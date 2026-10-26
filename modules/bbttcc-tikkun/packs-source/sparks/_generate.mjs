@@ -16,7 +16,9 @@ const SEPHIROT = [
   { key: "chokmah", label: "Chokmah", color: "#7e57c2", virtue: "Wisdom",       domain: "Founding insight"      },
   { key: "binah",   label: "Binah",   color: "#546e7a", virtue: "Understanding",domain: "Boundaries, law"       },
   { key: "chesed",  label: "Chesed",  color: "#4a90d9", virtue: "Mercy",        domain: "Healing, generosity"   },
-  { key: "gevurah", label: "Gevurah", color: "#c03030", virtue: "Severity",     domain: "Judgment, precision force" },
+  // Owner ruling 2026-10-26: one spelling, GEBURAH. idSeed keeps the _id derived from the old
+  // "spark_gevurah_<kind>" identifier, so world/compendium uuids of the three Severity sparks never change.
+  { key: "geburah", label: "Geburah", color: "#c03030", virtue: "Severity",     domain: "Judgment, precision force", idSeed: "gevurah" },
   { key: "tiferet", label: "Tiferet", color: "#e8c84a", virtue: "Harmony",      domain: "Balance, integration"  },
   { key: "netzach", label: "Netzach", color: "#27ae60", virtue: "Endurance",    domain: "Momentum, triumph"     },
   { key: "hod",     label: "Hod",     color: "#d4a017", virtue: "Glory",        domain: "Sigils, form, communication" },
@@ -30,7 +32,7 @@ const ALIGNMENT = {
   chokmah: { aligned: ["intrigue", "soul", "logistics"],         misaligned: ["violence", "siege"] },
   binah:   { aligned: ["intrigue", "diplomacy", "logistics"],    misaligned: ["violence", "nonlethal"] },
   chesed:  { aligned: ["nonlethal", "diplomacy", "softpower", "faith"], misaligned: ["violence", "siege"] },
-  gevurah: { aligned: ["violence", "siege"],                     misaligned: ["softpower", "diplomacy", "nonlethal"] },
+  geburah: { aligned: ["violence", "siege"],                     misaligned: ["softpower", "diplomacy", "nonlethal"] },
   tiferet: { aligned: ["diplomacy", "softpower", "faith"],       misaligned: ["violence"] },
   netzach: { aligned: ["violence", "siege", "logistics"],        misaligned: ["nonlethal", "intrigue"] },
   hod:     { aligned: ["intrigue", "diplomacy", "softpower"],    misaligned: ["violence", "siege"] },
@@ -96,12 +98,13 @@ function buildSpark(seph, kindKey) {
   const align = ALIGNMENT[seph.key];
   const name = `Spark of ${seph.virtue} (${kind.label})`;
   const identifier = `spark_${seph.key}_${kindKey}`;
-  const id = makeId(identifier);
+  const id = makeId(`spark_${seph.idSeed ?? seph.key}_${kindKey}`);   // idSeed: stable _id across a key rename
 
   const lore = `<p><em>${kind.descIntro}</em></p>
 <p><strong>Sephirah:</strong> ${seph.label} — ${seph.domain}.</p>
-<p><strong>Aligned methods:</strong> ${align.aligned.join(", ")}. <strong>Misaligned (causes Corruption):</strong> ${align.misaligned.join(", ")}.</p>
-<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>`;
+<p><strong>Aligned methods:</strong> ${align.aligned.join(", ")}. <strong>Misaligned (causes Corruption):</strong> ${align.misaligned.join(", ")}.</p>`;
+  // Ruling CO10 / audit §7.8 (2026-10-26): the GM hint is GM-only data, not player text; sparks carry no market price.
+  const gmHint = "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.";
 
   return {
     _id: id,
@@ -127,7 +130,8 @@ function buildSpark(seph, kindKey) {
     flags: {
       "bbttcc-tikkun": {
         sparkVersion: "1.0.0",
-        identifier
+        identifier,
+        gmHint
       }
     },
     _stats: {

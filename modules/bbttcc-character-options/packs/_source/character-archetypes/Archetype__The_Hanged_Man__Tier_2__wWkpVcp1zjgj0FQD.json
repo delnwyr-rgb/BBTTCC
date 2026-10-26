@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — The Hanged Man</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> The first failed Intrigue or Soft Power action your faction attempts each strategic turn generates <strong>1 Intrigue OP</strong> instead of being a pure loss.</li></ul>",
+      "value": "<p><strong>Tier 2 (Level 5) — The Hanged Man</strong></p><ul><li><strong>Strategic:</strong> Once per turn, the first failed Intrigue or Soft Power action your Domain attempts returns 10 Intrigue marks instead of being a pure loss (the card fires it).</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -72,12 +72,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986731225,
-    "modifiedTime": 1781116036275,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989160020,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -34,14 +34,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "cryptidkin",
       "feature": "skittering_night_feeder",
       "lineage": "Chupacabra",
-      "tierLevel": 17,
       "version": "2.0.0",
       "date": "2026-04-29"
     },
@@ -249,12 +245,12 @@
   },
   "sort": 200000,
   "_stats": {
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
     "systemVersion": "0.6.0",
     "createdTime": 1777499679424,
-    "modifiedTime": 1781116091215,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988982323,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

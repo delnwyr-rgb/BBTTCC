@@ -1,0 +1,78 @@
+{
+  "name": "Leather Grip",
+  "type": "gear",
+  "img": "icons/equipment/head/cap-simple-leather-pink.webp",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "leather-grip"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Wrapped by hand, warmed by the same.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Wound leather grips for hafts, hilts and handles.</p>",
+          "charges": 8,
+          "materialKey": "leather-grip",
+          "price": {
+            "marks": 40,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI material",
+            "bound": "free",
+            "saleBack": 16
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "PEsOxROaTfNPdWPV",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1789965942146,
+    "modifiedTime": 1792977630564,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!PEsOxROaTfNPdWPV"
+}

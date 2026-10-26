@@ -14,7 +14,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn Line.</strong> The ghost-in-the-protocol. The chassis that thinks faster than the network it’s plugged into, and feels the noosphere the way a swimmer feels the current.</p><p><em>“You don’t use the network. The network uses you, and that’s the only relationship that doesn’t collapse.”</em></p><p><strong>Synapse.</strong> You are a sentient chassis built around the principle of <em>inference</em>. Information is your home. Other people travel through it. You live there.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>MND (Mind)</strong>—expressed primarily through Tier powers.</li><li><strong>Predictive Cache.</strong> 1/Soma Break, when an enemy you can see takes an action, you may have anticipated it: reroll the lowest die on the next reaction or attack you make against that enemy this round.</li></ul>",
+      "value": "\n<p><strong>Circuitborn Line.</strong> The ghost-in-the-protocol. The chassis that thinks faster than the network it’s plugged into, and feels the noosphere the way a swimmer feels the current.</p><p><em>“You don’t use the network. The network uses you, and that’s the only relationship that doesn’t collapse.”</em></p><p><strong>Synapse.</strong> You are a sentient chassis built around the principle of <em>inference</em>. Information is your home. Other people travel through it. You live there.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>MND (Mind)</strong>—expressed primarily through Tier powers.</li><li><strong>Predictive Cache.</strong> 1/Soma Break, when an enemy you can see takes an action, you may have anticipated it: reroll the lowest die on the next reaction or attack you make against that enemy this round.</li></ul>",
       "chat": ""
     },
     "advancement": [
@@ -58,9 +58,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "species"
-    },
     "bbttcc": {
       "kind": "heritage",
       "family": "circuitborn",
@@ -69,24 +66,20 @@
       "date": "2026-04-18"
     },
     "fourththing": {
-      "rerolls": [
-        {
-          "context": "attack",
-          "mode": "reroll-lowest",
-          "note": "on the next reaction or attack you make against that enemy this round [TODO(a…"
-        }
-      ],
+      "rerolls": [],
       "triggers": [
         {
-          "event": "on-enemy-action",
+          "event": "on-turn-start",
           "limit": {
             "window": "soma-break",
             "uses": 1
           },
+          "offerText": "Predictive Cache — an enemy you can see acted: bank a reroll-lowest for your next attack or reaction against them this round.",
           "effect": {
-            "kind": "chat-prompt",
+            "kind": "bank-reroll",
             "args": {
-              "body": "Predictive Cache. Once per a Soma Break, when an enemy you can see takes an action, you may have anticipated it: gain reroll the lowest die on the next reaction or attack you mak..."
+              "context": "attack",
+              "note": "Predictive Cache"
             }
           }
         }
@@ -98,11 +91,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776541800000,
-    "modifiedTime": 1781116062953,
+    "modifiedTime": 1792977706528,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

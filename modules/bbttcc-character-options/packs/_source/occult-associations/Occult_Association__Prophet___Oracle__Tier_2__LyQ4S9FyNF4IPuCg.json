@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 — Prophet / Oracle</strong></p><p><strong>“You are no longer guessing. You are biasing arrival.”</strong></p><p>At Tier 2, you begin to influence what kind of event emerges first. Not by commanding the future outright, but by strengthening one probability path and starving another.</p><p><strong>Strategic (Faction / Campaign Scale)</strong></p><ul><li>Once per Scenario, when an encounter, complication, or emerging situation is about to be introduced, you may ask the GM to bias it toward one broad category: <strong>warning, negotiation, hazard, omen, hostile contact, or opportunity</strong></li><li>The GM retains final authorship, but should honor the bias where reasonably possible</li></ul><p><strong>Additional Benefit:</strong> when your faction prepares for a known threat, the GM should treat you as unusually difficult to catch flat-footed.</p><p><strong>Cost:</strong> when you bias arrival, you also shape what fails to happen. Expect displaced complications, missed opportunities, or consequences that reappear later wearing a different face.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT2\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Bias the Arrival</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Scenario &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When a complication is about to be introduced, ask GM to bias it toward a category: warning / negotiation / hazard / omen / hostile contact / opportunity.</div>\n</div>",
+      "value": "<p><strong>Tier 2 — Prophet / Oracle</strong></p><p><strong>“You are no longer guessing. You are biasing arrival.”</strong></p><p>At Tier 2, you begin to influence what kind of event emerges first. Not by commanding the future outright, but by strengthening one probability path and starving another.</p><p><strong>Strategic (Faction / Campaign Scale)</strong></p><ul><li>Once per Scenario, when an encounter, complication, or emerging situation is about to be introduced, you may ask the GM to bias it toward one broad category: <strong>warning, negotiation, hazard, omen, hostile contact, or opportunity</strong></li><li>The GM retains final authorship, but should honor the bias where reasonably possible</li></ul><p><strong>Additional Benefit:</strong> when your Domain prepares for a known threat, the GM should treat you as unusually difficult to catch flat-footed.</p><p><strong>Cost:</strong> when you bias arrival, you also shape what fails to happen. Expect displaced complications, missed opportunities, or consequences that reappear later wearing a different face.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT2\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Bias the Arrival</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Scenario &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When a complication is about to be introduced, ask GM to bias it toward a category: warning / negotiation / hazard / omen / hostile contact / opportunity.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -260,12 +260,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987097550,
-    "modifiedTime": 1781024182621,
-    "lastModifiedBy": "MRFjjbUTBd66pWBY"
+    "modifiedTime": 1792977827391,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

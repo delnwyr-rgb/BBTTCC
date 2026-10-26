@@ -3,11 +3,11 @@
   "type": "feat",
   "img": "icons/weapons/artillery/cannon-energy-sonic.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p>The faithful all hit the same note at once and the dark actually FLINCHES. I felt that one somewhere in my circuits.</p><p><b>On Success: faction morale +2, Darkness −1; allies gain Prayer's Grace and the scene pulses gold.</b></p>",
+      "value": "<p>The faithful all hit the same note at once and the dark actually FLINCHES. I felt that one somewhere in my circuits.</p><p><b>On Success: Loyalty +2 on the target hex, Darkness −1; allies gain Prayer's Grace and the scene pulses gold.</b></p>",
       "chat": ""
     }
   },
@@ -36,7 +36,7 @@
         "authoredSprint": 2
       },
       "effects": {
-        "text": "On success: faction morale +2, darkness −1. Scene-bound: 'Prayer's Grace' on allies + gold pulse VFX."
+        "text": "On success: Loyalty +2 on the target hex, darkness −1. Scene-bound: 'Prayer's Grace' on allies + gold pulse VFX."
       }
     }
   },
@@ -49,12 +49,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778964846637,
-    "modifiedTime": 1780163528135,
-    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "modifiedTime": 1792989013573,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

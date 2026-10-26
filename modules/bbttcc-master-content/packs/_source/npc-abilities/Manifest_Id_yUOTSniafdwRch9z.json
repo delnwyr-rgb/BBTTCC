@@ -1,0 +1,129 @@
+{
+  "name": "Manifest Id",
+  "type": "weapon",
+  "img": "icons/magic/death/blood-corruption-vomit-red.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "violence",
+    "skill": "channel",
+    "damage": {
+      "formula": "3d12",
+      "attribute": "presence",
+      "type": "qliphothic",
+      "damageFlavor": "",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 4,
+      "long": 4
+    },
+    "tags": [
+      "signature"
+    ],
+    "effect": "One creature inside the Miasma's space watches its deepest fear or most obscene desire assemble itself out of fog, in front of everyone. Mind check vs DC 18. Fail: full damage to Stress and Staggered until the end of the Miasma's next turn. Success: half damage, eyes averted in time.",
+    "flavor": "A monstrous doppelgänger tearing itself free of your silhouette.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "mind",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 18,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "staggered"
+        ],
+        "duration": "1-round"
+      }
+    },
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "yUOTSniafdwRch9z",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Lewd Miasma"
+        ],
+        "sourceIds": [
+          "Tw8Qy7Bg0pwKC29k"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069949,
+    "modifiedTime": 1792989070035,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!yUOTSniafdwRch9z"
+}

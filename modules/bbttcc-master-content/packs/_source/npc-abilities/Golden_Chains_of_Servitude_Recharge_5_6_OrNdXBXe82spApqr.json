@@ -1,0 +1,89 @@
+{
+  "name": "Golden Chains of Servitude (Recharge 5–6)",
+  "type": "feat",
+  "img": "icons/containers/chest/chest-simple-box-blue.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Up to three creatures within 24 squares roll vs Resolve (DC 18) or are Restrained by chains of golden light for a minute, taking 2d8 psychic damage (Stress) at the start of each of their turns. A chained creature can spend its action on a Presence check vs DC 18 — denying the Angel's glory out loud — to burst the chains. The Angel finds this genuinely hurtful.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "condition": {
+                "key": "restrained",
+                "duration": "until-saved",
+                "save": {
+                  "attr": "soul",
+                  "dc": 18
+                }
+              }
+            }
+          },
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Golden Chains of Servitude (Recharge 5–6)"
+            },
+            "do": {
+              "dot": {
+                "formula": "2d8",
+                "type": "psychic",
+                "ends": "rounds",
+                "rounds": 10
+              },
+              "prompt": "Burst the chains: an action on a Presence DC 18."
+            }
+          }
+        ],
+        "recharge": {
+          "mode": "d6",
+          "min": 5
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Angel of Hollow Glory"
+        ],
+        "sourceIds": [
+          "yQZAnkNsEcE5kKtg"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "OrNdXBXe82spApqr",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069937,
+    "modifiedTime": 1792989070020,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!OrNdXBXe82spApqr"
+}

@@ -37,7 +37,7 @@
     chokmah: "culture",
     binah:   "logistics",
     chesed:  "softpower",
-    gevurah: "violence",
+    geburah: "violence",
     tiferet: "diplomacy",
     netzach: "nonlethal",
     hod:     "intrigue",
@@ -46,13 +46,14 @@
   };
   const YIELD_MARKS_PER_TURN = 10; // integrated spark hex → +10 marks/turn (owner ruling; marks are the unit 2026-09-06)
 
-  // Spelling fork (2026-09-13): the pack says gevurah/tiferet, the campaign says geburah/tifaret.
+  // Spelling fork (2026-09-13): the pack said gevurah/tiferet, the campaign says geburah/tifaret.
+  // Owner ruling 2026-10-26: GEBURAH is the one spelling; gevurah/gevura stay accepted on input.
   // Every entry point canonicalizes, so a beat, a seeder or a GM may use either.
   const SEPHIRAH_ALIASES = {
     kether: "keter",
     chochmah: "chokmah", hokhmah: "chokmah", chokhmah: "chokmah",
     chessed: "chesed", hesed: "chesed",
-    geburah: "gevurah", gevura: "gevurah", gevurah: "gevurah",
+    gevurah: "geburah", gevura: "geburah", geburah: "geburah",
     tifaret: "tiferet", tipharet: "tiferet", tiphereth: "tiferet", tifereth: "tiferet",
     netzah: "netzach",
     malchut: "malkuth", malkhut: "malkuth"

@@ -1,0 +1,72 @@
+{
+  "name": "Summon Echoes of War (Recharge 5–6)",
+  "type": "feat",
+  "img": "icons/weapons/daggers/dagger-bone-grey.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>1d3 war-echoes rise from the ground in unoccupied squares within 6 squares (GM: use a T1 wraith-type statblock, e.g. Salt Wraith). They act on the Incarnate's initiative, fight for it, and disperse after a minute — or when the battle does, whichever it can prevent longer.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "spawn": {
+                "name": "Nahemoth Husk",
+                "count": "1d3"
+              },
+              "prompt": "Echoes of war, on its initiative."
+            },
+            "who": "self"
+          }
+        ],
+        "recharge": {
+          "mode": "d6",
+          "min": 5
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "War Incarnate"
+        ],
+        "sourceIds": [
+          "uyiTmCco8gDsuHde"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "sOezHMTfWTo0Vpa2",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069969,
+    "modifiedTime": 1792989070049,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!sOezHMTfWTo0Vpa2"
+}

@@ -1,0 +1,658 @@
+{
+  "name": "Golachab Immolator",
+  "type": "npc",
+  "img": "art/devin-knight/Monsters_October/Fire_Golem.webp",
+  "folder": "uMhSIaldbbcnBh0H",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "prototypeToken": {
+    "name": "Golachab Immolator",
+    "actorLink": false,
+    "disposition": -1,
+    "texture": {
+      "src": "art/devin-knight/Monsters_October/Fire_Golem.webp",
+      "scaleX": 1,
+      "scaleY": 1,
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "width": 1,
+    "height": 1,
+    "displayName": 30,
+    "depth": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "monster",
+      "createdViaMonsterBuilder": false,
+      "createdBy": "build-bestiary-slots.mjs 2026-10-07",
+      "lineage": "qliphothic"
+    },
+    "fourththing": {
+      "creatureType": "fiend",
+      "rfi": {
+        "actor": {
+          "tier": "IV",
+          "bracket": "medium",
+          "archetype": "golachab-immolator",
+          "lineage": "qliphothic",
+          "subLineage": "golachab",
+          "title": "Lesser Shell of Golachab, hull of Geburah — Wrath with a body",
+          "qliphah": {
+            "name": "golachab",
+            "hullOf": "geburah",
+            "grade": "lesser"
+          },
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "wrath",
+              "fire",
+              "golachab"
+            ],
+            "role": "brute",
+            "lootTable": [
+              {
+                "name": "Shell-Residue",
+                "qty": "1",
+                "weight": 3
+              },
+              {
+                "name": "Slag That Is Still Angry",
+                "qty": "1d2",
+                "weight": 2
+              },
+              {
+                "name": "The Thing It Wanted (Worthless. Priceless.)",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "exemplar": true,
+          "price": {
+            "marks": 60,
+            "bounty": 60,
+            "hire": 90,
+            "ransom": 90,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "TIV medium qliphothic — bounty 60 / hire 90 marks; credited to the pool matching the method (default softpower)"
+          }
+        }
+      },
+      "kind": "monster"
+    }
+  },
+  "system": {
+    "role": "brute",
+    "tier": 4,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 18,
+      "tier": 4,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "xp": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 6
+      },
+      "intrigue": {
+        "value": 3
+      },
+      "presence": {
+        "value": 4
+      },
+      "body": {
+        "value": 5
+      },
+      "mind": {
+        "value": 3
+      },
+      "soul": {
+        "value": 4
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 165,
+        "max": 70,
+        "temp": 0
+      },
+      "stress": {
+        "value": 132,
+        "max": 35
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "geburah"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "qliphothic",
+        "thermal"
+      ],
+      "immunities": [],
+      "vulnerabilities": [
+        "sephirotic"
+      ]
+    },
+    "conditionImmunities": [
+      "charmed"
+    ],
+    "tags": [
+      "qliphothic",
+      "wrath",
+      "fire",
+      "golachab"
+    ],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "T4 medium · qliphothic (Golachab). Wrath given a furnace body: the hollow where Geburah's judgement should be, burning without anything to judge. A fair fight for one Tier-IV Steward, three or four rounds, and it will try to make them angry first.",
+      "notes": "Golachab is the hull of Geburah — severity with the justice scooped out. An Immolator is what is left when that hollow finds a body: a furnace shaped like a man, running on nothing but the heat of being wronged. It cannot say what wronged it. It burns whatever is nearest and calls that fairness. The Lost Statues of Geburah draw them the way a hearth draws moths; the Garden count has twice gone up by one Immolator and down by two statues."
+    }
+  },
+  "items": [
+    {
+      "name": "Aura of Wrath",
+      "type": "feature",
+      "img": "icons/magic/fire/flame-burning-creature-skeleton.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-qliphothic",
+          "lineage-trait",
+          "aura",
+          "qliphah-golachab"
+        ],
+        "description": {
+          "value": "<p>Any creature that starts its turn within 2 squares feels the Shell's hollowness: Soul DC 15 or it is Compelled to attack the nearest creature on its turn, friend or foe.</p><p><em>Golachab — hull of Geburah. Severity, and nothing to be severe about.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "feature",
+              "lineageTrait": "qliphothic"
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "radius": 2,
+                "who": "enemies",
+                "do": {
+                  "condition": {
+                    "key": "compelled",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 15
+                    }
+                  }
+                },
+                "label": "Aura of Wrath"
+              }
+            ]
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "QfcwNhhjyAReGs9Z",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791422835442,
+        "modifiedTime": 1791422835442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Hollow Touch",
+      "type": "weapon",
+      "img": "icons/magic/death/hand-dirt-undead-zombie.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d10",
+          "attribute": "violence",
+          "type": "qliphothic",
+          "damageFlavor": "the heat of being wronged",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "bestiary",
+          "tier-iv",
+          "lineage-qliphothic"
+        ],
+        "effect": "Damage goes to Stress. On a hit, Soul DC 15 or the target is Compelled toward the Shell's vice for 1 round: it strikes the nearest creature.",
+        "flavor": "It is not a touch. It is an accusation.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 15,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square, one target. Damage: <code>2d10</code> qliphothic (the heat of being wronged) + violence. Damage goes to Stress. On a hit, Soul DC 15 or the target is Compelled toward the Shell's vice for 1 round: it strikes the nearest creature.</p><p><em>It is not a touch. It is an accusation.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "attack"
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "3FQPKcMNCFkExfBN",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791422835442,
+        "modifiedTime": 1791422835442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Immolating Grasp (recharge 5–6)",
+      "type": "weapon",
+      "img": "icons/magic/fire/flame-burning-hand-purple.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d10",
+          "attribute": "violence",
+          "type": "thermal",
+          "damageFlavor": "slag",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "bestiary",
+          "tier-iv",
+          "lineage-qliphothic"
+        ],
+        "effect": "On a hit the target is Burning until the end of its next turn.",
+        "flavor": "The Shell closes its hand and remembers what judgement felt like.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "burning"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "",
+            "saveDcMode": "none",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square, one target. Damage: <code>2d10</code> thermal (slag) + violence. On a hit the target is Burning until the end of its next turn.</p><p><em>The Shell closes its hand and remembers what judgement felt like.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "attack"
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "YefphY9P1si9wh0I",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791422835442,
+        "modifiedTime": 1792989139881,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "_id": "kpkoeR7Tedyvqs4c",
+  "effects": [],
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791422835442,
+    "modifiedTime": 1792977792338,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!kpkoeR7Tedyvqs4c"
+}

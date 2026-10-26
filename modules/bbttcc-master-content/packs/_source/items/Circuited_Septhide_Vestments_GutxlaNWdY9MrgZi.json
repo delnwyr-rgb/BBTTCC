@@ -1,0 +1,122 @@
+{
+  "name": "Circuited Septhide Vestments",
+  "type": "armor",
+  "img": "icons/equipment/chest/vest-bulletproof-body-armor.webp",
+  "system": {
+    "guardBonus": 4,
+    "evasionBonus": 3,
+    "resolveBonus": 4,
+    "resistances": [
+      "qliphothic"
+    ],
+    "armorSkill": "fitting",
+    "equipped": false,
+    "tags": [
+      "light-cloth",
+      "sept-blessed",
+      "graded",
+      "grade-circuited"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Layered cloth armor stitched in a sept-house. Light, breathable, embroidered with a single prayer running spine to hem.</p><p>Wards the wearer against the static the world drags in — corruption finds the cloth quieter than the body beneath.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Guard +4, Evasion +3, Resolve +4</li>\n  <li><strong>Requires:</strong> Fitting (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Tier:</strong> IV</li>\n  <li><strong>Cost:</strong> 2025 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Circuited (+2). A closed circuit of sigils; it answers one hand.</strong></p>\n<ul>\n  <li><strong>+2 on each of its defense bonuses</strong> → Guard +4, Evasion +3, Resolve +4 (rank-scaled like all armor: Trained half, Proficient full).</li>\n  <li>Grade raises it to <strong>Tier IV</strong> · attuned (one slot).</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Cloth that remembers the prayer it was woven for.",
+          "origin": "crafted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Layered cloth armor stitched in a sept-house. Light, breathable, embroidered with a single prayer running spine to hem.</p><p>Wards the wearer against the static the world drags in — corruption finds the cloth quieter than the body beneath.</p>",
+          "materialOf": [
+            {
+              "key": "sept-cloth",
+              "qty": 1
+            },
+            {
+              "key": "blessed-thread",
+              "qty": 1
+            },
+            {
+              "key": "prayer-resin",
+              "qty": 1
+            },
+            {
+              "key": "hex-glyph-plate",
+              "qty": 1
+            },
+            {
+              "key": "wardiron",
+              "qty": 1
+            }
+          ],
+          "grants": {
+            "resistances": [
+              "qliphothic"
+            ]
+          },
+          "price": {
+            "marks": 2025,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV armor (Circuited +2 on TII Septhide Vestments) × bound attuned",
+            "bound": "attuned",
+            "saleBack": 810
+          }
+        }
+      },
+      "grants": {
+        "resistances": [
+          "qliphothic"
+        ]
+      },
+      "grade": {
+        "rank": 2,
+        "name": "Circuited",
+        "key": "circuited",
+        "defense": 2
+      }
+    }
+  },
+  "folder": "paUl8Tj6Xx5fAkKN",
+  "_id": "GutxlaNWdY9MrgZi",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791427797929,
+    "modifiedTime": 1792977620359,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!GutxlaNWdY9MrgZi"
+}

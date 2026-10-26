@@ -25,6 +25,7 @@
  *   M2 W  weapon carries a rider in `system.effect` text with no manifestation block to apply it
  *   M3 I  animated (flags.autoanimations) but mechanically inert — it looks like it did something
  *   M4 E  automation data the system can't execute (npcAuto rule / weapon manifestation fails npc-auto-schema.mjs)
+ *   M5 W  npcAuto rule that only posts a chat prompt (GM-fiat tier) and is not marked `narrative:true` — build it or own it (BS7, 2026-10-26)
  *   S1 W  shell: fewer than 2 items, or no biography
  *   P1 W  bounty off the approved rubric (tierBase 5/10/20/40 × bracket light 1 · medium 1.5 · heavy 2 · boss 3)
  */
@@ -32,7 +33,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { BUDGET, LIMITED_RE, meanDice, budgetFor, trackOf } from "./threat-budget.mjs";
-import { validateNpcAuto, validateWeaponManifestation, statesList } from "./npc-auto-schema.mjs";
+import { validateNpcAuto, validateWeaponManifestation, statesList, npcAutoIsReal, promptOnlyRules } from "./npc-auto-schema.mjs";
 
 const argv = process.argv.slice(2);
 const opt = k => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : undefined; };
@@ -71,7 +72,8 @@ const bioOf = a => String(a.system?.biography?.notes || a.system?.details?.biogr
 // weapon (2026-10-06: 0/138 live), which the old "has keys" test mistook for automation
 const liveManifest = m => !!m && (!!statesList(m.appliedStates?.states).length || !!(m.appliedEffects?.modifiers || []).length
   || !!(m.appliedEffects?.resists || []).length || !!(m.appliedEffects?.immunes || []).length || !!m.resolution?.saveAttribute);
-const automated = (a, i) => liveManifest(i.system?.manifestation) || !!i.flags?.fourththing?.triggers?.length || !!i.flags?.fourththing?.npcAuto
+// 2026-10-26 (BS7): an npcAuto block counts only when something in it EXECUTES (a prompt-only rule set is GM text)
+const automated = (a, i) => liveManifest(i.system?.manifestation) || !!i.flags?.fourththing?.triggers?.length || npcAutoIsReal(i.flags?.fourththing?.npcAuto)
   || !!i.system?.damageParts?.length || !!(effects[`${a._id}.${i._id}`] || []).length || !!i.flags?.fourththing?.rfi?.item?.consume
   || !!i.flags?.fourththing?.automation || !!i.flags?.fourththing?.passives?.aura || !!i.flags?.fourththing?.passives?.checkBonus || !!i.flags?.fourththing?.passives?.ranks;   // pass-7 passives count (2026-10-07)
 
@@ -159,6 +161,7 @@ for (const a of actors) {
     if (i.flags?.autoanimations && isAbility && !automated(a, i)) hit("M3", "I", a, "animates but does nothing", i);
     for (const prob of [...validateNpcAuto(i.flags?.fourththing?.npcAuto), ...(i.type === "weapon" && liveManifest(i.system?.manifestation) ? validateWeaponManifestation(i.system.manifestation) : [])])
       hit("M4", "E", a, prob, i);
+    for (const r of promptOnlyRules(i.flags?.fourththing?.npcAuto)) hit("M5", "W", a, `prompt-only rule on:${r.on} — "${String(r.do?.prompt || "").slice(0, 80)}" (build it, or mark narrative:true)`, i);
   }
 }
 // duplicates

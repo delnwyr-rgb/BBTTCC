@@ -7,7 +7,7 @@
     "intent": "violence",
     "skill": "melee",
     "damage": {
-      "formula": "2d8",
+      "formula": "2d6",
       "attribute": "violence",
       "type": "psychic",
       "damageFlavor": "sleep-edge",
@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +79,24 @@
             "saleBack": 180
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Soma-Reaper"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Dreamcut"
+            },
+            "do": {
+              "clarity": "-1d4"
+            }
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "1f81c610-c3f4-4a96-8ec8-c9df6e8f2f42",
+      "id": "ft-dreamcut",
       "label": "Dreamcut",
       "macro": {
         "enable": false,
@@ -269,24 +271,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Soma-Reaper"
+        ],
+        "sourceIds": [
+          "lAn4USFvKWoAVVwy"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "Ce8W5yB8WT6FI9vt",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024227268,
-    "modifiedTime": 1782167244990,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989026256,
+    "modifiedTime": 1792989026256,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!Ce8W5yB8WT6FI9vt"
 }

@@ -1,0 +1,68 @@
+{
+  "name": "Spawn Fragment",
+  "type": "feat",
+  "img": "icons/magic/death/blood-corruption-vomit-red.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>A piece of the Abomination buds off into an unoccupied adjacent square as a Tier-1 fragment (GM: reuse any T1 horror statblock at half Integrity). It acts on its own and adores its parent, insofar as hunger is adoration.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "spawn": {
+                "name": "Nahemoth Husk",
+                "count": 1
+              },
+              "prompt": "A Tier-1 fragment at half Integrity; it adores its parent."
+            },
+            "who": "self"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Abomination of Excess"
+        ],
+        "sourceIds": [
+          "P8e2EX1lbLBFk2gL"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "kkrhd5XuAs4DedTq",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069967,
+    "modifiedTime": 1792989070047,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!kkrhd5XuAs4DedTq"
+}

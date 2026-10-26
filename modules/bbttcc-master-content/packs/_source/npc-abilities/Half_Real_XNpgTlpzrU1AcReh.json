@@ -1,0 +1,78 @@
+{
+  "name": "Half-Real",
+  "type": "feat",
+  "img": "icons/creatures/magical/spirit-undead-ghost-purple.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-dream",
+      "lineage-trait"
+    ],
+    "description": {
+      "value": "<p>Until Maarg attacks, attacks against it reroll the highest die. Its first strike fully manifests it for the rest of the scene. It moves through creatures and objects as difficult terrain.</p><p><em>The 'sort of' is the dangerous part.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "feature",
+          "lineageTrait": "dream"
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attacked",
+            "if": {
+              "ownerNotAttacked": true
+            },
+            "do": {
+              "reroll": "attack-highest"
+            },
+            "label": "Half-Real — not yet manifest"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Desenitarius Maarg"
+        ],
+        "sourceIds": [
+          "YreqW1q05O7dGoxK"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "XNpgTlpzrU1AcReh",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069939,
+    "modifiedTime": 1792989070021,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!XNpgTlpzrU1AcReh"
+}

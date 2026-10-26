@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Stone remembers pressure. So do you.”</em></p>\n        <p><strong>Stonecall (1/Soma Break).</strong> When you plant your feet, the world updates its assumptions about where “down” is. Until the start of your next turn, you can’t be forcibly moved, you have resistance to kinetic damage, and you ignore difficult terrain caused by earth, rubble, or broken masonry.</p>",
+      "value": "\n<p><em>“Stone remembers pressure. So do you.”</em></p>\n        <p><strong>Stonecall (1/Soma Break).</strong> When you plant your feet, the world updates its assumptions about where “down” is. Until the start of your next turn, you can’t be forcibly moved, you have resistance to kinetic damage, and you ignore difficult terrain caused by earth, rubble, or broken masonry.</p>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "properties": [],
     "requirements": "Oldenborn",
@@ -41,7 +41,6 @@
       "kind": "oldenborn",
       "feature": "stonecall",
       "lineage": "Earthbound",
-      "tierLevel": 0,
       "version": "1.0.0"
     }
   },
@@ -102,8 +101,7 @@
         "initiative": null
       },
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!U7HTnVoBSl8paTqw.0a285901db5c4bba"
+      "folder": null
     }
   ],
   "folder": "820o8CGCzl3DnTr2",
@@ -117,12 +115,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004114716,
-    "modifiedTime": 1782167240127,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988979176,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

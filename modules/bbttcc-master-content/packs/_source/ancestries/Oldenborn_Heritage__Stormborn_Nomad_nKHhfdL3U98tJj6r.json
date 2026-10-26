@@ -14,7 +14,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-oldenborn-furrykin=\"v1\" style=\"display:none\"></div>\n<p><em>\"Yesod fell. The world remembered old names. You answered.\"</em></p><p>Your place-soul is a weather front. You are the caravan memory of every tribe that crossed the ash squalls and came out the other side. When you walk, the wind remembers that you used to be the reason it had a name.</p><p><strong>Heritage signature (1/Soma Break).</strong> Surfaces the Stormborn Nomad Tier-I Wind-Read reaction (energy lightning/cold or kinetic electrical damage halved) directly from the heritage card. See the Tier-I feat for full mechanics.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldStormbornNomadHeritage\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Stormborn Nomad Heritage</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Reaction (mirrors Wind-Read) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Heritage card surfaces Wind-Read (Tier-I): halve incoming lightning/cold/electrical damage as a reaction.</div>\n</div>",
+      "value": "<p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Oldenborn (Stormborn Nomad).</strong> Your place-soul is a weather front. You are the caravan memory of every tribe that crossed the ash squalls and came out the other side. When you walk, the wind remembers that you used to be the reason it had a name.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Fey, Stormborn).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 6 squares.</li><li><strong>Attributes.</strong> Oldenborn does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> or <strong>Soul</strong> in fiction and through Tier powers.</li></ul><h3>Oldenborn Core</h3><p>At character creation you gain <strong>Old Memory, Old Flesh</strong> (Dream-Flesh, Old Paths, Veil-Sight, You Are Remembered) from the Oldenborn ancestry.</p><h3>Stormborn Nomad Traits</h3><ul><li><strong>Storm-Legs.</strong> You reroll the lowest die on Athletics checks made in wind, rain or ash-fall, and on checks to keep your footing on a moving vehicle or rig.</li><li><strong>Weatherwise.</strong> Your Tier I power: 12-hour weather foresight within one hex and Wind-Read, a reaction that halves weather damage.</li></ul><h3>Stormborn Tier Powers</h3><p>You gain <strong>Weatherwise</strong> at creation, then <strong>Ward of the Gale</strong> at Initiation 5, <strong>Nomad Networks</strong> at Initiation 11 and <strong>Skywalker</strong> at Initiation 17.</p><h3>Domain Edge</h3><ul><li><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Non-Lethal marks</strong> and <strong>+20 Faith marks</strong> at campaign start.</li></ul>",
       "chat": ""
     },
     "advancement": [
@@ -108,52 +108,25 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!nKHhfdL3U98tJj6r.mQnjMrKLIIARncu6"
+      }
     }
   ],
   "flags": {
-    "dnd5e": {
-      "originType": "species"
-    },
     "bbttcc": {
       "kind": "heritage",
       "family": "oldenborn",
       "lineage": "Stormborn Nomad",
-      "opEffects": {
-        "nonLethal": 2,
-        "faith": 1
-      },
-      "terrainSynergy": [
-        "Desert / Ash Wastes",
-        "Swamp / Mire"
-      ],
-      "preventHazardOncePerTurn": true,
-      "darknessRite": {
-        "cost": {
-          "faith": 1
-        },
-        "dc": 15,
-        "delta": -1,
-        "scope": "regional"
-      },
       "version": "2.0.0",
-      "date": "2026-04-18",
-      "normalizedFrom": "Stormborn Nomad [species]"
+      "date": "2026-04-18"
     },
     "fourththing": {
       "rerolls": [
         {
           "context": "check",
-          "attribute": "soul",
+          "skill": "athletics",
           "mode": "reroll-lowest",
-          "note": "on Presence and Soul checks to locate water, shelter, or safe passage in Dese…"
-        },
-        {
-          "context": "check",
-          "attribute": "soul",
-          "mode": "reroll-lowest",
-          "note": "Presence and Soul checks to locate water, shelter, or safe passage in Desert,…"
+          "vs": "in wind, rain or ash-fall, or keeping your footing on a moving vehicle",
+          "note": "Storm-Legs"
         }
       ],
       "resourceGrants": [
@@ -168,30 +141,7 @@
           "amount": 2
         }
       ],
-      "triggers": [
-        {
-          "event": "on-damage-taken",
-          "limit": {
-            "window": "soma-break",
-            "uses": 1
-          },
-          "effect": {
-            "kind": "chat-prompt",
-            "args": {
-              "body": "shallow snow, high winds, ash drifts). Ward of the Gale. Once per Soma Break, when you would take damage from an environmental source (storm, heat, cold, falling debris, pressure change), you may use your reaction t..."
-            }
-          }
-        },
-        {
-          "event": "on-move",
-          "effect": {
-            "kind": "chat-prompt",
-            "args": {
-              "body": "When you walk, the wind remembers that you used to be the reason it had a name"
-            }
-          }
-        }
-      ]
+      "triggers": []
     },
     "autoanimations": {
       "id": "e6fbba5a-95e1-4ae1-a19d-8ae34a9e8ebb",
@@ -382,12 +332,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1773192872324,
-    "modifiedTime": 1782167240134,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988988672,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

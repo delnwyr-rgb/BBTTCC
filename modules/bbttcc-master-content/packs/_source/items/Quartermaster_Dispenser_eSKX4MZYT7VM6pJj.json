@@ -7,8 +7,9 @@
     "tags": [],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
-      "value": "<p>A clipboarded oracle that allocates rations, ammo, and small mercies. Faction supplies stack here.</p>",
+      "value": "<p>A clipboarded oracle that allocates rations, ammo, and small mercies. Domain supplies stack here.</p>",
       "chat": ""
     }
   },
@@ -29,7 +30,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TII tool stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 36
@@ -49,11 +50,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778205374435,
-    "modifiedTime": 1778963271958,
+    "modifiedTime": 1792977647469,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

@@ -28,6 +28,23 @@
           "itemName": "Human Heritage: Denisovan",
           "viaSwap": true
         }
+      },
+      "aptitudePromotions": {
+        "archetype: the hermit (mystic-isolator) (tier 1)|faith": {
+          "delta": 1,
+          "item": "Archetype: The Hermit (Mystic-Isolator) (Tier 1)",
+          "at": 1792346692888
+        },
+        "archetype: the hermit (mystic-isolator) (tier 1)|stealth": {
+          "delta": 1,
+          "item": "Archetype: The Hermit (Mystic-Isolator) (Tier 1)",
+          "at": 1792346692888
+        },
+        "crew type: ironbound ascendants (tier 1)|athletics": {
+          "delta": 1,
+          "item": "Crew Type: Ironbound Ascendants (Tier 1)",
+          "at": 1792346692888
+        }
       }
     },
     "bbttcc-character-options": {
@@ -101,15 +118,15 @@
         }
       },
       "calculatedOPs": {
-        "violence": 2,
+        "violence": 1,
         "nonlethal": 0,
-        "intrigue": 4,
+        "intrigue": 2,
         "economy": 0,
-        "softpower": 5,
+        "softpower": 1,
         "diplomacy": 0,
         "logistics": 0,
         "culture": 0,
-        "faith": 4
+        "faith": 2
       },
       "crew": {
         "pack": "bbttcc-character-options.crew-types",
@@ -130,6 +147,34 @@
         "name": "Alignment: Chokmah",
         "identifier": "alignment-chokmah",
         "category": "sephirothic-alignments"
+      },
+      "contracts": {
+        "crew": {
+          "docId": "brAELAWiggUsnsox",
+          "pack": "bbttcc-character-options.crew-types",
+          "name": "Crew Type: Ironbound Ascendants",
+          "displayName": "Ironbound Ascendants",
+          "since": 1,
+          "until": 3,
+          "turns": 3,
+          "source": "legacy",
+          "entryId": null,
+          "vendorId": null,
+          "hiredAt": 1792371015337
+        },
+        "occult": {
+          "docId": "uzklMVc8EUDpGBA7",
+          "pack": "bbttcc-character-options.occult-associations",
+          "name": "Occult Association: Exorcist / Purifier",
+          "displayName": "Exorcist / Purifier",
+          "since": 1,
+          "until": 3,
+          "turns": 3,
+          "source": "legacy",
+          "entryId": null,
+          "vendorId": null,
+          "hiredAt": 1792371016164
+        }
       }
     },
     "bbttcc-aae": {
@@ -140,15 +185,16 @@
     },
     "bbttcc-mal-voice": {
       "persona": {
-        "topics": "the Lift Hall, Khezek Tor, Yesodium shipments, manifests, Father Tamsin, Allesh-Gilliam, the Night the Mountain Coughed",
-        "notes": "[KHEZEK-TREATMENT-2026-07-07] PRIVATE TRUTH \u2014 Brennig Tamsin, Quartermaster of the Lift Hall. Voice: dry competence with a laugh in the back of it; treats crates like patients and manifests like suspects. THE SCAR along his jaw he calls 'the mountain's receipt' \u2014 he was the man on the table the Night the Mountain Coughed, the stitch finished in the dark by feel. He knows Doc Greeley saved him; he does NOT know she had already chosen, in the dark, who she'd have let go \u2014 and he must never learn it from a careless conversation (that truth is hers and Father Tamsin's to carry). HIS BROTHER: the Father visits more than any parish requires. Brennig puts it down to guilt and love, in whichever order, and teases him about it gently. He does NOT know the visits are also the cover for something else \u2014 he is the alibi and doesn't know it. IF THE CONFESSOR'S DEBT RESOLVES (the dossier pages will say): redeemed \u2192 Brennig is quietly furious for a week, then walks to St Gilliam's and hugs his brother hard enough to hurt; exposed \u2192 he stands next to Tamsin in the daylight, jaw set, daring the town to say something; counterfeit \u2192 he never learns, which is its own small tragedy. THE CRATES: he knows which ones hum before touching them, keeps the humming ones apart from the food, and has opinions about anyone who calls that superstition. TELLS: taps the scar when the Cough comes up; counts crates aloud when avoiding a subject, exactly like Verna counts spoons (they have never met; they would be MENACES together)."
+        "topics": "the Lift Hall, Khezek Tor, Yesodium shipments, manifests, Father Tamsin, Allesh-Gilliam, the Night the Mountain Coughed, the bunker years, the old iron below Four, proud ore, the middle brother",
+        "notes": "[KHEZEK-TREATMENT-2026-07-07] PRIVATE TRUTH — Brennig Tamsin, Quartermaster of the Lift Hall. Voice: dry competence with a laugh in the back of it; treats crates like patients and manifests like suspects. THE SCAR along his jaw he calls 'the mountain's receipt' — he was the man on the table the Night the Mountain Coughed, the stitch finished in the dark by feel. He knows Doc Greeley saved him; he does NOT know she had already chosen, in the dark, who she'd have let go — and he must never learn it from a careless conversation (that truth is hers and Father Tamsin's to carry). HIS BROTHER: the Father visits more than any parish requires. Brennig puts it down to guilt and love, in whichever order, and teases him about it gently. He does NOT know the visits are also the cover for something else — he is the alibi and doesn't know it. IF THE CONFESSOR'S DEBT RESOLVES (the dossier pages will say): redeemed → Brennig is quietly furious for a week, then walks to St Gilliam's and hugs his brother hard enough to hurt; exposed → he stands next to Tamsin in the daylight, jaw set, daring the town to say something; counterfeit → he never learns, which is its own small tragedy. THE CRATES: he knows which ones hum before touching them, keeps the humming ones apart from the food, and has opinions about anyone who calls that superstition. TELLS: taps the scar when the Cough comes up; counts crates aloud when avoiding a subject, exactly like Verna counts spoons (they have never met; they would be MENACES together).\n\n[KT-TIMELINE-2026-09-13] PRIVATE TRUTH — PROUD ORE. Brennig's theory (shared after the second crate, never the first): Yesodium is proud; it sat a hundred years under owners who sold it to one client and let it idle while the valley starved, and it has not forgotten being taken for granted — so it hums, and dreams sour, when it is handled like inventory. He has no idea the owners were his brother's family in another life; he thinks the Father's \"mountain can forgive\" line is a priest's habit. THE MIDDLE BROTHER (draft — owner may reword): there were three Tamsin boys this life; the middle one leaned into the cage shaft after a dropped manifest, on a perfectly ordinary shift, and is technically still on that manifest; Brennig tells it as a joke, once, and then does not tell it again. It had nothing to do with the dark; it is the reason he counts crates aloud. THE OLD IRON: some of the shoring below Four was welded by hands that did not expect it to be seen again; he inventories it and does not ask.\n\n[KT-RETROFIT-2026-09-27] RETCON (bible draft 2, ruled 2026-09-22): the middle brother went into the cage shaft ON the Night the Mountain Coughed, after a dropped manifest that names the agents inside the crew and the forbidden chamber they steered it to. It was not an ordinary shift. Brennig is the THIRD brother, alive; he sets a place at the cookline every shift and will not say for whom. If a Steward puts the dropped manifest on that plate he says his brother's name once and then tells Night One as history — the family that ran the mine in the bunker years, the name over the gate, the one client, the valley turned away when there was plenty, the mountain shutting its own mouth, the hundred who caught what it let go — without ever saying the family's name is his.",
+        "secretsRaw": "Proud Ore :: rollPlus2 :: a Steward helps him count a SECOND crate, all the way, out loud :: Yesodium is proud. It sat a hundred years under owners who sold it to one client and let the valley starve, and it has not forgotten. \"You don't have to like the stone. You have to notice it.\" He does not know the owners were his brother's family in another life.\nThe Middle Brother :: stirThePot :: a Steward asks about his brother ONCE, and does not ask twice :: He tells it as a joke, once: the middle one leaned into the cage shaft after a dropped manifest on the night the mountain coughed, and is technically still on the manifest. He does not tell it again. He counts crates aloud instead. The plate he sets at the cookline is that man's."
       }
     }
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Quartermaster of the Lift Hall at Khezek Tor (Act 2-3)",
+      "notes": "Brennig Tamsin is Quartermaster of the Lift Hall at Khezek Tor, which in practice means a desk made of two pallets and a door. He treats crates like patients and manifests like suspects, and he knows which Yesodium crates hum before he touches them; he keeps those well away from the food. A scar runs along his jaw that he calls 'the mountain's receipt'. He has dry competence with a laugh in the back of it, counts crates aloud, and is Father Tamsin's brother."
     },
     "details": {
       "level": 4,
@@ -196,12 +242,12 @@
       "athletics": {
         "attribute": "violence",
         "label": "Athletics",
-        "value": 1
+        "value": 2
       },
       "stealth": {
         "attribute": "intrigue",
         "label": "Stealth",
-        "value": 1
+        "value": 2
       },
       "hacking": {
         "attribute": "intrigue",
@@ -266,7 +312,7 @@
       "faith": {
         "attribute": "soul",
         "label": "Faith",
-        "value": 1
+        "value": 2
       },
       "meditation": {
         "attribute": "soul",
@@ -290,10 +336,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 1
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 1
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 1
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 1
@@ -302,7 +358,8 @@
     "derived": {
       "integrity": {
         "value": 31,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 16,
@@ -392,7 +449,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -427,8 +485,8 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
       "id": null,
@@ -438,7 +496,10 @@
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
@@ -453,8 +514,8 @@
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
-      "scaleX": 1,
-      "scaleY": 1,
+      "scaleX": 1.8,
+      "scaleY": 1.8,
       "tint": "#ffffff",
       "alphaThreshold": 0.75
     },
@@ -594,7 +655,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Cro-Magnon, Denisovan, Florensis, Neanderthal</strong>.</p><p>This root grants the shared Human core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>\u201cHumanity is not special. It\u2019s just stubborn enough to keep moving when reality begs it to stop.\u201d</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
+          "value": "<p><strong>Human.</strong></p><p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
           "chat": ""
         },
         "advancement": [
@@ -673,34 +734,33 @@
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "on one checks [TODO(adv-call)] of your choice each round (declare before roll\u2026"
+              "when": "atOneIntegrity",
+              "note": "Tenacious — at 1 Integrity (one check per round; declare before rolling)"
             }
           ],
           "triggers": [
-            {
-              "event": "on-save-fail",
-              "limit": {
-                "window": "soma-break",
-                "uses": 1
-              },
-              "effect": {
-                "kind": "chat-prompt",
-                "args": {
-                  "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
-                }
-              }
-            },
             {
               "event": "on-skill-fail",
               "limit": {
                 "window": "soma-break",
                 "uses": 1
               },
+              "offerText": "Adaptive — you failed a check: choose to succeed instead (reroll; the GM may simply rule it a success).",
               "effect": {
-                "kind": "chat-prompt",
-                "args": {
-                  "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
-                }
+                "kind": "reroll-failed-check",
+                "args": {}
+              }
+            },
+            {
+              "event": "on-save-fail",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "offerText": "Adaptive — you failed a defense check: choose to succeed instead (reroll; the GM may simply rule it a success).",
+              "effect": {
+                "kind": "reroll-failed-check",
+                "args": {}
               }
             }
           ],
@@ -724,30 +784,23 @@
       },
       "effects": [],
       "folder": "byroU26YSQP4OQUn",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.a3057e55a2fc1026",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891286,
-        "modifiedTime": 1784177891286,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 0,
       "_id": "k4GPgJTxUcsefVKg",
-      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.k4GPgJTxUcsefVKg"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071692,
+        "modifiedTime": 1792989604449,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Human: Stubborn Spark",
@@ -762,7 +815,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cHumanity is not special. It\u2019s just stubborn enough to keep moving when reality begs it to stop.\u201d</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Neanderthal, Denisovan, Florensis, Erectus). Your lineage grants Tier powers as you level.</p>",
+          "value": "\n<p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
           "chat": ""
         },
         "uses": {
@@ -972,28 +1025,19 @@
           "version": 5
         },
         "fourththing": {
-          "grantedByAncestry": "Human"
+          "grantedByAncestry": "Human",
+          "rerolls": [
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "when": "atOneIntegrity",
+              "note": "Tenacious — at 1 Integrity (one check per round; declare before rolling)"
+            }
+          ]
         }
       },
       "effects": [],
       "folder": "byroU26YSQP4OQUn",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.jbiG7wAqTlBgEcDw",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891286,
-        "modifiedTime": 1784177891286,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1001,7 +1045,17 @@
       },
       "sort": 100000,
       "_id": "AM2MhBkgzr3kSgcH",
-      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.AM2MhBkgzr3kSgcH"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071692,
+        "modifiedTime": 1792989071692,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Human Heritage: Denisovan",
@@ -1012,7 +1066,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Human (Denisovan)</em> while converting it from a lineage-species into a heritage.</p><p><em>\u201cHumanity is the species that keeps walking even when the map says \u2018stop.\u2019\u201d</em></p><p><strong>Human (Denisovan).</strong> You are not a fantasy human. You are the rebooted inheritance of an older lineage resurfacing after Yesod\u2019s fall\u2014ancient adaptations, forgotten instincts, and Athletics strategies given room to matter again. You remember mountains that no longer exist. Gravity listens to you when you ask it to.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>BOD (Body)</strong>\u2014expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory) from the Human species root.</p><h3>Denisovan Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17):</p><ul><li><p><strong>Tier I \u2014 High-Altitude Blood.</strong> reroll-lowest on checks vs. poison and environmental suffocation; hold breath 10 min; Stone-Sense tremorsense 2 squares on stone or packed earth.</p></li><li><p><strong>Tier II \u2014 Stone-Singer.</strong> Mason\u2019s tool proficiency. 1/Soma Break reinforce a structure or barrier.</p></li><li><p><strong>Tier III \u2014 Ancient Logic.</strong> reroll-lowest on Investigation and Occult checks involving structures, mechanisms, or ruins; share the insight to grant an ally advantage once per scene.</p></li><li><p><strong>Tier IV \u2014 Peak-Anchor.</strong> 1/Soma Break reaction to negate forced movement or teleportation within 6 squares; aggressor takes psychic backlash equal to your tier.</p></li></ul>",
+          "value": "<p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Human (Denisovan)</em> while converting it from a lineage-species into a heritage.</p><p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Denisovan).</strong> You are not a fantasy human. You are the rebooted inheritance of an older lineage resurfacing after Yesod’s fall—ancient adaptations, forgotten instincts, and Athletics strategies given room to matter again. You remember mountains that no longer exist. Gravity listens to you when you ask it to.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>BOD (Body)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory) from the Human species root.</p><h3>Denisovan Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17):</p><ul><li><p><strong>Tier I — High-Altitude Blood.</strong> reroll-lowest on checks vs. poison and environmental suffocation; hold breath 10 min; Stone-Sense tremorsense 2 squares on stone or packed earth.</p></li><li><p><strong>Tier II — Stone-Singer.</strong> a skill rank in Tinkering. 1/Soma Break reinforce a structure or barrier.</p></li><li><p><strong>Tier III — Ancient Logic.</strong> reroll-lowest on Investigation and Occult checks involving structures, mechanisms, or ruins; share the insight to let an ally reroll the lowest die once per scene.</p></li><li><p><strong>Tier IV — Peak-Anchor.</strong> 1/Soma Break reaction to negate forced movement or teleportation within 6 squares; aggressor takes psychic backlash equal to your tier.</p></li></ul><h3>Domain Edge</h3><ul><li><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Logistics marks</strong> at campaign start.</li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -1093,30 +1147,23 @@
         }
       },
       "folder": "X8GnIzoaCFwLQbGU",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.TjBhlDjlMKL60wbo",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891286,
-        "modifiedTime": 1784177891286,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 0,
       "_id": "gcEOHIl4PG6aMFT5",
-      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.gcEOHIl4PG6aMFT5"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071692,
+        "modifiedTime": 1792989604450,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: The Hermit (Mystic-Isolator)",
@@ -1131,7 +1178,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cLeave me alone. I\u2019ll return with something useful.\u201d</em></p><p><strong>Archetype (Bad Eden): The Hermit (Mystic-Isolator).</strong> You step away in order to see clearly. Solitude is not withdrawal to you. It is a forge, a lens, and a discipline.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens contemplation, covert preparation, and hidden spiritual leverage. This Archetype is associated with <strong>+1 Faith OP</strong> and <strong>+1 Intrigue OP</strong>.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Leave me alone. I’ll return with something useful.”</em></p><p><strong>Archetype (Bad Eden): The Hermit (Mystic-Isolator).</strong> You step away in order to see clearly. Solitude is not withdrawal to you. It is a forge, a lens, and a discipline.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens contemplation, covert preparation, and hidden spiritual leverage. Your Domain earns <strong>+10 Faith</strong> and <strong>+10 Intrigue</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1205,17 +1252,6 @@
         },
         "dnd5e": {}
       },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891286,
-        "modifiedTime": 1784177891286,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1223,7 +1259,17 @@
       },
       "_id": "5P4B7UrEAvI8O2n1",
       "sort": 100000,
-      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.5P4B7UrEAvI8O2n1"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071692,
+        "modifiedTime": 1792989604450,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: The Hermit (Mystic-Isolator) (Tier 1)",
@@ -1234,12 +1280,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden \u2013 Archetype: The Hermit (Mystic-Isolator) (Tier 1)",
+          "custom": "Bad Eden – Archetype: The Hermit (Mystic-Isolator) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) \u2014 The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Stealth. You learn the Light Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's Faith OP cap increases by 1 and Intrigue OP cap increases by 1.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Stealth.</li><li><strong>Strategic:</strong> Your Domain's Faith marks cap and Intrigue marks cap rise by 10 each.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1266,7 +1312,7 @@
       },
       "effects": [
         {
-          "disabled": false,
+          "disabled": true,
           "duration": {
             "value": null,
             "units": "seconds",
@@ -1275,7 +1321,7 @@
           },
           "flags": {},
           "name": "Archetype Tier 1 Proficiencies",
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_4.png",
+          "img": "icons/sundries/lights/lantern-iron-lit-yellow.webp",
           "_id": "XJgwMQYkTW4ZYllF",
           "type": "base",
           "system": {
@@ -1302,21 +1348,20 @@
           "transfer": true,
           "statuses": [],
           "sort": 0,
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177891286,
-            "modifiedTime": 1784177891286
-          },
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!4Ie9Tl4NGBWwO5aj.DimsrDwGVTiApYIA.XJgwMQYkTW4ZYllF"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989071692,
+            "modifiedTime": 1792989604552,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "IOjnhZoMwrcOAdaa",
@@ -1346,19 +1391,12 @@
         },
         "dnd5e": {},
         "fourththing": {
-          "vocabScrub": "2026-05-16"
+          "vocabScrub": "2026-05-16",
+          "domainCapBonus": {
+            "faith": 10,
+            "intrigue": 10
+          }
         }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891286,
-        "modifiedTime": 1784177891286,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
       },
       "ownership": {
         "default": 0,
@@ -1367,7 +1405,17 @@
       },
       "_id": "DimsrDwGVTiApYIA",
       "sort": 200000,
-      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.DimsrDwGVTiApYIA"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071692,
+        "modifiedTime": 1792989604450,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Alignment: Chokmah",
@@ -1381,7 +1429,7 @@
         },
         "tags": [],
         "description": {
-          "value": "Soul - Creative energy. +1 Violence, +1 Soft Power OPs\n\nCreation arrives all at once. Chokmah rewards decisive action, inspired leadership, and bold openers that turn possibility into momentum before anyone else is ready.",
+          "value": "Soul - Creative energy. +10 Soft Power and +10 Violence marks to your Domain each turn.\n\nCreation arrives all at once. Chokmah rewards decisive action, inspired leadership, and bold openers that turn possibility into momentum before anyone else is ready.",
           "chat": ""
         },
         "activities": {},
@@ -1419,23 +1467,6 @@
       "img": "icons/weapons/staves/staff-blue-jewel.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
-      "_stats": {
-        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.YBryhDI3aQ92d65o",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.LilpQAsCU1MbIgsz",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891286,
-        "modifiedTime": 1784177891286,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 2,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1443,274 +1474,20 @@
       },
       "_id": "bvBWNHZnc9hm4Ays",
       "sort": 300000,
-      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.bvBWNHZnc9hm4Ays"
-    },
-    {
-      "name": "Crew Type: Ironbound Ascendants (Tier 1)",
-      "type": "feat",
-      "img": "icons/environment/settlement/watchtower-cliff.webp",
-      "system": {
-        "category": "technique",
-        "source": {
-          "custom": "Bad Eden \u2013 Crew Type: Ironbound Ascendants (Tier 1)",
-          "revision": 2,
-          "rules": "2024",
-          "book": ""
-        },
-        "tags": [],
-        "description": {
-          "value": "<p><strong>Tier 1 \u2014 Ironbound Ascendants</strong></p><p><strong>\u201cHeight is not terrain. It is policy.\u201d</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You\u2019ve learned the first law of altitude: the hill fights for whoever arrives prepared.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic:</strong> In Mountains and Highlands, travel is more efficient for your faction and elevation penalties are easier to manage.</li></ul>",
-          "chat": ""
-        },
-        "identifier": "crew-ironbound-ascendants-t1",
-        "activities": {},
-        "uses": {
-          "spent": 0,
-          "recovery": [],
-          "max": ""
-        },
-        "advancement": {},
-        "crewed": false,
-        "enchant": {},
-        "requirements": "Level 1+",
-        "properties": [],
-        "type": {
-          "value": "",
-          "subtype": ""
-        },
-        "prerequisites": {
-          "items": [],
-          "repeatable": false,
-          "level": null
-        }
-      },
-      "effects": [
-        {
-          "_id": "9e8c1c03e6d14b51",
-          "name": "Ironbound Ascendants T1 Skills",
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_armor_2.png",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.skills.athletics.value",
-                "type": "upgrade",
-                "value": 1,
-                "phase": "initial",
-                "priority": 20
-              },
-              {
-                "key": "system.skills.athletics.value",
-                "type": "upgrade",
-                "value": 1,
-                "phase": "initial",
-                "priority": 20
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "",
-          "origin": null,
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "dnd5e": {
-              "riders": {
-                "statuses": []
-              }
-            }
-          },
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177891286,
-            "modifiedTime": 1784177891286
-          },
-          "start": {
-            "combat": null,
-            "round": 0,
-            "time": 0,
-            "turn": 0,
-            "combatant": null,
-            "initiative": null
-          },
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!4Ie9Tl4NGBWwO5aj.gsRyeRcYpXjdzO0h.9e8c1c03e6d14b51"
-        }
-      ],
-      "folder": "wmqio7Q7DY1BZeRJ",
-      "flags": {
-        "bbttcc-character-options": {
-          "category": "crew",
-          "bonuses": {},
-          "option": {
-            "category": "crew",
-            "key": "ironbound-ascendants",
-            "progressionType": "level",
-            "tier": 1,
-            "levelMin": 1,
-            "levelMax": 1,
-            "domains": [
-              "travel",
-              "logistics",
-              "defense"
-            ],
-            "terrains": [
-              "mountain",
-              "highlands"
-            ],
-            "scope": "hex",
-            "tags": [
-              "bbttcc:option:crew",
-              "bbttcc:crew:ironbound-ascendants",
-              "bbttcc:tier:1",
-              "bbttcc:domain:travel",
-              "bbttcc:domain:logistics",
-              "bbttcc:domain:defense",
-              "bbttcc:terrain:mountain",
-              "bbttcc:terrain:highlands",
-              "bbttcc:scope:hex",
-              "bbttcc:when:origin_terrain:mountain",
-              "bbttcc:when:origin_terrain:highlands",
-              "bbttcc:effect:travel:cost_reduction:+1step",
-              "bbttcc:effect:travel:elevation_penalty:-1step",
-              "bbttcc:theme:elevation",
-              "bbttcc:theme:mountain-discipline",
-              "bbttcc:theme:chokepoints"
-            ]
-          }
-        },
-        "fourththing": {
-          "vocabScrub": "2026-05-16"
-        }
-      },
       "_stats": {
-        "compendiumSource": "Item.uTTREaIGmbvryPE3",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.uTTREaIGmbvryPE3",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891286,
-        "modifiedTime": 1784177891286,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
-      "ownership": {
-        "default": 0,
-        "vmUfDuSYUIe7V5uB": 3,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "_id": "gsRyeRcYpXjdzO0h",
-      "sort": 0,
-      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.gsRyeRcYpXjdzO0h"
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071692,
+        "modifiedTime": 1792989604450,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
-      "name": "Occult Association: Exorcist / Purifier (Tier 1)",
-      "type": "feat",
-      "system": {
-        "category": "technique",
-        "source": {
-          "revision": 1,
-          "rules": "2024",
-          "book": ""
-        },
-        "tags": [],
-        "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 \u2014 Exorcist</strong></p><p><strong>\u201cThat should not be here.\u201d</strong></p><p>You can identify corruption, spiritual pressure, and Qliphothic influence.</p><p><strong>Tactical</strong></p><ul><li>reroll-lowest on checks vs corruption, fear, or possession</li></ul><p><strong>Strategic</strong></p><ul><li>When entering a Hex, automatically detect presence of corruption or unnatural influence</li></ul><p><strong>Cost:</strong> constant awareness of corruption creates strain and intolerance for ambiguity.</p>",
-          "chat": ""
-        },
-        "identifier": "occult-association-exorcist-t1",
-        "activities": {},
-        "uses": {
-          "spent": 0,
-          "recovery": [],
-          "max": ""
-        },
-        "advancement": {},
-        "crewed": false,
-        "enchant": {},
-        "prerequisites": {
-          "items": [],
-          "repeatable": false,
-          "level": null
-        },
-        "properties": [],
-        "requirements": "",
-        "type": {
-          "value": "",
-          "subtype": ""
-        }
-      },
-      "flags": {
-        "bbttcc-character-options": {
-          "option": {
-            "tags": [
-              "bbttcc:tier:1",
-              "bbttcc:effect:detect:corruption",
-              "bbttcc:effect:advantage:saves:corruption",
-              "bbttcc:cost:strain"
-            ],
-            "category": "occult",
-            "key": "exorcist",
-            "progressionType": "level",
-            "tier": 1,
-            "levelMin": 1,
-            "levelMax": 1
-          },
-          "category": "occult"
-        }
-      },
-      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
-      "effects": [],
-      "folder": "eZrB95VvJnQ4Pb77",
-      "_stats": {
-        "compendiumSource": "Item.HkKJUdADMuiHexr5",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.HkKJUdADMuiHexr5",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891286,
-        "modifiedTime": 1784177891286,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
-      "ownership": {
-        "default": 0,
-        "vmUfDuSYUIe7V5uB": 3,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "_id": "fuzqNxtF6aGysye0",
-      "sort": 0,
-      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.fuzqNxtF6aGysye0"
-    },
-    {
-      "name": "Rallying Words",
+      "name": "Rallying Speech",
       "type": "feat",
       "img": "icons/sundries/scrolls/scroll-symbol-eye-blue.webp",
       "system": {
@@ -1722,7 +1499,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Rallying Words.</strong> You can deliver a short, targeted speech that makes people remember why you\u2019re here.</p><ul><li>As a bonus action, choose one creature other than yourself within 6 squares who can see or hear you. That creature gains a bonus to the next attack roll, attribute check, or defense check it makes before the start of your next turn. The bonus equals your Presence modifier (minimum +1).</li><li>You can use this feature a number of times per Soma Break equal to your tier.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Rallying Speech.</strong> You can deliver a short, targeted speech that makes people remember why you’re here.</p><ul><li>As a bonus action, choose one creature other than yourself within 6 squares who can see or hear you. That creature gains a bonus to the next attack roll, attribute check, or defense check it makes before the start of your next turn. The bonus equals your Presence value (minimum +1).</li><li>You can use this feature a number of times per Soma Break equal to your tier.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1741,7 +1518,7 @@
           "level": 2
         },
         "properties": [],
-        "requirements": "Harmony Marshal (2nd level)",
+        "requirements": "Harmony Marshal 2",
         "type": {
           "value": "",
           "subtype": ""
@@ -1749,7 +1526,7 @@
       },
       "effects": [
         {
-          "name": "Rallying Words (Inspiring Bonus)",
+          "name": "Rallying Speech (Inspiring Bonus)",
           "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_3.png",
           "origin": null,
           "transfer": true,
@@ -1761,17 +1538,6 @@
             "expired": false
           },
           "flags": {},
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177891286,
-            "modifiedTime": 1784177891286
-          },
           "_id": "cAPrkPRQ6ETCdinM",
           "type": "base",
           "system": {
@@ -1792,7 +1558,17 @@
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!4Ie9Tl4NGBWwO5aj.Tb3fGFh1PCHE1pP9.cAPrkPRQ6ETCdinM"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989071692,
+            "modifiedTime": 1792989071692,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "6ELe0FPqgC58OzKS",
@@ -1802,18 +1578,183 @@
             "rallyingWords": true
           }
         },
-        "dnd5e": {}
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891286,
-        "modifiedTime": 1784177891286,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+        "autoanimations": {
+          "id": "04ca3f50-116d-4e29-b5d2-02faca280a2f",
+          "label": "Rallying Speech",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "music",
+              "animation": "notes",
+              "variant": "01",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
       },
       "ownership": {
         "default": 0,
@@ -1823,7 +1764,17 @@
       },
       "sort": -487500,
       "_id": "Tb3fGFh1PCHE1pP9",
-      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.Tb3fGFh1PCHE1pP9"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071692,
+        "modifiedTime": 1792989071692,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Read the Room",
@@ -1838,7 +1789,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Read the Room.</strong> You have an instinctive feel for the emotional geometry of conversations.</p><ul><li>When you make an <strong>Insight (Soul)</strong> or <strong>Perception (Mind)</strong> check to gauge mood, detect Stealth, or sense the underlying stakes of a scene, you can add a d4 to the roll.</li><li>You can use this feature after you roll but before the GM tells you whether you succeed. Uses per Soma Break equal to your Soul modifier (minimum once).</li></ul><p>(The Active Effect below also gives you a small numeric edge on Insight (Soul) and Perception (Mind) checks.)</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Read the Room.</strong> You have an instinctive feel for the emotional geometry of conversations.</p><ul><li>When you make an <strong>Insight (Soul)</strong> or <strong>Perception (Mind)</strong> check to gauge mood, detect Stealth, or sense the underlying stakes of a scene, you can add a d4 to the roll.</li><li>You can use this feature after you roll but before the GM tells you whether you succeed. Uses per Soma Break equal to your Soul value (minimum once).</li></ul><p>(The Active Effect below also gives you a small numeric edge on Insight (Soul) and Perception (Mind) checks.)</p>",
           "chat": ""
         },
         "activities": {},
@@ -1857,7 +1808,7 @@
           "level": 2
         },
         "properties": [],
-        "requirements": "Harmony Marshal (2nd level)",
+        "requirements": "Harmony Marshal 2",
         "type": {
           "value": "",
           "subtype": ""
@@ -1865,7 +1816,7 @@
       },
       "effects": [
         {
-          "name": "Read the Room (Insight (Soul) (Soul) & Perception (Mind) (Mind) Edge)",
+          "name": "Read the Room (Insight (Soul) & Perception (Mind) Edge)",
           "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_5.png",
           "origin": null,
           "transfer": true,
@@ -1877,17 +1828,6 @@
             "expired": false
           },
           "flags": {},
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177891286,
-            "modifiedTime": 1784177891286
-          },
           "_id": "td2cFhPIKR65aGNY",
           "type": "base",
           "system": {
@@ -1922,7 +1862,17 @@
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!4Ie9Tl4NGBWwO5aj.2ljAK2jvhtXwDdeC.td2cFhPIKR65aGNY"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989071692,
+            "modifiedTime": 1792989071692,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "6ELe0FPqgC58OzKS",
@@ -1932,21 +1882,9 @@
             "readTheRoom": true
           }
         },
-        "dnd5e": {},
         "fourththing": {
           "vocabScrub": "2026-05-16"
         }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891286,
-        "modifiedTime": 1784177891286,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
       },
       "ownership": {
         "default": 0,
@@ -1956,7 +1894,17 @@
       },
       "sort": -481250,
       "_id": "2ljAK2jvhtXwDdeC",
-      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.2ljAK2jvhtXwDdeC"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071692,
+        "modifiedTime": 1792989071692,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Disciplined Fire",
@@ -1971,7 +1919,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Disciplined Fire</h2><p><em>It\u2019s not about more shots. It\u2019s about the right shot.</em></p><hr /><h3>Rules</h3><p>Once per turn when you hit with a ranged weapon attack, you may choose one:</p><ul><li><strong>Pin:</strong> The target\u2019s movement is reduced by 2 squares until the start of your next turn.</li><li><strong>Disrupt:</strong> The next attack roll the target makes before the end of its next turn is made with keep-lowest.</li></ul><p>A creature can be affected by this principle only once per round.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Disciplined Fire</h2><p><em>It’s not about more shots. It’s about the right shot.</em></p><hr /><h3>Rules</h3><p>Once per turn when you hit with a ranged weapon attack, you may choose one:</p><ul><li><strong>Pin:</strong> The target’s movement is reduced by 2 squares until the start of your next turn.</li><li><strong>Disrupt:</strong> The next attack roll the target makes before the end of its next turn is Imposed (3d10 keep-lowest-2).</li></ul><p>A creature can be affected by this technique only once per round.</p><p class=\"ft-engine-note\"><em>🃏 Card — once per turn: Pin (noted) or Disrupt (target first → Imposed).</em></p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_disciplined_fire",
@@ -2001,6 +1949,183 @@
         "bbttcc": {
           "pack": "bbttcc-feats-expansion-v1",
           "generatedAt": "2026-01-18T20:40:45.007450+00:00"
+        },
+        "autoanimations": {
+          "id": "ft-disciplined-fire",
+          "label": "Disciplined Fire",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "arrow",
+              "variant": "regular",
+              "color": "regular",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
         }
       },
       "folder": "QbGNBV70xh9pF0eh",
@@ -2010,19 +2135,18 @@
         "DHBK2UGr58xKXzxK": 3,
         "bytUGWIOqq9eT7Or": 3
       },
+      "_id": "0SBdSq5WrYyezhOe",
       "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071692,
+        "modifiedTime": 1792989071692,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891286,
-        "modifiedTime": 1784177891286,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
-      "_id": "0SBdSq5WrYyezhOe",
-      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.0SBdSq5WrYyezhOe"
+        "exportSource": null
+      }
     },
     {
       "name": "Overwatch (Bad Eden)",
@@ -2037,7 +2161,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Your vantage is systems-level; your voice, the signal.</em></p><p>When an ally within <strong>6 squares</strong> makes a key roll directly tied to the current objective (attack on a critical target, clutch save, investigation breakthrough, negotiation pivot), you may use your <strong>reaction</strong> to steady the moment.</p><ul><li>The ally adds your <strong>tier</strong> to the roll.</li><li>You may use this feature a number of times equal to your <strong>tier</strong>, regaining all uses on a <strong>a Soma Break</strong>.</li></ul><p><strong>Strategic Layer.</strong> When you lead a diplomatic, social, or morale-driven <em>scenario</em>, the <strong>first Soft Power OP spend</strong> your faction makes during that scenario is reduced by <strong>1 OP</strong> (minimum 1). This can occur once per scenario you lead.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Your vantage is systems-level; your voice, the signal.</em></p><p>When an ally within <strong>6 squares</strong> makes a key roll directly tied to the current objective (attack on a critical target, clutch save, investigation breakthrough, negotiation pivot), you may use your <strong>reaction</strong> to steady the moment.</p><ul><li>The ally adds your <strong>tier</strong> to the roll.</li><li>You may use this feature a number of times equal to your <strong>tier</strong>, regaining all uses on a Soma Break.</li></ul><p><strong>Strategic Layer.</strong> When you lead a diplomatic, social, or morale-driven <em>scenario</em>, the <strong>first Soft Power spend</strong> your Domain makes during that scenario is reduced by <strong>10 marks</strong> (minimum 10). This can occur once per scenario you lead.</p>",
           "chat": ""
         },
         "activities": {
@@ -2092,13 +2216,8 @@
         },
         "uses": {
           "spent": 0,
-          "recovery": [
-            {
-              "period": "lr",
-              "type": "recoverAll"
-            }
-          ],
-          "max": "@prof"
+          "recovery": [],
+          "max": ""
         },
         "advancement": {},
         "identifier": "harmmarshal-overwatch-overwatch",
@@ -2119,22 +2238,187 @@
       "effects": [],
       "folder": "2lNXuSAY9vKC4tM0",
       "flags": {
-        "dnd5e": {},
         "bbttcc": {
           "subclassKey": "harmmarshal_overwatch",
           "featureKey": "overwatch"
+        },
+        "autoanimations": {
+          "id": "8036e8e7-9c5a-409b-b76b-a13fa8ccf3af",
+          "label": "Overwatch (Bad Eden)",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "intro",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
         }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891286,
-        "modifiedTime": 1784177891286,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
       },
       "ownership": {
         "default": 0,
@@ -2144,7 +2428,17 @@
       },
       "sort": 150000,
       "_id": "fgDl4N38ZCB4cJtR",
-      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.fgDl4N38ZCB4cJtR"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071692,
+        "modifiedTime": 1792989071692,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Signal Boost",
@@ -2159,7 +2453,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You elevate a single voice until it carries a whole room.</em></p><p>As a <strong>bonus action</strong>, choose one ally within <strong>12 squares</strong> who can hear you. Until the start of your next turn:</p><ul><li>The ally gains <strong>advantage</strong> on their next <strong>Diplomacy (Presence)</strong> or <strong>Intimidation (Presence)</strong> check.</li><li>If that check shifts a crowd, faction representative, or social tempo, your faction gains <strong>+1 Soft Power OP</strong> for the next Strategic Turn (once per scene).</li></ul><p>This represents you turning someone into the right voice at the right time.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You elevate a single voice until it carries a whole room.</em></p><p>As a <strong>bonus action</strong>, choose one ally within <strong>12 squares</strong> who can hear you. Until the start of your next turn:</p><ul><li>The ally rerolls the lowest die on their next <strong>Diplomacy (Presence)</strong> or <strong>Intimidation (Presence)</strong> check.</li><li>If that check shifts a crowd, faction representative, or social tempo, your Domain gains <strong>+10 Soft Power marks</strong> for the next turn (once per scene).</li></ul><p>This represents you turning someone into the right voice at the right time.</p>",
           "chat": ""
         },
         "activities": {
@@ -2214,7 +2508,7 @@
         "uses": {
           "spent": 0,
           "recovery": [],
-          "max": "@prof"
+          "max": ""
         },
         "advancement": {},
         "identifier": "harmmarshal-overwatch-signal-boost",
@@ -2235,22 +2529,206 @@
       "effects": [],
       "folder": "2lNXuSAY9vKC4tM0",
       "flags": {
-        "dnd5e": {},
         "bbttcc": {
           "subclassKey": "harmmarshal_overwatch",
           "featureKey": "signal_boost"
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "who": "targets",
+                "do": {
+                  "bankReroll": {
+                    "context": "check",
+                    "attribute": "presence",
+                    "note": "Signal Boost — Diplomacy / Intimidation"
+                  },
+                  "prompt": "If the check shifts a crowd or faction, your faction gains +1 Soft Power OP next Strategic Turn (1/scene)."
+                }
+              }
+            ]
+          }
+        },
+        "autoanimations": {
+          "id": "0cad37f0-daf8-49de-bee5-c90107835515",
+          "label": "Signal Boost",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "music",
+              "animation": "notes",
+              "variant": "01",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
         }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891286,
-        "modifiedTime": 1784177891286,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
       },
       "ownership": {
         "default": 0,
@@ -2260,7 +2738,17 @@
       },
       "sort": 175000,
       "_id": "7NthsoStMtXjkCK9",
-      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.7NthsoStMtXjkCK9"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071692,
+        "modifiedTime": 1792989071692,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "_id": "Fx4EriCTAXf5Ey34",
@@ -2277,7 +2765,7 @@
           "presence"
         ],
         "description": {
-          "value": "<p><em>\"There is no problem two reasonable parties can't monetize.\"</em></p><p><strong>Broker</strong> is the Presence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: merchant, envoy, entertainer, cult recruiter, gang face. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Fair Price:</strong> The Broker moves any negotiated price <strong>5% per tier</strong> in their side's favor inside the \u00b125% tolerance band (Tier IV: the full \u00b120% swing).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Diplomacy</strong> rank = tier; secondary <strong>Empathy</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Diplomacy or Soft Power (GM picks by job)</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Harmony Marshal. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"There is no problem two reasonable parties can't monetize.\"</em></p><p><strong>Broker</strong> is the Presence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: merchant, envoy, entertainer, cult recruiter, gang face. A profession is a flavor label on the Calling.</p><p><strong>Knack — Fair Price:</strong> The Broker moves any negotiated price <strong>5% per tier</strong> in their side's favor inside the ±25% tolerance band (Tier IV: the full ±20% swing).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Diplomacy</strong> rank = tier; secondary <strong>Empathy</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Diplomacy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Harmony Marshal. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -2304,21 +2792,20 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891286,
-        "modifiedTime": 1784177891286,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071692,
+        "modifiedTime": 1792989071692,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.Fx4EriCTAXf5Ey34"
+      }
     },
     {
       "_id": "gC8LLAVK1euoyNbe",
-      "name": "Broker \u2014 Apprentice (Tier I)",
+      "name": "Broker — Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
@@ -2330,7 +2817,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Broker \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Word on the street:</strong> Current prices, current rumors, who's buying. <span style=\"opacity:0.7\">Standard fee 10 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick \u2014 Read the Room</strong> <em>(1/scene)</em>: GM truthfully answers: who here has the real power, and what do they want right now?</p>",
+          "value": "<p><strong>Broker — Apprentice</strong> (Tier I).</p><p><strong>Trade — Word on the street:</strong> Current prices, current rumors, who's buying. <span style=\"opacity:0.7\">Standard fee 10 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Read the Room</strong> <em>(1/scene)</em>: GM truthfully answers: who here has the real power, and what do they want right now?</p>",
           "chat": ""
         }
       },
@@ -2350,17 +2837,275 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891286,
-        "modifiedTime": 1784177891286,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071692,
+        "modifiedTime": 1792989071692,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Crew Type: Ironbound Ascendants (Tier 1)",
+      "type": "feat",
+      "img": "icons/environment/settlement/watchtower-cliff.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden – Crew Type: Ironbound Ascendants (Tier 1)",
+          "revision": 2,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You’ve learned the first law of altitude: the hill fights for whoever arrives prepared.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Plating.</li><li><strong>Strategic:</strong> In Mountains and Highlands, travel is more efficient for your Domain and elevation penalties are easier to manage.</li></ul>",
+          "chat": ""
+        },
+        "identifier": "crew-ironbound-ascendants-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "requirements": "Level 1+",
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        }
       },
-      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.gC8LLAVK1euoyNbe"
+      "effects": [
+        {
+          "_id": "9e8c1c03e6d14b51",
+          "name": "Ironbound Ascendants T1 Skills",
+          "img": "icons/environment/settlement/watchtower-cliff.webp",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.athletics.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.plating.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": true,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "dnd5e": {
+              "riders": {
+                "statuses": []
+              }
+            }
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989071692,
+            "modifiedTime": 1792989604635,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "folder": "wmqio7Q7DY1BZeRJ",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "ironbound-ascendants",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "travel",
+              "logistics",
+              "defense"
+            ],
+            "terrains": [
+              "mountain",
+              "highlands"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:ironbound-ascendants",
+              "bbttcc:tier:1",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:logistics",
+              "bbttcc:domain:defense",
+              "bbttcc:terrain:mountain",
+              "bbttcc:terrain:highlands",
+              "bbttcc:scope:hex",
+              "bbttcc:when:origin_terrain:mountain",
+              "bbttcc:when:origin_terrain:highlands",
+              "bbttcc:effect:travel:cost_reduction:+1step",
+              "bbttcc:effect:travel:elevation_penalty:-1step",
+              "bbttcc:theme:elevation",
+              "bbttcc:theme:mountain-discipline",
+              "bbttcc:theme:chokepoints"
+            ]
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "x2KxsIEAjaWa6tn9",
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071692,
+        "modifiedTime": 1792989604451,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Occult Association: Exorcist / Purifier (Tier 1)",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Exorcist</strong></p><p><strong>“That should not be here.”</strong></p><p>You can identify corruption, spiritual pressure, and Qliphothic influence.</p><p><strong>Tactical</strong></p><ul><li>reroll-lowest on checks vs corruption, fear, or possession</li></ul><p><strong>Strategic</strong></p><ul><li>When entering a Hex, automatically detect presence of corruption or unnatural influence</li></ul><p><strong>Cost:</strong> constant awareness of corruption creates strain and intolerance for ambiguity.</p>",
+          "chat": ""
+        },
+        "identifier": "occult-association-exorcist-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Level 1+",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "tags": [
+              "bbttcc:tier:1",
+              "bbttcc:effect:detect:corruption",
+              "bbttcc:effect:advantage:saves:corruption",
+              "bbttcc:cost:strain"
+            ],
+            "category": "occult",
+            "key": "exorcist",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1
+          },
+          "category": "occult"
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "save",
+              "mode": "reroll-lowest",
+              "vs": "corruption, fear, or possession",
+              "note": "Exorcist / Purifier T1"
+            }
+          ]
+        }
+      },
+      "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
+      "effects": [],
+      "folder": "eZrB95VvJnQ4Pb77",
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "yioZN2uOwndrY5Wp",
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071692,
+        "modifiedTime": 1792989604451,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -2368,15 +3113,16 @@
   "sort": 225000,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177891286,
-    "modifiedTime": 1784177891286,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989071692,
+    "modifiedTime": 1792989071698,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

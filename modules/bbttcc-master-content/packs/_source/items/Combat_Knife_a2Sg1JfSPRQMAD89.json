@@ -16,13 +16,12 @@
     "damageParts": [],
     "range": {
       "short": 1,
-      "long": 1
+      "long": 1,
+      "units": "sq"
     },
     "tags": [
       "t1-baseline",
-      "knife",
-      "light",
-      "finesse"
+      "knife"
     ],
     "effect": "Light, finesse-friendly. No signature ability.",
     "flavor": "Cheap. Honest. Always sharp enough.",
@@ -332,12 +331,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777869584201,
-    "modifiedTime": 1782160020988,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988939633,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

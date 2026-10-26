@@ -38,15 +38,15 @@ const OP_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplom
  * bbttcc-factions/turn-extensions.enhancer.js:16 where applicable; extends
  * to fit per-NPC roll-contribution (vs. that file's per-hex turn bonus).
  *
- * Spellings match the canonical SEPH_OP keys: gevurah (not "geburah"),
- * tiferet (not "tiphereth").
+ * Spellings match the canonical system keys: geburah (owner ruling 2026-10-26;
+ * legacy "gevurah" is folded on lookup), tiferet (not "tiphereth").
  * -------------------------------------------------------------------- */
 const SEPHIRAH_TABLE = {
   keter:    { faith:1 },                      // crown / sovereignty
   chokmah:  { economy:1 },                    // wisdom — matches turn-ext mapping
   binah:    { intrigue:1 },                   // understanding — matches turn-ext mapping
   chesed:   { softpower:1, diplomacy:1 },     // mercy — pacific/diplomatic flavor
-  gevurah:  { violence:2 },                   // severity / war — matches turn-ext mapping
+  geburah:  { violence:2 },                   // severity / war — matches turn-ext mapping
   tiferet:  { culture:1 },                    // beauty — matches turn-ext mapping
   netzach:  { violence:1 },                   // victory (turn-ext maps to "all"; per-NPC simpler = +1V)
   hod:      { faith:1 },                      // splendor — matches turn-ext mapping
@@ -197,7 +197,7 @@ function _addInto(target, block){
  * Returns: {
  *   total: { violence:N, nonlethal:N, ... },     // sum across all affiliations
  *   parts: [                                     // for tooltip / chat-card breakdown
- *     { kind:"sephirah",  key:"gevurah",  ops:{violence:2}, source:"static" },
+ *     { kind:"sephirah",  key:"geburah",  ops:{violence:2}, source:"static" },
  *     { kind:"political", key:"fascist",  ops:{violence:2}, source:"static" },
  *     { kind:"ancestry",  key:"dragon",   ops:{violence:2,logistics:1}, source:"static" },
  *     { kind:"archetype", key:"warlord",  ops:{violence:1}, source:"item-flag" },
@@ -236,7 +236,7 @@ function contributionBreakdown(actor){
     if (key) {
       const itemDoc = _slotItemDoc(slot);
       const ovr = _itemOverride(itemDoc);
-      const ops = ovr || SEPHIRAH_TABLE[key] || null;
+      const ops = ovr || SEPHIRAH_TABLE[(key === "gevurah" || key === "gevura") ? "geburah" : key] || null;   // legacy spelling fold (2026-10-26)
       if (ops && Object.keys(ops).length) {
         const norm = {};
         _addInto(norm, ops);

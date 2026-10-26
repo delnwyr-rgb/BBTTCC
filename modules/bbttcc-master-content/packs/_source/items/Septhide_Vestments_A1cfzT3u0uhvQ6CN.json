@@ -13,7 +13,8 @@
     "equipped": false,
     "tags": [
       "light-cloth",
-      "sept-blessed"
+      "sept-blessed",
+      "light"
     ],
     "category": "armor",
     "source": "",
@@ -145,8 +146,7 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!A1cfzT3u0uhvQ6CN.lVFe9mUabaS6VJlW"
+      }
     }
   ],
   "sort": -50000,
@@ -155,12 +155,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137142759,
-    "modifiedTime": 1782160020984,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988955555,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

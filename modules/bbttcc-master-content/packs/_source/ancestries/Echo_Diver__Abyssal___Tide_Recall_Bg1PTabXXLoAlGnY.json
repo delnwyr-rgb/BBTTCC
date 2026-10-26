@@ -7,7 +7,7 @@
     "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-echo-diver=\"v1\" style=\"display:none\"></div><p><em>\"The last thing anyone thinks before they drown stays in the water with them. You can hear it.\"</em></p><p><strong>Tide Recall (1/Soma Break).</strong> Touch a surface, creature, or object. The GM tells you one true thing from its recent past. The lookback window scales with your tier — Tier 1: last 24 hours · Tier 2: last week · Tier 3: last year · Tier 4: anything that ever happened to it. The GM may colour the answer; they may not lie.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDivAbyssalTideRecall\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Tide Recall</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Action (touch)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Touch any surface/creature/object; GM tells you one true thing from its recent past, lookback scales with character tier (24h / week / year / anything).</span></p></div>",
+      "value": "<p><em>\"The last thing anyone thinks before they drown stays in the water with them. You can hear it.\"</em></p><p><strong>Tide Recall (1/Soma Break).</strong> Touch a surface, creature, or object. The GM tells you one true thing from its recent past. The lookback window scales with your tier — Tier 1: last 24 hours · Tier 2: last week · Tier 3: last year · Tier 4: anything that ever happened to it. The GM may colour the answer; they may not lie.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDivAbyssalTideRecall\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Tide Recall</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Action (touch)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Touch any surface/creature/object; GM tells you one true thing from its recent past, lookback scales with character tier (24h / week / year / anything).</span></p></div>",
       "chat": ""
     },
     "advancement": {},
@@ -16,7 +16,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -33,14 +33,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "echo_diver",
       "feature": "tide_recall",
       "lineage": "Abyssal",
-      "tierLevel": 1,
       "version": "1.1.0",
       "date": "2026-04-19",
       "rfiNative": true
@@ -49,7 +45,7 @@
       "grants": {
         "resistances": [
           {
-            "type": "energy",
+            "type": "thermal",
             "flavor": "cold"
           },
           {
@@ -249,12 +245,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776660294498,
-    "modifiedTime": 1781116071489,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988968699,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

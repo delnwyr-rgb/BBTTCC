@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — The High Priestess (Seer)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During reconnaissance, espionage, omen-reading, or hidden-threat scenarios, the first successful information-gathering step reveals one additional hidden tag, threat, or condition.</li></ul>",
+      "value": "<p><strong>Tier 2 (Level 5) — The High Priestess (Seer)</strong></p><ul><li><strong>Strategic:</strong> Once per scene of reconnaissance, espionage, omen-reading or hidden threat, your Domain's first successful information-gathering step reveals one additional hidden tag, threat or condition (the card fires it).</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -72,12 +72,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986753400,
-    "modifiedTime": 1781116018522,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989160280,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

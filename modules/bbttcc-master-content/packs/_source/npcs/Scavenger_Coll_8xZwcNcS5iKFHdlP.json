@@ -1,0 +1,448 @@
+{
+  "name": "Scavenger — Coll",
+  "type": "npc",
+  "folder": "Gbm7VYogpunT8cgA",
+  "img": "modules/bbttcc-onboarding/art/scavenger-coll.webp",
+  "ownership": {
+    "default": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": -1,
+    "name": "Scavenger — Coll",
+    "width": 1,
+    "height": 1,
+    "displayName": 30,
+    "depth": 1,
+    "texture": {
+      "src": "modules/bbttcc-onboarding/art/scavenger-coll.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "role": "",
+    "tier": 1,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 1
+      },
+      "body": {
+        "value": 5
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 10,
+        "max": 10,
+        "temp": 0
+      },
+      "stress": {
+        "value": 13,
+        "max": 8
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "Careful scavenger who keeps turning up in new roles, always with Bit (tutorial+)",
+      "notes": "Coll is Bit's partner, a careful, spare scavenger who keeps turning up alongside Bit in whatever new role the two have been given this time. Bit does the talking; Coll does the looking. Coll notices the detail the scene forgot to hide and names it carefully, 'the way you'd say it about a patient'. Coll answers everything asked and volunteers nothing, except continuity errors, which Coll cannot let go. Slow to warm up, and kind."
+    }
+  },
+  "flags": {
+    "bbttcc-onboarding": {
+      "foeClass": "sentient"
+    },
+    "fourththing": {
+      "kind": "npc"
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the fence, the Pettibone line, the tent, the roads, roles, Bit, the Stewards, resources, recycling",
+        "notes": "[TALK-PILOT-2026-09-15] RECURRING CHARACTER — Coll (always with Bit). Coll also knows it's a game and minds it LESS than Bit does: Coll finds each new role faintly interesting and each reuse faintly insulting, and says so in fewer words. Coll is the one who looks at the fence, the tent, the wall — the detail the scene forgot to hide — and names it carefully, \"the way you'd say it about a patient.\" Warms to the Stewards more slowly than Bit and more permanently. VOICE: careful, spare, kind; answers everything asked and volunteers nothing, except continuity errors, which Coll cannot let go. If cast as an enemy soldier later, Coll will help the Stewards and be mildly embarrassed about how quickly.",
+        "secretsRaw": "Coll Reads the Set :: rollPlus2 :: a Steward asks Coll what's WRONG with the scene they're standing in, or what Coll has noticed that nobody said :: Coll names the detail the scene is built to hide — the fence nobody argues about, the tent that is too clean, the crowd that is all new. It is never the plot; it is always the seam. Produced in court, it is the observation nobody in the room can un-hear.\nSame Fence :: rollPlus2 :: a Steward shows Coll the rubbing from the post, or asks whether the quiet place and the loud place were ever one place :: Coll goes quiet, which is the loudest thing Coll does. \"It was a fence argument. We stood in the middle of it. One side went quiet. The other side got a tent.\" Both sides still count the fence. Coll will not say which side Coll would have stood on."
+      }
+    }
+  },
+  "_id": "8xZwcNcS5iKFHdlP",
+  "items": [
+    {
+      "_id": "E13WwZbG6U414tKB",
+      "name": "Fence-Wire Sling (if provoked)",
+      "type": "weapon",
+      "img": "icons/weapons/slings/slingshot-wood.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "ranged",
+        "damage": {
+          "formula": "1d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 30,
+          "long": 60
+        },
+        "tags": [
+          "improvised"
+        ],
+        "effect": "Range 6/12 squares. Coll fires once and then looks for the exit.",
+        "flavor": "A loop of fence wire and a pocket of road grit.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p><em>Only if the scavengers are cornered.</em></p><p>Range 6/12 squares. Coll fires once and then looks for the exit.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "frame": "weapon",
+              "origin": "looted",
+              "bound": "free",
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "label": "Fence-Wire Sling",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ranged",
+          "primary": {
+            "video": {
+              "dbSection": "ranged",
+              "menuType": "weapon",
+              "animation": "sling",
+              "variant": "01",
+              "color": "grey",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": false,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989101834,
+        "modifiedTime": 1792989101834,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "effects": [],
+  "sort": 0,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791317011798,
+    "modifiedTime": 1792989101705,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!8xZwcNcS5iKFHdlP"
+}

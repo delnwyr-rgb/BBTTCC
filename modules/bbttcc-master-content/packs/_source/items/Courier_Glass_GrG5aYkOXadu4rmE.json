@@ -41,15 +41,15 @@
           "charges": 3,
           "materialKey": "courier-glass",
           "price": {
-            "marks": 150,
+            "marks": 45,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TII material stamp",
+            "notes": "TII material",
             "bound": "free",
-            "saleBack": 60
+            "saleBack": 18
           }
         }
       }
@@ -64,11 +64,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137161822,
-    "modifiedTime": 1782156674943,
+    "modifiedTime": 1792977620084,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

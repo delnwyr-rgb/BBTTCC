@@ -117,14 +117,14 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     training_drills: "Increase Violence cap +1 for 2 turns.",
     reconstruction_drive: "Upgrade Hex status to 'Claimed'.",
     cultural_exchange: "Share Alignment bonus between Hexes.",
-    spy_insertion: "Reveal enemy OP pools next turn.",
+    spy_insertion: "Reveal the enemy's marks banks next turn.",
     terraforming_project: "Cleanse 1 Corrupted Hex.",
-    alliance_summit: "Merge resources for 1 Strategic Turn.",
+    alliance_summit: "Both Domains' marks income ×1.15 next turn.",
     industrial_revolution: "Double Economy output for 2 turns.",
     psych_ops_broadcast: "-2 Loyalty to enemy Hex.",
     purification_rite: "Reduce Darkness Track −2.",
     great_work_ritual: "Trigger Tikkun Phase C for one Spark.",
-    mass_mobilization: "+25% OP generation next turn, then −25%.",
+    mass_mobilization: "Marks income ×1.25 next turn, then ×0.75 (retired — see Mass Mobilization std).",
     enlightenment_congress: "Raise Enlightenment for all PCs by 1.",
     project_eden: "Create 'Garden City' Hex aligned to Tiferet.",
     apocalyptic_weapon_test: "Destroy enemy Hex; Darkness +3.",
@@ -1121,7 +1121,9 @@ if (_fid) {
           propaganda_tour:            "same effect as Propaganda Campaign (T1, no tier lock)",
           reconstruction_drive:       "folded into Reconstruction Drive (std) — repairs + status → Claimed + Integration +1",
           flaming_pitch:              "identical to Boiling Oil",
-          develop_infrastructure_std: "Infrastructure Expansion is strictly better at the same price (and now carries Integration +1)"
+          develop_infrastructure_std: "Infrastructure Expansion is strictly better at the same price (and now carries Integration +1)",
+          mass_mobilization:          "the old ×1.25/×0.75 income swing — Mass Mobilization (std) is the one card (DC2, 2026-10-26)",
+          radiant_rally:              "merged into Rally the Line 2026-05-24 (DC2, 2026-10-26)"
         };
         for (const [key, v] of Object.entries(EFFECTS)) {
           if (!v || v.kind !== "strategic") continue;

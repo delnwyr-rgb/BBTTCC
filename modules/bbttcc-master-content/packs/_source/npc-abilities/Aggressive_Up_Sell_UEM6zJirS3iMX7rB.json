@@ -7,7 +7,7 @@
     "intent": "presence",
     "skill": "channel",
     "damage": {
-      "formula": "1d8",
+      "formula": "1d4",
       "attribute": "presence",
       "type": "psychic",
       "damageFlavor": "the jingle, weaponized",
@@ -23,7 +23,7 @@
       "sonic",
       "comedic"
     ],
-    "effect": "15 ft. sphere of relentless marketing. Resolve vs DC 12. Fail: 1d8 psychic to Stress and Staggered until the start of its next turn.",
+    "effect": "3 squares. sphere of relentless marketing. Resolve vs DC 12. Fail: 1d8 psychic to Stress and Staggered until the start of its next turn.",
     "flavor": "",
     "manifestation": {
       "tier": 1,
@@ -54,6 +54,24 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 12,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "staggered"
+        ],
+        "duration": "1-round"
+      },
+      "area": {
+        "shape": "sphere",
+        "size": 15
       }
     },
     "description": {
@@ -61,7 +79,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -84,20 +101,6 @@
             "saleBack": 60
           }
         }
-      },
-      "manifestSheetMode": {
-        "bytUGWIOqq9eT7Or": "display"
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Snarky Burger Mascot (Reanimated)"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
       }
     },
     "autoanimations": {
@@ -276,24 +279,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "S'narchy Burger Mascot (Reanimated)"
+        ],
+        "sourceIds": [
+          "NZwUSJxiR3jQWWP5"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
   "_id": "UEM6zJirS3iMX7rB",
   "sort": 0,
+  "folder": null,
   "ownership": {
-    "default": 0
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1780000000000,
-    "modifiedTime": 1782167300917,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989016875,
+    "modifiedTime": 1792989016875,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
   },
-  "folder": null,
   "_key": "!items!UEM6zJirS3iMX7rB"
 }

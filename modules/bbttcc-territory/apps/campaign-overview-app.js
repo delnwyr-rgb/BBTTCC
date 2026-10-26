@@ -39,7 +39,7 @@ const SEPHIROT = {
   chokmah:  { addPer:{ knowledge:+2, trade:+2 } },
   binah:    { addPer:{ knowledge:+2, trade:+2 } },
   chesed:   { diplomacy:+3, loyalty:+3 },
-  gevurah:  { addPer:{ military:+3 }, defense:+1 },
+  geburah:  { addPer:{ military:+3 }, defense:+1 },
   tiferet:  { diplomacy:+2, loyalty:+2 },
   netzach:  { addPer:{ military:+2 }, loyalty:+2 },
   hod:      { addPer:{ knowledge:+2, trade:+2 } },
@@ -74,9 +74,10 @@ function normalizeSizeKey(sizeRaw) {
 }
 function keyFromName(n){ return String(n||"").toLowerCase().trim().replace(/[^\p{L}]+/gu,""); }
 async function resolveSephirotKeyFromFlags(f) {
-  if (f.sephirotKey) return String(f.sephirotKey).toLowerCase().trim();
+  const fold = (k) => (k === "gevurah" || k === "gevura") ? "geburah" : k;   // legacy spelling (2026-10-26)
+  if (f.sephirotKey) return fold(String(f.sephirotKey).toLowerCase().trim());
   if (!f.sephirotUuid) return "";
-  try { const it = await fromUuid(f.sephirotUuid); return keyFromName(it?.name ?? ""); }
+  try { const it = await fromUuid(f.sephirotUuid); return fold(keyFromName(it?.name ?? "")); }
   catch { return ""; }
 }
 const HR_KEYS = ["food","materials","trade","military","knowledge"];
@@ -320,7 +321,7 @@ const OVERVIEW_TIPS = {
   colHexes:     "Hexes — how many territory hexes the faction holds across all Scenes.",
   colScenes:    "Scenes — which Scenes the faction's hexes sit on.",
   colResources: "Resources (per turn) — the faction's summed effective yields: each hex's base pips × size multiplier × modifiers, plus sephirot bonuses, totalled across every holding. This is the production the turn engine converts into OP income.",
-  colDefense:   "Defense — the summed defensive bonuses across the faction's hexes, from size (Village/Town +1 … Megalopolis +4), modifiers (Fortified +3, Well-Maintained +1, Difficult Terrain +1…), and sephirot (Gevurah +1). Each hex's own share applies when that hex is raided.",
+  colDefense:   "Defense — the summed defensive bonuses across the faction's hexes, from size (Village/Town +1 … Megalopolis +4), modifiers (Fortified +3, Well-Maintained +1, Difficult Terrain +1…), and sephirot (Geburah +1). Each hex's own share applies when that hex is raided.",
   colOpen:      "Open — jump to this faction's full sheet.",
   relations:    "Faction relations — every non-neutral pair in the world, most extreme first (at war / hostile / unfriendly / friendly / allied). Read from each faction's relationship map (api.factions.relations); a pair both sides agree on shows once, a lopsided pair shows both directions. Beat gates, raid maneuvers and travel free-passage read these tiers — this is where to look when a door won't open.",
   relQuiet:     "All quiet — every faction pair is neutral. Relations move through beats, the Faction Exchange, diplomacy actions and raids.",

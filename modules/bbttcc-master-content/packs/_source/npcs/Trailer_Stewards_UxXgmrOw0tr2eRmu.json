@@ -1,0 +1,23 @@
+{
+  "name": "Trailer Stewards",
+  "type": "Actor",
+  "color": "#4fc3ff",
+  "_id": "UxXgmrOw0tr2eRmu",
+  "description": "",
+  "folder": null,
+  "sorting": "a",
+  "sort": 1500000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792773730065,
+    "modifiedTime": 1792773731013,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!UxXgmrOw0tr2eRmu"
+}

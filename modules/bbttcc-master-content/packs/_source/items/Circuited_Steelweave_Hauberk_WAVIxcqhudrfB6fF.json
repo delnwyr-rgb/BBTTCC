@@ -1,0 +1,120 @@
+{
+  "name": "Circuited Steelweave Hauberk",
+  "type": "armor",
+  "img": "icons/equipment/chest/breastplate-scale-grey.webp",
+  "system": {
+    "guardBonus": 5,
+    "evasionBonus": 0,
+    "resolveBonus": 3,
+    "resistances": [
+      "kinetic"
+    ],
+    "armorSkill": "plating",
+    "equipped": false,
+    "tags": [
+      "t2-aspiration",
+      "heavy",
+      "mail",
+      "plate",
+      "reactive",
+      "graded",
+      "grade-circuited"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A heavy hauberk woven through with a fine tension-thread of reactive yesodium-doped wire, cut and rivetted by a journeyman armorer in one of the older Bad Eden plate-houses. The weave snags incoming force a half-beat before it lands, redistributing it into the wearer's stance instead of their ribs. Heavy. Expensive. Worth it.</p><p><strong>Reactive Lacing.</strong> While worn, the wearer may shift one die of incoming kinetic damage into Stress instead of Integrity, once per scene. No upkeep, no harmonization — the thread does the thinking.</p>\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Circuited (+2). A closed circuit of sigils; it answers one hand.</strong></p>\n<ul>\n  <li><strong>+2 on each of its defense bonuses</strong> → Guard +5, Resolve +3 (rank-scaled like all armor: Trained half, Proficient full).</li>\n  <li>Grade raises it to <strong>Tier IV</strong> · attuned (one slot).</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Mail laced with reactive thread. The thread complains. The mail does not.",
+          "origin": "forged",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A heavy hauberk woven through with a fine tension-thread of reactive yesodium-doped wire, cut and rivetted by a journeyman armorer in one of the older Bad Eden plate-houses. The weave snags incoming force a half-beat before it lands, redistributing it into the wearer's stance instead of their ribs. Heavy. Expensive. Worth it.</p><p><b>Reactive Lacing.</b> While worn, the wearer may shift one die of incoming kinetic damage into Stress instead of Integrity, once per scene. No upkeep, no harmonization — the thread does the thinking.</p>",
+          "materialOf": [
+            {
+              "key": "mail",
+              "qty": 1
+            },
+            {
+              "key": "yesodium-thread",
+              "qty": 1
+            },
+            {
+              "key": "rivet-plate",
+              "qty": 1
+            },
+            {
+              "key": "hex-glyph-plate",
+              "qty": 1
+            },
+            {
+              "key": "wardiron",
+              "qty": 1
+            }
+          ],
+          "grants": {
+            "resistances": [
+              "kinetic"
+            ]
+          },
+          "price": {
+            "marks": 2025,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV armor (Circuited +2 on TII Steelweave Hauberk) × bound attuned",
+            "bound": "attuned",
+            "saleBack": 810
+          }
+        }
+      },
+      "grade": {
+        "rank": 2,
+        "name": "Circuited",
+        "key": "circuited",
+        "defense": 2
+      }
+    }
+  },
+  "folder": "paUl8Tj6Xx5fAkKN",
+  "_id": "WAVIxcqhudrfB6fF",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791427797929,
+    "modifiedTime": 1792988960795,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!WAVIxcqhudrfB6fF"
+}

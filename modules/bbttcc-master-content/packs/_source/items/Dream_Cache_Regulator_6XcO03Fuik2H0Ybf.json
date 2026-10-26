@@ -9,6 +9,7 @@
     ],
     "category": "gear",
     "source": "Phase 7 Seed (2026-05-10)",
+    "quantity": 1,
     "description": {
       "value": "<p>A small sigil-pendant tuned to a Dreamwalker's echo-reservoir. Stabilizes banking, prevents spillover during Soma Break.</p>",
       "chat": ""
@@ -65,18 +66,18 @@
   },
   "_id": "6XcO03Fuik2H0Ybf",
   "effects": [],
-  "folder": "0JDB983lzPepXXNe",
+  "folder": "TNrB6kEiHS0KwwJT",
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
     "systemVersion": "0.6.0",
     "createdTime": 1778963277000,
-    "modifiedTime": 1778963277000,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988931847,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

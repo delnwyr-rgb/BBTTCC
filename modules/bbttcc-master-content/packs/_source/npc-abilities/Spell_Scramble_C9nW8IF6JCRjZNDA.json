@@ -1,0 +1,64 @@
+{
+  "name": "Spell Scramble",
+  "type": "feat",
+  "img": "icons/weapons/guns/pistol-silenced.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Reaction.</strong> When a manifestation targets the demon or includes it in an area, the caster rolls Soul vs DC 16. Fail: the working collapses into nothing and the caster gains +1 Noise. The demon does not gloat. It has no face to gloat with.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "selfTurnStart",
+            "do": {
+              "prompt": "Spell Scramble (reaction): caster targeting it — Soul DC 16 or the working fails, +1 Noise."
+            },
+            "narrative": true
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Obstructor Demon"
+        ],
+        "sourceIds": [
+          "vYVjgcHYwwYRM6J1"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "C9nW8IF6JCRjZNDA",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069967,
+    "modifiedTime": 1792989070047,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!C9nW8IF6JCRjZNDA"
+}

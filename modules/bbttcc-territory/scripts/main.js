@@ -226,7 +226,7 @@ async function recordHexModifierTransition(hexDoc, modifier, transition, source 
 const DOSSIER_SIZE_LADDER = ["none", "outpost", "village", "town", "city", "metropolis", "megalopolis"];
 const DOSSIER_SIZE_MULT = SIZE_MULT;
 
-const _SEPH_HINT_NAMES = ["Keter","Chokhmah","Binah","Chesed","Gevurah","Tiferet","Netzach","Hod","Yesod","Malkuth"];
+const _SEPH_HINT_NAMES = ["Keter","Chokhmah","Binah","Chesed","Geburah","Tiferet","Netzach","Hod","Yesod","Malkuth"];
 const _fmtBonus = (b) => Object.entries(b).filter(([,v]) => v).map(([k,v]) => `+${v} ${k.charAt(0).toUpperCase()+k.slice(1)}`).join(", ") || "no bonus";
 // Derived from sephirotResourceBonus — the one authority (the hand-written list drifted: it promised Chokmah +2 Trade).
 const DOSSIER_SEPHIROT_HINTS = _SEPH_HINT_NAMES.map(n => ({ key: n.toLowerCase(), label: n, bonus: _fmtBonus(sephirotResourceBonus(n)) }));   // (keyFromName is a const declared later — TDZ at load)
@@ -235,7 +235,7 @@ const _DOSSIER_SEPHIROT_HINTS_LEGACY = [
   { key:"chokmah",  label:"Chokmah",  bonus:"+2 Knowledge, +2 Trade" },
   { key:"binah",    label:"Binah",    bonus:"+2 Knowledge, +2 Trade" },
   { key:"chesed",   label:"Chesed",   bonus:"+3 Diplomacy, +3 Loyalty" },
-  { key:"gevurah",  label:"Gevurah",  bonus:"+3 Military, +1 Defense" },
+  { key:"geburah",  label:"Geburah",  bonus:"+3 Military, +1 Defense" },
   { key:"tiferet",  label:"Tiferet",  bonus:"+2 Diplomacy, +2 Loyalty" },
   { key:"netzach",  label:"Netzach",  bonus:"+2 Military, +2 Loyalty" },
   { key:"hod",      label:"Hod",      bonus:"+2 Knowledge, +2 Trade" },
@@ -325,7 +325,7 @@ function computeHexNextSteps(dr) {
     if (!sephKey) {
       const typeFavoredSephirot = {
         farm: "chesed", mine: "malkuth", settlement: "tiferet",
-        fortress: "gevurah", port: "yesod", factory: "hod",
+        fortress: "geburah", port: "yesod", factory: "hod",
         research: "chokmah", temple: "keter", ruins: "binah"
       };
       const fav = typeFavoredSephirot[type];
@@ -1483,11 +1483,11 @@ async function buildSephirotList(){
   const foundByName = new Map();
   for (const it of game.items?.contents ?? []) {
     const name = it?.name ?? "";
-    if (/^(Keter|Chokhmah|Binah|Chesed|Gevurah|Tiferet|Netzach|Hod|Yesod|Malkuth)$/i.test(name))
+    if (/^(Keter|Chokhmah|Binah|Chesed|Geburah|Gevurah|Tiferet|Netzach|Hod|Yesod|Malkuth)$/i.test(name))   // Gevurah = legacy spelling (2026-10-26)
       foundByName.set(name, { uuid: it.uuid, name });
   }
-  for (const nm of ["Keter","Chokhmah","Binah","Chesed","Gevurah","Tiferet","Netzach","Hod","Yesod","Malkuth"])
-    if (!foundByName.has(nm)) foundByName.set(nm, { uuid: keyFromName(nm), name: nm });
+  for (const nm of ["Keter","Chokhmah","Binah","Chesed","Geburah","Tiferet","Netzach","Hod","Yesod","Malkuth"])
+    if (!foundByName.has(nm) && !(nm === "Geburah" && foundByName.has("Gevurah"))) foundByName.set(nm, { uuid: keyFromName(nm), name: nm });
   return Array.from(foundByName.values()).sort((A,B)=>A.name.localeCompare(B.name));
 }
 async function nameFromUuid(uuid){
@@ -1671,7 +1671,8 @@ function sephirotResourceBonus(name){
     case "chokhmah":return { food:0, materials:0, trade:0, military:0, knowledge:3 };
     case "binah":   return { food:0, materials:1, trade:0, military:0, knowledge:2 };
     case "chesed":  return { food:1, materials:0, trade:2, military:0, knowledge:0 };
-    case "gevurah": return { food:0, materials:0, trade:0, military:3, knowledge:0 };
+    case "geburah":
+    case "gevurah": return { food:0, materials:0, trade:0, military:3, knowledge:0 };   // gevurah = legacy spelling (2026-10-26)
     case "tiferet": return { food:0, materials:0, trade:1, military:1, knowledge:1 };
     case "netzach": return { food:0, materials:0, trade:1, military:2, knowledge:0 };
     case "hod":     return { food:0, materials:2, trade:1, military:0, knowledge:0 };
@@ -1893,7 +1894,7 @@ async function recomputeHexResources(hexDocOrUuid, { source = "recompute", dryRu
  * the alignment. Never overwrites an alignment the GM set by hand.
  * Spark keys (tikkun) → territory names: the one spelling difference is chokmah → Chokhmah. */
 const SPARK_KEY_TO_SEPHIROT_NAME = {
-  keter:"Keter", chokmah:"Chokhmah", chokhmah:"Chokhmah", binah:"Binah", chesed:"Chesed", gevurah:"Gevurah",
+  keter:"Keter", chokmah:"Chokhmah", chokhmah:"Chokhmah", binah:"Binah", chesed:"Chesed", geburah:"Geburah", gevurah:"Geburah", gevura:"Geburah",
   tiferet:"Tiferet", netzach:"Netzach", hod:"Hod", yesod:"Yesod", malkuth:"Malkuth"
 };
 async function alignHexToSephirot(hexDocOrUuid, sephirahKey, { source = "ritual", overwrite = false, byName = "" } = {}) {

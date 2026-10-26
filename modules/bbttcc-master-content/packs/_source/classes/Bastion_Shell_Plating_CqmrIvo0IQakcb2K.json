@@ -272,12 +272,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776459996550,
-    "modifiedTime": 1781116128753,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907929612,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

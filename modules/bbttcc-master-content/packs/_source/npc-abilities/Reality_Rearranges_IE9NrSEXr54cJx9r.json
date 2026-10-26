@@ -38,7 +38,6 @@
       "subtype": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -46,6 +45,27 @@
           "tier": "IV",
           "frame": "trait"
         }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "push": 6
+            },
+            "who": "targets",
+            "label": "Reality Rearranges — the creature"
+          },
+          {
+            "on": "use",
+            "do": {
+              "shift": 6
+            },
+            "to": "self",
+            "label": "Reality Rearranges — itself"
+          }
+        ]
       }
     },
     "bbttcc": {
@@ -53,29 +73,34 @@
         "sources": [
           "Avatar of the Veil"
         ],
+        "sourceIds": [
+          "PqhdO2hojxFosDX0"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "IE9NrSEXr54cJx9r",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167244993,
-    "modifiedTime": 1782167244993,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989040216,
+    "modifiedTime": 1792989040216,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!IE9NrSEXr54cJx9r"
 }

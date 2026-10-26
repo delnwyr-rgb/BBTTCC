@@ -1,0 +1,129 @@
+{
+  "_id": "AnCoreMenhirkin1",
+  "name": "Menhirkin: The Land Stood Up",
+  "type": "feat",
+  "img": "art/bbttcc/asli-icons/menhirkin_1.webp",
+  "effects": [],
+  "folder": "DylQKvptEOaCqul8",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "menhirkin",
+      "feature": "core",
+      "family": "menhirkin",
+      "speciesTrait": "menhirkin_core",
+      "version": "3.0.0",
+      "date": "2026-10-26"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "forced-movement",
+          "mode": "reroll-lowest",
+          "note": "Stone Soul"
+        },
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "while standing in a hex your Domain controls or has claimed",
+          "note": "Heartstone"
+        },
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "Stress, long-duration wear, forced marches, climate exposure, sustained labor",
+          "note": "Slow to Wear"
+        },
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "building, repairing or fortifying structures, siegeworks and defensive emplacements",
+          "note": "Stonebound"
+        },
+        {
+          "context": "check",
+          "skill": "stealth",
+          "mode": "reroll-highest",
+          "vs": "unless you are on or in stone",
+          "note": "Heavy Presence"
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-ally-incoming-damage",
+          "radius": 1,
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "offer": true,
+          "offerText": "Living Rampart — interpose: the adjacent ally takes half this damage.",
+          "effect": {
+            "kind": "modify-incoming-damage",
+            "args": {
+              "mode": "half"
+            }
+          }
+        }
+      ],
+      "passives": {
+        "vision": {
+          "tremorsense": 10
+        }
+      }
+    }
+  },
+  "system": {
+    "category": "feat",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"The land is not scenery. The land is a person. You are the version of it that finally stood up and walked over to complain.\"</em></p>\n<p><strong>Stone Soul.</strong> You count as Large for carrying capacity and for the size of creatures you can shove or grapple, despite your Medium frame. You reroll the lowest die on checks to resist being pushed, knocked Prone, or otherwise forcibly moved.</p>\n<p><strong>Heartstone.</strong> A fragment of your home hex is literally inside you. While you stand in a hex your Domain controls or has claimed, you reroll the lowest die on Body checks, and you cannot be forcibly removed from that hex against your will (teleportation, banishment, forced march) without first being reduced to 0 Integrity.</p>\n<p><strong>Land Memory (1/Soma Break).</strong> Lay a hand on any surface older than you; the GM tells you one true thing the land remembers.</p>\n<p><strong>Living Rampart (1/Soma Break).</strong> Reaction — when an ally adjacent to you is about to take damage from an attack, you interpose bulk and bad life choices: the ally takes half that damage.</p>\n<p><strong>Slow to Wear.</strong> You reroll the lowest die on Body checks against Stress, long-duration physical wear, forced marches, climate exposure, and sustained labor. You do not tire the way softer things tire.</p>\n<p><strong>Stonebound.</strong> You reroll the lowest die on Body checks to build, repair, or fortify structures, siegeworks, and defensive emplacements.</p>\n<p><strong>Heavy Presence.</strong> Your weight and settledness are perceptible: you have tremorsense out to 2 squares while standing on natural ground, and you roll 3d10 keep lowest 2 on Stealth checks unless you are on or in stone.</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "menhirkin_core",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "Menhirkin",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988968076,
+    "modifiedTime": 1792988968077,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "_key": "!items!AnCoreMenhirkin1"
+}

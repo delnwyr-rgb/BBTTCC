@@ -7,6 +7,7 @@
     "tags": [],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>Cages, hooks, and a butcher who hums. Works mid-deployment; nature provides on the move.</p>",
       "chat": ""
@@ -30,7 +31,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TI tool stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 12
@@ -50,11 +51,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.16",
     "createdTime": 1778205374519,
-    "modifiedTime": 1778963271957,
+    "modifiedTime": 1791865101707,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

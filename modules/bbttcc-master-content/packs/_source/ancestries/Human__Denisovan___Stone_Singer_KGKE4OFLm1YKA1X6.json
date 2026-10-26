@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Walls are stories. You can read them.”</em></p>\n        <p><strong>Stone-Singer.</strong> You gain a skill rank with the Plating aptitude. 1/Soma Break, you can reinforce a structure or barrier over 1 minute, granting it temporary durability (GM adjudicates).</p>",
+      "value": "\n<p><em>“Walls are stories. You can read them.”</em></p>\n        <p><strong>Stone-Singer.</strong> You gain a skill rank with the Plating aptitude. 1/Soma Break, you can reinforce a structure or barrier over 1 minute, granting it temporary durability (GM adjudicates).</p>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 5
     },
     "properties": [],
     "requirements": "Human",
@@ -41,14 +41,18 @@
       "kind": "human",
       "feature": "stone_singer",
       "lineage": "Denisovan",
-      "tierLevel": 5,
       "version": "1.0.0"
     },
     "bbttcc-character-options": {
       "option": {}
     },
     "fourththing": {
-      "vocabScrub": "2026-05-16"
+      "vocabScrub": "2026-05-16",
+      "passives": {
+        "ranks": {
+          "plating": 1
+        }
+      }
     }
   },
   "effects": [],
@@ -63,12 +67,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776540642443,
-    "modifiedTime": 1782167240123,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988976329,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

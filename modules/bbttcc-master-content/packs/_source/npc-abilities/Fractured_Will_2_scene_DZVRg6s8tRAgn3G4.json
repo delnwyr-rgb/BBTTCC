@@ -1,0 +1,63 @@
+{
+  "name": "Fractured Will (2/scene)",
+  "type": "feature",
+  "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-pre-fall",
+      "boss",
+      "fractured-will"
+    ],
+    "description": {
+      "value": "<p>When PRIME fails a check, some part of it refuses the outcome: PRIME succeeds instead. 2 times per scene.</p><p><em>The outcome is non-compliant. It is overruled.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "frame": "feature"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Compliance Engine PRIME"
+        ],
+        "sourceIds": [
+          "qDuH7PdGNGGqeChb"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "DZVRg6s8tRAgn3G4",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069930,
+    "modifiedTime": 1792989070015,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!DZVRg6s8tRAgn3G4"
+}

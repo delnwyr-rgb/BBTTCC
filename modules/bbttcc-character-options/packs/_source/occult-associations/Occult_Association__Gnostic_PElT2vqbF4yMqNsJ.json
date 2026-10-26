@@ -9,7 +9,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>Occult Association (Bad Eden): Gnostic.</em></p><p><strong>“I don’t believe. I remember.”</strong></p><p>Gnostics approach the Great Work as a recovery operation. The world is not merely broken. It is <em>obscured</em>.</p><p>Truth exists beneath propaganda, false heavens, corrupted consensus, and all the symbolic machinery that keeps frightened systems stable. Where others try to fix the world, the Gnostic strips it down. They interrogate assumptions, dismantle illusions, and treat certainty as a hostile force when it has not earned the right to exist.</p><p>To a Gnostic, the Great Work is not invention. It is <strong>remembrance</strong>. What is real was already real before the lie got organized.</p><p><strong>How Gnostics pursue the Great Work:</strong></p><ul><li>By exposing false narratives and corrupted consensus</li><li>By resisting manipulation, propaganda, and symbolic control</li><li>By recovering truths the world insists never existed</li><li>By making Stealth expensive to maintain</li></ul><p><strong>Resonance:</strong> <strong>Tiferet</strong> — truth, clarity, revelation, and the painful coherence that follows honest sight.</p><p><strong>Tell-tales:</strong> eyes that track patterns no one else admits are there, a habit of pausing just before the lie finishes speaking.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Soft Power OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> truth is destabilizing. Expect alienation, exposed contradictions, social friction, and pressure from systems that depended on confusion to survive.</p>",
+      "value": "<p><em>Occult Association (Bad Eden): Gnostic.</em></p><p><strong>“I don’t believe. I remember.”</strong></p><p>Gnostics approach the Great Work as a recovery operation. The world is not merely broken. It is <em>obscured</em>.</p><p>Truth exists beneath propaganda, false heavens, corrupted consensus, and all the symbolic machinery that keeps frightened systems stable. Where others try to fix the world, the Gnostic strips it down. They interrogate assumptions, dismantle illusions, and treat certainty as a hostile force when it has not earned the right to exist.</p><p>To a Gnostic, the Great Work is not invention. It is <strong>remembrance</strong>. What is real was already real before the lie got organized.</p><p><strong>How Gnostics pursue the Great Work:</strong></p><ul><li>By exposing false narratives and corrupted consensus</li><li>By resisting manipulation, propaganda, and symbolic control</li><li>By recovering truths the world insists never existed</li><li>By making Stealth expensive to maintain</li></ul><p><strong>Resonance:</strong> <strong>Tiferet</strong> — truth, clarity, revelation, and the painful coherence that follows honest sight.</p><p><strong>Tell-tales:</strong> eyes that track patterns no one else admits are there, a habit of pausing just before the lie finishes speaking.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to your Domain's Soft Power Domain rolls</strong></li></ul><p><strong>Cost Principle:</strong> truth is destabilizing. Expect alienation, exposed contradictions, social friction, and pressure from systems that depended on confusion to survive.</p><p><strong>Domain edge:</strong> Your Domain earns <strong>+10 Soft Power</strong> marks each turn while you serve it.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -64,7 +64,10 @@
       }
     },
     "fourththing": {
-      "vocabScrub": "2026-05-16"
+      "vocabScrub": "2026-05-16",
+      "domainRollBonus": {
+        "softpower": 1
+      }
     }
   },
   "effects": [],
@@ -80,12 +83,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987091124,
-    "modifiedTime": 1781116054734,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989173046,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

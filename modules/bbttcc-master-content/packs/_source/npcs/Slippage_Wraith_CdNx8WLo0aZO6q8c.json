@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/SlippageWraith1.png",
   "system": {
-    "role": "Phase Aberration (Reality-Drift)",
+    "role": "stealth",
     "tier": 3,
     "factionId": "",
     "notes": "<p>A person who slipped between moments and came back hungry. It flickers between where it is, where it was, and where the victim wishes it had gone.</p>",
@@ -11,7 +11,11 @@
       "level": 13,
       "tier": 3,
       "statPoints": 0,
-      "skillPoints": 0
+      "skillPoints": 0,
+      "biography": {
+        "value": "<p><strong>Concept.</strong> A person who slipped between moments and came back hungry. It flickers between where it is, where it was, and where the victim wishes it had gone.</p>\n<p><strong>Signature.</strong> Its footprints arrive after it does.</p>",
+        "public": ""
+      }
     },
     "faction": {
       "id": null,
@@ -22,13 +26,13 @@
         "value": 0
       },
       "intrigue": {
-        "value": 6
+        "value": 5
       },
       "presence": {
         "value": 6
       },
       "body": {
-        "value": 4
+        "value": 3
       },
       "mind": {
         "value": 3
@@ -40,8 +44,9 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 127,
-        "max": 127
+        "value": 90,
+        "max": 90,
+        "temp": 0
       },
       "stress": {
         "value": 64,
@@ -127,7 +132,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -138,35 +144,36 @@
     },
     "defenses": {
       "resistances": [
-        {
-          "type": "energy"
-        }
+        "electrical",
+        "thermal",
+        "chemical",
+        "kinetic"
       ],
       "immunities": [
-        {
-          "type": "qliphothic"
-        },
-        {
-          "type": "poison"
-        }
+        "qliphothic",
+        "poison"
       ],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "sephirotic"
+      ]
     },
     "conditionImmunities": [
       "charmed",
       "restrained",
       "staggered",
-      "poisoned",
       "prone",
-      "restrained"
+      "shaken"
     ],
     "tags": [
-      "5e-port",
       "cr-7",
       "Common",
       "Deep Cant",
-      "phase2-narrative-applied"
+      "phase2-narrative-applied",
+      "rfi-scrubbed"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -179,7 +186,12 @@
       "value": 0,
       "taint": 0,
       "fragments": []
-    }
+    },
+    "biography": {
+      "concept": "Phase Aberration (Reality-Drift)",
+      "notes": "<p>A person who slipped between moments and came back hungry. It flickers between where it is, where it was, and where the victim wishes it had gone.</p>"
+    },
+    "description": "<p><strong>Concept.</strong> A person who slipped between moments and came back hungry. It flickers between where it is, where it was, and where the victim wishes it had gone.</p>\n<p><strong>Signature.</strong> Its footprints arrive after it does.</p>"
   },
   "items": [
     {
@@ -191,10 +203,10 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p>The wraith can move through creatures and objects as if they were difficult terrain. It takes 5 (1d10) kinetic damage if it ends its turn inside an object.</p>",
+          "value": "<p>The wraith moves through creatures and objects as if they were difficult terrain. It takes 1d10 kinetic damage if it ends its turn inside an object.</p>",
           "chat": ""
         }
       },
@@ -205,19 +217,33 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "selfTurnStart",
+                "do": {
+                  "prompt": "Incorporeal Slip: moves through creatures/objects; 1d10 kinetic if it ends its turn inside one."
+                },
+                "narrative": true
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829208,
-        "modifiedTime": 1780163238852,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989123312,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!CdNx8WLo0aZO6q8c.6nxlJhKDx6V5WOdc"
+      }
     },
     {
       "name": "Temporal Afterimage",
@@ -228,10 +254,10 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p>Attack rolls against the wraith are made with disadvantage until the start of its next turn after it moves 2 squares or more.</p>",
+          "value": "<p>After the wraith moves 2 squares or more, attack rolls against it reroll the highest die until the start of its next turn.</p>",
           "chat": ""
         }
       },
@@ -242,19 +268,36 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attacked",
+                "if": {
+                  "ownerMovedSquares": 2
+                },
+                "do": {
+                  "reroll": "attack-highest"
+                },
+                "label": "Temporal Afterimage — it moved 2+ squares"
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.5",
         "createdTime": 1777700829208,
-        "modifiedTime": 1782167242595,
+        "modifiedTime": 1791422258372,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!CdNx8WLo0aZO6q8c.wbGOYXYMCtTTyOFb"
+      }
     },
     {
       "name": "Multiattack",
@@ -290,8 +333,7 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!CdNx8WLo0aZO6q8c.JQwu3v3MRk8WL7Lo"
+      }
     },
     {
       "name": "Rift Claw",
@@ -302,11 +344,11 @@
         "intent": "violence",
         "skill": "melee",
         "damage": {
-          "formula": "1d8",
+          "formula": "2d6",
           "attribute": "violence",
           "type": "psychic",
           "damageFlavor": "",
-          "track": "integrity"
+          "track": "stress"
         },
         "damageParts": [],
         "range": {
@@ -315,9 +357,9 @@
         },
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
-        "effect": "<p>The wraith tears the target with displaced time. On a hit, the target cannot take reactions until the start of its next turn.</p>",
+        "effect": "The wraith tears the target with displaced time. On a hit, the target cannot take reactions until the start of its next turn.",
         "flavor": "",
         "manifestation": {
           "tier": 1,
@@ -349,6 +391,9 @@
             "pool": "",
             "value": 0
           }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square., one target. Damage: <code>1d8</code> psychic + violence. Damage goes to Stress. On a hit, the target cannot take reactions until the start of its next turn.</p><p><em>You feel it a second before it lands, and a second after.</em></p>"
         }
       },
       "_id": "x7dhF6q42o4cWayz",
@@ -535,20 +580,35 @@
           "isCustomized": true,
           "fromAmmo": false,
           "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Rift Claw"
+                },
+                "do": {
+                  "noReactions": true
+                }
+              }
+            ]
+          }
         }
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829208,
-        "modifiedTime": 1780163238852,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792977758893,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!CdNx8WLo0aZO6q8c.x7dhF6q42o4cWayz"
+      }
     },
     {
       "name": "Phase Drain",
@@ -559,7 +619,7 @@
         "intent": "intrigue",
         "skill": "weave",
         "damage": {
-          "formula": "4d8",
+          "formula": "3d8",
           "attribute": "soul",
           "type": "qliphothic",
           "damageFlavor": "",
@@ -577,7 +637,7 @@
           "single",
           "shape-single"
         ],
-        "effect": "One target within 30 ft. rolls vs Resolve (DC 15). On a failed save the wraith then teleports to an unoccupied space within 5 ft. of the target. On a success, half damage and no teleport.",
+        "effect": "One target within 6 squares. rolls vs Resolve (DC 15). On a failed save the wraith then teleports to an unoccupied space within 1 square. of the target. On a success, half damage and no teleport.",
         "flavor": "It flickers to where you'll be standing, and drinks the difference.",
         "manifestation": {
           "tier": 1,
@@ -608,6 +668,14 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 15,
+            "onSave": "half",
+            "statesOnFail": true
           }
         },
         "description": {
@@ -629,6 +697,20 @@
               "frame": "save-single",
               "wiredFrom": "feature"
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Phase Drain"
+                },
+                "do": {
+                  "teleport": true
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -810,20 +892,19 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829208,
-        "modifiedTime": 1782167242595,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989123312,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!CdNx8WLo0aZO6q8c.9hq5jwIj5YSBrdoq"
+      }
     },
     {
-      "name": "Moment Shear (recharges on a Soma Break)",
+      "name": "Moment Shear (recharge 5–6)",
       "type": "weapon",
       "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
       "system": {
@@ -849,8 +930,8 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Each creature of the wraith's choice within 20 ft. rolls vs Resolve (DC 15). Half damage on success. On a failure, the target is also slowed until the end of its next turn (movement halved, no reactions, action OR bonus action \u2014 not both). Recharge 5\u20136.",
-        "flavor": "A second too late, a second too early \u2014 both happen to you at once.",
+        "effect": "Each creature of the wraith's choice within 4 squares. rolls vs Resolve (DC 15). Half damage on success. On a failure, the target is also slowed until the end of its next turn (movement halved, no reactions, action OR bonus action — not both). At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
+        "flavor": "A second too late, a second too early — both happen to you at once.",
         "manifestation": {
           "tier": 1,
           "family": "form",
@@ -880,10 +961,22 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 15,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 20
           }
         },
         "description": {
-          "value": "<p><strong>Area Attack.</strong> Each creature of the wraith's choice within 4 squares rolls <strong>Resolve</strong> vs DC 15. Hit: <code>4d6</code> psychic + soul; half on success. On a failure, the target is also slowed until the end of its next turn (movement halved, no reactions, action OR bonus action \u2014 not both).<br/><em>Recharges on a Soma Break.</em></p><p><em>A second too late, a second too early \u2014 both happen to you at once.</em></p>",
+          "value": "<p><strong>Area Attack.</strong> Each creature of the wraith's choice within 4 squares rolls <strong>Resolve</strong> vs DC 15. Hit: <code>4d6</code> psychic + soul; half on success. On a failure, the target is also slowed until the end of its next turn (movement halved, no reactions, action OR bonus action — not both).<br/><em>Recharges on a Soma Break.</em></p><p><em>A second too late, a second too early — both happen to you at once.</em></p>",
           "chat": ""
         }
       },
@@ -901,11 +994,30 @@
               "frame": "save",
               "wiredFrom": "feature"
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Moment Shear (recharge 5–6)"
+                },
+                "do": {
+                  "noReactions": true,
+                  "prompt": "Slowed: half move, action OR bonus action."
+                }
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
           }
         },
         "autoanimations": {
           "id": "ft-moment-shear-recharge-5-6-",
-          "label": "Moment Shear (Recharge 5\u20136)",
+          "label": "Moment Shear (Recharge 5–6)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -1082,17 +1194,16 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829208,
-        "modifiedTime": 1782167242595,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989123312,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!CdNx8WLo0aZO6q8c.kkxg5fSVnhh8kTth"
+      }
     },
     {
       "name": "Slip the Frame",
@@ -1103,10 +1214,10 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p>As a reaction when targeted by an attack the wraith can see, the wraith teleports up to 3 squares to an unoccupied space it can see. The triggering attack is made with disadvantage.</p>",
+          "value": "<p>Reaction, when targeted by an attack the wraith can see: it teleports up to 3 squares to an unoccupied space it can see. The triggering attack rerolls the highest die.</p>",
           "chat": ""
         }
       },
@@ -1117,19 +1228,37 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attacked",
+                "do": {
+                  "reroll": "attack-highest"
+                },
+                "limit": {
+                  "per": "round",
+                  "uses": 1
+                },
+                "label": "Slip the Frame — the wraith teleports up to 3 squares (GM moves it); the attack rolls 3 keep lowest"
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.5",
         "createdTime": 1777700829208,
-        "modifiedTime": 1782167242595,
+        "modifiedTime": 1791422258372,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!CdNx8WLo0aZO6q8c.nJBIqMwkt9vBrl60"
+      }
     },
     {
       "name": "Unmoored Presence",
@@ -1140,10 +1269,10 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p>A creature that starts its turn within 2 squares of the wraith must succeed on a DC 15 Soul check or have its movement reduced by 2 squares until the start of its next turn as local time thickens around it.</p>",
+          "value": "<p>A creature that starts its turn within 2 squares of the wraith must succeed a Soul check vs DC 15 or have its movement reduced by 2 squares until the start of its next turn as local time thickens around it.</p>",
           "chat": ""
         }
       },
@@ -1154,19 +1283,47 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "do": {
+                  "save": {
+                    "attr": "soul",
+                    "dc": 15,
+                    "onSave": "negate"
+                  }
+                },
+                "radius": 2,
+                "who": "enemies"
+              },
+              {
+                "on": "saveFail",
+                "do": {
+                  "slow": 2
+                },
+                "if": {
+                  "weapon": "Unmoored Presence"
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829208,
-        "modifiedTime": 1782167242596,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989123311,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!CdNx8WLo0aZO6q8c.tDM2plCYCHJXSJ78"
+      }
     },
     {
       "name": "Frame Drift",
@@ -1183,24 +1340,24 @@
         "target": "self",
         "range": "self",
         "damage": "1d6",
-        "damageType": "energy",
+        "damageType": "qliphothic",
         "damageFlavor": "",
         "damageRoll": {
           "op": "none",
           "number": 0,
           "die": "d6",
           "attribute": "",
-          "type": "kinetic",
+          "type": "qliphothic",
           "flavor": "",
-          "track": "integrity"
+          "track": "stress"
         },
         "damageParts": [],
         "effect": "Phase the Wraith partially out of the current frame. Until the start of its next turn, attackers reroll-lowest on attacks against it; on each missed attack, the attacker takes 1d6 qliphothic to Stress as the slip bleeds back into them.",
         "tags": [
           "translated",
-          "5e-port",
           "phase2-narrative",
-          "manifestation"
+          "manifestation",
+          "rfi-scrubbed"
         ],
         "category": "manifestation",
         "flavor": "The air around it remembers things that didn't happen.",
@@ -1224,7 +1381,7 @@
           "rangeFt": 0,
           "maintenanceCost": "1 Clarity per round to sustain.",
           "riskText": "The Wraith may slip too far and lose 1 Integrity to a frame it can't return from.",
-          "pathResonance": "Yesod \u2014 foundation as suggestion.",
+          "pathResonance": "Yesod — foundation as suggestion.",
           "fictionalPermission": "May refuse to be where it was.",
           "gmCalibration": "Reroll-lowest on attacks; 1d6 qliphothic to Stress on misses.",
           "mechanicalHook": "Reroll-lowest defense; reflective qliphothic damage.",
@@ -1249,6 +1406,9 @@
             "dcMode": "derived",
             "dcFixed": 15
           }
+        },
+        "description": {
+          "value": "<p><strong>Working.</strong> <em>Stop being entirely present.</em></p>\n<p>Phase the wraith partially out of the current frame. Until the start of its next turn, attackers reroll the highest die on attacks against it; each missed attack costs the attacker 1d6 qliphothic damage to Stress as the slip bleeds back into them.</p>\n<p><strong>Cost.</strong> 1 Clarity, +2 Noise · action · self / self.</p>\n<p><em>The air around it remembers things that didn't happen.</em></p>"
         }
       },
       "_id": "sfV5xqWm36h0dkio",
@@ -1436,20 +1596,36 @@
           "isCustomized": true,
           "fromAmmo": false,
           "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "evasive": {
+                    "rounds": 1
+                  },
+                  "prompt": "Each miss costs the attacker 1d6 qliphothic to Stress."
+                },
+                "who": "self"
+              }
+            ]
+          }
         }
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700841897,
-        "modifiedTime": 1780163238854,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989123312,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!CdNx8WLo0aZO6q8c.sfV5xqWm36h0dkio"
+      }
     },
     {
       "name": "Slipped Through",
@@ -1460,11 +1636,11 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port",
-          "phase2-narrative"
+          "phase2-narrative",
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p><strong>Reaction.</strong> When struck, the Wraith may displace 1 hex / 1 square The attacker briefly forgets which target they aimed at \u2014 they take Disadvantage (reroll-lowest) on their next attack roll this exchange.</p>",
+          "value": "<p>Reaction, when struck: the wraith displaces 1 square. The attacker briefly forgets which target they aimed at — they reroll the highest die on their next attack roll this exchange.</p>",
           "chat": ""
         }
       },
@@ -1476,19 +1652,96 @@
         "default": 0,
         "PEWWUtMPC7h7WMIt": 3
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "do": {
+                  "impose": true,
+                  "prompt": "The Wraith may displace 1 square (GM moves it)."
+                },
+                "label": "Slipped Through"
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.5",
         "createdTime": 1777700841897,
-        "modifiedTime": 1782167242596,
+        "modifiedTime": 1791422258372,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Half-Real",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "dream",
+          "reality-drift"
+        ],
+        "description": {
+          "value": "<p>Until this creature attacks, attacks against it reroll the highest die. Its first strike fully manifests it for the rest of the scene. It moves through creatures and objects as difficult terrain and takes 1d10 kinetic if it ends its turn inside something solid.</p><p><em>It is here. Sort of. The 'sort of' is the dangerous part.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!CdNx8WLo0aZO6q8c.ZJ1k1SclMPOYKIwb"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attacked",
+                "if": {
+                  "ownerNotAttacked": true
+                },
+                "do": {
+                  "reroll": "attack-highest"
+                },
+                "label": "Half-Real — until the first strike manifests it"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "dream"
+            }
+          }
+        }
+      },
+      "_id": "UeDTs5OgNfYrkkFV",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791342348914,
+        "modifiedTime": 1791422258373,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -1591,14 +1844,36 @@
   },
   "folder": "uMhSIaldbbcnBh0H",
   "sort": 631250,
-  "flags": {},
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "lineage": "dream",
+          "subLineage": "reality-drift",
+          "tier": "III",
+          "bracket": "heavy",
+          "price": {
+            "marks": 40,
+            "bounty": 40,
+            "hire": 60,
+            "ransom": 60,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "notes": "TIII heavy dream — bounty 40 / hire 60 marks; credited to the pool matching the method (default nonlethal)"
+          },
+          "title": "Phase Aberration (Reality-Drift)"
+        }
+      },
+      "creatureType": "undead"
+    }
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777700829208,
-    "modifiedTime": 1783219929021,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989123187,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

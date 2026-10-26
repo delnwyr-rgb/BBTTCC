@@ -21,7 +21,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A reinforced heater shield carried by Pactkeeper enforcers, its rim engraved with a standing oath the bearer renews each dawn. When the oath holds, so does the shield \u2014 vow-resin lacing snags incoming force and feeds it into the bearer's stance.</p><p><strong>Eat the Blow (1/Soma Break).</strong> While attuned and equipped, the bearer may shift one die of incoming kinetic damage into Stress instead of Integrity. GM-adjudicated; tap the use tracker when spent. Resists kinetic passively.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +3, Resolve +2</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Kinetic</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 450 Economy marks</p></li></ul>",
+      "value": "<p>A reinforced heater shield carried by Pactkeeper enforcers, its rim engraved with a standing oath the bearer renews each dawn. When the oath holds, so does the shield — vow-resin lacing snags incoming force and feeds it into the bearer's stance.</p><p><strong>Eat the Blow (1/Soma Break).</strong> While attuned and equipped, the bearer may shift one die of incoming kinetic damage into Stress instead of Integrity. GM-adjudicated; mark it spent until your next Soma Break. Resists kinetic passively.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +3, Resolve +2</p></li><li><p><strong>Requires:</strong> Bracing (trained)</p></li><li><p><strong>Resistance:</strong> Kinetic</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 315 Nonlethal marks</p></li></ul>",
       "chat": ""
     },
     "uses": {
@@ -50,22 +50,22 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A reinforced heater shield carried by Pactkeeper enforcers, its rim engraved with a standing oath the bearer renews each dawn. When the oath holds, so does the shield \u2014 vow-resin lacing snags incoming force and feeds it into the bearer's stance.</p><p><b>Eat the Blow (1/Soma Break).</b> While attuned and equipped, the bearer may shift one die of incoming kinetic damage into Stress instead of Integrity. GM-adjudicated; tap the use tracker when spent. Resists kinetic passively.</p>",
+          "lore": "<p>A reinforced heater shield carried by Pactkeeper enforcers, its rim engraved with a standing oath the bearer renews each dawn. When the oath holds, so does the shield — vow-resin lacing snags incoming force and feeds it into the bearer's stance.</p><p><b>Eat the Blow (1/Soma Break).</b> While attuned and equipped, the bearer may shift one die of incoming kinetic damage into Stress instead of Integrity. GM-adjudicated; tap the use tracker when spent. Resists kinetic passively.</p>",
           "materialOf": [
             "heart-iron",
             "vow-resin",
             "oath-leather"
           ],
           "price": {
-            "marks": 450,
-            "currency": "economy",
+            "marks": 315,
+            "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TIII shield \u00d7 1",
+            "notes": "TIII shield × attuned (hygiene 2026-10-07; was 450 economy)",
             "bound": "attuned",
-            "saleBack": 180
+            "saleBack": 126
           }
         }
       },
@@ -87,12 +87,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782150391560,
-    "modifiedTime": 1787335008060,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988957134,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

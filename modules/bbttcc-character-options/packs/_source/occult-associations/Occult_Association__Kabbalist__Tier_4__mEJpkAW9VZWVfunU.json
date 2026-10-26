@@ -2,8 +2,15 @@
   "name": "Occult Association: Kabbalist (Tier 4)",
   "type": "feat",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 — Kabbalist</strong></p><p><strong>“You don’t cleanse a Hex. You convince it to remember what it was meant to be.”</strong></p><p>At Tier 4, you are no longer merely a reader of alignment. You are a <em>shifter</em>. When your faction pushes a Hex toward a Sephirah, you can feel where the resistance is and where to apply pressure so the world gives way instead of breaking.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Alignment Authority:</strong> when your faction attempts to shift a Hex’s alignment toward a Sephirah, choose one:</li><ul><li>gain <strong>Advantage</strong> on the Opposed Strategic Roll, <em>or</em></li><li>reduce the OP cost of the shift by <strong>10%</strong> (minimum reduction 1 OP when spending 10+ OP; otherwise GM adjudicates)</li></ul></ul><p><em>The Tree hears you more clearly than it hears most people.</em></p><p><strong>Cost:</strong> forced alignment is never free. Expect backlash, revealed contradictions, metaphysical strain, or nearby instability when you make the world remember too quickly.</p>",
+      "value": "<p><strong>Tier 4 — Kabbalist</strong></p><p><strong>“You don’t cleanse a Hex. You convince it to remember what it was meant to be.”</strong></p><p>At Tier 4, you are no longer merely a reader of alignment. You are a <em>shifter</em>. When your Domain pushes a Hex toward a Sephirah, you can feel where the resistance is and where to apply pressure so the world gives way instead of breaking.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Alignment Authority:</strong> once per scene, when your Domain shifts a hex's alignment toward a Sephirah, choose one: reroll the lowest die on the Domain roll, or cut the shift's marks cost by 10% (the card fires it).</li></ul></ul><p><em>The Tree hears you more clearly than it hears most people.</em></p><p><strong>Cost:</strong> forced alignment is never free. Expect backlash, revealed contradictions, metaphysical strain, or nearby instability when you make the world remember too quickly.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -15,11 +22,6 @@
       "max": ""
     },
     "identifier": "occult-association-kabbalist-t4",
-    "source": {
-      "revision": 2,
-      "rules": "2024",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -81,12 +83,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987095107,
-    "modifiedTime": 1775063040940,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989176886,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

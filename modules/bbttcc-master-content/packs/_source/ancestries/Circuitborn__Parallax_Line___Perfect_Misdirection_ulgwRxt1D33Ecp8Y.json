@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Everyone is looking at the wrong thing. On purpose.”</em></p>\n        <p><strong>Perfect Misdirection (1/Soma Break).</strong> For 1 minute, hostile creatures roll 3d10 keep lowest 2 on attacks against you unless they succeed a Soul defense check at the start of their turn (DC = 8 + tier + Intrigue). Also, once per minute you may force a ranged attack to miss by “editing the frame.”</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"circParMisdirection\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Perfect Misdirection</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">For 1 minute, hostiles roll 3d10 keep lowest 2 on attacks vs. you unless they pass a Soul check (DC 8 + tier + Intrigue). Once per minute, force a ranged attack to miss.</div>\n</div>",
+      "value": "\n<p><em>“Everyone is looking at the wrong thing. On purpose.”</em></p>\n        <p><strong>Perfect Misdirection (1/Soma Break).</strong> For 1 minute, hostile creatures roll 3d10 keep lowest 2 on attacks against you unless they succeed a Soul defense check at the start of their turn (DC = 8 + tier + Intrigue). Also, once per minute you may force a ranged attack to miss by “editing the frame.”</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"circParMisdirection\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Perfect Misdirection</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">For 1 minute, hostiles roll 3d10 keep lowest 2 on attacks vs. you unless they pass a Soul check (DC 8 + tier + Intrigue). Once per minute, force a ranged attack to miss.</div>\n</div>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 17
     },
     "properties": [],
     "requirements": "Circuitborn",
@@ -41,7 +41,6 @@
       "kind": "circuitborn",
       "feature": "perfect_misdirection",
       "chassis": "Parallax Line",
-      "tierLevel": 17,
       "version": "1.0.0"
     },
     "bbttcc-character-options": {
@@ -252,12 +251,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004099337,
-    "modifiedTime": 1781116102014,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988986048,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -39,7 +39,6 @@
       "pack": "bbttcc-feats-core-v1",
       "generatedAt": "2026-01-18T18:59:59.544766+00:00"
     },
-    "fourththing": {},
     "autoanimations": {
       "id": "ft-calculated-risk",
       "label": "Calculated Risk",
@@ -228,11 +227,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1768802465828,
-    "modifiedTime": 1782164185975,
+    "modifiedTime": 1790037791983,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!Rst7wYHeDxYMFrI0"

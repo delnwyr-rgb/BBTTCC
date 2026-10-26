@@ -1,0 +1,696 @@
+{
+  "name": "Hunting Rifle of the Record",
+  "type": "weapon",
+  "img": "icons/weapons/guns/rifle-hunting-scoped-sight.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "violence",
+    "skill": "firearms",
+    "damage": {
+      "formula": "1d10",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "ballistic",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 12,
+      "long": 40,
+      "units": "sq"
+    },
+    "tags": [
+      "t1-baseline",
+      "rifle",
+      "ballistic",
+      "two-handed",
+      "bound-working"
+    ],
+    "effect": "Long-arm ballistic. Two-handed.",
+    "flavor": "Loud where it counts. Quiet otherwise.",
+    "manifestation": {
+      "tier": 2,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "<p>Bolt-action long arm, walnut stock, iron sights with an optional clamp-mount for a scope nobody can afford. Slow, accurate, loud. Used for game, for guard duty, and once memorably for an argument over fence lines.</p><p>Long range, no electronics, no magic. The rifle every patrol cabinet has at least one of.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Long-arm ballistic. Two-handed.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d10 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(ballistic)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 12 / 40 squares</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T2</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Bound Working — The Record Shows (TI).</strong></p>\n<ul>\n  <li>Carries the Working <strong>The Record Shows</strong>: it appears among your Manifestations as “The Record Shows ⟡ Hunting Rifle of the Record” and casts from the item, <strong>no Clarity</strong> — Noise and misfire still apply.</li>\n  <li><strong>3 charges</strong>; one is spent per cast attempt; all recover on a Soma Break.</li>\n  <li><em>One target within 6 squares is marked for the scene: Evasion −2 while their every move is a matter of record.</em></li>\n  <li>Tier II · attuned (one slot) · technomagical (Witness-forge binding).</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->"
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "5",
+          "frame": "weapon",
+          "signature": "Patient steel for impatient situations.",
+          "origin": "forged",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Bolt-action long arm, walnut stock, iron sights with an optional clamp-mount for a scope nobody can afford. Slow, accurate, loud. Used for game, for guard duty, and once memorably for an argument over fence lines.</p><p>Long range, no electronics, no magic. The rifle every patrol cabinet has at least one of.</p>",
+          "materialOf": [
+            {
+              "key": "scrap-steel",
+              "qty": 1
+            },
+            {
+              "key": "walnut-stock",
+              "qty": 1
+            },
+            {
+              "key": "prayer-binding",
+              "qty": 1
+            },
+            {
+              "key": "anchor-quartz",
+              "qty": 1
+            },
+            {
+              "key": "focused-crystal",
+              "qty": 1
+            },
+            {
+              "key": "witness-glass",
+              "qty": 1
+            }
+          ],
+          "price": {
+            "marks": 300,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII weapon × tech 2.0 (bound Working: The Record Shows TI) × attuned",
+            "bound": "attuned",
+            "saleBack": 120
+          },
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 3,
+              "max": 3,
+              "recoverPer": "soma-break"
+            },
+            "fuel": null,
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "signature": "bound-working",
+            "failure": "misfire",
+            "origin": "witness-forge",
+            "shielded": false
+          }
+        }
+      },
+      "working": {
+        "power": {
+          "name": "The Record Shows",
+          "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+          "system": {
+            "intent": "intrigue",
+            "channel": "mind",
+            "sephirah": "binah",
+            "mode": "hermetic",
+            "clarityRequired": 0,
+            "noiseGain": 0,
+            "activation": "action",
+            "target": "single",
+            "range": "near",
+            "damage": "",
+            "damageType": "energy",
+            "damageFlavor": "",
+            "damageRoll": {
+              "op": "none",
+              "number": 0,
+              "die": "d6",
+              "attribute": "",
+              "type": "kinetic",
+              "flavor": "",
+              "track": "integrity"
+            },
+            "damageParts": [],
+            "effect": "One target within 6 squares is marked for the scene: Evasion −2 while their every move is a matter of record.",
+            "tags": [
+              "starter-kit",
+              "debuff",
+              "mark",
+              "path:pactkeeper",
+              "doctrine-signature",
+              "sigil",
+              "reveal",
+              "sustained"
+            ],
+            "category": "manifestation",
+            "flavor": "Mal: 'Hard to dodge when your dodge is pre-registered. With diagrams.'",
+            "manifestation": {
+              "tier": 1,
+              "family": "working",
+              "concept": "You enter the target's position into the record — location, stance, habits, tells. The record is public. The record updates in real time.",
+              "form": "sigil",
+              "function": "reveal",
+              "stability": "sustained",
+              "interactionModel": "mark",
+              "costType": "none",
+              "costValue": 0,
+              "costText": "",
+              "duration": "scene",
+              "durationText": "",
+              "triggerText": "",
+              "scale": "personal",
+              "targetText": "",
+              "rangeAreaText": "",
+              "rangeFt": 30,
+              "maintenanceCost": "",
+              "riskText": "",
+              "pathResonance": "Pactkeeper — pactkeeper archivist of precedent",
+              "fictionalPermission": "",
+              "gmCalibration": "",
+              "mechanicalHook": "",
+              "signature": "",
+              "thirdThing": "",
+              "opCost": {
+                "pool": "",
+                "value": 0
+              },
+              "area": {
+                "shape": "none",
+                "size": 0
+              },
+              "activation": {
+                "type": "action",
+                "consumePool": true
+              },
+              "save": {
+                "enabled": false,
+                "defense": "evasion",
+                "attribute": "",
+                "dcMode": "derived",
+                "dcFixed": 15
+              },
+              "maintenanceKey": "none",
+              "isSignature": false,
+              "appliedStates": {
+                "states": [],
+                "duration": "scene",
+                "saveEachRound": false,
+                "saveAttribute": "mind",
+                "saveDcMode": "cast-dc",
+                "saveDcFixed": 15,
+                "saveAttributeOverrides": {}
+              },
+              "chain": {
+                "enabled": false,
+                "count": 3,
+                "range": 30,
+                "damageFormula": "1d6",
+                "damageType": "",
+                "carryConditions": false,
+                "carryEffects": false
+              },
+              "conditionalDamage": [],
+              "appliedEffects": {
+                "modifiers": [
+                  {
+                    "stat": "evasion",
+                    "op": "-",
+                    "value": 2
+                  }
+                ],
+                "resists": [],
+                "immunes": []
+              }
+            },
+            "description": {
+              "value": "<p>One target within 6 squares is marked for the scene: Evasion −2 while their every move is a matter of record.</p>"
+            }
+          },
+          "flags": {
+            "autoanimations": {
+              "id": "668f9d19-1f46-44cf-9d7b-1aac763c3473",
+              "label": "The Record Shows",
+              "levels3d": {
+                "type": "explosion",
+                "data": {
+                  "color01": "#FFFFFF",
+                  "color02": "#FFFFFF",
+                  "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+                },
+                "sound": {
+                  "enable": false
+                },
+                "secondary": {
+                  "enable": false,
+                  "data": {
+                    "color01": "#FFFFFF",
+                    "color02": "#FFFFFF",
+                    "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+                  }
+                }
+              },
+              "macro": {
+                "enable": false,
+                "playWhen": "0"
+              },
+              "meleeSwitch": {
+                "video": {
+                  "dbSection": "range",
+                  "menuType": "weapon",
+                  "animation": "arrow",
+                  "variant": "regular",
+                  "color": "regular"
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "detect": "automatic",
+                  "range": 2,
+                  "returning": false,
+                  "switchType": "on"
+                }
+              },
+              "menu": "ontoken",
+              "primary": {
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "spell",
+                  "animation": "bless",
+                  "variant": "intro",
+                  "color": "yellow",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "isWait": false,
+                  "opacity": 1,
+                  "playbackRate": 1,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "zIndex": 1
+                }
+              },
+              "secondary": {
+                "enable": false,
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "spell",
+                  "animation": "curewounds",
+                  "variant": "01",
+                  "color": "blue",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "addTokenWidth": false,
+                  "anchor": "0.5",
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "fadeIn": 250,
+                  "fadeOut": 500,
+                  "isMasked": false,
+                  "isRadius": true,
+                  "isWait": false,
+                  "opacity": 1,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1.5,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "zIndex": 1
+                }
+              },
+              "soundOnly": {
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                }
+              },
+              "source": {
+                "enable": false,
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "spell",
+                  "animation": "curewounds",
+                  "variant": "01",
+                  "color": "blue",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "addTokenWidth": false,
+                  "anchor": "0.5",
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "fadeIn": 250,
+                  "fadeOut": 500,
+                  "isMasked": false,
+                  "isRadius": false,
+                  "isWait": true,
+                  "opacity": 1,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "zIndex": 1
+                }
+              },
+              "target": {
+                "enable": false,
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "spell",
+                  "animation": "curewounds",
+                  "variant": "01",
+                  "color": "blue",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "addTokenWidth": false,
+                  "anchor": "0.5",
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "fadeIn": 250,
+                  "fadeOut": 500,
+                  "isMasked": false,
+                  "isRadius": false,
+                  "opacity": 1,
+                  "persistent": false,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "unbindAlpha": false,
+                  "unbindVisibility": false,
+                  "zIndex": 1
+                }
+              },
+              "isEnabled": true,
+              "isCustomized": true,
+              "fromAmmo": false,
+              "version": 5
+            }
+          }
+        },
+        "charges": {
+          "value": 3,
+          "max": 3,
+          "recoverPer": "soma-break"
+        },
+        "tier": 1
+      }
+    },
+    "autoanimations": {
+      "id": "0a92a0bd-b1fc-48d7-b730-a046c9c80b50",
+      "label": "Hunting Rifle",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "range",
+      "primary": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "weapon",
+          "animation": "bullet (+4 graded/bound twins)",
+          "variant": "regular",
+          "color": "regular",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "EdubcDDQfUtnlKvP",
+  "_id": "sQmhSSqyT4dsPgtc",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791427798072,
+    "modifiedTime": 1792988947825,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!sQmhSSqyT4dsPgtc"
+}

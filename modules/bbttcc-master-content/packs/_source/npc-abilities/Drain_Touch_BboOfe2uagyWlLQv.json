@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +79,28 @@
             "saleBack": 20
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Salt Wraith"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Drain-Touch"
+            },
+            "do": {
+              "damage": {
+                "formula": "1d4",
+                "type": "psychic"
+              },
+              "heal": "1d4"
+            }
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "8548f32c-ba78-4714-851b-a4b22949d80a",
+      "id": "ft-drain-touch",
       "label": "Drain-Touch",
       "macro": {
         "enable": false,
@@ -269,24 +275,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Salt Wraith"
+        ],
+        "sourceIds": [
+          "RQeXqKj5Q5fNLeRw"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "BboOfe2uagyWlLQv",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024226823,
-    "modifiedTime": 1782167244989,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989026060,
+    "modifiedTime": 1792989026060,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!BboOfe2uagyWlLQv"
 }

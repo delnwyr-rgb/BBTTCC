@@ -1,7 +1,7 @@
 {
   "type": "Item",
   "folder": null,
-  "name": "Abyssal Cartographer",
+  "name": "Abyssal Cartographers",
   "color": null,
   "sorting": "a",
   "_id": "RkZhM7hoNJJnRSIB",
@@ -12,12 +12,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.369",
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1774986939149,
-    "modifiedTime": 1774986939351,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989209693,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!folders!RkZhM7hoNJJnRSIB"
 }

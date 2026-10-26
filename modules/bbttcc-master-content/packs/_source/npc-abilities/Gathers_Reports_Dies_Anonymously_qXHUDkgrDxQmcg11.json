@@ -1,0 +1,117 @@
+{
+  "name": "Gathers, Reports, Dies Anonymously",
+  "type": "feat",
+  "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [
+      "seed-bestiary-attacks",
+      "tier-ii",
+      "role-stealth",
+      "passive"
+    ],
+    "description": {
+      "value": "<p>On death, the initiate's last sight is transmitted to a Witness-Warden within 1 mile. Combat-relevant: any nearby allied Witness gains reroll-the-lowest on their next attack roll against the killer.</p><p><em>They were always going to die this mission. The point was what they saw before they did.</em></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "frame": "trait"
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "zero",
+            "do": {
+              "bankReroll": {
+                "context": "attack",
+                "note": "Dies Anonymously"
+              }
+            },
+            "who": "allies",
+            "radius": 12,
+            "label": "Dies Anonymously"
+          }
+        ]
+      },
+      "triggers": [
+        {
+          "event": "on-drop-to-zero",
+          "effect": {
+            "kind": "bank-reroll",
+            "args": {
+              "target": "allies",
+              "radius": 12,
+              "excludeSelf": true,
+              "context": "attack",
+              "note": "the initiate's last sight — vs the killer"
+            }
+          }
+        }
+      ]
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Witness Initiate"
+        ],
+        "sourceIds": [
+          "OhNxMsImWa4bBZYA"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "qXHUDkgrDxQmcg11",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989027689,
+    "modifiedTime": 1792989027689,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!qXHUDkgrDxQmcg11"
+}

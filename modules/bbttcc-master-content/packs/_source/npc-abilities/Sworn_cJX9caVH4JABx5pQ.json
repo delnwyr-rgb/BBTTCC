@@ -1,0 +1,102 @@
+{
+  "name": "Sworn",
+  "type": "feat",
+  "img": "icons/equipment/shield/heater-steel-grey.webp",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [
+      "seed-bestiary-attacks",
+      "tier-iv",
+      "role-brute",
+      "passive"
+    ],
+    "description": {
+      "value": "<p>Immune to Charmed and Shaken. When the guard's sworn warlord (GM nominates at scene start) takes damage within 6 squares, the guard may use a reaction to take half of that damage instead.</p><p><em>They have killed more heroes than they remember. Heroes is just the title; remembering is the part they're done with.</em></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "trait"
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "allyDamaged",
+            "radius": 6,
+            "do": {
+              "ward": 0.5
+            },
+            "limit": {
+              "per": "round",
+              "uses": 1
+            },
+            "label": "Sworn — takes half of its warlord's wound"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Hex-Warlord's Honored Guard"
+        ],
+        "sourceIds": [
+          "mUM4tXeqeUagkLRJ"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "cJX9caVH4JABx5pQ",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069970,
+    "modifiedTime": 1792989070049,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!cJX9caVH4JABx5pQ"
+}

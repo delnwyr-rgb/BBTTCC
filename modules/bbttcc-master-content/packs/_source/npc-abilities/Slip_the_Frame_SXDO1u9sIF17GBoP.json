@@ -7,220 +7,65 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>As a reaction when targeted by an attack the wraith can see, the wraith teleports up to 3 squares to an unoccupied space it can see. The triggering attack is made with disadvantage.</p>",
+      "value": "<p>Reaction, when targeted by an attack the wraith can see: it teleports up to 3 squares to an unoccupied space it can see. The triggering attack rerolls the highest die.</p>",
       "chat": ""
     }
   },
-  "_id": "SXDO1u9sIF17GBoP",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attacked",
+            "do": {
+              "reroll": "attack-highest"
+            },
+            "limit": {
+              "per": "round",
+              "uses": 1
+            },
+            "label": "Slip the Frame — the wraith teleports up to 3 squares (GM moves it); the attack rolls 3 keep lowest"
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
           "Slippage Wraith"
         ],
+        "sourceIds": [
+          "CdNx8WLo0aZO6q8c"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
-    },
-    "autoanimations": {
-      "id": "b9099c46-59ee-4beb-b4c6-a3e9a3bb604d",
-      "label": "Slip the Frame",
-      "macro": {
-        "enable": false,
-        "playWhen": "0"
-      },
-      "menu": "ontoken",
-      "primary": {
-        "video": {
-          "dbSection": "static",
-          "menuType": "spell",
-          "animation": "bless",
-          "variant": "loop",
-          "color": "purple",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "contrast": 0,
-          "delay": 0,
-          "elevation": 1000,
-          "isWait": false,
-          "opacity": 1,
-          "playbackRate": 1,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "saturate": 0,
-          "size": 1,
-          "tint": false,
-          "tintColor": "#FFFFFF",
-          "zIndex": 1
-        }
-      },
-      "secondary": {
-        "enable": false,
-        "video": {
-          "dbSection": "static",
-          "menuType": "spell",
-          "animation": "curewounds",
-          "variant": "01",
-          "color": "blue",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "addTokenWidth": false,
-          "anchor": "0.5",
-          "contrast": 0,
-          "delay": 0,
-          "elevation": 1000,
-          "fadeIn": 250,
-          "fadeOut": 500,
-          "isMasked": false,
-          "isRadius": true,
-          "isWait": false,
-          "opacity": 1,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "saturate": 0,
-          "size": 1.5,
-          "tint": false,
-          "tintColor": "#FFFFFF",
-          "zIndex": 1
-        }
-      },
-      "soundOnly": {
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        }
-      },
-      "source": {
-        "enable": false,
-        "video": {
-          "dbSection": "static",
-          "menuType": "spell",
-          "animation": "curewounds",
-          "variant": "01",
-          "color": "blue",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "addTokenWidth": false,
-          "anchor": "0.5",
-          "contrast": 0,
-          "delay": 0,
-          "elevation": 1000,
-          "fadeIn": 250,
-          "fadeOut": 500,
-          "isMasked": false,
-          "isRadius": true,
-          "isWait": false,
-          "opacity": 1,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "saturate": 0,
-          "size": 1.5,
-          "tint": false,
-          "tintColor": "#FFFFFF",
-          "zIndex": 1
-        }
-      },
-      "target": {
-        "enable": false,
-        "video": {
-          "dbSection": "static",
-          "menuType": "spell",
-          "animation": "curewounds",
-          "variant": "01",
-          "color": "blue",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "addTokenWidth": false,
-          "anchor": "0.5",
-          "contrast": 0,
-          "delay": 0,
-          "elevation": 1000,
-          "fadeIn": 250,
-          "fadeOut": 500,
-          "isMasked": false,
-          "isRadius": true,
-          "isWait": false,
-          "opacity": 1,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "saturate": 0,
-          "size": 1.5,
-          "tint": false,
-          "tintColor": "#FFFFFF",
-          "zIndex": 1
-        }
-      },
-      "isEnabled": true,
-      "isCustomized": true,
-      "fromAmmo": false,
-      "version": 5
     }
   },
+  "effects": [],
+  "_id": "SXDO1u9sIF17GBoP",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781026866470,
-    "modifiedTime": 1782167244999,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989045032,
+    "modifiedTime": 1792989045032,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!SXDO1u9sIF17GBoP"
 }

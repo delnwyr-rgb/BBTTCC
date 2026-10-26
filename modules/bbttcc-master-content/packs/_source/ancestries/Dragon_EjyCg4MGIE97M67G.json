@@ -113,9 +113,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "species"
-    },
     "bbttcc": {
       "kind": "ancestry",
       "lineage": "dragon",
@@ -124,22 +121,7 @@
       "npAncestry": true
     },
     "fourththing": {
-      "principleSource": "ancestry",
-      "rfi": {
-        "item": {
-          "price": {
-            "marks": 30,
-            "currency": "economy",
-            "gmOverride": false,
-            "altCurrencies": {},
-            "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool × 0.60",
-            "bound": "free",
-            "saleBack": 12
-          }
-        }
-      }
+      "principleSource": "ancestry"
     },
     "bbttcc-factions": {
       "opContribution": {
@@ -152,11 +134,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778961511599,
-    "modifiedTime": 1781116073415,
+    "modifiedTime": 1792977713526,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

@@ -1,0 +1,136 @@
+{
+  "name": "Inciting Word",
+  "type": "weapon",
+  "img": "icons/weapons/guns/pistol-silenced.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "violence",
+    "skill": "channel",
+    "damage": {
+      "formula": "2d6",
+      "attribute": "presence",
+      "type": "psychic",
+      "damageFlavor": "",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 12,
+      "long": 12
+    },
+    "tags": [],
+    "effect": "One creature within 12 squares that can hear it rolls vs Resolve (DC 14). Fail: full damage to Stress, and the target immediately spends its reaction making one attack against a creature of the Disputant's choice — the perfect insult, perfectly placed. Success: half damage, no swing.",
+    "flavor": "A venomous whisper slithering into the ear like a snake.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 14,
+        "onSave": "half",
+        "statesOnFail": true
+      }
+    },
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Inciting Word"
+            },
+            "do": {
+              "noReactions": true,
+              "prompt": "Spends its reaction attacking a creature of the Disputant's choice."
+            }
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Thagirion Disputant"
+        ],
+        "sourceIds": [
+          "VWK3Fg8ozMPRipmD"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "0EGABGDkrUUNDcCx",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069946,
+    "modifiedTime": 1792989070032,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!0EGABGDkrUUNDcCx"
+}

@@ -3,8 +3,14 @@
   "type": "feat",
   "img": "icons/magic/symbols/runes-carved-stone-green.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Industrial Revolution</b></p><p>Double Economy output for 2 turns.</p><p><b>Cost:</b> Economy 4</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>industrial_revolution</code></p>",
+      "value": "<p><b>Industrial Revolution</b></p><p>Double Economy output for 2 turns.</p><p><b>Cost:</b> Economy 40 marks</p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "industrial-revolution",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -59,12 +61,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063189408,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989006140,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!fJSGCArGvDYOsK9Z"
 }

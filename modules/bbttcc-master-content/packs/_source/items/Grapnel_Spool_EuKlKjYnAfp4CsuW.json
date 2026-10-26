@@ -1,58 +1,20 @@
 {
+  "_id": "EuKlKjYnAfp4CsuW",
   "name": "Grapnel Spool",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/sundries/survival/rope-coil-white.webp",
   "system": {
-    "description": {
-      "value": "<p>50‑ft mono‑filament grapnel; reroll the lowest die on climb/jump checks [TODO(adv-call)]; can pull Medium target (Str vs DC 13).</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 3,
-      "units": "lb"
-    },
-    "price": {
-      "value": 120,
-      "denomination": "gp"
-    },
-    "rarity": "uncommon",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "grapnel-spool",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>10 squares mono‑filament grapnel; reroll the lowest die on climb/jump checks; can pull Medium target (Violence vs DC 13).</p>",
+      "chat": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": []
-    },
     "fourththing": {
       "rfi": {
         "item": {
@@ -63,39 +25,47 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1.5,
-            "notes": "TI tool stamp × rarity 1.5 (untiered pass 2026-10-12)",
+            "notes": "TI tool stamp × rarity 1.5",
             "bound": "free",
             "saleBack": 18
           },
-          "legacySystem": {
-            "description": {
-              "value": "<p>10 squares mono‑filament grapnel; reroll the lowest die on climb/jump checks; can pull Medium target (Violence vs DC 13).</p>"
-            }
-          },
           "tier": "I",
-          "frame": "tool"
+          "frame": "tool",
+          "bound": "free",
+          "origin": "looted",
+          "reach": "self",
+          "footprint": 1
         }
-      }
+      },
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "athletics",
+          "vs": "climbing or jumping with the grapnel",
+          "note": "Grapnel Spool"
+        }
+      ]
     }
   },
   "effects": [],
   "folder": "Wxh1A343inwTUeoo",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834174501,
-    "modifiedTime": 1782164185971,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 400000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "EuKlKjYnAfp4CsuW",
-  "sort": 400000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988909276,
+    "modifiedTime": 1792988909276,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!EuKlKjYnAfp4CsuW"
 }

@@ -1,58 +1,20 @@
 {
+  "_id": "buIaikuDJgYN0oD7",
   "name": "Filtermask Mk II",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/equipment/head/hood-leather-orange-mask.webp",
   "system": {
-    "description": {
-      "value": "<p>Breather mask; grants reroll the lowest die on Con saves vs [TODO(adv-call)]. gases; counts as tools for Athletics (Violence) (Body) checks to endure dust storms.</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 1,
-      "units": "lb"
-    },
-    "price": {
-      "value": 35,
-      "denomination": "gp"
-    },
-    "rarity": "common",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "filtermask-mk-ii",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>Breather mask; reroll the lowest die on Body checks vs. gases; counts as tools for Athletics (Violence) checks to endure dust storms.</p>",
+      "chat": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": []
-    },
     "fourththing": {
       "rfi": {
         "item": {
@@ -63,39 +25,47 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI vestment stamp (untiered pass 2026-10-12)",
+            "notes": "TI vestment stamp",
             "bound": "free",
             "saleBack": 30
           },
-          "legacySystem": {
-            "description": {
-              "value": "<p>Breather mask; reroll the lowest die on Body checks vs. gases; counts as tools for Athletics (Violence) checks to endure dust storms.</p>"
-            }
-          },
           "tier": "I",
-          "frame": "vestment"
+          "frame": "vestment",
+          "bound": "free",
+          "origin": "looted",
+          "reach": "self",
+          "footprint": 1
         }
-      }
+      },
+      "rerolls": [
+        {
+          "context": "save",
+          "mode": "reroll-lowest",
+          "attribute": "body",
+          "vs": "gases",
+          "note": "Filtermask Mk II"
+        }
+      ]
     }
   },
   "effects": [],
   "folder": "Wxh1A343inwTUeoo",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834170879,
-    "modifiedTime": 1782164185978,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1100000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "buIaikuDJgYN0oD7",
-  "sort": 1100000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988908457,
+    "modifiedTime": 1792988908458,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!buIaikuDJgYN0oD7"
 }

@@ -9,7 +9,7 @@
     "source": "Bad Eden (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>\"The goats are gone. So is the witness. So is the noise.\"</em></p><p><strong>Blood-Drinker (1/Soma Break).</strong> When you hit a creature with a melee attack, you may bite. Deal 1d6 + Body modifier qliphothic damage on top of the attack's normal damage, and gain temporary Integrity equal to the qliphothic damage dealt.</p><p><strong>Hex-Sense.</strong> You can smell magical residue the way most people smell rain. Once per scene, when something supernatural has happened in a place within the last 24 hours, the GM tells you so — and roughly what colour it was.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"crypChupBloodDrinker\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Blood-Drinker</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Triggered (on melee hit)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When you hit with a melee attack, bite for 1d6 + Body qliphothic damage on top of the attack, and gain temp Integrity equal to the qliphothic damage dealt.</span></p></div>",
+      "value": "<p><em>\"The goats are gone. So is the witness. So is the noise.\"</em></p><p><strong>Blood-Drinker (1/Soma Break).</strong> When you hit a creature with a melee attack, you may bite. Deal 1d6 + Body value qliphothic damage on top of the attack's normal damage, and gain temporary Integrity equal to the qliphothic damage dealt.</p><p><strong>Hex-Sense.</strong> You can smell magical residue the way most people smell rain. Once per scene, when something supernatural has happened in a place within the last 24 hours, the GM tells you so — and roughly what colour it was.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"crypChupBloodDrinker\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Blood-Drinker</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Triggered (on melee hit)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When you hit with a melee attack, bite for 1d6 + Body qliphothic damage on top of the attack, and gain temp Integrity equal to the qliphothic damage dealt.</span></p></div>",
       "chat": ""
     },
     "advancement": {},
@@ -18,7 +18,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -34,14 +34,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "cryptidkin",
       "feature": "blood_drinker",
       "lineage": "Chupacabra",
-      "tierLevel": 0,
       "version": "2.0.0",
       "date": "2026-04-29"
     },
@@ -229,12 +225,12 @@
   },
   "sort": 100000,
   "_stats": {
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777499679419,
-    "modifiedTime": 1781116072114,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988974317,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

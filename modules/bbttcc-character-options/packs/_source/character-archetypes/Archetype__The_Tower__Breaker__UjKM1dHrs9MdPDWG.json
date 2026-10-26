@@ -1,17 +1,13 @@
 {
   "name": "Archetype: The Tower (Breaker)",
   "type": "feat",
-  "img": "icons/environment/settlement/tower-stone-blue.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_tower.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "Bad Eden"
-    },
+    "source": "Bad Eden (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“If it stands, it can fall.”</em></p><p><strong>Archetype (Bad Eden): The Tower (Breaker).</strong> You are structural collapse, breach doctrine, and the terrible logic of proving that a thing was never as stable as it claimed.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens demolition, disruption, breach operations, and catastrophic openings. This Archetype is associated with <strong>+1 Violence</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>“If it stands, it can fall.”</em></p><p><strong>Archetype (Bad Eden): The Tower (Breaker).</strong> You are structural collapse, breach doctrine, and the terrible logic of proving that a thing was never as stable as it claimed.</p><h3>Archetype Effects</h3><ul><li><p><strong>Faction Edge.</strong> Your archetype strengthens demolition, disruption, breach operations, and catastrophic openings. Your Domain earns <strong>+10 Violence</strong> marks each turn while you serve it.</p></li><li><p><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</p></li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -94,12 +90,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986801383,
-    "modifiedTime": 1781116024150,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989148267,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

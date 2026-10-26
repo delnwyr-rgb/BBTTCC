@@ -21,7 +21,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A full-height pavise faced in polished mirror-alloy over a hex-lattice core. Heavy enough to plant; broad enough to hide a second Steward. The mirror face scatters arc and flame back the way they came.</p><p><strong>Mirror Face.</strong> Resists electrical and thermal. Slow to carry, slower to move \u2014 but nothing gets past it cheaply.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +4, Evasion -1, Resolve +1</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Electrical, Thermal</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 450 Economy marks</p></li></ul>",
+      "value": "<p>A full-height pavise faced in polished mirror-alloy over a hex-lattice core. Heavy enough to plant; broad enough to hide a second Steward. The mirror face scatters arc and flame back the way they came.</p><p><strong>Mirror Face.</strong> Resists electrical and thermal. Slow to carry, slower to move — but nothing gets past it cheaply.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +4, Evasion -1, Resolve +1</p></li><li><p><strong>Requires:</strong> Bracing (trained)</p></li><li><p><strong>Resistance:</strong> Electrical, Thermal</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 315 Nonlethal marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -46,22 +46,22 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A full-height pavise faced in polished mirror-alloy over a hex-lattice core. Heavy enough to plant; broad enough to hide a second Steward. The mirror face scatters arc and flame back the way they came.</p><p><b>Mirror Face.</b> Resists electrical and thermal. Slow to carry, slower to move \u2014 but nothing gets past it cheaply.</p>",
+          "lore": "<p>A full-height pavise faced in polished mirror-alloy over a hex-lattice core. Heavy enough to plant; broad enough to hide a second Steward. The mirror face scatters arc and flame back the way they came.</p><p><b>Mirror Face.</b> Resists electrical and thermal. Slow to carry, slower to move — but nothing gets past it cheaply.</p>",
           "materialOf": [
             "mirror-alloy",
             "hex-lattice",
             "brace-iron"
           ],
           "price": {
-            "marks": 450,
-            "currency": "economy",
+            "marks": 315,
+            "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TIII shield \u00d7 1",
+            "notes": "TIII shield × attuned (hygiene 2026-10-07; was 450 economy)",
             "bound": "attuned",
-            "saleBack": 180
+            "saleBack": 126
           }
         }
       },
@@ -86,11 +86,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782150391507,
-    "modifiedTime": 1787334995040,
+    "modifiedTime": 1792977653309,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

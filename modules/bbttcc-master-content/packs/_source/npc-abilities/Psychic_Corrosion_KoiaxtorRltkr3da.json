@@ -1,0 +1,73 @@
+{
+  "name": "Psychic Corrosion",
+  "type": "feature",
+  "img": "icons/equipment/body/suit-biohazard-protection.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>A creature that starts its turn inside the Miasma's space rolls vs Resolve (DC 18). Fail: 3d8 psychic damage (Stress), and the GM names one repressed impulse the fog is currently showing everyone on the target's behalf. It isn't real. It is accurate.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "do": {
+              "save": {
+                "attr": "soul",
+                "dc": 18,
+                "onSave": "negate"
+              },
+              "damage": {
+                "formula": "3d8",
+                "type": "psychic"
+              },
+              "prompt": "GM names a repressed impulse on a fail."
+            },
+            "radius": 1
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Lewd Miasma"
+        ],
+        "sourceIds": [
+          "Tw8Qy7Bg0pwKC29k"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "KoiaxtorRltkr3da",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069956,
+    "modifiedTime": 1792989070040,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!KoiaxtorRltkr3da"
+}

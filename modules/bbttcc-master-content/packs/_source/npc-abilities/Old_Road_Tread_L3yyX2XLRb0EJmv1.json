@@ -1,0 +1,134 @@
+{
+  "name": "Old Road Tread",
+  "type": "weapon",
+  "img": "icons/skills/movement/feet-winged-boots-brown.webp",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "melee",
+    "damage": {
+      "formula": "3d8",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "the road remembers being walked",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1
+    },
+    "tags": [
+      "bestiary",
+      "tier-iv",
+      "lineage-dream"
+    ],
+    "effect": "On a hit the target is knocked Prone.",
+    "flavor": "It did not hurry. It did not need to.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "prone"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "",
+        "saveDcMode": "none",
+        "saveDcFixed": 15,
+        "saveAttributeOverrides": {}
+      },
+      "area": {
+        "shape": "none",
+        "size": 0
+      }
+    },
+    "description": {
+      "value": "<p><strong>Strike.</strong> reach 1 square, one target. Damage: <code>3d8</code> kinetic (the road remembers being walked) + violence. On a hit the target is knocked Prone.</p><p><em>It did not hurry. It did not need to.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "attack",
+          "price": {
+            "marks": 1350,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV attack × 1",
+            "bound": "free",
+            "saleBack": 540
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Desenitarius Maarg"
+        ],
+        "sourceIds": [
+          "YreqW1q05O7dGoxK"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "L3yyX2XLRb0EJmv1",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069954,
+    "modifiedTime": 1792989070039,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!L3yyX2XLRb0EJmv1"
+}

@@ -10,12 +10,13 @@
     "armorSkill": "fitting",
     "equipped": false,
     "tags": [
-      "tech"
+      "tech",
+      "light"
     ],
     "category": "armor",
     "source": "Phase 7 Seed (2026-05-10)",
     "description": {
-      "value": "<p>A worn amulet that swallows sound around the wearer. Three scenes of silence per Soma Break; speech still passes, but boots and breath do not.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Evasion +1, Resolve +1</li>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 450 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>A worn amulet that swallows sound around the wearer. Three scenes of silence per Soma Break; speech still passes, but boots and breath do not.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Evasion +1, Resolve +1</li>\n  <li><strong>Requires:</strong> Fitting (trained)</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 450 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
       "chat": ""
     }
   },
@@ -125,8 +126,7 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!P84sMMxWAAWvMjyz.qZp6BPMi04Ogh7ww"
+      }
     }
   ],
   "folder": "Wxh1A343inwTUeoo",
@@ -135,12 +135,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1778963351715,
-    "modifiedTime": 1782160020987,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988955365,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

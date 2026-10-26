@@ -150,6 +150,7 @@
             ${li(`Stewards, factions, rigs: <b>${ps.actorsUpdate}</b> restored · <b>${ps.actorsCreate}</b> re-created · <b>${ps.actorsDelete.length}</b> made since the save${names(ps.actorsDelete)} · library NPCs: <b>${ps.actorsKept}</b> kept`)}
             ${li(`Hexes: <b>${ps.hexesMerged}</b> get their play state back (owner, builds, pressure, sparks…) — names, terrain, nodes, travel links stay · <b>${ps.hexesLiveOnly}</b> made since the save stay${ps.hexesSavedMissing ? ` · ${ps.hexesSavedMissing} removed since the save stay gone` : ""}`)}
             ${li(`Tokens on <b>${ps.scenesKnown}</b> scenes put back · Journal: <b>${ps.journal}</b> Bad Eden entries`)}
+            ${row.golden ? li(`Party position cleared — no faction is "standing" anywhere and saved rides are dropped, so the opening plays wherever it is set`) : ""}
           </ul>
           ${ps.actorsDelete.length ? `<label style="display:flex;gap:.4rem;align-items:center;font-size:.9em"><input type="checkbox" name="deleteExtras" checked/> Delete the ${ps.actorsDelete.length} steward/faction/rig actor${ps.actorsDelete.length === 1 ? "" : "s"} made since the save</label>` : ""}
           ${ps.actorsDeleteGame.length ? `<label style="display:flex;gap:.4rem;align-items:center;font-size:.9em"><input type="checkbox" name="deleteGameExtras"/> Also delete the ${ps.actorsDeleteGame.length} NPC actor${ps.actorsDeleteGame.length === 1 ? "" : "s"} made since the save${names(ps.actorsDeleteGame, 6)} <span class="bbttcc-muted">(play-made crews yes; new bestiary entries no)</span></label>` : ""}`;

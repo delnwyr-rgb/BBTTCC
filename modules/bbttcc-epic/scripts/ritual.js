@@ -49,7 +49,7 @@ const INSTRUMENTS = {
   chokmah: { name: "Lightning of First Thought", kind: "reveal",  text: "Reroll any one test with the clarity of the very first idea." },
   binah:   { name: "The Mother's Structure",     kind: "protect", text: "The party ignores all stress from one station — form holds." },
   chesed:  { name: "Mercy Absolute",             kind: "protect", text: "Shield one steward from a Chain attack completely." },
-  gevurah: { name: "The Severity",               kind: "attack",  text: "A decisive blow — Severity answers force with force. (Spends toward SUNDER.)" },
+  geburah: { name: "The Severity",               kind: "attack",  text: "A decisive blow — Severity answers force with force. (Spends toward SUNDER.)" },
   tiferet: { name: "The Reconciler",             kind: "protect", text: "Re-open a locked station, or unlock a fragment-bound steward's channel." },
   netzach: { name: "Endurance Eternal",          kind: "protect", text: "A broken steward stands back up, immediately." },
   hod:     { name: "The Codebook",               kind: "reveal",  text: "The Dragon's next attack is read aloud before it lands." },
@@ -192,7 +192,8 @@ async function instrument(sephirah, use = "protect", { actorId = null } = {}) {
   if (!game.user?.isGM) return null;
   const st = ritualState();
   if (!st) { ui.notifications?.warn("No ritual underway."); return null; }
-  const s = String(sephirah).toLowerCase();
+  let s = String(sephirah).toLowerCase();
+  if (s === "gevurah" || s === "gevura") s = "geburah";   // legacy spelling (2026-10-26)
   const inst = INSTRUMENTS[s];
   const slot = st.instruments?.[s];
   if (!inst || !slot) { ui.notifications?.warn(`No lit lamp for "${sephirah}".`); return null; }

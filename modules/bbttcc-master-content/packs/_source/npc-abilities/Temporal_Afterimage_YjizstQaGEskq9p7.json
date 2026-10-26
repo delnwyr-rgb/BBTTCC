@@ -7,43 +7,64 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>Attack rolls against the wraith are made with disadvantage until the start of its next turn after it moves 2 squares or more.</p>",
+      "value": "<p>After the wraith moves 2 squares or more, attack rolls against it reroll the highest die until the start of its next turn.</p>",
       "chat": ""
     }
   },
-  "_id": "YjizstQaGEskq9p7",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attacked",
+            "if": {
+              "ownerMovedSquares": 2
+            },
+            "do": {
+              "reroll": "attack-highest"
+            },
+            "label": "Temporal Afterimage — it moved 2+ squares"
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
           "Slippage Wraith"
         ],
+        "sourceIds": [
+          "CdNx8WLo0aZO6q8c"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "YjizstQaGEskq9p7",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167245002,
-    "modifiedTime": 1782167245002,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989048273,
+    "modifiedTime": 1792989048274,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!YjizstQaGEskq9p7"
 }

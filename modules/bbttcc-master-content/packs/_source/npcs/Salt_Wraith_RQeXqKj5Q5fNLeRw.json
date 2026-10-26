@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 25,
-        "max": 25
+        "max": 25,
+        "temp": 0
       },
       "stress": {
         "value": 12,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -142,7 +144,7 @@
       ],
       "immunities": [],
       "vulnerabilities": [
-        "radiant"
+        "sephirotic"
       ]
     },
     "conditionImmunities": [
@@ -150,6 +152,9 @@
       "shaken"
     ],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -162,6 +167,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "Battlefield revenant of crystallized grief. Drains warmth and resolve."
     }
   },
   "flags": {
@@ -191,16 +200,20 @@
             ]
           },
           "price": {
-            "marks": 150,
-            "bounty": 150,
-            "hire": 375,
-            "ransom": 250,
+            "marks": 5,
+            "bounty": 5,
+            "hire": 10,
+            "ransom": 10,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "TI light caster (bestiary) — bounty 150 / hire 375 / ransom 250 marks (paid in softpower)"
-          }
+            "notes": "TI light revenant — bounty 5 / hire 10 marks; credited to the pool matching the method (default softpower)"
+          },
+          "lineage": "revenant",
+          "subLineage": "grief"
         }
-      }
+      },
+      "creatureType": "undead",
+      "grants": "{resistances/vulnerabilities/conditionImmunities as the prose states}"
     }
   },
   "_id": "RQeXqKj5Q5fNLeRw",
@@ -345,6 +358,15 @@
               "tier": "I",
               "frame": "trait"
             }
+          },
+          "grants": {
+            "resistances": [
+              "kinetic"
+            ],
+            "conditionImmunities": [
+              "charmed",
+              "shaken"
+            ]
           }
         }
       },
@@ -356,17 +378,16 @@
       },
       "_id": "oDteQof8xjaL0Cp7",
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118750247,
-        "modifiedTime": 1780163239364,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989137045,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!RQeXqKj5Q5fNLeRw.oDteQof8xjaL0Cp7"
+      }
     },
     {
       "name": "Drain-Touch",
@@ -450,6 +471,24 @@
                 "saleBack": 20
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Drain-Touch"
+                },
+                "do": {
+                  "damage": {
+                    "formula": "1d4",
+                    "type": "psychic"
+                  },
+                  "heal": "1d4"
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -638,17 +677,16 @@
       },
       "_id": "ZDfGutOaDzHZA5KA",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1780118750247,
-        "modifiedTime": 1782167243257,
+        "modifiedTime": 1791331977473,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!RQeXqKj5Q5fNLeRw.ZDfGutOaDzHZA5KA"
+      }
     },
     {
       "name": "Salt-Sermon",
@@ -677,7 +715,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 15 ft. — targets roll vs Resolve (DC 12). Half damage on success. Failed-save targets remember a death that wasn't theirs — Shaken until the start of their next turn.",
+        "effect": "Radius 3 squares. — targets roll vs Resolve (DC 12). Half damage on success. Failed-save targets remember a death that wasn't theirs — Shaken until the start of their next turn.",
         "flavor": "The wraith does not speak. The salt speaks for it.",
         "manifestation": {
           "tier": 1,
@@ -708,6 +746,24 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 12,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "shaken"
+            ],
+            "duration": "1-round"
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 15
           }
         },
         "description": {
@@ -926,17 +982,16 @@
       },
       "_id": "f4IKHdbvaxX8VAOa",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118750247,
-        "modifiedTime": 1782167243257,
+        "modifiedTime": 1792977772420,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!RQeXqKj5Q5fNLeRw.f4IKHdbvaxX8VAOa"
+      }
     }
   ],
   "effects": [],
@@ -946,12 +1001,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118750247,
-    "modifiedTime": 1783219924869,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989136928,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

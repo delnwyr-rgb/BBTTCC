@@ -7,8 +7,9 @@
     "tags": [],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
-      "value": "<p>A pleasure-galley with delusions of fortress. Docks at hexes to throw lavish productions; cuts loose to roam when the music demands it. Throne optional, mandatory.</p><p><b>Frame · Medium · Hybrid · Jabba canon</b></p>",
+      "value": "<p>A pleasure-galley with delusions of fortress. Docks at hexes to throw lavish productions; cuts loose to roam when the music demands it. Throne optional, mandatory.</p><p><b>Frame · Medium · Hybrid</b></p>",
       "chat": ""
     }
   },
@@ -22,6 +23,7 @@
         "baseIntegrity": 32,
         "tierStep": 10,
         "mobilityAllowed": [
+          "mobile",
           "hybrid"
         ],
         "slots": {
@@ -72,7 +74,7 @@
           ]
         },
         "travel": {
-          "speed": 2,
+          "speed": 3,
           "range": 10
         },
         "visualFrame": "anchor-ring"
@@ -85,7 +87,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TII vehicle stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 300
@@ -105,12 +107,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778205373715,
-    "modifiedTime": 1778963271956,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988928221,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

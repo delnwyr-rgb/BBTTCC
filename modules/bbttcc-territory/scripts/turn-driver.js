@@ -1133,6 +1133,46 @@ async function advanceOPRegen({ apply=false, factionId=null, deferCapClamp=false
         const ms = game.bbttcc?.api?.raid?.militia?.state ? game.bbttcc.api.raid.militia.state(A) : null;
         if (ms && ms.rung >= 2) { opsDelta.violence = safeNum(opsDelta.violence) + 5; regenNotes.push("the militia drills: Violence +5 marks"); }
       } catch (e) { warn("militia regen apply failed", e); }
+      // Steward identity income (rulings CO3 as amended + CO21, 2026-10-26). Flat part = the OP engine's member reader
+      // (flags.bbttcc-character-options.bonuses, OP × MARKS_PER_OP, facts.faction.memberIncome). The rest reads
+      // flags.fourththing.domainIncome on an assigned steward's items: pct (all channels or `channels`),
+      // perHexType [{types, channel, op}] counted over the Domain's hexes (type or terrain key), perHexes {channel, per, op, min}.
+      try {
+        const flat = game.bbttcc?.facts?.faction?.memberIncome?.(A) || {};
+        const flatNotes = [];
+        for (const [k, v] of Object.entries(flat)) { const n = safeNum(v); if (n > 0 && (k in opsDelta)) { opsDelta[k] = safeNum(opsDelta[k]) + n; flatNotes.push(`${k} +${n}`); } }
+        if (flatNotes.length) regenNotes.push(`steward identity: ${flatNotes.join(", ")}`);
+        const mpo = Number(game.bbttcc?.api?.op?.marksPerOp?.()) || 0;   // the live ratio authority; 0 = unavailable → skip the hex parts
+        const ownedHexes = getAllOwnedHexDocs(A.id);
+        const hexTypes = ownedHexes.map(h => {
+          const tf = h.tf || {}; const terr = (tf.terrain && typeof tf.terrain === "object") ? tf.terrain.key : (tf.terrainKey || tf.terrainType || tf.terrain);
+          return [String(tf.type || "").toLowerCase(), String(terr || "").toLowerCase()];
+        });
+        const stewards = (game.actors?.contents || []).filter(a => a.type === "character" && a.getFlag?.(MOD_FACTIONS, "factionId") === A.id);
+        for (const st of stewards) for (const it of (st.items?.contents || [])) {
+          const di = it.flags?.fourththing?.domainIncome;
+          if (!di || typeof di !== "object") continue;
+          const pct = safeNum(di.pct);
+          if (pct) {
+            const chs = (Array.isArray(di.channels) && di.channels.length ? di.channels : Object.keys(opsDelta)).filter(k => k in opsDelta);
+            for (const k of chs) { const b0 = safeNum(opsDelta[k]); if (b0 > 0) opsDelta[k] = Math.floor(b0 * (1 + pct / 100)); }
+            regenNotes.push(`${it.name}: ${chs.length === Object.keys(opsDelta).length ? "all channels" : chs.join("/")} ${pct > 0 ? "+" : ""}${pct}%`);
+          }
+          if (!(mpo > 0)) continue;
+          for (const row of (Array.isArray(di.perHexType) ? di.perHexType : [])) {
+            const types = (Array.isArray(row?.types) ? row.types : []).map(s => String(s).toLowerCase()); const k = row?.channel;
+            if (!(k in opsDelta) || !types.length) continue;
+            const n = hexTypes.filter(([ty, te]) => types.includes(ty) || types.includes(te)).length;
+            const gain = n * safeNum(row.op) * mpo;
+            if (gain > 0) { opsDelta[k] = safeNum(opsDelta[k]) + gain; regenNotes.push(`${it.name}: ${n} hex${n === 1 ? "" : "es"} → ${k} +${gain}`); }
+          }
+          const ph = di.perHexes;
+          if (ph && (ph.channel in opsDelta)) {
+            const gain = Math.max(safeNum(ph.min), Math.floor(ownedHexes.length / Math.max(1, safeNum(ph.per, 1)))) * safeNum(ph.op) * mpo;
+            if (gain > 0) { opsDelta[ph.channel] = safeNum(opsDelta[ph.channel]) + gain; regenNotes.push(`${it.name}: ${ownedHexes.length} hexes → ${ph.channel} +${gain}`); }
+          }
+        }
+      } catch (e) { warn("steward identity income failed (non-fatal)", e); }
       const totalGained = Object.values(opsDelta).reduce((a,b)=>a+b,0);
 
       const row = { factionId: A.id, factionName: A.name, gained: totalGained, opsDelta, applied:false };

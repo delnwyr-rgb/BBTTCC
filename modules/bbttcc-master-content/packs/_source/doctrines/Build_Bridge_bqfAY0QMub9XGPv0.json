@@ -1,0 +1,73 @@
+{
+  "name": "Build Bridge",
+  "type": "feat",
+  "img": "icons/environment/settlement/bridge-stone.webp",
+  "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><b>Build Bridge</b></p><p>Bridge an open-water hex you can reach — a river, a lake, a strait: free crossing for you and your allies, a 5-mark toll for the neutral, closed to the hostile. A cut bridge is rebuilt here. Cannot be planned on a hex held by a Domain hostile to you.</p><p><b>Cost:</b> Economy 20 · Logistics 14 marks</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "build-bridge",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "build_bridge",
+      "meta": {
+        "tier": 1,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null
+      }
+    }
+  },
+  "_id": "bqfAY0QMub9XGPv0",
+  "effects": [],
+  "folder": "UpsmhFcQUtMCrYu2",
+  "sort": 9000000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988991613,
+    "modifiedTime": 1792988991614,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "_key": "!items!bqfAY0QMub9XGPv0"
+}

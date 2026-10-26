@@ -130,10 +130,11 @@
     // RETIRED 2026-10-18 (ruling 19): faction Morale is no longer a game meter. These two stay on
     // the API as tolerant no-ops — no flag write, no warLog line — and return whatever value the
     // actor still carries (0 if none / unknown faction) so any stale caller keeps working.
+    // NP8 (2026-10-26): the morale flag itself is stripped from every faction — nothing is read any more; the no-ops return 0.
     const retiredMorale = ({ factionId } = {}) => {
       if (!retiredMorale.__warned) { retiredMorale.__warned = true; console.debug(TAG, "setMorale/bumpMorale are retired (ruling 19, 2026-10-18) — ignored"); }
-      const A = game.actors.get(String(factionId));
-      return clamp01(A ? get(A, `flags.${MOD}.morale`, 0) : 0);
+      void factionId;
+      return 0;
     };
     game.bbttcc.api.factions.setMorale = async (args) => retiredMorale(args);
     game.bbttcc.api.factions.setLoyalty = async ({ factionId, value }) => {

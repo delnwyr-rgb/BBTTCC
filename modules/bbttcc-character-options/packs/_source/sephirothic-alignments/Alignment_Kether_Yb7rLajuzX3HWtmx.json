@@ -1,0 +1,75 @@
+{
+  "name": "Alignment: Kether",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "The Crown - Divine unity. +10 Diplomacy and +10 Soft Power marks to your Domain each turn.\n\nYou are called upward toward unity, legitimacy, and the better shape of the world. Kether rewards coalition-building, visionary leadership, and factions that hold together under pressure.",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "alignment-kether",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "sephirothic-alignments",
+      "bonuses": {
+        "diplomacy": 1,
+        "softpower": 1
+      },
+      "option": {}
+    }
+  },
+  "img": "icons/commodities/treasure/crown-gold-laurel-wreath.webp",
+  "effects": [],
+  "folder": "RAOWJYon3t34M5XY",
+  "_stats": {
+    "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.ic3UDTws3eh7bIi9",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.icXFNIffu7YuIQoA",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1774978150205,
+    "modifiedTime": 1792989141176,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "Yb7rLajuzX3HWtmx",
+  "sort": 600000,
+  "_key": "!items!Yb7rLajuzX3HWtmx"
+}

@@ -249,7 +249,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
   // A steward's own sephirah: identity flags (bbttcc-character-options) → mirror flag → the "Alignment: X" Item.
   function stewardSephirah(actor){
     if (!actor) return "";
-    const norm = (v) => { const k = String(v || "").toLowerCase().replace(/^alignment[:\-\s]+/, "").replace(/[^a-z]/g, ""); return { chokhmah:"chokmah", tiphareth:"tiferet", tipheret:"tiferet", geburah:"gevurah", kether:"keter" }[k] || k; };
+    const norm = (v) => { const k = String(v || "").toLowerCase().replace(/^alignment[:\-\s]+/, "").replace(/[^a-z]/g, ""); return { chokhmah:"chokmah", tiphareth:"tiferet", tipheret:"tiferet", gevurah:"geburah", gevura:"geburah", kether:"keter" }[k] || k; };
     try { const id = game.bbttcc?.api?.identity?.getIdentityFlags?.(actor.id) ?? actor.getFlag?.("bbttcc-character-options", "identity"); const k = id?.sephirothicAlignment?.key || id?.sephirothicAlignment?.name; if (k) return norm(k); } catch (_e) {}
     try { const m = actor.flags?.["bbttcc-character-options"]?.sephirot; const k = m?.key || m?.id || m?.name; if (k && isNaN(Number(k))) return norm(k); } catch (_e) {}
     try { const it = (actor.items?.contents ?? []).find(i => /^alignment[:\-]/i.test(String(i?.name || "")) || i.getFlag?.("bbttcc-character-options", "category") === "sephirothic-alignments"); if (it) return norm(it.name); } catch (_e) {}
@@ -593,13 +593,18 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       await pushWarLog(A, 'Psych Ops Broadcast: +Propaganda; −2 Loyalty (target hex).');
     },
     // Peace Accords — a 2-turn truce with the target hex's holder; raids either way are refused (turn-driver consumer).
+    // Peace Accords — DC10 (Dave, 2026-10-26): under ruling 22 the STORY offers every fight, so a Domain action cannot veto
+    // one. The truce flag (setTruce → raidRefusalFor) is no longer written; the accord is a Loyalty + Soft Power effect:
+    // the other side's hex (the target) gains Loyalty +1, and both war logs carry a GM note that no hostile offer should
+    // land on either side for 2 turns (the GM and the story honour it; nothing in the engine blocks a beat).
     async peace_accords(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid); const B = doc ? await factionOfHex(doc) : null;
-      if (!B || B.id === A?.id) { await pushWarLog(A, "Peace Accords: target a hex held by ANOTHER faction — no counterpart found."); return; }
-      await setTruce(A, B, 2);
-      await pushWarLog(A, `Peace Accords with ${B.name}: no raids either way for 2 turns.`);
-      await pushWarLog(B, `Peace Accords: ${A.name} offered terms — no raids either way for 2 turns.`);
+      if (!B || B.id === A?.id) { await pushWarLog(A, "Peace Accords: target a hex held by ANOTHER Domain — no counterpart found."); return; }
+      await adjustHexTrack(ctx.targetUuid, "loyalty", +1);
+      let until = ""; try { const t = Number(game.bbttcc?.api?.world?.getState?.()?.turn); if (Number.isFinite(t)) until = ` (through turn ${t + 2})`; } catch (_e) {}
+      await pushWarLog(A, `Peace Accords with ${B.name}: ${hexName(doc)} Loyalty +1 for the other side. GM note — no hostile offer against either side for 2 turns${until}.`);
+      await pushWarLog(B, `Peace Accords: ${A.name} offered terms — ${hexName(doc)} Loyalty +1. GM note — no hostile offer against either side for 2 turns${until}.`);
     },
     // Resource Expropriation — takes up to 20 marks Economy from the target hex's holder; Darkness +1.
     async resource_expropriation(ctx){
@@ -649,15 +654,17 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       if (!mutuallyAllied(A, B)) { await pushWarLog(A, `Alliance Summit: ${B.name} is not a mutual ally — no summit.`); return; }
       await addRegenPlan(A, [{ inTurns: 1, mult: 1.15, label: `Alliance Summit with ${B.name}` }]);
       await addRegenPlan(B, [{ inTurns: 1, mult: 1.15, label: `Alliance Summit with ${A.name}` }]);
-      await pushWarLog(A, `Alliance Summit with ${B.name}: both factions' OP income ×1.15 this turn.`);
-      await pushWarLog(B, `Alliance Summit with ${A.name}: both factions' OP income ×1.15 this turn.`);
+      await pushWarLog(A, `Alliance Summit with ${B.name}: both Domains' marks income ×1.15 this turn.`);
+      await pushWarLog(B, `Alliance Summit with ${A.name}: both Domains' marks income ×1.15 this turn.`);
     },
-    // Crisis Summit — used to shield every faction from the Darkness → Morale tick (noMoraleLoss).
-    // Faction Morale retired 2026-10-18 (ruling 19): the shield has nothing to shield; logs only.
+    // Crisis Summit — used to shield every faction from the Darkness → Morale tick (noMoraleLoss); faction Morale retired
+    // 2026-10-18 (ruling 19). DC10 (2026-10-26): the summit is a GM note, not an engine veto — every Domain's war log says
+    // tempers are held for a turn; no hostile offer should land on anyone until the next turn (the story decides).
     async crisis_summit(ctx){
       const A = game.actors.get(ctx.factionId);
       const facs = (game.actors?.contents ?? []).filter(a => a?.getFlag?.(MODF, "isFaction") === true || a?.flags?.[MODF]?.opBank);
-      await pushWarLog(A, `Crisis Summit convened (${facs.length} factions attended).`);
+      await pushWarLog(A, `Crisis Summit convened (${facs.length} Domains attended). GM note — tempers held: no hostile offer against any Domain for 1 turn.`);
+      for (const F of facs) { if (F.id === A?.id) continue; try { await pushWarLog(F, `Crisis Summit (${A?.name || "a Domain"} convened it): tempers held — GM note, no hostile offer against any Domain for 1 turn.`); } catch (_e) {} }
     },
     // Cultural Exchange — copies the target hex's sephirot alignment onto the TO hex (if it has none).
     async cultural_exchange(ctx){

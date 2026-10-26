@@ -14,7 +14,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-oldenborn-furrykin=\"v1\" style=\"display:none\"></div>\n<p><em>\"You can make almost anything run long past its expiration date. Yourself included.\"</em></p><p><strong>Patch & Repurpose (1/Soma Break).</strong> During a Soma Break, spend 10 min on a single broken/low-charge item (weapon, tool, power cell, vehicle component, armour). Restore it to one more use, scene, or day. The GM rules how it dies for real after.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldRustPatchRepurpose\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Patch & Repurpose</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> 10-min repair (during Soma Break) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Restore one broken/low-charge item to one more use/scene/day. It dies for real after.</div>\n</div>",
+      "value": "\n<p><em>\"You can make almost anything run long past its expiration date. Yourself included.\"</em></p><p><strong>Patch & Repurpose (1/Soma Break).</strong> During a Soma Break, spend 10 min on a single broken/low-charge item (weapon, tool, power cell, vehicle component, armour). Restore it to one more use, scene, or day. The GM rules how it dies for real after.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldRustPatchRepurpose\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Patch & Repurpose</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> 10-min repair (during Soma Break) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Restore one broken/low-charge item to one more use/scene/day. It dies for real after.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -39,30 +39,14 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "oldenborn",
       "feature": "patch_repurpose",
       "lineage": "Rustland Scavenger",
-      "tierLevel": 5,
       "version": "2.0.0",
       "date": "2026-04-19"
     },
-    "fourththing": {
-      "triggers": [
-        {
-          "event": "on-soma-break",
-          "effect": {
-            "kind": "chat-prompt",
-            "args": {
-              "body": "Yourself included.” Patch & Repurpose. During a Soma Break, you can spend 10 minutes working on a single broken or low-charge item (a weapon, a tool, a power cell, a vehicle co..."
-            }
-          }
-        }
-      ]
-    },
+    "fourththing": {},
     "autoanimations": {
       "id": "86ffb648-e351-431b-96e2-8ca823f9cf85",
       "label": "Oldenborn (Rustland Scavenger): Patch & Repurpose",
@@ -246,12 +230,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776600000000,
-    "modifiedTime": 1781116065662,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988972216,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

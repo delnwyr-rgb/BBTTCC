@@ -38,7 +38,7 @@
   },
   "effects": [
     {
-      "name": "Dreamer’s Poise (Body Check + Mental Stability)",
+      "name": "Dreamer’s Poise (+1 Resolve, steady mind)",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_2.png",
       "origin": null,
       "transfer": true,
@@ -53,20 +53,20 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "systemVersion": "0.6.37",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1776459927034,
-        "modifiedTime": 1777346198845
+        "modifiedTime": 1792988965866
       },
       "_id": "fl3jY8B70klbRz0i",
       "type": "base",
       "system": {
         "changes": [
           {
-            "key": "system.abilities.con.bonuses.save",
-            "value": "+1",
+            "key": "system.derived.resolve.aeBonus",
+            "value": "1",
             "priority": 20,
             "type": "add",
             "phase": "initial"
@@ -102,12 +102,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776459927034,
-    "modifiedTime": 1782167240820,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907910973,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

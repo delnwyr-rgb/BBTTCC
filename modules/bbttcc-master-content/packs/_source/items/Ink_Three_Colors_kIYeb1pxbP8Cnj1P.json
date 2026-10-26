@@ -1,0 +1,78 @@
+{
+  "name": "Ink, Three Colors",
+  "type": "gear",
+  "img": "icons/tools/scribal/ink-quill-red.webp",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "ink-three-colors"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Red for what was, black for what is, blue for what's owed.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A three-well ink set. Annotation, marginalia, contracts.</p>",
+          "charges": 3,
+          "materialKey": "ink-three-colors",
+          "price": {
+            "marks": 45,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII material",
+            "bound": "free",
+            "saleBack": 18
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "kIYeb1pxbP8Cnj1P",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1789965943910,
+    "modifiedTime": 1792977654633,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!kIYeb1pxbP8Cnj1P"
+}

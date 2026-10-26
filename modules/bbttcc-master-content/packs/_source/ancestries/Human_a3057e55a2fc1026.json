@@ -8,7 +8,7 @@
     "source": "Bad Eden (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Cro-Magnon, Denisovan, Florensis, Neanderthal</strong>.</p><p>This root grants the shared Human core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
+      "value": "<p><strong>Human.</strong></p><p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
       "chat": ""
     },
     "advancement": [
@@ -66,73 +66,47 @@
     "identifier": "human"
   },
   "flags": {
-    "dnd5e": {
-      "originType": "species"
-    },
     "bbttcc": {
       "kind": "ancestry",
       "family": "human",
       "version": "2.0.0",
-      "date": "2026-04-18",
-      "heritageList": [
-        "cro_magnon",
-        "denisovan",
-        "florensis",
-        "neanderthal"
-      ],
-      "refactorNotes": "v2: Erectus retired, Cro-Magnon added. Denisovan retained from v1 canon (heritage list was underdocumented in v1 loose-JSON exports)."
+      "date": "2026-04-18"
     },
     "fourththing": {
       "rerolls": [
         {
           "context": "check",
           "mode": "reroll-lowest",
-          "note": "on one checks [TODO(adv-call)] of your choice each round (declare before roll…"
+          "when": "atOneIntegrity",
+          "note": "Tenacious — at 1 Integrity (one check per round; declare before rolling)"
         }
       ],
       "triggers": [
-        {
-          "event": "on-save-fail",
-          "limit": {
-            "window": "soma-break",
-            "uses": 1
-          },
-          "effect": {
-            "kind": "chat-prompt",
-            "args": {
-              "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
-            }
-          }
-        },
         {
           "event": "on-skill-fail",
           "limit": {
             "window": "soma-break",
             "uses": 1
           },
+          "offerText": "Adaptive — you failed a check: choose to succeed instead (reroll; the GM may simply rule it a success).",
           "effect": {
-            "kind": "chat-prompt",
-            "args": {
-              "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
-            }
+            "kind": "reroll-failed-check",
+            "args": {}
+          }
+        },
+        {
+          "event": "on-save-fail",
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "offerText": "Adaptive — you failed a defense check: choose to succeed instead (reroll; the GM may simply rule it a success).",
+          "effect": {
+            "kind": "reroll-failed-check",
+            "args": {}
           }
         }
-      ],
-      "rfi": {
-        "item": {
-          "price": {
-            "marks": 30,
-            "currency": "economy",
-            "gmOverride": false,
-            "altCurrencies": {},
-            "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
-            "bound": "free",
-            "saleBack": 12
-          }
-        }
-      }
+      ]
     }
   },
   "effects": [],
@@ -147,12 +121,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1773192844645,
-    "modifiedTime": 1782167240129,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988989189,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

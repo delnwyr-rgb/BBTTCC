@@ -1,0 +1,294 @@
+{
+  "name": "Mayor Tansy Okoro",
+  "type": "npc",
+  "_id": "Z731OVuQtbOC8CeB",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "role": "",
+    "tier": 1,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 1
+      },
+      "body": {
+        "value": 1
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 10,
+        "max": 10,
+        "temp": 0
+      },
+      "stress": {
+        "value": 8,
+        "max": 8
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "Mayor of Soft Landing, presiding over a state function on the moon-bounce (Act 2)",
+      "notes": "Mayor Tansy Okoro conducts Soft Landing's state function on the moon-bounce with full ceremony and a full agenda, and every agenda item is cake. Her gavel is on a string so it comes back. She is still wearing elf ears from the party and doesn't seem to know they're a costume. She is warm, fast and parliamentary ('the chair recognises...'), and any motion that isn't cake dies for lack of a second, because everyone bounces too high to hear it. There are no minutes of any session, ever; she says this like policy."
+    }
+  },
+  "prototypeToken": {
+    "name": "Mayor Tansy Okoro",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [],
+  "effects": [],
+  "folder": "UAHVCMVXEDT8Q1B1",
+  "sort": 392188,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "npc"
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the session, the agenda, cake, the gavel, the moon-bounce, the state function, minutes, motions, the town, the party, the birthday, Halloween, elf ears, Captain Falk, Adaeze, policy, edges",
+        "notes": "[SOFT-LANDING-V2-2026-09-25] PRIVATE TRUTH — Mayor Tansy Okoro conducts the state function on the moon-bounce: full ceremony, full agenda, every item is cake. Gavel on a string so it comes back. Elf ears from the party still on; she does not know they are a costume. VOICE: warm, fast, parliamentary (\"the chair recognises…\"), never lands long enough to be asked a hard question twice; if a motion isn't cake she bounces higher and so does everyone, and the motion dies for lack of a second because nobody can hear it up there. There are no minutes of any session, ever: minutes are writing, writing is an edge, and she says this like policy and then, quieter, like a person. She was Teju's neighbour and read him stories; she will not say so. Funny first: item one cake, item two cake, a minister of something ricocheting past taking notes on nothing.",
+        "secretsRaw": "Item One :: stirThePot :: a Steward moves to add an item to the agenda that isn't cake :: \"The chair recognises… the chair does not recognise that.\" She bounces higher. Everyone bounces higher. The motion is not seconded because nobody can hear it up there.\nThe Minutes :: rollPlus2 :: a Steward asks to see the minutes of the LAST session :: there are no minutes. Minutes are writing. Writing is an edge. She says this like policy, and then, quieter, like a person."
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1791317103708,
+    "modifiedTime": 1791328201439,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!Z731OVuQtbOC8CeB"
+}

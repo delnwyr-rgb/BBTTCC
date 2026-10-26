@@ -6,13 +6,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
-      "revision": 2,
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Darkness Hardened</h2><p><em>The Dark doesn’t scare you. It negotiates.</em></p><hr /><h3>Rules</h3><p>You reroll the lowest die on defense checks against being Shaken.</p><p>Additionally, when you fail a defense check against fear or horror, you may choose to succeed instead. If you do, you gain one level of Strain after the effect ends. Once you use this principle, you can’t use it again until you finish a Soma Break.</p><p class=\"ft-engine-note\"><em>⚙ Defense checks vs Shaken reroll the lowest die. 🃏 Card — once per Soma Break: choose to succeed; one level of Strain lands.</em></p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Darkness Hardened</h2><p><em>The Dark doesn’t scare you. It negotiates.</em></p><hr /><h3>Rules</h3><p>You reroll the lowest die on defense checks against being Shaken.</p><p>Additionally, when you fail a defense check against fear or horror, you may choose to succeed instead. If you do, you gain one level of Strain after the effect ends. Once you use this technique, you can’t use it again until you finish a Soma Break.</p><p class=\"ft-engine-note\"><em>⚙ Defense checks vs Shaken reroll the lowest die. 🃏 Card — once per Soma Break: choose to succeed; one level of Strain lands.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_darkness_hardened",
@@ -241,11 +241,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1768802465828,
-    "modifiedTime": 1782159946546,
+    "modifiedTime": 1792977640297,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!XeSQLXvQFDdiynkW"

@@ -14,7 +14,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Rustlander Scavenger</em> while converting it from a species-root into an Oldenborn heritage. Renamed to <em>Rustland Scavenger</em> to match v2 canon.</p><p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Oldenborn (Rustland Scavenger).</strong> Your place-soul is a dead city that refused to finish dying. You are the genius loci of collapsed transit hubs, rebar graveyards, and the smell of old oil. Every ruin you walk into recognizes you on arrival and, quietly, offers you what’s left.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Fey, Rustland).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 6 squares</li><li><strong>attributes.</strong> Oldenborn does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>MND (Mind)</strong> or <strong>INTR (Intrigue)</strong> in fiction and mechanics via Tier powers.</li></ul><h3>Oldenborn Core</h3><p>At character creation, you gain <strong>Old Memory, Old Flesh</strong> (Dream-Flesh, Old Paths, Veil-Sight, You Are Remembered).</p><h3>Rustland Scavenger Traits</h3><ul><li><strong>Toxic Lung Filters.</strong> reroll-lowest on checks against inhaled toxins, smoke, and industrial residue. You can function for up to 1 hour in atmospheres that would hospitalize a normal Medium creature.</li><li><strong>Urban Scrounger.</strong> You gain a skill rank with the <em>Investigation</em> skill. You can always tell which structure in a ruin is load-bearing, which doorway is the real exit, and which pile of junk has something useful in it.</li><li><strong>Patch &amp; Repurpose.</strong> During a Soma Break spent in a ruin or wreckage hex, you can recover one expended consumable (bandage, filter, torch, ration) per Soma Break by scavenging.</li><li><strong>Ruin Sense.</strong> You read marketplaces, ruins, and hex politics at a glance and can always tell what the last three meaningful events were in a trade hub.</li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Economy OP</strong> and <strong>+1 Intrigue OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Ruins / Urban Wreckage</em> hexes, faction travel Intrigue costs are reduced by <strong>1</strong> (minimum 0).</li><li><strong>Salvage Windfall.</strong> Once per Strategic Turn, your faction may perform an extra Salvage action in a controlled Ruins hex without consuming its action slot.</li></ul>",
+      "value": "\n<p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Rustlander Scavenger</em> while converting it from a species-root into an Oldenborn heritage. Renamed to <em>Rustland Scavenger</em> to match v2 canon.</p><p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Oldenborn (Rustland Scavenger).</strong> Your place-soul is a dead city that refused to finish dying. You are the genius loci of collapsed transit hubs, rebar graveyards, and the smell of old oil. Every ruin you walk into recognizes you on arrival and, quietly, offers you what’s left.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Fey, Rustland).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 6 squares</li><li><strong>attributes.</strong> Oldenborn does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>MND (Mind)</strong> or <strong>INTR (Intrigue)</strong> in fiction and mechanics via Tier powers.</li></ul><h3>Oldenborn Core</h3><p>At character creation, you gain <strong>Old Memory, Old Flesh</strong> (Dream-Flesh, Old Paths, Veil-Sight, You Are Remembered).</p><h3>Rustland Scavenger Traits</h3><ul><li><strong>Toxic Lung Filters.</strong> reroll-lowest on checks against inhaled toxins, smoke, and industrial residue. You can function for up to 1 hour in atmospheres that would hospitalize a normal Medium creature.</li><li><strong>Urban Scrounger.</strong> You gain a skill rank with the <em>Investigation</em> skill. You can always tell which structure in a ruin is load-bearing, which doorway is the real exit, and which pile of junk has something useful in it.</li><li><strong>Patch &amp; Repurpose.</strong> During a Soma Break spent in a ruin or wreckage hex, you can recover one expended consumable (bandage, filter, torch, ration) per Soma Break by scavenging.</li><li><strong>Ruin Sense.</strong> You read marketplaces, ruins, and hex politics at a glance and can always tell what the last three meaningful events were in a trade hub.</li></ul><h3>Domain Edge</h3><ul><li><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Intrigue marks</strong> and <strong>+20 Economy marks</strong> at campaign start.</li></ul>",
       "chat": ""
     },
     "advancement": [
@@ -108,33 +108,16 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!bILvIQnnHx5eVzYb.u3Q68RR8Z4mfkWYG"
+      }
     }
   ],
   "flags": {
-    "dnd5e": {
-      "originType": "species"
-    },
     "bbttcc": {
       "kind": "heritage",
       "family": "oldenborn",
       "lineage": "Rustland Scavenger",
-      "opEffects": {
-        "economy": 2,
-        "intrigue": 1
-      },
-      "terrainSynergy": [
-        "Ruins / Urban Wreckage"
-      ],
-      "hexRules": {
-        "urbanTravelIntrigueDiscount": 1
-      },
-      "salvageWindfallPerTurn": true,
       "version": "2.0.0",
-      "date": "2026-04-18",
-      "normalizedFrom": "Rustlander Scavenger [species]",
-      "renamed": "Rustlander Scavenger -> Rustland Scavenger"
+      "date": "2026-04-18"
     },
     "fourththing": {
       "rerolls": [
@@ -344,12 +327,12 @@
   },
   "folder": "7fnxyCtrYl8KlYbp",
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776986644438,
-    "modifiedTime": 1782167240129,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988988153,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

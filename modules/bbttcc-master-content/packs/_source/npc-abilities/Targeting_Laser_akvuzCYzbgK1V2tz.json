@@ -9,7 +9,7 @@
     "damage": {
       "formula": "1d6",
       "attribute": "violence",
-      "type": "energy",
+      "type": "thermal",
       "damageFlavor": "coherent-light",
       "track": "integrity"
     },
@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +79,29 @@
             "saleBack": 20
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Pre-Fall Drone"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "do": {
+              "bankReroll": {
+                "context": "attack",
+                "note": "Targeting Laser — marked"
+              }
+            },
+            "who": "allies",
+            "radius": 12,
+            "if": {
+              "weapon": "Targeting Laser"
+            }
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "e98bb2db-07e6-4c0a-a906-274ec5dd78e2",
+      "id": "ft-targeting-laser",
       "label": "Targeting Laser",
       "macro": {
         "enable": false,
@@ -269,24 +276,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Pre-Fall Drone"
+        ],
+        "sourceIds": [
+          "jo8jbDD5O01VQcxG"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "akvuzCYzbgK1V2tz",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024235296,
-    "modifiedTime": 1782167283968,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989048081,
+    "modifiedTime": 1792989048082,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!akvuzCYzbgK1V2tz"
 }

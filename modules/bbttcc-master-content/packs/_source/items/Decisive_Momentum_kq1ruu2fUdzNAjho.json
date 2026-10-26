@@ -8,7 +8,7 @@
     "source": "Bad Eden Core Feats v1 (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<h2>Decisive Momentum</h2><p><em>You do not pause when the fight turns. You ride the turn.</em></p><hr><h3>Rules</h3><p>When you reduce a hostile creature to 0 Integrity or land a critical hit, you may immediately move up to half your movement without provoking reaction strikes <strong>or</strong> make one weapon attack against a different creature within reach. You can use this principle once per round.</p><p class=\"ft-engine-note\"><em>🃏 Card — once per round.</em></p>",
+      "value": "<h2>Decisive Momentum</h2><p><em>You do not pause when the fight turns. You ride the turn.</em></p><hr><h3>Rules</h3><p>When you reduce a hostile creature to 0 Integrity or roll a double 10, you may immediately move up to half your movement without provoking reaction strikes <strong>or</strong> make one weapon attack against a different creature within reach. You can use this technique once per round.</p><p class=\"ft-engine-note\"><em>🃏 Card — once per round.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_decisive_momentum",
@@ -39,7 +39,6 @@
       "pack": "bbttcc-feats-core-v1",
       "generatedAt": "2026-01-18T18:59:59.544766+00:00"
     },
-    "fourththing": {},
     "autoanimations": {
       "id": "ft-decisive-momentum",
       "label": "Decisive Momentum",
@@ -228,11 +227,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1768802465828,
-    "modifiedTime": 1781116210754,
+    "modifiedTime": 1792977655330,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!kq1ruu2fUdzNAjho"

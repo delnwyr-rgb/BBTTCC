@@ -1,53 +1,18 @@
 {
+  "_id": "XSxRopfJnyBpgLvc",
   "name": "Sephirotic Anchor",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/tools/nautical/anchor-blue.webp",
   "system": {
-    "description": {
-      "value": "<p>When planted for 10 minutes, creates a 60‑ft sanctuary: enemies have roll 3d10 keep lowest 2 on attacks; Darkness events suppressed [TODO(adv-call)].</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 5,
-      "units": "lb"
-    },
-    "price": {
-      "value": 6000,
-      "denomination": "gp"
-    },
-    "rarity": "veryRare",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "sephirotic-anchor",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>When planted for 10 minutes, creates a 12 squares sanctuary: enemies roll 3d10 keep lowest 2 on attacks; Darkness events suppressed.</p>",
+      "chat": ""
+    }
   },
   "flags": {
     "bbttcc": {
@@ -56,74 +21,57 @@
         "darkness"
       ]
     },
-    "rfi": {
-      "item": {
-        "tier": "II",
-        "footprint": 1,
-        "reach": "self",
-        "frame": "armor",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "scene"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
-    },
     "fourththing": {
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
-            "currency": "economy",
+            "marks": 540,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 3,
+            "notes": "TII talisman × rarity 3",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 216
           },
           "tier": "II",
-          "frame": "armor",
+          "frame": "talisman",
           "origin": "looted",
           "bound": "free",
           "reach": "self",
           "footprint": 1,
-          "legacySystem": {
-            "description": {
-              "value": "<p>When planted for 10 minutes, creates a 12 squares sanctuary: enemies roll 3d10 keep lowest 2 on attacks; Darkness events suppressed.</p>"
-            }
-          }
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {}
         }
       }
     }
   },
   "effects": [],
   "folder": "TNrB6kEiHS0KwwJT",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834202662,
-    "modifiedTime": 1782164185977,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1700000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "XSxRopfJnyBpgLvc",
-  "sort": 1700000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988915588,
+    "modifiedTime": 1792988915588,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!XSxRopfJnyBpgLvc"
 }

@@ -1,126 +1,78 @@
 {
+  "_id": "3Mdd5N4PVhMnvySG",
   "name": "Valhauler Pulsar Core",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/commodities/tech/electronics-tech-interface-crystal-yellow.webp",
   "system": {
-    "description": {
-      "value": "<p>Vehicle super‑core: doubles pulsar weapon die size; once/day skip 1 travel encounter and gain +2 to next opposed roll.</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [
+      "rig-module"
+    ],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 200,
-      "units": "lb"
-    },
-    "price": {
-      "value": 40000,
-      "denomination": "gp"
-    },
-    "rarity": "legendary",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "trinket",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "valhauler-pulsar-core",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>The super-core of a Valhauler war-rig: a pulsar bottled in witness-glass.</p><p><b>Pulsar Overdrive.</b> Mounted pulsar weapons step their damage die up one size.</p><p><b>Outrun It.</b> Once per Soma Break, the rig skips one travel encounter and takes +2 on its next opposed roll.</p>",
+      "chat": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": []
-    },
-    "rfi": {
-      "item": {
-        "tier": "IV",
-        "footprint": 1,
-        "reach": "self",
-        "frame": "armor",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "scene"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
-    },
     "fourththing": {
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
-            "currency": "economy",
+            "marks": 8100,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 5,
+            "notes": "TIV talisman × rarity 5",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 3240
           },
           "tier": "IV",
-          "frame": "armor",
+          "frame": "talisman",
           "origin": "looted",
           "bound": "free",
           "reach": "self",
           "footprint": 1,
-          "legacySystem": {
-            "description": {
-              "value": "<p>Vehicle super‑core: doubles pulsar weapon die size; once per Soma Break skip 1 travel encounter and gain +2 to next opposed roll.</p>"
-            }
-          }
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>The super-core of a Valhauler war-rig: a pulsar bottled in witness-glass.</p><p><b>Pulsar Overdrive.</b> Mounted pulsar weapons step their damage die up one size.</p><p><b>Outrun It.</b> Once per Soma Break, the rig skips one travel encounter and takes +2 on its next opposed roll.</p>"
         }
+      },
+      "rigGear": {
+        "subtype": "rig-system",
+        "passive": true
       }
     }
   },
   "effects": [],
-  "folder": "TNrB6kEiHS0KwwJT",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834209423,
-    "modifiedTime": 1782164185969,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "folder": "0JDB983lzPepXXNe",
+  "sort": 2300000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "3Mdd5N4PVhMnvySG",
-  "sort": 2300000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988918340,
+    "modifiedTime": 1792988918341,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!3Mdd5N4PVhMnvySG"
 }

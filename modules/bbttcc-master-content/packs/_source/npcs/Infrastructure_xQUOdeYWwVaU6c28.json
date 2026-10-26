@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": null,
+  "name": "Infrastructure",
+  "color": null,
+  "sorting": "a",
+  "_id": "xQUOdeYWwVaU6c28",
+  "description": "",
+  "sort": 1000000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1791317003494,
+    "modifiedTime": 1791317003663,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!xQUOdeYWwVaU6c28"
+}

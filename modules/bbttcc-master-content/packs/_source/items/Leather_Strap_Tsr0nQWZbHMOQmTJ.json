@@ -1,0 +1,78 @@
+{
+  "name": "Leather Strap",
+  "type": "gear",
+  "img": "icons/equipment/waist/belt-leather-black-brass.webp",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "leather-strap"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Buckle optional.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Cut and finished leather strapping. Belts, harness, armor points.</p>",
+          "charges": 8,
+          "materialKey": "leather-strap",
+          "price": {
+            "marks": 40,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI material",
+            "bound": "free",
+            "saleBack": 16
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "Tsr0nQWZbHMOQmTJ",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1789965942097,
+    "modifiedTime": 1792977635284,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!Tsr0nQWZbHMOQmTJ"
+}

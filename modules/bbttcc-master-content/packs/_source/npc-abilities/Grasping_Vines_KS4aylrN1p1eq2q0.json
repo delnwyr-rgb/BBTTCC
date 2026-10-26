@@ -7,7 +7,7 @@
     "intent": "violence",
     "skill": "melee",
     "damage": {
-      "formula": "",
+      "formula": "2d6",
       "attribute": "violence",
       "type": "kinetic",
       "damageFlavor": "",
@@ -20,9 +20,9 @@
     },
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
-    "effect": "<p>Snaring roots lash out from underfoot. On a hit, the target is grappled (escape DC 14) and pulled up to 10 ft. toward the shambler.</p>",
+    "effect": "Snaring roots lash out from underfoot. On a hit, the target is Restrained (escape: Violence check vs DC 14) and pulled up to 2 squares toward the shambler.",
     "flavor": "",
     "manifestation": {
       "tier": 1,
@@ -53,29 +53,30 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "saveAttribute": "violence",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 14,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "restrained"
+        ],
+        "duration": "until-saved",
+        "saveEachRound": true,
+        "saveAttribute": "violence"
       }
     },
     "description": {
-      "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>&lt;p&gt;Snaring roots lash out from underfoot. On a hit, the target is grappled (escape DC 14) and pulled up to 2 squares toward the shambler.&lt;/p&gt;</p>\n<ul>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Melee (Violence)</li>\n  <li><strong>Reach:</strong> Melee</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+      "value": "<p><strong>Strike.</strong> reach 1 square., one target. Damage: <code>1d6</code> kinetic + violence. On a hit, the target is Restrained (escape: Violence check vs DC 14) and pulled up to 2 squares toward the shambler.</p>"
     }
   },
-  "_id": "KS4aylrN1p1eq2q0",
-  "effects": [],
-  "sort": 0,
   "flags": {
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Qlipothic Shambler"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
-      }
-    },
     "autoanimations": {
-      "id": "1011eaa6-eaf7-4a4d-8a53-683b2dd606c8",
+      "id": "ft-grasping-vines",
       "label": "Grasping Vines",
       "macro": {
         "enable": false,
@@ -249,48 +250,58 @@
       "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
-      "version": 5,
-      "meleeSwitch": {
-        "video": {
-          "dbSection": "range",
-          "menuType": "weapon",
-          "animation": "arrow",
-          "variant": "regular",
-          "color": "regular",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "detect": "automatic",
-          "range": 2,
-          "returning": false,
-          "switchType": "on"
+      "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Qliphothic Shambler"
+        ],
+        "sourceIds": [
+          "dskzJNdpkiTFEbik"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
         }
       }
     }
   },
+  "effects": [],
+  "_id": "KS4aylrN1p1eq2q0",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024229567,
-    "modifiedTime": 1782167244994,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989028158,
+    "modifiedTime": 1792989028159,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!KS4aylrN1p1eq2q0"
 }

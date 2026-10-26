@@ -7,7 +7,7 @@
     "intent": "soul",
     "skill": "channel",
     "damage": {
-      "formula": "1d10",
+      "formula": "2d10",
       "attribute": "violence",
       "type": "kinetic",
       "damageFlavor": "",
@@ -24,7 +24,7 @@
       "control",
       "qliphothic"
     ],
-    "effect": "One creature within 60 ft. Soul vs DC 17. Fail: Compelled to attack the nearest ally (\"taking it up the chain\") on its next turn. Save each round to end.",
+    "effect": "One creature within 12 squares. Soul vs DC 17. Fail: Compelled to attack the nearest ally (\"taking it up the chain\") on its next turn. Save each round to end.",
     "flavor": "",
     "manifestation": {
       "tier": 1,
@@ -55,6 +55,22 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 17,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "compelled"
+        ],
+        "duration": "until-saved",
+        "saveEachRound": true,
+        "saveAttribute": "soul"
       }
     },
     "description": {
@@ -62,7 +78,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -85,17 +100,6 @@
             "saleBack": 60
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Gerald, Assistant Regional Manager of the Apocalypse"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
       }
     },
     "autoanimations": {
@@ -274,20 +278,37 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gerald, Assistant Regional Manager of the Apocalypse"
+        ],
+        "sourceIds": [
+          "3hQFAiFEsjwO9TKr"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
   "_id": "TMadz4er40zmgKo8",
   "sort": 0,
+  "folder": null,
   "ownership": {
-    "default": 0
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
-    "createdTime": 1780000000000,
-    "modifiedTime": 1780000000000,
-    "lastModifiedBy": "ftSprintBuilder0",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989026739,
+    "modifiedTime": 1792989026739,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

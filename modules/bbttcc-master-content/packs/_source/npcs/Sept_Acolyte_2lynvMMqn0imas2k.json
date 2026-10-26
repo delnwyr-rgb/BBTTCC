@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 32,
-        "max": 32
+        "max": 32,
+        "temp": 0
       },
       "stress": {
         "value": 16,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,6 +145,9 @@
     },
     "conditionImmunities": [],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -155,6 +160,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "Lower-rung ritualist of the Sept. Channels small blessings and minor wards."
     }
   },
   "flags": {
@@ -185,16 +194,19 @@
             ]
           },
           "price": {
-            "marks": 450,
-            "bounty": 450,
-            "hire": 1125,
-            "ransom": 750,
+            "marks": 10,
+            "bounty": 10,
+            "hire": 15,
+            "ransom": 15,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "TII light caster (bestiary) \u2014 bounty 450 / hire 1125 / ransom 750 marks (paid in softpower)"
-          }
+            "notes": "TII light mortal — bounty 10 / hire 15 marks; credited to the pool matching the method (default softpower)"
+          },
+          "lineage": "mortal",
+          "subLineage": "sept"
         }
-      }
+      },
+      "creatureType": "humanoid"
     }
   },
   "_id": "2lynvMMqn0imas2k",
@@ -339,6 +351,23 @@
               "tier": "II",
               "frame": "trait"
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "allyDamaged",
+                "radius": 6,
+                "do": {
+                  "ward": 0.5
+                },
+                "limit": {
+                  "per": "round",
+                  "uses": 1
+                },
+                "label": "Minor Ward"
+              }
+            ]
           }
         }
       },
@@ -350,17 +379,16 @@
       },
       "_id": "aMDi9KiGTFSto7ED",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.5",
         "createdTime": 1780118752264,
-        "modifiedTime": 1782167242061,
+        "modifiedTime": 1791422257451,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!2lynvMMqn0imas2k.aMDi9KiGTFSto7ED"
+      }
     },
     {
       "name": "Consecrated Lash",
@@ -439,11 +467,30 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack \u00d7 1",
+                "notes": "TII attack × 1",
                 "bound": "free",
                 "saleBack": 60
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "weapon": "Consecrated Lash",
+                  "targetTag": [
+                    "qliphothic",
+                    "undead",
+                    "fiend"
+                  ]
+                },
+                "do": {
+                  "reroll": "damage"
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -632,20 +679,19 @@
       },
       "_id": "xw25jYFhLLPwOO1w",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1780118752264,
-        "modifiedTime": 1782167242061,
+        "modifiedTime": 1791331975938,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!2lynvMMqn0imas2k.xw25jYFhLLPwOO1w"
+      }
     },
     {
-      "name": "Prayer-of-Pause (recharges on a Soma Break)",
+      "name": "Prayer-of-Pause (recharge 5–6)",
       "type": "weapon",
       "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
       "system": {
@@ -671,7 +717,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 15 ft. \u2014 targets roll vs Resolve (DC 13). Half damage on success. Failed-save targets lose their Reaction until the start of their next turn (the prayer asks them, politely, to wait). Recharge 5\u20136.",
+        "effect": "Radius 3 squares. — targets roll vs Resolve (DC 13). Half damage on success. Failed-save targets lose their Reaction until the start of their next turn (the prayer asks them, politely, to wait). At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
         "flavor": "A single word, spoken by someone who hasn't quite earned it. It works anyway.",
         "manifestation": {
           "tier": 1,
@@ -702,6 +748,18 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 13,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 15
           }
         },
         "description": {
@@ -727,16 +785,34 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII save \u00d7 1",
+                "notes": "TII save × 1",
                 "bound": "free",
                 "saleBack": 60
               }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Prayer-of-Pause (recharge 5–6)"
+                },
+                "do": {
+                  "noReactions": true
+                }
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
             }
           }
         },
         "autoanimations": {
           "id": "ft-prayer-of-pause-recharge-5-6-",
-          "label": "Prayer-of-Pause (Recharge 5\u20136)",
+          "label": "Prayer-of-Pause (Recharge 5–6)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -920,17 +996,16 @@
       },
       "_id": "bAGMyHYbf4aKfSaV",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118752264,
-        "modifiedTime": 1782167242061,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989137859,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!2lynvMMqn0imas2k.bAGMyHYbf4aKfSaV"
+      }
     }
   ],
   "effects": [],
@@ -940,12 +1015,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118752264,
-    "modifiedTime": 1783219923262,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989137739,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

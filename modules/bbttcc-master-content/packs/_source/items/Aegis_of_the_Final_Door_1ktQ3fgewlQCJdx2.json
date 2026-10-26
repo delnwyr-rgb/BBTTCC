@@ -21,7 +21,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A great round shield said to have been the last thing standing at a threshold no one names. Its face is featureless save for a single closed ring; the metal does not reflect, only quiets. Those who carry it report the world's whispering simply\u2026 stops at the rim.</p><p><strong>The Closed Ring.</strong> Resists qliphothic and psychic. The bearer cannot be charmed or compelled while it is raised.</p><p><strong>Soulbound.</strong> Binds at first attunement and cannot be re-bonded.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +3, Resolve +4</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic, Psychic</p></li><li><p><strong>Immune to:</strong> Charmed, Compelled</p></li><li><p><strong>Tier:</strong> IV</p></li><li><p><strong>Cost:</strong> 2025 Economy marks</p></li></ul>",
+      "value": "<p>A great round shield said to have been the last thing standing at a threshold no one names. Its face is featureless save for a single closed ring; the metal does not reflect, only quiets. Those who carry it report the world's whispering simply… stops at the rim.</p><p><strong>The Closed Ring.</strong> Resists qliphothic and psychic. The bearer cannot be charmed or compelled while it is raised.</p><p><strong>Soulbound.</strong> Binds at first attunement and cannot be re-bonded.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +3, Resolve +4</p></li><li><p><strong>Requires:</strong> Bracing (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic, Psychic</p></li><li><p><strong>Immune to:</strong> Charmed, Compelled</p></li><li><p><strong>Tier:</strong> IV</p></li><li><p><strong>Cost:</strong> 1415 Nonlethal marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -46,20 +46,20 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A great round shield said to have been the last thing standing at a threshold no one names. Its face is featureless save for a single closed ring; the metal does not reflect, only quiets. Those who carry it report the world's whispering simply\u2026 stops at the rim.</p><p><b>The Closed Ring.</b> Resists qliphothic and psychic. The bearer cannot be charmed or compelled while it is raised.</p><p><b>Soulbound.</b> Binds at first attunement and cannot be re-bonded.</p>",
+          "lore": "<p>A great round shield said to have been the last thing standing at a threshold no one names. Its face is featureless save for a single closed ring; the metal does not reflect, only quiets. Those who carry it report the world's whispering simply… stops at the rim.</p><p><b>The Closed Ring.</b> Resists qliphothic and psychic. The bearer cannot be charmed or compelled while it is raised.</p><p><b>Soulbound.</b> Binds at first attunement and cannot be re-bonded.</p>",
           "materialOf": [
             "threshold-iron",
             "silence-alloy",
             "vow-bone"
           ],
           "price": {
-            "marks": 2025,
-            "currency": "economy",
+            "marks": 1415,
+            "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TIV shield \u00d7 1 \u00d7 soulbound 1.5",
+            "notes": "TIV shield × soulbound (hygiene 2026-10-07; was 2025 economy)",
             "bound": "soulbound",
             "saleBack": 0
           }
@@ -90,11 +90,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782150391609,
-    "modifiedTime": 1787334814274,
+    "modifiedTime": 1792977603629,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

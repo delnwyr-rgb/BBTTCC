@@ -4924,9 +4924,24 @@ function _openOldenbornOceanJudge(actor, key, label, body) {
   });
 }
 
+// Sephirotic Scion Core — Sefirot Attunement (ruling AN1/AN9, 2026-10-26): 1/scene,
+// banks a +1 bonus the steward's next check consumes (collectCheckBonuses reads
+// actor.flags.fourththing.aidBanked); the sephirah comes from the Identity pick.
+function _openScionSefirotAttunement(actor, key, label, body) {
+  return _openPerSceneAbility(actor, key, label, body, async (a) => {
+    const align = a.flags?.["bbttcc-character-options"]?.identity?.sephirothicAlignment?.name ?? "";
+    const sephirah = String(align).replace(/^Alignment:\s*/i, "").trim() || "your sephirah";
+    try {
+      await game.fourththing.aid.bank(a, { kind: "bonus", from: a.name, source: "Sefirot Attunement", bonus: 1, note: `Sefirot Attunement — ${sephirah}'s register (spend it on a check in that domain)` });
+      return `<p style="font-size:0.78rem;margin:0.2rem 0;color:#7fc6e0">✦ +1 banked for your next check in <b>${_ftEscape(sephirah)}</b>'s register.</p>`;
+    } catch (e) { console.warn("Sefirot Attunement bank failed", e); return false; }
+  });
+}
+
 // Live-identifier → custom ancestry handler. Read by _dispatchSingleAbility (the
 // per-key escape hatch, sibling to the Shield Projector branch).
 const ANCESTRY_CUSTOM = {
+  "sephirotic_scion_core.sefirotAttunement": _openScionSefirotAttunement,
   "dragon-adolescent":               _openDragonAdolescentBreath,
   "dragon-ancient":                  _openDragonAncientAura,
   "dragon-elder":                    _openDragonElderWing,
@@ -5212,141 +5227,141 @@ export const CHAR_OPT_ABILITIES = {
   "archetype-wheel-of-fortune-t2": {
     type: "strategic-turn",
     label: "Wheel of Fortune — Tilt the Table (Tier 2)",
-    body: "Strategic: Once per strategic turn, after any random table roll, encounter roll, or variable-outcome result is revealed, your faction may shift the result one step up or down the table, if a legal adjacent result exists."
+    body: "Strategic: Once per turn, after any random table roll, encounter roll, or variable-outcome result is revealed, your Domain may shift the result one step up or down the table, if a legal adjacent result exists."
   },
   "archetype-wheel-of-fortune-t3": {
     type: "soma-break",
     label: "Wheel of Fortune — Treat as 10 (Tier 3)",
-    body: "Tactical: Once per Soma Break, when you miss with an attack or fail an ability check, treat the roll as a 10 before modifiers."
+    body: "Tactical: Once per Soma Break, when you miss with a Strike or fail a check, treat the 2d10 as a 10 before values are added."
   },
   "archetype-wheel-of-fortune-t4": {
     type: "strategic-turn", travel: true, mitigates: ["encounter"],
     label: "Wheel of Fortune — Force the Reroll (Tier 4)",
-    body: "Strategic: Once per strategic turn, after an outcome is revealed on a raid, campaign beat, travel encounter, or crisis table, your faction may force a reroll OR choose between the rolled outcome and the rerolled one."
+    body: "Strategic: Once per turn, after an outcome is revealed on a Battle, beat, travel encounter, or crisis table, your Domain may force a reroll OR choose between the rolled outcome and the rerolled one."
   },
   "archetype-moon-t3": {
     type: "soma-break",
-    label: "The Moon — Detect Thoughts (Tier 3)",
-    body: "Tactical: Once per Soma Break, cast Detect Thoughts without expending Clarity. (You also have permanent advantage on saves vs. being charmed — no cap.)"
+    label: "The Moon — Read Surface Thoughts (Tier 3)",
+    body: "Tactical: Once per Soma Break, read one creature's surface thoughts (the GM answers truthfully) without spending Clarity. (You also always reroll the lowest die on Soul checks against charm — passive.)"
   },
   "archetype-hanged-man-t3": {
     type: "soma-break",
-    label: "The Hanged Man — Reroll Failed Save (Tier 3)",
-    body: "Tactical: Once per Soma Break, when you fail a saving throw against being charmed, frightened, or restrained, immediately reroll it."
+    label: "The Hanged Man — Reroll Failed Check (Tier 3)",
+    body: "Tactical: Once per Soma Break, when you fail a check against being charmed, frightened, or restrained, immediately reroll it."
   },
   "archetype-hanged-man-t4": {
     type: "strategic-turn",
     label: "The Hanged Man — Sacrifice Refund (Tier 4)",
-    body: "Strategic: Once per strategic turn, after a failed raid, intrigue action, or diplomatic action, your faction may immediately regain 1 spent OP of the type used and apply +1 to its next related strategic roll."
+    body: "Strategic: Once per turn, after a failed Battle, Heist or Parley, your Domain may immediately regain 10 spent marks of the channel used and add +1 to its next related Domain roll."
   },
   "archetype-temperance-t2": {
     type: "info",
     label: "Temperance — Overflow Retention (Tier 2)",
-    body: "Strategic (passive, fires each turn): Retain 1 overflow OP per turn that would otherwise be lost. No daily cap; auto-applies — this card is a reminder of the rule."
+    body: "Strategic (passive, fires each turn): Retain 10 overflow marks per turn that would otherwise be lost. No daily cap; auto-applies — this card is a reminder of the rule."
   },
   "archetype-star-t3": {
     type: "soma-break",
     label: "The Star — Hopebringer Aura (Tier 3)",
-    body: "Tactical: Once per Soma Break during a major scene or encounter, allies within earshot who can see or hear you have advantage on saving throws against being frightened."
+    body: "Tactical: Once per Soma Break during a major scene or encounter, allies within earshot who can see or hear you reroll the lowest die on checks against being frightened."
   },
   "archetype-sun-t3": {
     type: "soma-break",
     label: "The Sun — Beacon Aura (Tier 3)",
-    body: "Tactical: Once per Soma Break during a major scene or encounter, allies within earshot who can see or hear you have advantage on saving throws against being frightened or charmed."
+    body: "Tactical: Once per Soma Break during a major scene or encounter, allies within earshot who can see or hear you reroll the lowest die on checks against being frightened or charmed."
   },
 
   // ── Crews (3) ─────────────────────────────────────────────────────────────
   "crew-storm-wardens-t2": {
     type: "strategic-turn", travel: true, mitigates: ["weather"],
     label: "Storm Wardens — Weather Veto (Tier 2)",
-    body: "Strategic: Once per strategic turn, your faction can suppress, blunt, or redirect a weather-based hazard affecting a local route, hex, or operation."
+    body: "Strategic: Once per turn, your Domain can suppress, blunt, or redirect a weather-based hazard affecting a local route, hex, or operation."
   },
   "crew-gridbreakers-t3": {
     type: "strategic-turn",
     label: "Gridbreakers — Reactivate Dormant Asset (Tier 3)",
-    body: "Strategic: Once per strategic turn, temporarily reactivate a dormant urban asset, granting a short-lived but meaningful local benefit."
+    body: "Strategic: Once per turn, temporarily reactivate a dormant urban asset, granting a short-lived but meaningful local benefit."
   },
   "crew-cultural-ambassadors-t4": {
     type: "strategic-turn",
     label: "Cultural Ambassadors — Soft Annex (Tier 4)",
-    body: "Strategic: Once per strategic turn, attempt to shift the alignment of an adjacent neutral Hex toward your faction's political affiliation without spending OPs."
+    body: "Strategic: Once per turn, attempt to shift the alignment of an adjacent neutral Hex toward your Domain's political affiliation without spending marks."
   },
 
   // ── Occult Associations (27) ──────────────────────────────────────────────
   "occult-association-kabbalist-t1": {
     type: "soma-break",
     label: "Kabbalist — Sense the Leak (Tier 1)",
-    body: "Tactical: Once per Soma Break, cast Detect Evil and Good (flavored as sephirothic flow / qliphothic pressure). Hex Read on entry is passive; +30 Soft Power marks rolls is passive."
+    body: "Tactical: Once per Soma Break, sense sephirotic flow and qliphothic pressure within 6 squares. Hex Read on entry is passive; +3 to Soft Power Domain rolls is passive."
   },
   "occult-association-kabbalist-t3": {
     type: "scenario",
     label: "Kabbalist — Read the Rot (Tier 3)",
-    body: "Strategic: Once per Scenario involving Qliphothic forces or corrupted Hex conditions, gain Advantage on one relevant Strategic Roll, chosen when you roll."
+    body: "Strategic: Once per scene involving Qliphothic forces or corrupted Hex conditions, reroll the lowest die on one relevant Domain roll, chosen when you roll."
   },
   "occult-association-shaman-t1": {
     type: "strategic-turn", travel: true,
     label: "Shaman — Hex Attunement (Tier 1)",
-    body: "Strategic: Once per Strategic Turn, gain +1 to one relevant travel, terrain, or wilderness-facing OP roll. (Hex Attunement on entry is passive.)"
+    body: "Strategic: Once per turn, gain +1 to one relevant travel, terrain, or wilderness-facing Domain roll. (Hex Attunement on entry is passive.)"
   },
   "occult-association-shaman-t2": {
     type: "strategic-turn", travel: true, mitigates: ["weather", "terrain"],
     label: "Shaman — Read the Path (Tier 2)",
-    body: "Strategic: Once per Strategic Turn when your faction faces travel hazard, severe weather, or terrain difficulty: reduce one weather/terrain complication by one step OR gain Advantage on one travel/wilderness Strategic Roll."
+    body: "Strategic: Once per turn when your Domain faces travel hazard, severe weather, or terrain difficulty: reduce one weather/terrain complication by one step OR reroll the lowest die on one travel/wilderness Domain roll."
   },
   "occult-association-shaman-t3": {
     type: "scenario", travel: true, mitigates: ["terrain", "qliphothic", "ley"],
     label: "Shaman — Spirit-Walk (Tier 3)",
-    body: "Strategic: Once per Scenario involving corrupted terrain, distressed leyline flow, unnatural weather, or spirit unrest: gain Advantage on one relevant Strategic Roll, OR negate one terrain- / corruption-based penalty for that Scene or operation."
+    body: "Strategic: Once per scene involving corrupted terrain, distressed leyline flow, unnatural weather, or spirit unrest: reroll the lowest die on one relevant Domain roll, OR negate one terrain- / corruption-based penalty for that scene or operation."
   },
   "occult-association-shaman-t4": {
     type: "strategic-turn", travel: true, mitigates: ["weather", "terrain", "ley", "qliphothic"],
     label: "Shaman — Stabilize the Hex (Tier 4)",
-    body: "Strategic: Once per Strategic Turn, target one Hex your faction occupies/traverses/affects: temporarily stabilize a distressed leyline or hostile environmental state for one Scenario or operation, OR reduce a corruption/weather/terrain pressure by one significant step."
+    body: "Strategic: Once per turn, target one Hex your Domain occupies/traverses/affects: temporarily stabilize a distressed leyline or hostile environmental state for one scene or operation, OR reduce a corruption/weather/terrain pressure by one significant step."
   },
   "occult-association-tarot-mage-t1": {
     type: "soma-break",
     label: "Tarot Mage — Draw the Line (Tier 1, Tactical)",
-    body: "Tactical: Once per Soma Break, before making an ability check, draw the line of fate early and gain Advantage on that check. (Strategic +2 Intrigue/turn is a separate Strategic Turn cadence — see the Strategic side.)"
+    body: "Tactical: Once per Soma Break, before making a check, draw the line of fate early and reroll the lowest die on that check. (The Strategic side runs on its own per-turn cadence.)"
   },
   "occult-association-tarot-mage-t2": {
     type: "scenario",
     label: "Tarot Mage — Tilt the Draw (Tier 2)",
-    body: "Strategic: Once per Scenario, after a key faction check is rolled but before consequences fully resolve, tilt the draw and add +2 to the result, OR reduce the severity of one failed narrative consequence by one step (GM adjudicated)."
+    body: "Strategic: Once per scene, after a key Domain roll is made but before consequences fully resolve, tilt the draw and add +2 to the result, OR reduce the severity of one failed narrative consequence by one step (GM adjudicated)."
   },
   "occult-association-tarot-mage-t3": {
     type: "soma-break",
     label: "Tarot Mage — Foretelling Roll (Tier 3, Tactical)",
-    body: "Tactical: When you finish a Soma Break, roll 2d10 and record the number. Once per Soma Break, replace any attack roll, save, or ability check (yours or a creature you can see) with this foretelling roll, declared before the roll."
+    body: "Tactical: When you finish a Soma Break, roll 2d10 and record the number. Once per Soma Break, replace any Strike, defense, or check (yours or a creature you can see) with this foretelling roll, declared before the roll."
   },
   "occult-association-tarot-mage-t4": {
     type: "scenario",
     label: "Tarot Mage — Force the Reroll (Tier 4)",
-    body: "Strategic: During Enemy Faction Turns (Phase 3), spend 50 Intrigue marks to force the GM to reroll one NPC faction's strategic action outcome and take the new result. Use sparingly — backlash, omen debt, hostile synchronicity guaranteed."
+    body: "Strategic: During the rival Domains' turn, spend 50 Intrigue marks to force the GM to reroll one rival Domain's action outcome and take the new result. Use sparingly — backlash, omen debt, hostile synchronicity guaranteed."
   },
   "occult-association-alchemist-t1": {
     type: "strategic-turn",
     label: "Alchemist — Production Reliability (Tier 1)",
-    body: "Strategic: Once per Strategic Turn, when your faction spends Economy marks on production, infrastructure, or supply stabilization, reduce that spend by 1 (minimum 1)."
+    body: "Strategic: Once per turn, when your Domain spends Economy marks on production, infrastructure, or supply stabilization, reduce that spend by 10 marks (minimum 10)."
   },
   "occult-association-alchemist-t2": {
     type: "strategic-turn",
     label: "Alchemist — Propaganda Distillate (Tier 2)",
-    body: "Strategic: Once per Strategic Turn, convert 30 Economy marks → 30 Soft Power marks, OR 30 Soft Power marks → 30 Economy marks. Does not count as OP generation. Leaves narrative residue."
+    body: "Strategic: Once per turn, convert 30 Economy marks → 30 Soft Power marks, OR 30 Soft Power marks → 30 Economy marks. Does not count as income. Leaves narrative residue."
   },
   "occult-association-alchemist-t4": {
     type: "strategic-turn",
     label: "Alchemist — Elixir of Fortitude (Tier 4)",
-    body: "Strategic: Once per Strategic Turn, spend 50 Economy marks. Choose one OP category (Violence/Non-Lethal/Intrigue/Soft Power/Diplomacy): that category gains +30 marks for the duration of one Scenario. Unspent bonus marks are lost when scenario ends."
+    body: "Strategic: Once per turn, spend 50 Economy marks. Choose one channel (Violence/Non-Lethal/Intrigue/Soft Power/Diplomacy): that channel gains +30 marks for one scene. Unspent bonus marks are lost when the scene ends."
   },
   "occult-association-goetic-summoner-t3": {
     type: "strategic-turn",
     label: "Goetic Summoner — Binding Posture (Tier 3)",
-    body: "Strategic: Once per Strategic Turn before a Scenario begins, declare a Binding Posture: gain +3 to a single Intrigue OP roll made during that Scenario. (If you fail a key check, GM may introduce a binding-tied complication.)"
+    body: "Strategic: Once per turn before a scene begins, declare a Binding Posture: gain +3 to a single Intrigue Domain roll made during that scene. (If you fail a key check, GM may introduce a binding-tied complication.)"
   },
   "occult-association-goetic-summoner-t4": {
     type: "scenario",
     label: "Goetic Summoner — Major Binding (Tier 4)",
-    body: "Strategic: After your faction defeats a major Qliphothic entity in a Scenario, attempt to bind it: spend 100 Intrigue marks and make a GM-adjudicated Strategic Roll. Success: bound asset granting +5 to Violence or Intrigue OP rolls while bound. Failure: entity escapes with a grudge."
+    body: "Strategic: After your Domain defeats a major Qliphothic entity in a scene, attempt to bind it: spend 100 Intrigue marks and make a Domain roll the GM sets. Success: bound asset granting +5 to Violence or Intrigue Domain rolls while bound. Failure: entity escapes with a grudge."
   },
   "occult-association-prophet-oracle-t1": {
     type: "soma-break",
@@ -5356,58 +5371,84 @@ export const CHAR_OPT_ABILITIES = {
   "occult-association-prophet-oracle-t2": {
     type: "scenario",
     label: "Prophet/Oracle — Bias the Arrival (Tier 2)",
-    body: "Strategic: Once per Scenario, when an encounter, complication, or emerging situation is about to be introduced, ask the GM to bias it toward one broad category: warning / negotiation / hazard / omen / hostile contact / opportunity."
+    body: "Strategic: Once per scene, when an encounter, complication, or emerging situation is about to be introduced, ask the GM to bias it toward one broad category: warning / negotiation / hazard / omen / hostile contact / opportunity."
   },
   "occult-association-prophet-oracle-t3": {
     type: "soma-break",
     label: "Prophet/Oracle — Foreseen Failure (Tier 3, Tactical)",
-    body: "Tactical: Once per Soma Break, before a roll is made, declare a creature/ally/visible event-thread and grant Advantage on one attack, save, or check tied to avoiding a meaningful failure."
+    body: "Tactical: Once per Soma Break, before a roll is made, declare a creature/ally/visible event-thread and let it reroll the lowest die on one Strike, defense, or check tied to avoiding a meaningful failure."
   },
   "occult-association-prophet-oracle-t4": {
     type: "strategic-turn",
     label: "Prophet/Oracle — Major Foresight (Tier 4)",
-    body: "Strategic: Once per Strategic Turn, ask the GM one major foresight question about an impending threat, faction move, complication, or fracture point. Answer is truthful, possibly symbolic / partial / framed as pressure. (Tier 4 also unlocks 1/Scenario unusually-accurate prep — track separately.)"
+    body: "Strategic: Once per turn, ask the GM one major foresight question about an impending threat, rival Domain move, complication, or fracture point. Answer is truthful, possibly symbolic / partial / framed as pressure. (Tier 4 also unlocks 1/scene unusually-accurate prep — track separately.)"
   },
   "occult-association-exorcist-t2": {
     type: "strategic-turn",
     label: "Exorcist — Reduce Darkness (Tier 2)",
-    body: "Strategic: Once per Strategic Turn, reduce Darkness or corruption pressure in a Hex by one step, OR remove one minor corruption effect from a scenario."
+    body: "Strategic: Once per turn, reduce Darkness or corruption pressure in a Hex by one step, OR remove one minor corruption effect from a scene."
   },
   "occult-association-exorcist-t3": {
     type: "scenario",
     label: "Exorcist — Negate Corruption (Tier 3)",
-    body: "Strategic: Once per Scenario, negate one corruption-based penalty or hostile effect. (Permanent advantage on rolls involving purification / stabilization / resisting Darkness is passive.)"
+    body: "Strategic: Once per scene, negate one corruption-based penalty or hostile effect. (Rerolling the lowest die on rolls involving purification / stabilization / resisting Darkness is passive.)"
   },
   "occult-association-exorcist-t4": {
     type: "strategic-turn",
     label: "Exorcist — Major Purge (Tier 4)",
-    body: "Strategic: Once per Strategic Turn, fully purge a major corruption event, Qliphothic effect, or Darkness spike, OR negate a major hostile environmental / metaphysical threat."
+    body: "Strategic: Once per turn, fully purge a major corruption event, Qliphothic effect, or Darkness spike, OR negate a major hostile environmental / metaphysical threat."
   },
   "occult-association-biomancer-t1": {
     type: "strategic-turn",
     label: "Biomancer — Reduce Survival Penalty (Tier 1)",
-    body: "Strategic: Once per Strategic Turn, reduce one survival, hazard, or casualty-related penalty by one step. (Permanent advantage vs. poison/disease/environmental hazards is passive.)"
+    body: "Strategic: Once per turn, reduce one survival, hazard, or casualty-related penalty by one step. (Rerolling the lowest die vs. poison/disease/environmental hazards is passive.)"
   },
   "occult-association-biomancer-t2": {
     type: "scenario",
     label: "Biomancer — Casualty Conversion (Tier 2)",
-    body: "Strategic: Once per Scenario, reduce casualty severity for your faction by one step, OR convert a catastrophic loss into a contained loss with consequences."
+    body: "Strategic: Once per scene, reduce casualty severity for your Domain by one step, OR convert a catastrophic loss into a contained loss with consequences."
   },
   "occult-association-biomancer-t4": {
     type: "strategic-turn",
     label: "Biomancer — Negate Crisis (Tier 4)",
-    body: "Strategic: Once per Strategic Turn, negate a major environmental, casualty, or biological crisis affecting your faction, OR convert a lethal condition into a survivable but transformed state."
+    body: "Strategic: Once per turn, negate a major environmental, casualty, or biological crisis affecting your Domain, OR convert a lethal condition into a survivable but transformed state."
   },
   "occult-association-gnostic-t3": {
     type: "scenario",
     label: "Gnostic — Ignore Deception (Tier 3)",
-    body: "Strategic: Once per Scenario, your faction may automatically ignore a single deception-based complication without spending OPs. (Permanent immunity to magical charm + advantage on Insight to detect deception is passive.)"
+    body: "Strategic: Once per scene, your Domain may automatically ignore a single deception-based complication without spending marks. (Immunity to magical charm + rerolling the lowest die on Insight to detect deception is passive.)"
   },
   "occult-association-rosicrucian-t3": {
     type: "strategic-turn",
     label: "Rosicrucian — Bypass Bureaucracy (Tier 3)",
-    body: "Strategic: Once per Strategic Turn, negate a single 'lost time' complication caused by bureaucracy, checkpoints, or local authorities during a Diplomacy-forward operation. (Securing safe shelter/cover/passage in GenPop hexes is passive — no OP spend.)"
+    body: "Strategic: Once per turn, negate a single 'lost time' complication caused by bureaucracy, checkpoints, or local authorities during a Diplomacy-forward operation. (Securing safe shelter/cover/passage in GenPop hexes is passive — no marks spent.)"
   },
+
+  // ── CO21 routes (ruling 2026-10-26): Strategic lines that had no carrier get a per-cadence card ─────────
+  "archetype-death-t2":   { type: "scenario", label: "Death — Salvage the Ending (Tier 2)", body: "Strategic: Once per scene of recovery, salvage, reform or post-catastrophe stabilisation, your Domain converts one failed or destroyed asset, initiative or position into a reduced but usable replacement instead of losing it entirely." },
+  "archetype-judgment-t2": { type: "scenario", label: "Judgment — Final Account (Tier 2)", body: "Strategic: Once per scene of purge, revelation, judgment, exposure or final account, your Domain ignores the first major resistance, denial or concealment effect." },
+  "archetype-strength-t2": { type: "scenario", label: "Strength — Hold the Field (Tier 2)", body: "Strategic: Once per Battle or Siege, your Domain adds +2 to one Violence Domain roll." },
+  "archetype-fool-t2":    { type: "strategic-turn", travel: true, mitigates: ["encounter"], label: "The Fool — First Step Free (Tier 2)", body: "Strategic: Once per turn, on a travel, scouting, route-finding or first-contact leg, your Domain rerolls the first setback or complication." },
+  "archetype-hanged-man-t2": { type: "strategic-turn", label: "The Hanged Man — The Lesson Pays (Tier 2)", body: "Strategic: Once per turn, the first failed Intrigue or Soft Power action your Domain attempts returns 10 Intrigue marks instead of being a pure loss." },
+  "archetype-high-priestess-t2": { type: "scenario", label: "The High Priestess — One More Veil (Tier 2)", body: "Strategic: Once per scene of reconnaissance, espionage, omen-reading or hidden threat, your Domain's first successful information-gathering step reveals one additional hidden tag, threat or condition." },
+  "archetype-magician-t2": { type: "scenario", label: "The Magician — Read the Lore (Tier 2)", body: "Strategic: Once per scene of the Great Work's Identification phase, the time or resources needed to uncover the Lore of an assigned Spark are halved." },
+  "archetype-world-t2":   { type: "scenario", label: "The World — Seamless Handoff (Tier 2)", body: "Strategic: Once per multi-step scene that spans two different subsystems, your Domain ignores the first cross-domain transition or coordination penalty." },
+  "archetype-lovers-t2":  { type: "scenario", label: "The Lovers — Shared Cause (Tier 2)", body: "Strategic: Once per scene, the first coalition action your Domain shares gains +1." },
+  "archetype-chariot-t2": { type: "strategic-turn", label: "The Chariot — Replace a Squadmate (Tier 2)", body: "Strategic: If a squadmate dies, your Domain replaces them during the next turn for 20 Non-Lethal marks." },
+  "archetype-chariot-t4": { type: "scenario", label: "The Chariot — Bunker Busters (Tier 4)", body: "Strategic: Once per Bunker Busters scene, your presence and squad let your Domain reroll the lowest die on its Domain roll." },
+  "archetype-justice-t4": { type: "scenario", label: "Justice — The Verdict Holds (Tier 4)", body: "Strategic: Once per scene of policy, trial, arbitration, reform or legitimacy, your Domain rerolls the lowest die on its Domain rolls." },
+  "archetype-emperor-t4": { type: "scenario", label: "The Emperor — Crisis Management (Tier 4)", body: "Strategic: Once per Policy & Crisis Management scene, your Domain rerolls the lowest die on its Domain rolls." },
+  "archetype-high-priestess-t4": { type: "scenario", label: "The High Priestess — Clandestine Revelation (Tier 4)", body: "Strategic: Once per scene of prophecy, espionage, hidden threat, omen or clandestine revelation, your Domain rerolls the lowest die on its Domain rolls." },
+  "archetype-star-t4":    { type: "scenario", label: "The Star — Rally After Ruin (Tier 4)", body: "Strategic: After your Domain suffers a major setback, failed siege or catastrophic beat, the first recovery or rally scene before the next turn rerolls the lowest die on its Domain rolls." },
+  "archetype-lovers-t4":  { type: "scenario", label: "The Lovers — Coalition Bond (Tier 4)", body: "Strategic: Once per scene, your coalition rolls reroll the lowest die and shed one coordination penalty." },
+  "archetype-moon-t4":    { type: "scenario", label: "The Moon — Reformation Tide (Tier 4)", body: "Strategic: When your Domain achieves a Justice or Reformation outcome, the hex shifts one step toward Keter (Crown) or Tiferet (Harmony)." },
+  "archetype-hierophant-t4": { type: "scenario", label: "The Hierophant — Tikkun Authority (Tier 4)", body: "Strategic: Once per scene, the marks cost or time to shift a hex's alignment toward a beneficial Sephirah drops by 20%." },
+  "crew-survivors-militia-t4": { type: "info", label: "Survivors / Militia — Nomad Reform (Tier 4)", body: "Strategic: If your Domain loses its last hex, it does not dissolve: it reforms as a Nomad Domain and keeps a quarter of its marks." },
+  "crew-diplomatic-envoys-t3": { type: "scene", label: "Diplomatic Envoys — Ceasefire (Tier 3)", body: "Tactical: Once per scene, call a Parley in the middle of a fight, forcing a 1-round ceasefire to negotiate, provided the enemies are intelligent and not fanatical." },
+  "occult-association-goetic-summoner-t2": { type: "scenario", label: "Goetic Summoner — Aim the Corruption (Tier 2)", body: "Strategic: Once per scene against Qliphothic entities or in a corrupted hex, your Domain rerolls the lowest die on one Domain roll — or, if the opposition deceives, terrorises or destabilises through Darkness-as-pressure, adds +1 to the relevant Intrigue Domain roll instead." },
+  "occult-association-kabbalist-t2": { type: "scenario", label: "Kabbalist — Identification Efficiency (Tier 2)", body: "Strategic: Once per scene of the Great Work's Identification phase, the marks cost or time to identify a required Spark drops by 25%." },
+  "occult-association-kabbalist-t4": { type: "scenario", label: "Kabbalist — Alignment Authority (Tier 4)", body: "Strategic: Once per scene, when your Domain shifts a hex's alignment toward a Sephirah, choose one: reroll the lowest die on the Domain roll, or cut the shift's marks cost by 10%." },
+  "occult-association-gnostic-t4": { type: "scenario", label: "Gnostic — Archon's Leverage (Tier 4)", body: "Strategic: Once per scene while your Domain pursues the Spark of Truth (Tiferet), cancel one bonus a rival Domain gains from Stealth, misinformation or a false alliance." },
 
   // ── Phase 6: Ancestry core trait abilities (2026-04-27) ───────────────────
   // Items whose description text already references 1/Soma Break powers but
@@ -5488,16 +5529,16 @@ export const CHAR_OPT_ABILITIES = {
 
   // ── D&D-vocab scrub Phase 3 — Cryptidkin ancestry feats (2026-04-29) ──────
   // Batch 2 from the buried-per-use survey. Identifiers verified in
-  // bbttcc-master-content.ancestries. All `1/Soma Break`. Tier→Level: T1=L5,
-  // T2=L5, T4=L17 (per pilot canon). Crossroads Hare carries TWO independent
+  // bbttcc-master-content.ancestries. All `1/Soma Break`. Tier→Level: T1=L1,
+  // T2=L5, T3=L11, T4=L17 (ruling AN7, 2026-10-26). Crossroads Hare carries TWO independent
   // 1/Soma Break uses, surfaced via the multi-ability picker.
   "cryptidkin-chupacabra-blood-drinker": {
     label: "Cryptidkin (Chupacabra): Blood-Drinker",
     abilities: [
-      { key: "bloodDrinker", type: "soma-break", level: 5,
+      { key: "bloodDrinker", type: "soma-break", level: 1,
         label: "Blood-Drinker (1/Soma Break)",
         body: "When you hit a creature with a melee attack, you may bite. Deal 1d6 + Body modifier qliphothic damage on top of the attack's normal damage, and gain temporary Integrity equal to the qliphothic damage dealt." },
-      { key: "hexSense", type: "scene", level: 5,
+      { key: "hexSense", type: "scene", level: 1,
         label: "Hex-Sense (1/Scene)",
         body: "GM-narrative. You can smell magical residue the way most people smell rain. When something supernatural has happened in a place within the last 24 hours, the GM tells you so — and roughly what colour it was." }
     ]
@@ -5548,51 +5589,85 @@ export const CHAR_OPT_ABILITIES = {
     abilities: [
       { key: "vanish", type: "soma-break", level: 17,
         label: "Crossroads Hare (Vanish)",
-        body: "1/Soma Break, when you would be reduced to 0 Integrity, you may instead vanish into the place between places. At the start of your next turn, you reappear in any unoccupied space within 1 mile that you have personally visited and clearly remember, with 1 Integrity and one level of Stress. You leave behind a single recognizable token at the spot you vanished from — a horn, a tuft of fur, a footprint that wasn't there before." },
+        body: "1/Soma Break, when you would be reduced to 0 Integrity, you may instead vanish into the place between places. At the start of your next turn, you reappear in any unoccupied space within one hex (five miles) that you have personally visited and clearly remember, with 1 Integrity and one level of Stress. You leave behind a single recognizable token at the spot you vanished from — a horn, a tuft of fur, a footprint that wasn't there before." },
       { key: "rumorRunsFaster", type: "soma-break", level: 17,
         label: "The Rumor Runs Faster",
         body: "1/Soma Break, spend 1 minute of focused Clarity hold to ask the GM what one nearby community is currently afraid of. The answer is at least one truth." }
     ]
   },
   "cryptidkin-jackalope-startle-reflex": {
-    type: "soma-break", level: 5,
+    type: "soma-break", level: 1,
     label: "Startle Reflex (1/Soma Break)",
     body: "Reaction when you are targeted by an attack roll or fail an Intrigue check — move up to 10 feet without provoking opportunity attacks. (Horns of Bad Luck — your natural unarmed strike — is granted as a manifestation when you take the Jackalope heritage.)"
   },
 
   // ── D&D-vocab scrub Phase 3 — Echo-Diver ancestry (2026-04-29) ────────────
-  // Batch 3. T1 → L5 per Cryptidkin canon. The species root is a 4-slot
+  // Batch 3. T1 → L1 (ruling AN7, 2026-10-26). The species root is a 4-slot
   // picker (1 active per-use + 3 info passives — matched by passive flags +
   // condition-immunity grant + initiative bonus on Empyrean tier1).
-  "echo_diver": {
-    label: "Echo-Diver: Time-Sense",
+  "echo_diver_core": {
+    label: "Echo-Diver: Half-Second Inheritance",
     abilities: [
-      { key: "temporalFlinch", type: "soma-break", level: 5,
-        label: "Temporal Flinch (1/Soma Break)",
-        body: "Reaction when you or a creature within 10 feet of you would be hit by an attack you can see — move yourself or that creature 5 feet. If this moves the target out of the attack's range or line, the attack misses." },
-      { key: "nicheSurvivor", type: "info", level: 5,
+      { key: "temporalFlinch", type: "info", level: 1,
+        label: "Temporal Flinch (1/Soma Break — Offer card)",
+        body: "Reaction — when you or an ally within 2 squares is hit by an attack you can see, an Offer card lets you shift yourself or that ally 1 square. If that takes the target out of the attack's range or line, the attack misses (the GM refunds the damage). The use is tracked by the Offer." },
+      { key: "nicheSurvivor", type: "info", level: 1,
         label: "Niche Survivor (passive)",
         body: "You need roughly half the food, water, and air a comparable Medium creature needs. Reroll the lowest die on Body checks against suffocation, starvation, dehydration, or extreme temperature (auto-fires). You can squeeze through gaps and hold stillness that shouldn't work, and you know it." },
-      { key: "vaultSight", type: "info", level: 5,
+      { key: "vaultSight", type: "info", level: 1,
         label: "Vault Sight (passive)",
-        body: "Darkvision 60 feet. Reroll the lowest die on Perception checks to notice unstable structure, active traps, trigger plates, load-bearing failures, or Spark / chronoflux residue (auto-fires; honor-system gate on the qualifying targets)." },
-      { key: "cannotBeSurprised", type: "info", level: 5,
+        body: "Darkvision 12 squares. Reroll the lowest die on Perception checks to notice unstable structure, active traps, trigger plates, load-bearing failures, or Spark / chronoflux residue (auto-fires)." },
+      { key: "cannotBeSurprised", type: "info", level: 1,
         label: "Cannot Be Surprised (passive)",
         body: "While conscious, you are immune to the Surprised condition. (Surfaces as an Immunity pill on your defenses block.)" }
     ]
   },
+  "qliph_scarred_core": {
+    label: "Qliph-Scarred: What Walked Out",
+    abilities: [
+      { key: "hungerMask", type: "soma-break", level: 1,
+        label: "Hunger Mask (1/Soma Break)",
+        body: "Suppress one bodily need (hunger, thirst, sleep, breath) for up to 24 hours by deciding to; you suffer none of its penalties during that window. When the window closes, every deferred need strikes at once, each as a separate Stress-class consequence." },
+      { key: "shadowResilience", type: "info", level: 1,
+        label: "Shadow Resilience (passive)",
+        body: "Resistance to qliphothic damage (Defenses pill). Reroll the lowest die on Body checks against effects that would drain, wither or corrupt your body (auto-fires)." },
+      { key: "qliphothicSaturation", type: "info", level: 1,
+        label: "Qliphothic Saturation (1/scene — Offer card)",
+        body: "When you fail a Soul check, an Offer card lets you reroll it; the scene's Darkness-gain count rises by 1 (the GM notes it). The use is tracked by the Offer." },
+      { key: "shadowWake", type: "info", level: 1,
+        label: "Shadow-Wake (passive)",
+        body: "Creatures with qliphothic attunement can sense you at 12 squares and know you have been marked. They may not know how to read the mark." }
+    ]
+  },
+  "sephirotic_scion_core": {
+    label: "Sephirotic Scion: The Higher Register",
+    abilities: [
+      { key: "sefirotAttunement", type: "scene", level: 1,
+        label: "Sefirot Attunement (1/scene)",
+        body: "Invoke your sephirah's register before a roll: a +1 bonus is banked and spent on your next check — one that falls clearly within that sephirah's domain." },
+      { key: "sephiroticPhysiology", type: "info", level: 1,
+        label: "Sephirotic Physiology (passive)",
+        body: "Resistance to sephirotic damage (Defenses pill). You do not technically age while on consecrated ground." },
+      { key: "holyConduit", type: "info", level: 1,
+        label: "Holy Conduit (passive)",
+        body: "Sephirotic-register effects that target you or pass through your space treat their caster's attribute as +1 for that effect's duration. Never for qliphothic-register effects." },
+      { key: "lightOfHarmony", type: "info", level: 1,
+        label: "Light of Harmony (passive)",
+        body: "When you reach an explicit, spoken agreement with another creature (a passed social check), you and that creature each gain 1 temporary Integrity (auto-fires)." }
+    ]
+  },
   "echo_diver_abyssal_tier1": {
-    type: "soma-break", level: 5,
+    type: "soma-break", level: 1,
     label: "Tide Recall (1/Soma Break)",
     body: "Touch a surface, creature, or object. The GM tells you one true thing from its recent past. The lookback window scales with your tier — Tier 1: last 24 hours · Tier 2: last week · Tier 3: last year · Tier 4: anything that ever happened to it. The GM may colour the answer; they may not lie."
   },
   "echo_diver_empyrean_tier1": {
     label: "Echo-Diver (Empyrean): Stormread",
     abilities: [
-      { key: "stormread", type: "soma-break", level: 5,
+      { key: "stormread", type: "soma-break", level: 1,
         label: "Stormread (1/Soma Break)",
         body: "Bonus action — deliver a warning to one willing ally within 30 feet who can hear and understand you. That ally may immediately use their reaction to move up to half their speed without provoking reaction strikes." },
-      { key: "stormreadInitiative", type: "info", level: 5,
+      { key: "stormreadInitiative", type: "info", level: 1,
         label: "Stormread Initiative (passive +2)",
         body: "Flat +2 bonus to initiative — auto-applied via system.derived.initiative.bonus (Phase 4 passive engine)." }
     ]
@@ -5600,95 +5675,92 @@ export const CHAR_OPT_ABILITIES = {
   "echo_diver_tellurian_tier1": {
     label: "Echo-Diver (Tellurian): Stone Patience",
     abilities: [
-      { key: "stonePatience", type: "soma-break", level: 5,
+      { key: "stonePatience", type: "soma-break", level: 1,
         label: "Stone Patience (1/Soma Break)",
         body: "Bonus action — anchor yourself until the start of your next turn. You cannot be moved against your will, knocked Prone, or made Shaken. Forced-movement effects targeting you fail cleanly; the aggressor knows it." },
-      { key: "objectSense", type: "info", level: 5,
+      { key: "objectSense", type: "info", level: 1,
         label: "Object Sense (passive)",
         body: "You passively know, without rolling, the approximate age and structural integrity of any object you touch." }
     ]
   },
 
   // ── D&D-vocab scrub Phase 3 — Sephirotic Scion ancestry (2026-04-29) ──────
-  // Batch 4. T1 → L5 per Cryptidkin canon. 3 Tier-I feats; species root is
+  // Batch 4. T1 → L1 (ruling AN7, 2026-10-26). 3 Tier-I feats; species root is
   // narrative-only (no mechanical per-use slots, skipped).
   "sephirotic_scion_cherubic_tier1": {
-    type: "soma-break", level: 5,
+    type: "soma-break", level: 1,
     label: "The Gate Knows You (1/Soma Break)",
     body: "Reaction — when a creature you can see within 30 feet attempts to open, close, lock, unlock, cross, or pass through a door, gate, threshold, ley-line gate, or named boundary, the target rolls 3d10 keep lowest 2 on any check or defense check related to that crossing. The boundary listens to you."
   },
   "sephirotic_scion_ophanic_tier1": {
-    type: "soma-break", level: 5,
+    type: "soma-break", level: 1,
     label: "The Wheel Never Stops (1/Soma Break)",
     body: "When you move at least 10 feet on your turn, as a bonus action take either one weapon attack OR the Dash action. Additional uses per Soma Break cost 1 Surge each (player-managed via Surge controls)."
   },
   "sephirotic_scion_seraphic_tier1": {
-    type: "soma-break", level: 5,
+    type: "soma-break", level: 1,
     label: "Cleansing Breath (1/Soma Break)",
     body: "Action — exhale a 15-foot cone of radiant fire. Each creature in the cone makes an Intrigue check vs. your Resolve. On a failure, take 2d10 exploding sephirotic damage (flavor: holy fire); half on a success. Tier scaling: 3d10 at Tier 2, 4d10 at Tier 3, 5d10 at Tier 4."
   },
 
   // ── D&D-vocab scrub Phase 3 — Qliph-Scarred ancestry (2026-04-29) ─────────
-  // Batch 5. T1 → L5 per Cryptidkin canon. 3 Tier-I feats; species root is
+  // Batch 5. T1 → L1 (ruling AN7, 2026-10-26). 3 Tier-I feats; species root is
   // narrative-only (skipped). All three are single-slot soma-break per-uses.
   "qliph_scarred_chthonic_tier1": {
-    type: "soma-break", level: 5,
+    type: "soma-break", level: 1,
     label: "What the Deep Dark Taught You (1/Soma Break)",
     body: "Bonus action — sink partially into shadow, earth, or stone. For up to 1 minute, while sunken you gain: reroll lowest on Stealth (Intrigue) checks · difficult terrain costs no extra movement · you can move through spaces 1 ft wide · resistance to qliphothic damage. The effect ends early if you are fully submerged in running water or take sephirotic damage."
   },
   "qliph_scarred_diabolic_tier1": {
-    type: "soma-break", level: 5,
+    type: "soma-break", level: 1,
     label: "What's Inside You (1/Soma Break)",
     body: "Action — let the splinter speak. Choose one humanoid you can see within 30 feet who can hear and understand a language you know. They make a Soul check vs. your Resolve. On a failure, they are Calmed by you for 1 minute, or until they take damage or witness you attack them or someone they consider an ally. On a success, they know someone else briefly spoke through your mouth and can describe it to others — they are probably going to tell their friends."
   },
   "qliph_scarred_husk_tier1": {
-    type: "soma-break", level: 5,
+    type: "soma-break", level: 1,
     label: "The Quiet Inside (1/Soma Break)",
     body: "Reaction — when you are targeted by a divination, mind-reading, or truth-detection effect, force the caster to roll their effect against your Resolve instead of its normal save DC. On a failure, the effect returns nothing — no partial information, no awareness that a target was present. On a success, you take 1 point of Stress from the pressure of the probe."
   },
 
   // ── D&D-vocab scrub Phase 3 — Menhirkin ancestry (2026-04-29) ─────────────
-  // Batch 6. T1 → L5. 3 Tier-I feats + species root (4-slot picker).
+  // Batch 6. T1 → L1 (ruling AN7). 3 Tier-I feats + species root (4-slot picker).
   // Phase 4 reroll grants stamped on the species root for Stonebound.
   "menhirkin_igneous_tier1": {
-    type: "soma-break", level: 5,
+    type: "soma-break", level: 1,
     label: "Magma Memory (1/Soma Break)",
     body: "Reaction when you take energy damage (any flavor) from a single source — bank a portion of the heat. Until your next Soma Break, spend the banked heat as a bonus action to add +2d10 exploding energy damage (flavor: fire) to your next weapon attack or unarmed strike that hits. While the heat is held, reroll the lowest die on Body checks against environmental cold."
   },
   "menhirkin_metamorphic_tier1": {
     label: "Menhirkin (Metamorphic): The Thing You Were",
     abilities: [
-      { key: "softer", type: "scene", level: 5,
+      { key: "softer", type: "scene", level: 1,
         label: "Softer (1/Scene)",
         body: "Bonus action — until the end of your next turn, your movement increases by 10 ft and you reroll the lowest die on Intrigue checks to squeeze or slip past. (Each option of The Thing You Were refreshes on Soma Break — you cannot pick the same option twice before a Soma Break.)" },
-      { key: "older", type: "scene", level: 5,
+      { key: "older", type: "scene", level: 1,
         label: "Older (1/Scene)",
         body: "Bonus action — until the end of your next turn, gain low-light vision 60 ft if you don't already have it, or +30 ft if you do. (Each option refreshes on Soma Break.)" },
-      { key: "wetter", type: "scene", level: 5,
+      { key: "wetter", type: "scene", level: 1,
         label: "Wetter (1/Scene)",
         body: "Bonus action — until the end of your next turn, you become immune to the Burning and Prone conditions, and difficult terrain does not slow you. (Each option refreshes on Soma Break.)" }
     ]
   },
   "menhirkin_sedimentary_tier1": {
-    type: "soma-break", level: 5,
+    type: "soma-break", level: 1,
     label: "Read the Strata (1/Soma Break)",
     body: "Spend 10 minutes with a structure, ruin, battlefield, or natural formation older than a century. The GM answers two true questions about it — one about how it was built or formed, and one about the last decade of its occupation or use. Separate from the ancestry's Hex Recognition; they do not share a pool."
   },
-  "menhirkin": {
-    label: "Menhirkin: Hex-Giant",
+  "menhirkin_core": {
+    label: "Menhirkin: The Land Stood Up",
     abilities: [
-      { key: "landMemory", type: "soma-break", level: 5,
+      { key: "landMemory", type: "soma-break", level: 1,
         label: "Land Memory (1/Soma Break)",
         body: "Lay a hand on any surface older than you and ask it what has happened there. The GM answers with one true thing the land remembers." },
-      { key: "livingRampart", type: "soma-break", level: 5,
-        label: "Living Rampart (1/Soma Break)",
-        body: "Reaction — when a creature you can see targets an ally adjacent to you with an attack, you interpose bulk and bad life choices: the attacker rolls 3d10 keep lowest 2 on that attack roll." },
-      { key: "sentientLand", type: "strategic-turn", level: 5,
-        label: "Sentient Land (1/Strategic Turn)",
-        body: "While standing on a hex your faction controls, consult the hex itself about a pending decision. The GM provides a one-sentence answer from the land's perspective (not the faction's). It is always honest. It is rarely comforting." },
-      { key: "heartstone", type: "info", level: 5,
-        label: "Heartstone (passive)",
-        body: "A fragment of your home hex is literally inside you. While in any hex your faction controls or has claimed: reroll the lowest die on Body checks (auto-fires via reroll grant), and you cannot be forcibly removed from the hex against your will (teleportation, banishment, forced march) without first being reduced to 0 Integrity." }
+      { key: "livingRampart", type: "info", level: 1,
+        label: "Living Rampart (1/Soma Break — Offer card)",
+        body: "Reaction — when an ally adjacent to you is about to take damage from an attack, an Offer card lets you interpose: the ally takes half that damage. The use is tracked by the Offer." },
+      { key: "heartstone", type: "info", level: 1,
+        label: "Heartstone + Stone Soul + Slow to Wear + Heavy Presence (passives)",
+        body: "A fragment of your home hex is literally inside you. While in any hex your Domain controls or has claimed: reroll the lowest die on Body checks, and you cannot be forcibly removed from the hex against your will (teleportation, banishment, forced march) without first being reduced to 0 Integrity. Stone Soul: Large for carry/shove/grapple; reroll-lowest vs forced movement. Slow to Wear: reroll-lowest on Body vs Stress, wear, marches, exposure. Heavy Presence: tremorsense 2 squares on natural ground; 3d10 keep lowest 2 on Stealth unless on stone. Stonebound: reroll-lowest to build, repair or fortify." }
     ]
   },
 
@@ -5699,10 +5771,10 @@ export const CHAR_OPT_ABILITIES = {
   "human_cro_magnon_tier1": {
     label: "Human (Cro-Magnon): Coalition Tongue",
     abilities: [
-      { key: "coalitionTongue", type: "soma-break", level: 5,
+      { key: "coalitionTongue", type: "soma-break", level: 1,
         label: "Coalition Tongue (1/Soma Break)",
         body: "Bonus action — choose one ally within 30 ft who can hear and understand you. Their next attack roll, skill check, or defense check before the start of your next turn is made at +1 rank (max rank 5). Name the thing you said, even if it was wordless." },
-      { key: "symbolicMemory", type: "info", level: 5,
+      { key: "symbolicMemory", type: "info", level: 1,
         label: "Symbolic Memory (passive)",
         body: "After spending 10 minutes in any inhabited or formerly-inhabited space, you may ask the GM one of: Who lived here? What did they fear? What did they leave? The answer is at least one truth, even if the GM colours it." }
     ]
@@ -5797,7 +5869,7 @@ export const CHAR_OPT_ABILITIES = {
     body: "When the party is in any ruin, junkyard, scrap field, abandoned facility, or wrecked vehicle, declare that one specific reasonable object exists somewhere within sight or one room over. GM may set a brief search time, require a minor cost, or rule the object is in worse condition."
   },
   "oldenborn_rustland_scavenger_tier1": {
-    type: "soma-break", level: 5,
+    type: "soma-break", level: 1,
     label: "Scavenger's Eye (1/Soma Break)",
     body: "Spend 10 min in a ruin, junkyard, or wreckage site. Find one specific reasonable item. GM may gate exotic items behind a Mind check. Passive Toxic Lung Filters: reroll-lowest on defense vs inhaled toxins/smoke/industrial residue (auto-fires); function up to 1 hour in atmospheres that would hospitalize a normal Medium creature."
   },
@@ -5820,16 +5892,6 @@ export const CHAR_OPT_ABILITIES = {
     type: "soma-break", level: 17,
     label: "Skywalker (1/Soma Break)",
     body: "Action — call the wind to hold you up. For 1 minute, walk on air, ash, falling rain, or any equivalent surface as if it were solid ground. Move at your normal walking speed in any direction including straight up. Falling damage negated for the duration. Ends early if you fall unconscious or dismiss it."
-  },
-  "oldenborn_stormborn_nomad_tier1": {
-    type: "soma-break", level: 5,
-    label: "Wind-Read (1/Soma Break)",
-    body: "Reaction — when you would take energy damage (lightning or cold flavor) or kinetic damage (thunder flavor), halve it. The wind shifts as you do. Passive Weatherwise: always know upcoming weather for the next 12 hours within 1 mile (even underground); reroll-lowest on defense checks vs weather effects."
-  },
-  "oldenborn_stormborn_nomad_heritage": {
-    type: "soma-break", level: 5,
-    label: "Stormborn Nomad Heritage (1/Soma Break)",
-    body: "Heritage-level signature: see Wind-Read on the Stormborn Nomad Tier-I feat for the active reaction. The heritage container surfaces here so the per-use is reachable from the heritage card directly."
   },
 
   // ── D&D-vocab scrub Phase 3 — Furrykin ancestry (2026-04-29) ──────────────
@@ -6013,22 +6075,17 @@ export const CHAR_OPT_ABILITIES = {
   "archetype-chariot-t3": {
     type: "info", level: 11,
     label: "Archetype: The Chariot (Squad Leader) — Tier 3",
-    body: "Tactical: you can use the Help action as a bonus action during combat (target = allied NPC or squadmate). Strategic: 1/Siege or Bunker operation, may pre-position one ally squad. (Auto-passive per-turn use; no debit.)"
+    body: "Tactical: you can use the Help action as a bonus action during combat (target = allied NPC or squadmate). Strategic: once per Siege or Bunker operation, grant +2 to one Violence or Intrigue Domain roll."
   },
   "oldenborn-tideborne-floodgate_self": {
-    type: "soma-break", level: 5,
+    type: "soma-break", level: 11,
     label: "Oldenborn (Tideborne): Floodgate of Self (1/Soma Break)",
     body: "Bonus action — enter a state for 1 minute. Resistance to psychic damage; when you deal damage you may push the target 5 ft."
-  },
-  "menhirkin-living-rampart": {
-    type: "soma-break", level: 5,
-    label: "Menhirkin: Living Rampart (1/Soma Break)",
-    body: "Reaction — when a creature you can see targets an ally adjacent to you with an attack, interpose bulk and bad life choices: the attacker rolls 3d10 keep lowest 2 on the attack."
   },
   "oldenborn-stormborn-weatherwise": {
     type: "info",
     label: "Oldenborn (Stormborn Nomad): Weatherwise (passive)",
-    body: "Always know the upcoming weather for the next 12 hours within 1 mile, even underground. Reroll the lowest die on saving throws against weather effects (auto-fires)."
+    body: "Always know the upcoming weather for the next 12 hours within one hex (five miles), even underground. Reroll the lowest die on defense checks against weather effects (auto-fires)."
   },
   "circuitborn-synapse-memory_print": {
     type: "soma-break", level: 5,
@@ -6036,7 +6093,7 @@ export const CHAR_OPT_ABILITIES = {
     body: "Bonus action — replay a scene fragment to an ally, granting reroll-lowest on one Investigation, History, or Insight check."
   },
   "oldenborn-tideborne-undertow_grip": {
-    type: "soma-break-tier", level: 1,
+    type: "soma-break-tier", level: 5,
     label: "Oldenborn (Tideborne): Undertow Grip (tier/Soma Break)",
     body: "Reaction — when a creature within 10 feet moves willingly, use your reaction to slow them; their speed becomes 0 until the end of the turn."
   },
@@ -6088,7 +6145,7 @@ export const CHAR_OPT_ABILITIES = {
     body: "Bonus action — step sideways out of consensus reality; become invisible and pass through one wall up to 5 ft thick before reappearing on the other side. No concentration."
   },
   "oldenborn-tideborne-ocean_judge": {
-    type: "soma-break", level: 1,
+    type: "soma-break", level: 17,
     label: "Oldenborn (Tideborne): Ocean Judge (1/Soma Break)",
     body: "When a creature you can see lies to you, betrays a promise, or breaks a sworn agreement, mark them for 1 hour. While marked you always know the direction to them, and your attacks against them deal +Tier psychic damage once per turn."
   },

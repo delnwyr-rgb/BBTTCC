@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Boiling Oil</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> violence 15, logistics 10</p></div>",
+      "value": "<p><strong>Boiling Oil</strong></p><p>Siege, defender. Pour it from the wall: the besiegers' Buffer −2 marks; your garrison's Loyalty +1. In the clash: 12 marks from the garrison's own bank.</p><p><em>Queued on the turn: Violence 15 · Logistics 10 marks. Fired in the clash: 12 marks from the garrison's bank.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "boiling_oil"
+      "key": "boiling_oil",
+      "effects": {
+        "text": "Siege, defender. Pour it from the wall: the besiegers' Buffer −2 marks; your garrison's Loyalty +1. In the clash: 12 marks from the garrison's own bank."
+      }
     }
   },
   "_id": "ypsAo746iRWevaRB",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601769,
-    "modifiedTime": 1782703702690,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988999566,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

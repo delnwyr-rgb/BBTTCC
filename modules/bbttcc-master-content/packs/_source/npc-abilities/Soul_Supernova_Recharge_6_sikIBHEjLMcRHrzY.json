@@ -1,0 +1,149 @@
+{
+  "name": "Soul Supernova (Recharge 6)",
+  "type": "weapon",
+  "img": "icons/magic/fire/explosion-fireball-medium-orange.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "violence",
+    "skill": "warding",
+    "damage": {
+      "formula": "4d8",
+      "attribute": "soul",
+      "type": "thermal",
+      "damageFlavor": "hot",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 6,
+      "long": 6
+    },
+    "tags": [
+      "aoe",
+      "signature"
+    ],
+    "effect": "The Inferno detonates. Every creature within 6 squares rolls an Evasion check vs DC 18. Fail: 4d8 thermal (hot) AND 4d8 psychic to Stress — the collective pain of all who came before, delivered at once. Success: half of each.",
+    "flavor": "A blinding green blast with a screaming skull at its heart.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "intrigue",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 18,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "sphere",
+        "size": 30
+      }
+    },
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Soul Supernova (Recharge 6)"
+            },
+            "do": {
+              "damage": {
+                "formula": "4d8",
+                "type": "psychic"
+              }
+            }
+          }
+        ],
+        "recharge": {
+          "mode": "d6",
+          "min": 6
+        }
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Inferno of Cruelty"
+        ],
+        "sourceIds": [
+          "vpPWkftzLsEwoY9k"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "sikIBHEjLMcRHrzY",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069966,
+    "modifiedTime": 1792989070046,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!sikIBHEjLMcRHrzY"
+}

@@ -298,11 +298,15 @@ function weaponDamageType(s, tags) {
   if (t === "chemical") return "acid";
   return t; // poison, psychic, sephirotic, qliphothic
 }
+// Geburah spelling ruling (2026-10-26): the RFI names/keys moved gevurah → geburah, but build-packs derives each 5E
+// _id from the slug — so the slug keeps the old spelling and the bad-eden-5e twins keep their uuids. Slug only; the
+// name, identifier and text all read Geburah.
+const LEGACY_SLUG = s => s.replace(/^gear-wardstone-of-geburah$/, "gear-wardstone-of-gevurah").replace(/^spark-geburah-/, "spark-gevurah-");
 const DIE_UP = { 4: 6, 6: 8, 8: 10, 10: 12, 12: 12 };
 const rarityFor = (tags, marks, attune) => tags.includes("t1-baseline") ? "" : tags.includes("capstone") || marks >= 2000 ? "legendary" : attune || marks >= 1000 ? "veryRare" : marks >= 300 ? "rare" : marks >= 150 ? "uncommon" : "common";
 const rfiPrice = d => Number(d.flags?.fourththing?.rfi?.item?.price?.marks ?? 0) || 0;
 const baseItem = (d, type, extra = {}) => ({
-  slug: "gear-" + d.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),   // by name: RFI identifiers collide (two "laser" weapons)
+  slug: LEGACY_SLUG("gear-" + d.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")),   // by name: RFI identifiers collide (two "laser" weapons)
   name: d.name, type, img: d.img && !/fourththing|bbttcc/.test(d.img) ? d.img : extra.img ?? "icons/svg/item-bag.svg",
   system: { description: { value: "", chat: "" }, identified: true, unidentified: { description: "" }, container: null, quantity: 1, weight: { value: extra.weight ?? 1, units: "lb" }, price: { value: rfiPrice(d), denomination: "gp" }, rarity: "", attunement: "", attuned: false, equipped: false, uses: { max: "", spent: 0, recovery: [] }, properties: [], identifier: d.system?.identifier || undefined },
   effects: [], flags: {}
@@ -859,7 +863,7 @@ function laneSparks() {
     const needs = []; const ident = d.flags?.["bbttcc-tikkun"]?.identifier ?? d._id;
     const html = convertText(d.system?.description?.value ?? "");
     const { description, ...spark } = JSON.parse(JSON.stringify(d.system ?? {}));
-    const e = { slug: slugOf("spark-", ident.replace(/^spark_/, "").replace(/_/g, "-")), name: d.name, type: "loot", img: d.img ?? "icons/magic/light/orb-lightbulb-gray.webp", folder: "Sparks",
+    const e = { slug: LEGACY_SLUG(slugOf("spark-", ident.replace(/^spark_/, "").replace(/_/g, "-"))), name: d.name, type: "loot", img: d.img ?? "icons/magic/light/orb-lightbulb-gray.webp", folder: "Sparks",
       system: { description: { value: html, chat: "" }, type: { value: "treasure", subtype: "" }, quantity: 1, weight: { value: 0, units: "lb" }, price: { value: 0, denomination: "gp" }, rarity: "rare", identifier: ident },
       effects: [],
       flags: { "bbttcc-tikkun": { ...(d.flags?.["bbttcc-tikkun"] ?? {}), spark }, "bad-eden-5e": { rfi: { id: d._id ?? ident, pack: "sparks", identifier: ident, hash: sha(JSON.stringify({ n: d.name, s: d.system, f: d.flags ?? {} })) } } } };
@@ -935,7 +939,7 @@ function laneDoctrines() {
 // identity / crew / travel / output / tags → the flag, Integrity → hp (dt by bracket), defenses → traits through
 // the rubric damage map. Rig gear keeps `flags.fourththing.rigGear / rigFrame` verbatim (rigs.gearOf reads that
 // scope on either system); weapons and gear go through the gear lane's converters so they're real dnd5e items.
-const DT_BY_BRACKET = { personal: 0, light: 5, medium: 10, heavy: 15, siege: 20 };
+const DT_BY_BRACKET = { personal: 0, light: 5, medium: 10, heavy: 15, siege: 20, mecha: 5 };   // mecha: RG9 (2026-10-26)
 function laneRigs() {
   const src = loadPack("vehicles").filter(d => d.type === "rig");
   const out = [], needsAll = [];

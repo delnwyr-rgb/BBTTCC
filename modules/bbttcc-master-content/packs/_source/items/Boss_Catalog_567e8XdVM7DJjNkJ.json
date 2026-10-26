@@ -1,0 +1,23 @@
+{
+  "_id": "567e8XdVM7DJjNkJ",
+  "name": "Boss Catalog",
+  "type": "Item",
+  "description": "Boss templates and augments (bestiary slice owns the text).",
+  "folder": null,
+  "sorting": "a",
+  "sort": 750000,
+  "color": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988927761,
+    "modifiedTime": 1792988927761,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!567e8XdVM7DJjNkJ"
+}

@@ -1,0 +1,72 @@
+{
+  "name": "Manifest Fear (Recharge 5–6)",
+  "type": "feat",
+  "img": "icons/commodities/treasure/statue-bust-stone-grey.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Dream-Twister reaches into one Shaken creature within 12 squares and pulls its fear out through the mirror of the world: a shadow-thing steps free (GM: use a T1 wraith-type statblock, hostile to everyone). It lasts a minute — or until someone is brave enough at it.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "spawn": {
+                "name": "Nahemoth Husk",
+                "count": 1
+              },
+              "prompt": "It steps out of one Shaken creature within 12 squares, hostile to everyone."
+            },
+            "who": "self"
+          }
+        ],
+        "recharge": {
+          "mode": "d6",
+          "min": 5
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gamalielite Dream-Twister"
+        ],
+        "sourceIds": [
+          "usU6xHOysv7adf8j"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "0sPpRHEf8NOXkgre",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069949,
+    "modifiedTime": 1792989070034,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!0sPpRHEf8NOXkgre"
+}

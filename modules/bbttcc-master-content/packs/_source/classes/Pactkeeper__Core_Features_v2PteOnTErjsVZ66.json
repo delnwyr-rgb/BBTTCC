@@ -38,58 +38,6 @@
   },
   "effects": [
     {
-      "name": "Class L1: Bracing +1",
-      "img": "icons/skills/melee/sword-stylized-blue.webp",
-      "type": "base",
-      "disabled": false,
-      "transfer": true,
-      "description": "Granted by Pactkeeper: Core Features at Tier 1.",
-      "flags": {
-        "fourththing": {
-          "passiveAuthored": true,
-          "aptitudeStamp": "2026-05-04",
-          "aptitudeAnchor": "Pactkeeper: Core Features",
-          "aptitudeKind": "bracing"
-        }
-      },
-      "system": {
-        "changes": [
-          {
-            "key": "system.skills.bracing.value",
-            "value": 1,
-            "priority": 10,
-            "type": "add",
-            "phase": "initial"
-          }
-        ]
-      },
-      "_id": "BA3pPNzcM5aXCLl7",
-      "start": null,
-      "duration": {
-        "value": null,
-        "units": "seconds",
-        "expiry": null,
-        "expired": false
-      },
-      "origin": null,
-      "tint": "#ffffff",
-      "statuses": [],
-      "showIcon": 1,
-      "folder": null,
-      "sort": 0,
-      "_stats": {
-        "coreVersion": "14.369",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.16",
-        "createdTime": 1791864374148,
-        "modifiedTime": 1791864374148,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      }
-    },
-    {
       "name": "Class L1: Brawl +1",
       "img": "icons/skills/melee/sword-stylized-blue.webp",
       "type": "base",
@@ -140,6 +88,58 @@
         "duplicateSource": null,
         "exportSource": null
       }
+    },
+    {
+      "name": "Class L1: Bracing +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "description": "Granted by Pactkeeper: Core Features at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Pactkeeper: Core Features",
+          "aptitudeKind": "bracing"
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.bracing.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "BA3pPNzcM5aXCLl7",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864374148,
+        "modifiedTime": 1791864374148,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "flags": {
@@ -150,12 +150,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776481562693,
-    "modifiedTime": 1782167240830,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907873992,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

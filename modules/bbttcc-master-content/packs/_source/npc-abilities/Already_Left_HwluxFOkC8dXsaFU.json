@@ -15,7 +15,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -23,6 +22,18 @@
           "tier": "III",
           "frame": "feature"
         }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "bloodied",
+            "do": {
+              "vanish": true,
+              "prompt": "Already Left: a prepared exit — the lieutenant is gone."
+            }
+          }
+        ]
       }
     },
     "bbttcc": {
@@ -30,29 +41,34 @@
         "sources": [
           "Witness-Warden Lieutenant"
         ],
+        "sourceIds": [
+          "5MA3L8ebRzPLhaBP"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "HwluxFOkC8dXsaFU",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": null,
-    "modifiedTime": null,
-    "lastModifiedBy": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989017152,
+    "modifiedTime": 1792989017152,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!HwluxFOkC8dXsaFU"
 }

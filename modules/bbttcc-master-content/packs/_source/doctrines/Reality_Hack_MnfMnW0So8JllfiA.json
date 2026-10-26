@@ -3,14 +3,14 @@
   "type": "feat",
   "img": "icons/environment/settlement/warehouse-crates.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": {
       "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<p>Grab the round by the lapels and SHAKE. It re-rolls. You keep whatever falls out — better or worse, no takebacks. Bending the world always bills you.</p><p><b>Re-roll your faction's round result once; keep the second result. Darkness +1.</b></p>",
+      "value": "<p>Grab the round by the lapels and SHAKE. It re-rolls. You keep whatever falls out — better or worse, no takebacks. Bending the world always bills you.</p><p><b>Re-roll your Domain's round result once; keep the second result. Darkness +1.</b></p>",
       "chat": ""
     },
     "activities": {},
@@ -50,7 +50,8 @@
           "intrigue"
         ],
         "engine": "intrigue"
-      }
+      },
+      "effects": {}
     }
   },
   "_id": "MnfMnW0So8JllfiA",
@@ -65,12 +66,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977107845,
-    "modifiedTime": 1779731346993,
-    "lastModifiedBy": "6ut7GT8pCAhpdWjS"
+    "modifiedTime": 1792988993411,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!MnfMnW0So8JllfiA"
 }

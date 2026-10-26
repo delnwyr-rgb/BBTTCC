@@ -1,0 +1,70 @@
+{
+  "name": "Arms Down",
+  "type": "feature",
+  "img": "icons/skills/social/wave-halt-stop.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "rfi-scrubbed"
+    ],
+    "description": {
+      "value": "<p>If reduced below half Integrity, the bandit must succeed a Soul check vs DC 12 at the start of its turn or throw down arms and surrender — hands up, weapon in the reeds. The Bandit Accord's mercy ledger counts every one you let walk.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "bloodied",
+            "do": {
+              "morale": {
+                "attr": "soul",
+                "dc": 12,
+                "outcome": "disengages and moves away at full speed"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Drowned South Bandit"
+        ],
+        "sourceIds": [
+          "kIVv7SCfezxi8pkz"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "1e2ZBHXok0nrswJe",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069906,
+    "modifiedTime": 1792989069989,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!1e2ZBHXok0nrswJe"
+}

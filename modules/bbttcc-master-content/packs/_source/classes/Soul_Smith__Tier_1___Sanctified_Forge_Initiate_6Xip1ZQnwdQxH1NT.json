@@ -38,110 +38,6 @@
   },
   "effects": [
     {
-      "name": "Class L1: Plating +1",
-      "img": "icons/skills/melee/sword-stylized-blue.webp",
-      "type": "base",
-      "disabled": false,
-      "transfer": true,
-      "description": "Granted by Soul-Smith: Tier 1 — Sanctified Forge Initiate at Tier 1.",
-      "flags": {
-        "fourththing": {
-          "passiveAuthored": true,
-          "aptitudeStamp": "2026-05-04",
-          "aptitudeAnchor": "Soul-Smith: Tier 1 — Sanctified Forge Initiate",
-          "aptitudeKind": "plating"
-        }
-      },
-      "system": {
-        "changes": [
-          {
-            "key": "system.skills.plating.value",
-            "value": 1,
-            "priority": 10,
-            "type": "add",
-            "phase": "initial"
-          }
-        ]
-      },
-      "_id": "0ABvLdx6OSccs4Sv",
-      "start": null,
-      "duration": {
-        "value": null,
-        "units": "seconds",
-        "expiry": null,
-        "expired": false
-      },
-      "origin": null,
-      "tint": "#ffffff",
-      "statuses": [],
-      "showIcon": 1,
-      "folder": null,
-      "sort": 0,
-      "_stats": {
-        "coreVersion": "14.369",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.16",
-        "createdTime": 1791864374362,
-        "modifiedTime": 1791864374362,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      }
-    },
-    {
-      "name": "Class L1: Melee +1",
-      "img": "icons/skills/melee/sword-stylized-blue.webp",
-      "type": "base",
-      "disabled": false,
-      "transfer": true,
-      "description": "Granted by Soul-Smith: Tier 1 — Sanctified Forge Initiate at Tier 1.",
-      "flags": {
-        "fourththing": {
-          "passiveAuthored": true,
-          "aptitudeStamp": "2026-05-04",
-          "aptitudeAnchor": "Soul-Smith: Tier 1 — Sanctified Forge Initiate",
-          "aptitudeKind": "melee"
-        }
-      },
-      "system": {
-        "changes": [
-          {
-            "key": "system.skills.melee.value",
-            "value": 1,
-            "priority": 10,
-            "type": "add",
-            "phase": "initial"
-          }
-        ]
-      },
-      "_id": "hfDa2xi8es441eAt",
-      "start": null,
-      "duration": {
-        "value": null,
-        "units": "seconds",
-        "expiry": null,
-        "expired": false
-      },
-      "origin": null,
-      "tint": "#ffffff",
-      "statuses": [],
-      "showIcon": 1,
-      "folder": null,
-      "sort": 0,
-      "_stats": {
-        "coreVersion": "14.369",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.16",
-        "createdTime": 1791864374362,
-        "modifiedTime": 1791864374362,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      }
-    },
-    {
       "name": "Sanctified Forge Initiate (Hex Repair Hook)",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cast_2.png",
       "origin": null,
@@ -199,6 +95,110 @@
       "start": null,
       "showIcon": 1,
       "folder": null
+    },
+    {
+      "name": "Class L1: Melee +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "description": "Granted by Soul-Smith: Tier 1 — Sanctified Forge Initiate at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Soul-Smith: Tier 1 — Sanctified Forge Initiate",
+          "aptitudeKind": "melee"
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.melee.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "hfDa2xi8es441eAt",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864374362,
+        "modifiedTime": 1791864374362,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Class L1: Plating +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "description": "Granted by Soul-Smith: Tier 1 — Sanctified Forge Initiate at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Soul-Smith: Tier 1 — Sanctified Forge Initiate",
+          "aptitudeKind": "plating"
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.plating.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "0ABvLdx6OSccs4Sv",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864374362,
+        "modifiedTime": 1791864374362,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "folder": "qdqMhHfZdVgUs1gN",
@@ -220,12 +220,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776459996548,
-    "modifiedTime": 1781116115064,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907928665,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

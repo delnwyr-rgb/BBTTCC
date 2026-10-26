@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Prophet / Oracle</strong></p><p><strong>“You don’t know the future. You just know when something has started.”</strong></p><p>At Tier 1, you begin catching the edge of events before they fully arrive. Not enough to command them. Enough to stop being surprised.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> and <strong>Perception</strong></li><li>1/Soma Break, ask the GM one focused omen-question about an immediate situation, route, or known danger; the answer should be truthful but limited, symbolic, or pressure-based</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a planning-heavy, reconnaissance, or intrigue-forward action, gain <strong>+2</strong> to one relevant OP roll by declaring what sign your faction is acting on</li></ul><p><strong>Cost:</strong> early warning is rarely comfortable. Expect unease, distraction, or tension when you sense something going wrong before anyone else can justify reacting to it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Omen Question</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Ask the GM one focused omen-question. Truthful but limited / symbolic / pressure-based.</div>\n</div>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Prophet / Oracle</strong></p><p><strong>“You don’t know the future. You just know when something has started.”</strong></p><p>At Tier 1, you begin catching the edge of events before they fully arrive. Not enough to command them. Enough to stop being surprised.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> and <strong>Perception</strong></li><li>1/Soma Break, ask the GM one focused omen-question about an immediate situation, route, or known danger; the answer should be truthful but limited, symbolic, or pressure-based</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per turn, before a planning-heavy, reconnaissance, or intrigue-forward action, gain <strong>+2</strong> to one relevant OP roll by declaring what sign your Domain is acting on</li></ul><p><strong>Cost:</strong> early warning is rarely comfortable. Expect unease, distraction, or tension when you sense something going wrong before anyone else can justify reacting to it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Omen Question</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Ask the GM one focused omen-question. Truthful but limited / symbolic / pressure-based.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -251,7 +251,7 @@
   },
   "effects": [
     {
-      "name": "Occult Tier1 Proficiencies",
+      "name": "Occult Tier 1 Proficiencies",
       "disabled": false,
       "transfer": true,
       "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
@@ -291,17 +291,16 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346196119,
-        "modifiedTime": 1777433499565
+        "modifiedTime": 1792989174705
       },
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!fhbiUUQ9B3QrThXa.oracleTier1Profs"
+      "folder": null
     }
   ],
   "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
@@ -316,11 +315,11 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987097550,
-    "modifiedTime": 1782167239252,
+    "modifiedTime": 1792977830156,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Doctrine Force Projection [Option]",
+  "name": "Doctrine Force Projection",
   "type": "feat",
   "img": "icons/magic/control/silhouette-aura-energy.webp",
   "system": {
@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Doctrine Force Projection [Option]</h3><p><em>No rules text registered.</em></p></div>",
+      "value": "<p><strong>Doctrine Force Projection</strong></p><p>Strength (Warlord). Domain-wide: your next Battle or Heist rolls initiative rerolling the lowest die.</p><p><em>Cost: Violence 10 · Logistics 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "optact_doctrine_force_projection"
+      "key": "optact_doctrine_force_projection",
+      "effects": {
+        "text": "Strength (Warlord). Domain-wide: your next Battle or Heist rolls initiative rerolling the lowest die."
+      }
     }
   },
   "_id": "GUMqYFWoZRDjeA1H",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601760,
-    "modifiedTime": 1782703702687,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988996278,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

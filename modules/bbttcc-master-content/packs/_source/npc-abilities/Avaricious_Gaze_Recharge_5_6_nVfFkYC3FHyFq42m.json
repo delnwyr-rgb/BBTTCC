@@ -1,0 +1,87 @@
+{
+  "name": "Avaricious Gaze (Recharge 5–6)",
+  "type": "feat",
+  "img": "icons/weapons/staves/staff-ornate-eye.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>One creature within 12 squares meets its coin-pupiled eye and rolls vs Resolve (DC 14). Fail: Charmed and Staggered — captivated by a vision of its greatest desire, hanging just out of reach. Repeat the check at the end of each of its turns. On a success, immune to any Scavenger's Gaze for a day.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "condition": {
+                "key": "charmed",
+                "duration": "until-saved",
+                "save": {
+                  "attr": "soul",
+                  "dc": 14
+                }
+              }
+            }
+          },
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Avaricious Gaze (Recharge 5–6)"
+            },
+            "do": {
+              "condition": {
+                "key": "staggered",
+                "duration": "scene"
+              },
+              "prompt": "Staggered while Charmed; on a success it's immune for a day."
+            }
+          }
+        ],
+        "recharge": {
+          "mode": "d6",
+          "min": 5
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Harab Serapel Scavenger"
+        ],
+        "sourceIds": [
+          "SmVDBIAjrDFTRjxt"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "nVfFkYC3FHyFq42m",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069913,
+    "modifiedTime": 1792989069996,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!nVfFkYC3FHyFq42m"
+}

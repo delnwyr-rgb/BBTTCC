@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Velocity is not speed. It is direction maintained under pressure.”</em></p>\n<p><strong>Archetype (Bad Eden): The Chariot (Squad Leader).</strong> Field commander, momentum-anchor, and small-unit tactician. You turn chaos into movement and movement into victory.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> This Archetype is associated with <strong>+1 Violence</strong> and <strong>+1 Intrigue</strong> in faction calculus, reflecting mixed-method tactical control.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of squad command, coordinated action, and breach momentum.</li>\n</ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Velocity is not speed. It is direction maintained under pressure.”</em></p>\n<p><strong>Archetype (Bad Eden): The Chariot (Squad Leader).</strong> Field commander, momentum-anchor, and small-unit tactician. You turn chaos into movement and movement into victory.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your Domain earns <strong>+10 Violence</strong> and <strong>+10 Intrigue</strong> marks each turn while you serve it.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of squad command, coordinated action, and breach momentum.</li>\n</ul>",
       "chat": ""
     },
     "activities": {},
@@ -95,12 +95,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986677898,
-    "modifiedTime": 1781116037752,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989146218,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

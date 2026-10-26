@@ -19,13 +19,13 @@
     },
     "attributes": {
       "violence": {
-        "value": 3
+        "value": 1
       },
       "intrigue": {
         "value": 1
       },
       "presence": {
-        "value": 2
+        "value": 1
       },
       "body": {
         "value": 3
@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 25,
-        "max": 25
+        "max": 25,
+        "temp": 0
       },
       "stress": {
         "value": 12,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -140,11 +142,17 @@
       "resistances": [],
       "immunities": [],
       "vulnerabilities": [
-        "fire"
+        {
+          "type": "thermal",
+          "flavor": "hot"
+        }
       ]
     },
     "conditionImmunities": [],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -157,6 +165,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "Insect swarm that boils out of stagnant mire when disturbed. Bites are venomous."
     }
   },
   "flags": {
@@ -187,16 +199,22 @@
             ]
           },
           "price": {
-            "marks": 150,
-            "bounty": 150,
-            "hire": 375,
-            "ransom": 250,
+            "marks": 5,
+            "bounty": 5,
+            "hire": 10,
+            "ransom": 10,
             "currency": "violence",
             "gmOverride": false,
-            "notes": "TI light brute (bestiary) — bounty 150 / hire 375 / ransom 250 marks (paid in violence)"
-          }
+            "notes": "TI light wild — bounty 5 / hire 10 marks; credited to the pool matching the method (default violence)"
+          },
+          "lineage": "wild",
+          "subLineage": "insect"
         }
-      }
+      },
+      "creatureType": [
+        "beast",
+        "swarm"
+      ]
     }
   },
   "_id": "juFbGL3HEuoWcuHV",
@@ -341,6 +359,21 @@
               "tier": "I",
               "frame": "trait"
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attacked",
+                "if": {
+                  "ownerNotBloodied": true
+                },
+                "do": {
+                  "reroll": "attack-highest"
+                },
+                "label": "Swarm — above half Integrity"
+              }
+            ]
           }
         }
       },
@@ -352,17 +385,16 @@
       },
       "_id": "eJt5kaYS4On1swNn",
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.5",
         "createdTime": 1780118696567,
-        "modifiedTime": 1780163239985,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1791422260849,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!juFbGL3HEuoWcuHV.eJt5kaYS4On1swNn"
+      }
     },
     {
       "name": "Boiling Bites",
@@ -389,7 +421,7 @@
           "tier-i",
           "role-brute"
         ],
-        "effect": "Auto-hits any creature sharing the swarm's space. On a hit, target must succeed a DC 12 Body save or have reroll-the-highest on its next action (venom haze).",
+        "effect": "Auto-hits any creature sharing the swarm's space. On a hit, target must succeed a DC 12 Body check or be Imposed; dy save or have reroll-the-highest on its next action (venom haze).",
         "flavor": "There is no first bite. There is only the realization of biting.",
         "manifestation": {
           "tier": 1,
@@ -420,6 +452,19 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "body",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 12,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "imposed"
+            ],
+            "duration": "1-round"
           }
         },
         "description": {
@@ -634,17 +679,16 @@
       },
       "_id": "8jKDGDs1T2XiiQ7t",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118696567,
-        "modifiedTime": 1782167243973,
+        "modifiedTime": 1792977789649,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!juFbGL3HEuoWcuHV.8jKDGDs1T2XiiQ7t"
+      }
     },
     {
       "name": "Mire-Disperse",
@@ -673,7 +717,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 10 ft. — targets roll vs Evasion (DC 11). Half damage on success. Triggers automatically the first time the swarm drops below half Integrity — the swarm scatters wide before re-coalescing.",
+        "effect": "Radius 2 squares. — targets roll vs Evasion (DC 11). Half damage on success. Triggers automatically the first time the swarm drops below half Integrity — the swarm scatters wide before re-coalescing.",
         "flavor": "Wound it and it just becomes a wider problem.",
         "manifestation": {
           "tier": 1,
@@ -704,6 +748,18 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "intrigue",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 11,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 10
           }
         },
         "description": {
@@ -734,6 +790,28 @@
                 "saleBack": 20
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "bloodied",
+                "who": "enemies",
+                "radius": 2,
+                "do": {
+                  "save": {
+                    "attr": "intrigue",
+                    "dc": 11,
+                    "onSave": "half"
+                  },
+                  "damage": {
+                    "formula": "1d6",
+                    "type": "poison"
+                  }
+                },
+                "label": "Mire-Disperse fires"
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -922,17 +1000,92 @@
       },
       "_id": "5198Hj5ZwwPnUdE8",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118696567,
-        "modifiedTime": 1782167243973,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989134388,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
+      }
+    },
+    {
+      "name": "Territory",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "wild",
+          "insect"
+        ],
+        "description": {
+          "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: reroll the lowest die on attack rolls against any creature within 1 square of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!juFbGL3HEuoWcuHV.5198Hj5ZwwPnUdE8"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "firstRound": true
+                },
+                "do": {
+                  "reroll": "attack"
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                },
+                "label": "Territory — the first strike rerolls the lowest"
+              },
+              {
+                "on": "attack",
+                "if": {
+                  "allyAdjacentToTarget": true
+                },
+                "do": {
+                  "reroll": "attack"
+                },
+                "label": "Pack — reroll the lowest beside an ally"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "wild"
+            }
+          }
+        }
+      },
+      "_id": "QjSfGSYRmjVJnJqk",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342350349,
+        "modifiedTime": 1791342350349,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -942,12 +1095,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118696567,
-    "modifiedTime": 1783219918001,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989134259,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

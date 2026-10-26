@@ -8,7 +8,7 @@
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p><strong>Two Tongues, One Table.</strong> Tell each of them what the other said. You don't even have to lie much. Mostly you just have to seat them adjacent.</p><p><em>Play:</em> Two courtiers each lose 1 favor toward your opponent.</p>",
+      "value": "<p><strong>Two Tongues, One Table.</strong> Tell each of them what the other said. You don't even have to lie much. Mostly you just have to seat them adjacent.</p><p><em>Play:</em> Two courtiers each lose 1 Favor toward your opponent.</p>",
       "chat": "",
       "unidentified": ""
     }
@@ -30,11 +30,11 @@
     "default": 0
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780000000000,
-    "modifiedTime": 1784079176429,
+    "modifiedTime": 1792977748994,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

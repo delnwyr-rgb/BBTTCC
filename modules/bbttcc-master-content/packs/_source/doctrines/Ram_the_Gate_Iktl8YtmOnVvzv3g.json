@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Ram the Gate</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> violence 30</p></div>",
+      "value": "<p><strong>Ram the Gate</strong></p><p>Siege, attacker. Drive the ram home: 2d10+12 concussive structure damage to the current layer, and the garrison reels (defender Anytime budget −1). In the clash: 20 marks off the Buffer.</p><p><em>Queued on the turn: Violence 30 marks. Fired in the clash: 20 marks from the garrison's bank.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "ram_gate"
+      "key": "ram_gate",
+      "effects": {
+        "text": "Siege, attacker. Drive the ram home: 2d10+12 concussive structure damage to the current layer, and the garrison reels (defender Anytime budget −1). In the clash: 20 marks off the Buffer."
+      }
     }
   },
   "_id": "Iktl8YtmOnVvzv3g",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601769,
-    "modifiedTime": 1782703702693,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989009564,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

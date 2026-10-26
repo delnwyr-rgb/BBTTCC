@@ -159,7 +159,7 @@
       "desc": "Overflowing mercy; chosen kinship."
     },
     {
-      "name": "gevurah_signal",
+      "name": "geburah_signal",
       "category": "sefirot_signal",
       "weightInAlignmentResolver": 2,
       "desc": "Disciplined cutting; pruning."
@@ -302,7 +302,7 @@
         "hierarchy": 2,
         "severity": 1,
         "discipline": 2,
-        "gevurah_signal": 1,
+        "geburah_signal": 1,
         "ambition": 1
       },
       "The Hierophant": {
@@ -330,7 +330,7 @@
         "compassion": 2,
         "discipline": 1,
         "mercy": 2,
-        "gevurah_signal": 1,
+        "geburah_signal": 1,
         "chesed_signal": 1
       },
       "The Hermit": {
@@ -366,7 +366,7 @@
         "severity": 2,
         "sorrow": 2,
         "faith": 1,
-        "gevurah_signal": 1,
+        "geburah_signal": 1,
         "discipline": 1
       },
       "Temperance": {
@@ -387,7 +387,7 @@
         "violence": 2,
         "risk": 2,
         "severity": 1,
-        "gevurah_signal": 1,
+        "geburah_signal": 1,
         "ambition": 1
       },
       "The Star": {
@@ -474,7 +474,7 @@
         "hierarchy": 2,
         "ambition": 1,
         "faith": 1,
-        "gevurah_signal": 1
+        "geburah_signal": 1
       },
       "Mercenary Band": {
         "violence": 2,
@@ -523,7 +523,7 @@
         "discipline": 1,
         "severity": 1,
         "sacrifice": 2,
-        "gevurah_signal": 1,
+        "geburah_signal": 1,
         "hierarchy": 1
       },
       "Cosmic Linguist": {
@@ -692,7 +692,7 @@
         "faith": 2,
         "ritual": 2,
         "severity": 1,
-        "gevurah_signal": 1
+        "geburah_signal": 1
       },
       "Gnostic": {
         "study": 2,
@@ -758,8 +758,8 @@
         "compassion": 1,
         "mercy": 1
       },
-      "Gevurah": {
-        "gevurah_signal": 1,
+      "Geburah": {
+        "geburah_signal": 1,
         "dread": 1,
         "severity": 1
       },
@@ -815,13 +815,13 @@
           "discipline": 1,
           "violence": 2,
           "risk": 1,
-          "gevurah_signal": 1
+          "geburah_signal": 1
         },
         "Path of the Cataclyst": {
           "ambition": 2,
           "severity": 1,
           "violence": 1,
-          "gevurah_signal": 1
+          "geburah_signal": 1
         },
         "Path of the Mountain": {
           "discipline": 2,
@@ -1179,7 +1179,7 @@
               "tags": {
                 "violence": 2,
                 "risk": 1,
-                "gevurah_signal": 1
+                "geburah_signal": 1
               }
             },
             {
@@ -1278,7 +1278,7 @@
               "tags": {
                 "discipline": 2,
                 "severity": 1,
-                "gevurah_signal": 1
+                "geburah_signal": 1
               }
             },
             {
@@ -1419,7 +1419,7 @@
     {
       "index": 5,
       "sefirah": {
-        "hebrew": "Gevurah",
+        "hebrew": "Geburah",
         "english": "Severity"
       },
       "pillar": "severity",
@@ -1427,7 +1427,7 @@
       "outputCategory": "class",
       "outputResolvedBy": "resolveClass",
       "outputIsExplicit": false,
-      "orientation": "Gevurah is the fist that cuts — Severity, unbound. Its failure mode is pruning to the root. Every shape you could take falls away here except one. That one becomes your Path.",
+      "orientation": "Geburah is the fist that cuts — Severity, unbound. Its failure mode is pruning to the root. Every shape you could take falls away here except one. That one becomes your Path.",
       "questions": [
         {
           "id": "G1",
@@ -1440,7 +1440,7 @@
               "tags": {
                 "discipline": 2,
                 "severity": 2,
-                "gevurah_signal": 2,
+                "geburah_signal": 2,
                 "ambition": 1
               }
             },
@@ -1449,7 +1449,7 @@
               "text": "Your mercy. You learned early that kindness at the wrong moment costs more.",
               "tags": {
                 "severity": 2,
-                "gevurah_signal": 2,
+                "geburah_signal": 2,
                 "sorrow": 1
               }
             },
@@ -1459,7 +1459,7 @@
               "tags": {
                 "discipline": 1,
                 "independence": 2,
-                "gevurah_signal": 1,
+                "geburah_signal": 1,
                 "sorrow": 1
               }
             },
@@ -1469,7 +1469,7 @@
               "tags": {
                 "independence": 2,
                 "severity": 1,
-                "gevurah_signal": 1,
+                "geburah_signal": 1,
                 "ambition": 1
               }
             }
@@ -1486,7 +1486,7 @@
               "tags": {
                 "dread": 2,
                 "discipline": 1,
-                "gevurah_signal": 1
+                "geburah_signal": 1
               }
             },
             {
@@ -1496,7 +1496,7 @@
                 "faith": 2,
                 "discipline": 1,
                 "hierarchy": 1,
-                "gevurah_signal": 1
+                "geburah_signal": 1
               }
             },
             {
@@ -1557,7 +1557,7 @@
                 "severity": 2,
                 "discipline": 1,
                 "tiphareth_signal": 1,
-                "gevurah_signal": 1
+                "geburah_signal": 1
               }
             },
             {
@@ -1888,7 +1888,7 @@
               "text": "A blade. Precise. Useful. Not decorative. It cuts what needs cutting and rests clean.",
               "tags": {
                 "severity": 2,
-                "gevurah_signal": 2,
+                "geburah_signal": 2,
                 "yesod_signal": 2,
                 "violence": 1
               }

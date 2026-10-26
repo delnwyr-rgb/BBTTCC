@@ -8,7 +8,7 @@
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p><strong>The Quartermaster's Debt.</strong> You covered a shortfall once, quietly, and never mentioned it. Now you mention it. Just once. Just enough.</p><p><em>Play:</em> +1 favor with a courtier of your choice toward your side.</p>",
+      "value": "<p><strong>The Quartermaster's Debt.</strong> You covered a shortfall once, quietly, and never mentioned it. Now you mention it. Just once. Just enough.</p><p><em>Play:</em> +1 Favor with a courtier of your choice toward your side.</p>",
       "chat": "",
       "unidentified": ""
     }
@@ -30,11 +30,11 @@
     "default": 0
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780000000000,
-    "modifiedTime": 1784079176430,
+    "modifiedTime": 1792977749702,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

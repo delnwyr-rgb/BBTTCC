@@ -1,0 +1,65 @@
+{
+  "name": "Sadistic Glee",
+  "type": "feature",
+  "img": "icons/magic/nature/root-vine-caduceus-healing.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Whenever a creature within 4 squares of the Flayer fails a check, the Flayer gains 5 temporary Integrity. Your bad day is load-bearing for it.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "saveFail",
+            "do": {
+              "tempIntegrity": 5
+            },
+            "to": "self",
+            "label": "Sadistic Glee — a failed check feeds it"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Golachab Flayer"
+        ],
+        "sourceIds": [
+          "QphIxEIKKyq8HLgf"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "thZS91HrEa77ybmw",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069961,
+    "modifiedTime": 1792989070043,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!thZS91HrEa77ybmw"
+}

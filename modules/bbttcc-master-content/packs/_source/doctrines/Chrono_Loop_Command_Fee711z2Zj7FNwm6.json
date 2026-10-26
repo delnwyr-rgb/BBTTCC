@@ -3,7 +3,7 @@
   "type": "feat",
   "img": "icons/sundries/flags/banner-flag-skull-red.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": {
       "revision": 1,
       "rules": "2024"
@@ -65,12 +65,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977107845,
-    "modifiedTime": 1779731346861,
-    "lastModifiedBy": "6ut7GT8pCAhpdWjS"
+    "modifiedTime": 1792977678068,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!Fee711z2Zj7FNwm6"
 }

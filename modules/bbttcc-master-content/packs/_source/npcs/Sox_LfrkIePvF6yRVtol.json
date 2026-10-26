@@ -1,0 +1,3701 @@
+{
+  "name": "Sox",
+  "type": "character",
+  "_id": "LfrkIePvF6yRVtol",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT Token/sox_pov Background Removed.png",
+  "system": {
+    "biography": {
+      "concept": "Spokesperson of the cinema-vigil family camped outside the Hidden Vault (Act 3)",
+      "notes": "Sox is a Felid Phantom Courier and the mouth of the family camped outside the Hidden Vault: several generations keeping the Wonder of Cinema in silly hats and vests, keeping vigil for the 300th Customer. Sox is soft-spoken, ceremonial, a little too fast and prone to shushing, and announces the family's rites in full title (the Night of the Premiere, the Solemn Removal of Chewing Gum). Strangers are welcomed into the vigil, and Sox means it."
+    },
+    "details": {
+      "level": 13,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 3
+    },
+    "attributes": {
+      "violence": {
+        "value": 10
+      },
+      "intrigue": {
+        "value": 10
+      },
+      "presence": {
+        "value": 2
+      },
+      "body": {
+        "value": 4
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 3
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 0
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 0
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 3
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 5
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 0
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 3
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 0
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "fitting": {
+        "attribute": "intrigue",
+        "label": "Fitting",
+        "value": 0
+      },
+      "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 10,
+        "max": 10,
+        "temp": 0
+      },
+      "stress": {
+        "value": 8,
+        "max": 8
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
+  },
+  "prototypeToken": {
+    "name": "Sox",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT Token/sox_pov Background Removed.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "name": "Shadow Courier — Tier 3: Package Mastery",
+      "type": "feat",
+      "img": "icons/sundries/documents/envelope-letter-post.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>Delivery is a sacrament now.</em></p><p><strong>At Shadow Courier Initiation 11</strong>, your Route's signature Package type gains an additional benefit each time you successfully deliver it (in addition to the L1 doctrine delivery effect):</p><ul><li><p><strong>Route of the Wayfarer Tongue (Message).</strong> Delivering grants the recipient Domain <strong>+10 Intrigue marks</strong> in addition to the L1 effect.</p></li><li><p><strong>Route of the Black Stair (Blade or Key).</strong> Delivering banks <strong>+1 Surge</strong> for you in addition to the L1 effect.</p></li><li><p><strong>Route of the Last Mile (Soul).</strong> Delivering reduces <strong>Darkness</strong> in the recipient's hex by an additional <strong>1 point</strong> in addition to the L1 effect.</p></li></ul><p>If you ever change Routes (which the campaign should not normally permit), this feature retunes itself to the new doctrine on your next Soma Break.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "shadow_courier_tier3_package_mastery",
+        "requirements": "Shadow Courier Initiation 11",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 11
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "classfeat",
+          "classIdentifier": "shadow_courier",
+          "tierLevel": 3,
+          "version": "1.0.0",
+          "date": "2026-04-23",
+          "rfiNative": true
+        },
+        "fourththing": {
+          "grants": {},
+          "triggers": [
+            {
+              "event": "on-delivery",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Package Mastery. Wayfarer Tongue (Message): the recipient Domain gains an additional +10 Intrigue marks. Black Stair (Blade/Key): you bank +1 Surge. Last Mile (Soul): Darkness in the recipient's hex drops by an additional 1."
+                }
+              }
+            }
+          ]
+        }
+      },
+      "folder": "i2DrP0h8cZ7UFXpy",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989608592,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "1Sq4l6Ie98rojf8n",
+      "sort": 0
+    },
+    {
+      "_id": "4TNbD7BT3jEgq23H",
+      "name": "Cryptidkin",
+      "type": "species",
+      "img": "art/bbttcc/asli-icons/cryptidkin_furrykin_4.webp",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Cryptidkin.</strong></p><p><em>“Every settlement has a story about you. None of them are accurate. All of them are useful.”</em></p><hr><p><em><strong>Cryptidkin Core Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (set by subspecies).</p></li><li><p><strong>Speed.</strong> 6 squares (subspecies may override).</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Cryptidkin does not grant fixed bonuses. Subspecies lean expressed through Tier powers.</p></li></ul><p><strong>Folklore Presence.</strong> When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as <em>omen</em>, <em>trophy</em>, or <em>legend</em>. It is never neutral. People have heard of your kind. They are almost always wrong, and that is almost always useful.</p><p><strong>Wasteland Adapted.</strong> You reroll the lowest die on checks against disease and environmental poison. You ignore the first nonmagical environmental hazard you encounter each turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor’s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 12 squares You cannot be surprised while conscious.</p><p><strong>Subspecies.</strong> Choose one Cryptidkin subspecies (Chupacabra, Jackalope, Furrykin). Your subspecies grants Tier powers as you level (Tier I at creation, then 5/11/17).</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "CKSIZE0000000001",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "sm",
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Small or Medium (set by subspecies).",
+            "value": {}
+          },
+          {
+            "_id": "CKCORE0000000001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.CKCORETRAITPLACE",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Folklore & Frame",
+            "hint": "Gain the core Cryptidkin ancestry traits."
+          }
+        ],
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": 60,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": "Folklore Presence; Survivor's Instinct."
+        },
+        "type": {
+          "value": "humanoid",
+          "custom": "",
+          "subtype": "Cryptidkin"
+        },
+        "identifier": "cryptidkin"
+      },
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "family": "cryptidkin",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "absorbed": [
+            "jackalope",
+            "furrykin"
+          ]
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "effects": [],
+      "folder": "f95fcfa18822c4e3",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.c9a7f1d26e3b4c81",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989608592,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 1500000
+    },
+    {
+      "name": "Route of the Last Mile (Bad Eden)",
+      "type": "subclass",
+      "img": "icons/magic/time/day-night-sunset-sunrise.webp",
+      "system": {
+        "category": "doctrine",
+        "classIdentifier": "shadow_courier",
+        "source": "Bad Eden Originals — Sprint F (2026 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"Give it to me. I carry things.\"</em></p>\n<p><strong>Doctrine:</strong> Carry the unbearable thing to where it must go — intimate, burdensome, exact. Who bears the package now?</p>\n<p>The Last Mile is the courier as the one who refuses to let it fall. Your Surge spends take the weight off others: shoulder their wounds at your own cost, carry an ally through a place that should have killed them, and deliver the unbearable thing intact.</p>\n<h3>Route (spent via Surge)</h3>\n<ul>\n  <li><strong>Shoulder the Weight</strong> (1) — heal an ally Tier d6; you take half as Stress; they bank a reroll.</li>\n  <li><strong>Quiet Voyage</strong> (2) — an ally gains DR equal to Tier, and the next hit that would drop them is held at 1.</li>\n  <li><strong>Delivered</strong> (5) — restore a fallen or badly-hurt ally to half Integrity and clear a condition.</li>\n</ul>",
+          "chat": ""
+        },
+        "identifier": "bbttcc-shadow-courier-courier-last-mile",
+        "advancement": [],
+        "spellcasting": {
+          "progression": "none",
+          "preparation": {}
+        }
+      },
+      "effects": [],
+      "folder": "NYwTsnPu4JjS5QE0",
+      "flags": {},
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "D5vp5mZJeC9ymXg2",
+      "sort": 500000,
+      "_stats": {
+        "systemId": "fourththing",
+        "coreVersion": "14.369",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989093559,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "systemVersion": "0.6.37",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Hex-Script Pistol",
+      "type": "weapon",
+      "img": "icons/weapons/guns/pistol-revolver-long.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 18,
+          "units": "sq"
+        },
+        "tags": [
+          "tech"
+        ],
+        "effect": "",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>A rad-iron flintlock that burns Yesodium dust per shot. Each round inscribes the wound with a small, vicious hex.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Damage:</strong> 2d6 Kinetic damage to <em>Integrity</em></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 6 / 18 squares</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T2</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "weapon",
+              "bound": "free",
+              "materialOf": [
+                {
+                  "key": "yesodium",
+                  "qty": 1
+                },
+                {
+                  "key": "rad-iron",
+                  "qty": 2
+                },
+                {
+                  "key": "hex-iron-cleat",
+                  "qty": 1
+                }
+              ],
+              "tech": {
+                "kind": "fueled",
+                "fuel": {
+                  "materialKey": "yesodium",
+                  "perActivation": 1
+                },
+                "failure": "misfire",
+                "origin": "hex-script"
+              },
+              "price": {
+                "marks": 300,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII weapon × 1 × tech 2.0",
+                "bound": "free",
+                "saleBack": 120
+              }
+            }
+          },
+          "manifestSheetMode": {
+            "bytUGWIOqq9eT7Or": "display"
+          },
+          "equipped": true
+        },
+        "autoanimations": {
+          "id": "5dc103cb-393c-4f43-be08-248f1d9d55e2",
+          "label": "Hex-Script Pistol",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "spell",
+              "animation": "eldritchblast",
+              "variant": "01",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_id": "DThg2KIVw7afwJsS",
+      "effects": [],
+      "folder": "H6eMhWQrjwcwZcBi",
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989119017,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "sort": 0
+    },
+    {
+      "_id": "ITUiBEsufv9pi1Rs",
+      "name": "Strike and Fade",
+      "type": "feat",
+      "img": "icons/skills/melee/hand-grip-sword-strike-orange.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Feats Expansion v1",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Strike and Fade</h2><p><em>You don’t win by standing still. You win by leaving.</em></p><hr /><h3>Rules</h3><p>Once per turn, when you hit a creature with an attack, you may move 2 squares without provoking reaction strikes from that creature.</p><p>If you end this movement in dim light, darkness, or behind cover, you reroll the lowest die on your next Intrigue (Stealth (Intrigue)) checks made before the end of your next turn.</p><p class=\"ft-engine-note\"><em>⚙ Stealth checks reroll the lowest die; the dim-light / cover gate is read by the GM.</em></p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_strike_and_fade",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-expansion-v1",
+          "generatedAt": "2026-01-18T20:40:44.998280+00:00"
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "skill": "stealth",
+              "mode": "reroll-lowest",
+              "vs": "after Strike and Fade ends in dim light, darkness, or cover",
+              "note": "Strike and Fade"
+            }
+          ]
+        },
+        "autoanimations": {
+          "id": "ft-strike-and-fade",
+          "label": "Strike and Fade",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "mistystep",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 2200000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989093559,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      }
+    },
+    {
+      "name": "Last Mile L9: Funeral Rites",
+      "type": "feat",
+      "img": "icons/magic/death/skeleton-skull-soul-blue.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "RFI-native",
+          "revision": 1,
+          "book": "Bulwark + Shadow Courier v1.0",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Some weights resolve only when delivered to the right ground.</em></p><p>When the Soul you carry is a <strong>dead body</strong>, a <strong>dying creature's final message</strong>, or a creature <strong>marked by a death curse</strong>, you may deliver it to a <strong>place of meaning</strong> — a burial ground, an ancestral home, a sacred site, the next of kin, the place of death, or any location the GM agrees has narrative weight for that specific Soul.</p><p>Doing so <strong>resolves the curse, completes the rite, or closes the narrative thread mechanically</strong>. The mechanical effect ends, the haunting ceases, the related faction gains <strong>2 Tikkun progress</strong> toward their next stage, and the recipient hex's Darkness is reduced by an additional <strong>1 point</strong> beyond the L1 delivery effect.</p><p>The GM adjudicates what counts as 'place of meaning'. When in doubt, it is the place the Soul most regrets having left, or the place it most wanted to return to.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "shadow_courier_lastmile_l9_funeral_rites",
+        "requirements": "Route of the Last Mile, Shadow Courier Initiation 9",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 9
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "subclassfeat",
+          "classIdentifier": "shadow_courier",
+          "subclassIdentifier": "bbttcc-shadow-courier-courier-last-mile",
+          "subclassLevel": 9,
+          "version": "1.0.0",
+          "date": "2026-04-23",
+          "rfiNative": true
+        },
+        "fourththing": {
+          "grants": {}
+        }
+      },
+      "folder": "NYwTsnPu4JjS5QE0",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989093559,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "MJXpnM4HHEGKFJPH",
+      "sort": 300000
+    },
+    {
+      "name": "Last Mile L1: The Weight You Carry",
+      "type": "feat",
+      "img": "icons/skills/movement/feet-winged-sandals-tan.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>Nobody stays behind.</em></p><p><strong>Mode: Psychopomp / drift: Sideways.</strong></p><p>Your default Package type is a <strong>Soul</strong> — a specific character, creature, or intangible (a secret, a confession, a deathbed wish, a refugee's name, an unfinished obligation) that cannot reach safety on its own.</p><p><strong>While carrying a Soul:</strong></p><ul><li><p>Your movement speed is <strong>reduced by 1 square</strong>, but allies traveling with you gain <strong>+1 square of movement speed</strong> (the Soul's witness-weight pulls them forward).</p></li><li><p>You <strong>reroll the lowest die</strong> on Stealth (Intrigue) and Athletics (Violence) checks made specifically to <strong>protect or conceal the Soul</strong> (not all stealth/athletics — just protective acts).</p></li></ul><p><strong>On delivery:</strong> When you successfully deliver a Soul to safety (the GM confirms the destination counts as safety for that Soul), the recipient Domain gains <strong>+10 Soft Power marks</strong> and <strong>Darkness in the recipient's hex drops by 1</strong>.</p><p>You may receive a new Soul any time your Package slot is empty.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "shadow_courier_lastmile_l1_weight_you_carry",
+        "requirements": "Route of the Last Mile, Shadow Courier Initiation 1",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "subclassfeat",
+          "classIdentifier": "shadow_courier",
+          "subclassIdentifier": "bbttcc-shadow-courier-courier-last-mile",
+          "subclassLevel": 1,
+          "version": "1.0.0",
+          "date": "2026-04-23",
+          "rfiNative": true,
+          "defaultPackageType": "soul"
+        },
+        "fourththing": {
+          "grants": {},
+          "triggers": [
+            {
+              "event": "on-delivery",
+              "predicate": {
+                "tag": [
+                  "soul"
+                ]
+              },
+              "effect": {
+                "kind": "grant-resource",
+                "args": {
+                  "resource": "soft-power-op",
+                  "amount": 1,
+                  "target": "faction"
+                }
+              }
+            },
+            {
+              "event": "on-delivery",
+              "predicate": {
+                "tag": [
+                  "soul"
+                ]
+              },
+              "effect": {
+                "kind": "hex-darkness",
+                "args": {
+                  "delta": -1
+                }
+              }
+            }
+          ],
+          "rerolls": [
+            {
+              "context": "check",
+              "skill": "stealth",
+              "mode": "reroll-lowest",
+              "when": "carryingSoul",
+              "vs": "protecting or concealing the Soul",
+              "note": "The Weight You Carry — while carrying a Soul"
+            },
+            {
+              "context": "check",
+              "skill": "athletics",
+              "mode": "reroll-lowest",
+              "when": "carryingSoul",
+              "vs": "protecting or concealing the Soul",
+              "note": "The Weight You Carry — while carrying a Soul"
+            }
+          ]
+        },
+        "autoanimations": {
+          "id": "f41e7fe8-58bc-4fdd-98af-2fc8156dce63",
+          "label": "Last Mile L1: The Weight You Carry",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "loop",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "NYwTsnPu4JjS5QE0",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989093559,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "VVDbTjAJ4jr7gvQR",
+      "sort": 100000
+    },
+    {
+      "name": "Last Mile L13: The Quiet Voyage",
+      "type": "feat",
+      "img": "icons/magic/water/barrier-ice-crystal-wall-faceted.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>The road belongs to those who already left.</em></p><p>While carrying a Soul, you may become <strong>temporarily insubstantial</strong> for up to <strong>your Initiation tier</strong> rounds per scene (3 at T3, 4 at T4 — note this feature unlocks at T3). Activate as a bonus action; deactivate as a free action on your turn.</p><p>While insubstantial:</p><ul><li><p>You and the Soul pass through <strong>non-magical barriers</strong> — walls, doors, terrain features, crowds.</p></li><li><p>You are <strong>immune to reaction strikes</strong> (reaction strikes).</p></li><li><p>You are <strong>invisible to creatures not specifically attuned</strong> to death, transition, or the psychopomp domain. Such attuned creatures see you normally.</p></li><li><p>You <strong>cannot attack</strong>, manifest powers, or use any non-movement ability. The Soul is also protected for the duration.</p></li></ul><p>You may end The Quiet Voyage early as a free action, banking the unused rounds for later in the scene.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "shadow_courier_lastmile_l13_quiet_voyage",
+        "requirements": "Route of the Last Mile, Shadow Courier Initiation 13",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 13
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "subclassfeat",
+          "classIdentifier": "shadow_courier",
+          "subclassIdentifier": "bbttcc-shadow-courier-courier-last-mile",
+          "subclassLevel": 13,
+          "version": "1.0.0",
+          "date": "2026-04-23",
+          "rfiNative": true
+        },
+        "fourththing": {
+          "grants": {}
+        },
+        "autoanimations": {
+          "id": "8be836f5-4cf8-46f3-8bdd-ff14002d50ce",
+          "label": "Last Mile L13: The Quiet Voyage",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "loop",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "NYwTsnPu4JjS5QE0",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989093559,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "fnsScSwJe2ePb2g8",
+      "sort": 400000
+    },
+    {
+      "name": "Septhide Vestments",
+      "type": "armor",
+      "img": "icons/equipment/chest/vest-bulletproof-body-armor.webp",
+      "system": {
+        "guardBonus": 2,
+        "evasionBonus": 1,
+        "resolveBonus": 2,
+        "resistances": [
+          "qliphothic"
+        ],
+        "armorSkill": "fitting",
+        "equipped": false,
+        "tags": [
+          "light-cloth",
+          "sept-blessed",
+          "light"
+        ],
+        "category": "armor",
+        "source": "",
+        "description": {
+          "value": "<p>Layered cloth armor stitched in a sept-house. Light, breathable, embroidered with a single prayer running spine to hem.</p><p>Wards the wearer against the static the world drags in — corruption finds the cloth quieter than the body beneath.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Guard +2, Evasion +1, Resolve +2</li>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 225 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "footprint": 1,
+              "reach": "self",
+              "frame": "armor",
+              "signature": "Cloth that remembers the prayer it was woven for.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>Layered cloth armor stitched in a sept-house. Light, breathable, embroidered with a single prayer running spine to hem.</p><p>Wards the wearer against the static the world drags in — corruption finds the cloth quieter than the body beneath.</p>",
+              "materialOf": [
+                "sept-cloth",
+                "blessed-thread",
+                "prayer-resin"
+              ],
+              "grants": {
+                "resistances": [
+                  "qliphothic"
+                ]
+              },
+              "price": {
+                "marks": 225,
+                "currency": "nonlethal",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII armor stamp",
+                "bound": "free",
+                "saleBack": 90
+              }
+            }
+          },
+          "grants": {
+            "resistances": [
+              "qliphothic"
+            ]
+          },
+          "equipped": true
+        }
+      },
+      "folder": "Iyyec8ij0PAfdLBd",
+      "_id": "mjdcW18j8jhNBlPP",
+      "effects": [
+        {
+          "name": "⚙️ Defense Grant",
+          "transfer": false,
+          "disabled": false,
+          "flags": {
+            "fourththing": {
+              "defenseGrant": true
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "flags.fourththing.grant.resists",
+                "value": "qliphothic",
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.guard",
+                "value": 2,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.evasion",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.resolve",
+                "value": 2,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "lVFe9mUabaS6VJlW",
+          "img": "icons/svg/aura.svg",
+          "type": "base",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989093559,
+            "modifiedTime": 1792989093559,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "sort": -50000,
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989119017,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "_id": "pixxxK1AQjhawxiY",
+      "name": "Cryptidkin: Folklore & Frame",
+      "type": "feat",
+      "img": "icons/magic/control/fear-fright-mask-orange.webp",
+      "system": {
+        "category": "feature",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.\"</em></p><p><strong>Folklore Presence.</strong> 1/Soma Break, when you first meet a community, decide whether the rumors about you arrived first. If yes, reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering — the GM gets to colour it.</p><p><strong>Wasteland Adapted.</strong> Reroll the lowest die on defense checks against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh).</p><p><strong>Survivor's Instinct.</strong> 1/Soma Break, when you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "cryptidkin-folklore-frame",
+        "requirements": "Cryptidkin",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "cryptidkin",
+          "feature": "folklore_frame",
+          "family": "cryptidkin",
+          "tierLevel": 0,
+          "version": "2.0.0",
+          "date": "2026-04-18"
+        },
+        "fourththing": {
+          "triggers": [
+            {
+              "event": "on-would-drop-to-zero",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "survive-at-1",
+                "args": {}
+              }
+            },
+            {
+              "event": "on-would-drop-to-zero",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "grant-resource",
+                "args": {
+                  "resource": "stress",
+                  "amount": 1
+                }
+              }
+            }
+          ]
+        },
+        "autoanimations": {
+          "id": "1ef467b8-6eb3-4e41-b1cc-5c1e27f370ac",
+          "label": "Cryptidkin: Folklore & Frame",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "loop",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "f95fcfa18822c4e3",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989608593,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0
+    },
+    {
+      "_id": "pmy3gLtl8VEISmm4",
+      "name": "Cryptidkin Heritage: Furrykin",
+      "type": "feat",
+      "img": "art/bbttcc/asli-icons/cryptidkin_furrykin_1.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Cryptidkin Subspecies.</strong> This heritage preserves the original UUID for <em>Furrykin</em> while converting it from a species-root with five sub-clades into a single flexible Cryptidkin subspecies.</p><p><em>“You are not an animal that learned to talk. You are a person the world made with fur because it needed you to survive.”</em></p><p><strong>Furrykin.</strong> You are anything fur-bearing the world decided to make people out of. Talking badger, cunning fox, stoic bear, watchful rabbit, the uncle-shaped thing the trappers call Bigfoot—all valid. Size and frame are flexible; the instinct is not.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (choose at creation; Medium Furrykin can describe themselves as “large and shaggy” without mechanical change—Bigfoot-scale creatures still move and fight at Medium).</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Subspecies Lean.</strong> No fixed stat lean. Your frame is your business—the Tier powers adapt to how you play it.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor’s Instinct).</p><h3>Wildframe & Instinct (Furrykin Extras)</h3><ul><li><p><strong>Wildframe.</strong> Your body is built for a world that bites back. You already reroll the lowest die on checks against disease and environmental poison (from Wasteland Adapted); as Furrykin, you also reroll the lowest die on Body defense checks to resist Stress.</p></li><li><p><strong>Keen Sense.</strong> Choose one: <em>Keen Smell</em>, <em>Keen Hearing</em>, or <em>Keen Sight</em>. You reroll the lowest die on Perception checks relying on that sense.</p></li><li><p><strong>Frame Choice.</strong> Choose one narrative frame at creation: <em>Predator</em> (bite or claws count as unarmed strikes that deal 1d6 instead of 1d4), <em>Forager</em> (trained in Athletics), or <em>Brute</em> (count as one size larger for carrying, shoving, and grappling).</p></li></ul><h3>Furrykin Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Tier powers previously split across Felid / Leporid / Mustelid / Ursid / Vulpin are unified; choose flavor at the table without mechanical separation.</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "ckfurrykinadv001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.RWAuuqy8LInVCgvJ",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Furrykin Tier I",
+            "hint": "Gain your Furrykin Tier I subspecies power (maps to legacy Wildframe & Instinct grant)."
+          }
+        ],
+        "identifier": "cryptidkin_furrykin_heritage",
+        "requirements": "Cryptidkin",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "cryptidkin",
+          "lineage": "Furrykin",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "normalizedFrom": "Furrykin [species + 5 clade heritages consolidated]",
+          "consolidatedFrom": [
+            "furrykin_felid",
+            "furrykin_leporid",
+            "furrykin_mustelid",
+            "furrykin_ursid",
+            "furrykin_vulpin"
+          ]
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16",
+          "rerolls": [
+            {
+              "context": "defense",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "vs": "Stress",
+              "note": "Wildframe"
+            },
+            {
+              "context": "check",
+              "skill": "perception",
+              "mode": "reroll-lowest",
+              "vs": "scent or hearing",
+              "note": "Keen Sense"
+            }
+          ]
+        }
+      },
+      "folder": "ooP9ptENqJIkL9Hf",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.a2b5906bad32ad4c",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989608593,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000
+    },
+    {
+      "name": "Shadow Courier — Tier 1: Liminal Operator",
+      "type": "feat",
+      "img": "icons/sundries/documents/envelope-letter-post.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>You cross what isn't supposed to be crossed — and you always come out the other side carrying something.</em></p><p><strong>On gaining Shadow Courier Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Stealth (Intrigue)</strong>.</p></li><li><p>Skill rank +1 in <strong>Tinkering (Intrigue)</strong>.</p></li><li><p><strong>+20 Intrigue marks</strong> and <strong>+20 Logistics marks</strong> to your Domain's caps.</p></li><li><p>You bank <strong>Surge</strong> by moving: 6 squares on your turn banks +1, again at 12 (max +2 a round).</p></li><li><p><strong>Package</strong> slot comes online — one Package at a time, type set by your chosen Route at L1.</p></li></ul><p>Spend Surge from the ◆ Surge menu: Snap Strike, Flank &amp; Strike, Clear Road, Quiet Voyage and your Route's spends.</p><p><strong>Liminal Sense.</strong> Once a scene, ignore the first detection-style roll an opponent attempts against you (perception, scrying, Insight to read your intent, etc.). The roll is treated as if it had failed; resources spent on the attempt are not refunded.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "shadow_courier_tier1_liminal_operator",
+        "requirements": "Shadow Courier Initiation 1",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [
+        {
+          "name": "Liminal Operator: Tinkering +1",
+          "img": "icons/tools/smithing/anvil.webp",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.tinkering.value",
+                "value": 1,
+                "type": "add",
+                "priority": 10,
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Passive: Liminal Operator: Tinkering +1",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "sprint": "passive-ae-2026-04-28"
+            }
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "_id": "NY2BDWuBBR9JOQSn",
+          "showIcon": 1,
+          "folder": null,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989093559,
+            "modifiedTime": 1792989093559,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        },
+        {
+          "name": "Liminal Operator: Stealth +1",
+          "img": "icons/skills/movement/feet-winged-boots.webp",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.stealth.value",
+                "value": 1,
+                "type": "add",
+                "priority": 10,
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Passive: Liminal Operator: Stealth +1",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "sprint": "passive-ae-2026-04-28"
+            }
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "_id": "QmS7XNQZJGpbqJaM",
+          "showIcon": 1,
+          "folder": null,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989093559,
+            "modifiedTime": 1792989093559,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "classfeat",
+          "classIdentifier": "shadow_courier",
+          "tierLevel": 1,
+          "version": "1.0.0",
+          "date": "2026-04-23",
+          "rfiNative": true,
+          "opEffects": {
+            "capDelta": {
+              "intrigue": 2,
+              "logistics": 2
+            }
+          }
+        },
+        "fourththing": {
+          "grants": {},
+          "triggers": [
+            {
+              "event": "on-move",
+              "predicate": {
+                "amountMin": 30
+              },
+              "limit": {
+                "window": "turn",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "grant-resource",
+                "args": {
+                  "resource": "pace",
+                  "amount": 1,
+                  "target": "self"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "folder": "i2DrP0h8cZ7UFXpy",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989608593,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "qN35EjEaiEPAkvq4",
+      "sort": 0
+    },
+    {
+      "name": "Shadow Courier",
+      "type": "class",
+      "system": {
+        "category": "path",
+        "identifier": "shadow_courier",
+        "source": "",
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"You're already moving. The fight rearranges around it.\"</em></p>\n<p>The Shadow Courier runs on <strong>Surge</strong>, like everyone — but yours comes from <strong>motion</strong>. Move <strong>30+ ft in a turn and you bank +1 Surge</strong> (again at 12 squares, max +2/round). A courier in motion has options; a courier standing still is just a target. The old <em>Pace</em> pool folds into this — same fuel, one number.</p>\n<h3>The Courier (spent via Surge)</h3>\n<ul>\n  <li><strong>Courier's Step</strong> (1) — +half-speed move (no provoke) and a freed reaction; flow through the fight.</li>\n  <li><strong>Ghoststep</strong> (3) — DR equal to Tier till your next turn, and reposition out of danger.</li>\n  <li><strong>Flank &amp; Strike</strong> (5) — reposition, then your next Strike reroll the lowest die <em>and</em> +Tier d6.</li>\n  <li><strong>No Such Door</strong> (8) — allies within Tier squares each gain a freed reaction and a reroll; open the road for the whole team.</li>\n</ul>\n<p>The <strong>Package</strong> endures as your work — designate it, carry it, deliver it. <strong>Delivery banks your Surge to full</strong> and still triggers the route's strategic payoff (Intrigue marks, Darkness reduction, the arrival that mattered).</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "ysJfJkeA2WfOMglf",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL01abcd",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL01abcd",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwClassFt01abc",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 1,
+            "title": "Shadow Courier Core Features"
+          },
+          {
+            "_id": "fKMpucL0iMdGK36R",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL05abcd",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL05abcd",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 5,
+            "title": "Shadow Courier: Level 5 Features"
+          },
+          {
+            "_id": "WWn1GvGPn6D5b7VT",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwClassFt02abc",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 6,
+            "title": "Shadow Courier — Tier 2: The Crossing"
+          },
+          {
+            "_id": "XTTN4qPwzYgfQmVV",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL09abcd",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL09abcd",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 9,
+            "title": "Shadow Courier: Level 9 Features"
+          },
+          {
+            "_id": "04Vm8pF6PL24VTNk",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwClassFt03abc",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 11,
+            "title": "Shadow Courier — Tier 3: Package Mastery"
+          },
+          {
+            "_id": "T33qFY91LUnCWm0K",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL13abcd",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL13abcd",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 13,
+            "title": "Shadow Courier: Level 13 Features"
+          },
+          {
+            "_id": "DssNqx6N2zCsLnbY",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwClassFt04abc",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 16,
+            "title": "Shadow Courier — Tier 4: Unfound Route"
+          },
+          {
+            "_id": "vZgryR38AUD5g5Is",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL17abcd",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL17abcd",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 17,
+            "title": "Shadow Courier: Level 17 Features"
+          }
+        ]
+      },
+      "flags": {
+        "bbttcc": {
+          "primary": "dexterity",
+          "opBonus": {
+            "intrigue": 2,
+            "logistics": 2
+          }
+        }
+      },
+      "_id": "qTNODvsZOedSUuj3",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "effects": [],
+      "folder": "apQBjTCtfZVreQpj",
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 400000,
+      "_stats": {
+        "systemId": "fourththing",
+        "coreVersion": "14.369",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989093559,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "systemVersion": "0.6.37",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Light Footprint",
+      "type": "feat",
+      "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+      "folder": "QbGNBV70xh9pF0eh",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "BBTTCC Manifestation Techniques v1",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<h2>Light Footprint</h2><p><em>Your sustained workings sit lightly on the world.</em></p><hr /><h3>Rules</h3><p>The ongoing <strong>upkeep</strong> cost of maintaining your sustained manifestations is <strong>halved</strong>.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">⚙ Applies automatically: upkeep cost ×0.5.</p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_light_footprint",
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-manifestation-techniques-v1",
+          "theme": "Concurrency & upkeep"
+        },
+        "fourththing": {
+          "discipline": {
+            "passive": {
+              "upkeepScale": 0.5
+            }
+          }
+        }
+      },
+      "_id": "u2eaBfgrPKMbphWt",
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989093559,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Last Mile L5: The Arms That Carry",
+      "type": "feat",
+      "img": "icons/magic/earth/construct-stone-long-arms.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "RFI-native",
+          "revision": 1,
+          "book": "Bulwark + Shadow Courier v1.0",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>You learn to carry the body that cannot carry itself.</em></p><p>You may pick up an <strong>unconscious, bound, or Staggered creature</strong> of your size or smaller as a <strong>bonus action</strong>, without spending or reducing your remaining movement that turn (the L1 Soul speed penalty still applies only to the Soul Package, not to a creature you are physically carrying).</p><p>You may <strong>hand off</strong> a carried creature to an ally in an adjacent space as a <strong>free action</strong>. The hand-off does not provoke reactions.</p><p>You may <strong>carry a creature one size larger than yourself</strong> at half your movement speed, no Package penalty stacking — though the GM may adjudicate that this is conspicuous in tight terrain.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "shadow_courier_lastmile_l5_arms_that_carry",
+        "requirements": "Route of the Last Mile, Shadow Courier Initiation 5",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 5
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "subclassfeat",
+          "classIdentifier": "shadow_courier",
+          "subclassIdentifier": "bbttcc-shadow-courier-courier-last-mile",
+          "subclassLevel": 5,
+          "version": "1.0.0",
+          "date": "2026-04-23",
+          "rfiNative": true
+        },
+        "fourththing": {
+          "grants": {}
+        },
+        "autoanimations": {
+          "id": "090e53be-5267-41c4-bc9a-bfd27e07b29e",
+          "label": "Last Mile L5: The Arms That Carry",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "NYwTsnPu4JjS5QE0",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989608593,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "x3Xz8WtakUx3qkHY",
+      "sort": 200000
+    },
+    {
+      "name": "Brass Knife of the Quiet Word",
+      "type": "weapon",
+      "img": "icons/weapons/swords/shortsword-guard-brass.webp",
+      "system": {
+        "category": "melee",
+        "intent": "intrigue",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d6",
+          "attribute": "intrigue",
+          "type": "kinetic",
+          "damageFlavor": "stab",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1,
+          "units": "sq"
+        },
+        "tags": [
+          "knife",
+          "parry",
+          "courier-favored"
+        ],
+        "effect": "Quiet Word: +1 Evasion vs the first attack each round while attuned and equipped.",
+        "flavor": "Carried in the inside seam, not the belt.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>Small parry knife. Brass guard etched with a single word in three languages, all meaning <i>enough</i>.</p><p>Favored by Shadow Couriers. Light enough to draw between sentences.</p><p><b>Quiet Word.</b> While attuned and equipped, you have +1 to Evasion against the first attack each round.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Quiet Word: +1 Evasion vs the first attack each round while attuned and equipped.</p>\n<ul>\n <li><strong>Damage:</strong> 1d6 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(stab)</span></li>\n <li><strong>Faculty:</strong> Intrigue</li>\n <li><strong>Attack:</strong> Melee (Intrigue)</li>\n <li><strong>Reach:</strong> Melee</li>\n <li><strong>Duration:</strong> Scene</li>\n <li><strong>Tier:</strong> T2</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "footprint": 1,
+              "reach": "5",
+              "frame": "weapon",
+              "signature": "A word kept short; an edge kept shorter.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "attuned",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {
+                "parry": true
+              },
+              "lore": "<p>Small parry knife. Brass guard etched with a single word in three languages, all meaning <i>enough</i>.</p><p>Favored by Shadow Couriers. Light enough to draw between sentences.</p><p><b>Quiet Word.</b> While attuned and equipped, you have +1 to Evasion against the first attack each round.</p>",
+              "materialOf": [
+                "bronze-nail",
+                "hex-script",
+                "finger-bone"
+              ],
+              "price": {
+                "marks": 150,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII weapon stamp",
+                "bound": "attuned",
+                "saleBack": 60
+              }
+            }
+          },
+          "manifestSheetMode": {
+            "bytUGWIOqq9eT7Or": "display"
+          },
+          "equipped": true
+        },
+        "autoanimations": {
+          "id": "5286f4c5-b631-482e-8e0e-5689ee70a954",
+          "label": "Brass Knife of the Quiet Word",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "dagger",
+              "variant": "01",
+              "color": "white",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5,
+          "meleeSwitch": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "arrow",
+              "variant": "regular",
+              "color": "regular",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "detect": "automatic",
+              "range": 2,
+              "returning": false,
+              "switchType": "on"
+            }
+          }
+        }
+      },
+      "folder": "H6eMhWQrjwcwZcBi",
+      "_id": "zTGHyudIjUCDad4P",
+      "effects": [],
+      "sort": 900000,
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989608594,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Shadow Courier — Tier 2: The Crossing",
+      "type": "feat",
+      "img": "icons/magic/water/barrier-ice-crystal-wall-jagged-blue.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>Signature move. Once a scene, the membrane chooses you instead of the wall.</em></p><p><strong>The Crossing — 1/scene (recovers on Soma Break).</strong> As an action, declare a single threshold within reach: a door, wall, ward, alarm, divination perimeter, hex boundary, or similar barrier. You cross it. Resolution depends on the barrier:</p><ul><li><p><strong>Mundane barriers</strong> (locked doors, sealed walls, alarmed corridors, password gates) <strong>simply fail to register</strong> your passage. No roll. The barrier remains intact for everyone else.</p></li><li><p><strong>Magical wards or alarms</strong> (alarm manifestations, divination perimeters, scrying screens, hex-warded boundaries) require an <strong>Intrigue defense check</strong> against DC <strong>12 + (the ward source's Initiation tier × 2)</strong>. On a success you cross without triggering the ward; on a failure you still cross, but the ward fires normally and the source is alerted.</p></li></ul><p>The Black Stair's L5 feature extends The Crossing.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "shadow_courier_tier2_the_crossing",
+        "requirements": "Shadow Courier Initiation 6",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 6
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [
+            {
+              "period": "sr",
+              "type": "recoverAll",
+              "formula": ""
+            }
+          ],
+          "max": "1"
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "classfeat",
+          "classIdentifier": "shadow_courier",
+          "tierLevel": 2,
+          "version": "1.0.0",
+          "date": "2026-04-23",
+          "rfiNative": true
+        },
+        "fourththing": {
+          "grants": {}
+        },
+        "autoanimations": {
+          "id": "751f0e1f-1525-454a-b67e-1763aa8f0517",
+          "label": "Shadow Courier — Tier 2: The Crossing",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "loop",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "i2DrP0h8cZ7UFXpy",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989093559,
+        "modifiedTime": 1792989608594,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "zjahcToje19K1vkB",
+      "sort": 0
+    }
+  ],
+  "effects": [],
+  "folder": "UAHVCMVXEDT8Q1B1",
+  "sort": 892188,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "npc"
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the vigil, the 300th customer, the Prize, the door, the password, BSTMOVIE1984, GHSTBSTRZ, the Night of the Premiere, the Red Carpet March, the family, the hats, the vests, cinema, the incantation, the number",
+        "notes": "[HIDDEN-VAULT-RETROFIT-2026-09-27] PRIVATE TRUTH — Sox, Felid Phantom Courier, the mouth of the family outside the Vault (with Karsden the Menhirkin Dreamwalker, Indwimeir the Ember-Touched Cosmic Linguist, Fendeddiir the Qliph-Scarred Titanbound): a multi-generational cult preserving the Wonder of Cinema in silly hats and vests, keeping vigil for the 300th Customer. VOICE: soft, ceremonial, a little too fast, prone to shushing; announces rites (the Night of the Premiere, the Solemn Removal of Chewing Gum) in full title. THE NUMBER: the family has always known the 300th customer is a headcount off a service contract, not a miracle; they kept vigil anyway, because vigil is what you do with a number you can't reach. Sox will hand a stranger the password (\"BSTMOVIE1984\" — the response is \"GHSTBSTRZ\") and the Ticket (ADMIT ONE PLUS GUEST) and mean it.",
+        "secretsRaw": "Two Hundred Ninety-Nine :: oppRollMinus2 :: a Steward asks what the Prize IS :: A headcount off a service contract. The family has always known the 300th customer is a number, not a miracle. They kept vigil anyway, because vigil is what you do with a number you can't reach."
+      }
+    },
+    "bbttcc-auto-link": {
+      "entityKind": "npc"
+    },
+    "bbttcc-character-options": {
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989093559,
+    "modifiedTime": 1792989119144,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!LfrkIePvF6yRVtol"
+}

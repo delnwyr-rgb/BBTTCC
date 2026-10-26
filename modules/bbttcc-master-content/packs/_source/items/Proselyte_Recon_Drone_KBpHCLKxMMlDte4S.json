@@ -1,58 +1,20 @@
 {
+  "_id": "KBpHCLKxMMlDte4S",
   "name": "Proselyte Recon Drone",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/equipment/head/tech-steel-mask.webp",
   "system": {
-    "description": {
-      "value": "<p>Orb drone with omnidirectional eyes. reroll the lowest die on Stealth (Intrigue) (Intrigue) while surveilling; can project Minor Illusion (at will) [TODO(adv-call)].</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 1,
-      "units": "lb"
-    },
-    "price": {
-      "value": 2200,
-      "denomination": "gp"
-    },
-    "rarity": "rare",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "proselyte-recon-drone",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>Orb drone with omnidirectional eyes. reroll the lowest die on Stealth (Intrigue) while surveilling; can project a small illusion (at will).</p>",
+      "chat": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": []
-    },
     "fourththing": {
       "rfi": {
         "item": {
@@ -63,39 +25,47 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 2,
-            "notes": "TII tool stamp × rarity 2.0 (untiered pass 2026-10-12)",
+            "notes": "TII tool stamp × rarity 2.0",
             "bound": "free",
             "saleBack": 72
           },
-          "legacySystem": {
-            "description": {
-              "value": "<p>Orb drone with omnidirectional eyes. reroll the lowest die on Stealth (Intrigue) while surveilling; can project Minor Illusion (at will).</p>"
-            }
-          },
           "tier": "II",
-          "frame": "tool"
+          "frame": "tool",
+          "bound": "free",
+          "origin": "looted",
+          "reach": "self",
+          "footprint": 1
         }
-      }
+      },
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "stealth",
+          "vs": "while surveilling through the drone",
+          "note": "Proselyte Recon Drone"
+        }
+      ]
     }
   },
   "effects": [],
   "folder": "Wxh1A343inwTUeoo",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834186563,
-    "modifiedTime": 1782164185973,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1400000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "KBpHCLKxMMlDte4S",
-  "sort": 1400000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988911370,
+    "modifiedTime": 1792988911370,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!KBpHCLKxMMlDte4S"
 }

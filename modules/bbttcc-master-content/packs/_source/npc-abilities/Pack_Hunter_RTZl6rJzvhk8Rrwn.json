@@ -7,43 +7,63 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>The stalker reroll the lowest die on attack rolls against a creature if at least one ally stalker is within 1 square of the target and not Staggered.</p>",
+      "value": "<p>The stalker rerolls the lowest die on attack rolls against a creature if at least one ally stalker is within 1 square of the target and not Staggered.</p>",
       "chat": ""
     }
   },
-  "_id": "RTZl6rJzvhk8Rrwn",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attack",
+            "if": {
+              "allyAdjacentToTarget": true
+            },
+            "do": {
+              "reroll": "attack"
+            }
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Tier 2 Predator (Wastes Stalker)"
+          "Wastes Stalker"
+        ],
+        "sourceIds": [
+          "BYUSNIOicg4IZn6W"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "RTZl6rJzvhk8Rrwn",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167244998,
-    "modifiedTime": 1782167244998,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989034450,
+    "modifiedTime": 1792989034450,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!RTZl6rJzvhk8Rrwn"
 }

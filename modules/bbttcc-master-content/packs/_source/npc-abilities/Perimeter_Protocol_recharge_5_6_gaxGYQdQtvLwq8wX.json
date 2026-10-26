@@ -1,0 +1,155 @@
+{
+  "name": "Perimeter Protocol (recharge 5–6)",
+  "type": "weapon",
+  "img": "icons/skills/targeting/crosshair-ringed-gray.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "mind",
+    "skill": "channel",
+    "damage": {
+      "formula": "3d8",
+      "attribute": "mind",
+      "type": "electrical",
+      "damageFlavor": "the fence that isn't there",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 6,
+      "long": 18
+    },
+    "tags": [
+      "bestiary",
+      "tier-iii",
+      "lineage-pre-fall",
+      "boss",
+      "signature"
+    ],
+    "effect": "Cone 6 squares. — targets roll vs Evasion (DC 16). Half damage on success. On a failed save the target is Restrained until the end of its next turn — held at the perimeter line.",
+    "flavor": "“You are outside the permitted area. You have always been outside the permitted area.”",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "restrained"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "intrigue",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 16,
+        "saveAttributeOverrides": {}
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "intrigue",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 16,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "cone",
+        "size": 30
+      }
+    },
+    "description": {
+      "value": "<p><strong>Area Attack.</strong> Each creature in a 6-square. cone rolls vs DC 16. Damage: <code>3d8</code> electrical (the fence that isn't there). On a failed save the target is Restrained until the end of its next turn — held at the perimeter line.</p><p><em>“You are outside the permitted area. You have always been outside the permitted area.”</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "frame": "save",
+          "aoeShape": "cone",
+          "aoeSize": 30,
+          "dc": 16,
+          "price": {
+            "marks": 450,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII save × 1",
+            "bound": "free",
+            "saleBack": 180
+          }
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [],
+        "recharge": {
+          "mode": "d6",
+          "min": 5
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Compliance Engine PRIME"
+        ],
+        "sourceIds": [
+          "qDuH7PdGNGGqeChb"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "gaxGYQdQtvLwq8wX",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069955,
+    "modifiedTime": 1792989070039,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!gaxGYQdQtvLwq8wX"
+}

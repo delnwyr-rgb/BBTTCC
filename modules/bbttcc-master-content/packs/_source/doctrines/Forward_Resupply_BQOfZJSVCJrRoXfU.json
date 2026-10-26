@@ -3,11 +3,11 @@
   "type": "feat",
   "img": "icons/containers/boxes/box-gift-pink.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p>Fresh mags, warm batteries, somebody's grandma's cookies in the ammo crate. Morale runs on cookies, stewards. Always has.</p><p><b>Friendly tokens gain Resupplied (+1 attack) for 1 round.</b></p>",
+      "value": "<p>Fresh mags, warm batteries, somebody's grandma's cookies in the ammo crate. Loyalty runs on cookies, stewards. Always has.</p><p><b>Friendly tokens gain Resupplied (+1 attack) for 1 round.</b></p>",
       "chat": ""
     }
   },
@@ -48,12 +48,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778964846637,
-    "modifiedTime": 1780163522963,
-    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "modifiedTime": 1792977676098,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

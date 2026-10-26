@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +79,27 @@
             "saleBack": 540
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Witness Apotheon"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Sight-Cuts-Sight"
+            },
+            "do": {
+              "damage": {
+                "formula": "2d6",
+                "type": "psychic"
+              }
+            }
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "53f180ac-14e9-4775-8b11-a091bdfe415c",
+      "id": "ft-sight-cuts-sight",
       "label": "Sight-Cuts-Sight",
       "macro": {
         "enable": false,
@@ -269,24 +274,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Witness Apotheon"
+        ],
+        "sourceIds": [
+          "le5vxgOyNRqbVnbo"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "yZ312NZIbj6jxpBB",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024243082,
-    "modifiedTime": 1782167245013,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989044278,
+    "modifiedTime": 1792989044279,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!yZ312NZIbj6jxpBB"
 }

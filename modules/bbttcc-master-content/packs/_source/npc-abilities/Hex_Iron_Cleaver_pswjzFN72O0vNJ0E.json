@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +79,27 @@
             "saleBack": 60
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Hex-Iron Berserker"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Hex-Iron Cleaver"
+            },
+            "do": {
+              "damage": {
+                "formula": "1",
+                "type": "qliphothic"
+              }
+            }
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "3f7de580-d864-41e3-b33a-3d5ed31ffe33",
+      "id": "ft-hex-iron-cleaver",
       "label": "Hex-Iron Cleaver",
       "macro": {
         "enable": false,
@@ -268,50 +273,41 @@
       "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
-      "version": 5,
-      "meleeSwitch": {
-        "video": {
-          "dbSection": "range",
-          "menuType": "weapon",
-          "animation": "arrow",
-          "variant": "regular",
-          "color": "regular",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "detect": "automatic",
-          "range": 2,
-          "returning": false,
-          "switchType": "on"
-        }
+      "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Hex-Iron Berserker"
+        ],
+        "sourceIds": [
+          "sJdEi1VglScR4Urz"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "pswjzFN72O0vNJ0E",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024239960,
-    "modifiedTime": 1782167245010,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989029501,
+    "modifiedTime": 1792989029501,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!pswjzFN72O0vNJ0E"
 }

@@ -7,245 +7,85 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>If a creature ends its turn within 2 squares of the apex predator, the predator can make one bite attack against that creature as a reaction (1/round).</p>",
+      "value": "<p>If a creature ends its turn within 2 squares of the apex predator, the predator may make one Rending Bite against it as a reaction (1/round).</p>",
       "chat": ""
     }
   },
-  "_id": "7PoKPowb37ZTjDL7",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "radius": 2,
+            "who": "enemies",
+            "do": {
+              "damage": {
+                "formula": "2d10",
+                "type": "kinetic"
+              }
+            },
+            "limit": {
+              "per": "round",
+              "uses": 1
+            },
+            "label": "Territorial — a Rending Bite as a reaction"
+          }
+        ]
+      },
+      "triggers": [
+        {
+          "event": "on-enemy-turn-end-adjacent",
+          "limit": {
+            "window": "round",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "reaction-attack",
+            "args": {
+              "reachSquares": 2
+            }
+          }
+        }
+      ]
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
           "Apex Predator"
         ],
+        "sourceIds": [
+          "oAS0ajjFzQ7ekFiw"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
-      }
-    },
-    "autoanimations": {
-      "id": "aa7e8358-d3f4-4ab8-9ce7-091a888b5b2a",
-      "label": "Territorial",
-      "macro": {
-        "enable": false,
-        "playWhen": "0"
-      },
-      "menu": "melee",
-      "primary": {
-        "video": {
-          "dbSection": "melee",
-          "menuType": "weapon",
-          "animation": "unarmedstrike",
-          "variant": "physical",
-          "color": "yellow",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "contrast": 0,
-          "delay": 0,
-          "elevation": 1000,
-          "isWait": false,
-          "opacity": 1,
-          "playbackRate": 1,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "saturate": 0,
-          "size": 1,
-          "tint": false,
-          "tintColor": "#FFFFFF",
-          "zIndex": 1
-        }
-      },
-      "secondary": {
-        "enable": false,
-        "video": {
-          "dbSection": "static",
-          "menuType": "spell",
-          "animation": "curewounds",
-          "variant": "01",
-          "color": "blue",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "addTokenWidth": false,
-          "anchor": "0.5",
-          "contrast": 0,
-          "delay": 0,
-          "elevation": 1000,
-          "fadeIn": 250,
-          "fadeOut": 500,
-          "isMasked": false,
-          "isRadius": true,
-          "isWait": false,
-          "opacity": 1,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "saturate": 0,
-          "size": 1.5,
-          "tint": false,
-          "tintColor": "#FFFFFF",
-          "zIndex": 1
-        }
-      },
-      "soundOnly": {
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        }
-      },
-      "source": {
-        "enable": false,
-        "video": {
-          "dbSection": "static",
-          "menuType": "spell",
-          "animation": "curewounds",
-          "variant": "01",
-          "color": "blue",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "addTokenWidth": false,
-          "anchor": "0.5",
-          "contrast": 0,
-          "delay": 0,
-          "elevation": 1000,
-          "fadeIn": 250,
-          "fadeOut": 500,
-          "isMasked": false,
-          "isRadius": true,
-          "isWait": false,
-          "opacity": 1,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "saturate": 0,
-          "size": 1.5,
-          "tint": false,
-          "tintColor": "#FFFFFF",
-          "zIndex": 1
-        }
-      },
-      "target": {
-        "enable": false,
-        "video": {
-          "dbSection": "static",
-          "menuType": "spell",
-          "animation": "curewounds",
-          "variant": "01",
-          "color": "blue",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "addTokenWidth": false,
-          "anchor": "0.5",
-          "contrast": 0,
-          "delay": 0,
-          "elevation": 1000,
-          "fadeIn": 250,
-          "fadeOut": 500,
-          "isMasked": false,
-          "isRadius": true,
-          "isWait": false,
-          "opacity": 1,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "saturate": 0,
-          "size": 1.5,
-          "tint": false,
-          "tintColor": "#FFFFFF",
-          "zIndex": 1
-        }
-      },
-      "isEnabled": true,
-      "isCustomized": true,
-      "fromAmmo": false,
-      "version": 5,
-      "meleeSwitch": {
-        "video": {
-          "dbSection": "range",
-          "menuType": "weapon",
-          "animation": "arrow",
-          "variant": "regular",
-          "color": "regular",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "detect": "automatic",
-          "range": 2,
-          "returning": false,
-          "switchType": "on"
-        }
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "7PoKPowb37ZTjDL7",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781026865483,
-    "modifiedTime": 1782167244988,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989048759,
+    "modifiedTime": 1792989048759,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!7PoKPowb37ZTjDL7"
 }

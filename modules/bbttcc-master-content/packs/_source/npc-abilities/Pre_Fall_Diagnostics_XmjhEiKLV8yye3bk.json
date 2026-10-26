@@ -1,0 +1,101 @@
+{
+  "name": "Pre-Fall Diagnostics",
+  "type": "feat",
+  "img": "icons/commodities/tech/tube-chamber-lightning.webp",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [
+      "seed-bestiary-attacks",
+      "tier-iv",
+      "role-hardened",
+      "passive"
+    ],
+    "description": {
+      "value": "<p>Once per round, when the construct would be hit by an attack, it may impose reroll-the-highest on the attack roll instead. (Targeting solution recalibrates faster than the shooter.)</p><p><em>It does not flinch. It updates.</em></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "trait"
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attacked",
+            "do": {
+              "reroll": "attack-highest"
+            },
+            "limit": {
+              "per": "round",
+              "uses": 1
+            },
+            "label": "Pre-Fall Diagnostics — targeting solution recalibrates"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Pre-Fall Apex Construct"
+        ],
+        "sourceIds": [
+          "bY5b3zOkFr7RbcNU"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "XmjhEiKLV8yye3bk",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069956,
+    "modifiedTime": 1792989070040,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!XmjhEiKLV8yye3bk"
+}

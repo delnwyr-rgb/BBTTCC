@@ -14,76 +14,11 @@
       }
     },
     "bbttcc-factions": {
-      "factionId": "ZHSvzNyO0wAbfMJ2"
+      "factionId": "ZHSvzNyO0wAbfMJ2",
+      "warLogs": []
     },
     "fourththing": {
       "kind": "rig"
-    },
-    "bbttcc-structures": {
-      "hasStructure": true,
-      "facilityMode": false,
-      "materialBOM": [
-        {
-          "materialKey": "bog-iron",
-          "qty": 4,
-          "originalQty": 4,
-          "family": "metal",
-          "tier": "I",
-          "name": "bog-iron",
-          "tagsCache": []
-        },
-        {
-          "materialKey": "ash-wood",
-          "qty": 2,
-          "originalQty": 2,
-          "family": "wood",
-          "tier": "I",
-          "name": "ash-wood",
-          "tagsCache": []
-        },
-        {
-          "materialKey": "hex-iron-cleat",
-          "qty": 1,
-          "originalQty": 1,
-          "family": "metal",
-          "tier": "II",
-          "name": "Hex-Iron Cleat",
-          "tagsCache": [
-            "material",
-            "hex-iron-cleat"
-          ]
-        }
-      ],
-      "state": "intact",
-      "plates": {
-        "current": 19,
-        "max": 19
-      },
-      "threshold": 1.2,
-      "resists": {
-        "kinetic": 0.5
-      },
-      "vulnerabilities": {
-        "energy|heat": {
-          "type": "energy",
-          "flavor": "heat",
-          "factor": 2
-        },
-        "energy|fire": {
-          "type": "energy",
-          "flavor": "fire",
-          "factor": 2
-        }
-      },
-      "loadBearing": false,
-      "collapseProfile": {
-        "fallFt": 10,
-        "damageDice": "2d10",
-        "nonlethal": true,
-        "knockbackFt": 5,
-        "triggerState": "breached"
-      },
-      "history": []
     }
   },
   "system": {
@@ -128,8 +63,8 @@
       "crewMax": 2
     },
     "integrity": {
-      "value": 10,
-      "max": 10,
+      "value": 14,
+      "max": 14,
       "tier": 1,
       "bracket": "personal"
     },
@@ -142,7 +77,9 @@
       },
       "resolve": {
         "value": 11
-      }
+      },
+      "integrity": {},
+      "stress": {}
     },
     "defenses": {
       "resistances": [],
@@ -155,8 +92,8 @@
       "basePerTurn": {}
     },
     "travel": {
-      "speed": 3,
-      "range": 8,
+      "speed": 5,
+      "range": 10,
       "hazardResist": 0,
       "domains": [
         "land"
@@ -168,7 +105,11 @@
       "faction-starter",
       "personal",
       "land"
-    ]
+    ],
+    "biography": {
+      "concept": "",
+      "notes": ""
+    }
   },
   "prototypeToken": {
     "actorLink": true,
@@ -179,7 +120,7 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/hex_mobile_5.png",
+      "src": "modules/bbttcc-core/assets/rigs/personal_rig_6.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -263,7 +204,7 @@
     "prependAdjective": false
   },
   "_id": "AuL4NhNxcv2njJHs",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/hex_mobile_5.png",
+  "img": "modules/bbttcc-core/assets/rigs/personal_rig_6.webp",
   "items": [
     {
       "name": "Hexmobile Frame",
@@ -276,7 +217,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>Synthetic frame authored by the Rig Builder. Bracket: personal. Pilot Mount enabled — one pilot-fired weapon.</p>",
+          "value": "<p>Two-seat scout chassis — a pilot, a passenger, and one weapon mounted at the pilot's hand. Bad Eden's signature scout-and-skirmish ride.</p><p><b>Frame · Personal · Mobile</b></p>",
           "chat": ""
         }
       },
@@ -350,6 +291,9 @@
               }
             }
           }
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.items.Item.HzOrI0fZiFA1ZlWV"
         }
       },
       "_id": "V1JmnJVWjg3x12wX",
@@ -361,17 +305,16 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1787799236928,
-        "modifiedTime": 1787799236928,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791317112220,
+        "modifiedTime": 1792989104829,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!AuL4NhNxcv2njJHs.V1JmnJVWjg3x12wX"
+      }
     },
     {
       "name": "Twin Autocannons",
@@ -391,7 +334,8 @@
         "damageParts": [],
         "range": {
           "short": 4,
-          "long": 12
+          "long": 12,
+          "units": "sq"
         },
         "tags": [
           "suppression",
@@ -665,23 +609,22 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
-        "createdTime": 1787799236928,
-        "modifiedTime": 1787799236928,
+        "createdTime": 1791317112220,
+        "modifiedTime": 1791317112220,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "8bMy0DY9jmJVk0p5",
-      "_key": "!actors.items!AuL4NhNxcv2njJHs.8bMy0DY9jmJVk0p5"
+      "_id": "8bMy0DY9jmJVk0p5"
     },
     {
       "name": "Sensor Suite",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/commodities/tech/electronics-sensor-eye.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -689,7 +632,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p>",
+          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p><p><strong>Passive:</strong> every crew member aboard adds +1 to initiative.</p>",
           "chat": ""
         }
       },
@@ -697,7 +640,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": true
+            "passive": {
+              "initiative": 1
+            }
           },
           "rfi": {
             "item": {
@@ -724,34 +669,33 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1787799236928,
-        "modifiedTime": 1787799236928,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791317112220,
+        "modifiedTime": 1792989104829,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "C3WpMZViFcuf8YzQ",
-      "_key": "!actors.items!AuL4NhNxcv2njJHs.C3WpMZViFcuf8YzQ"
+      "_id": "C3WpMZViFcuf8YzQ"
     }
   ],
   "effects": [],
-  "folder": "A5lXFcIAzAii56cq",
+  "folder": "FaFSAThUFkRk4y4k",
   "sort": 100000,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1787799236928,
-    "modifiedTime": 1787799236928,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791317112220,
+    "modifiedTime": 1792989104710,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

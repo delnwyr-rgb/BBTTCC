@@ -1,58 +1,18 @@
 {
+  "_id": "HlvNlhDr9F2COugT",
   "name": "Lantern of Unforgotten Light",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/sundries/lights/lantern-steel.webp",
   "system": {
-    "description": {
-      "value": "<p><i>“Some memories refuse to stay buried.”</i></p><p><b>Glow.</b> While lit, allies within 20 ft have reroll the lowest die on checks to resist fear/despair effects sourced from Darkness (GM adjudication) [TODO(adv-call)].</p><p><b>Purge Pulse.</b> 1/a Soma Break. As an action, suppress 1 level of personal Darkness/Corruption effects on allies in 20 ft for 10 minutes.</p><p><b>Note:</b> Does not change faction Darkness.</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 0,
-      "units": "lb"
-    },
-    "price": {
-      "value": 0,
-      "denomination": "gp"
-    },
-    "rarity": "rare",
-    "attunement": "",
-    "identified": true,
-    "equipped": false,
-    "type": {
-      "value": "trinket",
-      "baseItem": ""
-    },
-    "uses": {
-      "max": "1",
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
-      "spent": 0
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "activities": {},
-    "identifier": "lantern-of-unforgotten-light",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p><i>“Some memories refuse to stay buried.”</i></p><p><b>Glow.</b> While lit, allies within 4 squares reroll the lowest die on checks to resist fear/despair effects sourced from Darkness.</p><p><b>Purge Pulse.</b> once per Soma Break. As an action, suppress 1 level of personal Darkness/Corruption effects on allies in 4 squares for 10 minutes.</p>",
+      "chat": ""
+    }
   },
   "flags": {
     "bbttcc": {
@@ -61,52 +21,53 @@
         "support"
       ]
     },
-    "rfi": {
-      "item": {
-        "tier": "III",
-        "footprint": 1,
-        "reach": "self",
-        "frame": "armor",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "scene"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
-    },
     "fourththing": {
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
-            "currency": "economy",
+            "marks": 1080,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 2,
+            "notes": "TIII talisman × rarity 2",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 432
           },
           "tier": "III",
-          "frame": "armor",
+          "frame": "talisman",
           "origin": "looted",
           "bound": "free",
           "reach": "self",
           "footprint": 1,
-          "legacySystem": {
-            "description": {
-              "value": "<p><i>“Some memories refuse to stay buried.”</i></p><p><b>Glow.</b> While lit, allies within 4 squares reroll the lowest die on checks to resist fear/despair effects sourced from Darkness (GM adjudication).</p><p><b>Purge Pulse.</b> 1/a Soma Break. As an action, suppress 1 level of personal Darkness/Corruption effects on allies in 4 squares for 10 minutes.</p><p><b>Note:</b> Does not change faction Darkness.</p>"
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {}
+        }
+      },
+      "passives": {
+        "aura": {
+          "radius": 4,
+          "who": "allies",
+          "includeSelf": true,
+          "requires": {
+            "equipped": true
+          },
+          "rerolls": [
+            {
+              "context": "defense",
+              "mode": "reroll-lowest",
+              "vs": "fear / despair sourced from Darkness",
+              "note": "Lantern of Unforgotten Light — while lit"
             }
-          }
+          ]
         }
       }
     },
@@ -290,22 +251,22 @@
   },
   "effects": [],
   "folder": "TNrB6kEiHS0KwwJT",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834181085,
-    "modifiedTime": 1782164185972,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1200000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "HlvNlhDr9F2COugT",
-  "sort": 1200000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988910322,
+    "modifiedTime": 1792988910322,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!HlvNlhDr9F2COugT"
 }

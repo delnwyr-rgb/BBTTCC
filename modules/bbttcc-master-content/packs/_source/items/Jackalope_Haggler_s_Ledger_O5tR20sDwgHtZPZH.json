@@ -10,11 +10,11 @@
     "default": 0
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1780000000000,
-    "modifiedTime": 1782164185975,
+    "modifiedTime": 1792977627821,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,
@@ -63,18 +63,27 @@
             "courier-glass"
           ],
           "price": {
-            "marks": 120,
+            "marks": 180,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TII tool — intrigue support",
+            "rarityMult": 2,
+            "notes": "TII gear × rarity 2",
             "bound": "free",
-            "saleBack": 48
+            "saleBack": 72
           }
         }
-      }
+      },
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "attribute": "intrigue",
+          "vs": "once per scene — a negotiation, bribe, or appraisal (recall an exact figure or favor)",
+          "note": "Jackalope Haggler's Ledger"
+        }
+      ]
     },
     "autoanimations": {
       "id": "cf3fdea9-b2d5-4f78-8a01-222abb00af18",

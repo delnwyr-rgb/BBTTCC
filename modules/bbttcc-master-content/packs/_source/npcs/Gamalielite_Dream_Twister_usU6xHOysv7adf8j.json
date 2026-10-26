@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "icons/svg/mystery-man.svg",
   "system": {
-    "role": "Qliphothic Parasite (Gamaliel — Lesser)",
+    "role": "stealth",
     "tier": 3,
     "factionId": "",
     "notes": "<p>A predator of the subconscious: swirling oily black-and-purple smoke, featureless except that its silhouette keeps subtly shifting to mimic whoever is looking at it, two points of cold white light where eyes should be. It slips into sleeping minds and turns dreams into personalized hells, drinking terror and despair, leaving its victims exhausted, madness-touched — or not waking at all. It rarely manifests physically. In the dreamscape, it is the landlord.</p><p><strong>Qliphah:</strong> Gamaliel, the Obscenities — the Hull of Yesod. The Foundation's dream-layer, polluted at the source.</p><p><em>Mal's note: 'Post watches in pairs and wake each other on a timer. It cannot twist a dream you refuse to finish.'</em></p>",
@@ -40,8 +40,9 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 48,
-        "max": 48
+        "value": 39,
+        "max": 39,
+        "temp": 0
       },
       "stress": {
         "value": 40,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -148,7 +150,8 @@
     },
     "conditionImmunities": [
       "restrained",
-      "prone"
+      "prone",
+      "charmed"
     ],
     "tags": [
       "qliphothic",
@@ -158,6 +161,9 @@
       "hull-of-yesod",
       "lesser"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -170,6 +176,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Parasite (Gamaliel — Lesser)",
+      "notes": "<p>A predator of the subconscious: swirling oily black-and-purple smoke, featureless except that its silhouette keeps subtly shifting to mimic whoever is looking at it, two points of cold white light where eyes should be. It slips into sleeping minds and turns dreams into personalized hells, drinking terror and despair, leaving its victims exhausted, madness-touched — or not waking at all. It rarely manifests physically. In the dreamscape, it is the landlord.</p><p><strong>Qliphah:</strong> Gamaliel, the Obscenities — the Hull of Yesod. The Foundation's dream-layer, polluted at the source.</p><p><em>Mal's note: 'Post watches in pairs and wake each other on a timer. It cannot twist a dream you refuse to finish.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -269,7 +279,7 @@
       "_id": "1favJ9zXVA6t4Bll",
       "name": "Unbodied",
       "type": "feature",
-      "img": "icons/svg/invisible.svg",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -285,19 +295,33 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "selfTurnStart",
+                "do": {
+                  "prompt": "Unbodied: moves through things; 1d10 kinetic if it ends inside something solid."
+                },
+                "narrative": true
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188174,
-        "modifiedTime": 1787799188174,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989134720,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!usU6xHOysv7adf8j.1favJ9zXVA6t4Bll"
+      }
     },
     {
       "_id": "KumwGnSBxPh3QE1t",
@@ -321,23 +345,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188174,
-        "modifiedTime": 1787799188174,
+        "modifiedTime": 1791324416162,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!usU6xHOysv7adf8j.KumwGnSBxPh3QE1t"
+      }
     },
     {
       "_id": "AgMIGFtkY02qs4lM",
       "name": "Dread Touch",
       "type": "weapon",
-      "img": "icons/svg/terror.svg",
+      "img": "icons/magic/death/blood-corruption-vomit-red.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -401,23 +424,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188174,
-        "modifiedTime": 1787799188174,
+        "modifiedTime": 1791324416162,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!usU6xHOysv7adf8j.AgMIGFtkY02qs4lM"
+      }
     },
     {
       "_id": "URFqu9CskOUWq4Ea",
       "name": "Dream-Shallows Slip (Recharge 5–6)",
       "type": "feat",
-      "img": "icons/svg/sleep.svg",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -435,23 +457,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188174,
-        "modifiedTime": 1787799188174,
+        "modifiedTime": 1791324416162,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!usU6xHOysv7adf8j.URFqu9CskOUWq4Ea"
+      }
     },
     {
       "_id": "aQKJqSngbJHDglwQ",
       "name": "Nightmare Intrusion (1/scene)",
       "type": "feat",
-      "img": "icons/svg/unconscious.svg",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -467,25 +488,60 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "save": {
+                    "attr": "soul",
+                    "dc": 16,
+                    "onSave": "negate"
+                  },
+                  "damage": {
+                    "formula": "4d10",
+                    "type": "psychic"
+                  }
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                }
+              },
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Nightmare Intrusion (1/scene)"
+                },
+                "do": {
+                  "prompt": "Rest ruined: no benefit, no Soma Break refresh; worse Resolve checks until a clean sleep."
+                },
+                "narrative": true
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188174,
-        "modifiedTime": 1787799188174,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989134720,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!usU6xHOysv7adf8j.aQKJqSngbJHDglwQ"
+      }
     },
     {
       "_id": "5rDiDUhV2SmShcGZ",
       "name": "Manifest Fear (Recharge 5–6)",
       "type": "feat",
-      "img": "icons/svg/statue.svg",
+      "img": "icons/commodities/treasure/statue-bust-stone-grey.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -501,19 +557,234 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "spawn": {
+                    "name": "Nahemoth Husk",
+                    "count": 1
+                  },
+                  "prompt": "It steps out of one Shaken creature within 12 squares, hostile to everyone."
+                },
+                "who": "self"
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1787799188174,
+        "modifiedTime": 1792989134719,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Aura of Obscenity",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "qliphothic",
+          "gamaliel"
+        ],
+        "description": {
+          "value": "<p>Any creature that starts its turn within 4 squares must succeed a Resolve check (DC by tier) or take 1d4 psychic damage to Stress as a repressed impulse surfaces, spoken aloud.</p><p><em>Gamaliel — hull of yesod.</em></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "radius": 4,
+                "who": "enemies",
+                "do": {
+                  "save": {
+                    "attr": "soul",
+                    "dc": 17,
+                    "onSave": "negate"
+                  },
+                  "damage": {
+                    "formula": "1d4",
+                    "type": "psychic"
+                  }
+                },
+                "label": "Aura of Obscenity"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "qliphothic"
+            }
+          }
+        }
+      },
+      "_id": "jb1NTI5EeGnHvmpg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
-        "createdTime": 1787799188174,
-        "modifiedTime": 1787799188174,
+        "createdTime": 1791342350925,
+        "modifiedTime": 1791342350925,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Hollow Touch",
+      "type": "weapon",
+      "img": "icons/magic/death/hand-withered-gray.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d8",
+          "attribute": "violence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "lineage-strike",
+          "qliphothic",
+          "bestiary"
+        ],
+        "effect": "Damage goes to Stress. On a hit the target rolls Resolve vs DC 17; on a failure it is Compelled toward the shell's vice until the end of its next turn.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul"
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 17,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> Reach 1 square, one target. Damage: <code>2d8</code> qliphothic to Stress + violence. On a hit the target rolls Resolve vs DC 17; on a failure it is Compelled toward the shell's vice until the end of its next turn.</p><p><em>The hollow reaches for what it lacks.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!usU6xHOysv7adf8j.5rDiDUhV2SmShcGZ"
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "III",
+              "frame": "attack",
+              "lineageStrike": "qliphothic",
+              "price": {
+                "marks": 450,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIII attack × 1",
+                "bound": "free",
+                "saleBack": 180
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "v9eRcEX09xT1wm1t",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989134766,
+        "modifiedTime": 1792989134767,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -558,34 +829,38 @@
             ]
           },
           "price": {
-            "marks": 900,
-            "bounty": 1100,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 20,
+            "bounty": 20,
+            "hire": 30,
+            "ransom": 30,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "III light Qliphothic Parasite (Gamaliel — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TIII light qliphothic — bounty 20 / hire 30 marks; credited to the pool matching the method (default intrigue)"
           },
           "qliphah": {
             "name": "gamaliel",
             "hullOf": "yesod",
             "grade": "lesser"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "gamaliel",
+          "title": "Qliphothic Parasite (Gamaliel — Lesser)"
         }
       },
-      "kind": "npc"
+      "kind": "npc",
+      "creatureType": "fiend"
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188174,
-    "modifiedTime": 1787799188174,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989134594,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "usU6xHOysv7adf8j",
   "_key": "!actors!usU6xHOysv7adf8j"

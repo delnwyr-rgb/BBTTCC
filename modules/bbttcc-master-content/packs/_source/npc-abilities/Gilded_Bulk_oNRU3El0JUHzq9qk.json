@@ -1,0 +1,50 @@
+{
+  "name": "Gilded Bulk",
+  "type": "feature",
+  "img": "icons/magic/air/air-pressure-shield-blue.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Tyrant rolls twice and keeps the better result on checks to resist manifestations.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "oNRU3El0JUHzq9qk",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Gilded Tyrant"
+        ],
+        "sourceIds": [
+          "m1Wzc1wbRFO7kl7j"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069937,
+    "modifiedTime": 1792989070019,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!oNRU3El0JUHzq9qk"
+}

@@ -1,0 +1,800 @@
+{
+  "name": "Wall Placeable",
+  "type": "rig",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "rig",
+      "createdViaRigBuilder": true,
+      "createdAt": 1779391305985
+    },
+    "bbttcc-structures": {
+      "hasStructure": true,
+      "facilityMode": true,
+      "materialBOM": [
+        {
+          "materialKey": "anchorstone",
+          "qty": 6,
+          "originalQty": 6,
+          "family": "stone",
+          "tier": "II",
+          "name": "Anchorstone",
+          "tagsCache": [
+            "material",
+            "anchorstone",
+            "bulwark",
+            "stone",
+            "ground"
+          ]
+        },
+        {
+          "materialKey": "yesodium",
+          "qty": 1,
+          "originalQty": 1,
+          "family": "sephirotic",
+          "tier": "III",
+          "name": "Yesodium",
+          "tagsCache": [
+            "material",
+            "yesodium",
+            "sephirotic",
+            "yesod",
+            "metastable-proto-ore",
+            "narrative-responsive",
+            "khezek-tor"
+          ]
+        }
+      ],
+      "state": "intact",
+      "plates": {
+        "current": 27,
+        "max": 27
+      },
+      "threshold": 2.36,
+      "resists": {
+        "kinetic": 0.5,
+        "qliphothic": 0.5
+      },
+      "loadBearing": true,
+      "collapseProfile": {
+        "fallFt": 10,
+        "damageDice": "2d10",
+        "nonlethal": true,
+        "knockbackFt": 5,
+        "triggerState": "breached"
+      },
+      "history": [
+        {
+          "at": 1779492007733,
+          "fromState": "intact",
+          "toState": "damaged",
+          "dmg": 8,
+          "chipped": [
+            {
+              "k": "blessed-thread",
+              "n": 1
+            },
+            {
+              "k": "mountain-stone",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "at": 1779557273842,
+          "fromState": "damaged",
+          "toState": "breached",
+          "dmg": 14,
+          "chipped": [
+            {
+              "k": "mountain-stone",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "at": 1779687115594,
+          "fromState": "intact",
+          "toState": "damaged",
+          "dmg": 10,
+          "chipped": [
+            {
+              "k": "mountain-stone",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "at": 1779687179777,
+          "fromState": "damaged",
+          "toState": "breached",
+          "dmg": 13,
+          "chipped": [
+            {
+              "k": "anchorstone",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "at": 1779766338973,
+          "fromState": "intact",
+          "toState": "damaged",
+          "dmg": 13,
+          "chipped": [
+            {
+              "k": "anchorstone",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "at": 1779766633293,
+          "fromState": "damaged",
+          "toState": "breached",
+          "dmg": 6,
+          "chipped": [
+            {
+              "k": "anchorstone",
+              "n": 3
+            }
+          ]
+        }
+      ],
+      "vulnerabilities": {
+        "kinetic|concussive": {
+          "type": "kinetic",
+          "flavor": "concussive",
+          "factor": 2
+        }
+      }
+    },
+    "tokenflip": {
+      "unfuck": false
+    },
+    "fourththing": {
+      "kind": "rig"
+    }
+  },
+  "system": {
+    "identity": {
+      "mobility": "stationary",
+      "state": "parked",
+      "factionOwnerId": "",
+      "archetype": "Stationary Battery",
+      "binding": {
+        "hexId": "",
+        "sceneId": "",
+        "tokenId": ""
+      }
+    },
+    "crew": {
+      "slots": [],
+      "capacity": {
+        "pilot": {
+          "min": 0,
+          "max": 1
+        },
+        "gunner": {
+          "min": 1,
+          "max": 2
+        },
+        "engineer": {
+          "min": 0,
+          "max": 1
+        },
+        "crew": {
+          "min": 0,
+          "max": 2
+        }
+      },
+      "crewMin": 1,
+      "crewMax": 6
+    },
+    "integrity": {
+      "value": 72,
+      "max": 72,
+      "tier": 2,
+      "bracket": "heavy"
+    },
+    "derived": {
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 12
+      },
+      "resolve": {
+        "value": 11
+      },
+      "integrity": {},
+      "stress": {}
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "output": {
+      "modules": [],
+      "basePerTurn": {}
+    },
+    "travel": {
+      "speed": 0,
+      "range": 0,
+      "hazardResist": 0,
+      "domains": [
+        "land"
+      ],
+      "depthRating": 0
+    },
+    "tags": [
+      "emplacement",
+      "battery",
+      "fixed"
+    ],
+    "biography": {
+      "concept": "",
+      "notes": ""
+    }
+  },
+  "prototypeToken": {
+    "actorLink": true,
+    "disposition": 1,
+    "name": "Wall Placeable",
+    "displayName": 30,
+    "width": 3,
+    "height": 3,
+    "depth": 1,
+    "texture": {
+      "src": "modules/bbttcc-core/assets/rigs/wall.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      },
+      "tokenflip": {
+        "tokenfaces": [
+          {
+            "actorId": "A3JxXSAdgpCjxgnm",
+            "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_wall_2.png",
+            "id": "k0i8n1LjdOuKUKOSKfOG",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 3,
+            "height": 3,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          },
+          {
+            "actorId": "A3JxXSAdgpCjxgnm",
+            "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_wall_1.png",
+            "id": "GwsKsEjwp84fLf6l3RfU",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 3,
+            "height": 3,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          }
+        ]
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "A3JxXSAdgpCjxgnm",
+  "img": "modules/bbttcc-core/assets/rigs/wall.webp",
+  "items": [
+    {
+      "name": "Garrison Fort Frame",
+      "type": "gear",
+      "img": "icons/environment/settlement/wagon-black.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "<p>Stone, sandbags, and the kind of stubborn that calcifies into law. Crewed by gunners and held by quartermasters. Output is reputation: nothing crosses without a paper trail.</p><p><b>Frame · Heavy · Stationary</b></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-frame"
+          },
+          "rigFrame": {
+            "bracket": "heavy",
+            "baseIntegrity": 56,
+            "tierStep": 16,
+            "mobilityAllowed": [
+              "stationary"
+            ],
+            "slots": {
+              "weapon": 4,
+              "system": 3,
+              "output": 1
+            },
+            "capacity": {
+              "pilot": {
+                "min": 0,
+                "max": 0
+              },
+              "gunner": {
+                "min": 0,
+                "max": 3
+              },
+              "engineer": {
+                "min": 0,
+                "max": 1
+              },
+              "crew": {
+                "min": 0,
+                "max": 4
+              }
+            },
+            "actions": {
+              "pilot": [],
+              "gunner": [
+                "fire-weapon",
+                "aimed-shot",
+                "suppression",
+                "reload",
+                "opportunity-fire"
+              ],
+              "engineer": [
+                "repair",
+                "boost-system",
+                "counter-sabotage"
+              ],
+              "crew": [
+                "operate-module",
+                "reload",
+                "brace",
+                "signal",
+                "hold-on"
+              ]
+            },
+            "travel": {
+              "speed": 0,
+              "range": 0
+            },
+            "visualFrame": "anchor-corners"
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 2500000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791317003568,
+        "modifiedTime": 1791317003568,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "tXiPIezFRQMg4jHw"
+    },
+    {
+      "name": "Mortar Battery",
+      "type": "weapon",
+      "img": "icons/weapons/ammunition/explosive-artillery-mortar-shell.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "3d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 8,
+          "long": 24,
+          "units": "sq"
+        },
+        "tags": [
+          "aoe",
+          "arc",
+          "heavy"
+        ],
+        "effect": "",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>Indirect fire from pre-rotated tubes. Crew yells coordinates at each other; the math sometimes lands.</p>"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-weapon"
+          },
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "weapon",
+              "price": {
+                "marks": 150,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII weapon stamp",
+                "bound": "free",
+                "saleBack": 60
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 2400000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791317003568,
+        "modifiedTime": 1792989117646,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "WX7qDJZRNHgNEJQb"
+    },
+    {
+      "name": "Reinforced Plating",
+      "type": "gear",
+      "img": "icons/commodities/tech/plating-metal-armor-tech-steel-blue.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p><p><strong>Passive:</strong> +2 Integrity max per rig tier while fitted.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-system",
+            "passive": {
+              "integrityMaxPerTier": 2
+            }
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 400000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791317003568,
+        "modifiedTime": 1792989117646,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "0GqSX3dgDTv2HR77"
+    },
+    {
+      "name": "Sensor Suite",
+      "type": "gear",
+      "img": "icons/commodities/tech/electronics-sensor-eye.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p><p><strong>Passive:</strong> every crew member aboard adds +1 to initiative.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-system",
+            "passive": {
+              "initiative": 1
+            }
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 300000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791317003568,
+        "modifiedTime": 1792989117646,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "d2F8Kc5CWnkvKqcH"
+    },
+    {
+      "name": "Hex-Bound Garrison Plate",
+      "type": "gear",
+      "img": "icons/tools/smithing/anvil.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "<p>An anchored authority — registers the holding with the local hex. Stationary-only: deploying the rig severs the bond.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "output-module",
+            "yield": {
+              "violence": 1
+            },
+            "mobileLegal": false
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 270,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIII tool stamp (untiered pass 2026-10-12)",
+                "bound": "free",
+                "saleBack": 108
+              },
+              "tier": "III",
+              "frame": "tool"
+            }
+          }
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.items.Item.2WRUYcsbzPyBkbMi"
+        }
+      },
+      "effects": [],
+      "_id": "0mpGWuGltQSttdp1",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989117691,
+        "modifiedTime": 1792989117691,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "effects": [],
+  "folder": "xQUOdeYWwVaU6c28",
+  "sort": 200000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791317003568,
+    "modifiedTime": 1792989117529,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!A3JxXSAdgpCjxgnm"
+}

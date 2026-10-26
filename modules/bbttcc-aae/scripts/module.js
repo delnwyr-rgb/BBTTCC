@@ -612,7 +612,7 @@ function deriveVirtues(values) {
   if (primary === "Freedom") missing = "Order / Structure (Binah/Chokmah blend)";
   else if (primary === "Order") missing = "Freedom / Autonomy (Netzach/Hod blend)";
   else if (primary === "Discipline/Severity") missing = "Mercy (Chesed)";
-  else if (primary === "Mercy") missing = "Justice/Boundaries (Gevurah)";
+  else if (primary === "Mercy") missing = "Justice/Boundaries (Geburah)";
 
   return { primaryVirtue: primary, missingVirtue: missing };
 }

@@ -1,0 +1,73 @@
+{
+  "name": "Aura of Battle Fury",
+  "type": "feature",
+  "img": "icons/skills/melee/blade-tip-damaged-acid-green.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Any creature that starts its turn within 6 squares is flooded with bloodlust: it rolls twice-keep-better on melee attacks, but must roll vs Resolve (DC 16) or spend its action attacking the nearest creature — whoever that happens to be. The effect ends when it starts a turn outside the aura, breathing hard.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "do": {
+              "condition": {
+                "key": "compelled",
+                "duration": "1-round",
+                "save": {
+                  "attr": "soul",
+                  "dc": 16
+                }
+              },
+              "prompt": "Bloodlust: twice-keep-better on melee attacks this turn."
+            },
+            "radius": 6,
+            "who": "all"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "War Incarnate"
+        ],
+        "sourceIds": [
+          "uyiTmCco8gDsuHde"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "syRqeH4BUqSRRrb4",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069907,
+    "modifiedTime": 1792989069990,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!syRqeH4BUqSRRrb4"
+}

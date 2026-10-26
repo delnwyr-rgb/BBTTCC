@@ -1,0 +1,73 @@
+{
+  "name": "Sell Surplus",
+  "type": "feat",
+  "img": "art/bbttcc/overlays-icons/bad_eden_map_overlay_farm.webp",
+  "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><b>Sell Surplus</b></p><p>Take half of your stockpile's most plentiful material to market: it sells into its home channel at the surplus price (sell ×1.1); the bank's cap holds back what will not fit.</p><p><b>Cost:</b> Economy 5 marks</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "sell-surplus",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "sell_surplus",
+      "meta": {
+        "tier": 1,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null
+      }
+    }
+  },
+  "_id": "ko4pdcL1OtucRHU5",
+  "effects": [],
+  "folder": "UpsmhFcQUtMCrYu2",
+  "sort": 9300000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988991614,
+    "modifiedTime": 1792988991615,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "_key": "!items!ko4pdcL1OtucRHU5"
+}

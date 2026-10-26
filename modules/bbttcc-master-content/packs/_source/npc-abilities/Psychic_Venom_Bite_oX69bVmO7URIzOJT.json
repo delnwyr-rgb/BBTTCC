@@ -1,0 +1,113 @@
+{
+  "name": "Psychic Venom Bite",
+  "type": "weapon",
+  "img": "icons/weapons/daggers/dagger-poisoned.webp",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "melee",
+    "damage": {
+      "formula": "2d6",
+      "attribute": "intrigue",
+      "type": "psychic",
+      "damageFlavor": "",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1
+    },
+    "tags": [],
+    "effect": "Venom that attacks certainty instead of flesh. Damage goes to Stress as the target briefly cannot tell which of its memories are real.",
+    "flavor": "A fang dripping doubt.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "oX69bVmO7URIzOJT",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Satariel Veil-Spinner"
+        ],
+        "sourceIds": [
+          "zVWpSrwZCA3TL5Dp"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069957,
+    "modifiedTime": 1792989070041,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!oX69bVmO7URIzOJT"
+}

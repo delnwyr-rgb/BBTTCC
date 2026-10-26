@@ -132,7 +132,8 @@ export const RIG_BRACKET_MULT = {
   light:    5,   // 1-2 crew scout/courier
   medium:   12,  // 4-8 crew barge/hauler
   heavy:    25,  // 4-7 crew war-rig/garrison
-  siege:    50   // stationary forge/fortress/relic-installation
+  siege:    50,  // stationary forge/fortress/relic-installation
+  mecha:    8    // giant fighting robot (RG9, 2026-10-26) — between light and medium; was falling back to light
 };
 
 // Cross-pool surcharge (rubric §1.5).
@@ -687,6 +688,8 @@ function _buildPricingStrip(item) {
 
 function _injectPricingStrip(sheet, html) {
   try {
+    // 2026-10-26 (GR17): the strip is a GM authoring tool (list price, pool, override, rubric notes) — never on a player's sheet.
+    if (!game.user?.isGM) return;
     if (sheet?.constructor?.name && _PRICING_STRIP_SKIP_SHEETS.has(sheet.constructor.name)) return;
     const item = sheet?.document ?? sheet?.item;
     if (!item) return;

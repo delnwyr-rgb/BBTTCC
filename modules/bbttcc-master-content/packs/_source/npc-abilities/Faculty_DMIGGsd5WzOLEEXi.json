@@ -1,0 +1,73 @@
+{
+  "name": "Faculty",
+  "type": "feature",
+  "img": "icons/sundries/books/book-worn-brown-grey.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-pre-fall"
+    ],
+    "description": {
+      "value": "<p>At the start of each of its turns the Mechanism grades the room aloud: the creature that acted most recently learns one true thing about the next room (GM supplies it). The defences barely work, and it knows.</p><p><em>It is not a dungeon. It is faculty.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "frame": "feature"
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "selfTurnStart",
+            "do": {
+              "prompt": "Faculty: the Mechanism grades the room — the last creature to act learns one true thing about the next room."
+            },
+            "narrative": true
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Mechanism 52603"
+        ],
+        "sourceIds": [
+          "wxmlLpURBWJW2zHJ"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "DMIGGsd5WzOLEEXi",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069929,
+    "modifiedTime": 1792989070013,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!DMIGGsd5WzOLEEXi"
+}

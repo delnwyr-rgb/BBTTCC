@@ -26,8 +26,8 @@
   const PLACEMENTS = [
     // ── The Drowned South (6)
     ["spark_binah_animate",      "Blackwater Verge a"],      // the deep mother-water, alive
-    ["spark_gevurah_conceptual", "Evil Bad Fortress"],       // severity as doctrine
-    ["spark_gevurah_vestigial",  "The Burnt Flats"],         // wrath's ash
+    ["spark_geburah_conceptual", "Evil Bad Fortress"],       // severity as doctrine
+    ["spark_geburah_vestigial",  "The Burnt Flats"],         // wrath's ash
     ["spark_tiferet_animate",    "The Singing Mire"],        // harmony that sings back
     ["spark_netzach_conceptual", "Drowned Kudzu Reach f"],   // growth even drowned
     ["spark_yesod_animate",      "The Anchor Reach"],        // the living anchor
@@ -48,7 +48,7 @@
     ["spark_binah_conceptual",   "Odaroloc Depths"],         // understanding at depth
     ["spark_chesed_animate",     "Lyrenn"],                  // the farm that feeds strangers
     ["spark_chesed_vestigial",   "Bedlam Fancies"],          // charity curdled into whimsy
-    ["spark_gevurah_animate",    "Khezek-Tor"],              // the seal that holds (Valhaulan arc)
+    ["spark_geburah_animate",    "Khezek-Tor"],              // the seal that holds (Valhaulan arc)
     ["spark_tiferet_conceptual", "Bedlam Thirdword"],        // the third word that reconciles
     ["spark_netzach_animate",    "Port Kudzu"],              // kudzu endures beyond reason
     ["spark_yesod_conceptual",   "Allesh-Gilliam"],          // CANON: the Thatward's Ho! finale spark

@@ -3,8 +3,14 @@
   "type": "feat",
   "img": "icons/containers/barrels/barrel-oak-banded-tan.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Establish Supply Line</b></p><p><b>Cost:</b> Economy 1 • Logistics 3</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>establish_supply_line</code></p>",
+      "value": "<p><strong>Establish Supply Line</strong></p><p>Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Supply Line tag and the route is stored on both; sieges draw on it.</p><p><em>Cost: Logistics 30 · Economy 10 marks.</em></p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "establish-supply-line",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -44,6 +46,9 @@
         "storyOnly": false,
         "availability": null,
         "unlockKey": null
+      },
+      "effects": {
+        "text": "Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Supply Line tag and the route is stored on both; sieges draw on it."
       }
     }
   },
@@ -59,12 +64,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063179111,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989003661,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!FWGbMigtAmo06ulh"
 }

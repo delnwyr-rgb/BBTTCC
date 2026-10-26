@@ -1,0 +1,78 @@
+{
+  "name": "The Hex Tries One More Thing",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "hex-touched",
+      "crystal"
+    ],
+    "description": {
+      "value": "<p>When reduced to 0 Integrity, the creature acts for one more round with reroll-the-lowest on attacks, then drops. When a creature within 1 square drops to 0 Integrity, this one gains 5 temporary Integrity.</p><p><em>Still recognizably what it was. That is the worst part.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "zero",
+            "do": {
+              "heal": 1,
+              "prompt": "The hex tries one more thing: it acts for ONE more round (reroll-the-lowest on attacks), then drops."
+            },
+            "limit": {
+              "per": "combat",
+              "uses": 1
+            }
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "hex-touched"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Crystal Lurker"
+        ],
+        "sourceIds": [
+          "7APmN7sGfyALCeCc"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "VAdpVVpqNG1WKum7",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069977,
+    "modifiedTime": 1792989070054,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!VAdpVVpqNG1WKum7"
+}

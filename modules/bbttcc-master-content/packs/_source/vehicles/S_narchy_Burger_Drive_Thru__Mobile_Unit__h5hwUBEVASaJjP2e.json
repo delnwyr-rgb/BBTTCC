@@ -7,79 +7,6 @@
       "entityKind": "rig",
       "createdViaContentSprint": "2026-06-13",
       "createdAt": 1781332648936
-    },
-    "bbttcc-structures": {
-      "hasStructure": true,
-      "facilityMode": false,
-      "materialBOM": [
-        {
-          "materialKey": "scribed-steel",
-          "qty": 6,
-          "originalQty": 6,
-          "family": "metal",
-          "tier": "III",
-          "name": "Scribed Steel",
-          "tagsCache": [
-            "material",
-            "scribed-steel"
-          ]
-        },
-        {
-          "materialKey": "heart-iron",
-          "qty": 3,
-          "originalQty": 3,
-          "family": "metal",
-          "tier": "II",
-          "name": "Heart-Iron",
-          "tagsCache": [
-            "material",
-            "heart-iron",
-            "heart-iron",
-            "aurablade",
-            "metal"
-          ]
-        },
-        {
-          "materialKey": "cold-iron",
-          "qty": 2,
-          "originalQty": 2,
-          "family": "metal",
-          "tier": "II",
-          "name": "Cold-Iron",
-          "tagsCache": [
-            "material",
-            "cold-iron",
-            "iron",
-            "cold-forge",
-            "hex-resistant"
-          ]
-        }
-      ],
-      "state": "intact",
-      "plates": {
-        "current": 33,
-        "max": 33
-      },
-      "threshold": 3.05,
-      "resists": {
-        "kinetic": 0.5
-      },
-      "vulnerabilities": {
-        "energy|heat": {
-          "type": "energy",
-          "flavor": "heat",
-          "factor": 2
-        }
-      },
-      "loadBearing": false,
-      "collapseProfile": {
-        "fallFt": 10,
-        "damageDice": "2d10",
-        "nonlethal": true,
-        "knockbackFt": 5,
-        "triggerState": "breached"
-      },
-      "history": []
     }
   },
   "system": {
@@ -150,7 +77,7 @@
     },
     "travel": {
       "speed": 3,
-      "range": 14,
+      "range": 10,
       "hazardResist": 1,
       "domains": [
         "land"
@@ -163,6 +90,10 @@
       "home-town",
       "faction-rig"
     ],
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
     "details": {
       "biography": {
         "value": "<p><strong>Concept.</strong> When Allesh-Gilliam needs to move the whole HQ, it folds the repurposed S'narchy Burger into a self-propelled drive-thru. The order speaker still works. It will take your order whether you stop or not. PROUDLY OVERCOOKED SINCE THE SHATTERING.</p>\n<p><strong>Signature.</strong> A moving home town — the wrongness of the wastes falls quiet around it, and the coffee is, against all odds, fresh.</p>",
@@ -176,11 +107,11 @@
     "disposition": 1,
     "name": "S'narchy Burger Drive-Thru (Mobile Unit)",
     "displayName": 30,
-    "width": 1,
-    "height": 1,
+    "width": 2,
+    "height": 2,
     "depth": 1,
     "texture": {
-      "src": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
+      "src": "modules/bbttcc-core/assets/rigs/medium_rig_1.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -266,123 +197,9 @@
   "_id": "h5hwUBEVASaJjP2e",
   "items": [
     {
-      "name": "Forge Facility Frame",
-      "type": "gear",
-      "img": "icons/environment/settlement/wagon-black.webp",
-      "system": {
-        "slot": "misc",
-        "tags": [],
-        "category": "gear",
-        "source": "",
-        "quantity": 1,
-        "description": {
-          "value": "<p>A bolted-down industrial cathedral. Chimneys exhale slag and prayer in equal measure. Doesn't move; doesn't need to. Things come <em>to</em> it.</p><p><strong>Frame · Siege · Stationary</strong></p>",
-          "chat": ""
-        }
-      },
-      "flags": {
-        "fourththing": {
-          "rigGear": {
-            "subtype": "rig-frame"
-          },
-          "rigFrame": {
-            "bracket": "siege",
-            "baseIntegrity": 64,
-            "tierStep": 18,
-            "mobilityAllowed": [
-              "stationary"
-            ],
-            "slots": {
-              "weapon": 1,
-              "system": 2,
-              "output": 4
-            },
-            "capacity": {
-              "pilot": {
-                "min": 0,
-                "max": 0
-              },
-              "gunner": {
-                "min": 0,
-                "max": 1
-              },
-              "engineer": {
-                "min": 0,
-                "max": 2
-              },
-              "crew": {
-                "min": 0,
-                "max": 4
-              }
-            },
-            "actions": {
-              "pilot": [],
-              "gunner": [
-                "fire-weapon",
-                "suppression",
-                "opportunity-fire"
-              ],
-              "engineer": [
-                "repair",
-                "boost-system",
-                "vent-heat",
-                "cycle-power",
-                "counter-sabotage"
-              ],
-              "crew": [
-                "operate-module",
-                "reload",
-                "brace"
-              ]
-            },
-            "travel": {
-              "speed": 0,
-              "range": 0
-            },
-            "visualFrame": "anchor-corners"
-          },
-          "rfi": {
-            "item": {
-              "price": {
-                "marks": 30,
-                "currency": "economy",
-                "gmOverride": false,
-                "altCurrencies": {},
-                "split": null,
-                "rarityMult": 1,
-                "notes": "TI tool stamp",
-                "bound": "free",
-                "saleBack": 12
-              }
-            }
-          }
-        }
-      },
-      "folder": "0JDB983lzPepXXNe",
-      "effects": [],
-      "sort": 3100000,
-      "ownership": {
-        "default": 0,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "_stats": {
-        "coreVersion": "14.363",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1781398498139,
-        "modifiedTime": 1781398498139,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "exportSource": null,
-        "compendiumSource": null,
-        "duplicateSource": null
-      },
-      "_id": "r3KIGi9tW7FmBxf6",
-      "_key": "!actors.items!h5hwUBEVASaJjP2e.r3KIGi9tW7FmBxf6"
-    },
-    {
       "name": "Repair Bay",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/tools/hand/wrench-adjustable-toothed.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -390,7 +207,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>A dedicated cubby with a wrench wall and a swearing engineer. Engineer's repair action gains traction here.</p>",
+          "value": "<p>A dedicated cubby with a wrench wall and a swearing engineer. Engineer's repair action gains traction here.</p><p><strong>Passive:</strong> the engineer's repair check gains +2.</p>",
           "chat": ""
         }
       },
@@ -398,7 +215,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": false
+            "passive": {
+              "repairBonus": 2
+            }
           },
           "rfi": {
             "item": {
@@ -425,23 +244,22 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1781398498139,
-        "modifiedTime": 1781398498139,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989016148,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
       },
-      "_id": "HtsGZw0t8l3JoQYN",
-      "_key": "!actors.items!h5hwUBEVASaJjP2e.HtsGZw0t8l3JoQYN"
+      "_id": "HtsGZw0t8l3JoQYN"
     },
     {
       "name": "Comms Array",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/tools/fasteners/washer-hex-copper-brown.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -449,7 +267,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>A nest of antennae held together by faith. Extends signal range; allies on hex coordinate at +1 step.</p>",
+          "value": "<p>A nest of antennae held together by faith. Extends signal range; allies on hex coordinate at +1 step.</p><p><strong>Passive:</strong> Signal grants +2 on the ally's next roll instead of +1.</p>",
           "chat": ""
         }
       },
@@ -457,7 +275,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": true
+            "passive": {
+              "signalBonus": 1
+            }
           },
           "rfi": {
             "item": {
@@ -484,23 +304,22 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1781398498139,
-        "modifiedTime": 1781398498139,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989016148,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
       },
-      "_id": "YvQb6cnv6ZrQ0kbi",
-      "_key": "!actors.items!h5hwUBEVASaJjP2e.YvQb6cnv6ZrQ0kbi"
+      "_id": "YvQb6cnv6ZrQ0kbi"
     },
     {
       "name": "Sensor Suite",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/commodities/tech/electronics-sensor-eye.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -508,7 +327,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p>",
+          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p><p><strong>Passive:</strong> every crew member aboard adds +1 to initiative.</p>",
           "chat": ""
         }
       },
@@ -516,7 +335,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": true
+            "passive": {
+              "initiative": 1
+            }
           },
           "rfi": {
             "item": {
@@ -543,18 +364,17 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1781398498139,
-        "modifiedTime": 1781398498139,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989016148,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
       },
-      "_id": "Abmw6wNfHhWMI8fH",
-      "_key": "!actors.items!h5hwUBEVASaJjP2e.Abmw6wNfHhWMI8fH"
+      "_id": "Abmw6wNfHhWMI8fH"
     },
     {
       "name": "Quartermaster Dispenser",
@@ -567,7 +387,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>A clipboarded oracle that allocates rations, ammo, and small mercies. Faction supplies stack here.</p>",
+          "value": "<p>A clipboarded oracle that allocates rations, ammo, and small mercies. Domain supplies stack here.</p>",
           "chat": ""
         }
       },
@@ -605,18 +425,140 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1781398498139,
-        "modifiedTime": 1781398498139,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989016149,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
       },
-      "_id": "gixanYkLYJJAbQ8b",
-      "_key": "!actors.items!h5hwUBEVASaJjP2e.gixanYkLYJJAbQ8b"
+      "_id": "gixanYkLYJJAbQ8b"
+    },
+    {
+      "name": "Sail Barge Frame",
+      "type": "gear",
+      "img": "icons/environment/settlement/wagon-black.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "<p>A pleasure-galley with delusions of fortress. Docks at hexes to throw lavish productions; cuts loose to roam when the music demands it. Throne optional, mandatory.</p><p><b>Frame · Medium · Hybrid</b></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-frame"
+          },
+          "rigFrame": {
+            "bracket": "medium",
+            "baseIntegrity": 32,
+            "tierStep": 10,
+            "mobilityAllowed": [
+              "mobile",
+              "hybrid"
+            ],
+            "slots": {
+              "weapon": 2,
+              "system": 2,
+              "output": 3
+            },
+            "capacity": {
+              "pilot": {
+                "min": 1,
+                "max": 1
+              },
+              "gunner": {
+                "min": 0,
+                "max": 1
+              },
+              "engineer": {
+                "min": 0,
+                "max": 1
+              },
+              "crew": {
+                "min": 0,
+                "max": 6
+              }
+            },
+            "actions": {
+              "pilot": [
+                "steer",
+                "tack-against-wind",
+                "raise-sail",
+                "evasive"
+              ],
+              "gunner": [
+                "fire-weapon",
+                "suppression",
+                "reload"
+              ],
+              "engineer": [
+                "repair",
+                "boost-system",
+                "vent-heat"
+              ],
+              "crew": [
+                "operate-module",
+                "brace",
+                "signal",
+                "hold-on"
+              ]
+            },
+            "travel": {
+              "speed": 3,
+              "range": 10
+            },
+            "visualFrame": "anchor-ring"
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 750,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII vehicle stamp (untiered pass 2026-10-12)",
+                "bound": "free",
+                "saleBack": 300
+              },
+              "tier": "II",
+              "frame": "vehicle"
+            }
+          }
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.items.Item.XjmS2vVRLGPl6RqN"
+        }
+      },
+      "effects": [],
+      "_id": "ZfCNFcSjUyof0b7L",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989016242,
+        "modifiedTime": 1792989016242,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -626,12 +568,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1781398498139,
-    "modifiedTime": 1784515283082,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989015986,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

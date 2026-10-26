@@ -9,8 +9,9 @@
     ],
     "category": "gear",
     "source": "Phase 7 Seed (2026-05-10)",
+    "quantity": 1,
     "description": {
-      "value": "<p>A siege-class forge core, bound by oath to a single faction. Installed in a hex, it grants forge-wide crafting bonuses and a Yesodium-burning hum that locals can hear from a mile out.</p>",
+      "value": "<p>A siege-class forge core, bound by oath to a single Domain. Installed in a hex, it grants forge-wide crafting bonuses and a Yesodium-burning hum that locals can hear from a mile out.</p>",
       "chat": ""
     }
   },
@@ -70,18 +71,18 @@
   },
   "_id": "2jbXNdkrFzRTllzO",
   "effects": [],
-  "folder": "0JDB983lzPepXXNe",
+  "folder": "TNrB6kEiHS0KwwJT",
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778963404582,
-    "modifiedTime": 1778963404582,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988932038,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

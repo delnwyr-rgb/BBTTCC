@@ -1,10 +1,16 @@
 {
-  "name": "Policy Reforms (Admin)",
+  "name": "Policy Reforms",
   "type": "feat",
   "img": "icons/sundries/flags/banner-flag-pink.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Policy Reforms (Admin)</b></p><p><b>Cost:</b> Economy 2 • Diplomacy 1 • Logistics 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>policy_reforms</code></p>",
+      "value": "<p><strong>Policy Reforms (Admin)</strong></p><p>Domain-wide. marks income ×1.05 this turn, and your next Battle or Heist DC is 1 lower.</p><p><em>Cost: Economy 20 · Soft Power 20 · Diplomacy 10 · Logistics 10 marks.</em></p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "policy-reforms-admin",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -44,6 +46,9 @@
         "storyOnly": false,
         "availability": null,
         "unlockKey": null
+      },
+      "effects": {
+        "text": "Domain-wide. marks income ×1.05 this turn, and your next Battle or Heist DC is 1 lower."
       }
     }
   },
@@ -59,12 +64,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063183429,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792988997990,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!PKCTMp2NUvrqOhEf"
 }

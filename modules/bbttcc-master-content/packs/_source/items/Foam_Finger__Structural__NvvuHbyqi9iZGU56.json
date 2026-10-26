@@ -9,7 +9,7 @@
     "resistances": [
       "kinetic"
     ],
-    "armorSkill": "fitting",
+    "armorSkill": "bracing",
     "equipped": false,
     "tags": [
       "shield",
@@ -18,7 +18,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A pre-Fall sports memorabilia foam finger. Faded blue. Slightly chewed at the base. Through some combination of polymer chemistry, nostalgia, and the structural ambitions of post-apocalyptic salvage, it is now load-bearing. Use it like a buckler. Wave it for morale. Both, on a good day.</p><p><strong>Structural Foam.</strong> Counts as a buckler — +1 Guard while equipped in the off-hand. Once per scene, when you would take damage from a non-magical projectile, the foam absorbs the hit completely. The finger is not visibly damaged. The finger is, however, a little slower to wave.</p>",
+      "value": "<p>A pre-Fall sports memorabilia foam finger. Faded blue. Slightly chewed at the base. Through some combination of polymer chemistry, nostalgia, and the structural ambitions of post-apocalyptic salvage, it is now load-bearing. Use it like a buckler. Wave it for morale. Both, on a good day.</p><p><strong>Structural Foam.</strong> Counts as a buckler — +1 Guard and +1 Resolve while equipped in the off-hand. Once per scene, when you would take damage from a non-magical projectile, the foam absorbs the hit completely. The finger is not visibly damaged. The finger is, however, a little slower to wave.</p>",
       "chat": ""
     }
   },
@@ -43,25 +43,47 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A pre-Fall sports memorabilia foam finger. Faded blue. Slightly chewed at the base. Through some combination of polymer chemistry, nostalgia, and the structural ambitions of post-apocalyptic salvage, it is now load-bearing. Use it like a buckler. Wave it for morale. Both, on a good day.</p><p><b>Structural Foam.</b> Counts as a buckler — +1 Guard while equipped in the off-hand. Once per scene, when you would take damage from a non-magical projectile, the foam absorbs the hit completely. The finger is not visibly damaged. The finger is, however, a little slower to wave.</p>",
+          "lore": "<p>A pre-Fall sports memorabilia foam finger. Faded blue. Slightly chewed at the base. Through some combination of polymer chemistry, nostalgia, and the structural ambitions of post-apocalyptic salvage, it is now load-bearing. Use it like a buckler. Wave it for morale. Both, on a good day.</p><p><b>Structural Foam.</b> Counts as a buckler — +1 Guard and +1 Resolve while equipped in the off-hand. Once per scene, when you would take damage from a non-magical projectile, the foam absorbs the hit completely. The finger is not visibly damaged. The finger is, however, a little slower to wave.</p>",
           "materialOf": [
             "expanded-polyurethane",
             "team-spirit",
             "physics-violation"
           ],
           "price": {
-            "marks": 50,
-            "currency": "economy",
+            "marks": 35,
+            "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI shield stamp",
+            "notes": "TI shield (hygiene 2026-10-07; was 50 economy)",
             "bound": "free",
-            "saleBack": 20
+            "saleBack": 14
           }
         }
-      }
+      },
+      "triggers": [
+        {
+          "event": "on-incoming-damage",
+          "predicate": {
+            "tag": [
+              "kinetic"
+            ]
+          },
+          "limit": {
+            "window": "scene",
+            "uses": 1
+          },
+          "offer": true,
+          "offerText": "Foam Finger — the foam absorbs this projectile hit completely (once per scene).",
+          "effect": {
+            "kind": "modify-incoming-damage",
+            "args": {
+              "mode": "zero"
+            }
+          }
+        }
+      ]
     }
   },
   "folder": "Wxh1A343inwTUeoo",
@@ -121,8 +143,7 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!NvvuHbyqi9iZGU56.AR5ZzN45HPfUGvQQ"
+      }
     }
   ],
   "sort": 625000,
@@ -131,12 +152,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777437725656,
-    "modifiedTime": 1778541964576,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988953193,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

@@ -17,12 +17,13 @@
       "vestment",
       "hex-warded",
       "field",
-      "attunement"
+      "attunement",
+      "medium"
     ],
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A field surplice layered over a hex-lattice underlayer, cut for wardens who walk hex-blighted ground where the curse runs hot. Turns aside both the corruption and the scorch that so often comes with it.</p><p><strong>Hexbane Weave.</strong> Resists qliphothic and thermal. Built to be worn working, not displayed.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Defense:</strong> Guard +2, Resolve +2</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic, Thermal</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 675 Nonlethal marks</p></li></ul>",
+      "value": "<p>A field surplice layered over a hex-lattice underlayer, cut for wardens who walk hex-blighted ground where the curse runs hot. Turns aside both the corruption and the scorch that so often comes with it.</p><p><strong>Hexbane Weave.</strong> Resists qliphothic and thermal. Built to be worn working, not displayed.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Defense:</strong> Guard +2, Resolve +2</p></li><li><p><strong>Requires:</strong> Bracing (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic, Thermal</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 675 Nonlethal marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -60,7 +61,7 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TIII armor \u00d7 1.50",
+            "notes": "TIII armor × 1.50",
             "bound": "attuned",
             "saleBack": 270
           }
@@ -87,12 +88,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782150391790,
-    "modifiedTime": 1787335078032,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988953984,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

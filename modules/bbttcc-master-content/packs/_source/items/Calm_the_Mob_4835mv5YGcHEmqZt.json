@@ -39,7 +39,6 @@
       "pack": "bbttcc-feats-expansion-v1",
       "generatedAt": "2026-01-18T20:40:45.007126+00:00"
     },
-    "fourththing": {},
     "autoanimations": {
       "id": "ft-calm-the-mob",
       "label": "Calm the Mob",
@@ -228,11 +227,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.1",
     "createdTime": 1768802465828,
-    "modifiedTime": 1781116199316,
+    "modifiedTime": 1790037787622,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!4835mv5YGcHEmqZt"

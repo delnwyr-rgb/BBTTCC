@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You do not wave your hands and hope. You know what symbols are for.”</em></p>\n<p><strong>Archetype (Bad Eden): The Magician (Scholar).</strong> Researcher, operator, and wielder of applied understanding. You turn knowledge into leverage and leverage into effect.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> This Archetype is associated with <strong>+1 Intrigue</strong> in faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of scholarship, arcane literacy, research throughput, and recovered knowledge.</li>\n</ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You do not wave your hands and hope. You know what symbols are for.”</em></p>\n<p><strong>Archetype (Bad Eden): The Magician (Scholar).</strong> Researcher, operator, and wielder of applied understanding. You turn knowledge into leverage and leverage into effect.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your Domain earns <strong>+10 Intrigue</strong> marks each turn while you serve it.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of scholarship, arcane literacy, research throughput, and recovered knowledge.</li>\n</ul>",
       "chat": ""
     },
     "activities": {},
@@ -94,12 +94,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986769802,
-    "modifiedTime": 1781116038489,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989147590,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -238,12 +238,12 @@
     "compendiumSource": "Item.rFVC8d5nxO2V2BRH",
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776481562690,
-    "modifiedTime": 1781116187689,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792902867143,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "_key": "!items!rFVC8d5nxO2V2BRH"
 }

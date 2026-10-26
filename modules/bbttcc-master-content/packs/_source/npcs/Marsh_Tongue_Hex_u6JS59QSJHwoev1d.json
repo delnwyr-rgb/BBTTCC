@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 50,
-        "max": 50
+        "max": 50,
+        "temp": 0
       },
       "stress": {
         "value": 25,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -137,12 +139,19 @@
       "movementBudgetFt": 30
     },
     "defenses": {
-      "resistances": [],
+      "resistances": [
+        "kinetic"
+      ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "sephirotic"
+      ]
     },
     "conditionImmunities": [],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -155,6 +164,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "Eldritch beast that speaks in tongues no human dialect should produce. Mire and song."
     }
   },
   "flags": {
@@ -190,16 +203,19 @@
             ]
           },
           "price": {
-            "marks": 1080,
-            "bounty": 1080,
-            "hire": 2700,
-            "ransom": 1800,
+            "marks": 15,
+            "bounty": 15,
+            "hire": 25,
+            "ransom": 25,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "TII medium caster (bestiary) \u2014 bounty 1080 / hire 2700 / ransom 1800 marks (paid in softpower)"
-          }
+            "notes": "TII medium hex-touched — bounty 15 / hire 25 marks; credited to the pool matching the method (default softpower)"
+          },
+          "lineage": "hex-touched",
+          "subLineage": "eldritch"
         }
-      }
+      },
+      "creatureType": "aberration"
     }
   },
   "_id": "u6JS59QSJHwoev1d",
@@ -344,6 +360,32 @@
               "tier": "II",
               "frame": "trait"
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "do": {
+                  "save": {
+                    "attr": "mind",
+                    "dc": 13,
+                    "onSave": "negate"
+                  }
+                },
+                "radius": 6,
+                "who": "all"
+              },
+              {
+                "on": "saveFail",
+                "do": {
+                  "noBonusAction": true
+                },
+                "if": {
+                  "weapon": "Tongues Beyond Dialect"
+                }
+              }
+            ]
           }
         }
       },
@@ -355,17 +397,16 @@
       },
       "_id": "2zR5B8k9Oa2cgt1B",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118716904,
-        "modifiedTime": 1782167244640,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989123060,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!u6JS59QSJHwoev1d.2zR5B8k9Oa2cgt1B"
+      }
     },
     {
       "name": "Wrong-Syllable",
@@ -392,7 +433,7 @@
           "tier-ii",
           "role-caster"
         ],
-        "effect": "On a hit, the target's next spell or manifestation has reroll-the-highest (the wrong syllable lingers, fouls the next casting).",
+        "effect": "On a hit, the target's next working or manifestation has reroll-the-highest (the wrong syllable lingers, fouls the next casting).",
         "flavor": "It says something. You hear it. Something in your throat agrees, briefly, against your will.",
         "manifestation": {
           "tier": 1,
@@ -444,11 +485,25 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack \u00d7 1",
+                "notes": "TII attack × 1",
                 "bound": "free",
                 "saleBack": 60
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Wrong-Syllable"
+                },
+                "do": {
+                  "impose": true
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -637,20 +692,19 @@
       },
       "_id": "OMe3920vMPj95DEk",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118716904,
-        "modifiedTime": 1782167244641,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989123060,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!u6JS59QSJHwoev1d.OMe3920vMPj95DEk"
+      }
     },
     {
-      "name": "Tongues-Flood (recharges on a Soma Break)",
+      "name": "Tongues-Flood (recharge 5–6)",
       "type": "weapon",
       "img": "icons/magic/sonic/scream-wail-shout-teal.webp",
       "system": {
@@ -676,7 +730,7 @@
           "aoe",
           "shape-cone"
         ],
-        "effect": "Cone 30 ft. \u2014 targets roll vs Resolve (DC 13). Half damage on success. Failed-save targets are Compelled to repeat the syllable themselves on their next turn (lose Action). Recharge 5\u20136.",
+        "effect": "Cone 6 squares. — targets roll vs Resolve (DC 13). Half damage on success. Failed-save targets are Compelled to repeat the syllable themselves on their next turn (lose Action). At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
         "flavor": "The hex opens its mouth wide enough to hear the inside of itself.",
         "manifestation": {
           "tier": 1,
@@ -707,6 +761,24 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 13,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round"
+          },
+          "area": {
+            "shape": "cone",
+            "size": 30
           }
         },
         "description": {
@@ -732,16 +804,24 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII save \u00d7 1",
+                "notes": "TII save × 1",
                 "bound": "free",
                 "saleBack": 60
               }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
             }
           }
         },
         "autoanimations": {
           "id": "ft-tongues-flood-recharge-5-6-",
-          "label": "Tongues-Flood (Recharge 5\u20136)",
+          "label": "Tongues-Flood (Recharge 5–6)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -925,17 +1005,79 @@
       },
       "_id": "x8bS3dlR1OWjAKlo",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118716904,
-        "modifiedTime": 1782167244641,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989123061,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
+      }
+    },
+    {
+      "name": "The Hex Tries One More Thing",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "hex-touched",
+          "eldritch"
+        ],
+        "description": {
+          "value": "<p>When reduced to 0 Integrity, the creature acts for one more round with reroll-the-lowest on attacks, then drops. When a creature within 1 square drops to 0 Integrity, this one gains 5 temporary Integrity.</p><p><em>Still recognizably what it was. That is the worst part.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!u6JS59QSJHwoev1d.x8bS3dlR1OWjAKlo"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "zero",
+                "do": {
+                  "heal": 1,
+                  "prompt": "The hex tries one more thing: it acts for ONE more round (reroll-the-lowest on attacks), then drops."
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                }
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "hex-touched"
+            }
+          }
+        }
+      },
+      "_id": "RLHqh8MXxvGxk0nN",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342350876,
+        "modifiedTime": 1791342350876,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -945,12 +1087,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118716904,
-    "modifiedTime": 1783219918012,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989122895,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

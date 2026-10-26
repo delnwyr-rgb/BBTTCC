@@ -7,43 +7,75 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>A creature that starts its turn within 2 squares of the wraith must succeed on a DC 15 Soul check or have its movement reduced by 2 squares until the start of its next turn as local time thickens around it.</p>",
+      "value": "<p>A creature that starts its turn within 2 squares of the wraith must succeed a Soul check vs DC 15 or have its movement reduced by 2 squares until the start of its next turn as local time thickens around it.</p>",
       "chat": ""
     }
   },
-  "_id": "ZduCeoIlbRfon8SQ",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "do": {
+              "save": {
+                "attr": "soul",
+                "dc": 15,
+                "onSave": "negate"
+              }
+            },
+            "radius": 2,
+            "who": "enemies"
+          },
+          {
+            "on": "saveFail",
+            "do": {
+              "slow": 2
+            },
+            "if": {
+              "weapon": "Unmoored Presence"
+            }
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
           "Slippage Wraith"
         ],
+        "sourceIds": [
+          "CdNx8WLo0aZO6q8c"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "ZduCeoIlbRfon8SQ",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167245002,
-    "modifiedTime": 1782167245002,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989049903,
+    "modifiedTime": 1792989049903,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!ZduCeoIlbRfon8SQ"
 }

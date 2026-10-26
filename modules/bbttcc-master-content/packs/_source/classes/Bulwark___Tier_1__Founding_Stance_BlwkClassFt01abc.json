@@ -27,58 +27,6 @@
   },
   "effects": [
     {
-      "name": "Class L1: Plating +1",
-      "img": "icons/skills/melee/sword-stylized-blue.webp",
-      "type": "base",
-      "disabled": false,
-      "transfer": true,
-      "description": "Granted by Bulwark — Tier 1: Founding Stance at Tier 1.",
-      "flags": {
-        "fourththing": {
-          "passiveAuthored": true,
-          "aptitudeStamp": "2026-05-04",
-          "aptitudeAnchor": "Bulwark — Tier 1: Founding Stance",
-          "aptitudeKind": "plating"
-        }
-      },
-      "system": {
-        "changes": [
-          {
-            "key": "system.skills.plating.value",
-            "value": 1,
-            "priority": 10,
-            "type": "add",
-            "phase": "initial"
-          }
-        ]
-      },
-      "_id": "OwTD0TqHMTv9E9YP",
-      "start": null,
-      "duration": {
-        "value": null,
-        "units": "seconds",
-        "expiry": null,
-        "expired": false
-      },
-      "origin": null,
-      "tint": "#ffffff",
-      "statuses": [],
-      "showIcon": 1,
-      "folder": null,
-      "sort": 0,
-      "_stats": {
-        "coreVersion": "14.369",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.16",
-        "createdTime": 1791864373836,
-        "modifiedTime": 1791864373836,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      }
-    },
-    {
       "name": "Founding Stance: Athletics +1",
       "img": "icons/skills/melee/shield-block-bash-yellow.webp",
       "type": "base",
@@ -186,6 +134,58 @@
         "duplicateSource": null,
         "exportSource": null
       }
+    },
+    {
+      "name": "Class L1: Plating +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "description": "Granted by Bulwark — Tier 1: Founding Stance at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Bulwark — Tier 1: Founding Stance",
+          "aptitudeKind": "plating"
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.plating.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "OwTD0TqHMTv9E9YP",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864373836,
+        "modifiedTime": 1791864373836,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "flags": {
@@ -216,12 +216,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777003646518,
-    "modifiedTime": 1781116125204,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792948154406,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

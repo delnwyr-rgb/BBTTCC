@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> When you score a critical hit with a weapon attack, you gain temporary Integrity equal to your character level.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> When your Strike hits and either die shows a 10, you gain temporary Integrity equal to four times your tier.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-mercenary-band-t3",
@@ -69,6 +69,26 @@
           "bbttcc:theme:shock-force"
         ]
       }
+    },
+    "fourththing": {
+      "triggers": [
+        {
+          "event": "on-attack-hit",
+          "predicate": {
+            "dieMin": 10
+          },
+          "limit": {
+            "window": "round",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "add-temp-integrity",
+            "args": {
+              "amount": "@tier*4"
+            }
+          }
+        }
+      ]
     }
   },
   "_stats": {
@@ -81,12 +101,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986954715,
-    "modifiedTime": 1781116040964,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989171698,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

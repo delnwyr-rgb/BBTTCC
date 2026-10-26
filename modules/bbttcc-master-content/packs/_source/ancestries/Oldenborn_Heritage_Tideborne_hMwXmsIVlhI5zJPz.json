@@ -1,0 +1,81 @@
+{
+  "_id": "hMwXmsIVlhI5zJPz",
+  "name": "Oldenborn Heritage: Tideborne",
+  "type": "feat",
+  "img": "art/bbttcc/asli-icons/oldenborn_tideborn_2.webp",
+  "effects": [],
+  "folder": "r4F3WD3V7iSDDkkD",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "oldenborn",
+      "lineage": "Tideborne",
+      "version": "2.0.0",
+      "date": "2026-10-26"
+    }
+  },
+  "system": {
+    "category": "heritage",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Oldenborn (Tideborne).</strong> Your place-soul is a shoreline that remembers every ship. You are the memory of tide-pools and drowned harbours, a genius loci clawing back into embodiment with salt still in the seams. Folk might call you a selkie or a drowned saint, because mortals label what scares them. You know the truth: you are a place-soul wearing legs.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Fey, Tideborne).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 6 squares.</li><li><strong>Attributes.</strong> Oldenborn does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Soul</strong> in fiction and through Tier powers.</li></ul><h3>Oldenborn Core</h3><p>At character creation you gain <strong>Old Memory, Old Flesh</strong> (Dream-Flesh, Old Paths, Veil-Sight, You Are Remembered) from the Oldenborn ancestry.</p><h3>Tideborne Tier Powers</h3><p>You gain <strong>Memory Tide</strong> at creation, then <strong>Undertow Grip</strong> at Initiation 5, <strong>Floodgate of Self</strong> at Initiation 11 and <strong>Ocean Judge</strong> at Initiation 17.</p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "oldntidebrnadv01",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.8UYks5io6jCDVlxN",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Tideborne Tier I",
+        "hint": "Gain your Tideborne Tier I lineage power (Memory Tide)."
+      }
+    ],
+    "identifier": "oldenborn_tideborn_heritage",
+    "requirements": "Oldenborn",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988967732,
+    "modifiedTime": 1792988967733,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "_key": "!items!hMwXmsIVlhI5zJPz"
+}

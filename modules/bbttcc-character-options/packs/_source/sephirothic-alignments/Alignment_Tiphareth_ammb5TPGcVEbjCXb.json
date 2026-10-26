@@ -1,0 +1,75 @@
+{
+  "name": "Alignment: Tiphareth",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "Beauty - Balance that costs something. +10 Diplomacy and +10 Soft Power marks to your Domain each turn.\n\nTiphareth holds justice and mercy in living tension. It rewards balanced play, stability across multiple systems, and factions that survive by integrating contradictions instead of denying them.",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "alignment-tiphareth",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "img": "icons/equipment/neck/necklace-astrology-sun-gold.webp",
+  "effects": [],
+  "folder": "RAOWJYon3t34M5XY",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "sephirothic-alignments",
+      "bonuses": {
+        "diplomacy": 1,
+        "softpower": 1
+      },
+      "option": {}
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.sUbH6ds2iUNdFMz9",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.fxAlgcvKBqlWJ7ux",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1774978150205,
+    "modifiedTime": 1792989141618,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "ammb5TPGcVEbjCXb",
+  "sort": 900000,
+  "_key": "!items!ammb5TPGcVEbjCXb"
+}

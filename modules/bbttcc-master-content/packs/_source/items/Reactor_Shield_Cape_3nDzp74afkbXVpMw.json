@@ -1,58 +1,20 @@
 {
+  "_id": "3nDzp74afkbXVpMw",
   "name": "Reactor Shield Cape",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/equipment/back/cape-layered-orange.webp",
   "system": {
-    "description": {
-      "value": "<p>As a reaction to taking energy damage, gain resistance until end of your next turn (3/day).</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 3,
-      "units": "lb"
-    },
-    "price": {
-      "value": 2100,
-      "denomination": "gp"
-    },
-    "rarity": "rare",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "reactor-shield-cape",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>A cape of reactor-cloth that drinks heat, charge and the slow light. When a hit of that kind lands, the cape flares and takes half of it.</p><p><b>Reactor Shield.</b> As a reaction to taking electrical, thermal or radiation damage, halve it. Three times per session.</p>",
+      "chat": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": []
-    },
     "fourththing": {
       "rfi": {
         "item": {
@@ -63,39 +25,62 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 2,
-            "notes": "TII vestment stamp × rarity 2.0 (untiered pass 2026-10-12)",
+            "notes": "TII vestment stamp × rarity 2.0",
             "bound": "free",
             "saleBack": 180
           },
-          "legacySystem": {
-            "description": {
-              "value": "<p>As a reaction to taking radiation damage, gain resistance until end of your next turn (3/day).</p>"
-            }
-          },
           "tier": "II",
-          "frame": "vestment"
+          "frame": "vestment",
+          "bound": "free",
+          "origin": "looted",
+          "reach": "self",
+          "footprint": 1
         }
-      }
+      },
+      "triggers": [
+        {
+          "event": "on-incoming-damage",
+          "predicate": {
+            "tag": [
+              "electrical",
+              "thermal",
+              "radiation"
+            ]
+          },
+          "limit": {
+            "window": "session",
+            "uses": 3
+          },
+          "offer": true,
+          "offerText": "Reactor Shield Cape — reaction: the cape takes half of this electrical / thermal / radiation hit (the difference is refunded).",
+          "effect": {
+            "kind": "modify-incoming-damage",
+            "args": {
+              "mode": "half"
+            }
+          }
+        }
+      ]
     }
   },
   "effects": [],
   "folder": "Wxh1A343inwTUeoo",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834193916,
-    "modifiedTime": 1782167282784,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1700000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "3nDzp74afkbXVpMw",
-  "sort": 1700000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988913465,
+    "modifiedTime": 1792988913466,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!3nDzp74afkbXVpMw"
 }

@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Rally the Standard</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> softPower 15, diplomacy 10</p></div>",
+      "value": "<p><strong>Rally the Standard</strong></p><p>Siege, attacker; needs a Harmony Marshal on your roster. The standard rises and the supply train steadies: siege Buffer +2 marks (logistics) and Loyalty +1. In the clash: 15 marks off the Buffer.</p><p><em>Queued on the turn: Soft Power 15 · Diplomacy 10 marks. Fired in the clash: 15 marks from the siege Buffer.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "cls_marshal"
+      "key": "cls_marshal",
+      "effects": {
+        "text": "Siege, attacker; needs a Harmony Marshal on your roster. The standard rises and the supply train steadies: siege Buffer +2 marks (logistics) and Loyalty +1. In the clash: 15 marks off the Buffer."
+      }
     }
   },
   "_id": "HYDs8lJwQ6IZ6RbX",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601770,
-    "modifiedTime": 1782703702693,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989009426,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

@@ -19,7 +19,7 @@
     "fourththing": {
       "rfi": {
         "item": {
-          "tier": "I",
+          "tier": "II",
           "frame": "sigil",
           "bound": "free",
           "materialOf": [
@@ -43,15 +43,15 @@
             "origin": "septcraft"
           },
           "price": {
-            "marks": 120,
+            "marks": 360,
             "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI sigil × 1.20 × tech 2.0",
+            "notes": "TII sigil × 1.20 × tech 2.0",
             "bound": "free",
-            "saleBack": 48
+            "saleBack": 144
           }
         }
       }
@@ -65,12 +65,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1778963342717,
-    "modifiedTime": 1782159946545,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988919843,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

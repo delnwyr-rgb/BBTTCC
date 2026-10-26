@@ -65,8 +65,7 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!cxjYHCgiwpcvCpvO.em0kCa3kGAPKiubl"
+      }
     }
   ],
   "folder": "TNrB6kEiHS0KwwJT",
@@ -75,12 +74,12 @@
     "default": 0
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1780000000000,
-    "modifiedTime": 1781742902260,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988952490,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
@@ -92,7 +91,7 @@
     "resistances": [
       "qliphothic"
     ],
-    "armorSkill": "plating",
+    "armorSkill": "fitting",
     "equipped": false,
     "tags": [
       "light",
@@ -103,7 +102,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A long frontier coat with hex-script stitched into the lining and threshold-wax worked into the seams. Light enough to ride in, warded enough to sleep in. The wrongness slides off it like rain off oilcloth.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Light</p></li><li><p><strong>Defense:</strong> Guard +2, Resolve +1</p></li><li><p><strong>Requires:</strong> Plating (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 400 Nonlethal marks</p></li></ul>",
+      "value": "<p>A long frontier coat with hex-script stitched into the lining and threshold-wax worked into the seams. Light enough to ride in, warded enough to sleep in. The wrongness slides off it like rain off oilcloth.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Light</p></li><li><p><strong>Defense:</strong> Guard +2, Resolve +1</p></li><li><p><strong>Requires:</strong> Fitting (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 450 Nonlethal marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -140,15 +139,15 @@
             "threshold-wax"
           ],
           "price": {
-            "marks": 400,
+            "marks": 450,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TII light armor — qliphothic ward",
+            "rarityMult": 2,
+            "notes": "TII armor × attuned × rarity 2",
             "bound": "attuned",
-            "saleBack": 160
+            "saleBack": 180
           },
           "grants": {
             "resistances": [

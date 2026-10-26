@@ -1,0 +1,94 @@
+{
+  "name": "Crystallized Grief",
+  "type": "feat",
+  "img": "icons/commodities/gems/gem-rough-cushion-violet.webp",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [
+      "seed-bestiary-attacks",
+      "tier-i",
+      "role-caster",
+      "passive"
+    ],
+    "description": {
+      "value": "<p>The wraith has resistance to kinetic damage and vulnerability to sephirotic damage. Cannot be Charmed or Shaken (it is already nothing but those things).</p><p><em>Salt remembers what salt is for. The wraith remembers the screaming.</em></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "frame": "trait"
+        }
+      },
+      "grants": {
+        "resistances": [
+          "kinetic"
+        ],
+        "conditionImmunities": [
+          "charmed",
+          "shaken"
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Salt Wraith"
+        ],
+        "sourceIds": [
+          "RQeXqKj5Q5fNLeRw"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "sATWSCqzpvbtKb7f",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069925,
+    "modifiedTime": 1792989070006,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!sATWSCqzpvbtKb7f"
+}

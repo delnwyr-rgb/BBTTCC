@@ -1,0 +1,50 @@
+{
+  "name": "Form of the Trusted",
+  "type": "feat",
+  "img": "icons/equipment/head/hood-cloth-teal.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Deceiver reshapes into someone the target trusts — living or dead. A suspicious observer may roll Mind (insight) vs DC 16 to catch the wrongness: the shadow it casts is not the shape it wears.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "XsNMQHpYWnlgFTFU",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Whispering Deceiver"
+        ],
+        "sourceIds": [
+          "hIOAU3bYR4KkdPhw"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069930,
+    "modifiedTime": 1792989070014,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!XsNMQHpYWnlgFTFU"
+}

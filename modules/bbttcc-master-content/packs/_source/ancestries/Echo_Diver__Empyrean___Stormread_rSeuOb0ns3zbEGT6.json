@@ -7,7 +7,7 @@
     "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-echo-diver=\"v1\" style=\"display:none\"></div><p><em>\"It's not that you're faster. It's that the moment is slower, on your side of it.\"</em></p><p><strong>Stormread Initiative (passive).</strong> Flat +2 bonus to initiative — auto-applied via system.derived.initiative.bonus.</p><p><strong>Stormread (1/Soma Break).</strong> Bonus action — deliver a warning to one willing ally within 6 squares who can hear and understand you. That ally may immediately use their reaction to move up to half their speed without provoking reaction strikes.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDivEmpyreanStormread\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Stormread</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (active) + passive +2 init  ·  <strong>Action:</strong> Picker (Stormread · Stormread Initiative)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Active: bonus-action ally warning grants them a half-speed reaction-move w/o provoking. Passive: +2 initiative auto-applied.</span></p></div>",
+      "value": "<p><em>\"It's not that you're faster. It's that the moment is slower, on your side of it.\"</em></p><p><strong>Stormread Initiative (passive).</strong> Flat +2 bonus to initiative.derived.initiative.bonus.</p><p><strong>Stormread (1/Soma Break).</strong> Bonus action — deliver a warning to one willing ally within 6 squares who can hear and understand you. That ally may immediately use their reaction to move up to half their speed without provoking reaction strikes.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDivEmpyreanStormread\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Stormread</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (active) + passive +2 init  ·  <strong>Action:</strong> Picker (Stormread · Stormread Initiative)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Active: bonus-action ally warning grants them a half-speed reaction-move w/o provoking. Passive: +2 initiative auto-applied.</span></p></div>",
       "chat": ""
     },
     "advancement": {},
@@ -16,7 +16,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -33,14 +33,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "echo_diver",
       "feature": "stormread",
       "lineage": "Empyrean",
-      "tierLevel": 1,
       "version": "1.1.0",
       "date": "2026-04-19",
       "rfiNative": true
@@ -48,10 +44,7 @@
     "fourththing": {
       "grants": {
         "resistances": [
-          {
-            "type": "energy",
-            "flavor": "lightning"
-          },
+          "electrical",
           {
             "type": "kinetic",
             "flavor": "thunder"
@@ -254,12 +247,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776660294504,
-    "modifiedTime": 1782167240136,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988968399,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

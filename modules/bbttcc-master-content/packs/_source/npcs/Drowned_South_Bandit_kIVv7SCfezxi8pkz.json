@@ -44,8 +44,8 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 11,
-        "max": 11,
+        "value": 25,
+        "max": 25,
         "temp": 0
       },
       "stress": {
@@ -171,8 +171,8 @@
       "fragments": []
     },
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Humanoid",
+      "notes": "A Drowned South bandit who has heard the stories: the Stewards take prisoners — alive ones. Ambushes with one eye on the exit and the other on the REFORMED column outside the Muster. The current Road Bandit build (2026-10-13); spawns in the ambushes that come after the first, as the Bandit Accord unfolds."
     },
     "description": "<p><strong>Concept.</strong> The bottom rung of every raider warband. Somebody's cousin with a pipe rifle and a bad plan.</p>\n<p><strong>Signature.</strong> Fires the first shot a full second before anyone told them to.</p>"
   },
@@ -235,7 +235,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> range 60/180 ft., one target. Damage: <code>1d8</code> kinetic + violence. On a hit against a target that hasn't acted yet this combat, the damage die rerolls the lowest.</p><p><em>Held together with tape and confidence.</em></p>"
+          "value": "<p><strong>Strike.</strong> range 60/36 squares., one target. Damage: <code>1d8</code> kinetic + violence. On a hit against a target that hasn't acted yet this combat, the damage die rerolls the lowest.</p><p><em>Held together with tape and confidence.</em></p>"
         }
       },
       "_id": "KFZIeEHFYApDPk0X",
@@ -440,6 +440,17 @@
             ]
           }
         }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791944537915,
+        "modifiedTime": 1792977790091,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
       }
     },
     {
@@ -477,6 +488,17 @@
             }
           ]
         }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.17",
+        "createdTime": 1791944537915,
+        "modifiedTime": 1791944537915,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
       }
     },
     {
@@ -537,7 +559,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. On a hit against a Prone or Restrained target, +1d4 kinetic.</p><p><em>Nobody's proud of the shiv.</em></p>"
+          "value": "<p><strong>Strike.</strong> reach 1 square., one target. Damage: <code>1d6</code> kinetic + violence. On a hit against a Prone or Restrained target, +1d4 kinetic.</p><p><em>Nobody's proud of the shiv.</em></p>"
         }
       },
       "_id": "kIgZynYLQa4fMhAG",
@@ -748,6 +770,17 @@
             ]
           }
         }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791944537915,
+        "modifiedTime": 1792977790091,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
       }
     },
     {
@@ -791,18 +824,30 @@
             ]
           }
         }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.17",
+        "createdTime": 1791944537915,
+        "modifiedTime": 1791944537915,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
       }
     }
   ],
   "effects": [],
   "ownership": {
     "default": 0,
-    "PEWWUtMPC7h7WMIt": 3
+    "PEWWUtMPC7h7WMIt": 3,
+    "bytUGWIOqq9eT7Or": 3
   },
   "_id": "kIVv7SCfezxi8pkz",
   "prototypeToken": {
     "name": "Drowned South Bandit",
-    "displayName": 0,
+    "displayName": 30,
     "actorLink": false,
     "width": 1,
     "height": 1,
@@ -821,7 +866,7 @@
     "rotation": 0,
     "alpha": 1,
     "disposition": -1,
-    "displayBars": 0,
+    "displayBars": 30,
     "bar1": {
       "attribute": null
     },
@@ -854,7 +899,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -914,7 +959,20 @@
           "title": "Humanoid"
         }
       },
-      "creatureType": "humanoid"
+      "creatureType": "humanoid",
+      "kind": "monster"
     }
-  }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791944537915,
+    "modifiedTime": 1792989138980,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!kIVv7SCfezxi8pkz"
 }

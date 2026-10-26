@@ -1,0 +1,294 @@
+{
+  "name": "Dunmore Kell",
+  "type": "npc",
+  "_id": "zJfy0z0sWrjzCjh6",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "role": "",
+    "tier": 1,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 1
+      },
+      "body": {
+        "value": 1
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 10,
+        "max": 10,
+        "temp": 0
+      },
+      "stress": {
+        "value": 8,
+        "max": 8
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "Basin Sexton, sweeping round the first of the Lost Stone Statues (Act 3)",
+      "notes": "Dunmore Kell is the Basin Sexton. He sweeps the plains basin around the first of the standing stone figures with a broom older than the road, and does it properly. He doesn't stop sweeping when you arrive. He keeps the book of everyone who ever tried the pickets, which is what he calls the statues, never 'statues'. He is short, dry and kind underneath. 'Sign the book after, not before. Before is bragging.'"
+    }
+  },
+  "prototypeToken": {
+    "name": "Dunmore Kell",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [],
+  "effects": [],
+  "folder": "UAHVCMVXEDT8Q1B1",
+  "sort": 387500,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "npc"
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the basin, the broom, the pickets, the book, the column, answerable, stood, took, and said so, the post, kin, stone, sweeping, the Garden, the third one, the water",
+        "notes": "[LOST-STATUES-RETROFIT-2026-09-30] PRIVATE TRUTH — Dunmore Kell, the Basin Sexton. An old Menhirkin (the faint grain of stone in the skin, if you know to look) who sweeps the plains basin around the first statue with a broom older than the road, and does it properly. He keeps THE BOOK: everyone who ever tried the pickets and how. VOICE: does not stop sweeping when you arrive; short, dry, kind underneath; \"sign the book after, not before — before is bragging.\" Calls the statues \"the pickets\" and never \"statues\". THE COLUMN (his whole test): the book has one column and it is titled ANSWERABLE; STOOD and TOOK are both in it; the grade is whether the person told him THEMSELVES, before he asked. \"TOOK, AND SAID SO\" is on a line by itself. For a Steward who tells the truth of the first fragment unprompted he tears out their line — which a Sexton never does — and tells them to set it down in the water at the third one, without a speech. KIN (only if shown stone-sign or asked what he is): the pickets are kin — not his, everybody's; they walked out to stand at a post and are still standing at it two hundred years on, which earns somebody to sweep. He says the word \"Garden\" once, as a place, and refuses everything else: not what post, not what they hold, not who is missing. Owner slots — never improvise them.",
+        "secretsRaw": "The Book :: forceReroll :: a Steward tells him truthfully how they took the first fragment, before he asks :: He writes it down without looking at you. The book goes back further than the road. Restraint and force are in the same column; the column is titled ANSWERABLE, and the entries are graded by whether the person told him themselves.\nKin :: rollPlus2 :: a Steward shows him stone-sign, or asks him what he is :: Menhirkin. The pickets are kin — not his, everybody's. They walked out here to stand at a post, and they are still standing at it, and a thing still standing at its post two hundred years on has earned somebody to sweep. Three of the hundred: one of them walked off his post, and these three walked out to cover it, short-handed, and have been short-handed since. He will not say what they hold; he looks at the mountains when he doesn't say it. He says the word 'Garden' once, as the place they left."
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1791317103700,
+    "modifiedTime": 1791328212337,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!zJfy0z0sWrjzCjh6"
+}

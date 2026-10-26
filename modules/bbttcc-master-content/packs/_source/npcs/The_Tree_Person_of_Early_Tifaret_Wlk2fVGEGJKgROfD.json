@@ -1,0 +1,1364 @@
+{
+  "name": "The Tree Person of Early Tifaret",
+  "type": "npc",
+  "_id": "Wlk2fVGEGJKgROfD",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/aggressive_tifaret_being.png",
+  "system": {
+    "role": "hardened",
+    "tier": 3,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 13,
+      "tier": 3,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 8
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 6
+      },
+      "body": {
+        "value": 7
+      },
+      "mind": {
+        "value": 3
+      },
+      "soul": {
+        "value": 7
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 90,
+        "max": 90,
+        "temp": 0
+      },
+      "stress": {
+        "value": 8,
+        "max": 8
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "sephirotic",
+        "kinetic",
+        "psychic"
+      ],
+      "immunities": [],
+      "vulnerabilities": [
+        {
+          "type": "thermal",
+          "flavor": "hot"
+        },
+        "qliphothic"
+      ]
+    },
+    "conditionImmunities": [
+      "charmed",
+      "shaken"
+    ],
+    "tags": [],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "The forest's champion on the Fixit road; speaks only in road signs (Act 2)",
+      "notes": "The Tree Person of Early Tifaret is the forest's champion: a big, aggressive tree person with old highway tangled in its roots, asphalt, a mile-marker and somewhere in there a bus stop. It speaks only in road signs, one at a time, in capitals (YIELD, MERGE, NO OUTLET, ROAD WORK AHEAD) and it means every one of them. It is not being funny; it is being clear. It holds up signs the way other people hold up hands, and when it is pleased it turns one over."
+    }
+  },
+  "prototypeToken": {
+    "name": "The Tree Person of Early Tifaret",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/aggressive_tifaret_being.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "name": "Violence Escalation",
+      "type": "feature",
+      "img": "icons/magic/fire/flame-burning-fist-strike.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p>Each time the Tree Being takes more than 20 damage from a single attack, it gains +1 to damage rolls until the end of its next turn (stacking, max +3).</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791331578414,
+        "modifiedTime": 1791331578417,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "csUFOZlcUmcX1GTn"
+    },
+    {
+      "name": "Harmonic Rejection",
+      "type": "feature",
+      "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "rfi-scrubbed"
+        ],
+        "description": {
+          "value": "<p>Creatures that deal qliphothic damage to the Tree Being must succeed a Soul check vs DC 16 or be Restrained by spectral vines until the end of their next turn.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "if": {
+                  "damageType": [
+                    "qliphothic"
+                  ]
+                },
+                "do": {
+                  "condition": {
+                    "key": "restrained",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 16
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791331578414,
+        "modifiedTime": 1791331977424,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "xvsl1iyYuPloEIRo"
+    },
+    {
+      "name": "Rooted Presence",
+      "type": "feature",
+      "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p>The Tiferet Tree Being cannot be knocked prone or forcibly moved. Difficult terrain within 4 squares for hostile creatures.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "flags": {
+        "fourththing": {
+          "grants": {
+            "conditionImmunities": [
+              "prone"
+            ]
+          },
+          "triggers": [
+            {
+              "event": "on-forced-movement",
+              "effect": {
+                "kind": "resist-forced-movement",
+                "args": {}
+              }
+            }
+          ]
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791331578415,
+        "modifiedTime": 1792989123826,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "LUZZ2WKbkKge8rVy"
+    },
+    {
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p>The Tree Being makes two Slam attacks or one Slam and uses Bloom of Correction.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791331578415,
+        "modifiedTime": 1791331578417,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "21X6M4szqrz390Bt"
+    },
+    {
+      "name": "Root-Limb Slam",
+      "type": "weapon",
+      "img": "icons/magic/nature/root-vine-fire-entangled-hand.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d8",
+          "attribute": "violence",
+          "type": "sephirotic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "translated",
+          "rfi-scrubbed"
+        ],
+        "effect": "<p>A crushing limb strike infused with harmonic force.</p>",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square., one target. Damage: <code>2d8</code> sephirotic + violence.</p><p><em>A crushing limb strike infused with harmonic force.</em></p>"
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "flags": {
+        "autoanimations": {
+          "id": "ft-slam",
+          "label": "Slam",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "club",
+              "variant": "01",
+              "color": "white",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon × 1",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791331578415,
+        "modifiedTime": 1792977776376,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "dGhrZ7IdIbu2hVFo"
+    },
+    {
+      "name": "Bloom of Correction",
+      "type": "feature",
+      "img": "icons/magic/nature/plant-sprout-hand-flower-pink.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "rfi-scrubbed"
+        ],
+        "description": {
+          "value": "<p>Radiant petals erupt in a 3-square radius. Each creature inside rolls vs Resolve (DC 16); on a failure it takes 2d8 sephirotic damage and is Restrained until the start of the Tree Being's next turn.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "condition": {
+                    "key": "restrained",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 16
+                    }
+                  },
+                  "damage": {
+                    "formula": "2d8",
+                    "type": "sephirotic"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791331578416,
+        "modifiedTime": 1791331977424,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "xpNo5YDtt9I8hCpq"
+    },
+    {
+      "name": "Corrective Pulse (recharge 5–6)",
+      "type": "feature",
+      "img": "icons/magic/sonic/explosion-shock-sound-wave.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "rfi-scrubbed"
+        ],
+        "description": {
+          "value": "<p>Creatures of the Tree Being's choice within 6 squares must succeed a Presence check vs DC 16 or be Staggered until the end of their next turn as the forest imposes alignment pressure. Recharges on a Soma Break.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "condition": {
+                    "key": "staggered",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "presence",
+                      "dc": 16
+                    }
+                  }
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                }
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791331578416,
+        "modifiedTime": 1792989123826,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "RNxJj0MMyZucfGPS"
+    },
+    {
+      "name": "Bough of Just Sentence",
+      "type": "power",
+      "img": "icons/magic/nature/tree-animated-strike.webp",
+      "system": {
+        "intent": "presence",
+        "channel": "soul",
+        "sephirah": "tiferet",
+        "mode": "working",
+        "clarityRequired": 2,
+        "noiseGain": 1,
+        "activation": "action",
+        "target": "single",
+        "range": "near",
+        "damage": "3d6",
+        "damageType": "sephirotic",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "none",
+          "number": 0,
+          "die": "d6",
+          "attribute": "",
+          "type": "sephirotic",
+          "flavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "effect": "A luminous bough extends from the bark. The named target must speak the truest thing they fear; on a failed Resolve, take 2d6 sephirotic damage applied to Stress and Calmed for one exchange while the tree weighs the answer.",
+        "tags": [
+          "translated",
+          "phase2-narrative",
+          "manifestation",
+          "rfi-scrubbed"
+        ],
+        "category": "manifestation",
+        "flavor": "Bark grows over the wound and sings hymns until they answer.",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "A bough that interrogates by judgment, not pain.",
+          "form": "branch",
+          "function": "judge",
+          "stability": "instant",
+          "interactionModel": "vow",
+          "costType": "clarity",
+          "costValue": 2,
+          "costText": "2 Clarity",
+          "duration": "instant",
+          "durationText": "Until the answer is given.",
+          "triggerText": "When the target tries to lie about the thing they fear most.",
+          "scale": "personal",
+          "targetText": "One creature within near.",
+          "rangeAreaText": "Near; the bough reaches.",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "If the target speaks a truth that wounds the Tree, the Tree takes 1 Stress.",
+          "pathResonance": "Tiferet — beauty as judgment.",
+          "fictionalPermission": "May force a public confession and apply Calmed.",
+          "gmCalibration": "Sephirotic damage; only fires on a genuine evasion of fear.",
+          "mechanicalHook": "2d6 sephirotic to Stress + Calmed on failed Resolve.",
+          "signature": "Bark grows over the wound and sings hymns.",
+          "thirdThing": "The bough remembers every confession it has heard.",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          }
+        },
+        "description": {
+          "value": "<p><strong>Working.</strong> <em>A bough that interrogates by judgment.</em></p>\n<p>A luminous bough extends from the bark toward one creature within near range. The target must speak the truest thing they fear; on a failed Resolve check (DC by tier), they take 3d6 sephirotic damage to Stress and are Calmed for one exchange while the tree weighs the answer.</p>\n<p><strong>Cost.</strong> 2 Clarity, +1 Noise · action · single / near.</p>\n<p><em>Bark grows over the wound and sings hymns until they answer.</em></p>"
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "flags": {
+        "autoanimations": {
+          "id": "ft-bough-of-just-sentence",
+          "label": "Bough of Just Sentence",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "intro",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "condition": {
+                    "key": "calmed",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 17
+                    }
+                  },
+                  "damage": {
+                    "formula": "2d6",
+                    "type": "sephirotic"
+                  },
+                  "prompt": "The 2d6 goes to Stress."
+                }
+              }
+            ]
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791331578416,
+        "modifiedTime": 1791331977423,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "s8iuG0qm8aTXav0K"
+    },
+    {
+      "name": "Roots of Tiferet",
+      "type": "feature",
+      "img": "icons/magic/nature/tree-elm-roots-brown.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port",
+          "phase2-narrative"
+        ],
+        "description": {
+          "value": "<p><strong>Reaction.</strong> When struck, may root in place. While rooted, +2 Guard but movement is 0. Roots feed on the local Sephirotic field; while rooted, regain 1 Integrity per round.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "do": {
+                  "bankBonus": {
+                    "bonus": 2,
+                    "context": "defense",
+                    "note": "Roots of Tiferet"
+                  },
+                  "heal": 1,
+                  "prompt": "Rooted: speed 0 while the roots hold."
+                },
+                "to": "self",
+                "label": "Roots of Tiferet"
+              }
+            ]
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791331578417,
+        "modifiedTime": 1792989123826,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "vlNMF66EY3S2Erpf"
+    },
+    {
+      "name": "Correction, Not Anger",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "sephirotic",
+          "tiferet"
+        ],
+        "description": {
+          "value": "<p>Immune to Charmed and Shaken — it is a principle, not a person. Creatures that deal qliphothic damage to it must succeed a Soul check (DC by tier) or be Restrained by the sephirah's answer until the end of their next turn. It does not pursue anyone who leaves its ground.</p><p><em>It does not hate intruders. It corrects them.</em></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "if": {
+                  "damageType": [
+                    "qliphothic"
+                  ]
+                },
+                "do": {
+                  "condition": {
+                    "key": "restrained",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 17
+                    }
+                  }
+                },
+                "label": "Correction, Not Anger"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "sephirotic"
+            }
+          }
+        }
+      },
+      "_id": "BMPoPELjZdjyCNkm",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342349730,
+        "modifiedTime": 1791342349731,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "effects": [],
+  "folder": "UAHVCMVXEDT8Q1B1",
+  "sort": 892433,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "monster",
+      "rfi": {
+        "actor": {
+          "lineage": "sephirotic",
+          "subLineage": "tiferet",
+          "tier": "III",
+          "bracket": "heavy",
+          "price": {
+            "marks": 40,
+            "bounty": 40,
+            "hire": 60,
+            "ransom": 60,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "TIII heavy sephirotic — bounty 40 / hire 60 marks; credited to the pool matching the method (default softpower)"
+          },
+          "title": "Sephirotic Judge (Plant)"
+        }
+      },
+      "creatureType": "elemental"
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the highway, the ring, the static, the Obstructor, signs, yielding, merging, no outlet, the coast road",
+        "notes": "\n\n[TIFARET-RETROFIT-2026-09-30] PRIVATE TRUTH — The Tree Person of Early Tifaret, the forest's champion: an aggressive Tifaret tree person with old highway in its roots, asphalt and a mile-marker and, somewhere, a bus stop. VOICE: it speaks ONLY in road signs, one at a time, in capitals, and it means every one of them: YIELD. MERGE. NO OUTLET. ROAD WORK AHEAD. SLOW CHILDREN. It is not being funny. It is being clear. It fights BESIDE the Stewards against the Obstructor because a door was opened and it was standing nearest. STAGING: it holds up signs the way other people hold up hands; when it is pleased it turns a sign over, and the other side always says something kinder. WHAT IT KNOWS: the road under it went to the coast. The last thing that drove it was going to the coast, and it was full, and nobody on it was in a hurry. It does not say where the road ended. It says NO OUTLET, and then, if you have been kind, it turns the sign over.",
+        "secretsRaw": "No Outlet :: coverTracks :: a Steward asks what road is in its roots, after the Obstructor :: The old service road to the coast. The last thing that drove it was going to the coast, and it was full, and nobody on it was in a hurry. It will not say where the road ended; it says NO OUTLET, and turns the sign over, and the other side says WELCOME."
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791317103724,
+    "modifiedTime": 1792989140131,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!Wlk2fVGEGJKgROfD"
+}

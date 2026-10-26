@@ -70,22 +70,22 @@
     catch (e) { return ui.notifications?.error?.(`${TAG} Pack is locked and unlock failed — unlock it in Compendium settings, then re-run.`); }
   }
 
+  // Costs are MARKS (the registry's unit); channel names are the player-facing ones. DC7 (2026-10-26).
+  const CH = { violence:"Violence", nonlethal:"Nonlethal", intrigue:"Intrigue", economy:"Economy", softpower:"Soft Power", diplomacy:"Diplomacy", logistics:"Logistics", culture:"Culture", faith:"Faith" };
   const fmtCost = (spec) => {
     const c = spec?.cost || spec?.opCosts || {};
     const parts = [];
-    for (const [k, v] of Object.entries(c)) { const n = Number(v || 0); if (n) parts.push(`${k} ${n}`); }
-    return parts.join(", ");
+    for (const [k, v] of Object.entries(c)) { const n = Number(v || 0); if (n) parts.push(`${CH[String(k).toLowerCase()] || k} ${n}`); }
+    return parts.length ? `${parts.join(" · ")} marks` : "";
   };
   const buildDesc = (c) => {
     const s = c.spec || {};
     const text = String(s.text || s.description || "").trim() || "<em>No rules text registered.</em>";
     const cost = fmtCost(s);
-    const rts = Array.isArray(s.raidTypes) ? s.raidTypes.join(", ") : "";
+    // DC7 (2026-10-26): rule + "Cost: … marks" only — no Tier / Rarity / Raid Types meta lines, no dev footer, in the player card.
+    // (tier / rarity / raidTypes stay on flags.bbttcc.meta and in the console tooltip.)
     let html = `<div class="bbttcc-doctrine-desc"><h3>${c.label}</h3><p>${text}</p>`;
-    if (cost) html += `<p><strong>OP Cost:</strong> ${cost}</p>`;
-    if (s.tier != null && s.tier !== "") html += `<p><strong>Tier:</strong> ${s.tier}</p>`;
-    if (s.rarity) html += `<p><strong>Rarity:</strong> ${s.rarity}</p>`;
-    if (rts) html += `<p><strong>Raid Types:</strong> ${rts}</p>`;
+    if (cost) html += `<p><strong>Cost:</strong> ${cost}</p>`;
     html += `</div>`;
     return html;
   };

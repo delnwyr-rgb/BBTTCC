@@ -7,43 +7,83 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p><strong>Attack.</strong> If the stalker is hidden from a target when it hits it, the hit deals an extra 7 (2d6) damage and the target must succeed on a DC 13 Violence check or be knocked prone.</p>",
+      "value": "<p>If the stalker is hidden from a target when it hits it, the hit deals +2d6 kinetic and the target must succeed a Body check vs DC 13 or be knocked Prone.</p>",
       "chat": ""
     }
   },
-  "_id": "B9qU5LCtS9Li1RSs",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "do": {
+              "damage": {
+                "formula": "2d6",
+                "type": "kinetic"
+              }
+            },
+            "label": "Ambush Strike — from hiding",
+            "if": {
+              "ownerHidden": true
+            }
+          },
+          {
+            "on": "hit",
+            "do": {
+              "condition": {
+                "key": "prone",
+                "duration": "1-round",
+                "save": {
+                  "attr": "body",
+                  "dc": 13
+                }
+              }
+            },
+            "if": {
+              "ownerHidden": true
+            }
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Tier 2 Predator (Wastes Stalker)"
+          "Wastes Stalker"
+        ],
+        "sourceIds": [
+          "BYUSNIOicg4IZn6W"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "B9qU5LCtS9Li1RSs",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167244989,
-    "modifiedTime": 1782167244989,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989017558,
+    "modifiedTime": 1792989017558,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!B9qU5LCtS9Li1RSs"
 }

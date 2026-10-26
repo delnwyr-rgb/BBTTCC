@@ -7,7 +7,7 @@
     "intent": "violence",
     "skill": "melee",
     "damage": {
-      "formula": "1d6",
+      "formula": "1d4",
       "attribute": "violence",
       "type": "qliphothic",
       "damageFlavor": "hex-pus",
@@ -54,6 +54,12 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "imposed"
+        ],
+        "duration": "1-round"
       }
     },
     "description": {
@@ -61,7 +67,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -82,19 +87,8 @@
         }
       }
     },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Hex-Touched Stray"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
-      }
-    },
     "autoanimations": {
-      "id": "3ec0a653-0b14-48d7-ac1d-6504a5aff32a",
+      "id": "ft-yellowing-bite",
       "label": "Yellowing Bite",
       "macro": {
         "enable": false,
@@ -269,24 +263,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Hex-Touched Stray"
+        ],
+        "sourceIds": [
+          "tXgo1gl88cgf1hcc"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "PPj2pRjsZOfqjjgp",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024232044,
-    "modifiedTime": 1782167244997,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989052666,
+    "modifiedTime": 1792989052666,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!PPj2pRjsZOfqjjgp"
 }

@@ -7,7 +7,7 @@
     "intent": "soul",
     "skill": "channel",
     "damage": {
-      "formula": "2d6",
+      "formula": "1d12",
       "attribute": "soul",
       "type": "psychic",
       "damageFlavor": "a thought that won't finish",
@@ -23,7 +23,7 @@
       "qliphothic",
       "debuff"
     ],
-    "effect": "20 ft. sphere. Mind vs DC 15. Fail: 2d6 psychic to Stress and Compelled to repeat its last action next turn.",
+    "effect": "4 squares. sphere. Mind vs DC 15. Fail: 2d6 psychic to Stress and Compelled to repeat its last action next turn.",
     "flavor": "",
     "manifestation": {
       "tier": 1,
@@ -54,6 +54,24 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "mind",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 15,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "compelled"
+        ],
+        "duration": "1-round"
+      },
+      "area": {
+        "shape": "sphere",
+        "size": 20
       }
     },
     "description": {
@@ -61,7 +79,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -84,17 +101,6 @@
             "saleBack": 60
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Please-Stop-Hitting-Yourself (Qliphothic Loop)"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
       }
     },
     "autoanimations": {
@@ -273,24 +279,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Please-Stop-Hitting-Yourself (Qliphothic Loop)"
+        ],
+        "sourceIds": [
+          "ipexaGZlhurZKpc3"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
   "_id": "JRDGod907VJLFl3d",
   "sort": 0,
+  "folder": null,
   "ownership": {
-    "default": 0
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1780000000000,
-    "modifiedTime": 1782167244993,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989040421,
+    "modifiedTime": 1792989040421,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
   },
-  "folder": null,
   "_key": "!items!JRDGod907VJLFl3d"
 }

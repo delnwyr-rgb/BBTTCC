@@ -1,0 +1,368 @@
+{
+  "name": "Dennis",
+  "type": "npc",
+  "_id": "wphUa2Ps2IybpbVj",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "role": "",
+    "tier": 1,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": "1",
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": "RgpV6bx2Olk9Z4qW",
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 1
+      },
+      "body": {
+        "value": 1
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {
+      "brawl": {
+        "value": 0
+      },
+      "melee": {
+        "value": 0
+      },
+      "firearms": {
+        "value": 0
+      },
+      "athletics": {
+        "value": 0
+      },
+      "stealth": {
+        "value": 0
+      },
+      "hacking": {
+        "value": 0
+      },
+      "tinkering": {
+        "value": 0
+      },
+      "piloting": {
+        "value": 0
+      },
+      "streetwise": {
+        "value": 0
+      },
+      "fitting": {
+        "value": 0
+      },
+      "diplomacy": {
+        "value": 0
+      },
+      "intimidation": {
+        "value": 0
+      },
+      "empathy": {
+        "value": 0
+      },
+      "performance": {
+        "value": 0
+      },
+      "perception": {
+        "value": 0
+      },
+      "investigation": {
+        "value": 0
+      },
+      "lore": {
+        "value": 0
+      },
+      "occult": {
+        "value": 0
+      },
+      "faith": {
+        "value": 0
+      },
+      "meditation": {
+        "value": 0
+      },
+      "ritual": {
+        "value": 0
+      },
+      "insight": {
+        "value": 0
+      },
+      "bracing": {
+        "value": 0
+      },
+      "plating": {
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 10,
+        "max": 13,
+        "temp": 0
+      },
+      "stress": {
+        "value": 8,
+        "max": 13
+      },
+      "guard": {
+        "value": 12
+      },
+      "evasion": {
+        "value": 12
+      },
+      "resolve": {
+        "value": 12
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": "",
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "Circuit Rider tinkerer and self-described regrettable hypothesis (Act 2-3)",
+      "notes": "Dennis is the Circuit Riders' regrettable but occasionally necessary hypothesis, and he is delighted to be called that. He is bright-eyed and fast, usually half inside a machine panel, and pleased by every new problem; he tests edge cases before they become funerals. His motto: speed without verification is just panic with branding. He named the anxious robot the size of a skyscraper 'the Colossus, provisionally', and he means the 'provisionally'."
+    }
+  },
+  "prototypeToken": {
+    "name": "Dennis",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [],
+  "effects": [],
+  "folder": "Z3bqaptcJ3FkGa2I",
+  "sort": 225000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "npc",
+      "surgeEnabled": false
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "secretsRaw": "Probably Fine Is Not Load-Bearing :: stirThePot :: a Steward asks Dennis which of his theories should have stayed a draft :: Dennis had a theory that should have stayed a draft, and 'probably fine' turned out not to be a load-bearing phrase. Produced in court, it stirs the pot: somebody's confident plan gets asked for its aftermath.",
+        "topics": "hypotheses, drafts, probably fine, speed, verification, branding, the Colossus, delight",
+        "notes": "[RIDERS-RETROFIT-2026-09-27] VOICE — Dennis is the regrettable but occasionally necessary hypothesis, and is delighted by everything, including being called that. Fast, bright, load-bearing phrases are his hobby (\"probably fine\" is not one). \"Speed without verification is just panic with branding.\" He named the anxious robot the size of a skyscraper \"the Colossus, provisionally,\" which is a hypothesis. Reads corroboration by asking whether someone did the work of becoming believable."
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1791316997694,
+    "modifiedTime": 1791328210924,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!wphUa2Ps2IybpbVj"
+}

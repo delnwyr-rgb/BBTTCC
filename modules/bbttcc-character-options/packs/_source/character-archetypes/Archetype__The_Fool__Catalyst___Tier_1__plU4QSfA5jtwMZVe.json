@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 (Level 1) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+      "value": "<p><strong>Tier 1 (Level 1) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Perception.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -61,7 +61,7 @@
             "priority": 20
           },
           {
-            "key": "system.skills.athletics.value",
+            "key": "system.skills.perception.value",
             "type": "upgrade",
             "value": 1,
             "phase": "initial",
@@ -79,17 +79,16 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "systemVersion": "0.6.37",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346195414,
-        "modifiedTime": 1777433499502
+        "modifiedTime": 1792989152770
       },
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!plU4QSfA5jtwMZVe.JoH3gYGJrthivYzI"
+      "folder": null
     }
   ],
   "folder": "lthIAA49boUx7C1S",
@@ -129,12 +128,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986723243,
-    "modifiedTime": 1782167238592,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989152686,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

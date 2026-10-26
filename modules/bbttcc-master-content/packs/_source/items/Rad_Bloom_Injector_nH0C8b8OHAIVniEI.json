@@ -1,157 +1,39 @@
 {
+  "_id": "nH0C8b8OHAIVniEI",
   "name": "Rad‑Bloom Injector",
-  "type": "consumable",
+  "type": "gear",
   "img": "icons/consumables/potions/potion-vial-tube-yellow.webp",
   "system": {
-    "description": {
-      "value": "<p><b>Use:</b> Remove radiation effects from yourself. For the next 10 minutes, you experience vivid hallucinations (GM voice opportunity).</p><p><b>Engine hook:</b> flagged for Bad Eden radiation cleanse.</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 0,
-      "units": "lb"
-    },
-    "price": {
-      "value": 0,
-      "denomination": "gp"
-    },
-    "rarity": "rare",
-    "attunement": "",
-    "identified": true,
-    "uses": {
-      "max": "1",
-      "autoDestroy": true,
-      "spent": 0,
-      "recovery": []
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "type": {
-      "value": "potion",
-      "subtype": ""
-    },
-    "activities": {},
-    "identifier": "radbloom-injector",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "container": null,
-    "attuned": false,
-    "equipped": false,
-    "damage": {
-      "base": {
-        "types": [],
-        "custom": {
-          "enabled": false
-        },
-        "scaling": {
-          "number": 1
-        }
-      },
-      "replace": false
-    },
-    "properties": []
+    "description": {
+      "value": "<p><b>Use:</b> purge every rad from your own body. For the next 10 minutes you see things that are not there, vividly.</p>",
+      "chat": ""
+    }
   },
   "flags": {
     "bbttcc": {
       "tags": [
         "radiation",
         "consumable"
-      ],
-      "radiation": {
-        "cleanse": true
-      }
-    },
-    "rfi": {
-      "item": {
-        "tier": "III",
-        "footprint": 0,
-        "reach": "self",
-        "frame": "consumable",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "none"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
+      ]
     },
     "fourththing": {
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
+            "marks": 180,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 2,
+            "notes": "TIII consumable × rarity 2",
             "bound": "free",
-            "saleBack": 12
-          },
-          "legacySystem": {
-            "description": {
-              "value": "<p><b>Use:</b> Remove radiation effects from yourself. For the next 10 minutes, you experience vivid hallucinations (GM voice opportunity).</p><p><b>Engine hook:</b> flagged for Bad Eden radiation cleanse.</p>",
-              "chat": ""
-            },
-            "quantity": 1,
-            "weight": {
-              "value": 0,
-              "units": "lb"
-            },
-            "price": {
-              "value": 0,
-              "denomination": "gp"
-            },
-            "rarity": "rare",
-            "attunement": "",
-            "identified": true,
-            "uses": {
-              "max": "1",
-              "autoDestroy": true,
-              "spent": 0,
-              "recovery": []
-            },
-            "unidentified": {
-              "description": ""
-            },
-            "type": {
-              "value": "potion",
-              "subtype": ""
-            },
-            "activities": {},
-            "identifier": "radbloom-injector",
-            "source": {
-              "revision": 1,
-              "rules": "2024"
-            },
-            "container": null,
-            "attuned": false,
-            "equipped": false,
-            "damage": {
-              "base": {
-                "types": [],
-                "custom": {
-                  "enabled": false
-                },
-                "scaling": {
-                  "number": 1
-                }
-              },
-              "replace": false
-            },
-            "properties": []
+            "saleBack": 72
           },
           "tier": "III",
           "frame": "consumable",
@@ -170,7 +52,16 @@
             ],
             "decrement": true,
             "target": "self"
-          }
+          },
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {}
         }
       }
     },
@@ -354,22 +245,22 @@
   },
   "effects": [],
   "folder": "TNrB6kEiHS0KwwJT",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834191326,
-    "modifiedTime": 1782159994985,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1500000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "nH0C8b8OHAIVniEI",
-  "sort": 1500000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988913187,
+    "modifiedTime": 1792988913188,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!nH0C8b8OHAIVniEI"
 }

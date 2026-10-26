@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Turn The Card [Option]",
+  "name": "Turn The Card",
   "type": "feat",
   "img": "icons/sundries/gaming/rune-card.webp",
   "system": {
@@ -7,31 +7,37 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Turn The Card [Option]</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> intrigue 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> option</p><p><strong>Raid Types:</strong> espionage, infiltration, propaganda</p></div>",
+      "value": "<p><strong>Turn The Card</strong></p><p>Tarot Mage, pre-roll. Reroll the lowest die on your roll this round.</p><p><em>Cost: Intrigue 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "maneuver",
-      "key": "opt_turn_the_card"
+      "key": "opt_turn_the_card",
+      "effects": {
+        "text": "Tarot Mage, pre-roll. Reroll the lowest die on your roll this round."
+      },
+      "meta": {
+        "storyOnly": false
+      }
     }
   },
   "_id": "nxt3vVVz8wZVUzRW",
   "effects": [],
-  "folder": null,
+  "folder": "SziFuLdTIX4Y2Rav",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601757,
-    "modifiedTime": 1782703702690,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988994981,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

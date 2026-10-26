@@ -122,6 +122,9 @@ export function recipeById(id) {
  *                      no token is created and the actor sits in the directory
  *   - skipCostCheck    GM bypass for paper-testing
  */
+/** RG14 (2026-10-26): structure integrity by recipe bracket — the rig-builder size bases (bbttcc-auto-link rig-builder.js BRACKETS). */
+const STRUCTURE_INTEGRITY = { light: 20, heavy: 48 };
+
 export async function build(recipeId, factionActor, opts = {}) {
   await _loadRecipes();
   const recipe = recipeById(recipeId);
@@ -148,6 +151,11 @@ export async function build(recipeId, factionActor, opts = {}) {
   // there) creates the native RFI rig exactly as before the port.
   const R = game.bbttcc?.rigs;
   const actorName = opts.actorName ?? recipe.name;
+  // RG14 (2026-10-26): integrity follows the recipe's bracket at mint — heavy for facilities, light otherwise — on the
+  // rig-builder size bases. Every structure built before this sat at the template default (medium 30/30) whatever the
+  // recipe said; existing structures keep their play state.
+  const _bracket = recipe.facilityMode ? "heavy" : "light";
+  const _integrityMax = STRUCTURE_INTEGRITY[_bracket] ?? 30;
   const newActor = !R?.create ? await Actor.create({
     name: actorName,
     type: "rig",
@@ -158,7 +166,8 @@ export async function build(recipeId, factionActor, opts = {}) {
         mobility: "stationary",
         state: "parked",
         factionOwnerId: factionActor?.id ?? ""
-      }
+      },
+      integrity: { value: _integrityMax, max: _integrityMax, tier: 1, bracket: _bracket }
     }
   }) : await R.create({
     name: actorName,
@@ -169,7 +178,7 @@ export async function build(recipeId, factionActor, opts = {}) {
       state: "parked",
       factionOwnerId: factionActor?.id ?? ""
     },
-    integrity: { bracket: recipe.facilityMode ? "heavy" : "light" }
+    integrity: { bracket: _bracket, max: _integrityMax, value: _integrityMax, tier: 1 }
   });
   if (!newActor) return { ok: false, error: "rigs.create returned null" };
 

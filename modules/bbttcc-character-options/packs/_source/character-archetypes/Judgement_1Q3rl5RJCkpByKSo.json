@@ -1,7 +1,7 @@
 {
   "type": "Item",
   "folder": null,
-  "name": "Judgement",
+  "name": "Judgment",
   "color": null,
   "sorting": "a",
   "_id": "1Q3rl5RJCkpByKSo",
@@ -12,11 +12,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.369",
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB",
-    "modifiedTime": 1774995500464
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "modifiedTime": 1792989209651,
+    "createdTime": 1792989209651
   },
   "_key": "!folders!1Q3rl5RJCkpByKSo"
 }

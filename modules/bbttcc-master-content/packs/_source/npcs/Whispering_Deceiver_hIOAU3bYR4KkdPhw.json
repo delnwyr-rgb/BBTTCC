@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "art/bbttcc/qliphoth/whispering-deceiver.webp",
   "system": {
-    "role": "Qliphothic Parasite (Satariel — Greater)",
+    "role": "stealth",
     "tier": 3,
     "factionId": "",
     "notes": "<p>A living, hateful secret: a truth so terrible it was violently repressed, and grew a mind of its own in the dark. Mostly transparent — a heat-haze glitch with spectral faces drifting through it — it haunts ruins and battlefields, drawn to betrayal. It does not fight. It makes your friends do that, wearing the face of whoever you trust most, and eats the despair that follows.</p><p><strong>Qliphah:</strong> Satariel, the Veils — the Hull of Binah. The greater art of concealment: a lie with your loved one's voice.</p><p><em>Mal's note: 'If an ally you buried walks up mid-fight with urgent news — receipts first, hugs later.'</em></p>",
@@ -19,7 +19,7 @@
     },
     "attributes": {
       "violence": {
-        "value": 1
+        "value": 2
       },
       "intrigue": {
         "value": 5
@@ -40,8 +40,9 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 55,
-        "max": 55
+        "value": 60,
+        "max": 60,
+        "temp": 0
       },
       "stress": {
         "value": 42,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -138,7 +140,8 @@
     },
     "defenses": {
       "resistances": [
-        "kinetic"
+        "kinetic",
+        "qliphothic"
       ],
       "immunities": [
         "qliphothic"
@@ -159,6 +162,9 @@
       "hull-of-binah",
       "greater"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -171,6 +177,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Parasite (Satariel — Greater)",
+      "notes": "<p>A living, hateful secret: a truth so terrible it was violently repressed, and grew a mind of its own in the dark. Mostly transparent — a heat-haze glitch with spectral faces drifting through it — it haunts ruins and battlefields, drawn to betrayal. It does not fight. It makes your friends do that, wearing the face of whoever you trust most, and eats the despair that follows.</p><p><strong>Qliphah:</strong> Satariel, the Veils — the Hull of Binah. The greater art of concealment: a lie with your loved one's voice.</p><p><em>Mal's note: 'If an ally you buried walks up mid-fight with urgent news — receipts first, hugs later.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -270,7 +280,7 @@
       "_id": "noSunzz5YXXORAdW",
       "name": "Unbodied",
       "type": "feature",
-      "img": "icons/svg/invisible.svg",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -288,23 +298,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188147,
-        "modifiedTime": 1787799188147,
+        "modifiedTime": 1791324409736,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!hIOAU3bYR4KkdPhw.noSunzz5YXXORAdW"
+      }
     },
     {
       "_id": "l5DpsI6VbmoMcsZR",
       "name": "Fractured Will (2/scene)",
       "type": "feature",
-      "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+      "img": "icons/magic/air/air-pressure-shield-blue.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -322,23 +331,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188147,
-        "modifiedTime": 1787799188147,
+        "modifiedTime": 1791324409736,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!hIOAU3bYR4KkdPhw.l5DpsI6VbmoMcsZR"
+      }
     },
     {
       "_id": "si2adHVzxB8jnqNh",
       "name": "Whispering Aura",
       "type": "feature",
-      "img": "icons/svg/sound.svg",
+      "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -354,25 +362,40 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "do": {
+                  "impose": true
+                },
+                "radius": 6,
+                "who": "enemies"
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188147,
-        "modifiedTime": 1787799188147,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989127446,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!hIOAU3bYR4KkdPhw.si2adHVzxB8jnqNh"
+      }
     },
     {
       "_id": "HIKnhsHIR085ygW8",
       "name": "Touch of Paranoia",
       "type": "weapon",
-      "img": "icons/svg/terror.svg",
+      "img": "icons/magic/death/blood-corruption-vomit-red.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -382,7 +405,7 @@
           "attribute": "presence",
           "type": "qliphothic",
           "damageFlavor": "",
-          "track": "integrity"
+          "track": "stress"
         },
         "damageParts": [],
         "range": {
@@ -421,6 +444,21 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 16,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "charmed"
+            ],
+            "duration": "until-saved",
+            "saveEachRound": true,
+            "saveAttribute": "soul"
           }
         },
         "description": {
@@ -436,23 +474,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188147,
-        "modifiedTime": 1787799188147,
+        "modifiedTime": 1791331978432,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!hIOAU3bYR4KkdPhw.HIKnhsHIR085ygW8"
+      }
     },
     {
       "_id": "PqmP7aY2gldmp27S",
       "name": "Form of the Trusted",
       "type": "feat",
-      "img": "icons/svg/cowled.svg",
+      "img": "icons/equipment/head/hood-cloth-teal.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -470,23 +507,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188147,
-        "modifiedTime": 1787799188147,
+        "modifiedTime": 1791324409736,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!hIOAU3bYR4KkdPhw.PqmP7aY2gldmp27S"
+      }
     },
     {
       "_id": "XoYfGpCrumfnweZJ",
       "name": "Twisted Words",
       "type": "feat",
-      "img": "icons/svg/silenced.svg",
+      "img": "icons/weapons/guns/pistol-silenced.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -502,25 +538,45 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "condition": {
+                    "key": "shaken",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 16
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188147,
-        "modifiedTime": 1787799188147,
+        "modifiedTime": 1791331978432,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!hIOAU3bYR4KkdPhw.XoYfGpCrumfnweZJ"
+      }
     },
     {
       "_id": "7PZJrCX3jaqPWizX",
       "name": "Sow Discord",
       "type": "feat",
-      "img": "icons/svg/explosion.svg",
+      "img": "icons/magic/fire/explosion-fireball-medium-orange.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -536,19 +592,99 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "condition": {
+                    "key": "compelled",
+                    "duration": "until-saved",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 16
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188147,
-        "modifiedTime": 1787799188147,
+        "modifiedTime": 1791331978432,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Aura of Concealment",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "qliphothic",
+          "satariel"
+        ],
+        "description": {
+          "value": "<p>Any creature that starts its turn within 6 squares hears faint whispers in a voice it knows: it rolls twice-keep-worse on checks to read intentions or see through deception until the start of its next turn.</p><p><em>Satariel — hull of binah.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!hIOAU3bYR4KkdPhw.7PZJrCX3jaqPWizX"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "radius": 6,
+                "who": "enemies",
+                "do": {
+                  "impose": true
+                }
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "qliphothic"
+            }
+          }
+        }
+      },
+      "_id": "X5q5ZQaP9R3E6uqp",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791342350255,
+        "modifiedTime": 1792989127446,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -593,34 +729,38 @@
             ]
           },
           "price": {
-            "marks": 900,
-            "bounty": 1200,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 30,
+            "bounty": 30,
+            "hire": 45,
+            "ransom": 45,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "III medium Qliphothic Parasite (Satariel — Greater) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TIII medium qliphothic — bounty 30 / hire 45 marks; credited to the pool matching the method (default intrigue)"
           },
           "qliphah": {
             "name": "satariel",
             "hullOf": "binah",
             "grade": "greater"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "satariel",
+          "title": "Qliphothic Parasite (Satariel — Greater)"
         }
       },
-      "kind": "npc"
+      "kind": "npc",
+      "creatureType": "fiend"
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188147,
-    "modifiedTime": 1787799188147,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989127326,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "hIOAU3bYR4KkdPhw",
   "_key": "!actors!hIOAU3bYR4KkdPhw"

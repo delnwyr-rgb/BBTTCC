@@ -72,7 +72,7 @@ const SCENARIOS = {
       subcategory: "hostile",
       scale: "hybrid",
       tableTier: 2,
-      tikkunTie: "Gevurah",
+      tikkunTie: "Geburah",
       spawnerKey: "bandit_ambush_standard",
       steps: [
         {
@@ -193,7 +193,7 @@ const SCENARIOS = {
       subcategory: "hazard",
       scale: "macro",
       tableTier: 3,
-      tikkunTie: "Gevurah",
+      tikkunTie: "Geburah",
       steps: [
         {
           kind: "scene",
@@ -288,7 +288,7 @@ const SCENARIOS = {
       subcategory: "conflict",
       scale: "hybrid",
       tableTier: 2,
-      tikkunTie: "Gevurah",
+      tikkunTie: "Geburah",
       steps: [
         {
           kind: "scene",
@@ -682,7 +682,7 @@ const SCENARIOS = {
       subcategory: "hostile",
       scale: "hybrid",
       tableTier: 3,
-      tikkunTie: "Gevurah",
+      tikkunTie: "Geburah",
       spawnerKey: "hexknight_standard",
       steps: [
         {

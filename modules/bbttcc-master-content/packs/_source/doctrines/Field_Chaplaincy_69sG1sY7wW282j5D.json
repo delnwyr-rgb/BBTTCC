@@ -3,7 +3,7 @@
   "type": "feat",
   "img": "icons/magic/defensive/shield-barrier-flaming-pentagon-teal-purple.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": "",
     "tags": [],
     "description": {
@@ -42,18 +42,18 @@
   },
   "_id": "69sG1sY7wW282j5D",
   "effects": [],
-  "folder": null,
+  "folder": "SziFuLdTIX4Y2Rav",
   "sort": 0,
   "ownership": {
     "default": 0,
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1779731207892,
-    "modifiedTime": 1781402980310,
+    "modifiedTime": 1792977673056,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

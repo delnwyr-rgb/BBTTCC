@@ -10,12 +10,12 @@
     "default": 0
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1780000000000,
-    "modifiedTime": 1784515282607,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988942377,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
@@ -28,13 +28,14 @@
       "formula": "1d6",
       "attribute": "presence",
       "type": "kinetic",
-      "damageFlavor": "served with a side of commentary",
+      "damageFlavor": "",
       "track": "stress"
     },
     "damageParts": [],
     "range": {
-      "short": 5,
-      "long": 5
+      "short": 1,
+      "long": 1,
+      "units": "sq"
     },
     "tags": [
       "t1-baseline",
@@ -42,7 +43,7 @@
       "improvised",
       "sass"
     ],
-    "effect": "Improvised melee. On a hit, you may make a withering remark — target rolls Resolve vs DC 11 or is Shaken until the end of its next turn.",
+    "effect": "Improvised melee. On a hit, you may make a withering remark: the target makes a Mind check against your Resolve DC or is Shaken until the end of its next turn.",
     "flavor": "The grill is cold. The burns are not.",
     "manifestation": {
       "tier": 1,
@@ -73,10 +74,21 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "shaken"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "mind",
+        "saveDcMode": "cast-dc",
+        "saveDcFixed": 15,
+        "saveAttributeOverrides": {}
       }
     },
     "description": {
-      "value": "<p>Standard-issue S'narchy Burger flat-top spatula, well-seasoned, slightly cursed by decades of overheard sarcasm. Hits about as hard as you'd expect and exactly as hard as it needs to.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Improvised melee. On a hit, you may make a withering remark — target rolls Resolve vs DC 11 or is Shaken until the end of its next turn.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d6 Kinetic damage to <em>Stress</em> <span style=\"opacity:.75\">(served with a side of commentary)</span></li>\n  <li><strong>Faculty:</strong> Presence</li>\n  <li><strong>Attack:</strong> Melee (Presence)</li>\n  <li><strong>Range:</strong> 5</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+      "value": "<p>Standard-issue S'narchy Burger flat-top spatula, well-seasoned, slightly cursed by decades of overheard sarcasm. Hits about as hard as you'd expect and exactly as hard as it needs to.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Improvised melee. On a hit, you may make a withering remark: the target makes a Mind check against your Resolve DC or is Shaken until the end of its next turn.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d6 Kinetic damage to <em>Stress</em> <span style=\"opacity:.75\">(served with a side of commentary)</span></li>\n  <li><strong>Faculty:</strong> Presence</li>\n  <li><strong>Attack:</strong> Melee (Presence)</li>\n  <li><strong>Range:</strong> 1 square</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
     }
   },
   "flags": {
@@ -85,7 +97,7 @@
         "item": {
           "tier": "I",
           "footprint": 1,
-          "reach": "5",
+          "reach": "1",
           "frame": "weapon",
           "signature": "Flips burgers. Flips attitudes. Flips you off, spiritually.",
           "origin": "looted",
@@ -112,14 +124,11 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI weapon — comedic",
+            "notes": "TI weapon",
             "bound": "free",
             "saleBack": 20
           }
         }
-      },
-      "manifestSheetMode": {
-        "bytUGWIOqq9eT7Or": "display"
       }
     },
     "autoanimations": {

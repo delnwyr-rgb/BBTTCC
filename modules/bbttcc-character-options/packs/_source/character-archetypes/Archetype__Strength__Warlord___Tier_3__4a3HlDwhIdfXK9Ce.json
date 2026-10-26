@@ -1,18 +1,13 @@
 {
   "name": "Archetype: Strength (Warlord) (Tier 3)",
   "type": "feat",
-  "img": "icons/creatures/abilities/lion-roar-yellow.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_strength.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "Bad Eden – Archetype: Strength (Warlord) (Tier 3)",
-      "book": ""
-    },
+    "source": "Bad Eden – Archetype: Strength (Warlord) (Tier 3) (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Violence</strong></p>\n<ul>\n<li><strong>Tactical:</strong> When you make a Violence check, an Intimidation check, or a contested battlefield command check, you may treat any 2d10x10 roll of <strong>9 or lower as a 10</strong>.</li>\n<li><strong>Strategic:</strong> Your battlefield reliability increasingly shapes faction confidence, but its primary effect is expressed through your repeated competence at the table.</li>\n</ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Tier 3 (Level 11) — Strength (Warlord)</strong></p><ul><li><p><strong>Tactical:</strong> When you make a Violence check, an Intimidation check, or a contested battlefield command check, you may treat any 2d10 roll of <strong>9 or lower as a 10</strong>.</p></li><li><p><strong>Strategic:</strong> Your battlefield reliability increasingly shapes faction confidence, but its primary effect is expressed through your repeated competence at the table.</p></li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -71,12 +66,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986646202,
-    "modifiedTime": 1782167238586,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989155124,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

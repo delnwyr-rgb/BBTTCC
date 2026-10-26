@@ -13,24 +13,24 @@
     "target": "burst",
     "range": "near",
     "damage": "2d6",
-    "damageType": "energy",
+    "damageType": "sephirotic",
     "damageFlavor": "",
     "damageRoll": {
       "op": "none",
       "number": 0,
       "die": "d6",
       "attribute": "",
-      "type": "kinetic",
+      "type": "sephirotic",
       "flavor": "",
       "track": "integrity"
     },
     "damageParts": [],
-    "effect": "Release a saturated wave. Each creature within near makes a Resolve check; on failure, take 2d6 energy damage and become Charmed for one exchange (they see only beauty in the Elemental).",
+    "effect": "Release a saturated wave. Each creature within near makes a Resolve check; on failure, take 2d6 sephirotic damage and become Charmed for one exchange (they see only beauty in the Elemental).",
     "tags": [
       "translated",
-      "5e-port",
       "phase2-narrative",
-      "manifestation"
+      "manifestation",
+      "rfi-scrubbed"
     ],
     "category": "manifestation",
     "flavor": "Animal silhouettes briefly inhabit the landscape behind targets — a unicorn, a kitten, a dolphin.",
@@ -81,26 +81,12 @@
       }
     },
     "description": {
-      "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>AOE save; 2d6 sephirotic + Charmed.</p>\n<ul>\n  <li><strong>Damage:</strong> 2d6 Sephirotic damage</li>\n  <li><strong>Intent:</strong> Presence</li>\n  <li><strong>Action:</strong> Action</li>\n  <li><strong>Range:</strong> Near</li>\n  <li><strong>Target:</strong> Burst</li>\n  <li><strong>Target:</strong> All creatures within near.</li>\n  <li><strong>Cost:</strong> 2 Clarity, Clarity 2, +1 Noise, 2 Clarity</li>\n  <li><strong>Duration:</strong> One pulse; Charm lasts one exchange.</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<p><strong>Risk:</strong> The Elemental fades by 1 Integrity per Cascade — joy is expensive.</p>\n<!-- BBTTCC:MECHANICS:END -->"
+      "value": "<p><strong>Working.</strong> <em>An eruption of impossible colour.</em></p>\n<p>Release a saturated wave. Each creature within near range makes a Resolve check (DC by tier); on a failure it takes 2d6 sephirotic damage and is Charmed for one exchange — it sees only beauty in the Elemental.</p>\n<p><strong>Cost.</strong> 2 Clarity, +1 Noise · action · burst / near.</p>\n<p><em>Animal silhouettes briefly inhabit the landscape behind the targets — a unicorn, a kitten, a dolphin.</em></p>"
     }
   },
-  "_id": "vc7Uf3Ez39mAcdh2",
-  "effects": [],
-  "sort": 0,
   "flags": {
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Lisa Frank Elemental"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
-      }
-    },
     "autoanimations": {
-      "id": "a43aa180-6067-495d-b654-b1994f4d20ec",
+      "id": "ft-rainbow-cascade",
       "label": "Rainbow Cascade",
       "macro": {
         "enable": false,
@@ -275,22 +261,64 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "condition": {
+                "key": "charmed",
+                "duration": "1-round",
+                "save": {
+                  "attr": "soul",
+                  "dc": 15
+                }
+              },
+              "damage": {
+                "formula": "2d6",
+                "type": "sephirotic"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "CACA"
+        ],
+        "sourceIds": [
+          "a9orjOV99MnMObho"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
+  "_id": "vc7Uf3Ez39mAcdh2",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024241630,
-    "modifiedTime": 1782167283968,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989039460,
+    "modifiedTime": 1792989039460,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!vc7Uf3Ez39mAcdh2"
 }

@@ -3026,7 +3026,7 @@ function makeRaidBeat({ id, title, activityKey, intro, instruct, after, courtKey
         target: session.targetUuid ? { targetUuid: session.targetUuid, targetName: session.targetName, defenderId: session.defenderId } : null
       });
       if (!globalThis.game?.user?.isGM) {
-        if (gmRes?.ok) await ctx.speak("Your GM's console just lit up on your banner — they run the rounds. Pick your maneuvers; your Domain brings what it owns, and the GM calls it.");
+        if (gmRes?.ok) await ctx.speak("Your GM's console just lit up on your banner — they run the rounds. Pick your maneuvers; your Domain brings what it owns, spends what the round costs, and the GM calls it.");
         else await ctx.speak("Heads up: rounds are resolved GM-side, and I couldn't reach one. Pick your maneuvers — you'll need a GM at the table to call this one.");
         await _pause(500);
       }

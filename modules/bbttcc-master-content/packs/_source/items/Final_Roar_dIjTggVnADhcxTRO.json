@@ -18,7 +18,7 @@
       }
     }
   },
-  "folder": "0JDB983lzPepXXNe",
+  "folder": "567e8XdVM7DJjNkJ",
   "_id": "dIjTggVnADhcxTRO",
   "effects": [],
   "sort": 3300000,
@@ -27,12 +27,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
     "systemVersion": "0.6.0",
     "createdTime": 1778205374757,
-    "modifiedTime": 1778963271958,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988932488,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

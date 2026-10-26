@@ -3,7 +3,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-14",
+    "at": "2026-10-26",
     "overridesApplied": 0
   },
   "features": [
@@ -59,7 +59,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/skills/melee/strikes-sword-scimitar.webp",
-      "description": "<p><em>You don’t need to be closest to steer the fight.</em></p><p>As a Bonus action, choose one ally who can see or hear you within 30 feet That ally may immediately move up to 10 feet without provoking opportunity attacks.</p><p>You can use this feat a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</p>",
+      "description": "<p><em>You don’t need to be closest to steer the fight.</em></p><p>As a Bonus Action, choose one ally who can see or hear you within 30 feet. That ally may immediately move up to 10 feet without provoking opportunity attacks.</p><p>You can use this technique a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</p>",
       "uses": {
         "max": "@prof",
         "per": "lr"
@@ -71,7 +71,7 @@
             "id": "eoz92v7bIszZoopP",
             "pack": "items",
             "identifier": "bbttcc_feat_backline_commander",
-            "hash": "c7547b807812"
+            "hash": "551413458553"
           }
         }
       }
@@ -92,7 +92,7 @@
             "id": "rpt6sZMxSpXGZykt",
             "pack": "items",
             "identifier": "bbttcc_feat_battlefield_presence",
-            "hash": "901ce6b8e81a"
+            "hash": "e50407731525"
           }
         }
       }
@@ -127,7 +127,7 @@
       "requirements": "Path of the Pactkeeper",
       "folder": "Techniques",
       "img": "icons/magic/symbols/runes-carved-stone-purple.webp",
-      "description": "<p><em>A sealed pact holds itself; you need only keep the terms.</em></p><p>While your <strong>Sealed Pact</strong> stance is active, the bindings carry their own weight: the <strong>upkeep</strong> cost of your sustained powers is <strong>halved</strong>.</p>",
+      "description": "<p><em>A sealed pact holds itself; you need only keep the terms.</em></p><p>While your <strong>Sealed Pact</strong> stance is active, the bindings carry part of your will for you: your <strong>Clarity maximum rises by 1</strong>.</p>",
       "effects": [
         {
           "_id": "be5ec40bf29460c9",
@@ -137,7 +137,7 @@
           "disabled": true,
           "changes": [
             {
-              "key": "system.attributes.concentration.roll.mode",
+              "key": "flags.bad-eden-5e.bonus.points",
               "mode": 2,
               "value": "1",
               "priority": 20
@@ -161,7 +161,7 @@
             "id": "RjwisInxBL2Uiv7p",
             "pack": "items",
             "identifier": "bbttcc_feat_bound_and_bargained",
-            "hash": "f96d8a233d39"
+            "hash": "e49e47388e79"
           }
         }
       }
@@ -175,7 +175,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/water/barrier-ice-wall-explosion.webp",
-      "description": "<p><em>Everything has a seam. Most people just don’t look.</em></p><p>You gain a rank in Tinkering (thieves’ tools). If you already have it, you gain expertise with it instead.</p><p>When you hit an object, door, barrier, or construct with a weapon attack, you may treat the attack as dealing maximum damage to the target’s objects-only resistances (GM adjudication). Once you do, you can’t do so again until the start of your next turn.</p>",
+      "description": "<p><em>Everything has a seam. Most people just don’t look.</em></p><p>You gain a rank in Tinkering. If you already have it, you gain expertise with it instead.</p><p>When you hit an object, door, barrier, or construct with a weapon attack, you may treat the attack as dealing maximum damage to the target’s objects-only resistances (GM adjudication). Once you do, you can’t do so again until the start of your next turn.</p>",
       "traits": [
         {
           "tag": "tinkering",
@@ -191,7 +191,7 @@
             "id": "UoMYdLZRAG52Y1dz",
             "pack": "items",
             "identifier": "bbttcc_feat_breach_specialist",
-            "hash": "38874a629acb"
+            "hash": "81d69afc289f"
           }
         }
       }
@@ -327,7 +327,7 @@
             "id": "5NMHaJsuIJhmKS7R",
             "pack": "items",
             "identifier": "bbttcc_feat_combat_intuition",
-            "hash": "a5830f4b46b0"
+            "hash": "77924b7dfea8"
           }
         }
       }
@@ -469,7 +469,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/control/fear-fright-shadow-monster-red.webp",
-      "description": "<p><em>The Dark doesn’t scare you. It negotiates.</em></p><p>You have advantage on saving throws against being Frightened.</p><p>Additionally, when you fail a saving throw against fear or horror, you may choose to succeed instead. If you do, you gain one level of exhaustion after the effect ends. Once you use this feat, you can’t use it again until you finish a long rest.</p>",
+      "description": "<p><em>The Dark doesn’t scare you. It negotiates.</em></p><p>You have advantage on saving throws against being Frightened.</p><p>Additionally, when you fail a saving throw against fear or horror, you may choose to succeed instead. If you do, you gain one level of exhaustion after the effect ends. Once you use this technique, you can’t use it again until you finish a long rest.</p>",
       "riders": {
         "strain": {
           "n": 1
@@ -487,7 +487,7 @@
             "id": "XeSQLXvQFDdiynkW",
             "pack": "items",
             "identifier": "bbttcc_feat_darkness_hardened",
-            "hash": "0b97f5ec3b4d"
+            "hash": "3bc064631710"
           }
         }
       }
@@ -501,14 +501,14 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
-      "description": "<p><em>You do not pause when the fight turns. You ride the turn.</em></p><p>When you reduce a hostile creature to 0 hit points or land a critical hit, you may immediately move up to half your movement without provoking opportunity attacks <strong>or</strong> make one weapon attack against a different creature within reach. You can use this feat once per round.</p>",
+      "description": "<p><em>You do not pause when the fight turns. You ride the turn.</em></p><p>When you reduce a hostile creature to 0 hit points or roll a double 10, you may immediately move up to half your movement without provoking opportunity attacks <strong>or</strong> make one weapon attack against a different creature within reach. You can use this technique once per round.</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
             "id": "kq1ruu2fUdzNAjho",
             "pack": "items",
             "identifier": "bbttcc_feat_decisive_momentum",
-            "hash": "4abcef79ef90"
+            "hash": "ca0c813559e1"
           }
         }
       }
@@ -566,7 +566,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/skills/melee/strike-sword-slashing-red.webp",
-      "description": "<p><em>Timing is a weapon.</em></p><p>Once per turn, you may delay one attack you make until later in the round. When you do, that attack gain advantage.</p>",
+      "description": "<p><em>Timing is a weapon.</em></p><p>Once per turn, you may delay one attack you make until later in the round. When you do, that attack is made with advantage.</p>",
       "riders": {
         "bank": {
           "n": 1,
@@ -586,7 +586,7 @@
             "id": "q9iV4JZUm71Enwim",
             "pack": "items",
             "identifier": "bbttcc_feat_deliberate_tempo",
-            "hash": "9611b4bf086b"
+            "hash": "ca23a13264a7"
           }
         }
       }
@@ -600,14 +600,14 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/skills/melee/strike-sword-dagger-runes-gold.webp",
-      "description": "<p><em>When you are out of options, you become one.</em></p><p>When you miss with an attack roll, you may choose to turn the miss into a glancing blow. The attack deals damage equal to your proficiency bonus (of the same type as the weapon or powers) and does not trigger additional effects.</p><p>Once you use this feat, you can’t use it again until you finish a short rest or long rest.</p>",
+      "description": "<p><em>When you are out of options, you become one.</em></p><p>When you miss with an attack roll, you may choose to turn the miss into a glancing blow. The attack deals damage equal to your proficiency bonus (of the same type as the weapon or powers) and does not trigger additional effects.</p><p>Once you use this technique, you can’t use it again until you finish a short rest.</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
             "id": "9OLE0siNPQFVSVM6",
             "pack": "items",
             "identifier": "bbttcc_feat_desperate_measure",
-            "hash": "4d973bdaf976"
+            "hash": "0c824529f411"
           }
         }
       }
@@ -621,7 +621,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/fire/flame-burning-tree-log.webp",
-      "description": "<p><em>It’s not about more shots. It’s about the right shot.</em></p><p>Once per turn when you hit with a ranged weapon attack, you may choose one:</p><ul><li><strong>Pin:</strong> The target’s movement is reduced by 10 feet until the start of your next turn.</li><li><strong>Disrupt:</strong> The next attack roll the target makes before the end of its next turn is at disadvantage (3d10 keep-lowest-2).</li></ul><p>A creature can be affected by this feat only once per round.</p>",
+      "description": "<p><em>It’s not about more shots. It’s about the right shot.</em></p><p>Once per turn when you hit with a ranged weapon attack, you may choose one:</p><ul><li><strong>Pin:</strong> The target’s movement is reduced by 10 feet until the start of your next turn.</li><li><strong>Disrupt:</strong> The next attack roll the target makes before the end of its next turn is at disadvantage (3d10 keep-lowest-2).</li></ul><p>A creature can be affected by this technique only once per round.</p>",
       "riders": {
         "impose": {
           "note": "Disrupt — or Pin: the target's speed is reduced by 10 feet until the start of your next turn."
@@ -644,7 +644,7 @@
             "id": "o2BssJu9XhrDFBgV",
             "pack": "items",
             "identifier": "bbttcc_feat_disciplined_fire",
-            "hash": "b14aa1976656"
+            "hash": "f9ecb6195bbb"
           }
         }
       }
@@ -727,7 +727,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
-      "description": "<p><em>You hold your will together when others lose it.</em></p><p>You have advantage on Constitution checks made to maintain Clarity hold. Additionally, you can perform somatic components even when holding weapons or a shield.</p>",
+      "description": "<p><em>You hold your will together when others lose it.</em></p><p>You have advantage on Constitution checks made to maintain Clarity hold. Additionally, you can shape a working’s gestures even with weapons or a shield in hand.</p>",
       "effects": [
         {
           "_id": "be5ec4c46ab275a5",
@@ -757,7 +757,7 @@
             "id": "1WtbzowA25xZlRWj",
             "pack": "items",
             "identifier": "bbttcc_feat_enduring_focus",
-            "hash": "eda998c8bfa9"
+            "hash": "685e12fa0545"
           }
         }
       }
@@ -793,14 +793,14 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/skills/melee/strikes-sword-scimitar.webp",
-      "description": "<p><em>You move like the fight is trying to catch up with you.</em></p><p>Your movement increases by 10 feet Additionally, when you make a melee attack against a creature, that creature can’t make opportunity attacks against you for the rest of the turn (hit or miss).</p>",
+      "description": "<p><em>You move like the fight is trying to catch up with you.</em></p><p>Your movement increases by 10 feet. Additionally, when you make a melee attack against a creature, that creature can’t make opportunity attacks against you for the rest of the turn (hit or miss).</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
             "id": "aZPLxt6FjcNY1GsA",
             "pack": "items",
             "identifier": "bbttcc_feat_fluid_footwork",
-            "hash": "5f346254afe6"
+            "hash": "ebfee8cb4dec"
           }
         }
       }
@@ -968,7 +968,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/sundries/misc/ladder-improvised.webp",
-      "description": "<p><em>If you can’t fix it, you can at least make it dangerous.</em></p><p>You gain a rank in Tinkering (artisan’s tools). If you already have it, you gain expertise with it instead.</p><p>During a short rest, you can craft one improvised device from scrap (choose one):</p><ul><li><strong>Flash-burn:</strong> A thrown device (20/60) that sheds bright light in a 10 feet radius for 1 minute; creatures that rely on invisibility have their invisibility suppressed while in the light (GM adjudication).</li><li><strong>Snareline:</strong> A 10 feet tripline trap you can set in 1 minute; the first creature to cross it must succeed on a Dexterity check (DC = 8 + your proficiency bonus + your Intelligence modifier) or fall prone.</li><li><strong>Signal Screamer:</strong> A noisemaker you can place; it triggers on contact, audible out to 300 feet</li></ul><p>A device becomes inert after 8 hours or after triggering once.</p>",
+      "description": "<p><em>If you can’t fix it, you can at least make it dangerous.</em></p><p>You gain a rank in Tinkering. If you already have it, you gain expertise with it instead.</p><p>During a short rest, you can craft one improvised device from scrap (choose one):</p><ul><li><strong>Flash-burn:</strong> A thrown device (4/60 feet) that sheds bright light in a 2-square radius for 1 minute; creatures that rely on invisibility have their invisibility suppressed while in the light (GM adjudication).</li><li><strong>Snareline:</strong> A 2-square tripline trap you can set in 1 minute; the first creature to cross it must succeed on an Dexterity check against your Resolve DC or fall prone.</li><li><strong>Signal Screamer:</strong> A noisemaker you can place; it triggers on contact, audible out to 300 feet</li></ul><p>A device becomes inert after 8 hours or after triggering once.</p>",
       "traits": [
         {
           "tag": "tinkering",
@@ -984,7 +984,7 @@
             "id": "nmO1GPJJb6QVG6RX",
             "pack": "items",
             "identifier": "bbttcc_feat_improvised_engineer",
-            "hash": "1159656d5252"
+            "hash": "cd1ef3ea1cdd"
           }
         }
       }
@@ -998,14 +998,14 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/skills/trades/mining-pickaxe-iron-blue.webp",
-      "description": "<p><em>Panic is contagious. So is control.</em></p><p>When you roll initiative, you gain temporary hit points equal to your proficiency bonus.</p><p>Additionally, when you make a saving throw against being Frightened or charmed, you may roll a d4 and add it to the save. Once you use this bonus, you can’t use it again until you finish a short rest or long rest.</p>",
+      "description": "<p><em>Panic is contagious. So is control.</em></p><p>When you roll initiative, you gain temporary hit points equal to your proficiency bonus.</p><p>Additionally, when you make a saving throw against being Frightened or charmed, you may roll a d4 and add it to the save. Once you use this bonus, you can’t use it again until you finish a short rest.</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
             "id": "3Bx70MfaL4F9APDO",
             "pack": "items",
             "identifier": "bbttcc_feat_iron_nerves",
-            "hash": "0f8d5f85a2b4"
+            "hash": "c9274813d301"
           }
         }
       }
@@ -1043,7 +1043,7 @@
             "id": "9qquKLVG0GTjCO4C",
             "pack": "items",
             "identifier": "bbttcc_feat_iron_will",
-            "hash": "e8843ca5c230"
+            "hash": "110f7c010be4"
           }
         }
       }
@@ -1057,14 +1057,14 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/defensive/armor-shield-barrier-steel.webp",
-      "description": "<p><em>Armor isn’t weight. It’s permission.</em></p><p>While you are wearing armor or wielding a shield, you have advantage on saving throws against being knocked prone.</p><p>Additionally, when you would be pushed or pulled, you may reduce the distance moved by 5 feet You can do so once per turn.</p>",
+      "description": "<p><em>Armor isn’t weight. It’s permission.</em></p><p>While you are wearing armor or wielding a shield, you have advantage on saving throws against being knocked prone.</p><p>Additionally, when you would be pushed or pulled, you may reduce the distance moved by 5 feet. You can do so once per turn.</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
             "id": "q8F7HDBIeM1GFiNR",
             "pack": "items",
             "identifier": "bbttcc_feat_ironclad_training",
-            "hash": "1994bc061b07"
+            "hash": "3278ae2bacd9"
           }
         }
       }
@@ -1090,7 +1090,7 @@
             "id": "dJAoJ1cXbBR7miaX",
             "pack": "items",
             "identifier": "bbttcc_feat_last_exit",
-            "hash": "187941097a41"
+            "hash": "7ebd4a61aa23"
           }
         }
       }
@@ -1104,14 +1104,14 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
-      "description": "<p><em>You don’t just cross the world. You listen to it.</em></p><p>When you take a short rest, you may attune to the local flow. Until your next long rest, you gain one of the following benefits (choose when you attune):</p><ul><li><strong>Guidance of the Current:</strong> You have advantage on one Athletics checks you make each hour of travel.</li><li><strong>Quiet Step:</strong> You have advantage on one Stealth checks you make each hour of travel.</li><li><strong>Resonant Warning:</strong> You have advantage on initiative rolls made in the first combat after you begin travel.</li></ul><p>You can change the chosen benefit each time you attune.</p>",
+      "description": "<p><em>You don’t just cross the world. You listen to it.</em></p><p>When you take a short rest, you may attune to the local flow. Until your next long rest, you gain one of the following benefits (choose when you attune):</p><ul><li><strong>Guidance of the Current:</strong> You have advantage on one Athletics check you make each hour of travel.</li><li><strong>Quiet Step:</strong> You have advantage on one Stealth check you make each hour of travel.</li><li><strong>Resonant Warning:</strong> You have advantage on initiative rolls made in the first combat after you begin travel.</li></ul><p>You can change the chosen benefit each time you attune.</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
             "id": "6AVSK4jCoGlGzevR",
             "pack": "items",
             "identifier": "bbttcc_feat_leyline_attunement",
-            "hash": "4b52a964aac2"
+            "hash": "5cc0089f5853"
           }
         }
       }
@@ -1284,7 +1284,7 @@
             "id": "jlUqwcW26u8HMOwb",
             "pack": "items",
             "identifier": "bbttcc_feat_many_hands",
-            "hash": "9eaf890141d3"
+            "hash": "fdefc3974c9c"
           }
         }
       }
@@ -1298,7 +1298,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/unholy/strike-body-life-soul-green.webp",
-      "description": "<p><em>Out here, healing is logistics.</em></p><p>You gain proficiency in Religion. If you already have it, you gain expertise with it instead.</p><p>When you use a medkit to stabilize a creature, it also regains hit points equal to your proficiency bonus.</p><p>Additionally, during a short rest, you may allow up to two creatures to regain additional hit points equal to your proficiency bonus. A creature can benefit from this feat only once per short rest.</p>",
+      "description": "<p><em>Out here, healing is logistics.</em></p><p>You gain proficiency in Religion. If you already have it, you gain expertise with it instead.</p><p>When you use a medkit to stabilize a creature, it also regains hit points equal to your proficiency bonus.</p><p>Additionally, during a short rest, you may allow up to two creatures to regain additional hit points equal to your proficiency bonus. A creature can benefit from this technique only once per short rest.</p>",
       "uses": {
         "max": "1",
         "per": "sr"
@@ -1319,7 +1319,7 @@
             "id": "Zrv0q6PgygEWtxta",
             "pack": "items",
             "identifier": "bbttcc_feat_medic_of_the_wastes",
-            "hash": "27d331f93f80"
+            "hash": "9461f5795aad"
           }
         }
       }
@@ -1419,7 +1419,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/environment/settlement/target-dummy.webp",
-      "description": "<p><em>If you can’t save them, you can at least keep them here.</em></p><p>When a creature you can reach drops to 0 hit points, you may use your reaction to stabilize it. If you do, it also gains temporary hit points equal to your proficiency bonus.</p><p>Once you use this feat, you can’t use it again until you finish a short rest or long rest.</p>",
+      "description": "<p><em>If you can’t save them, you can at least keep them here.</em></p><p>When a creature you can reach drops to 0 hit points, you may use your reaction to stabilize it. If you do, it also gains temporary hit points equal to your proficiency bonus.</p><p>Once you use this technique, you can’t use it again until you finish a short rest.</p>",
       "activation": "reaction",
       "riders": {
         "temp": {
@@ -1449,7 +1449,7 @@
             "id": "CmO8Q6nr21zzgXjv",
             "pack": "items",
             "identifier": "bbttcc_feat_last_ritual",
-            "hash": "b96d9f2af1bd"
+            "hash": "c73f019dee63"
           }
         }
       }
@@ -1570,7 +1570,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/control/buff-flight-wings-blue.webp",
-      "description": "<p><em>You tear reserve will out of your own composure.</em></p><p>Once per short rest, you may take <strong>1 Stress</strong> to immediately recover <strong>2 Clarity</strong>, up to your maximum.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">✍ Applied by the GM/player — no automatic engine effect.</p>",
+      "description": "<p><em>You tear reserve will out of your own composure.</em></p><p>Once per short rest, you may take <strong>1 Stress</strong> to immediately recover <strong>2 Clarity</strong>, up to your maximum.</p>",
       "uses": {
         "max": "1",
         "per": "sr"
@@ -1600,7 +1600,7 @@
             "id": "y5n7kupZ6OYuA1QI",
             "pack": "items",
             "identifier": "bbttcc_feat_reclamation",
-            "hash": "c969e1e0a0cf"
+            "hash": "244fdb7872cc"
           }
         }
       }
@@ -1654,7 +1654,7 @@
             "id": "sRlow24HYNfaPaE5",
             "pack": "items",
             "identifier": "bbttcc_feat_refracted_attention",
-            "hash": "ec6e4da47bf2"
+            "hash": "8232da1a51e2"
           }
         }
       }
@@ -1668,7 +1668,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/environment/settlement/rubble-scrap-refuse-wood-metal.webp",
-      "description": "<p><em>No. That is not how this ends.</em></p><p>Once per long rest, after rolling but before the result is resolved, you may treat a roll of 9 or lower on a 2d10x10 as a 10.</p>",
+      "description": "<p><em>No. That is not how this ends.</em></p><p>Once per long rest, after rolling but before the result is resolved, you may treat a roll of 9 or lower on 2d10 as a 10.</p>",
       "uses": {
         "max": "1",
         "per": "lr"
@@ -1680,7 +1680,7 @@
             "id": "L4LgC7GaLg56ET0X",
             "pack": "items",
             "identifier": "bbttcc_feat_refuse_the_narrative",
-            "hash": "185e24bd3a84"
+            "hash": "b7df50b62c62"
           }
         }
       }
@@ -1733,7 +1733,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/unholy/hand-claw-fog-green.webp",
-      "description": "<p><em>You know what keeps a moving fortress from becoming a coffin.</em></p><p>You gain a rank in Tinkering (tinker’s tools). If you already have it, you gain expertise with it instead.</p><p>During a short rest, you can perform emergency maintenance on a vehicle, rig, or facility. Choose one:</p><ul><li>Restore 1d6 hit points to a construct/vehicle/rig under the GM’s control rules, or</li><li>Remove one non-magical malfunction or minor condition (stuck mechanism, seized hatch, jammed lock, fouled intake) at the GM’s discretion.</li></ul><p>Once you use this feat, you can’t use it again until you finish a long rest.</p>",
+      "description": "<p><em>You know what keeps a moving fortress from becoming a coffin.</em></p><p>You gain a rank in Tinkering. If you already have it, you gain expertise with it instead.</p><p>During a short rest, you can perform emergency maintenance on a vehicle, rig, or facility. Choose one:</p><ul><li>Restore 1d6 hit points to a construct/vehicle/rig under the GM’s control rules, or</li><li>Remove one mundane malfunction or minor condition (stuck mechanism, seized hatch, jammed lock, fouled intake) at the GM’s discretion.</li></ul><p>Once you use this technique, you can’t use it again until you finish a long rest.</p>",
       "traits": [
         {
           "tag": "tinkering",
@@ -1749,7 +1749,7 @@
             "id": "5NgRfhPWkCDM4Vvh",
             "pack": "items",
             "identifier": "bbttcc_feat_rig_hand",
-            "hash": "4d59cb2cb32f"
+            "hash": "6c72a584f13f"
           }
         }
       }
@@ -1877,7 +1877,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/perception/eye-slit-orange.webp",
-      "description": "<p><em>Some truths are louder than sound.</em></p><p>You gain proficiency in Arcana. If you already have it, you gain expertise with it instead.</p><p>As an action, you may focus on the unseen and learn one of the following about a creature, object, or place within 30 feet (choose one):</p><ul><li>Whether it is suffused with magic-like resonance</li><li>Whether it feels aligned toward Renewal or toward Corruption (GM adjudication)</li><li>Whether it bears an active ward, curse, or binding</li></ul><p>You can use this feat a number of times equal to your proficiency bonus, regaining all uses on a long rest.</p>",
+      "description": "<p><em>Some truths are louder than sound.</em></p><p>You gain proficiency in Arcana. If you already have it, you gain expertise with it instead.</p><p>As an action, you may focus on the unseen and learn one of the following about a creature, object, or place within 30 feet (choose one):</p><ul><li>Whether it is suffused with resonance</li><li>Whether it feels aligned toward Renewal or toward Corruption (GM adjudication)</li><li>Whether it bears an active ward, curse, or binding</li></ul><p>You can use this technique a number of times equal to your proficiency bonus, regaining all uses on a long rest.</p>",
       "uses": {
         "max": "@prof",
         "per": "lr"
@@ -1898,7 +1898,7 @@
             "id": "hWJWokdPW2Pp6st3",
             "pack": "items",
             "identifier": "bbttcc_feat_spark_sense",
-            "hash": "5a4cc0ccee6c"
+            "hash": "251dc4c363e3"
           }
         }
       }
@@ -2032,7 +2032,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/skills/melee/strike-sword-dagger-runes-gray.webp",
-      "description": "<p><em>Sometimes the quiet is the threat.</em></p><p>As a Bonus action once per short rest, choose one creature that can see you within 30 feet That creature is at disadvantage: its next attack roll against a target other than you is 3d10 keep-lowest-2.</p>",
+      "description": "<p><em>Sometimes the quiet is the threat.</em></p><p>As a Bonus Action once per short rest, choose one creature that can see you within 30 feet. That creature is at disadvantage: its next attack roll against a target other than you is 3d10 keep-lowest-2.</p>",
       "uses": {
         "max": "1",
         "per": "sr"
@@ -2059,7 +2059,7 @@
             "id": "4jCeY0iHWA3KKak0",
             "pack": "items",
             "identifier": "bbttcc_feat_threatening_silence",
-            "hash": "195112be158e"
+            "hash": "ec22931cc734"
           }
         }
       }
@@ -2181,14 +2181,14 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
-      "description": "<p><em>Locks are promises made by people who never met you.</em></p><p>You have advantage on checks made to locate hidden doors, panels, caches, and secret compartments.</p><p>Additionally, when you attempt to open a lock or disable a trap, you may treat a 2d10x10 roll of 9 or lower as a 10. Once you use this feat, you can’t use it again until you finish a short rest or long rest.</p>",
+      "description": "<p><em>Locks are promises made by people who never met you.</em></p><p>You have advantage on checks made to locate hidden doors, panels, caches, and secret compartments.</p><p>Additionally, when you attempt to open a lock or disable a trap, you may treat a 2d10 roll of 9 or lower as a 10. Once you use this technique, you can’t use it again until you finish a short rest.</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
             "id": "w6VpwbAJcOJq1uYU",
             "pack": "items",
             "identifier": "bbttcc_feat_vaultbreaker",
-            "hash": "2ecdd0464906"
+            "hash": "63f118bbc6a3"
           }
         }
       }
@@ -2202,14 +2202,14 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/water/strike-weapon-blade-ice-blue.webp",
-      "description": "<p><em>A handle is a handle if you know leverage.</em></p><p>When you attack with a weapon you are not trained with, you do not suffer disadvantage.</p>",
+      "description": "<p><em>A handle is a handle if you know leverage.</em></p><p>When you attack with a weapon you are not trained with, you roll 2d10 normally (no keep-lowest penalty).</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
             "id": "Om4cXPYondma8XIZ",
             "pack": "items",
             "identifier": "bbttcc_feat_weapon_familiarity",
-            "hash": "def19e4d514e"
+            "hash": "3d56f553e7e0"
           }
         }
       }
@@ -2259,14 +2259,14 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/light/explosion-star-glow-orange.webp",
-      "description": "<p><em>What you shape, you shape broadly.</em></p><p>Increase the <strong>area size</strong> of any area-of-effect powers you cast by one step (e.g. a 10 ft burst becomes 15 ft; a 15 ft cone becomes 20 ft).</p><p><span style=\"opacity: 0.7; margin: 0.5rem 0 0; font-size: 0.74rem\">✍ Applied by the GM/player — no automatic engine effect.</span></p>",
+      "description": "<p><em>What you shape, you shape broadly.</em></p><p>Increase the <strong>area size</strong> of any area-of-effect powers you cast by one step (e.g. a 10 feet burst becomes 15 feet; a 15 feet cone becomes 20 feet).</p><p><span style=\"opacity: 0.7; margin: 0.5rem 0 0; font-size: 0.74rem\">✍ Applied by the GM/player — no automatic engine effect.</span></p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
             "id": "pz32DyjV69BILwss",
             "pack": "items",
             "identifier": "bbttcc_feat_wide_working",
-            "hash": "b3a4c625ca46"
+            "hash": "0d0947e50746"
           }
         }
       }

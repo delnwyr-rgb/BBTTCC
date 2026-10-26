@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 105,
-        "max": 105
+        "max": 105,
+        "temp": 0
       },
       "stress": {
         "value": 52,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -146,6 +148,9 @@
       "shaken"
     ],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -158,6 +163,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "Elite bodyguard sworn to a Hex-Warlord. Has killed more heroes than they remember."
     }
   },
   "flags": {
@@ -198,16 +207,19 @@
             ]
           },
           "price": {
-            "marks": 20250,
-            "bounty": 20250,
-            "hire": 50625,
-            "ransom": 33750,
+            "marks": 80,
+            "bounty": 80,
+            "hire": 120,
+            "ransom": 120,
             "currency": "violence",
             "gmOverride": false,
-            "notes": "TIV heavy brute (bestiary) \u2014 bounty 20250 / hire 50625 / ransom 33750 marks (paid in violence)"
-          }
+            "notes": "TIV heavy mortal — bounty 80 / hire 120 marks; credited to the pool matching the method (default violence)"
+          },
+          "lineage": "mortal",
+          "subLineage": "oath-bound"
         }
-      }
+      },
+      "creatureType": "humanoid"
     }
   },
   "_id": "mUM4tXeqeUagkLRJ",
@@ -352,6 +364,23 @@
               "tier": "IV",
               "frame": "trait"
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "allyDamaged",
+                "radius": 6,
+                "do": {
+                  "ward": 0.5
+                },
+                "limit": {
+                  "per": "round",
+                  "uses": 1
+                },
+                "label": "Sworn — takes half of its warlord's wound"
+              }
+            ]
           }
         }
       },
@@ -363,17 +392,16 @@
       },
       "_id": "4SMEFmR2iKAYso5D",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118714976,
-        "modifiedTime": 1782167244207,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989132690,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!mUM4tXeqeUagkLRJ.4SMEFmR2iKAYso5D"
+      }
     },
     {
       "name": "Warlord's Blade",
@@ -384,7 +412,7 @@
         "intent": "violence",
         "skill": "melee",
         "damage": {
-          "formula": "2d12",
+          "formula": "3d10",
           "attribute": "violence",
           "type": "kinetic",
           "damageFlavor": "honored-edge",
@@ -452,11 +480,38 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack \u00d7 1",
+                "notes": "TIV attack × 1",
                 "bound": "free",
                 "saleBack": 540
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "weapon": "Warlord's Blade"
+                },
+                "do": {
+                  "reroll": "damage"
+                }
+              },
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Warlord's Blade",
+                  "critical": true
+                },
+                "do": {
+                  "condition": {
+                    "key": "prone",
+                    "duration": "1-round"
+                  }
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -645,20 +700,19 @@
       },
       "_id": "8KO0jBULI7awWQSK",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118714976,
-        "modifiedTime": 1782167244207,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989132690,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!mUM4tXeqeUagkLRJ.8KO0jBULI7awWQSK"
+      }
     },
     {
-      "name": "Wall-of-Honor (recharges on a Soma Break)",
+      "name": "Wall-of-Honor (recharge 5–6)",
       "type": "weapon",
       "img": "icons/magic/earth/barrier-stone-brown-green.webp",
       "system": {
@@ -666,7 +720,7 @@
         "intent": "presence",
         "skill": "melee",
         "damage": {
-          "formula": "2d12",
+          "formula": "3d10",
           "attribute": "violence",
           "type": "kinetic",
           "damageFlavor": "battlefield-impact",
@@ -684,7 +738,7 @@
           "aoe",
           "shape-cone"
         ],
-        "effect": "Cone 15 ft. \u2014 targets roll vs Guard (DC 14). Half damage on success. The guard plants and sweeps. Failed-save targets are knocked prone and pushed 10 ft. away from the warlord (the cone always opens away from the warlord). Recharge 5\u20136.",
+        "effect": "Cone 3 squares. — targets roll vs Guard (DC 14). Half damage on success. The guard plants and sweeps. Failed-save targets are knocked prone and pushed 2 squares. away from the warlord (the cone always opens away from the warlord). At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
         "flavor": "Whatever ground the warlord is standing on. That ground.",
         "manifestation": {
           "tier": 1,
@@ -715,6 +769,24 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "body",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 14,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "prone"
+            ],
+            "duration": "1-round"
+          },
+          "area": {
+            "shape": "cone",
+            "size": 15
           }
         },
         "description": {
@@ -740,16 +812,24 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV save \u00d7 1",
+                "notes": "TIV save × 1",
                 "bound": "free",
                 "saleBack": 540
               }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
             }
           }
         },
         "autoanimations": {
           "id": "ft-wall-of-honor-recharge-5-6-",
-          "label": "Wall-of-Honor (Recharge 5\u20136)",
+          "label": "Wall-of-Honor (Recharge 5–6)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -933,17 +1013,16 @@
       },
       "_id": "YNwVCgkGjqBsH6YG",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118714976,
-        "modifiedTime": 1782167244207,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989132691,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!mUM4tXeqeUagkLRJ.YNwVCgkGjqBsH6YG"
+      }
     },
     {
       "name": "Last to Fall",
@@ -990,8 +1069,7 @@
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!mUM4tXeqeUagkLRJ.5Bra10noUfGvWEir"
+      }
     },
     {
       "name": "Sworn Intercept",
@@ -1002,7 +1080,7 @@
         "intent": "violence",
         "skill": "melee",
         "damage": {
-          "formula": "2d12",
+          "formula": "3d10",
           "attribute": "violence",
           "type": "kinetic",
           "damageFlavor": "intercepting-cut",
@@ -1018,7 +1096,7 @@
           "tier-iv",
           "role-brute"
         ],
-        "effect": "Triggered when an enemy moves within 5 ft. of the warlord. The guard makes one attack as a reaction. Damage die rerolls-the-lowest.",
+        "effect": "Triggered when an enemy moves within 1 square. of the warlord. The guard makes one attack as a reaction. Damage die rerolls-the-lowest.",
         "flavor": "The guard does not interrupt you. The interrupt was scheduled.",
         "manifestation": {
           "tier": 1,
@@ -1070,11 +1148,32 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack \u00d7 1",
+                "notes": "TIV attack × 1",
                 "bound": "free",
                 "saleBack": 540
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "weapon": "Sworn Intercept"
+                },
+                "do": {
+                  "reroll": "damage"
+                }
+              },
+              {
+                "on": "selfTurnStart",
+                "do": {
+                  "prompt": "Sworn Intercept: reaction strike when an enemy moves within 5 ft of the warlord."
+                },
+                "narrative": true
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -1263,17 +1362,16 @@
       },
       "_id": "3GwtnUotnVE5MVx3",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118714976,
-        "modifiedTime": 1782167244207,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989132690,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!mUM4tXeqeUagkLRJ.3GwtnUotnVE5MVx3"
+      }
     }
   ],
   "effects": [],
@@ -1283,12 +1381,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118714976,
-    "modifiedTime": 1783219918003,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989132569,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

@@ -1,0 +1,77 @@
+{
+  "name": "Shattered Facade",
+  "type": "feat",
+  "img": "icons/magic/death/blood-corruption-vomit-red.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The beautiful form flickers, and for one instant everyone sees what casts that shadow. Each creature within 6 squares that can see the Angel rolls vs Resolve (DC 18). Fail: 3d10 psychic damage (Stress) and Shaken. Repeat the check at the end of each of its turns to recover. The Angel does not use this ability by choice — the GM may fire it when the Angel drops below half Integrity.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "if": {
+              "ownerBloodied": true
+            },
+            "do": {
+              "condition": {
+                "key": "shaken",
+                "duration": "until-saved",
+                "save": {
+                  "attr": "soul",
+                  "dc": 18
+                }
+              },
+              "damage": {
+                "formula": "3d10",
+                "type": "psychic"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Angel of Hollow Glory"
+        ],
+        "sourceIds": [
+          "yQZAnkNsEcE5kKtg"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "ItJ8lt6TGFAfzDyC",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069963,
+    "modifiedTime": 1792989070044,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ItJ8lt6TGFAfzDyC"
+}

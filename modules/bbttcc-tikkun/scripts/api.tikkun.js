@@ -2,6 +2,11 @@
 // carries the same block at flags.bbttcc-tikkun.spark because dnd5e's data model strips unknown system keys.
 const _sparkSys = (it) => (it?.system?.sephirah ? it.system : (it?.flags?.["bbttcc-tikkun"]?.spark ?? it?.system ?? {}));
 
+// One spelling per sephira (owner ruling 2026-10-26): GEBURAH. Legacy "gevurah"/"gevura" sephirah
+// values and "spark_gevurah_*" spark keys are folded on input so pre-migration data keeps resolving.
+const _foldSeph = (k) => { const s = String(k ?? "").toLowerCase(); return (s === "gevurah" || s === "gevura") ? "geburah" : s; };
+const _foldSparkKey = (k) => String(k ?? "").replace(/^spark_gevurah?_/i, "spark_geburah_");
+
 console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
 /* bbttcc-tikkun/api.tikkun.js — Great Work Core API (C1 + Phase A.1)
  *
@@ -77,7 +82,7 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
         key,
         name:       cfg.name       || key,
         kind:       cfg.kind       || null,   // conceptual / vestigial / animate
-        sephirah:   cfg.sephirah   || null,   // chesed / gevurah / ...
+        sephirah:   cfg.sephirah   || null,   // chesed / geburah / ...
         status:     cfg.status     || "unknown",
         identified: !!cfg.identified,
         acquired:   !!cfg.acquired,
@@ -113,7 +118,7 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     chokmah: { aligned: ["intrigue", "soul", "logistics"],         misaligned: ["violence", "siege"] },
     binah:   { aligned: ["intrigue", "diplomacy", "logistics"],    misaligned: ["violence", "nonlethal"] },
     chesed:  { aligned: ["nonlethal", "diplomacy", "softpower", "faith"], misaligned: ["violence", "siege"] },
-    gevurah: { aligned: ["violence", "siege"],                     misaligned: ["softpower", "diplomacy", "nonlethal"] },
+    geburah: { aligned: ["violence", "siege"],                     misaligned: ["softpower", "diplomacy", "nonlethal"] },
     tiferet: { aligned: ["diplomacy", "softpower", "faith"],       misaligned: ["violence"] },
     netzach: { aligned: ["violence", "siege", "logistics"],        misaligned: ["nonlethal", "intrigue"] },
     hod:     { aligned: ["intrigue", "diplomacy", "softpower"],    misaligned: ["violence", "siege"] },
@@ -136,7 +141,7 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     let aligned    = Array.isArray(sys.alignedMethods)    ? sys.alignedMethods    : null;
     let misaligned = Array.isArray(sys.misalignedMethods) ? sys.misalignedMethods : null;
     if ((!aligned?.length || !misaligned?.length) && sys.sephirah) {
-      const fallback = SEPHIRAH_METHOD_ALIGNMENT[sys.sephirah];
+      const fallback = SEPHIRAH_METHOD_ALIGNMENT[_foldSeph(sys.sephirah)];
       if (fallback) {
         if (!aligned?.length)    aligned    = fallback.aligned;
         if (!misaligned?.length) misaligned = fallback.misaligned;
@@ -177,7 +182,7 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
 
   async function _resolveSparkItem(keyOrUuid) {
     if (!keyOrUuid) return null;
-    const s = String(keyOrUuid);
+    const s = _foldSparkKey(keyOrUuid);   // spark_gevurah_* → spark_geburah_* (2026-10-26)
     // Full UUID path
     let rfiId = null;
     if (s.startsWith("Compendium.")) {
@@ -205,7 +210,8 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     const actor = _asActor(actorOrId);
     if (!actor || !key) return false;
     const map  = get(actor, `flags.${MOD}.sparks`, {});
-    const rec  = map?.[key] || Object.values(map).find((s) => s.key === key);
+    const k2   = _foldSparkKey(key);   // legacy spark_gevurah_* ↔ spark_geburah_* (2026-10-26)
+    const rec  = map?.[key] || map?.[k2] || Object.values(map).find((s) => s.key === key || _foldSparkKey(s.key) === k2);
     if (!rec) return false;
     const st = String(rec.status || "").toLowerCase();
     // Treat gathered or integrated as "has" for gating (e.g., Spark of Mercy)
@@ -322,7 +328,7 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     if (!actor) throw new Error("markSparkPhase: actor not found");
     const key = sparkKey;
     const map = _getSparkMap(actor);
-    let s     = map[key] || Object.values(map).find((sp) => sp.key === key);
+    let s     = map[key] || map[_foldSparkKey(key)] || Object.values(map).find((sp) => sp.key === key || _foldSparkKey(sp.key) === _foldSparkKey(key));   // legacy spark_gevurah_* (2026-10-26)
     if (!s && create) {
       const item = await _resolveSparkItem(key);
       const identifier = item?.flags?.["bbttcc-tikkun"]?.identifier ?? key;
@@ -406,7 +412,7 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     const actor = _asActor(actorId);
     if (!actor) throw new Error("depositSpark: actor not found");
     const map = _getSparkMap(actor);
-    const s   = map[sparkKey] || Object.values(map).find(x => x.key === sparkKey);
+    const s   = map[sparkKey] || map[_foldSparkKey(sparkKey)] || Object.values(map).find(x => x.key === sparkKey || _foldSparkKey(x.key) === _foldSparkKey(sparkKey));
     if (!s) throw new Error(`depositSpark: spark "${sparkKey}" not found on ${actor.name}`);
     if (!s.integrated) throw new Error(`depositSpark: ${s.name ?? sparkKey} is not yet integrated personally`);
     if (s.corrupted)   throw new Error(`depositSpark: ${s.name ?? sparkKey} is corrupted — run a repair ritual first`);
@@ -436,7 +442,7 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     // If it fails (or is missing) the deposit did NOT happen: throw BEFORE the
     // character flip, so the spark stays depositable and nothing claims a count
     // the faction never received.
-    const sephKey = String(s.sephirah || sparkKey).toLowerCase();
+    const sephKey = _foldSeph(s.sephirah || sparkKey);
     const factionApi = game?.bbttcc?.api?.tikkun?.integrateSpark;
     if (typeof factionApi !== "function") throw new Error("depositSpark: faction integrateSpark is not installed — nothing deposited");
     try {

@@ -44,8 +44,8 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 11,
-        "max": 11,
+        "value": 25,
+        "max": 25,
         "temp": 0
       },
       "stress": {
@@ -170,12 +170,114 @@
       "fragments": []
     },
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Humanoid",
+      "notes": "The bottom rung of every raider warband: somebody's cousin with a pipe rifle and a bad plan. Fights in crews, fires early, runs when the crew thins."
     },
     "description": "<p><strong>Concept.</strong> The bottom rung of every raider warband. Somebody's cousin with a pipe rifle and a bad plan.</p>\n<p><strong>Signature.</strong> Fires the first shot a full second before anyone told them to.</p>"
   },
   "items": [
+    {
+      "name": "Ambush Crew",
+      "type": "feature",
+      "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "rfi-scrubbed"
+        ],
+        "description": {
+          "value": "<p>In the first round of combat, the bandit rerolls the lowest die on attack rolls against any creature that hasn't taken a turn yet.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "eZeCUtHui2PZfXCO",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "when": "firstRound",
+              "vs": "a creature that hasn't taken a turn yet",
+              "note": "Ambush Crew"
+            }
+          ]
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1777700829202,
+        "modifiedTime": 1791422257668,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Poor Discipline",
+      "type": "feature",
+      "img": "icons/magic/control/fear-fright-white.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "rfi-scrubbed"
+        ],
+        "description": {
+          "value": "<p>If reduced below half Integrity, the bandit must succeed a Soul check vs DC 12 at the start of its turn or disengage and move away at full speed.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "wDDLCStYDKjBkVM0",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "bloodied",
+                "do": {
+                  "morale": {
+                    "attr": "soul",
+                    "dc": 12,
+                    "outcome": "disengages and moves away at full speed"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1777700829202,
+        "modifiedTime": 1791331976226,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
     {
       "name": "Pipe Rifle",
       "type": "weapon",
@@ -234,7 +336,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> range 60/180 ft., one target. Damage: <code>1d8</code> kinetic + violence. On a hit against a target that hasn't acted yet this combat, the damage die rerolls the lowest.</p><p><em>Held together with tape and confidence.</em></p>"
+          "value": "<p><strong>Strike.</strong> range 60/36 squares., one target. Damage: <code>1d8</code> kinetic + violence. On a hit against a target that hasn't acted yet this combat, the damage die rerolls the lowest.</p><p><em>Held together with tape and confidence.</em></p>"
         }
       },
       "_id": "IknBNvAVYXRCelYc",
@@ -439,43 +541,17 @@
             ]
           }
         }
-      }
-    },
-    {
-      "name": "Ambush Crew",
-      "type": "feature",
-      "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
-      "system": {
-        "category": "principle",
-        "source": "",
-        "tags": [
-          "translated",
-          "rfi-scrubbed"
-        ],
-        "description": {
-          "value": "<p>In the first round of combat, the bandit rerolls the lowest die on attack rolls against any creature that hasn't taken a turn yet.</p>",
-          "chat": ""
-        }
       },
-      "_id": "eZeCUtHui2PZfXCO",
-      "effects": [],
-      "folder": null,
-      "sort": 0,
-      "ownership": {
-        "default": 0
-      },
-      "flags": {
-        "fourththing": {
-          "rerolls": [
-            {
-              "context": "attack",
-              "mode": "reroll-lowest",
-              "when": "firstRound",
-              "vs": "a creature that hasn't taken a turn yet",
-              "note": "Ambush Crew"
-            }
-          ]
-        }
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1777700829202,
+        "modifiedTime": 1792977754044,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
       }
     },
     {
@@ -536,7 +612,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. On a hit against a Prone or Restrained target, +1d4 kinetic.</p><p><em>Nobody's proud of the shiv.</em></p>"
+          "value": "<p><strong>Strike.</strong> reach 1 square., one target. Damage: <code>1d6</code> kinetic + violence. On a hit against a Prone or Restrained target, +1d4 kinetic.</p><p><em>Nobody's proud of the shiv.</em></p>"
         }
       },
       "_id": "jtCqz9pt2aQ62UuF",
@@ -747,49 +823,17 @@
             ]
           }
         }
-      }
-    },
-    {
-      "name": "Poor Discipline",
-      "type": "feature",
-      "img": "icons/magic/control/fear-fright-white.webp",
-      "system": {
-        "category": "principle",
-        "source": "",
-        "tags": [
-          "translated",
-          "rfi-scrubbed"
-        ],
-        "description": {
-          "value": "<p>If reduced below half Integrity, the bandit must succeed a Soul check vs DC 12 at the start of its turn or disengage and move away at full speed.</p>",
-          "chat": ""
-        }
       },
-      "_id": "wDDLCStYDKjBkVM0",
-      "effects": [],
-      "folder": null,
-      "sort": 0,
-      "ownership": {
-        "default": 0
-      },
-      "flags": {
-        "fourththing": {
-          "npcAuto": {
-            "v": 1,
-            "rules": [
-              {
-                "on": "bloodied",
-                "do": {
-                  "morale": {
-                    "attr": "soul",
-                    "dc": 12,
-                    "outcome": "disengages and moves away at full speed"
-                  }
-                }
-              }
-            ]
-          }
-        }
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1777700829202,
+        "modifiedTime": 1792977754045,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
       }
     }
   ],
@@ -915,5 +959,17 @@
       },
       "creatureType": "humanoid"
     }
-  }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1777700829202,
+    "modifiedTime": 1792989137978,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!5QNrUdqGtIcr1f5Z"
 }

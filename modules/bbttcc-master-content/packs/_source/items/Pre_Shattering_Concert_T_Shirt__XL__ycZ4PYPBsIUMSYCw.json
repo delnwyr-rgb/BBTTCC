@@ -10,8 +10,10 @@
     "armorSkill": "fitting",
     "equipped": false,
     "tags": [
+      "mal-voiced",
       "vestment",
-      "pre-fall"
+      "pre-fall",
+      "light"
     ],
     "category": "armor",
     "source": "",
@@ -48,15 +50,15 @@
             "indistinct-rebellion"
           ],
           "price": {
-            "marks": 50,
-            "currency": "economy",
+            "marks": 75,
+            "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI vestment stamp",
+            "notes": "TI vestment",
             "bound": "free",
-            "saleBack": 20
+            "saleBack": 30
           }
         }
       }
@@ -112,8 +114,7 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!ycZ4PYPBsIUMSYCw.DtuX8b0Uuxg2z5yK"
+      }
     }
   ],
   "sort": 603125,
@@ -122,12 +123,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777437725676,
-    "modifiedTime": 1778541981825,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988954916,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

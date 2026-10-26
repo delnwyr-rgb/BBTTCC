@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During travel, scouting, route-finding, or first-contact scenarios, the first setback or complication may be rerolled once.</li></ul>",
+      "value": "<p><strong>Tier 2 (Level 5) — The Fool (Catalyst)</strong></p><ul><li><strong>Strategic:</strong> Once per turn, on a travel, scouting, route-finding or first-contact leg, your Domain rerolls the first setback or complication (the card fires it).</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -71,12 +71,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986723243,
-    "modifiedTime": 1781116036590,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989159864,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

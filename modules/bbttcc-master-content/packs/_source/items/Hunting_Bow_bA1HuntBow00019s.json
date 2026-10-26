@@ -15,14 +15,14 @@
     },
     "damageParts": [],
     "range": {
-      "short": 30,
-      "long": 120
+      "short": 6,
+      "long": 24,
+      "units": "sq"
     },
     "tags": [
       "t1-baseline",
       "bow",
-      "silent",
-      "two-handed"
+      "silent"
     ],
     "effect": "Two-handed, silent. Arrows can be recovered and re-fletched. No signature ability.",
     "flavor": "Quiet enough to keep the deer, and the neighbours, from noticing.",
@@ -58,7 +58,7 @@
       }
     },
     "description": {
-      "value": "<p>A recurve hunting bow of laminated ash with a hex-rope string, the kind every hex still makes because arrows are free and brass is not. Hunters, scouts and anyone who would rather not announce themselves carry one. It will never out-shoot a Hunting Rifle; it will out-last one, and the ammunition grows on trees.</p><p><b>Standard Issue.</b> Silent two-handed ranged. No signature — it predates the idea.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Two-handed, silent. Arrows can be recovered and re-fletched. No signature ability.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d8 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(arrow)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 30 / 120</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+      "value": "<p>A recurve hunting bow of laminated ash with a hex-rope string, the kind every hex still makes because arrows are free and brass is not. Hunters, scouts and anyone who would rather not announce themselves carry one. It will never out-shoot a Hunting Rifle; it will out-last one, and the ammunition grows on trees.</p><p><b>Standard Issue.</b> Silent two-handed ranged. No signature — it predates the idea.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Two-handed, silent. Arrows can be recovered and re-fletched. No signature ability.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d8 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(arrow)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 6 / 24 squares</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
     }
   },
   "flags": {
@@ -301,21 +301,21 @@
       "version": 5
     }
   },
-  "folder": "bQhXd1gwJXtaVLGh",
   "_id": "bA1HuntBow00019s",
   "effects": [],
+  "folder": "bQhXd1gwJXtaVLGh",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.16",
-    "createdTime": 1792009438689,
-    "modifiedTime": 1792009438689,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792009555922,
+    "modifiedTime": 1792988943950,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

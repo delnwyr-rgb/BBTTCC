@@ -1,0 +1,471 @@
+{
+  "name": "Initiate's Robe of Thick Skin",
+  "type": "armor",
+  "img": "icons/equipment/chest/robe-layered-red.webp",
+  "system": {
+    "guardBonus": 0,
+    "evasionBonus": 1,
+    "resolveBonus": 1,
+    "resistances": [],
+    "armorSkill": "fitting",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "robe",
+      "cloth",
+      "caster",
+      "light",
+      "bound-working"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Undyed sept-cloth cut to a long working robe with a corded belt. Issued to first-circle initiates of any chapterhouse or tutor-cell — the kind of garment that gets traded between students faster than any of them keep notebooks. Comfortable to channel in. Forgettable to anyone watching for trouble.</p><p>Light enough to manifest in. Dignified enough to walk past a sept-warden.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Cloth</li>\n  <li><strong>Defense:</strong> Evasion +1, Resolve +1</li>\n  <li><strong>Requires:</strong> Fitting (trained)</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 450 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Bound Working — Thick Skin, Literally (TI).</strong></p>\n<ul>\n  <li>Carries the Working <strong>Thick Skin, Literally</strong>: it appears among your Manifestations as “Thick Skin, Literally ⟡ Initiate's Robe of Thick Skin” and casts from the item, <strong>no Clarity</strong> — Noise and misfire still apply.</li>\n  <li><strong>3 charges</strong>; one is spent per cast attempt; all recover on a Soma Break.</li>\n  <li><em>One ally within 6 squares (or yourself) gains Guard +2 for the scene.</em></li>\n  <li>Tier II · attuned (one slot) · technomagical (Witness-forge binding).</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Plain cloth. The hem remembers the floor of the room you left.",
+          "origin": "forged",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Undyed sept-cloth cut to a long working robe with a corded belt. Issued to first-circle initiates of any chapterhouse or tutor-cell — the kind of garment that gets traded between students faster than any of them keep notebooks. Comfortable to channel in. Forgettable to anyone watching for trouble.</p><p>Light enough to manifest in. Dignified enough to walk past a sept-warden.</p>",
+          "materialOf": [
+            {
+              "key": "sept-cloth",
+              "qty": 1
+            },
+            {
+              "key": "corded-belt",
+              "qty": 1
+            },
+            {
+              "key": "prayer-binding",
+              "qty": 1
+            },
+            {
+              "key": "anchor-quartz",
+              "qty": 1
+            },
+            {
+              "key": "focused-crystal",
+              "qty": 1
+            },
+            {
+              "key": "witness-glass",
+              "qty": 1
+            }
+          ],
+          "price": {
+            "marks": 450,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII armor × tech 2.0 (bound Working: Thick Skin, Literally TI) × attuned",
+            "bound": "attuned",
+            "saleBack": 180
+          },
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 3,
+              "max": 3,
+              "recoverPer": "soma-break"
+            },
+            "fuel": null,
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "signature": "bound-working",
+            "failure": "misfire",
+            "origin": "witness-forge",
+            "shielded": false
+          }
+        }
+      },
+      "working": {
+        "power": {
+          "name": "Thick Skin, Literally",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+          "system": {
+            "intent": "presence",
+            "channel": "body",
+            "sephirah": "chesed",
+            "mode": "hermetic",
+            "clarityRequired": 0,
+            "noiseGain": 0,
+            "activation": "action",
+            "target": "single",
+            "range": "near",
+            "damage": "",
+            "damageType": "energy",
+            "damageFlavor": "",
+            "damageRoll": {
+              "op": "none",
+              "number": 0,
+              "die": "d6",
+              "attribute": "",
+              "type": "kinetic",
+              "flavor": "",
+              "track": "integrity"
+            },
+            "damageParts": [],
+            "effect": "One ally within 6 squares (or yourself) gains Guard +2 for the scene.",
+            "tags": [
+              "starter-kit",
+              "ward",
+              "path:cosmic_linguist",
+              "doctrine-signature",
+              "vestment",
+              "protect",
+              "sustained",
+              "worn"
+            ],
+            "category": "manifestation",
+            "flavor": "Mal: 'Rhino-adjacent. Emotionally AND ballistically.'",
+            "manifestation": {
+              "tier": 1,
+              "family": "working",
+              "concept": "You compliment an ally on being thick-skinned, and the metaphor settles over them like a well-worn duster: insults and shrapnel alike now mostly bounce.",
+              "form": "vestment",
+              "function": "protect",
+              "stability": "sustained",
+              "interactionModel": "worn",
+              "costType": "none",
+              "costValue": 0,
+              "costText": "",
+              "duration": "scene",
+              "durationText": "",
+              "triggerText": "",
+              "scale": "personal",
+              "targetText": "",
+              "rangeAreaText": "",
+              "rangeFt": 30,
+              "maintenanceCost": "",
+              "riskText": "",
+              "pathResonance": "Cosmic Linguist — cosmic linguist linguist metaphor apostle",
+              "fictionalPermission": "",
+              "gmCalibration": "",
+              "mechanicalHook": "",
+              "signature": "",
+              "thirdThing": "",
+              "opCost": {
+                "pool": "",
+                "value": 0
+              },
+              "area": {
+                "shape": "none",
+                "size": 0
+              },
+              "activation": {
+                "type": "action",
+                "consumePool": true
+              },
+              "save": {
+                "enabled": false,
+                "defense": "evasion",
+                "attribute": "",
+                "dcMode": "derived",
+                "dcFixed": 15
+              },
+              "maintenanceKey": "none",
+              "isSignature": false,
+              "chain": {
+                "enabled": false,
+                "count": 3,
+                "range": 30,
+                "damageFormula": "1d6",
+                "damageType": "",
+                "carryConditions": false,
+                "carryEffects": false
+              },
+              "conditionalDamage": [],
+              "appliedEffects": {
+                "modifiers": [
+                  {
+                    "stat": "guard",
+                    "op": "+",
+                    "value": 2
+                  }
+                ],
+                "resists": [],
+                "immunes": []
+              }
+            },
+            "description": {
+              "value": "<p>One ally within 6 squares (or yourself) gains Guard +2 for the scene.</p>"
+            }
+          },
+          "flags": {
+            "autoanimations": {
+              "id": "e5b8f7d9-008c-43f6-bcc6-4c332d49a891",
+              "label": "Thick Skin, Literally",
+              "levels3d": {
+                "type": "explosion",
+                "data": {
+                  "color01": "#FFFFFF",
+                  "color02": "#FFFFFF",
+                  "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+                },
+                "sound": {
+                  "enable": false
+                },
+                "secondary": {
+                  "enable": false,
+                  "data": {
+                    "color01": "#FFFFFF",
+                    "color02": "#FFFFFF",
+                    "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+                  }
+                }
+              },
+              "macro": {
+                "enable": false,
+                "playWhen": "0"
+              },
+              "meleeSwitch": {
+                "video": {
+                  "dbSection": "range",
+                  "menuType": "weapon",
+                  "animation": "arrow",
+                  "variant": "regular",
+                  "color": "regular"
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "detect": "automatic",
+                  "range": 2,
+                  "returning": false,
+                  "switchType": "on"
+                }
+              },
+              "menu": "ontoken",
+              "primary": {
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "shieldfx",
+                  "animation": "ice",
+                  "variant": "03",
+                  "color": "purple",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "isWait": false,
+                  "opacity": 1,
+                  "playbackRate": 1,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "zIndex": 1
+                }
+              },
+              "secondary": {
+                "enable": false,
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "spell",
+                  "animation": "curewounds",
+                  "variant": "01",
+                  "color": "blue",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "addTokenWidth": false,
+                  "anchor": "0.5",
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "fadeIn": 250,
+                  "fadeOut": 500,
+                  "isMasked": false,
+                  "isRadius": true,
+                  "isWait": false,
+                  "opacity": 1,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1.5,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "zIndex": 1
+                }
+              },
+              "soundOnly": {
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                }
+              },
+              "source": {
+                "enable": false,
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "spell",
+                  "animation": "curewounds",
+                  "variant": "01",
+                  "color": "blue",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "addTokenWidth": false,
+                  "anchor": "0.5",
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "fadeIn": 250,
+                  "fadeOut": 500,
+                  "isMasked": false,
+                  "isRadius": false,
+                  "isWait": true,
+                  "opacity": 1,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "zIndex": 1
+                }
+              },
+              "target": {
+                "enable": false,
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "spell",
+                  "animation": "curewounds",
+                  "variant": "01",
+                  "color": "blue",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "addTokenWidth": false,
+                  "anchor": "0.5",
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "fadeIn": 250,
+                  "fadeOut": 500,
+                  "isMasked": false,
+                  "isRadius": false,
+                  "opacity": 1,
+                  "persistent": false,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "unbindAlpha": false,
+                  "unbindVisibility": false,
+                  "zIndex": 1
+                }
+              },
+              "isEnabled": true,
+              "isCustomized": true,
+              "fromAmmo": false,
+              "version": 5
+            }
+          }
+        },
+        "charges": {
+          "value": 3,
+          "max": 3,
+          "recoverPer": "soma-break"
+        },
+        "tier": 1
+      }
+    }
+  },
+  "folder": "EdubcDDQfUtnlKvP",
+  "_id": "O6Rjfh1KSvrhdZmM",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791427798073,
+    "modifiedTime": 1792988961656,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!O6Rjfh1KSvrhdZmM"
+}

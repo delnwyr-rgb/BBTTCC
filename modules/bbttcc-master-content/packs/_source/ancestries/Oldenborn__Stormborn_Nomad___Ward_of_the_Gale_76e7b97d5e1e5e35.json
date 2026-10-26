@@ -14,7 +14,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-oldenborn-furrykin=\"v1\" style=\"display:none\"></div>\n<p><em>\"Storms have learned to lean around you instead of straight through you.\"</em></p><p><strong>Ward of the Gale (1/Soma Break).</strong> Reaction — when you take damage from a visible attack, hazard, or effect, wrap yourself in whirling air and reduce that damage by half until the start of your next turn (apply resistance first, then halve the remainder).</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldStormWardOfTheGale\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Ward of the Gale</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Reaction (on damage) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Halve incoming damage from a visible source until start of next turn (resistance first, then halve).</div>\n</div>",
+      "value": "\n<p><em>\"Storms have learned to lean around you instead of straight through you.\"</em></p><p><strong>Ward of the Gale (1/Soma Break).</strong> Reaction — when you take damage from a visible attack, hazard, or effect, wrap yourself in whirling air and reduce that damage by half until the start of your next turn (apply resistance first, then halve the remainder).</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldStormWardOfTheGale\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Ward of the Gale</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Reaction (on damage) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Halve incoming damage from a visible source until start of next turn (resistance first, then halve).</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -39,14 +39,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "oldenborn",
       "feature": "ward_of_the_gale",
       "lineage": "Stormborn Nomad",
-      "tierLevel": 5,
       "version": "2.0.0",
       "date": "2026-04-19"
     },
@@ -60,15 +56,17 @@
       ],
       "triggers": [
         {
-          "event": "on-damage-taken",
+          "event": "on-incoming-damage",
           "limit": {
             "window": "soma-break",
             "uses": 1
           },
+          "offer": true,
+          "offerText": "Ward of the Gale — reaction: wrap yourself in whirling air and halve this hit.",
           "effect": {
-            "kind": "chat-prompt",
+            "kind": "modify-incoming-damage",
             "args": {
-              "body": "Ward of the Gale (1/a Soma Break). When you take damage from an attack, hazard, or effect you can see, you may use your reaction to wrap yourself in whirling air and reduce..."
+              "mode": "half"
             }
           }
         }
@@ -257,12 +255,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776600000000,
-    "modifiedTime": 1781116068087,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988973116,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

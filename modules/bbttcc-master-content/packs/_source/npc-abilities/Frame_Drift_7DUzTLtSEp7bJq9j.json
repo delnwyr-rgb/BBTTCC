@@ -13,24 +13,24 @@
     "target": "self",
     "range": "self",
     "damage": "1d6",
-    "damageType": "energy",
+    "damageType": "qliphothic",
     "damageFlavor": "",
     "damageRoll": {
       "op": "none",
       "number": 0,
       "die": "d6",
       "attribute": "",
-      "type": "kinetic",
+      "type": "qliphothic",
       "flavor": "",
-      "track": "integrity"
+      "track": "stress"
     },
     "damageParts": [],
     "effect": "Phase the Wraith partially out of the current frame. Until the start of its next turn, attackers reroll-lowest on attacks against it; on each missed attack, the attacker takes 1d6 qliphothic to Stress as the slip bleeds back into them.",
     "tags": [
       "translated",
-      "5e-port",
       "phase2-narrative",
-      "manifestation"
+      "manifestation",
+      "rfi-scrubbed"
     ],
     "category": "manifestation",
     "flavor": "The air around it remembers things that didn't happen.",
@@ -79,25 +79,14 @@
         "dcMode": "derived",
         "dcFixed": 15
       }
+    },
+    "description": {
+      "value": "<p><strong>Working.</strong> <em>Stop being entirely present.</em></p>\n<p>Phase the wraith partially out of the current frame. Until the start of its next turn, attackers reroll the highest die on attacks against it; each missed attack costs the attacker 1d6 qliphothic damage to Stress as the slip bleeds back into them.</p>\n<p><strong>Cost.</strong> 1 Clarity, +2 Noise · action · self / self.</p>\n<p><em>The air around it remembers things that didn't happen.</em></p>"
     }
   },
-  "_id": "7DUzTLtSEp7bJq9j",
-  "effects": [],
-  "sort": 0,
   "flags": {
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Slippage Wraith"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
-      }
-    },
     "autoanimations": {
-      "id": "4918bb29-a6ee-489a-9dfa-c066dd2ea310",
+      "id": "ft-frame-drift",
       "label": "Frame Drift",
       "macro": {
         "enable": false,
@@ -272,22 +261,57 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "evasive": {
+                "rounds": 1
+              },
+              "prompt": "Each miss costs the attacker 1d6 qliphothic to Stress."
+            },
+            "who": "self"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Slippage Wraith"
+        ],
+        "sourceIds": [
+          "CdNx8WLo0aZO6q8c"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
+  "_id": "7DUzTLtSEp7bJq9j",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": 1781024225546,
-    "modifiedTime": 1781024225546,
-    "lastModifiedBy": "MRFjjbUTBd66pWBY",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989027415,
+    "modifiedTime": 1792989027416,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!7DUzTLtSEp7bJq9j"
 }

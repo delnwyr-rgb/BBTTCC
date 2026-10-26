@@ -1,0 +1,104 @@
+{
+  "_id": "AnCoreQliphScar1",
+  "name": "Qliph-Scarred: What Walked Out",
+  "type": "feat",
+  "img": "art/bbttcc/asli-icons/qliph_scarred_3.webp",
+  "effects": [],
+  "folder": "j42C7j9nQ8gpXSoM",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "qliph_scarred",
+      "feature": "core",
+      "family": "qliph_scarred",
+      "speciesTrait": "qliph_scarred_core",
+      "version": "3.0.0",
+      "date": "2026-10-26"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "effects that would drain, wither or corrupt your body",
+          "note": "Shadow Resilience"
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-skill-fail",
+          "predicate": {
+            "tag": [
+              "soul"
+            ]
+          },
+          "limit": {
+            "window": "scene",
+            "uses": 1
+          },
+          "offerText": "Qliphothic Saturation — reroll the failed Soul check. The scene's Darkness-gain count rises by 1 (GM notes it).",
+          "effect": {
+            "kind": "reroll-failed-check",
+            "args": {}
+          }
+        }
+      ],
+      "grants": {
+        "resistances": [
+          "qliphothic"
+        ]
+      }
+    }
+  },
+  "system": {
+    "category": "feat",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"You walked out of a place that should have unmade you. The hollows never fully closed, and the world can feel the pressure leaking out.\"</em></p>\n<p><strong>Shadow Resilience.</strong> You have resistance to qliphothic damage. You reroll the lowest die on Body checks against effects that would drain, wither, or corrupt your body.</p>\n<p><strong>Qliphothic Saturation (1/scene).</strong> When you fail a Soul check, you may reroll it — but the scene's Darkness-gain count rises by 1. The scar pays for what the scar saves.</p>\n<p><strong>Hunger Mask (1/Soma Break).</strong> You can suppress one bodily need (hunger, thirst, sleep, breath) for up to 24 hours by deciding to; you suffer none of its penalties during that window. When the window closes, every deferred need strikes at once, each as a separate Stress-class consequence.</p>\n<p><strong>Shadow-Wake.</strong> Creatures with qliphothic attunement (demons, corrupt sephirot, Radiation-warped entities) can sense you at 12 squares and know you have been marked. They may not know how to read the mark.</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "qliph_scarred_core",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "Qliph-Scarred",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988968076,
+    "modifiedTime": 1792988968078,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "_key": "!items!AnCoreQliphScar1"
+}

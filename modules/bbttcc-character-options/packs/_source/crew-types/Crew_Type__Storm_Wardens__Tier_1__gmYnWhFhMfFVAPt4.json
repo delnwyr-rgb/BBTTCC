@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 — Storm Wardens</strong></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><p><em>You’ve learned the first law of bad weather: panic is usually deadlier than the rain.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Lore and Faith.</li><li><strong>Strategic:</strong> In hazardous weather or corrupted environmental conditions, your faction reduces travel and exposure penalties.</li></ul>",
+      "value": "<p><strong>Tier 1 — Storm Wardens</strong></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><p><em>You’ve learned the first law of bad weather: panic is usually deadlier than the rain.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Lore and Faith.</li><li><strong>Strategic:</strong> In hazardous weather or corrupted environmental conditions, your Domain reduces travel and exposure penalties.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-storm-wardens-t1",
@@ -85,12 +85,12 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346195869,
-        "modifiedTime": 1777433499540
+        "modifiedTime": 1792989167707
       },
       "start": {
         "combat": null,
@@ -101,8 +101,7 @@
         "initiative": null
       },
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!gmYnWhFhMfFVAPt4.4c4c71f0b0be4694"
+      "folder": null
     }
   ],
   "folder": "UA0NkRXG1eSXe9EL",
@@ -169,11 +168,11 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986959359,
-    "modifiedTime": 1782167238953,
+    "modifiedTime": 1792977822805,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

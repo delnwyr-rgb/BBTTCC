@@ -1,0 +1,63 @@
+{
+  "name": "Fractured Will (3/scene)",
+  "type": "feature",
+  "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-dream",
+      "boss",
+      "fractured-will"
+    ],
+    "description": {
+      "value": "<p>When Maarg fails a check, some part of it refuses the outcome: Maarg succeeds instead. 3 times per scene.</p><p><em>The calendar disagrees with the outcome.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "feature"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Desenitarius Maarg"
+        ],
+        "sourceIds": [
+          "YreqW1q05O7dGoxK"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "HVoVq2VEPckuB07P",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069935,
+    "modifiedTime": 1792989070017,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!HVoVq2VEPckuB07P"
+}

@@ -1,7 +1,7 @@
 {
   "name": "Ash Wolf",
   "type": "npc",
-  "img": "art/devin-knight/ScifiJanuary/Wolf_Alien_red.webp",
+  "img": "art/bbttcc/asli-tokens/bad_eden_ash_wolf.webp",
   "system": {
     "role": "brute",
     "tier": 1,
@@ -19,7 +19,7 @@
     },
     "attributes": {
       "violence": {
-        "value": 3
+        "value": 2
       },
       "intrigue": {
         "value": 1
@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 25,
-        "max": 25
+        "max": 25,
+        "temp": 0
       },
       "stress": {
         "value": 12,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,6 +145,9 @@
     },
     "conditionImmunities": [],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -155,6 +160,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "Apex pack hunter of the burn-zones. Coat smokes when angered."
     }
   },
   "flags": {
@@ -185,16 +194,19 @@
             ]
           },
           "price": {
-            "marks": 150,
-            "bounty": 150,
-            "hire": 375,
-            "ransom": 250,
+            "marks": 5,
+            "bounty": 5,
+            "hire": 10,
+            "ransom": 10,
             "currency": "violence",
             "gmOverride": false,
-            "notes": "TI light brute (bestiary) — bounty 150 / hire 375 / ransom 250 marks (paid in violence)"
-          }
+            "notes": "TI light wild — bounty 5 / hire 10 marks; credited to the pool matching the method (default violence)"
+          },
+          "lineage": "wild",
+          "subLineage": "pack"
         }
-      }
+      },
+      "creatureType": "beast"
     }
   },
   "_id": "GZeM7IAl471weU8b",
@@ -206,12 +218,12 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "art/devin-knight/ScifiJanuary/Wolf_Alien_red.webp",
+      "src": "art/bbttcc/asli-tokens/bad_eden_ash_wolf.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
-      "scaleX": 1,
-      "scaleY": 1,
+      "scaleX": 2,
+      "scaleY": 2,
       "tint": "#ffffff",
       "alphaThreshold": 0.75
     },
@@ -272,7 +284,7 @@
         "ring": null,
         "background": null
       },
-      "effects": 1,
+      "effects": 0,
       "subject": {
         "scale": 1,
         "texture": null
@@ -285,7 +297,11 @@
       "disposition": false
     },
     "movementAction": null,
-    "flags": {},
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
     "randomImg": false,
     "appendNumber": false,
     "prependAdjective": false
@@ -339,7 +355,29 @@
               "tier": "I",
               "frame": "trait"
             }
-          }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "allyAdjacentToTarget": true
+                },
+                "do": {
+                  "reroll": "attack"
+                }
+              }
+            ]
+          },
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "when": "allyAdjacentToTarget",
+              "note": "Pack Tactics — an ally within 1 square of the target"
+            }
+          ]
         }
       },
       "folder": null,
@@ -350,17 +388,16 @@
       },
       "_id": "HOFh2QhbRMVYikIe",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.5",
         "createdTime": 1780118689406,
-        "modifiedTime": 1782167242834,
+        "modifiedTime": 1791422259023,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!GZeM7IAl471weU8b.HOFh2QhbRMVYikIe"
+      }
     },
     {
       "name": "Smoldering Bite",
@@ -444,6 +481,24 @@
                 "saleBack": 20
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Smoldering Bite"
+                },
+                "do": {
+                  "dot": {
+                    "formula": "1",
+                    "type": "electrical",
+                    "ends": "action"
+                  }
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -632,20 +687,19 @@
       },
       "_id": "iLmU9IF21xWxyBOU",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1780118689406,
-        "modifiedTime": 1782167283442,
+        "modifiedTime": 1791331976859,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!GZeM7IAl471weU8b.iLmU9IF21xWxyBOU"
+      }
     },
     {
-      "name": "Burn-Zone Lunge (recharges on a Soma Break)",
+      "name": "Burn-Zone Lunge (recharge 5–6)",
       "type": "weapon",
       "img": "icons/magic/fire/beam-jet-stream-embers.webp",
       "system": {
@@ -655,7 +709,7 @@
         "damage": {
           "formula": "1d6",
           "attribute": "violence",
-          "type": "energy",
+          "type": "thermal",
           "damageFlavor": "cinder",
           "track": "integrity"
         },
@@ -671,7 +725,7 @@
           "aoe",
           "shape-line"
         ],
-        "effect": "Line 15 ft. — targets roll vs Evasion (DC 11). Half damage on success. Wolf can move up to its speed in a straight line as part of this action; it doesn't provoke opportunity attacks from the line. Recharge 5–6.",
+        "effect": "Line 3 squares. — targets roll vs Evasion (DC 11). Half damage on success. Wolf can move up to its speed in a straight line as part of this action; it doesn't provoke reaction strikes from the line. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
         "flavor": "It runs along the burn and lets the burn run along it.",
         "manifestation": {
           "tier": 1,
@@ -702,10 +756,22 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "intrigue",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 11,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "line",
+            "size": 15
           }
         },
         "description": {
-          "value": "<p><strong>Area Attack.</strong> Each creature in a 3 squares line the wolf moves through rolls <strong>Evasion</strong> vs DC 11. Hit: <code>1d6</code> thermal (cinder) + violence; half on success. Wolf can move up to its speed in a straight line as part of this action; it doesn't provoke opportunity attacks from the line.<br/><em>Recharges on a Soma Break.</em></p><p><em>It runs along the burn and lets the burn run along it.</em></p>",
+          "value": "<p><strong>Area Attack.</strong> Each creature in a 3 squares line the wolf moves through rolls <strong>Evasion</strong> vs DC 11. Hit: <code>1d6</code> thermal (cinder) + violence; half on success. Wolf can move up to its speed in a straight line as part of this action; it doesn't provoke reaction strikes from the line.<br/><em>Recharges on a Soma Break.</em></p><p><em>It runs along the burn and lets the burn run along it.</em></p>",
           "chat": ""
         }
       },
@@ -731,6 +797,14 @@
                 "bound": "free",
                 "saleBack": 20
               }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
             }
           }
         },
@@ -920,17 +994,92 @@
       },
       "_id": "rPeDoUL3RxF7jgcI",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118689406,
-        "modifiedTime": 1782167283443,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989138864,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
+      }
+    },
+    {
+      "name": "Territory",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "wild",
+          "pack"
+        ],
+        "description": {
+          "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: reroll the lowest die on attack rolls against any creature within 1 square of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!GZeM7IAl471weU8b.rPeDoUL3RxF7jgcI"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "firstRound": true
+                },
+                "do": {
+                  "reroll": "attack"
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                },
+                "label": "Territory — the first strike rerolls the lowest"
+              },
+              {
+                "on": "attack",
+                "if": {
+                  "allyAdjacentToTarget": true
+                },
+                "do": {
+                  "reroll": "attack"
+                },
+                "label": "Pack — reroll the lowest beside an ally"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "wild"
+            }
+          }
+        }
+      },
+      "_id": "wWFga1Fa63TySpOC",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342349157,
+        "modifiedTime": 1791342349158,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -940,12 +1089,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118689406,
-    "modifiedTime": 1783219918022,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989138685,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

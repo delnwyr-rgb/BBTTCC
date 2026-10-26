@@ -1,0 +1,80 @@
+{
+  "name": "Storm-Voiced",
+  "type": "feature",
+  "img": "icons/magic/sonic/scream-wail-shout-teal.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-mortal",
+      "lineage-trait",
+      "banner-valhaulan"
+    ],
+    "description": {
+      "value": "<p>The first time each scene Sklar is reduced below half Integrity, she roars: allies within 6 squares reroll the lowest die on their next attack roll, and she gains 5 temporary Integrity.</p><p><em>“I like you already.”</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "feature",
+          "lineageTrait": "mortal"
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "bloodied",
+            "do": {
+              "tempIntegrity": 5,
+              "prompt": "Storm-Voiced: allies within 6 squares reroll the lowest die on their next attack."
+            },
+            "limit": {
+              "per": "scene",
+              "uses": 1
+            }
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Sklar Bjrornholt"
+        ],
+        "sourceIds": [
+          "tlGzp9UpQU3PwKdB"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "P2IyVkZ2KOx0gI4u",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069968,
+    "modifiedTime": 1792989070048,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!P2IyVkZ2KOx0gI4u"
+}

@@ -1,0 +1,95 @@
+{
+  "name": "Ambush Crew",
+  "type": "feature",
+  "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-mortal",
+      "lineage-trait",
+      "banner-raider"
+    ],
+    "description": {
+      "value": "<p>In the first round of combat, the Reeve rerolls the lowest die on attack rolls against any creature that hasn't acted yet. If reduced below half Integrity, his crew checks morale: Soul DC 12 or they fall back to the far bank.</p><p><em>Nobody crosses without paying. Nobody pays without crossing.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "frame": "feature",
+          "lineageTrait": "mortal"
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attack",
+            "if": {
+              "firstRound": true,
+              "targetNotActed": true
+            },
+            "do": {
+              "reroll": "attack"
+            },
+            "label": "Ambush Crew"
+          },
+          {
+            "on": "bloodied",
+            "do": {
+              "morale": {
+                "attr": "soul",
+                "dc": 12,
+                "outcome": "the crew falls back to the far bank; the Reeve holds the planks alone"
+              },
+              "prompt": "Ambush Crew morale check."
+            },
+            "limit": {
+              "per": "scene",
+              "uses": 1
+            }
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Hollis Varn, Reeve of the Broken Bridge"
+        ],
+        "sourceIds": [
+          "UpHwUANX26OoCqoH"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "4j05mPz6dvnlNnNI",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069904,
+    "modifiedTime": 1792989069988,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!4j05mPz6dvnlNnNI"
+}

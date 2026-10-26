@@ -1,0 +1,294 @@
+{
+  "name": "Ines Calloway",
+  "type": "npc",
+  "_id": "HyLJiy9CDWdtIlzQ",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "role": "",
+    "tier": 1,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 1
+      },
+      "body": {
+        "value": 1
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 10,
+        "max": 10,
+        "temp": 0
+      },
+      "stress": {
+        "value": 8,
+        "max": 8
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "Last Clerk of Probably Beaumont, in the Flooded Towns (Act 3)",
+      "notes": "Ines Calloway is the Last Clerk of Probably Beaumont, and lately of Maybe Beaumont and Bedlam Barrens too, probably. Her office is the only dry room in town. She is dry and exact, never looks up, and stamps before you finish your sentence. She says 'probably' about everything, including the town's name and her own, and will issue you a permit for being here and a second permit for the first one. She was holding the stamp, so she is the Clerk."
+    }
+  },
+  "prototypeToken": {
+    "name": "Ines Calloway",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [],
+  "effects": [],
+  "folder": "UAHVCMVXEDT8Q1B1",
+  "sort": 900000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "npc"
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "permits, the office, the stamp, the sign, Beaumont, probably, the light, the water, the vote, the minutes, the nine, the forty-one, Maybe Beaumont, Bedlam Barrens, filing, the job",
+        "notes": "[FLOODED-TOWNS-RETROFIT-2026-09-30] PRIVATE TRUTH — Ines Calloway, the Last Clerk of Probably Beaumont, and since the night the sky tore, of Maybe Beaumont and Bedlam Barrens too, probably. The office is the only dry room in town because the light does not come indoors where there is paperwork. VOICE: dry, exact, never looks up, stamps before you finish the sentence; says \"probably\" about everything including the town's name and her own; a permit for being here and a second permit for the first one. She was holding the stamp when the light came, so she is the Clerk. WHAT SHE KNOWS: the town's name is on a sign under four feet of lit water and nobody has waded out to read it, because reading it would settle the argument and the light feeds on the argument. THE VOTE (the turn — tell it only if asked WHO assigned the roles): nobody assigned them; the week the light came it put it to the district in shapes, a town with a plan or a town without one, and it carried forty-one to nine on a show of hands. She was one of the nine. She kept the minutes anyway; that's the job. She will tear the page out for a Steward who asks properly, which a Clerk never does. Funny first, then the count.",
+        "secretsRaw": "The Sign :: rollPlus2 :: a Steward asks her to say the town's name without 'probably' :: She can't. The sign is under four feet of lit water and she has never waded out to read it, because reading it would settle the argument, and the light feeds on the argument. She stamps you a permit to go and look.\nThe Vote :: oppRollMinus2 :: a Steward asks WHO assigned the roles in Maybe Beaumont :: Nobody. They volunteered. The district put it to a show of hands the week the light came, and a town with a plan beat a town without one, forty-one to nine. She was one of the nine. She kept the minutes anyway; that's the job."
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1791317103705,
+    "modifiedTime": 1791328194079,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!HyLJiy9CDWdtIlzQ"
+}

@@ -41,21 +41,21 @@
           "charges": 5,
           "materialKey": "hex-rope",
           "price": {
-            "marks": 50,
+            "marks": 25,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI material stamp",
+            "notes": "TI material",
             "bound": "free",
-            "saleBack": 20
+            "saleBack": 10
           }
         }
       }
     }
   },
-  "folder": "Wxh1A343inwTUeoo",
+  "folder": "Mzo3vreEeHyIsTWO",
   "_id": "nSxwbmgwnIzed1Dh",
   "effects": [],
   "sort": 1000000,
@@ -64,11 +64,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137161806,
-    "modifiedTime": 1782156674953,
+    "modifiedTime": 1792977657583,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

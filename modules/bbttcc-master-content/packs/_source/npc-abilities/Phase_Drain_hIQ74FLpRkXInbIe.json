@@ -7,7 +7,7 @@
     "intent": "intrigue",
     "skill": "weave",
     "damage": {
-      "formula": "4d8",
+      "formula": "3d8",
       "attribute": "soul",
       "type": "qliphothic",
       "damageFlavor": "",
@@ -25,7 +25,7 @@
       "single",
       "shape-single"
     ],
-    "effect": "One target within 30 ft. rolls vs Resolve (DC 15). On a failed save the wraith then teleports to an unoccupied space within 5 ft. of the target. On a success, half damage and no teleport.",
+    "effect": "One target within 6 squares. rolls vs Resolve (DC 15). On a failed save the wraith then teleports to an unoccupied space within 1 square. of the target. On a success, half damage and no teleport.",
     "flavor": "It flickers to where you'll be standing, and drinks the difference.",
     "manifestation": {
       "tier": 1,
@@ -56,6 +56,14 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 15,
+        "onSave": "half",
+        "statesOnFail": true
       }
     },
     "description": {
@@ -63,31 +71,42 @@
       "chat": ""
     }
   },
-  "_id": "hIQ74FLpRkXInbIe",
-  "effects": [],
-  "sort": 0,
   "flags": {
     "fourththing": {
       "rfi": {
         "item": {
           "frame": "save-single",
-          "wiredFrom": "feature"
+          "wiredFrom": "feature",
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI save-single × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Slippage Wraith"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Phase Drain"
+            },
+            "do": {
+              "teleport": true
+            }
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "a5109a9a-bcdf-45be-8d88-49e12ac54fa6",
+      "id": "ft-phase-drain",
       "label": "Phase Drain",
       "macro": {
         "enable": false,
@@ -262,22 +281,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Slippage Wraith"
+        ],
+        "sourceIds": [
+          "CdNx8WLo0aZO6q8c"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
+  "_id": "hIQ74FLpRkXInbIe",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024237630,
-    "modifiedTime": 1782167245006,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989035610,
+    "modifiedTime": 1792989035610,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!hIQ74FLpRkXInbIe"
 }

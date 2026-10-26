@@ -1,0 +1,72 @@
+{
+  "name": "Thought-Obstructing Veil (1/scene)",
+  "type": "feat",
+  "img": "icons/creatures/eyes/humanoid-single-blind.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Blinder sheds a 3-square cube of grey mental haze centred on itself. The area is heavily obscured. A creature that ends its turn in the haze rolls Mind vs DC 12 or is Compelled on its next turn — it acts, but not on any plan it remembers making. The haze lasts a minute or until real wind takes it.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "template": {
+                "shape": "sphere",
+                "size": 15
+              },
+              "prompt": "Heavily obscured; end a turn inside → Mind DC 12 or Compelled."
+            },
+            "who": "self",
+            "limit": {
+              "per": "combat",
+              "uses": 1
+            }
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Ghagielite Blinder"
+        ],
+        "sourceIds": [
+          "X6OcEP6YbKkYNdiw"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "biJhqMRpAX9xQJIG",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069978,
+    "modifiedTime": 1792989070055,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!biJhqMRpAX9xQJIG"
+}

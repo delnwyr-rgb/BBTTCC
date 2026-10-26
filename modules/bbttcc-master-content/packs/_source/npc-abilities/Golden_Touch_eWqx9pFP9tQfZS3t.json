@@ -1,0 +1,143 @@
+{
+  "name": "Golden Touch",
+  "type": "weapon",
+  "img": "icons/commodities/treasure/statue-bust-stone-grey.webp",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "melee",
+    "damage": {
+      "formula": "3d8",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1
+    },
+    "tags": [],
+    "effect": "On a hit: Body check vs DC 16 or the gilding begins — the target is Restrained as gold creeps over it. It repeats the check at the end of its next turn: success ends it; failure means gilded solid — out of the fight, a beautiful statue, until cracked free by allies (careful work, Violence check vs DC 16, 1d4 rounds) or a restoration-grade working.",
+    "flavor": "A hand dripping liquid gold. The dripping is the mercy.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "resolution": {
+        "saveAttribute": "body",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 16,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "restrained"
+        ],
+        "duration": "until-saved",
+        "saveEachRound": true,
+        "saveAttribute": "body"
+      }
+    },
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Golden Touch"
+            },
+            "do": {
+              "prompt": "Gilding: if its end-of-turn save fails too, it's a statue — out of the fight."
+            },
+            "narrative": true
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Gilded Tyrant"
+        ],
+        "sourceIds": [
+          "m1Wzc1wbRFO7kl7j"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "eWqx9pFP9tQfZS3t",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069938,
+    "modifiedTime": 1792989070020,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!eWqx9pFP9tQfZS3t"
+}

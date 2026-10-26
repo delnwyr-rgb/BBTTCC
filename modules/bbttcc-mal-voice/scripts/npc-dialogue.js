@@ -536,6 +536,24 @@ function _parsePageTags(text) {
   return { gate, knownBy, body: rest };
 }
 
+// Story-gated persona blocks (2026-10-26, rulings NP1 / NP7): persona.notes (the PRIVATE TRUTH) may hold several
+// lives separated by lines that are exactly `@after: <questId|beat:<beatId>>[:completed]`. The text before the first
+// tag is always true; each tagged block is appended only once the story has reached it (same gate vocabulary and the
+// same fail-closed rule as journal pages — no story state, no gated block). One actor, several states: Pip before and
+// after the Maneuver Vault (one block per ending), Wick before and after the name under the thumb.
+function _gateBlocks(text, state) {
+  const src = String(text || "");
+  if (!/^\s*@after:/im.test(src)) return src;
+  const out = [];
+  let keep = true;
+  for (const ln of src.split(/\r?\n/)) {
+    const m = ln.match(/^\s*@after:\s*([\w:-]+?)(?::(completed))?\s*$/i);
+    if (m) { keep = _questKnown(state, m[1], !!m[2]); continue; }
+    if (keep) out.push(ln);
+  }
+  return out.join("\n").trim();
+}
+
 // Back-compat shim (old name, @after only).
 function _parseAfterTag(text) {
   const { gate, body } = _parsePageTags(text);
@@ -712,7 +730,7 @@ function _buildPersonaPrompt(actor, lore = null, state = null, dossier = null) {
   const factionId = actor.flags?.["bbttcc-factions"]?.factionId || sys.faction?.id || sys.factionId || null;
   const factionName = factionId ? (game.actors.get(factionId)?.name || null) : null;
 
-  const gmNotes = String(actor.getFlag(MODULE_ID, "persona")?.notes || "").trim();
+  const gmNotes = _gateBlocks(String(actor.getFlag(MODULE_ID, "persona")?.notes || ""), state).trim();   // @after blocks (2026-10-26)
   const sceneName = game.scenes?.active?.name || null;
 
   // Durable story-event memories (written by the campaign engine when beats

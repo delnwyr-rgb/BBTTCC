@@ -1,0 +1,155 @@
+{
+  "name": "Sideways Landing (recharge 5–6)",
+  "type": "weapon",
+  "img": "icons/skills/movement/feet-winged-boots-brown.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "presence",
+    "skill": "channel",
+    "damage": {
+      "formula": "3d8",
+      "attribute": "presence",
+      "type": "kinetic",
+      "damageFlavor": "the airship arrives",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 6,
+      "long": 18
+    },
+    "tags": [
+      "bestiary",
+      "tier-iv",
+      "lineage-mortal",
+      "boss",
+      "signature"
+    ],
+    "effect": "Cone 6 squares. — targets roll vs Evasion (DC 17). Half damage on success. On a failed save the target is knocked Prone by the wash of a ship landing on its side.",
+    "flavor": "Valhaulan airships always land sideways.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "prone"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "intrigue",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 17,
+        "saveAttributeOverrides": {}
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "intrigue",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 17,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "cone",
+        "size": 30
+      }
+    },
+    "description": {
+      "value": "<p><strong>Area Attack.</strong> Each creature in a 6-square. cone rolls vs DC 17. Damage: <code>3d8</code> kinetic (the airship arrives). On a failed save the target is knocked Prone by the wash of a ship landing on its side.</p><p><em>Valhaulan airships always land sideways.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "save",
+          "aoeShape": "cone",
+          "aoeSize": 30,
+          "dc": 17,
+          "price": {
+            "marks": 1350,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV save × 1",
+            "bound": "free",
+            "saleBack": 540
+          }
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [],
+        "recharge": {
+          "mode": "d6",
+          "min": 5
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Sklar Bjrornholt"
+        ],
+        "sourceIds": [
+          "tlGzp9UpQU3PwKdB"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "xOZrrWMphGWhUYIc",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069963,
+    "modifiedTime": 1792989070045,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!xOZrrWMphGWhUYIc"
+}

@@ -14,7 +14,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Your body is built for a world that bites back. So is your patience.”</em></p>\n<p><strong>Wildframe.</strong> Add your tier to Body defense checks made to resist Stress.</p>\n<p><strong>Keen Sense.</strong> Choose one at character creation: <em>Keen Smell</em>, <em>Keen Hearing</em>, or <em>Keen Sight</em>. You reroll the lowest die on Soul (Perception) checks that rely on that sense.</p>\n<p><strong>Frame Choice.</strong> Choose one narrative frame at character creation; it is permanent.</p>\n<ul><li><strong>Predator.</strong> Your unarmed strikes (bite or claws) deal 1d6 instead of 1d4 and count as natural weapons.</li><li><strong>Forager.</strong> You gain a skill rank in the Athletics skill. If you already have it, you may choose another skill from the Cryptidkin list (GM adjudicates).</li><li><strong>Brute.</strong> You count as one size larger for the purposes of carrying capacity, push, drag, lift, shove, and grapple.</li></ul>",
+      "value": "\n<p><em>“Your body is built for a world that bites back. So is your patience.”</em></p>\n<p><strong>Wildframe.</strong> Add your tier to Body defense checks made to resist Stress.</p>\n<p><strong>Keen Sense.</strong> Choose one at character creation: <em>Keen Smell</em>, <em>Keen Hearing</em>, or <em>Keen Sight</em>. You reroll the lowest die on Soul (Perception) checks that rely on that sense.</p>\n<p><strong>Frame Choice.</strong> Choose one narrative frame at character creation; it is permanent.</p>\n<ul><li><strong>Predator.</strong> Your unarmed strikes (bite or claws) deal 1d6 instead of 1d4 and count as natural weapons.</li><li><strong>Forager.</strong> You gain a skill rank in the Athletics skill. If you already have it, you may choose another skill from the Cryptidkin list (GM adjudicates).</li><li><strong>Brute.</strong> You count as one size larger for the purposes of carrying capacity, push, drag, lift, shove, and grapple.</li></ul>",
       "chat": ""
     },
     "advancement": {},
@@ -23,7 +23,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -93,19 +93,14 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!RWAuuqy8LInVCgvJ.rpR5M3AUar8hNI41"
+      }
     }
   ],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "cryptidkin",
       "feature": "wildframe_instinct",
       "lineage": "Furrykin",
-      "tierLevel": 0,
       "version": "2.0.0",
       "date": "2026-04-18"
     },
@@ -130,12 +125,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776543000000,
-    "modifiedTime": 1782167240126,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988978362,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

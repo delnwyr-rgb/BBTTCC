@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Alchemist</strong></p><p><strong>“You can do it on purpose now. That’s worse.”</strong></p><p>By Tier 3, your body has adapted to your work. So has the world around you.</p><p>You understand instability not as danger, but as stored energy. You can touch volatile substances — physical or systemic — without flinching, and you know exactly how long you can keep your hands there.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain resistance to <strong>acid</strong> and <strong>poison</strong> damage</li><li>You can identify the properties and risks of a strange substance within <strong>1 minute</strong></li><li>You reroll the lowest die on checks involving contamination, purification, or controlled degradation</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>During a Scenario involving toxic environments, industrial hazards, contamination cleanup, or unstable compounds, your faction gains <strong>Advantage</strong> on <strong>one</strong> relevant Opposed Strategic Roll</li></ul><p><strong>Cost:</strong> every hazard you normalize changes your threshold for “acceptable.” The line between mastery and acclimation gets thin.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Alchemist</strong></p><p><strong>“You can do it on purpose now. That’s worse.”</strong></p><p>By Tier 3, your body has adapted to your work. So has the world around you.</p><p>You understand instability not as danger, but as stored energy. You can touch volatile substances — physical or systemic — without flinching, and you know exactly how long you can keep your hands there.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain resistance to <strong>acid</strong> and <strong>poison</strong> damage</li><li>You can identify the properties and risks of a strange substance within <strong>1 minute</strong></li><li>You reroll the lowest die on checks involving contamination, purification, or controlled degradation</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>During a Scenario involving toxic environments, industrial hazards, contamination cleanup, or unstable compounds, your Domain gains <strong>Advantage</strong> on <strong>one</strong> relevant Opposed Strategic Roll</li></ul><p><strong>Cost:</strong> every hazard you normalize changes your threshold for “acceptable.” The line between mastery and acclimation gets thin.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -249,6 +249,30 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          "chemical:acid",
+          "poison"
+        ]
+      },
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "tinkering",
+          "vs": "contamination, purification, or controlled degradation",
+          "note": "Alchemist T3"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "occult",
+          "vs": "contamination, purification, or controlled degradation",
+          "note": "Alchemist T3"
+        }
+      ]
     }
   },
   "effects": [],
@@ -264,12 +288,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987084174,
-    "modifiedTime": 1781024183658,
-    "lastModifiedBy": "MRFjjbUTBd66pWBY"
+    "modifiedTime": 1792977829674,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

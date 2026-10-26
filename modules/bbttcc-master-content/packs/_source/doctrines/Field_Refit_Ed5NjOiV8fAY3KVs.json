@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Field Refit</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> logistics 15, economy 10</p></div>",
+      "value": "<p><strong>Field Refit</strong></p><p>Siege, defender; needs a Soul-Smith on your roster. A field forge refits the wall under fire: your Renewal pool +2 and Loyalty +1. In the clash: 15 marks from the garrison's bank.</p><p><em>Queued on the turn: Logistics 15 · Economy 10 marks. Fired in the clash: 15 marks from the garrison's bank.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "cls_soulsmith"
+      "key": "cls_soulsmith",
+      "effects": {
+        "text": "Siege, defender; needs a Soul-Smith on your roster. A field forge refits the wall under fire: your Renewal pool +2 and Loyalty +1. In the clash: 15 marks from the garrison's bank."
+      }
     }
   },
   "_id": "Ed5NjOiV8fAY3KVs",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601773,
-    "modifiedTime": 1782703702692,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989004169,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

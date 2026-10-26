@@ -7,43 +7,47 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>If the adept starts its turn within 2 squares of the Spark of Yesod, it regains 5 Integrity.</p>",
+      "value": "<p>If the adept starts its turn within 2 squares of a Spark (a bound Spark of the Tree in any state), it regains 5 Integrity.</p>",
       "chat": ""
     }
   },
-  "_id": "TBQuN4T65YZMdDQ0",
   "effects": [],
+  "_id": "TBQuN4T65YZMdDQ0",
   "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "flags": {
     "bbttcc": {
       "npcAbility": {
         "sources": [
           "Valhaulan Spark Adept"
         ],
+        "sourceIds": [
+          "ZOttfT1AftTApkwf"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167244999,
-    "modifiedTime": 1782167244999,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989045984,
+    "modifiedTime": 1792989045984,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!TBQuN4T65YZMdDQ0"
 }

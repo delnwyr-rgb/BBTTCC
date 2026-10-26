@@ -1,0 +1,78 @@
+{
+  "name": "Sworn",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "mortal",
+      "oath-bound"
+    ],
+    "description": {
+      "value": "<p>Immune to Charmed and Compelled. The first time this creature is reduced to 0 Integrity, it instead drops to 1 and gains +2 on its next attack roll — the oath tries one more thing.</p><p><em>Will die before breaking it. Has, several times.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "zero",
+            "do": {
+              "heal": 1,
+              "prompt": "Sworn: drops to 1 instead and gains +2 on its next attack — the oath tries one more thing."
+            },
+            "limit": {
+              "per": "combat",
+              "uses": 1
+            }
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "mortal"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Vow-Bound Thrall"
+        ],
+        "sourceIds": [
+          "VpkA2FQ0ElY0bzDE"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "D7wZlAWGgfeC1n2m",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069970,
+    "modifiedTime": 1792989070049,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!D7wZlAWGgfeC1n2m"
+}

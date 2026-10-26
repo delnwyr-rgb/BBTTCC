@@ -1,127 +1,84 @@
 {
+  "_id": "leVKLuvF8AaaSAbT",
   "name": "Spark‑Tuned Rosary",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/consumables/potions/potion-flask-corked-tied-necklace-teal.webp",
   "system": {
-    "description": {
-      "value": "<p>While attuned, you have reroll the lowest die on checks to identify Sparks and −1 local Darkness once per week after a vigil [TODO(adv-call)].</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 0.1,
-      "units": "lb"
-    },
-    "price": {
-      "value": 200,
-      "denomination": "gp"
-    },
-    "rarity": "uncommon",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "sparktuned-rosary",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>While attuned, you reroll the lowest die on checks to identify Sparks and −1 local Darkness once per week after a vigil.</p>",
+      "chat": ""
+    }
   },
   "flags": {
     "bbttcc": {
       "darknessDeltaWeekly": -1,
       "tags": []
     },
-    "rfi": {
-      "item": {
-        "tier": "II",
-        "footprint": 1,
-        "reach": "self",
-        "frame": "armor",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "scene"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
-    },
     "fourththing": {
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
-            "currency": "economy",
+            "marks": 270,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 1.5,
+            "notes": "TII talisman × rarity 1.5",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 108
           },
           "tier": "II",
-          "frame": "armor",
+          "frame": "talisman",
           "origin": "looted",
           "bound": "free",
           "reach": "self",
           "footprint": 1,
-          "legacySystem": {
-            "description": {
-              "value": "<p>While attuned, you reroll the lowest die on checks to identify Sparks and −1 local Darkness once per week after a vigil.</p>"
-            }
-          }
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {}
         }
-      }
+      },
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "occult",
+          "vs": "identifying Sparks (while attuned)",
+          "note": "Spark-Tuned Rosary"
+        }
+      ]
     }
   },
   "effects": [],
   "folder": "TNrB6kEiHS0KwwJT",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834203678,
-    "modifiedTime": 1782164185979,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1800000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "leVKLuvF8AaaSAbT",
-  "sort": 1800000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988916259,
+    "modifiedTime": 1792988916260,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!leVKLuvF8AaaSAbT"
 }

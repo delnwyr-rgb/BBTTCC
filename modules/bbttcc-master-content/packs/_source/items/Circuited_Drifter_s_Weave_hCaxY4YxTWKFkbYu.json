@@ -1,0 +1,107 @@
+{
+  "name": "Circuited Drifter's Weave",
+  "type": "armor",
+  "img": "icons/equipment/chest/vest-cloth-tattered-tan.webp",
+  "system": {
+    "guardBonus": 3,
+    "evasionBonus": 3,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "fitting",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "light",
+      "cloth",
+      "graded",
+      "grade-circuited"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Layered travel cloth — patchwork canvas over a quilted underlayer, road-stained at the cuffs. Cut for moving. Sold on every frontier table from Allesh Gilliam to the edge of the Lyrenn line. The first armor most Stewards ever buy, and the first they outgrow.</p><p>Worn in the field, not the throne room. Easy to repair, easy to replace, easy to forget you have it on.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Light</li>\n  <li><strong>Defense:</strong> Guard +3, Evasion +3</li>\n  <li><strong>Requires:</strong> Fitting (trained)</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 675 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Circuited (+2). A closed circuit of sigils; it answers one hand.</strong></p>\n<ul>\n  <li><strong>+2 on each of its defense bonuses</strong> → Guard +3, Evasion +3 (rank-scaled like all armor: Trained half, Proficient full).</li>\n  <li>Grade raises it to <strong>Tier III</strong> · attuned (one slot).</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Cloth that's already walked further than you have.",
+          "origin": "forged",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Layered travel cloth — patchwork canvas over a quilted underlayer, road-stained at the cuffs. Cut for moving. Sold on every frontier table from Allesh Gilliam to the edge of the Lyrenn line. The first armor most Stewards ever buy, and the first they outgrow.</p><p>Worn in the field, not the throne room. Easy to repair, easy to replace, easy to forget you have it on.</p>",
+          "materialOf": [
+            {
+              "key": "road-canvas",
+              "qty": 1
+            },
+            {
+              "key": "quilted-liner",
+              "qty": 1
+            },
+            {
+              "key": "hex-glyph-plate",
+              "qty": 1
+            },
+            {
+              "key": "wardiron",
+              "qty": 1
+            }
+          ],
+          "price": {
+            "marks": 675,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII armor (Circuited +2 on TI Drifter's Weave) × bound attuned",
+            "bound": "attuned",
+            "saleBack": 270
+          }
+        }
+      },
+      "grade": {
+        "rank": 2,
+        "name": "Circuited",
+        "key": "circuited",
+        "defense": 2
+      }
+    }
+  },
+  "folder": "paUl8Tj6Xx5fAkKN",
+  "_id": "hCaxY4YxTWKFkbYu",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791427797925,
+    "modifiedTime": 1792988958960,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hCaxY4YxTWKFkbYu"
+}

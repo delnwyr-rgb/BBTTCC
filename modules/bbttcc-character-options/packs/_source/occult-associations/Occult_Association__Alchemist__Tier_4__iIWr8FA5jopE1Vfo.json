@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 — Alchemist</strong></p><p><strong>“At this point, the world has started adjusting around you.”</strong></p><p>At Tier 4, you are no longer reacting to instability. You <strong>schedule it</strong>.</p><p>You can brew solutions that temporarily override institutional limits. They do not last. They do not pretend to. But for the duration, your faction operates as if scarcity were a suggestion.</p><p>This is how Alchemists leave their mark on the Great Work: by making impossible pushes <em>just possible enough</em>.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Elixir of Fortitude:</strong> once per Strategic Turn, spend <strong>5 Economy OP</strong>. Choose one OP category: <strong>Violence, Non-Lethal, Intrigue, Soft Power, or Diplomacy</strong></li><li>That category gains <strong>+3 OP</strong> for the duration of <strong>one entire Scenario</strong></li><li>When the Scenario ends, the bonus expires. Unspent bonus OP is lost</li></ul><p><strong>Cost:</strong> this always leaves residue: shortages, scrutiny, instability, moral debt, or a local system that now expects impossible output as normal.</p><p><strong>The Great Work notices when you do this.</strong></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"alchT4\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Elixir of Fortitude</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic (5 Eco) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Spend 5 Economy OP. Pick an OP category: gains +3 OP for one Scenario. Unspent expires.</div>\n</div>",
+      "value": "<p><strong>Tier 4 — Alchemist</strong></p><p><strong>“At this point, the world has started adjusting around you.”</strong></p><p>At Tier 4, you are no longer reacting to instability. You <strong>schedule it</strong>.</p><p>You can brew solutions that temporarily override institutional limits. They do not last. They do not pretend to. But for the duration, your Domain operates as if scarcity were a suggestion.</p><p>This is how Alchemists leave their mark on the Great Work: by making impossible pushes <em>just possible enough</em>.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Elixir of Fortitude:</strong> once per turn, spend <strong>50 Economy marks</strong>. Choose one OP category: <strong>Violence, Non-Lethal, Intrigue, Soft Power, or Diplomacy</strong></li><li>That category gains <strong>+3 OP</strong> for the duration of <strong>one entire Scenario</strong></li><li>When the Scenario ends, the bonus expires. Unspent bonus OP is lost</li></ul><p><strong>Cost:</strong> this always leaves residue: shortages, scrutiny, instability, moral debt, or a local system that now expects impossible output as normal.</p><p><strong>The Great Work notices when you do this.</strong></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"alchT4\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Elixir of Fortitude</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic (5 Eco) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Spend 50 Economy marks. Pick an OP category: gains +3 OP for one Scenario. Unspent expires.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -266,12 +266,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987084174,
-    "modifiedTime": 1781024184165,
-    "lastModifiedBy": "MRFjjbUTBd66pWBY"
+    "modifiedTime": 1792977830813,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

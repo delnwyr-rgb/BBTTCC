@@ -8,7 +8,7 @@
     "source": "BBTTCC Manifestation Techniques v1 (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<h2>Wide Working</h2><p><em>What you shape, you shape broadly.</em></p><hr><h3>Rules</h3><p>Increase the <strong>area size</strong> of any area-of-effect manifestation you cast by one step (e.g. a 10 ft burst becomes 15 ft; a 15 ft cone becomes 20 ft).</p><p><span style=\"opacity: 0.7; margin: 0.5rem 0 0; font-size: 0.74rem\">✍ Applied by the GM/player — no automatic engine effect.</span></p>",
+      "value": "<h2>Wide Working</h2><p><em>What you shape, you shape broadly.</em></p><hr><h3>Rules</h3><p>Increase the <strong>area size</strong> of any area-of-effect manifestation you cast by one step (e.g. a 2 squares burst becomes 3 squares; a 3 squares cone becomes 4 squares).</p><p><span style=\"opacity: 0.7; margin: 0.5rem 0 0; font-size: 0.74rem\">✍ Applied by the GM/player — no automatic engine effect.</span></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_wide_working",
@@ -39,11 +39,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782190568573,
-    "modifiedTime": 1782190840468,
+    "modifiedTime": 1792977660575,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

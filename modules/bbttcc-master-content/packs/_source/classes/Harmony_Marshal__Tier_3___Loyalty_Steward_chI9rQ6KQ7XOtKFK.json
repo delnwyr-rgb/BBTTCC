@@ -87,8 +87,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!chI9rQ6KQ7XOtKFK.BJauLyS2xerRg6R6"
+      "folder": null
     }
   ],
   "folder": "6ELe0FPqgC58OzKS",
@@ -106,12 +105,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776467816704,
-    "modifiedTime": 1781116169673,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907934086,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

@@ -1,0 +1,80 @@
+{
+  "name": "Quiet In The Theater (reaction)",
+  "type": "feature",
+  "img": "icons/skills/social/wave-halt-stop.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "rfi-scrubbed"
+    ],
+    "description": {
+      "value": "<p><strong>Reaction, when a creature within 12 squares speaks, shouts, or casts.</strong> That creature must succeed a Body check vs DC 16 or be unable to speak above a whisper — and unable to cast manifestations with a spoken component — until the end of its next turn.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "save": {
+                "attr": "body",
+                "dc": 16,
+                "onSave": "negate"
+              }
+            }
+          },
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Quiet In The Theater (reaction)"
+            },
+            "do": {
+              "prompt": "Whisper only — no spoken-component casting — until its next turn ends."
+            },
+            "narrative": true
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gilbert, Attendant Eternal"
+        ],
+        "sourceIds": [
+          "LQS2jaeFhzFMDpxA"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "pGgldynSYbz2xueP",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069957,
+    "modifiedTime": 1792989070041,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!pGgldynSYbz2xueP"
+}

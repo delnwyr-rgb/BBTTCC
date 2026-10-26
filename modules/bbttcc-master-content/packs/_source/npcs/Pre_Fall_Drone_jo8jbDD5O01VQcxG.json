@@ -19,7 +19,7 @@
     },
     "attributes": {
       "violence": {
-        "value": 2
+        "value": 1
       },
       "intrigue": {
         "value": 3
@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 25,
-        "max": 25
+        "max": 25,
+        "temp": 0
       },
       "stress": {
         "value": 12,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -138,11 +140,13 @@
     },
     "defenses": {
       "resistances": [
-        "radiant",
+        "sephirotic",
         "kinetic"
       ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "chemical"
+      ]
     },
     "conditionImmunities": [
       "charmed",
@@ -150,6 +154,9 @@
       "compelled"
     ],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -162,6 +169,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "A still-functioning servitor from before the Fall. Limited directive set; loops on broken protocol."
     }
   },
   "flags": {
@@ -192,16 +203,19 @@
             ]
           },
           "price": {
-            "marks": 150,
-            "bounty": 150,
-            "hire": 375,
-            "ransom": 250,
+            "marks": 5,
+            "bounty": 5,
+            "hire": 10,
+            "ransom": 10,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "TI light scout (bestiary) — bounty 150 / hire 375 / ransom 250 marks (paid in intrigue)"
-          }
+            "notes": "TI light pre-fall — bounty 5 / hire 10 marks; credited to the pool matching the method (default intrigue)"
+          },
+          "lineage": "pre-fall",
+          "subLineage": "servitor"
         }
-      }
+      },
+      "creatureType": "construct"
     }
   },
   "_id": "jo8jbDD5O01VQcxG",
@@ -309,7 +323,7 @@
         "damage": {
           "formula": "1d6",
           "attribute": "violence",
-          "type": "energy",
+          "type": "thermal",
           "damageFlavor": "coherent-light",
           "track": "integrity"
         },
@@ -380,6 +394,25 @@
                 "saleBack": 20
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "do": {
+                  "bankReroll": {
+                    "context": "attack",
+                    "note": "Targeting Laser — marked"
+                  }
+                },
+                "who": "allies",
+                "radius": 12,
+                "if": {
+                  "weapon": "Targeting Laser"
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -568,17 +601,16 @@
       },
       "_id": "jyi8cVjuZpc2umcP",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118736358,
-        "modifiedTime": 1782167283542,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989125156,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!jo8jbDD5O01VQcxG.jyi8cVjuZpc2umcP"
+      }
     },
     {
       "name": "Diagnostic Probe",
@@ -859,8 +891,7 @@
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!jo8jbDD5O01VQcxG.OB9wB5PEjYNzzwFW"
+      }
     },
     {
       "name": "Broken Protocol Loop",
@@ -930,8 +961,7 @@
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!jo8jbDD5O01VQcxG.AYBo2MkBkvDnytjz"
+      }
     }
   ],
   "effects": [],
@@ -941,12 +971,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118736358,
-    "modifiedTime": 1783219918010,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989124989,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

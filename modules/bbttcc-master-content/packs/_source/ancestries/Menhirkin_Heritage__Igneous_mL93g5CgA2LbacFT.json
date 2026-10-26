@@ -13,7 +13,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Menhirkin heritage: Igneous.</p><p><em>“Some stone was born yelling.”</em></p><p><strong>Menhirkin (Igneous).</strong> You are new rock. The Shattering was your birthday. The land that stood up and began answering chose you because it wanted a mouth that remembered being molten. You run hot, you cool slow, and you are, structurally, still furious about something.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Menhirkin).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 6 squares walking.</li><li><strong>Lineage Lean.</strong> Menhirkin does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Violence</strong> in fiction and through Tier powers.</li></ul><h3>Menhirkin Core: The Land Stood Up</h3><p><em>Shared across all Menhirkin heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><strong>Stone Soul.</strong> You count as Large for carry, shove, and grapple despite your Medium frame. You reroll the lowest die on checks to resist being forcibly moved.</li><li><strong>Hex Recognition.</strong> Once per scene, while you are on a natural surface you are directly touching, you may whisper a single question about the place. The GM answers with one true thing the land knows.</li><li><strong>Slow to Wear.</strong> You reroll the lowest die on Body checks against Stress, long-duration physical wear, forced marches, climate exposure, and sustained labor. You do not tire the way softer things tire.</li><li><strong>Heavy Presence.</strong> Your weight and settledness are perceptible. Creatures within 2 squares of you know you are there even if they cannot see you; you roll 3d10 keep lowest 2 on Intrigue (Stealth) checks unless you are on or in stone.</li></ul><h3>Igneous Traits</h3><ul><li><strong>Heat Memory.</strong> When you take thermal damage with the fire flavor, you may bank that damage. Before your next Soma Break, you may spend the banked heat as a bonus action to add +1d10 exploding thermal damage (flavor: fire) to your next weapon attack, unarmed strike, or grapple that connects.</li><li><strong>Molten Bearing.</strong> You count fire, smoke, ash, and heated terrain as normal ground for the purposes of difficult terrain and footing. Contact with your bare skin singes paper and warms metal.</li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Violence OP</strong> and <strong>+1 Non-Lethal OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Volcanic / Thermal / Industrial-Furnace</em> hexes, your faction's heat-based or smelting operations cost 1 fewer OP (minimum 0).</li><li><strong>Forge-Ready.</strong> Once per Strategic Turn, your faction may reroll one failed crafting or weapons-salvage check. The heat remembers the work.</li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#a8c4e0;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Hex Recognition</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">On a natural surface you're touching, whisper a question — GM answers with one true thing the land knows.</div>\n</div>",
+      "value": "\n<p><em>“Some stone was born yelling.”</em></p><p><strong>Menhirkin (Igneous).</strong> You are new rock. The Shattering was your birthday. The land that stood up and began answering chose you because it wanted a mouth that remembered being molten. You run hot, you cool slow, and you are, structurally, still furious about something.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Menhirkin).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 6 squares walking.</li><li><strong>Lineage Lean.</strong> Menhirkin does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Violence</strong> in fiction and through Tier powers.</li></ul><h3>Menhirkin Core: The Land Stood Up</h3><p><em>Shared across all Menhirkin heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><strong>Stone Soul.</strong> You count as Large for carry, shove, and grapple despite your Medium frame. You reroll the lowest die on checks to resist being forcibly moved.</li><li><strong>Hex Recognition.</strong> Once per scene, while you are on a natural surface you are directly touching, you may whisper a single question about the place. The GM answers with one true thing the land knows.</li><li><strong>Slow to Wear.</strong> You reroll the lowest die on Body checks against Stress, long-duration physical wear, forced marches, climate exposure, and sustained labor. You do not tire the way softer things tire.</li><li><strong>Heavy Presence.</strong> Your weight and settledness are perceptible. Creatures within 2 squares of you know you are there even if they cannot see you; you roll 3d10 keep lowest 2 on Intrigue (Stealth) checks unless you are on or in stone.</li></ul><h3>Igneous Traits</h3><ul><li><strong>Heat Memory.</strong> When you take thermal damage with the fire flavor, you may bank that damage. Before your next Soma Break, you may spend the banked heat as a bonus action to add +1d10 exploding thermal damage (flavor: fire) to your next weapon attack, unarmed strike, or grapple that connects.</li><li><strong>Molten Bearing.</strong> You count fire, smoke, ash, and heated terrain as normal ground for the purposes of difficult terrain and footing. Contact with your bare skin singes paper and warms metal.</li></ul><h3>Domain Edge</h3><ul><li><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Violence marks</strong> and <strong>+20 Non-Lethal marks</strong> at campaign start.</li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#a8c4e0;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Hex Recognition</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">On a natural surface you're touching, whisper a question — GM answers with one true thing the land knows.</div>\n</div>",
       "chat": ""
     },
     "advancement": [
@@ -52,80 +52,24 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "species"
-    },
     "bbttcc": {
       "kind": "heritage",
       "family": "menhirkin",
       "lineage": "Igneous",
       "version": "1.1.0",
       "date": "2026-04-19",
-      "rfiNative": true,
-      "opEffects": {
-        "violence": 2,
-        "nonlethal": 1
-      }
+      "rfiNative": true
     },
     "fourththing": {
       "grants": {
         "resistances": [
           {
-            "type": "energy",
-            "flavor": "fire"
+            "type": "thermal",
+            "flavor": "hot"
           }
         ]
       },
-      "rerolls": [
-        {
-          "context": "forced-movement",
-          "mode": "reroll-lowest",
-          "note": "on checks to resist being forcibly moved"
-        },
-        {
-          "context": "check",
-          "attribute": "body",
-          "mode": "reroll-lowest",
-          "vs": "vs:exhaustion",
-          "note": "on Body checks against exhaustion, long-duration physical wear, forced marche…"
-        },
-        {
-          "context": "check",
-          "skill": "stealth",
-          "mode": "reroll-highest",
-          "note": "on Intrigue (Stealth) checks unless you are on or in stone"
-        },
-        {
-          "context": "check",
-          "attribute": "intrigue",
-          "mode": "reroll-highest",
-          "note": "on Intrigue (Stealth) checks unless you are on or in stone"
-        },
-        {
-          "context": "forced-movement",
-          "mode": "reroll-lowest",
-          "note": "checks to resist being forcibly moved"
-        },
-        {
-          "context": "check",
-          "attribute": "body",
-          "mode": "reroll-lowest",
-          "vs": "vs:exhaustion",
-          "note": "Body checks against exhaustion, long-duration physical wear, forced marches, …"
-        },
-        {
-          "context": "check",
-          "skill": "stealth",
-          "mode": "reroll-highest",
-          "note": "Intrigue (Stealth) checks unless you are on or in stone"
-        },
-        {
-          "context": "check",
-          "attribute": "intrigue",
-          "mode": "reroll-highest",
-          "note": "Intrigue (Stealth) checks unless you are on or in stone"
-        }
-      ],
+      "rerolls": [],
       "resourceGrants": [
         {
           "cadence": "per-campaign-start",
@@ -141,10 +85,34 @@
       "triggers": [
         {
           "event": "on-damage-taken",
+          "predicate": {
+            "tag": [
+              "thermal",
+              "hot",
+              "fire"
+            ]
+          },
           "effect": {
-            "kind": "chat-prompt",
+            "kind": "bank-counter",
             "args": {
-              "body": "Igneous Traits Heat Memory. When you take energy damage with the fire flavor, you may bank that damage"
+              "counter": "heat",
+              "delta": 1,
+              "max": 1
+            }
+          }
+        },
+        {
+          "event": "on-attack-hit",
+          "offer": true,
+          "offerText": "Heat Memory — spend the banked heat: +1d10 exploding thermal (fire) on this hit.",
+          "effect": {
+            "kind": "spend-counter",
+            "args": {
+              "counter": "heat",
+              "per": {
+                "dieFormula": "1d10x10"
+              },
+              "type": "thermal"
             }
           }
         }
@@ -339,12 +307,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776660294429,
-    "modifiedTime": 1782167281945,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988969218,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -14,7 +14,8 @@
       }
     },
     "bbttcc-factions": {
-      "factionId": "6H5Grt3HybAs1rSq"
+      "factionId": "6H5Grt3HybAs1rSq",
+      "warLogs": []
     },
     "fourththing": {
       "kind": "rig",
@@ -22,63 +23,6 @@
         "hexesMoved": 10,
         "heat": 3
       }
-    },
-    "bbttcc-structures": {
-      "hasStructure": true,
-      "facilityMode": false,
-      "materialBOM": [
-        {
-          "materialKey": "bog-iron",
-          "qty": 3,
-          "originalQty": 4,
-          "family": "metal",
-          "tier": "I",
-          "name": "bog-iron",
-          "tagsCache": []
-        },
-        {
-          "materialKey": "hex-iron-cleat",
-          "qty": 1,
-          "originalQty": 1,
-          "family": "metal",
-          "tier": "II",
-          "name": "Hex-Iron Cleat",
-          "tagsCache": [
-            "material",
-            "hex-iron-cleat"
-          ]
-        }
-      ],
-      "state": "intact",
-      "plates": {
-        "current": 19,
-        "max": 19
-      },
-      "threshold": 1.2,
-      "resists": {
-        "kinetic": 0.5
-      },
-      "vulnerabilities": {
-        "energy|heat": {
-          "type": "energy",
-          "flavor": "heat",
-          "factor": 2
-        },
-        "energy|fire": {
-          "type": "energy",
-          "flavor": "fire",
-          "factor": 2
-        }
-      },
-      "loadBearing": false,
-      "collapseProfile": {
-        "fallFt": 10,
-        "damageDice": "2d10",
-        "nonlethal": true,
-        "knockbackFt": 5,
-        "triggerState": "breached"
-      },
-      "history": []
     }
   },
   "system": {
@@ -123,8 +67,8 @@
       "crewMax": 2
     },
     "integrity": {
-      "value": 10,
-      "max": 10,
+      "value": 14,
+      "max": 14,
       "tier": 1,
       "bracket": "personal"
     },
@@ -150,8 +94,8 @@
       "basePerTurn": {}
     },
     "travel": {
-      "speed": 3,
-      "range": 8,
+      "speed": 5,
+      "range": 10,
       "hazardResist": 0,
       "domains": [
         "land"
@@ -164,10 +108,9 @@
       "personal",
       "land"
     ],
-    "resources": {
-      "surge": {
-        "value": 1
-      }
+    "biography": {
+      "concept": "",
+      "notes": ""
     }
   },
   "prototypeToken": {
@@ -184,8 +127,8 @@
       "tint": "#ffffff",
       "alphaThreshold": 0.75
     },
-    "width": 2,
-    "height": 2,
+    "width": 1,
+    "height": 1,
     "displayName": 30,
     "depth": 1,
     "lockRotation": false,
@@ -266,7 +209,8 @@
   "ownership": {
     "default": 0,
     "rzJQNVz5H3SHfP2i": 3,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_id": "kz6B4asDWmJuBk19",
   "items": [
@@ -288,7 +232,8 @@
         "damageParts": [],
         "range": {
           "short": 4,
-          "long": 12
+          "long": 12,
+          "units": "sq"
         },
         "tags": [
           "suppression",
@@ -562,23 +507,22 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1787799237005,
-        "modifiedTime": 1787799237005,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773771920,
+        "modifiedTime": 1792989105996,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "AaLMv7BIjb5QNAfu",
-      "_key": "!actors.items!kz6B4asDWmJuBk19.AaLMv7BIjb5QNAfu"
+      "_id": "AaLMv7BIjb5QNAfu"
     },
     {
       "name": "Sensor Suite",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/commodities/tech/electronics-sensor-eye.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -586,7 +530,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p>",
+          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p><p><strong>Passive:</strong> every crew member aboard adds +1 to initiative.</p>",
           "chat": ""
         }
       },
@@ -594,7 +538,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": true
+            "passive": {
+              "initiative": 1
+            }
           },
           "rfi": {
             "item": {
@@ -621,18 +567,17 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1787799237005,
-        "modifiedTime": 1787799237005,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773771920,
+        "modifiedTime": 1792989105996,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "CqSNqE6gTeJYdJeX",
-      "_key": "!actors.items!kz6B4asDWmJuBk19.CqSNqE6gTeJYdJeX"
+      "_id": "CqSNqE6gTeJYdJeX"
     },
     {
       "name": "Hexmobile Frame",
@@ -645,7 +590,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>Synthetic frame authored by the Rig Builder. Bracket: personal. Pilot Mount enabled — one pilot-fired weapon.</p>",
+          "value": "<p>Two-seat scout chassis — a pilot, a passenger, and one weapon mounted at the pilot's hand. Bad Eden's signature scout-and-skirmish ride.</p><p><b>Frame · Personal · Mobile</b></p>",
           "chat": ""
         }
       },
@@ -719,6 +664,9 @@
               }
             }
           }
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.items.Item.HzOrI0fZiFA1ZlWV"
         }
       },
       "_id": "IqXYgmCt69NG9V0O",
@@ -730,29 +678,28 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1787799237005,
-        "modifiedTime": 1787799237005,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773771920,
+        "modifiedTime": 1792989105996,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!kz6B4asDWmJuBk19.IqXYgmCt69NG9V0O"
+      }
     }
   ],
   "effects": [],
   "folder": "ytd3WZZ13kxuQyKA",
   "sort": 300000,
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1787799237005,
-    "modifiedTime": 1787799237005,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792773771920,
+    "modifiedTime": 1792989105876,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

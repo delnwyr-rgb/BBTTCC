@@ -7,220 +7,70 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port",
-      "phase2-narrative"
+      "phase2-narrative",
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p><strong>Passive.</strong> Once per scene, the Serpent may reroll-lowest one defense check by reading where the strike was going to swing.</p>",
+      "value": "<p><strong>Passive.</strong> Once per scene, the Serpent may reroll the lowest die on one defense check by reading where the strike was going to swing.</p>",
       "chat": ""
     }
   },
-  "_id": "SNYc3mr4bLaUoTbT",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "selfTurnStart",
+            "do": {
+              "bankReroll": {
+                "context": "defense",
+                "note": "Read the Vector"
+              }
+            },
+            "to": "self",
+            "limit": {
+              "per": "scene",
+              "uses": 1
+            },
+            "label": "Read the Vector"
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
           "Jommetry Serpent"
         ],
+        "sourceIds": [
+          "xCHciB6b5HEF5926"
+        ],
         "worlds": [
-          "ember"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
-    },
-    "autoanimations": {
-      "id": "80fc250c-952a-42f6-b0a4-5d87e173fa1c",
-      "label": "Read the Vector",
-      "macro": {
-        "enable": false,
-        "playWhen": "0"
-      },
-      "menu": "ontoken",
-      "primary": {
-        "video": {
-          "dbSection": "static",
-          "menuType": "spell",
-          "animation": "bless",
-          "variant": "intro",
-          "color": "yellow",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "contrast": 0,
-          "delay": 0,
-          "elevation": 1000,
-          "isWait": false,
-          "opacity": 1,
-          "playbackRate": 1,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "saturate": 0,
-          "size": 1,
-          "tint": false,
-          "tintColor": "#FFFFFF",
-          "zIndex": 1
-        }
-      },
-      "secondary": {
-        "enable": false,
-        "video": {
-          "dbSection": "static",
-          "menuType": "spell",
-          "animation": "curewounds",
-          "variant": "01",
-          "color": "blue",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "addTokenWidth": false,
-          "anchor": "0.5",
-          "contrast": 0,
-          "delay": 0,
-          "elevation": 1000,
-          "fadeIn": 250,
-          "fadeOut": 500,
-          "isMasked": false,
-          "isRadius": true,
-          "isWait": false,
-          "opacity": 1,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "saturate": 0,
-          "size": 1.5,
-          "tint": false,
-          "tintColor": "#FFFFFF",
-          "zIndex": 1
-        }
-      },
-      "soundOnly": {
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        }
-      },
-      "source": {
-        "enable": false,
-        "video": {
-          "dbSection": "static",
-          "menuType": "spell",
-          "animation": "curewounds",
-          "variant": "01",
-          "color": "blue",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "addTokenWidth": false,
-          "anchor": "0.5",
-          "contrast": 0,
-          "delay": 0,
-          "elevation": 1000,
-          "fadeIn": 250,
-          "fadeOut": 500,
-          "isMasked": false,
-          "isRadius": true,
-          "isWait": false,
-          "opacity": 1,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "saturate": 0,
-          "size": 1.5,
-          "tint": false,
-          "tintColor": "#FFFFFF",
-          "zIndex": 1
-        }
-      },
-      "target": {
-        "enable": false,
-        "video": {
-          "dbSection": "static",
-          "menuType": "spell",
-          "animation": "curewounds",
-          "variant": "01",
-          "color": "blue",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "addTokenWidth": false,
-          "anchor": "0.5",
-          "contrast": 0,
-          "delay": 0,
-          "elevation": 1000,
-          "fadeIn": 250,
-          "fadeOut": 500,
-          "isMasked": false,
-          "isRadius": true,
-          "isWait": false,
-          "opacity": 1,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "saturate": 0,
-          "size": 1.5,
-          "tint": false,
-          "tintColor": "#FFFFFF",
-          "zIndex": 1
-        }
-      },
-      "isEnabled": true,
-      "isCustomized": true,
-      "fromAmmo": false,
-      "version": 5
     }
   },
+  "effects": [],
+  "_id": "SNYc3mr4bLaUoTbT",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": 1781026866163,
-    "modifiedTime": 1781026866163,
-    "lastModifiedBy": "MRFjjbUTBd66pWBY",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989039801,
+    "modifiedTime": 1792989039801,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!SNYc3mr4bLaUoTbT"
 }

@@ -1,0 +1,79 @@
+{
+  "name": "Minor Ward",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "mortal",
+      "sept"
+    ],
+    "description": {
+      "value": "<p>Once per round, when an ally within 6 squares would take damage, the Sept member may use a reaction to grant them resistance to that instance.</p><p><em>They are not very good at it. They are very sincere about it.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "allyDamaged",
+            "radius": 6,
+            "do": {
+              "ward": 0.5
+            },
+            "limit": {
+              "per": "round",
+              "uses": 1
+            },
+            "label": "Minor Ward"
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "mortal"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Septless Wanderer"
+        ],
+        "sourceIds": [
+          "WvR3YPMYK9dd1lEH"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "5PMzdEPcjXCx8wQm",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069950,
+    "modifiedTime": 1792989070036,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!5PMzdEPcjXCx8wQm"
+}

@@ -1,0 +1,70 @@
+{
+  "name": "Twisted Words",
+  "type": "feat",
+  "img": "icons/weapons/guns/pistol-silenced.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>One creature within 12 squares that can hear it rolls vs Resolve (DC 16) or becomes Shaken with respect to one of its own allies (Deceiver's choice) until the end of its next turn — every word that ally says arrives pre-poisoned.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "condition": {
+                "key": "shaken",
+                "duration": "1-round",
+                "save": {
+                  "attr": "soul",
+                  "dc": 16
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Whispering Deceiver"
+        ],
+        "sourceIds": [
+          "hIOAU3bYR4KkdPhw"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "ahSpl2nxTvGTdk9D",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069980,
+    "modifiedTime": 1792989070056,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ahSpl2nxTvGTdk9D"
+}

@@ -1,0 +1,482 @@
+{
+  "name": "Boots of the Doorframe Discount",
+  "type": "armor",
+  "img": "icons/equipment/feet/boots-simple-leather-brown.webp",
+  "system": {
+    "guardBonus": 0,
+    "evasionBonus": 1,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "fitting",
+    "equipped": false,
+    "tags": [
+      "mal-voiced",
+      "footwear",
+      "salvaged",
+      "light",
+      "bound-working"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Salvaged from two different abandoned trucks at two different crossroads. The left boot was loved very much. The right boot was loved less, but more recently. Together they make a pair that walks faster than either of them used to. The previous owners are not asking for them back.</p><p><strong>Mismatched Stride.</strong> +1 Evasion while worn. Stealth checks reroll the lowest die because nobody expects a person walking this fast to be sneaky. (Mal: \"It's psychological. They're so confused they don't notice you.\")</p>\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Bound Working — Doorframe Discount (TI).</strong></p>\n<ul>\n  <li>Carries the Working <strong>Doorframe Discount</strong>: it appears among your Manifestations as “Doorframe Discount ⟡ Boots of the Doorframe Discount” and casts from the item, <strong>no Clarity</strong> — Noise and misfire still apply.</li>\n  <li><strong>3 charges</strong>; one is spent per cast attempt; all recover on a Soma Break.</li>\n  <li><em>Step through any doorway, arch, or gap and emerge from another within 6 squares. The disorientation you leave behind grants you +1 Evasion for the scene.</em></li>\n  <li>Tier II · attuned (one slot) · technomagical (Witness-forge binding).</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "footwear",
+          "signature": "Left boot from one couple. Right boot from another. They get along well enough.",
+          "origin": "forged",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Salvaged from two different abandoned trucks at two different crossroads. The left boot was loved very much. The right boot was loved less, but more recently. Together they make a pair that walks faster than either of them used to. The previous owners are not asking for them back.</p><p><b>Mismatched Stride.</b> +1 Evasion while worn. Stealth checks reroll the lowest die because nobody expects a person walking this fast to be sneaky. (Mal: \"It's psychological. They're so confused they don't notice you.\")</p>",
+          "materialOf": [
+            {
+              "key": "road-leather",
+              "qty": 1
+            },
+            {
+              "key": "two-different-stories",
+              "qty": 1
+            },
+            {
+              "key": "prayer-binding",
+              "qty": 1
+            },
+            {
+              "key": "anchor-quartz",
+              "qty": 1
+            },
+            {
+              "key": "focused-crystal",
+              "qty": 1
+            },
+            {
+              "key": "witness-glass",
+              "qty": 1
+            }
+          ],
+          "price": {
+            "marks": 300,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII footwear × tech 2.0 (bound Working: Doorframe Discount TI) × attuned",
+            "bound": "attuned",
+            "saleBack": 120
+          },
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 3,
+              "max": 3,
+              "recoverPer": "soma-break"
+            },
+            "fuel": null,
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "signature": "bound-working",
+            "failure": "misfire",
+            "origin": "witness-forge",
+            "shielded": false
+          }
+        }
+      },
+      "working": {
+        "power": {
+          "name": "Doorframe Discount",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
+          "system": {
+            "intent": "intrigue",
+            "channel": "mind",
+            "sephirah": "yesod",
+            "mode": "hermetic",
+            "clarityRequired": 0,
+            "noiseGain": 0,
+            "activation": "action",
+            "target": "self",
+            "range": "near",
+            "damage": "",
+            "damageType": "energy",
+            "damageFlavor": "",
+            "damageRoll": {
+              "op": "none",
+              "number": 0,
+              "die": "d6",
+              "attribute": "",
+              "type": "kinetic",
+              "flavor": "",
+              "track": "integrity"
+            },
+            "damageParts": [],
+            "effect": "Step through any doorway, arch, or gap and emerge from another within 6 squares. The disorientation you leave behind grants you +1 Evasion for the scene.",
+            "tags": [
+              "starter-kit",
+              "dreamwalker",
+              "sapphire-gate",
+              "mobility",
+              "new",
+              "path:dreamwalker",
+              "doctrine-signature",
+              "gate",
+              "move",
+              "instant",
+              "event"
+            ],
+            "category": "manifestation",
+            "flavor": "Mal: 'Doors are a franchise. She has the loyalty card.'",
+            "manifestation": {
+              "tier": 1,
+              "family": "working",
+              "concept": "All doorways are the same doorway if you fell asleep in enough of them. Step into any opening; step out of another one nearby.",
+              "form": "gate",
+              "function": "move",
+              "stability": "instant",
+              "interactionModel": "event",
+              "costType": "none",
+              "costValue": 0,
+              "costText": "",
+              "duration": "scene",
+              "durationText": "",
+              "triggerText": "",
+              "scale": "personal",
+              "targetText": "",
+              "rangeAreaText": "",
+              "rangeFt": 30,
+              "maintenanceCost": "",
+              "riskText": "",
+              "pathResonance": "Dreamwalker — dreamwalker sapphire gate",
+              "fictionalPermission": "",
+              "gmCalibration": "",
+              "mechanicalHook": "",
+              "signature": "",
+              "thirdThing": "",
+              "opCost": {
+                "pool": "",
+                "value": 0
+              },
+              "area": {
+                "shape": "none",
+                "size": 0
+              },
+              "activation": {
+                "type": "action",
+                "consumePool": true
+              },
+              "save": {
+                "enabled": false,
+                "defense": "evasion",
+                "attribute": "",
+                "dcMode": "derived",
+                "dcFixed": 15
+              },
+              "maintenanceKey": "none",
+              "isSignature": false,
+              "chain": {
+                "enabled": false,
+                "count": 3,
+                "range": 30,
+                "damageFormula": "1d6",
+                "damageType": "",
+                "carryConditions": false,
+                "carryEffects": false
+              },
+              "conditionalDamage": [],
+              "appliedEffects": {
+                "modifiers": [
+                  {
+                    "stat": "evasion",
+                    "op": "+",
+                    "value": 1
+                  }
+                ],
+                "resists": [],
+                "immunes": []
+              }
+            },
+            "description": {
+              "value": "<p>Step through any doorway, arch, or gap and emerge from another within 6 squares. The disorientation you leave behind grants you +1 Evasion for the scene.</p>"
+            }
+          },
+          "flags": {
+            "autoanimations": {
+              "id": "c71c16da-1482-44e3-b4b6-76f7cbe090e5",
+              "label": "Doorframe Discount",
+              "levels3d": {
+                "type": "explosion",
+                "data": {
+                  "color01": "#FFFFFF",
+                  "color02": "#FFFFFF",
+                  "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+                },
+                "sound": {
+                  "enable": false
+                },
+                "secondary": {
+                  "enable": false,
+                  "data": {
+                    "color01": "#FFFFFF",
+                    "color02": "#FFFFFF",
+                    "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+                  }
+                }
+              },
+              "macro": {
+                "enable": false,
+                "playWhen": "0"
+              },
+              "meleeSwitch": {
+                "video": {
+                  "dbSection": "range",
+                  "menuType": "weapon",
+                  "animation": "arrow",
+                  "variant": "regular",
+                  "color": "regular"
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "detect": "automatic",
+                  "range": 2,
+                  "returning": false,
+                  "switchType": "on"
+                }
+              },
+              "menu": "ontoken",
+              "primary": {
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "spell",
+                  "animation": "bless",
+                  "variant": "intro",
+                  "color": "yellow",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "isWait": false,
+                  "opacity": 1,
+                  "playbackRate": 1,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "zIndex": 1
+                }
+              },
+              "secondary": {
+                "enable": false,
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "spell",
+                  "animation": "curewounds",
+                  "variant": "01",
+                  "color": "blue",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "addTokenWidth": false,
+                  "anchor": "0.5",
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "fadeIn": 250,
+                  "fadeOut": 500,
+                  "isMasked": false,
+                  "isRadius": true,
+                  "isWait": false,
+                  "opacity": 1,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1.5,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "zIndex": 1
+                }
+              },
+              "soundOnly": {
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                }
+              },
+              "source": {
+                "enable": false,
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "spell",
+                  "animation": "curewounds",
+                  "variant": "01",
+                  "color": "blue",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "addTokenWidth": false,
+                  "anchor": "0.5",
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "fadeIn": 250,
+                  "fadeOut": 500,
+                  "isMasked": false,
+                  "isRadius": false,
+                  "isWait": true,
+                  "opacity": 1,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "zIndex": 1
+                }
+              },
+              "target": {
+                "enable": false,
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "spell",
+                  "animation": "curewounds",
+                  "variant": "01",
+                  "color": "blue",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "addTokenWidth": false,
+                  "anchor": "0.5",
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "fadeIn": 250,
+                  "fadeOut": 500,
+                  "isMasked": false,
+                  "isRadius": false,
+                  "opacity": 1,
+                  "persistent": false,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "unbindAlpha": false,
+                  "unbindVisibility": false,
+                  "zIndex": 1
+                }
+              },
+              "isEnabled": true,
+              "isCustomized": true,
+              "fromAmmo": false,
+              "version": 5
+            }
+          }
+        },
+        "charges": {
+          "value": 3,
+          "max": 3,
+          "recoverPer": "soma-break"
+        },
+        "tier": 1
+      },
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "stealth",
+          "vs": "nobody expects a person walking this fast to be sneaky",
+          "note": "Mismatched Stride"
+        }
+      ]
+    }
+  },
+  "folder": "EdubcDDQfUtnlKvP",
+  "_id": "8Z6yhEzqW06qK7a2",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791427798074,
+    "modifiedTime": 1792988962971,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!8Z6yhEzqW06qK7a2"
+}

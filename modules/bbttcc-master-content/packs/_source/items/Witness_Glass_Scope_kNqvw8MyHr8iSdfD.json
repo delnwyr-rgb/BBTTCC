@@ -42,15 +42,15 @@
             "origin": "witness-forge"
           },
           "price": {
-            "marks": 180,
+            "marks": 360,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TII tool × 0.60 × tech 2.0",
+            "rarityMult": 2,
+            "notes": "TII tool × tech 2.0 × attuned × rarity 2",
             "bound": "attuned",
-            "saleBack": 72
+            "saleBack": 144
           }
         }
       }
@@ -64,11 +64,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778963499668,
-    "modifiedTime": 1782149456173,
+    "modifiedTime": 1792977654884,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "exportSource": null,
     "compendiumSource": null,

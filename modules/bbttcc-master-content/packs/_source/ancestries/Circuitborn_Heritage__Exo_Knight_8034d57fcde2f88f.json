@@ -14,7 +14,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn Line.</strong> The war-plate. Made for impact, for holding the line, for being the thing the squad puts between itself and whatever just came through the gate.</p><p><em>“Captain Robot is not a robot. You are. Try not to make it weird about him.”</em></p><p><strong>Exo-Knight.</strong> You are a sentient chassis built around the principle of <em>presence</em>. When you stand somewhere, that ground belongs to your faction until something stronger walks you off it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>VIO (Violence)</strong>—expressed primarily through Tier powers.</li><li><strong>Bulwark Frame.</strong> When an ally within 1 square of you is hit by an attack, you may use your reaction to impose 3d10 keep lowest 2 on the attack roll (1/Soma Break).</li></ul>",
+      "value": "\n<p><strong>Circuitborn Line.</strong> The war-plate. Made for impact, for holding the line, for being the thing the squad puts between itself and whatever just came through the gate.</p><p><em>“Captain Robot is not a robot. You are. Try not to make it weird about him.”</em></p><p><strong>Exo-Knight.</strong> You are a sentient chassis built around the principle of <em>presence</em>. When you stand somewhere, that ground belongs to your Domain until something stronger walks you off it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>VIO (Violence)</strong>—expressed primarily through Tier powers.</li><li><strong>Bulwark Frame.</strong> When an ally within 1 square of you is about to take damage from an attack, you may use your reaction to step in: the ally takes half that damage (1/Soma Break).</li></ul>",
       "chat": ""
     },
     "advancement": [
@@ -58,9 +58,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "species"
-    },
     "bbttcc": {
       "kind": "heritage",
       "family": "circuitborn",
@@ -244,6 +241,26 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "fourththing": {
+      "triggers": [
+        {
+          "event": "on-ally-incoming-damage",
+          "radius": 1,
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "offer": true,
+          "offerText": "Bulwark Frame — step in: the adjacent ally takes half this damage.",
+          "effect": {
+            "kind": "modify-incoming-damage",
+            "args": {
+              "mode": "half"
+            }
+          }
+        }
+      ]
     }
   },
   "folder": "Cejbng0vC6BVadnb",
@@ -251,12 +268,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776541800000,
-    "modifiedTime": 1782167240121,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988990766,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

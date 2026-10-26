@@ -3,7 +3,7 @@
   "type": "feat",
   "img": "icons/containers/boxes/crate-wooden-beige-red.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": "",
     "tags": [],
     "description": {
@@ -49,11 +49,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1778964846636,
-    "modifiedTime": 1781934665174,
+    "modifiedTime": 1792977704375,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

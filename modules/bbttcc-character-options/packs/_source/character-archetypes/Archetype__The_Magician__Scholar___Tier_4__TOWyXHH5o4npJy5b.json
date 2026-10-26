@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 (Level 17) — The Magician</strong></p>\n<ul>\n<li><strong>Tactical:</strong> Your mastery of ancient and modern lore places you among the greatest scholars of the age.</li>\n<li><strong>Strategic:</strong> When undertaking an <strong>Asset Retrieval</strong> scenario to recover lost knowledge (ancient texts, blueprints, occult schematics, etc.), the <strong>Violence or Intrigue OP cost is reduced by 3</strong> (minimum 1).</li>\n</ul>",
+      "value": "<p><strong>Tier 4 (Level 17) — The Magician</strong></p>\n<ul>\n<li><strong>Tactical:</strong> Your mastery of ancient and modern lore places you among the greatest scholars of the age.</li>\n<li><strong>Strategic:</strong> Whenever your Domain spends Violence or Intrigue marks, it spends 30 fewer (never below 10).</li>\n</ul>",
       "chat": ""
     },
     "activities": {},
@@ -60,7 +60,21 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "violence",
+            "intrigue"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Archetype: The Magician (Scholar) (Tier 4)",
+          "marks": 30
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": "Item.rsHGAg0PgOSNaHOU",
@@ -72,12 +86,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986769802,
-    "modifiedTime": 1781116023818,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989156355,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

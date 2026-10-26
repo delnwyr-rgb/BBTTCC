@@ -1,81 +1,84 @@
 {
   "name": "Sworn",
-  "type": "feat",
+  "type": "feature",
   "img": "icons/equipment/shield/heater-steel-grey.webp",
   "system": {
-    "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
+    "category": "principle",
+    "source": "",
     "tags": [
-      "seed-bestiary-attacks",
-      "tier-iv",
-      "role-brute",
-      "passive"
+      "translated",
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>Immune to Charmed and Shaken. When the guard's sworn warlord (GM nominates at scene start) takes damage within 6 squares, the guard may use a reaction to take half of that damage instead.</p><p><em>They have killed more heroes than they remember. Heroes is just the title; remembering is the part they're done with.</em></p>",
+      "value": "<p>Immune to Charmed and Compelled. The first time this creature is reduced to 0 Integrity, it instead drops to 1 and gains +2 on its next attack roll — the oath tries one more thing.</p><p><em>Will die before breaking it. Has, several times.</em></p>",
       "chat": ""
-    },
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": []
-    },
-    "advancement": {},
-    "identifier": "",
-    "crewed": false,
-    "enchant": {},
-    "prerequisites": {
-      "items": [],
-      "repeatable": false
-    },
-    "properties": [],
-    "requirements": "",
-    "type": {
-      "value": "",
-      "subtype": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
-      "rfi": {
-        "item": {
-          "tier": "IV",
-          "frame": "trait"
-        }
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "zero",
+            "do": {
+              "heal": 1,
+              "bankBonus": {
+                "bonus": 2,
+                "context": "attack",
+                "note": "the oath tries one more thing"
+              }
+            },
+            "to": "self",
+            "limit": {
+              "per": "combat",
+              "uses": 1
+            },
+            "label": "Sworn"
+          }
+        ]
+      },
+      "grants": {
+        "conditionImmunities": [
+          "charmed",
+          "compelled",
+          "shaken"
+        ]
       }
     },
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Hex-Warlord's Honored Guard"
+          "Hexknight"
+        ],
+        "sourceIds": [
+          "QiFWQHYcmDZyUAuI"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "al8nnLiMnC9wHrYZ",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167245002,
-    "modifiedTime": 1782167245002,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989047610,
+    "modifiedTime": 1792989047611,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!al8nnLiMnC9wHrYZ"
 }

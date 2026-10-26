@@ -1,0 +1,78 @@
+{
+  "name": "Tyrant's Aura",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Any creature that starts its turn within 2 squares of the despot is battered by contradictory commands: it rolls twice and keeps the worse result on skill checks until the start of its next turn (Resolve check vs DC 12 to shrug it off).</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "do": {
+              "save": {
+                "attr": "soul",
+                "dc": 12,
+                "onSave": "negate"
+              }
+            },
+            "radius": 2,
+            "who": "enemies"
+          },
+          {
+            "on": "saveFail",
+            "do": {
+              "impose": true
+            },
+            "if": {
+              "weapon": "Tyrant's Aura"
+            }
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Thaumielite Despot"
+        ],
+        "sourceIds": [
+          "QT2xnNzPOYRA0Wz4"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "pCk440CCaGAzLdLt",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069981,
+    "modifiedTime": 1792989070056,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!pCk440CCaGAzLdLt"
+}

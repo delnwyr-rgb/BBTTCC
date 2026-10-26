@@ -39,14 +39,15 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "Lyrenn, the seed vault, crop rotation, the Green Ring, the Water Choir, Khezek Tor, Etta Bloom, the east channels",
-        "notes": "[LYRENN-TREATMENT-2026-07-07] PRIVATE TRUTH \u2014 Elsin Quade. Voice: firm handshake in word form; answers what's asked, once, completely; allergic to being managed. Positions she'll state plainly: soil rotation beats quotas, fewer sudden mandates, and Khezek Tor's ambition will cost somebody who isn't Khezek Tor. THE VAULT: hers by trust, not title \u2014 she opens it for people who ask like it matters. The red-thread jars she treats like sleeping patients: she will not open one casually, and if someone wants to PLANT them she doesn't forbid it \u2014 she watches, hard, because \"no one has agreed not to\" and Elsin believes some permissions are tests. HER ECHO (tells only when asked directly and with respect, never volunteers): before Lyrenn she farmed somewhere she pushed too hard \u2014 quotas, mandates, force-feeding the ground \u2014 and the ground DIED. Not failed. Died. A place where nothing argues back anymore, and she can find it on a map without looking. She's in Lyrenn to farm as apology. TELLS: wipes clean hands on her apron when deciding how much to say; goes very still when someone proposes forcing a yield. If the party did violence in Lyrenn, she is polite, exact, and one degree colder \u2014 the soil told her."
+        "notes": "[LYRENN-TREATMENT-2026-07-07] PRIVATE TRUTH — Elsin Quade. Voice: firm handshake in word form; answers what's asked, once, completely; allergic to being managed. Positions she'll state plainly: soil rotation beats quotas, fewer sudden mandates, and Khezek Tor's ambition will cost somebody who isn't Khezek Tor. THE VAULT: hers by trust, not title — she opens it for people who ask like it matters. The red-thread jars she treats like sleeping patients: she will not open one casually, and if someone wants to PLANT them she doesn't forbid it — she watches, hard, because \"no one has agreed not to\" and Elsin believes some permissions are tests. HER ECHO (tells only when asked directly and with respect, never volunteers): before Lyrenn she farmed somewhere she pushed too hard — quotas, mandates, force-feeding the ground — and the ground DIED. Not failed. Died. A place where nothing argues back anymore, and she can find it on a map without looking. She's in Lyrenn to farm as apology. TELLS: wipes clean hands on her apron when deciding how much to say; goes very still when someone proposes forcing a yield. If the party did violence in Lyrenn, she is polite, exact, and one degree colder — the soil told her.",
+        "secretsRaw": "The Farm That Died :: rollPlus2 :: a Steward asks, with respect, where she farmed before Lyrenn :: Quotas, mandates, force-feeding the ground, and the ground DIED. Not failed. Died. A place where nothing argues back any more, and she can find it on a map without looking. She is in Lyrenn to farm as apology.\nPermissions Are Tests :: stirThePot :: a Steward asks whether she would LET them plant the red thread :: \"No one has agreed not to.\" She does not forbid it. She watches, hard, because some permissions are tests, and she has not yet decided which kind this one is."
       }
     }
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Crop coordinator and keeper of Lyrenn's seed vault (Act 2)",
+      "notes": "Elsin Quade keeps Lyrenn's ledgers and its seed vault, and coordinates what gets planted where. She speaks like a firm handshake: answers what's asked, once, completely, and dislikes being managed. Her positions are public and plain: soil rotation beats quotas, fewer sudden mandates, and Khezek Tor's ambition will cost somebody who isn't Khezek Tor. The vault is hers by trust rather than title, and she opens it for people who ask like it matters. She wipes already-clean hands on her apron while she decides how much to say."
     },
     "details": {
       "level": 1,
@@ -188,10 +189,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 0
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -200,7 +211,8 @@
     "derived": {
       "integrity": {
         "value": 16,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 16,
@@ -290,7 +302,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -325,8 +338,8 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
       "id": null,
@@ -336,23 +349,26 @@
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
     "disposition": 1,
     "name": "Elsin Quade",
     "displayName": 30,
-    "width": 1,
-    "height": 1,
+    "width": 6,
+    "height": 6,
     "depth": 1,
     "texture": {
-      "src": "icons/svg/mystery-man.svg",
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/elsin_quade_preview_pov.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
-      "scaleX": 1,
-      "scaleY": 1,
+      "scaleX": 3,
+      "scaleY": 3,
       "tint": "#ffffff",
       "alphaThreshold": 0.75
     },
@@ -412,7 +428,7 @@
         "ring": null,
         "background": null
       },
-      "effects": 1,
+      "effects": 0,
       "subject": {
         "scale": 1,
         "texture": null
@@ -425,13 +441,17 @@
       "disposition": false
     },
     "movementAction": null,
-    "flags": {},
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
     "randomImg": false,
     "appendNumber": false,
     "prependAdjective": false
   },
   "_id": "pA3n9cJbltCGzvWU",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/elsin_quade_preview_pov.webp",
   "items": [
     {
       "_id": "lKAm75kuoFMo1VBc",
@@ -448,7 +468,7 @@
           "violence"
         ],
         "description": {
-          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -475,21 +495,20 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895256,
-        "modifiedTime": 1784177895256,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989086623,
+        "modifiedTime": 1792989086623,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!pA3n9cJbltCGzvWU.lKAm75kuoFMo1VBc"
+      }
     },
     {
       "_id": "9dQuc88jKR3SZjMT",
-      "name": "Bravo \u2014 Apprentice (Tier I)",
+      "name": "Bravo — Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
@@ -501,7 +520,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Bravo \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick \u2014 Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
           "chat": ""
         }
       },
@@ -517,21 +536,38 @@
           "calling": {
             "key": "bravo",
             "tier": 1
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "allyDamaged",
+                "radius": 1,
+                "do": {
+                  "ward": 0,
+                  "redirect": true
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                },
+                "label": "Hold the Line"
+              }
+            ]
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895256,
-        "modifiedTime": 1784177895256,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989086623,
+        "modifiedTime": 1792989617897,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!pA3n9cJbltCGzvWU.9dQuc88jKR3SZjMT"
+      }
     }
   ],
   "effects": [],
@@ -539,15 +575,16 @@
   "sort": 100000,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177895256,
-    "modifiedTime": 1784177895256,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989086623,
+    "modifiedTime": 1792989086624,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

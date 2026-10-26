@@ -7,43 +7,61 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>If the beast takes damage from a creature it can’t see, it immediately moves up to half its movement away (no reaction strikes triggered).</p>",
+      "value": "<p>If the beast takes damage from a creature it can't see, it immediately moves up to half its speed away without provoking reaction strikes.</p>",
       "chat": ""
     }
   },
-  "_id": "7hvpq0URJyjOiKSv",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "damaged",
+            "do": {
+              "prompt": "Skittish: if the source was unseen, it moves half speed away, no reaction strikes."
+            },
+            "narrative": true
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Tier 1 Predator (Scavenger Beast)"
+          "Scavenger Beast"
+        ],
+        "sourceIds": [
+          "d6E2m6vnxKrKOzBS"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "7hvpq0URJyjOiKSv",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": null,
-    "modifiedTime": null,
-    "lastModifiedBy": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989044758,
+    "modifiedTime": 1792989044758,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!7hvpq0URJyjOiKSv"
 }

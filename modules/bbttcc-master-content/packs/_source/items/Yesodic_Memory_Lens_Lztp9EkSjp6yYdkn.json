@@ -13,8 +13,9 @@
     ],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
-      "value": "<p>Hand-ground lens of Yesodium-clouded glass, set in a Tree-of-Life-shard mount.</p><p><strong>Recall Sephirah (Harmonized, 1/scene).</strong> Look through the lens at any object, person, or location you have previously perceived under a known sephirotic alignment. Recall that alignment now — the GM names which sefirah dominated the moment.</p><p><strong>Memory Edge (Harmonized).</strong> Once per raid, after a magic test resolves, add +1 margin retroactively.</p><p><em>Unharmonized: clear glass. Pretty. Inert.</em></p>",
+      "value": "<p>Hand-ground lens of Yesodium-clouded glass, set in a Tree-of-Life-shard mount.</p><p><strong>Recall Sephirah (while attuned, once per scene).</strong> Look through the lens at any object, person, or location you have previously perceived under a known sephirotic alignment. Recall that alignment now — the GM names which sefirah dominated the moment.</p><p><strong>Memory Edge (while attuned).</strong> Once per Battle, Heist or Parley, after a casting check resolves, add +1 to its margin after the fact.</p><p><em>Unattuned: clear glass. Pretty. Inert.</em></p>",
       "chat": ""
     }
   },
@@ -44,7 +45,7 @@
             "recall_sephirah": true
           },
           "requiresHarmonization": true,
-          "lore": "<p>Hand-ground lens of Yesodium-clouded glass, set in a Tree-of-Life-shard mount.</p><p><b>Recall Sephirah (Harmonized, 1/scene).</b> Look through the lens at any object, person, or location you have previously perceived under a known sephirotic alignment. Recall that alignment now — the GM names which sefirah dominated the moment.</p><p><b>Memory Edge (Harmonized).</b> Once per raid, after a magic test resolves, add +1 margin retroactively.</p><p><i>Unharmonized: clear glass. Pretty. Inert.</i></p>",
+          "lore": "<p>Hand-ground lens of Yesodium-clouded glass, set in a Tree-of-Life-shard mount.</p><p><b>Recall Sephirah (while attuned, once per scene).</b> Look through the lens at any object, person, or location you have previously perceived under a known sephirotic alignment. Recall that alignment now — the GM names which sefirah dominated the moment.</p><p><b>Memory Edge (while attuned).</b> Once per Battle, Heist or Parley, after a casting check resolves, add +1 to its margin after the fact.</p><p><i>Unattuned: clear glass. Pretty. Inert.</i></p>",
           "materialOf": [
             {
               "key": "yesodium",
@@ -87,12 +88,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137210142,
-    "modifiedTime": 1778541963671,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988926130,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

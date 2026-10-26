@@ -1,0 +1,23 @@
+{
+  "_id": "FaFSAThUFkRk4y4k",
+  "name": "Retired test rigs",
+  "type": "Actor",
+  "description": "Pack-only test-seat rigs (RG1, 2026-10-26). Kept for reference; not in any world.",
+  "folder": null,
+  "sorting": "a",
+  "sort": 950000,
+  "color": "#5a5a5a",
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989103959,
+    "modifiedTime": 1792989103959,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!FaFSAThUFkRk4y4k"
+}

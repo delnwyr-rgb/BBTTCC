@@ -15,7 +15,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -23,6 +22,27 @@
           "tier": "IV",
           "frame": "feature"
         }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "do": {
+              "damage": {
+                "formula": "1d4",
+                "type": "qliphothic",
+                "track": "stress"
+              }
+            },
+            "radius": 2,
+            "who": "all",
+            "if": {
+              "chance": 0.1
+            },
+            "label": "Thinning Aura — a 1 on the d10"
+          }
+        ]
       }
     },
     "bbttcc": {
@@ -30,29 +50,34 @@
         "sources": [
           "Avatar of the Veil"
         ],
+        "sourceIds": [
+          "PqhdO2hojxFosDX0"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "dNsG3Tu0zyeGHgrf",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167245005,
-    "modifiedTime": 1782167245005,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989048953,
+    "modifiedTime": 1792989048954,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!dNsG3Tu0zyeGHgrf"
 }

@@ -1,64 +1,20 @@
 {
+  "_id": "Lz9niNHviI4BS8nr",
   "name": "Rust-Ooze Solvent Vial",
-  "type": "consumable",
+  "type": "gear",
   "img": "icons/consumables/potions/potion-vial-corked-purple.webp",
   "system": {
-    "description": {
-      "value": "<p>Dissolves mundane rust/ooze residue; grants advantage to escape viscous traps or restraints crafted from rusting materials for 1 minute.</p>",
-      "chat": ""
-    },
-    "rarity": "common",
-    "price": {
-      "value": 15,
-      "denomination": "gp"
-    },
-    "type": {
-      "value": "poison",
-      "subtype": ""
-    },
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "autoDestroy": false,
-      "max": ""
-    },
-    "identifier": "rust-ooze-solvent-vial",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "identified": true,
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 0,
-      "units": "lb"
-    },
-    "attunement": "",
-    "attuned": false,
-    "equipped": false,
-    "damage": {
-      "base": {
-        "types": [],
-        "custom": {
-          "enabled": false
-        },
-        "scaling": {
-          "number": 1
-        }
-      },
-      "replace": false
-    },
-    "properties": []
+    "description": {
+      "value": "<p>Dissolves mundane rust/ooze residue; reroll the lowest die to escape viscous traps or restraints crafted from rusting materials for 1 minute.</p>",
+      "chat": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": []
-    },
     "fourththing": {
       "rfi": {
         "item": {
@@ -69,39 +25,53 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI consumable stamp (untiered pass 2026-10-12)",
+            "notes": "TI consumable stamp",
             "bound": "free",
             "saleBack": 4
           },
-          "legacySystem": {
-            "description": {
-              "value": "<p>Dissolves mundane rust/ooze residue; reroll the lowest die to escape viscous traps or restraints crafted from rusting materials for 1 minute.</p>"
-            }
-          },
           "tier": "I",
-          "frame": "consumable"
+          "frame": "consumable",
+          "bound": "free",
+          "origin": "looted",
+          "reach": "self",
+          "footprint": 1,
+          "consume": {
+            "effects": [],
+            "decrement": true,
+            "target": "self"
+          },
+          "charges": 1
         }
-      }
+      },
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "athletics",
+          "vs": "escaping viscous traps or rusting restraints (1 minute after use)",
+          "note": "Rust-Ooze Solvent"
+        }
+      ]
     }
   },
   "effects": [],
   "folder": "Wxh1A343inwTUeoo",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834195185,
-    "modifiedTime": 1782164185974,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1800000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "Lz9niNHviI4BS8nr",
-  "sort": 1800000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988913702,
+    "modifiedTime": 1792988913702,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!Lz9niNHviI4BS8nr"
 }

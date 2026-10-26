@@ -1,0 +1,50 @@
+{
+  "name": "Veil Climber",
+  "type": "feature",
+  "img": "icons/magic/nature/wolf-paw-glow-small-green.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Climbs any surface, including upside down, without a check — and ignores movement restrictions from any webbing, its own or otherwise.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "3V9evosvlSDaDQwo",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Satariel Veil-Spinner"
+        ],
+        "sourceIds": [
+          "zVWpSrwZCA3TL5Dp"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069982,
+    "modifiedTime": 1792989070056,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!3V9evosvlSDaDQwo"
+}

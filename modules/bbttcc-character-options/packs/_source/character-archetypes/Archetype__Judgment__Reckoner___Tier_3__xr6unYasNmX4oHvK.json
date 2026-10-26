@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Judgment (Reckoner)</strong></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on checks against being charmed, and on checks made to detect lies, confessions, concealed guilt, or false repentance.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Judgment (Reckoner)</strong></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on checks against being charmed, and on checks made to detect lies, confessions, concealed guilt, or false repentance.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -60,7 +60,24 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "rerolls": [
+        {
+          "mode": "reroll-lowest",
+          "context": "defense",
+          "vs": "being charmed",
+          "note": "Judgment T3"
+        },
+        {
+          "mode": "reroll-lowest",
+          "context": "check",
+          "skill": "insight",
+          "vs": "lies, confessions, concealed guilt, or false repentance",
+          "note": "Judgment T3"
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": null,
@@ -72,12 +89,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986323670,
-    "modifiedTime": 1782167238594,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989163041,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

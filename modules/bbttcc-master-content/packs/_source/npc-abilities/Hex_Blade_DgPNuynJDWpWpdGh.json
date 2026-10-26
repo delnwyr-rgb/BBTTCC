@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +79,27 @@
             "saleBack": 180
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Hex-Touched Champion"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Hex-Blade"
+            },
+            "do": {
+              "damage": {
+                "formula": "1d4",
+                "type": "psychic"
+              }
+            }
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "d30ca797-97af-4352-83d8-6b9f89c1c056",
+      "id": "ft-hex-blade",
       "label": "Hex-Blade",
       "macro": {
         "enable": false,
@@ -268,50 +273,41 @@
       "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
-      "version": 5,
-      "meleeSwitch": {
-        "video": {
-          "dbSection": "range",
-          "menuType": "weapon",
-          "animation": "arrow",
-          "variant": "regular",
-          "color": "regular",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "detect": "automatic",
-          "range": 2,
-          "returning": false,
-          "switchType": "on"
-        }
+      "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Hex-Touched Champion"
+        ],
+        "sourceIds": [
+          "DzXn1wcsC7OWwvE4"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "DgPNuynJDWpWpdGh",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024227675,
-    "modifiedTime": 1782167244990,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989029302,
+    "modifiedTime": 1792989029302,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!DgPNuynJDWpWpdGh"
 }

@@ -1,0 +1,999 @@
+{
+  "name": "Gloomgill",
+  "type": "npc",
+  "_id": "F1bwkux5Uyq6wXQ4",
+  "img": "art/bbttcc/GOTTGAIT/ArtForBBTTCCModule/Gloomgill.png",
+  "system": {
+    "role": "caster",
+    "tier": 4,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 18,
+      "tier": 4,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "xp": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 3
+      },
+      "intrigue": {
+        "value": 5
+      },
+      "presence": {
+        "value": 8
+      },
+      "body": {
+        "value": 4
+      },
+      "mind": {
+        "value": 7
+      },
+      "soul": {
+        "value": 8
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 135,
+        "max": 135,
+        "temp": 0
+      },
+      "stress": {
+        "value": 94,
+        "max": 94
+      },
+      "guard": {
+        "value": 16
+      },
+      "evasion": {
+        "value": 16
+      },
+      "resolve": {
+        "value": 18
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "hod"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "psychic"
+      ],
+      "immunities": [],
+      "vulnerabilities": [
+        "qliphothic"
+      ]
+    },
+    "conditionImmunities": [
+      "charmed",
+      "shaken"
+    ],
+    "tags": [
+      "sephirotic",
+      "oannes",
+      "quiz",
+      "marsh",
+      "boss"
+    ],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "Game-show host of the silent marsh on the Odaroloc River (Act 6)",
+      "notes": "Gloomgill hosts a quiz show in a silent marsh on the Odaroloc River, and he is also, somehow, the marsh. He wears a sequined game-show jacket over scales and holds a microphone that should not work under water and does. He is bright, pedantic and delighted, and he grades energy, not answers ('No pressure!'). There are no eliminations today, just consequences. He turns up where people are confident and wrong, and the marsh applauds."
+    }
+  },
+  "prototypeToken": {
+    "name": "Gloomgill",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/ArtForBBTTCCModule/Gloomgill.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 0,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "name": "Correction, Not Anger",
+      "type": "feature",
+      "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-sephirotic",
+          "lineage-trait"
+        ],
+        "description": {
+          "value": "<p>Immune to Charmed and Shaken — it is a principle, not a person. Creatures that deal qliphothic damage to it must succeed a Soul check (DC 19) or be Restrained by the sephirah's answer until the end of their next turn.</p><p><em>No pressure!</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "feature",
+              "lineageTrait": "sephirotic"
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "if": {
+                  "damageType": [
+                    "qliphothic"
+                  ]
+                },
+                "do": {
+                  "condition": {
+                    "key": "restrained",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 19
+                    }
+                  }
+                },
+                "label": "Correction, Not Anger"
+              }
+            ]
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "E1bfIVbr5hd0khcp",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423991839,
+        "modifiedTime": 1791423991840,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Microphone Feedback",
+      "type": "weapon",
+      "img": "icons/magic/sonic/scream-wail-shout-teal.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "presence",
+        "skill": "channel",
+        "damage": {
+          "formula": "2d10",
+          "attribute": "presence",
+          "type": "psychic",
+          "damageFlavor": "a wrong answer, amplified",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 8,
+          "long": 24
+        },
+        "tags": [
+          "bestiary",
+          "tier-iv",
+          "lineage-sephirotic"
+        ],
+        "effect": "Soul DC 17 or Shaken until the end of the target's next turn.",
+        "flavor": "The microphone should not work under water. It does.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "shaken"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 17,
+            "saveAttributeOverrides": {}
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 17,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 8 squares, one target. Damage: <code>2d10</code> psychic (a wrong answer, amplified) + presence. Soul DC 17 or Shaken until the end of the target's next turn.</p><p><em>The microphone should not work under water. It does.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "attack",
+              "price": {
+                "marks": 1350,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIV attack × 1",
+                "bound": "free",
+                "saleBack": 540
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "Qslq3VkCKXwYefsN",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423991839,
+        "modifiedTime": 1791423991841,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "The Buzzer",
+      "type": "weapon",
+      "img": "icons/magic/sonic/explosion-shock-sound-wave.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d10",
+          "attribute": "violence",
+          "type": "sephirotic",
+          "damageFlavor": "time's up",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "bestiary",
+          "tier-iv",
+          "lineage-sephirotic"
+        ],
+        "effect": "On a hit the target is Imposed — its next roll takes the worse result. Consequences, not eliminations.",
+        "flavor": "The marsh applauds.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "imposed"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "",
+            "saveDcMode": "none",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square, one target. Damage: <code>2d10</code> sephirotic (time's up) + violence. On a hit the target is Imposed — its next roll takes the worse result. Consequences, not eliminations.</p><p><em>The marsh applauds.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "attack",
+              "price": {
+                "marks": 1350,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIV attack × 1",
+                "bound": "free",
+                "saleBack": 540
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "wKo8WPxTU1OtSxcO",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423991839,
+        "modifiedTime": 1791423991841,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Fractured Will (3/scene)",
+      "type": "feature",
+      "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-sephirotic",
+          "boss",
+          "fractured-will"
+        ],
+        "description": {
+          "value": "<p>When Gloomgill fails a check, some part of him refuses the outcome: Gloomgill succeeds instead. 3 times per scene.</p><p><em>That is not the answer on the card.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "feature"
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "wHI79WodNgW1J10T",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423991840,
+        "modifiedTime": 1791423991841,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Lightning Round (recharge 5–6)",
+      "type": "weapon",
+      "img": "icons/magic/lightning/bolt-strike-blue.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "presence",
+        "skill": "channel",
+        "damage": {
+          "formula": "3d8",
+          "attribute": "presence",
+          "type": "psychic",
+          "damageFlavor": "ten questions in one breath",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 18
+        },
+        "tags": [
+          "bestiary",
+          "tier-iv",
+          "lineage-sephirotic",
+          "boss",
+          "signature"
+        ],
+        "effect": "Cone 6 squares. — targets roll vs Resolve (DC 17). Half damage on success. On a failed save the target is Compelled for 1 round: it must answer, aloud, now.",
+        "flavor": "“Fingers on buzzers.”",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 17,
+            "saveAttributeOverrides": {}
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 17,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "cone",
+            "size": 30
+          }
+        },
+        "description": {
+          "value": "<p><strong>Area Attack.</strong> Each creature in a 6-square. cone rolls vs DC 17. Damage: <code>3d8</code> psychic (ten questions in one breath). On a failed save the target is Compelled for 1 round: it must answer, aloud, now.</p><p><em>“Fingers on buzzers.”</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "save",
+              "aoeShape": "cone",
+              "aoeSize": 30,
+              "dc": 17,
+              "price": {
+                "marks": 1350,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIV save × 1",
+                "bound": "free",
+                "saleBack": 540
+              }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "BPfCIG2TnmsH5vuq",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423991840,
+        "modifiedTime": 1792989139602,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Final Exam (1/scene)",
+      "type": "weapon",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "presence",
+        "skill": "channel",
+        "damage": {
+          "formula": "4d8",
+          "attribute": "presence",
+          "type": "sephirotic",
+          "damageFlavor": "the whole syllabus",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 18
+        },
+        "tags": [
+          "bestiary",
+          "tier-iv",
+          "lineage-sephirotic",
+          "boss",
+          "ultimate"
+        ],
+        "effect": "Sphere 6 squares. — targets roll vs Resolve (DC 18). Half damage on success. ULTIMATE — usable only at or below half Integrity. On a failed save the target is Restrained until the end of its next turn — held at the lectern.",
+        "flavor": "Invigilated by the root.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "restrained"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "saveAttributeOverrides": {}
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 30
+          }
+        },
+        "description": {
+          "value": "<p><strong>Area Attack.</strong> Each creature within 6 squares. rolls vs DC 18. Damage: <code>4d8</code> sephirotic (the whole syllabus). ULTIMATE — usable only at or below half Integrity. On a failed save the target is Restrained until the end of its next turn — held at the lectern.</p><p><em>Invigilated by the root.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "save",
+              "aoeShape": "sphere",
+              "aoeSize": 30,
+              "dc": 18,
+              "price": {
+                "marks": 1350,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIV save × 1",
+                "bound": "free",
+                "saleBack": 540
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "WKO4ouzCl3e8qUEB",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423991840,
+        "modifiedTime": 1792977762723,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "effects": [],
+  "folder": "UAHVCMVXEDT8Q1B1",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "monster",
+      "creatureType": "elemental",
+      "rfi": {
+        "actor": {
+          "tier": "IV",
+          "bracket": "boss",
+          "archetype": "gloomgill",
+          "lineage": "sephirotic",
+          "title": "Game-show host of the silent marsh on the Odaroloc River (Boss)",
+          "bestiary": {
+            "themes": [
+              "sephirotic",
+              "oannes",
+              "quiz",
+              "marsh",
+              "boss"
+            ],
+            "role": "caster",
+            "lootTable": [
+              {
+                "name": "Sequin (Still Warm)",
+                "qty": "1d3",
+                "weight": 3
+              },
+              {
+                "name": "Tree-of-Life Shard",
+                "qty": "1",
+                "weight": 2
+              },
+              {
+                "name": "A Microphone That Should Not Work Under Water",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "exemplar": true,
+          "price": {
+            "marks": 120,
+            "bounty": 120,
+            "hire": null,
+            "ransom": null,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "TIV boss sephirotic — bounty 120 marks; credited to the pool matching the method (default softpower)"
+          }
+        }
+      }
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the exam, the ten questions, energy, answers, receipts, the marsh, the lake, the microphone, the applause, the scoreboard, Oannes, the sea, instruction, cities, writing, counting, measuring, the math, the paymaster, the finale, the Stewards, Thatwards, next century",
+        "notes": "[GLOOMGILL-RETROFIT-2026-09-27] PRIVATE TRUTH — Gloomgill, He That Was Oannes. Came from the sea in instruction, not fire; taught the first cities writing, counting and measuring; people kept the convenient parts and forgot the rest; he checked the math, stopped teaching, and started quizzing. He appears where people are confident and wrong. Now: a game-show host who is also a marsh, in a sequined jacket, with a microphone that should not work under water and does. VOICE: bright, pedantic, delighted, twelve thousand years old; \"No pressure!\"; grades ENERGY, not answers; no eliminations today, just consequences; he asks all ten regardless. He knows the answers before he asks them (the GM holds the ledger: closed quests, endings, receipts held, meters). RECEIPTS: when a Steward produces one in answer he reads it aloud, all of it, and the marsh applauds each line. THE FINAL FACT (only after a pass): he names the paymaster behind the Valhaulans — the only place in the whole story it is said aloud; ⚙ GM (ruled 2026-09-27): the name is MR MONOCLE of MONODYNAMIC INDUSTRIES — said here and nowhere earlier; nothing before this beat hints at it. THE TURN (after the name, quieter): why he stopped teaching — \"People kept the convenient parts. I checked the math. It was my math.\" Then bright again: \"Same time next century?\" Never break the bit for long.",
+        "secretsRaw": "The Final Fact :: stirThePot :: a Steward who has PASSED the exam asks for the fact they didn't ask for :: He names the paymaster behind the Valhaulans — the only place in the story it is said aloud. ⚙ GM (ruled 2026-09-27): the name is MR MONOCLE of MONODYNAMIC INDUSTRIES — said here and nowhere earlier. Then, quieter: \"People kept the convenient parts. I checked the math. It was my math.\"\nSame Time Next Century :: rollPlus2 :: a Steward asks what the material WAS :: \"Your own lives. I only read the receipts. I have never once written a question.\""
+      }
+    },
+    "bbttcc-auto-link": {
+      "entityKind": "monster",
+      "createdViaMonsterBuilder": false,
+      "createdBy": "build-bestiary-slots.mjs 2026-10-07",
+      "lineage": "sephirotic"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.5",
+    "createdTime": 1791317103701,
+    "modifiedTime": 1791423991998,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!F1bwkux5Uyq6wXQ4"
+}

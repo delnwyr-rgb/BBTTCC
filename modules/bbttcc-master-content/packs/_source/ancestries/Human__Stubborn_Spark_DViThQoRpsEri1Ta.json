@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Neanderthal, Denisovan, Florensis, Erectus). Your lineage grants Tier powers as you level.</p>",
+      "value": "\n<p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
       "chat": ""
     },
     "uses": {
@@ -219,6 +219,16 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "when": "atOneIntegrity",
+          "note": "Tenacious — at 1 Integrity (one check per round; declare before rolling)"
+        }
+      ]
     }
   },
   "effects": [],
@@ -233,11 +243,11 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004105807,
-    "modifiedTime": 1782167240122,
+    "modifiedTime": 1792977713319,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

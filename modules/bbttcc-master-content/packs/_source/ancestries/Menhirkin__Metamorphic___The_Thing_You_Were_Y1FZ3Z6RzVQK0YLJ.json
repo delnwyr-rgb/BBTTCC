@@ -13,7 +13,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-menhirkin=\"v1\" style=\"display:none\"></div>\n<p><em>\"The first shape was softer. The second shape remembers.\"</em></p>\n<p><strong>The Thing You Were (1/Scene).</strong> Bonus action — briefly re-surface a trait of your pre-pressure self. Pick one of three options; it lasts until the end of your next turn:</p>\n<ul>\n  <li><strong>Softer:</strong> your movement increases by 2 squares and you reroll the lowest die on Intrigue checks to squeeze or slip past.</li>\n  <li><strong>Older:</strong> you gain low-light vision 12 squares if you don't already have it, or +6 squares if you do.</li>\n  <li><strong>Wetter:</strong> you become immune to the Burning and Prone conditions, and difficult terrain does not slow you.</li>\n</ul>\n<p>Each option refreshes on Soma Break — you cannot pick the same option twice before a Soma Break.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"menhirkinMetamorphicThingYouWere\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>The Thing You Were</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Scene total — each option refreshes on Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Picker (Softer · Older · Wetter) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Bonus action — re-surface one of three pre-pressure traits (Softer / Older / Wetter) until end of next turn. Each option's individual use refreshes on Soma Break.</div>\n</div>",
+      "value": "\n<p><em>\"The first shape was softer. The second shape remembers.\"</em></p>\n<p><strong>The Thing You Were (1/Scene).</strong> Bonus action — briefly re-surface a trait of your pre-pressure self. Pick one of three options; it lasts until the end of your next turn:</p>\n<ul>\n  <li><strong>Softer:</strong> your movement increases by 2 squares and you reroll the lowest die on Intrigue checks to squeeze or slip past.</li>\n  <li><strong>Older:</strong> you gain low-light vision 12 squares if you don't already have it, or +6 squares if you do.</li>\n  <li><strong>Wetter:</strong> you become immune to the Burning and Prone conditions, and difficult terrain does not slow you.</li>\n</ul>\n<p>Each option refreshes on Soma Break — you cannot pick the same option twice before a Soma Break.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"menhirkinMetamorphicThingYouWere\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>The Thing You Were</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Scene total — each option refreshes on Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Picker (Softer · Older · Wetter) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Bonus action — re-surface one of three pre-pressure traits (Softer / Older / Wetter) until end of next turn. Each option's individual use refreshes on Soma Break.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -22,7 +22,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -39,14 +39,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "menhirkin",
       "feature": "the_thing_you_were",
       "lineage": "Metamorphic",
-      "tierLevel": 1,
       "version": "1.1.0",
       "date": "2026-04-19",
       "rfiNative": true
@@ -256,12 +252,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776660294537,
-    "modifiedTime": 1782167240128,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988979559,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

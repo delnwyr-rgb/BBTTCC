@@ -7,7 +7,7 @@
     "evasionBonus": 0,
     "resolveBonus": 0,
     "resistances": [],
-    "armorSkill": "plating",
+    "armorSkill": "bracing",
     "equipped": false,
     "tags": [
       "t1-baseline",
@@ -17,7 +17,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A studded breastplate over a gambeson, with shoulder pauldrons that fit at least three different body types badly. Worn by faction patrols, hex constables, and anyone who needs to look like they have authority without carrying signature gear. Cheap, repairable, and forgivingly average.</p><p><strong>Standard Issue.</strong> No signature, no harmonization, no questions asked at the gate.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Medium</li>\n  <li><strong>Defense:</strong> Guard +2</li>\n  <li><strong>Requires:</strong> Plating (trained)</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 75 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>A studded breastplate over a gambeson, with shoulder pauldrons that fit at least three different body types badly. Worn by Domain patrols, hex constables, and anyone who needs to look like they have authority without carrying signature gear. Cheap, repairable, and forgivingly average.</p><p><strong>Standard Issue.</strong> No signature, no harmonization, no questions asked at the gate.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Medium</li>\n  <li><strong>Defense:</strong> Guard +2</li>\n  <li><strong>Requires:</strong> Bracing (trained)</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 75 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
       "chat": ""
     }
   },
@@ -113,8 +113,7 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!GeOlwjJbAKCMaMVZ.kiVk8sdosX8dblYu"
+      }
     }
   ],
   "sort": 0,
@@ -123,12 +122,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777862455158,
-    "modifiedTime": 1782160020986,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988952301,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

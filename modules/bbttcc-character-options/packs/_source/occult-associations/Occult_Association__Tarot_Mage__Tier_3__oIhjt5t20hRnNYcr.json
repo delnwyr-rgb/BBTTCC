@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Tarot Mage</strong></p><p><strong>“I’ve already seen the roll.”</strong></p><p>You stop reading the future and start <em>pinning it</em>. Not forever. Just long enough to matter.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>When you finish a Soma Break, roll a 2d10x10 and record the number</li><li><strong>1/Soma Break</strong>, you may replace any attack roll, check, or attribute check made by you or a creature you can see with this foretelling roll, declared before the roll</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Scenario, you may <strong>call the card</strong> to gain <strong>Advantage</strong> on a single key check</li><li>If you fail anyway, the GM should attach a meaningful narrative cost</li></ul><p><strong>Cost:</strong> pinning a result creates tension elsewhere in the spread. Expect narrative backlash, omen inversion, or the sickening realization that something else just became inevitable instead.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"tarotT3\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Foretelling Roll</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free (declare before) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">On Soma Break, roll a 2d10x10 and record. Replace any attack/save/check with this roll.</div>\n</div>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Tarot Mage</strong></p><p><strong>“I’ve already seen the roll.”</strong></p><p>You stop reading the future and start <em>pinning it</em>. Not forever. Just long enough to matter.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>When you finish a Soma Break, roll a 2d10 and record the number</li><li><strong>1/Soma Break</strong>, you may replace any attack roll, check, or attribute check made by you or a creature you can see with this foretelling roll, declared before the roll</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Scenario, you may <strong>call the card</strong> to gain <strong>Advantage</strong> on a single key check</li><li>If you fail anyway, the GM should attach a meaningful narrative cost</li></ul><p><strong>Cost:</strong> pinning a result creates tension elsewhere in the spread. Expect narrative backlash, omen inversion, or the sickening realization that something else just became inevitable instead.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"tarotT3\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Foretelling Roll</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free (declare before) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">On Soma Break, roll a 2d10 and record. Replace any attack/save/check with this roll.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -262,11 +262,11 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987105637,
-    "modifiedTime": 1782167239253,
+    "modifiedTime": 1792977831529,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

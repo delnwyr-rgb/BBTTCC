@@ -8,6 +8,7 @@
     "tags": [],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>Hovers a foot off the dirt and hates every grain of it. Single pilot, side-mounted hardpoint, just enough cargo for a canteen and a grudge.</p><p><b>Frame · Personal · Mobile · Single seat + 1 weapon</b></p>",
       "chat": ""
@@ -73,7 +74,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TI vehicle stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 100
@@ -92,11 +93,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.16",
     "createdTime": 1778961742305,
-    "modifiedTime": 1778963271954,
+    "modifiedTime": 1791865101701,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

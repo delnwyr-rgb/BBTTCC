@@ -1,0 +1,23 @@
+{
+  "name": "Bound Workings",
+  "type": "Item",
+  "_id": "EdubcDDQfUtnlKvP",
+  "description": "",
+  "folder": null,
+  "sorting": "a",
+  "sort": 0,
+  "color": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.6",
+    "createdTime": 1791427798019,
+    "modifiedTime": 1791427798019,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!EdubcDDQfUtnlKvP"
+}

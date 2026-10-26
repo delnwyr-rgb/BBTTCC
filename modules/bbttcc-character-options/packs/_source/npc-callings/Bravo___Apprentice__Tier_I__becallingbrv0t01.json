@@ -27,16 +27,34 @@
       "calling": {
         "key": "bravo",
         "tier": 1
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "allyDamaged",
+            "radius": 1,
+            "do": {
+              "ward": 0,
+              "redirect": true
+            },
+            "limit": {
+              "per": "scene",
+              "uses": 1
+            },
+            "label": "Hold the Line"
+          }
+        ]
       }
     }
   },
   "_stats": {
-    "coreVersion": "14.364",
-    "systemId": null,
-    "systemVersion": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1784006624740,
-    "modifiedTime": 1784006624740,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989177761,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

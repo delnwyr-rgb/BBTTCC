@@ -15,36 +15,61 @@
       "chat": ""
     }
   },
-  "_id": "B59k8qqkigyIH28i",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "struck",
+            "do": {
+              "bankBonus": {
+                "bonus": 2,
+                "context": "defense",
+                "note": "Roots of Tiferet"
+              },
+              "heal": 1,
+              "prompt": "Rooted: speed 0 while the roots hold."
+            },
+            "to": "self",
+            "label": "Roots of Tiferet"
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Aggressive Tiferet Tree Person"
+          "The Tree Person of Early Tifaret"
+        ],
+        "sourceIds": [
+          "Wlk2fVGEGJKgROfD"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "B59k8qqkigyIH28i",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": null,
-    "modifiedTime": null,
-    "lastModifiedBy": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989042463,
+    "modifiedTime": 1792989042463,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!B59k8qqkigyIH28i"
 }

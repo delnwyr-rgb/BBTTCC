@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> You can move at a normal pace while traveling stealthily and reroll the lowest die on checks made to create or bypass security systems.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> You can move at a normal pace while traveling stealthily and reroll the lowest die on checks made to create or bypass security systems.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-covert-ops-cell-t3",
@@ -75,6 +75,24 @@
           "bbttcc:theme:security"
         ]
       }
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "hacking",
+          "vs": "creating or bypassing security systems",
+          "note": "Covert Ops Cell T3"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "tinkering",
+          "vs": "creating or bypassing security systems",
+          "note": "Covert Ops Cell T3"
+        }
+      ]
     }
   },
   "_stats": {
@@ -87,12 +105,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986943268,
-    "modifiedTime": 1781116047774,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989171902,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -10,6 +10,7 @@
     ],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>A belt buckle in the shape of the Frontier Formerly Known As Texas. Cast brass, slightly tarnished, the panhandle a little crooked because nobody really knows where the panhandle WAS, alright? The maps are vague. The buckle is more confident than the maps. People notice.</p><p><strong>Mild Authority.</strong> While worn (visibly), once per scene you may extend a social interaction by one sentence. The other party will hear you out. They are not obligated to agree. (Mal: \"This is, technically, a magic item. Mostly it's brass and audacity.\")</p>",
       "chat": ""
@@ -43,15 +44,15 @@
             "brass"
           ],
           "price": {
-            "marks": 150,
-            "currency": "economy",
+            "marks": 180,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TII talisman stamp",
+            "notes": "TII talisman × attuned",
             "bound": "attuned",
-            "saleBack": 60
+            "saleBack": 72
           }
         }
       }
@@ -66,11 +67,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777437725660,
-    "modifiedTime": 1778541962250,
+    "modifiedTime": 1792977623025,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

@@ -1,0 +1,80 @@
+{
+  "name": "Storm-Voiced",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "mortal",
+      "valhaulan"
+    ],
+    "description": {
+      "value": "<p>The first time each scene this Valhaulan is reduced below half Integrity, they roar: allies within 6 squares reroll the lowest die on their next attack roll, and the Valhaulan gains 5 temporary Integrity.</p><p><em>Storm's a-comin'. The storm has opinions.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "bloodied",
+            "do": {
+              "tempIntegrity": 5,
+              "prompt": "Storm-Voiced: allies within 6 squares reroll the lowest die on their next attack."
+            },
+            "limit": {
+              "per": "scene",
+              "uses": 1
+            }
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "mortal"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Battle-Bassinet Berserker",
+          "Valhaulan Spark Adept"
+        ],
+        "sourceIds": [
+          "0qEJRPazunAo51Fl",
+          "ZOttfT1AftTApkwf"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "vWYFpmdhcXsVirzn",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069968,
+    "modifiedTime": 1792989070048,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!vWYFpmdhcXsVirzn"
+}

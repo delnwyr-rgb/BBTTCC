@@ -1,0 +1,122 @@
+{
+  "name": "ATR Transport Frame",
+  "type": "gear",
+  "img": "icons/environment/settlement/wagon.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Medium land transport. Carries people and matériel across Bad Eden — armored enough to discourage trouble, armed enough to end it.</p><p><b>Frame · Medium · Mobile</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "rig-frame"
+      },
+      "rigFrame": {
+        "bracket": "medium",
+        "baseIntegrity": 36,
+        "tierStep": 10,
+        "pilotMount": false,
+        "mobilityAllowed": [
+          "mobile"
+        ],
+        "slots": {
+          "weapon": 1,
+          "system": 2,
+          "output": 1
+        },
+        "capacity": {
+          "pilot": {
+            "min": 1,
+            "max": 1
+          },
+          "gunner": {
+            "min": 0,
+            "max": 1
+          },
+          "engineer": {
+            "min": 0,
+            "max": 1
+          },
+          "crew": {
+            "min": 2,
+            "max": 6
+          }
+        },
+        "actions": {
+          "pilot": [
+            "steer",
+            "hold-position",
+            "evasive",
+            "swerve"
+          ],
+          "gunner": [
+            "fire-weapon",
+            "aimed-shot",
+            "suppression",
+            "reload"
+          ],
+          "engineer": [
+            "repair",
+            "boost-system",
+            "vent-heat"
+          ],
+          "crew": [
+            "operate-module",
+            "brace",
+            "signal",
+            "hold-on"
+          ]
+        },
+        "travel": {
+          "speed": 3,
+          "range": 14
+        },
+        "visualFrame": "open-corners"
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 750,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "authored from the rig-builder preset (RG13, 2026-10-26)",
+            "bound": "free",
+            "saleBack": 300
+          },
+          "tier": "II",
+          "frame": "vehicle"
+        }
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "VMpmRfVs4r8XD9NX",
+  "effects": [],
+  "sort": 1920000,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988928098,
+    "modifiedTime": 1792988928099,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!VMpmRfVs4r8XD9NX"
+}

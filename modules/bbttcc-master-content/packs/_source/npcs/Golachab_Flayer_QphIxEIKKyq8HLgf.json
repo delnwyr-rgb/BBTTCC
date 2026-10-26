@@ -3,10 +3,10 @@
   "type": "npc",
   "img": "art/bbttcc/qliphoth/golachab-flayer.webp",
   "system": {
-    "role": "Qliphothic Tormentor (Golachab — Lesser)",
+    "role": "caster",
     "tier": 2,
     "factionId": "",
-    "notes": "<p>Master of the Wastes' torture pits: a tall, emaciated figure of blackened charcoal skin glowing from within, needle teeth, and a long whip of solidified flame. Flayers patrol the sites of old atrocities, drawn to the lingering psychic residue of pain, and their greatest joy is an echo — a scream coming back off the desolation.</p><p><strong>Qliphah:</strong> Golachab, the Pyres — the Hull of Gevurah. Severity unmoored from judgment: burning cruelty for its own sake.</p><p><em>Mal's note: 'It is an artist, and you are the medium. Deny it an audience: fight quiet.'</em></p>",
+    "notes": "<p>Master of the Wastes' torture pits: a tall, emaciated figure of blackened charcoal skin glowing from within, needle teeth, and a long whip of solidified flame. Flayers patrol the sites of old atrocities, drawn to the lingering psychic residue of pain, and their greatest joy is an echo — a scream coming back off the desolation.</p><p><strong>Qliphah:</strong> Golachab, the Pyres — the Hull of Geburah. Severity unmoored from judgment: burning cruelty for its own sake.</p><p><em>Mal's note: 'It is an artist, and you are the medium. Deny it an audience: fight quiet.'</em></p>",
     "details": {
       "level": 8,
       "tier": 2,
@@ -40,8 +40,9 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 45,
-        "max": 45
+        "value": 50,
+        "max": 50,
+        "temp": 0
       },
       "stress": {
         "value": 25,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -142,17 +144,24 @@
         "qliphothic"
       ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "sephirotic"
+      ]
     },
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "charmed"
+    ],
     "tags": [
       "qliphothic",
       "5e-port",
       "cr-5",
       "qliphah-golachab",
-      "hull-of-gevurah",
+      "hull-of-geburah",
       "lesser"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -165,6 +174,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Tormentor (Golachab — Lesser)",
+      "notes": "<p>Master of the Wastes' torture pits: a tall, emaciated figure of blackened charcoal skin glowing from within, needle teeth, and a long whip of solidified flame. Flayers patrol the sites of old atrocities, drawn to the lingering psychic residue of pain, and their greatest joy is an echo — a scream coming back off the desolation.</p><p><strong>Qliphah:</strong> Golachab, the Pyres — the Hull of Geburah. Severity unmoored from judgment: burning cruelty for its own sake.</p><p><em>Mal's note: 'It is an artist, and you are the medium. Deny it an audience: fight quiet.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -264,7 +277,7 @@
       "_id": "7xTEDIi2BbmLUL3Z",
       "name": "Aura of Pain",
       "type": "feature",
-      "img": "icons/svg/blood.svg",
+      "img": "icons/magic/unholy/strike-beam-blood-large-red-purple.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -280,25 +293,44 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "enemyDamaged",
+                "radius": 4,
+                "do": {
+                  "damage": {
+                    "formula": "1d4",
+                    "type": "psychic",
+                    "track": "stress"
+                  }
+                },
+                "label": "Aura of Pain"
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188155,
-        "modifiedTime": 1787799188155,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989121761,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!QphIxEIKKyq8HLgf.7xTEDIi2BbmLUL3Z"
+      }
     },
     {
       "_id": "8saNBNaidv8kjMxy",
       "name": "Sadistic Glee",
       "type": "feature",
-      "img": "icons/svg/regen.svg",
+      "img": "icons/magic/nature/root-vine-caduceus-healing.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -314,19 +346,34 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "do": {
+                  "tempIntegrity": 5
+                },
+                "to": "self",
+                "label": "Sadistic Glee — a failed check feeds it"
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188155,
-        "modifiedTime": 1787799188155,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989121760,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!QphIxEIKKyq8HLgf.8saNBNaidv8kjMxy"
+      }
     },
     {
       "_id": "E8BamWUx5eIvYuOy",
@@ -350,23 +397,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188155,
-        "modifiedTime": 1787799188155,
+        "modifiedTime": 1791324404431,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!QphIxEIKKyq8HLgf.E8BamWUx5eIvYuOy"
+      }
     },
     {
       "_id": "op3clD2465FnlvTt",
       "name": "Whip of Agony",
       "type": "weapon",
-      "img": "icons/svg/fire.svg",
+      "img": "icons/weapons/guns/flamethrower-spray-fire-orange.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -415,6 +461,21 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "body",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 14,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "burning"
+            ],
+            "duration": "until-saved",
+            "saveEachRound": true,
+            "saveAttribute": "body"
           }
         },
         "description": {
@@ -428,19 +489,162 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Whip of Agony"
+                },
+                "do": {
+                  "damage": {
+                    "formula": "1d6",
+                    "type": "thermal"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188155,
-        "modifiedTime": 1787799188155,
+        "modifiedTime": 1791331977377,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Hollow Touch",
+      "type": "weapon",
+      "img": "icons/magic/death/hand-withered-gray.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "violence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "lineage-strike",
+          "qliphothic",
+          "bestiary"
+        ],
+        "effect": "Damage goes to Stress. On a hit the target rolls Resolve vs DC 15; on a failure it is Compelled toward the shell's vice until the end of its next turn.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul"
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 15,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> Reach 1 square, one target. Damage: <code>2d6</code> qliphothic to Stress + violence. On a hit the target rolls Resolve vs DC 15; on a failure it is Compelled toward the shell's vice until the end of its next turn.</p><p><em>The hollow reaches for what it lacks.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!QphIxEIKKyq8HLgf.op3clD2465FnlvTt"
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "attack",
+              "lineageStrike": "qliphothic",
+              "price": {
+                "marks": 150,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII attack × 1",
+                "bound": "free",
+                "saleBack": 60
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "567E8xDvm7djJnKj",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989121807,
+        "modifiedTime": 1792989121807,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -484,34 +688,38 @@
             ]
           },
           "price": {
-            "marks": 450,
-            "bounty": 600,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 15,
+            "bounty": 15,
+            "hire": 25,
+            "ransom": 25,
             "currency": "violence",
             "gmOverride": false,
-            "notes": "II medium Qliphothic Tormentor (Golachab — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TII medium qliphothic — bounty 15 / hire 25 marks; credited to the pool matching the method (default violence)"
           },
           "qliphah": {
             "name": "golachab",
-            "hullOf": "gevurah",
+            "hullOf": "geburah",
             "grade": "lesser"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "golachab",
+          "title": "Qliphothic Tormentor (Golachab — Lesser)"
         }
       },
-      "kind": "npc"
+      "kind": "npc",
+      "creatureType": "fiend"
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188155,
-    "modifiedTime": 1787799188155,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989121639,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "QphIxEIKKyq8HLgf",
   "_key": "!actors!QphIxEIKKyq8HLgf"

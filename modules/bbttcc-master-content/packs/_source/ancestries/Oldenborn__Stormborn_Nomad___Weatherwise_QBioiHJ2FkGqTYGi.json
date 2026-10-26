@@ -14,7 +14,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“The sky is a language. You were the first to learn the punctuation.”</em></p>\n<p><strong>Weatherwise.</strong> You always know the upcoming weather for the next 12 hours within 1 mile, even underground. You reroll the lowest die on checks against weather effects (extreme cold, extreme heat, wind, lightning).</p>\n<p><strong>Wind-Read (1/Soma Break).</strong> When you would take lightning, thunder, or thermal damage, you may use your reaction to halve it. The wind shifts as you do.</p>\n<p><strong>Ash-Walker.</strong> You ignore difficult terrain caused by snow, ash, dust, sand, or shifting earth.</p>",
+      "value": "\n<p><em>“The sky is a language. You were the first to learn the punctuation.”</em></p>\n<p><strong>Weatherwise.</strong> You always know the upcoming weather for the next 12 hours within one hex (five miles), even underground. You reroll the lowest die on checks against weather effects (extreme cold, extreme heat, wind, lightning).</p>\n<p><strong>Wind-Read (1/Soma Break).</strong> When you would take lightning, thunder, or thermal damage, you may use your reaction to halve it. The wind shifts as you do.</p>\n<p><strong>Ash-Walker.</strong> You ignore difficult terrain caused by snow, ash, dust, sand, or shifting earth.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldStormbornWeatherwise\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Wind-Read</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Reaction (on weather damage) — an Offer card appears when it applies  ·  <strong>Weatherwise</strong> is always on.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Halve incoming lightning, thunder or thermal damage as a reaction. Weather foresight for 12 hours within one hex; reroll the lowest die on defense checks against weather.</span></p></div>",
       "chat": ""
     },
     "advancement": {},
@@ -23,7 +23,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -39,14 +39,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "oldenborn",
       "feature": "weatherwise",
       "lineage": "Stormborn Nomad",
-      "tierLevel": 0,
       "version": "2.0.0",
       "date": "2026-04-18"
     },
@@ -226,6 +222,42 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "defense",
+          "mode": "reroll-lowest",
+          "vs": "weather effects — extreme cold, extreme heat, wind, lightning",
+          "note": "Weatherwise"
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-incoming-damage",
+          "predicate": {
+            "tag": [
+              "electrical",
+              "lightning",
+              "cold",
+              "thunder",
+              "thermal"
+            ]
+          },
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "offer": true,
+          "offerText": "Wind-Read — reaction: halve this weather damage.",
+          "effect": {
+            "kind": "modify-incoming-damage",
+            "args": {
+              "mode": "half"
+            }
+          }
+        }
+      ]
     }
   },
   "folder": "s4JLtG8OuVuIzQpi",
@@ -233,12 +265,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776543000000,
-    "modifiedTime": 1782167240126,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988978105,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

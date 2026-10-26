@@ -3,8 +3,14 @@
   "type": "feat",
   "img": "icons/skills/social/diplomacy-peace-alliance.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Peace Accords</b></p><p>Prevent enemy Raids for 2 turns on both sides.</p><p><b>Cost:</b> Diplomacy 3</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>peace_accords</code></p>",
+      "value": "<p><b>Peace Accords</b></p><p>Make terms with the holder of the target hex: that hex's Loyalty +1, and a GM note goes to both sides that no hostile offer should land on either of you for 2 turns. The story still decides who fights; nothing here forbids a beat.</p><p><b>Cost:</b> Diplomacy 30 marks</p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "peace-accords",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -59,12 +61,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063178593,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989008124,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!CKTTHQvl4Us8CIvZ"
 }

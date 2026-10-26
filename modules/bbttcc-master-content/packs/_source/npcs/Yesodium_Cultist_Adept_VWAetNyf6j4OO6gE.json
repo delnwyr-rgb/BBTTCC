@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 60,
-        "max": 60
+        "max": 60,
+        "temp": 0
       },
       "stress": {
         "value": 30,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,6 +145,9 @@
     },
     "conditionImmunities": [],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -155,6 +160,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "A devotee who learned to hum the Yesodium-channel. Each spell is also a wound."
     }
   },
   "flags": {
@@ -190,16 +199,19 @@
             ]
           },
           "price": {
-            "marks": 3240,
-            "bounty": 3240,
-            "hire": 8100,
-            "ransom": 5400,
+            "marks": 30,
+            "bounty": 30,
+            "hire": 45,
+            "ransom": 45,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "TIII medium caster (bestiary) \u2014 bounty 3240 / hire 8100 / ransom 5400 marks (paid in softpower)"
-          }
+            "notes": "TIII medium mortal — bounty 30 / hire 45 marks; credited to the pool matching the method (default softpower)"
+          },
+          "lineage": "mortal",
+          "subLineage": "cultist"
         }
-      }
+      },
+      "creatureType": "humanoid"
     }
   },
   "_id": "VWAetNyf6j4OO6gE",
@@ -364,8 +376,7 @@
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!VWAetNyf6j4OO6gE.k1BuNFx86dOM62ba"
+      }
     },
     {
       "name": "Yesodium-Bolt",
@@ -444,11 +455,16 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII attack \u00d7 1",
+                "notes": "TIII attack × 1",
                 "bound": "free",
                 "saleBack": 180
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "ignoreResists": true
           }
         },
         "autoanimations": {
@@ -637,20 +653,19 @@
       },
       "_id": "DPW4BKRzjBXQnjRU",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118776762,
-        "modifiedTime": 1782167243315,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989133258,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!VWAetNyf6j4OO6gE.DPW4BKRzjBXQnjRU"
+      }
     },
     {
-      "name": "Channel-Feedback (recharges on a Soma Break)",
+      "name": "Channel-Feedback (recharge 5–6)",
       "type": "weapon",
       "img": "icons/magic/sonic/explosion-shock-sound-wave.webp",
       "system": {
@@ -676,7 +691,7 @@
           "aoe",
           "shape-cone"
         ],
-        "effect": "Cone 25 ft. \u2014 targets roll vs Resolve (DC 14). Half damage on success. Failed-save targets cannot use Bonus Actions on their next turn (the channel-hum displaces their secondary tempo). Recharge 5\u20136.",
+        "effect": "Cone 5 squares. — targets roll vs Resolve (DC 14). Half damage on success. Failed-save targets cannot use Bonus Actions on their next turn (the channel-hum displaces their secondary tempo). At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
         "flavor": "The note finds its way into your ribs. Your ribs hum back, against your will.",
         "manifestation": {
           "tier": 1,
@@ -707,6 +722,18 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 14,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "cone",
+            "size": 25
           }
         },
         "description": {
@@ -732,16 +759,34 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII save \u00d7 1",
+                "notes": "TIII save × 1",
                 "bound": "free",
                 "saleBack": 180
               }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Channel-Feedback (recharge 5–6)"
+                },
+                "do": {
+                  "noBonusAction": true
+                }
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
             }
           }
         },
         "autoanimations": {
           "id": "ft-channel-feedback-recharge-5-6-",
-          "label": "Channel-Feedback (Recharge 5\u20136)",
+          "label": "Channel-Feedback (Recharge 5–6)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -925,17 +970,16 @@
       },
       "_id": "W2qYPngsTeahglko",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118776762,
-        "modifiedTime": 1782167243315,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989133258,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!VWAetNyf6j4OO6gE.W2qYPngsTeahglko"
+      }
     },
     {
       "name": "Resonance Mark",
@@ -982,8 +1026,7 @@
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!VWAetNyf6j4OO6gE.sIKtna3ocsHRbbkT"
+      }
     }
   ],
   "effects": [],
@@ -993,12 +1036,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118776762,
-    "modifiedTime": 1783219939231,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989133138,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

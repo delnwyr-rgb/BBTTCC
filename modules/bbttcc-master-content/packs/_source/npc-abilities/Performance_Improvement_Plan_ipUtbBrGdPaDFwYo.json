@@ -24,7 +24,7 @@
       "debuff",
       "bureaucracy"
     ],
-    "effect": "20 ft. cube. Resolve vs DC 17. Fail: 3d8 psychic to Stress, and the target has disadvantage on its next attack (it's on a PIP). Half and no PIP on success.",
+    "effect": "4-square cube. Resolve vs DC 17. Fail: 3d8 psychic to Stress, and the target is Imposed on its next attack (it's on a PIP). Half and no PIP on success.",
     "flavor": "",
     "manifestation": {
       "tier": 1,
@@ -55,14 +55,31 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 17,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "imposed"
+        ],
+        "duration": "1-round"
+      },
+      "area": {
+        "shape": "cube",
+        "size": 20
       }
     },
     "description": {
-      "value": "<p><strong>PIP.</strong> 4 squares cube. Resolve vs DC 17. Fail: <code>3d8</code> psychic (Stress) + disadvantage next attack. Half on success.</p><p><em>\"I'm not angry. I'm documenting.\"</em></p>",
+      "value": "<p><strong>PIP.</strong> 4 squares cube. Resolve vs DC 17. Fail: <code>3d8</code> psychic (Stress) + Imposed on next attack. Half on success.</p><p><em>\"I'm not angry. I'm documenting.\"</em></p>",
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -85,17 +102,6 @@
             "saleBack": 60
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Gerald, Assistant Regional Manager of the Apocalypse"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
       }
     },
     "autoanimations": {
@@ -274,24 +280,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gerald, Assistant Regional Manager of the Apocalypse"
+        ],
+        "sourceIds": [
+          "3hQFAiFEsjwO9TKr"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
   "_id": "ipUtbBrGdPaDFwYo",
   "sort": 0,
+  "folder": null,
   "ownership": {
-    "default": 0
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1780000000000,
-    "modifiedTime": 1782167245007,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989035313,
+    "modifiedTime": 1792989035313,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
   },
-  "folder": null,
   "_key": "!items!ipUtbBrGdPaDFwYo"
 }

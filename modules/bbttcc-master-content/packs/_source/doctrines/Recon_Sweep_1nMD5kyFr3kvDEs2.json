@@ -3,8 +3,14 @@
   "type": "feat",
   "img": "icons/magic/perception/eye-ringed-green.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Recon Sweep</b></p><p>Reveal alignment of 1 adjacent Hex.</p><p><b>Cost:</b> Intrigue 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>recon_sweep</code></p>",
+      "value": "<p><b>Recon Sweep</b></p><p>Reveal alignment of 1 adjacent Hex.</p><p><b>Cost:</b> Intrigue 10 marks</p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "recon-sweep",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -59,12 +61,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063175879,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989010068,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!1nMD5kyFr3kvDEs2"
 }

@@ -1,5 +1,5 @@
 {
-  "name": "Maestra Velvetine Mar",
+  "name": "Maestra Velvetine Marr",
   "type": "character",
   "flags": {
     "bbttcc-auto-link": {
@@ -27,16 +27,32 @@
       }
     },
     "bbttcc-factions": {
-      "factionId": "gvZvjqy8hxloOnwS"
+      "factionId": "gvZvjqy8hxloOnwS",
+      "warLogs": [
+        {
+          "ts": 1788839270126,
+          "date": "9/7/2026, 10:47:50 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        }
+      ]
     },
     "bbttcc-territory": {
       "faction": "The Cadence"
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the floor, the declaration, rhythm, face, the crew, the four figures, respect, terms, refreshments, the drum (once), steel (never), the next target (guarded)",
+        "notes": "[CADENCE-RETROFIT-2026-09-30] PRIVATE TRUTH — Maestra Velvetine Marr, of the Cadence. Voice: warm, unhurried command; discusses dance exclusively in the vocabulary of siegecraft (a routine is 'an assault', a good crowd is 'favorable terrain', applause is 'terms'). Her crew has never thrown a punch and she enforces this the way other commanders enforce discipline under fire, because it IS the discipline: the moment steel appears, the Cadence has lost, whatever happens next. HER ECHO (told plainly, once, at her tempo, to someone who asks with genuine curiosity what the drum was for): she was a war-drummer, years back, keeping time for a column of soldiers, good ones, brave ones, and on the third day of a siege she noticed that EVERYONE, both walls, was moving to her drum. The blades were incidental. The drum was the army. She walked out of that war with the drum. ON WINNING UGLY: she does not retaliate; she withdraws in formation, in silence, and lets the region do the rest: 'the silence is the encore.' ON A PARADE PERMIT: a parade is a floor with a direction; she will take one as terms. GUARDS: never names the next target ('the card arrives when the card arrives'); never mocks a graceful loser. TELLS: counts anything she's assessing in fours under her breath; when moved she stops keeping time entirely, which her crew regards with the alarm other units reserve for incoming fire.",
+        "secretsRaw": "The Drum Was the Army :: favorPlus1 :: a Steward asks, with genuine curiosity, what the drum was FOR :: On the third day of a siege both walls were moving to her drum. The blades were incidental. She walked out of that war with the drum and has been taking territory that rebuilds overnight ever since: face, regard, the story a hex tells about itself.\nThe Card Arrives When the Card Arrives :: coverTracks :: a Steward asks who is next :: She never names the next target. She will, if pressed kindly, say who it ISN'T, and a list of who it isn't is a kind of map."
+      }
     }
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Leader of the Cadence, the crew that raids hexes with dance (Act 2)",
+      "notes": "Maestra Velvetine Marr leads the Cadence, a crew that raids hexes culturally: speakers, sequins and a dance floor built in an hour. She commands warmly and unhurriedly, and talks about dance entirely in the language of siegecraft; a routine is an assault, a good crowd is favourable terrain, applause is terms. Her crew have never thrown a punch, and she enforces that the way other commanders enforce discipline under fire. She counts anything she's assessing in fours under her breath."
     },
     "details": {
       "level": 4,
@@ -178,10 +194,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 0
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -190,7 +216,8 @@
     "derived": {
       "integrity": {
         "value": 31,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 16,
@@ -280,7 +307,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -315,8 +343,8 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
       "id": "gvZvjqy8hxloOnwS",
@@ -327,12 +355,15 @@
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
     "disposition": 1,
-    "name": "Maestra Velvetine Mar",
+    "name": "Maestra Velvetine Marr",
     "displayName": 30,
     "width": 1,
     "height": 1,
@@ -439,7 +470,7 @@
           "presence"
         ],
         "description": {
-          "value": "<p><em>\"There is no problem two reasonable parties can't monetize.\"</em></p><p><strong>Broker</strong> is the Presence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: merchant, envoy, entertainer, cult recruiter, gang face. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Fair Price:</strong> The Broker moves any negotiated price <strong>5% per tier</strong> in their side's favor inside the \u00b125% tolerance band (Tier IV: the full \u00b120% swing).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Diplomacy</strong> rank = tier; secondary <strong>Empathy</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Diplomacy or Soft Power (GM picks by job)</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Harmony Marshal. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"There is no problem two reasonable parties can't monetize.\"</em></p><p><strong>Broker</strong> is the Presence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: merchant, envoy, entertainer, cult recruiter, gang face. A profession is a flavor label on the Calling.</p><p><strong>Knack — Fair Price:</strong> The Broker moves any negotiated price <strong>5% per tier</strong> in their side's favor inside the ±25% tolerance band (Tier IV: the full ±20% swing).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Diplomacy</strong> rank = tier; secondary <strong>Empathy</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Diplomacy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Harmony Marshal. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -466,21 +497,20 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534540,
-        "modifiedTime": 1784177534540,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989087249,
+        "modifiedTime": 1792989087249,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!rTYujrg6B9bL5eGl.PHE9sHFDCMNZuASe"
+      }
     },
     {
       "_id": "ugD7MikYlmfi7J3c",
-      "name": "Broker \u2014 Apprentice (Tier I)",
+      "name": "Broker — Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
@@ -492,7 +522,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Broker \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Word on the street:</strong> Current prices, current rumors, who's buying. <span style=\"opacity:0.7\">Standard fee 10 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick \u2014 Read the Room</strong> <em>(1/scene)</em>: GM truthfully answers: who here has the real power, and what do they want right now?</p>",
+          "value": "<p><strong>Broker — Apprentice</strong> (Tier I).</p><p><strong>Trade — Word on the street:</strong> Current prices, current rumors, who's buying. <span style=\"opacity:0.7\">Standard fee 10 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Read the Room</strong> <em>(1/scene)</em>: GM truthfully answers: who here has the real power, and what do they want right now?</p>",
           "chat": ""
         }
       },
@@ -512,17 +542,16 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534540,
-        "modifiedTime": 1784177534540,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989087249,
+        "modifiedTime": 1792989087249,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!rTYujrg6B9bL5eGl.ugD7MikYlmfi7J3c"
+      }
     },
     {
       "name": "Oldenborn",
@@ -539,7 +568,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Oldenborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Earthbound, Lumenwrought, Stormborn Nomad, Rustland Scavenger</strong>.</p><p>This root grants the shared Oldenborn core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>\u201cYou are not an elf. You are the memory of a place that learned to walk again.\u201d</em></p>\n<p><strong>Dream-Flesh.</strong> You do not sleep. When you rest, you drift into Yesod\u2014symbolic memory-space\u2014unless you choose otherwise. You are immune to magical sleep, and you can always tell when a dream, illusion, or constructed reality is present.</p>\n<p><strong>Old Memory, Old Paths.</strong> You reroll the lowest die on checks to interpret ruins, follow ley-lines, identify altered terrain, and sense metaphysical instability. You always know if a place feels <em>remembered</em>, <em>abandoned</em>, or <em>contested</em> (the GM answers vaguely).</p>\n<p><strong>Veil-Sight.</strong> You perceive the <em>presence</em> of spirits, ghosts, Spark echoes, and noospheric constructs. This grants awareness, not perfect sight.</p>\n<p><strong>You Are Remembered.</strong> When you first meet a community, the GM chooses (or rolls) whether you are met with reverence, fear, or familiarity. It\u2019s never neutral.</p>",
+          "value": "\n<p><strong>Oldenborn.</strong></p><p><em>“You are not an elf. You are the memory of a place that learned to walk again.”</em></p>\n<p><strong>Dream-Flesh.</strong> You do not sleep. When you rest, you drift into Yesod—symbolic memory-space—unless you choose otherwise. You are immune to magical sleep, and you can always tell when a dream, illusion, or constructed reality is present.</p>\n<p><strong>Old Memory, Old Paths.</strong> You reroll the lowest die on checks to interpret ruins, follow ley-lines, identify altered terrain, and sense metaphysical instability. You always know if a place feels <em>remembered</em>, <em>abandoned</em>, or <em>contested</em> (the GM answers vaguely).</p>\n<p><strong>Veil-Sight.</strong> You perceive the <em>presence</em> of spirits, ghosts, Spark echoes, and noospheric constructs. This grants awareness, not perfect sight.</p>\n<p><strong>You Are Remembered.</strong> When you first meet a community, the GM chooses (or rolls) whether you are met with reverence, fear, or familiarity. It’s never neutral.</p>",
           "chat": ""
         },
         "advancement": [
@@ -618,21 +647,21 @@
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "on checks to interpret ruins, follow ley-lines, identify altered terrain, and\u2026"
+              "note": "on checks to interpret ruins, follow ley-lines, identify altered terrain, and…"
             },
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "checks to interpret ruins, follow ley-lines, identify altered terrain, and se\u2026"
+              "note": "checks to interpret ruins, follow ley-lines, identify altered terrain, and se…"
             }
           ],
           "triggers": [
             {
-              "event": "on-rest",
+              "event": "on-soma-break",
               "effect": {
                 "kind": "chat-prompt",
                 "args": {
-                  "body": "Dream-Flesh. You do not sleep. When you rest, you drift into Yesod"
+                  "body": "Dream-Flesh. You do not sleep: this rest, you drift into Yesod — symbolic memory-space — unless you choose otherwise."
                 }
               }
             }
@@ -657,30 +686,23 @@
       },
       "effects": [],
       "folder": "5PPxNybRn7zD0k0G",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.7709222f8ff32964",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534540,
-        "modifiedTime": 1784177534540,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 0,
       "_id": "kYD6fE77HYKBnpn9",
-      "_key": "!actors.items!rTYujrg6B9bL5eGl.kYD6fE77HYKBnpn9"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989087249,
+        "modifiedTime": 1792989087249,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Oldenborn Heritage: Lumenwrought",
@@ -691,7 +713,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Oldenborn Heritage.</strong> The branch that lit up from inside. Festival-spirit, glamour-spirit, the ancestor that taught the people to call something beautiful before they had a word for sacred.</p><p><em>\u201cThe world remembered old names. You answered\u2014and you were lit by the answering.\u201d</em></p><p><strong>Lumenwrought.</strong> You are the place-soul that learned to wear a mask of light. Folks call you elf, sylph, faerie, depending on what scares them prettier than it scares them honestly. You are the first reason a candle is holy.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Fey).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>PRE (Presence)</strong>\u2014expressed primarily through Tier powers.</p></li><li><p><strong>Glamourcast.</strong> You can shed dim light in a 1 square radius at will, and snuff it out the same way. Your light is the colour of one specific moment in your past\u2014the GM and you decide which.</p></li></ul>",
+          "value": "<p><strong>Oldenborn Heritage.</strong> The branch that lit up from inside. Festival-spirit, glamour-spirit, the ancestor that taught the people to call something beautiful before they had a word for sacred.</p><p><em>“The world remembered old names. You answered—and you were lit by the answering.”</em></p><p><strong>Lumenwrought.</strong> You are the place-soul that learned to wear a mask of light. Folks call you elf, sylph, faerie, depending on what scares them prettier than it scares them honestly. You are the first reason a candle is holy.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Fey).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>PRE (Presence)</strong>—expressed primarily through Tier powers.</p></li><li><p><strong>Glamourcast.</strong> You can shed dim light in a 1 square radius at will, and snuff it out the same way. Your light is the colour of one specific moment in your past—the GM and you decide which.</p></li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -746,28 +768,36 @@
           "date": "2026-04-18"
         },
         "fourththing": {
-          "grantedByHeritage": "Lumenwrought"
+          "grantedByHeritage": "Lumenwrought",
+          "rerolls": [
+            {
+              "context": "check",
+              "skill": "perception",
+              "mode": "reroll-lowest",
+              "vs": "in darkness or dim light, by your own glow",
+              "note": "Glamourcast"
+            }
+          ]
         }
       },
       "folder": "8lnQFXfSvlVrEqA2",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534540,
-        "modifiedTime": 1784177534540,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 150000,
       "_id": "gG5NdN7aYe3fDbEE",
-      "_key": "!actors.items!rTYujrg6B9bL5eGl.gG5NdN7aYe3fDbEE"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989087249,
+        "modifiedTime": 1792989619093,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Oldenborn (Lumenwrought): Glamourfield",
@@ -782,7 +812,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>\u201cYou were not beautiful. You were <strong>wanted</strong>.\u201d</em></p>\n        <p><strong>Glamourfield (At Will, Minor).</strong> You can create subtle illusions affecting light, sound, scent, or emotional tone. It never overwhelms; it always influences.</p>\n        <p><strong>Dream Anchor.</strong> You have a +1 bonus to checks against metaphysical hazards (slippage, dream traps, Spark backlash).</p>",
+          "value": "<p><em>“You were not beautiful. You were <strong>wanted</strong>.”</em></p>\n        <p><strong>Glamourfield (At Will, Minor).</strong> You can create subtle illusions affecting light, sound, scent, or emotional tone. It never overwhelms; it always influences.</p>\n        <p><strong>Dream Anchor.</strong> You have +1 Resolve, and the same edge on checks against metaphysical hazards (slippage, dream traps, Spark backlash).</p>",
           "chat": ""
         },
         "uses": {
@@ -797,7 +827,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 1
         },
         "properties": [],
         "requirements": "Oldenborn",
@@ -857,17 +887,6 @@
               }
             }
           },
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177534540,
-            "modifiedTime": 1784177534540
-          },
           "start": {
             "combat": null,
             "round": 0,
@@ -878,27 +897,20 @@
           },
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!rTYujrg6B9bL5eGl.Peq5WuOAM4vRSMW1.9b52887635e340da"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989087249,
+            "modifiedTime": 1792989087249,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "AZpEGZW4ZA1Kjb9K",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.0QQRNxNGttQFVSHj",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534540,
-        "modifiedTime": 1784177534540,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -906,7 +918,17 @@
       },
       "sort": 100000,
       "_id": "Peq5WuOAM4vRSMW1",
-      "_key": "!actors.items!rTYujrg6B9bL5eGl.Peq5WuOAM4vRSMW1"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989087249,
+        "modifiedTime": 1792989619093,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Adaptive Defense",
@@ -917,7 +939,7 @@
         "source": "Bad Eden Core Feats v1 (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<h2>Adaptive Defense</h2><p><em>Defense is not denial. It is management.</em></p><hr><h3>Rules</h3><p>When you are hit by an attack you can see, you may use your reaction to reduce the damage by an amount equal to your skill rank bonus + your Violence or Intrigue value (your choice).</p>",
+          "value": "<h2>Adaptive Defense</h2><p><em>Defense is not denial. It is management.</em></p><hr><h3>Rules</h3><p>When you are hit by an attack you can see, you may use your reaction to reduce the damage by an amount equal to your rank bonus + your Violence or Intrigue value (your choice).</p><p class=\"ft-engine-note\"><em>🃏 Card — click ▶ when you are hit: it shows the reduction (rank bonus + Violence or Intrigue).</em></p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_adaptive_defense",
@@ -947,6 +969,183 @@
         "bbttcc": {
           "pack": "bbttcc-feats-core-v1",
           "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+        },
+        "autoanimations": {
+          "id": "ft-adaptive-defense",
+          "label": "Adaptive Defense",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "shieldfx",
+              "animation": "ice",
+              "variant": "03",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
         }
       },
       "folder": "QbGNBV70xh9pF0eh",
@@ -956,19 +1155,18 @@
         "DHBK2UGr58xKXzxK": 3,
         "bytUGWIOqq9eT7Or": 3
       },
+      "_id": "oE7PaT8cm3aPlZtH",
       "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989087249,
+        "modifiedTime": 1792989087249,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534540,
-        "modifiedTime": 1784177534540,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
-      "_id": "oE7PaT8cm3aPlZtH",
-      "_key": "!actors.items!rTYujrg6B9bL5eGl.oE7PaT8cm3aPlZtH"
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -976,15 +1174,16 @@
   "sort": 100000,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177534540,
-    "modifiedTime": 1784177534540,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989087249,
+    "modifiedTime": 1792989087251,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

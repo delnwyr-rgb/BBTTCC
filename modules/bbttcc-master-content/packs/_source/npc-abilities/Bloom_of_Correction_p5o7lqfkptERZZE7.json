@@ -7,43 +7,71 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>Radiant petals erupt in a 3 squares radius. On a failure, creatures are also restrained until the start of the Tree Being’s next turn.</p>",
+      "value": "<p>Radiant petals erupt in a 3-square radius. Each creature inside rolls vs Resolve (DC 16); on a failure it takes 2d8 sephirotic damage and is Restrained until the start of the Tree Being's next turn.</p>",
       "chat": ""
     }
   },
-  "_id": "p5o7lqfkptERZZE7",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "condition": {
+                "key": "restrained",
+                "duration": "1-round",
+                "save": {
+                  "attr": "soul",
+                  "dc": 16
+                }
+              },
+              "damage": {
+                "formula": "2d8",
+                "type": "sephirotic"
+              }
+            }
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Aggressive Tiferet Tree Person"
+          "The Tree Person of Early Tifaret"
+        ],
+        "sourceIds": [
+          "Wlk2fVGEGJKgROfD"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "p5o7lqfkptERZZE7",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167245009,
-    "modifiedTime": 1782167245009,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989019499,
+    "modifiedTime": 1792989019499,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!p5o7lqfkptERZZE7"
 }

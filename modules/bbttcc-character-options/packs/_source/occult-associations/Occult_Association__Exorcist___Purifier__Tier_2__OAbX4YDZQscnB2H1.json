@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 — Exorcist</strong></p><p><strong>“Get out.”</strong></p><p><strong>Strategic</strong></p><ul><li>Once per Strategic Turn, reduce Darkness or corruption pressure in a Hex by one step</li><li>Remove one minor corruption effect from a scenario</li></ul><p><strong>Cost:</strong> removed corruption may manifest elsewhere or return later in altered form.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"exorcT2\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Reduce Darkness</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Reduce Darkness/corruption pressure in a Hex by one step, OR remove one minor corruption effect from a scenario.</div>\n</div>",
+      "value": "<p><strong>Tier 2 — Exorcist</strong></p><p><strong>“Get out.”</strong></p><p><strong>Strategic</strong></p><ul><li>Once per turn, reduce Darkness or corruption pressure in a Hex by one step</li><li>Remove one minor corruption effect from a scenario</li></ul><p><strong>Cost:</strong> removed corruption may manifest elsewhere or return later in altered form.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"exorcT2\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Reduce Darkness</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Reduce Darkness/corruption pressure in a Hex by one step, OR remove one minor corruption effect from a scenario.</div>\n</div>",
       "chat": ""
     },
     "identifier": "occult-association-exorcist-t2",
@@ -29,7 +29,7 @@
       "level": null
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Level 5+",
     "type": {
       "value": "",
       "subtype": ""
@@ -244,12 +244,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987089076,
-    "modifiedTime": 1781025124813,
-    "lastModifiedBy": "MRFjjbUTBd66pWBY"
+    "modifiedTime": 1792989175798,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

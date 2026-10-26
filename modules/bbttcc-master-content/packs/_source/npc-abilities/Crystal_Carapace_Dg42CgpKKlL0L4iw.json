@@ -46,6 +46,22 @@
           "tier": "II",
           "frame": "trait"
         }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attacked",
+            "do": {
+              "reroll": "attack-highest"
+            },
+            "limit": {
+              "per": "combat",
+              "uses": 1
+            },
+            "label": "Crystal Carapace — the carapace turns the first blow"
+          }
+        ]
       }
     },
     "bbttcc": {
@@ -63,12 +79,12 @@
   "sort": 0,
   "_id": "Dg42CgpKKlL0L4iw",
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": null,
-    "modifiedTime": null,
-    "lastModifiedBy": null,
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.3",
+    "createdTime": 1791412953585,
+    "modifiedTime": 1791412953585,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

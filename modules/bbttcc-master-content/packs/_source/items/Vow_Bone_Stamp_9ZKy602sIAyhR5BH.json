@@ -9,6 +9,7 @@
     ],
     "category": "gear",
     "source": "Phase 7 Seed (2026-05-10)",
+    "quantity": 1,
     "description": {
       "value": "<p>Press the carved bone into oath-ink and a document becomes a vow. Breaking the vow blackens the seal — and the breaker.</p>",
       "chat": ""
@@ -18,7 +19,7 @@
     "fourththing": {
       "rfi": {
         "item": {
-          "tier": "I",
+          "tier": "II",
           "frame": "sigil",
           "bound": "free",
           "materialOf": [
@@ -46,15 +47,15 @@
             "origin": "septcraft"
           },
           "price": {
-            "marks": 120,
+            "marks": 360,
             "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI sigil × 1.20 × tech 2.0",
+            "notes": "TII sigil × 1.20 × tech 2.0",
             "bound": "free",
-            "saleBack": 48
+            "saleBack": 144
           }
         }
       }
@@ -68,12 +69,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778963370893,
-    "modifiedTime": 1778963370893,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988919640,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

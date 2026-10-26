@@ -1,0 +1,65 @@
+{
+  "name": "Whispering Aura",
+  "type": "feature",
+  "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Any creature that starts its turn within 6 squares hears faint, paranoid whispers in a voice it knows. It rolls twice-keep-worse on checks to read intentions or see through deception, and on checks to resist being Charmed or Shaken.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "do": {
+              "impose": true
+            },
+            "radius": 6,
+            "who": "enemies"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Whispering Deceiver"
+        ],
+        "sourceIds": [
+          "hIOAU3bYR4KkdPhw"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "KTdd6zh9oRMozPhm",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069985,
+    "modifiedTime": 1792989070058,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!KTdd6zh9oRMozPhm"
+}

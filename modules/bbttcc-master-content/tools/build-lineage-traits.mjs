@@ -24,6 +24,9 @@ const ROMAN = { I: 1, II: 2, III: 3, IV: 4 };
 // flags.fourththing.rfi.actor.qliphah (the flavour word in subLineage stays). "Agshekeloh" = Dave's spelling of
 // Gha'agsheblah = Gamchicoth (Excess, hull of Chesed). Gilbert = Samael (hull of Hod — his Redemption ending turns him Hod).
 const RULED_QLIPHAH = { LQS2jaeFhzFMDpxA: "samael", a0mWjHfmFd2KmWnI: "ghagiel", dskzJNdpkiTFEbik: "thagirion", "Please-Stop-Hitting-Yourself (Qliphothic Loop)": "gamchicoth", "Gerald, Assistant Regional Manager of the Apocalypse": "ghagiel" };
+// BS4 (2026-10-26): the flag is an OBJECT everywhere — { name: <QLIPHOTH key>, hullOf, grade } (monster-builder.js writes the same shape)
+const qliphahKeyOf = q => (q && typeof q === "object") ? String(q.name || "").toLowerCase() : (q ? String(q).toLowerCase() : null);
+const qliphahObj = (key, grade) => ({ name: key, hullOf: QLIPHOTH[key]?.hullOf ?? "", grade: grade || "lesser" });
 const BANNER_ALIAS = { jackalope: "beast-folk" };   // Jackalope Tinker-Scout → Beast-Folk "Entrepreneurial" (ruled 2026-10-06)
 const dcFor = t => 11 + 2 * t;
 
@@ -37,18 +40,18 @@ const LINEAGE_RULES = {
     { on: "zero", do: { heal: 1, prompt: "The hex tries one more thing: it acts for ONE more round (reroll-the-lowest on attacks), then drops." }, limit: { per: "combat", uses: 1 } },
   ],
   "pre-fall": () => [
-    { on: "struck", do: { prompt: "Broken Protocol: combat protocol for 3 rounds, then back to the directive if nothing hostile is in sight." }, limit: { per: "combat", uses: 1 } },
+    { on: "struck", do: { disposition: { set: -1, rounds: 3 }, prompt: "Broken Protocol: combat protocol for 3 rounds, then back to the directive if nothing hostile is in sight." }, limit: { per: "combat", uses: 1 }, label: "Broken Protocol" },
   ],
   sephirotic: (m) => [
     { on: "struck", if: { damageType: ["qliphothic"] }, do: { condition: { key: "restrained", duration: "1-round", save: { attr: "soul", dc: dcFor(m.tier) } } }, label: "Correction, Not Anger" },
   ],
   dream: () => [
     { on: "attacked", if: { ownerNotAttacked: true }, do: { reroll: "attack-highest" }, label: "Half-Real — until it attacks, attacks against it reroll the highest" },
-    { on: "selfTurnStart", do: { prompt: "Half-Real: moves through creatures and objects as difficult terrain; 1d10 kinetic if it ends inside something solid." }, limit: { per: "combat", uses: 1 } },
+    { on: "selfTurnStart", narrative: true, do: { prompt: "Half-Real: moves through creatures and objects as difficult terrain; 1d10 kinetic if it ends inside something solid." }, limit: { per: "combat", uses: 1 } },
   ],
   revenant: () => [
     { on: "hit", do: { heal: "1d4" }, label: "Crystallized Grief — the warmth it takes mends it" },
-    { on: "zero", do: { prompt: "Laid to rest, not killed: it reforms next dusk unless the grief that made it is named aloud." } },
+    { on: "zero", narrative: true, do: { prompt: "Laid to rest, not killed: it reforms next dusk unless the grief that made it is named aloud." } },
   ],
 };
 const BANNER_RULES = {
@@ -57,9 +60,10 @@ const BANNER_RULES = {
     { on: "bloodied", do: { morale: { attr: "soul", dc: 12, outcome: "disengages and runs at full speed" } } },
   ],
   sept: () => [{ on: "allyDamaged", radius: 6, do: { ward: 0.5 }, limit: { per: "round", uses: 1 }, label: "Minor Ward" }],
-  witness: () => [{ on: "zero", do: { prompt: "Reports Up: its last sight is transmitted to the nearest Witness within a mile." } }],
-  valhaulan: () => [{ on: "bloodied", do: { tempIntegrity: 5, prompt: "Storm-Voiced: allies within 6 squares reroll the lowest die on their next attack." }, limit: { per: "scene", uses: 1 } }],
-  cultist: () => [{ on: "hit", if: { damageType: ["qliphothic"] }, do: { prompt: "Each Spell Is Also a Wound: the cultist takes 1 qliphothic damage to Stress." } }],
+  witness: () => [{ on: "zero", narrative: true, do: { prompt: "Reports Up: its last sight is transmitted to the nearest Witness within a hex." } }],
+  valhaulan: () => [{ on: "bloodied", do: { tempIntegrity: 5 }, limit: { per: "scene", uses: 1 }, label: "Storm-Voiced" },
+                    { on: "bloodied", who: "allies", radius: 6, do: { bankReroll: { context: "attack", note: "Storm-Voiced" } }, limit: { per: "scene", uses: 1 }, label: "Storm-Voiced — allies reroll the lowest" }],
+  cultist: () => [{ on: "hit", if: { damageType: ["qliphothic"] }, to: "self", do: { damage: { formula: "1", type: "qliphothic", track: "stress" } }, label: "Each Spell Is Also a Wound" }],
   "oath-bound": () => [{ on: "zero", do: { heal: 1, prompt: "Sworn: drops to 1 instead and gains +2 on its next attack — the oath tries one more thing." }, limit: { per: "combat", uses: 1 } }],
   "beast-folk": () => [{ on: "use", who: "targets", do: { save: { attr: "mind", dc: 12, onSave: "negate" }, prompt: "Entrepreneurial: on a fail the target spends its next action considering the offer." }, limit: { per: "scene", uses: 1 } }],
   unaffiliated: () => [{ on: "bloodied", do: { morale: { attr: "soul", dc: 12, outcome: "GM rolls d6 openly — 1–2 surrender, 3–4 flee, 5–6 fight on" } } }],
@@ -67,14 +71,14 @@ const BANNER_RULES = {
 const AURA_RULES = (q, tier) => {
   const dc = dcFor(tier);
   switch (q) {
-    case "thaumiel":      return [{ on: "turnStart", radius: 2, who: "enemies", do: { prompt: "Aura of Duality: rolls twice and keeps the worse on skill checks until the start of its next turn." } }];
-    case "ghagiel":       return [{ on: "turnStart", radius: 3, who: "enemies", do: { prompt: "Aura of Obstruction: twice-keep-worse on Mind checks until the start of its next turn." } }];
-    case "satariel":      return [{ on: "turnStart", radius: 6, who: "enemies", do: { prompt: "Aura of Concealment: twice-keep-worse on checks to read intentions or see through deception." } }];
+    case "thaumiel":      return [{ on: "turnStart", radius: 2, who: "enemies", do: { impose: true }, label: "Aura of Duality — Imposed until its next turn" }];
+    case "ghagiel":       return [{ on: "turnStart", radius: 3, who: "enemies", do: { impose: true }, label: "Aura of Obstruction — Imposed on the mind" }];
+    case "satariel":      return [{ on: "turnStart", radius: 6, who: "enemies", do: { impose: true }, label: "Aura of Concealment — Imposed when reading it" }];
     case "gamchicoth":    return [{ on: "turnStart", radius: 4, who: "enemies", do: { save: { attr: "soul", dc, onSave: "negate" }, prompt: "Aura of Excess: on a fail, spends its bonus action on one reckless, pleasurable thing." } }];
-    case "golachab":      return [{ on: "turnStart", radius: 4, who: "enemies", do: { prompt: "Aura of Cruelty: any damage taken within 4 squares deals +1d4 psychic to Stress." } }];
-    case "thagirion":     return [{ on: "turnStart", radius: 6, who: "enemies", do: { prompt: "Aura of Contention: twice-keep-worse on Presence checks to persuade or de-escalate." } }];
+    case "golachab":      return [{ on: "enemyDamaged", radius: 4, do: { damage: { formula: "1d4", type: "psychic", track: "stress" } }, label: "Aura of Cruelty — every wound articulate" }];
+    case "thagirion":     return [{ on: "turnStart", radius: 6, who: "enemies", do: { impose: true }, label: "Aura of Contention — Imposed when it argues" }];
     case "harab-serapel": return [{ on: "turnStart", radius: 6, who: "enemies", do: { save: { attr: "soul", dc, onSave: "negate" }, prompt: "Aura of Avarice: on a fail, its movement goes toward the most valuable object it can see." } }];
-    case "samael":        return [{ on: "turnStart", radius: 6, who: "enemies", do: { prompt: "Aura of Vanity: twice-keep-worse on checks to resist being Charmed while it can be seen." } }];
+    case "samael":        return [{ on: "turnStart", radius: 6, who: "enemies", do: { impose: true }, label: "Aura of Vanity — Imposed while it can be seen" }];
     case "gamaliel":      return [{ on: "turnStart", radius: 4, who: "enemies", do: { save: { attr: "soul", dc, onSave: "negate" }, damage: { formula: "1d4", type: "psychic" } }, label: "Aura of Obscenity" }];
     case "nahemoth":      return [{ on: "turnStart", radius: 2, who: "enemies", do: { condition: { key: "staggered", duration: "1-round", save: { attr: "soul", dc } } }, label: "Aura of Materialism" }];
     default: return null;
@@ -100,8 +104,10 @@ for (const a of actors) {
   const p = { id: a._id, name: a.name, items: [], notes: [], set: {} };
   if (rfi.lineage === "qliphothic") {
     const ruled = RULED_QLIPHAH[a._id] ?? RULED_QLIPHAH[a.name] ?? null;
-    const qk = rfi.qliphah ?? ruled ?? m.sub;
-    if (ruled && rfi.qliphah !== ruled) { p.set["flags.fourththing.rfi.actor.qliphah"] = ruled; p.notes.push(`qliphah → ${ruled} (ruled)`); }
+    const have = qliphahKeyOf(rfi.qliphah);
+    const qk = have ?? ruled ?? m.sub;
+    const grade = (rfi.qliphah && typeof rfi.qliphah === "object" && rfi.qliphah.grade) || (rfi.bracket === "boss" || rfi.bracket === "heavy" ? "greater" : "lesser");
+    if ((ruled && have !== ruled) || (rfi.qliphah && typeof rfi.qliphah !== "object")) { p.set["flags.fourththing.rfi.actor.qliphah"] = qliphahObj(ruled ?? have, grade); p.notes.push(`qliphah → ${JSON.stringify(p.set["flags.fourththing.rfi.actor.qliphah"])} (object, BS4)`); }
     const q = QLIPHOTH[qk], rules = AURA_RULES(qk, m.tier);
     if (!its.some(i => /^Aura of/i.test(i.name))) {
       if (q && rules) { p.items.push(featureItem(`Aura of ${q.vice}`, q.aura, `${q.label}${qk === "gamchicoth" && /Hitting/.test(a.name) ? " (Agshekeloh)" : ""} — hull of ${q.hullOf}.`, "qliphothic", rules, [m.sub, qk])); p.notes.push(`Aura of ${q.vice}`); tally.auras++; }
@@ -118,8 +124,10 @@ for (const a of actors) {
   if (!its.some(i => i.type === "weapon") && L.strike) {
     const s = L.strike, dice = { 1: "1d8", 2: "2d6", 3: "2d8", 4: "2d10" }[m.tier];
     p.items.push({ name: s.name, type: "weapon", img: "icons/weapons/swords/swords-sharp-worn.webp",
-      system: { category: s.melee ? "melee" : "ranged", intent: "violence", skill: s.melee ? "melee" : "ranged", damage: { formula: dice, type: s.damageType, damageFlavor: s.damageFlavor || "", attribute: "violence", track: ["psychic", "qliphothic"].includes(s.damageType) ? "stress" : "integrity" }, range: s.melee ? { value: s.reach || 5, units: "ft" } : { value: s.shortRange || 30, long: s.longRange || 90, units: "ft" }, effect: s.riderText || "", tags: ["lineage-strike", rfi.lineage], description: { value: `<p>${esc(s.riderText || "")}</p>`, chat: "" } },
-      flags: { fourththing: { rfi: { item: { frame: "attack", lineageStrike: rfi.lineage } }, npcAuto: s.riderText ? { v: 1, rules: [{ on: "hit", do: { prompt: s.riderText.slice(0, 118) } }] } : undefined } } });
+      system: { category: s.melee ? "melee" : "ranged", intent: "violence", skill: s.melee ? "melee" : "ranged", damage: { formula: dice, type: s.damageType, damageFlavor: s.damageFlavor || "", attribute: "violence", track: ["psychic", "qliphothic"].includes(s.damageType) ? "stress" : "integrity" }, range: s.melee ? { short: Math.max(1, Math.round((s.reach || 5) / 5)), long: Math.max(1, Math.round((s.reach || 5) / 5)) } : { short: Math.max(1, Math.round((s.shortRange || 30) / 5)), long: Math.max(1, Math.round((s.longRange || 90) / 5)) }, effect: s.riderText || "", tags: ["lineage-strike", rfi.lineage], description: { value: `<p>${esc(s.riderText || "")}</p>`, chat: "" },
+        // BS6 (2026-10-26): the qliphothic Hollow Touch is REAL — Stress track + Resolve (soul) check or Compelled, DC 11 + 2×tier
+        ...(rfi.lineage === "qliphothic" ? { manifestation: { appliedStates: { states: ["compelled"], duration: "1-round", saveEachRound: false, saveAttribute: "soul" }, resolution: { saveAttribute: "soul", saveDcMode: "fixed", saveDcFixed: dcFor(m.tier), onSave: "negate", statesOnFail: true } } } : {}) },
+      flags: { fourththing: { rfi: { item: { frame: "attack", lineageStrike: rfi.lineage } }, npcAuto: s.riderText && rfi.lineage !== "qliphothic" ? { v: 1, rules: [{ on: "hit", narrative: true, do: { prompt: s.riderText.slice(0, 118) } }] } : undefined } } });
     p.notes.push(`signature strike ${s.name} ${dice}`); tally.strikes++;
   }
   for (const it of p.items) { const probs = validateNpcAuto(it.flags?.fourththing?.npcAuto, `${a.name} › ${it.name}: `); if (probs.length) { console.error(probs.join("\n")); process.exit(1); } }

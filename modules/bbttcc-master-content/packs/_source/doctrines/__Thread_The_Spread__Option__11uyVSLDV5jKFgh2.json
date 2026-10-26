@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Thread The Spread [Option]",
+  "name": "Thread The Spread",
   "type": "feat",
   "img": "icons/magic/control/orb-web-hold.webp",
   "system": {
@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Thread The Spread [Option]</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> intrigue 10</p></div>",
+      "value": "<p><strong>Thread The Spread</strong></p><p>Tarot Mage. Target a hex: one fogged hex adjacent to it is revealed, and every neighbour's alignment and holder is whispered to your Domain.</p><p><em>Cost: Intrigue 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "optact_thread_the_spread"
+      "key": "optact_thread_the_spread",
+      "effects": {
+        "text": "Tarot Mage. Target a hex: one fogged hex adjacent to it is revealed, and every neighbour's alignment and holder is whispered to your Domain."
+      }
     }
   },
   "_id": "11uyVSLDV5jKFgh2",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601761,
-    "modifiedTime": 1782703702690,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988997853,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

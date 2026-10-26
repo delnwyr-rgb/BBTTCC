@@ -1,0 +1,116 @@
+{
+  "_id": "AnCoreEchoDiver1",
+  "name": "Echo-Diver: Half-Second Inheritance",
+  "type": "feat",
+  "img": "icons/creatures/birds/corvid-call-sound-glowing.webp",
+  "effects": [],
+  "folder": "0b5hc8Y3eu3rN4Kg",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "echo_diver",
+      "feature": "core",
+      "family": "echo_diver",
+      "speciesTrait": "echo_diver_core",
+      "version": "3.0.0",
+      "date": "2026-10-26"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "suffocation, starvation, dehydration, extreme temperature",
+          "note": "Niche Survivor"
+        },
+        {
+          "context": "check",
+          "skill": "perception",
+          "mode": "reroll-lowest",
+          "vs": "unstable structure, active traps, trigger plates, load-bearing failure, Spark or chronoflux residue",
+          "note": "Vault Sight"
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-self-or-ally-hit",
+          "radius": 2,
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "offer": true,
+          "offerText": "Temporal Flinch — shift the one who was hit 1 square. GM: if that breaks the attack's range or line, the attack misses (refund the damage).",
+          "effect": {
+            "kind": "displace-token",
+            "args": {
+              "squares": 1,
+              "mode": "shift"
+            }
+          }
+        }
+      ],
+      "grants": {
+        "conditionImmunities": [
+          "surprise"
+        ]
+      },
+      "passives": {
+        "vision": {
+          "darkvision": 60
+        }
+      }
+    }
+  },
+  "system": {
+    "category": "feat",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"The lions are gone. The wolves are gone. The kings are gone. We're still here. Think about what that means.\"</em></p>\n<p><strong>Temporal Flinch (1/Soma Break).</strong> You experience the next two seconds as a faint pre-echo: you are immune to the Surprised condition while conscious. Reaction — when you or an ally within 2 squares is hit by an attack you can see, shift yourself or that ally 1 square; if that takes the target out of the attack's range or line, the attack misses (the GM refunds the damage).</p>\n<p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air a comparable Medium creature needs. You reroll the lowest die on Body checks against suffocation, starvation, dehydration, and extreme temperature.</p>\n<p><strong>Vault Sight.</strong> You have darkvision out to 12 squares. You reroll the lowest die on Perception checks to notice unstable structure, active traps, trigger plates, load-bearing failures, and Spark or chronoflux residue.</p>\n<p><strong>Rat Inheritance.</strong> You can squeeze through gaps at least a foot wide without halving your movement, and you can hold a stillness that shouldn't work.</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "echo_diver_core",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "Echo-Diver",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988968076,
+    "modifiedTime": 1792988968077,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "_key": "!items!AnCoreEchoDiver1"
+}

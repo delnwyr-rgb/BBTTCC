@@ -1,0 +1,113 @@
+{
+  "name": "Dread Touch",
+  "type": "weapon",
+  "img": "icons/magic/death/blood-corruption-vomit-red.webp",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "channel",
+    "damage": {
+      "formula": "3d8",
+      "attribute": "soul",
+      "type": "psychic",
+      "damageFlavor": "",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1
+    },
+    "tags": [],
+    "effect": "A hand of smoke closes around the waking mind. Damage goes straight to Stress.",
+    "flavor": "A shadowy, clawed hand reaching into a sleeping head — except you're awake.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "ODCOwROKn7GaICka",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gamalielite Dream-Twister"
+        ],
+        "sourceIds": [
+          "usU6xHOysv7adf8j"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069927,
+    "modifiedTime": 1792989070010,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ODCOwROKn7GaICka"
+}

@@ -1,0 +1,78 @@
+{
+  "name": "Road Leather",
+  "type": "gear",
+  "img": "icons/containers/bags/pouch-leather-gold-red.webp",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "road-leather"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Scuffed by a hundred miles of thatward.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Hide cured on the road with salt and smoke. Tougher than work leather, and it knows the routes.</p>",
+          "charges": 4,
+          "materialKey": "road-leather",
+          "price": {
+            "marks": 60,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII material",
+            "bound": "free",
+            "saleBack": 24
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "AYh8ccjTZZZylFLU",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1789965941864,
+    "modifiedTime": 1792977613593,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!AYh8ccjTZZZylFLU"
+}

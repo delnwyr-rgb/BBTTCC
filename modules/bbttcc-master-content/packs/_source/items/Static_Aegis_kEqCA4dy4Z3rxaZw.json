@@ -17,7 +17,7 @@
         "changes": [
           {
             "key": "flags.fourththing.grant.resists",
-            "value": "energy",
+            "value": "electrical",
             "priority": 20,
             "type": "add",
             "phase": "initial"
@@ -49,17 +49,16 @@
       "folder": null,
       "sort": 0,
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1781726107815,
-        "modifiedTime": 1781726107815,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792988935628,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!kEqCA4dy4Z3rxaZw.YgBWQqvo9Ns2YDeX"
+      }
     }
   ],
   "folder": "TNrB6kEiHS0KwwJT",
@@ -68,12 +67,12 @@
     "default": 0
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1780000000000,
-    "modifiedTime": 1782167282786,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988935509,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
@@ -83,7 +82,7 @@
     "evasionBonus": 0,
     "resolveBonus": 0,
     "resistances": [
-      "energy"
+      "electrical"
     ],
     "armorSkill": "bracing",
     "equipped": false,
@@ -96,7 +95,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A salvaged pre-Fall riot shield with the emitter coil still good. Thumb the stud and a crackling static field sheets across the face — it grounds incoming electrical and stands the hair up on everyone within arm's reach. Pairs with any one-handed weapon.</p><p><b>Active Ward.</b> While raised, the field bleeds off electrical damage; a melee attacker that hits you takes 1 electrical from the discharge.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Shield</li>\n  <li><strong>Defense:</strong> Guard +2</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Electrical</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 280 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>A salvaged pre-Fall riot shield with the emitter coil still good. Thumb the stud and a crackling static field sheets across the face — it grounds incoming electrical and stands the hair up on everyone within arm's reach. Pairs with any one-handed weapon.</p><p><b>Active Ward.</b> While raised, the field bleeds off electrical damage; a melee attacker that hits you takes 1 electrical from the discharge.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Shield</li>\n  <li><strong>Defense:</strong> Guard +2</li>\n  <li><strong>Requires:</strong> Bracing (trained)</li>\n  <li><strong>Resistance:</strong> Electrical</li>\n  <li><strong>Tier:</strong> II</li>\n  \n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
       "chat": ""
     }
   },
@@ -104,7 +103,7 @@
     "fourththing": {
       "grants": {
         "resistances": [
-          "energy"
+          "electrical"
         ]
       },
       "rfi": {
@@ -133,15 +132,15 @@
             "sun-glass"
           ],
           "price": {
-            "marks": 280,
-            "currency": "economy",
+            "marks": 210,
+            "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TII techno-shield — energy ward",
+            "rarityMult": 2,
+            "notes": "TII shield × rarity 2",
             "bound": "free",
-            "saleBack": 112
+            "saleBack": 84
           },
           "grants": {
             "resistances": [

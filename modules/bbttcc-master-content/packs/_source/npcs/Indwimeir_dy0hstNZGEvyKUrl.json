@@ -1,0 +1,3287 @@
+{
+  "name": "Indwimeir",
+  "type": "character",
+  "img": "art/devin-knight/MayFantasy/Thin_Witch_hi.webp",
+  "folder": "UAHVCMVXEDT8Q1B1",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "prototypeToken": {
+    "name": "Indwimeir",
+    "actorLink": true,
+    "disposition": 1,
+    "texture": {
+      "src": "art/devin-knight/MayFantasy/Thin_Witch_hi.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc"
+    },
+    "fourththing": {
+      "kind": "npc"
+    },
+    "bbttcc-character-options": {
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      }
+    }
+  },
+  "_id": "dy0hstNZGEvyKUrl",
+  "system": {
+    "biography": {
+      "concept": "Keeper of the titles for the cinema-vigil family — Ember-Touched (Igneous Menhirkin) Cosmic Linguist, T III, Initiation 13 (Act 3).",
+      "notes": "Indwimeir reads the credits. Every film the family remembers, Indwimeir can recite — cast, crew, the catering company — and treats the lists as scripture, because in the Hidden Vault a name said correctly still opens things. Ember-touched: the Igneous heat never left Indwimeir's hands, and the marquee letters are re-lit by them each dusk. Indwimeir is the one who taught the family the incantation and the one who will not say where it came from."
+    },
+    "details": {
+      "level": 13,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 3
+    },
+    "attributes": {
+      "violence": {
+        "value": 2
+      },
+      "intrigue": {
+        "value": 3
+      },
+      "presence": {
+        "value": 10
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 10
+      },
+      "soul": {
+        "value": 5
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 0
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 0
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 0
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 0
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 0
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 5
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 3
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 3
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 0
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "fitting": {
+        "attribute": "intrigue",
+        "label": "Fitting",
+        "value": 0
+      },
+      "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 16,
+        "max": 16,
+        "temp": 0
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
+  },
+  "items": [
+    {
+      "_id": "8NxiltaCv844DnaP",
+      "name": "Menhirkin",
+      "type": "species",
+      "img": "art/bbttcc/asli-icons/menhirkin_1.webp",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"The land is not scenery. The land is a person. You are the version of it that finally stood up and walked over to complain.\"</em></p><p>You are not descended from the land. You are the land. A hex decided to become a person and the person is you. The standing stones on the ridge are distant cousins. The bedrock under the bunker is a grandparent. Mortals call you a Hex-Giant. You don't correct them.</p><p><strong>Creature Type.</strong> Humanoid (Menhirkin). <strong>Size.</strong> Medium, but you count as Large for carrying capacity and the size of creatures you can shove or grapple. <strong>Speed.</strong> 6 squares</p><p><strong>Heartstone (passive).</strong> A fragment of your home hex is literally inside you. While in any hex your Domain controls or has claimed: reroll the lowest die on Body checks, and you cannot be forcibly removed from the hex against your will (teleportation, banishment, forced march) without first being reduced to 0 Integrity.</p><p><strong>Land Memory (1/Soma Break).</strong> Lay a hand on any surface older than you; the GM tells you one true thing the land remembers.</p><p><strong>Living Rampart (1/Soma Break).</strong> Reaction — when a creature you can see targets an ally adjacent to you with an attack, the attacker rolls 3d10 keep lowest 2 on that attack roll.</p><p><strong>Stonebound (passive).</strong> Reroll the lowest die on Body checks to resist being pushed, knocked Prone, or otherwise forcibly moved. Reroll the lowest die on Body checks to build, repair, or fortify structures, siegeworks, and defensive emplacements.</p><p><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Violence marks</strong> and <strong>+20 Non-Lethal marks</strong> at campaign start.</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "mJh91oDMWDwzfq6L",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium (but you count as Large for carrying, shove, and grapple).",
+            "value": {}
+          },
+          {
+            "_id": "HS11111111111111",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.2wTyD2Lq1mbnwODi",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Heartstone",
+            "hint": "Gain the Menhirkin: Heartstone feature."
+          },
+          {
+            "_id": "SM22222222222222",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.nkLGYmro2QJxW5nA",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Land Memory",
+            "hint": "Gain the Menhirkin: Land Memory feature (v2 reframe of Stone Memory)."
+          },
+          {
+            "_id": "GW33333333333333",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.NIOQEm26wOoSuf2O",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Gravity Well",
+            "hint": "Gain the Menhirkin: Gravity Well feature."
+          },
+          {
+            "_id": "a1b2c3d4e5f6g7h8",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.Pf74lkSrv4Ogjyk6",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Living Rampart",
+            "hint": "Gain the Menhirkin: Living Rampart feature."
+          },
+          {
+            "_id": "h7g6f5e4d3c2b1a0",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.o9A2rhMAKPFI8Dnb",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Stonebound",
+            "hint": "Gain the Menhirkin: Stonebound feature."
+          },
+          {
+            "_id": "Z9Y8X7W6V5U4T3S2",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.qVOg838eU3areJzy",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Strategic Hooks (Menhirkin)",
+            "hint": "Grants OP edges and hex/Logistics hooks used by Bad Eden faction systems."
+          }
+        ],
+        "identifier": "menhirkin",
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": 10,
+          "truesight": null,
+          "units": null,
+          "special": "Tremorsense 10 ft while standing on natural ground."
+        },
+        "type": {
+          "value": "humanoid",
+          "subtype": "Menhirkin",
+          "custom": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Living Rampart: Athletics +1",
+          "img": "icons/magic/earth/strike-shock-stone.webp",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.athletics.value",
+                "value": 1,
+                "type": "add",
+                "priority": 10,
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Passive: Living Rampart: Athletics +1",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "sprint": "passive-ae-2026-04-28",
+              "batch": 2
+            }
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "_id": "ABtRlSRtwZtFWrcn",
+          "showIcon": 1,
+          "folder": null,
+          "_stats": {
+            "coreVersion": "14.368",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.5",
+            "createdTime": 1791423987707,
+            "modifiedTime": 1791423987707,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "folder": "DylQKvptEOaCqul8",
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "opEffects": {
+            "nonLethal": 2,
+            "violence": 1
+          },
+          "siegeRepairDiscount": 1,
+          "logisticsDiscountPerTurn": 1,
+          "sentientLandConsult": true,
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "normalizedFrom": "Hex-Giant (Menhirkin)",
+          "refactorNotes": "v2 reframe: living embodiment of sentient land. Heartstone now binds to hex. Stone Memory reframed as Land Memory. Added Sentient Land faction hook."
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "save",
+              "mode": "reroll-lowest",
+              "note": "on Constitution saves and cannot be forcibly removed from the hex against you…"
+            },
+            {
+              "context": "forced-movement",
+              "mode": "reroll-lowest",
+              "note": "on ability checks you make to resist being pushed, knocked prone, or otherwis…"
+            },
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "on checks you make to build, repair, or fortify structures, siegeworks, and d…"
+            },
+            {
+              "context": "save",
+              "mode": "reroll-lowest",
+              "note": "Constitution saves and cannot be forcibly removed from the hex against your w…"
+            },
+            {
+              "context": "forced-movement",
+              "mode": "reroll-lowest",
+              "note": "ability checks you make to resist being pushed, knocked prone, or otherwise f…"
+            },
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "checks you make to build, repair, or fortify structures, siegeworks, and defe…"
+            },
+            {
+              "context": "attack",
+              "mode": "reroll-highest"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "note": "while in a hex your faction controls or has claimed (Heartstone)"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "note": "to resist being pushed, knocked Prone, or otherwise forcibly moved (Stonebound)"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "note": "to build, repair, or fortify structures, siegeworks, or defensive emplacements (Stonebound)"
+            }
+          ],
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "violence-op",
+              "amount": 2
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "non-lethal-op",
+              "amount": 2
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-ally-hit",
+              "radius": 1,
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Living Rampart (1/Soma Break). Reaction — an ally adjacent to you was just attacked: the attacker rolls 3d10 keep lowest 2 on that attack roll (GM re-reads the roll)."
+                }
+              }
+            }
+          ],
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.kLmFqDPpLUBzqgR2",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423987707,
+        "modifiedTime": 1792989613267,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0
+    },
+    {
+      "name": "Menhirkin Heritage: Igneous",
+      "type": "feat",
+      "img": "art/bbttcc/asli-icons/menhirkin_2.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "RFI-native",
+          "revision": 3,
+          "book": "Heritages v1.1",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "\n<p><em>“Some stone was born yelling.”</em></p><p><strong>Menhirkin (Igneous).</strong> You are new rock. The Shattering was your birthday. The land that stood up and began answering chose you because it wanted a mouth that remembered being molten. You run hot, you cool slow, and you are, structurally, still furious about something.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Menhirkin).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 6 squares walking.</li><li><strong>Lineage Lean.</strong> Menhirkin does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Violence</strong> in fiction and through Tier powers.</li></ul><h3>Menhirkin Core: The Land Stood Up</h3><p><em>Shared across all Menhirkin heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><strong>Stone Soul.</strong> You count as Large for carry, shove, and grapple despite your Medium frame. You reroll the lowest die on checks to resist being forcibly moved.</li><li><strong>Hex Recognition.</strong> Once per scene, while you are on a natural surface you are directly touching, you may whisper a single question about the place. The GM answers with one true thing the land knows.</li><li><strong>Slow to Wear.</strong> You reroll the lowest die on Body checks against Stress, long-duration physical wear, forced marches, climate exposure, and sustained labor. You do not tire the way softer things tire.</li><li><strong>Heavy Presence.</strong> Your weight and settledness are perceptible. Creatures within 2 squares of you know you are there even if they cannot see you; you roll 3d10 keep lowest 2 on Intrigue (Stealth) checks unless you are on or in stone.</li></ul><h3>Igneous Traits</h3><ul><li><strong>Heat Memory.</strong> When you take thermal damage with the fire flavor, you may bank that damage. Before your next Soma Break, you may spend the banked heat as a bonus action to add +1d10 exploding thermal damage (flavor: fire) to your next weapon attack, unarmed strike, or grapple that connects.</li><li><strong>Molten Bearing.</strong> You count fire, smoke, ash, and heated terrain as normal ground for the purposes of difficult terrain and footing. Contact with your bare skin singes paper and warms metal.</li></ul><h3>Domain Edge</h3><ul><li><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Violence marks</strong> and <strong>+20 Non-Lethal marks</strong> at campaign start.</li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#a8c4e0;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Hex Recognition</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">On a natural surface you're touching, whisper a question — GM answers with one true thing the land knows.</div>\n</div>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "79f3a0c21d32e737",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.TDAzTMQwQQlQyoi5",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Igneous Tier I",
+            "hint": "Gain your Igneous Tier I feat."
+          }
+        ],
+        "identifier": "menhirkin_igneous_heritage",
+        "requirements": "Menhirkin",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "menhirkin",
+          "lineage": "Igneous",
+          "version": "1.1.0",
+          "date": "2026-04-19",
+          "rfiNative": true,
+          "opEffects": {
+            "violence": 2,
+            "nonlethal": 1
+          }
+        },
+        "fourththing": {
+          "grants": {
+            "resistances": [
+              {
+                "type": "thermal",
+                "flavor": "hot"
+              }
+            ]
+          },
+          "rerolls": [],
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "violence-op",
+              "amount": 2
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "non-lethal-op",
+              "amount": 2
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-damage-taken",
+              "predicate": {
+                "tag": [
+                  "thermal",
+                  "hot",
+                  "fire"
+                ]
+              },
+              "effect": {
+                "kind": "bank-counter",
+                "args": {
+                  "counter": "heat",
+                  "delta": 1,
+                  "max": 1
+                }
+              }
+            },
+            {
+              "event": "on-attack-hit",
+              "offer": true,
+              "offerText": "Heat Memory — spend the banked heat: +1d10 exploding thermal (fire) on this hit.",
+              "effect": {
+                "kind": "spend-counter",
+                "args": {
+                  "counter": "heat",
+                  "per": {
+                    "dieFormula": "1d10x10"
+                  },
+                  "type": "thermal"
+                }
+              }
+            }
+          ]
+        },
+        "autoanimations": {
+          "id": "322e7e01-0695-475c-abc6-e0a44ff64f87",
+          "label": "Menhirkin Heritage: Igneous",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "yellowwhite",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "RImtnSG0UK4pP7o7",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-heritages-v1.1",
+          "uuid": "Item.mL93g5CgA2LbacFT",
+          "coreVersion": "13.351",
+          "systemId": "fourththing",
+          "systemVersion": "0.6.0"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423987708,
+        "modifiedTime": 1792989613268,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "hRZmUVVECklgqstn",
+      "sort": 0
+    },
+    {
+      "name": "Cosmic Linguist",
+      "type": "class",
+      "system": {
+        "category": "path",
+        "identifier": "cosmic_linguist",
+        "source": "",
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"Strike the clause. Insert your own. Reality reads from the top.\"</em></p>\n<p>The Cosmic Linguist edits reality like text — meaning first, matter second. One currency now: <strong>Surge</strong>. The editor always has the next word, so you bank <strong>+1 Surge at the start of your turn</strong> (the old Resonance, Strain, and Editorial Authority pools are folded into this single pool).</p>\n<h3>The Edit (spent via Surge)</h3>\n<ul>\n  <li><strong>Emphasis</strong> (1) — your next Strike or manifestation hits for +Tier d6 (the word, underlined).</li>\n  <li><strong>Stabilize</strong> (2) — you gain DR equal to Tier; your next cast resists counter / dispel (the sentence holds).</li>\n  <li><strong>Impose a Reading</strong> (3) — a foe's next attack and its saves are rolling 3d10 and keeping the lowest 2 (only one correct interpretation: yours).</li>\n  <li><strong>Rewrite the Sentence</strong> (5) — a foe loses its reactions and rolls saves rolling 3d10 and keeping the lowest 2; allies near you bank a reroll.</li>\n</ul>\n<p><strong>The Sentence</strong> endures as your signature stance — while held, the manifestation's primary target is bound by name and rolls its checks against you rolling 3d10 and keeping the lowest 2.</p>",
+          "chat": ""
+        },
+        "hd": {
+          "additional": "",
+          "spent": 0
+        },
+        "advancement": [
+          {
+            "_id": "rOxiMPiQoOXcWVsP",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.l4s5F3CMg7bo0Lb2",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.wc0V0gK05SnEXBR9",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.BiSJL6Gl0tnBLAmW",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.iIcYhYyA4LhD1Ei2",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.9c0g33iP1wGPGedB",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.cLddE4bSelGil06x",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.0THo7r8y2sUg8JlZ",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 1,
+            "title": "Cosmic Linguist Core Features"
+          },
+          {
+            "_id": "5f28179b5fe01b69",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.431954640378b392",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": {
+                "ability": "",
+                "preparation": "",
+                "uses": {
+                  "max": "",
+                  "per": ""
+                }
+              }
+            },
+            "value": {},
+            "level": 1,
+            "title": "Cosmic Linguist Discipline (Init 1) — True-Name Touch",
+            "icon": "",
+            "classRestriction": "",
+            "hint": "",
+            "flags": {}
+          },
+          {
+            "_id": "0dfd0ceed783fc00",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.7a37d8358c144126",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": {
+                "ability": "",
+                "preparation": "",
+                "uses": {
+                  "max": "",
+                  "per": ""
+                }
+              }
+            },
+            "value": {},
+            "level": 6,
+            "title": "Cosmic Linguist Discipline (Init 6) — Translation",
+            "icon": "",
+            "classRestriction": "",
+            "hint": "",
+            "flags": {}
+          },
+          {
+            "_id": "9fbd2f150a62e292",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.a2702a2349d936dd",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": {
+                "ability": "",
+                "preparation": "",
+                "uses": {
+                  "max": "",
+                  "per": ""
+                }
+              }
+            },
+            "value": {},
+            "level": 11,
+            "title": "Cosmic Linguist Discipline (Init 11) — The Sentence",
+            "icon": "",
+            "classRestriction": "",
+            "hint": "",
+            "flags": {}
+          },
+          {
+            "_id": "2bee2f4389022b8d",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.8a7f6bcb78b3de87",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": {
+                "ability": "",
+                "preparation": "",
+                "uses": {
+                  "max": "",
+                  "per": ""
+                }
+              }
+            },
+            "value": {},
+            "level": 16,
+            "title": "Cosmic Linguist Discipline (Init 16) — Word That Was",
+            "icon": "",
+            "classRestriction": "",
+            "hint": "",
+            "flags": {}
+          }
+        ]
+      },
+      "flags": {
+        "bbttcc": {
+          "primary": "charisma",
+          "opBonus": {
+            "intrigue": 2,
+            "faith": 2
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_id": "AIkbNKoYevNcnQWB",
+      "img": "icons/sundries/books/book-eye-purple.webp",
+      "effects": [],
+      "folder": "IyB4V2rPqsdbGukM",
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_stats": {
+        "systemId": "fourththing",
+        "coreVersion": "14.369",
+        "createdTime": 1791423987709,
+        "modifiedTime": 1792977785087,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Annotator (Bad Eden)",
+      "type": "subclass",
+      "img": "icons/skills/trades/academics-scribe-quill-gray.webp",
+      "system": {
+        "category": "doctrine",
+        "classIdentifier": "cosmic_linguist",
+        "source": "Bad Eden Originals — Sprint F (2026 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"See below. It changes everything above.\"</em></p>\n<p><strong>Doctrine:</strong> Prefer surgical changes with precise scope — a small note that produces a large consequence. You are strongest when the edit looks modest.</p>\n<p>The Annotator wins in the margins. Your Surge spends are footnotes with teeth: shore up an ally's roll, pin a foe with marginalia it cannot ignore, and revise the whole passage at once.</p>\n<h3>Doctrine (spent via Surge)</h3>\n<ul>\n  <li><strong>Footnote</strong> (1) — an ally banks a reroll-lowest (a small note, a large consequence).</li>\n  <li><strong>Marginalia</strong> (2) — a foe is Staggered and rolls its saves rolling 3d10 and keeping the lowest 2.</li>\n  <li><strong>Revision</strong> (5) — allies within 6 squares each bank a reroll-lowest (the whole passage, corrected).</li>\n</ul>",
+          "chat": ""
+        },
+        "identifier": "bbttcc-cosmic-linguist-linguist-annotator",
+        "advancement": [],
+        "spellcasting": {
+          "progression": "none",
+          "preparation": {}
+        }
+      },
+      "effects": [],
+      "folder": "7fCEbHBaAKFkEuHN",
+      "flags": {},
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "Itcy2BQGIYjl2t9Q",
+      "sort": 1000000,
+      "_stats": {
+        "systemId": "fourththing",
+        "coreVersion": "14.369",
+        "createdTime": 1791423987709,
+        "modifiedTime": 1792977785088,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "_id": "4bR0ru9CqQMvhBSh",
+      "name": "Cosmic Linguist: The Edit",
+      "type": "feat",
+      "img": "icons/skills/melee/strike-blade-scimitar-green-purple.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Originals (2026 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>The Edit — your four class Surge spends, from the ◆ Surge menu.</strong></p><ul><li><strong>Emphasis (1)</strong> — your next Strike or manifestation hits for +Tier d6 (the word, underlined).</li><li><strong>Stabilize (2)</strong> — you gain DR equal to Tier; your next cast explodes on 9–10 (the sentence holds).</li><li><strong>Impose a Reading (3)</strong> — a foe's next attack and its saves roll 3d10 and keep the lowest 2. Only one correct interpretation: yours.</li><li><strong>Rewrite the Sentence (5)</strong> — a foe loses its reactions and rolls saves rolling 3d10 and keeping the lowest 2; allies near you bank a reroll.</li></ul><p>These are the old Resonance channels spoken in the one currency: <strong>Surge</strong>. <strong>The Sentence</strong> (Initiation 11) endures as your signature stance on top of them.</p>",
+          "chat": ""
+        },
+        "identifier": "cosmic_linguist_resonance_channel",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "cosmic_linguist_resonance_channel"
+        }
+      },
+      "folder": "r5DULAhp98iub0mt",
+      "sort": 150000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": "Item.iIcYhYyA4LhD1Ei2",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423987709,
+        "modifiedTime": 1792989613268,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      }
+    },
+    {
+      "_id": "VpBS8sSUckCUazjQ",
+      "name": "Cosmic Linguist: Core Features",
+      "type": "feat",
+      "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"Magic is grammar. Reality is a draft.\"</em></p><p>You are a prepared, academic manifestant who edits meaning directly. You do not delegate power; you channel it raw.</p><p><strong>Engine truth:</strong> your craft runs on <strong>Clarity</strong> (your casting pool, deeper than other paths), <strong>Noise</strong> (the lattice hears sloppy work), <strong>Surge</strong> (the editor's one currency — +1 at the start of your turn), and <strong>Blood Debt</strong> (reaching above your tier, discounted by your Discipline). <em>The cast dialog's cost line is the truth.</em></p><p><em>An earlier draft of this class spoke of Resonance, Strain, and correspondence alignment. Those pools were folded into Surge — the fiction survives; the bookkeeping does not.</em></p>",
+          "chat": ""
+        },
+        "identifier": "cosmic_linguist_core_features",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "cosmic_linguist_core_features"
+        }
+      },
+      "folder": "r5DULAhp98iub0mt",
+      "sort": 100000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": "Item.l4s5F3CMg7bo0Lb2",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423987709,
+        "modifiedTime": 1791423987714,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      }
+    },
+    {
+      "_id": "7fmOZfV58mhu2cGQ",
+      "name": "Cosmic Linguist: Semantic Editor",
+      "type": "feat",
+      "img": "icons/sundries/scrolls/scroll-rolled-white.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"I am not casting. I am editing.\"</em></p><p><strong>Roleplay register, not rules.</strong> Choose the voice of your edits — <strong>Additive, Subtractive, Transformative, Referential, or Performative</strong>. Narrate every manifestation in your mode: it shapes how the working looks, sounds, and is remembered — never what it costs.</p><p><em>The cast dialog's cost line is the truth. (An earlier draft priced modes in Strain; Strain is retired.)</em></p>",
+          "chat": ""
+        },
+        "identifier": "cosmic_linguist_semantic_editor",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "cosmic_linguist_semantic_editor"
+        }
+      },
+      "folder": "r5DULAhp98iub0mt",
+      "sort": 125000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": "Item.cLddE4bSelGil06x",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423987710,
+        "modifiedTime": 1791423987714,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      }
+    },
+    {
+      "name": "Cosmic Linguist: Initiation 1 — True-Name Touch",
+      "type": "feat",
+      "img": "icons/sundries/scrolls/scroll-symbol-eye-blue.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Initiation 1 — True-Name Touch.</strong> You bank +1 Surge at the start of each of your turns (max +2 a round). When you spend Clarity to manifest, you may <em>name</em> the target as part of the action. For the rest of the scene, extending that manifestation's Reach to the named target costs 1 less Surge / Blood Debt (minimum 0).</p><p><span style=\"opacity: 0.7; font-size: 0.85em\">Discipline (passive): Reach discount −1 on Blood-Debt-reach. Skill rank +1 in two of: Occult, Lore, Insight.</span></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"clInit1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>True-Name Touch</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> At-will (per scene)  ·  <strong>Action:</strong> Bonus (with manifestation)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Name a target as part of your manifestation. For the rest of the scene, extending that manifestation's Reach to the named target costs 1 less Surge (min 0).</span></p></div>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "advancement": {},
+        "identifier": "cl_init1_true_name_touch",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "Cosmic Linguist 1",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "r5DULAhp98iub0mt",
+      "flags": {
+        "fourththing": {
+          "discipline": {
+            "passive": {
+              "reachDiscount": 1
+            }
+          },
+          "vocabScrub": "2026-05-16"
+        },
+        "bbttcc": {},
+        "dnd5e": {},
+        "autoanimations": {
+          "id": "69c8981b-22f1-47d3-9c2b-dfe14c63e3fb",
+          "label": "True-Name Touch",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423987710,
+        "modifiedTime": 1792989613268,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "BODdPEsNdOD3fEj4",
+      "sort": 175000
+    },
+    {
+      "name": "Cosmic Linguist: Initiation 6 — Translation",
+      "type": "feat",
+      "img": "icons/sundries/scrolls/scroll-bound-sealed-brown.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Initiation 6 — Translation.</strong> 1/scene signature move: as a reaction to an ally completing a manifestation within Reach, transcribe it into your idiom. Until the end of the next round, you carry their effect at your tier cap, paying its upkeep from your Clarity. Your translation, your bill.</p><p><span style=\"opacity: 0.7; font-size: 0.85em\">Discipline: passive Reach discount unchanged from Init 1; Translation itself is a 1/scene narrative power resolved at the table.</span></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"clInit6\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Translation</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Reaction  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When an ally completes a manifestation within Reach, transcribe it into your idiom. Carry their effect at your tier cap until end of next round; pay upkeep from your Clarity.</span></p></div>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "advancement": {},
+        "identifier": "cl_init6_translation",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 6
+        },
+        "properties": [],
+        "requirements": "Cosmic Linguist 6",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "r5DULAhp98iub0mt",
+      "flags": {
+        "fourththing": {
+          "discipline": {}
+        },
+        "bbttcc": {},
+        "dnd5e": {},
+        "autoanimations": {
+          "id": "e0d59a6e-cfef-47fd-9ce8-7af9690f25ae",
+          "label": "Cosmic Linguist: Initiation 6 — Translation",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "music",
+              "animation": "notes",
+              "variant": "01",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423987710,
+        "modifiedTime": 1792989613269,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "fIGuv4wz4ft9vXeB",
+      "sort": 131250
+    },
+    {
+      "name": "Cosmic Linguist: Initiation 11 — The Sentence (Signature Mode)",
+      "type": "feat",
+      "img": "icons/sundries/scrolls/scroll-bound-sealed-leather-red-tan.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Initiation 11 — The Sentence (Signature Mode).</strong> Stance. While The Sentence is held, every manifestation you sustain treats its primary target as <em>bound by name</em> — mechanical hook for holds, binds, and compelled-truth at the GM's table. Pays 1 Clarity per scene of upkeep against your Clarity.</p><p><span style=\"opacity: 0.7; font-size: 0.85em\">Discipline (mode <code>clSentence</code>): while ON, additional Reach discount −1 (stacks with Init 1 for a total of −2 on Blood-Debt-reach). Click this feature on the sheet to toggle the stance.</span></p><p><em>Pilot: lock exact upkeep curve and break condition after one playtest cycle.</em></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"clMode\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>The Sentence</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> Stance (signature)  ·  <strong>Action:</strong> Action (open / drop)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Hold to bind primary targets of sustained manifestations by name (mechanical hook for holds, binds, compelled-truth). Pays 1 Clarity per scene of upkeep against Clarity.</span></p></div>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "advancement": {},
+        "identifier": "cl_mode_sentence",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 11
+        },
+        "properties": [],
+        "requirements": "Cosmic Linguist 11",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "r5DULAhp98iub0mt",
+      "flags": {
+        "fourththing": {
+          "discipline": {
+            "mode": {
+              "key": "clSentence",
+              "grants": {
+                "reachDiscount": 1
+              }
+            }
+          }
+        },
+        "bbttcc": {},
+        "dnd5e": {},
+        "autoanimations": {
+          "id": "9a60f00c-9d2e-4e18-a077-a6d69a62f76c",
+          "label": "Cosmic Linguist: Initiation 11 — The Sentence (Signature Mode)",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "darkpurple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423987710,
+        "modifiedTime": 1792989613269,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "rH14MEUCWkqoBV3C",
+      "sort": 350000
+    },
+    {
+      "_id": "qnDvqcPMmi45RqwK",
+      "name": "Annotator: Circle Discipline",
+      "type": "feat",
+      "img": "icons/magic/symbols/ring-circle-smoke-blue.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>(3rd Level)</em></p><p>You reduce misfire risk through formal preparation.</p><p>When you cast using:</p><ul><li><p>Diagrams</p></li><li><p>Circles</p></li><li><p>Correspondence-correct timing</p></li><li><p>Proper ritual framing</p></li></ul><p>Reduce misfire risk gained (GM adjudicated; typically by 1).</p><p>This applies only when the preparation meaningfully exists in fiction.</p><p>You are not suppressing risk.</p><p>You are managing it.</p>",
+          "chat": ""
+        },
+        "identifier": "annotator_circle_discipline",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 3
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "annotator_circle_discipline"
+        }
+      },
+      "folder": "7fCEbHBaAKFkEuHN",
+      "sort": 400000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": "Item.zoepU5NLs3DyKtiY",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423987710,
+        "modifiedTime": 1792977785089,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      }
+    },
+    {
+      "_id": "hXmu6S77pexpTK3j",
+      "name": "Annotator: Ritual Annotation",
+      "type": "feat",
+      "img": "icons/magic/symbols/rune-sigil-hook-white-red.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>(3rd Level)</em></p><p>You annotate rituals with correspondence-perfect notes.</p><h3>Effects</h3><ul><li><p>Ritual casting is faster or more stable (GM adjudicated).</p></li><li><p>Aligned rituals bank additional Surge.</p></li><li><p>Misaligned rituals generate a gentler misfire band than usual.</p></li></ul><p>Your rituals are not safer because they are weaker.</p><p>They are safer because they are correct.</p>",
+          "chat": ""
+        },
+        "identifier": "annotator_ritual_annotation",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 3
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "annotator_ritual_annotation"
+        }
+      },
+      "folder": "7fCEbHBaAKFkEuHN",
+      "sort": 800000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": "Item.aIw8v94NHWDQqs3H",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423987711,
+        "modifiedTime": 1792977785089,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      }
+    },
+    {
+      "_id": "WnUHCzLISQrTYBAf",
+      "name": "Annotator: Stored Annotation",
+      "type": "feat",
+      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>(6th Level)</em></p><p>You bank one prepared manifestation as a sigiled casting.</p><p>After deliberate preparation:</p><ul><li><p>Store one prepared manifestation as an inscribed annotation.</p></li><li><p>Later, cast it quickly without losing the stored working until the stored version is discharged.</p></li></ul><p>This does not remove misfire risk.</p><p>It front-loads stability.</p><p>You prepared yesterday so you can survive today.</p><p></p>",
+          "chat": ""
+        },
+        "identifier": "annotator_stored_annotation",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 6
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "annotator_stored_annotation"
+        },
+        "autoanimations": {
+          "id": "7c8048cf-27d0-4dbd-8aa6-f7875d69ea84",
+          "label": "Annotator: Stored Annotation",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "music",
+              "animation": "notes",
+              "variant": "01",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "7fCEbHBaAKFkEuHN",
+      "sort": 681250,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": "Item.qqk83xyKxkWSi5bM",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423987711,
+        "modifiedTime": 1792989613269,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      }
+    },
+    {
+      "name": "Sure Recitation",
+      "type": "feat",
+      "img": "icons/magic/symbols/runes-triangle-orange.webp",
+      "folder": "QbGNBV70xh9pF0eh",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "BBTTCC Manifestation Techniques v1",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<h2>Sure Recitation</h2><p><em>You speak your workings cleanly, even under pressure.</em></p><hr /><h3>Rules</h3><p>On any manifestation <strong>cast roll</strong>, you may <strong>reroll the lowest die</strong>, keeping the new result if it is higher.</p><p style=\"font-size:0.8rem;opacity:0.85;margin:0.5rem 0 0\"><strong>Requires:</strong> General — Tier 2+</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">⚙ Applies automatically: reroll the lowest die on every manifestation cast.</p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_sure_recitation",
+        "requirements": "General — Tier 2+",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 6
+        },
+        "properties": []
+      },
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-manifestation-techniques-v1",
+          "theme": "Reach, scale & signature"
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "caster-check",
+              "mode": "reroll-lowest",
+              "note": "Sure Recitation"
+            }
+          ]
+        }
+      },
+      "_id": "3xIG5Fo6ooLN34Gd",
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423987711,
+        "modifiedTime": 1791423987711,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Scavenged Insight",
+      "type": "feat",
+      "img": "icons/environment/settlement/house-two-stories.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Core Feats (Batch 3)",
+          "revision": 1,
+          "rules": "2026"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Scavenged Insight</h2><p><em>Debris tells stories.</em></p><hr /><h3>Rules</h3><p>After a combat encounter, you may ask the GM one factual question about what the enemies were carrying, guarding, or afraid of.</p><p class=\"ft-engine-note\"><em>✍ Table rule.</em></p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_scavenged_insight",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-batch3",
+          "featNumber": 57,
+          "generatedAt": "2026-01-19T05:04:20.693394Z"
+        }
+      },
+      "_id": "ymds7Cs1ZhWYWoUr",
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 125000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": "Item.24g8mxNy4iJ6bcxE",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423987711,
+        "modifiedTime": 1791423987716,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      }
+    },
+    {
+      "name": "Pact-Pen Stylus",
+      "type": "weapon",
+      "img": "icons/weapons/swords/sword-gold-holy.webp",
+      "system": {
+        "category": "melee",
+        "intent": "presence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d4",
+          "attribute": "presence",
+          "type": "sephirotic",
+          "damageFlavor": "binding",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1,
+          "units": "sq"
+        },
+        "tags": [
+          "stylus",
+          "binding",
+          "pactkeeper-favored"
+        ],
+        "effect": "Binding: on hit, target either honors a prior oath or takes 1 stress (GM call).",
+        "flavor": "Looks like a fountain pen. Reads like a contract.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>A heavy stylus of vow-shaft and witness-glass. Held by Pactkeepers; favored when an oath needs an enforcement clause.</p><p><b>Binding.</b> On a clean hit, GM may invite the target to honor an oath they have previously sworn — at GM discretion, the target either complies or takes 1 stress.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Binding: on hit, target either honors a prior oath or takes 1 stress (GM call).</p>\n<ul>\n <li><strong>Damage:</strong> 1d4 Sephirotic damage to <em>Integrity</em> <span style=\"opacity:.75\">(binding)</span></li>\n <li><strong>Faculty:</strong> Presence</li>\n <li><strong>Attack:</strong> Melee (Presence)</li>\n <li><strong>Reach:</strong> Melee</li>\n <li><strong>Duration:</strong> Scene</li>\n <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "footprint": 1,
+              "reach": "5",
+              "frame": "weapon",
+              "signature": "Words that can't be unwritten.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "attuned",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {
+                "binding": true
+              },
+              "lore": "<p>A heavy stylus of vow-shaft and witness-glass. Held by Pactkeepers; favored when an oath needs an enforcement clause.</p><p><b>Binding.</b> On a clean hit, GM may invite the target to honor an oath they have previously sworn — at GM discretion, the target either complies or takes 1 stress.</p>",
+              "materialOf": [
+                "oath-ink",
+                "vow-shaft",
+                "witness-glass"
+              ],
+              "price": {
+                "marks": 150,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII weapon stamp",
+                "bound": "attuned",
+                "saleBack": 60
+              }
+            }
+          },
+          "manifestSheetMode": {
+            "bytUGWIOqq9eT7Or": "display"
+          },
+          "equipped": true
+        },
+        "autoanimations": {
+          "id": "a54064e5-a79e-4ad3-b366-8551c191df7b",
+          "label": "Pact-Pen Stylus",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "dagger",
+              "variant": "01",
+              "color": "white",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5,
+          "meleeSwitch": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "arrow",
+              "variant": "regular",
+              "color": "regular",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "detect": "automatic",
+              "range": 2,
+              "returning": false,
+              "switchType": "on"
+            }
+          }
+        }
+      },
+      "folder": "H6eMhWQrjwcwZcBi",
+      "_id": "Ut9QlohPhiiXG4f4",
+      "effects": [],
+      "sort": 700000,
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423987711,
+        "modifiedTime": 1791423987716,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Hex-Warded Duster",
+      "type": "armor",
+      "img": "icons/equipment/chest/breastplate-banded-steel-grey.webp",
+      "_id": "26Vc21Ehb0WUJa0F",
+      "effects": [
+        {
+          "name": "⚙️ Defense Grant",
+          "transfer": false,
+          "disabled": false,
+          "flags": {
+            "fourththing": {
+              "defenseGrant": true
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "flags.fourththing.grant.resists",
+                "value": "qliphothic",
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.guard",
+                "value": 2,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.resolve",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "em0kCa3kGAPKiubl",
+          "img": "icons/svg/aura.svg",
+          "type": "base",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.368",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.5",
+            "createdTime": 1791423987712,
+            "modifiedTime": 1791423987712,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "folder": "TNrB6kEiHS0KwwJT",
+      "sort": 150000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423987712,
+        "modifiedTime": 1792989119097,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {
+        "guardBonus": 2,
+        "evasionBonus": 0,
+        "resolveBonus": 1,
+        "resistances": [
+          "qliphothic"
+        ],
+        "armorSkill": "fitting",
+        "equipped": false,
+        "tags": [
+          "light",
+          "hex-warded",
+          "frontier",
+          "attunement"
+        ],
+        "category": "armor",
+        "source": "",
+        "description": {
+          "value": "<p>A long frontier coat with hex-script stitched into the lining and threshold-wax worked into the seams. Light enough to ride in, warded enough to sleep in. The wrongness slides off it like rain off oilcloth.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Light</p></li><li><p><strong>Defense:</strong> Guard +2, Resolve +1</p></li><li><p><strong>Requires:</strong> Fitting (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 450 Nonlethal marks</p></li></ul>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "grants": {
+            "resistances": [
+              "qliphothic"
+            ]
+          },
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "footprint": 1,
+              "reach": "self",
+              "frame": "armor",
+              "signature": "Keeps the dust out. Keeps the worse things out too.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "attuned",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "",
+              "materialOf": [
+                "herd-leather",
+                "hex-script",
+                "threshold-wax"
+              ],
+              "price": {
+                "marks": 400,
+                "currency": "nonlethal",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII light armor — qliphothic ward",
+                "bound": "attuned",
+                "saleBack": 160
+              },
+              "grants": {
+                "resistances": [
+                  "qliphothic"
+                ]
+              }
+            }
+          },
+          "equipped": true
+        }
+      }
+    }
+  ],
+  "effects": [],
+  "sort": 0,
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.5",
+    "createdTime": 1791423985341,
+    "modifiedTime": 1791423988037,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!dy0hstNZGEvyKUrl"
+}

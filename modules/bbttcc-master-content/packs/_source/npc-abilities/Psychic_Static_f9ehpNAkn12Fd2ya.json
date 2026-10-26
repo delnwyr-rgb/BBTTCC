@@ -1,0 +1,77 @@
+{
+  "name": "Psychic Static",
+  "type": "feat",
+  "img": "icons/weapons/guns/pistol-silenced.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>One creature within 24 squares rolls Mind vs DC 18 or cannot manifest until the end of its next turn — the channel is full of other people's nightmares, all of them shouting.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "save": {
+                "attr": "mind",
+                "dc": 18,
+                "onSave": "negate"
+              }
+            }
+          },
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Psychic Static"
+            },
+            "do": {
+              "prompt": "Cannot manifest until the end of its next turn."
+            },
+            "narrative": true
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Lewd Miasma"
+        ],
+        "sourceIds": [
+          "Tw8Qy7Bg0pwKC29k"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "f9ehpNAkn12Fd2ya",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069956,
+    "modifiedTime": 1792989070041,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!f9ehpNAkn12Fd2ya"
+}

@@ -3,8 +3,14 @@
   "type": "feat",
   "img": "icons/tools/navigation/compass-worn-copper.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Repair Fortifications</b></p><p><b>Cost:</b> Economy 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>repair_fortifications</code></p>",
+      "value": "<p><strong>Repair Fortifications</strong></p><p>Target a hex you hold whose primary facility is damaged: it recovers one damage step at once. Does nothing on an intact facility.</p><p><em>Cost: Economy 20 marks.</em></p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "repair-fortifications",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -44,6 +46,9 @@
         "storyOnly": false,
         "availability": null,
         "unlockKey": null
+      },
+      "effects": {
+        "text": "Target a hex you hold whose primary facility is damaged: it recovers one damage step at once. Does nothing on an intact facility."
       }
     }
   },
@@ -59,12 +64,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063192798,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989010560,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!sTyUD3Ap5S5QHfEb"
 }

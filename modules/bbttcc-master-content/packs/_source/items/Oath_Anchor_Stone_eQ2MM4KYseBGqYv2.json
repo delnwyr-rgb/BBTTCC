@@ -9,6 +9,7 @@
     ],
     "category": "gear",
     "source": "Phase 7 Seed (2026-05-10)",
+    "quantity": 1,
     "description": {
       "value": "<p>A carved anchorstone bound to a treaty. While the stone is intact, the treaty holds; cracking it pings every signatory across the hex.</p>",
       "chat": ""
@@ -44,7 +45,7 @@
             "charges": {
               "value": 1,
               "max": 1,
-              "recoverPer": "week"
+              "recoverPer": "day"
             },
             "failure": "drain",
             "origin": "septcraft"
@@ -72,12 +73,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778963325935,
-    "modifiedTime": 1778963325935,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988927502,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

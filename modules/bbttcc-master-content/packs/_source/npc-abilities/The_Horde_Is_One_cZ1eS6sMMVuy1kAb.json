@@ -1,0 +1,50 @@
+{
+  "name": "The Horde Is One",
+  "type": "feature",
+  "img": "icons/magic/holy/angel-wings-gray.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Horde occupies other creatures' spaces freely and pours through any opening a single raven could pass. It cannot regain Integrity or gain temporary Integrity — except through Consume Magic. It is not healing. It is replacing.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "cZ1eS6sMMVuy1kAb",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Ashen Horde"
+        ],
+        "sourceIds": [
+          "knO0GK8qKCeyNC6N"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069978,
+    "modifiedTime": 1792989070054,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!cZ1eS6sMMVuy1kAb"
+}

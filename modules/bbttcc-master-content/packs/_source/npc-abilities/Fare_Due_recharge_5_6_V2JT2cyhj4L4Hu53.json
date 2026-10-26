@@ -1,0 +1,155 @@
+{
+  "name": "Fare Due (recharge 5–6)",
+  "type": "weapon",
+  "img": "icons/commodities/currency/coins-assorted-mix-copper.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "soul",
+    "skill": "channel",
+    "damage": {
+      "formula": "2d8",
+      "attribute": "soul",
+      "type": "qliphothic",
+      "damageFlavor": "the drowned count",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 6,
+      "long": 18
+    },
+    "tags": [
+      "bestiary",
+      "tier-ii",
+      "lineage-revenant",
+      "boss",
+      "signature"
+    ],
+    "effect": "Cone 6 squares. — targets roll vs Resolve (DC 14). Half damage on success. On a failed save the target is Compelled for 1 round: it steps toward the water.",
+    "flavor": "Eleven voices say the fare together.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "compelled"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 14,
+        "saveAttributeOverrides": {}
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 14,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "cone",
+        "size": 30
+      }
+    },
+    "description": {
+      "value": "<p><strong>Area Attack.</strong> Each creature in a 6-square. cone rolls vs DC 14. Damage: <code>2d8</code> qliphothic (the drowned count). On a failed save the target is Compelled for 1 round: it steps toward the water.</p><p><em>Eleven voices say the fare together.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "frame": "save",
+          "aoeShape": "cone",
+          "aoeSize": 30,
+          "dc": 14,
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII save × 1",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [],
+        "recharge": {
+          "mode": "d6",
+          "min": 5
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Ferryman of the Drowned South"
+        ],
+        "sourceIds": [
+          "MHVUvyZbNGxeWytB"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "V2JT2cyhj4L4Hu53",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069929,
+    "modifiedTime": 1792989070013,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!V2JT2cyhj4L4Hu53"
+}

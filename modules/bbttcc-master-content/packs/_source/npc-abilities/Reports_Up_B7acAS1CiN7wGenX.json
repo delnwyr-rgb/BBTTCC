@@ -1,0 +1,90 @@
+{
+  "name": "Reports Up",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "mortal",
+      "witness"
+    ],
+    "description": {
+      "value": "<p>On death, the Witness's last sight is transmitted to the nearest Witness within a mile. While any other Witness is within a mile, this one cannot be surprised.</p><p><em>Gathers, reports, dies anonymously.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "zero",
+            "do": {
+              "prompt": "Reports Up: its last sight is transmitted to the nearest Witness within a hex."
+            },
+            "narrative": true
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "mortal"
+        }
+      },
+      "passives": {
+        "aura": {
+          "radius": 1056,
+          "who": "allies",
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "note": "Reports Up — the lieutenant relays"
+            }
+          ],
+          "note": "Initiate minions cannot be surprised (GM)"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Witness Apotheon",
+          "Witness Initiate"
+        ],
+        "sourceIds": [
+          "OhNxMsImWa4bBZYA",
+          "le5vxgOyNRqbVnbo"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "B7acAS1CiN7wGenX",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069959,
+    "modifiedTime": 1792989070042,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!B7acAS1CiN7wGenX"
+}

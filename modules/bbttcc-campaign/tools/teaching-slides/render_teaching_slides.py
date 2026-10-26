@@ -96,14 +96,14 @@ GROUND_Y = 880                       # the ground line in slides 4–7 (below Ma
 TREE_TOP, TREE_SCALE = 90, 0.88      # the Tree sits wholly above the ground line
 # Tree of Life: three pillars, classical layout (unit coords → screen)
 SEPH = {  # name: (col, row)
-    "keter": (0, 0), "chokmah": (1, 1), "binah": (-1, 1), "chesed": (1, 2.4), "gevurah": (-1, 2.4),
+    "keter": (0, 0), "chokmah": (1, 1), "binah": (-1, 1), "chesed": (1, 2.4), "geburah": (-1, 2.4),
     "tiferet": (0, 3.2), "netzach": (1, 4.4), "hod": (-1, 4.4), "yesod": (0, 5.3), "malkuth": (0, 6.6)}
 PATHS = [("keter", "chokmah"), ("keter", "binah"), ("keter", "tiferet"), ("chokmah", "binah"), ("chokmah", "tiferet"),
-         ("chokmah", "chesed"), ("binah", "tiferet"), ("binah", "gevurah"), ("chesed", "gevurah"), ("chesed", "tiferet"),
-         ("chesed", "netzach"), ("gevurah", "tiferet"), ("gevurah", "hod"), ("tiferet", "netzach"), ("tiferet", "hod"),
+         ("chokmah", "chesed"), ("binah", "tiferet"), ("binah", "geburah"), ("chesed", "geburah"), ("chesed", "tiferet"),
+         ("chesed", "netzach"), ("geburah", "tiferet"), ("geburah", "hod"), ("tiferet", "netzach"), ("tiferet", "hod"),
          ("tiferet", "yesod"), ("netzach", "hod"), ("netzach", "yesod"), ("netzach", "malkuth"), ("hod", "yesod"),
          ("hod", "malkuth"), ("yesod", "malkuth")]
-FLASH = ["keter", "chokmah", "binah", "chesed", "gevurah", "tiferet", "netzach", "hod", "yesod", "malkuth"]
+FLASH = ["keter", "chokmah", "binah", "chesed", "geburah", "tiferet", "netzach", "hod", "yesod", "malkuth"]
 
 def tree_pos(name, cx=960, top=TREE_TOP, dx=190, dy=115, droop=0.0, scale=TREE_SCALE):
     c, r = SEPH[name]

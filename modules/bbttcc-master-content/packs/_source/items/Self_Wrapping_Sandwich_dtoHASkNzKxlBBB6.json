@@ -10,6 +10,7 @@
     ],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>A wax-paper sandwich that re-folds itself when you set it down. Take a bite, set it down, look up, look back: re-wrapped. Take another bite, set it down. Re-wrapped. The bread stays fresh. The filling stays at exactly the temperature it was when you got it. You have been eating this sandwich for three days now. So has the previous owner, apparently. So has the owner before them.</p><p><strong>Eternal Lunch.</strong> Heals 1 Stress per scene if eaten during the scene. Cannot be eaten in fewer than 4 actions across at least 4 scenes. The sandwich never spoils. The sandwich never runs out. The sandwich is approximately 60% as satisfying as a real sandwich.</p>",
       "chat": ""
@@ -66,11 +67,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777437725668,
-    "modifiedTime": 1778541973059,
+    "modifiedTime": 1792974834887,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

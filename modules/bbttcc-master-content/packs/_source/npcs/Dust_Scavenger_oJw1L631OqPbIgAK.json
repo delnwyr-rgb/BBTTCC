@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 25,
-        "max": 25
+        "max": 25,
+        "temp": 0
       },
       "stress": {
         "value": 12,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,6 +145,9 @@
     },
     "conditionImmunities": [],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -155,6 +160,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "A scrap-clad survivor turned predator. Carries rusty knives and stolen rations."
     }
   },
   "flags": {
@@ -185,16 +194,19 @@
             ]
           },
           "price": {
-            "marks": 150,
-            "bounty": 150,
-            "hire": 375,
-            "ransom": 250,
+            "marks": 5,
+            "bounty": 5,
+            "hire": 10,
+            "ransom": 10,
             "currency": "violence",
             "gmOverride": false,
-            "notes": "TI light stealth (bestiary) — bounty 150 / hire 375 / ransom 250 marks (paid in violence)"
-          }
+            "notes": "TI light mortal — bounty 5 / hire 10 marks; credited to the pool matching the method (default violence)"
+          },
+          "lineage": "mortal",
+          "subLineage": "raider"
         }
-      }
+      },
+      "creatureType": "humanoid"
     }
   },
   "_id": "oJw1L631OqPbIgAK",
@@ -290,7 +302,195 @@
     "appendNumber": false,
     "prependAdjective": false
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Ambush Crew",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "mortal",
+          "raider"
+        ],
+        "description": {
+          "value": "<p>In the first round of combat, the raider rerolls the lowest die on attack rolls against any creature that hasn't acted yet. If reduced below half Integrity, they must succeed a DC 12 Soul check at the start of their turn or disengage and run.</p><p><em>They fight like people who have to eat tonight.</em></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "firstRound": true,
+                  "targetNotActed": true
+                },
+                "do": {
+                  "reroll": "attack"
+                },
+                "label": "Ambush Crew"
+              },
+              {
+                "on": "bloodied",
+                "do": {
+                  "morale": {
+                    "attr": "soul",
+                    "dc": 12,
+                    "outcome": "disengages and runs at full speed"
+                  }
+                }
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "mortal"
+            }
+          },
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "when": "firstRound",
+              "vs": "a creature that hasn't taken a turn yet",
+              "note": "Ambush Crew"
+            }
+          ]
+        }
+      },
+      "_id": "Mxg0XPLzfEoBGwgU",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791342350634,
+        "modifiedTime": 1791422261408,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Sidearm",
+      "type": "weapon",
+      "img": "icons/weapons/swords/swords-sharp-worn.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "blade",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1,
+          "value": 5,
+          "units": "ft"
+        },
+        "tags": [
+          "lineage-strike",
+          "mortal"
+        ],
+        "effect": "",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "frame": "attack",
+              "lineageStrike": "mortal",
+              "price": {
+                "marks": 50,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI attack × 1",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        }
+      },
+      "_id": "Da4WvWORtzNc4T3i",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342350634,
+        "modifiedTime": 1791342350635,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
   "effects": [],
   "folder": "uMhSIaldbbcnBh0H",
   "ownership": {
@@ -298,12 +498,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118706703,
-    "modifiedTime": 1783219918015,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989139173,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-oldenborn-furrykin=\"v1\" style=\"display:none\"></div>\n<p><em>\"The mountain does not fall. It negotiates.\"</em></p><p><strong>Mountain Stance (tier uses / Soma Break).</strong> Bonus action — enter a stance for 1 minute. While in the stance: reroll the lowest die on Violence checks; creatures provoke opportunity attacks from you even when they Disengage.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldEarthboundMountainStance\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Mountain Stance</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> tier uses / Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Bonus action (1-min stance) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Enter stance: reroll-lowest on Violence checks for 1 min, foes provoke OAs even when Disengaging.</div>\n</div>",
+      "value": "\n<p><em>\"The mountain does not fall. It negotiates.\"</em></p><p><strong>Mountain Stance (tier uses / Soma Break).</strong> Bonus action — enter a stance for 1 minute. While in the stance: reroll the lowest die on Violence checks; creatures provoke reaction strikes from you even when they Disengage.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldEarthboundMountainStance\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Mountain Stance</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> tier uses / Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Bonus action (1-min stance) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Enter stance: reroll-lowest on Violence checks for 1 min, foes provoke OAs even when Disengaging.</div>\n</div>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 11
     },
     "properties": [],
     "requirements": "Oldenborn",
@@ -41,7 +41,6 @@
       "kind": "oldenborn",
       "feature": "mountain_stance",
       "lineage": "Earthbound",
-      "tierLevel": 11,
       "version": "1.0.0"
     },
     "fourththing": {
@@ -58,9 +57,10 @@
           "note": "on Violence checks [TODO(adv-call)] and Violence check, and creatures provoke…"
         },
         {
-          "context": "opportunity-attack",
+          "context": "attack",
           "mode": "reroll-lowest",
-          "note": "on Violence checks [TODO(adv-call)] and Violence check, and creatures provoke…"
+          "note": "on Violence checks [TODO(adv-call)] and Violence check, and creatures provoke…",
+          "when": "unmoved"
         }
       ]
     },
@@ -254,12 +254,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004114716,
-    "modifiedTime": 1781116102334,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988986277,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

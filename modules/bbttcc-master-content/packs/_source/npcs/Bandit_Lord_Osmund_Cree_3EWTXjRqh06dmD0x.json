@@ -23,53 +23,54 @@
         "level": "",
         "display": ""
       },
-      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.hcromagn0h1tage8",
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.nKHhfdL3U98tJj6r",
       "nativeLinks": {
-        "heritageName": "Human Heritage: Cro-Magnon",
-        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.hcromagn0h1tage8",
+        "heritageName": "Oldenborn Heritage: Stormborn Nomad",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.nKHhfdL3U98tJj6r",
         "heritageApplied": true,
-        "ancestryName": "Human",
-        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.a3057e55a2fc1026",
+        "ancestryName": "Oldenborn",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.7709222f8ff32964",
         "ancestryApplied": true
       }
     },
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "the profession, the books, pensions, the summit, the program, the Drowned South, punts, tolls",
-        "notes": "[BANDIT-ACCORD-2026-07-13 \u00b7 renamed 2026-09-27] PRIVATE TRUTH \u2014 Lady Ralph Maccio, Bandit Lord of the Drowned South; a Stormborn Nomad woman in her sixties who named herself after the greatest pre-Shattering warrior and will explain the film if asked. Voice: unhurried bookkeeper's calm with swamp-dry humor; talks about banditry exclusively in the vocabulary of management (crews are 'staff', ambushes are 'collections', casualties are 'the bad column'). NOT evil \u2014 OVER-EXTENDED: inherited three crews, married into two more, and has been paying survivor pensions from a shrinking toll base for years; the books are real, meticulous, and slowly drowning her. HER ECHO (tells if asked plainly, once): the night she understood the profession was finished wasn't a battle \u2014 it was a payroll. She sat in the stilt-hall with the pension ledger and realized the Drowned South's future was a program some out-of-towners were running out of a fire station, and what she felt wasn't anger. It was RELIEF, and the relief frightened her more than any raid ever had. ON THE PROGRAM: she tracks the Stewards' mercy count more accurately than they do \u2014 every spared crew, every bowl of soup, every reformed hire is a line in HER books too, in a column she titled, privately, THE EXIT. GUARDS: never discusses camp positions or whistle-codes while the profession is live; won't badmouth her own people, even the splinter-minded ones ('every ledger has a bad column; you don't read it aloud'). TELLS: squares stacked items to true edges when the pension math comes up; says 'four hundred souls' never 'four hundred fighters'; laughs exactly once, quietly, when someone calls her a warlord; the faded cloth headband is the one vanity."
+        "notes": "[BANDIT-ACCORD-2026-07-13 · renamed 2026-09-27] PRIVATE TRUTH — Lady Ralph Maccio, Bandit Lord of the Drowned South; a Stormborn Nomad woman in her sixties who named herself after the greatest pre-Shattering warrior and will explain the film if asked. Voice: unhurried bookkeeper's calm with swamp-dry humor; talks about banditry exclusively in the vocabulary of management (crews are 'staff', ambushes are 'collections', casualties are 'the bad column'). NOT evil — OVER-EXTENDED: inherited three crews, married into two more, and has been paying survivor pensions from a shrinking toll base for years; the books are real, meticulous, and slowly drowning her. HER ECHO (tells if asked plainly, once): the night she understood the profession was finished wasn't a battle — it was a payroll. She sat in the stilt-hall with the pension ledger and realized the Drowned South's future was a program some out-of-towners were running out of a fire station, and what she felt wasn't anger. It was RELIEF, and the relief frightened her more than any raid ever had. ON THE PROGRAM: she tracks the Stewards' mercy count more accurately than they do — every spared crew, every bowl of soup, every reformed hire is a line in HER books too, in a column she titled, privately, THE EXIT. GUARDS: never discusses camp positions or whistle-codes while the profession is live; won't badmouth her own people, even the splinter-minded ones ('every ledger has a bad column; you don't read it aloud'). TELLS: squares stacked items to true edges when the pension math comes up; says 'four hundred souls' never 'four hundred fighters'; laughs exactly once, quietly, when someone calls her a warlord; the faded cloth headband is the one vanity.",
+        "secretsRaw": "[BANDIT-ACCORD-RETROFIT-2026-09-30]\nThe Exit Column :: stirThePot :: a Steward asks what the books are FOR :: Every spared crew, every bowl of soup, every reformed hire is a line in her ledger too, in a column she titled, privately, THE EXIT. She has been keeping the Stewards' books more accurately than the Stewards. She shows the page. It is longer than the bad column.\nThe Payroll Night :: favorPlus1 :: asked plainly, once, when she knew the profession was finished :: Not a battle. A payroll. She sat in the stilt-hall with the pension ledger and understood that the Drowned South's future was a program some out-of-towners were running out of a fire station, and what she felt was RELIEF, and the relief frightened her more than any raid.\nThe Name :: rollPlus2 :: someone says her name wrong, or asks about it :: She named herself after the greatest warrior of the pre-Shattering era and will explain the film, at length, and be wrong about most of it, and exactly right about the part that matters: the whole point was that he waited."
       }
     }
   },
   "system": {
     "biography": {
-      "concept": "",
+      "concept": "Lady Ralph Maccio, Warlord of the Drowned South — keeps the books at the stilt-hall (Act 2)",
       "notes": ""
     },
     "details": {
-      "level": 1,
+      "level": 8,
       "xp": 0,
       "statPoints": 0,
       "skillPoints": 0,
-      "tier": 1
+      "tier": 2
     },
     "attributes": {
       "violence": {
-        "value": 2
+        "value": 3
       },
       "intrigue": {
-        "value": 2
+        "value": 3
       },
       "presence": {
-        "value": 2
+        "value": 10
       },
       "body": {
-        "value": 2
+        "value": 3
       },
       "mind": {
-        "value": 2
+        "value": 4
       },
       "soul": {
-        "value": 2
+        "value": 6
       }
     },
     "skills": {
@@ -116,17 +117,17 @@
       "streetwise": {
         "attribute": "intrigue",
         "label": "Streetwise",
-        "value": 0
+        "value": 1
       },
       "diplomacy": {
         "attribute": "presence",
         "label": "Diplomacy",
-        "value": 0
+        "value": 4
       },
       "intimidation": {
         "attribute": "presence",
         "label": "Intimidation",
-        "value": 0
+        "value": 2
       },
       "empathy": {
         "attribute": "presence",
@@ -185,10 +186,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 0
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -197,7 +208,8 @@
     "derived": {
       "integrity": {
         "value": 16,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 16,
@@ -287,7 +299,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -322,18 +335,22 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
-      "id": null,
-      "loyalty": 0
+      "id": "oK7VitQikQ6FN3PI",
+      "loyalty": 0,
+      "name": "Evil Bad Faction"
     },
     "bloodDebt": {
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
@@ -344,7 +361,7 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "icons/svg/mystery-man.svg",
+      "src": "art/devin-knight/Monsters2_October/Brigand_Leader.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -428,123 +445,29 @@
     "prependAdjective": false
   },
   "_id": "3EWTXjRqh06dmD0x",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "art/devin-knight/Monsters2_October/Brigand_Leader.webp",
   "items": [
     {
-      "_id": "CN6TB42YKO2exyje",
-      "name": "Keeper",
-      "type": "class",
-      "img": "icons/environment/settlement/temple-night.webp",
-      "system": {
-        "category": "calling",
-        "identifier": "calling-keeper",
-        "source": "Callings",
-        "tags": [
-          "calling",
-          "keeper",
-          "soul"
-        ],
-        "description": {
-          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
-          "chat": ""
-        }
-      },
-      "effects": [],
-      "folder": null,
-      "sort": 600000,
-      "ownership": {
-        "default": 0,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "flags": {
-        "bbttcc": {
-          "kind": "calling"
-        },
-        "fourththing": {
-          "calling": {
-            "key": "keeper",
-            "faculty": "soul",
-            "signature": "faith",
-            "secondary": "insight",
-            "pool": "Soft Power",
-            "awakens": "Pactkeeper or Dreamwalker"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534553,
-        "modifiedTime": 1784177534553,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_key": "!actors.items!3EWTXjRqh06dmD0x.CN6TB42YKO2exyje"
-    },
-    {
-      "_id": "YxYsJ8aeJwbKhX0g",
-      "name": "Keeper \u2014 Apprentice (Tier I)",
-      "type": "feature",
-      "img": "icons/environment/settlement/temple-night.webp",
-      "system": {
-        "category": "calling",
-        "source": "Callings",
-        "tags": [
-          "calling",
-          "keeper",
-          "tier-1"
-        ],
-        "description": {
-          "value": "<p><strong>Keeper \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 The rites:</strong> Weddings, funerals, blessings; participants recover 2\u00d7tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick \u2014 Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
-          "chat": ""
-        }
-      },
-      "effects": [],
-      "folder": null,
-      "sort": 601000,
-      "ownership": {
-        "default": 0,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "flags": {
-        "fourththing": {
-          "calling": {
-            "key": "keeper",
-            "tier": 1
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534553,
-        "modifiedTime": 1784177534553,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_key": "!actors.items!3EWTXjRqh06dmD0x.YxYsJ8aeJwbKhX0g"
-    },
-    {
-      "name": "Human",
+      "name": "Oldenborn",
       "type": "species",
-      "img": "art/bbttcc/asli-icons/human_denisovan_1.webp",
+      "img": "art/bbttcc/asli-icons/oldborne_sky.webp",
       "system": {
         "category": "ancestry",
-        "source": "Bad Eden (2024 rules)",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 2,
+          "book": "",
+          "license": ""
+        },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Cro-Magnon, Denisovan, Florensis, Neanderthal</strong>.</p><p>This root grants the shared Human core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>\u201cHumanity is not special. It\u2019s just stubborn enough to keep moving when reality begs it to stop.\u201d</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
+          "value": "\n<p><strong>Oldenborn.</strong></p><p><em>“You are not an elf. You are the memory of a place that learned to walk again.”</em></p>\n<p><strong>Dream-Flesh.</strong> You do not sleep. When you rest, you drift into Yesod—symbolic memory-space—unless you choose otherwise. You are immune to magical sleep, and you can always tell when a dream, illusion, or constructed reality is present.</p>\n<p><strong>Old Memory, Old Paths.</strong> You reroll the lowest die on checks to interpret ruins, follow ley-lines, identify altered terrain, and sense metaphysical instability. You always know if a place feels <em>remembered</em>, <em>abandoned</em>, or <em>contested</em> (the GM answers vaguely).</p>\n<p><strong>Veil-Sight.</strong> You perceive the <em>presence</em> of spirits, ghosts, Spark echoes, and noospheric constructs. This grants awareness, not perfect sight.</p>\n<p><strong>You Are Remembered.</strong> When you first meet a community, the GM chooses (or rolls) whether you are met with reverence, fear, or familiarity. It’s never neutral.</p>",
           "chat": ""
         },
         "advancement": [
           {
-            "_id": "36a73edc22fe4dab",
+            "_id": "8dfcdc1a6e9e4b08",
             "type": "Size",
             "configuration": {
               "sizes": [
@@ -557,12 +480,12 @@
             "value": {}
           },
           {
-            "_id": "1d8d99cab1380a3c",
+            "_id": "95aae7269bab1119",
             "type": "ItemGrant",
             "configuration": {
               "items": [
                 {
-                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.DViThQoRpsEri1Ta",
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.TNlzDCiEgc27ZzOl",
                   "optional": false
                 }
               ],
@@ -571,8 +494,8 @@
             },
             "value": {},
             "level": 0,
-            "title": "Stubborn Spark",
-            "hint": "Gain the core Human ancestry traits."
+            "title": "Old Memory, Old Flesh",
+            "hint": "Gain the core Oldenborn ancestry traits."
           }
         ],
         "movement": {
@@ -587,14 +510,14 @@
           "tremorsense": null,
           "truesight": null,
           "units": null,
-          "special": "Lineage Memory (ancient human adaptations)."
+          "special": "Veil-Sight (awareness of spirits, Spark echoes, noospheric constructs)."
         },
         "type": {
           "value": "humanoid",
           "custom": "",
-          "subtype": "Human"
+          "subtype": "Oldenborn"
         },
-        "identifier": "human"
+        "identifier": "oldenborn"
       },
       "flags": {
         "dnd5e": {
@@ -602,49 +525,37 @@
         },
         "bbttcc": {
           "kind": "ancestry",
-          "family": "human",
+          "family": "oldenborn",
           "version": "2.0.0",
           "date": "2026-04-18",
           "heritageList": [
-            "cro_magnon",
-            "denisovan",
-            "florensis",
-            "neanderthal"
+            "earthbound",
+            "lumenwrought",
+            "stormborn_nomad",
+            "rustland_scavenger"
           ],
-          "refactorNotes": "v2: Erectus retired, Cro-Magnon added. Denisovan retained from v1 canon (heritage list was underdocumented in v1 loose-JSON exports)."
+          "refactorNotes": "v2 simplification: Sky-Threaded and Ember-Touched retired. Stormborn Nomad and Rustland Scavenger demoted from species to Oldenborn heritages."
         },
         "fourththing": {
           "rerolls": [
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "on one checks [TODO(adv-call)] of your choice each round (declare before roll\u2026"
+              "note": "on checks to interpret ruins, follow ley-lines, identify altered terrain, and…"
+            },
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "checks to interpret ruins, follow ley-lines, identify altered terrain, and se…"
             }
           ],
           "triggers": [
             {
-              "event": "on-save-fail",
-              "limit": {
-                "window": "soma-break",
-                "uses": 1
-              },
+              "event": "on-soma-break",
               "effect": {
                 "kind": "chat-prompt",
                 "args": {
-                  "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
-                }
-              }
-            },
-            {
-              "event": "on-skill-fail",
-              "limit": {
-                "window": "soma-break",
-                "uses": 1
-              },
-              "effect": {
-                "kind": "chat-prompt",
-                "args": {
-                  "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
+                  "body": "Dream-Flesh. You do not sleep: this rest, you drift into Yesod — symbolic memory-space — unless you choose otherwise."
                 }
               }
             }
@@ -663,85 +574,483 @@
                 "saleBack": 12
               }
             }
-          },
-          "grantedByAncestry": "Human"
+          }
         }
       },
       "effects": [],
-      "folder": "byroU26YSQP4OQUn",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.a3057e55a2fc1026",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534553,
-        "modifiedTime": 1784177534553,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
+      "folder": "5PPxNybRn7zD0k0G",
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 0,
-      "_id": "7VUmw1sZJyPaFW6C",
-      "_key": "!actors.items!3EWTXjRqh06dmD0x.7VUmw1sZJyPaFW6C"
+      "_id": "1a5JX21HXCsP7kdl",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071304,
+        "modifiedTime": 1792989071304,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
-      "name": "Human: Stubborn Spark",
+      "name": "Oldenborn Heritage: Stormborn Nomad",
       "type": "feat",
-      "img": "icons/magic/fire/orb-lightning-sun.webp",
+      "img": "art/bbttcc/asli-icons/oldenborn_lumenwrought_2.webp",
       "system": {
         "category": "technique",
         "source": {
-          "custom": "Bad Eden",
+          "revision": 2,
           "rules": "2024",
-          "revision": 1
+          "book": "",
+          "custom": "Bad Eden",
+          "license": ""
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cHumanity is not special. It\u2019s just stubborn enough to keep moving when reality begs it to stop.\u201d</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Neanderthal, Denisovan, Florensis, Erectus). Your lineage grants Tier powers as you level.</p>",
+          "value": "<p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Oldenborn (Stormborn Nomad).</strong> Your place-soul is a weather front. You are the caravan memory of every tribe that crossed the ash squalls and came out the other side. When you walk, the wind remembers that you used to be the reason it had a name.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Fey, Stormborn).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 6 squares.</li><li><strong>Attributes.</strong> Oldenborn does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> or <strong>Soul</strong> in fiction and through Tier powers.</li></ul><h3>Oldenborn Core</h3><p>At character creation you gain <strong>Old Memory, Old Flesh</strong> (Dream-Flesh, Old Paths, Veil-Sight, You Are Remembered) from the Oldenborn ancestry.</p><h3>Stormborn Nomad Traits</h3><ul><li><strong>Storm-Legs.</strong> You reroll the lowest die on Athletics checks made in wind, rain or ash-fall, and on checks to keep your footing on a moving vehicle or rig.</li><li><strong>Weatherwise.</strong> Your Tier I power: 12-hour weather foresight within one hex and Wind-Read, a reaction that halves weather damage.</li></ul><h3>Stormborn Tier Powers</h3><p>You gain <strong>Weatherwise</strong> at creation, then <strong>Ward of the Gale</strong> at Initiation 5, <strong>Nomad Networks</strong> at Initiation 11 and <strong>Skywalker</strong> at Initiation 17.</p><h3>Domain Edge</h3><ul><li><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Non-Lethal marks</strong> and <strong>+20 Faith marks</strong> at campaign start.</li></ul>",
           "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "STORMADVH0000001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.QBioiHJ2FkGqTYGi",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Stormborn Tier I",
+            "hint": "Gain your Stormborn Tier I power (maps to legacy Weatherwise grant)."
+          }
+        ],
+        "identifier": "oldenborn_stormborn_nomad_heritage",
+        "requirements": "Oldenborn",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         },
         "uses": {
           "spent": 0,
           "recovery": [],
           "max": ""
         },
+        "activities": {}
+      },
+      "effects": [
+        {
+          "name": "Weatherwise: Athletics +1",
+          "img": "icons/magic/lightning/bolt-strike-yellow.webp",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.athletics.value",
+                "value": 1,
+                "type": "add",
+                "priority": 10,
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Passive: Weatherwise: Athletics +1",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "sprint": "passive-ae-2026-04-28",
+              "batch": 2
+            }
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "_id": "mQnjMrKLIIARncu6",
+          "showIcon": 1,
+          "folder": null,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989071304,
+            "modifiedTime": 1792989071304,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "oldenborn",
+          "lineage": "Stormborn Nomad",
+          "opEffects": {
+            "nonLethal": 2,
+            "faith": 1
+          },
+          "terrainSynergy": [
+            "Desert / Ash Wastes",
+            "Swamp / Mire"
+          ],
+          "preventHazardOncePerTurn": true,
+          "darknessRite": {
+            "cost": {
+              "faith": 1
+            },
+            "dc": 15,
+            "delta": -1,
+            "scope": "regional"
+          },
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "normalizedFrom": "Stormborn Nomad [species]"
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "skill": "athletics",
+              "mode": "reroll-lowest",
+              "vs": "in wind, rain or ash-fall, or keeping your footing on a moving vehicle",
+              "note": "Storm-Legs"
+            }
+          ],
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "non-lethal-op",
+              "amount": 2
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "faith-op",
+              "amount": 2
+            }
+          ],
+          "triggers": []
+        },
+        "autoanimations": {
+          "id": "e6fbba5a-95e1-4ae1-a19d-8ae34a9e8ebb",
+          "label": "Oldenborn Heritage: Stormborn Nomad",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "loop",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "tOhJngjYdqMlM2Xz",
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "UiKRknNJzybatsAn",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071304,
+        "modifiedTime": 1792989604328,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Oldenborn (Stormborn Nomad): Weatherwise",
+      "type": "feat",
+      "img": "icons/magic/lightning/bolt-cloud-sky-white.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "RFI-native",
+          "revision": 3,
+          "book": "Heritages v1.1",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "\n<p><em>“The sky is a language. You were the first to learn the punctuation.”</em></p>\n<p><strong>Weatherwise.</strong> You always know the upcoming weather for the next 12 hours within one hex (five miles), even underground. You reroll the lowest die on checks against weather effects (extreme cold, extreme heat, wind, lightning).</p>\n<p><strong>Wind-Read (1/Soma Break).</strong> When you would take lightning, thunder, or thermal damage, you may use your reaction to halve it. The wind shifts as you do.</p>\n<p><strong>Ash-Walker.</strong> You ignore difficult terrain caused by snow, ash, dust, sand, or shifting earth.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldStormbornWeatherwise\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Wind-Read</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Reaction (on weather damage) — an Offer card appears when it applies  ·  <strong>Weatherwise</strong> is always on.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Halve incoming lightning, thunder or thermal damage as a reaction. Weather foresight for 12 hours within one hex; reroll the lowest die on defense checks against weather.</span></p></div>",
+          "chat": ""
+        },
         "advancement": {},
-        "identifier": "human-stubborn-spark",
-        "crewed": false,
-        "enchant": {},
+        "identifier": "oldenborn_stormborn_nomad_tier1",
+        "requirements": "Oldenborn (Stormborn Nomad)",
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 1
         },
-        "properties": [],
-        "requirements": "Human",
-        "type": {
-          "value": "",
-          "subtype": ""
+        "uses": {
+          "spent": 0,
+          "recovery": [
+            {
+              "period": "sr",
+              "type": "recoverAll",
+              "formula": ""
+            }
+          ],
+          "max": ""
         },
         "activities": {}
       },
+      "effects": [],
       "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
         "bbttcc": {
-          "kind": "human",
-          "feature": "core",
-          "lineage": "any",
-          "version": "1.0.0"
+          "kind": "oldenborn",
+          "feature": "weatherwise",
+          "lineage": "Stormborn Nomad",
+          "tierLevel": 1,
+          "version": "1.1.0",
+          "date": "2026-04-19",
+          "rfiNative": true
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "defense",
+              "mode": "reroll-lowest",
+              "vs": "weather effects — extreme cold, extreme heat, wind, lightning",
+              "note": "Weatherwise"
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-incoming-damage",
+              "predicate": {
+                "tag": [
+                  "electrical",
+                  "lightning",
+                  "cold",
+                  "thunder",
+                  "thermal"
+                ]
+              },
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "offer": true,
+              "offerText": "Wind-Read — reaction: halve this weather damage.",
+              "effect": {
+                "kind": "modify-incoming-damage",
+                "args": {
+                  "mode": "half"
+                }
+              }
+            }
+          ]
         },
         "autoanimations": {
-          "id": "8488fb2b-0f73-4241-a7a2-9758b5555936",
-          "label": "Human: Stubborn Spark",
+          "id": "2c7756cc-b240-44f2-8281-d8cdc566c8ca",
+          "label": "Oldenborn (Stormborn Nomad): Weatherwise",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -915,151 +1224,1198 @@
           "isCustomized": true,
           "fromAmmo": false,
           "version": 5
-        },
-        "fourththing": {
-          "grantedByAncestry": "Human"
+        }
+      },
+      "folder": "yDsEwVuM6VuCj5c6",
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "cUU9yoIxVdfhyjna",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071304,
+        "modifiedTime": 1792989604329,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "_id": "LMxNKDEDfI9wXmoV",
+      "name": "Keeper",
+      "type": "class",
+      "img": "icons/environment/settlement/temple-night.webp",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-keeper",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "keeper",
+          "soul"
+        ],
+        "description": {
+          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling — the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
         }
       },
       "effects": [],
-      "folder": "byroU26YSQP4OQUn",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.jbiG7wAqTlBgEcDw",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534553,
-        "modifiedTime": 1784177534553,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
+      "folder": null,
+      "sort": 600000,
       "ownership": {
         "default": 0,
-        "vmUfDuSYUIe7V5uB": 3,
         "bytUGWIOqq9eT7Or": 3
       },
-      "sort": 100000,
-      "_id": "8o4ahKoCzKHE4umk",
-      "_key": "!actors.items!3EWTXjRqh06dmD0x.8o4ahKoCzKHE4umk"
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "faculty": "soul",
+            "signature": "faith",
+            "secondary": "insight",
+            "pool": "Soft Power",
+            "awakens": "Pactkeeper or Dreamwalker"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071304,
+        "modifiedTime": 1792989071304,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
-      "name": "Human Heritage: Cro-Magnon",
-      "type": "feat",
-      "img": "art/bbttcc/asli-icons/human_erectus_1.webp",
+      "_id": "541drCtUFRvNNWfB",
+      "name": "Keeper — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/environment/settlement/temple-night.webp",
       "system": {
-        "category": "technique",
-        "source": "Bad Eden (2024 rules)",
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "keeper",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Keeper — Apprentice</strong> (Tier I).</p><p><strong>Trade — The rites:</strong> Weddings, funerals, blessings; participants recover 2×tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick — Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 601000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "tier": 1
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "who": "targets",
+                "do": {
+                  "removeCondition": [
+                    "shaken"
+                  ],
+                  "bankReroll": {
+                    "context": "defense",
+                    "note": "Steady the Soul"
+                  }
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071304,
+        "modifiedTime": 1792989071304,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "_id": "mUfZUTKiAKRAVPaM",
+      "name": "Keeper — Initiate (Tier II)",
+      "type": "feature",
+      "img": "icons/environment/settlement/temple-night.webp",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "keeper",
+          "tier-2"
+        ],
+        "description": {
+          "value": "<p><strong>Keeper — Initiate</strong> (Tier II).</p><p><strong>Trade — Hear the burden:</strong> One confession/counsel session clears one fear- or grief-borne condition. <span style=\"opacity:0.7\">Standard fee 30 marks (Soft Power).</span></p><p><strong>Trick — Warding Sign</strong> <em>(1/scene)</em>: Impose −2 on one incoming psychic or qliphothic effect.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 602000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "tier": 2
+          },
+          "triggers": [
+            {
+              "event": "on-ally-incoming-damage",
+              "radius": 6,
+              "predicate": {
+                "tag": [
+                  "psychic",
+                  "qliphothic"
+                ]
+              },
+              "limit": {
+                "window": "scene",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "modify-incoming-damage",
+                "args": {
+                  "mode": "minus",
+                  "amount": 2
+                }
+              }
+            }
+          ]
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071304,
+        "modifiedTime": 1792989071304,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "_id": "QGnxaiH4e0xt5eeq",
+      "name": "Oldenborn (Stormborn Nomad): Ward of the Gale",
+      "type": "feat",
+      "img": "icons/magic/unholy/barrier-shield-glowing-pink.webp",
+      "system": {
+        "category": "feature",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 2,
+          "book": "",
+          "license": ""
+        },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>New Heritage (v2).</strong> Cro-Magnon replaces Erectus in the Human heritage lineup.</p><p><em>\u201cHumanity is the species that keeps walking even when the map says \u2018stop.\u2019\u201d</em></p><p><strong>Human (Cro-Magnon).</strong> You are not a fantasy human. You are the cognitive, symbolic, cooperative inheritance of the lineage that first painted ancestors on cave walls, buried its dead with flowers, and traded ochre across a continent it had no map for.</p><p>Where Neanderthal is <em>strength</em> and Florensis is <em>reach</em>, Cro-Magnon is <em>pattern</em>. Language, ritual, coalition. You are the human branch that kept explaining things until the explanation started working.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>MND (Mind)</strong> or <strong>PRE (Presence)</strong>\u2014expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory).</p><h3>Cro-Magnon Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Cro-Magnon powers emphasize: <em>Symbolic Thought</em> (ritual and language sensitivity), <em>Coalition Instinct</em> (cooperation bonuses with allies), <em>Tool Mind</em> (improvisational tool use), and <em>Narrative Memory</em> (lore retention that persists across generations).</p>",
+          "value": "\n<p><em>\"Storms have learned to lean around you instead of straight through you.\"</em></p><p><strong>Ward of the Gale (1/Soma Break).</strong> Reaction — when you take damage from a visible attack, hazard, or effect, wrap yourself in whirling air and reduce that damage by half until the start of your next turn (apply resistance first, then halve the remainder).</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldStormWardOfTheGale\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Ward of the Gale</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Reaction (on damage) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Halve incoming damage from a visible source until start of next turn (resistance first, then halve).</div>\n</div>",
           "chat": ""
         },
-        "advancement": [
-          {
-            "_id": "hcromagadv000001",
-            "type": "ItemGrant",
-            "configuration": {
-              "items": [
-                {
-                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.HCROMAGNONTIERI0",
-                  "optional": false
-                }
-              ],
-              "optional": false,
-              "spell": null
-            },
-            "value": {},
-            "level": 0,
-            "title": "Cro-Magnon Tier I",
-            "hint": "Gain your Cro-Magnon Tier I lineage power."
-          }
-        ],
-        "identifier": "human_cro_magnon_heritage",
-        "requirements": "Human",
+        "advancement": {},
+        "identifier": "oldenborn-stormborn-ward-of-the-gale",
+        "requirements": "Oldenborn (Stormborn Nomad)",
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 5
         },
         "uses": {
           "spent": 0,
           "recovery": [],
           "max": ""
         },
-        "activities": {}
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
       },
       "effects": [],
       "flags": {
         "dnd5e": {
-          "originType": "species"
+          "originType": "feat"
         },
         "bbttcc": {
-          "kind": "heritage",
-          "family": "human",
-          "lineage": "Cro-Magnon",
+          "kind": "oldenborn",
+          "feature": "ward_of_the_gale",
+          "lineage": "Stormborn Nomad",
+          "tierLevel": 5,
           "version": "2.0.0",
-          "date": "2026-04-18",
-          "normalizedFrom": "new-in-v2",
-          "replaces": "human_erectus_heritage"
+          "date": "2026-04-19"
         },
         "fourththing": {
-          "resourceGrants": [
+          "rerolls": [
             {
-              "cadence": "per-campaign-start",
-              "resource": "intrigue-op",
-              "amount": 2
-            },
-            {
-              "cadence": "per-campaign-start",
-              "resource": "soft-power-op",
-              "amount": 2
+              "context": "defense",
+              "mode": "reroll-lowest",
+              "note": "on defense checks [TODO(adv-call)] against weather and travel hazards (sand, …"
             }
           ],
           "triggers": [
             {
-              "event": "on-help-action",
+              "event": "on-incoming-damage",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "offer": true,
+              "offerText": "Ward of the Gale — reaction: wrap yourself in whirling air and halve this hit.",
               "effect": {
-                "kind": "chat-prompt",
+                "kind": "modify-incoming-damage",
                 "args": {
-                  "body": "Coalition Instinct. When you use the Help action on an ally's check and they succeed, the ally also recovers 1 point of Stress"
+                  "mode": "half"
                 }
               }
             }
-          ],
-          "grantedByHeritage": "Cro-Magnon"
+          ]
+        },
+        "autoanimations": {
+          "id": "821b8dcb-4232-4c84-be8d-624c6b3653c6",
+          "label": "Oldenborn (Stormborn Nomad): Ward of the Gale",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "shieldfx",
+              "animation": "ice",
+              "variant": "03",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
         }
       },
-      "folder": "XtVszfKGXh1D3T29",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.hcromagn0h1tage8",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534553,
-        "modifiedTime": 1784177534553,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
+      "folder": "s4JLtG8OuVuIzQpi",
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
-      "sort": 100000,
-      "_id": "60AgcypByAmGzsWp",
-      "_key": "!actors.items!3EWTXjRqh06dmD0x.60AgcypByAmGzsWp"
+      "sort": -100000,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071304,
+        "modifiedTime": 1792989071304,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "_id": "67HeXU4zXCreTncm",
+      "name": "Calm the Mob",
+      "type": "feat",
+      "img": "icons/skills/social/diplomacy-peace-alliance.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Feats Expansion v1 (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><h2>Calm the Mob</h2><p><em>Crowds don’t think. They feel. So you give them something else to feel.</em></p><hr><h3>Rules</h3><p>You gain a skill rank in Diplomacy (Presence) or Intimidation (Presence) (your choice). If you already have it, its rank rises by one instead.</p><p>When you spend at least 1 minute addressing a group of non-hostile or uncertain creatures, you may make a Presence (Diplomacy (Presence) or Intimidation (Presence)) check (DC set by the GM). On a success, you reduce immediate hostility: the crowd hesitates, disperses, or agrees to hear terms. On a failure, you still buy time, but a complication occurs (a challenger steps forward, guards arrive, a rumor spreads).</p><p class=\"ft-engine-note\"><em>⚙ +1 to Diplomacy or Intimidation — whichever you rank higher.</em></p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_calm_the_mob",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-expansion-v1",
+          "generatedAt": "2026-01-18T20:40:45.007126+00:00"
+        },
+        "autoanimations": {
+          "id": "ft-calm-the-mob",
+          "label": "Calm the Mob",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "intro",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 4900000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071304,
+        "modifiedTime": 1792989071304,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Hex-Script Pistol",
+      "type": "weapon",
+      "img": "icons/weapons/guns/pistol-revolver-long.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 18,
+          "units": "sq"
+        },
+        "tags": [
+          "tech"
+        ],
+        "effect": "",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>A rad-iron flintlock that burns Yesodium dust per shot. Each round inscribes the wound with a small, vicious hex.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Damage:</strong> 2d6 Kinetic damage to <em>Integrity</em></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 6 / 18 squares</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T2</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "weapon",
+              "bound": "free",
+              "materialOf": [
+                {
+                  "key": "yesodium",
+                  "qty": 1
+                },
+                {
+                  "key": "rad-iron",
+                  "qty": 2
+                },
+                {
+                  "key": "hex-iron-cleat",
+                  "qty": 1
+                }
+              ],
+              "tech": {
+                "kind": "fueled",
+                "fuel": {
+                  "materialKey": "yesodium",
+                  "perActivation": 1
+                },
+                "failure": "misfire",
+                "origin": "hex-script"
+              },
+              "price": {
+                "marks": 300,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII weapon × 1 × tech 2.0",
+                "bound": "free",
+                "saleBack": 120
+              }
+            }
+          },
+          "manifestSheetMode": {
+            "bytUGWIOqq9eT7Or": "display"
+          },
+          "equipped": true
+        },
+        "autoanimations": {
+          "id": "5dc103cb-393c-4f43-be08-248f1d9d55e2",
+          "label": "Hex-Script Pistol",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "spell",
+              "animation": "eldritchblast",
+              "variant": "01",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_id": "k62Qtx7CJfvhDBBq",
+      "effects": [],
+      "folder": "H6eMhWQrjwcwZcBi",
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071304,
+        "modifiedTime": 1792989071304,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Hex-Warded Duster",
+      "type": "armor",
+      "img": "icons/equipment/chest/breastplate-banded-steel-grey.webp",
+      "_id": "PIYpazeZU1lltWGs",
+      "effects": [
+        {
+          "name": "⚙️ Defense Grant",
+          "transfer": false,
+          "disabled": false,
+          "flags": {
+            "fourththing": {
+              "defenseGrant": true
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "flags.fourththing.grant.resists",
+                "value": "qliphothic",
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.guard",
+                "value": 2,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.resolve",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "em0kCa3kGAPKiubl",
+          "img": "icons/svg/aura.svg",
+          "type": "base",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989071304,
+            "modifiedTime": 1792989071304,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "folder": "TNrB6kEiHS0KwwJT",
+      "sort": 150000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "system": {
+        "guardBonus": 2,
+        "evasionBonus": 0,
+        "resolveBonus": 1,
+        "resistances": [
+          "qliphothic"
+        ],
+        "armorSkill": "fitting",
+        "equipped": false,
+        "tags": [
+          "light",
+          "hex-warded",
+          "frontier",
+          "attunement"
+        ],
+        "category": "armor",
+        "source": "",
+        "description": {
+          "value": "<p>A long frontier coat with hex-script stitched into the lining and threshold-wax worked into the seams. Light enough to ride in, warded enough to sleep in. The wrongness slides off it like rain off oilcloth.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Light</p></li><li><p><strong>Defense:</strong> Guard +2, Resolve +1</p></li><li><p><strong>Requires:</strong> Fitting (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 450 Nonlethal marks</p></li></ul>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "grants": {
+            "resistances": [
+              "qliphothic"
+            ]
+          },
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "footprint": 1,
+              "reach": "self",
+              "frame": "armor",
+              "signature": "Keeps the dust out. Keeps the worse things out too.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "attuned",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "",
+              "materialOf": [
+                "herd-leather",
+                "hex-script",
+                "threshold-wax"
+              ],
+              "price": {
+                "marks": 400,
+                "currency": "nonlethal",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII light armor — qliphothic ward",
+                "bound": "attuned",
+                "saleBack": 160
+              },
+              "grants": {
+                "resistances": [
+                  "qliphothic"
+                ]
+              }
+            }
+          },
+          "equipped": true
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071304,
+        "modifiedTime": 1792989071304,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -1067,15 +2423,16 @@
   "sort": 100000,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177534553,
-    "modifiedTime": 1784177534553,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989071304,
+    "modifiedTime": 1792989071308,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

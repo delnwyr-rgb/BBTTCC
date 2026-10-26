@@ -5,9 +5,16 @@
 export const CONDITIONS = ["staggered", "scarred", "calmed", "blinded", "prone", "shaken", "burning", "restrained", "charmed", "compelled", "imposed"];
 export const ATTRS = ["violence", "intrigue", "presence", "body", "mind", "soul"];
 export const DAMAGE_TYPES = ["kinetic", "electrical", "thermal", "chemical", "poison", "sephirotic", "psychic", "qliphothic", "radiation"];
-const ON = ["attack", "hit", "turnStart", "selfTurnStart", "bloodied", "zero", "allyDamaged", "use", "saveFail", "struck", "damaged", "attacked"];
-const IF = ["firstRound", "targetNotActed", "allyAdjacentToTarget", "targetTag", "targetCondition", "weapon", "damageType", "ownerNotAttacked", "ownerBloodied", "targetBloodied", "ownerNotBloodied", "ownerAirborne", "targetNotAirborne", "ownerMovedSquares"];
-const DO = ["reroll", "condition", "save", "damage", "dot", "radiation", "noReactions", "tempIntegrity", "heal", "morale", "ward", "prompt", "bankReroll", "bankBonus", "removeCondition", "impose"];
+const ON = ["attack", "hit", "turnStart", "selfTurnStart", "bloodied", "zero", "allyDamaged", "use", "saveFail", "struck", "damaged", "attacked", "enemyDamaged"];   // enemyDamaged 2026-10-26
+const IF = ["firstRound", "targetNotActed", "allyAdjacentToTarget", "targetTag", "targetCondition", "weapon", "damageType", "ownerNotAttacked", "ownerBloodied", "targetBloodied", "ownerNotBloodied", "ownerAirborne", "targetNotAirborne", "ownerMovedSquares",
+  "critical", "maxDie", "chance", "ownerHidden"];   // 2026-10-26 (BS7)
+const DO = ["reroll", "condition", "save", "damage", "dot", "radiation", "noReactions", "tempIntegrity", "heal", "morale", "ward", "prompt", "bankReroll", "bankBonus", "removeCondition", "impose",
+  "push", "pull", "shift", "slow", "teleport", "swap", "clarity", "noBonusAction", "immune", "evasive", "disposition", "vanish", "hide", "spawn", "template", "clearBank", "random", "redirect"];   // 2026-10-26 (BS7; redirect = CO18 ward-and-take-the-hit)
+export const REAL_DO = DO.filter(k => k !== "prompt");
+/** a rule the engine executes (anything beyond a chat prompt), or one the author marked GM-fiat on purpose */
+export const ruleIsReal = r => !!r && Object.keys(r.do ?? {}).some(k => REAL_DO.includes(k) && r.do[k] !== undefined && r.do[k] !== false && r.do[k] !== null && r.do[k] !== "");
+export const npcAutoIsReal = na => !!na && typeof na === "object" && ((na.rules ?? []).some(ruleIsReal) || !!na.recharge || !!na.requires || !!na.ignoreResists);
+export const promptOnlyRules = na => (na?.rules ?? []).filter(r => !ruleIsReal(r) && !r.narrative);
 const DURATIONS = ["1-round", "2-rounds", "3-rounds", "until-saved", "scene"];
 const FORMULA = /^\d+(d\d+)?([+-]\d+)?$/;
 // ftPlaceAreaTemplate's vocabulary (module.js SHAPE_MAP) — NOT Foundry's circle/ray/rect
@@ -18,15 +25,18 @@ export function validateNpcAuto(na, where = "") {
   const p = []; const err = m => p.push(`${where}${m}`);
   if (!na) return p;
   if (typeof na !== "object") return [`${where}npcAuto not an object`];
-  for (const k of Object.keys(na)) if (!["v", "rules", "recharge", "spent"].includes(k)) err(`unknown npcAuto key "${k}"`);
+  for (const k of Object.keys(na)) if (!["v", "rules", "recharge", "spent", "spentRound", "requires", "ignoreResists"].includes(k)) err(`unknown npcAuto key "${k}"`);
+  if (na.requires) for (const k of Object.keys(na.requires)) if (k !== "ownerBloodied") err(`unknown requires.${k}`);
   if (na.recharge) {
-    if (!["d6", "combat"].includes(na.recharge.mode)) err(`recharge.mode "${na.recharge.mode}"`);
+    if (!["d6", "combat", "nextTurn"].includes(na.recharge.mode)) err(`recharge.mode "${na.recharge.mode}"`);
     if (na.recharge.mode === "d6" && !(na.recharge.min >= 2 && na.recharge.min <= 6)) err(`recharge.min ${na.recharge.min}`);
   }
   (na.rules ?? []).forEach((r, i) => {
     const w = `rule ${i} `;
     if (!ON.includes(r.on)) err(`${w}on "${r.on}"`);
-    for (const k of Object.keys(r)) if (!["on", "if", "do", "radius", "who", "limit", "label"].includes(k)) err(`${w}unknown key "${k}"`);
+    for (const k of Object.keys(r)) if (!["on", "if", "do", "radius", "who", "limit", "label", "to", "narrative"].includes(k)) err(`${w}unknown key "${k}"`);
+    if (r.to !== undefined && r.to !== "self") err(`${w}to "${r.to}" (only "self")`);
+    if (r.narrative && ruleIsReal(r)) err(`${w}narrative on a rule that executes`);
     for (const k of Object.keys(r.if ?? {})) if (!IF.includes(k)) err(`${w}unknown if.${k}`);
     if (!r.do || !Object.keys(r.do).length) err(`${w}empty do`);
     for (const k of Object.keys(r.do ?? {})) if (!DO.includes(k)) err(`${w}unknown do.${k}`);
@@ -35,11 +45,22 @@ export function validateNpcAuto(na, where = "") {
     if (d.reroll && d.reroll !== "attack-highest" && r.on !== "attack") err(`${w}reroll needs on:"attack"`);
     if (d.reroll === "attack-highest" && r.on !== "attacked") err(`${w}attack-highest needs on:"attacked"`);
     if (r.on === "attacked" && d.reroll !== "attack-highest") err(`${w}on:"attacked" only supports do.reroll:"attack-highest"`);
-    if (r.on === "damaged" && (d.condition || d.save || d.damage || d.dot || d.radiation || d.noReactions || d.impose || d.removeCondition || d.bankReroll || d.bankBonus)) err(`${w}on:"damaged" has no target — self effects only (heal/tempIntegrity/prompt)`);
+    if (r.on === "damaged" && r.to !== "self" && (d.condition || d.save || d.damage || d.dot || d.radiation || d.noReactions || d.impose || d.removeCondition || d.bankReroll || d.bankBonus)) err(`${w}on:"damaged" has no target — self effects only (heal/tempIntegrity/prompt) unless to:"self"`);
+    // 2026-10-26 verbs
+    for (const k of ["push", "pull", "shift", "slow"]) if (d[k] !== undefined && !(Number(d[k]) > 0)) err(`${w}${k} must be > 0`);
+    if (d.clarity !== undefined && !(typeof d.clarity === "number" || /^-?\s*\d+(d\d+)?$/.test(String(d.clarity).replace(/\s+/g, "")))) err(`${w}clarity "${d.clarity}"`);
+    for (const k of ["immune", "evasive"]) if (d[k] !== undefined && (typeof d[k] !== "object" || !(Number(d[k].rounds ?? 1) >= 1))) err(`${w}${k} needs {rounds}`);
+    if (d.disposition !== undefined && (typeof d.disposition !== "object" || ![-1, 0, 1].includes(Number(d.disposition.set ?? -1)) || !(Number(d.disposition.rounds ?? 3) >= 1))) err(`${w}disposition needs {set:-1|0|1, rounds}`);
+    if (d.spawn !== undefined && (typeof d.spawn !== "object" || !d.spawn.name)) err(`${w}spawn needs {name, count?}`);
+    if (d.template !== undefined && (typeof d.template !== "object" || !AREA_SHAPES.includes(d.template.shape) || !(Number(d.template.size) > 0))) err(`${w}template needs {shape, size(ft)}`);
+    if (d.random !== undefined && (!Array.isArray(d.random) || !d.random.length || d.random.some(e => !e || typeof e !== "object"))) err(`${w}random needs a non-empty array of {do}`);
+    if (r.on === "enemyDamaged" && !(r.radius > 0)) err(`${w}enemyDamaged needs radius`);
+    if ((r.on === "enemyDamaged") && !(d.damage || d.dot || d.condition || d.impose || d.prompt)) err(`${w}enemyDamaged runs damage/dot/condition/impose on the wounded enemy`);
     if (d.bankBonus && !(Number(d.bankBonus.bonus) !== 0)) err(`${w}bankBonus needs a bonus`);
     if (d.removeCondition && (!Array.isArray(d.removeCondition) || d.removeCondition.some(k => !CONDITIONS.includes(k)))) err(`${w}removeCondition ${JSON.stringify(d.removeCondition)}`);
     if (r.if?.ownerMovedSquares !== undefined && !(Number(r.if.ownerMovedSquares) > 0)) err(`${w}if.ownerMovedSquares must be > 0`);
-    if (r.who && r.on === "use" && !["self", "targets"].includes(r.who)) err(`${w}use who "${r.who}"`);
+    if (r.who && r.on === "use" && !["self", "targets", "enemies", "allies", "all"].includes(r.who)) err(`${w}use who "${r.who}"`);
+    if (r.who && ["enemies", "allies", "all"].includes(r.who) && !["turnStart", "use"].includes(r.on) && !(r.radius > 0)) err(`${w}a burst (who:${r.who}) needs radius`);
     for (const k of ["damageType"]) if (r.if?.[k] && !Array.isArray(r.if[k])) err(`${w}if.${k} must be an array`);
     if (r.if?.damageType) for (const t of r.if.damageType) if (!DAMAGE_TYPES.includes(t)) err(`${w}if.damageType "${t}"`);
     if (d.condition) {
@@ -58,7 +79,7 @@ export function validateNpcAuto(na, where = "") {
     if (d.morale && r.on !== "bloodied") err(`${w}morale needs on:"bloodied"`);
     if (d.ward !== undefined && (r.on !== "allyDamaged" || !(d.ward >= 0 && d.ward < 1))) err(`${w}ward ${d.ward} (needs on:"allyDamaged", 0 ≤ ward < 1)`);
     if (r.on === "turnStart" && !(r.radius > 0)) err(`${w}aura needs radius`);
-    if (r.who && r.on !== "use" && !["enemies", "allies", "all"].includes(r.who)) err(`${w}who "${r.who}"`);
+    if (r.who && r.on !== "use" && !["enemies", "allies", "all"].includes(r.who) && !(r.who === "self" && r.on === "allyDamaged")) err(`${w}who "${r.who}"`);   // CO18: allyDamaged who:"self" = self-ward
     if (r.limit && (!["round", "combat", "scene"].includes(r.limit.per) || !(r.limit.uses >= 1))) err(`${w}limit ${JSON.stringify(r.limit)}`);
   });
   return p;

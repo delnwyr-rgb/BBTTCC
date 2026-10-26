@@ -1,0 +1,68 @@
+{
+  "name": "Wall of Nullity",
+  "type": "feat",
+  "img": "icons/environment/settlement/tower-stone-blue.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The demon raises a wall of dull grey psychic static on a surface within 12 squares — up to 6 squares long, 2 high. It is opaque, blocks line of sight, and cannot be damaged. A creature that touches it or ends its turn adjacent to it takes 2d10 psychic damage (Stress). It stands for a minute, or until the demon drops.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "template": {
+                "shape": "line",
+                "size": 30
+              },
+              "prompt": "Touch it or end adjacent → 2d10 psychic to Stress."
+            },
+            "who": "self"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Obstructor Demon"
+        ],
+        "sourceIds": [
+          "vYVjgcHYwwYRM6J1"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "V79VbmU0uq8wA3lE",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069983,
+    "modifiedTime": 1792989070057,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!V79VbmU0uq8wA3lE"
+}

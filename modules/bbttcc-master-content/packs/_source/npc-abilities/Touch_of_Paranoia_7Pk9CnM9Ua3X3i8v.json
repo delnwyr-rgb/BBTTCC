@@ -1,0 +1,128 @@
+{
+  "name": "Touch of Paranoia",
+  "type": "weapon",
+  "img": "icons/magic/death/blood-corruption-vomit-red.webp",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "channel",
+    "damage": {
+      "formula": "3d8",
+      "attribute": "presence",
+      "type": "qliphothic",
+      "damageFlavor": "",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1
+    },
+    "tags": [],
+    "effect": "On a hit: Resolve check vs DC 16 or the target is Charmed for one round — utterly convinced its closest ally is a traitor, and obliged to act on it. Repeat the check at the end of each of its turns to shake it.",
+    "flavor": "A hand reaching out, a vortex of dark energy in its palm.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "resolution": {
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 16,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "charmed"
+        ],
+        "duration": "until-saved",
+        "saveEachRound": true,
+        "saveAttribute": "soul"
+      }
+    },
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "7Pk9CnM9Ua3X3i8v",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Whispering Deceiver"
+        ],
+        "sourceIds": [
+          "hIOAU3bYR4KkdPhw"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069980,
+    "modifiedTime": 1792989070055,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!7Pk9CnM9Ua3X3i8v"
+}

@@ -1,0 +1,86 @@
+{
+  "name": "Each Spell Is Also a Wound",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "mortal",
+      "cultist"
+    ],
+    "description": {
+      "value": "<p>Whenever the cultist uses a save-based or qliphothic attack, they also take 1 qliphothic damage to Stress. When they fail a check against being Charmed or Shaken, they may instead succeed once per scene by taking 1d4 Stress.</p><p><em>They were told the hum would stop. It did not stop.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "damageType": [
+                "qliphothic"
+              ]
+            },
+            "do": {
+              "damage": {
+                "formula": "1",
+                "type": "qliphothic",
+                "track": "stress"
+              }
+            },
+            "to": "self",
+            "label": "Each Spell Is Also a Wound"
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "mortal"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Bone Patriarch",
+          "Hex-Iron Berserker"
+        ],
+        "sourceIds": [
+          "sJdEi1VglScR4Urz",
+          "tZv6AIxvw4v6dB5L"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "HFJvDZIyjKobcGJe",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069928,
+    "modifiedTime": 1792989070011,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!HFJvDZIyjKobcGJe"
+}

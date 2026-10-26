@@ -6,13 +6,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
-      "revision": 2,
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Ironclad Training</h2><p><em>Armor isn’t weight. It’s permission.</em></p><hr /><h3>Rules</h3><p>While you are wearing armor or wielding a shield, you reroll the lowest die on defense checks against being knocked prone.</p><p>Additionally, when you would be pushed or pulled, you may reduce the distance moved by 1 square You can do so once per turn.</p><p class=\"ft-engine-note\"><em>⚙ In armor or with a shield, defense checks vs prone reroll the lowest die.</em></p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Ironclad Training</h2><p><em>Armor isn’t weight. It’s permission.</em></p><hr /><h3>Rules</h3><p>While you are wearing armor or wielding a shield, you reroll the lowest die on defense checks against being knocked prone.</p><p>Additionally, when you would be pushed or pulled, you may reduce the distance moved by 1 square. You can do so once per turn.</p><p class=\"ft-engine-note\"><em>⚙ In armor or with a shield, defense checks vs prone reroll the lowest die.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_ironclad_training",
@@ -65,11 +65,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1768802465828,
-    "modifiedTime": 1782164185980,
+    "modifiedTime": 1792977660966,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!q8F7HDBIeM1GFiNR"

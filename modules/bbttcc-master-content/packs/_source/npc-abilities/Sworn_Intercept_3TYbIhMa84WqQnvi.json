@@ -7,7 +7,7 @@
     "intent": "violence",
     "skill": "melee",
     "damage": {
-      "formula": "2d12",
+      "formula": "3d10",
       "attribute": "violence",
       "type": "kinetic",
       "damageFlavor": "intercepting-cut",
@@ -23,7 +23,7 @@
       "tier-iv",
       "role-brute"
     ],
-    "effect": "Triggered when an enemy moves within 5 ft. of the warlord. The guard makes one attack as a reaction. Damage die rerolls-the-lowest.",
+    "effect": "Triggered when an enemy moves within 1 square. of the warlord. The guard makes one attack as a reaction. Damage die rerolls-the-lowest.",
     "flavor": "The guard does not interrupt you. The interrupt was scheduled.",
     "manifestation": {
       "tier": 1,
@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +79,31 @@
             "saleBack": 540
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Hex-Warlord's Honored Guard"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attack",
+            "if": {
+              "weapon": "Sworn Intercept"
+            },
+            "do": {
+              "reroll": "damage"
+            }
+          },
+          {
+            "on": "selfTurnStart",
+            "do": {
+              "prompt": "Sworn Intercept: reaction strike when an enemy moves within 5 ft of the warlord."
+            },
+            "narrative": true
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "f12e16b8-3d84-4d87-ac34-e88ce70f329f",
+      "id": "ft-sworn-intercept",
       "label": "Sworn Intercept",
       "macro": {
         "enable": false,
@@ -268,50 +277,41 @@
       "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
-      "version": 5,
-      "meleeSwitch": {
-        "video": {
-          "dbSection": "range",
-          "menuType": "weapon",
-          "animation": "arrow",
-          "variant": "regular",
-          "color": "regular",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "detect": "automatic",
-          "range": 2,
-          "returning": false,
-          "switchType": "on"
-        }
+      "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Hex-Warlord's Honored Guard"
+        ],
+        "sourceIds": [
+          "mUM4tXeqeUagkLRJ"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "3TYbIhMa84WqQnvi",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024224185,
-    "modifiedTime": 1782167244986,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989047802,
+    "modifiedTime": 1792989047803,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!3TYbIhMa84WqQnvi"
 }

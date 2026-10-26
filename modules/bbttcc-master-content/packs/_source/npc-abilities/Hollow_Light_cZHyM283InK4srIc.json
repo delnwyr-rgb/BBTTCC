@@ -1,0 +1,137 @@
+{
+  "name": "Hollow Light",
+  "type": "weapon",
+  "img": "icons/magic/air/weather-sunlight-sky.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "violence",
+    "skill": "warding",
+    "damage": {
+      "formula": "4d8",
+      "attribute": "presence",
+      "type": "qliphothic",
+      "damageFlavor": "",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 18,
+      "long": 18
+    },
+    "tags": [
+      "aoe",
+      "shape-line",
+      "signature"
+    ],
+    "effect": "An 18-square line of false radiance, one square wide. Each creature in the line rolls an Evasion check vs DC 18. Fail: full damage to Stress and Blinded — the beam is full of tiny screaming skulls, and seeing that costs. Repeat Body vs DC 18 at end of turns to clear the blindness. Success: half damage, eyes shut in time.",
+    "flavor": "Brilliant gold, and wrong all the way through.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "intrigue",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 18,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "blinded"
+        ],
+        "duration": "until-saved",
+        "saveEachRound": true,
+        "saveAttribute": "body"
+      },
+      "area": {
+        "shape": "line",
+        "size": 90
+      }
+    },
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "cZHyM283InK4srIc",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Angel of Hollow Glory"
+        ],
+        "sourceIds": [
+          "yQZAnkNsEcE5kKtg"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069941,
+    "modifiedTime": 1792989070023,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!cZHyM283InK4srIc"
+}

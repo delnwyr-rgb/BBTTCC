@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Never Scattered [Option]",
+  "name": "Never Scattered",
   "type": "feat",
   "img": "icons/magic/fire/dagger-rune-enchant-flame-strong-orange.webp",
   "system": {
@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Never Scattered [Option]</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> logistics 10</p></div>",
+      "value": "<p><strong>Never Scattered</strong></p><p>Survivors' Militia. Domain-wide: next turn, infiltration (Intrigue) raids against your hexes are refused.</p><p><em>Cost: Logistics 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "optact_never_scattered"
+      "key": "optact_never_scattered",
+      "effects": {
+        "text": "Survivors' Militia. Domain-wide: next turn, infiltration (Intrigue) raids against your hexes are refused."
+      }
     }
   },
   "_id": "zeV5bNPELSNJRP3I",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601761,
-    "modifiedTime": 1782703702688,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988997033,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

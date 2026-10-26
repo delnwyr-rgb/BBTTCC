@@ -27,58 +27,6 @@
   },
   "effects": [
     {
-      "name": "Class L1: Fitting +1",
-      "img": "icons/skills/melee/sword-stylized-blue.webp",
-      "type": "base",
-      "disabled": false,
-      "transfer": true,
-      "description": "Granted by Shadow Courier — Tier 1: Liminal Operator at Tier 1.",
-      "flags": {
-        "fourththing": {
-          "passiveAuthored": true,
-          "aptitudeStamp": "2026-05-04",
-          "aptitudeAnchor": "Shadow Courier — Tier 1: Liminal Operator",
-          "aptitudeKind": "fitting"
-        }
-      },
-      "system": {
-        "changes": [
-          {
-            "key": "system.skills.fitting.value",
-            "value": 1,
-            "priority": 10,
-            "type": "add",
-            "phase": "initial"
-          }
-        ]
-      },
-      "_id": "EdrFshBq4aeLH5AM",
-      "start": null,
-      "duration": {
-        "value": null,
-        "units": "seconds",
-        "expiry": null,
-        "expired": false
-      },
-      "origin": null,
-      "tint": "#ffffff",
-      "statuses": [],
-      "showIcon": 1,
-      "folder": null,
-      "sort": 0,
-      "_stats": {
-        "coreVersion": "14.369",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.16",
-        "createdTime": 1791864374457,
-        "modifiedTime": 1791864374457,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      }
-    },
-    {
       "name": "Liminal Operator: Tinkering +1",
       "img": "icons/tools/smithing/anvil.webp",
       "type": "base",
@@ -243,6 +191,58 @@
         "duplicateSource": null,
         "exportSource": null
       }
+    },
+    {
+      "name": "Class L1: Fitting +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "description": "Granted by Shadow Courier — Tier 1: Liminal Operator at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Shadow Courier — Tier 1: Liminal Operator",
+          "aptitudeKind": "fitting"
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.fitting.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "EdrFshBq4aeLH5AM",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864374457,
+        "modifiedTime": 1791864374457,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "flags": {
@@ -269,12 +269,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777005233883,
-    "modifiedTime": 1782167240819,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907917790,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

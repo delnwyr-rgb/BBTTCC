@@ -1,0 +1,50 @@
+{
+  "name": "Keen Sight",
+  "type": "feature",
+  "img": "icons/weapons/staves/staff-ornate-eye.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Rolls twice and keeps the better result on sight-based checks to notice things. Especially things that glitter.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "BUjDwaikOSO8Xqb1",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Harab Serapel Scavenger"
+        ],
+        "sourceIds": [
+          "SmVDBIAjrDFTRjxt"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069947,
+    "modifiedTime": 1792989070033,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!BUjDwaikOSO8Xqb1"
+}

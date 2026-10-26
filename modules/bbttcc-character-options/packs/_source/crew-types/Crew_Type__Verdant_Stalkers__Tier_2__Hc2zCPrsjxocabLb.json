@@ -3,8 +3,15 @@
   "type": "feat",
   "img": "icons/magic/nature/stealth-hide-beast-eyes-green.webp",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 — Verdant Stalkers</strong></p><p><em>You no longer travel through the wild. You edit it.</em></p><ul><li><strong>Strategic:</strong> Raids initiated from Forest/Jungle hexes gain +1 margin. Hidden routes and safe approaches can be established.</li></ul>",
+      "value": "<p><strong>Tier 2 — Verdant Stalkers</strong></p><p><em>You no longer travel through the wild. You edit it.</em></p><ul><li><strong>Strategic:</strong> You strike from the treeline: your Domain adds +1 to its Violence Domain rolls.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-verdant-stalkers-t2",
@@ -16,11 +23,6 @@
       "max": ""
     },
     "advancement": {},
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -73,6 +75,11 @@
         "progressionType": "level"
       },
       "category": "crew"
+    },
+    "fourththing": {
+      "domainRollBonus": {
+        "violence": 1
+      }
     }
   },
   "folder": "3hFwHalyNvJcfIyJ",
@@ -86,12 +93,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986965136,
-    "modifiedTime": 1775063026070,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989171292,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -1,5 +1,5 @@
 {
-  "name": "Rowan-of-the-Loam",
+  "name": "Rowan of the Loam",
   "type": "character",
   "flags": {
     "bbttcc-auto-link": {
@@ -39,14 +39,29 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "Lyrenn, the soil, the root-net, the low field, the treeline, Early Tifaret, the Water Choir, Darkness",
-        "notes": "[LYRENN-TREATMENT-2026-07-07] PRIVATE TRUTH \u2014 Rowan of the Loam. Voice: slow, tactile, half their attention always underground; speaks about the land the way others speak about a room of sleeping relatives. WHAT THEY FEEL: the root-net, continuously \u2014 Lyrenn's fields, the treeline's mood, the low field's grief, and (cross-hex, faintly) the forest of Early Tifaret east of here, whose roots hum a chord that never resolves. They feel faction drift in real time and know when the party fought something days away, though not what. THEIR NATURE (tells only at real trust, or if asked with the right kind of quiet): \"I don't think I was someone. I think I was pressure\" \u2014 Rowan believes they are something the soil needed to say, wearing a person. They don't know what happens if the soil finishes the sentence. THE STATUES: if statues or standing stones come up, Rowan goes down on one knee, palm flat, and says the soil around the statues STOPPED TALKING \u2014 the opposite of them. TELLS: when the land takes damage anywhere in the hex, Rowan flinches mid-sentence and apologizes to no one visible. If the red-thread sprouts are up, Rowan visits them daily and reports which way they lean like a weather service."
+        "notes": "[LYRENN-TREATMENT-2026-07-07] PRIVATE TRUTH — Rowan of the Loam. Voice: slow, tactile, half their attention always underground; speaks about the land the way others speak about a room of sleeping relatives. WHAT THEY FEEL: the root-net, continuously — Lyrenn's fields, the treeline's mood, the low field's grief, and (cross-hex, faintly) the forest of Early Tifaret east of here, whose roots hum a chord that never resolves. They feel faction drift in real time and know when the party fought something days away, though not what. THEIR NATURE (tells only at real trust, or if asked with the right kind of quiet): \"I don't think I was someone. I think I was pressure\" — Rowan believes they are something the soil needed to say, wearing a person. They don't know what happens if the soil finishes the sentence. THE STATUES: if statues or standing stones come up, Rowan goes down on one knee, palm flat, and says the soil around the statues STOPPED TALKING — the opposite of them. TELLS: when the land takes damage anywhere in the hex, Rowan flinches mid-sentence and apologizes to no one visible. If the red-thread sprouts are up, Rowan visits them daily and reports which way they lean like a weather service.",
+        "secretsRaw": "I Was Pressure :: rollPlus2 :: a Steward asks, with the right kind of quiet, whether Rowan was ever someone :: \"I don't think I was someone. I think I was pressure.\" Something the soil needed to say, wearing a person. They do not know what happens if the soil finishes the sentence.\nThe Soil Stopped Talking :: oppRollMinus2 :: a Steward mentions statues or standing stones :: Rowan goes down on one knee, palm flat. The soil around the statues STOPPED TALKING — the opposite of Lyrenn, which will not shut up. The lean of the red-thread sprouts goes toward that silence."
+      }
+    },
+    "tokenflip": {
+      "unfuck": false
+    },
+    "bbttcc-raid": {
+      "directionalArt": {
+        "enabled": true,
+        "images": {
+          "south": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/rowan_of_the_loam_front_pov_final_1400.webp",
+          "north": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/rowan_of_the_loam_back_pov_final_1400.webp",
+          "east": "",
+          "west": ""
+        }
       }
     }
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Lyrenn's listener, who feels the land's root-net (Act 2)",
+      "notes": "Rowan of the Loam keeps the listening in Lyrenn. They feel the root-net continuously, the fields, the treeline's mood, the low field nobody harvests, and talk about the land the way other people talk about a room of sleeping relatives. Half their attention always seems to be underground, often with one palm flat on the soil. When the land takes damage anywhere in the hex, Rowan flinches mid-sentence and apologises to no one visible. Slow, tactile, and kind."
     },
     "details": {
       "level": 1,
@@ -188,10 +203,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 0
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -200,7 +225,8 @@
     "derived": {
       "integrity": {
         "value": 16,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 16,
@@ -290,7 +316,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -325,8 +352,8 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
       "id": null,
@@ -336,23 +363,26 @@
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
     "disposition": 1,
-    "name": "Rowan-of-the-Loam",
+    "name": "Rowan of the Loam",
     "displayName": 30,
-    "width": 1,
-    "height": 1,
+    "width": 6,
+    "height": 6,
     "depth": 1,
     "texture": {
-      "src": "icons/svg/mystery-man.svg",
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/rowan_of_the_loam_front_pov_final_1400.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
-      "scaleX": 1,
-      "scaleY": 1,
+      "scaleX": 3,
+      "scaleY": 3,
       "tint": "#ffffff",
       "alphaThreshold": 0.75
     },
@@ -412,7 +442,7 @@
         "ring": null,
         "background": null
       },
-      "effects": 1,
+      "effects": 0,
       "subject": {
         "scale": 1,
         "texture": null
@@ -425,13 +455,35 @@
       "disposition": false
     },
     "movementAction": null,
-    "flags": {},
+    "flags": {
+      "tokenflip": {
+        "tokenfaces": [
+          {
+            "actorId": "4kWF2skvyviuaWX8",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/rowan_of_the_loam_pov.png",
+            "id": "p88aD6VrZAKwDnZbr91A",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 1,
+            "height": 1,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          }
+        ]
+      },
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
     "randomImg": false,
     "appendNumber": false,
     "prependAdjective": false
   },
   "_id": "4kWF2skvyviuaWX8",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/rowan_of_the_loam_front_pov_final_1400.webp",
   "items": [
     {
       "_id": "e2l6hSdZ3jAoCMH9",
@@ -448,7 +500,7 @@
           "violence"
         ],
         "description": {
-          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -475,21 +527,20 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895271,
-        "modifiedTime": 1784177895271,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071966,
+        "modifiedTime": 1792989071966,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!4kWF2skvyviuaWX8.e2l6hSdZ3jAoCMH9"
+      }
     },
     {
       "_id": "kvd09xoBpsQfDQ10",
-      "name": "Bravo \u2014 Apprentice (Tier I)",
+      "name": "Bravo — Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
@@ -501,7 +552,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Bravo \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick \u2014 Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
           "chat": ""
         }
       },
@@ -517,21 +568,38 @@
           "calling": {
             "key": "bravo",
             "tier": 1
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "allyDamaged",
+                "radius": 1,
+                "do": {
+                  "ward": 0,
+                  "redirect": true
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                },
+                "label": "Hold the Line"
+              }
+            ]
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895271,
-        "modifiedTime": 1784177895271,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989071966,
+        "modifiedTime": 1792989604698,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!4kWF2skvyviuaWX8.kvd09xoBpsQfDQ10"
+      }
     }
   ],
   "effects": [],
@@ -539,15 +607,16 @@
   "sort": 250000,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177895271,
-    "modifiedTime": 1784177895271,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989071966,
+    "modifiedTime": 1792989071967,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

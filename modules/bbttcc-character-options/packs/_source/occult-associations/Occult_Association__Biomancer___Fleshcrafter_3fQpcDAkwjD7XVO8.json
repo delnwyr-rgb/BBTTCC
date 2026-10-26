@@ -9,7 +9,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>Occult Association (Bad Eden): Biomancer / Fleshcrafter.</em></p><p><strong>“You don’t survive the world. You rewrite what Athletics means.”</strong></p><p>Biomancers do not treat life as sacred. They treat it as <strong>modifiable</strong>.</p><p>Where Alchemists convert matter and Shamans negotiate with ecosystems, Biomancers operate at a more intimate scale: flesh, bone, instinct, and adaptation. To them, evolution is not a process. It is a toolkit.</p><p>The Great Work, in their hands, is not about restoring what was lost. It is about building something that can survive what is coming.</p><p><strong>How Biomancers pursue the Great Work:</strong></p><ul><li>By modifying bodies to survive hostile conditions</li><li>By reducing loss through biological adaptation</li><li>By converting harm into resilience</li><li>By treating mutation as both tool and risk</li></ul><p><strong>Resonance:</strong> <strong>Yesod / Life-State</strong> — transformation, embodiment, and the unstable boundary between identity and function.</p><p><strong>Tell-tales:</strong> asymmetry, controlled mutation, eyes that adapt faster than they should.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on Athletics, endurance, or recovery-related OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> adaptation changes you. Expect mutation, instability, and moments where you are no longer certain what “baseline” meant.</p>",
+      "value": "<p><em>Occult Association (Bad Eden): Biomancer / Fleshcrafter.</em></p><p><strong>“You don’t survive the world. You rewrite what strength means.”</strong></p><p>Biomancers do not treat life as sacred. They treat it as <strong>modifiable</strong>.</p><p>Where Alchemists convert matter and Shamans negotiate with ecosystems, Biomancers operate at a more intimate scale: flesh, bone, instinct, and adaptation. To them, evolution is not a process. It is a toolkit.</p><p>The Great Work, in their hands, is not about restoring what was lost. It is about building something that can survive what is coming.</p><p><strong>How Biomancers pursue the Great Work:</strong></p><ul><li>By modifying bodies to survive hostile conditions</li><li>By reducing loss through biological adaptation</li><li>By converting harm into resilience</li><li>By treating mutation as both tool and risk</li></ul><p><strong>Resonance:</strong> <strong>Yesod / Life-State</strong> — transformation, embodiment, and the unstable boundary between identity and function.</p><p><strong>Tell-tales:</strong> asymmetry, controlled mutation, eyes that adapt faster than they should.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to your Domain's Logistics Domain rolls</strong></li></ul><p><strong>Cost Principle:</strong> adaptation changes you. Expect mutation, instability, and moments where you are no longer certain what “baseline” meant.</p>",
       "chat": ""
     },
     "identifier": "occult-association-biomancer",
@@ -62,7 +62,10 @@
       }
     },
     "fourththing": {
-      "vocabScrub": "2026-05-16"
+      "vocabScrub": "2026-05-16",
+      "domainRollBonus": {
+        "logistics": 1
+      }
     }
   },
   "img": "icons/skills/trades/helix-green.webp",
@@ -78,12 +81,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987087005,
-    "modifiedTime": 1781116053667,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989174138,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

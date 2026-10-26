@@ -41,15 +41,15 @@
           "charges": 2,
           "materialKey": "scribed-steel",
           "price": {
-            "marks": 450,
+            "marks": 90,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TIII material stamp",
+            "notes": "TIII material",
             "bound": "free",
-            "saleBack": 180
+            "saleBack": 36
           }
         }
       }
@@ -64,11 +64,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137161794,
-    "modifiedTime": 1782156674955,
+    "modifiedTime": 1792977667659,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

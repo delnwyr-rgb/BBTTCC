@@ -3,8 +3,14 @@
   "type": "feat",
   "img": "icons/magic/defensive/shield-hex-red.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Terraforming Project</b></p><p>Cleanse 1 Corrupted Hex.</p><p><b>Cost:</b> Economy 4 • Faith 4</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>terraforming_project</code></p>",
+      "value": "<p><b>Terraforming Project</b></p><p>Cleanse 1 Corrupted Hex.</p><p><b>Cost:</b> Economy 40 · Faith 40 marks</p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "terraforming-project",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -59,12 +61,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063189270,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989012277,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!engiJTCo26z3g6uw"
 }

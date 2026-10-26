@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Call the Debt</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> faith 15, diplomacy 10</p></div>",
+      "value": "<p><strong>Call the Debt</strong></p><p>Siege, attacker; needs a Pactkeeper on your roster. Call a sworn debt in: an ally's supply arrives, siege Buffer +2 marks (logistics). In the clash: 15 marks off the Buffer.</p><p><em>Queued on the turn: Faith 15 · Diplomacy 10 marks. Fired in the clash: 15 marks from the siege Buffer.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "cls_pact"
+      "key": "cls_pact",
+      "effects": {
+        "text": "Siege, attacker; needs a Pactkeeper on your roster. Call a sworn debt in: an ally's supply arrives, siege Buffer +2 marks (logistics). In the clash: 15 marks off the Buffer."
+      }
     }
   },
   "_id": "OAGrUE48UXqWzOj5",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601772,
-    "modifiedTime": 1782703702691,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989000390,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

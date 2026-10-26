@@ -1,10 +1,13 @@
 {
   "name": "Archetype: The Lovers (Tier 2)",
   "type": "feat",
-  "img": "icons/equipment/neck/amulet-heart.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_lovers.webp",
   "system": {
+    "category": "technique",
+    "source": "(2024 rules)",
+    "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 — The Lovers</strong></p><ul><li><strong>Strategic:</strong> Coalition actions gain +1 effectiveness on first shared OP.</li></ul>",
+      "value": "<p><strong>Tier 2 — The Lovers</strong></p><ul><li><p><strong>Strategic:</strong> Once per scene, the first coalition action your Domain shares gains +1 (the card fires it).</p></li></ul>",
       "chat": ""
     },
     "identifier": "archetype-lovers-t2",
@@ -16,11 +19,6 @@
       "max": ""
     },
     "advancement": {},
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -63,12 +61,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986761329,
-    "modifiedTime": 1775063009779,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989160958,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

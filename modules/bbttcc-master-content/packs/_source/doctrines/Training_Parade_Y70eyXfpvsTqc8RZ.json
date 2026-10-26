@@ -3,8 +3,14 @@
   "type": "feat",
   "img": "icons/sundries/flags/banner-sword-blue.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Training Parade</b></p><p>+1 Morale for next Raid.</p><p><b>Cost:</b> Violence 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>training_parade</code></p>",
+      "value": "<p><b>Training Parade</b></p><p>+1 Loyalty for next Raid.</p><p><b>Cost:</b> Soft Power 10 · Violence 10 marks</p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "training-parade",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -44,7 +46,8 @@
         "storyOnly": false,
         "availability": null,
         "unlockKey": null
-      }
+      },
+      "effects": {}
     }
   },
   "_id": "Y70eyXfpvsTqc8RZ",
@@ -59,12 +62,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063186413,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792988993273,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!Y70eyXfpvsTqc8RZ"
 }

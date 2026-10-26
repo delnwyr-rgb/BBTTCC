@@ -1,10 +1,16 @@
 {
-  "name": "Courtly Intrigue Council",
+  "name": "Parley Council",
   "type": "feat",
   "img": "icons/skills/melee/strike-dagger-arcane-pink.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Courtly Intrigue Council</b></p><p>Initiate social combat; gain intel on enemy plans.</p><p><b>Cost:</b> Intrigue 3 • Diplomacy 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>courtly_intrigue_council</code></p>",
+      "value": "<p><b>Parley Council</b></p><p>Open a Parley with the target hex's holder; gain intel on their plans.</p><p><b>Cost:</b> Intrigue 30 · Diplomacy 20 marks</p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "courtly-intrigue-council",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -59,12 +61,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063185931,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792988998607,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!WM0W0FBZ1h8vFFFi"
 }

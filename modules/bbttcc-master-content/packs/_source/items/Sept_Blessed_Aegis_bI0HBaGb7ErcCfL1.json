@@ -19,7 +19,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A kite shield consecrated in a sept-house, its face inlaid with a prayer-resin sigil that warms faintly when the world's static draws near. Issued to chapter-wardens who walk into qliphothic ground on purpose.</p><p><strong>Consecrated.</strong> Corruption finds the shield quieter than the body behind it. Resists qliphothic.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +2, Resolve +2</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 150 Economy marks</p></li></ul>",
+      "value": "<p>A kite shield consecrated in a sept-house, its face inlaid with a prayer-resin sigil that warms faintly when the world's static draws near. Issued to chapter-wardens who walk into qliphothic ground on purpose.</p><p><strong>Consecrated.</strong> Corruption finds the shield quieter than the body behind it. Resists qliphothic.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +2, Resolve +2</p></li><li><p><strong>Requires:</strong> Bracing (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 105 Nonlethal marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -51,15 +51,15 @@
             "sept-leather"
           ],
           "price": {
-            "marks": 150,
-            "currency": "economy",
+            "marks": 105,
+            "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TII shield \u00d7 1",
+            "notes": "TII shield (hygiene 2026-10-07; was 150 economy)",
             "bound": "free",
-            "saleBack": 60
+            "saleBack": 42
           }
         }
       },
@@ -81,11 +81,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782150391462,
-    "modifiedTime": 1787335025028,
+    "modifiedTime": 1792977643564,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

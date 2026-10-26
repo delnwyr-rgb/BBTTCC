@@ -1,0 +1,80 @@
+{
+  "name": "Aura of Avarice",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "qliphothic",
+      "harab-serapel"
+    ],
+    "description": {
+      "value": "<p>Any creature that starts its turn within 6 squares must succeed a Resolve check (DC by tier) or spend its movement moving toward the most valuable object it can see.</p><p><em>Harab Serapel — hull of netzach.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "radius": 6,
+            "who": "enemies",
+            "do": {
+              "save": {
+                "attr": "soul",
+                "dc": 15,
+                "onSave": "negate"
+              },
+              "prompt": "Aura of Avarice: on a fail, its movement goes toward the most valuable object it can see."
+            }
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "qliphothic"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Harab Serapel Scavenger"
+        ],
+        "sourceIds": [
+          "SmVDBIAjrDFTRjxt"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "3MST1Y0RFqIjHSqV",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069906,
+    "modifiedTime": 1792989069990,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!3MST1Y0RFqIjHSqV"
+}

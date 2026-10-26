@@ -7,6 +7,7 @@
     "tags": [],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>A bolted-down industrial cathedral. Chimneys exhale slag and prayer in equal measure. Doesn't move; doesn't need to. Things come <em>to</em> it.</p><p><strong>Frame · Siege · Stationary</strong></p>",
       "chat": ""
@@ -81,7 +82,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TIII vehicle stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 900
@@ -101,11 +102,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.16",
     "createdTime": 1778205373758,
-    "modifiedTime": 1778963271957,
+    "modifiedTime": 1791865101707,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

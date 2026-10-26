@@ -1,0 +1,390 @@
+{
+  "name": "The Inner Keep — Perspicacity",
+  "type": "rig",
+  "img": "art/bbttcc/GOTTGAIT/Structures/perspicacity_tower.png",
+  "system": {
+    "identity": {
+      "mobility": "stationary",
+      "state": "parked",
+      "factionOwnerId": "oK7VitQikQ6FN3PI",
+      "archetype": "Structure: Inner Keep (siege layer)",
+      "binding": {
+        "hexId": "",
+        "sceneId": "",
+        "tokenId": ""
+      }
+    },
+    "crew": {
+      "slots": [],
+      "capacity": {
+        "pilot": {
+          "min": 0,
+          "max": 0
+        },
+        "gunner": {
+          "min": 0,
+          "max": 0
+        },
+        "engineer": {
+          "min": 0,
+          "max": 0
+        },
+        "crew": {
+          "min": 0,
+          "max": 0
+        }
+      },
+      "crewMin": 0,
+      "crewMax": 0
+    },
+    "integrity": {
+      "value": 30,
+      "max": 30,
+      "tier": 1,
+      "bracket": "medium"
+    },
+    "derived": {
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 12
+      },
+      "resolve": {
+        "value": 11
+      },
+      "integrity": {},
+      "stress": {}
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "output": {
+      "modules": [],
+      "basePerTurn": {}
+    },
+    "travel": {
+      "speed": 1,
+      "range": 5,
+      "hazardResist": 0,
+      "domains": [
+        "land"
+      ],
+      "depthRating": 0
+    },
+    "tags": [],
+    "biography": {
+      "concept": "",
+      "notes": ""
+    }
+  },
+  "_id": "EoTOcbq23sljFQqV",
+  "prototypeToken": {
+    "name": "The Inner Keep — Perspicacity",
+    "displayName": 30,
+    "actorLink": true,
+    "width": 4,
+    "height": 4,
+    "depth": 4,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/Structures/perspicacity_tower.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 2,
+      "scaleY": 2,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [],
+  "effects": [
+    {
+      "name": "Prone",
+      "img": "icons/svg/aura.svg",
+      "tint": "#78909c",
+      "origin": "Actor.EoTOcbq23sljFQqV",
+      "statuses": [
+        "prone"
+      ],
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {
+        "fourththing": {
+          "condition": "prone",
+          "appliedManifestation": {
+            "source": "Actor.EoTOcbq23sljFQqV",
+            "itemId": "EoTOcbq23sljFQqV",
+            "itemName": "Structure Collapse",
+            "dc": 15,
+            "saveAttribute": "body",
+            "saveEachRound": false,
+            "durationKind": "1-round",
+            "startRound": null,
+            "startTurn": null
+          }
+        }
+      },
+      "system": {
+        "changes": []
+      },
+      "_id": "gqGUyDMeNRt5OeKI",
+      "type": "base",
+      "disabled": false,
+      "start": {
+        "time": 0,
+        "combat": null,
+        "combatant": null,
+        "initiative": null,
+        "round": null,
+        "turn": null
+      },
+      "description": "",
+      "transfer": false,
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791317003566,
+        "modifiedTime": 1791317003566,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "folder": "xQUOdeYWwVaU6c28",
+  "sort": 250000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "bbttcc-structures": {
+      "hasStructure": true,
+      "facilityMode": true,
+      "materialBOM": [
+        {
+          "materialKey": "mountain-stone",
+          "qty": 16,
+          "originalQty": 16,
+          "family": "stone",
+          "tier": "I",
+          "name": "mountain-stone",
+          "tagsCache": []
+        },
+        {
+          "materialKey": "hex-glyph-plate",
+          "qty": 14,
+          "originalQty": 14,
+          "family": "ward",
+          "tier": "III",
+          "name": "Hex-Glyph Plate",
+          "tagsCache": [
+            "material",
+            "hex-glyph-plate",
+            "hex",
+            "armor-plate",
+            "warded"
+          ]
+        },
+        {
+          "materialKey": "blessed-thread",
+          "qty": 4,
+          "originalQty": 4,
+          "family": "cloth",
+          "tier": "I",
+          "name": "Blessed Thread",
+          "tagsCache": [
+            "material",
+            "blessed-thread"
+          ]
+        }
+      ],
+      "state": "intact",
+      "plates": {
+        "current": 96,
+        "max": 96
+      },
+      "threshold": 1.49,
+      "resists": {
+        "kinetic": 0.5,
+        "qliphothic": 0.5
+      },
+      "vulnerabilities": {
+        "kinetic|concussive": {
+          "type": "kinetic",
+          "flavor": "concussive",
+          "factor": 2
+        },
+        "energy|fire": {
+          "type": "energy",
+          "flavor": "fire",
+          "factor": 2
+        }
+      },
+      "loadBearing": false,
+      "collapseProfile": {
+        "fallFt": 10,
+        "damageDice": "2d10",
+        "nonlethal": true,
+        "knockbackFt": 5,
+        "triggerState": "breached"
+      },
+      "history": [],
+      "crew": {
+        "assigned": [
+          {
+            "tokenId": "oN6SLaapIe9Qy86x",
+            "label": "🛡 Garrison · 5",
+            "joinedStrength": 5
+          },
+          {
+            "tokenId": "HVAlQ65IZRtuvDOS",
+            "label": "🛡 Garrison · 5",
+            "joinedStrength": 5
+          },
+          {
+            "tokenId": "16DJlsg7wNbtBuEX",
+            "label": "🛡 Garrison · 5",
+            "joinedStrength": 5
+          },
+          {
+            "tokenId": "6F9Ab1IIreRoz3PS",
+            "label": "🛡 Garrison · 5",
+            "joinedStrength": 5
+          },
+          {
+            "tokenId": "g4ncnBLREqadCwe9",
+            "label": "🛡 Garrison · 2",
+            "joinedStrength": 2
+          },
+          {
+            "tokenId": "JrDwXLjPHQflMOYQ",
+            "label": "🛡 Garrison · 1",
+            "joinedStrength": 1
+          },
+          {
+            "tokenId": "7DrsZDDgokQlnBZS",
+            "label": "🛡 Garrison · 2",
+            "joinedStrength": 2
+          },
+          {
+            "tokenId": "gHSnmJBL66WS6p0I",
+            "label": "🛡 Garrison · 2",
+            "joinedStrength": 2
+          },
+          {
+            "tokenId": "NqCm6cisA6FR4NvQ",
+            "label": "🛡 Garrison · 4",
+            "joinedStrength": 4
+          }
+        ]
+      }
+    },
+    "fourththing": {
+      "kind": "rig"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791317003566,
+    "modifiedTime": 1792989115195,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!EoTOcbq23sljFQqV"
+}

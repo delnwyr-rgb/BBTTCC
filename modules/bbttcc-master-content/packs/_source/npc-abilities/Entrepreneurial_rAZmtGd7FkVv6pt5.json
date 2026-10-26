@@ -1,0 +1,83 @@
+{
+  "name": "Entrepreneurial",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "mortal",
+      "jackalope"
+    ],
+    "description": {
+      "value": "<p>Once per scene the beast-folk may offer a deal instead of a strike: the target rolls Mind vs DC 12 or spends its next action considering the offer. Sells the map, then sells your route.</p><p><em>There was something a bit ENTREPRENEURIAL about them.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "who": "targets",
+            "do": {
+              "save": {
+                "attr": "mind",
+                "dc": 12,
+                "onSave": "negate"
+              },
+              "prompt": "Entrepreneurial: on a fail the target spends its next action considering the offer."
+            },
+            "limit": {
+              "per": "scene",
+              "uses": 1
+            }
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "mortal"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Jackalope Tinker-Scout"
+        ],
+        "sourceIds": [
+          "tYObKsKdkK5JHB0i"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "rAZmtGd7FkVv6pt5",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069929,
+    "modifiedTime": 1792989070012,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!rAZmtGd7FkVv6pt5"
+}

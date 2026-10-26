@@ -1,10 +1,16 @@
 {
-  "name": "Develop Outpost (Stability)",
+  "name": "Develop Outpost",
   "type": "feat",
   "img": "icons/environment/traps/spiked-wall.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Develop Outpost (Stability)</b></p><p>Stabilize a young outpost: clear hazards, patrol, and build trust.</p><p><b>Cost:</b> Nonlethal 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>develop_outpost_stability</code></p>",
+      "value": "<p><b>Develop Outpost (Stability)</b></p><p>Stabilize a young outpost: clear hazards, patrol, and build trust.</p><p><b>Cost:</b> Diplomacy 20 · Economy 10 marks</p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "develop-outpost-stability",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -59,12 +61,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063190742,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792988998472,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!mHx4ipWqDOlTBb2N"
 }

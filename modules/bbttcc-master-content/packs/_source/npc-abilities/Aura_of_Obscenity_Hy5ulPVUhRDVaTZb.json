@@ -1,0 +1,84 @@
+{
+  "name": "Aura of Obscenity",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "qliphothic",
+      "gamaliel"
+    ],
+    "description": {
+      "value": "<p>Any creature that starts its turn within 4 squares must succeed a Resolve check (DC by tier) or take 1d4 psychic damage to Stress as a repressed impulse surfaces, spoken aloud.</p><p><em>Gamaliel — hull of yesod.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "radius": 4,
+            "who": "enemies",
+            "do": {
+              "save": {
+                "attr": "soul",
+                "dc": 19,
+                "onSave": "negate"
+              },
+              "damage": {
+                "formula": "1d4",
+                "type": "psychic"
+              }
+            },
+            "label": "Aura of Obscenity"
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "qliphothic"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Lewd Miasma"
+        ],
+        "sourceIds": [
+          "Tw8Qy7Bg0pwKC29k"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "Hy5ulPVUhRDVaTZb",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069911,
+    "modifiedTime": 1792989069994,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!Hy5ulPVUhRDVaTZb"
+}

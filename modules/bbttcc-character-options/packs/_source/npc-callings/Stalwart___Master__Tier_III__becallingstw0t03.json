@@ -27,16 +27,33 @@
       "calling": {
         "key": "stalwart",
         "tier": 3
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "who": "self",
+            "do": {
+              "heal": 6
+            },
+            "limit": {
+              "per": "scene",
+              "uses": 1
+            },
+            "label": "Second Wind"
+          }
+        ]
       }
     }
   },
   "_stats": {
-    "coreVersion": "14.364",
-    "systemId": null,
-    "systemVersion": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1784007341490,
-    "modifiedTime": 1784007341490,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989178365,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

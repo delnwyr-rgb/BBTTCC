@@ -1,74 +1,30 @@
 {
+  "_id": "WDhyIG2Canwwa3kB",
   "name": "Neon Spirit Armor",
-  "type": "equipment",
+  "type": "armor",
   "img": "icons/commodities/metal/armor-plate-reticulated.webp",
   "system": {
-    "description": {
-      "value": "<p>It hums with the after-image of fluorescent signage. Smells like ozone and pretzel salt.</p><p><b>Neon Afterimage.</b> While in dim light or within 30 ft of an obvious artificial light source (signage, streetlights, neon, holo-ads), reroll the lowest die on Intrigue (tumble/balance/slip-past) checks to avoid provoking opportunity attacks.</p><p><b>Ghostwalk (1/Soma Break).</b> As a bonus action, become briefly half-ethereal until the end of your current turn. You can move through creatures and objects as if difficult terrain. If you end your turn inside an object, you're shunted to the nearest open space and take <b>1d10 kinetic damage</b>.</p><p><b>Neon Signature.</b> The armor sheds faint, shifting light: a 5-ft radius of dim light. Suppress or restore as a bonus action.</p>",
-      "chat": ""
-    },
-    "source": {
-      "custom": "BBTTCC That 90's Faction Encounters",
-      "revision": 1,
-      "rules": "2024"
-    },
-    "quantity": 1,
-    "weight": {
-      "value": 40,
-      "units": "lb"
-    },
-    "price": {
-      "value": 900,
-      "denomination": "gp"
-    },
-    "attunement": "required",
-    "equipped": false,
-    "rarity": "rare",
-    "identified": true,
-    "uses": {
-      "max": "",
-      "spent": 0,
-      "recovery": []
-    },
-    "identifier": "bbttcc_item_neon_spirit_armor",
-    "type": {
-      "value": "medium",
-      "baseItem": ""
-    },
-    "properties": [
-      "mgc",
-      "stealthDisadvantage"
-    ],
-    "activities": {},
-    "armor": {
-      "value": 15,
-      "dex": 2,
-      "magicalBonus": null
-    },
-    "strength": 13,
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "proficient": null,
-    "crew": {
-      "value": []
-    },
     "guardBonus": 1,
+    "evasionBonus": 0,
     "resolveBonus": 1,
-    "armorSkill": "plating",
+    "resistances": [],
+    "armorSkill": "bracing",
+    "equipped": false,
     "tags": [
       "half-plate",
       "neon",
       "attunement",
-      "ghostwalk"
-    ]
+      "ghostwalk",
+      "medium"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>It hums with the after-image of fluorescent signage. Smells like ozone and pretzel salt.</p><p><b>Neon Afterimage.</b> While in dim light or within 6 squares of an obvious artificial light source (signage, streetlights, neon, holo-ads), reroll the lowest die on Intrigue (tumble/balance/slip-past) checks to avoid provoking reaction strikes.</p><p><b>Ghostwalk (1/Soma Break).</b> As a bonus action, become briefly half-ethereal until the end of your current turn. You can move through creatures and objects as if difficult terrain. If you end your turn inside an object, you're shunted to the nearest open space and take <b>1d10 kinetic damage</b>.</p><p><b>Neon Signature.</b> The armor sheds faint, shifting light: a 1 square radius of dim light. Suppress or restore as a bonus action.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Medium</li>\n  <li><strong>Defense:</strong> Guard +1 · Resolve +1</li>\n  <li><strong>Requires:</strong> Bracing (trained)</li>\n  <li><strong>Tier:</strong> III</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
   },
-  "effects": [],
   "flags": {
-    "dnd5e": {},
     "fourththing": {
       "rfi": {
         "item": {
@@ -89,48 +45,50 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>It hums with the after-image of fluorescent signage. Smells like ozone and pretzel salt.</p><p><b>Neon Afterimage.</b> While in dim light or within 6 squares of an obvious artificial light source (signage, streetlights, neon, holo-ads), reroll the lowest die on Intrigue (tumble/balance/slip-past) checks to avoid provoking opportunity attacks.</p><p><b>Ghostwalk (1/Soma Break).</b> As a bonus action, become briefly half-ethereal until the end of your current turn. You can move through creatures and objects as if difficult terrain. If you end your turn inside an object, you're shunted to the nearest open space and take <b>1d10 kinetic damage</b>.</p><p><b>Neon Signature.</b> The armor sheds faint, shifting light: a 1 square radius of dim light. Suppress or restore as a bonus action.</p>",
-          "legacySystem": {
-            "guardBonus": 0,
-            "evasionBonus": 0,
-            "resolveBonus": 0,
-            "resistances": [],
-            "armorSkill": "fitting",
-            "equipped": true,
-            "tags": []
-          },
+          "lore": "<p>It hums with the after-image of fluorescent signage. Smells like ozone and pretzel salt.</p><p><b>Neon Afterimage.</b> While in dim light or within 6 squares of an obvious artificial light source (signage, streetlights, neon, holo-ads), reroll the lowest die on Intrigue (tumble/balance/slip-past) checks to avoid provoking reaction strikes.</p><p><b>Ghostwalk (1/Soma Break).</b> As a bonus action, become briefly half-ethereal until the end of your current turn. You can move through creatures and objects as if difficult terrain. If you end your turn inside an object, you're shunted to the nearest open space and take <b>1d10 kinetic damage</b>.</p><p><b>Neon Signature.</b> The armor sheds faint, shifting light: a 1 square radius of dim light. Suppress or restore as a bonus action.</p>",
           "price": {
-            "marks": 675,
+            "marks": 1350,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TIII armor stamp",
+            "rarityMult": 2,
+            "notes": "TIII armor × attuned × rarity 2",
             "bound": "attuned",
-            "saleBack": 270
+            "saleBack": 540
           }
         }
-      }
+      },
+      "rerolls": [
+        {
+          "context": "check",
+          "attribute": "intrigue",
+          "mode": "reroll-lowest",
+          "when": "dimLightOrNearLight",
+          "vs": "tumble, balance, slip past — avoiding reaction strikes",
+          "note": "Neon Afterimage — in dim light or near artificial light"
+        }
+      ]
     }
   },
+  "effects": [],
   "folder": "Wxh1A343inwTUeoo",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1768451454668,
-    "modifiedTime": 1782164185977,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 2300000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "WDhyIG2Canwwa3kB",
-  "sort": 2300000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988910847,
+    "modifiedTime": 1792988910848,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!WDhyIG2Canwwa3kB"
 }

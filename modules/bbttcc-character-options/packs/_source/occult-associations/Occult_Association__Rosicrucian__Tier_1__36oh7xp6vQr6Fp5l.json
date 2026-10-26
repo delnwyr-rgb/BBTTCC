@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 — Rosicrucian</strong></p><p><strong>“The secret isn’t the symbol. It’s the route.”</strong></p><p>You become a bearer of old codes and practical protocols. You know how to talk to people who do not want to be found — and how to survive when they find you first.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Lore</strong> and <strong>Diplomacy</strong></li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction negotiates treaties, ceasefires, trade pacts, or alliances, gain <strong>+1 to the relevant Diplomacy OP roll</strong></li><li>You begin play with one established positive relationship with a neutral NPC faction (GM chooses or you propose)</li></ul><p><strong>Cost:</strong> every functioning backchannel creates expectations. Old contacts become live liabilities the moment you prove the network still works.</p>",
+      "value": "<p><strong>Tier 1 — Rosicrucian</strong></p><p><strong>“The secret isn’t the symbol. It’s the route.”</strong></p><p>You become a bearer of old codes and practical protocols. You know how to talk to people who do not want to be found — and how to survive when they find you first.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Lore</strong> and <strong>Diplomacy</strong></li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your Domain negotiates treaties, ceasefires, trade pacts, or alliances, gain <strong>+1 to the relevant Diplomacy marks roll</strong></li><li>You begin play with one established positive relationship with a neutral NPC faction (GM chooses or you propose)</li></ul><p><strong>Cost:</strong> every functioning backchannel creates expectations. Old contacts become live liabilities the moment you prove the network still works.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -78,7 +78,7 @@
   },
   "effects": [
     {
-      "name": "Occult Tier1 Proficiencies",
+      "name": "Occult Tier 1 Proficiencies",
       "disabled": false,
       "transfer": true,
       "img": "icons/magic/symbols/cross-circle-blue.webp",
@@ -118,17 +118,16 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346196022,
-        "modifiedTime": 1777433499557
+        "modifiedTime": 1792989174747
       },
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!36oh7xp6vQr6Fp5l.RXBvf5g8dMfC8pAt"
+      "folder": null
     }
   ],
   "img": "icons/magic/symbols/cross-circle-blue.webp",
@@ -143,11 +142,11 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987100132,
-    "modifiedTime": 1782167239250,
+    "modifiedTime": 1792977825527,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

@@ -135,7 +135,7 @@
     {
       path: "aurablade", kind: "weapon", name: "Wrath-Brand",
       stability: "sustained", interaction: "weapon", form: "weapon", function: "harm",
-      intent: "violence", channel: "body", sephirah: "gevurah", mode: "chaos",
+      intent: "violence", channel: "body", sephirah: "geburah", mode: "chaos",
       damageFormula: "2d6", damageType: "fire", damageFlavor: "righteous heat",
       concept: "A blade made of your conviction, hot to the touch and visibly upset.",
       signature: "The edge sings the name of the wrong it answers.",
@@ -831,7 +831,7 @@
     },
     {
       path: "pactkeeper", kind: "power", name: "Penalty Clause",
-      tier: 1, intent: "violence", channel: "soul", sephirah: "gevurah", mode: "hermetic",
+      tier: 1, intent: "violence", channel: "soul", sephirah: "geburah", mode: "hermetic",
       activation: "reaction", target: "single", range: "near",
       stability: "instant", interaction: "event", form: "sigil", function: "harm",
       damage: "2d6", damageType: "psychic", damageFlavor: "the consequence of an oath broken",

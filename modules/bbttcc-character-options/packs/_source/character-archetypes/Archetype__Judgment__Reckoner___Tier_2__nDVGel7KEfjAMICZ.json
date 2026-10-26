@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — Judgment (Reckoner)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During purge, revelation, judgment, exposure, or final-account scenarios, the first major resistance, denial, or concealment effect is ignored once.</li></ul>",
+      "value": "<p><strong>Tier 2 (Level 5) — Judgment (Reckoner)</strong></p><ul><li><strong>Strategic:</strong> Once per scene of purge, revelation, judgment, exposure or final account, your Domain ignores the first major resistance, denial or concealment effect (the card fires it).</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -71,12 +71,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986323670,
-    "modifiedTime": 1781116031646,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989159478,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

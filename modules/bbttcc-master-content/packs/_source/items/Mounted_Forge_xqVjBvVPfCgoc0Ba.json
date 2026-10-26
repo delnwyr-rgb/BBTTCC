@@ -7,6 +7,7 @@
     "tags": [],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>Anvil bolted to a turret-ring. Produces ingots and parts each turn the rig is parked or docked. War rigs run it at half during deployment.</p>",
       "chat": ""
@@ -30,7 +31,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TII tool stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 36
@@ -50,11 +51,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.16",
     "createdTime": 1778205374390,
-    "modifiedTime": 1778963271959,
+    "modifiedTime": 1791865101708,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

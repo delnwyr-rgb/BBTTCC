@@ -7,7 +7,7 @@
     "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-qliph-scarred=\"v1\" style=\"display:none\"></div><p><em>\"There are ways to move that the sun never got to review.\"</em></p><p><strong>What the Deep Dark Taught You (1/Soma Break).</strong> Bonus action — sink partially into shadow, earth, or stone. For up to 1 minute, while sunken you gain:</p><ul><li><p>Reroll the lowest die on Stealth (Intrigue) checks.</p></li><li><p>Difficult terrain costs you no extra movement.</p></li><li><p>You can move through spaces 1 square wide.</p></li><li><p>Resistance to qliphothic damage.</p></li></ul><p>The effect ends early if you are fully submerged in running water or take sephirotic damage.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"qliphChthonicDeepDark\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>What the Deep Dark Taught You</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Bonus action (1-min duration)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Sink into shadow/earth/stone for up to 1 min: reroll-lowest on Stealth · ignore difficult terrain · squeeze through 1 square gaps · resist qliphothic damage. Ends early on running water or sephirotic damage.</span></p></div>",
+      "value": "<p><em>\"There are ways to move that the sun never got to review.\"</em></p><p><strong>What the Deep Dark Taught You (1/Soma Break).</strong> Bonus action — sink partially into shadow, earth, or stone. For up to 1 minute, while sunken you gain:</p><ul><li><p>Reroll the lowest die on Stealth (Intrigue) checks.</p></li><li><p>Difficult terrain costs you no extra movement.</p></li><li><p>You can move through spaces 1 square wide.</p></li><li><p>Resistance to qliphothic damage.</p></li></ul><p>The effect ends early if you are fully submerged in running water or take sephirotic damage.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"qliphChthonicDeepDark\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>What the Deep Dark Taught You</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Bonus action (1-min duration)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Sink into shadow/earth/stone for up to 1 min: reroll-lowest on Stealth · ignore difficult terrain · squeeze through 1 square gaps · resist qliphothic damage. Ends early on running water or sephirotic damage.</span></p></div>",
       "chat": ""
     },
     "advancement": {},
@@ -16,7 +16,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -33,14 +33,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "qliph_scarred",
       "feature": "what_the_deep_dark_taught_you",
       "lineage": "Chthonic",
-      "tierLevel": 1,
       "version": "1.1.0",
       "date": "2026-04-19",
       "rfiNative": true
@@ -248,12 +244,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776660294570,
-    "modifiedTime": 1782167240125,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988977655,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

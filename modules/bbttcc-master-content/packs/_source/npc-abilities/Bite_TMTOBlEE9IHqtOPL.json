@@ -1,0 +1,132 @@
+{
+  "name": "Bite",
+  "type": "weapon",
+  "img": "icons/weapons/swords/swords-sharp-worn.webp",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "melee",
+    "damage": {
+      "formula": "1d8",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "bite",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1,
+      "value": 5,
+      "units": "ft"
+    },
+    "tags": [
+      "lineage-strike",
+      "wild"
+    ],
+    "effect": "On a hit, the target is marked by scent until the end of the scene — this creature and its kin reroll the lowest die when tracking it.",
+    "flavor": "",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "<p>On a hit, the target is marked by scent until the end of the scene — this creature and its kin reroll the lowest die when tracking it.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "frame": "attack",
+          "lineageStrike": "wild",
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI attack × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "do": {
+              "prompt": "On a hit, the target is marked by scent until the end of the scene — this creature and its kin reroll the lowest die w"
+            },
+            "narrative": true
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Jommetry Serpent"
+        ],
+        "sourceIds": [
+          "xCHciB6b5HEF5926"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "TMTOBlEE9IHqtOPL",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069914,
+    "modifiedTime": 1792989069996,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!TMTOBlEE9IHqtOPL"
+}

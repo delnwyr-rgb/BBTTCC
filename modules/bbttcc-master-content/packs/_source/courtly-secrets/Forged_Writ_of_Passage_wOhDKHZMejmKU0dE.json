@@ -8,7 +8,7 @@
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p><strong>Forged Writ of Passage.</strong> The seal is real. The signature is real-adjacent. By the time anyone checks, you were demonstrably somewhere else, being charming.</p><p><em>Play:</em> Lower Suspicion by 2.</p>",
+      "value": "<p><strong>Forged Writ of Passage.</strong> The seal is real. The signature is real-adjacent. By the time anyone checks, you were demonstrably somewhere else, being charming.</p><p><em>Play:</em> −2 Suspicion.</p>",
       "chat": "",
       "unidentified": ""
     }
@@ -30,11 +30,11 @@
     "default": 0
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780000000000,
-    "modifiedTime": 1784079176431,
+    "modifiedTime": 1792977750312,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

@@ -384,10 +384,14 @@ function _mpo() { return game.bbttcc?.api?.op?.OP_TO_MARKS ?? game.fourththing?.
 // (20 marks); the same ×0.75 the strategic rows and travel legs take makes it +1 per 15 marks.
 // api.raid.PRICE_MULT is the one policy; 0.75 is the fallback if throughput hasn't attached yet.
 function _rcPriceMult() { const m = Number(game?.bbttcc?.api?.raid?.PRICE_MULT); return (Number.isFinite(m) && m > 0) ? m : 0.75; }
-// ALPHA CUT ruling 5 (Dave, 2026-10-17; built 2026-10-18): while the Alpha Cut world setting is on, NO seat spends marks
-// inside a Battle or Heist. Strength is what the Domain owns (ops, roster, coalition; hex, holdings, defences, loyalty)
-// and is shown as one line per side. A Parley keeps one diegetic use of marks: Sweeten the deal (see the engine).
-function _rcNoMarks() { try { return game.bbttcc?.alpha?.enabled?.() === true; } catch (_e) { return false; } }
+// Alpha Cut switch — the non-marks surfaces of rulings 21/22 read this (battlemap Battle + the GM's call, hidden log
+// toggles, the Strength line per side).
+function _rcAlphaOn() { try { return game.bbttcc?.alpha?.enabled?.() === true; } catch (_e) { return false; } }
+// RULING 5 RETIRED (Dave, content-audit rulings 2026-10-26, DC5): "every Battle, Heist and Parley costs marks, even when
+// the story offers it." Staged marks, maneuver costs, the affordability gate and the debit run under the Alpha Cut exactly
+// as they do without it; a Parley keeps Sweeten the deal on top of its spend. Kept as a function that answers false so
+// every older call site stays safe.
+function _rcNoMarks() { return false; }
 
 // ─── ALPHA CUT ruling 21 (Dave, blessed 2026-10-18): WHAT A BATTLE IS FOR ─────────────────────────────────────
 // A Battle is the party's fight, token by token on the battlemap, in combat rounds. The console frames the STAKE,
@@ -461,7 +465,7 @@ async function _rcStoryRoute(app, word, why = "") {
 }
 /** After the round resolved: open ground changes hands on a won Battle (ruling 21 + 20). */
 async function _rcBattleGroundFlip(r, attacker, defender, hexDoc, opts = {}) {
-  if (!_rcNoMarks() || !_rcIsBattleKey(r?.activityKey) || r?.targetType !== "hex" || !hexDoc || !attacker) return null;
+  if (!_rcAlphaOn() || !_rcIsBattleKey(r?.activityKey) || r?.targetType !== "hex" || !hexDoc || !attacker) return null;
   const d = hexDoc?.document ?? hexDoc;
   const stake = await _rcBattleStake(r, attacker, d, opts);
   if (!stake) return null;
@@ -498,6 +502,8 @@ function stagedOpBonus(marks) {
   return Math.ceil(Number(marks || 0) / per);
 }
 // Marks are the unit everywhere (owner ruling 2026-09-06) — renders whole marks.
+const _RC_OP_LABELS = { violence:"Violence", nonlethal:"Nonlethal", intrigue:"Intrigue", economy:"Economy", softpower:"Soft Power", diplomacy:"Diplomacy", logistics:"Logistics", culture:"Culture", faith:"Faith" };
+function _rcOpLabel(k) { return _RC_OP_LABELS[String(k || "").toLowerCase()] || String(k || ""); }
 function _rcOP(marks) {
   const fmt = globalThis.game?.bbttcc?.api?.op?.fmtNum;
   if (typeof fmt === "function") { try { return fmt(marks); } catch (_e) {} }
@@ -820,6 +826,16 @@ function rosterContribution(faction, key) {
     const v = Number(contrib?.[key] ?? contrib?.[key.replace("nonlethal","nonLethal")] ?? 0);
     if (Number.isFinite(v) && v) sum += v;
 
+    // Ruling CO21 (2026-10-26): identity items declare flags.fourththing.domainRollBonus { <opKey>: N } — a flat bonus
+    // to this Domain's rolls in that channel (Kabbalist T1 +3 Soft Power, Mercenary Band T2 +1 Violence, …).
+    try {
+      for (const it of (a.items?.contents || [])) {
+        const rb = it.flags?.fourththing?.domainRollBonus;
+        const n = Number(rb?.[key] ?? rb?.[key.replace("nonlethal","nonLethal")] ?? 0);
+        if (Number.isFinite(n) && n) sum += n;
+      }
+    } catch (_e) {}
+
     // 2026-05-15 — Affiliation contribution layer: sephirah / political / ancestry
     // (static defaults) + archetype/crew/occult (per-item-flag overrides only).
     // See affiliation-op-table.enhancer.js for table values.
@@ -1052,11 +1068,7 @@ function getOPBank(actor){
 // - Adds tooltip + button disabled state (no template changes).
 // - Optional desperation is not enabled here yet (Raid has multi-round spend math).
 // ---------------------------------------------------------------------------
-function _rcOpLabel(key){
-  key = String(key||"").toLowerCase().trim();
-  if (!key) return "OP";
-  return key.charAt(0).toUpperCase() + key.slice(1);
-}
+// _rcOpLabel lives with _RC_OP_LABELS near the top (one definition — a second `function` broke the ES module, 2026-10-26).
 function _rcGetAttackerBank(attacker){
   try { return attacker ? getOPBank(attacker) : _zeroOps(); } catch(_e){ return _zeroOps(); }
 }
@@ -3666,7 +3678,7 @@ _renderScenarioHUD(host, round){
               grid.style.flexWrap = "wrap";
               grid.style.gap = ".25rem";
 
-              for (const k of (_rcNoMarks() ? [] : keys)) {   // ruling 5: no stage chips while the Alpha Cut is on
+              for (const k of keys) {   // stage chips render under the Alpha Cut too (ruling 5 retired 2026-10-26: fights cost marks)
                 const staged = Number(round?.localStaged?.support?.[sf.id]?.[k] || 0);
                 const bank = Number(getOPBank(sf)?.[k] || 0);
 
@@ -4064,9 +4076,9 @@ _renderScenarioHUD(host, round){
     const __hintKey = (!_rcIsGMUser() && __lastR?.activityKey) ? __lastR.activityKey : this.vm.activityKey;
     context.activityLabel = __hintKey ? _rcTypeLabel(__hintKey) : "";
     context.activityHint  = __hintKey ? _rcTypeHint(__hintKey) : "";
-    context.noMarks = _rcNoMarks();
+    context.noMarks = _rcNoMarks();   // always false since 2026-10-26 (ruling 5 retired) — kept for anything that still reads it
     // Alpha Cut (Dave 2026-10-18): the Log Attacker / Log Defender toggles are hidden and both sides are always logged.
-    context.alphaOn = context.noMarks;
+    context.alphaOn = _rcAlphaOn();
     if (context.alphaOn) { this.vm.logWar = true; this.vm.includeDefender = true; }
     try { for (const r of (this.vm.rounds || [])) if (r && r.activityLabel) r.activityLabel = _rcTypeLabel(r.activityKey || r.activityLabel); } catch (_e) {}
 
@@ -4267,7 +4279,7 @@ _renderScenarioHUD(host, round){
     context.leadAttackerName = leadAttackerName;
     // Surface the "pending uncommitted staging" flag so the template can show
     // the player a Commit Staging banner. GM never has pending state.
-    context.stagingDirty = !_rcIsGMUser() && !!this.__stagingDirty && !_rcNoMarks();
+    context.stagingDirty = !_rcIsGMUser() && !!this.__stagingDirty;
 
     // Pick the bank the player sees: their own when supporting, the lead's
     // when leading, the resolved attacker otherwise (GM view).
@@ -4332,12 +4344,12 @@ _renderScenarioHUD(host, round){
       const bankAtt = att ? getOPBank(att) : _zeroOps();
       const bankDef = def ? getOPBank(def) : _zeroOps();
 
-      const __nm = _rcNoMarks();   // ruling 5: staged marks never reach the view while the Alpha Cut is on
-      const stagedA = __nm ? 0 : Number(staged?.att?.[cat]||0);
-      const stagedD = __nm ? 0 : Number(staged?.def?.[cat]||0);
+      // Ruling 5 retired 2026-10-26: staged marks reach the view under the Alpha Cut too.
+      const stagedA = Number(staged?.att?.[cat]||0);
+      const stagedD = Number(staged?.def?.[cat]||0);
 
       let stagedSupport = 0;
-      const supportStage = __nm ? {} : (staged?.support || {});
+      const supportStage = (staged?.support || {});
       for (const bucket of Object.values(supportStage)) {
         stagedSupport += Number(bucket?.[cat] || 0);
       }
@@ -4387,9 +4399,19 @@ r.view = {
   defenderId: def?.id || "",
   coalition: coalitionRound,
   breakdown: `Att ${(attBaseRoll||0)} + ceil((StageA + Support) OP/2) ${stagedOpBonus(stagedA + stagedSupport)} = ${attProj}  •  Def ${(defBaseRoll||0)} + Base ${baseDefense} + Staged/2 ${defProjBonus}${diffR?` + Diff ${diffR}`:""}${facDefTotal?` + Defense ${facDefTotal}`:""}${nextBR?` + Next-Raid ${nextBR}`:""} = ${defProj}`};
-      // Ruling 5 — ONE line per side: what the Domain owns, as the engine already adds it.
-      r.view.noMarks = __nm;
-      if (__nm) {
+      // Alpha Cut — ONE Strength line per side (what the Domain owns, as the engine adds it) ABOVE the spend grid.
+      // Ruling 5 retired 2026-10-26: marks are spent in every Battle/Heist/Parley, so the grid always renders.
+      r.view.noMarks = false;
+      r.view.strengthOn = _rcAlphaOn();
+      // What this round spends — each side's selected maneuver costs in marks (the panel's "spends" line).
+      try {
+        const __EFF = (game.bbttcc?.api?.raid?.EFFECTS) || {};
+        const __sum = (keys) => { const o = {}; for (const k of (Array.isArray(keys) ? keys : [])) { const e = __EFF[k]; if (!e) continue; let free = false; try { free = _b3IsManeuverFreeOnRound(r, k); } catch (_e) {} if (free) continue; const { op } = lcKeysCost(_rcCostOf(e)); for (const [kk, v] of Object.entries(op || {})) { const n = Number(v || 0); if (n > 0) o[kk] = (o[kk] || 0) + n; } } return o; };
+        const __fmt = (o) => Object.entries(o).map(([k, v]) => `${_rcOpLabel(k)} ${_rcOP(v)}`).join(" · ");
+        r.view.spendAtt = __fmt(__sum(r.mansSelected));
+        r.view.spendDef = __fmt(__sum(r.mansSelectedDef));
+      } catch (_eSp) {}
+      if (r.view.strengthOn) {
         const c = coalitionRound || {};
         const sgn = (n) => `${Number(n) < 0 ? "−" : "+"}${Math.abs(Number(n) || 0)}`;
         const aParts = [`ops & people ${sgn(c.leadTotal || 0)}`];
@@ -5043,7 +5065,6 @@ r.view = {
   }
 
   async _stageOP(idx, { who, key, delta, factionId }){
-    if (_rcNoMarks()) { try { ui.notifications?.info?.("No marks at raid time: your Domain fights with what it owns."); } catch (_e) {} return; }
     const side = String(who || "").toLowerCase();
 
     // Permission gates for non-GM clicks:
@@ -5274,7 +5295,7 @@ async _postRoundCard(idx){
     // clicked "Commit Staging to GM" — that contribution won't be in the
     // session. The GM client can't see remote pending state, so we just warn
     // up front and let the GM decide.
-    if (!(await _rcConfirm("Resolve Round", _rcNoMarks() ? "Resolve this round?" : "Resolve this round?\n\nAny supporter who staged but hasn't clicked 'Commit Staging to GM' yet will lose that contribution."))) {
+    if (!(await _rcConfirm("Resolve Round", "Resolve this round?\n\nAny supporter who staged but hasn't clicked 'Commit Staging to GM' yet will lose that contribution."))) {
       return;
     }
 
@@ -5378,9 +5399,8 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
         // (owner hit this validating the courtly sprint 2026-07-14).
         const __prevCourtSt = this.__courtlyScenario?.getState?.() || null;
         if (!this.__courtlyScenario || !__prevCourtSt || __prevCourtSt.outcome !== "ongoing" || this.__courtlyScenarioAtt !== attacker.id || this.__courtlyScenarioDef !== defender.id) {
-          // ALPHA CUT ruling 3: one goal per Parley, picked here. Ruling 5: with the Alpha Cut on, Influence comes from what
-          // the Domain owns in Diplomacy and Soft Power (nothing debited) and the marks fields are not shown.
-          const __nm = _rcNoMarks();
+          // ALPHA CUT ruling 3: one goal per Parley, picked here. Ruling 5 retired 2026-10-26 (DC5): the opening commitment
+          // is real marks from each Domain's bank under the Alpha Cut too.
           const GOALS = [
             ["persuade",  "Persuade — win them over"],
             ["deceive",   "Deceive — make them believe a thing that is not so"],
@@ -5399,14 +5419,13 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
                   <div class="form-group"><label>Goal</label><select name="goal">${goalOpts}</select></div>
                   <div class="form-group" data-parley-style style="display:none;"><label>Style</label><select name="style">${styleOpts}</select></div>
                   <p class="hint">One goal per Parley. Suspicion only runs when the goal is Stay unnoticed; Impress runs the contest with its crowd.</p>
-                  ${__nm ? `<p class="hint" style="opacity:.85;">Influence opens from what each Domain owns in Diplomacy and Soft Power. No marks are spent to sit down.</p>` : `
-                  <p class="hint">Initial commitment sets starting Influence HP. You can leave these at 0 for a quick test.</p>
+                  <p class="hint">Initial commitment sets starting Influence HP — marks spent now from each Domain's bank. Every Parley costs marks, story-offered or not.</p>
                   <p class="hint" style="opacity:.85;">Attacker bank — Diplomacy <b>${Math.floor(Number(attacker?.getFlag?.("bbttcc-factions","opBank")?.diplomacy||0))}</b> · Soft Power <b>${Math.floor(Number(attacker?.getFlag?.("bbttcc-factions","opBank")?.softpower||0))}</b> marks. 10 Soft Power stays in reserve so the next round can still be added.</p>
                   <div class="form-group"><label>Attacker: Diplomacy marks commit</label><input type="number" name="atkDip" value="0" min="0" step="10"/></div>
                   <div class="form-group"><label>Attacker: Soft Power marks commit</label><input type="number" name="atkSoft" value="0" min="0" step="10"/></div>
                   <hr/>
                   <div class="form-group"><label>Defender: Diplomacy marks commit</label><input type="number" name="defDip" value="0" min="0" step="10"/></div>
-                  <div class="form-group"><label>Defender: Soft Power marks commit</label><input type="number" name="defSoft" value="0" min="0" step="10"/></div>`}
+                  <div class="form-group"><label>Defender: Soft Power marks commit</label><input type="number" name="defSoft" value="0" min="0" step="10"/></div>
                   <div class="form-group"><label>Label</label><input type="text" name="label" value="" placeholder="Parley — Persuade"/></div>
                 </form>`,
               buttons: {
@@ -5441,7 +5460,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           // 2026-10-09 — the opening commitment draws on the same Soft Power pool
           // that Add Round gates on. Keep the round cost in reserve so starting
           // the duel can't lock the attacker out of round 2.
-          if (!__nm) try {
+          try {
             const RESERVE = 10;
             const bankSoft = Math.floor(Number(attacker?.getFlag?.("bbttcc-factions", "opBank")?.softpower || 0));
             const maxSoft = Math.max(0, bankSoft - RESERVE);
@@ -5462,10 +5481,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
               label: init.label,
               goal: init.goal,
               performance: init.goal === "impress" ? init.style : null,
-              domainStrength: __nm ? {
-                atk: { dip: Number(categoryTotalWithRoster(attacker, "diplomacy") || 0), soft: Number(categoryTotalWithRoster(attacker, "softpower") || 0) },
-                def: { dip: Number(categoryTotalWithRoster(defender, "diplomacy") || 0), soft: Number(categoryTotalWithRoster(defender, "softpower") || 0) }
-              } : null
+              domainStrength: null   // ruling 5 retired 2026-10-26: Influence opens from the marks committed above
             });
             this.__courtlyScenarioAtt = attacker.id;
             this.__courtlyScenarioDef = defender.id;
@@ -5495,7 +5511,6 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           }
         }
 
-        const __nmX = _rcNoMarks();
         const __stX = this.__courtlyScenario?.getState?.() || {};
         const __perfActs = __stX.performance?.actions || null;   // Impress: the style names the four moves
         const stepArgs = await new Promise((resolve) => {
@@ -5505,20 +5520,22 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
             ["expose","Expose (Intrigue)"],
             ["intimidate","Intimidate (Violence Aura)"]
           ].map(([k,l])=>`<option value="${k}">${foundry.utils.escapeHTML(__perfActs?.[k] || l)}</option>`).join("");
-          const sweetHint = `<p class="hint">Sweeten the deal: marks handed to the other side now, in the open. They keep them whatever happens; you roll +1 per 15 marks this exchange.</p>`;
+          const sweetHint = `<p class="hint">Spend is the exchange's price, drawn from the pool your action leans on (every Parley costs marks). Sweeten the deal is on top: marks handed to the other side now, in the open. They keep them whatever happens; you roll +1 per 15 marks this exchange.</p>`;
           new Dialog({
             title: "Parley — Exchange",
             content: `
               <form class="bbttcc-raid-dialog-form">
                 <div class="form-group"><label>Attacker Action</label><select name="atkAction">${actions}</select></div>
-                ${__nmX ? `<div class="form-group"><label>Attacker: Sweeten the deal (marks to ${foundry.utils.escapeHTML(defender.name)})</label><input type="number" name="atkSweeten" value="0" min="0" step="10"/></div>` : `<div class="form-group"><label>Attacker Spend (marks)</label><input type="number" name="atkSpend" value="20" min="0" step="10"/></div>`}
+                <div class="form-group"><label>Attacker Spend (marks)</label><input type="number" name="atkSpend" value="20" min="0" step="10"/></div>
+                <div class="form-group"><label>Attacker: Sweeten the deal (marks to ${foundry.utils.escapeHTML(defender.name)})</label><input type="number" name="atkSweeten" value="0" min="0" step="10"/></div>
                 <div class="form-group"><label>Attacker Skill Bonus</label><input type="number" name="atkSkill" value="0" step="1"/></div>
                 <hr/>
                 <div class="form-group"><label>Defender Action</label><select name="defAction">${actions}</select></div>
-                ${__nmX ? `<div class="form-group"><label>Defender: Sweeten the deal (marks to ${foundry.utils.escapeHTML(attacker.name)})</label><input type="number" name="defSweeten" value="0" min="0" step="10"/></div>` : `<div class="form-group"><label>Defender Spend (marks)</label><input type="number" name="defSpend" value="20" min="0" step="10"/></div>`}
+                <div class="form-group"><label>Defender Spend (marks)</label><input type="number" name="defSpend" value="20" min="0" step="10"/></div>
+                <div class="form-group"><label>Defender: Sweeten the deal (marks to ${foundry.utils.escapeHTML(attacker.name)})</label><input type="number" name="defSweeten" value="0" min="0" step="10"/></div>
                 <div class="form-group"><label>Defender Skill Bonus</label><input type="number" name="defSkill" value="0" step="1"/></div>
                 <div class="form-group"><label>Note (optional)</label><input type="text" name="note" value=""/></div>
-                ${__nmX ? sweetHint : ""}
+                ${sweetHint}
               </form>`,
             buttons: {
               ok: { label:"Resolve", callback:(html)=>{
@@ -5703,16 +5720,16 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
             title: "Heist — Round",
             content: `
               <form>
-                ${_rcNoMarks() ? `<p class="hint">No marks are spent in a Heist. Your Domain works with what it owns; the stewards' chips and the coalition carry the roll.</p>` : `
+                <p class="hint">Every Heist costs marks: the round's spend comes from the Domain's Intrigue (the house answers in Nonlethal).</p>
                 <div class="form-group"><label>Attacker Spend (Intrigue marks)</label><input type="number" name="atk" value="20" min="0" step="10"/></div>
                 <div class="form-group"><label>Defender Spend (Nonlethal marks)</label><input type="number" name="def" value="20" min="0" step="10"/></div>
                 <div class="form-group"><label>Flashback (optional)</label>
                   <div class="form-fields">
                     <input type="checkbox" name="flash" style="margin-right:.5rem;"/>
-                    <span class="hint">Spend Intrigue OP to reduce Alarm by 1 (once per round).</span>
+                    <span class="hint">Spend Intrigue marks to reduce Alarm by 1 (once per round).</span>
                   </div>
                 </div>
-                <div class="form-group"><label>Flashback Cost (Intrigue marks)</label><input type="number" name="flashCost" value="20" min="0" step="10"/></div>`}
+                <div class="form-group"><label>Flashback Cost (Intrigue marks)</label><input type="number" name="flashCost" value="20" min="0" step="10"/></div>
                 <div class="form-group"><label>Note (optional)</label><input type="text" name="note" value=""/></div>
               </form>`,
             buttons: {
@@ -6097,16 +6114,16 @@ const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3DefMode, __b3ThisRound?
       addInto(manOpD, op);
     }
 
-    const __nmCommit = _rcNoMarks();   // ruling 5: nothing staged reaches the roll while the Alpha Cut is on
-    const stagedA = __nmCommit ? 0 : Number(r?.localStaged?.att?.[cat]||0);
-    const stagedD = __nmCommit ? 0 : Number(r?.localStaged?.def?.[cat]||0);
+    // Ruling 5 retired 2026-10-26 (DC5): staged marks reach the roll — and the debit — under the Alpha Cut too.
+    const stagedA = Number(r?.localStaged?.att?.[cat]||0);
+    const stagedD = Number(r?.localStaged?.def?.[cat]||0);
 
     let stagedSupport = 0;
     if (stagedA>0) manOpA[cat] = (manOpA[cat]||0)+stagedA;
     if (stagedD>0) manOpD[cat] = (manOpD[cat]||0)+stagedD;
 
     // Support faction staged OP
-    const supportStage = __nmCommit ? {} : (r?.localStaged?.support || {});
+    const supportStage = (r?.localStaged?.support || {});
     for (const [sfid, bucket] of Object.entries(supportStage)) {
       const clean = {};
       for (const [k, v] of Object.entries(bucket || {})) {
@@ -6159,7 +6176,7 @@ const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3DefMode, __b3ThisRound?
 
     // ALPHA CUT ruling 21 — a Battle is fought on the battlemap; the GM calls it here. Dice = off-map fallback.
     let __battleCall = null;
-    if (_rcNoMarks() && _rcIsBattleKey(r.activityKey) && r.targetType !== "creature") {
+    if (_rcAlphaOn() && _rcIsBattleKey(r.activityKey) && r.targetType !== "creature") {
       let __stake = null;
       try { if (r.targetType === "hex" && targetHex) __stake = await _rcBattleStake(r, attacker, targetHex, { objectiveOnly: this.vm.objectiveOnly === true }); } catch (_e) {}
       r.meta ||= {}; if (__stake) r.meta.stake = __stake;

@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "art/bbttcc/qliphoth/harab-serapel-scavenger.webp",
   "system": {
-    "role": "Qliphothic Predator (Harab Serapel — Lesser)",
+    "role": "stealth",
     "tier": 2,
     "factionId": "",
     "notes": "<p>A giant raven the size of a lion, feathers scorched black with embers still clinging to wing and tail, a beak of jagged volcanic rock. The embodiment of avarice on the wing: it mesmerizes victims with visions of treasure, holding them captivated while it swoops in to take their valuables and their life force, in that order of preference.</p><p><strong>Qliphah:</strong> Harab Serapel, the Ravens of Burning — the Hull of Netzach. Victory hollowed into rapacious greed.</p><p><em>Mal's note: 'It will show you exactly what you want. That is not generosity. That is aiming.'</em></p>",
@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 50,
-        "max": 50
+        "max": 50,
+        "temp": 0
       },
       "stress": {
         "value": 25,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -142,9 +144,13 @@
         "qliphothic"
       ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "sephirotic"
+      ]
     },
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "charmed"
+    ],
     "tags": [
       "qliphothic",
       "5e-port",
@@ -153,6 +159,9 @@
       "hull-of-netzach",
       "lesser"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -165,6 +174,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Predator (Harab Serapel — Lesser)",
+      "notes": "<p>A giant raven the size of a lion, feathers scorched black with embers still clinging to wing and tail, a beak of jagged volcanic rock. The embodiment of avarice on the wing: it mesmerizes victims with visions of treasure, holding them captivated while it swoops in to take their valuables and their life force, in that order of preference.</p><p><strong>Qliphah:</strong> Harab Serapel, the Ravens of Burning — the Hull of Netzach. Victory hollowed into rapacious greed.</p><p><em>Mal's note: 'It will show you exactly what you want. That is not generosity. That is aiming.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -264,13 +277,13 @@
       "_id": "d5AkKwUk95bNgXoJ",
       "name": "Flyby",
       "type": "feature",
-      "img": "icons/svg/wing.svg",
+      "img": "icons/magic/holy/angel-wings-gray.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
         "tags": [],
         "description": {
-          "value": "<p>The Scavenger doesn't provoke opportunity attacks when it flies out of reach. It was never really there for you anyway — just your pockets.</p>",
+          "value": "<p>The Scavenger doesn't provoke reaction strikes when it flies out of reach. It was never really there for you anyway — just your pockets.</p>",
           "chat": ""
         }
       },
@@ -282,23 +295,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188165,
-        "modifiedTime": 1787799188165,
+        "modifiedTime": 1792977772858,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!SmVDBIAjrDFTRjxt.d5AkKwUk95bNgXoJ"
+      }
     },
     {
       "_id": "mbFGEHPjw3SUztnt",
       "name": "Keen Sight",
       "type": "feature",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/weapons/staves/staff-ornate-eye.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -316,17 +328,16 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188165,
-        "modifiedTime": 1787799188165,
+        "modifiedTime": 1791324405232,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!SmVDBIAjrDFTRjxt.mbFGEHPjw3SUztnt"
+      }
     },
     {
       "_id": "Mlx1jTBQuLunleR5",
@@ -350,29 +361,28 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188165,
-        "modifiedTime": 1787799188165,
+        "modifiedTime": 1791324405232,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!SmVDBIAjrDFTRjxt.Mlx1jTBQuLunleR5"
+      }
     },
     {
       "_id": "uOEfoBLF6Ik4M3By",
       "name": "Soulfire Beak",
       "type": "weapon",
-      "img": "icons/svg/fire.svg",
+      "img": "icons/weapons/guns/flamethrower-spray-fire-orange.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
         "skill": "melee",
         "damage": {
-          "formula": "2d10",
+          "formula": "2d8",
           "attribute": "violence",
           "type": "kinetic",
           "damageFlavor": "hot",
@@ -415,6 +425,13 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "body",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 14,
+            "onSave": "negate",
+            "statesOnFail": true
           }
         },
         "description": {
@@ -428,25 +445,54 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Soulfire Beak"
+                },
+                "do": {
+                  "damage": {
+                    "formula": "1d6",
+                    "type": "thermal"
+                  }
+                }
+              },
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Soulfire Beak"
+                },
+                "do": {
+                  "prompt": "Max Integrity drops by the thermal dealt until a Soma Break."
+                },
+                "narrative": true
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188165,
-        "modifiedTime": 1787799188165,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989136761,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!SmVDBIAjrDFTRjxt.uOEfoBLF6Ik4M3By"
+      }
     },
     {
       "_id": "uipuL4skts5m2S8u",
       "name": "Talons",
       "type": "weapon",
-      "img": "icons/svg/pawprint.svg",
+      "img": "icons/magic/nature/wolf-paw-glow-small-green.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -510,23 +556,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188165,
-        "modifiedTime": 1787799188165,
+        "modifiedTime": 1791324405233,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!SmVDBIAjrDFTRjxt.uipuL4skts5m2S8u"
+      }
     },
     {
       "_id": "t283p3TRB4uEsBl5",
       "name": "Avaricious Gaze (Recharge 5–6)",
       "type": "feat",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/weapons/staves/staff-ornate-eye.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -542,19 +587,245 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "condition": {
+                    "key": "charmed",
+                    "duration": "until-saved",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 14
+                    }
+                  }
+                }
+              },
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Avaricious Gaze (Recharge 5–6)"
+                },
+                "do": {
+                  "condition": {
+                    "key": "staggered",
+                    "duration": "scene"
+                  },
+                  "prompt": "Staggered while Charmed; on a success it's immune for a day."
+                }
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188165,
-        "modifiedTime": 1787799188165,
+        "modifiedTime": 1791331977518,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Aura of Avarice",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "qliphothic",
+          "harab-serapel"
+        ],
+        "description": {
+          "value": "<p>Any creature that starts its turn within 6 squares must succeed a Resolve check (DC by tier) or spend its movement moving toward the most valuable object it can see.</p><p><em>Harab Serapel — hull of netzach.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!SmVDBIAjrDFTRjxt.t283p3TRB4uEsBl5"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "radius": 6,
+                "who": "enemies",
+                "do": {
+                  "save": {
+                    "attr": "soul",
+                    "dc": 15,
+                    "onSave": "negate"
+                  },
+                  "prompt": "Aura of Avarice: on a fail, its movement goes toward the most valuable object it can see."
+                }
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "qliphothic"
+            }
+          }
+        }
+      },
+      "_id": "Tb15BBhwpnUkOgA9",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342349583,
+        "modifiedTime": 1791342349584,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Hollow Touch",
+      "type": "weapon",
+      "img": "icons/magic/death/hand-withered-gray.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "violence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "lineage-strike",
+          "qliphothic",
+          "bestiary"
+        ],
+        "effect": "Damage goes to Stress. On a hit the target rolls Resolve vs DC 15; on a failure it is Compelled toward the shell's vice until the end of its next turn.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul"
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 15,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> Reach 1 square, one target. Damage: <code>2d6</code> qliphothic to Stress + violence. On a hit the target rolls Resolve vs DC 15; on a failure it is Compelled toward the shell's vice until the end of its next turn.</p><p><em>The hollow reaches for what it lacks.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "attack",
+              "lineageStrike": "qliphothic",
+              "price": {
+                "marks": 150,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII attack × 1",
+                "bound": "free",
+                "saleBack": 60
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "oESpWd2BSzhztOIa",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989136809,
+        "modifiedTime": 1792989136809,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -598,34 +869,38 @@
             ]
           },
           "price": {
-            "marks": 450,
-            "bounty": 600,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 15,
+            "bounty": 15,
+            "hire": 25,
+            "ransom": 25,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "II medium Qliphothic Predator (Harab Serapel — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TII medium qliphothic — bounty 15 / hire 25 marks; credited to the pool matching the method (default intrigue)"
           },
           "qliphah": {
             "name": "harab-serapel",
             "hullOf": "netzach",
             "grade": "lesser"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "harab-serapel",
+          "title": "Qliphothic Predator (Harab Serapel — Lesser)"
         }
       },
-      "kind": "npc"
+      "kind": "npc",
+      "creatureType": "fiend"
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188165,
-    "modifiedTime": 1787799188165,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989136592,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "SmVDBIAjrDFTRjxt",
   "_key": "!actors!SmVDBIAjrDFTRjxt"

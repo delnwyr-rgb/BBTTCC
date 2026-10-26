@@ -16,7 +16,8 @@
     "damageParts": [],
     "range": {
       "short": 1,
-      "long": 1
+      "long": 1,
+      "units": "sq"
     },
     "tags": [
       "stylus",
@@ -318,12 +319,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137142780,
-    "modifiedTime": 1782159946544,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988941477,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

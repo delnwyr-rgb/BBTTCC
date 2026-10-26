@@ -1,0 +1,111 @@
+{
+  "name": "Circuited Patrolman's Plate",
+  "type": "armor",
+  "img": "icons/equipment/chest/breastplate-layered-leather-black.webp",
+  "system": {
+    "guardBonus": 4,
+    "evasionBonus": 0,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "bracing",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "medium",
+      "plate",
+      "graded",
+      "grade-circuited"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A studded breastplate over a gambeson, with shoulder pauldrons that fit at least three different body types badly. Worn by Domain patrols, hex constables, and anyone who needs to look like they have authority without carrying signature gear. Cheap, repairable, and forgivingly average.</p><p>No signature, no harmonization, no questions asked at the gate.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Medium</li>\n  <li><strong>Defense:</strong> Guard +4</li>\n  <li><strong>Requires:</strong> Bracing (trained)</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 675 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Circuited (+2). A closed circuit of sigils; it answers one hand.</strong></p>\n<ul>\n  <li><strong>+2 on each of its defense bonuses</strong> → Guard +4 (rank-scaled like all armor: Trained half, Proficient full).</li>\n  <li>Grade raises it to <strong>Tier III</strong> · attuned (one slot).</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Issued, dented, returned, reissued. Honest metal.",
+          "origin": "forged",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A studded breastplate over a gambeson, with shoulder pauldrons that fit at least three different body types badly. Worn by faction patrols, hex constables, and anyone who needs to look like they have authority without carrying signature gear. Cheap, repairable, and forgivingly average.</p><p>No signature, no harmonization, no questions asked at the gate.</p>",
+          "materialOf": [
+            {
+              "key": "scrap-steel",
+              "qty": 1
+            },
+            {
+              "key": "gambeson",
+              "qty": 1
+            },
+            {
+              "key": "leather-strap",
+              "qty": 1
+            },
+            {
+              "key": "hex-glyph-plate",
+              "qty": 1
+            },
+            {
+              "key": "wardiron",
+              "qty": 1
+            }
+          ],
+          "price": {
+            "marks": 675,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII armor (Circuited +2 on TI Patrolman's Plate) × bound attuned",
+            "bound": "attuned",
+            "saleBack": 270
+          }
+        }
+      },
+      "grade": {
+        "rank": 2,
+        "name": "Circuited",
+        "key": "circuited",
+        "defense": 2
+      }
+    }
+  },
+  "folder": "paUl8Tj6Xx5fAkKN",
+  "_id": "iIeVeAC62iq2IQ4v",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791427797923,
+    "modifiedTime": 1792988957577,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!iIeVeAC62iq2IQ4v"
+}

@@ -1,0 +1,50 @@
+{
+  "name": "Siege-Thing",
+  "type": "feature",
+  "img": "icons/environment/wilderness/wall-ruins.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Deals double damage to objects and structures. Walls are just slow enemies.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "y3eelXrwGLi0N8u2",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "War Incarnate"
+        ],
+        "sourceIds": [
+          "uyiTmCco8gDsuHde"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069964,
+    "modifiedTime": 1792989070045,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!y3eelXrwGLi0N8u2"
+}

@@ -30,7 +30,7 @@
       "level": null
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Level 11+",
     "type": {
       "value": "",
       "subtype": ""
@@ -51,6 +51,16 @@
         "levelMax": 3
       },
       "category": "archetype"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "mode": "reroll-lowest",
+          "context": "defense",
+          "vs": "Stress, poison, or environmental effects",
+          "note": "Temperance T3"
+        }
+      ]
     }
   },
   "effects": [],
@@ -65,12 +75,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986658337,
-    "modifiedTime": 1782167238588,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989150498,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

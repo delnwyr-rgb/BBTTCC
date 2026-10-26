@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 — Tarot Mage</strong></p><p><strong>“Fate is a machine. I know where to kick it.”</strong></p><p>At this tier, you can reach across the table and touch another faction’s outcome. Not by overpowering them — by <em>reordering the moment</em>.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>During <strong>Enemy Faction Turns (Phase 3)</strong>, spend <strong>5 Intrigue OP</strong> to manipulate fate</li><li>Force the GM to reroll one NPC faction’s strategic action outcome and take the new result</li></ul><p>Use this sparingly. The world does not like being reminded it can be edited.</p><p><strong>Cost:</strong> direct fate-editing leaves fingerprints all over the campaign. Expect backlash, omen debt, hostile synchronicity, or enemy actors who start looking for who touched the line.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"tarotT4\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Force the Reroll</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 5 Intrigue OP &nbsp;·&nbsp; <strong>Action:</strong> Strategic (Phase 3) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Force the GM to reroll one NPC faction's strategic action outcome. Backlash guaranteed — use sparingly.</div>\n</div>",
+      "value": "<p><strong>Tier 4 — Tarot Mage</strong></p><p><strong>“Fate is a machine. I know where to kick it.”</strong></p><p>At this tier, you can reach across the table and touch another faction’s outcome. Not by overpowering them — by <em>reordering the moment</em>.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>During <strong>Enemy Faction Turns (Phase 3)</strong>, spend <strong>50 Intrigue marks</strong> to manipulate fate</li><li>Force the GM to reroll one NPC faction’s strategic action outcome and take the new result</li></ul><p>Use this sparingly. The world does not like being reminded it can be edited.</p><p><strong>Cost:</strong> direct fate-editing leaves fingerprints all over the campaign. Expect backlash, omen debt, hostile synchronicity, or enemy actors who start looking for who touched the line.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"tarotT4\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Force the Reroll</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 50 Intrigue marks &nbsp;·&nbsp; <strong>Action:</strong> Strategic (Phase 3) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Force the GM to reroll one NPC faction's strategic action outcome. Backlash guaranteed — use sparingly.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -258,12 +258,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987105637,
-    "modifiedTime": 1781025124276,
-    "lastModifiedBy": "MRFjjbUTBd66pWBY"
+    "modifiedTime": 1792977826248,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

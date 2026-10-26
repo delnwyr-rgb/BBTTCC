@@ -8,6 +8,7 @@
     "tags": [],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>Two wheels of bad decision. Outruns most opinions and a fair number of bullets. No room for company; that's the appeal.</p><p><strong>Frame · Personal · Mobile · Single seat</strong></p>",
       "chat": ""
@@ -72,7 +73,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TI vehicle stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 100
@@ -91,11 +92,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.16",
     "createdTime": 1778961742221,
-    "modifiedTime": 1779041934881,
+    "modifiedTime": 1791865101702,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

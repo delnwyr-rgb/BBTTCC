@@ -29,7 +29,7 @@
       "level": null
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Level 11+",
     "type": {
       "value": "",
       "subtype": ""
@@ -52,6 +52,14 @@
         "levelMax": 3
       },
       "category": "occult"
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          "radiation",
+          "qliphothic"
+        ]
+      }
     }
   },
   "img": "icons/skills/trades/helix-green.webp",
@@ -67,12 +75,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987087005,
-    "modifiedTime": 1777515322528,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989175320,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -3,8 +3,14 @@
   "type": "feat",
   "img": "icons/skills/trades/security-locksmith-key-gray.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Resource Expropriation</b></p><p>Steal +2 Economy from enemy; Darkness +1.</p><p><b>Cost:</b> Violence 2 • Economy 3</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>resource_expropriation</code></p>",
+      "value": "<p><b>Resource Expropriation</b></p><p>Steal +2 Economy from enemy; Darkness +1.</p><p><b>Cost:</b> Economy 30 · Violence 20 marks</p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "resource-expropriation",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -59,12 +61,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063179595,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989010907,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!GpM8ureaRtqCUdCu"
 }

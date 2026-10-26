@@ -1,18 +1,13 @@
 {
   "name": "Archetype: Strength (Warlord) (Tier 2)",
   "type": "feat",
-  "img": "icons/creatures/abilities/lion-roar-yellow.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_strength.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "Bad Eden – Archetype: Strength (Warlord) (Tier 2)",
-      "book": ""
-    },
+    "source": "Bad Eden – Archetype: Strength (Warlord) (Tier 2) (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — Violence</strong></p>\n<ul>\n<li><strong>Tactical:</strong> Your force of presence and battlefield authority begin to shape momentum.</li>\n<li><strong>Strategic:</strong> Once per raid, siege, or violent strategic action, your faction may add <strong>+2</strong> to one relevant Opposed Strategic Roll involving Violence.</li>\n</ul>",
+      "value": "<p><strong>Tier 2 (Level 5) — Strength (Warlord)</strong></p><ul><li><p><strong>Tactical:</strong> Your force of presence and battlefield authority begin to shape momentum.</p></li><li><p><strong>Strategic:</strong> Once per Battle or Siege, your Domain adds +2 to one Violence Domain roll (the card fires it).</p></li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -73,12 +68,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986646202,
-    "modifiedTime": 1782167238590,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989154905,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

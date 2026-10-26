@@ -1,0 +1,5209 @@
+{
+  "name": "Senna Ketch",
+  "type": "character",
+  "img": "art/bbttcc/asli-trailer/tokens/rustland-scavernger-1.webp",
+  "prototypeToken": {
+    "texture": {
+      "src": "art/bbttcc/asli-trailer/tokens/rustland-scavernger-1.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "name": "Senna Ketch",
+    "displayName": 30,
+    "actorLink": true,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 10,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 2,
+      "alignment": ""
+    },
+    "attributes": {
+      "violence": {
+        "value": 8
+      },
+      "intrigue": {
+        "value": 3
+      },
+      "presence": {
+        "value": 2
+      },
+      "body": {
+        "value": 6
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 7
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 1
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 4
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 1
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 1
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 0
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 2
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 3
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 0
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "fitting": {
+        "attribute": "intrigue",
+        "label": "Fitting",
+        "value": 1
+      },
+      "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 88,
+        "max": 16,
+        "temp": 0
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
+  },
+  "_id": "eFYAnE7OeCex0zoI",
+  "items": [
+    {
+      "name": "Oldenborn",
+      "type": "species",
+      "img": "art/bbttcc/asli-icons/oldborne_sky.webp",
+      "system": {
+        "category": "ancestry",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 2,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "\n<p><strong>Oldenborn.</strong></p><p><em>“You are not an elf. You are the memory of a place that learned to walk again.”</em></p>\n<p><strong>Dream-Flesh.</strong> You do not sleep. When you rest, you drift into Yesod—symbolic memory-space—unless you choose otherwise. You are immune to magical sleep, and you can always tell when a dream, illusion, or constructed reality is present.</p>\n<p><strong>Old Memory, Old Paths.</strong> You reroll the lowest die on checks to interpret ruins, follow ley-lines, identify altered terrain, and sense metaphysical instability. You always know if a place feels <em>remembered</em>, <em>abandoned</em>, or <em>contested</em> (the GM answers vaguely).</p>\n<p><strong>Veil-Sight.</strong> You perceive the <em>presence</em> of spirits, ghosts, Spark echoes, and noospheric constructs. This grants awareness, not perfect sight.</p>\n<p><strong>You Are Remembered.</strong> When you first meet a community, the GM chooses (or rolls) whether you are met with reverence, fear, or familiarity. It’s never neutral.</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "8dfcdc1a6e9e4b08",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium.",
+            "value": {}
+          },
+          {
+            "_id": "95aae7269bab1119",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.TNlzDCiEgc27ZzOl",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Old Memory, Old Flesh",
+            "hint": "Gain the core Oldenborn ancestry traits."
+          }
+        ],
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": "Veil-Sight (awareness of spirits, Spark echoes, noospheric constructs)."
+        },
+        "type": {
+          "value": "humanoid",
+          "custom": "",
+          "subtype": "Oldenborn"
+        },
+        "identifier": "oldenborn"
+      },
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "family": "oldenborn",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "heritageList": [
+            "earthbound",
+            "lumenwrought",
+            "stormborn_nomad",
+            "rustland_scavenger"
+          ],
+          "refactorNotes": "v2 simplification: Sky-Threaded and Ember-Touched retired. Stormborn Nomad and Rustland Scavenger demoted from species to Oldenborn heritages."
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "on checks to interpret ruins, follow ley-lines, identify altered terrain, and…"
+            },
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "checks to interpret ruins, follow ley-lines, identify altered terrain, and se…"
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-soma-break",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Dream-Flesh. You do not sleep: this rest, you drift into Yesod — symbolic memory-space — unless you choose otherwise."
+                }
+              }
+            }
+          ],
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.7709222f8ff32964"
+        }
+      },
+      "effects": [],
+      "folder": "5PPxNybRn7zD0k0G",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.7709222f8ff32964",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.7709222f8ff32964",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613882,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "y9l3LTSJRnXTjFdD"
+    },
+    {
+      "name": "Oldenborn Heritage: Rustland Scavenger",
+      "type": "feat",
+      "img": "art/bbttcc/asli-icons/oldenborn_lumenwrought_2.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 2,
+          "rules": "2024",
+          "book": "",
+          "custom": "Bad Eden",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "\n<p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Rustlander Scavenger</em> while converting it from a species-root into an Oldenborn heritage. Renamed to <em>Rustland Scavenger</em> to match v2 canon.</p><p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Oldenborn (Rustland Scavenger).</strong> Your place-soul is a dead city that refused to finish dying. You are the genius loci of collapsed transit hubs, rebar graveyards, and the smell of old oil. Every ruin you walk into recognizes you on arrival and, quietly, offers you what’s left.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Fey, Rustland).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 6 squares</li><li><strong>attributes.</strong> Oldenborn does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>MND (Mind)</strong> or <strong>INTR (Intrigue)</strong> in fiction and mechanics via Tier powers.</li></ul><h3>Oldenborn Core</h3><p>At character creation, you gain <strong>Old Memory, Old Flesh</strong> (Dream-Flesh, Old Paths, Veil-Sight, You Are Remembered).</p><h3>Rustland Scavenger Traits</h3><ul><li><strong>Toxic Lung Filters.</strong> reroll-lowest on checks against inhaled toxins, smoke, and industrial residue. You can function for up to 1 hour in atmospheres that would hospitalize a normal Medium creature.</li><li><strong>Urban Scrounger.</strong> You gain a skill rank with the <em>Investigation</em> skill. You can always tell which structure in a ruin is load-bearing, which doorway is the real exit, and which pile of junk has something useful in it.</li><li><strong>Patch &amp; Repurpose.</strong> During a Soma Break spent in a ruin or wreckage hex, you can recover one expended consumable (bandage, filter, torch, ration) per Soma Break by scavenging.</li><li><strong>Ruin Sense.</strong> You read marketplaces, ruins, and hex politics at a glance and can always tell what the last three meaningful events were in a trade hub.</li></ul><h3>Domain Edge</h3><ul><li><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Intrigue marks</strong> and <strong>+20 Economy marks</strong> at campaign start.</li></ul>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "RUSTADVH00000001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.k8xjtKEZHM2XVq6t",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Rustland Tier I",
+            "hint": "Gain your Rustland Tier I power (maps to legacy Toxic Lung Filters grant)."
+          }
+        ],
+        "identifier": "oldenborn_rustland_scavenger_heritage",
+        "requirements": "Oldenborn",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [
+        {
+          "name": "Urban Scrounger: Investigation +1",
+          "img": "icons/tools/scribal/magnifying-glass.webp",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.investigation.value",
+                "value": 1,
+                "type": "add",
+                "priority": 10,
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Passive: Urban Scrounger: Investigation +1",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "sprint": "passive-ae-2026-04-28",
+              "batch": 2
+            }
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "_id": "u3Q68RR8Z4mfkWYG",
+          "showIcon": 1,
+          "folder": null,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792773730485,
+            "modifiedTime": 1792773730485,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "oldenborn",
+          "lineage": "Rustland Scavenger",
+          "opEffects": {
+            "economy": 2,
+            "intrigue": 1
+          },
+          "terrainSynergy": [
+            "Ruins / Urban Wreckage"
+          ],
+          "hexRules": {
+            "urbanTravelIntrigueDiscount": 1
+          },
+          "salvageWindfallPerTurn": true,
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "normalizedFrom": "Rustlander Scavenger [species]",
+          "renamed": "Rustlander Scavenger -> Rustland Scavenger"
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "defense",
+              "mode": "reroll-lowest",
+              "vs": "vs:inhaled toxins",
+              "note": "on defense checks against inhaled toxins, smoke, and industrial residue"
+            },
+            {
+              "context": "defense",
+              "mode": "reroll-lowest",
+              "vs": "vs:inhaled toxins",
+              "note": "defense checks against inhaled toxins, smoke, and industrial residue"
+            }
+          ],
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "intrigue-op",
+              "amount": 2
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "economy-op",
+              "amount": 2
+            }
+          ],
+          "principleSource": "ancestry"
+        },
+        "autoanimations": {
+          "id": "cfe67a51-15ce-4959-bf7a-5c8a49514c5f",
+          "label": "Oldenborn Heritage: Rustland Scavenger",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.bILvIQnnHx5eVzYb"
+        }
+      },
+      "folder": "7fnxyCtrYl8KlYbp",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613883,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "exportSource": null,
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.bILvIQnnHx5eVzYb",
+        "duplicateSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "ujfkLpMeyvuuo9qi"
+    },
+    {
+      "name": "Aurablade",
+      "type": "class",
+      "img": "icons/sundries/scrolls/scroll-bound-skull-brown.webp",
+      "system": {
+        "category": "path",
+        "identifier": "aurablade",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h1>⚔ AURABLADE — MECHANICAL CORE (PHASE 1.5)</h1><p><em>Emotion is not flavor text.<br />Emotion is a resource.</em></p><hr /><h2>🔥 Burn — What It Is (Plainly)</h2><p><strong>Burn</strong> represents emotional overextension:</p><ul><li><p>Adrenaline overload</p></li><li><p>Suppressed fear</p></li><li><p>Moral fixation</p></li><li><p>Spiritual strain</p></li></ul><p>Burn is <strong>not a die pool</strong>.<br />Burn is a <strong>state track</strong> that unlocks power <strong>and</strong> risk.</p><p>You do not “spend” Burn.<br />You <strong>enter Burn states</strong>, and the game responds.</p><hr /><h2>🔥 How You Gain Burn (Concrete Triggers)</h2><p>You gain <strong>1 Burn</strong> when <strong>any one</strong> of the following occurs:</p><h3>Universal Burn Triggers</h3><ul><li><p>You hit with an attack granted or enhanced by your Aura</p></li><li><p>You force a defense check using an Aura feature</p></li><li><p>You escalate without pause (GM-flagged high-risk continuation)</p></li><li><p>You remain in the same Aura for too long without stabilizing</p></li></ul><p>⚠️ <strong>Limit:</strong><br />You bank <strong>at most 2 Burn a round from landed hits</strong>; each Aura action adds 1, and a subclass may say otherwise.</p><p>Burn rewards <strong>commitment</strong>, not spam.</p><hr /><h2>🔥 Burn States (Explicit Bands)</h2><p>Burn is divided into <strong>three states</strong>.</p><h3>🔹 Burn 0–1 — <strong>Controlled</strong></h3><p>You are emotionally steady.</p><ul><li><p>You gain <strong>only passive Aura benefits</strong></p></li><li><p>No backlash risk</p></li><li><p>No forced effects</p></li></ul><p>This is the <em>safe</em> state.</p><hr /><h3>🔸 Burn 2–3 — <strong>Engaged</strong></h3><p>Your emotion is active and visible.</p><p>At this state:</p><ul><li><p>Your Aura unlocks <strong>standard combat riders</strong></p></li><li><p>Your abilities gain <strong>explicit mechanical effects</strong></p></li><li><p>You may choose to <strong>push harder</strong></p></li></ul><p>This is the <em>intended combat state</em>.</p><hr /><h3>🔥 Burn 4+ — <strong>Overheated</strong></h3><p>You are exceeding safe emotional limits.</p><p>At this state:</p><ul><li><p>Aura effects <strong>intensify</strong></p></li><li><p>GM is authorized to:</p><ul><li><p>Trigger backlash</p></li><li><p>Apply collateral</p></li><li><p>Force Aura collapse on a bad roll or narrative beat</p></li></ul></li></ul><p>This is the <em>danger state</em>.</p><hr /><h2>🔥 What Happens at Backlash (Clear, Bounded)</h2><p>When backlash triggers (GM discretion or subclass feature):</p><p>One of the following occurs (GM chooses or rolls):</p><ul><li><p>You take psychic or sephirotic damage</p></li><li><p>You suffer roll 3d10 keep lowest 2 on your next attack or save</p></li><li><p>Your Aura collapses (you drop to Burn 0)</p></li><li><p>A narrative consequence occurs (fear, escalation, attention)</p></li></ul><p>Aurablades are not punished randomly.<br />They are punished <strong>predictably</strong>.</p><hr /><h1>💠 AURA STATES — EXPLICIT MECHANICAL EFFECTS</h1><p>Each Aura grants:</p><ul><li><p>A <strong>passive effect</strong></p></li><li><p><strong>Engaged Burn effects</strong></p></li><li><p><strong>Overheated Burn effects</strong></p></li></ul><p>These are <strong>not manifestations</strong>.<br />They are <strong>combat permissions</strong>.</p><hr /><h2>🔥 FURY — Escalation &amp; Force</h2><p><strong>Theme:</strong> Press harder. Break lines.</p><h3>Passive (Always On)</h3><ul><li><p>+1 bonus to damage rolls with melee weapon attacks</p></li></ul><hr /><h3>Burn 2–3 (Engaged)</h3><p>When you hit with a melee attack:</p><ul><li><p>Deal <strong>+tier damage</strong></p></li><li><p>You may <strong>push the target 1 square</strong> or <strong>cleave</strong> a second creature within reach (once per turn)</p></li></ul><p>You may also:</p><ul><li><p>Ignore roll 3d10 keep lowest 2 on one attack per turn</p></li></ul><hr /><h3>Burn 4+ (Overheated)</h3><p>When you hit:</p><ul><li><p>Target must succeed on a Violence defense or be <strong>knocked prone</strong></p></li><li><p>Your attacks <strong>deny reactions</strong> until the start of your next turn</p></li></ul><p>⚠️ Risk:</p><ul><li><p>On a missed attack, GM may trigger backlash</p></li></ul><p>Fury trades control for dominance.</p><hr /><h2>🛡 RESOLVE — Defense &amp; Refusal</h2><p><strong>Theme:</strong> Stand firm. Make removal expensive.</p><h3>Passive (Always On)</h3><ul><li><p>+1 bonus to Guard while you have not moved this turn</p></li></ul><hr /><h3>Burn 2–3 (Engaged)</h3><p>You may:</p><ul><li><p>Halve the next hit you take before the start of your next turn</p></li><li><p>Ignore forced movement up to 2 squares</p></li></ul><p>Additionally:</p><ul><li><p>Reaction strikes against you roll 3d10 and keep the lowest 2</p></li></ul><hr /><h3>Burn 4+ (Overheated)</h3><p>You may:</p><ul><li><p>Automatically succeed on one Violence, Body, or Intrigue check per round</p></li><li><p>Lock your position: enemies cannot move you at all</p></li></ul><p>⚠️ Risk:</p><ul><li><p>When damage is fully negated, backlash may occur</p></li></ul><p>Resolve dares the world to try harder.</p><hr /><h2>🤍 MERCY — Protection &amp; Restraint</h2><p><strong>Theme:</strong> Prevent loss. Redirect harm.</p><h3>Passive (Always On)</h3><ul><li><p>You may choose to deal <strong>nonlethal damage</strong> without penalty</p></li></ul><hr /><h3>Burn 2–3 (Engaged)</h3><p>Once per round, when an ally within 2 squares takes damage:</p><ul><li><p>Reduce that damage by <strong>tier</strong></p></li><li><p>You may redirect it to yourself</p></li></ul><p>You may also:</p><ul><li><p>Automatically stabilize a creature you touch</p></li></ul><hr /><h3>Burn 4+ (Overheated)</h3><p>You may:</p><ul><li><p>Prevent an ally from dropping below 1 Integrity (once per round)</p></li><li><p>Convert a failed Last Stand check into a success</p></li></ul><p>⚠️ Risk:</p><ul><li><p>Preventing death may trigger backlash or Aura collapse</p></li></ul><p>Mercy delays consequences — it does not erase them.</p><hr /><h2>🕳 DREAD — Suppression &amp; Collapse</h2><p><strong>Theme:</strong> Remove hope. End momentum.</p><h3>Passive (Always On)</h3><ul><li><p>Enemies within 1 square suffer roll 3d10 keep lowest 2 on fear and nerve checks (GM adjudication)</p></li></ul><hr /><h3>Burn 2–3 (Engaged)</h3><p>On hit:</p><ul><li><p>Target must make a Soul defense or be <strong>Shaken</strong> until the end of its next turn</p></li><li><p>Target cannot take reactions</p></li></ul><p>You may also:</p><ul><li><p>Suppress one buff or inspiration effect (GM adjudication)</p></li></ul><hr /><h3>Burn 4+ (Overheated)</h3><p>When you hit:</p><ul><li><p>Target suffers <strong>roll 3d10 keep lowest 2 on all saves</strong> until the start of your next turn</p></li><li><p>Nearby enemies must make a defense check or hesitate (lose movement or reactions)</p></li></ul><p>⚠️ Risk:</p><ul><li><p>Collateral fear or narrative fallout is likely</p></li></ul><p>Dread does not kill bodies.<br />It kills <em>belief</em>.</p><hr /><h1>🔄 Changing Aura (Explicit Rule)</h1><p>You may change your Aura:</p><ul><li><p>As a <strong>bonus action</strong></p></li><li><p>Or as part of a Soma Break or narrative reset</p></li></ul><p>Changing Aura:</p><ul><li><p>Costs <strong>1 Burn</strong></p></li><li><p>Does not clear Burn; Stabilize or Meditate for that</p></li></ul><p>Frequent swapping = control<br />Deep commitment = power</p><hr /><h1>🧠 How Players Should Think About Aurablade</h1><p>Ask yourself every turn:</p><ul><li><p>“Do I escalate — or stabilize?”</p></li><li><p>“Can I afford another Burn?”</p></li><li><p>“What happens if this goes wrong?”</p></li></ul><p>Aurablades are <strong>not forgiving</strong>.</p><p>They are <strong>honest</strong>.</p><hr />",
+          "chat": ""
+        },
+        "startingEquipment": [],
+        "levels": 1,
+        "advancement": [
+          {
+            "_id": "6jC9kzVPDsnnY3IO",
+            "type": "HitPoints",
+            "configuration": {},
+            "value": {},
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "He0NO4aGFw5ESuXk",
+            "type": "Subclass",
+            "configuration": {},
+            "value": {
+              "document": null,
+              "uuid": null
+            },
+            "level": 3,
+            "title": "",
+            "hint": "",
+            "flags": {}
+          },
+          {
+            "_id": "F3lztRY7YoQTqhXH",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 4,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "VaBQIzrvUak6vnUn",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 8,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "ZtZeyVymIuhlsKbT",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 12,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "HcvRmEV3DJJFFoH2",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 16,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "l8EtNSfONAPTWl0j",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 19,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "DrO6a8jlxI1GdgMP",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "saves:wis",
+                "saves:cha"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "defense check Proficiencies",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          {
+            "_id": "0CcvUuOYW5tRvu3o",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [],
+              "choices": [
+                {
+                  "count": 2,
+                  "pool": [
+                    "skills:acr",
+                    "skills:ath",
+                    "skills:ins",
+                    "skills:prc",
+                    "skills:itm"
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Skill Proficiencies",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          {
+            "_id": "grgBYWJqWmJFVlIS",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "armor:lgt"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Armor Proficiencies",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          {
+            "_id": "a9qA6e7011jFgmhB",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "weapon:sim",
+                "weapon:mar"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Weapon Proficiencies",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          {
+            "_id": "l6TwG6MjmlLftERT",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.wgygFL4kFQvY7Y7R",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.BhlrJv0osQl3kJId",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.DbgJfsKa735tgoaL",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.SnNMVlFK9hAUbO5U",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.0HJDPkWxEvKLPZQG",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 1,
+            "title": "Aurablade Core Features"
+          }
+        ],
+        "spellcasting": {
+          "progression": "half",
+          "ability": "cha",
+          "preparation": {
+            "formula": "@cha.mod + floor(@classes.aurablade.levels/2)"
+          }
+        },
+        "primaryAbility": {
+          "value": [
+            "cha"
+          ],
+          "all": false
+        },
+        "hd": {
+          "denomination": "d8",
+          "spent": 0,
+          "additional": ""
+        },
+        "properties": [],
+        "wealth": ""
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "primary": "cha",
+          "burn": {
+            "range": {
+              "min": 0,
+              "max": 1
+            },
+            "delta": 1,
+            "_taggedBy": "bbttcc-burn-batch-tagger",
+            "_ts": 1770856290932,
+            "_from": "Aurablade"
+          }
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.V7fpwepCDoqUdT1O"
+        }
+      },
+      "folder": "dOGgswNkCqoX08ys",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.V7fpwepCDoqUdT1O",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613883,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "AmXBG9OxAFfm8ln9"
+    },
+    {
+      "name": "Aurablade Action",
+      "type": "feat",
+      "img": "icons/magic/fire/barrier-wall-flame-ring-yellow.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p>Open the Aurablade action dialog. Available options depend on your current <strong>Aura</strong> and <strong>Burn</strong> band.</p><p> for Fury, Resolve, Mercy, or Dread.</p>",
+          "chat": ""
+        },
+        "identifier": "aurablade_action",
+        "advancement": {},
+        "activities": {
+          "primary": {
+            "type": "utility",
+            "name": "Aurablade Action",
+            "activation": {
+              "type": "action",
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "units": "inst",
+              "value": "",
+              "concentration": false,
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "units": "self",
+              "value": "",
+              "override": false
+            },
+            "target": {
+              "affects": {
+                "type": "self",
+                "choice": false
+              },
+              "template": {
+                "count": "",
+                "units": "ft",
+                "type": "",
+                "contiguous": false,
+                "stationary": false
+              },
+              "override": false,
+              "prompt": true
+            },
+            "uses": {
+              "max": "",
+              "spent": 0,
+              "recovery": []
+            },
+            "_id": "Q2IIN89y5X0UUjfT",
+            "img": null,
+            "sort": 0,
+            "flags": {},
+            "visibility": {
+              "level": {},
+              "requireAttunement": false,
+              "requireIdentification": false,
+              "requireMagic": false
+            },
+            "roll": {
+              "prompt": false,
+              "visible": false
+            }
+          }
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "aurablade_action",
+          "resourceAction": true,
+          "resourceDisplay": false,
+          "engine": "stateTrack",
+          "classId": "aurablade",
+          "track": "burn",
+          "actionKey": "aurablade_action",
+          "opensDialog": "aurablade_burn"
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.wgygFL4kFQvY7Y7R"
+        },
+        "autoanimations": {
+          "id": "7bbc9923-0cb6-4106-8f93-25a3988dbd73",
+          "label": "Aurablade Action",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "yellowwhite",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "jzZQust69VtMPSOe",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.wgygFL4kFQvY7Y7R",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613884,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 200000,
+      "_id": "6wg7VeuvHeT3cAUF"
+    },
+    {
+      "name": "Aurablade: Burn State",
+      "type": "feat",
+      "img": "icons/magic/fire/flame-burning-embers-yellow.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Burn</strong> is a state track, not a die pool. This is your display item for current Burn, current Aura, and current band on the Features tab.</p><p><strong>Bands:</strong> 0–1 Controlled, 2–3 Engaged, 4+ Overheated.</p>",
+          "chat": ""
+        },
+        "identifier": "aurablade_burn_state",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "aurablade_burn_state",
+          "resourceAction": false,
+          "resourceDisplay": true,
+          "engine": "stateTrack",
+          "classId": "aurablade",
+          "track": "burn"
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.BhlrJv0osQl3kJId"
+        }
+      },
+      "folder": "jzZQust69VtMPSOe",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.BhlrJv0osQl3kJId",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613884,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 300000,
+      "_id": "YPzeNfiP9eRJifek"
+    },
+    {
+      "name": "Aurablade: Change Aura",
+      "type": "feat",
+      "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p>Open the <strong>Change Aura</strong> dialog and switch between Fury, Resolve, Mercy, and Dread.</p>",
+          "chat": ""
+        },
+        "identifier": "aurablade_change_aura",
+        "advancement": {},
+        "activities": {
+          "primary": {
+            "type": "utility",
+            "name": "Aurablade: Change Aura",
+            "activation": {
+              "type": "bonus",
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "units": "inst",
+              "value": "",
+              "concentration": false,
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "units": "self",
+              "value": "",
+              "override": false
+            },
+            "target": {
+              "affects": {
+                "type": "self",
+                "choice": false
+              },
+              "template": {
+                "count": "",
+                "units": "ft",
+                "type": "",
+                "contiguous": false,
+                "stationary": false
+              },
+              "override": false,
+              "prompt": true
+            },
+            "uses": {
+              "max": "",
+              "spent": 0,
+              "recovery": []
+            },
+            "_id": "B0tV8NOxwlpEz96x",
+            "img": null,
+            "sort": 0,
+            "flags": {},
+            "visibility": {
+              "level": {},
+              "requireAttunement": false,
+              "requireIdentification": false,
+              "requireMagic": false
+            },
+            "roll": {
+              "prompt": false,
+              "visible": false
+            }
+          }
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "aurablade_change_aura",
+          "resourceAction": true,
+          "resourceDisplay": false,
+          "engine": "stateTrack",
+          "classId": "aurablade",
+          "track": "burn",
+          "actionKey": "aurablade_change_aura",
+          "opensDialog": "aurablade_change_aura"
+        },
+        "autoanimations": {
+          "id": "f9c16a11-ed0e-46e7-817a-54fe06682164",
+          "label": "Aurablade: Change Aura",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "yellowwhite",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.DbgJfsKa735tgoaL"
+        }
+      },
+      "folder": "jzZQust69VtMPSOe",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.DbgJfsKa735tgoaL",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613884,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 400000,
+      "_id": "LkKJTFjOPR5qKIxu"
+    },
+    {
+      "name": "Aurablade: Core Features",
+      "type": "feat",
+      "img": "icons/magic/perception/orb-crystal-ball-scrying.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“Emotion sharpens faster than steel.”</em></p><p><strong>Aura States</strong> (Fury, Resolve, Mercy, Dread) shape a luminous blade. Spending power builds <strong>Burn</strong>; at high Burn you gain potency and risk backlash.</p>",
+          "chat": ""
+        },
+        "identifier": "aurablade_core_features",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Class L1: Melee +1",
+          "img": "icons/skills/melee/sword-stylized-blue.webp",
+          "type": "base",
+          "disabled": true,
+          "transfer": true,
+          "description": "Granted by Aurablade: Core Features at Tier 1.",
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "aptitudeStamp": "2026-05-04",
+              "aptitudeAnchor": "Aurablade: Core Features",
+              "aptitudeKind": "melee"
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.melee.value",
+                "value": 1,
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "b6DIoV0jva1V9xLW",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792773730485,
+            "modifiedTime": 1792773730485,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        },
+        {
+          "name": "Class L1: Fitting +1",
+          "img": "icons/skills/melee/sword-stylized-blue.webp",
+          "type": "base",
+          "disabled": true,
+          "transfer": true,
+          "description": "Granted by Aurablade: Core Features at Tier 1.",
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "aptitudeStamp": "2026-05-04",
+              "aptitudeAnchor": "Aurablade: Core Features",
+              "aptitudeKind": "fitting"
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.fitting.value",
+                "value": 1,
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "jLjgrW13PkU1fiO2",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792773730485,
+            "modifiedTime": 1792773730485,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "flags": {
+        "bbttcc": {
+          "identifier": "aurablade_core_features"
+        },
+        "autoanimations": {
+          "id": "7ccb09bf-9c2e-4fe5-8e06-91de239caa1b",
+          "label": "Aurablade: Core Features",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "yellowwhite",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "principleSource": "class",
+          "aurablade": {
+            "meleeAttrOption": "presence"
+          }
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.SnNMVlFK9hAUbO5U"
+        }
+      },
+      "folder": "jzZQust69VtMPSOe",
+      "sort": 100000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.SnNMVlFK9hAUbO5U",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613884,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "_id": "7LNhwRrVvbC0UgsJ"
+    },
+    {
+      "name": "Aurablade: Stabilize Burn",
+      "type": "feat",
+      "img": "icons/skills/movement/feet-bladed-boots-fire.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p>Open the <strong>Stabilize Burn</strong> dialog and reduce, clear, or safely manage Burn according to class/subclass rules.</p>",
+          "chat": ""
+        },
+        "identifier": "aurablade_stabilize_burn",
+        "advancement": {},
+        "activities": {
+          "primary": {
+            "type": "utility",
+            "name": "Aurablade: Stabilize Burn",
+            "activation": {
+              "type": "bonus",
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "units": "inst",
+              "value": "",
+              "concentration": false,
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "units": "self",
+              "value": "",
+              "override": false
+            },
+            "target": {
+              "affects": {
+                "type": "self",
+                "choice": false
+              },
+              "template": {
+                "count": "",
+                "units": "ft",
+                "type": "",
+                "contiguous": false,
+                "stationary": false
+              },
+              "override": false,
+              "prompt": true
+            },
+            "uses": {
+              "max": "",
+              "spent": 0,
+              "recovery": []
+            },
+            "_id": "OdmQ847e0z2puskL",
+            "img": null,
+            "sort": 0,
+            "flags": {},
+            "visibility": {
+              "level": {},
+              "requireAttunement": false,
+              "requireIdentification": false,
+              "requireMagic": false
+            },
+            "roll": {
+              "prompt": false,
+              "visible": false
+            }
+          }
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "aurablade_stabilize_burn",
+          "resourceAction": true,
+          "resourceDisplay": false,
+          "engine": "stateTrack",
+          "classId": "aurablade",
+          "track": "burn",
+          "actionKey": "aurablade_stabilize_burn",
+          "opensDialog": "aurablade_stabilize_burn"
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.0HJDPkWxEvKLPZQG"
+        },
+        "autoanimations": {
+          "id": "d03e39bd-8c9a-49d3-aa6e-3651dc3d6d95",
+          "label": "Aurablade: Stabilize Burn",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "jzZQust69VtMPSOe",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.0HJDPkWxEvKLPZQG",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613885,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 275000,
+      "_id": "hZZWdJxTvAt7xVED"
+    },
+    {
+      "name": "Void Edge (Bad Eden)",
+      "type": "subclass",
+      "img": "icons/magic/defensive/shield-barrier-blades-teal.webp",
+      "system": {
+        "category": "doctrine",
+        "classIdentifier": "aurablade",
+        "source": {
+          "custom": "Bad Eden Originals — Sprint F",
+          "revision": 1,
+          "rules": "2026"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Entropy has a shape. I cut along it.</em></p>\n<p><strong>Mode:</strong> Edge-walker</p>\n<p>Void Edge Aurablades cut along the seams of decay. The doctrine suppresses what enemies rely on — buffs, banked rerolls, nerve — and propagates dread into the spaces between people. Played as the operative whose presence makes hope harder to organize.</p>\n<h3>Doctrine Features</h3>\n<ul>\n  <li><strong>Level 3 — Null Field.</strong> Your blade suppresses their edge. When you hit at Burn 1+, suppress one of the following until the end of the target's next turn: reroll-lowest on attacks, bonus damage, or fear or inspiration effects. At Burn 3+ the target also loses one reaction.</li>\n  <li><strong>Level 6 — Silence of Will.</strong> You break focus. Targets you hit roll 3d10 keep lowest 2 on Clarity hold checks and cannot benefit from rallying or command effects. At Burn 3+, failing a Clarity hold also causes Burn-like fatigue (GM narrative).</li>\n  <li><strong>Level 10 — Dread Cut.</strong> Fear propagates. When you hit at Burn 2+, the target saves or is Shaken; nearby enemies save or suffer hesitation (lose movement or reactions). At Burn 4+ fear spreads automatically to one additional creature.</li>\n  <li><strong>Level 14 — Emotional Erasure.</strong> Once per round when you hit, remove one beneficial emotional, nerve, or inspiration effect from the target. Bypasses resistance tied to hope or courage. At Burn 4+ the effect cannot be reapplied for 1 round.</li>\n  <li><strong>Level 18 — Final Quiet (Capstone).</strong> Once per Soma Break, create a 6 squares zone for 1 minute: nerve cannot rise, inspiration fails, hope or courage buffs do not apply, enemies roll 3d10 keep lowest 2 on checks vs fear. Afterward your Burn drops to 0.</li>\n</ul>",
+          "chat": ""
+        },
+        "identifier": "bbttcc-aurablade-void-edge",
+        "advancement": [],
+        "spellcasting": {
+          "progression": "none",
+          "preparation": {}
+        }
+      },
+      "effects": [],
+      "folder": "640HHePTVNcMB98C",
+      "flags": {
+        "fourththing": {
+          "principleSource": "subclass"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.xg0RIGmaeS99TPNx"
+        }
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 300000,
+      "_stats": {
+        "systemId": "fourththing",
+        "coreVersion": "14.369",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613885,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "systemVersion": "0.6.37",
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.xg0RIGmaeS99TPNx",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "bKIzui0SdtdCYU75"
+    },
+    {
+      "name": "Oldenborn (Rustland Scavenger): Ruin-Sense",
+      "type": "feat",
+      "img": "icons/magic/perception/eye-ringed-glow-angry-teal.webp",
+      "system": {
+        "category": "feature",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 2,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "\n<p><em>“The dead cities are not silent. They are mid-sentence.”</em></p>\n<p><strong>Ruin-Sense.</strong> When you spend 10 minutes examining a broken or ruined object, you can ask the GM one of: <em>What was its last use? Who broke it? What does it still want?</em> The answer is at least one truth.</p>\n<p><strong>Scavenger’s Eye (1/Soma Break).</strong> Spend 10 minutes searching a rubble pile, gutted building, or wreckage of any kind. You recover one minor useful item — the GM picks from a short list of plausible salvage (a half-charged battery, a length of usable wire, a sealed container of clean water, a still-edible ration, a tool of one trade). It is what the place actually had.</p>\n<p><strong>Toxic-Lung Filters.</strong> You reroll the lowest die on checks against airborne poisons, toxic gas, and rad-dust. You can hold your breath for 10 minutes.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "oldenborn-rustland-ruin-sense",
+        "requirements": "Oldenborn (Rustland Scavenger)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "oldenborn",
+          "feature": "ruin_sense",
+          "lineage": "Rustland Scavenger",
+          "tierLevel": 0,
+          "version": "2.0.0",
+          "date": "2026-04-18"
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "save",
+              "mode": "reroll-lowest",
+              "vs": "vs:airborne poisons",
+              "note": "on saves against airborne poisons, toxic gas, and rad-dust"
+            },
+            {
+              "context": "save",
+              "mode": "reroll-lowest",
+              "vs": "vs:airborne poisons",
+              "note": "saves against airborne poisons, toxic gas, and rad-dust"
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-search",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Ruin-Sense. After 10 minutes examining a broken or ruined object, ask the GM one of: What was its last use? Who broke it? What does it still want? The answer is at least one truth."
+                }
+              }
+            }
+          ],
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.k8xjtKEZHM2XVq6t"
+        }
+      },
+      "folder": "sLAoXdttpeuRXEex",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.k8xjtKEZHM2XVq6t",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613885,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 200000,
+      "_id": "FLT7WHM7GLo1zkbd"
+    },
+    {
+      "name": "Wrath-Brand",
+      "type": "weapon",
+      "img": "icons/skills/melee/blade-tip-energy-green.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "violence",
+          "type": "thermal",
+          "damageFlavor": "hot",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1,
+          "units": "sq"
+        },
+        "tags": [
+          "starter-kit",
+          "weapon",
+          "fire",
+          "path:aurablade",
+          "path-core",
+          "harm",
+          "bound"
+        ],
+        "effect": "Melee attack: 2d6 thermal (integrity). On hit: Body defense vs Cast DC or Burning for 1 round.",
+        "flavor": "Mercy has a sibling. The sibling does not get invited to things, for reasons about to be demonstrated.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "The same aura, run hot — a brand of righteous heat that says the quiet part with fire.",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "",
+          "duration": "1-round",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "Aurablade",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "maintenanceKey": "none",
+          "isSignature": false,
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "appliedStates": {
+            "states": [
+              "burning"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "body",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "chain": {
+            "enabled": false,
+            "count": 3,
+            "range": 30,
+            "damageFormula": "1d6",
+            "damageType": "",
+            "carryConditions": false,
+            "carryEffects": false
+          },
+          "conditionalDamage": [],
+          "appliedEffects": {
+            "modifiers": [],
+            "resists": [],
+            "immunes": []
+          }
+        },
+        "description": {
+          "value": "<p>Melee attack: 2d6 thermal (integrity). On hit: Body defense vs Cast DC or Burning for 1 round.</p>"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterKit": {
+            "path": "aurablade",
+            "doctrine": "",
+            "core": true
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon × 1",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "503b5eb7-9ac5-412b-a198-4ffc2ae66710",
+          "label": "Wrath-Brand",
+          "levels3d": {
+            "type": "explosion",
+            "data": {
+              "color01": "#FFFFFF",
+              "color02": "#FFFFFF",
+              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+            },
+            "sound": {
+              "enable": false
+            },
+            "secondary": {
+              "enable": false,
+              "data": {
+                "color01": "#FFFFFF",
+                "color02": "#FFFFFF",
+                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+              }
+            }
+          },
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "meleeSwitch": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "arrow",
+              "variant": "regular",
+              "color": "regular"
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "detect": "automatic",
+              "range": 2,
+              "returning": false,
+              "switchType": "on"
+            }
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "sword",
+              "variant": "fire",
+              "color": "orange",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613886,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "jWTxj1XaY4joKvg0",
+      "folder": null
+    },
+    {
+      "name": "Mercy's Edge",
+      "type": "weapon",
+      "img": "icons/skills/melee/blade-tip-energy-green.webp",
+      "system": {
+        "category": "melee",
+        "intent": "presence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d6",
+          "attribute": "presence",
+          "type": "psychic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1,
+          "units": "sq"
+        },
+        "tags": [
+          "starter-kit",
+          "weapon",
+          "nonlethal",
+          "path:aurablade",
+          "path-core",
+          "harm",
+          "bound"
+        ],
+        "effect": "Melee attack with Presence: 1d6 psychic (stress). On hit: Soul defense vs Cast DC or Shaken for 1 round. Leaves no wound — only the memory of having been spared.",
+        "flavor": "The most upsetting thing you can do to some people is decline to kill them. Loudly.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "A blade of pale aura that cuts between a person and their worst intentions. Flesh unmarked; fight removed.",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "",
+          "duration": "1-round",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "Aurablade",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "maintenanceKey": "none",
+          "isSignature": false,
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "appliedStates": {
+            "states": [
+              "shaken"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "chain": {
+            "enabled": false,
+            "count": 3,
+            "range": 30,
+            "damageFormula": "1d6",
+            "damageType": "",
+            "carryConditions": false,
+            "carryEffects": false
+          },
+          "conditionalDamage": [],
+          "appliedEffects": {
+            "modifiers": [],
+            "resists": [],
+            "immunes": []
+          }
+        },
+        "description": {
+          "value": "<p>Melee attack with Presence: 1d6 psychic (stress). On hit: Soul defense vs Cast DC or Shaken for 1 round. Leaves no wound — only the memory of having been spared.</p>"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterKit": {
+            "path": "aurablade",
+            "doctrine": "",
+            "core": true
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon × 1",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "f6475462-0907-4432-9351-f41561b45947",
+          "label": "Mercy's Edge",
+          "levels3d": {
+            "type": "explosion",
+            "data": {
+              "color01": "#FFFFFF",
+              "color02": "#FFFFFF",
+              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+            },
+            "sound": {
+              "enable": false
+            },
+            "secondary": {
+              "enable": false,
+              "data": {
+                "color01": "#FFFFFF",
+                "color02": "#FFFFFF",
+                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+              }
+            }
+          },
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "meleeSwitch": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "arrow",
+              "variant": "regular",
+              "color": "regular"
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "detect": "automatic",
+              "range": 2,
+              "returning": false,
+              "switchType": "on"
+            }
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "sword",
+              "variant": "01",
+              "color": "white",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613886,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "bckrU1hU5dCjegGx",
+      "folder": null
+    },
+    {
+      "name": "The Unstitching",
+      "type": "power",
+      "img": "icons/skills/melee/blade-tip-energy-green.webp",
+      "system": {
+        "intent": "intrigue",
+        "channel": "soul",
+        "sephirah": "keter",
+        "mode": "hermetic",
+        "clarityRequired": 1,
+        "noiseGain": 0,
+        "activation": "action",
+        "target": "single",
+        "range": "near",
+        "damage": "",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "damage",
+          "number": 1,
+          "die": "d4",
+          "attribute": "intrigue",
+          "type": "psychic",
+          "flavor": "the snip",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "effect": "Target within 6 squares: 1d4 psychic (stress) and Resolve −2 for the scene, as one thread they were leaning on is snipped.",
+        "tags": [
+          "starter-kit",
+          "debuff",
+          "mark",
+          "path:aurablade",
+          "doctrine-signature",
+          "sigil",
+          "harm",
+          "sustained"
+        ],
+        "category": "manifestation",
+        "flavor": "Everything is attached to something. Mal recommends not asking what YOU'RE attached to. Too late.",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "The Void Edge doesn't cut things. It cuts the stitch between things — a target and the certainty it was leaning on.",
+          "form": "sigil",
+          "function": "harm",
+          "stability": "sustained",
+          "interactionModel": "mark",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 30,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "Aurablade — aurablade void edge",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "maintenanceKey": "none",
+          "isSignature": false,
+          "chain": {
+            "enabled": false,
+            "count": 3,
+            "range": 30,
+            "damageFormula": "1d6",
+            "damageType": "",
+            "carryConditions": false,
+            "carryEffects": false
+          },
+          "conditionalDamage": [],
+          "appliedEffects": {
+            "modifiers": [
+              {
+                "stat": "resolve",
+                "op": "-",
+                "value": 2
+              }
+            ],
+            "resists": [],
+            "immunes": []
+          }
+        },
+        "description": {
+          "value": "<p>Target within 6 squares: 1d4 psychic (stress) and Resolve −2 for the scene, as one thread they were leaning on is snipped.</p>"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterKit": {
+            "path": "aurablade",
+            "doctrine": "bbttcc-aurablade-void-edge",
+            "core": false
+          }
+        },
+        "autoanimations": {
+          "id": "053d2337-d945-489d-a752-7c5c10d2f53e",
+          "label": "The Unstitching",
+          "levels3d": {
+            "type": "explosion",
+            "data": {
+              "color01": "#FFFFFF",
+              "color02": "#FFFFFF",
+              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+            },
+            "sound": {
+              "enable": false
+            },
+            "secondary": {
+              "enable": false,
+              "data": {
+                "color01": "#FFFFFF",
+                "color02": "#FFFFFF",
+                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+              }
+            }
+          },
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "meleeSwitch": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "arrow",
+              "variant": "regular",
+              "color": "regular"
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "detect": "automatic",
+              "range": 2,
+              "returning": false,
+              "switchType": "on"
+            }
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "spell",
+              "animation": "eldritchblast",
+              "variant": "01",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613886,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "WMgP7OYbGAJjfpLp",
+      "folder": null
+    },
+    {
+      "name": "Bladed Tempo",
+      "type": "feat",
+      "img": "icons/skills/movement/feet-bladed-boots-fire.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Core Feats v1",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "<h2>Bladed Tempo</h2><p><em>Your weapons are punctuation.</em></p><hr /><h3>Rules</h3><p>When you hit with a melee weapon attack, you may immediately draw or stow a weapon, or shift 1 square without provoking reaction strikes.</p><p class=\"ft-engine-note\"><em>✍ Table rule.</em></p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_bladed_tempo",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-core-v1",
+          "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+        },
+        "autoanimations": {
+          "id": "ft-bladed-tempo",
+          "label": "Bladed Tempo",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "sword",
+              "variant": "01",
+              "color": "white",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "grantedAtLevel": 3
+        }
+      },
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 5200000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613887,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "_id": "LJLpZ49DZmSDz1H7"
+    },
+    {
+      "name": "Void Edge: Null Field",
+      "type": "feat",
+      "img": "icons/magic/defensive/shield-barrier-flaming-pentagon-red.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Level 3 — <strong>Null Field</strong></h2><p>Your blade suppresses their banked rerolls.</p><h3>Mechanical Effects</h3><p>When you hit a creature while at <strong>Burn 1+</strong>:</p><ul><li><p>Suppress one of the following until the end of its next turn:</p><ul><li><p>reroll the lowest die on attacks</p></li><li><p>Bonus damage</p></li><li><p>Fear or inspiration effects</p></li></ul></li></ul><p>At <strong>Burn 3+</strong>:</p><ul><li><p>The target also loses <strong>reactions</strong></p></li></ul><p>Hope falters where you cut.</p>",
+          "chat": ""
+        },
+        "identifier": "voidedge_null_field",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 3
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "voidedge_null_field",
+          "burn": {
+            "min": 1,
+            "_taggedBy": "bbttcc-burn-batch-tagger",
+            "_ts": 1770856290770,
+            "_from": "Void Edge: Null Field"
+          }
+        },
+        "fourththing": {
+          "grantedAtLevel": 3
+        }
+      },
+      "folder": "640HHePTVNcMB98C",
+      "sort": 112500,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613887,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "_id": "6ujnM1WTcCOdwpg0"
+    },
+    {
+      "name": "Bound and Bargained",
+      "type": "feat",
+      "img": "icons/magic/symbols/runes-carved-stone-purple.webp",
+      "folder": "QbGNBV70xh9pF0eh",
+      "system": {
+        "category": "technique",
+        "source": "BBTTCC Manifestation Techniques v1 (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<h2>Bound and Bargained</h2><p><em>A sealed pact holds itself; you need only keep the terms.</em></p><hr><h3>Rules</h3><p>While your <strong>Sealed Pact</strong> stance is active, the bindings carry part of your will for you: your <strong>Clarity maximum rises by 1</strong>.</p><p><span style=\"opacity: 0.85; margin: 0.5rem 0 0; font-size: 0.8rem\"><strong>Requires:</strong> Pactkeeper</span><span style=\"opacity: 0.7; margin: 0.5rem 0 0; font-size: 0.74rem\">⚙ Applies automatically while the Sealed Pact stance is active: Clarity max +1.</span></p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_bound_and_bargained",
+        "requirements": "Pactkeeper",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-manifestation-techniques-v1",
+          "theme": "Concurrency & upkeep"
+        },
+        "fourththing": {
+          "discipline": {
+            "mode": {
+              "key": "pkSealedPact",
+              "grants": {
+                "upkeepScale": 0.5,
+                "clarityMaxBonus": 1
+              }
+            }
+          },
+          "grantedAtLevel": 6
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613887,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "Jl1vtU8c7CbWCxmt"
+    },
+    {
+      "name": "Void Edge: Silence of Will",
+      "type": "feat",
+      "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Level 6 — <strong>Silence of Will</strong></h2><p>You break focus.</p><h3>Mechanical Effects</h3><p>Targets you hit:</p><ul><li><p>roll 3d10 keep lowest 2 on <strong>Clarity hold checks</strong></p></li><li><p>Cannot benefit from rallying or command effects</p></li></ul><p>At <strong>Burn 3+</strong>:</p><ul><li><p>Failing a Clarity hold check also causes <strong>Burn-like fatigue</strong> (GM narrative effect)</p></li></ul><p>Hope stops organizing itself.</p>",
+          "chat": ""
+        },
+        "identifier": "voidedge_silence_of_will",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 6
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "voidedge_silence_of_will",
+          "burn": {
+            "min": 3,
+            "_taggedBy": "bbttcc-burn-batch-tagger",
+            "_ts": 1770856290389,
+            "_from": "Void Edge: Silence of Will"
+          }
+        },
+        "fourththing": {
+          "grantedAtLevel": 6
+        }
+      },
+      "folder": "640HHePTVNcMB98C",
+      "sort": 106250,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613887,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "_id": "DtC6JBKWpo2epYSC"
+    },
+    {
+      "name": "Adaptive Defense",
+      "type": "feat",
+      "img": "icons/magic/defensive/shield-barrier-flaming-diamond-red.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Core Feats v1 (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<h2>Adaptive Defense</h2><p><em>Defense is not denial. It is management.</em></p><hr><h3>Rules</h3><p>When you are hit by an attack you can see, you may use your reaction to reduce the damage by an amount equal to your rank bonus + your Violence or Intrigue value (your choice).</p><p class=\"ft-engine-note\"><em>🃏 Card — click ▶ when you are hit: it shows the reduction (rank bonus + Violence or Intrigue).</em></p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_adaptive_defense",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-core-v1",
+          "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+        },
+        "autoanimations": {
+          "id": "ft-adaptive-defense",
+          "label": "Adaptive Defense",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "shieldfx",
+              "animation": "ice",
+              "variant": "03",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "grantedAtLevel": 9
+        }
+      },
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 100000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613887,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "_id": "6yUFzsTgJAWP1Yvl"
+    },
+    {
+      "name": "Void Edge: Dread Cut",
+      "type": "feat",
+      "img": "icons/skills/melee/blood-slash-foam-red.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<h2>Level 10 — <strong>Dread Cut</strong></h2><p>Fear propagates.</p><h3>Mechanical Effects</h3><p>When you hit at <strong>Burn 2+</strong>:</p><ul><li><p>Target must make a defense check or be <strong>Shaken</strong></p></li><li><p>Nearby enemies must make a defense check or suffer <strong>hesitation</strong> (lose movement or reactions)</p></li></ul><p>At <strong>Burn 4+</strong>:</p><ul><li><p>Fear spreads automatically to one additional creature</p></li></ul><p>Dread is contagious.</p>",
+          "chat": ""
+        },
+        "identifier": "voidedge_dread_cut",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 10
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "voidedge_dread_cut",
+          "burn": {
+            "min": 2,
+            "_taggedBy": "bbttcc-burn-batch-tagger",
+            "_ts": 1770856291286,
+            "_from": "Void Edge: Dread Cut"
+          }
+        },
+        "autoanimations": {
+          "id": "86934230-917e-4841-bc38-3970bd556170",
+          "label": "Void Edge: Dread Cut",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "darkpurple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "grantedAtLevel": 10
+        }
+      },
+      "folder": "640HHePTVNcMB98C",
+      "sort": 200000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613888,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "_id": "XPPL9CWK6zFvdIc5"
+    },
+    {
+      "name": "Crew Type: Mercenary Band",
+      "type": "feat",
+      "img": "icons/commodities/currency/coin-embossed-sword-copper.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 2,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Crew Type (Bad Eden): Mercenary Band.</em></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Plating and Melee.</li><li><strong>Strategic Identity:</strong> Your Domain earns <strong>+10 Violence</strong> marks each turn while you serve it.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "crew-mercenary-band",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "m4EIJI3cE6QISpe4",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "violence": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "mercenary-band",
+            "progressionType": "level",
+            "domains": [
+              "op",
+              "combat"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:mercenary-band",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:domain:combat",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:violence:+8",
+              "bbttcc:effect:op:diplomacy:-3",
+              "bbttcc:theme:contract-violence",
+              "bbttcc:theme:professional-soldiers",
+              "bbttcc:theme:battlefield-pressure",
+              "bbttcc:theme:paid-force"
+            ]
+          }
+        },
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": "Item.F1yxOz0g9YNgZHS4",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.F1yxOz0g9YNgZHS4",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792773730485,
+        "modifiedTime": 1792989613888,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "UNdAXl8cjRJRks1L",
+      "sort": 100000
+    }
+  ],
+  "effects": [],
+  "folder": "UxXgmrOw0tr2eRmu",
+  "sort": 900000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "steward",
+      "levelGrants": {
+        "2": {
+          "v": 1,
+          "ts": 1791521111424,
+          "attrKey": "violence",
+          "attrFrom": 5,
+          "attrTo": 6,
+          "skillPointsGranted": 0,
+          "techniqueItemId": null,
+          "importedFeatureIds": [],
+          "grantedSkills": [],
+          "signatureBumps": [],
+          "integrityTopUp": 5
+        },
+        "3": {
+          "v": 1,
+          "ts": 1791521112180,
+          "attrKey": "soul",
+          "attrFrom": 4,
+          "attrTo": 5,
+          "skillPointsGranted": 2,
+          "techniqueItemId": "LJLpZ49DZmSDz1H7",
+          "importedFeatureIds": [
+            "6ujnM1WTcCOdwpg0"
+          ],
+          "grantedSkills": [],
+          "signatureBumps": [],
+          "integrityTopUp": 5
+        },
+        "4": {
+          "v": 1,
+          "ts": 1791521112919,
+          "attrKey": "body",
+          "attrFrom": 3,
+          "attrTo": 4,
+          "skillPointsGranted": 0,
+          "techniqueItemId": null,
+          "importedFeatureIds": [],
+          "grantedSkills": [],
+          "signatureBumps": [],
+          "integrityTopUp": 11
+        },
+        "5": {
+          "v": 1,
+          "ts": 1791521113552,
+          "attrKey": "violence",
+          "attrFrom": 6,
+          "attrTo": 7,
+          "skillPointsGranted": 0,
+          "techniqueItemId": null,
+          "importedFeatureIds": [],
+          "grantedSkills": [],
+          "signatureBumps": [],
+          "integrityTopUp": 6
+        },
+        "6": {
+          "v": 1,
+          "ts": 1791521114393,
+          "attrKey": "soul",
+          "attrFrom": 5,
+          "attrTo": 6,
+          "skillPointsGranted": 2,
+          "techniqueItemId": "Jl1vtU8c7CbWCxmt",
+          "importedFeatureIds": [
+            "DtC6JBKWpo2epYSC"
+          ],
+          "grantedSkills": [],
+          "signatureBumps": [],
+          "integrityTopUp": 6
+        },
+        "7": {
+          "v": 1,
+          "ts": 1791521115028,
+          "attrKey": "body",
+          "attrFrom": 4,
+          "attrTo": 5,
+          "skillPointsGranted": 0,
+          "techniqueItemId": null,
+          "importedFeatureIds": [],
+          "grantedSkills": [],
+          "signatureBumps": [],
+          "integrityTopUp": 9
+        },
+        "8": {
+          "v": 1,
+          "ts": 1791521115663,
+          "attrKey": "violence",
+          "attrFrom": 7,
+          "attrTo": 8,
+          "skillPointsGranted": 0,
+          "techniqueItemId": null,
+          "importedFeatureIds": [],
+          "grantedSkills": [],
+          "signatureBumps": [],
+          "integrityTopUp": 6
+        },
+        "9": {
+          "v": 1,
+          "ts": 1791521116544,
+          "attrKey": "soul",
+          "attrFrom": 6,
+          "attrTo": 7,
+          "skillPointsGranted": 2,
+          "techniqueItemId": "6yUFzsTgJAWP1Yvl",
+          "importedFeatureIds": [],
+          "grantedSkills": [],
+          "signatureBumps": [],
+          "integrityTopUp": 6
+        },
+        "10": {
+          "v": 1,
+          "ts": 1791521117234,
+          "attrKey": "body",
+          "attrFrom": 5,
+          "attrTo": 6,
+          "skillPointsGranted": 0,
+          "techniqueItemId": null,
+          "importedFeatureIds": [
+            "XPPL9CWK6zFvdIc5"
+          ],
+          "grantedSkills": [],
+          "signatureBumps": [],
+          "integrityTopUp": 18
+        }
+      },
+      "aptitudePromotions": {
+        "aurablade: core features|melee": {
+          "delta": 1,
+          "item": "Aurablade: Core Features",
+          "at": 1791865238796
+        },
+        "aurablade: core features|fitting": {
+          "delta": 1,
+          "item": "Aurablade: Core Features",
+          "at": 1791865238796
+        }
+      }
+    },
+    "bbttcc-factions": {
+      "factionId": "6H5Grt3HybAs1rSq",
+      "warLogs": []
+    },
+    "bbttcc-territory": {
+      "faction": "The Crash Test Redshirts"
+    },
+    "bbttcc-character-options": {
+      "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.7709222f8ff32964",
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.bILvIQnnHx5eVzYb",
+      "classUuid": "Compendium.bbttcc-master-content.classes.Item.V7fpwepCDoqUdT1O",
+      "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.xg0RIGmaeS99TPNx",
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "nativeLinks": {
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.7709222f8ff32964",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.bILvIQnnHx5eVzYb",
+        "classUuid": "Compendium.bbttcc-master-content.classes.Item.V7fpwepCDoqUdT1O",
+        "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.xg0RIGmaeS99TPNx",
+        "ancestryApplied": true,
+        "heritageApplied": true,
+        "classApplied": true,
+        "subclassApplied": true,
+        "ancestryName": "Oldenborn",
+        "heritageName": "Oldenborn Heritage: Rustland Scavenger",
+        "className": "Aurablade",
+        "subclassName": "Void Edge (Bad Eden)"
+      },
+      "calculatedOPs": {
+        "violence": 0,
+        "nonlethal": 0,
+        "intrigue": 1,
+        "economy": 2,
+        "softpower": 0,
+        "diplomacy": 0,
+        "logistics": 0,
+        "culture": 0,
+        "faith": 0
+      }
+    },
+    "bbttcc-auto-link": {
+      "guidedCharacterCreation": {
+        "stage": "complete",
+        "name": "Senna Ketch",
+        "factionId": "6H5Grt3HybAs1rSq",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.7709222f8ff32964",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.bILvIQnnHx5eVzYb",
+        "classUuid": "Compendium.bbttcc-master-content.classes.Item.V7fpwepCDoqUdT1O",
+        "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.xg0RIGmaeS99TPNx",
+        "picks": {},
+        "baseStats": {
+          "violence": 5,
+          "soul": 4,
+          "body": 3,
+          "intrigue": 3,
+          "presence": 2,
+          "mind": 2
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792773730485,
+    "modifiedTime": 1792773730547,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!eFYAnE7OeCex0zoI"
+}

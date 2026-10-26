@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Philosophic Exchange [Option]",
+  "name": "Philosophic Exchange",
   "type": "feat",
   "img": "icons/sundries/books/book-symbol-cross-blue.webp",
   "system": {
@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Philosophic Exchange [Option]</h3><p><em>No rules text registered.</em></p></div>",
+      "value": "<p><strong>Philosophic Exchange</strong></p><p>Alchemist. Domain-wide: Loyalty (Empathy) +1 now and +10 marks Culture next turn.</p><p><em>Cost: Culture 10 · Faith 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "optact_philosophic_exchange"
+      "key": "optact_philosophic_exchange",
+      "effects": {
+        "text": "Alchemist. Domain-wide: Loyalty (Empathy) +1 now and +10 marks Culture next turn."
+      }
     }
   },
   "_id": "hH5aM95eP4vT4PNC",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601762,
-    "modifiedTime": 1782703702689,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988997373,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

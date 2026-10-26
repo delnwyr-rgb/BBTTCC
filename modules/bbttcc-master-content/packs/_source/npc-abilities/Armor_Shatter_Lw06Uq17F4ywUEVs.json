@@ -1,0 +1,50 @@
+{
+  "name": "Armor Shatter",
+  "type": "feat",
+  "img": "icons/magic/death/blood-corruption-vomit-red.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The War Incarnate makes one Weapon Limb attack against an armored creature. On a hit, besides the damage, the target's Guard drops by 2 until the armor is repaired or the wearer's next Soma Break. A given creature can only be Shattered once — after that there is nothing left to disrespect.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "Lw06Uq17F4ywUEVs",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "War Incarnate"
+        ],
+        "sourceIds": [
+          "uyiTmCco8gDsuHde"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069906,
+    "modifiedTime": 1792989069989,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!Lw06Uq17F4ywUEVs"
+}

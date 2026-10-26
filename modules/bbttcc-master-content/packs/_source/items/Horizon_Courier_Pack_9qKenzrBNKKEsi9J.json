@@ -1,58 +1,20 @@
 {
+  "_id": "9qKenzrBNKKEsi9J",
   "name": "Horizon Courier Pack",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/containers/bags/pack-leather-stitched-tan.webp",
   "system": {
-    "description": {
-      "value": "<p>Folding glider + energy assist. Gain 40‑ft fly speed for 10 minutes 1/day; overland travel time −25% for small party.</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 6,
-      "units": "lb"
-    },
-    "price": {
-      "value": 1500,
-      "denomination": "gp"
-    },
-    "rarity": "rare",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "horizon-courier-pack",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>Folding glider + energy assist. Gain 8 squares fly speed for 10 minutes 1 per Soma Break; overland travel time −25% for small party.</p>",
+      "chat": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": []
-    },
     "fourththing": {
       "rfi": {
         "item": {
@@ -63,39 +25,38 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 2,
-            "notes": "TII tool stamp × rarity 2.0 (untiered pass 2026-10-12)",
+            "notes": "TII tool stamp × rarity 2.0",
             "bound": "free",
             "saleBack": 72
           },
-          "legacySystem": {
-            "description": {
-              "value": "<p>Folding glider + energy assist. Gain 8 squares fly speed for 10 minutes 1 per Soma Break; overland travel time −25% for small party.</p>"
-            }
-          },
           "tier": "II",
-          "frame": "tool"
+          "frame": "tool",
+          "bound": "free",
+          "origin": "looted",
+          "reach": "self",
+          "footprint": 1
         }
       }
     }
   },
   "effects": [],
   "folder": "Wxh1A343inwTUeoo",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834177732,
-    "modifiedTime": 1782164185971,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1300000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "9qKenzrBNKKEsi9J",
-  "sort": 1300000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988910039,
+    "modifiedTime": 1792988910039,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!9qKenzrBNKKEsi9J"
 }

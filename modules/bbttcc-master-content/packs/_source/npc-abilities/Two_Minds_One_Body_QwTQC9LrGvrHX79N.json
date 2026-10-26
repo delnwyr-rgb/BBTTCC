@@ -1,0 +1,60 @@
+{
+  "name": "Two Minds, One Body",
+  "type": "feature",
+  "img": "icons/magic/control/sleep-bubble-purple.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Two wills argue inside one skull. The despot rolls twice and keeps the better result on checks to resist being Charmed or Compelled — one head is always too paranoid to listen.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "save",
+          "mode": "reroll-lowest",
+          "vs": "being Charmed or Compelled",
+          "note": "Two Minds, One Body"
+        }
+      ]
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Thaumielite Despot"
+        ],
+        "sourceIds": [
+          "QT2xnNzPOYRA0Wz4"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "QwTQC9LrGvrHX79N",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069981,
+    "modifiedTime": 1792989070056,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!QwTQC9LrGvrHX79N"
+}

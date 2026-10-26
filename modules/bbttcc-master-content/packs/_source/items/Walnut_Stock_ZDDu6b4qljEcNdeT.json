@@ -1,0 +1,78 @@
+{
+  "name": "Walnut Stock",
+  "type": "gear",
+  "img": "icons/commodities/wood/log-cut-walnut.webp",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "walnut-stock"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Dark grain, warm shoulder.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Walnut blanks for rifle and crossbow stocks.</p>",
+          "charges": 3,
+          "materialKey": "walnut-stock",
+          "price": {
+            "marks": 45,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII material",
+            "bound": "free",
+            "saleBack": 18
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "ZDDu6b4qljEcNdeT",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1789965942704,
+    "modifiedTime": 1792977642432,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ZDDu6b4qljEcNdeT"
+}

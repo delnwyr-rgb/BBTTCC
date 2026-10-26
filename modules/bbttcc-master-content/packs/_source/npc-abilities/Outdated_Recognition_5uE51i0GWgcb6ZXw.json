@@ -38,7 +38,6 @@
       "subtype": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -46,6 +45,17 @@
           "tier": "II",
           "frame": "trait"
         }
+      },
+      "grants": {
+        "resistances": [
+          "kinetic",
+          "sephirotic"
+        ],
+        "conditionImmunities": [
+          "charmed",
+          "shaken",
+          "compelled"
+        ]
       }
     },
     "bbttcc": {
@@ -53,29 +63,34 @@
         "sources": [
           "Pre-Fall Sentinel"
         ],
+        "sourceIds": [
+          "gIHcgJ2aS9L6y3yf"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "5uE51i0GWgcb6ZXw",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": null,
-    "modifiedTime": null,
-    "lastModifiedBy": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989033703,
+    "modifiedTime": 1792989033703,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!5uE51i0GWgcb6ZXw"
 }

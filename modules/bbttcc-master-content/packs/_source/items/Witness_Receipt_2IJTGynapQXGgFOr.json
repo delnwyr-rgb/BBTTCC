@@ -10,6 +10,7 @@
     ],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>You're not sure when it started. You found one in your jacket after a fight you survived. Then another after a deal you regretted. Then another after a kindness you forgot you'd done. The receipts are itemized, dated, and printed in a font that doesn't quite exist. They are addressed to you. They are sometimes harsh. They are never wrong.</p><p><strong>The Ledger Knows.</strong> Soulbound to you the moment you accept the first receipt. Once per session, present a recent receipt to a Pactkeeper, an archivist, or a sufficiently old institutional NPC. They treat the receipt as legitimate testimony. (Mal: \"Yes. They will. I don't know why. Don't ask. Just use it sparingly.\")</p>",
       "chat": ""
@@ -43,13 +44,13 @@
             "cosmic-petty"
           ],
           "price": {
-            "marks": 225,
-            "currency": "economy",
+            "marks": 270,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TII talisman stamp × soulbound 1.5",
+            "notes": "TII talisman × soulbound",
             "bound": "soulbound",
             "saleBack": 0
           }
@@ -66,11 +67,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777437725678,
-    "modifiedTime": 1778541951708,
+    "modifiedTime": 1792977604103,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

@@ -7,7 +7,7 @@
     "intent": "soul",
     "skill": "warding",
     "damage": {
-      "formula": "1d6",
+      "formula": "2d6",
       "attribute": "soul",
       "type": "qliphothic",
       "damageFlavor": "",
@@ -25,7 +25,7 @@
       "aoe",
       "shape-radius"
     ],
-    "effect": "Each creature within 10 ft. rolls vs Resolve (DC 13). Half damage on success. Triggers when the Shambler is reduced to 0 Integrity.",
+    "effect": "Each creature within 2 squares. rolls vs Resolve (DC 13). Half damage on success. Triggers when the Shambler is reduced to 0 Integrity.",
     "flavor": "The wrongness spills out of the hole where it used to be.",
     "manifestation": {
       "tier": 1,
@@ -56,6 +56,18 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 13,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "sphere",
+        "size": 10
       }
     },
     "description": {
@@ -63,31 +75,51 @@
       "chat": ""
     }
   },
-  "_id": "jKS4hFUDzi4RRrk3",
-  "effects": [],
-  "sort": 0,
   "flags": {
     "fourththing": {
       "rfi": {
         "item": {
           "frame": "save",
-          "wiredFrom": "feature"
+          "wiredFrom": "feature",
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI save × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Qlipothic Shambler"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "zero",
+            "who": "all",
+            "radius": 2,
+            "do": {
+              "save": {
+                "attr": "soul",
+                "dc": 13,
+                "onSave": "half"
+              },
+              "damage": {
+                "formula": "2d6",
+                "type": "qliphothic",
+                "track": "stress"
+              }
+            },
+            "label": "Wrong-Wave"
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "2f59d2dc-9251-44bc-a3b6-756b5d8fef42",
+      "id": "ft-wrong-wave",
       "label": "Wrong-Wave",
       "macro": {
         "enable": false,
@@ -262,22 +294,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Qliphothic Shambler"
+        ],
+        "sourceIds": [
+          "dskzJNdpkiTFEbik"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
+  "_id": "jKS4hFUDzi4RRrk3",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024237994,
-    "modifiedTime": 1782167245007,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989052472,
+    "modifiedTime": 1792989052472,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!jKS4hFUDzi4RRrk3"
 }

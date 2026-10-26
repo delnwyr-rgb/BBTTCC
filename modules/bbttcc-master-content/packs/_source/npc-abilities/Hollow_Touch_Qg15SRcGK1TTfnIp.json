@@ -1,0 +1,143 @@
+{
+  "name": "Hollow Touch",
+  "type": "weapon",
+  "img": "icons/magic/death/hand-withered-gray.webp",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "melee",
+    "damage": {
+      "formula": "2d10",
+      "attribute": "violence",
+      "type": "qliphothic",
+      "damageFlavor": "",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1
+    },
+    "tags": [
+      "lineage-strike",
+      "qliphothic",
+      "bestiary"
+    ],
+    "effect": "Damage goes to Stress. On a hit the target rolls Resolve vs DC 19; on a failure it is Compelled toward the shell's vice until the end of its next turn.",
+    "flavor": "",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "compelled"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "soul"
+      },
+      "resolution": {
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 19,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "none",
+        "size": 0
+      }
+    },
+    "description": {
+      "value": "<p><strong>Strike.</strong> Reach 1 square, one target. Damage: <code>2d10</code> qliphothic to Stress + violence. On a hit the target rolls Resolve vs DC 19; on a failure it is Compelled toward the shell's vice until the end of its next turn.</p><p><em>The hollow reaches for what it lacks.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "attack",
+          "lineageStrike": "qliphothic",
+          "price": {
+            "marks": 1350,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV attack × 1",
+            "bound": "free",
+            "saleBack": 540
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Abomination of Excess",
+          "Inferno of Cruelty",
+          "The Ashen Horde"
+        ],
+        "sourceIds": [
+          "P8e2EX1lbLBFk2gL",
+          "knO0GK8qKCeyNC6N",
+          "vpPWkftzLsEwoY9k"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "Qg15SRcGK1TTfnIp",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069944,
+    "modifiedTime": 1792989070025,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!Qg15SRcGK1TTfnIp"
+}

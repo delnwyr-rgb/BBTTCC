@@ -1,0 +1,153 @@
+{
+  "name": "Web of Deceit",
+  "type": "weapon",
+  "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "violence",
+    "skill": "ranged",
+    "damage": {
+      "formula": "1d4",
+      "attribute": "intrigue",
+      "type": "kinetic",
+      "damageFlavor": "",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 6,
+      "long": 12
+    },
+    "tags": [],
+    "effect": "Ranged, 6/12 squares. On a hit the target is Restrained by shadow-silk (escape: Violence check vs DC 12). While Restrained, the web shows the target its worst fear wearing a familiar face: Resolve check vs DC 12 or Shaken while the web holds.",
+    "flavor": "",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "resolution": {
+        "saveAttribute": "violence",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 12,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "restrained",
+          "shaken"
+        ],
+        "duration": "until-saved",
+        "saveEachRound": true,
+        "saveAttribute": "violence"
+      }
+    },
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Web of Deceit",
+              "targetCondition": [
+                "restrained"
+              ]
+            },
+            "do": {
+              "condition": {
+                "key": "shaken",
+                "duration": "until-saved",
+                "save": {
+                  "attr": "soul",
+                  "dc": 12
+                }
+              }
+            }
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Satariel Veil-Spinner"
+        ],
+        "sourceIds": [
+          "zVWpSrwZCA3TL5Dp"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "vrQ8BZYTewkwLgzc",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069985,
+    "modifiedTime": 1792989070058,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!vrQ8BZYTewkwLgzc"
+}

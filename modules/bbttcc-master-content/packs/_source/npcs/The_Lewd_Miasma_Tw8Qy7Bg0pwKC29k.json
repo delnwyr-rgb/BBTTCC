@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "art/bbttcc/qliphoth/the-lewd-miasma.webp",
   "system": {
-    "role": "Qliphothic Weather (Gamaliel — Greater)",
+    "role": "caster",
     "tier": 4,
     "factionId": "",
     "notes": "<p>Not a single creature but a sentient psychic weather system — the collective filth of a billion nightmares given form. A slow-rolling bank of sickly purple, grey and black fog covering a huge area, within which the most repressed, obscene, violent fantasies of mortal minds are made terrifyingly real: a distorted screaming face here, a grasping claw of teeth there, a weeping eye the size of a boulder. A walking zone of madness. A living dream from which there is no awakening — only weathering it.</p><p><strong>Qliphah:</strong> Gamaliel, the Obscenities — the Hull of Yesod. The sewer under the Foundation, risen to street level.</p><p><em>Mal's note: 'It is a landscape that happens to be hungry, and it is ALWAYS your own id catering the buffet. Rope-line your people together and do not trust anything you are ashamed of wanting.'</em></p>",
@@ -19,7 +19,7 @@
     },
     "attributes": {
       "violence": {
-        "value": 1
+        "value": 2
       },
       "intrigue": {
         "value": 5
@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 135,
-        "max": 135
+        "max": 135,
+        "temp": 0
       },
       "stress": {
         "value": 60,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -140,7 +142,8 @@
       "resistances": [
         "kinetic",
         "poison",
-        "thermal"
+        "thermal",
+        "qliphothic"
       ],
       "immunities": [
         "qliphothic"
@@ -164,6 +167,9 @@
       "hull-of-yesod",
       "greater"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -176,6 +182,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Weather (Gamaliel — Greater)",
+      "notes": "<p>Not a single creature but a sentient psychic weather system — the collective filth of a billion nightmares given form. A slow-rolling bank of sickly purple, grey and black fog covering a huge area, within which the most repressed, obscene, violent fantasies of mortal minds are made terrifyingly real: a distorted screaming face here, a grasping claw of teeth there, a weeping eye the size of a boulder. A walking zone of madness. A living dream from which there is no awakening — only weathering it.</p><p><strong>Qliphah:</strong> Gamaliel, the Obscenities — the Hull of Yesod. The sewer under the Foundation, risen to street level.</p><p><em>Mal's note: 'It is a landscape that happens to be hungry, and it is ALWAYS your own id catering the buffet. Rope-line your people together and do not trust anything you are ashamed of wanting.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -275,7 +285,7 @@
       "_id": "M17lfkh8J1NVoQjc",
       "name": "Miasmic Form",
       "type": "feature",
-      "img": "icons/svg/invisible.svg",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -293,23 +303,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188177,
-        "modifiedTime": 1787799188177,
+        "modifiedTime": 1791324405575,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.M17lfkh8J1NVoQjc"
+      }
     },
     {
       "_id": "VxA5t8HkGnqUOnUB",
       "name": "Fractured Will (3/scene)",
       "type": "feature",
-      "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+      "img": "icons/magic/air/air-pressure-shield-blue.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -327,23 +336,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188177,
-        "modifiedTime": 1787799188177,
+        "modifiedTime": 1791324405575,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.VxA5t8HkGnqUOnUB"
+      }
     },
     {
       "_id": "BdjDnXzUxhGC0gET",
       "name": "Psychic Corrosion",
       "type": "feature",
-      "img": "icons/svg/biohazard.svg",
+      "img": "icons/equipment/body/suit-biohazard-protection.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -359,19 +367,42 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "do": {
+                  "save": {
+                    "attr": "soul",
+                    "dc": 18,
+                    "onSave": "negate"
+                  },
+                  "damage": {
+                    "formula": "3d8",
+                    "type": "psychic"
+                  },
+                  "prompt": "GM names a repressed impulse on a fail."
+                },
+                "radius": 1
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188177,
-        "modifiedTime": 1787799188177,
+        "modifiedTime": 1791331977566,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.BdjDnXzUxhGC0gET"
+      }
     },
     {
       "_id": "ysCVfDe32Hl2bXwS",
@@ -395,29 +426,28 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188177,
-        "modifiedTime": 1787799188177,
+        "modifiedTime": 1791324405575,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.ysCVfDe32Hl2bXwS"
+      }
     },
     {
       "_id": "ZbqnKblR4CWmG6ia",
       "name": "Manifest Id",
       "type": "weapon",
-      "img": "icons/svg/terror.svg",
+      "img": "icons/magic/death/blood-corruption-vomit-red.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
         "skill": "channel",
         "damage": {
-          "formula": "4d10",
+          "formula": "3d12",
           "attribute": "presence",
           "type": "qliphothic",
           "damageFlavor": "",
@@ -462,6 +492,20 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "mind",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "staggered"
+            ],
+            "duration": "1-round"
           }
         },
         "description": {
@@ -477,23 +521,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188177,
-        "modifiedTime": 1787799188177,
+        "modifiedTime": 1791331977566,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.ZbqnKblR4CWmG6ia"
+      }
     },
     {
       "_id": "insmoKU5glfJmXot",
       "name": "Oneirophage (Recharge 5–6)",
       "type": "feat",
-      "img": "icons/svg/sleep.svg",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -509,25 +552,60 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "save": {
+                    "attr": "soul",
+                    "dc": 18,
+                    "onSave": "negate"
+                  }
+                }
+              },
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Oneirophage (Recharge 5–6)"
+                },
+                "do": {
+                  "condition": {
+                    "key": "staggered",
+                    "duration": "3-rounds"
+                  },
+                  "heal": 15,
+                  "prompt": "Dreaming — wakes early only if damaged or shaken awake."
+                }
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188177,
-        "modifiedTime": 1787799188177,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989134142,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.insmoKU5glfJmXot"
+      }
     },
     {
       "_id": "4e1s4UicnyNRlP7j",
       "name": "Psychic Static",
       "type": "feat",
-      "img": "icons/svg/silenced.svg",
+      "img": "icons/weapons/guns/pistol-silenced.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -543,25 +621,52 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "save": {
+                    "attr": "mind",
+                    "dc": 18,
+                    "onSave": "negate"
+                  }
+                }
+              },
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Psychic Static"
+                },
+                "do": {
+                  "prompt": "Cannot manifest until the end of its next turn."
+                },
+                "narrative": true
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188177,
-        "modifiedTime": 1787799188177,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989134142,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.4e1s4UicnyNRlP7j"
+      }
     },
     {
       "_id": "eHFWuEX4nbNHPRfJ",
       "name": "Reality Inversion",
       "type": "feat",
-      "img": "icons/svg/explosion.svg",
+      "img": "icons/magic/fire/explosion-fireball-medium-orange.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -577,19 +682,115 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "save": {
+                    "attr": "soul",
+                    "dc": 18,
+                    "onSave": "negate"
+                  }
+                }
+              },
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Reality Inversion"
+                },
+                "do": {
+                  "noReactions": true,
+                  "prompt": "Spends its reaction making one attack against itself."
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1787799188177,
+        "modifiedTime": 1792989134142,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Aura of Obscenity",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "qliphothic",
+          "gamaliel"
+        ],
+        "description": {
+          "value": "<p>Any creature that starts its turn within 4 squares must succeed a Resolve check (DC by tier) or take 1d4 psychic damage to Stress as a repressed impulse surfaces, spoken aloud.</p><p><em>Gamaliel — hull of yesod.</em></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "radius": 4,
+                "who": "enemies",
+                "do": {
+                  "save": {
+                    "attr": "soul",
+                    "dc": 19,
+                    "onSave": "negate"
+                  },
+                  "damage": {
+                    "formula": "1d4",
+                    "type": "psychic"
+                  }
+                },
+                "label": "Aura of Obscenity"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "qliphothic"
+            }
+          }
+        }
+      },
+      "_id": "thLkqr5wxZsJnNjv",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
-        "createdTime": 1787799188177,
-        "modifiedTime": 1787799188177,
+        "createdTime": 1791342349631,
+        "modifiedTime": 1791342349631,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.eHFWuEX4nbNHPRfJ"
+      }
     }
   ],
   "effects": [],
@@ -604,7 +805,7 @@
       "rfi": {
         "actor": {
           "tier": "IV",
-          "bracket": "elite",
+          "bracket": "boss",
           "archetype": "the-lewd-miasma",
           "bestiary": {
             "themes": [
@@ -635,34 +836,38 @@
             ]
           },
           "price": {
-            "marks": 1800,
-            "bounty": 3200,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 120,
+            "bounty": 120,
+            "hire": null,
+            "ransom": null,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "IV elite Qliphothic Weather (Gamaliel — Greater) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TIV boss qliphothic — bounty 120 marks; credited to the pool matching the method (default softpower)"
           },
           "qliphah": {
             "name": "gamaliel",
             "hullOf": "yesod",
             "grade": "greater"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "gamaliel",
+          "title": "Qliphothic Weather (Gamaliel — Greater)"
         }
       },
-      "kind": "npc"
+      "kind": "npc",
+      "creatureType": "fiend"
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188177,
-    "modifiedTime": 1787799188177,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989133948,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "Tw8Qy7Bg0pwKC29k",
   "_key": "!actors!Tw8Qy7Bg0pwKC29k"

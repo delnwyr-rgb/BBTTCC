@@ -84,7 +84,7 @@
             "gmOverride": true,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TII medium frame · mounted gunnery pays Violence (rubric §7) (feat-type frames pass 2026-10-16)",
             "bound": "free",
             "saleBack": 300
@@ -101,12 +101,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.24",
     "createdTime": 1778961701297,
-    "modifiedTime": 1779041790517,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792209442984,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

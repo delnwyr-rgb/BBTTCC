@@ -8,7 +8,7 @@
     "source": "Bad Eden (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“The land knows whose teeth marks live here.”</em></p><p><strong>Apex Den.</strong> You can spend 10 minutes claiming a 6 squares-radius area as your den. Until you take a Soma Break or claim a new den, while you are within that area:</p><ul><li><p>You reroll the lowest die on initiative rolls.</p></li><li><p>The first time you hit a creature in your den each round, the attack deals an additional 1d6 damage of the weapon’s type.</p></li><li><p>You always know if any Medium or larger creature crosses the boundary while you are inside.</p></li></ul><p>You can have only one den at a time.</p>",
+      "value": "\n<p><em>“The land knows whose teeth marks live here.”</em></p><p><strong>Apex Den.</strong> You can spend 10 minutes claiming a 6 squares-radius area as your den. Until you take a Soma Break or claim a new den, while you are within that area:</p><ul><li><p>You reroll the lowest die on initiative rolls.</p></li><li><p>The first time you hit a creature in your den each round, the attack deals an additional 1d6 damage of the weapon’s type.</p></li><li><p>You always know if any Medium or larger creature crosses the boundary while you are inside.</p></li></ul><p>You can have only one den at a time.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -33,14 +33,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "cryptidkin",
       "feature": "apex_den",
       "lineage": "Furrykin",
-      "tierLevel": 11,
       "version": "2.0.0",
       "date": "2026-04-19"
     },
@@ -58,12 +54,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776600000000,
-    "modifiedTime": 1782167240120,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988972738,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

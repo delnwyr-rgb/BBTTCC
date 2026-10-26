@@ -7,44 +7,63 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port",
-      "phase2-narrative"
+      "phase2-narrative",
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p><strong>Reaction.</strong> When struck, the Wraith may displace 1 hex / 1 square The attacker briefly forgets which target they aimed at — they take Disadvantage (reroll-lowest) on their next attack roll this exchange.</p>",
+      "value": "<p>Reaction, when struck: the wraith displaces 1 square. The attacker briefly forgets which target they aimed at — they reroll the highest die on their next attack roll this exchange.</p>",
       "chat": ""
     }
   },
-  "_id": "6OBoepZcUxDHR9X2",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "struck",
+            "do": {
+              "impose": true,
+              "prompt": "The Wraith may displace 1 square (GM moves it)."
+            },
+            "label": "Slipped Through"
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
           "Slippage Wraith"
         ],
+        "sourceIds": [
+          "CdNx8WLo0aZO6q8c"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "6OBoepZcUxDHR9X2",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167244987,
-    "modifiedTime": 1782167244987,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989045226,
+    "modifiedTime": 1792989045226,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!6OBoepZcUxDHR9X2"
 }

@@ -1,0 +1,737 @@
+{
+  "name": "Burn-Zone Alpha",
+  "type": "npc",
+  "img": "art/bbttcc/asli-tokens/burn_zone_alpha.webp",
+  "folder": "uMhSIaldbbcnBh0H",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "prototypeToken": {
+    "name": "Burn-Zone Alpha",
+    "actorLink": false,
+    "disposition": -1,
+    "texture": {
+      "src": "art/bbttcc/asli-tokens/burn_zone_alpha.webp",
+      "scaleX": 1,
+      "scaleY": 1,
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "width": 3,
+    "height": 3,
+    "displayName": 30,
+    "depth": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "monster",
+      "createdViaMonsterBuilder": false,
+      "createdBy": "build-bestiary-slots.mjs 2026-10-07",
+      "lineage": "wild"
+    },
+    "fourththing": {
+      "creatureType": "beast",
+      "rfi": {
+        "actor": {
+          "tier": "I",
+          "bracket": "heavy",
+          "archetype": "burn-zone-alpha",
+          "lineage": "wild",
+          "subLineage": "pack",
+          "title": "The wolf that taught the pack to hunt in cinders",
+          "bestiary": {
+            "themes": [
+              "wildlife",
+              "predator",
+              "pack",
+              "burn-zone"
+            ],
+            "role": "brute",
+            "lootTable": [
+              {
+                "name": "Herd Leather",
+                "qty": "1d3",
+                "weight": 5
+              },
+              {
+                "name": "Alpha's Fang",
+                "qty": "1",
+                "weight": 1
+              },
+              {
+                "name": "Ash-Wood",
+                "qty": "1d2",
+                "weight": 3
+              }
+            ]
+          },
+          "exemplar": true,
+          "price": {
+            "marks": 10,
+            "bounty": 10,
+            "hire": 15,
+            "ransom": 15,
+            "currency": "violence",
+            "gmOverride": false,
+            "notes": "TI heavy wild — bounty 10 / hire 15 marks; credited to the pool matching the method (default violence)"
+          }
+        }
+      },
+      "kind": "monster"
+    }
+  },
+  "system": {
+    "role": "brute",
+    "tier": 1,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "xp": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 3
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 2
+      },
+      "body": {
+        "value": 4
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 66,
+        "max": 60,
+        "temp": 0
+      },
+      "stress": {
+        "value": 39,
+        "max": 30
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [
+      "wildlife",
+      "predator",
+      "pack",
+      "burn-zone",
+      "wild"
+    ],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "T1 heavy · wild. An old ash wolf, twice the size of her pack, scarred down one flank where the burn-zone took her first litter. She fights beside three lights and makes them dangerous.",
+      "notes": "She was a yearling when the Yesodium works went up and the forest became a burn-zone. She learned to hunt in smoke before she learned to hunt in grass. Her pack moves through cinder like a current; she moves through it like weather. Hunters in Allesh Gilliam call her the Alpha and leave her the field. She does not leave them anything."
+    }
+  },
+  "items": [
+    {
+      "name": "Territory",
+      "type": "feat",
+      "img": "icons/creatures/abilities/paw-print-tan.webp",
+      "system": {
+        "category": "technique",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-wild",
+          "lineage-trait"
+        ],
+        "description": {
+          "value": "<p>Pack. The Alpha rerolls the lowest die on attack rolls against any creature within 1 square of an ally that isn't incapacitated. Burn-zone: while in cinder or smoke, her first attack each combat rerolls the lowest die and she is hidden until she acts.</p><p><em>It was here first. It intends to be here after.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "frame": "feature",
+              "lineageTrait": "wild"
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "firstRound": true
+                },
+                "do": {
+                  "reroll": "attack"
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                },
+                "label": "Territory — the first strike rerolls the lowest"
+              },
+              {
+                "on": "attack",
+                "if": {
+                  "allyAdjacentToTarget": true
+                },
+                "do": {
+                  "reroll": "attack"
+                },
+                "label": "Pack"
+              }
+            ]
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "NZFCCOe6xhmOFAHF",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791422833619,
+        "modifiedTime": 1791422833619,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Lead the Hunt",
+      "type": "feature",
+      "img": "icons/creatures/mammals/wolf-howl-moon-forest-blue.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-wild",
+          "aura"
+        ],
+        "description": {
+          "value": "<p>Allied wolves within 6 squares of the Alpha reroll the lowest die on their attack rolls. When the Alpha first drops below half Integrity, every allied wolf within 6 squares gains 5 temporary Integrity and may move 2 squares at once.</p><p><em>The pack does not look at her. It does not need to.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "frame": "feature"
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "bloodied",
+                "do": {
+                  "tempIntegrity": 5,
+                  "prompt": "Lead the Hunt: every allied wolf within 6 squares gains 5 temporary Integrity and may move 2 squares."
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                }
+              }
+            ]
+          },
+          "passives": {
+            "aura": {
+              "radius": 6,
+              "who": "allies",
+              "rerolls": [
+                {
+                  "context": "attack",
+                  "mode": "reroll-lowest",
+                  "note": "Lead the Hunt — the Alpha is close"
+                }
+              ],
+              "note": "Lead the Hunt"
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "NlL229mgSOuBIenm",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791422833619,
+        "modifiedTime": 1791422833619,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Alpha's Bite",
+      "type": "weapon",
+      "img": "icons/magic/death/mouth-bite-fangs-vampire.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "bite",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "bestiary",
+          "tier-i",
+          "lineage-wild"
+        ],
+        "effect": "On a hit, the target is Staggered until the start of its next turn — the jaws close on the leg, not the throat. The throat is for later.",
+        "flavor": "She bites to slow you. The pack does the rest.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "staggered"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "",
+            "saveDcMode": "none",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square, one target. Damage: <code>1d8</code> kinetic (bite) + violence. On a hit, the target is Staggered until the start of its next turn — the jaws close on the leg, not the throat. The throat is for later.</p><p><em>She bites to slow you. The pack does the rest.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "frame": "attack"
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "2fsMjUYuzzg8z6nu",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791422833619,
+        "modifiedTime": 1791422833619,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Cinder Howl (recharge 5–6)",
+      "type": "weapon",
+      "img": "icons/creatures/abilities/wolf-howl-moon-purple.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "presence",
+        "skill": "channel",
+        "damage": {
+          "formula": "1d8",
+          "attribute": "presence",
+          "type": "thermal",
+          "damageFlavor": "ash",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 18
+        },
+        "tags": [
+          "bestiary",
+          "tier-i",
+          "lineage-wild"
+        ],
+        "effect": "Cone 3 squares. — targets roll vs Resolve (DC 12). Half damage on success. On a failed save the target is also Shaken until the end of its next turn.",
+        "flavor": "A howl with embers in it. Every wolf within earshot answers.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "shaken"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 12,
+            "saveAttributeOverrides": {}
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 12,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "cone",
+            "size": 15
+          }
+        },
+        "description": {
+          "value": "<p><strong>Area Attack.</strong> Each creature in a 3-square. cone rolls vs DC 12. Damage: <code>1d8</code> thermal (ash). On a failed save the target is also Shaken until the end of its next turn.</p><p><em>A howl with embers in it. Every wolf within earshot answers.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "frame": "save",
+              "aoeShape": "cone",
+              "aoeSize": 15,
+              "dc": 12
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "EvHea3oEwmLnewiM",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791422833619,
+        "modifiedTime": 1792989139925,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "_id": "mKtVF9qB8ouHtYyf",
+  "effects": [],
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.5",
+    "createdTime": 1791422833619,
+    "modifiedTime": 1792771453375,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!mKtVF9qB8ouHtYyf"
+}

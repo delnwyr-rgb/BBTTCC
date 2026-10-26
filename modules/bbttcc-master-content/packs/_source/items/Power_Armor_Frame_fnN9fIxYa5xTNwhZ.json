@@ -1,0 +1,111 @@
+{
+  "name": "Power-Armor Frame",
+  "type": "gear",
+  "img": "icons/equipment/chest/breastplate-metal-scaled-grey.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Single-pilot power armor — the smallest giant fighting robot. One weapon rides at the pilot's hand; plate covers everything else.</p><p><b>Frame · Mecha · Mobile</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "rig-frame"
+      },
+      "rigFrame": {
+        "bracket": "mecha",
+        "baseIntegrity": 24,
+        "tierStep": 6,
+        "pilotMount": true,
+        "mobilityAllowed": [
+          "mobile"
+        ],
+        "slots": {
+          "weapon": 1,
+          "system": 1,
+          "output": 0
+        },
+        "capacity": {
+          "pilot": {
+            "min": 1,
+            "max": 1
+          },
+          "gunner": {
+            "min": 0,
+            "max": 0
+          },
+          "engineer": {
+            "min": 0,
+            "max": 0
+          },
+          "crew": {
+            "min": 0,
+            "max": 1
+          }
+        },
+        "actions": {
+          "pilot": [
+            "steer",
+            "evasive",
+            "stomp",
+            "fire-weapon"
+          ],
+          "gunner": [],
+          "engineer": [],
+          "crew": [
+            "brace",
+            "hold-on"
+          ]
+        },
+        "travel": {
+          "speed": 4,
+          "range": 8
+        },
+        "visualFrame": "open-corners"
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 250,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "authored from the rig-builder preset (RG13, 2026-10-26)",
+            "bound": "free",
+            "saleBack": 100
+          },
+          "tier": "I",
+          "frame": "vehicle"
+        }
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "fnN9fIxYa5xTNwhZ",
+  "effects": [],
+  "sort": 1930000,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988928098,
+    "modifiedTime": 1792988928099,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!fnN9fIxYa5xTNwhZ"
+}

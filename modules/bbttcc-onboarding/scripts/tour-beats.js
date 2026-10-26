@@ -232,7 +232,7 @@ const FIRST_OPEN_OFFERS = [
   },
   {
     api: () => globalThis.game?.bbttcc?.api?.raid, fn: "openConsole", tour: "raid-console",
-    prompt: "Back at the sharp end — want the Domain Conflict refresher? Your Domain brings what it owns, you pick the maneuvers, the GM calls it. Quick walk-through before blood?",
+    prompt: "Back at the sharp end — want the Domain Conflict refresher? Your Domain brings what it owns and spends what the round costs, you pick the maneuvers, the GM calls it. Quick walk-through before blood?",
     label: "Refresh me"
   }
 ];

@@ -1,0 +1,723 @@
+{
+  "name": "Maul of the Pressure Front",
+  "type": "weapon",
+  "img": "icons/weapons/hammers/hammer-double-sledge-engraved.webp",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "melee",
+    "damage": {
+      "formula": "1d12",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "blunt",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1,
+      "units": "sq"
+    },
+    "tags": [
+      "t1-baseline",
+      "maul",
+      "heavy",
+      "bound-working"
+    ],
+    "effect": "Two-handed, heavy. Pairs well with a Bulwark's Surge.",
+    "flavor": "Not subtle. Not trying to be.",
+    "manifestation": {
+      "tier": 2,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "<p>Two-handed iron-headed maul on a long ash haft. Heavy, slow, and absolutely uninterested in your finesse. The Bulwark's first real weapon — the one you swing when subtlety has already failed.</p><p>Heavy two-handed kinetic. No signature — Surge still does the work; the maul just makes the impact mean it.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Two-handed, heavy. Pairs well with a Bulwark's Surge.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d12 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(blunt)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Melee (Violence)</li>\n  <li><strong>Reach:</strong> Melee</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T2</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Bound Working — Pressure Front (TI).</strong></p>\n<ul>\n  <li>Carries the Working <strong>Pressure Front</strong>: it appears among your Manifestations as “Pressure Front ⟡ Maul of the Pressure Front” and casts from the item, <strong>no Clarity</strong> — Noise and misfire still apply.</li>\n  <li><strong>3 charges</strong>; one is spent per cast attempt; all recover on a Soma Break.</li>\n  <li><em>Release the front in a 3-square cone: 1d6 kinetic (integrity), and each target saves Body vs Cast DC or is knocked Prone.</em></li>\n  <li>Tier II · attuned (one slot) · technomagical (Witness-forge binding).</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->"
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "5",
+          "frame": "weapon",
+          "signature": "When the door is the problem, the maul is the answer.",
+          "origin": "forged",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Two-handed iron-headed maul on a long ash haft. Heavy, slow, and absolutely uninterested in your finesse. The Bulwark's first real weapon — the one you swing when subtlety has already failed.</p><p>Heavy two-handed kinetic. No signature — Surge still does the work; the maul just makes the impact mean it.</p>",
+          "materialOf": [
+            {
+              "key": "pig-iron",
+              "qty": 1
+            },
+            {
+              "key": "ash-haft",
+              "qty": 1
+            },
+            {
+              "key": "prayer-binding",
+              "qty": 1
+            },
+            {
+              "key": "anchor-quartz",
+              "qty": 1
+            },
+            {
+              "key": "focused-crystal",
+              "qty": 1
+            },
+            {
+              "key": "witness-glass",
+              "qty": 1
+            }
+          ],
+          "price": {
+            "marks": 300,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII weapon × tech 2.0 (bound Working: Pressure Front TI) × attuned",
+            "bound": "attuned",
+            "saleBack": 120
+          },
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 3,
+              "max": 3,
+              "recoverPer": "soma-break"
+            },
+            "fuel": null,
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "signature": "bound-working",
+            "failure": "misfire",
+            "origin": "witness-forge",
+            "shielded": false
+          }
+        }
+      },
+      "working": {
+        "power": {
+          "name": "Pressure Front",
+          "img": "icons/equipment/shield/heater-steel-worn.webp",
+          "system": {
+            "intent": "violence",
+            "channel": "body",
+            "sephirah": "geburah",
+            "mode": "hermetic",
+            "clarityRequired": 0,
+            "noiseGain": 0,
+            "activation": "action",
+            "target": "area",
+            "range": "near",
+            "damage": "",
+            "damageType": "energy",
+            "damageFlavor": "",
+            "damageRoll": {
+              "op": "damage",
+              "number": 1,
+              "die": "d6",
+              "attribute": "violence",
+              "type": "kinetic",
+              "flavor": "advancing weight",
+              "track": "integrity"
+            },
+            "damageParts": [],
+            "effect": "Release the front in a 3-square cone: 1d6 kinetic (integrity), and each target saves Body vs Cast DC or is knocked Prone.",
+            "tags": [
+              "starter-kit",
+              "aoe",
+              "cc",
+              "path:bulwark",
+              "doctrine-signature",
+              "field",
+              "harm",
+              "sustained",
+              "zone"
+            ],
+            "category": "manifestation",
+            "flavor": "Snow doesn't hate anyone. That's what makes it so good at this.",
+            "manifestation": {
+              "tier": 1,
+              "family": "working",
+              "concept": "You carry the exact moment an avalanche decides. Point it somewhere.",
+              "form": "field",
+              "function": "harm",
+              "stability": "sustained",
+              "interactionModel": "zone",
+              "costType": "none",
+              "costValue": 0,
+              "costText": "",
+              "duration": "action",
+              "durationText": "",
+              "triggerText": "",
+              "scale": "scene",
+              "targetText": "",
+              "rangeAreaText": "",
+              "rangeFt": 0,
+              "maintenanceCost": "",
+              "riskText": "",
+              "pathResonance": "Bulwark — bulwark avalanche",
+              "fictionalPermission": "",
+              "gmCalibration": "",
+              "mechanicalHook": "",
+              "signature": "",
+              "thirdThing": "",
+              "opCost": {
+                "pool": "",
+                "value": 0
+              },
+              "area": {
+                "shape": "cone",
+                "size": 15
+              },
+              "activation": {
+                "type": "action",
+                "consumePool": true
+              },
+              "save": {
+                "enabled": false,
+                "defense": "evasion",
+                "attribute": "",
+                "dcMode": "derived",
+                "dcFixed": 15
+              },
+              "maintenanceKey": "none",
+              "isSignature": false,
+              "appliedStates": {
+                "states": [
+                  "prone"
+                ],
+                "duration": "1-round",
+                "saveEachRound": false,
+                "saveAttribute": "body",
+                "saveDcMode": "cast-dc",
+                "saveDcFixed": 15,
+                "saveAttributeOverrides": {}
+              },
+              "chain": {
+                "enabled": false,
+                "count": 3,
+                "range": 30,
+                "damageFormula": "1d6",
+                "damageType": "",
+                "carryConditions": false,
+                "carryEffects": false
+              },
+              "conditionalDamage": [],
+              "appliedEffects": {
+                "modifiers": [],
+                "resists": [],
+                "immunes": []
+              }
+            },
+            "description": {
+              "value": "<p>Release the front in a 3-square cone: 1d6 kinetic (integrity), and each target saves Body vs Cast DC or is knocked Prone.</p>"
+            }
+          },
+          "flags": {
+            "autoanimations": {
+              "id": "5091d58c-b3c1-4a31-943c-a3debc4d6fc6",
+              "label": "Pressure Front",
+              "levels3d": {
+                "type": "explosion",
+                "data": {
+                  "color01": "#FFFFFF",
+                  "color02": "#FFFFFF",
+                  "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+                },
+                "sound": {
+                  "enable": false
+                },
+                "secondary": {
+                  "enable": false,
+                  "data": {
+                    "color01": "#FFFFFF",
+                    "color02": "#FFFFFF",
+                    "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+                  }
+                }
+              },
+              "macro": {
+                "enable": false,
+                "playWhen": "0"
+              },
+              "menu": "ontoken",
+              "primary": {
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "spell",
+                  "animation": "thunderwave",
+                  "variant": "center",
+                  "color": "blue",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "addTokenWidth": false,
+                  "anchor": "0.5",
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "fadeIn": 250,
+                  "fadeOut": 500,
+                  "isMasked": false,
+                  "isRadius": false,
+                  "isWait": false,
+                  "opacity": 1,
+                  "persistent": false,
+                  "playbackRate": 1,
+                  "playOn": "default",
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "unbindAlpha": false,
+                  "unbindVisibility": false,
+                  "zIndex": 1
+                }
+              },
+              "secondary": {
+                "enable": false,
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "spell",
+                  "animation": "curewounds",
+                  "variant": "01",
+                  "color": "blue",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "addTokenWidth": false,
+                  "anchor": "0.5",
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "fadeIn": 250,
+                  "fadeOut": 500,
+                  "isMasked": false,
+                  "isRadius": true,
+                  "isWait": false,
+                  "opacity": 1,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1.5,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "zIndex": 1
+                }
+              },
+              "soundOnly": {
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                }
+              },
+              "source": {
+                "enable": false,
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "spell",
+                  "animation": "curewounds",
+                  "variant": "01",
+                  "color": "blue",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "addTokenWidth": false,
+                  "anchor": "0.5",
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "fadeIn": 250,
+                  "fadeOut": 500,
+                  "isMasked": false,
+                  "isRadius": false,
+                  "isWait": true,
+                  "opacity": 1,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "zIndex": 1
+                }
+              },
+              "target": {
+                "enable": false,
+                "video": {
+                  "dbSection": "static",
+                  "menuType": "spell",
+                  "animation": "curewounds",
+                  "variant": "01",
+                  "color": "blue",
+                  "enableCustom": false,
+                  "customPath": ""
+                },
+                "sound": {
+                  "enable": false,
+                  "delay": 0,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "startTime": 0,
+                  "volume": 0.75
+                },
+                "options": {
+                  "addTokenWidth": false,
+                  "anchor": "0.5",
+                  "contrast": 0,
+                  "delay": 0,
+                  "elevation": 1000,
+                  "fadeIn": 250,
+                  "fadeOut": 500,
+                  "isMasked": false,
+                  "isRadius": false,
+                  "opacity": 1,
+                  "persistent": false,
+                  "repeat": 1,
+                  "repeatDelay": 250,
+                  "saturate": 0,
+                  "size": 1,
+                  "tint": false,
+                  "tintColor": "#FFFFFF",
+                  "unbindAlpha": false,
+                  "unbindVisibility": false,
+                  "zIndex": 1
+                }
+              },
+              "isEnabled": true,
+              "isCustomized": true,
+              "fromAmmo": false,
+              "version": 5
+            }
+          }
+        },
+        "charges": {
+          "value": 3,
+          "max": 3,
+          "recoverPer": "soma-break"
+        },
+        "tier": 1
+      }
+    },
+    "autoanimations": {
+      "id": "295c9eda-4e4c-4533-9aa9-efffa8ebb49e",
+      "label": "Maul",
+      "levels3d": {
+        "type": "explosion",
+        "data": {
+          "color01": "#FFFFFF",
+          "color02": "#FFFFFF",
+          "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+        },
+        "sound": {
+          "enable": false
+        },
+        "secondary": {
+          "enable": false,
+          "data": {
+            "color01": "#FFFFFF",
+            "color02": "#FFFFFF",
+            "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+          }
+        }
+      },
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "meleeSwitch": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "weapon",
+          "animation": "arrow",
+          "variant": "regular",
+          "color": "regular"
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "detect": "automatic",
+          "range": 2,
+          "returning": false,
+          "switchType": "on"
+        }
+      },
+      "menu": "melee",
+      "primary": {
+        "video": {
+          "dbSection": "melee",
+          "menuType": "weapon",
+          "animation": "maul",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "isWait": true,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "opacity": 1,
+          "persistent": false,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "unbindAlpha": false,
+          "unbindVisibility": false,
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "EdubcDDQfUtnlKvP",
+  "_id": "ySVJEJ4Y5itSQdny",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791427798070,
+    "modifiedTime": 1792988949192,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ySVJEJ4Y5itSQdny"
+}

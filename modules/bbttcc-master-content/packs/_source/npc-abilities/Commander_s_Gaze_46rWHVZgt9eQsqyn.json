@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +79,29 @@
             "saleBack": 180
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Witness-Warden Lieutenant"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "do": {
+              "bankReroll": {
+                "context": "attack",
+                "note": "Commander's Gaze — priority target"
+              }
+            },
+            "who": "allies",
+            "radius": 12,
+            "if": {
+              "weapon": "Commander's Gaze"
+            }
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "adb9d668-d8bb-4942-9b4f-9a0d9c1292c9",
+      "id": "ft-commander-s-gaze",
       "label": "Commander's Gaze",
       "macro": {
         "enable": false,
@@ -269,24 +276,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Witness-Warden Lieutenant"
+        ],
+        "sourceIds": [
+          "5MA3L8ebRzPLhaBP"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "46rWHVZgt9eQsqyn",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024224598,
-    "modifiedTime": 1782167244986,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989023686,
+    "modifiedTime": 1792989023686,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!46rWHVZgt9eQsqyn"
 }

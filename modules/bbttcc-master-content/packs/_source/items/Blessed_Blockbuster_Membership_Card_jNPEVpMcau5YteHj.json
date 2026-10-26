@@ -1,66 +1,24 @@
 {
+  "_id": "jNPEVpMcau5YteHj",
   "name": "Blessed Blockbuster Membership Card",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/sundries/gaming/card-game-pink.webp",
   "system": {
-    "description": {
-      "value": "<p>Plastic card that smells faintly of carpet cleaner and late fees forgiven by an angel. The number changes depending on who's holding it; the back always reads <i>FOREVER MEMBER</i>.</p><p><b>Be Kind, Rewind.</b> Reroll the lowest die on Mind (Lore) checks about popular entertainment, celebrities, urban legends, and \"what everyone was watching back then.\"</p><p><b>Late Fee Absolution (1/Soma Break).</b> When you fail an attribute check, pay it forward and reroll. Use the new roll. If it fails too, take −1 to your next attribute check before end of next turn — the universe <i>remembers</i>.</p><p><b>Sleeve of Protection.</b> Reroll the lowest die on defense checks against effects that would magically force you to forget something you've seen or learned in the last 24 hours.</p>",
-      "chat": ""
-    },
-    "source": {
-      "custom": "BBTTCC That 90's Faction Encounters",
-      "revision": 1,
-      "rules": "2024"
-    },
-    "quantity": 1,
-    "weight": {
-      "value": 0,
-      "units": "lb"
-    },
-    "price": {
-      "value": 250,
-      "denomination": "gp"
-    },
-    "attunement": "required",
-    "equipped": false,
-    "rarity": "uncommon",
-    "identified": true,
-    "uses": {
-      "max": "",
-      "spent": 0,
-      "recovery": []
-    },
-    "identifier": "bbttcc_item_blessed_blockbuster_membership",
-    "type": {
-      "value": "wondrous",
-      "baseItem": ""
-    },
-    "properties": [
-      "mgc"
-    ],
-    "activities": {},
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null,
-      "magicalBonus": null
-    },
-    "proficient": null,
-    "strength": null,
-    "slot": "wondrous",
+    "slot": "misc",
     "tags": [
       "wondrous",
       "attunement",
       "memory",
       "rewind"
-    ]
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Plastic card that smells faintly of carpet cleaner and late fees forgiven by an angel. The number changes depending on who's holding it; the back always reads <i>FOREVER MEMBER</i>.</p><p><b>Be Kind, Rewind.</b> Reroll the lowest die on Mind (Lore) checks about popular entertainment, celebrities, urban legends, and \"what everyone was watching back then.\"</p><p><b>Late Fee Absolution (1/Soma Break).</b> When you fail an attribute check, pay it forward and reroll. Use the new roll. If it fails too, take −1 to your next attribute check before end of next turn — the universe <i>remembers</i>.</p><p><b>Sleeve of Protection.</b> Reroll the lowest die on defense checks against effects that would magically force you to forget something you've seen or learned in the last 24 hours.</p>",
+      "chat": ""
+    }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -83,42 +41,55 @@
           },
           "signals": {},
           "lore": "<p>Plastic card that smells faintly of carpet cleaner and late fees forgiven by an angel. The number changes depending on who's holding it; the back always reads <i>FOREVER MEMBER</i>.</p><p><b>Be Kind, Rewind.</b> Reroll the lowest die on Mind (Lore) checks about popular entertainment, celebrities, urban legends, and \"what everyone was watching back then.\"</p><p><b>Late Fee Absolution (1/Soma Break).</b> When you fail an attribute check, pay it forward and reroll. Use the new roll. If it fails too, take −1 to your next attribute check before end of next turn — the universe <i>remembers</i>.</p><p><b>Sleeve of Protection.</b> Reroll the lowest die on defense checks against effects that would magically force you to forget something you've seen or learned in the last 24 hours.</p>",
-          "legacySystem": {
-            "slot": "misc",
-            "tags": []
-          },
           "price": {
-            "marks": 90,
+            "marks": 135,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TII tool stamp",
+            "rarityMult": 1.5,
+            "notes": "TII tool × attuned × rarity 1.5",
             "bound": "attuned",
-            "saleBack": 36
+            "saleBack": 54
           }
         }
-      }
+      },
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "lore",
+          "attribute": "mind",
+          "vs": "popular entertainment, celebrities, urban legends, 'what everyone was watching back then'",
+          "note": "Be Kind, Rewind"
+        },
+        {
+          "context": "defense",
+          "mode": "reroll-lowest",
+          "vs": "effects that would magically force you to forget something seen or learned in the last 24 hours",
+          "note": "Sleeve of Protection"
+        }
+      ]
     }
   },
+  "effects": [],
   "folder": "Wxh1A343inwTUeoo",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1768451450766,
-    "modifiedTime": 1782156674952,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 2100000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "jNPEVpMcau5YteHj",
-  "sort": 2100000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988907174,
+    "modifiedTime": 1792988907175,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!jNPEVpMcau5YteHj"
 }

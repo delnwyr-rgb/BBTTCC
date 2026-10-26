@@ -1,0 +1,417 @@
+{
+  "name": "Outer Curtain Wall — Perspicacity",
+  "type": "rig",
+  "img": "art/bbttcc/GOTTGAIT/Structures/Perspicacity%20Outer%20Wall.png",
+  "system": {
+    "identity": {
+      "mobility": "stationary",
+      "state": "parked",
+      "factionOwnerId": "oK7VitQikQ6FN3PI",
+      "archetype": "Structure: Curtain Wall (siege layer)",
+      "binding": {
+        "hexId": "",
+        "sceneId": "",
+        "tokenId": ""
+      }
+    },
+    "crew": {
+      "slots": [],
+      "capacity": {
+        "pilot": {
+          "min": 0,
+          "max": 0
+        },
+        "gunner": {
+          "min": 0,
+          "max": 0
+        },
+        "engineer": {
+          "min": 0,
+          "max": 0
+        },
+        "crew": {
+          "min": 0,
+          "max": 0
+        }
+      },
+      "crewMin": 0,
+      "crewMax": 0
+    },
+    "integrity": {
+      "value": 22,
+      "max": 30,
+      "tier": 1,
+      "bracket": "medium"
+    },
+    "derived": {
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 12
+      },
+      "resolve": {
+        "value": 11
+      },
+      "integrity": {},
+      "stress": {}
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "output": {
+      "modules": [],
+      "basePerTurn": {}
+    },
+    "travel": {
+      "speed": 1,
+      "range": 5,
+      "hazardResist": 0,
+      "domains": [
+        "land"
+      ],
+      "depthRating": 0
+    },
+    "tags": []
+  },
+  "_id": "NP0kpBvtERMeTqPo",
+  "prototypeToken": {
+    "name": "Outer Curtain Wall — Perspicacity",
+    "displayName": 30,
+    "actorLink": true,
+    "width": 12,
+    "height": 12,
+    "depth": 12,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/Structures/Perspicacity%20Outer%20Wall.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 2,
+      "scaleY": 2,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [],
+  "effects": [],
+  "folder": "xQUOdeYWwVaU6c28",
+  "sort": 150000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "bbttcc-structures": {
+      "hasStructure": true,
+      "facilityMode": true,
+      "materialBOM": [
+        {
+          "materialKey": "mountain-stone",
+          "qty": 20,
+          "originalQty": 20,
+          "family": "stone",
+          "tier": "I",
+          "name": "mountain-stone",
+          "tagsCache": []
+        },
+        {
+          "materialKey": "anchorstone",
+          "qty": 10,
+          "originalQty": 10,
+          "family": "stone",
+          "tier": "II",
+          "name": "Anchorstone",
+          "tagsCache": [
+            "material",
+            "anchorstone",
+            "bulwark",
+            "stone",
+            "ground"
+          ]
+        }
+      ],
+      "state": "intact",
+      "plates": {
+        "current": 120,
+        "max": 120
+      },
+      "threshold": 1.33,
+      "resists": {
+        "kinetic": 0.5
+      },
+      "vulnerabilities": {
+        "kinetic|concussive": {
+          "type": "kinetic",
+          "flavor": "concussive",
+          "factor": 2
+        },
+        "energy|heat": {
+          "type": "energy",
+          "flavor": "heat",
+          "factor": 2
+        },
+        "energy|fire": {
+          "type": "energy",
+          "flavor": "fire",
+          "factor": 2
+        }
+      },
+      "loadBearing": false,
+      "collapseProfile": {
+        "fallFt": 10,
+        "damageDice": "2d10",
+        "nonlethal": true,
+        "knockbackFt": 5,
+        "triggerState": "breached"
+      },
+      "history": [
+        {
+          "at": 1780509099562,
+          "fromState": "intact",
+          "toState": "razed",
+          "dmg": 100,
+          "chipped": [
+            {
+              "k": "mountain-stone",
+              "n": 14
+            }
+          ]
+        },
+        {
+          "at": 1780509348443,
+          "fromState": "intact",
+          "toState": "razed",
+          "dmg": 100,
+          "chipped": [
+            {
+              "k": "mountain-stone",
+              "n": 13
+            }
+          ]
+        },
+        {
+          "at": 1780509387239,
+          "fromState": "intact",
+          "toState": "razed",
+          "dmg": 100,
+          "chipped": [
+            {
+              "k": "mountain-stone",
+              "n": 12
+            }
+          ]
+        },
+        {
+          "at": 1780510675047,
+          "fromState": "intact",
+          "toState": "damaged",
+          "dmg": 12,
+          "chipped": [
+            {
+              "k": "mountain-stone",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "at": 1780510842905,
+          "fromState": "damaged",
+          "toState": "breached",
+          "dmg": 13,
+          "chipped": [
+            {
+              "k": "mountain-stone",
+              "n": 2
+            }
+          ]
+        },
+        {
+          "at": 1780522572104,
+          "fromState": "intact",
+          "toState": "damaged",
+          "dmg": 16,
+          "chipped": [
+            {
+              "k": "mountain-stone",
+              "n": 3
+            }
+          ]
+        },
+        {
+          "at": 1780522834374,
+          "fromState": "damaged",
+          "toState": "breached",
+          "dmg": 12,
+          "chipped": [
+            {
+              "k": "mountain-stone",
+              "n": 4
+            }
+          ]
+        },
+        {
+          "at": 1780609032766,
+          "fromState": "intact",
+          "toState": "damaged",
+          "dmg": 10,
+          "chipped": [
+            {
+              "k": "mountain-stone",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "at": 1781140748971,
+          "fromState": "intact",
+          "toState": "razed",
+          "dmg": 80,
+          "chipped": [
+            {
+              "k": "mountain-stone",
+              "n": 11
+            }
+          ]
+        },
+        {
+          "at": 1781559750936,
+          "fromState": "intact",
+          "toState": "damaged",
+          "dmg": 11,
+          "chipped": [
+            {
+              "k": "mountain-stone",
+              "n": 2
+            }
+          ]
+        }
+      ],
+      "crew": {
+        "assigned": [
+          {
+            "tokenId": "Q9tM8JNVjCu0HuYO",
+            "label": "🛡 Garrison · 6",
+            "joinedStrength": 6
+          },
+          {
+            "tokenId": "Obxs6lPxGPqXkU3a",
+            "label": "🛡 Garrison · 6",
+            "joinedStrength": 6
+          },
+          {
+            "tokenId": "hpiu5skURKo3leyn",
+            "label": "🛡 Garrison · 5",
+            "joinedStrength": 5
+          },
+          {
+            "tokenId": "YMKucvgLfHFmo4ue",
+            "label": "🛡 Garrison · 5",
+            "joinedStrength": 5
+          },
+          {
+            "tokenId": "XPAAE7BzsNgSMoKD",
+            "label": "🛡 Garrison · 6",
+            "joinedStrength": 6
+          }
+        ]
+      }
+    },
+    "fourththing": {
+      "kind": "rig"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1791317003561,
+    "modifiedTime": 1791317003561,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!NP0kpBvtERMeTqPo"
+}

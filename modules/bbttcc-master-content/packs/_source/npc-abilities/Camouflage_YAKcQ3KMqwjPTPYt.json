@@ -7,43 +7,58 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>The stalker reroll the lowest die on Intrigue (Stealth (Intrigue)) checks made to hide in rubble, brush, or ruined interiors.</p>",
+      "value": "<p>The stalker rerolls the lowest die on Intrigue checks to hide in rubble, brush, or ruined interiors.</p>",
       "chat": ""
     }
   },
-  "_id": "YAKcQ3KMqwjPTPYt",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "stealth",
+          "vs": "hiding in rubble, brush, or ruined interiors",
+          "note": "Camouflage"
+        }
+      ]
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Tier 2 Predator (Wastes Stalker)"
+          "Wastes Stalker"
+        ],
+        "sourceIds": [
+          "BYUSNIOicg4IZn6W"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "YAKcQ3KMqwjPTPYt",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167245001,
-    "modifiedTime": 1782167245001,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989021118,
+    "modifiedTime": 1792989021119,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!YAKcQ3KMqwjPTPYt"
 }

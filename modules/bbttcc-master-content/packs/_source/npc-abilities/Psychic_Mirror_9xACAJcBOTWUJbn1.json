@@ -1,0 +1,64 @@
+{
+  "name": "Psychic Mirror",
+  "type": "feat",
+  "img": "icons/magic/air/air-pressure-shield-blue.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Reaction.</strong> When a manifestation or effect targets the Disputant's Resolve, it can throw the argument back: the originator rolls vs its own DC or suffers the effect instead. The Disputant considers this winning on a technicality, its favorite kind.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "selfTurnStart",
+            "do": {
+              "prompt": "Psychic Mirror (reaction): effect vs its Resolve — originator rolls vs own DC or suffers it."
+            },
+            "narrative": true
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Thagirion Disputant"
+        ],
+        "sourceIds": [
+          "VWK3Fg8ozMPRipmD"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "9xACAJcBOTWUJbn1",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069956,
+    "modifiedTime": 1792989070041,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!9xACAJcBOTWUJbn1"
+}

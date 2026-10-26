@@ -24,7 +24,7 @@
       "storm-voiced",
       "fear"
     ],
-    "effect": "15 ft. cone. Resolve vs DC 13. Fail: 1d10 psychic to Stress and Shaken until the end of its next turn. Half on success, no Shaken.",
+    "effect": "3 squares. cone. Resolve vs DC 13. Fail: 1d10 psychic to Stress and Shaken until the end of its next turn. Half on success, no Shaken.",
     "flavor": "",
     "manifestation": {
       "tier": 1,
@@ -55,6 +55,24 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 13,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "shaken"
+        ],
+        "duration": "1-round"
+      },
+      "area": {
+        "shape": "cone",
+        "size": 15
       }
     },
     "description": {
@@ -62,7 +80,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -85,17 +102,6 @@
             "saleBack": 60
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Battle-Bassinet Berserker"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
       }
     },
     "autoanimations": {
@@ -274,24 +280,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Battle-Bassinet Berserker"
+        ],
+        "sourceIds": [
+          "0qEJRPazunAo51Fl"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
   "_id": "6DAVd6kFJqbb1Uew",
   "sort": 0,
+  "folder": null,
   "ownership": {
-    "default": 0
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1780000000000,
-    "modifiedTime": 1782167244987,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989018829,
+    "modifiedTime": 1792989018829,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
   },
-  "folder": null,
   "_key": "!items!6DAVd6kFJqbb1Uew"
 }

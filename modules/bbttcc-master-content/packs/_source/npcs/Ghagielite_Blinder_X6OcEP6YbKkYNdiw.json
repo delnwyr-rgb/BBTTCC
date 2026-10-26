@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "art/bbttcc/qliphoth/ghagielite-blinder.webp",
   "system": {
-    "role": "Qliphothic Vermin (Ghagiel — Lesser)",
+    "role": "scout",
     "tier": 1,
     "factionId": "",
     "notes": "<p>A thought, interrupted, given wings. Blinders flutter through the Wastes in disorienting swarms, drawn to any display of complex thought, planning, or manifestation. Their wings carry hypnotic, impossible patterns; their dissonant hum clouds the mind until simple deductions feel like mountain climbs. They don't want to kill you. They want you stupid.</p><p><strong>Qliphah:</strong> Ghagiel, the Obstructions — the Hull of Chokmah. Wisdom snuffed to stagnation.</p><p><em>Mal's note: 'If you suddenly can't remember why you drew your gun, shoot the moth. That IS why you drew your gun.'</em></p>",
@@ -40,8 +40,9 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 20,
-        "max": 20
+        "value": 25,
+        "max": 25,
+        "temp": 0
       },
       "stress": {
         "value": 12,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -141,9 +143,13 @@
         "qliphothic"
       ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "sephirotic"
+      ]
     },
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "charmed"
+    ],
     "tags": [
       "qliphothic",
       "5e-port",
@@ -152,6 +158,9 @@
       "hull-of-chokmah",
       "lesser"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -164,6 +173,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Vermin (Ghagiel — Lesser)",
+      "notes": "<p>A thought, interrupted, given wings. Blinders flutter through the Wastes in disorienting swarms, drawn to any display of complex thought, planning, or manifestation. Their wings carry hypnotic, impossible patterns; their dissonant hum clouds the mind until simple deductions feel like mountain climbs. They don't want to kill you. They want you stupid.</p><p><strong>Qliphah:</strong> Ghagiel, the Obstructions — the Hull of Chokmah. Wisdom snuffed to stagnation.</p><p><em>Mal's note: 'If you suddenly can't remember why you drew your gun, shoot the moth. That IS why you drew your gun.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -263,7 +276,7 @@
       "_id": "fuyL6Zp1Op7Srnc9",
       "name": "Droning Stupor",
       "type": "feature",
-      "img": "icons/svg/sound.svg",
+      "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -279,31 +292,46 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "do": {
+                  "impose": true
+                },
+                "radius": 4,
+                "who": "all"
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188141,
-        "modifiedTime": 1787799188141,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989128035,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!X6OcEP6YbKkYNdiw.fuyL6Zp1Op7Srnc9"
+      }
     },
     {
       "_id": "z3r5n5UPrHvjf8o5",
       "name": "Mind-Cluttering Bite",
       "type": "weapon",
-      "img": "icons/svg/paralysis.svg",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
         "skill": "melee",
         "damage": {
-          "formula": "1d4",
+          "formula": "1d6",
           "attribute": "intrigue",
           "type": "kinetic",
           "damageFlavor": "",
@@ -346,6 +374,13 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 12,
+            "onSave": "negate",
+            "statesOnFail": true
           }
         },
         "description": {
@@ -359,25 +394,41 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Mind-Cluttering Bite"
+                },
+                "do": {
+                  "noReactions": true
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188141,
-        "modifiedTime": 1787799188141,
+        "modifiedTime": 1791331977947,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!X6OcEP6YbKkYNdiw.z3r5n5UPrHvjf8o5"
+      }
     },
     {
       "_id": "HA0fsi5fBmX68Lhk",
       "name": "Thought-Obstructing Veil (1/scene)",
       "type": "feat",
-      "img": "icons/svg/blind.svg",
+      "img": "icons/creatures/eyes/humanoid-single-blind.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -393,19 +444,225 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "template": {
+                    "shape": "sphere",
+                    "size": 15
+                  },
+                  "prompt": "Heavily obscured; end a turn inside → Mind DC 12 or Compelled."
+                },
+                "who": "self",
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188141,
-        "modifiedTime": 1787799188141,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989128035,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Aura of Obstruction",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "qliphothic",
+          "ghagiel"
+        ],
+        "description": {
+          "value": "<p>The 3 squares around this creature are difficult terrain for thought itself: a creature that starts its turn inside rolls twice-keep-worse on Mind checks until the start of its next turn.</p><p><em>Ghagiel — hull of chokmah.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!X6OcEP6YbKkYNdiw.HA0fsi5fBmX68Lhk"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "radius": 3,
+                "who": "enemies",
+                "do": {
+                  "impose": true
+                }
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "qliphothic"
+            }
+          }
+        }
+      },
+      "_id": "pwbO9n6kYN7NFW8l",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791342349828,
+        "modifiedTime": 1792989128035,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Hollow Touch",
+      "type": "weapon",
+      "img": "icons/magic/death/hand-withered-gray.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d8",
+          "attribute": "violence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "lineage-strike",
+          "qliphothic",
+          "bestiary"
+        ],
+        "effect": "Damage goes to Stress. On a hit the target rolls Resolve vs DC 13; on a failure it is Compelled toward the shell's vice until the end of its next turn.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul"
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 13,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> Reach 1 square, one target. Damage: <code>1d8</code> qliphothic to Stress + violence. On a hit the target rolls Resolve vs DC 13; on a failure it is Compelled toward the shell's vice until the end of its next turn.</p><p><em>The hollow reaches for what it lacks.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "frame": "attack",
+              "lineageStrike": "qliphothic",
+              "price": {
+                "marks": 50,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI attack × 1",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "0MPgwUgLTqsTTDP1",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989128082,
+        "modifiedTime": 1792989128082,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -444,34 +701,38 @@
             ]
           },
           "price": {
-            "marks": 150,
-            "bounty": 200,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 5,
+            "bounty": 5,
+            "hire": 10,
+            "ransom": 10,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "I light Qliphothic Vermin (Ghagiel — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TI light qliphothic — bounty 5 / hire 10 marks; credited to the pool matching the method (default softpower)"
           },
           "qliphah": {
             "name": "ghagiel",
             "hullOf": "chokmah",
             "grade": "lesser"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "ghagiel",
+          "title": "Qliphothic Vermin (Ghagiel — Lesser)"
         }
       },
-      "kind": "npc"
+      "kind": "npc",
+      "creatureType": "fiend"
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188141,
-    "modifiedTime": 1787799188141,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989127902,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "X6OcEP6YbKkYNdiw",
   "_key": "!actors!X6OcEP6YbKkYNdiw"

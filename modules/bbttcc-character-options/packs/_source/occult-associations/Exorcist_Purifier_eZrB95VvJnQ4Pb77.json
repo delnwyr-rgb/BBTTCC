@@ -1,7 +1,7 @@
 {
   "type": "Item",
   "folder": null,
-  "name": "Exorcist/Purifier",
+  "name": "Exorcist / Purifier",
   "color": null,
   "sorting": "a",
   "_id": "eZrB95VvJnQ4Pb77",
@@ -12,12 +12,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.369",
     "systemId": "dnd5e",
     "systemVersion": "5.2.5",
     "createdTime": 1774987089025,
-    "modifiedTime": 1774987089127,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989209737,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!folders!eZrB95VvJnQ4Pb77"
 }

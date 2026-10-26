@@ -1,10 +1,16 @@
 {
-  "name": "⭐ Ritual Binding [Option]",
+  "name": "Ritual Binding",
   "type": "feat",
   "img": "icons/magic/fire/dagger-rune-enchant-flame-strong-purple-pink.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>⭐ Ritual Binding [Option]</b></p><p><b>Cost:</b> Intrigue 2 • Faith 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>optact_ritual_binding</code></p>",
+      "value": "<p><strong>Ritual Binding</strong></p><p>Goetic Summoner. Target a hex with a dormant spark seated on it: the spark is integrated (a Lamp for the Threshold) and your Reach is debited. Needs a GM seat.</p><p><em>Cost: Intrigue 20 · Faith 10 marks.</em></p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "-ritual-binding-option",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -41,9 +43,12 @@
         "tier": null,
         "rarity": null,
         "minFactionTier": null,
-        "storyOnly": true,
+        "storyOnly": false,
         "availability": null,
         "unlockKey": null
+      },
+      "effects": {
+        "text": "Goetic Summoner. Target a hex with a dormant spark seated on it: the spark is integrated (a Lamp for the Threshold) and your Reach is debited. Needs a GM seat."
       }
     }
   },
@@ -59,12 +64,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063182785,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792988997508,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!OYS3jgSuQAQcr5Dq"
 }

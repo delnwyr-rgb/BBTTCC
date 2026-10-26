@@ -8,7 +8,7 @@
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p><strong>Buried Betrothal.</strong> A marriage promised before the Shattering, never formally dissolved. Wave it gently and watch a cold courtier suddenly find you fascinating.</p><p><em>Play:</em> +2 favor with a courtier of your choice toward your side.</p>",
+      "value": "<p><strong>Buried Betrothal.</strong> A marriage promised before the Shattering, never formally dissolved. Wave it gently and watch a cold courtier suddenly find you fascinating.</p><p><em>Play:</em> +2 Favor with a courtier of your choice toward your side.</p>",
       "chat": "",
       "unidentified": ""
     }
@@ -30,11 +30,11 @@
     "default": 0
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780000000000,
-    "modifiedTime": 1784079176431,
+    "modifiedTime": 1792977750447,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

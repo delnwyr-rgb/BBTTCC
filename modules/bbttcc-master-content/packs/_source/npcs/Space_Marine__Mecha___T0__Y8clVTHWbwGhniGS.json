@@ -14,79 +14,11 @@
       }
     },
     "bbttcc-factions": {
-      "factionId": "RgpV6bx2Olk9Z4qW"
+      "factionId": "RgpV6bx2Olk9Z4qW",
+      "warLogs": []
     },
     "fourththing": {
       "kind": "rig"
-    },
-    "bbttcc-structures": {
-      "hasStructure": true,
-      "facilityMode": false,
-      "materialBOM": [
-        {
-          "materialKey": "bog-iron",
-          "qty": 5,
-          "originalQty": 5,
-          "family": "metal",
-          "tier": "I",
-          "name": "bog-iron",
-          "tagsCache": []
-        },
-        {
-          "materialKey": "ash-wood",
-          "qty": 2,
-          "originalQty": 2,
-          "family": "wood",
-          "tier": "I",
-          "name": "ash-wood",
-          "tagsCache": []
-        },
-        {
-          "materialKey": "cold-iron",
-          "qty": 1,
-          "originalQty": 1,
-          "family": "metal",
-          "tier": "II",
-          "name": "Cold-Iron",
-          "tagsCache": [
-            "material",
-            "cold-iron",
-            "iron",
-            "cold-forge",
-            "hex-resistant"
-          ]
-        }
-      ],
-      "state": "intact",
-      "plates": {
-        "current": 22,
-        "max": 22
-      },
-      "threshold": 1.2,
-      "resists": {
-        "kinetic": 0.5
-      },
-      "vulnerabilities": {
-        "energy|heat": {
-          "type": "energy",
-          "flavor": "heat",
-          "factor": 2
-        },
-        "energy|fire": {
-          "type": "energy",
-          "flavor": "fire",
-          "factor": 2
-        }
-      },
-      "loadBearing": false,
-      "collapseProfile": {
-        "fallFt": 10,
-        "damageDice": "2d10",
-        "nonlethal": true,
-        "knockbackFt": 5,
-        "triggerState": "breached"
-      },
-      "history": []
     }
   },
   "system": {
@@ -125,8 +57,8 @@
       "crewMax": 2
     },
     "integrity": {
-      "value": 28,
-      "max": 28,
+      "value": 24,
+      "max": 24,
       "tier": 0,
       "bracket": "mecha"
     },
@@ -139,7 +71,9 @@
       },
       "resolve": {
         "value": 11
-      }
+      },
+      "integrity": {},
+      "stress": {}
     },
     "defenses": {
       "resistances": [],
@@ -153,7 +87,7 @@
     },
     "travel": {
       "speed": 4,
-      "range": 10,
+      "range": 8,
       "hazardResist": 0,
       "domains": [
         "land"
@@ -165,18 +99,22 @@
       "power-armor",
       "space-marine",
       "faction-starter"
-    ]
+    ],
+    "biography": {
+      "concept": "",
+      "notes": ""
+    }
   },
   "prototypeToken": {
     "actorLink": true,
     "disposition": 1,
     "name": "Space Marine (Mecha · T0)",
     "displayName": 30,
-    "width": 1,
-    "height": 1,
+    "width": 2,
+    "height": 2,
     "depth": 1,
     "texture": {
-      "src": "icons/svg/mystery-man.svg",
+      "src": "modules/bbttcc-core/assets/rigs/mechsuit_1.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -260,7 +198,7 @@
     "prependAdjective": false
   },
   "_id": "Y8clVTHWbwGhniGS",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "modules/bbttcc-core/assets/rigs/mechsuit_1.webp",
   "items": [
     {
       "name": "Power-Armor Frame",
@@ -273,7 +211,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>Synthetic frame authored by the Rig Builder. Bracket: mecha. Pilot Mount enabled — one pilot-fired weapon.</p>",
+          "value": "<p>Single-pilot power armor — the smallest giant fighting robot. One weapon rides at the pilot's hand; plate covers everything else.</p><p><b>Frame · Mecha · Mobile</b></p>",
           "chat": ""
         }
       },
@@ -347,6 +285,9 @@
               }
             }
           }
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.items.Item.fnN9fIxYa5xTNwhZ"
         }
       },
       "_id": "eDX9ps3WKhVqyGqu",
@@ -358,17 +299,16 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1787799219624,
-        "modifiedTime": 1787799219624,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791316997697,
+        "modifiedTime": 1792989113455,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!Y8clVTHWbwGhniGS.eDX9ps3WKhVqyGqu"
+      }
     },
     {
       "name": "Twin Autocannons",
@@ -388,7 +328,8 @@
         "damageParts": [],
         "range": {
           "short": 4,
-          "long": 12
+          "long": 12,
+          "units": "sq"
         },
         "tags": [
           "suppression",
@@ -662,23 +603,22 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
-        "createdTime": 1787799219624,
-        "modifiedTime": 1787799219624,
+        "createdTime": 1791316997697,
+        "modifiedTime": 1791316997697,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "IWnyi1OjhjjmM7FR",
-      "_key": "!actors.items!Y8clVTHWbwGhniGS.IWnyi1OjhjjmM7FR"
+      "_id": "IWnyi1OjhjjmM7FR"
     },
     {
       "name": "Reinforced Plating",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/commodities/tech/plating-metal-armor-tech-steel-blue.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -686,7 +626,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p>",
+          "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p><p><strong>Passive:</strong> +2 Integrity max per rig tier while fitted.</p>",
           "chat": ""
         }
       },
@@ -694,7 +634,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": true
+            "passive": {
+              "integrityMaxPerTier": 2
+            }
           },
           "rfi": {
             "item": {
@@ -721,18 +663,17 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1787799219624,
-        "modifiedTime": 1787799219624,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791316997697,
+        "modifiedTime": 1792989113454,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "BGrWjBI8tZ7ZMdkf",
-      "_key": "!actors.items!Y8clVTHWbwGhniGS.BGrWjBI8tZ7ZMdkf"
+      "_id": "BGrWjBI8tZ7ZMdkf"
     }
   ],
   "effects": [],
@@ -743,12 +684,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1787799219624,
-    "modifiedTime": 1787799219624,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791316997697,
+    "modifiedTime": 1792989113333,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

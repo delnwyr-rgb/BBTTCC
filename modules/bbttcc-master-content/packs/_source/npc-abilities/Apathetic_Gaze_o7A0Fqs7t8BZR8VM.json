@@ -1,0 +1,80 @@
+{
+  "name": "Apathetic Gaze",
+  "type": "feat",
+  "img": "icons/weapons/staves/staff-ornate-eye.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>One creature within 6 squares meets its wide, vacant eyes and rolls vs Resolve (DC 12). Fail: crushed by pure pointlessness until the end of its next turn — Staggered, speed halved, no reactions. Why hurry. Why anything.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "condition": {
+                "key": "staggered",
+                "duration": "1-round",
+                "save": {
+                  "attr": "soul",
+                  "dc": 12
+                }
+              }
+            }
+          },
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Apathetic Gaze"
+            },
+            "do": {
+              "noReactions": true,
+              "prompt": "Speed halved too (pointlessness)."
+            }
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Nahemoth Husk"
+        ],
+        "sourceIds": [
+          "BvNe8KEqyzjNxiFc"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "o7A0Fqs7t8BZR8VM",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069905,
+    "modifiedTime": 1792989069988,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!o7A0Fqs7t8BZR8VM"
+}

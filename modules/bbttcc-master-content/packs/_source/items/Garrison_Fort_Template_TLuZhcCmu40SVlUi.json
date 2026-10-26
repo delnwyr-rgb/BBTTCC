@@ -1,13 +1,13 @@
 {
   "name": "Garrison Fort Template",
   "type": "feature",
-  "img": "icons/sundries/scrolls/scroll-bound-sealed-red.webp",
+  "img": "icons/environment/settlement/castle-gatehouse.webp",
   "system": {
     "category": "principle",
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p>Pre-rolled stationary garrison: heavy frame, four guns, militia output. Holds a hex against raids.</p>",
+      "value": "<p>Pre-rolled stationary garrison: heavy frame, four guns, militia output. Holds a hex against Battles and Sieges.</p>",
       "chat": ""
     }
   },
@@ -44,7 +44,7 @@
       }
     }
   },
-  "folder": "0JDB983lzPepXXNe",
+  "folder": "bUSEVy3wXJbUTl2t",
   "_id": "TLuZhcCmu40SVlUi",
   "effects": [],
   "sort": 2600000,
@@ -53,12 +53,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778205374982,
-    "modifiedTime": 1778963271956,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988931172,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

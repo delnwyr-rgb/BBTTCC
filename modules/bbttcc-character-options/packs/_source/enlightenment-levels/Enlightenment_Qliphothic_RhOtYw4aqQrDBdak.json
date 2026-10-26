@@ -1,0 +1,69 @@
+{
+  "name": "Enlightenment: Qliphothic",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "Dark enlightenment. The Shells answer before the Tree does. +20 Violence and +20 Intrigue marks to your Domain each turn.",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "enlightenment-qliphothic",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "enlightenment-levels",
+      "bonuses": {
+        "violence": 2,
+        "intrigue": 2
+      }
+    }
+  },
+  "img": "icons/magic/unholy/hand-fire-skeleton-pink.webp",
+  "effects": [],
+  "folder": null,
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989141799,
+    "modifiedTime": 1792989141799,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_id": "RhOtYw4aqQrDBdak",
+  "sort": 700000,
+  "_key": "!items!RhOtYw4aqQrDBdak"
+}

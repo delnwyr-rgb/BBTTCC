@@ -7,7 +7,7 @@
     "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>“You remember mountains that no longer exist.”</em></p><p><strong>High-Altitude Blood.</strong> You reroll the lowest die on defense checks against poison and environmental suffocation. You can hold your breath for 10 minutes.</p><p><strong>Stone-Sense.</strong> You gain tremorsense 2 squares while standing on stone or packed earth.</p>",
+      "value": "<p><em>“You remember mountains that no longer exist.”</em></p><p><strong>High-Altitude Blood.</strong> You reroll the lowest die on defense checks against poison and environmental suffocation. You can hold your breath for 10 minutes.</p><p><strong>Stone-Sense.</strong> You gain tremorsense 2 squares while standing on stone or packed earth.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -16,7 +16,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -27,14 +27,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "human",
       "feature": "high-altitude_blood",
       "lineage": "Denisovan",
-      "tierLevel": 1,
       "version": "1.1.0",
       "date": "2026-04-19",
       "rfiNative": true
@@ -58,12 +54,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776660294519,
-    "modifiedTime": 1782167240125,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988976955,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

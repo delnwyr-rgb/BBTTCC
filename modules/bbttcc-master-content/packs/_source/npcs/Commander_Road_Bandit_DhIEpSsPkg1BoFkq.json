@@ -44,8 +44,8 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 48,
-        "max": 48,
+        "value": 60,
+        "max": 60,
         "temp": 0
       },
       "stress": {
@@ -170,8 +170,8 @@
       "fragments": []
     },
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Humanoid",
+      "notes": "The one who owns the map. Keeps the crew pointed at the road and the loot pointed at the lockbox. Better shot than the crew, worse nerves than they think. Retuned 2026-10-13 to a tier-1 heavy: the first ambush's boss — scary for a round, beatable by a fresh coalition. The old tier-2 build rides on as the Hexknight."
     },
     "description": "<p><strong>Concept.</strong> The one who owns the map. Keeps the crew pointed at the road and the loot pointed at the lockbox.</p>\n<p><strong>Signature.</strong> Shouts the plan loud enough that the party hears it too.</p>"
   },
@@ -234,7 +234,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. Bonus action, only after a Shiv hit this turn, same target. Damage die rerolls the highest.</p><p><em>The off hand is the bad hand.</em></p>"
+          "value": "<p><strong>Strike.</strong> reach 1 square., one target. Damage: <code>1d6</code> kinetic + violence. Bonus action, only after a Shiv hit this turn, same target. Damage die rerolls the highest.</p><p><em>The off hand is the bad hand.</em></p>"
         }
       },
       "_id": "4OTgooHSKy8nQTZF",
@@ -242,7 +242,8 @@
       "folder": null,
       "sort": 0,
       "ownership": {
-        "default": 0
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
       },
       "flags": {
         "autoanimations": {
@@ -436,8 +437,34 @@
                 }
               }
             ]
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon × 1",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
           }
         }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791944537407,
+        "modifiedTime": 1792977761072,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
       }
     },
     {
@@ -498,7 +525,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> range 60/180 ft., one target. Damage: <code>1d8</code> kinetic + violence. On a hit, one ally bandit within 6 squares may immediately move 2 squares as a reaction — the commander's shot is the signal.</p><p><em>The one rifle in the crew with a real scope.</em></p>"
+          "value": "<p><strong>Strike.</strong> range 60/36 squares., one target. Damage: <code>1d8</code> kinetic + violence. On a hit, one ally bandit within 6 squares may immediately move 2 squares as a reaction — the commander's shot is the signal.</p><p><em>The one rifle in the crew with a real scope.</em></p>"
         }
       },
       "_id": "AMw0EdjtQBFDZ05V",
@@ -506,7 +533,8 @@
       "folder": null,
       "sort": 0,
       "ownership": {
-        "default": 0
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
       },
       "flags": {
         "autoanimations": {
@@ -697,11 +725,38 @@
                 },
                 "do": {
                   "prompt": "Signal shot: one ally bandit within 6 sq may move 2 sq as a reaction."
-                }
+                },
+                "narrative": true
               }
             ]
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon × 1",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
           }
         }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791944537408,
+        "modifiedTime": 1792989136236,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
       }
     },
     {
@@ -725,7 +780,8 @@
       "folder": null,
       "sort": 0,
       "ownership": {
-        "default": 0
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
       },
       "flags": {
         "fourththing": {
@@ -739,6 +795,17 @@
             }
           ]
         }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.17",
+        "createdTime": 1791944537408,
+        "modifiedTime": 1791944537410,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
       }
     },
     {
@@ -762,7 +829,8 @@
       "folder": null,
       "sort": 0,
       "ownership": {
-        "default": 0
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
       },
       "flags": {
         "fourththing": {
@@ -782,6 +850,17 @@
             ]
           }
         }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.17",
+        "createdTime": 1791944537408,
+        "modifiedTime": 1791944537410,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
       }
     },
     {
@@ -842,7 +921,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. On a hit against a Prone or Restrained target, +1d4 kinetic.</p>"
+          "value": "<p><strong>Strike.</strong> reach 1 square., one target. Damage: <code>1d6</code> kinetic + violence. On a hit against a Prone or Restrained target, +1d4 kinetic.</p>"
         }
       },
       "_id": "mJWSOJ8Ri97OxwdS",
@@ -850,7 +929,8 @@
       "folder": null,
       "sort": 0,
       "ownership": {
-        "default": 0
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
       },
       "flags": {
         "autoanimations": {
@@ -1051,8 +1131,34 @@
                 }
               }
             ]
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon × 1",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
           }
         }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791944537408,
+        "modifiedTime": 1792977761073,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
       }
     }
   ],
@@ -1178,5 +1284,17 @@
       },
       "creatureType": "humanoid"
     }
-  }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1777700829085,
+    "modifiedTime": 1792989136048,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!DhIEpSsPkg1BoFkq"
 }

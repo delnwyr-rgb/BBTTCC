@@ -16,13 +16,14 @@
     "damageParts": [],
     "range": {
       "short": 1,
-      "long": 1
+      "long": 1,
+      "units": "sq"
     },
     "tags": [
       "knife",
       "mercy"
     ],
-    "effect": "Mercy Engraving: kills with this weapon incur no Blood Debt.",
+    "effect": "Mercy Engraving: every strike with this knife is nonlethal — a target brought to 0 Integrity is out cold, not dead. The apology counts.",
     "flavor": "It says it's sorry. It means it. Reality keeps the receipt.",
     "manifestation": {
       "tier": 1,
@@ -56,7 +57,7 @@
       }
     },
     "description": {
-      "value": "<p>A cheap, mass-produced stiletto with an apology engraved up the fuller. The engraving is competent. The steel is mediocre. The point is sharp. They were sold in bulk before the Shattering as novelty items at gas stations. After the Shattering, somebody noticed they actually work — and not just in the obvious ways.</p><p><b>Mercy Engraving.</b> When you reduce a creature to 0 Integrity with this knife, the kill incurs <b>no Blood Debt</b>. The engraved apology counts. Reality accepts the receipt. (Mal: \"Don't think about this too hard. The metaphysics are at minimum dubious. The mechanic is real.\")</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Mercy Engraving: kills with this weapon incur no Blood Debt.</p>\n<ul>\n <li><strong>Damage:</strong> 1d6 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(stab)</span></li>\n <li><strong>Faculty:</strong> Violence</li>\n <li><strong>Attack:</strong> Melee (Violence)</li>\n <li><strong>Reach:</strong> Melee</li>\n <li><strong>Duration:</strong> Scene</li>\n <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+      "value": "<p>A cheap, mass-produced stiletto with an apology engraved up the fuller. The engraving is competent. The steel is mediocre. The point is sharp. They were sold in bulk before the Shattering as novelty items at gas stations. After the Shattering, somebody noticed they actually work — and not just in the obvious ways.</p><p><b>Mercy Engraving.</b> When you reduce a creature to 0 Integrity with this knife, it falls <b>unconscious and stable</b> instead of dying. The engraved apology counts. Reality accepts the receipt. (Mal: \"Don't think about this too hard. The metaphysics are at minimum dubious. The mechanic is real.\")</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Mercy Engraving: every strike with this knife is nonlethal — a target brought to 0 Integrity is out cold, not dead. The apology counts.</p>\n<ul>\n <li><strong>Damage:</strong> 1d6 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(stab)</span></li>\n <li><strong>Faculty:</strong> Violence</li>\n <li><strong>Attack:</strong> Melee (Violence)</li>\n <li><strong>Reach:</strong> Melee</li>\n <li><strong>Duration:</strong> Scene</li>\n <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
     }
   },
   "flags": {
@@ -80,7 +81,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A cheap, mass-produced stiletto with an apology engraved up the fuller. The engraving is competent. The steel is mediocre. The point is sharp. They were sold in bulk before the Shattering as novelty items at gas stations. After the Shattering, somebody noticed they actually work — and not just in the obvious ways.</p><p><b>Mercy Engraving.</b> When you reduce a creature to 0 Integrity with this knife, the kill incurs <b>no Blood Debt</b>. The engraved apology counts. Reality accepts the receipt. (Mal: \"Don't think about this too hard. The metaphysics are at minimum dubious. The mechanic is real.\")</p>",
+          "lore": "<p>A cheap, mass-produced stiletto with an apology engraved up the fuller. The engraving is competent. The steel is mediocre. The point is sharp. They were sold in bulk before the Shattering as novelty items at gas stations. After the Shattering, somebody noticed they actually work — and not just in the obvious ways.</p><p><b>Mercy Engraving.</b> When you reduce a creature to 0 Integrity with this knife, it falls <b>unconscious and stable</b> instead of dying. The engraved apology counts. Reality accepts the receipt. (Mal: \"Don't think about this too hard. The metaphysics are at minimum dubious. The mechanic is real.\")</p>",
           "materialOf": [
             "pre-fall-stainless",
             "regret",
@@ -312,12 +313,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777437725672,
-    "modifiedTime": 1782159946549,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988950379,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

@@ -31,7 +31,7 @@
     chokmah: "economy",   // "Tech" → Economy by default
     binah:   "intrigue",
     chesed:  null,        // healing effectiveness → no OP delta
-    gevurah: "violence",
+    geburah: "violence",
     tiferet: "culture",
     netzach: "all",
     hod:     "faith",
@@ -46,7 +46,7 @@
     chokmah: 3,
     binah:   3,
     chesed:  0,
-    gevurah: 3,
+    geburah: 3,
     tiferet: 3,
     netzach: 2,   // 2 OP to every channel
     hod:     3,
@@ -61,7 +61,7 @@
     return n > 0 ? n : null;
   }
 
-  const PILLARS = ["keter","chokmah","binah","chesed","gevurah","tiferet","netzach","hod","yesod","malkuth"];
+  const PILLARS = ["keter","chokmah","binah","chesed","geburah","tiferet","netzach","hod","yesod","malkuth"];
 
   function zeroOps() {
     return { violence:0, nonlethal:0, intrigue:0, economy:0, softpower:0, diplomacy:0, logistics:0, culture:0, faith:0 };
@@ -85,8 +85,9 @@
         const owner = tf.factionId || tf.ownerId || "";
         if (String(owner) !== String(factionId)) continue;
         const fromKey = String(tf.sephirahKey || tf.sephirah || "").toLowerCase();
-        const fromUuid = String(tf.sephirotUuid||"").toLowerCase().match(/keter|chokmah|binah|chesed|gevurah|tiferet|netzach|hod|yesod|malkuth/);
-        const key = fromKey || (fromUuid ? fromUuid[0] : "");
+        const fromUuid = String(tf.sephirotUuid||"").toLowerCase().match(/keter|chokmah|binah|chesed|geburah|gevurah|tiferet|netzach|hod|yesod|malkuth/);
+        let key = fromKey || (fromUuid ? fromUuid[0] : "");
+        if (key === "gevurah" || key === "gevura") key = "geburah";   // legacy spelling (2026-10-26)
         if (!key) continue;
         counts[key] = (counts[key]||0) + 1;
       }

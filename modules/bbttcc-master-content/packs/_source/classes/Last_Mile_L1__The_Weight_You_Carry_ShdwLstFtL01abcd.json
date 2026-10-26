@@ -7,7 +7,7 @@
     "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<p><em>Nobody stays behind.</em></p><p><strong>Mode: Psychopomp / drift: Sideways.</strong></p><p>Your default Package type is a <strong>Soul</strong> — a specific character, creature, or intangible (a secret, a confession, a deathbed wish, a refugee's name, an unfinished obligation) that cannot reach safety on its own.</p><p><strong>While carrying a Soul:</strong></p><ul><li><p>Your movement speed is <strong>reduced by 1 square</strong>, but allies traveling with you gain <strong>+1 square of movement speed</strong> (the Soul's witness-weight pulls them forward).</p></li><li><p>You <strong>reroll the lowest die</strong> on Stealth (Intrigue) and Athletics (Violence) checks made specifically to <strong>protect or conceal the Soul</strong> (not all stealth/athletics — just protective acts).</p></li></ul><p><strong>On delivery:</strong> When you successfully deliver a Soul to safety (the GM confirms the destination counts as safety for that Soul), the recipient Domain gains <strong>+1 Loyalty marks</strong> and <strong>Darkness in the recipient's hex is reduced by 1 point</strong>.</p><p>You may receive a new Soul any time your Package slot is empty.</p>",
+      "value": "<p><em>Nobody stays behind.</em></p><p><strong>Mode: Psychopomp / drift: Sideways.</strong></p><p>Your default Package type is a <strong>Soul</strong> — a specific character, creature, or intangible (a secret, a confession, a deathbed wish, a refugee's name, an unfinished obligation) that cannot reach safety on its own.</p><p><strong>While carrying a Soul:</strong></p><ul><li><p>Your movement speed is <strong>reduced by 1 square</strong>, but allies traveling with you gain <strong>+1 square of movement speed</strong> (the Soul's witness-weight pulls them forward).</p></li><li><p>You <strong>reroll the lowest die</strong> on Stealth (Intrigue) and Athletics (Violence) checks made specifically to <strong>protect or conceal the Soul</strong> (not all stealth/athletics — just protective acts).</p></li></ul><p><strong>On delivery:</strong> When you successfully deliver a Soul to safety (the GM confirms the destination counts as safety for that Soul), the recipient Domain gains <strong>+10 Soft Power marks</strong> and <strong>Darkness in the recipient's hex drops by 1</strong>.</p><p>You may receive a new Soul any time your Package slot is empty.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -48,9 +48,25 @@
             ]
           },
           "effect": {
-            "kind": "chat-prompt",
+            "kind": "grant-resource",
             "args": {
-              "body": "The Weight You Carry. You delivered a Soul to safety (GM confirms the destination counts as safety): the recipient faction gains +1 Morale OP and Darkness in the recipient's hex is reduced by 1 point."
+              "resource": "soft-power-op",
+              "amount": 1,
+              "target": "faction"
+            }
+          }
+        },
+        {
+          "event": "on-delivery",
+          "predicate": {
+            "tag": [
+              "soul"
+            ]
+          },
+          "effect": {
+            "kind": "hex-darkness",
+            "args": {
+              "delta": -1
             }
           }
         }
@@ -257,12 +273,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.368",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.3",
+    "systemVersion": "0.6.37",
     "createdTime": 1777005233927,
-    "modifiedTime": 1791412952022,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988966099,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

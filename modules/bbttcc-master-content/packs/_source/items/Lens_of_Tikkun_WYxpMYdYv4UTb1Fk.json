@@ -1,122 +1,75 @@
 {
+  "_id": "WYxpMYdYv4UTb1Fk",
   "name": "Lens of Tikkun",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/tools/scribal/lens-grey-red.webp",
   "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>Attuned only by Illuminated/Transcendent. Once/week, purify one Corrupted Spark or reduce global Darkness by 1.</p>",
       "chat": ""
-    },
-    "quantity": 1,
-    "weight": {
-      "value": 1,
-      "units": "lb"
-    },
-    "price": {
-      "value": 25000,
-      "denomination": "gp"
-    },
-    "rarity": "legendary",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "lens-of-tikkun",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    }
   },
   "flags": {
     "bbttcc": {
       "globalDarknessDeltaWeekly": -1,
       "tags": []
     },
-    "rfi": {
-      "item": {
-        "tier": "IV",
-        "footprint": 1,
-        "reach": "self",
-        "frame": "armor",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "scene"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
-    },
     "fourththing": {
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
-            "currency": "economy",
+            "marks": 8100,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 5,
+            "notes": "TIV talisman × rarity 5",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 3240
           },
           "tier": "IV",
-          "frame": "armor",
+          "frame": "talisman",
           "origin": "looted",
           "bound": "free",
           "reach": "self",
-          "footprint": 1
+          "footprint": 1,
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {}
         }
       }
     }
   },
   "effects": [],
   "folder": "TNrB6kEiHS0KwwJT",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834182246,
-    "modifiedTime": 1782159994984,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1300000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "WYxpMYdYv4UTb1Fk",
-  "sort": 1300000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988910566,
+    "modifiedTime": 1792988910566,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!WYxpMYdYv4UTb1Fk"
 }

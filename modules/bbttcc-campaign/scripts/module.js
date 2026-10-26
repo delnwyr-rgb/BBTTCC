@@ -6964,6 +6964,34 @@ function _npcDisplayName(actor) {
     return nm;
   } catch (_e) { return String(actor?.name || ""); }
 }
+// REVEAL KIT (2026-10-26, ruling NP1 — Wick is Jeargan): an aliased actor may carry the kit of its true self under
+// flags["bbttcc-campaign"].revealKit = { untilMark:[beatIds], items:[item docs], patch?:{system:{…}}, note? }. When one of
+// those beats resolves, the primary GM seat grants the items once (keepId, duplicates skipped), applies the patch and
+// stamps revealKitGranted — the same moment the alias engine above lets the true name out. Idempotent: a second resolve
+// of the beat, or a rerun, grants nothing.
+async function _grantRevealKits(beatId) {
+  const bid = String(beatId || "").trim(); if (!bid) return 0;
+  if (!game.user?.isGM) return 0;
+  try { const gx = game.bbttcc?.api?.gmExec; const primary = (typeof gx?.primaryGmId === "function") ? gx.primaryGmId() : game.users?.activeGM?.id; if (primary && primary !== game.user.id) return 0; } catch (_e) {}
+  let n = 0;
+  for (const a of (game.actors?.contents || [])) {
+    const kit = a.flags?.[MOD_ID]?.revealKit; if (!kit || typeof kit !== "object") continue;
+    if (a.flags?.[MOD_ID]?.revealKitGranted) continue;
+    const until = [].concat(kit.untilMark ?? kit.untilMarks ?? []).map(s => String(s || "").trim());
+    if (!until.includes(bid)) continue;
+    try {
+      const items = (Array.isArray(kit.items) ? kit.items : []).filter(d => d && typeof d === "object" && !(d._id && a.items.get(d._id)));
+      if (items.length) await a.createEmbeddedDocuments("Item", foundry.utils.deepClone(items), { keepId: true });
+      const upd = { [`flags.${MOD_ID}.revealKitGranted`]: { ts: Date.now(), beatId: bid, items: items.length } };
+      if (kit.patch && typeof kit.patch === "object") Object.assign(upd, foundry.utils.flattenObject({ system: kit.patch.system || {} }));
+      await a.update(upd);
+      n++;
+      try { ChatMessage.create({ whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id), speaker: { alias: "Bad Eden" }, content: `<div style="border-left:3px solid #8a6d3b;padding:.35em .6em;background:rgba(138,109,59,.08);">🗿 <b>${foundry.utils.escapeHTML(String(a.name))}</b> — the name is out: ${items.length} item(s) of the hidden kit granted${kit.note ? ` <span style="opacity:.7">(${foundry.utils.escapeHTML(String(kit.note))})</span>` : ""}.</div>` }); } catch (_eMsg) {}
+    } catch (e) { warn("revealKit grant failed for", a.name, e); }
+  }
+  return n;
+}
+Hooks.on("bbttcc:beat:resolved", (payload) => { try { const id = payload?.beat?.id; if (id) _grantRevealKits(id); } catch (_e) {} });
 function _inviteNameMatch(a, b) {   // "caulder" ≈ "calder", "sable" = "sable"; short words must match exactly
   if (a === b) return true;
   if (a.length < 4 || b.length < 4) return false;

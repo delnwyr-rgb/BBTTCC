@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Deep water is patient. Deep water is not merciful.”</em></p>\n        <p><strong>Ocean Judge (1/Soma Break).</strong> When a creature you can see lies to you, betrays a promise, or breaks a sworn agreement (GM adjudicates), you can mark them for 1 hour. While marked, you always know the direction to them, and your attacks against them deal +tier psychic damage once per turn.</p>",
+      "value": "\n<p><em>“Deep water is patient. Deep water is not merciful.”</em></p>\n        <p><strong>Ocean Judge (1/Soma Break).</strong> When a creature you can see lies to you, betrays a promise, or breaks a sworn agreement (GM adjudicates), you can mark them for 1 hour. While marked, you always know the direction to them, and your attacks against them deal +tier psychic damage once per turn.</p>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 17
     },
     "properties": [],
     "requirements": "Oldenborn",
@@ -41,7 +41,6 @@
       "kind": "oldenborn",
       "feature": "ocean_judge",
       "lineage": "Tideborne",
-      "tierLevel": 17,
       "version": "1.0.0"
     },
     "autoanimations": {
@@ -234,12 +233,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004114716,
-    "modifiedTime": 1781116063679,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988971164,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

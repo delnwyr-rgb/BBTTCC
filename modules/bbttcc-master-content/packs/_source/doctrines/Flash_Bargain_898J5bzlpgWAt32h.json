@@ -3,14 +3,14 @@
   "type": "feat",
   "img": "icons/magic/light/circle-window-clock-blue.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": {
       "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<p>A handshake so fast the other guy doesn't clock that his wallet got lighter. Classic frontier diplomacy.</p><p><b>Borrow +1 enemy OP for this round.</b></p>",
+      "value": "<p>A handshake so fast the other guy doesn't clock that his wallet got lighter. Classic frontier diplomacy.</p><p><b>Borrow +10 enemy marks for this round.</b></p>",
       "chat": ""
     },
     "activities": {},
@@ -51,7 +51,8 @@
           "intrigue"
         ],
         "engine": "intrigue"
-      }
+      },
+      "effects": {}
     }
   },
   "_id": "898J5bzlpgWAt32h",
@@ -66,12 +67,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977107845,
-    "modifiedTime": 1779731345768,
-    "lastModifiedBy": "6ut7GT8pCAhpdWjS"
+    "modifiedTime": 1792988991851,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!898J5bzlpgWAt32h"
 }

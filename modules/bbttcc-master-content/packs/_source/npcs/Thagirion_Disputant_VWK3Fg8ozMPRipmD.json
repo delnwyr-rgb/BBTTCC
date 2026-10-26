@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "art/bbttcc/qliphoth/thagirion-disputant.webp",
   "system": {
-    "role": "Qliphothic Agitator (Thagirion — Lesser)",
+    "role": "caster",
     "tier": 2,
     "factionId": "",
     "notes": "<p>A walking argument: unnaturally tall and thin, skin a bruised patchwork of clashing colors, head featureless except for a single oversized, sneering mouth that never stops moving. Drawn to peace like flies to sugar — negotiations, gatherings, quiet libraries — where its whispers exploit every insecurity until civil discussion becomes bloodshed. It doesn't need to win fights. Only to start them.</p><p><strong>Qliphah:</strong> Thagirion, the Conflicts — the Hull of Tiferet. Harmony shattered into endless, ugly strife.</p><p><em>Mal's note: 'If everyone at the table is suddenly RIGHT and FURIOUS about it, someone let a Disputant in the door.'</em></p>",
@@ -28,7 +28,7 @@
         "value": 5
       },
       "body": {
-        "value": 4
+        "value": 3
       },
       "mind": {
         "value": 3
@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 50,
-        "max": 50
+        "max": 50,
+        "temp": 0
       },
       "stress": {
         "value": 28,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -141,10 +143,13 @@
         "qliphothic"
       ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "sephirotic"
+      ]
     },
     "conditionImmunities": [
-      "calmed"
+      "calmed",
+      "charmed"
     ],
     "tags": [
       "qliphothic",
@@ -154,6 +159,9 @@
       "hull-of-tiferet",
       "lesser"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -166,6 +174,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Agitator (Thagirion — Lesser)",
+      "notes": "<p>A walking argument: unnaturally tall and thin, skin a bruised patchwork of clashing colors, head featureless except for a single oversized, sneering mouth that never stops moving. Drawn to peace like flies to sugar — negotiations, gatherings, quiet libraries — where its whispers exploit every insecurity until civil discussion becomes bloodshed. It doesn't need to win fights. Only to start them.</p><p><strong>Qliphah:</strong> Thagirion, the Conflicts — the Hull of Tiferet. Harmony shattered into endless, ugly strife.</p><p><em>Mal's note: 'If everyone at the table is suddenly RIGHT and FURIOUS about it, someone let a Disputant in the door.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -265,7 +277,7 @@
       "_id": "AtxG5zIR80rCuX3s",
       "name": "Aura of Contention",
       "type": "feature",
-      "img": "icons/svg/sound.svg",
+      "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -281,25 +293,47 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "do": {
+                  "condition": {
+                    "key": "compelled",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 14
+                    }
+                  },
+                  "prompt": "Also twice-keep-worse on persuasion; Compelled = hostile to a random creature ≤6 sq."
+                },
+                "radius": 6
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188159,
-        "modifiedTime": 1787799188159,
+        "modifiedTime": 1791331977753,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!VWK3Fg8ozMPRipmD.AtxG5zIR80rCuX3s"
+      }
     },
     {
       "_id": "3aoozAci9UhiTkku",
       "name": "Psychic Mirror",
       "type": "feat",
-      "img": "icons/svg/mage-shield.svg",
+      "img": "icons/magic/air/air-pressure-shield-blue.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -315,19 +349,33 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "selfTurnStart",
+                "do": {
+                  "prompt": "Psychic Mirror (reaction): effect vs its Resolve — originator rolls vs own DC or suffers it."
+                },
+                "narrative": true
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188159,
-        "modifiedTime": 1787799188159,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989133784,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!VWK3Fg8ozMPRipmD.3aoozAci9UhiTkku"
+      }
     },
     {
       "_id": "GjDSYfDcz6rEo6r9",
@@ -351,29 +399,28 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188159,
-        "modifiedTime": 1787799188159,
+        "modifiedTime": 1791324406035,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!VWK3Fg8ozMPRipmD.GjDSYfDcz6rEo6r9"
+      }
     },
     {
       "_id": "TSg0Wp4Tc3eI1CGQ",
       "name": "Inciting Word",
       "type": "weapon",
-      "img": "icons/svg/silenced.svg",
+      "img": "icons/weapons/guns/pistol-silenced.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
         "skill": "channel",
         "damage": {
-          "formula": "2d8",
+          "formula": "2d6",
           "attribute": "presence",
           "type": "psychic",
           "damageFlavor": "",
@@ -416,6 +463,14 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 14,
+            "onSave": "half",
+            "statesOnFail": true
           }
         },
         "description": {
@@ -429,19 +484,160 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Inciting Word"
+                },
+                "do": {
+                  "noReactions": true,
+                  "prompt": "Spends its reaction attacking a creature of the Disputant's choice."
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188159,
-        "modifiedTime": 1787799188159,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989133784,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Hollow Touch",
+      "type": "weapon",
+      "img": "icons/magic/death/hand-withered-gray.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "violence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "lineage-strike",
+          "qliphothic",
+          "bestiary"
+        ],
+        "effect": "Damage goes to Stress. On a hit the target rolls Resolve vs DC 15; on a failure it is Compelled toward the shell's vice until the end of its next turn.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul"
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 15,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> Reach 1 square, one target. Damage: <code>2d6</code> qliphothic to Stress + violence. On a hit the target rolls Resolve vs DC 15; on a failure it is Compelled toward the shell's vice until the end of its next turn.</p><p><em>The hollow reaches for what it lacks.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!VWK3Fg8ozMPRipmD.TSg0Wp4Tc3eI1CGQ"
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "attack",
+              "lineageStrike": "qliphothic",
+              "price": {
+                "marks": 150,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII attack × 1",
+                "bound": "free",
+                "saleBack": 60
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "QG11oeCRizkdr8Ur",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989133831,
+        "modifiedTime": 1792989133831,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -485,34 +681,38 @@
             ]
           },
           "price": {
-            "marks": 450,
-            "bounty": 600,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 15,
+            "bounty": 15,
+            "hire": 25,
+            "ransom": 25,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "II medium Qliphothic Agitator (Thagirion — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TII medium qliphothic — bounty 15 / hire 25 marks; credited to the pool matching the method (default softpower)"
           },
           "qliphah": {
             "name": "thagirion",
             "hullOf": "tiferet",
             "grade": "lesser"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "thagirion",
+          "title": "Qliphothic Agitator (Thagirion — Lesser)"
         }
       },
-      "kind": "npc"
+      "kind": "npc",
+      "creatureType": "fiend"
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188159,
-    "modifiedTime": 1787799188159,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989133664,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "VWK3Fg8ozMPRipmD",
   "_key": "!actors!VWK3Fg8ozMPRipmD"

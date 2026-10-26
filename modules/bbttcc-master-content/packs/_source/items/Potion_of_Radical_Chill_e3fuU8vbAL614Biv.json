@@ -1,154 +1,25 @@
 {
+  "_id": "e3fuU8vbAL614Biv",
   "name": "Potion of Radical Chill",
-  "type": "consumable",
+  "type": "gear",
   "img": "icons/consumables/potions/potion-vial-tube-yellow.webp",
   "system": {
-    "description": {
-      "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Restore <strong>4</strong> Stress; Restore <strong>1</strong> Clarity; Restore <strong>1</strong> Noise</li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 30 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
-      "chat": ""
-    },
-    "source": {
-      "custom": "BBTTCC That 90's Faction Encounters",
-      "revision": 1,
-      "rules": "2024"
-    },
-    "quantity": 1,
-    "weight": {
-      "value": 0.5,
-      "units": "lb"
-    },
-    "price": {
-      "value": 150,
-      "denomination": "gp"
-    },
-    "attunement": "",
-    "equipped": false,
-    "rarity": "uncommon",
-    "identified": true,
-    "uses": {
-      "max": "1",
-      "autoDestroy": true,
-      "spent": 0,
-      "recovery": []
-    },
-    "damage": {
-      "base": {
-        "types": [],
-        "custom": {
-          "enabled": false
-        },
-        "scaling": {
-          "number": 1
-        }
-      },
-      "replace": false
-    },
-    "identifier": "bbttcc_item_potion_radical_chill",
-    "type": {
-      "value": "",
-      "subtype": ""
-    },
-    "properties": [],
-    "activities": {
-      "dnd5eactivity000": {
-        "_id": "dnd5eactivity000",
-        "type": "utility",
-        "activation": {
-          "type": "action",
-          "value": 1,
-          "condition": "Drink the potion.",
-          "override": false
-        },
-        "consumption": {
-          "targets": [
-            {
-              "type": "itemUses",
-              "target": "",
-              "value": "1",
-              "scaling": {
-                "mode": "",
-                "formula": ""
-              }
-            }
-          ],
-          "scaling": {
-            "allowed": false,
-            "max": ""
-          },
-          "spellSlot": true
-        },
-        "description": {
-          "chatFlavor": ""
-        },
-        "duration": {
-          "concentration": false,
-          "value": "1",
-          "units": "hour",
-          "special": "",
-          "override": false
-        },
-        "effects": [],
-        "range": {
-          "units": "self",
-          "special": "",
-          "override": false
-        },
-        "target": {
-          "template": {
-            "count": "",
-            "contiguous": false,
-            "type": "",
-            "size": "",
-            "width": "",
-            "height": "",
-            "units": "ft"
-          },
-          "affects": {
-            "count": "",
-            "type": "",
-            "choice": false,
-            "special": ""
-          },
-          "prompt": true,
-          "override": false
-        },
-        "uses": {
-          "spent": 0,
-          "max": "",
-          "recovery": []
-        },
-        "roll": {
-          "formula": "",
-          "name": "",
-          "prompt": false,
-          "visible": false
-        },
-        "sort": 0,
-        "flags": {},
-        "visibility": {
-          "level": {},
-          "requireAttunement": false,
-          "requireIdentification": false,
-          "requireMagic": false
-        }
-      }
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "slot": "consumable",
+    "slot": "misc",
     "tags": [
       "potion",
       "cold",
       "calm",
       "single-use"
-    ]
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>A slushy-blue vial. One swallow and a supernatural calm settles in: the hands stop shaking, the channel goes quiet, the cold feels like somebody else's problem.</p><p><b>Radical Chill.</b> Drink it: restore 4 Stress and 1 Clarity and shed 1 Noise. The calm is immediate; whatever else you feel is in your head.</p>",
+      "chat": ""
+    }
   },
-  "effects": [],
   "flags": {
-    "dnd5e": {},
     "fourththing": {
       "rfi": {
         "item": {
@@ -170,7 +41,7 @@
           },
           "signals": {},
           "charges": 1,
-          "lore": "<p>A slushy-blue vial. When you drink it, you are suffused with a supernatural calm for 1 hour:</p><ul><li>Resistance to <b>thermal (cold)</b> damage.</li><li>Reroll the lowest die on defense checks against being <b>Shaken</b>.</li><li><b>Radical Cool (1/Duration).</b> When you take fire or thermal (cold) damage, use your reaction to reduce it by <b>2d6</b>.</li></ul><p>The effect ends early if you are Staggered.</p><p><i>Engine note: the immediate sip restores stress and softens the channel — extended duration buffs are GM-tracked.</i></p>",
+          "lore": "<p>A slushy-blue vial. One swallow and a supernatural calm settles in: the hands stop shaking, the channel goes quiet, the cold feels like somebody else's problem.</p><p><b>Radical Chill.</b> Drink it: restore 4 Stress and 1 Clarity and shed 1 Noise. The calm is immediate; whatever else you feel is in your head.</p>",
           "consume": {
             "effects": [
               {
@@ -194,20 +65,16 @@
             ],
             "decrement": true
           },
-          "legacySystem": {
-            "slot": "misc",
-            "tags": []
-          },
           "price": {
-            "marks": 30,
+            "marks": 45,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TII consumable stamp",
+            "rarityMult": 1.5,
+            "notes": "TII consumable × rarity 1.5",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 18
           }
         }
       }
@@ -390,23 +257,24 @@
       "version": 5
     }
   },
+  "effects": [],
   "folder": "Wxh1A343inwTUeoo",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1768451485066,
-    "modifiedTime": 1782167282785,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 2400000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "e3fuU8vbAL614Biv",
-  "sort": 2400000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988911085,
+    "modifiedTime": 1792988911086,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!e3fuU8vbAL614Biv"
 }

@@ -23,7 +23,7 @@
       "tier-ii",
       "role-caster"
     ],
-    "effect": "On a hit, the target's next spell or manifestation has reroll-the-highest (the wrong syllable lingers, fouls the next casting).",
+    "effect": "On a hit, the target's next working or manifestation has reroll-the-highest (the wrong syllable lingers, fouls the next casting).",
     "flavor": "It says something. You hear it. Something in your throat agrees, briefly, against your will.",
     "manifestation": {
       "tier": 1,
@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +79,24 @@
             "saleBack": 60
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Marsh-Tongue Hex"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Wrong-Syllable"
+            },
+            "do": {
+              "impose": true
+            }
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "5a821479-bf93-4ebf-ab6c-822cac75621f",
+      "id": "ft-wrong-syllable",
       "label": "Wrong-Syllable",
       "macro": {
         "enable": false,
@@ -269,24 +271,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Marsh-Tongue Hex"
+        ],
+        "sourceIds": [
+          "u6JS59QSJHwoev1d"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "bAhwW3yrDKO5vbRz",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024235708,
-    "modifiedTime": 1782167245003,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989052276,
+    "modifiedTime": 1792989052277,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!bAhwW3yrDKO5vbRz"
 }

@@ -25,7 +25,7 @@
       "aoe",
       "shape-radius"
     ],
-    "effect": "Radius 15 ft. — targets roll vs Resolve (DC 12). Half damage on success. Failed-save targets remember a death that wasn't theirs — Shaken until the start of their next turn.",
+    "effect": "Radius 3 squares. — targets roll vs Resolve (DC 12). Half damage on success. Failed-save targets remember a death that wasn't theirs — Shaken until the start of their next turn.",
     "flavor": "The wraith does not speak. The salt speaks for it.",
     "manifestation": {
       "tier": 1,
@@ -56,6 +56,24 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 12,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "shaken"
+        ],
+        "duration": "1-round"
+      },
+      "area": {
+        "shape": "sphere",
+        "size": 15
       }
     },
     "description": {
@@ -63,7 +81,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -88,19 +105,8 @@
         }
       }
     },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Salt Wraith"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
-      }
-    },
     "autoanimations": {
-      "id": "4be63b84-e814-489b-9044-a01829216ddf",
+      "id": "ft-salt-sermon",
       "label": "Salt-Sermon",
       "macro": {
         "enable": false,
@@ -275,24 +281,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Salt Wraith"
+        ],
+        "sourceIds": [
+          "RQeXqKj5Q5fNLeRw"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "Vm7v3CJDB56oZSMD",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024233954,
-    "modifiedTime": 1782167245000,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989042936,
+    "modifiedTime": 1792989042936,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!Vm7v3CJDB56oZSMD"
 }

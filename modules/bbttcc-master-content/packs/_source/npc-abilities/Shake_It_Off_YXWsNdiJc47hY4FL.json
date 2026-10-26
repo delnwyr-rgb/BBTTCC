@@ -23,7 +23,7 @@
       "radiation",
       "debuff"
     ],
-    "effect": "Shakes a cloud of glowing dander in a 10 ft. sphere. Body vs DC 11. Fail: gain 1 RP. (No HP damage — this seeds long-term radiation.)",
+    "effect": "Shakes a cloud of glowing dander in a 2 squares. sphere. Body vs DC 11. Fail: gain 1 RP. (No Integrity damage — this seeds long-term radiation.)",
     "flavor": "",
     "manifestation": {
       "tier": 1,
@@ -54,6 +54,18 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "body",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 11,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "sphere",
+        "size": 10
       }
     },
     "description": {
@@ -61,7 +73,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -84,16 +95,19 @@
             "saleBack": 60
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Yesodium Tick-Hound"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Shake It Off"
+            },
+            "do": {
+              "radiation": 1
+            }
+          }
         ]
       }
     },
@@ -273,24 +287,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Yesodium Tick-Hound"
+        ],
+        "sourceIds": [
+          "DCFDuwrSVxC3xIDZ"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
   "_id": "YXWsNdiJc47hY4FL",
   "sort": 0,
+  "folder": null,
   "ownership": {
-    "default": 0
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1780000000000,
-    "modifiedTime": 1782167245001,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989043415,
+    "modifiedTime": 1792989043415,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
   },
-  "folder": null,
   "_key": "!items!YXWsNdiJc47hY4FL"
 }

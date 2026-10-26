@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 105,
-        "max": 105
+        "max": 105,
+        "temp": 0
       },
       "stress": {
         "value": 52,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -142,7 +144,9 @@
         "psychic"
       ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "qliphothic"
+      ]
     },
     "conditionImmunities": [
       "charmed",
@@ -150,6 +154,9 @@
       "compelled"
     ],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -162,6 +169,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "A walking thinning of the Veil. The world rearranges itself in their presence."
     }
   },
   "flags": {
@@ -202,16 +213,19 @@
             ]
           },
           "price": {
-            "marks": 20250,
-            "bounty": 20250,
-            "hire": 50625,
-            "ransom": 33750,
+            "marks": 80,
+            "bounty": 80,
+            "hire": 120,
+            "ransom": 120,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "TIV heavy caster (bestiary) \u2014 bounty 20250 / hire 50625 / ransom 33750 marks (paid in softpower)"
-          }
+            "notes": "TIV heavy sephirotic — bounty 80 / hire 120 marks; credited to the pool matching the method (default softpower)"
+          },
+          "lineage": "sephirotic",
+          "subLineage": "veil"
         }
-      }
+      },
+      "creatureType": "elemental"
     }
   },
   "_id": "PqhdO2hojxFosDX0",
@@ -356,6 +370,27 @@
               "tier": "IV",
               "frame": "trait"
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "push": 6
+                },
+                "who": "targets",
+                "label": "Reality Rearranges — the creature"
+              },
+              {
+                "on": "use",
+                "do": {
+                  "shift": 6
+                },
+                "to": "self",
+                "label": "Reality Rearranges — itself"
+              }
+            ]
           }
         }
       },
@@ -367,17 +402,16 @@
       },
       "_id": "oA1sVY7sozO5l09c",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118692827,
-        "modifiedTime": 1782167243161,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989125397,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!PqhdO2hojxFosDX0.oA1sVY7sozO5l09c"
+      }
     },
     {
       "name": "Veil-Severance",
@@ -456,11 +490,29 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack \u00d7 1",
+                "notes": "TIV attack × 1",
                 "bound": "free",
                 "saleBack": 540
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Veil-Severance"
+                },
+                "do": {
+                  "damage": {
+                    "formula": "2d6",
+                    "type": "psychic"
+                  },
+                  "prompt": "Can't recover Stress until it rests."
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -649,17 +701,16 @@
       },
       "_id": "zU5FThctgh7IXkZ7",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1780118692827,
-        "modifiedTime": 1782167243161,
+        "modifiedTime": 1791331977279,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!PqhdO2hojxFosDX0.zU5FThctgh7IXkZ7"
+      }
     },
     {
       "name": "Unfound-Gesture",
@@ -686,7 +737,7 @@
           "tier-iv",
           "role-caster"
         ],
-        "effect": "On a hit, the target must succeed a DC 16 Mind save or take their next turn from the wrong location (their token gets repositioned 20 ft. in a direction the GM chooses, before they act).",
+        "effect": "On a hit, the target must succeed a DC 16 Mind check or take their next turn from the wrong location (their token gets repositioned 4 squares. in a direction the GM chooses, before they act).",
         "flavor": "The avatar makes a sign you've never seen. The space behind you agrees with it.",
         "manifestation": {
           "tier": 1,
@@ -717,6 +768,13 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "mind",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 16,
+            "onSave": "negate",
+            "statesOnFail": true
           }
         },
         "description": {
@@ -738,11 +796,25 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack \u00d7 1",
+                "notes": "TIV attack × 1",
                 "bound": "free",
                 "saleBack": 540
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Unfound-Gesture"
+                },
+                "do": {
+                  "push": 4
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -931,20 +1003,19 @@
       },
       "_id": "6reLM2DiggbVQED5",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118692827,
-        "modifiedTime": 1782167243162,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989125397,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!PqhdO2hojxFosDX0.6reLM2DiggbVQED5"
+      }
     },
     {
-      "name": "Re-Arrangement (recharges on a Soma Break)",
+      "name": "Re-Arrangement (recharge 5–6)",
       "type": "weapon",
       "img": "icons/magic/time/arrows-circling-green.webp",
       "system": {
@@ -970,7 +1041,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 30 ft. \u2014 targets roll vs Resolve (DC 15). Half damage on success. Failed-save targets swap positions with the nearest other failed-save target (GM pairs them up). They are also Shaken until end of next turn. Recharge 5\u20136.",
+        "effect": "Radius 6 squares. — targets roll vs Resolve (DC 15). Half damage on success. Failed-save targets swap positions with the nearest other failed-save target (GM pairs them up). They are also Shaken until end of next turn. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
         "flavor": "The avatar gestures, briefly, and the rules of where things go stop being negotiable.",
         "manifestation": {
           "tier": 1,
@@ -1001,6 +1072,24 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 15,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "shaken"
+            ],
+            "duration": "1-round"
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 30
           }
         },
         "description": {
@@ -1026,16 +1115,35 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV save \u00d7 1",
+                "notes": "TIV save × 1",
                 "bound": "free",
                 "saleBack": 540
               }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Re-Arrangement (recharge 5–6)"
+                },
+                "do": {
+                  "swap": true
+                },
+                "label": "Re-Arrangement — trades places"
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
             }
           }
         },
         "autoanimations": {
           "id": "ft-re-arrangement-recharge-5-6-",
-          "label": "Re-Arrangement (Recharge 5\u20136)",
+          "label": "Re-Arrangement (Recharge 5–6)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -1219,17 +1327,16 @@
       },
       "_id": "wnd06ve9LEVDJnPF",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118692827,
-        "modifiedTime": 1782167243162,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989125397,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!PqhdO2hojxFosDX0.wnd06ve9LEVDJnPF"
+      }
     },
     {
       "name": "Thinning Aura",
@@ -1244,7 +1351,7 @@
           "role-caster"
         ],
         "description": {
-          "value": "<p><strong>Passive.</strong> All creatures within 2 squares of the avatar \u2014 including allies \u2014 are subject to occasional Veil-thinning: at the start of their turn, on a 1 on a d10, they take 1d4 qliphothic Stress damage. The avatar does not control this and does not particularly notice it.</p><p><em>Being near them is its own debt.</em></p>",
+          "value": "<p><strong>Passive.</strong> All creatures within 2 squares of the avatar — including allies — are subject to occasional Veil-thinning: at the start of their turn, on a 1 on a d10, they take 1d4 qliphothic Stress damage. The avatar does not control this and does not particularly notice it.</p><p><em>Being near them is its own debt.</em></p>",
           "chat": ""
         }
       },
@@ -1256,6 +1363,27 @@
               "tier": "IV",
               "frame": "feature"
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "do": {
+                  "damage": {
+                    "formula": "1d4",
+                    "type": "qliphothic",
+                    "track": "stress"
+                  }
+                },
+                "radius": 2,
+                "who": "all",
+                "if": {
+                  "chance": 0.1
+                },
+                "label": "Thinning Aura — a 1 on the d10"
+              }
+            ]
           }
         }
       },
@@ -1267,17 +1395,87 @@
       },
       "_id": "xvdhasOuT5AKr4qk",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118692827,
-        "modifiedTime": 1782167243162,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989125398,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
+      }
+    },
+    {
+      "name": "Correction, Not Anger",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "sephirotic",
+          "veil"
+        ],
+        "description": {
+          "value": "<p>Immune to Charmed and Shaken — it is a principle, not a person. Creatures that deal qliphothic damage to it must succeed a Soul check (DC by tier) or be Restrained by the sephirah's answer until the end of their next turn. It does not pursue anyone who leaves its ground.</p><p><em>It does not hate intruders. It corrects them.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!PqhdO2hojxFosDX0.xvdhasOuT5AKr4qk"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "if": {
+                  "damageType": [
+                    "qliphothic"
+                  ]
+                },
+                "do": {
+                  "condition": {
+                    "key": "restrained",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 19
+                    }
+                  }
+                },
+                "label": "Correction, Not Anger"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "sephirotic"
+            }
+          }
+        }
+      },
+      "_id": "WNjIImbeBAYyBCfx",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342349400,
+        "modifiedTime": 1791342349400,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -1287,12 +1485,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118692827,
-    "modifiedTime": 1783219918021,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989125276,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

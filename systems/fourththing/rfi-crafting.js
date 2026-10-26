@@ -29,7 +29,11 @@ const TIER_INT = { I: 1, II: 2, III: 3, IV: 4 };
 // pair as ONE key so what the land yields satisfies what the recipes ask. Add a row here rather than minting a twin item.
 const KEY_ALIASES = Object.freeze({
   "prefall-component": "pre-fall-component",
-  "scrap-salvage":     "scrap-steel"
+  "scrap-salvage":     "scrap-steel",
+  // 2026-10-26 (GR3): three recipe spellings no material item carries → the item that exists (owner ruling: alias, no twins).
+  "ash-wood":          "ash-haft",
+  "herd-leather":      "work-leather",
+  "sun-glass":         "focusing-lens"
 });
 function canonKey(key) { const k = String(key || ""); return KEY_ALIASES[k] || k; }
 

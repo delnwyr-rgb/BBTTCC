@@ -1,0 +1,70 @@
+{
+  "name": "Duplicitous Command",
+  "type": "feat",
+  "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>One creature within 6 squares that can hear the despot rolls vs Resolve (DC 13). On a failure it is Compelled until the end of its next turn: the despot chooses the target of its next attack, and both faces smile.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "condition": {
+                "key": "compelled",
+                "duration": "1-round",
+                "save": {
+                  "attr": "soul",
+                  "dc": 13
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Thaumielite Despot"
+        ],
+        "sourceIds": [
+          "QT2xnNzPOYRA0Wz4"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "2eJ2l1hyc3zZEY25",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069928,
+    "modifiedTime": 1792989070011,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!2eJ2l1hyc3zZEY25"
+}

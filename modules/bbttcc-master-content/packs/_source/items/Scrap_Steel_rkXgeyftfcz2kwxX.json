@@ -1,0 +1,78 @@
+{
+  "_id": "rkXgeyftfcz2kwxX",
+  "name": "Scrap Steel",
+  "type": "gear",
+  "img": "icons/commodities/metal/barstock-broken-steel.webp",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "scrap-steel"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Cut and straightened salvage steel, de-rusted and stacked. Every barrel, blade and bolt-driver starts here.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Somebody's bridge, somebody's bumper, now yours.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Cut and straightened salvage steel, de-rusted and stacked. Every barrel, blade and bolt-driver starts here.</p>",
+          "charges": 6,
+          "materialKey": "scrap-steel",
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI material",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988919443,
+    "modifiedTime": 1792988919444,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!rkXgeyftfcz2kwxX"
+}

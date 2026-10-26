@@ -1,100 +1,33 @@
 {
-  "folder": "Iyyec8ij0PAfdLBd",
-  "name": "Rad Suit (Mk III)",
-  "type": "equipment",
   "_id": "iIE6Xaaan8ewFNfC",
+  "name": "Rad Suit (Mk III)",
+  "type": "armor",
   "img": "icons/commodities/tech/plating-metal-armor-tech-energy-white.webp",
   "system": {
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "description": {
-      "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Resistance:</strong> Radiation, Qliphothic, Poison, Kinetic</li>\n  <li><strong>Tier:</strong> IV</li>\n  <li><strong>Cost:</strong> 2025 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
-      "chat": ""
-    },
-    "identifier": "equipment",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "identified": true,
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "quantity": 1,
-    "weight": {
-      "value": 0,
-      "units": "lb"
-    },
-    "price": {
-      "value": 0,
-      "denomination": "gp"
-    },
-    "rarity": "common",
-    "attunement": "",
-    "attuned": false,
-    "equipped": false,
-    "crew": {
-      "value": []
-    },
-    "armor": {
-      "value": 20,
-      "dex": 2
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": 12,
-    "type": {
-      "value": "heavy",
-      "baseItem": "plate"
-    },
     "guardBonus": 4,
     "evasionBonus": -1,
     "resolveBonus": 3,
-    "armorSkill": "plating",
     "resistances": [
       "radiation",
-      "necrotic",
+      "qliphothic",
       "poison",
       "kinetic"
     ],
+    "armorSkill": "plating",
+    "equipped": false,
     "tags": [
       "hazmat",
-      "rad-shielded"
-    ]
-  },
-  "effects": [],
-  "sort": -200000,
-  "ownership": {
-    "default": 0,
-    "vmUfDuSYUIe7V5uB": 3
+      "rad-shielded",
+      "heavy"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Heavy hardsuit. Plate-grade shielding turns the wearer into a slow-moving sanctuary; movement suffers, the world bounces off.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Heavy</li>\n  <li><strong>Defense:</strong> Guard +4 · Evasion -1 · Resolve +3</li>\n  <li><strong>Requires:</strong> Plating (trained)</li>\n  <li><strong>Resistance:</strong> Radiation, Qliphothic, Poison, Kinetic</li>\n  <li><strong>Tier:</strong> IV</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
   },
   "flags": {
-    "rfi": {
-      "item": {
-        "tier": "I",
-        "footprint": 1,
-        "reach": "self",
-        "frame": "armor",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "scene"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
-    },
     "fourththing": {
       "rfi": {
         "item": {
@@ -115,15 +48,6 @@
             "table": null
           },
           "signals": {},
-          "legacySystem": {
-            "guardBonus": 0,
-            "evasionBonus": 0,
-            "resolveBonus": 0,
-            "resistances": [],
-            "armorSkill": "fitting",
-            "equipped": true,
-            "tags": []
-          },
           "lore": "<p>Heavy hardsuit. Plate-grade shielding turns the wearer into a slow-moving sanctuary; movement suffers, the world bounces off.</p>",
           "price": {
             "marks": 2025,
@@ -154,18 +78,29 @@
           }
         ]
       }
+    },
+    "bbttcc": {
+      "radiationResist": true
     }
   },
+  "effects": [],
+  "folder": "Iyyec8ij0PAfdLBd",
+  "sort": -200000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988912665,
+    "modifiedTime": 1792988912665,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1772308099723,
-    "modifiedTime": 1782158151709,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "exportSource": null
   },
   "_key": "!items!iIE6Xaaan8ewFNfC"
 }

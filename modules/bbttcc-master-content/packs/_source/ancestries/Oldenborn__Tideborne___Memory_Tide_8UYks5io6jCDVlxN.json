@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Water remembers feeling. So do you.”</em></p>\n        <p><strong>Memory Tide (1/Soma Break).</strong> You flood a creature you can see within 6 squares with recall. Choose one: calm (ends hostility briefly), charm, or stun for 1 round (GM may require a save depending on target).</p>\n        <p><strong>Depth-Sight.</strong> You can see normally in darkness and underwater (your eyes read pressure and motion).</p>",
+      "value": "\n<p><em>“Water remembers feeling. So do you.”</em></p>\n        <p><strong>Memory Tide (1/Soma Break).</strong> You flood a creature you can see within 6 squares with recall. Choose one: calm (ends hostility briefly), charm, or stun for 1 round (GM may require a save depending on target).</p>\n        <p><strong>Depth-Sight.</strong> You can see normally in darkness and underwater (your eyes read pressure and motion).</p><p><strong>Tide-sight.</strong> You have darkvision out to 12 squares.</p>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "properties": [],
     "requirements": "Oldenborn",
@@ -41,70 +41,17 @@
       "kind": "oldenborn",
       "feature": "memory_tide",
       "lineage": "Tideborne",
-      "tierLevel": 0,
       "version": "1.0.0"
+    },
+    "fourththing": {
+      "passives": {
+        "vision": {
+          "darkvision": 60
+        }
+      }
     }
   },
-  "effects": [
-    {
-      "_id": "7302862aa82e4609",
-      "name": "Tideborne: Darkvision (Rules-Lite)",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blood_hymn.png",
-      "type": "base",
-      "system": {
-        "changes": [
-          {
-            "key": "system.attributes.senses.darkvision",
-            "value": 60,
-            "priority": 10,
-            "type": "override"
-          }
-        ]
-      },
-      "disabled": false,
-      "duration": {
-        "value": null,
-        "units": "seconds",
-        "expiry": null,
-        "expired": false
-      },
-      "description": "Sets 60ft darkvision as a stand-in for depth-sight.",
-      "origin": null,
-      "tint": "#ffffff",
-      "transfer": true,
-      "statuses": [],
-      "sort": 0,
-      "flags": {
-        "dnd5e": {
-          "riders": {
-            "statuses": []
-          }
-        }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.360",
-        "systemId": "dnd5e",
-        "systemVersion": "5.2.5",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
-        "createdTime": 1777346196577,
-        "modifiedTime": 1777346196577
-      },
-      "start": {
-        "combat": null,
-        "round": 0,
-        "time": 0,
-        "turn": 0,
-        "combatant": null,
-        "initiative": null
-      },
-      "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!8UYks5io6jCDVlxN.7302862aa82e4609"
-    }
-  ],
+  "effects": [],
   "folder": "Z23EKfzPHMTSN3f2",
   "_stats": {
     "compendiumSource": null,
@@ -116,12 +63,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004114716,
-    "modifiedTime": 1782167240121,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988973640,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

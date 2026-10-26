@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Unused force becomes stored anger.”</em></p>\n        <p><strong>Kinetic Overflow.</strong> When you spend Bad Eden OP on Violence during a scene, you may bank one point of <em>Overflow</em> (max tier). When you hit with a weapon attack, you can spend 1 Overflow to deal +1d6 kinetic damage.</p>",
+      "value": "\n<p><em>“Unused force becomes stored anger.”</em></p>\n        <p><strong>Kinetic Overflow.</strong> Unused force becomes stored anger: whenever kinetic damage lands on you, you bank one point of Overflow (maximum = your tier). When you hit with a weapon attack, you can spend 1 Overflow to deal +1d6 kinetic damage.</p>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 5
     },
     "properties": [],
     "requirements": "Circuitborn",
@@ -41,7 +41,6 @@
       "kind": "circuitborn",
       "feature": "kinetic_overflow",
       "chassis": "Exo-Knight Line",
-      "tierLevel": 5,
       "version": "1.0.0"
     },
     "bbttcc-character-options": {
@@ -50,11 +49,34 @@
     "fourththing": {
       "triggers": [
         {
-          "event": "on-attack-hit",
+          "event": "on-damage-taken",
+          "predicate": {
+            "tag": [
+              "kinetic"
+            ]
+          },
           "effect": {
-            "kind": "chat-prompt",
+            "kind": "bank-counter",
             "args": {
-              "body": "When you hit with a weapon attack, you can spend 1 Overflow to deal +1d6 kinetic damage (force)"
+              "counter": "overflow",
+              "delta": 1,
+              "max": "tier"
+            }
+          }
+        },
+        {
+          "event": "on-attack-hit",
+          "offer": true,
+          "offerText": "Kinetic Overflow — spend 1 banked Overflow: +1d6 kinetic on this hit.",
+          "effect": {
+            "kind": "spend-counter",
+            "args": {
+              "counter": "overflow",
+              "per": {
+                "dieFormula": "1d6"
+              },
+              "type": "kinetic",
+              "max": 1
             }
           }
         }
@@ -73,12 +95,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004099337,
-    "modifiedTime": 1782167240138,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988987323,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

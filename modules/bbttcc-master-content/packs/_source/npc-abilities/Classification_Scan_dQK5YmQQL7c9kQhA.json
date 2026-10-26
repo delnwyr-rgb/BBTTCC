@@ -9,7 +9,7 @@
     "damage": {
       "formula": "1d10",
       "attribute": "violence",
-      "type": "energy",
+      "type": "electrical",
       "damageFlavor": "scan-beam",
       "track": "integrity"
     },
@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,24 +79,10 @@
             "saleBack": 60
           }
         }
-      },
-      "manifestSheetMode": {
-        "bytUGWIOqq9eT7Or": "display"
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Pre-Fall Sentinel"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
       }
     },
     "autoanimations": {
-      "id": "58963ad1-675f-44b7-8f0f-f3870623cf2d",
+      "id": "ft-classification-scan",
       "label": "Classification Scan",
       "macro": {
         "enable": false,
@@ -272,24 +257,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Pre-Fall Sentinel"
+        ],
+        "sourceIds": [
+          "gIHcgJ2aS9L6y3yf"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "dQK5YmQQL7c9kQhA",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024236736,
-    "modifiedTime": 1782167245005,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989022545,
+    "modifiedTime": 1792989022545,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!dQK5YmQQL7c9kQhA"
 }

@@ -11,7 +11,7 @@
       "attribute": "violence",
       "type": "radiation",
       "damageFlavor": "the bite that keeps on giving",
-      "track": "integrity"
+      "track": "radiation"
     },
     "damageParts": [],
     "range": {
@@ -57,11 +57,10 @@
       }
     },
     "description": {
-      "value": "<p>On a hit, the target gains 1 Radiation Point (RP).</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>On a hit, the target gains 1 Radiation Point (RP).</p>\n<ul>\n  <li><strong>Damage:</strong> 1d8 Radiation damage to <em>Integrity</em> <span style=\"opacity:.75\">(the bite that keeps on giving)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Melee (Violence)</li>\n  <li><strong>Range:</strong> 5</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>On a hit, the target gains 1 Radiation Point (RP).</p>",
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,16 +79,19 @@
             "saleBack": 20
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Yesodium Tick-Hound"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Irradiated Bite"
+            },
+            "do": {
+              "radiation": 1
+            }
+          }
         ]
       }
     },
@@ -268,50 +270,41 @@
       "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
-      "version": 5,
-      "meleeSwitch": {
-        "video": {
-          "dbSection": "range",
-          "menuType": "weapon",
-          "animation": "arrow",
-          "variant": "regular",
-          "color": "regular",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "detect": "automatic",
-          "range": 2,
-          "returning": false,
-          "switchType": "on"
-        }
+      "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Yesodium Tick-Hound"
+        ],
+        "sourceIds": [
+          "DCFDuwrSVxC3xIDZ"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
   "_id": "2nU0YqvQbM4GlncQ",
   "sort": 0,
+  "folder": null,
   "ownership": {
-    "default": 0
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1780000000000,
-    "modifiedTime": 1782151216388,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989030942,
+    "modifiedTime": 1792989030943,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
   },
-  "folder": null,
   "_key": "!items!2nU0YqvQbM4GlncQ"
 }

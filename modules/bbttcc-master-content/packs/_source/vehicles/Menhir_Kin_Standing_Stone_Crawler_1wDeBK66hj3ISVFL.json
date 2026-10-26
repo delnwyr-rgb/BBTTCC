@@ -7,111 +7,6 @@
       "entityKind": "rig",
       "createdViaContentSprint": "2026-06-13",
       "createdAt": 1781332649519
-    },
-    "bbttcc-structures": {
-      "hasStructure": true,
-      "facilityMode": false,
-      "materialBOM": [
-        {
-          "materialKey": "scribed-steel",
-          "qty": 10,
-          "originalQty": 10,
-          "family": "metal",
-          "tier": "III",
-          "name": "Scribed Steel",
-          "tagsCache": [
-            "material",
-            "scribed-steel"
-          ]
-        },
-        {
-          "materialKey": "heart-iron",
-          "qty": 5,
-          "originalQty": 5,
-          "family": "metal",
-          "tier": "II",
-          "name": "Heart-Iron",
-          "tagsCache": [
-            "material",
-            "heart-iron",
-            "heart-iron",
-            "aurablade",
-            "metal"
-          ]
-        },
-        {
-          "materialKey": "cold-iron",
-          "qty": 4,
-          "originalQty": 4,
-          "family": "metal",
-          "tier": "II",
-          "name": "Cold-Iron",
-          "tagsCache": [
-            "material",
-            "cold-iron",
-            "iron",
-            "cold-forge",
-            "hex-resistant"
-          ]
-        },
-        {
-          "materialKey": "mountain-stone",
-          "qty": 4,
-          "originalQty": 4,
-          "family": "stone",
-          "tier": "I",
-          "name": "mountain-stone",
-          "tagsCache": []
-        },
-        {
-          "materialKey": "yesodium",
-          "qty": 1,
-          "originalQty": 1,
-          "family": "sephirotic",
-          "tier": "III",
-          "name": "Yesodium",
-          "tagsCache": [
-            "material",
-            "yesodium",
-            "sephirotic",
-            "yesod",
-            "metastable-proto-ore",
-            "narrative-responsive",
-            "khezek-tor"
-          ]
-        }
-      ],
-      "state": "intact",
-      "plates": {
-        "current": 76,
-        "max": 76
-      },
-      "threshold": 2.75,
-      "resists": {
-        "kinetic": 0.5,
-        "qliphothic": 0.5
-      },
-      "vulnerabilities": {
-        "energy|heat": {
-          "type": "energy",
-          "flavor": "heat",
-          "factor": 2
-        },
-        "kinetic|concussive": {
-          "type": "kinetic",
-          "flavor": "concussive",
-          "factor": 2
-        }
-      },
-      "loadBearing": true,
-      "collapseProfile": {
-        "fallFt": 10,
-        "damageDice": "2d10",
-        "nonlethal": true,
-        "knockbackFt": 5,
-        "triggerState": "breached"
-      },
-      "history": []
     }
   },
   "system": {
@@ -153,7 +48,7 @@
       "value": 120,
       "max": 120,
       "tier": 3,
-      "bracket": "siege"
+      "bracket": "heavy"
     },
     "derived": {
       "guard": {
@@ -179,9 +74,13 @@
       "basePerTurn": {}
     },
     "travel": {
-      "speed": 1,
-      "range": 6,
-      "hazardResist": 2
+      "speed": 3,
+      "range": 8,
+      "hazardResist": 2,
+      "domains": [
+        "land"
+      ],
+      "depthRating": 0
     },
     "tags": [
       "bulwark",
@@ -190,6 +89,10 @@
       "slow",
       "faction-rig"
     ],
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
     "details": {
       "biography": {
         "value": "<p><strong>Concept.</strong> The Menhir Kin do not build vehicles so much as convince a standing stone to walk. Slow. Implacable. The kind of slow that arrives anyway. It does not skip encounters; it absorbs them.</p>\n<p><strong>Signature.</strong> A fortress that travels badly and holds excellently. When it finally stops, the ground is grateful and the enemy is not.</p>",
@@ -203,11 +106,11 @@
     "disposition": 1,
     "name": "Menhir Kin Standing-Stone Crawler",
     "displayName": 30,
-    "width": 1,
-    "height": 1,
+    "width": 3,
+    "height": 3,
     "depth": 1,
     "texture": {
-      "src": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_war_tower_1.png",
+      "src": "modules/bbttcc-core/assets/rigs/heavy_rig_6.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -293,122 +196,9 @@
   "_id": "1wDeBK66hj3ISVFL",
   "items": [
     {
-      "name": "Forge Facility Frame",
-      "type": "gear",
-      "img": "icons/environment/settlement/wagon-black.webp",
-      "system": {
-        "slot": "misc",
-        "tags": [],
-        "category": "gear",
-        "source": "",
-        "description": {
-          "value": "<p>A bolted-down industrial cathedral. Chimneys exhale slag and prayer in equal measure. Doesn't move; doesn't need to. Things come <em>to</em> it.</p><p><strong>Frame · Siege · Stationary</strong></p>",
-          "chat": ""
-        }
-      },
-      "flags": {
-        "fourththing": {
-          "rigGear": {
-            "subtype": "rig-frame"
-          },
-          "rigFrame": {
-            "bracket": "siege",
-            "baseIntegrity": 64,
-            "tierStep": 18,
-            "mobilityAllowed": [
-              "stationary"
-            ],
-            "slots": {
-              "weapon": 1,
-              "system": 2,
-              "output": 4
-            },
-            "capacity": {
-              "pilot": {
-                "min": 0,
-                "max": 0
-              },
-              "gunner": {
-                "min": 0,
-                "max": 1
-              },
-              "engineer": {
-                "min": 0,
-                "max": 2
-              },
-              "crew": {
-                "min": 0,
-                "max": 4
-              }
-            },
-            "actions": {
-              "pilot": [],
-              "gunner": [
-                "fire-weapon",
-                "suppression",
-                "opportunity-fire"
-              ],
-              "engineer": [
-                "repair",
-                "boost-system",
-                "vent-heat",
-                "cycle-power",
-                "counter-sabotage"
-              ],
-              "crew": [
-                "operate-module",
-                "reload",
-                "brace"
-              ]
-            },
-            "travel": {
-              "speed": 0,
-              "range": 0
-            },
-            "visualFrame": "anchor-corners"
-          },
-          "rfi": {
-            "item": {
-              "price": {
-                "marks": 30,
-                "currency": "economy",
-                "gmOverride": false,
-                "altCurrencies": {},
-                "split": null,
-                "rarityMult": 1,
-                "notes": "TI tool stamp",
-                "bound": "free",
-                "saleBack": 12
-              }
-            }
-          }
-        }
-      },
-      "folder": "0JDB983lzPepXXNe",
-      "effects": [],
-      "sort": 3100000,
-      "ownership": {
-        "default": 0,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "_stats": {
-        "coreVersion": "14.363",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1781398481422,
-        "modifiedTime": 1781398481422,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "exportSource": null,
-        "compendiumSource": null,
-        "duplicateSource": null
-      },
-      "_id": "OBgtsqUDXkPN5I7d",
-      "_key": "!actors.items!1wDeBK66hj3ISVFL.OBgtsqUDXkPN5I7d"
-    },
-    {
       "name": "Mortar Battery",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_siege_2.png",
+      "img": "icons/weapons/ammunition/explosive-artillery-mortar-shell.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -676,30 +466,30 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1781398481422,
-        "modifiedTime": 1781398481422,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989015340,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
       },
-      "_id": "GKGZvlgX8FzUmbRc",
-      "_key": "!actors.items!1wDeBK66hj3ISVFL.GKGZvlgX8FzUmbRc"
+      "_id": "GKGZvlgX8FzUmbRc"
     },
     {
       "name": "Reinforced Plating",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/commodities/tech/plating-metal-armor-tech-steel-blue.webp",
       "system": {
         "slot": "misc",
         "tags": [],
         "category": "gear",
         "source": "",
+        "quantity": 1,
         "description": {
-          "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p>",
+          "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p><p><strong>Passive:</strong> +2 Integrity max per rig tier while fitted.</p>",
           "chat": ""
         }
       },
@@ -707,7 +497,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": true
+            "passive": {
+              "integrityMaxPerTier": 2
+            }
           },
           "rfi": {
             "item": {
@@ -734,30 +526,30 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1781398481422,
-        "modifiedTime": 1781398481422,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989015340,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
       },
-      "_id": "xTcEAxP47dO2G5Sr",
-      "_key": "!actors.items!1wDeBK66hj3ISVFL.xTcEAxP47dO2G5Sr"
+      "_id": "xTcEAxP47dO2G5Sr"
     },
     {
       "name": "Sensor Suite",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/commodities/tech/electronics-sensor-eye.webp",
       "system": {
         "slot": "misc",
         "tags": [],
         "category": "gear",
         "source": "",
+        "quantity": 1,
         "description": {
-          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p>",
+          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p><p><strong>Passive:</strong> every crew member aboard adds +1 to initiative.</p>",
           "chat": ""
         }
       },
@@ -765,7 +557,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": true
+            "passive": {
+              "initiative": 1
+            }
           },
           "rfi": {
             "item": {
@@ -792,18 +586,143 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1781398481422,
-        "modifiedTime": 1781398481422,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989015339,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
       },
-      "_id": "2eS75uaYKeYfwNie",
-      "_key": "!actors.items!1wDeBK66hj3ISVFL.2eS75uaYKeYfwNie"
+      "_id": "2eS75uaYKeYfwNie"
+    },
+    {
+      "name": "War Rig Frame",
+      "type": "gear",
+      "img": "icons/environment/settlement/wagon-black.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "<p>A diesel-howling hulk of plate and bolted-on intent. The kind of vehicle that arrives like weather. Crew of five, four guns, room in back for whatever you took.</p><p><strong>Frame · Heavy · Mobile</strong></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-frame"
+          },
+          "rigFrame": {
+            "bracket": "heavy",
+            "baseIntegrity": 48,
+            "tierStep": 14,
+            "mobilityAllowed": [
+              "mobile"
+            ],
+            "slots": {
+              "weapon": 4,
+              "system": 2,
+              "output": 1
+            },
+            "capacity": {
+              "pilot": {
+                "min": 1,
+                "max": 1
+              },
+              "gunner": {
+                "min": 0,
+                "max": 2
+              },
+              "engineer": {
+                "min": 0,
+                "max": 1
+              },
+              "crew": {
+                "min": 0,
+                "max": 3
+              }
+            },
+            "actions": {
+              "pilot": [
+                "steer",
+                "ram",
+                "hold-position",
+                "evasive",
+                "swerve"
+              ],
+              "gunner": [
+                "fire-weapon",
+                "aimed-shot",
+                "suppression",
+                "reload",
+                "opportunity-fire"
+              ],
+              "engineer": [
+                "repair",
+                "boost-system",
+                "vent-heat",
+                "counter-sabotage"
+              ],
+              "crew": [
+                "operate-module",
+                "reload",
+                "brace",
+                "hold-on"
+              ]
+            },
+            "travel": {
+              "speed": 3,
+              "range": 8
+            },
+            "visualFrame": "open-corners"
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 750,
+                "currency": "violence",
+                "gmOverride": true,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII vehicle stamp · Heavy Combatant chassis (T2 heavy) — war-rig pays Violence (rubric §7) (untiered pass 2026-10-12)",
+                "bound": "free",
+                "saleBack": 300
+              },
+              "tier": "II",
+              "frame": "vehicle"
+            }
+          }
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.items.Item.IkT8J6cIvEzZYXdG"
+        }
+      },
+      "effects": [],
+      "_id": "DAg1DH486Wxp2LcW",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989015434,
+        "modifiedTime": 1792989015435,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -813,12 +732,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1781398481422,
-    "modifiedTime": 1781398493077,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989015242,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

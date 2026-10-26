@@ -7,7 +7,7 @@
     "intent": "presence",
     "skill": "performance",
     "damage": {
-      "formula": "4d8",
+      "formula": "3d8",
       "attribute": "presence",
       "type": "psychic",
       "damageFlavor": "",
@@ -20,12 +20,12 @@
     },
     "tags": [
       "translated",
-      "5e-port",
       "npc-action-wired",
       "single",
-      "shape-single"
+      "shape-single",
+      "rfi-scrubbed"
     ],
-    "effect": "One target within 60 ft. rolls vs Resolve (DC 16). On a failure, the target is rattled until the end of its next turn (disadvantage on its next attack roll or attribute check).",
+    "effect": "One target within 12 squares rolls vs Resolve (DC 16). On a failure, the target is Imposed (rattled) until the end of its next turn — it rerolls the highest die on its next attack roll or check.",
     "flavor": "Customer-service dread, weaponized.",
     "manifestation": {
       "tier": 1,
@@ -56,6 +56,20 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 16,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "imposed"
+        ],
+        "duration": "1-round"
       }
     },
     "description": {
@@ -63,31 +77,28 @@
       "chat": ""
     }
   },
-  "_id": "wd7JKXROr9I8lNT7",
-  "effects": [],
-  "sort": 0,
   "flags": {
     "fourththing": {
       "rfi": {
         "item": {
           "frame": "save-single",
-          "wiredFrom": "feature"
+          "wiredFrom": "feature",
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI save-single × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
         }
       }
     },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Gilbert, Eternally Cleaning Not Leaning Theater Attendant"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
-      }
-    },
     "autoanimations": {
-      "id": "e4854663-9ae9-4199-9654-6ec6ec2a61d7",
+      "id": "ft-weaponized-shame",
       "label": "Weaponized Shame",
       "macro": {
         "enable": false,
@@ -262,22 +273,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gilbert, Attendant Eternal"
+        ],
+        "sourceIds": [
+          "LQS2jaeFhzFMDpxA"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
+  "_id": "wd7JKXROr9I8lNT7",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024241901,
-    "modifiedTime": 1782167245012,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989051326,
+    "modifiedTime": 1792989051326,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!wd7JKXROr9I8lNT7"
 }

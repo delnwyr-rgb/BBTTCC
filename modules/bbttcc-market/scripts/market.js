@@ -807,24 +807,10 @@ const DEFAULT_CATALOG = [
     uuid: "", // Compendium.x.y.Item.<id>
     cost: { economy: 10 }
   },
-  {
-    id: "starter-rig-war",
-    vendorId: "furriers-fixit-farm",
-    kind: "rig",
-    name: "War Rig (Template)",
-    blurb: "A bare chassis with attitude. Configure after purchase.",
-    rigData: {
-      name: "New Rig",
-      type: "war-rig",
-      hitTrack: { max: 10, current: 10 },
-      damageStep: 0,
-      mobilityTags: [],
-      raidBonuses: { defense: 0 },
-      passiveBonuses: [],
-      turnEffectsRaw: []
-    },
-    cost: { economy: 30 }
-  },
+  // RG10 (2026-10-26): the legacy `kind:"rig"` starter ("starter-rig-war") is gone — it delivered a flag rig
+  // (flags.bbttcc-factions.rigs[], hitTrack/damageStep), not a rig actor. Rigs sell as `kind:"actor"` entries whose
+  // uuid points at a bbttcc-master-content.vehicles template. The live world catalog is scrubbed by
+  // bbttcc-campaign/tools/patch-market-drop-starter-rig-war.console.js.
   {
     id: "starter-facility-bunker",
     vendorId: "furriers-fixit-farm",

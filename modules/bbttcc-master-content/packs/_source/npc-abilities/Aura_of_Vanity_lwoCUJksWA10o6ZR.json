@@ -1,0 +1,77 @@
+{
+  "name": "Aura of Vanity",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "qliphothic",
+      "samael"
+    ],
+    "description": {
+      "value": "<p>Any creature that starts its turn within 6 squares and can see this creature rolls twice-keep-worse on checks to resist being Charmed until the start of its next turn.</p><p><em>Samael — hull of hod.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "radius": 6,
+            "who": "enemies",
+            "do": {
+              "impose": true
+            }
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "qliphothic"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Angel of Hollow Glory",
+          "Samaelite Poisoner"
+        ],
+        "sourceIds": [
+          "sfNdTpowMundsPbC",
+          "yQZAnkNsEcE5kKtg"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "lwoCUJksWA10o6ZR",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069913,
+    "modifiedTime": 1792989069995,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!lwoCUJksWA10o6ZR"
+}

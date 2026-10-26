@@ -1,63 +1,24 @@
 {
+  "_id": "ONVocWduo9NObDdL",
   "name": "Hex Boots",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/equipment/feet/boots-leather-teal.webp",
   "system": {
-    "description": {
-      "value": "<p>Boosters tuned for hex-crawl reality.\n\n<b>Travel Assist.</b> Once per travel leg, you may reduce the Travel Check DC by 2 (to a minimum of 10) for the party’s movement. This does not change faction OP costs.\n\n<i>Playtest note:</i> If you want the old behavior, add a GM-only tag and let the travel engine read it later.</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 2,
-      "units": "lb"
-    },
-    "price": {
-      "value": 300,
-      "denomination": "gp"
-    },
-    "rarity": "uncommon",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "hex-boots",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>Boosters tuned for hex-crawl reality.</p><p><b>Travel Assist.</b> Once per travel leg, the party's Travel Check DC drops by 2 (to a minimum of 10) while you walk point.</p>",
+      "chat": ""
+    }
   },
   "flags": {
     "bbttcc": {
-      "travelOPReduce": 1,
       "tags": [
         "travel"
-      ],
-      "travel": {
-        "dcDeltaOncePerLeg": -2
-      }
+      ]
     },
     "fourththing": {
       "rfi": {
@@ -69,34 +30,38 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1.5,
-            "notes": "TI footwear stamp × rarity 1.5 (untiered pass 2026-10-12)",
+            "notes": "TI footwear stamp × rarity 1.5",
             "bound": "free",
             "saleBack": 30
           },
           "tier": "I",
-          "frame": "footwear"
+          "frame": "footwear",
+          "bound": "free",
+          "origin": "looted",
+          "reach": "self",
+          "footprint": 1
         }
       }
     }
   },
   "effects": [],
   "folder": "Wxh1A343inwTUeoo",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834175491,
-    "modifiedTime": 1782156674946,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 100000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "ONVocWduo9NObDdL",
-  "sort": 100000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988909516,
+    "modifiedTime": 1792988909516,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!ONVocWduo9NObDdL"
 }

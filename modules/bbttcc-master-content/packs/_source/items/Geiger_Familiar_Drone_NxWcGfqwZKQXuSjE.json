@@ -1,58 +1,20 @@
 {
+  "_id": "NxWcGfqwZKQXuSjE",
   "name": "Geiger Familiar Drone",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/commodities/tech/electronics-tech-sensor-orange.webp",
   "system": {
-    "description": {
-      "value": "<p>Tiny flying sensor (Guard 15, Integrity 5). As an action, release drone for 10 minutes to map radiation pockets and Spark traces within 300 ft.</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 1,
-      "units": "lb"
-    },
-    "price": {
-      "value": 250,
-      "denomination": "gp"
-    },
-    "rarity": "uncommon",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "geiger-familiar-drone",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>Tiny flying sensor (Guard 15, Integrity 5). As an action, release drone for 10 minutes to map radiation pockets and Spark traces within 60 squares</p>",
+      "chat": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": []
-    },
     "fourththing": {
       "rfi": {
         "item": {
@@ -63,17 +25,16 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1.5,
-            "notes": "TI tool stamp × rarity 1.5 (untiered pass 2026-10-12)",
+            "notes": "TI tool stamp × rarity 1.5",
             "bound": "free",
             "saleBack": 18
           },
-          "legacySystem": {
-            "description": {
-              "value": "<p>Tiny flying sensor (Guard 15, Integrity 5). As an action, release drone for 10 minutes to map radiation pockets and Spark traces within 60 squares</p>"
-            }
-          },
           "tier": "I",
-          "frame": "tool"
+          "frame": "tool",
+          "bound": "free",
+          "origin": "looted",
+          "reach": "self",
+          "footprint": 1
         }
       }
     },
@@ -257,22 +218,22 @@
   },
   "effects": [],
   "folder": "Wxh1A343inwTUeoo",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834171894,
-    "modifiedTime": 1782164185975,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1200000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "NxWcGfqwZKQXuSjE",
-  "sort": 1200000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988908750,
+    "modifiedTime": 1792988908751,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!NxWcGfqwZKQXuSjE"
 }

@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "art/bbttcc/qliphoth/the-gilded-tyrant.webp",
   "system": {
-    "role": "Qliphothic Golem (Nahemoth — Greater)",
+    "role": "brute",
     "tier": 3,
     "factionId": "",
     "notes": "<p>The apex of Nahemoth's influence: a hulking twelve-foot golem of dripping molten gold, priceless gems and ancient coins embedded in its mass, faint screaming faces swirling just beneath the surface. Formed in the heart of cursed hoards where kings and oligarchs died alone with their wealth, it is an amalgam of the treasure and the souls enslaved to acquire it. Pure inertia and possessiveness — it exists to guard its hoard, and it counts you as inventory the moment you look at it wanting.</p><p><strong>Qliphah:</strong> Nahemoth, the Whispering Ones — the Hull of Malkuth. Avarice with a body count, wearing the body count.</p><p><em>Mal's note: 'Yes, it is LITERALLY made of money. That thought is its first attack. Notice it worked on you.'</em></p>",
@@ -40,8 +40,9 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 95,
-        "max": 95
+        "value": 90,
+        "max": 90,
+        "temp": 0
       },
       "stress": {
         "value": 30,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -138,7 +140,8 @@
     },
     "defenses": {
       "resistances": [
-        "kinetic"
+        "kinetic",
+        "qliphothic"
       ],
       "immunities": [
         "poison",
@@ -146,7 +149,8 @@
         "qliphothic"
       ],
       "vulnerabilities": [
-        "chemical"
+        "chemical",
+        "sephirotic"
       ]
     },
     "conditionImmunities": [
@@ -163,6 +167,9 @@
       "hull-of-malkuth",
       "greater"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -175,6 +182,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Golem (Nahemoth — Greater)",
+      "notes": "<p>The apex of Nahemoth's influence: a hulking twelve-foot golem of dripping molten gold, priceless gems and ancient coins embedded in its mass, faint screaming faces swirling just beneath the surface. Formed in the heart of cursed hoards where kings and oligarchs died alone with their wealth, it is an amalgam of the treasure and the souls enslaved to acquire it. Pure inertia and possessiveness — it exists to guard its hoard, and it counts you as inventory the moment you look at it wanting.</p><p><strong>Qliphah:</strong> Nahemoth, the Whispering Ones — the Hull of Malkuth. Avarice with a body count, wearing the body count.</p><p><em>Mal's note: 'Yes, it is LITERALLY made of money. That thought is its first attack. Notice it worked on you.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -274,7 +285,7 @@
       "_id": "nQ8okymLxI7mqxXP",
       "name": "Aura of Covetousness",
       "type": "feature",
-      "img": "icons/svg/chest.svg",
+      "img": "icons/containers/chest/chest-oak-steel-brown.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -290,25 +301,46 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "do": {
+                  "condition": {
+                    "key": "compelled",
+                    "duration": "until-saved",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 16
+                    }
+                  }
+                },
+                "radius": 6
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188180,
-        "modifiedTime": 1787799188180,
+        "modifiedTime": 1791331978904,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!m1Wzc1wbRFO7kl7j.nQ8okymLxI7mqxXP"
+      }
     },
     {
       "_id": "ajrz96gghdcIAVxf",
       "name": "Immutable Form",
       "type": "feature",
-      "img": "icons/svg/statue.svg",
+      "img": "icons/commodities/treasure/statue-bust-stone-grey.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -326,23 +358,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188180,
-        "modifiedTime": 1787799188180,
+        "modifiedTime": 1791324412138,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!m1Wzc1wbRFO7kl7j.ajrz96gghdcIAVxf"
+      }
     },
     {
       "_id": "ZypH8KwOPcWGTIrK",
       "name": "Gilded Bulk",
       "type": "feature",
-      "img": "icons/svg/mage-shield.svg",
+      "img": "icons/magic/air/air-pressure-shield-blue.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -360,17 +391,16 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188180,
-        "modifiedTime": 1787799188180,
+        "modifiedTime": 1791324412137,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!m1Wzc1wbRFO7kl7j.ZypH8KwOPcWGTIrK"
+      }
     },
     {
       "_id": "a2Zede4WkG53QMXj",
@@ -394,23 +424,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188180,
-        "modifiedTime": 1787799188180,
+        "modifiedTime": 1791324412137,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!m1Wzc1wbRFO7kl7j.a2Zede4WkG53QMXj"
+      }
     },
     {
       "_id": "667D8qLJC0jI24yn",
       "name": "Golden Touch",
       "type": "weapon",
-      "img": "icons/svg/statue.svg",
+      "img": "icons/commodities/treasure/statue-bust-stone-grey.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -459,6 +488,21 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "body",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 16,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "restrained"
+            ],
+            "duration": "until-saved",
+            "saveEachRound": true,
+            "saveAttribute": "body"
           }
         },
         "description": {
@@ -472,25 +516,42 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Golden Touch"
+                },
+                "do": {
+                  "prompt": "Gilding: if its end-of-turn save fails too, it's a statue — out of the fight."
+                },
+                "narrative": true
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188180,
-        "modifiedTime": 1787799188180,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989135641,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!m1Wzc1wbRFO7kl7j.667D8qLJC0jI24yn"
+      }
     },
     {
       "_id": "DyeQU2DarDdvSBN8",
       "name": "Hurl Treasure (Recharge 5–6)",
       "type": "weapon",
-      "img": "icons/svg/explosion.svg",
+      "img": "icons/magic/fire/explosion-fireball-medium-orange.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -541,6 +602,18 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "intrigue",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 16,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 10
           }
         },
         "description": {
@@ -554,19 +627,166 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Hurl Treasure (Recharge 5–6)"
+                },
+                "do": {
+                  "damage": {
+                    "formula": "2d8",
+                    "type": "qliphothic"
+                  }
+                }
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188180,
-        "modifiedTime": 1787799188180,
+        "modifiedTime": 1791331978904,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Hollow Touch",
+      "type": "weapon",
+      "img": "icons/magic/death/hand-withered-gray.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d8",
+          "attribute": "violence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "lineage-strike",
+          "qliphothic",
+          "bestiary"
+        ],
+        "effect": "Damage goes to Stress. On a hit the target rolls Resolve vs DC 17; on a failure it is Compelled toward the shell's vice until the end of its next turn.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul"
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 17,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> Reach 1 square, one target. Damage: <code>2d8</code> qliphothic to Stress + violence. On a hit the target rolls Resolve vs DC 17; on a failure it is Compelled toward the shell's vice until the end of its next turn.</p><p><em>The hollow reaches for what it lacks.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!m1Wzc1wbRFO7kl7j.DyeQU2DarDdvSBN8"
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "III",
+              "frame": "attack",
+              "lineageStrike": "qliphothic",
+              "price": {
+                "marks": 450,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIII attack × 1",
+                "bound": "free",
+                "saleBack": 180
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "zFcnfCsJuYOF0B7l",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989135688,
+        "modifiedTime": 1792989135689,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -616,34 +836,38 @@
             ]
           },
           "price": {
-            "marks": 900,
-            "bounty": 1200,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 40,
+            "bounty": 40,
+            "hire": 60,
+            "ransom": 60,
             "currency": "violence",
             "gmOverride": false,
-            "notes": "III heavy Qliphothic Golem (Nahemoth — Greater) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TIII heavy qliphothic — bounty 40 / hire 60 marks; credited to the pool matching the method (default violence)"
           },
           "qliphah": {
             "name": "nahemoth",
             "hullOf": "malkuth",
             "grade": "greater"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "nahemoth",
+          "title": "Qliphothic Golem (Nahemoth — Greater)"
         }
       },
-      "kind": "npc"
+      "kind": "npc",
+      "creatureType": "fiend"
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188180,
-    "modifiedTime": 1787799188180,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989135468,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "m1Wzc1wbRFO7kl7j",
   "_key": "!actors!m1Wzc1wbRFO7kl7j"

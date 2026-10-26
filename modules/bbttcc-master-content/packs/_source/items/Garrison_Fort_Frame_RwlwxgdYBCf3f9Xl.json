@@ -7,6 +7,7 @@
     "tags": [],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>Stone, sandbags, and the kind of stubborn that calcifies into law. Crewed by gunners and held by quartermasters. Output is reputation: nothing crosses without a paper trail.</p><p><b>Frame · Heavy · Stationary</b></p>",
       "chat": ""
@@ -83,7 +84,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TII vehicle stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 300
@@ -103,11 +104,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.16",
     "createdTime": 1778205373804,
-    "modifiedTime": 1778963271956,
+    "modifiedTime": 1791865101706,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

@@ -15,7 +15,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -23,6 +22,16 @@
           "tier": "III",
           "frame": "feature"
         }
+      },
+      "grants": {
+        "resistances": [
+          "kinetic",
+          "sephirotic",
+          "psychic"
+        ],
+        "conditionImmunities": [
+          "shaken"
+        ]
       }
     },
     "bbttcc": {
@@ -30,29 +39,34 @@
         "sources": [
           "Pre-Fall Battlemind"
         ],
+        "sourceIds": [
+          "nAl4cJIYsqzvJtOd"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "iVJYCEhSh44B5je2",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167283968,
-    "modifiedTime": 1782167283968,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989046380,
+    "modifiedTime": 1792989046380,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!iVJYCEhSh44B5je2"
 }

@@ -7,7 +7,7 @@
     "intent": "violence",
     "skill": "melee",
     "damage": {
-      "formula": "2d10+5",
+      "formula": "2d10",
       "attribute": "violence",
       "type": "kinetic",
       "damageFlavor": "",
@@ -20,9 +20,9 @@
     },
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
-    "effect": "<p><strong>Attack.</strong> If the predator moves at least 20 ft. straight toward a creature and hits it with a bite on the same turn, the target must succeed on a DC 15 Str save or be knocked prone. If prone, the predator can make one claws attack as a Bonus action.</p>",
+    "effect": "If the predator moves at least 4 squares straight toward a creature and hits it with this attack on the same turn, the target must succeed a Body check vs DC 15 or be knocked Prone. If it is Prone, the predator may make one Claws attack as a bonus action.",
     "flavor": "",
     "manifestation": {
       "tier": 1,
@@ -56,26 +56,12 @@
       }
     },
     "description": {
-      "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>&lt;p&gt;&lt;strong&gt;Attack.&lt;/strong&gt; If the predator moves at least 4 squares straight toward a creature and hits it with a bite on the same turn, the target must succeed on a DC 15 Violence check or be knocked prone. If prone, the predator can make one claws attack as a Bonus action.&lt;/p&gt;</p>\n<ul>\n  <li><strong>Damage:</strong> 2d10+5 Kinetic damage to <em>Integrity</em></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Melee (Violence)</li>\n  <li><strong>Reach:</strong> Melee</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+      "value": "<p><strong>Strike.</strong> reach 1 square., after 4+ squares of straight movement, one target. Damage: <code>2d10</code> kinetic + violence. The target must succeed a Body check vs DC 15 or be knocked Prone. If it is Prone, the predator may make one Claws attack as a bonus action.</p><p><em>It was already in the air when you noticed it.</em></p>"
     }
   },
-  "_id": "e3AACrA95RT8E5gu",
-  "effects": [],
-  "sort": 0,
   "flags": {
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Apex Predator"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
-      }
-    },
     "autoanimations": {
-      "id": "de7e6436-084e-4823-ab96-df46ce7c4327",
+      "id": "ft-pounce",
       "label": "Pounce",
       "macro": {
         "enable": false,
@@ -249,48 +235,81 @@
       "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
-      "version": 5,
-      "meleeSwitch": {
-        "video": {
-          "dbSection": "range",
-          "menuType": "weapon",
-          "animation": "arrow",
-          "variant": "regular",
-          "color": "regular",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "detect": "automatic",
-          "range": 2,
-          "returning": false,
-          "switchType": "on"
+      "version": 5
+    },
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Pounce",
+              "ownerMovedSquares": 4
+            },
+            "do": {
+              "condition": {
+                "key": "prone",
+                "duration": "1-round",
+                "save": {
+                  "attr": "body",
+                  "dc": 15
+                }
+              },
+              "prompt": "…then a bonus Claws attack."
+            }
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
         }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Apex Predator"
+        ],
+        "sourceIds": [
+          "oAS0ajjFzQ7ekFiw"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "e3AACrA95RT8E5gu",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024236952,
-    "modifiedTime": 1782167245005,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989037237,
+    "modifiedTime": 1792989037238,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!e3AACrA95RT8E5gu"
 }

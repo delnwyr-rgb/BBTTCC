@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Reality is a database. You brought admin tools.”</em></p>\n        <p><strong>Yesod-Diver.</strong> You reroll the lowest die on checks to interpret metaphysical constructs (Sparks, slippage, noospheric entities). 1/Soma Break, you can ask the GM one direct question about a nearby “system,” and receive a truthful but incomplete answer.</p>",
+      "value": "\n<p><em>“Reality is a database. You brought admin tools.”</em></p>\n        <p><strong>Yesod-Diver.</strong> You reroll the lowest die on checks to interpret metaphysical constructs (Sparks, slippage, noospheric entities). 1/Soma Break, you can ask the GM one direct question about a nearby “system,” and receive a truthful but incomplete answer.</p>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "properties": [],
     "requirements": "Circuitborn",
@@ -41,7 +41,6 @@
       "kind": "circuitborn",
       "feature": "yesod_diver",
       "chassis": "Synapse Line",
-      "tierLevel": 0,
       "version": "1.0.0"
     },
     "bbttcc-character-options": {
@@ -223,6 +222,24 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "occult",
+          "vs": "interpreting metaphysical constructs — Sparks, slippage, noospheric entities",
+          "note": "Yesod-Diver"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "investigation",
+          "vs": "interpreting metaphysical constructs — Sparks, slippage, noospheric entities",
+          "note": "Yesod-Diver"
+        }
+      ]
     }
   },
   "effects": [],
@@ -237,12 +254,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004099337,
-    "modifiedTime": 1781116081167,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988978886,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

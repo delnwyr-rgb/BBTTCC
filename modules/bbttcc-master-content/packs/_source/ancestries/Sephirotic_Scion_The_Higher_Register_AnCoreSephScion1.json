@@ -1,0 +1,98 @@
+{
+  "_id": "AnCoreSephScion1",
+  "name": "Sephirotic Scion: The Higher Register",
+  "type": "feat",
+  "img": "art/bbttcc/asli-icons/sephirotic_scion_2.webp",
+  "effects": [],
+  "folder": "087LoHAORwCBuexO",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "sephirotic_scion",
+      "feature": "core",
+      "family": "sephirotic_scion",
+      "speciesTrait": "sephirotic_scion_core",
+      "version": "3.0.0",
+      "date": "2026-10-26"
+    },
+    "fourththing": {
+      "triggers": [
+        {
+          "event": "on-agreement",
+          "effect": {
+            "kind": "add-temp-integrity",
+            "args": {
+              "amount": 1,
+              "target": "self"
+            }
+          }
+        },
+        {
+          "event": "on-agreement",
+          "effect": {
+            "kind": "add-temp-integrity",
+            "args": {
+              "amount": 1,
+              "target": "target"
+            }
+          }
+        }
+      ],
+      "grants": {
+        "resistances": [
+          "sephirotic"
+        ]
+      }
+    }
+  },
+  "system": {
+    "category": "feat",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"Your blood remembers the higher spheres. Light hangs around you a little too long, and prayers sometimes answer themselves.\"</em></p>\n<p><strong>Sephirotic Physiology.</strong> You have resistance to sephirotic damage. Your blood runs a little bright under the right light; you do not technically age while on consecrated ground.</p>\n<p><strong>Sefirot Attunement (1/scene).</strong> At creation, pick one sephirah. Once per scene you can invoke its register before a roll: your next check that falls clearly within that sephirah's domain gains +1.</p>\n<p><strong>Holy Conduit.</strong> Manifestations, rituals, and other sephirotic-register effects that target you or pass through your space treat their caster's attribute as +1 for the duration of that effect. Works on allies and on you; never on qliphothic-register effects.</p>\n<p><strong>Light of Harmony.</strong> When you reach an explicit, spoken agreement with another creature, you and that creature each gain 1 temporary Integrity.</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "sephirotic_scion_core",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "Sephirotic Scion",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988968077,
+    "modifiedTime": 1792988968078,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "_key": "!items!AnCoreSephScion1"
+}

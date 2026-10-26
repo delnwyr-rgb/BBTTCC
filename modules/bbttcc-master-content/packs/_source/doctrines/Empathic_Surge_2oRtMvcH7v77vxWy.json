@@ -3,14 +3,14 @@
   "type": "feat",
   "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": {
       "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<p>Turns out feeling things together is a genuine force multiplier. Who knew. ...Me. I knew.</p><p><b>Unity +1 after the round; heal morale.</b></p>",
+      "value": "<p>Turns out feeling things together is a genuine force multiplier. Who knew. ...Me. I knew.</p><p><b>+10 Soft Power marks after the round; Loyalty +1 on the target hex.</b></p>",
       "chat": ""
     },
     "activities": {},
@@ -50,7 +50,8 @@
           "presence"
         ],
         "engine": "presence"
-      }
+      },
+      "effects": {}
     }
   },
   "_id": "2oRtMvcH7v77vxWy",
@@ -65,12 +66,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977107845,
-    "modifiedTime": 1779731344193,
-    "lastModifiedBy": "6ut7GT8pCAhpdWjS"
+    "modifiedTime": 1792988992178,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!2oRtMvcH7v77vxWy"
 }

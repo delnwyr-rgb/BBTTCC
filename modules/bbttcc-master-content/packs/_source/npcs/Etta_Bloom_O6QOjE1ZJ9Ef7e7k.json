@@ -28,6 +28,28 @@
           "itemName": "Sephirotic Scion Heritage: Ophanic",
           "viaSwap": true
         }
+      },
+      "aptitudePromotions": {
+        "archetype: the tower (breaker) (tier 1)|athletics": {
+          "delta": 1,
+          "item": "Archetype: The Tower (Breaker) (Tier 1)",
+          "at": 1792346696425
+        },
+        "archetype: the tower (breaker) (tier 1)|investigation": {
+          "delta": 1,
+          "item": "Archetype: The Tower (Breaker) (Tier 1)",
+          "at": 1792346696425
+        },
+        "crew type: survivors / militia (tier 1)|athletics": {
+          "delta": 1,
+          "item": "Crew Type: Survivors / Militia (Tier 1)",
+          "at": 1792346696425
+        },
+        "crew type: survivors / militia (tier 1)|faith": {
+          "delta": 1,
+          "item": "Crew Type: Survivors / Militia (Tier 1)",
+          "at": 1792346696425
+        }
       }
     },
     "bbttcc-character-options": {
@@ -91,13 +113,13 @@
         }
       },
       "calculatedOPs": {
-        "violence": 3,
+        "violence": 2,
         "nonlethal": 0,
-        "intrigue": 6,
+        "intrigue": 2,
         "economy": 0,
-        "softpower": 3,
-        "diplomacy": 3,
-        "logistics": 4,
+        "softpower": 2,
+        "diplomacy": 2,
+        "logistics": 0,
         "culture": 0,
         "faith": 0
       },
@@ -114,6 +136,21 @@
         "name": "Alignment: Tiphareth",
         "identifier": "alignment-tiphareth",
         "category": "sephirothic-alignments"
+      },
+      "contracts": {
+        "crew": {
+          "docId": "nywioz6KRfDEG2tR",
+          "pack": "bbttcc-character-options.crew-types",
+          "name": "Crew Type: Survivors / Militia",
+          "displayName": "Survivors / Militia",
+          "since": 1,
+          "until": 3,
+          "turns": 3,
+          "source": "legacy",
+          "entryId": null,
+          "vendorId": null,
+          "hiredAt": 1792371018151
+        }
       }
     },
     "tokenflip": {
@@ -125,14 +162,29 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "",
-        "notes": "[AG-LEYGATE-2026-07-07] PRIVATE TRUTH \u2014 Etta Bloom. Voice: warm, unblinking, forgives you in advance; adjusts things that don't need adjusting when she's deciding how much to say; never blinks first. STAGING: the Long Market is her office, the whole market \u2014 she conducts it while she talks. WHAT SHE GUARDS: the \"old mistakes buried nearby\" line is a DOOR and she opens it only if a Steward asks directly about statues, standing stones, or stone-folk \u2014 or shows her stone-sign of any kind. Behind that door: she is Menhirkin, and the buried mistakes are KIN \u2014 stone kin who stopped, or were stopped, and were let stay lost because finding them meant deciding what was owed. She counts debts in consequence, not marks (her echo is public and true). About the sigil she gave the Stewards: she is watching which of the three doors they walk through \u2014 restore, redirect, break \u2014 and she has already adjusted inventory for two of the three. Ask her which two and she smiles and sells you preserves."
+        "notes": "[AG-LEYGATE-2026-07-07] PRIVATE TRUTH — Etta Bloom. Voice: warm, unblinking, forgives you in advance; adjusts things that don't need adjusting when she's deciding how much to say; never blinks first. STAGING: the Long Market is her office, the whole market — she conducts it while she talks. WHAT SHE GUARDS: the \"old mistakes buried nearby\" line is a DOOR and she opens it only if a Steward asks directly about statues, standing stones, or stone-folk — or shows her stone-sign of any kind. Behind that door: she is Menhirkin, and the buried mistakes are KIN — stone kin who stopped, or were stopped, and were let stay lost because finding them meant deciding what was owed. She counts debts in consequence, not marks (her echo is public and true). About the sigil she gave the Stewards: she is watching which of the three doors they walk through — restore, redirect, break — and she has already adjusted inventory for two of the three. Ask her which two and she smiles and sells you preserves.",
+        "secretsRaw": "The Camp That Isn't on Any Map :: oppRollMinus2 :: a Steward asks WHICH stall buys forty pounds of salt and no meat, or candle wax in tallow country :: She has known for a season. Third stall from the east end, the rope stall that never sells rope; every third market a Jackalope wagon loads there for a camp two days coastward that is on no map. She has already adjusted inventory for it. She sells you preserves first; the question is answered when the jar is paid for.\nWhich Two Doors :: rollPlus2 :: a Steward asks which two of the three doors (restore, redirect, break) she has already adjusted inventory for :: She smiles and sells you preserves. Behind the smile: she is Menhirkin, the 'old mistakes buried nearby' are KIN, and she has stocked for the two doors where somebody pays. Nobody has stocked for 'no one owes anyone anything', because nobody knows what that costs."
       }
+    },
+    "bbttcc-raid": {
+      "directionalArt": {
+        "enabled": true,
+        "images": {
+          "south": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/etta_bloom_pov_front_final_1400.webp",
+          "north": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/etta_bloom_pov_back_final_1400.webp",
+          "east": "",
+          "west": ""
+        }
+      }
+    },
+    "bbttcc-territory": {
+      "faction": "The Crash Test Redshirts"
     }
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Matriarch of the Long Market, Allesh-Gilliam's closest thing to a mayor (Act 1-2)",
+      "notes": "Etta Bloom runs the Long Market the way a conductor runs an orchestra: the whole market is her office, and she keeps it going while she talks to you. She is the closest thing Allesh-Gilliam has to a mayor, though nobody voted. She is warm, never blinks first, and forgives you in advance. Whatever you came to ask, you will be sold preserves first. She counts debts in consequence, not marks, and she adjusts things that don't need adjusting while she decides how much to tell you. She calls Avuncular Joan 'Ava'."
     },
     "details": {
       "level": 4,
@@ -180,7 +232,7 @@
       "athletics": {
         "attribute": "violence",
         "label": "Athletics",
-        "value": 1
+        "value": 3
       },
       "stealth": {
         "attribute": "intrigue",
@@ -235,7 +287,7 @@
       "investigation": {
         "attribute": "mind",
         "label": "Investigation",
-        "value": 1
+        "value": 2
       },
       "lore": {
         "attribute": "mind",
@@ -250,7 +302,7 @@
       "faith": {
         "attribute": "soul",
         "label": "Faith",
-        "value": 1
+        "value": 2
       },
       "meditation": {
         "attribute": "soul",
@@ -274,10 +326,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 0
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -286,7 +348,8 @@
     "derived": {
       "integrity": {
         "value": 37,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 30,
@@ -376,7 +439,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -411,18 +475,22 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
-      "id": null,
-      "loyalty": 0
+      "id": "6H5Grt3HybAs1rSq",
+      "loyalty": 0,
+      "name": "The Crash Test Redshirts"
     },
     "bloodDebt": {
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
@@ -433,12 +501,12 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/etta_bloom_pov_2.png",
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/etta_bloom_pov_front_final_1400.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
-      "scaleX": 1,
-      "scaleY": 1,
+      "scaleX": 3,
+      "scaleY": 3,
       "tint": "#ffffff",
       "alphaThreshold": 0.75
     },
@@ -567,7 +635,7 @@
     "prependAdjective": false
   },
   "_id": "O6QOjE1ZJ9Ef7e7k",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/etta_bloom_pov_2.png",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/etta_bloom_pov_front_final_1400.webp",
   "items": [
     {
       "name": "Sephirotic Scion",
@@ -578,7 +646,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Sephirotic Scion.</strong> Your blood remembers the higher spheres. Light hangs around you a little too long, prayers sometimes answer themselves, and the world\u2019s moral architecture feels less like an abstraction and more like the weather report.</p><hr><p><em><strong>Sephirotic Scion Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic).</p></li><li><p><strong>Size.</strong> You are Medium.</p></li><li><p><strong>Speed.</strong> Your walking speed is 6 squares</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Sephirotic Scion does not grant any attribute bonuses.</p></li></ul><p>Your Sephirotic heritage grants you additional features through advancements (Item Grants) added during character creation: sephirotic physiology, attunement to higher patterns, holy conduction, the Light of Harmony, and strategic hooks that tilt factions toward soft power, diplomacy, and alignment work.</p>",
+          "value": "\n<p><strong>Sephirotic Scion.</strong> Your blood remembers the higher spheres. Light hangs around you a little too long, prayers sometimes answer themselves, and the world’s moral architecture feels less like an abstraction and more like the weather report.</p><hr><p><em><strong>Sephirotic Scion Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic).</p></li><li><p><strong>Size.</strong> You are Medium.</p></li><li><p><strong>Speed.</strong> Your walking speed is 6 squares</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Sephirotic Scion does not grant any attribute bonuses.</p></li></ul><p><strong>Sephirotic Scion Core.</strong> At character creation you gain <strong>The Higher Register</strong> (Sephirotic Physiology, Sefirot Attunement, Holy Conduit, Light of Harmony). Your heritage adds its own traits and Tier powers at Initiation 1, 5, 11 and 17.</p>",
           "chat": ""
         },
         "advancement": {
@@ -747,17 +815,6 @@
           "grantedByAncestry": "Sephirotic Scion"
         }
       },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885502,
-        "modifiedTime": 1784177885502,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -765,7 +822,17 @@
       },
       "sort": 100000,
       "_id": "M7NpHB2moaZVtEb3",
-      "_key": "!actors.items!O6QOjE1ZJ9Ef7e7k.M7NpHB2moaZVtEb3"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989078200,
+        "modifiedTime": 1792989609743,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Sefirot Attunement",
@@ -812,17 +879,6 @@
           "type": "base",
           "disabled": false,
           "transfer": true,
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885502,
-            "modifiedTime": 1784177885502
-          },
           "_id": "4cyMaXGkbAbpqpUx",
           "system": {
             "changes": [
@@ -830,13 +886,6 @@
                 "key": "system.skills.perception.value",
                 "type": "add",
                 "value": "+1",
-                "phase": "initial",
-                "priority": 20
-              },
-              {
-                "key": "system.skills.perception.value",
-                "type": "add",
-                "value": "+2",
                 "phase": "initial",
                 "priority": 20
               }
@@ -857,7 +906,17 @@
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!O6QOjE1ZJ9Ef7e7k.JfeStD3Srgj0z87o.4cyMaXGkbAbpqpUx"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989078200,
+            "modifiedTime": 1792989078200,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "FehDulVPgqIjjQEa",
@@ -873,23 +932,6 @@
           "grantedByAncestry": "Sephirotic Scion"
         }
       },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.QLk2SUnHLglsiQwR",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885502,
-        "modifiedTime": 1784177885502,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -897,7 +939,17 @@
       },
       "sort": 300000,
       "_id": "JfeStD3Srgj0z87o",
-      "_key": "!actors.items!O6QOjE1ZJ9Ef7e7k.JfeStD3Srgj0z87o"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989078200,
+        "modifiedTime": 1792989078200,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Sephirotic Scion: Holy Conduit",
@@ -944,17 +996,6 @@
           "type": "base",
           "disabled": false,
           "transfer": true,
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885502,
-            "modifiedTime": 1784177885502
-          },
           "_id": "Ss0vEkuN1Vv6vz40",
           "system": {
             "changes": [
@@ -982,7 +1023,17 @@
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!O6QOjE1ZJ9Ef7e7k.Bq0qruQsnp1beelO.Ss0vEkuN1Vv6vz40"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989078200,
+            "modifiedTime": 1792989078200,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "FehDulVPgqIjjQEa",
@@ -996,25 +1047,13 @@
           "option": {}
         },
         "fourththing": {
-          "grantedByAncestry": "Sephirotic Scion"
+          "grantedByAncestry": "Sephirotic Scion",
+          "grants": {
+            "resistances": [
+              "psychic"
+            ]
+          }
         }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.6RJBcRcIeUIDAHuz",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885502,
-        "modifiedTime": 1784177885502,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
       },
       "ownership": {
         "default": 0,
@@ -1023,7 +1062,17 @@
       },
       "sort": 250000,
       "_id": "Bq0qruQsnp1beelO",
-      "_key": "!actors.items!O6QOjE1ZJ9Ef7e7k.Bq0qruQsnp1beelO"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989078200,
+        "modifiedTime": 1792989078200,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Scion: Light of Harmony",
@@ -1038,7 +1087,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou glow a little. Sometimes metaphorically. Sometimes not.\u201d</em></p><ul><li>You can cast <strong>calm emotions</strong> 1/Soma Break (Presence is your manifestation aptitude).</li><li>Allies within 2 squares reroll the lowest die on checks against being <strong>frightened</strong>.</li><li>You automatically sense the Sephirothic/Qliphothic tilt of any hex you enter.</li></ul>",
+          "value": "\n<p><em>“You glow a little. Sometimes metaphorically. Sometimes not.”</em></p><ul><li>You can cast <strong>calm emotions</strong> 1/Soma Break (Presence is your manifestation aptitude).</li><li>Allies within 2 squares reroll the lowest die on checks against being <strong>frightened</strong>.</li><li>You automatically sense the Sephirothic/Qliphothic tilt of any hex you enter.</li></ul>",
           "chat": ""
         },
         "activities": {
@@ -1093,17 +1142,6 @@
           "type": "base",
           "disabled": false,
           "transfer": true,
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885502,
-            "modifiedTime": 1784177885502
-          },
           "_id": "No3Pkmg20U8O9kab",
           "system": {
             "changes": [
@@ -1131,7 +1169,17 @@
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!O6QOjE1ZJ9Ef7e7k.YRECTEicENZxzlTp.No3Pkmg20U8O9kab"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989078200,
+            "modifiedTime": 1792989078200,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "FehDulVPgqIjjQEa",
@@ -1322,25 +1370,22 @@
           "version": 5
         },
         "fourththing": {
-          "grantedByAncestry": "Sephirotic Scion"
+          "grantedByAncestry": "Sephirotic Scion",
+          "passives": {
+            "aura": {
+              "radius": 2,
+              "who": "allies",
+              "rerolls": [
+                {
+                  "context": "defense",
+                  "mode": "reroll-lowest",
+                  "vs": "vs:frightened",
+                  "note": "Light of Harmony — vs being frightened"
+                }
+              ]
+            }
+          }
         }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.lixFTlqcjyCv52Uh",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885502,
-        "modifiedTime": 1784177885502,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
       },
       "ownership": {
         "default": 0,
@@ -1349,7 +1394,17 @@
       },
       "sort": 100000,
       "_id": "YRECTEicENZxzlTp",
-      "_key": "!actors.items!O6QOjE1ZJ9Ef7e7k.YRECTEicENZxzlTp"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989078200,
+        "modifiedTime": 1792989078200,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Scion: Strategic Hooks",
@@ -1364,7 +1419,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>\u201cEven the world listens when you walk in.\u201d</em></p><ul><li>Your faction gains +2 Soft Power OP and +1 Diplomacy OP.</li><li>Shifting a controlled hex toward a Sephirah costs <strong>10% less</strong>.</li><li>The first Spark Identification each chapter is <strong>free</strong>.</li></ul>",
+          "value": "<p><em>“Even the world listens when you walk in.”</em></p><ul><li>your Domain gains +2×10 Soft Power marks (×10) and +1×10 Diplomacy marks (×10).</li><li>Shifting a controlled hex toward a Sephirah costs <strong>10% less</strong>.</li><li>The first Spark Identification each chapter is <strong>free</strong>.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1396,17 +1451,6 @@
           "type": "base",
           "disabled": false,
           "transfer": true,
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885502,
-            "modifiedTime": 1784177885502
-          },
           "_id": "QrSTwtebIPNt67Rh",
           "system": {
             "changes": [
@@ -1441,7 +1485,17 @@
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!O6QOjE1ZJ9Ef7e7k.wWcH0OoDfyocD70a.QrSTwtebIPNt67Rh"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989078200,
+            "modifiedTime": 1792989078200,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "FehDulVPgqIjjQEa",
@@ -1464,23 +1518,6 @@
           "grantedByAncestry": "Sephirotic Scion"
         }
       },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.I3NyRgkTbi52qnJq",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885502,
-        "modifiedTime": 1784177885502,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1488,7 +1525,17 @@
       },
       "sort": 200000,
       "_id": "wWcH0OoDfyocD70a",
-      "_key": "!actors.items!O6QOjE1ZJ9Ef7e7k.wWcH0OoDfyocD70a"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989078200,
+        "modifiedTime": 1792989078200,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Sephirotic Scion Heritage: Ophanic",
@@ -1499,7 +1546,7 @@
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Sephirotic Scion heritage: Ophanic.</p><p><em>\u201cThe wheels were full of eyes. You never stop turning. You never stop seeing.\u201d</em></p><p><strong>Sephirotic Scion (Ophanic).</strong> Your blood runs rotating. The Ophanim are wheels-and-eyes \u2014 motion, sight, the order that is always already looking both ways. You are descended from a thing that could not be snuck up on because it had no back. You kept some of that. Not all. Enough.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic Scion).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Sephirotic Scion does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Sephirotic Scion Core: The Higher Register</h3><p><em>Shared across all Sephirotic Scion heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Sephirotic Physiology.</strong> You have resistance to sephirotic damage. Your blood runs a little bright under the right light; you do not technically age while on consecrated ground.</p></li><li><p><strong>Sefirot Attunement.</strong> At creation, pick one sephirah (player choice). Once per scene, you can invoke its register and gain a +1 rank bonus to one check that falls clearly within that sephirah's domain.</p></li><li><p><strong>Holy Conduit.</strong> Manifestations, rituals, and other sephirotic-register effects that target you or pass through your space treat their effective caster-attribute as +1 for the duration of that effect. Works on allies and on you; does not work on qliphothic-register effects.</p></li><li><p><strong>Light of Harmony.</strong> When two or more creatures within 6 squares of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity. This refreshes when a new agreement is reached between different creatures.</p></li></ul><h3>Ophanic Traits</h3><ul><li><p><strong>Wheel-and-Eye.</strong> You can see invisible creatures and objects within 6 squares as dimly lit shapes. You cannot be flanked.</p></li><li><p><strong>Concentric Sight.</strong> You reroll the lowest die on Mind (Perception) checks that involve noticing movement, pattern, or change over time. You roll 3d10 keep lowest 2 on Mind (Perception) checks to notice things that have been perfectly still since before you started looking \u2014 you see motion, not furniture.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Violence OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Battlefield / Procession / High-Traffic</em> hexes, your faction's observation and counter-intel operations gain +2 on the success check.</p></li><li><p><strong>Turning Witness.</strong> Once per Strategic Turn, you may observe one exchange of goods, intelligence, or personnel between two rival factions within your field of influence. You learn that it happened and between whom, though not necessarily what was exchanged.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Sefirot Attunement</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene \u00a0\u00b7\u00a0 <strong>Action:</strong> Free (declare before roll) \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Invoke your chosen sephirah for +1 rank bonus on a check clearly in its domain.</span></p></div>",
+          "value": "<p><em>“The wheels were full of eyes. You never stop turning. You never stop seeing.”</em></p><p><strong>Sephirotic Scion (Ophanic).</strong> Your blood runs rotating. The Ophanim are wheels-and-eyes — motion, sight, the order that is always already looking both ways. You are descended from a thing that could not be snuck up on because it had no back. You kept some of that. Not all. Enough.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic Scion).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Sephirotic Scion does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Sephirotic Scion Core: The Higher Register</h3><p><em>Shared across all Sephirotic Scion heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Sephirotic Physiology.</strong> You have resistance to sephirotic damage. Your blood runs a little bright under the right light; you do not technically age while on consecrated ground.</p></li><li><p><strong>Sefirot Attunement.</strong> At creation, pick one sephirah (player choice). Once per scene, you can invoke its register and gain a +1 rank bonus to one check that falls clearly within that sephirah's domain.</p></li><li><p><strong>Holy Conduit.</strong> Manifestations, rituals, and other sephirotic-register effects that target you or pass through your space treat their effective caster-attribute as +1 for the duration of that effect. Works on allies and on you; does not work on qliphothic-register effects.</p></li><li><p><strong>Light of Harmony.</strong> When two or more creatures within 6 squares of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity. This refreshes when a new agreement is reached between different creatures.</p></li></ul><h3>Ophanic Traits</h3><ul><li><p><strong>Wheel-and-Eye.</strong> You can see invisible creatures and objects within 6 squares as dimly lit shapes. You cannot be flanked.</p></li><li><p><strong>Concentric Sight.</strong> You reroll the lowest die on Mind (Perception) checks that involve noticing movement, pattern, or change over time. You roll 3d10 keep lowest 2 on Mind (Perception) checks to notice things that have been perfectly still since before you started looking — you see motion, not furniture.</p></li></ul><h3>Domain Edge</h3><ul><li><p><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Violence marks</strong> and <strong>+20 Intrigue marks</strong> at campaign start.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Sefirot Attunement</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Free (declare before roll)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Invoke your chosen sephirah for +1 rank bonus on a check clearly in its domain.</span></p></div>",
           "chat": ""
         },
         "advancement": [
@@ -1558,46 +1605,26 @@
             {
               "context": "check",
               "skill": "perception",
-              "mode": "reroll-lowest"
+              "mode": "reroll-lowest",
+              "note": "Concentric Sight — movement, pattern, change over time"
             },
             {
               "context": "check",
               "attribute": "mind",
-              "mode": "reroll-lowest"
+              "mode": "reroll-lowest",
+              "note": ""
             },
             {
               "context": "check",
               "skill": "perception",
               "mode": "reroll-highest",
-              "note": "on Mind (Perception) checks to notice things that have been perfectly still s\u2026"
+              "note": "Mind (Perception) checks to notice things that have been perfectly still s"
             },
             {
               "context": "check",
               "attribute": "mind",
               "mode": "reroll-highest",
-              "note": "on Mind (Perception) checks to notice things that have been perfectly still s\u2026"
-            },
-            {
-              "context": "check",
-              "skill": "perception",
-              "mode": "reroll-lowest"
-            },
-            {
-              "context": "check",
-              "attribute": "mind",
-              "mode": "reroll-lowest"
-            },
-            {
-              "context": "check",
-              "skill": "perception",
-              "mode": "reroll-highest",
-              "note": "Mind (Perception) checks to notice things that have been perfectly still sinc\u2026"
-            },
-            {
-              "context": "check",
-              "attribute": "mind",
-              "mode": "reroll-highest",
-              "note": "Mind (Perception) checks to notice things that have been perfectly still sinc\u2026"
+              "note": "Mind (Perception) checks to notice things that have been perfectly still s"
             }
           ],
           "resourceGrants": [
@@ -1616,9 +1643,20 @@
             {
               "event": "on-agreement",
               "effect": {
-                "kind": "chat-prompt",
+                "kind": "add-temp-integrity",
                 "args": {
-                  "body": "Light of Harmony. When two or more creatures within 30 feet of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity"
+                  "amount": 1,
+                  "target": "self"
+                }
+              }
+            },
+            {
+              "event": "on-agreement",
+              "effect": {
+                "kind": "add-temp-integrity",
+                "args": {
+                  "amount": 1,
+                  "target": "target"
                 }
               }
             }
@@ -1804,23 +1842,6 @@
         }
       },
       "folder": "jZarWfKQgT5cujvt",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-heritages-v1.1",
-          "uuid": "Item.09IqdCAcL2F1Y8xy",
-          "coreVersion": "13.351",
-          "systemId": "fourththing",
-          "systemVersion": "0.6.0"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885502,
-        "modifiedTime": 1784177885502,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "PEWWUtMPC7h7WMIt": 3,
@@ -1828,7 +1849,17 @@
       },
       "sort": 0,
       "_id": "r5M4RRMEYGYYeRr2",
-      "_key": "!actors.items!O6QOjE1ZJ9Ef7e7k.r5M4RRMEYGYYeRr2"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989078200,
+        "modifiedTime": 1792989609743,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Sephirotic Scion (Ophanic): The Wheel Never Stops",
@@ -1839,7 +1870,7 @@
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><div data-ft-canon-sephirotic=\"v1\" style=\"display:none\"></div><p><em>\"There is no angle that is not a front, to a thing with no back.\"</em></p><p><strong>The Wheel Never Stops (1/Soma Break).</strong> When you move at least 2 squares on your turn, as a bonus action take either one weapon attack OR the Dash. Additional uses per Soma Break cost 1 Surge each (player-managed via Surge controls).</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"sephOphanicWheel\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>The Wheel Never Stops</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (+1 Surge per extra use) \u00a0\u00b7\u00a0 <strong>Action:</strong> Bonus action (after moving 2 squares) \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">After moving \u2265 2 squares, bonus action: one weapon attack OR Dash. Each additional use this Soma Break costs 1 Surge \u2014 spend manually.</span></p></div>",
+          "value": "<p><em>\"There is no angle that is not a front, to a thing with no back.\"</em></p><p><strong>The Wheel Never Stops (1/Soma Break).</strong> When you move at least 2 squares on your turn, as a bonus action take either one weapon attack — rerolling its lowest die — or the Dash. Additional uses per Soma Break cost 1 Surge each (spend it from your Surge controls).</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"sephOphanicWheel\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>The Wheel Never Stops</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (+1 Surge per extra use)  ·  <strong>Action:</strong> Bonus action (after moving 2 squares)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">After moving ≥ 2 squares, bonus action: one weapon attack OR Dash. Each additional use this Soma Break costs 1 Surge — spend manually.</span></p></div>",
           "chat": ""
         },
         "advancement": {},
@@ -1848,7 +1879,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 1
         },
         "uses": {
           "spent": 0,
@@ -1881,14 +1912,22 @@
           "triggers": [
             {
               "event": "on-move",
+              "predicate": {
+                "amountMin": 10
+              },
               "limit": {
                 "window": "soma-break",
                 "uses": 1
               },
+              "offer": true,
+              "offerText": "The Wheel Never Stops — bonus action: one weapon attack (reroll its lowest die) or the Dash.",
               "effect": {
-                "kind": "chat-prompt",
+                "kind": "bank-reroll",
                 "args": {
-                  "body": "The Wheel Never Stops (1/Soma Break). When you move at least 10 feet on your turn, as a bonus action you may take either one weapon attack OR the Dash action"
+                  "target": "self",
+                  "count": 1,
+                  "context": "attack",
+                  "note": "The Wheel Never Stops"
                 }
               }
             }
@@ -2075,23 +2114,6 @@
         }
       },
       "folder": "a5biOVmssBh3zmWx",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-heritages-v1.1",
-          "uuid": "Item.jpagUy0moeZlFgkX",
-          "coreVersion": "13.351",
-          "systemId": "fourththing",
-          "systemVersion": "0.6.0"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885502,
-        "modifiedTime": 1784177885502,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "PEWWUtMPC7h7WMIt": 3,
@@ -2099,12 +2121,22 @@
       },
       "sort": 0,
       "_id": "qoEk9mcuXzrtIbHS",
-      "_key": "!actors.items!O6QOjE1ZJ9Ef7e7k.qoEk9mcuXzrtIbHS"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989078200,
+        "modifiedTime": 1792989609744,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: The Tower (Breaker)",
       "type": "feat",
-      "img": "icons/environment/settlement/tower-stone-blue.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_tower.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -2114,7 +2146,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cIf it stands, it can fall.\u201d</em></p><p><strong>Archetype (Bad Eden): The Tower (Breaker).</strong> You are structural collapse, breach doctrine, and the terrible logic of proving that a thing was never as stable as it claimed.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens demolition, disruption, breach operations, and catastrophic openings. This Archetype is associated with <strong>+1 Violence</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>“If it stands, it can fall.”</em></p><p><strong>Archetype (Bad Eden): The Tower (Breaker).</strong> You are structural collapse, breach doctrine, and the terrible logic of proving that a thing was never as stable as it claimed.</p><h3>Archetype Effects</h3><ul><li><p><strong>Faction Edge.</strong> Your archetype strengthens demolition, disruption, breach operations, and catastrophic openings. Your Domain earns <strong>+10 Violence</strong> marks each turn while you serve it.</p></li><li><p><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</p></li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2187,23 +2219,6 @@
         },
         "dnd5e": {}
       },
-      "_stats": {
-        "compendiumSource": "Item.zTN7YGcUFICBGiPW",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.zTN7YGcUFICBGiPW",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885502,
-        "modifiedTime": 1784177885502,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -2211,23 +2226,33 @@
       },
       "_id": "n5nYzc5Srxusbsxa",
       "sort": 100000,
-      "_key": "!actors.items!O6QOjE1ZJ9Ef7e7k.n5nYzc5Srxusbsxa"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989078200,
+        "modifiedTime": 1792989609744,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: The Tower (Breaker) (Tier 1)",
       "type": "feat",
-      "img": "icons/environment/settlement/tower-stone-blue.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_tower.webp",
       "system": {
         "category": "technique",
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden \u2013 Archetype: The Tower (Breaker) (Tier 1)",
+          "custom": "Bad Eden – Archetype: The Tower (Breaker) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) \u2014 The Tower (Breaker)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — The Tower (Breaker)</strong></p><ul><li><p><strong>Tactical:</strong> You gain a skill rank in Athletics and Investigation.</p></li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2254,7 +2279,7 @@
       },
       "effects": [
         {
-          "disabled": false,
+          "disabled": true,
           "duration": {
             "value": null,
             "units": "seconds",
@@ -2263,7 +2288,7 @@
           },
           "flags": {},
           "name": "Archetype Tier 1 Proficiencies",
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_6.png",
+          "img": "art/bbttcc/asli-archetypes/archetype_tower.webp",
           "_id": "zOYSsV6rMdmfERTi",
           "type": "base",
           "system": {
@@ -2290,21 +2315,20 @@
           "transfer": true,
           "statuses": [],
           "sort": 0,
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885502,
-            "modifiedTime": 1784177885502
-          },
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!O6QOjE1ZJ9Ef7e7k.1go5kHOSdfPw0JUp.zOYSsV6rMdmfERTi"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989078200,
+            "modifiedTime": 1792989610019,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "RnuL7aCXXxgV9QU4",
@@ -2330,23 +2354,6 @@
         },
         "dnd5e": {}
       },
-      "_stats": {
-        "compendiumSource": "Item.yKWEeD1fgL1AM1wt",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.yKWEeD1fgL1AM1wt",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885502,
-        "modifiedTime": 1784177885502,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -2354,7 +2361,17 @@
       },
       "_id": "1go5kHOSdfPw0JUp",
       "sort": 0,
-      "_key": "!actors.items!O6QOjE1ZJ9Ef7e7k.1go5kHOSdfPw0JUp"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989078200,
+        "modifiedTime": 1792989609744,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Alignment: Tiphareth",
@@ -2368,7 +2385,7 @@
         },
         "tags": [],
         "description": {
-          "value": "Beauty - Balance that costs something. +1 Diplomacy, +1 Soft Power OPs\n\nTiphareth holds justice and mercy in living tension. It rewards balanced play, stability across multiple systems, and factions that survive by integrating contradictions instead of denying them.",
+          "value": "Beauty - Balance that costs something. +10 Diplomacy and +10 Soft Power marks to your Domain each turn.\n\nTiphareth holds justice and mercy in living tension. It rewards balanced play, stability across multiple systems, and factions that survive by integrating contradictions instead of denying them.",
           "chat": ""
         },
         "activities": {},
@@ -2406,23 +2423,6 @@
           "option": {}
         }
       },
-      "_stats": {
-        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.sUbH6ds2iUNdFMz9",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.fxAlgcvKBqlWJ7ux",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885502,
-        "modifiedTime": 1784177885502,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 2,
         "vmUfDuSYUIe7V5uB": 3,
@@ -2430,182 +2430,17 @@
       },
       "_id": "NIkhjLH94gXiTBcW",
       "sort": 900000,
-      "_key": "!actors.items!O6QOjE1ZJ9Ef7e7k.NIkhjLH94gXiTBcW"
-    },
-    {
-      "name": "Crew Type: Survivors / Militia (Tier 1)",
-      "type": "feat",
-      "img": "icons/environment/people/group.webp",
-      "system": {
-        "category": "technique",
-        "source": {
-          "custom": "Bad Eden \u2013 Crew Type: Survivors / Militia (Tier 1)",
-          "revision": 2,
-          "rules": "2024",
-          "book": ""
-        },
-        "tags": [],
-        "description": {
-          "value": "<p><strong>Tier 1 \u2014 Survivors / Militia</strong></p><p><strong>\u201cWe were here before your grand strategy, and we\u2019ll be here after it catches fire.\u201d</strong></p><p>Survivors and militias are what happens when ordinary people become infrastructure. They patch walls, ration supplies, drag neighbors out of burning buildings, and keep the faction alive long after cleaner doctrines would have folded.</p><p><em>You\u2019ve learned the first law of bad times: everyone becomes useful or everyone dies tired.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Faith.</li><li><strong>Strategic:</strong> Your faction starts with +1 Non-Lethal OP and +1 Economy OP.</li></ul>",
-          "chat": ""
-        },
-        "identifier": "crew-survivors-militia-t1",
-        "activities": {},
-        "uses": {
-          "spent": 0,
-          "recovery": [],
-          "max": ""
-        },
-        "advancement": {},
-        "crewed": false,
-        "enchant": {},
-        "requirements": "Level 1+",
-        "properties": [],
-        "type": {
-          "value": "",
-          "subtype": ""
-        },
-        "prerequisites": {
-          "items": [],
-          "repeatable": false,
-          "level": null
-        }
-      },
-      "effects": [
-        {
-          "_id": "c0c3df7e7b8a41c1",
-          "name": "Survivors / Militia T1 Skills",
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_3.png",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.skills.athletics.value",
-                "type": "upgrade",
-                "value": 1,
-                "phase": "initial",
-                "priority": 20
-              },
-              {
-                "key": "system.skills.faith.value",
-                "type": "upgrade",
-                "value": 1,
-                "phase": "initial",
-                "priority": 20
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "",
-          "origin": null,
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "dnd5e": {
-              "riders": {
-                "statuses": []
-              }
-            }
-          },
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885502,
-            "modifiedTime": 1784177885502
-          },
-          "start": {
-            "combat": null,
-            "round": 0,
-            "time": 0,
-            "turn": 0,
-            "combatant": null,
-            "initiative": null
-          },
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!O6QOjE1ZJ9Ef7e7k.04oOJze6zeJUiTQo.c0c3df7e7b8a41c1"
-        }
-      ],
-      "folder": "nzOz07rZNThqspSs",
-      "flags": {
-        "bbttcc-character-options": {
-          "category": "crew",
-          "bonuses": {},
-          "option": {
-            "category": "crew",
-            "key": "survivors-militia",
-            "progressionType": "level",
-            "tier": 1,
-            "levelMin": 1,
-            "levelMax": 1,
-            "domains": [
-              "op",
-              "survival",
-              "recovery"
-            ],
-            "scope": "faction",
-            "tags": [
-              "bbttcc:option:crew",
-              "bbttcc:crew:survivors-militia",
-              "bbttcc:tier:1",
-              "bbttcc:domain:op",
-              "bbttcc:domain:survival",
-              "bbttcc:domain:recovery",
-              "bbttcc:scope:faction",
-              "bbttcc:effect:op:violence:+2",
-              "bbttcc:effect:op:nonlethal:+2",
-              "bbttcc:effect:op:economy:+2",
-              "bbttcc:effect:op:softpower:+2",
-              "bbttcc:effect:recovery:baseline_stability:true",
-              "bbttcc:theme:resilience",
-              "bbttcc:theme:hardship",
-              "bbttcc:theme:mutual-aid",
-              "bbttcc:theme:continuity"
-            ]
-          }
-        },
-        "fourththing": {
-          "vocabScrub": "2026-05-16"
-        }
-      },
       "_stats": {
-        "compendiumSource": "Item.CvJ9ziHEodDvbNYX",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.CvJ9ziHEodDvbNYX",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885502,
-        "modifiedTime": 1784177885502,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
-      "ownership": {
-        "default": 0,
-        "vmUfDuSYUIe7V5uB": 3,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "_id": "04oOJze6zeJUiTQo",
-      "sort": 0,
-      "_key": "!actors.items!O6QOjE1ZJ9Ef7e7k.04oOJze6zeJUiTQo"
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989078200,
+        "modifiedTime": 1792989609745,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Last Mile L1: The Weight You Carry",
@@ -2616,7 +2451,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>Nobody stays behind.</em></p><p><strong>Mode: Psychopomp / drift: Sideways.</strong></p><p>Your default Package type is a <strong>Soul</strong> \u2014 a specific character, creature, or intangible (a secret, a confession, a deathbed wish, a refugee's name, an unfinished obligation) that cannot reach safety on its own.</p><p><strong>While carrying a Soul:</strong></p><ul><li><p>Your movement speed is <strong>reduced by 1 square</strong>, but allies traveling with you gain <strong>+1 square of movement speed</strong> (the Soul's witness-weight pulls them forward).</p></li><li><p>You <strong>reroll the lowest die</strong> on Stealth (Intrigue) and Athletics (Violence) checks made specifically to <strong>protect or conceal the Soul</strong> (not all stealth/athletics \u2014 just protective acts).</p></li></ul><p><strong>On delivery:</strong> When you successfully deliver a Soul to safety (the GM confirms the destination counts as safety for that Soul), the recipient faction gains <strong>+1 Morale OP</strong> and <strong>Darkness in the recipient's hex is reduced by 1 point</strong>.</p><p>You may receive a new Soul any time your Package slot is empty.</p>",
+          "value": "<p><em>Nobody stays behind.</em></p><p><strong>Mode: Psychopomp / drift: Sideways.</strong></p><p>Your default Package type is a <strong>Soul</strong> — a specific character, creature, or intangible (a secret, a confession, a deathbed wish, a refugee's name, an unfinished obligation) that cannot reach safety on its own.</p><p><strong>While carrying a Soul:</strong></p><ul><li><p>Your movement speed is <strong>reduced by 1 square</strong>, but allies traveling with you gain <strong>+1 square of movement speed</strong> (the Soul's witness-weight pulls them forward).</p></li><li><p>You <strong>reroll the lowest die</strong> on Stealth (Intrigue) and Athletics (Violence) checks made specifically to <strong>protect or conceal the Soul</strong> (not all stealth/athletics — just protective acts).</p></li></ul><p><strong>On delivery:</strong> When you successfully deliver a Soul to safety (the GM confirms the destination counts as safety for that Soul), the recipient Domain gains <strong>+10 Soft Power marks</strong> and <strong>Darkness in the recipient's hex drops by 1</strong>.</p><p>You may receive a new Soul any time your Package slot is empty.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -2636,9 +2471,6 @@
       },
       "effects": [],
       "flags": {
-        "dnd5e": {
-          "originType": "feat"
-        },
         "bbttcc": {
           "kind": "subclassfeat",
           "classIdentifier": "shadow_courier",
@@ -2654,12 +2486,51 @@
           "triggers": [
             {
               "event": "on-delivery",
+              "predicate": {
+                "tag": [
+                  "soul"
+                ]
+              },
               "effect": {
-                "kind": "chat-prompt",
+                "kind": "grant-resource",
                 "args": {
-                  "body": "On delivery: When you successfully deliver a Soul to safety (the GM confirms the destination counts as safety for that Soul), the recipie..."
+                  "resource": "soft-power-op",
+                  "amount": 1,
+                  "target": "faction"
                 }
               }
+            },
+            {
+              "event": "on-delivery",
+              "predicate": {
+                "tag": [
+                  "soul"
+                ]
+              },
+              "effect": {
+                "kind": "hex-darkness",
+                "args": {
+                  "delta": -1
+                }
+              }
+            }
+          ],
+          "rerolls": [
+            {
+              "context": "check",
+              "skill": "stealth",
+              "mode": "reroll-lowest",
+              "when": "carryingSoul",
+              "vs": "protecting or concealing the Soul",
+              "note": "The Weight You Carry — while carrying a Soul"
+            },
+            {
+              "context": "check",
+              "skill": "athletics",
+              "mode": "reroll-lowest",
+              "when": "carryingSoul",
+              "vs": "protecting or concealing the Soul",
+              "note": "The Weight You Carry — while carrying a Soul"
             }
           ]
         },
@@ -2842,17 +2713,6 @@
         }
       },
       "folder": "NYwTsnPu4JjS5QE0",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885502,
-        "modifiedTime": 1784177885502,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "PEWWUtMPC7h7WMIt": 3,
@@ -2860,7 +2720,17 @@
       },
       "sort": 100000,
       "_id": "G21IlCw35oV41Mpt",
-      "_key": "!actors.items!O6QOjE1ZJ9Ef7e7k.G21IlCw35oV41Mpt"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989078200,
+        "modifiedTime": 1792989100797,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Adaptive Defense",
@@ -2871,7 +2741,7 @@
         "source": "Bad Eden Core Feats v1 (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<h2>Adaptive Defense</h2><p><em>Defense is not denial. It is management.</em></p><hr><h3>Rules</h3><p>When you are hit by an attack you can see, you may use your reaction to reduce the damage by an amount equal to your skill rank bonus + your Violence or Intrigue value (your choice).</p>",
+          "value": "<h2>Adaptive Defense</h2><p><em>Defense is not denial. It is management.</em></p><hr><h3>Rules</h3><p>When you are hit by an attack you can see, you may use your reaction to reduce the damage by an amount equal to your rank bonus + your Violence or Intrigue value (your choice).</p><p class=\"ft-engine-note\"><em>🃏 Card — click ▶ when you are hit: it shows the reduction (rank bonus + Violence or Intrigue).</em></p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_adaptive_defense",
@@ -2901,6 +2771,183 @@
         "bbttcc": {
           "pack": "bbttcc-feats-core-v1",
           "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+        },
+        "autoanimations": {
+          "id": "ft-adaptive-defense",
+          "label": "Adaptive Defense",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "shieldfx",
+              "animation": "ice",
+              "variant": "03",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
         }
       },
       "folder": "QbGNBV70xh9pF0eh",
@@ -2910,19 +2957,18 @@
         "DHBK2UGr58xKXzxK": 3,
         "bytUGWIOqq9eT7Or": 3
       },
+      "_id": "T5ob4cEaLb16k1V3",
       "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989078200,
+        "modifiedTime": 1792989078200,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885502,
-        "modifiedTime": 1784177885502,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
-      "_id": "T5ob4cEaLb16k1V3",
-      "_key": "!actors.items!O6QOjE1ZJ9Ef7e7k.T5ob4cEaLb16k1V3"
+        "exportSource": null
+      }
     },
     {
       "_id": "1dXnxLI0fC4bsLkh",
@@ -2939,7 +2985,7 @@
           "violence"
         ],
         "description": {
-          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -2966,21 +3012,20 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885502,
-        "modifiedTime": 1784177885502,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989078200,
+        "modifiedTime": 1792989078200,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!O6QOjE1ZJ9Ef7e7k.1dXnxLI0fC4bsLkh"
+      }
     },
     {
       "_id": "NrLZfneEy0fvD47O",
-      "name": "Bravo \u2014 Apprentice (Tier I)",
+      "name": "Bravo — Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
@@ -2992,7 +3037,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Bravo \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick \u2014 Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
           "chat": ""
         }
       },
@@ -3008,21 +3053,205 @@
           "calling": {
             "key": "bravo",
             "tier": 1
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "allyDamaged",
+                "radius": 1,
+                "do": {
+                  "ward": 0,
+                  "redirect": true
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                },
+                "label": "Hold the Line"
+              }
+            ]
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885502,
-        "modifiedTime": 1784177885502,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989078200,
+        "modifiedTime": 1792989609745,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Crew Type: Survivors / Militia (Tier 1)",
+      "type": "feat",
+      "img": "icons/environment/people/group.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden – Crew Type: Survivors / Militia (Tier 1)",
+          "revision": 2,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Survivors / Militia</strong></p><p><strong>“We were here before your grand strategy, and we’ll be here after it catches fire.”</strong></p><p>Survivors and militias are what happens when ordinary people become infrastructure. They patch walls, ration supplies, drag neighbors out of burning buildings, and keep the faction alive long after cleaner doctrines would have folded.</p><p><em>You’ve learned the first law of bad times: everyone becomes useful or everyone dies tired.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Faith.</li><li><strong>Strategic:</strong> Your Domain starts with +10 Non-Lethal marks and +10 Economy marks.</li></ul>",
+          "chat": ""
+        },
+        "identifier": "crew-survivors-militia-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "requirements": "Level 1+",
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        }
       },
-      "_key": "!actors.items!O6QOjE1ZJ9Ef7e7k.NrLZfneEy0fvD47O"
+      "effects": [
+        {
+          "_id": "c0c3df7e7b8a41c1",
+          "name": "Survivors / Militia T1 Skills",
+          "img": "icons/environment/people/group.webp",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.athletics.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.faith.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": true,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "dnd5e": {
+              "riders": {
+                "statuses": []
+              }
+            }
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989078200,
+            "modifiedTime": 1792989610270,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "folder": "nzOz07rZNThqspSs",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "survivors-militia",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "op",
+              "survival",
+              "recovery"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:survivors-militia",
+              "bbttcc:tier:1",
+              "bbttcc:domain:op",
+              "bbttcc:domain:survival",
+              "bbttcc:domain:recovery",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:violence:+2",
+              "bbttcc:effect:op:nonlethal:+2",
+              "bbttcc:effect:op:economy:+2",
+              "bbttcc:effect:op:softpower:+2",
+              "bbttcc:effect:recovery:baseline_stability:true",
+              "bbttcc:theme:resilience",
+              "bbttcc:theme:hardship",
+              "bbttcc:theme:mutual-aid",
+              "bbttcc:theme:continuity"
+            ]
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "wmUVjgxFdUB9Or2A",
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989078200,
+        "modifiedTime": 1792989078200,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -3030,15 +3259,16 @@
   "sort": 300000,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177885502,
-    "modifiedTime": 1784177885502,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989078200,
+    "modifiedTime": 1792989078205,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

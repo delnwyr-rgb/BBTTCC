@@ -6,13 +6,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
-      "revision": 2,
+      "custom": "Bad Eden Core Feats v1",
+      "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Enduring Focus</h2><p><em>You hold your will together when others lose it.</em></p><hr /><h3>Rules</h3><p>You reroll the lowest die on Body checks made to maintain Clarity hold. Additionally, you can perform somatic components even when holding weapons or a shield.</p><p class=\"ft-engine-note\"><em>⚙ Body checks reroll the lowest die; the Clarity-hold gate is read by the GM.</em></p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Enduring Focus</h2><p><em>You hold your will together when others lose it.</em></p><hr /><h3>Rules</h3><p>You reroll the lowest die on Body checks made to maintain Clarity hold. Additionally, you can shape a working’s gestures even with weapons or a shield in hand.</p><p class=\"ft-engine-note\"><em>⚙ Body checks reroll the lowest die; the Clarity-hold gate is read by the GM.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_enduring_focus",
@@ -65,11 +65,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1768802465828,
-    "modifiedTime": 1782159946536,
+    "modifiedTime": 1792977603425,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!1WtbzowA25xZlRWj"

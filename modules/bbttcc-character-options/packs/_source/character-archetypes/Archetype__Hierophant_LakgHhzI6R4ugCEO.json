@@ -1,5 +1,5 @@
 {
-  "name": "Archetype: Hierophant",
+  "name": "Archetype: The Hierophant",
   "type": "feat",
   "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
   "system": {
@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You speak for something bigger than yourself. Unfortunately, it has opinions.”</em></p>\n<p><strong>Archetype (Bad Eden): Hierophant.</strong> Spiritual leader and mediator between factions and the higher weirdness. You are part priest, part occult systems admin, part HR for gods and genii loci.</p>\n<p>This Archetype means you’ve stood between people and the powers they invoked, and somehow not been turned into a cautionary tale. Yet.</p>\n\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Soft Power / Faith Hooks.</strong> This Archetype integrates you deeply with Bad Eden’s Soft Power and Tikkun systems. See the Hierophant Tier feats (Tier 1–4) for the full tactical and strategic details of your miracles, sermons, and extremely pointed blessings.</li>\n</ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You speak for something bigger than yourself. Unfortunately, it has opinions.”</em></p>\n<p><strong>Archetype (Bad Eden): Hierophant.</strong> Spiritual leader and mediator between factions and the higher weirdness. You are part priest, part occult systems admin, part HR for gods and genii loci.</p>\n<p>This Archetype means you’ve stood between people and the powers they invoked, and somehow not been turned into a cautionary tale. Yet.</p>\n\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Soft Power / Faith Hooks.</strong> This Archetype integrates you deeply with Bad Eden’s Soft Power and Tikkun systems. See the Hierophant Tier feats (Tier 1–4) for the full tactical and strategic details of your miracles, sermons, and extremely pointed blessings.</li>\n</ul><p><strong>Domain edge:</strong> Your Domain earns <strong>+10 Soft Power</strong> and <strong>+10 Faith</strong> marks each turn while you serve it.</p>",
       "chat": ""
     },
     "activities": {},
@@ -94,12 +94,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986744488,
-    "modifiedTime": 1781116022017,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989145387,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

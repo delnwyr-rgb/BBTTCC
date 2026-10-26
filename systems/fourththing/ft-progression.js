@@ -999,6 +999,7 @@ export async function fireResourceGrants(actor, cadence) {
 //                "bank-counter"       {counter, delta?, max?}   "spend-counter" {counter, per:{dieFormula?|flat?}, type?, max?}
 //                "reroll-failed-check" {}   (offer-only; on-skill-fail)   "reaction-attack" {reachSquares?} (offer-only; on-missed-by etc.)
 //                "queued-reroll"      args:{context, mode}      // still a GM whisper
+//                "hex-darkness"       {delta}   // Darkness pips on the party's current hex (flags.bbttcc-territory.mods.darkness); GM whisper when no hex / not GM
 //                "chat-prompt"        args:{templateKey, body?}  // GM-resolves manually
 //              }
 // }]
@@ -1127,7 +1128,7 @@ const _TRIGGER_SELF_PATH = {
 const OFFER_ONLY_KINDS = new Set(["reroll-failed-check", "reaction-attack"]);
 export const TRIGGER_EFFECT_KINDS = ["grant-resource", "add-temp-integrity", "apply-state", "heal", "extra-damage", "queued-reroll", "spend-and-survive", "chat-prompt",
   "modify-incoming-damage", "survive-at-1", "resist-forced-movement", "bank-reroll", "bank-bonus", "impose", "displace-token", "apply-ae", "remove-condition",
-  "bank-counter", "spend-counter", "reroll-failed-check", "reaction-attack", "negate-condition"];
+  "bank-counter", "spend-counter", "reroll-failed-check", "reaction-attack", "negate-condition", "hex-darkness"];
 export const TRIGGER_EVENTS = ["on-ally-turn-end-adjacent", "on-attack-hit", "on-attack-miss", "on-missed-by", "on-damage-taken", "on-incoming-damage", "on-ally-incoming-damage", "on-ally-hit", "on-self-or-ally-hit",
   "on-skill-fail", "on-skill-success", "on-agreement", "on-search", "on-save-fail", "on-save-success", "on-would-drop-to-zero", "on-drop-to-zero", "on-adjacent-drop",
   "on-soma-break", "on-move", "on-forced-movement", "on-delivery", "on-cast", "on-turn-start", "on-turn-end", "on-enemy-turn-end-adjacent", "on-help-action", "on-would-gain-condition", "on-ally-forced-movement"];
@@ -1143,7 +1144,12 @@ function _effectTargets(actor, args, payload) {
   if (t === "enemies") return ftNearbyActors(actor, { radius: Number(args.radius) || 6, who: "enemies" }).map(n => n.actor);
   return [actor];
 }
-const _rollTotal = async (v) => (typeof v === "number" ? v : (await new Roll(String(v || "0")).evaluate()).total);
+// `@tier` in an amount/formula is the actor's tier (2026-10-26, AN9: Attention Resonance heals @tier).
+const _rollTotal = async (v, actor = null) => {
+  if (typeof v === "number") return v;
+  const tier = Math.max(1, Number((actor?.system?.system ?? actor?.system)?.details?.tier) || 1);
+  return (await new Roll(String(v || "0").replace(/@tier/g, String(tier))).evaluate()).total;
+};
 
 async function _dispatchEffect(actor, effect, source, payload, sourceItemId = null) {
   const kind = effect?.kind;
@@ -1177,7 +1183,7 @@ async function _dispatchEffect(actor, effect, source, payload, sourceItemId = nu
     case "add-temp-integrity": {
       const who = _effectTargets(actor, args, payload);
       if (!who.length) return { ok:false, reason:"no target for temp Integrity" };
-      const amt = await _rollTotal(args.amount);
+      const amt = await _rollTotal(args.amount, actor);
       for (const a of who) { try { await game.fourththing.tempIntegrity.grant(a, amt, source, { quiet: true }); } catch (_e) {} }
       return { ok:true, summary:`+${amt} temp Integrity → ${who.map(a => a.name).join(", ")}` };
     }
@@ -1198,7 +1204,7 @@ async function _dispatchEffect(actor, effect, source, payload, sourceItemId = nu
     case "heal": {
       const who = _effectTargets(actor, args, payload);
       if (!who.length) return { ok:false, reason:"no target to heal" };
-      const amt = await _rollTotal(args.amount);
+      const amt = await _rollTotal(args.amount, actor);
       for (const a of who) await game.fourththing.rolls._applyDamageToActor(a, amt, { op: "heal", track: args.track || "integrity" });
       return { ok:true, summary:`+${amt} ${args.track || "Integrity"} → ${who.map(a => a.name).join(", ")}` };
     }
@@ -1235,6 +1241,36 @@ async function _dispatchEffect(actor, effect, source, payload, sourceItemId = nu
         whisper: _gmAndMe()
       });
       return { ok:true, summary:`chat-prompt fired` };
+    }
+    // ── NP9 (2026-10-26): the courier's gift — Darkness pips on the party's current hex. Writes the field the campaign
+    //    engine's hex darknessDelta and the hex sheet read (flags.bbttcc-territory.mods.darkness, floor 0). The hex comes
+    //    from api.campaign.where() (the travel position); no hex or a non-GM seat → the GM is whispered instead.
+    case "hex-darkness": {
+      const delta = Number(args.delta) || 0;
+      if (!delta) return { ok:false, reason:"hex-darkness needs a delta" };
+      let hex = null, hexName = "";
+      try {
+        const where = game.bbttcc?.api?.campaign?.where?.() || null;
+        hexName = String(where?.hex || "");
+        const ref = where?.hexUuid ? await fromUuid(where.hexUuid).catch(() => null) : null;
+        hex = ref?.document ?? ref ?? null;
+      } catch (_e) { hex = null; }
+      if (hex && game.user.isGM) {
+        const mods = foundry.utils.deepClone(hex.flags?.["bbttcc-territory"]?.mods || {});
+        const before = Number(mods.darkness || 0) || 0;
+        const after = Math.max(0, before + delta);
+        if (after === before) return { ok:false, reason:`hex Darkness already ${before}` };
+        mods.darkness = after;
+        await hex.update({ "flags.bbttcc-territory.mods": mods }, { parent: hex.parent });
+        return { ok:true, summary:`hex Darkness ${before} → ${after}${hexName ? ` (${hexName})` : ""}` };
+      }
+      ChatMessage.create({
+        user: game.user.id,
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: `<p style="font-size:0.78rem"><b>${source}</b> triggered: Darkness ${delta > 0 ? "+" : ""}${delta} in the recipient's hex${hexName ? ` (${hexName})` : ""} <span style="opacity:0.6">(GM applies on the hex sheet)</span></p>`,
+        whisper: _gmAndMe()
+      });
+      return { ok:true, summary:`hex-darkness → GM prompted` };
     }
     // ── 2026-10-07 (regimen pass 7) — kinds that EXECUTE ──────────────────────────────────────────────
     case "modify-incoming-damage": {
@@ -1335,7 +1371,8 @@ async function _dispatchEffect(actor, effect, source, payload, sourceItemId = nu
     case "bank-counter": {
       if (!srcItem || !args.counter) return { ok:false, reason:"bank-counter needs its item + counter name" };
       const cur = Number(srcItem.flags?.fourththing?.counters?.[args.counter]) || 0;
-      const max = Number.isFinite(Number(args.max)) ? Number(args.max) : Infinity;
+      const tierMax = Math.max(1, Number((actor.system?.system ?? actor.system)?.details?.tier) || 1);
+      const max = args.max === "tier" ? tierMax : (Number.isFinite(Number(args.max)) ? Number(args.max) : Infinity);   // "tier" (2026-10-26, Kinetic Overflow)
       const next = Math.max(0, Math.min(max, cur + (Number(args.delta) || 1)));
       if (next === cur) return { ok:false, reason:`${args.counter} already at ${cur}` };
       await srcItem.update({ [`flags.fourththing.counters.${args.counter}`]: next });
@@ -1522,11 +1559,39 @@ export async function resetSomaBreakTriggerLimits(actor) {
 }
 
 // ─── Bad Eden Technique picker ─────────────────────────────────────────────────
-// Pool: 59 feats in the "Bad Eden Feats" folder of bbttcc-master-content.items.
+// Pool: the 75 techniques in the "Bad Eden: Techniques" folder of bbttcc-master-content.items.
 const BBTTCC_FEATS_PACK   = "bbttcc-master-content.items";
 const BBTTCC_FEATS_FOLDER = "QbGNBV70xh9pF0eh";
 
-async function getBBTTCCTechniqueOptions(actor) {
+// Requirement gate (ruling TQ1, 2026-10-26). A technique's free-text
+// `system.requirements` ("Pactkeeper", "Wyrdlens-Adept", "General — Tier 2+")
+// and a stamped `system.prerequisites.level` are both honoured: a class name is
+// matched against the actor's class identifier with punctuation and case
+// ignored ("Wyrdlens-Adept" ↔ "wyrdlens-adept" / "wyrdlens_adept"); "Tier N+"
+// gates on the tier of the level being reached; "General" is no gate.
+// Returns null when the actor qualifies, else the reason shown greyed in the picker.
+export function techniqueLockReason(doc, actor, { level = null } = {}) {
+  const norm = (v) => String(v ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+  const req = String(doc?.system?.requirements ?? "").trim();
+  const atLevel = Number(level) || Number(actor?.system?.details?.level) || 1;
+  const reqLevel = Number(doc?.system?.prerequisites?.level) || 0;
+  if (reqLevel && atLevel < reqLevel) return `Requires Initiation ${reqLevel}`;
+  if (!req) return null;
+  const tierM = req.match(/tier\s*(\d)\s*\+?/i);
+  if (tierM && tierForLevel(atLevel) < Number(tierM[1])) return `Requires Tier ${tierM[1]}+`;
+  const classes = (actor?.items ?? []).filter(i => i.type === "class");
+  const classKeys = new Set(classes.flatMap(c => [norm(c.system?.identifier), norm(c.name)]).filter(Boolean));
+  for (const part of req.split(/[—–,;/]|\bor\b/i).map(t => t.trim()).filter(Boolean)) {
+    if (/^general$/i.test(part) || /^tier\s*\d/i.test(part)) continue;
+    const key = norm(part);
+    if (!key) continue;
+    if (classKeys.has(key)) continue;
+    return `Requires ${part}`;
+  }
+  return null;
+}
+
+async function getBBTTCCTechniqueOptions(actor, { level = null } = {}) {
   const pack = game.packs.get(BBTTCC_FEATS_PACK);
   if (!pack) return { options: [], error: `Pack ${BBTTCC_FEATS_PACK} not found` };
   // Full docs, not just the index — the picker shows each technique's synopsis
@@ -1540,6 +1605,7 @@ async function getBBTTCCTechniqueOptions(actor) {
     description: String(d.system?.description?.value ?? "")
       .replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim(),
     owned: ownedNames.has(d.name),
+    lockReason: techniqueLockReason(d, actor, { level }),
   }));
   return { options, error: null };
 }
@@ -1739,6 +1805,75 @@ export async function applyPathFeatures(actor, opts = {}) {
   return { imported: created.map(c => c.name), importedIds: created.map(c => c.id), skipped, error: null, subclassFolderName };
 }
 
+// ─── Heritage tier features (2026-10-26, ruling AN1b) ────────────────────────
+// Tier II / III / IV ancestry features (Initiation 5 / 11 / 17) used to be GM
+// drag-only: no ItemGrant referenced them and applyPathFeatures walks class
+// folders only. This walks the steward's HERITAGE root's feature folder in the
+// ancestries pack (the "Ancestry Features" child of the heritage's folder) and
+// imports every feat whose `system.prerequisites.level` (stamped 1/5/11/17 by
+// the AN7 pass; deriveItemUnlockLevel as the fallback for unstamped content)
+// the steward has reached. Dedupes by name; stamps `grantedByHeritage` (so a
+// heritage swap's cleanup pass B removes them) and `grantedAtLevel` (so
+// levelDown reverses them). Called after applyPathFeatures on level-up, by the
+// sheet's Apply Path Features button, and by backfill-heritage-features.macro.js.
+export async function applyHeritageFeatures(actor, opts = {}) {
+  if (!actor) return { imported: [], skipped: [], error: "No actor" };
+  const herItem = actor.items.find(i => i.type === "feat" && (String(i.flags?.bbttcc?.kind ?? "").toLowerCase() === "heritage" || String(i.system?.identifier ?? "").toLowerCase().endsWith("_heritage")));
+  if (!herItem) return { imported: [], skipped: [], error: null };
+  const links = actor.getFlag?.("bbttcc-character-options", "nativeLinks") ?? {};
+  const srcUuid = await _resolveCompendiumSource(herItem)
+    ?? links.heritageUuid
+    ?? actor.getFlag?.("bbttcc-character-options", "heritageUuid")
+    ?? actor.getFlag?.("bbttcc-auto-link", "guidedCharacterCreation")?.heritageUuid;
+  let herDoc = srcUuid ? await fromUuid(String(srcUuid)).catch(() => null) : null;
+  const pack = game.packs.get(herDoc?.pack || "bbttcc-master-content.ancestries");
+  if (!pack) return { imported: [], skipped: [], error: "ancestries pack not found" };
+  const index = await pack.getIndex({ fields: ["folder", "type", "name", "system.identifier", "system.prerequisites.level", "flags.bbttcc.kind"] });
+  // a source-less embedded heritage (hand-dragged, wizard-era) resolves by name in the pack index
+  let herEntry = herDoc?.pack === pack.collection ? (index.get?.(herDoc.id) ?? index.find?.(e => e._id === herDoc.id)) : null;
+  if (!herEntry) herEntry = index.find(e => e.type === "feat" && String(e.name).trim() === String(herItem.name).trim()) ?? null;
+  if (!herEntry) return { imported: [], skipped: [], error: `heritage ${herItem.name} not found in ${pack.collection}` };
+  const herFolderId = herEntry.folder ?? null;
+  if (!herFolderId) return { imported: [], skipped: [], error: `${herItem.name} has no folder in the pack` };
+  // candidates: every feat in the heritage's folder or any of its child folders ("Ancestry Features"), except heritage roots
+  const allFolders = pack.folders?.contents ?? [...(pack.folders ?? [])];
+  const folderIds = new Set([herFolderId]);
+  let grew = true;
+  while (grew) { grew = false; for (const f of allFolders) { const parent = f.folder?.id ?? f.folder; if (parent && folderIds.has(parent) && !folderIds.has(f.id)) { folderIds.add(f.id); grew = true; } } }
+  const actorLevel = Number((actor.system?.system ?? actor.system)?.details?.level) || 1;
+  const currentTier = tierForLevel(actorLevel);
+  const ownedNames = new Set((actor.items ?? []).map(i => i.name));
+  const survivors = [], skipped = [];
+  for (const e of index) {
+    if (e.type !== "feat" || !folderIds.has(e.folder) || e._id === herEntry._id) continue;
+    if (String(e.flags?.bbttcc?.kind ?? e["flags.bbttcc.kind"] ?? "").toLowerCase() === "heritage") continue;
+    const stamped = Number(e.system?.prerequisites?.level ?? e["system.prerequisites.level"]);
+    let lvlGate = Number.isFinite(stamped) && stamped > 0 ? stamped : null, tierGate = null;
+    if (lvlGate === null) { const d = await pack.getDocument(e._id); const g = deriveItemUnlockLevel(d); lvlGate = g.level; tierGate = g.tier; }
+    if (lvlGate !== null && lvlGate > actorLevel) continue;
+    if (tierGate !== null && tierGate > currentTier) continue;
+    if (ownedNames.has(e.name)) { skipped.push(e.name); continue; }
+    survivors.push(e);
+  }
+  if (!survivors.length) return { imported: [], skipped, error: null };
+  // lineage tag = what applyActorHeritageChange's cleanup compares: the parenthetical lineage, else the "Heritage: X" remainder
+  const rawName = String(herItem.name ?? "");
+  const paren = rawName.match(/\(([^)]+)\)/);
+  const lineage = paren ? paren[1].trim() : rawName.replace(/^[^:]+Heritage:\s*/i, "").trim();
+  const stampLevel = Number(opts?.stampLevel);
+  const data = [];
+  for (const e of survivors) {
+    const doc = await pack.getDocument(e._id); if (!doc) continue;
+    const obj = doc.toObject(); delete obj._id;
+    foundry.utils.setProperty(obj, "flags.fourththing.grantedByHeritage", lineage);
+    foundry.utils.setProperty(obj, "flags.fourththing.principleSource", "ancestry");
+    if (Number.isFinite(stampLevel) && stampLevel > 0) foundry.utils.setProperty(obj, "flags.fourththing.grantedAtLevel", stampLevel);
+    data.push(obj);
+  }
+  const created = data.length ? await actor.createEmbeddedDocuments("Item", data) : [];
+  return { imported: created.map(c => c.name), importedIds: created.map(c => c.id), skipped, error: null, heritage: herItem.name };
+}
+
 // ─── Starter manifestation kits ──────────────────────────────────────────────
 // Grants the path+doctrine starter manifestation kit: every item in the
 // master-content pack stamped `flags.fourththing.starterKit` whose `path`
@@ -1829,7 +1964,7 @@ export async function levelUp(actor) {
   // Bad Eden Technique: granted at aptitude-point levels (3/6/9/12/15/18/20)
   let techOpts = null;
   if (gainSkillPts) {
-    const { options, error } = await getBBTTCCTechniqueOptions(actor);
+    const { options, error } = await getBBTTCCTechniqueOptions(actor, { level: newLevel });
     if (error) console.warn("ft-progression levelUp: technique picker skipped —", error);
     else techOpts = options;
   }
@@ -1850,12 +1985,13 @@ export async function levelUp(actor) {
     const synopsis = t.description
       ? (t.description.length > 170 ? t.description.slice(0, 167) + "…" : t.description)
       : "";
+    const locked = !t.owned && !!t.lockReason;   // TQ1: greyed with the reason, never pickable
     return `
-      <label style="display:flex;gap:0.45rem;align-items:flex-start;padding:0.3rem 0.4rem;border-radius:4px;border:1px solid rgba(255,255,255,0.06);margin:0.15rem 0;${t.owned ? "opacity:0.45;" : "cursor:pointer;"}">
-        <input type="radio" name="techniqueChoice" value="${t.uuid}"${t.owned ? " disabled" : ""} style="margin-top:0.2rem;flex:none"/>
+      <label style="display:flex;gap:0.45rem;align-items:flex-start;padding:0.3rem 0.4rem;border-radius:4px;border:1px solid rgba(255,255,255,0.06);margin:0.15rem 0;${(t.owned || locked) ? "opacity:0.45;" : "cursor:pointer;"}">
+        <input type="radio" name="techniqueChoice" value="${t.uuid}"${(t.owned || locked) ? " disabled" : ""} style="margin-top:0.2rem;flex:none"/>
         <span style="flex:1;min-width:0">
           <span style="display:flex;justify-content:space-between;gap:0.4rem;align-items:baseline">
-            <b>${_esc(t.name)}${t.owned ? " (owned)" : ""}</b>
+            <b>${_esc(t.name)}${t.owned ? " (owned)" : ""}${locked ? ` <span style="font-weight:normal;font-size:0.72rem;color:#e8c84a">🔒 ${_esc(t.lockReason)}</span>` : ""}</b>
             <a class="content-link" draggable="true" data-uuid="${t.uuid}" data-link data-tooltip="Open ${_esc(t.name)}" style="flex:none;font-size:0.72rem"><i class="fas fa-book-open"></i></a>
           </span>
           ${synopsis ? `<span style="display:block;font-size:0.72rem;opacity:0.7;line-height:1.35" data-tooltip="${_esc(t.description)}">${_esc(synopsis)}</span>` : ""}
@@ -1869,7 +2005,7 @@ export async function levelUp(actor) {
             <label style="display:flex;gap:0.45rem;align-items:center;padding:0.25rem 0.4rem;cursor:pointer"><input type="radio" name="techniqueChoice" value="" checked/> <i>— skip —</i></label>
             ${techRows}
           </div>
-          <p style="font-size:0.72rem;opacity:0.6;margin:0.2rem 0 0">${techOpts.length} available · owned greyed · 📖 opens the full technique · hover a synopsis for the full text</p>
+          <p style="font-size:0.72rem;opacity:0.6;margin:0.2rem 0 0">${techOpts.filter(t => !t.owned && !t.lockReason).length} available of ${techOpts.length} · owned and 🔒 locked greyed (the lock says why) · 📖 opens the full technique · hover a synopsis for the full text</p>
         </div>` : "";
 
   const attrNames = ["Violence", "Intrigue", "Presence", "Body", "Mind", "Soul"];
@@ -1973,6 +2109,12 @@ export async function levelUp(actor) {
               const pf = await applyPathFeatures(actor, { stampLevel: newLevel });
               if (pf?.imported?.length) autoGranted.imported = pf.imported;
               if (pf?.importedIds?.length) autoGranted.importedIds = pf.importedIds;
+              // Heritage tier features (Initiation 5 / 11 / 17) ride the same ledger so levelDown reverses them (AN1b, 2026-10-26).
+              try {
+                const hf = await applyHeritageFeatures(actor, { stampLevel: newLevel });
+                if (hf?.imported?.length) autoGranted.imported = [...autoGranted.imported, ...hf.imported];
+                if (hf?.importedIds?.length) autoGranted.importedIds = [...autoGranted.importedIds, ...hf.importedIds];
+              } catch (e) { console.error("ft-progression: heritage feature grant failed", e); }
               const sk = await applySkillGrantsFromFeatures(actor);
               if (Array.isArray(sk) && sk.length) autoGranted.grantedSkills = sk;
               const promoted = await promoteStampedAptitudeAEs(actor);

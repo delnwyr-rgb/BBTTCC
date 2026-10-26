@@ -1,0 +1,86 @@
+{
+  "name": "Aura of Wrath",
+  "type": "feature",
+  "img": "icons/magic/fire/flame-burning-creature-skeleton.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-qliphothic",
+      "lineage-trait",
+      "aura",
+      "qliphah-golachab"
+    ],
+    "description": {
+      "value": "<p>Any creature that starts its turn within 2 squares feels the Shell's hollowness: Soul DC 15 or it is Compelled to attack the nearest creature on its turn, friend or foe.</p><p><em>Golachab — hull of Geburah. Severity, and nothing to be severe about.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "feature",
+          "lineageTrait": "qliphothic"
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "radius": 2,
+            "who": "enemies",
+            "do": {
+              "condition": {
+                "key": "compelled",
+                "duration": "1-round",
+                "save": {
+                  "attr": "soul",
+                  "dc": 15
+                }
+              }
+            },
+            "label": "Aura of Wrath"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Golachab Immolator"
+        ],
+        "sourceIds": [
+          "kpkoeR7Tedyvqs4c"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "ynoBVlMB7KgqirqQ",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069913,
+    "modifiedTime": 1792989069995,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ynoBVlMB7KgqirqQ"
+}

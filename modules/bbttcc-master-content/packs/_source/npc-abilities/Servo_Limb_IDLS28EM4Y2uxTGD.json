@@ -1,0 +1,141 @@
+{
+  "name": "Servo-Limb",
+  "type": "weapon",
+  "img": "icons/commodities/tech/claw-mechanical.webp",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "melee",
+    "damage": {
+      "formula": "3d8",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "actuator",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1
+    },
+    "tags": [
+      "bestiary",
+      "tier-iii",
+      "lineage-pre-fall"
+    ],
+    "effect": "On a hit, Body DC 15 or the target is knocked Prone and pushed 1 square. — it is enforcing a perimeter, not killing. Yet.",
+    "flavor": "The arm was built to lift buses.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "prone"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "body",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 15,
+        "saveAttributeOverrides": {}
+      },
+      "resolution": {
+        "saveAttribute": "body",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 15,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "none",
+        "size": 0
+      }
+    },
+    "description": {
+      "value": "<p><strong>Strike.</strong> reach 1 square, one target. Damage: <code>3d8</code> kinetic (actuator) + violence. On a hit, Body DC 15 or the target is knocked Prone and pushed 1 square. — it is enforcing a perimeter, not killing. Yet.</p><p><em>The arm was built to lift buses.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "frame": "attack",
+          "price": {
+            "marks": 450,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII attack × 1",
+            "bound": "free",
+            "saleBack": 180
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Compliance Engine PRIME"
+        ],
+        "sourceIds": [
+          "qDuH7PdGNGGqeChb"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "IDLS28EM4Y2uxTGD",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069962,
+    "modifiedTime": 1792989070044,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!IDLS28EM4Y2uxTGD"
+}

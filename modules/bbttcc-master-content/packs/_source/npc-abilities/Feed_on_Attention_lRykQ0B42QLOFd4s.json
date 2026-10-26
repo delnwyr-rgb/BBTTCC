@@ -14,36 +14,55 @@
       "chat": ""
     }
   },
-  "_id": "lRykQ0B42QLOFd4s",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "struck",
+            "do": {
+              "heal": 5
+            },
+            "to": "self",
+            "label": "Feed on Attention"
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Lisa Frank Elemental"
+          "CACA"
+        ],
+        "sourceIds": [
+          "a9orjOV99MnMObho"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "lRykQ0B42QLOFd4s",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": 1782149215851,
-    "modifiedTime": 1782149215851,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989026935,
+    "modifiedTime": 1792989026935,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!lRykQ0B42QLOFd4s"
 }

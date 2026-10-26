@@ -5,8 +5,8 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
-      "revision": 2,
+      "custom": "Bad Eden Core Feats (Batch 3)",
+      "revision": 1,
       "rules": "2026"
     },
     "tags": [],
@@ -66,11 +66,11 @@
     "compendiumSource": "Item.GBxCyqshZnEIL1ZC",
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1768802465828,
-    "modifiedTime": 1782164185972,
+    "modifiedTime": 1790037789955,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!GBxCyqshZnEIL1ZC"

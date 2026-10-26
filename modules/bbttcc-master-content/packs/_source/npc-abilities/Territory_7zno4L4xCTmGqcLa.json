@@ -1,0 +1,92 @@
+{
+  "name": "Territory",
+  "type": "feat",
+  "img": "icons/creatures/abilities/paw-print-tan.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-wild",
+      "lineage-trait"
+    ],
+    "description": {
+      "value": "<p>Pack. The Alpha rerolls the lowest die on attack rolls against any creature within 1 square of an ally that isn't incapacitated. Burn-zone: while in cinder or smoke, her first attack each combat rerolls the lowest die and she is hidden until she acts.</p><p><em>It was here first. It intends to be here after.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "frame": "feature",
+          "lineageTrait": "wild"
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attack",
+            "if": {
+              "firstRound": true
+            },
+            "do": {
+              "reroll": "attack"
+            },
+            "limit": {
+              "per": "combat",
+              "uses": 1
+            },
+            "label": "Territory — the first strike rerolls the lowest"
+          },
+          {
+            "on": "attack",
+            "if": {
+              "allyAdjacentToTarget": true
+            },
+            "do": {
+              "reroll": "attack"
+            },
+            "label": "Pack"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Burn-Zone Alpha"
+        ],
+        "sourceIds": [
+          "mKtVF9qB8ouHtYyf"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "7zno4L4xCTmGqcLa",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069973,
+    "modifiedTime": 1792989070051,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!7zno4L4xCTmGqcLa"
+}

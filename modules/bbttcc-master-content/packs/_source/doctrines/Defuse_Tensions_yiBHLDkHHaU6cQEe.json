@@ -3,8 +3,14 @@
   "type": "feat",
   "img": "icons/magic/defensive/armor-green-hex.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Defuse Tensions</b></p><p><b>Cost:</b> Diplomacy 2 • Culture 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>defuse_tensions</code></p>",
+      "value": "<p><strong>Defuse Tensions</strong></p><p>Target a restive hex. At the turn: Hostile Population is removed, it gains Loyal Population, Loyalty +2 and Loyalty +2.</p><p><em>Cost: Diplomacy 20 · Soft Power 20 · Culture 10 marks.</em></p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "defuse-tensions",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -44,6 +46,9 @@
         "storyOnly": false,
         "availability": null,
         "unlockKey": null
+      },
+      "effects": {
+        "text": "Target a restive hex. At the turn: Hostile Population is removed, it gains Loyal Population, Loyalty +2 and Loyalty +2."
       }
     }
   },
@@ -59,12 +64,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063194945,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989002152,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!yiBHLDkHHaU6cQEe"
 }

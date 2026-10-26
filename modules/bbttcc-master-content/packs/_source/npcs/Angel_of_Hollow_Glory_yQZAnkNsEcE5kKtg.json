@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "art/bbttcc/qliphoth/angel-of-hollow-glory.webp",
   "system": {
-    "role": "Qliphothic Idol (Samael — Greater)",
+    "role": "caster",
     "tier": 4,
     "factionId": "",
     "notes": "<p>A monument to vanity: a fallen celestial who became so enamored with its own beauty and light that it decided it was their source, not their reflection. Tall, androgynous, impossibly beautiful, six massive white wings, radiating brilliant golden light — but its shadow on the ground belongs to something skeletal with broken wings. It reigns over a desolate corner of the Wastes as a lost god, 'blessing' desperate followers with gifts of hollow light that corrupt them into beautiful, empty shells built to adore it.</p><p><strong>Qliphah:</strong> Samael, the Poisons — the Hull of Hod. False glory at full wattage.</p><p><em>Mal's note: 'Check the shadow. Always check the shadow. The lighting budget is the tell — real grace doesn't need it.'</em></p>",
@@ -113,8 +113,9 @@
     },
     "derived": {
       "integrity": {
-        "value": 110,
-        "max": 110
+        "value": 135,
+        "max": 135,
+        "temp": 0
       },
       "stress": {
         "value": 46,
@@ -139,7 +140,7 @@
         "value": 0,
         "max": 10
       },
-      "sephirah": "gevurah"
+      "sephirah": "geburah"
     },
     "resources": {
       "frameDice": {
@@ -200,7 +201,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -212,7 +214,8 @@
     "defenses": {
       "resistances": [
         "psychic",
-        "kinetic"
+        "kinetic",
+        "qliphothic"
       ],
       "immunities": [
         "qliphothic"
@@ -225,7 +228,17 @@
       "charmed",
       "shaken"
     ],
-    "tags": "qliphothic,5e-port,cr-19,qliphah-samael,hull-of-hod,greater",
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-19",
+      "qliphah-samael",
+      "hull-of-hod",
+      "greater"
+    ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -238,6 +251,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Idol (Samael — Greater)",
+      "notes": "<p>A monument to vanity: a fallen celestial who became so enamored with its own beauty and light that it decided it was their source, not their reflection. Tall, androgynous, impossibly beautiful, six massive white wings, radiating brilliant golden light — but its shadow on the ground belongs to something skeletal with broken wings. It reigns over a desolate corner of the Wastes as a lost god, 'blessing' desperate followers with gifts of hollow light that corrupt them into beautiful, empty shells built to adore it.</p><p><strong>Qliphah:</strong> Samael, the Poisons — the Hull of Hod. False glory at full wattage.</p><p><em>Mal's note: 'Check the shadow. Always check the shadow. The lighting budget is the tell — real grace doesn't need it.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -337,7 +354,7 @@
       "_id": "Pi9kS4tNYUm3akSo",
       "name": "Deific Presence",
       "type": "feature",
-      "img": "icons/svg/angel.svg",
+      "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -353,25 +370,47 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "do": {
+                  "condition": {
+                    "key": "charmed",
+                    "duration": "until-saved",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 18
+                    }
+                  },
+                  "prompt": "Also Staggered (adoration); damage or an ally's action breaks it."
+                },
+                "radius": 12
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188172,
-        "modifiedTime": 1787799188172,
+        "modifiedTime": 1791331979795,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!yQZAnkNsEcE5kKtg.Pi9kS4tNYUm3akSo"
+      }
     },
     {
       "_id": "dqsLXtluEd6hnvJI",
       "name": "Fractured Will (3/scene)",
       "type": "feature",
-      "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+      "img": "icons/magic/air/air-pressure-shield-blue.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -389,23 +428,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188172,
-        "modifiedTime": 1787799188172,
+        "modifiedTime": 1791324417736,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!yQZAnkNsEcE5kKtg.dqsLXtluEd6hnvJI"
+      }
     },
     {
       "_id": "OeoYt6Ez57gdZnQx",
       "name": "Hollow Radiance",
       "type": "feature",
-      "img": "icons/svg/holy-shield.svg",
+      "img": "icons/weapons/swords/sword-gold-holy.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -423,17 +461,16 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188172,
-        "modifiedTime": 1787799188172,
+        "modifiedTime": 1791324417736,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!yQZAnkNsEcE5kKtg.OeoYt6Ez57gdZnQx"
+      }
     },
     {
       "_id": "NCiIMP4CYX5bI9wW",
@@ -457,23 +494,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188172,
-        "modifiedTime": 1787799188172,
+        "modifiedTime": 1791324417736,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!yQZAnkNsEcE5kKtg.NCiIMP4CYX5bI9wW"
+      }
     },
     {
       "_id": "DP9aUnWgKxutnO1k",
       "name": "Scepter of Vanity",
       "type": "weapon",
-      "img": "icons/svg/light.svg",
+      "img": "icons/sundries/lights/candle-lit-angelic.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -483,7 +519,7 @@
           "attribute": "presence",
           "type": "qliphothic",
           "damageFlavor": "",
-          "track": "integrity"
+          "track": "stress"
         },
         "damageParts": [],
         "range": {
@@ -537,23 +573,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188172,
-        "modifiedTime": 1787799188172,
+        "modifiedTime": 1791324417736,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!yQZAnkNsEcE5kKtg.DP9aUnWgKxutnO1k"
+      }
     },
     {
       "_id": "Qrnvu1BZbzvXIXAR",
       "name": "Hollow Light",
       "type": "weapon",
-      "img": "icons/svg/sun.svg",
+      "img": "icons/magic/air/weather-sunlight-sky.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -606,6 +641,26 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "intrigue",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "blinded"
+            ],
+            "duration": "until-saved",
+            "saveEachRound": true,
+            "saveAttribute": "body"
+          },
+          "area": {
+            "shape": "line",
+            "size": 90
           }
         },
         "description": {
@@ -621,23 +676,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188172,
-        "modifiedTime": 1787799188172,
+        "modifiedTime": 1791331979796,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!yQZAnkNsEcE5kKtg.Qrnvu1BZbzvXIXAR"
+      }
     },
     {
       "_id": "zIm7TbmnHqVrFFRZ",
       "name": "Golden Chains of Servitude (Recharge 5–6)",
       "type": "feat",
-      "img": "icons/svg/padlock.svg",
+      "img": "icons/containers/chest/chest-simple-box-blue.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -653,25 +707,64 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "condition": {
+                    "key": "restrained",
+                    "duration": "until-saved",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 18
+                    }
+                  }
+                }
+              },
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Golden Chains of Servitude (Recharge 5–6)"
+                },
+                "do": {
+                  "dot": {
+                    "formula": "2d8",
+                    "type": "psychic",
+                    "ends": "rounds",
+                    "rounds": 10
+                  },
+                  "prompt": "Burst the chains: an action on a Presence DC 18."
+                }
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188172,
-        "modifiedTime": 1787799188172,
+        "modifiedTime": 1791331979796,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!yQZAnkNsEcE5kKtg.zIm7TbmnHqVrFFRZ"
+      }
     },
     {
       "_id": "EmbyXYkGdwFzFkal",
       "name": "Shattered Facade",
       "type": "feat",
-      "img": "icons/svg/terror.svg",
+      "img": "icons/magic/death/blood-corruption-vomit-red.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -687,25 +780,52 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "if": {
+                  "ownerBloodied": true
+                },
+                "do": {
+                  "condition": {
+                    "key": "shaken",
+                    "duration": "until-saved",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 18
+                    }
+                  },
+                  "damage": {
+                    "formula": "3d10",
+                    "type": "psychic"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188172,
-        "modifiedTime": 1787799188172,
+        "modifiedTime": 1791331979795,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!yQZAnkNsEcE5kKtg.EmbyXYkGdwFzFkal"
+      }
     },
     {
       "_id": "BoFjK417qmVdS4Ed",
       "name": "Teleport",
       "type": "feat",
-      "img": "icons/svg/walk.svg",
+      "img": "icons/equipment/feet/boots-collared-leather.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -723,17 +843,76 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188172,
-        "modifiedTime": 1787799188172,
+        "modifiedTime": 1791324417736,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Aura of Vanity",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "qliphothic",
+          "samael"
+        ],
+        "description": {
+          "value": "<p>Any creature that starts its turn within 6 squares and can see this creature rolls twice-keep-worse on checks to resist being Charmed until the start of its next turn.</p><p><em>Samael — hull of hod.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!yQZAnkNsEcE5kKtg.BoFjK417qmVdS4Ed"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "radius": 6,
+                "who": "enemies",
+                "do": {
+                  "impose": true
+                }
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "qliphothic"
+            }
+          }
+        }
+      },
+      "_id": "jFjn7JnHekPX3ym9",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791342351020,
+        "modifiedTime": 1792989121491,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -748,7 +927,7 @@
       "rfi": {
         "actor": {
           "tier": "IV",
-          "bracket": "elite",
+          "bracket": "boss",
           "archetype": "angel-of-hollow-glory",
           "bestiary": {
             "themes": [
@@ -783,35 +962,39 @@
             ]
           },
           "price": {
-            "marks": 1800,
-            "bounty": 3000,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 120,
+            "bounty": 120,
+            "hire": null,
+            "ransom": null,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "IV elite Qliphothic Idol (Samael — Greater) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TIV boss qliphothic — bounty 120 marks; credited to the pool matching the method (default softpower)"
           },
           "qliphah": {
             "name": "samael",
             "hullOf": "hod",
             "grade": "greater"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "samael",
+          "title": "Qliphothic Idol (Samael — Greater)"
         }
       },
       "kind": "npc",
-      "surgeEnabled": false
+      "surgeEnabled": false,
+      "creatureType": "fiend"
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188172,
-    "modifiedTime": 1787799188172,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989121335,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "yQZAnkNsEcE5kKtg",
   "_key": "!actors!yQZAnkNsEcE5kKtg"

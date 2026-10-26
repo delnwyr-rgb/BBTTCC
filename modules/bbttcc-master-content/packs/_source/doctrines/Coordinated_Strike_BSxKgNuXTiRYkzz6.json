@@ -3,11 +3,11 @@
   "type": "feat",
   "img": "icons/skills/melee/strike-blade-claw-red.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p>Parade-ground precision in a place with no parade and not much ground left. I'm a little proud, honestly.</p><p><b>On Success: 7 damage to enemy tokens; allies gain Press the Advantage; faction morale +1.</b></p>",
+      "value": "<p>Parade-ground precision in a place with no parade and not much ground left. I'm a little proud, honestly.</p><p><b>On Success: 7 damage to enemy tokens; allies gain Press the Advantage; Loyalty +1 on the target hex.</b></p>",
       "chat": ""
     }
   },
@@ -36,7 +36,7 @@
         "authoredSprint": 2
       },
       "effects": {
-        "text": "On success: enemy tokens take 7 damage, allied tokens gain 'Press the Advantage', faction morale +1."
+        "text": "On success: enemy tokens take 7 damage, allied tokens gain 'Press the Advantage', Loyalty +1 on the target hex."
       }
     }
   },
@@ -49,12 +49,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778964846638,
-    "modifiedTime": 1780163523240,
-    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "modifiedTime": 1792989013375,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

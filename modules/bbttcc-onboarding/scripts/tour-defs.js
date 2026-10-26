@@ -661,7 +661,7 @@ const raidConsoleTour = {
   title: "The Sharp End (Domain Conflict)",
   audience: "player",
   intro: "Opening the Domain Conflict console. Three ways to take what's theirs: Battle, Heist, Parley. Battle and Heist are fought on the battlemap in combat rounds; a Parley is talked out at the table. The story opens the table — a fight comes to you as a choice, you never start one yourself. If there's no live fight I've staged you a practice target— *bzzt* —it won't mind.",
-  outro: "Console toured. Remember the shape: the story offers the fight, your Domain brings what it owns, you pick the maneuvers, the GM calls it. No marks change hands in a Battle or Heist; a Parley can sweeten the deal.",
+  outro: "Console toured. Remember the shape: the story offers the fight, your Domain brings what it owns and spends what the round costs, you pick the maneuvers, the GM calls it. Every Battle, Heist and Parley costs marks — staged marks and each maneuver's price leave the bank when the round commits; a Parley can also sweeten the deal.",
 
   open: async (ctx) => {
     const raidApi = game.bbttcc?.api?.raid;
@@ -729,7 +729,7 @@ const raidConsoleTour = {
     {
       id: "playerbank", title: "Your bank",
       selector: "section.bbttcc-bank",
-      text: "What your Domain owns. Nothing here is spent in a Battle or a Heist — strength is what the Domain already is: its ops, its people, its allies. The GM sees attacker and defender side by side.\nIn a Parley you may sweeten the deal: marks handed to the other side, in the open."
+      text: "What your Domain owns, by pool. Strength is what the Domain already is — its ops, its people, its allies — and marks are what it spends: every Battle, Heist and Parley costs them, story-offered or not. Staged marks add to the roll and leave the bank when the round commits, and each maneuver has its own price in marks. The GM sees attacker and defender side by side.\nIn a Parley you may also sweeten the deal: marks handed to the other side, in the open."
     },
     {
       id: "coalition", title: "Coalition support",
@@ -742,7 +742,7 @@ const raidConsoleTour = {
       id: "rounds", title: "Rounds — the heartbeat",
       selector: "section.bbttcc-rounds",
       optional: true,
-      text: "A fight is a series of rounds. Open one and you see the strength line for each side — what the Domain brings, nothing to push — and the stake: open ground is the prize, built ground takes a Siege. Pick your maneuvers; the GM resolves the round and the outcome lands in this table."
+      text: "A fight is a series of rounds. Open one and you see the strength line for each side — what the Domain brings — the spend grid where marks are staged, a line naming what this round's maneuvers cost, and the stake: open ground is the prize, built ground takes a Siege. Pick your maneuvers; the GM resolves the round, the marks leave the bank, and the outcome lands in this table."
     },
     {
       id: "maneuvers", title: "Maneuvers — the knives",

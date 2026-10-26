@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>Crew Type (Bad Eden): Verdant Stalkers.</em></p><p><strong>“If the forest sees you, you’re already late.”</strong></p><p>Verdant Stalkers move through living terrain like they were invited. They conceal routes, read pressure from broken twigs and bent moss, and make hostile wilderness feel personal.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Stealth and Athletics.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
+      "value": "<p><em>Crew Type (Bad Eden): Verdant Stalkers.</em></p><p><strong>“If the forest sees you, you’re already late.”</strong></p><p>Verdant Stalkers move through living terrain like they were invited. They conceal routes, read pressure from broken twigs and bent moss, and make hostile wilderness feel personal.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Stealth and Athletics.</li><li><strong>Strategic Identity:</strong> Your Domain earns <strong>+10 Intrigue</strong> marks each turn while you serve it.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-verdant-stalkers",
@@ -79,12 +79,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986965136,
-    "modifiedTime": 1782167238950,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989166992,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

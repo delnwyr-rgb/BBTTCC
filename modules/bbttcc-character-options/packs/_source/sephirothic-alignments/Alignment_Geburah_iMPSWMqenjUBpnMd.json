@@ -1,0 +1,75 @@
+{
+  "name": "Alignment: Geburah",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "Judgment - Necessary force. +10 Violence and +10 Logistics marks to your Domain each turn.\n\nGeburah draws the line. It rewards discipline, enforcement, and decisive action against fortified problems, but always risks becoming cruelty if severity outruns wisdom.",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "alignment-geburah",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "img": "icons/weapons/swords/sword-gold-holy.webp",
+  "effects": [],
+  "folder": "RAOWJYon3t34M5XY",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "sephirothic-alignments",
+      "bonuses": {
+        "violence": 1,
+        "logistics": 1
+      },
+      "option": {}
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.dlAJf2LhJ540QdTn",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.cKJbvIdeHnFrBJvq",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1774978150205,
+    "modifiedTime": 1792989140921,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "iMPSWMqenjUBpnMd",
+  "sort": 400000,
+  "_key": "!items!iMPSWMqenjUBpnMd"
+}

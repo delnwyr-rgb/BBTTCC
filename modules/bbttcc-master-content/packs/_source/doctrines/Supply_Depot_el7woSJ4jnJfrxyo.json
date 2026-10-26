@@ -3,8 +3,14 @@
   "type": "feat",
   "img": "icons/containers/boxes/crate-reinforced-brown.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Supply Depot</b></p><p><b>Cost:</b> Economy 2 • Logistics 3</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>supply_depot</code></p>",
+      "value": "<p><strong>Supply Depot</strong></p><p>Target one hex you hold. At the turn: it gains the Logistics Hub tag and Defense +1.</p><p><em>Cost: Logistics 30 · Economy 20 marks.</em></p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "supply-depot",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -44,6 +46,9 @@
         "storyOnly": false,
         "availability": null,
         "unlockKey": null
+      },
+      "effects": {
+        "text": "Target one hex you hold. At the turn: it gains the Logistics Hub tag and Defense +1."
       }
     }
   },
@@ -59,12 +64,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063189133,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989012141,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!el7woSJ4jnJfrxyo"
 }

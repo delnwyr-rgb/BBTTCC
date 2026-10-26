@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 (Level 17) — The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a recovery, relief, resettlement, or reconstruction scenario, the Economy or Culture OP cost is reduced by 3 (minimum 1).</li></ul>",
+      "value": "<p><strong>Tier 4 (Level 17) — The Empress (Caretaker)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Economy or Culture marks, it spends 30 fewer (never below 10).</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -60,7 +60,21 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "economy",
+            "culture"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Archetype: The Empress (Caretaker) (Tier 4)",
+          "marks": 30
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": null,
@@ -72,12 +86,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986713706,
-    "modifiedTime": 1781116037989,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989155870,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

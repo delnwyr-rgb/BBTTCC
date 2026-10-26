@@ -1,0 +1,930 @@
+{
+  "name": "Desenitarius Maarg",
+  "type": "npc",
+  "img": "art/devin-knight/Monsters_October/Dragon_Copper_Wingless.webp",
+  "folder": "uMhSIaldbbcnBh0H",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "prototypeToken": {
+    "name": "Desenitarius Maarg",
+    "actorLink": false,
+    "disposition": -1,
+    "texture": {
+      "src": "art/devin-knight/Monsters_October/Dragon_Copper_Wingless.webp",
+      "scaleX": 1,
+      "scaleY": 1,
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "width": 4,
+    "height": 4,
+    "displayName": 30,
+    "depth": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "monster",
+      "createdViaMonsterBuilder": false,
+      "createdBy": "build-bestiary-slots.mjs 2026-10-07",
+      "lineage": "dream"
+    },
+    "fourththing": {
+      "creatureType": "undead",
+      "rfi": {
+        "actor": {
+          "tier": "IV",
+          "bracket": "boss",
+          "archetype": "desenitarius-maarg",
+          "lineage": "dream",
+          "title": "It walks the old roads on its own calendar. It collects. Be polite. (World Boss)",
+          "bestiary": {
+            "themes": [
+              "dream",
+              "world-boss",
+              "old-roads",
+              "collector"
+            ],
+            "role": "hardened",
+            "lootTable": [
+              {
+                "name": "Memory Resin",
+                "qty": "2d3",
+                "weight": 5
+              },
+              {
+                "name": "Witness-Glass",
+                "qty": "1d2",
+                "weight": 2
+              },
+              {
+                "name": "Something It Collected From Someone Else",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "exemplar": true,
+          "price": {
+            "marks": 120,
+            "bounty": 120,
+            "hire": null,
+            "ransom": null,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "notes": "TIV boss dream — bounty 120 marks; credited to the pool matching the method (default nonlethal)"
+          }
+        }
+      },
+      "kind": "monster"
+    }
+  },
+  "system": {
+    "role": "hardened",
+    "tier": 4,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 18,
+      "tier": 4,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "xp": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 5
+      },
+      "intrigue": {
+        "value": 5
+      },
+      "presence": {
+        "value": 6
+      },
+      "body": {
+        "value": 6
+      },
+      "mind": {
+        "value": 6
+      },
+      "soul": {
+        "value": 5
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 520,
+        "max": 135,
+        "temp": 0
+      },
+      "stress": {
+        "value": 516,
+        "max": 135
+      },
+      "guard": {
+        "value": 16
+      },
+      "evasion": {
+        "value": 16
+      },
+      "resolve": {
+        "value": 16
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "yesod"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "kinetic"
+      ],
+      "immunities": [],
+      "vulnerabilities": [
+        "sephirotic"
+      ]
+    },
+    "conditionImmunities": [
+      "shaken"
+    ],
+    "tags": [
+      "dream",
+      "world-boss",
+      "old-roads",
+      "collector"
+    ],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "T IV world boss · dream (Yesod-side). Don't ask what it is — the people who could answer stopped being available to answer things. Every story agrees on one point: the ones who showed respect got to keep telling stories. Hostile only to the impolite.",
+      "notes": "Desenitarius Maarg walks the old roads on a calendar nobody else can read. It is very large and it is half there; what the eye insists on calling a dragon is the part of it that agrees to be looked at. It collects — things, debts, names, favours — and it keeps what it collects somewhere on the Yesod side where the roads used to go. Engines to idle, weapons down, and whatever it asks for, be polite: it has never once harmed a party that paid the courtesy, and it has never once left anything of a party that didn't. The Trail's travel tables place it at Tier IV. The Trail is being generous."
+    }
+  },
+  "items": [
+    {
+      "name": "Half-Real",
+      "type": "feat",
+      "img": "icons/creatures/magical/spirit-undead-ghost-purple.webp",
+      "system": {
+        "category": "technique",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-dream",
+          "lineage-trait"
+        ],
+        "description": {
+          "value": "<p>Until Maarg attacks, attacks against it reroll the highest die. Its first strike fully manifests it for the rest of the scene. It moves through creatures and objects as difficult terrain.</p><p><em>The 'sort of' is the dangerous part.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "feature",
+              "lineageTrait": "dream"
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attacked",
+                "if": {
+                  "ownerNotAttacked": true
+                },
+                "do": {
+                  "reroll": "attack-highest"
+                },
+                "label": "Half-Real — not yet manifest"
+              }
+            ]
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "aqEmhF78gOLMPLj1",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423993733,
+        "modifiedTime": 1791423993733,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Old Road Tread",
+      "type": "weapon",
+      "img": "icons/skills/movement/feet-winged-boots-brown.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "3d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "the road remembers being walked",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "bestiary",
+          "tier-iv",
+          "lineage-dream"
+        ],
+        "effect": "On a hit the target is knocked Prone.",
+        "flavor": "It did not hurry. It did not need to.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "prone"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "",
+            "saveDcMode": "none",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square, one target. Damage: <code>3d8</code> kinetic (the road remembers being walked) + violence. On a hit the target is knocked Prone.</p><p><em>It did not hurry. It did not need to.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "attack"
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "t8P0xqTei1dJj5jO",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423993733,
+        "modifiedTime": 1791423993733,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "The Collection",
+      "type": "weapon",
+      "img": "icons/containers/bags/sack-simple-leather-brown.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "soul",
+        "skill": "channel",
+        "damage": {
+          "formula": "2d10",
+          "attribute": "soul",
+          "type": "psychic",
+          "damageFlavor": "it asks, once",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 18
+        },
+        "tags": [
+          "bestiary",
+          "tier-iv",
+          "lineage-dream"
+        ],
+        "effect": "Soul DC 18 or Compelled for 1 round: the target hands over one thing it is holding. Maarg keeps it.",
+        "flavor": "Things. Debts. It honestly isn't clear.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "saveAttributeOverrides": {}
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 6 squares, one target. Damage: <code>2d10</code> psychic (it asks, once) + soul. Soul DC 18 or Compelled for 1 round: the target hands over one thing it is holding. Maarg keeps it.</p><p><em>Things. Debts. It honestly isn't clear.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "attack"
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "diMhzOh65dZLnBmn",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423993733,
+        "modifiedTime": 1791423993733,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Fractured Will (3/scene)",
+      "type": "feature",
+      "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-dream",
+          "boss",
+          "fractured-will"
+        ],
+        "description": {
+          "value": "<p>When Maarg fails a check, some part of it refuses the outcome: Maarg succeeds instead. 3 times per scene.</p><p><em>The calendar disagrees with the outcome.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "feature"
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "AvzNiHZDQZu52a5P",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423993733,
+        "modifiedTime": 1791423993733,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Its Own Calendar (recharge 5–6)",
+      "type": "weapon",
+      "img": "icons/magic/time/hourglass-tilted-gray.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "soul",
+        "skill": "channel",
+        "damage": {
+          "formula": "3d8",
+          "attribute": "soul",
+          "type": "psychic",
+          "damageFlavor": "a day you did not have",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 18
+        },
+        "tags": [
+          "bestiary",
+          "tier-iv",
+          "lineage-dream",
+          "boss",
+          "signature"
+        ],
+        "effect": "Cone 6 squares. — targets roll vs Resolve (DC 18). Half damage on success. On a failed save the target is Staggered until the end of its next turn — it lost a day it was standing in.",
+        "flavor": "It walks on its own calendar.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "staggered"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "saveAttributeOverrides": {}
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "cone",
+            "size": 30
+          }
+        },
+        "description": {
+          "value": "<p><strong>Area Attack.</strong> Each creature in a 6-square. cone rolls vs DC 18. Damage: <code>3d8</code> psychic (a day you did not have). On a failed save the target is Staggered until the end of its next turn — it lost a day it was standing in.</p><p><em>It walks on its own calendar.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "save",
+              "aoeShape": "cone",
+              "aoeSize": 30,
+              "dc": 18
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "CEbJWAm2teyxw5gl",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423993733,
+        "modifiedTime": 1792989139833,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Debt Called In (1/scene)",
+      "type": "weapon",
+      "img": "icons/commodities/currency/coins-plain-pouch-gold.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "soul",
+        "skill": "channel",
+        "damage": {
+          "formula": "4d8",
+          "attribute": "soul",
+          "type": "psychic",
+          "damageFlavor": "everything owed, at once",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 18
+        },
+        "tags": [
+          "bestiary",
+          "tier-iv",
+          "lineage-dream",
+          "boss",
+          "ultimate"
+        ],
+        "effect": "Sphere 6 squares. — targets roll vs Resolve (DC 18). Half damage on success. ULTIMATE — usable only at or below half Integrity. On a failed save the target is Restrained until the end of its next turn — held by what it owes.",
+        "flavor": "The ones who showed respect got to keep telling stories.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "restrained"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "saveAttributeOverrides": {}
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 30
+          }
+        },
+        "description": {
+          "value": "<p><strong>Area Attack.</strong> Each creature within 6 squares. rolls vs DC 18. Damage: <code>4d8</code> psychic (everything owed, at once). ULTIMATE — usable only at or below half Integrity. On a failed save the target is Restrained until the end of its next turn — held by what it owes.</p><p><em>The ones who showed respect got to keep telling stories.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "save",
+              "aoeShape": "sphere",
+              "aoeSize": 30,
+              "dc": 18
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "bhSoQUHykf9BdeEo",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423993733,
+        "modifiedTime": 1792977777848,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "_id": "YreqW1q05O7dGoxK",
+  "effects": [],
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.5",
+    "createdTime": 1791423993733,
+    "modifiedTime": 1791423994278,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!YreqW1q05O7dGoxK"
+}

@@ -44,17 +44,7 @@
     },
     "fourththing": {
       "grants": {},
-      "triggers": [
-        {
-          "event": "on-feature-use",
-          "effect": {
-            "kind": "chat-prompt",
-            "args": {
-              "body": "Wards aren't walls. They're paperwork. When you use your class's The Crossing ability (Class Tier 2) on a magical barrier, treat the barrier's check DC as if it were 2 lower"
-            }
-          }
-        }
-      ]
+      "triggers": []
     }
   },
   "folder": "eQl1GnJxLhG4BD19",
@@ -62,12 +52,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.3",
     "createdTime": 1777005233908,
-    "modifiedTime": 1781116151011,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907926694,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

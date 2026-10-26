@@ -1,0 +1,77 @@
+{
+  "name": "Reality Inversion",
+  "type": "feat",
+  "img": "icons/magic/fire/explosion-fireball-medium-orange.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Miasma folds the local dream like paper: two creatures in its space swap positions instantly. Each rolls Soul vs DC 18 or spends its reaction making one attack against itself — for a heartbeat, each was standing exactly where its own strike was already going.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "save": {
+                "attr": "soul",
+                "dc": 18,
+                "onSave": "negate"
+              }
+            }
+          },
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Reality Inversion"
+            },
+            "do": {
+              "noReactions": true,
+              "prompt": "Spends its reaction making one attack against itself."
+            }
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Lewd Miasma"
+        ],
+        "sourceIds": [
+          "Tw8Qy7Bg0pwKC29k"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "IokTORBrjHAO5Kci",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069958,
+    "modifiedTime": 1792989070042,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!IokTORBrjHAO5Kci"
+}

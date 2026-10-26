@@ -1,18 +1,13 @@
 {
   "name": "Archetype: The Tower (Breaker) (Tier 2)",
   "type": "feat",
-  "img": "icons/environment/settlement/tower-stone-blue.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_tower.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "Bad Eden – Archetype: The Tower (Breaker) (Tier 2)",
-      "book": ""
-    },
+    "source": "Bad Eden – Archetype: The Tower (Breaker) (Tier 2) (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — The Tower (Breaker)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When spending Violence OPs to breach fortifications, break infrastructure, sabotage facilities, or trigger cascading failure, the effectiveness of spent OPs is increased by 25%.</li></ul>",
+      "value": "<p><strong>Tier 2 (Level 5) — The Tower (Breaker)</strong></p><ul><li><p><strong>Strategic:</strong> Whenever your Domain spends Violence marks, it spends 20% less (never below 10).</p></li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -59,7 +54,20 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "violence"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Archetype: The Tower (Breaker) (Tier 2)",
+          "pct": 20
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": "Item.WIflqZ4wv10OZOIq",
@@ -71,12 +79,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986801383,
-    "modifiedTime": 1781116013207,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989157858,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

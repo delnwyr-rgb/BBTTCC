@@ -3,8 +3,14 @@
   "type": "feat",
   "img": "icons/skills/social/trading-justice-scale-yellow.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><strong>Justice Tribunal</strong></p><p>Remove 1 Darkness; Morale +1.</p><p><strong>Cost:</strong> Faith 1</p><hr /><p class=\"hint\"><em>BBTTCC Doctrine</em> • <code>strategic</code> • <code>justice_tribunal</code></p>",
+      "value": "<p><strong>Justice Tribunal</strong></p><p>Remove 1 Darkness; Loyalty +1.</p><p><strong>Cost:</strong> Soft Power 20 · Faith 10 marks</p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "justice-tribunal",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -44,7 +46,8 @@
         "storyOnly": false,
         "availability": null,
         "unlockKey": null
-      }
+      },
+      "effects": {}
     }
   },
   "_id": "sk3HBZKqZwY4LOH8",
@@ -59,12 +62,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063192941,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792988992317,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!sk3HBZKqZwY4LOH8"
 }

@@ -7,44 +7,62 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>In the first round of combat, the bandit reroll the lowest die on attack rolls against any creature that hasn’t taken a turn yet.</p>",
+      "value": "<p>In the first round of combat, the bandit rerolls the lowest die on attack rolls against any creature that hasn't taken a turn yet.</p>",
       "chat": ""
     }
   },
-  "_id": "F9AfwSXXZlSyYF2h",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "attack",
+          "mode": "reroll-lowest",
+          "when": "firstRound",
+          "vs": "a creature that hasn't taken a turn yet",
+          "note": "Ambush Crew"
+        }
+      ]
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
           "Commander Road Bandit",
+          "Drowned South Bandit",
           "Road Bandit"
         ],
+        "sourceIds": [
+          "5QNrUdqGtIcr1f5Z",
+          "DhIEpSsPkg1BoFkq",
+          "kIVv7SCfezxi8pkz"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "F9AfwSXXZlSyYF2h",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167244991,
-    "modifiedTime": 1782167244991,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989017359,
+    "modifiedTime": 1792989017359,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!F9AfwSXXZlSyYF2h"
 }

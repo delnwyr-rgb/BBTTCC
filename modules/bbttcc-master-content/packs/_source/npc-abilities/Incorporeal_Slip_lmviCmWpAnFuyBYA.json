@@ -7,43 +7,61 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>The wraith can move through creatures and objects as if they were difficult terrain. It takes 5 (1d10) kinetic damage if it ends its turn inside an object.</p>",
+      "value": "<p>The wraith moves through creatures and objects as if they were difficult terrain. It takes 1d10 kinetic damage if it ends its turn inside an object.</p>",
       "chat": ""
     }
   },
-  "_id": "lmviCmWpAnFuyBYA",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "selfTurnStart",
+            "do": {
+              "prompt": "Incorporeal Slip: moves through creatures/objects; 1d10 kinetic if it ends its turn inside one."
+            },
+            "narrative": true
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
           "Slippage Wraith"
         ],
+        "sourceIds": [
+          "CdNx8WLo0aZO6q8c"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "lmviCmWpAnFuyBYA",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": null,
-    "modifiedTime": null,
-    "lastModifiedBy": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989030449,
+    "modifiedTime": 1792989030449,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!lmviCmWpAnFuyBYA"
 }

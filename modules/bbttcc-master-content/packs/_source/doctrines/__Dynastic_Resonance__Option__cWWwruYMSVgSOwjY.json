@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Dynastic Resonance [Option]",
+  "name": "Dynastic Resonance",
   "type": "feat",
   "img": "icons/commodities/currency/coin-embossed-crown-gold.webp",
   "system": {
@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Dynastic Resonance [Option]</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> softpower 10, diplomacy 10</p></div>",
+      "value": "<p><strong>Dynastic Resonance</strong></p><p>The Moon (Ancient Blood). Target a hex held by another Domain: that Domain's standing toward you moves one step warmer on the relations ladder (at war → hostile → unfriendly → neutral → friendly → allied).</p><p><em>Cost: Soft Power 10 · Diplomacy 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "optact_dynastic_resonance"
+      "key": "optact_dynastic_resonance",
+      "effects": {
+        "text": "The Moon (Ancient Blood). Target a hex held by another Domain: that Domain's standing toward you moves one step warmer on the relations ladder (at war → hostile → unfriendly → neutral → friendly → allied)."
+      }
     }
   },
   "_id": "cWWwruYMSVgSOwjY",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601762,
-    "modifiedTime": 1782703702688,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988996549,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

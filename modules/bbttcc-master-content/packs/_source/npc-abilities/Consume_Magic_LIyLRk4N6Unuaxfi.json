@@ -1,0 +1,50 @@
+{
+  "name": "Consume Magic",
+  "type": "feat",
+  "img": "icons/sundries/books/book-rounded-blue.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Horde swarms one creature or object within 12 squares and strips an active manifestation from it — the working ends, visibly dimming as ravens swallow its light. If it ends a substantial working (GM's call), the Horde regains 10 Integrity: the one meal that mends it. A magic item so targeted goes dark for an hour instead.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "LIyLRk4N6Unuaxfi",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Ashen Horde"
+        ],
+        "sourceIds": [
+          "knO0GK8qKCeyNC6N"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069923,
+    "modifiedTime": 1792989070004,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!LIyLRk4N6Unuaxfi"
+}

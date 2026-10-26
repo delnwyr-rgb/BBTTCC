@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 — Goetic Summoner</strong></p><p><strong>“You don’t fight the corruption. You aim it.”</strong></p><p>At Tier 2, you stop pretending the veil is a barrier. It is a marketplace.</p><p>You have enough practice to exploit corrupted environments without being swallowed by them. Usually. Your faction becomes frighteningly competent in places others cannot operate.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When dealing with Qliphothic entities or running Scenarios in corrupted Hexes, gain <strong>Advantage</strong> on one relevant Strategic Roll per Scenario</li><li>If the opposition is attempting to deceive, terrorize, or destabilize via Darkness-as-pressure, gain <strong>+1 to the relevant Intrigue OP roll</strong> instead</li></ul><p><strong>Cost:</strong> every time you leverage this understanding, the GM is encouraged to record a <strong>Debt</strong> in the fiction. Not a number. A <em>name</em>.</p>",
+      "value": "<p><strong>Tier 2 — Goetic Summoner</strong></p><p><strong>“You don’t fight the corruption. You aim it.”</strong></p><p>At Tier 2, you stop pretending the veil is a barrier. It is a marketplace.</p><p>You have enough practice to exploit corrupted environments without being swallowed by them. Usually. Your Domain becomes frighteningly competent in places others cannot operate.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per scene against Qliphothic entities or in a corrupted hex, your Domain rerolls the lowest die on one Domain roll — or, if the opposition deceives, terrorises or destabilises through Darkness-as-pressure, adds +1 to the relevant Intrigue Domain roll instead (the card fires it).</li></ul><p><strong>Cost:</strong> every time you leverage this understanding, the GM is encouraged to record a <strong>Debt</strong> in the fiction. Not a number. A <em>name</em>.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -260,12 +260,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987093047,
-    "modifiedTime": 1781024183145,
-    "lastModifiedBy": "MRFjjbUTBd66pWBY"
+    "modifiedTime": 1792989176619,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

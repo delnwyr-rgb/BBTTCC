@@ -7,79 +7,6 @@
       "createdViaRigBuilder": true,
       "createdAt": 1779398486740
     },
-    "bbttcc-structures": {
-      "hasStructure": true,
-      "facilityMode": false,
-      "materialBOM": [
-        {
-          "materialKey": "scribed-steel",
-          "qty": 6,
-          "originalQty": 6,
-          "family": "metal",
-          "tier": "III",
-          "name": "Scribed Steel",
-          "tagsCache": [
-            "material",
-            "scribed-steel"
-          ]
-        },
-        {
-          "materialKey": "heart-iron",
-          "qty": 3,
-          "originalQty": 3,
-          "family": "metal",
-          "tier": "II",
-          "name": "Heart-Iron",
-          "tagsCache": [
-            "material",
-            "heart-iron",
-            "heart-iron",
-            "aurablade",
-            "metal"
-          ]
-        },
-        {
-          "materialKey": "cold-iron",
-          "qty": 2,
-          "originalQty": 2,
-          "family": "metal",
-          "tier": "II",
-          "name": "Cold-Iron",
-          "tagsCache": [
-            "material",
-            "cold-iron",
-            "iron",
-            "cold-forge",
-            "hex-resistant"
-          ]
-        }
-      ],
-      "state": "intact",
-      "plates": {
-        "current": 33,
-        "max": 33
-      },
-      "threshold": 3.05,
-      "resists": {
-        "kinetic": 0.5
-      },
-      "vulnerabilities": {
-        "energy|heat": {
-          "type": "energy",
-          "flavor": "heat",
-          "factor": 2
-        }
-      },
-      "loadBearing": false,
-      "collapseProfile": {
-        "fallFt": 10,
-        "damageDice": "2d10",
-        "nonlethal": true,
-        "knockbackFt": 5,
-        "triggerState": "breached"
-      },
-      "history": []
-    },
     "fourththing": {
       "kind": "rig"
     }
@@ -120,8 +47,8 @@
       "crewMax": 9
     },
     "integrity": {
-      "value": 39,
-      "max": 39,
+      "value": 46,
+      "max": 46,
       "tier": 2,
       "bracket": "medium"
     },
@@ -148,7 +75,7 @@
     },
     "travel": {
       "speed": 3,
-      "range": 10,
+      "range": 14,
       "hazardResist": 0,
       "domains": [
         "land"
@@ -160,18 +87,22 @@
       "faction-starter",
       "land",
       "atr"
-    ]
+    ],
+    "biography": {
+      "concept": "",
+      "notes": ""
+    }
   },
   "prototypeToken": {
     "actorLink": true,
     "disposition": 1,
     "name": "Amycrawler",
     "displayName": 30,
-    "width": 1,
-    "height": 1,
+    "width": 2,
+    "height": 2,
     "depth": 1,
     "texture": {
-      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/atr_1.png",
+      "src": "modules/bbttcc-core/assets/rigs/bus_1.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -259,7 +190,7 @@
     "prependAdjective": false
   },
   "_id": "MjiiR6aszunSOBTl",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/atr_1.png",
+  "img": "modules/bbttcc-core/assets/rigs/bus_1.webp",
   "items": [
     {
       "name": "ATR Transport Frame",
@@ -272,7 +203,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>Synthetic frame authored by the Rig Builder. Bracket: medium. </p>",
+          "value": "<p>Medium land transport. Carries people and matériel across Bad Eden — armored enough to discourage trouble, armed enough to end it.</p><p><b>Frame · Medium · Mobile</b></p>",
           "chat": ""
         }
       },
@@ -357,6 +288,9 @@
               }
             }
           }
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.items.Item.VMpmRfVs4r8XD9NX"
         }
       },
       "_id": "WXl9Q19XZUSc9WsX",
@@ -368,17 +302,16 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1784177518538,
-        "modifiedTime": 1784177518538,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989104304,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!MjiiR6aszunSOBTl.WXl9Q19XZUSc9WsX"
+      }
     },
     {
       "name": "Twin Autocannons",
@@ -398,7 +331,8 @@
         "damageParts": [],
         "range": {
           "short": 4,
-          "long": 12
+          "long": 12,
+          "units": "sq"
         },
         "tags": [
           "suppression",
@@ -438,7 +372,7 @@
           }
         },
         "description": {
-          "value": "<p>Belt-fed twin barrels. Less aimed than <em>insisted upon</em>. Suppression in service of statement.</p>"
+          "value": "<p>Belt-fed twin barrels. Less aimed than <em>insisted upon</em>. Suppression in service of statement.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Damage:</strong> 2d8 Kinetic damage to <em>Integrity</em></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 4 / 12</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
         }
       },
       "flags": {
@@ -672,23 +606,22 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1784177518538,
-        "modifiedTime": 1784177518538,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989104304,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "C4ea0LQGbsFtG43C",
-      "_key": "!actors.items!MjiiR6aszunSOBTl.C4ea0LQGbsFtG43C"
+      "_id": "C4ea0LQGbsFtG43C"
     },
     {
       "name": "Reinforced Plating",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/commodities/tech/plating-metal-armor-tech-steel-blue.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -696,7 +629,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p>",
+          "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p><p><strong>Passive:</strong> +2 Integrity max per rig tier while fitted.</p>",
           "chat": ""
         }
       },
@@ -704,7 +637,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": true
+            "passive": {
+              "integrityMaxPerTier": 2
+            }
           },
           "rfi": {
             "item": {
@@ -731,23 +666,22 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1784177518538,
-        "modifiedTime": 1784177518538,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989104305,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "oAnevPrbXw3hsgCo",
-      "_key": "!actors.items!MjiiR6aszunSOBTl.oAnevPrbXw3hsgCo"
+      "_id": "oAnevPrbXw3hsgCo"
     },
     {
       "name": "Comms Array",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/tools/fasteners/washer-hex-copper-brown.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -755,7 +689,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>A nest of antennae held together by faith. Extends signal range; allies on hex coordinate at +1 step.</p>",
+          "value": "<p>A nest of antennae held together by faith. Extends signal range; allies on hex coordinate at +1 step.</p><p><strong>Passive:</strong> Signal grants +2 on the ally's next roll instead of +1.</p>",
           "chat": ""
         }
       },
@@ -763,7 +697,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": true
+            "passive": {
+              "signalBonus": 1
+            }
           },
           "rfi": {
             "item": {
@@ -790,22 +726,21 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1784177518538,
-        "modifiedTime": 1784177518538,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989104305,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "xhHAXiw6wY2S6aHK",
-      "_key": "!actors.items!MjiiR6aszunSOBTl.xhHAXiw6wY2S6aHK"
+      "_id": "xhHAXiw6wY2S6aHK"
     }
   ],
   "effects": [],
-  "folder": "kNHlN9Q6lytUK4sB",
+  "folder": "FaFSAThUFkRk4y4k",
   "sort": -75000,
   "ownership": {
     "default": 0,
@@ -813,12 +748,12 @@
     "s2n4WnSFFbK6aHDj": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1784177518538,
-    "modifiedTime": 1784177518538,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989104181,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

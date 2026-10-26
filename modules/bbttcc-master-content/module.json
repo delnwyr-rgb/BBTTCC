@@ -71,6 +71,18 @@
       "system": "fourththing"
     },
     {
+      "type": "Actor",
+      "name": "playtest-actors",
+      "label": "BBTTCC Playtest (GM)",
+      "path": "packs/playtest-actors",
+      "system": "fourththing",
+      "ownership": {
+        "PLAYER": "NONE",
+        "TRUSTED": "NONE",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
       "type": "Item",
       "name": "npc-abilities",
       "label": "Bad Eden: NPC Abilities",
@@ -87,7 +99,7 @@
     {
       "type": "Item",
       "name": "courtly-secrets",
-      "label": "Bad Eden: Courtly Secrets",
+      "label": "Bad Eden: Receipts",
       "path": "packs/courtly-secrets",
       "system": "fourththing"
     },

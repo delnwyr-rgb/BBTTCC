@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Inherited Deference [Option]",
+  "name": "Inherited Deference",
   "type": "feat",
   "img": "icons/commodities/currency/coins-crown-stack-gold.webp",
   "system": {
@@ -7,31 +7,37 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Inherited Deference [Option]</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> softpower 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> option</p><p><strong>Raid Types:</strong> liberation, occupation, courtly</p></div>",
+      "value": "<p><strong>Inherited Deference</strong></p><p>The Moon (Ancient Blood), pre-roll. +1 to your roll this round, and any enemy Propaganda maneuver this round is cancelled.</p><p><em>Cost: Soft Power 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "maneuver",
-      "key": "opt_inherited_deference"
+      "key": "opt_inherited_deference",
+      "effects": {
+        "text": "The Moon (Ancient Blood), pre-roll. +1 to your roll this round, and any enemy Propaganda maneuver this round is cancelled."
+      },
+      "meta": {
+        "storyOnly": false
+      }
     }
   },
   "_id": "zRoVaLZm3KPLOB0C",
   "effects": [],
-  "folder": null,
+  "folder": "SziFuLdTIX4Y2Rav",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601773,
-    "modifiedTime": 1782703702688,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988995458,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

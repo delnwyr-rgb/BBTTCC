@@ -7,6 +7,7 @@
     "tags": [],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>An anchored authority — registers the holding with the local hex. Stationary-only: deploying the rig severs the bond.</p>",
       "chat": ""
@@ -17,7 +18,8 @@
       "rigGear": {
         "subtype": "output-module",
         "yield": {
-          "militia_op": 1
+          "militia_op": 1,
+          "violence": 1
         },
         "mobileLegal": false
       },
@@ -29,7 +31,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TIII tool stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 108
@@ -49,12 +51,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778205374478,
-    "modifiedTime": 1778963271954,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988928696,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

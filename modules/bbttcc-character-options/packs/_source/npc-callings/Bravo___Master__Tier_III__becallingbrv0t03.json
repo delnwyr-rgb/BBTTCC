@@ -27,15 +27,35 @@
       "calling": {
         "key": "bravo",
         "tier": 3
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "who": "targets",
+            "do": {
+              "bankBonus": {
+                "bonus": 2,
+                "context": "defense",
+                "note": "Veteran's Read — vs the called move"
+              }
+            },
+            "limit": {
+              "per": "scene",
+              "uses": 1
+            }
+          }
+        ]
       }
     }
   },
   "_stats": {
-    "coreVersion": "14.364",
-    "systemId": null,
-    "systemVersion": null,
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.3",
     "createdTime": 1784006639951,
-    "modifiedTime": 1784006639951,
+    "modifiedTime": 1791412959956,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

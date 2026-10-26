@@ -14,86 +14,13 @@
     },
     "fourththing": {
       "kind": "rig"
-    },
-    "bbttcc-structures": {
-      "hasStructure": true,
-      "facilityMode": false,
-      "materialBOM": [
-        {
-          "materialKey": "scribed-steel",
-          "qty": 6,
-          "originalQty": 6,
-          "family": "metal",
-          "tier": "III",
-          "name": "Scribed Steel",
-          "tagsCache": [
-            "material",
-            "scribed-steel"
-          ]
-        },
-        {
-          "materialKey": "heart-iron",
-          "qty": 3,
-          "originalQty": 3,
-          "family": "metal",
-          "tier": "II",
-          "name": "Heart-Iron",
-          "tagsCache": [
-            "material",
-            "heart-iron",
-            "heart-iron",
-            "aurablade",
-            "metal"
-          ]
-        },
-        {
-          "materialKey": "cold-iron",
-          "qty": 2,
-          "originalQty": 2,
-          "family": "metal",
-          "tier": "II",
-          "name": "Cold-Iron",
-          "tagsCache": [
-            "material",
-            "cold-iron",
-            "iron",
-            "cold-forge",
-            "hex-resistant"
-          ]
-        }
-      ],
-      "state": "intact",
-      "plates": {
-        "current": 33,
-        "max": 33
-      },
-      "threshold": 3.05,
-      "resists": {
-        "kinetic": 0.5
-      },
-      "vulnerabilities": {
-        "energy|heat": {
-          "type": "energy",
-          "flavor": "heat",
-          "factor": 2
-        }
-      },
-      "loadBearing": false,
-      "collapseProfile": {
-        "fallFt": 10,
-        "damageDice": "2d10",
-        "nonlethal": true,
-        "knockbackFt": 5,
-        "triggerState": "breached"
-      },
-      "history": []
     }
   },
   "system": {
     "identity": {
       "mobility": "mobile",
       "state": "parked",
-      "factionOwnerId": "Zsn8DO6cpTuHHexS",
+      "factionOwnerId": "",
       "archetype": "Submersible",
       "binding": {
         "hexId": "",
@@ -125,8 +52,8 @@
       "crewMax": 7
     },
     "integrity": {
-      "value": 39,
-      "max": 39,
+      "value": 42,
+      "max": 42,
       "tier": 2,
       "bracket": "medium"
     },
@@ -153,7 +80,7 @@
     },
     "travel": {
       "speed": 3,
-      "range": 14,
+      "range": 10,
       "hazardResist": 0,
       "domains": [
         "water-sub"
@@ -165,18 +92,22 @@
       "submersible",
       "sub",
       "water-sub"
-    ]
+    ],
+    "biography": {
+      "concept": "",
+      "notes": ""
+    }
   },
   "prototypeToken": {
     "actorLink": true,
     "disposition": 1,
     "name": "The Markiplier",
     "displayName": 30,
-    "width": 1,
-    "height": 1,
+    "width": 2,
+    "height": 2,
     "depth": 1,
     "texture": {
-      "src": "icons/svg/mystery-man.svg",
+      "src": "modules/bbttcc-core/assets/rigs/boat_2.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -260,7 +191,7 @@
     "prependAdjective": false
   },
   "_id": "XkE1PFLW0DQYy4HV",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "modules/bbttcc-core/assets/rigs/boat_2.webp",
   "items": [
     {
       "name": "Sail Barge Frame",
@@ -273,7 +204,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>A pleasure-galley with delusions of fortress. Docks at hexes to throw lavish productions; cuts loose to roam when the music demands it. Throne optional, mandatory.</p><p><b>Frame · Medium · Hybrid · Jabba canon</b></p>",
+          "value": "<p>A pleasure-galley with delusions of fortress. Docks at hexes to throw lavish productions; cuts loose to roam when the music demands it. Throne optional, mandatory.</p><p><b>Frame · Medium · Hybrid</b></p>",
           "chat": ""
         }
       },
@@ -287,6 +218,7 @@
             "baseIntegrity": 32,
             "tierStep": 10,
             "mobilityAllowed": [
+              "mobile",
               "hybrid"
             ],
             "slots": {
@@ -337,7 +269,7 @@
               ]
             },
             "travel": {
-              "speed": 2,
+              "speed": 3,
               "range": 10
             },
             "visualFrame": "anchor-ring"
@@ -367,18 +299,17 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1784177518717,
-        "modifiedTime": 1784177518717,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989115837,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "G3d585OnDMz5go1s",
-      "_key": "!actors.items!XkE1PFLW0DQYy4HV.G3d585OnDMz5go1s"
+      "_id": "G3d585OnDMz5go1s"
     },
     {
       "name": "Twin Autocannons",
@@ -398,7 +329,8 @@
         "damageParts": [],
         "range": {
           "short": 4,
-          "long": 12
+          "long": 12,
+          "units": "sq"
         },
         "tags": [
           "suppression",
@@ -682,13 +614,12 @@
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "EwVgqJYER3PuigEl",
-      "_key": "!actors.items!XkE1PFLW0DQYy4HV.EwVgqJYER3PuigEl"
+      "_id": "EwVgqJYER3PuigEl"
     },
     {
       "name": "Reinforced Plating",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/commodities/tech/plating-metal-armor-tech-steel-blue.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -696,7 +627,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p>",
+          "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p><p><strong>Passive:</strong> +2 Integrity max per rig tier while fitted.</p>",
           "chat": ""
         }
       },
@@ -704,7 +635,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": true
+            "passive": {
+              "integrityMaxPerTier": 2
+            }
           },
           "rfi": {
             "item": {
@@ -731,23 +664,22 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1784177518717,
-        "modifiedTime": 1784177518717,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989115837,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "jZ8ZAmCrVti8iAPr",
-      "_key": "!actors.items!XkE1PFLW0DQYy4HV.jZ8ZAmCrVti8iAPr"
+      "_id": "jZ8ZAmCrVti8iAPr"
     },
     {
       "name": "Sensor Suite",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/commodities/tech/electronics-sensor-eye.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -755,7 +687,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p>",
+          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p><p><strong>Passive:</strong> every crew member aboard adds +1 to initiative.</p>",
           "chat": ""
         }
       },
@@ -763,7 +695,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": true
+            "passive": {
+              "initiative": 1
+            }
           },
           "rfi": {
             "item": {
@@ -790,34 +724,33 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1784177518717,
-        "modifiedTime": 1784177518717,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989115837,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "opbncKAt7QAX7cEp",
-      "_key": "!actors.items!XkE1PFLW0DQYy4HV.opbncKAt7QAX7cEp"
+      "_id": "opbncKAt7QAX7cEp"
     }
   ],
   "effects": [],
-  "folder": "ZRkeSIKGxcDujCh8",
+  "folder": "FaFSAThUFkRk4y4k",
   "sort": 125000,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1784177518717,
-    "modifiedTime": 1784177518717,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989115718,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

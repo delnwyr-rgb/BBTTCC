@@ -10,7 +10,7 @@ Transform your post-apocalyptic characters from simple adventurers into faction 
 - **Character Archetypes** - Your fundamental role and background (Warlord, Hierophant, Mayor, etc.)
 - **Crew Types** - The nature of your followers and organization (Mercenaries, Diplomats, Survivors, etc.)
 - **Occult Associations** - Mystical traditions and secret knowledge (Kabbalist, Alchemist, Gnostic, etc.)
-- **Political Affiliations** - Your ideological alignment (Democrat, Communist, Monarchist, etc.)
+- **Political Affiliations** - Your sworn philosophy (Marxist, Liberal, Libertarian, Theocratic, …)
 - **Enlightenment Levels** - Spiritual advancement stages (Sleeper → Awakened → Transcendent)
 - **Sephirothic Alignments** - Cosmic influences and divine attributes (Keter, Chokmah, Tiferet, etc.)
 
@@ -98,20 +98,14 @@ Connect to mystical traditions with specialized knowledge:
 - **Rosicrucian** - Enlightened networks, +3 Diplomacy OPs
 
 ### **🏛️ Political Affiliations**
-Shape your faction's ideology with "Best" and "Worst" aspects:
+A steward swears one of eight philosophies (picked in the wizard or on the sheet; stored at `flags.bbttcc-aae.politicalPhilosophy`).
+The matching record in the **Political Affiliations** pack is embedded on the steward and pays its Domain each turn
+(`bonuses` × 10 marks). Convictions on the Domain tab track how far the Domain drifts from it.
 
-- **Democrat** - High diplomacy, potential for gridlock
-- **Communist** - Centralized planning, diplomatic challenges
-- **Socialist** - Social safety nets, bureaucratic overhead
-- **Capitalist** - Economic dynamism, inequality issues
-- **Monarchist** - Traditional stability, rigid hierarchies
-- **Theocrat** - Spiritual guidance, sectarian conflicts
-- **Militarist** - Disciplined efficiency, authoritarian tendencies
-- **Fascist** - Nationalistic unity, totalitarian risks
-- **Tribalist** - Community cohesion, xenophobic limitations
-- **Anarchist** - Individual freedom, structural challenges
-- **Meritocrat** - Competency-based leadership, elitist potential
-- **Oligarch** - Growth-oriented wealth concentration
+- **Marxist / Communist** · **Liberal** · **Social Democratic** · **Libertarian**
+- **Authoritarian / Statist** · **Theocratic** · **Fascist** · **Anarchist**
+
+The pack also keeps GM-only ideologies (Technocrat, Monarchist, Nationalist …) for NPC Domains; drag them on by hand.
 
 ### **✨ Enlightenment Levels**
 Progress through spiritual advancement stages:
@@ -130,7 +124,7 @@ Cosmic influences affecting characters and territories:
 - **Chokmah (Wisdom)** - Intuitive insight, research acceleration
 - **Binah (Understanding)** - Structural comprehension, stability
 - **Chesed (Mercy)** - Boundless compassion, population growth
-- **Gevurah (Severity)** - Righteous discipline, defensive strength
+- **Geburah (Severity)** - Righteous discipline, defensive strength
 - **Tiferet (Harmony)** - Perfect balance, inspiring beauty
 - **Netzach (Victory)** - Enduring drive, high morale
 - **Hod (Glory)** - Analytical mastery, technological advancement

@@ -78,17 +78,16 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346195764,
-        "modifiedTime": 1777433499532
+        "modifiedTime": 1792989167797
       },
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!MSENeApUbgbL4VQc.PobaIDuwSu4dCXI7"
+      "folder": null
     }
   ],
   "flags": {

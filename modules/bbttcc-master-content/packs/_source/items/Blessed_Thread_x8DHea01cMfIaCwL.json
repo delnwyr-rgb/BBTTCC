@@ -41,15 +41,15 @@
           "charges": 5,
           "materialKey": "blessed-thread",
           "price": {
-            "marks": 50,
+            "marks": 25,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI material stamp",
+            "notes": "TI material",
             "bound": "free",
-            "saleBack": 20
+            "saleBack": 10
           }
         }
       }
@@ -64,11 +64,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137161771,
-    "modifiedTime": 1782156674955,
+    "modifiedTime": 1792977667461,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

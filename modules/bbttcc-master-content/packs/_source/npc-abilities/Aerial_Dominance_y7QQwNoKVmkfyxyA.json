@@ -46,6 +46,33 @@
           "tier": "II",
           "frame": "trait"
         }
+      },
+      "rerolls": [
+        {
+          "context": "attack",
+          "mode": "reroll-lowest",
+          "when": [
+            "airborne",
+            "targetGrounded"
+          ],
+          "note": "Aerial Dominance — airborne vs a grounded target"
+        }
+      ],
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attacked",
+            "if": {
+              "ownerAirborne": true,
+              "targetNotAirborne": true
+            },
+            "do": {
+              "reroll": "attack-highest"
+            },
+            "label": "Aerial Dominance — ground-based attackers reroll their highest die"
+          }
+        ]
       }
     },
     "bbttcc": {
@@ -63,12 +90,12 @@
   "sort": 0,
   "_id": "y7QQwNoKVmkfyxyA",
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": null,
-    "modifiedTime": null,
-    "lastModifiedBy": null,
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.3",
+    "createdTime": 1791412953064,
+    "modifiedTime": 1791412953064,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

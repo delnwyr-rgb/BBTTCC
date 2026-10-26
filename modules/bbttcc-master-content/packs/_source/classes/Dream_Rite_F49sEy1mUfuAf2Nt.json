@@ -85,8 +85,8 @@
   },
   "effects": [
     {
-      "name": "Dream Rite (Spark Rite Flag)",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_spark.png",
+      "name": "Dream Rite (Route Rite Flag)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_moon_gate.png",
       "origin": null,
       "transfer": false,
       "disabled": true,
@@ -98,7 +98,7 @@
       },
       "flags": {
         "bbttcc": {
-          "dreamRiteMode": "spark"
+          "dreamRiteMode": "route"
         }
       },
       "_stats": {
@@ -112,12 +112,12 @@
         "createdTime": 1776459927031,
         "modifiedTime": 1777346198200
       },
-      "_id": "GSZRFg3Lasu8vEgW",
+      "_id": "aZMswprYd0QN8gmL",
       "type": "base",
       "system": {
         "changes": [
           {
-            "key": "flags.bbttcc.dreamwalker.dreamRiteSpark",
+            "key": "flags.bbttcc.dreamwalker.dreamRiteRoute",
             "value": 1,
             "priority": 20,
             "type": "custom",
@@ -232,8 +232,8 @@
       "folder": null
     },
     {
-      "name": "Dream Rite (Route Rite Flag)",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_moon_gate.png",
+      "name": "Dream Rite (Spark Rite Flag)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_spark.png",
       "origin": null,
       "transfer": false,
       "disabled": true,
@@ -245,7 +245,7 @@
       },
       "flags": {
         "bbttcc": {
-          "dreamRiteMode": "route"
+          "dreamRiteMode": "spark"
         }
       },
       "_stats": {
@@ -259,12 +259,12 @@
         "createdTime": 1776459927031,
         "modifiedTime": 1777346198200
       },
-      "_id": "aZMswprYd0QN8gmL",
+      "_id": "GSZRFg3Lasu8vEgW",
       "type": "base",
       "system": {
         "changes": [
           {
-            "key": "flags.bbttcc.dreamwalker.dreamRiteRoute",
+            "key": "flags.bbttcc.dreamwalker.dreamRiteSpark",
             "value": 1,
             "priority": 20,
             "type": "custom",
@@ -470,12 +470,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776459927031,
-    "modifiedTime": 1782167240813,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907892274,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

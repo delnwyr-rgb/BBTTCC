@@ -1,0 +1,72 @@
+{
+  "name": "Disperse and Reform (Recharge 5–6)",
+  "type": "feat",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Horde scatters into individual birds — it is immune to all damage until the start of its next turn, when it reforms anywhere it likes within 24 squares. The silence while it is dispersed is worse than the cawing.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "immune": {
+                "rounds": 1
+              },
+              "shift": 24
+            },
+            "who": "self",
+            "label": "Disperse and Reform"
+          }
+        ],
+        "recharge": {
+          "mode": "d6",
+          "min": 5
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Ashen Horde"
+        ],
+        "sourceIds": [
+          "knO0GK8qKCeyNC6N"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "VcoLZA3Fa2Gh2RzL",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069927,
+    "modifiedTime": 1792989070009,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!VcoLZA3Fa2Gh2RzL"
+}

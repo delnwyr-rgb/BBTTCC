@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": "7XKW4O4wpoxj6i5a",
+  "name": "The Errata Society",
+  "color": null,
+  "sorting": "a",
+  "_id": "ytd3WZZ13kxuQyKA",
+  "description": "",
+  "sort": 400000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989089206,
+    "modifiedTime": 1792989089206,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!ytd3WZZ13kxuQyKA"
+}

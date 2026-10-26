@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Kabbalist</strong></p><p><strong>“The map is not the territory. The territory is also not the territory.”</strong></p><p>At Tier 1, you have learned to <em>see</em> what other people are walking through. The Tree leaves fingerprints on everything. You have merely trained yourself to stop ignoring them.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Faith</strong>. If you already have it, take another GM-approved skill proficiency.</li><li><strong>Sense the Leak:</strong> you can cast <em>Detect Evil and Good</em> 1/Soma Break, flavored as sensing sephirothic flow and qliphothic pressure.</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Hex Read:</strong> upon entering a new Hex, you immediately learn its dominant <strong>Sephirothic</strong> or <strong>Qliphothic</strong> alignment, if any.</li><li><strong>Soft Power Precision:</strong> your faction’s <strong>Soft Power OP rolls</strong> gain <strong>+3</strong>.</li></ul><p><strong>Cost:</strong> perception is not neutral. Once you can see the leak, you stop being able to ignore it. Expect strain, attention, or moral pressure when you name what others would rather leave vague.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"kabT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Sense the Leak</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Cast Detect Evil and Good (sephirothic flow / qliphothic pressure).</div>\n</div>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Kabbalist</strong></p><p><strong>“The map is not the territory. The territory is also not the territory.”</strong></p><p>At Tier 1, you have learned to <em>see</em> what other people are walking through. The Tree leaves fingerprints on everything. You have merely trained yourself to stop ignoring them.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Faith</strong>. If you already have it, its rank rises by one.</li><li><strong>Sense the Leak:</strong> once per Soma Break you sense sephirotic flow and qliphothic pressure within 6 squares.</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Hex Read:</strong> upon entering a new Hex, you immediately learn its dominant <strong>Sephirotic</strong> or <strong>Qliphothic</strong> alignment, if any.</li><li><strong>Soft Power Precision:</strong> your Domain’s <strong>Soft Power Domain rolls</strong> gain <strong>+3</strong>.</li></ul><p><strong>Cost:</strong> perception is not neutral. Once you can see the leak, you stop being able to ignore it. Expect strain, attention, or moral pressure when you name what others would rather leave vague.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"kabT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Sense the Leak</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Cast Detect Evil and Good (sephirothic flow / qliphothic pressure).</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -74,7 +74,10 @@
     },
     "dnd5e": {},
     "fourththing": {
-      "vocabScrub": "2026-05-16"
+      "vocabScrub": "2026-05-16",
+      "domainRollBonus": {
+        "softpower": 3
+      }
     },
     "autoanimations": {
       "id": "e9cb72d2-b740-41a3-9da8-f3457a73c563",
@@ -256,7 +259,7 @@
   },
   "effects": [
     {
-      "name": "Occult Tier1 Proficiencies",
+      "name": "Occult Tier 1 Proficiencies",
       "disabled": false,
       "transfer": true,
       "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
@@ -289,17 +292,16 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346196167,
-        "modifiedTime": 1777433499566
+        "modifiedTime": 1792989174659
       },
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!k8reKRIa2p6Huct3.pqFrb0jwW98dsObV"
+      "folder": null
     }
   ],
   "img": "icons/magic/nature/tree-roots-glow-yellow.webp",
@@ -314,12 +316,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987095107,
-    "modifiedTime": 1782167239253,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989174573,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

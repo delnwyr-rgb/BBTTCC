@@ -11,7 +11,7 @@
       "attribute": "intrigue",
       "type": "qliphothic",
       "damageFlavor": "collation, but evil",
-      "track": "integrity"
+      "track": "stress"
     },
     "damageParts": [],
     "range": {
@@ -53,14 +53,19 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "restrained"
+        ],
+        "duration": "scene"
       }
     },
     "description": {
-      "value": "<p>Fires a reality-stapler. On a hit, the target is pinned (Restrained) to the nearest surface until it spends an action to tear free.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Fires a reality-stapler. On a hit, the target is pinned (Restrained) to the nearest surface until it spends an action to tear free.</p>\n<ul>\n  <li><strong>Damage:</strong> 3d10 Qliphothic damage to <em>Integrity</em> <span style=\"opacity:.75\">(collation, but evil)</span></li>\n  <li><strong>Faculty:</strong> Intrigue</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 30 / 60</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>Fires a reality-stapler. On a hit, the target is pinned (Restrained) to the nearest surface until it spends an action to tear free.</p>",
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -79,16 +84,20 @@
             "saleBack": 20
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Gerald, Assistant Regional Manager of the Apocalypse"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Cosmic Stapler"
+            },
+            "do": {
+              "prompt": "Pinned: an action tears it free — clear Restrained then."
+            },
+            "narrative": true
+          }
         ]
       }
     },
@@ -268,24 +277,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gerald, Assistant Regional Manager of the Apocalypse"
+        ],
+        "sourceIds": [
+          "3hQFAiFEsjwO9TKr"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
   "_id": "5i0UkC8GB1HCHbyt",
   "sort": 0,
+  "folder": null,
   "ownership": {
-    "default": 0
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1780000000000,
-    "modifiedTime": 1782151216389,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989024366,
+    "modifiedTime": 1792989024367,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
   },
-  "folder": null,
   "_key": "!items!5i0UkC8GB1HCHbyt"
 }

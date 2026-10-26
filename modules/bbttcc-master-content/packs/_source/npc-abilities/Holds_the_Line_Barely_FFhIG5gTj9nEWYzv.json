@@ -1,0 +1,70 @@
+{
+  "name": "Holds the Line (Barely)",
+  "type": "feature",
+  "img": "icons/skills/melee/shield-block-gray-yellow.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "rfi-scrubbed"
+    ],
+    "description": {
+      "value": "<p>If reduced below half Integrity, the commander must succeed a Soul check vs DC 12 at the start of its turn or order a retreat: every bandit within 6 squares disengages and moves away at full speed.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "bloodied",
+            "do": {
+              "morale": {
+                "attr": "soul",
+                "dc": 12,
+                "outcome": "orders a retreat — every bandit within 6 sq disengages at full speed"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Commander Road Bandit"
+        ],
+        "sourceIds": [
+          "DhIEpSsPkg1BoFkq"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "FFhIG5gTj9nEWYzv",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069941,
+    "modifiedTime": 1792989070023,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!FFhIG5gTj9nEWYzv"
+}

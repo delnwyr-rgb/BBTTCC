@@ -7,7 +7,7 @@
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p>Port of the existing <code>bosses.gloomgill.js</code> canonical boss into the new Boss actor schema. Drop onto a blank Boss actor to populate identity, raid profile, manifestations, and phase ladder.</p>",
+      "value": "<p>Drop onto a blank Boss actor to populate identity, raid profile, manifestations, and phase ladder.</p>",
       "chat": ""
     }
   },
@@ -94,7 +94,7 @@
       }
     }
   },
-  "folder": "0JDB983lzPepXXNe",
+  "folder": "567e8XdVM7DJjNkJ",
   "_id": "92rNBW1YfczhzciF",
   "effects": [
     {
@@ -136,8 +136,7 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!92rNBW1YfczhzciF.TKU917RAG7LhCUy3"
+      }
     }
   ],
   "sort": 900000,
@@ -146,12 +145,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778205375026,
-    "modifiedTime": 1778963271955,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988933137,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

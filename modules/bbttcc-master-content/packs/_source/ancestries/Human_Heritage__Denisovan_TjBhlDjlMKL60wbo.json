@@ -8,7 +8,7 @@
     "source": "Bad Eden (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Human (Denisovan)</em> while converting it from a lineage-species into a heritage.</p><p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Denisovan).</strong> You are not a fantasy human. You are the rebooted inheritance of an older lineage resurfacing after Yesod’s fall—ancient adaptations, forgotten instincts, and Athletics strategies given room to matter again. You remember mountains that no longer exist. Gravity listens to you when you ask it to.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>BOD (Body)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory) from the Human species root.</p><h3>Denisovan Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17):</p><ul><li><p><strong>Tier I — High-Altitude Blood.</strong> reroll-lowest on checks vs. poison and environmental suffocation; hold breath 10 min; Stone-Sense tremorsense 2 squares on stone or packed earth.</p></li><li><p><strong>Tier II — Stone-Singer.</strong> Mason’s tool proficiency. 1/Soma Break reinforce a structure or barrier.</p></li><li><p><strong>Tier III — Ancient Logic.</strong> reroll-lowest on Investigation and Occult checks involving structures, mechanisms, or ruins; share the insight to grant an ally advantage once per scene.</p></li><li><p><strong>Tier IV — Peak-Anchor.</strong> 1/Soma Break reaction to negate forced movement or teleportation within 6 squares; aggressor takes psychic backlash equal to your tier.</p></li></ul>",
+      "value": "<p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Human (Denisovan)</em> while converting it from a lineage-species into a heritage.</p><p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Denisovan).</strong> You are not a fantasy human. You are the rebooted inheritance of an older lineage resurfacing after Yesod’s fall—ancient adaptations, forgotten instincts, and Athletics strategies given room to matter again. You remember mountains that no longer exist. Gravity listens to you when you ask it to.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>BOD (Body)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory) from the Human species root.</p><h3>Denisovan Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17):</p><ul><li><p><strong>Tier I — High-Altitude Blood.</strong> reroll-lowest on checks vs. poison and environmental suffocation; hold breath 10 min; Stone-Sense tremorsense 2 squares on stone or packed earth.</p></li><li><p><strong>Tier II — Stone-Singer.</strong> a skill rank in Tinkering. 1/Soma Break reinforce a structure or barrier.</p></li><li><p><strong>Tier III — Ancient Logic.</strong> reroll-lowest on Investigation and Occult checks involving structures, mechanisms, or ruins; share the insight to let an ally reroll the lowest die once per scene.</p></li><li><p><strong>Tier IV — Peak-Anchor.</strong> 1/Soma Break reaction to negate forced movement or teleportation within 6 squares; aggressor takes psychic backlash equal to your tier.</p></li></ul><h3>Domain Edge</h3><ul><li><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Logistics marks</strong> at campaign start.</li></ul>",
       "chat": ""
     },
     "advancement": [
@@ -18,7 +18,7 @@
         "configuration": {
           "items": [
             {
-              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.FeRlU9VFJ5Yvhfnw",
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.Nqpnoy8U88PmgoL2",
               "optional": false
             }
           ],
@@ -47,18 +47,12 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "species"
-    },
     "bbttcc": {
       "kind": "heritage",
       "family": "human",
       "lineage": "Denisovan",
       "version": "2.0.0",
-      "date": "2026-04-18",
-      "normalizedFrom": "Human (Denisovan) [race/species]",
-      "tierGrantPattern": "all-tiers",
-      "note": "Denisovan is the first heritage in the pack to grant all 4 Tiers at levels 0/5/11/17 via advancements. Other heritages currently only grant Tier I and rely on a separate wiring hook for higher Tiers. Flag for future consistency pass."
+      "date": "2026-04-18"
     },
     "fourththing": {
       "rerolls": [
@@ -98,12 +92,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776540642443,
-    "modifiedTime": 1782167240127,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988971018,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

@@ -6,13 +6,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
-      "revision": 2,
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<h2>Spark Sense</h2><p><em>Some truths are louder than sound.</em></p><hr /><h3>Rules</h3><p>You gain a skill rank in Occult (Mind). If you already have it, its rank rises by one instead.</p><p>As an action, you may focus on the unseen and learn one of the following about a creature, object, or place within 6 squares (choose one):</p><ul><li>Whether it is suffused with magic-like resonance</li><li>Whether it feels aligned toward Renewal or toward Corruption (GM adjudication)</li><li>Whether it bears an active ward, curse, or binding</li></ul><p>You can use this principle a number of times equal to your rank bonus, regaining all uses on a Soma Break.</p><p class=\"ft-engine-note\"><em>⚙ +1 Occult. 🃏 Card — rank-bonus uses per Soma Break.</em></p>",
+      "value": "<h2>Spark Sense</h2><p><em>Some truths are louder than sound.</em></p><hr /><h3>Rules</h3><p>You gain a skill rank in Occult (Mind). If you already have it, its rank rises by one instead.</p><p>As an action, you may focus on the unseen and learn one of the following about a creature, object, or place within 6 squares (choose one):</p><ul><li>Whether it is suffused with resonance</li><li>Whether it feels aligned toward Renewal or toward Corruption (GM adjudication)</li><li>Whether it bears an active ward, curse, or binding</li></ul><p>You can use this technique a number of times equal to your rank bonus, regaining all uses on a Soma Break.</p><p class=\"ft-engine-note\"><em>⚙ +1 Occult. 🃏 Card — rank-bonus uses per Soma Break.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_spark_sense",
@@ -43,7 +43,6 @@
       "pack": "bbttcc-feats-expansion-v1",
       "generatedAt": "2026-01-18T20:40:45.006988+00:00"
     },
-    "fourththing": {},
     "autoanimations": {
       "id": "ft-spark-sense",
       "label": "Spark Sense",
@@ -232,11 +231,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1768802465828,
-    "modifiedTime": 1782164185979,
+    "modifiedTime": 1792977651485,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!hWJWokdPW2Pp6st3"

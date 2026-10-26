@@ -12,7 +12,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>On use:</strong> Lose <strong>25</strong> Radiation</p></li><li><p><strong>Charges:</strong> 1 (consumed on use)</p></li><li><p><strong>Target:</strong> Self</p></li><li><p><strong>Tier:</strong> I</p></li><li><p><strong>Cost:</strong> 10 Economy marks</p></li></ul>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Lose <strong>25</strong> Radiation</li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 10 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>Bitter tablet; the thyroid's small refusal.</p><!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Lose <strong>25</strong> Radiation</li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> I</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
       "chat": ""
     }
   },
@@ -37,7 +37,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "Standard rad-kit issue. Won't undo what's done; will keep what hasn't from settling in.",
+          "lore": "<p>Bitter tablet; the thyroid's small refusal.</p>",
           "charges": 1,
           "consume": {
             "effects": [
@@ -75,12 +75,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777096380567,
-    "modifiedTime": 1782160020993,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988925479,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

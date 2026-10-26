@@ -1,0 +1,134 @@
+{
+  "name": "Pole-Strike",
+  "type": "weapon",
+  "img": "icons/weapons/staves/staff-simple.webp",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "melee",
+    "damage": {
+      "formula": "1d10",
+      "attribute": "violence",
+      "type": "qliphothic",
+      "damageFlavor": "warmth-theft",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1
+    },
+    "tags": [
+      "bestiary",
+      "tier-ii",
+      "lineage-revenant"
+    ],
+    "effect": "On a hit the target is Shaken until the end of its next turn and feels cold for an hour.",
+    "flavor": "The pole finds the bottom. The bottom is you.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "shaken"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "",
+        "saveDcMode": "none",
+        "saveDcFixed": 15,
+        "saveAttributeOverrides": {}
+      },
+      "area": {
+        "shape": "none",
+        "size": 0
+      }
+    },
+    "description": {
+      "value": "<p><strong>Strike.</strong> reach 1 square, one target. Damage: <code>1d10</code> qliphothic (warmth-theft) + violence. On a hit the target is Shaken until the end of its next turn and feels cold for an hour.</p><p><em>The pole finds the bottom. The bottom is you.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "frame": "attack",
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII attack × 1",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Ferryman of the Drowned South"
+        ],
+        "sourceIds": [
+          "MHVUvyZbNGxeWytB"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "3LTdIvzqKw7ln0Hz",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069955,
+    "modifiedTime": 1792989070040,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!3LTdIvzqKw7ln0Hz"
+}

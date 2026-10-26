@@ -9,330 +9,7 @@
     },
     "bbttcc-factions": {
       "factionId": "H8sSXuuoTZIJKCXP",
-      "warLogs": [
-        {
-          "ts": 1780167118417,
-          "date": "5/30/2026, 1:51:58 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780167949181,
-          "date": "5/30/2026, 2:05:49 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780168658984,
-          "date": "5/30/2026, 2:17:38 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780168729042,
-          "date": "5/30/2026, 2:18:49 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780173118033,
-          "date": "5/30/2026, 3:31:58 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780178447200,
-          "date": "5/30/2026, 5:00:47 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780179931309,
-          "date": "5/30/2026, 5:25:31 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780211884507,
-          "date": "5/31/2026, 2:18:04 AM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780211929727,
-          "date": "5/31/2026, 2:18:49 AM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780211975695,
-          "date": "5/31/2026, 2:19:35 AM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780212021653,
-          "date": "5/31/2026, 2:20:21 AM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780212067929,
-          "date": "5/31/2026, 2:21:07 AM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780212106297,
-          "date": "5/31/2026, 2:21:46 AM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780212169232,
-          "date": "5/31/2026, 2:22:49 AM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780336213685,
-          "date": "6/1/2026, 12:50:13 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780336444842,
-          "date": "6/1/2026, 12:54:04 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780462180857,
-          "date": "6/2/2026, 11:49:40 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780462375807,
-          "date": "6/2/2026, 11:52:55 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780500418034,
-          "date": "6/3/2026, 10:26:58 AM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780510405077,
-          "date": "6/3/2026, 1:13:25 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780510512354,
-          "date": "6/3/2026, 1:15:12 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780510579982,
-          "date": "6/3/2026, 1:16:19 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780510689436,
-          "date": "6/3/2026, 1:18:09 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780510764666,
-          "date": "6/3/2026, 1:19:24 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780513604206,
-          "date": "6/3/2026, 2:06:44 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780521930599,
-          "date": "6/3/2026, 4:25:30 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780522369092,
-          "date": "6/3/2026, 4:32:49 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780522587537,
-          "date": "6/3/2026, 4:36:27 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780522851019,
-          "date": "6/3/2026, 4:40:51 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1780599531848,
-          "date": "6/4/2026, 1:58:51 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1781056406734,
-          "date": "6/9/2026, 8:53:26 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1781559149901,
-          "date": "6/15/2026, 4:32:29 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1781562199360,
-          "date": "6/15/2026, 5:23:19 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1781567048016,
-          "date": "6/15/2026, 6:44:08 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1781567251724,
-          "date": "6/15/2026, 6:47:31 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1781567793705,
-          "date": "6/15/2026, 6:56:33 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1781568793358,
-          "date": "6/15/2026, 7:13:13 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1781570756020,
-          "date": "6/15/2026, 7:45:56 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1781573108032,
-          "date": "6/15/2026, 8:25:08 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1781573242649,
-          "date": "6/15/2026, 8:27:22 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1781580442899,
-          "date": "6/15/2026, 10:27:22 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1781580916696,
-          "date": "6/15/2026, 10:35:16 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1781637131078,
-          "date": "6/16/2026, 2:12:11 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1781736333059,
-          "date": "6/17/2026, 5:45:33 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1781837274335,
-          "date": "6/18/2026, 9:47:54 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        },
-        {
-          "ts": 1783979396591,
-          "date": "7/13/2026, 4:49:56 PM",
-          "type": "turn",
-          "activity": "process_requests",
-          "summary": "No queued repair requests to process."
-        }
-      ]
+      "warLogs": []
     },
     "fourththing": {
       "combat": {
@@ -340,71 +17,13 @@
         "hexesMoved": 3
       },
       "kind": "rig"
-    },
-    "bbttcc-structures": {
-      "hasStructure": true,
-      "facilityMode": false,
-      "materialBOM": [
-        {
-          "materialKey": "scribed-steel",
-          "qty": 6,
-          "originalQty": 6,
-          "family": "metal",
-          "tier": "III",
-          "name": "Scribed Steel",
-          "tagsCache": [
-            "material",
-            "scribed-steel"
-          ]
-        },
-        {
-          "materialKey": "heart-iron",
-          "qty": 1,
-          "originalQty": 3,
-          "family": "metal",
-          "tier": "II",
-          "name": "Heart-Iron",
-          "tagsCache": [
-            "material",
-            "heart-iron",
-            "heart-iron",
-            "aurablade",
-            "metal"
-          ]
-        }
-      ],
-      "state": "intact",
-      "plates": {
-        "current": 33,
-        "max": 33
-      },
-      "threshold": 3.05,
-      "resists": {
-        "kinetic": 0.5
-      },
-      "vulnerabilities": {
-        "energy|heat": {
-          "type": "energy",
-          "flavor": "heat",
-          "factor": 2
-        }
-      },
-      "loadBearing": false,
-      "collapseProfile": {
-        "fallFt": 10,
-        "damageDice": "2d10",
-        "nonlethal": true,
-        "knockbackFt": 5,
-        "triggerState": "breached"
-      },
-      "history": []
     }
   },
   "system": {
     "identity": {
       "mobility": "mobile",
       "state": "deployed",
-      "factionOwnerId": "H8sSXuuoTZIJKCXP",
+      "factionOwnerId": "",
       "archetype": "Avuncular Transport Rig (ATR)",
       "binding": {
         "hexId": "",
@@ -457,8 +76,8 @@
       "crewMax": 9
     },
     "integrity": {
-      "value": 26,
-      "max": 39,
+      "value": 46,
+      "max": 46,
       "tier": 2,
       "bracket": "medium"
     },
@@ -485,7 +104,7 @@
     },
     "travel": {
       "speed": 3,
-      "range": 10,
+      "range": 14,
       "hazardResist": 0,
       "domains": [
         "land"
@@ -498,17 +117,9 @@
       "land",
       "atr"
     ],
-    "actions": {
-      "actionUsed": false,
-      "bonusUsed": false,
-      "reactionUsed": false,
-      "movementUsedFt": 0,
-      "movementBudgetFt": 30
-    },
-    "resources": {
-      "surge": {
-        "value": 1
-      }
+    "biography": {
+      "concept": "",
+      "notes": ""
     }
   },
   "prototypeToken": {
@@ -516,11 +127,11 @@
     "disposition": 1,
     "name": "Big Boy",
     "displayName": 30,
-    "width": 1,
-    "height": 1,
+    "width": 2,
+    "height": 2,
     "depth": 1,
     "texture": {
-      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/atr_2.png",
+      "src": "modules/bbttcc-core/assets/rigs/bus_2.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -608,7 +219,7 @@
     "prependAdjective": false
   },
   "_id": "T9wuTL0R6K2fUtBR",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/atr_2.png",
+  "img": "modules/bbttcc-core/assets/rigs/bus_2.webp",
   "items": [
     {
       "name": "ATR Transport Frame",
@@ -621,7 +232,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>Synthetic frame authored by the Rig Builder. Bracket: medium. </p>",
+          "value": "<p>Medium land transport. Carries people and matériel across Bad Eden — armored enough to discourage trouble, armed enough to end it.</p><p><b>Frame · Medium · Mobile</b></p>",
           "chat": ""
         }
       },
@@ -706,6 +317,9 @@
               }
             }
           }
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.items.Item.VMpmRfVs4r8XD9NX"
         }
       },
       "_id": "JbaNyvDPL1VeB8f7",
@@ -717,22 +331,21 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1784177518605,
-        "modifiedTime": 1784177518605,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989105123,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!T9wuTL0R6K2fUtBR.JbaNyvDPL1VeB8f7"
+      }
     },
     {
       "name": "Reinforced Plating",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/commodities/tech/plating-metal-armor-tech-steel-blue.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -740,7 +353,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p>",
+          "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p><p><strong>Passive:</strong> +2 Integrity max per rig tier while fitted.</p>",
           "chat": ""
         }
       },
@@ -748,7 +361,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": true
+            "passive": {
+              "integrityMaxPerTier": 2
+            }
           },
           "rfi": {
             "item": {
@@ -775,23 +390,22 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1784177518605,
-        "modifiedTime": 1784177518605,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989105124,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "wkUbgEMrpd2I36yV",
-      "_key": "!actors.items!T9wuTL0R6K2fUtBR.wkUbgEMrpd2I36yV"
+      "_id": "wkUbgEMrpd2I36yV"
     },
     {
       "name": "Comms Array",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/tools/fasteners/washer-hex-copper-brown.webp",
       "system": {
         "slot": "misc",
         "tags": [],
@@ -799,7 +413,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>A nest of antennae held together by faith. Extends signal range; allies on hex coordinate at +1 step.</p>",
+          "value": "<p>A nest of antennae held together by faith. Extends signal range; allies on hex coordinate at +1 step.</p><p><strong>Passive:</strong> Signal grants +2 on the ally's next roll instead of +1.</p>",
           "chat": ""
         }
       },
@@ -807,7 +421,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": true
+            "passive": {
+              "signalBonus": 1
+            }
           },
           "rfi": {
             "item": {
@@ -834,18 +450,17 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1784177518605,
-        "modifiedTime": 1784177518605,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989105124,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "VAtsb1spK9lMDZbe",
-      "_key": "!actors.items!T9wuTL0R6K2fUtBR.VAtsb1spK9lMDZbe"
+      "_id": "VAtsb1spK9lMDZbe"
     },
     {
       "name": "Twin Autocannons",
@@ -865,7 +480,8 @@
         "damageParts": [],
         "range": {
           "short": 4,
-          "long": 12
+          "long": 12,
+          "units": "sq"
         },
         "tags": [
           "suppression",
@@ -905,7 +521,7 @@
           }
         },
         "description": {
-          "value": "<p>Belt-fed twin barrels. Less aimed than <em>insisted upon</em>. Suppression in service of statement.</p>"
+          "value": "<p>Belt-fed twin barrels. Less aimed than <em>insisted upon</em>. Suppression in service of statement.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Damage:</strong> 2d8 Kinetic damage to <em>Integrity</em></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 4 / 12</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
         }
       },
       "flags": {
@@ -1142,330 +758,21 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1784177518605,
-        "modifiedTime": 1784177518605,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989105122,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": "Compendium.bbttcc-master-content.items.Item.H8o7ANSnEzum0J8C",
         "duplicateSource": null,
         "exportSource": null
       },
-      "_id": "V1QSzrovMUa6jvXC",
-      "_key": "!actors.items!T9wuTL0R6K2fUtBR.V1QSzrovMUa6jvXC"
-    },
-    {
-      "name": "Twin Autocannons",
-      "type": "weapon",
-      "img": "icons/weapons/guns/gun-chain-gatling-belt.webp",
-      "system": {
-        "category": "ranged",
-        "intent": "violence",
-        "skill": "firearms",
-        "damage": {
-          "formula": "2d8",
-          "attribute": "violence",
-          "type": "kinetic",
-          "damageFlavor": "",
-          "track": "integrity"
-        },
-        "damageParts": [],
-        "range": {
-          "short": 4,
-          "long": 12
-        },
-        "tags": [
-          "suppression",
-          "light"
-        ],
-        "effect": "",
-        "flavor": "",
-        "manifestation": {
-          "tier": 1,
-          "family": "form",
-          "concept": "",
-          "form": "weapon",
-          "function": "harm",
-          "stability": "bound",
-          "interactionModel": "weapon",
-          "costType": "none",
-          "costValue": 0,
-          "costText": "",
-          "duration": "scene",
-          "durationText": "",
-          "triggerText": "",
-          "scale": "personal",
-          "targetText": "",
-          "rangeAreaText": "",
-          "rangeFt": 0,
-          "maintenanceCost": "",
-          "riskText": "",
-          "pathResonance": "",
-          "fictionalPermission": "",
-          "gmCalibration": "",
-          "mechanicalHook": "",
-          "signature": "",
-          "thirdThing": "",
-          "opCost": {
-            "pool": "",
-            "value": 0
-          }
-        },
-        "description": {
-          "value": "<p>Belt-fed twin barrels. Less aimed than <em>insisted upon</em>. Suppression in service of statement.</p>"
-        }
-      },
-      "flags": {
-        "fourththing": {
-          "rigGear": {
-            "subtype": "rig-weapon"
-          },
-          "rfi": {
-            "item": {
-              "tier": "I",
-              "frame": "weapon",
-              "price": {
-                "marks": 50,
-                "currency": "violence",
-                "gmOverride": false,
-                "altCurrencies": {},
-                "split": null,
-                "rarityMult": 1,
-                "notes": "TI weapon stamp",
-                "bound": "free",
-                "saleBack": 20
-              }
-            }
-          }
-        },
-        "autoanimations": {
-          "id": "8b5ab879-3a84-4f1a-a5cd-955c3e7f2368",
-          "label": "Twin Autocannons",
-          "levels3d": {
-            "type": "explosion",
-            "data": {
-              "color01": "#FFFFFF",
-              "color02": "#FFFFFF",
-              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
-            },
-            "sound": {
-              "enable": false
-            },
-            "secondary": {
-              "enable": false,
-              "data": {
-                "color01": "#FFFFFF",
-                "color02": "#FFFFFF",
-                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
-              }
-            }
-          },
-          "macro": {
-            "enable": false,
-            "playWhen": "0"
-          },
-          "menu": "range",
-          "primary": {
-            "video": {
-              "dbSection": "range",
-              "menuType": "weapon",
-              "animation": "lasershot",
-              "variant": "01",
-              "color": "blue",
-              "enableCustom": false,
-              "customPath": ""
-            },
-            "sound": {
-              "enable": false,
-              "delay": 0,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "startTime": 0,
-              "volume": 0.75
-            },
-            "options": {
-              "contrast": 0,
-              "delay": 0,
-              "elevation": 1000,
-              "isReturning": false,
-              "isWait": false,
-              "onlyX": false,
-              "opacity": 1,
-              "playbackRate": 1,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "saturate": 0,
-              "tint": false,
-              "tintColor": "#FFFFFF",
-              "zIndex": 1
-            }
-          },
-          "secondary": {
-            "enable": false,
-            "video": {
-              "dbSection": "static",
-              "menuType": "spell",
-              "animation": "curewounds",
-              "variant": "01",
-              "color": "blue",
-              "enableCustom": false,
-              "customPath": ""
-            },
-            "sound": {
-              "enable": false,
-              "delay": 0,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "startTime": 0,
-              "volume": 0.75
-            },
-            "options": {
-              "addTokenWidth": false,
-              "anchor": "0.5",
-              "contrast": 0,
-              "delay": 0,
-              "elevation": 1000,
-              "fadeIn": 250,
-              "fadeOut": 500,
-              "isMasked": false,
-              "isRadius": true,
-              "isWait": false,
-              "opacity": 1,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "saturate": 0,
-              "size": 1.5,
-              "tint": false,
-              "tintColor": "#FFFFFF",
-              "zIndex": 1
-            }
-          },
-          "soundOnly": {
-            "sound": {
-              "enable": false,
-              "delay": 0,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "startTime": 0,
-              "volume": 0.75
-            }
-          },
-          "source": {
-            "enable": false,
-            "video": {
-              "dbSection": "static",
-              "menuType": "spell",
-              "animation": "curewounds",
-              "variant": "01",
-              "color": "blue",
-              "enableCustom": false,
-              "customPath": ""
-            },
-            "sound": {
-              "enable": false,
-              "delay": 0,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "startTime": 0,
-              "volume": 0.75
-            },
-            "options": {
-              "addTokenWidth": false,
-              "anchor": "0.5",
-              "contrast": 0,
-              "delay": 0,
-              "elevation": 1000,
-              "fadeIn": 250,
-              "fadeOut": 500,
-              "isMasked": false,
-              "isRadius": false,
-              "isWait": true,
-              "opacity": 1,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "saturate": 0,
-              "size": 1,
-              "tint": false,
-              "tintColor": "#FFFFFF",
-              "zIndex": 1
-            }
-          },
-          "target": {
-            "enable": false,
-            "video": {
-              "dbSection": "static",
-              "menuType": "spell",
-              "animation": "curewounds",
-              "variant": "01",
-              "color": "blue",
-              "enableCustom": false,
-              "customPath": ""
-            },
-            "sound": {
-              "enable": false,
-              "delay": 0,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "startTime": 0,
-              "volume": 0.75
-            },
-            "options": {
-              "addTokenWidth": false,
-              "anchor": "0.5",
-              "contrast": 0,
-              "delay": 0,
-              "elevation": 1000,
-              "fadeIn": 250,
-              "fadeOut": 500,
-              "isMasked": false,
-              "isRadius": false,
-              "opacity": 1,
-              "persistent": false,
-              "repeat": 1,
-              "repeatDelay": 250,
-              "saturate": 0,
-              "size": 1,
-              "tint": false,
-              "tintColor": "#FFFFFF",
-              "unbindAlpha": false,
-              "unbindVisibility": false,
-              "zIndex": 1
-            }
-          },
-          "isEnabled": true,
-          "isCustomized": true,
-          "fromAmmo": false,
-          "version": 5
-        },
-        "core": {
-          "sourceId": "Compendium.bbttcc-master-content.items.Item.H8o7ANSnEzum0J8C"
-        }
-      },
-      "folder": "0JDB983lzPepXXNe",
-      "effects": [],
-      "sort": 1800000,
-      "ownership": {
-        "default": 0,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "_stats": {
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177518605,
-        "modifiedTime": 1784177518605,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": "Compendium.bbttcc-master-content.items.Item.H8o7ANSnEzum0J8C",
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_id": "Csc3oxpOdJRivpas",
-      "_key": "!actors.items!T9wuTL0R6K2fUtBR.Csc3oxpOdJRivpas"
+      "_id": "Csc3oxpOdJRivpas"
     }
   ],
   "effects": [],
-  "folder": "Khbibuaxxz1XieoW",
+  "folder": "FaFSAThUFkRk4y4k",
   "sort": -200000,
   "ownership": {
     "default": 0,
@@ -1475,12 +782,12 @@
     "B83uCa0IV4h5mTEp": 2
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1784177518605,
-    "modifiedTime": 1784177518605,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989104949,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

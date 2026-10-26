@@ -1,0 +1,50 @@
+{
+  "name": "Fractured Will (2/scene)",
+  "type": "feature",
+  "img": "icons/magic/air/air-pressure-shield-blue.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>When the Deceiver fails a check, it may reveal that the failing self was another mask, and succeed instead. Twice per scene.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "oJVO6LXR9yIO3xFl",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Whispering Deceiver"
+        ],
+        "sourceIds": [
+          "hIOAU3bYR4KkdPhw"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069933,
+    "modifiedTime": 1792989070015,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!oJVO6LXR9yIO3xFl"
+}

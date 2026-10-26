@@ -1,0 +1,44 @@
+{
+  "_id": "UbcjGgmRwD1oiwBn",
+  "name": "Itemized Receipts",
+  "type": "feat",
+  "img": "icons/sundries/documents/document-sealed-beige-red.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Itemized Receipts.</strong> Not a metaphor. Actual receipts. Itemized. Someone bought something they should not have, and kept the little slip of paper like an idiot.</p><p><em>Play:</em> Deal 2 Influence damage to your opponent outside an exchange.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "influenceDmg2",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1200000,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1780000000000,
+    "modifiedTime": 1792989015052,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!UbcjGgmRwD1oiwBn"
+}

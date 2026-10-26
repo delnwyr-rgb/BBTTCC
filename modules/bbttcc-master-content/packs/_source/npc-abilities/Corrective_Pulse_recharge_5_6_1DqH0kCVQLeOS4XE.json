@@ -1,0 +1,81 @@
+{
+  "name": "Corrective Pulse (recharge 5–6)",
+  "type": "feature",
+  "img": "icons/magic/sonic/explosion-shock-sound-wave.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "rfi-scrubbed"
+    ],
+    "description": {
+      "value": "<p>Creatures of the Tree Being's choice within 6 squares must succeed a Presence check vs DC 16 or be Staggered until the end of their next turn as the forest imposes alignment pressure. Recharges on a Soma Break.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "condition": {
+                "key": "staggered",
+                "duration": "1-round",
+                "save": {
+                  "attr": "presence",
+                  "dc": 16
+                }
+              }
+            },
+            "limit": {
+              "per": "combat",
+              "uses": 1
+            }
+          }
+        ],
+        "recharge": {
+          "mode": "d6",
+          "min": 5
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Tree Person of Early Tifaret"
+        ],
+        "sourceIds": [
+          "Wlk2fVGEGJKgROfD"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "1DqH0kCVQLeOS4XE",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069925,
+    "modifiedTime": 1792989070006,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!1DqH0kCVQLeOS4XE"
+}

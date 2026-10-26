@@ -1,0 +1,66 @@
+{
+  "name": "Aura of Stagnation",
+  "type": "feature",
+  "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The 3 squares around the demon are difficult terrain — thought itself moves slowly there. A creature that starts its turn in the aura has its speed halved until the start of its next turn, and rolls twice-keep-worse on checks to maintain a manifestation.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "do": {
+              "impose": true,
+              "slow": 3
+            },
+            "radius": 3,
+            "who": "enemies"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Obstructor Demon"
+        ],
+        "sourceIds": [
+          "vYVjgcHYwwYRM6J1"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "0b3a9ZRhaSFkzrFO",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069912,
+    "modifiedTime": 1792989069995,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!0b3a9ZRhaSFkzrFO"
+}

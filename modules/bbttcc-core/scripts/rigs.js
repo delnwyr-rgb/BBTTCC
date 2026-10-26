@@ -36,7 +36,7 @@ const num = (v, d = 0) => (Number.isFinite(Number(v)) ? Number(v) : d);
 const clone = (v) => foundry.utils.deepClone(v);
 
 /** dnd5e damage threshold by bracket (RIG_SPRINT_PLAN §1; RFI plating is the system's own). */
-const DT_BY_BRACKET = { personal: 0, light: 5, medium: 10, heavy: 15, siege: 20 };
+const DT_BY_BRACKET = { personal: 0, light: 5, medium: 10, heavy: 15, siege: 20, mecha: 5 };   // mecha: RG9 (2026-10-26)
 const HP_BY_BRACKET = { personal: 10, light: 30, medium: 60, heavy: 100, siege: 150 };
 const DEFAULT_CAPACITY = { pilot: { min: 1, max: 1 }, gunner: { min: 0, max: 2 }, engineer: { min: 0, max: 1 }, crew: { min: 0, max: 4 } };
 const DEFAULT_TRAVEL = { speed: 1, range: 5, hazardResist: 0, domains: ["land"], depthRating: 0 };

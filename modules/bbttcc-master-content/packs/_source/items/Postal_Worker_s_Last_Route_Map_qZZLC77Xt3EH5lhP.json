@@ -10,6 +10,7 @@
     ],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>A laminated mail-route map, hand-annotated in three colors of ink. The roads are pre-Shattering. Most are now dust, briar, or crater. The annotations include phrases like <em>\"dog at 12, friendly,\"</em> and <em>\"Mrs. Vorhees needs the package put inside the screen door,\"</em> and, more recently in different handwriting, <em>\"the bend remembers wrong.\"</em></p><p><strong>Pre-Shattering Memory.</strong> Once per scene, consult the map. The GM tells you one fact about the current hex that pre-dates the Shattering — a building, a road, a name, a habit of the land. This information is true; it is also at least 27 years out of date. Use it however you want.</p>",
       "chat": ""
@@ -66,11 +67,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777437725664,
-    "modifiedTime": 1778541978461,
+    "modifiedTime": 1792974834888,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

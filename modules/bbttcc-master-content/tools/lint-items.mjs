@@ -254,9 +254,16 @@ function carriers(pack, v, effs) {
   if (pack === "doctrines") {
     const key = String(v.flags?.bbttcc?.key || "").toLowerCase();
     if (key && new RegExp("(^|[^a-z0-9_])" + key + "([^a-z0-9_]|$)", "m").test(EXEC_SRC)) c.push("raid-apply/throughput");
+    // opt_<key> option maneuvers get their bodies from the L1 table in maneuvers-audit-wiring (`<key>: { … t: (c) => … }`,
+    // registered as `opt_${k}` at runtime) — the literal "opt_<key>" never appears in source. DC1, 2026-10-26.
+    else if (key && /^opt_/.test(key) && new RegExp("^\\s*" + key.slice(4) + ":\\s*\\{[^\\n]*\\bt: *\\(c\\) *=>", "m").test(EXEC_SRC)) c.push("raid-apply/throughput");
+    // found_site_<type> rows are registered in a loop over SITE_TYPES (effects-wilderness `found_site_${type}`) — DC4 (withdrawn), 2026-10-26.
+    else if (key && /^found_site_[a-z]+$/.test(key) && /found_site_\$\{/.test(EXEC_SRC)) c.push("raid-apply/throughput");
   }
   const bco = v.flags?.["bbttcc-character-options"];
   if (bco && nonEmpty(bco.bonuses)) c.push("co-bonuses(OP)");
+  // CO21 (2026-10-26) Domain carriers: op-engine caps/discounts, turn-driver income, raid roll bonus
+  for (const k of ["domainCapBonus", "domainCostDiscount", "domainIncome", "domainRollBonus"]) if (nonEmpty(ff[k])) c.push(`co-bonuses(${k})`);
   if (bco?.option?.key && pack === "co-crew-types") {
     const n = name.replace(/^Crew Type:\s*/i, "").replace(/\s*\(Tier \d\)/i, "").trim().toLowerCase();
     if (CREW_GRANTS.has(n)) c.push("crew-maneuver-grants");
@@ -290,7 +297,7 @@ const _whenBad = (w) => (Array.isArray(w) ? w : [w]).filter(x => !WHEN_VOCAB.has
 // I18 (2026-10-14): the icon swap ruling — every item icon comes from an approved pool. GOTTGAIT = the AI
 // placeholder library (retired), icons/svg = generic core silhouettes (banned by ruling), dnd5e/Devin Night = not ours.
 const ICON_BAD = /GOTTGAIT|^icons\/svg\/|^systems\/dnd5e\/|^art\/devin-knight\//;
-const ICON_OK = /^icons\/(commodities|consumables|containers|creatures|environment|equipment|magic|skills|sundries|tools|weapons)\/|^art\/bbttcc\/(asli-icons|asli-tokens|overlays-icons)\/|^modules\/bbttcc-core\/assets\/rigs\//;
+const ICON_OK = /^icons\/(commodities|consumables|containers|creatures|environment|equipment|magic|skills|sundries|tools|weapons)\/|^art\/bbttcc\/(asli-[a-z-]+|overlays-icons)\/|^modules\/bbttcc-core\/assets\/rigs\//;   // CO23: every art/bbttcc/asli-* pool is approved (asli-archetypes joined 10-25)
 function lintIcon(pack, v) {
   const img = String(v.img || "");
   if (!img) return hit("I18", "E", pack, v, "no img");
@@ -371,7 +378,7 @@ for (const file of PACK_FILES) {
     if (v.type === "power" && !c.some(x => /appliedStates|appliedEffects|damageRoll|^save$/.test(x))) { const eff = strip(v.system?.effect); hit("I6", eff ? "W" : "E", pack, v, eff ? `power with prose effect, no payload :: ${eff.slice(0, 90)}` : "power with EMPTY effect text and no payload"); }
     if (v.type === "weapon" && /DC\s?\d|rolls? vs|Shaken|Staggered|Prone|Restrained|Blinded|Charmed|Compelled|Imposed|push|knock/i.test(strip(v.system?.effect)) && !c.some(x => /appliedStates|^save$/.test(x)) && !nonEmpty(ff.npcAuto)) hit("I7", "W", pack, v, `weapon rider is prose only :: ${strip(v.system?.effect).slice(0, 90)}`);
     if (pack === "doctrines") { const t = strip(v.flags?.bbttcc?.effects?.text), d = strip(v.system?.description?.value); const rules = /No rules text registered/i.test(t) ? "" : (t || d.replace(/^[^.]*\bcost\b[^.]*\.?\s*/i, "")); if (!rules || /No rules text registered/i.test(d)) hit("I8", "E", pack, v, "doctrine has no rules text (only a cost line, or none)"); else if (!c.includes("raid-apply/throughput") && mech) hit("I8", "W", pack, v, `doctrine key "${v.flags?.bbttcc?.key}" has no apply()/throughput handler`); }
-    if (/^co-(crew-types|occult-associations)$/.test(pack) && /\(Tier \d\)/.test(v.name) && !c.some(x => /co-bonuses|ae-changes|char_opt:(?!info)/.test(x)) && mech) hit("I9", "W", pack, v, "tier feat: Strategic/Tactical lines with no bonuses and no AE");
+    if (/^co-(crew-types|occult-associations)$/.test(pack) && /\(Tier \d\)/.test(v.name) && !c.some(x => /co-bonuses|ae-changes|char_opt:(?!info)|^rerolls$|^grants/.test(x)) && mech) hit("I9", "W", pack, v, "tier feat: Strategic/Tactical lines with no bonuses and no AE");
     if (!TEMPLATE_TYPES.has(v.type)) hit("I10", "W", pack, v, `foreign item type "${v.type}" — fourththing sheets/engines skip it`);
     if (["feat","feature"].includes(v.type) && mech && !id && !/^(courtly-secrets|co-npc-callings)$/.test(pack)) hit("I11", "I", pack, v, "mechanic text but empty system.identifier");
     for (const r of (Array.isArray(ff.rerolls) ? ff.rerolls : [])) { if (!REROLL_CONTEXTS.has(r?.context)) hit("I13", "E", pack, v, `rerolls.context "${r?.context}" unknown (engine: ${[...REROLL_CONTEXTS].join("/")})`); if (!REROLL_MODES.has(r?.mode)) hit("I13", "E", pack, v, `rerolls.mode "${r?.mode}"`); }

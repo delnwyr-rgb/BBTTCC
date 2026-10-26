@@ -1,0 +1,73 @@
+{
+  "name": "Charter Passage",
+  "type": "feat",
+  "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+  "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><b>Charter Passage</b></p><p>Charter another Domain's boats, flyers or subs (they must rate you neutral or better; pick their rig): it carries your people through those domains for 3 turns, and the carrier pockets 8 marks Economy.</p><p><b>Cost:</b> Diplomacy 20 · Economy 10 marks</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "charter-passage",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "charter_passage",
+      "meta": {
+        "tier": 1,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null
+      }
+    }
+  },
+  "_id": "oeaLu6STD8QrzB9F",
+  "effects": [],
+  "folder": "UpsmhFcQUtMCrYu2",
+  "sort": 9200000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988991614,
+    "modifiedTime": 1792988991615,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "_key": "!items!oeaLu6STD8QrzB9F"
+}

@@ -3,15 +3,19 @@
   "type": "npc",
   "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/GEOMETRY%20SERPENT1.png",
   "system": {
-    "role": "Geometric Predator (Vector-Reader)",
+    "role": "stealth",
     "tier": 1,
     "factionId": "",
-    "notes": "",
+    "notes": "A snake made of angles. It reads the line a strike will take before the strike is thrown, and it is usually somewhere else by then. Harmless until cornered; cornering it is the hard part.",
     "details": {
       "level": 1,
       "tier": 1,
       "statPoints": 0,
-      "skillPoints": 0
+      "skillPoints": 0,
+      "biography": {
+        "value": "<p><strong>Concept.</strong> A snake made of angles. It reads the line a strike will take before the strike is thrown, and is usually somewhere else by then.</p>\n<p><strong>Signature.</strong> The room briefly grows a corner that wasn't drawn.</p>",
+        "public": ""
+      }
     },
     "faction": {
       "id": null,
@@ -40,8 +44,9 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 10,
-        "max": 10
+        "value": 25,
+        "max": 25,
+        "temp": 0
       },
       "stress": {
         "value": 5,
@@ -127,7 +132,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,10 +149,13 @@
     },
     "conditionImmunities": [],
     "tags": [
-      "5e-port",
       "cr-1",
-      "phase2-narrative-applied"
+      "phase2-narrative-applied",
+      "rfi-scrubbed"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -159,7 +168,12 @@
       "value": 0,
       "taint": 0,
       "fragments": []
-    }
+    },
+    "biography": {
+      "concept": "Geometric Predator (Vector-Reader)",
+      "notes": "A snake made of angles. It reads the line a strike will take before the strike is thrown, and it is usually somewhere else by then. Harmless until cornered; cornering it is the hard part."
+    },
+    "description": "<p><strong>Concept.</strong> A snake made of angles. It reads the line a strike will take before the strike is thrown, and is usually somewhere else by then.</p>\n<p><strong>Signature.</strong> The room briefly grows a corner that wasn't drawn.</p>"
   },
   "items": [
     {
@@ -177,7 +191,7 @@
         "target": "self",
         "range": "near",
         "damage": "",
-        "damageType": "energy",
+        "damageType": "electrical",
         "damageFlavor": "",
         "damageRoll": {
           "op": "none",
@@ -189,12 +203,12 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "Move along an impossible chord; reappear at any point within near. The Serpent's next attack this turn rolls 2d10x10 with reroll-lowest.",
+        "effect": "Move along an impossible chord; reappear at any point within near. The Serpent's next attack this turn rolls 2d10 with reroll-lowest.",
         "tags": [
           "translated",
-          "5e-port",
           "phase2-narrative",
-          "manifestation"
+          "manifestation",
+          "rfi-scrubbed"
         ],
         "category": "manifestation",
         "flavor": "The room briefly grows a corner that wasn't drawn.",
@@ -243,6 +257,9 @@
             "dcMode": "derived",
             "dcFixed": 15
           }
+        },
+        "description": {
+          "value": "<p><strong>Working.</strong> <em>Travel along a line nobody drew.</em></p>\n<p>Move along an impossible chord and reappear at any point within near range without provoking reaction strikes. The Serpent's next attack this turn rerolls the lowest die.</p>\n<p><strong>Cost.</strong> 1 Clarity · action · self / near.</p>\n<p><em>The room briefly grows a corner that wasn't drawn.</em></p>"
         }
       },
       "_id": "Gwewt1W1juBAecHE",
@@ -435,15 +452,33 @@
           "isCustomized": true,
           "fromAmmo": false,
           "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "shift": 6,
+                  "bankReroll": {
+                    "context": "attack",
+                    "note": "Angle of Arrival"
+                  }
+                },
+                "who": "self"
+              }
+            ]
+          }
         }
       },
       "_stats": {
-        "coreVersion": "14.363",
-        "systemId": null,
-        "systemVersion": null,
-        "createdTime": null,
-        "modifiedTime": null,
-        "lastModifiedBy": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1788544804975,
+        "modifiedTime": 1792989124108,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
@@ -451,8 +486,7 @@
       "folder": null,
       "ownership": {
         "default": 0
-      },
-      "_key": "!actors.items!xCHciB6b5HEF5926.Gwewt1W1juBAecHE"
+      }
     },
     {
       "name": "Read the Vector",
@@ -463,11 +497,11 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port",
-          "phase2-narrative"
+          "phase2-narrative",
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p><strong>Passive.</strong> Once per scene, the Serpent may reroll-lowest one defense check by reading where the strike was going to swing.</p>",
+          "value": "<p><strong>Passive.</strong> Once per scene, the Serpent may reroll the lowest die on one defense check by reading where the strike was going to swing.</p>",
           "chat": ""
         }
       },
@@ -484,15 +518,37 @@
               "ember"
             ]
           }
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "selfTurnStart",
+                "do": {
+                  "bankReroll": {
+                    "context": "defense",
+                    "note": "Read the Vector"
+                  }
+                },
+                "to": "self",
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                },
+                "label": "Read the Vector"
+              }
+            ]
+          }
         }
       },
       "_stats": {
-        "coreVersion": "14.363",
-        "systemId": null,
-        "systemVersion": null,
-        "createdTime": null,
-        "modifiedTime": null,
-        "lastModifiedBy": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1788546630115,
+        "modifiedTime": 1792989124107,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
@@ -500,8 +556,190 @@
       "folder": null,
       "ownership": {
         "default": 0
+      }
+    },
+    {
+      "name": "Territory",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "wild",
+          "geometric"
+        ],
+        "description": {
+          "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: reroll the lowest die on attack rolls against any creature within 1 square of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!xCHciB6b5HEF5926.3pmEP9XBFJ0rwwVI"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "firstRound": true
+                },
+                "do": {
+                  "reroll": "attack"
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                },
+                "label": "Territory — the first strike rerolls the lowest"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "wild"
+            }
+          }
+        }
+      },
+      "_id": "RoXr4nzu4a8mCMVx",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342350971,
+        "modifiedTime": 1791342350972,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Bite",
+      "type": "weapon",
+      "img": "icons/weapons/swords/swords-sharp-worn.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "bite",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1,
+          "value": 5,
+          "units": "ft"
+        },
+        "tags": [
+          "lineage-strike",
+          "wild"
+        ],
+        "effect": "On a hit, the target is marked by scent until the end of the scene — this creature and its kin reroll the lowest die when tracking it.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>On a hit, the target is marked by scent until the end of the scene — this creature and its kin reroll the lowest die when tracking it.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "frame": "attack",
+              "lineageStrike": "wild",
+              "price": {
+                "marks": 50,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI attack × 1",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "do": {
+                  "prompt": "On a hit, the target is marked by scent until the end of the scene — this creature and its kin reroll the lowest die w"
+                },
+                "narrative": true
+              }
+            ]
+          }
+        }
+      },
+      "_id": "vdRu29Vk4maSaOjn",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791342350971,
+        "modifiedTime": 1792989124108,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -604,14 +842,36 @@
   },
   "folder": "uMhSIaldbbcnBh0H",
   "sort": 1000000,
-  "flags": {},
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "lineage": "wild",
+          "subLineage": "geometric",
+          "tier": "I",
+          "bracket": "light",
+          "price": {
+            "marks": 5,
+            "bounty": 5,
+            "hire": 10,
+            "ransom": 10,
+            "currency": "violence",
+            "gmOverride": false,
+            "notes": "TI light wild — bounty 5 / hire 10 marks; credited to the pool matching the method (default violence)"
+          },
+          "title": "Geometric Predator (Vector-Reader)"
+        }
+      },
+      "creatureType": "beast"
+    }
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777700829135,
-    "modifiedTime": 1783219918008,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989123947,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

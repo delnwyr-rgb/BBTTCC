@@ -1,0 +1,971 @@
+{
+  "name": "Sklar Bjrornholt",
+  "type": "npc",
+  "_id": "tlGzp9UpQU3PwKdB",
+  "img": "art/devin-knight/Vikings/F_Noble_Norse1.webp",
+  "system": {
+    "role": "brute",
+    "tier": 4,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 18,
+      "tier": 4,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "xp": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 9
+      },
+      "intrigue": {
+        "value": 4
+      },
+      "presence": {
+        "value": 8
+      },
+      "body": {
+        "value": 7
+      },
+      "mind": {
+        "value": 3
+      },
+      "soul": {
+        "value": 4
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 135,
+        "max": 135,
+        "temp": 0
+      },
+      "stress": {
+        "value": 67,
+        "max": 67
+      },
+      "guard": {
+        "value": 16
+      },
+      "evasion": {
+        "value": 16
+      },
+      "resolve": {
+        "value": 16
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [
+      "humanoid",
+      "valhaulan",
+      "sky-pirate",
+      "boss",
+      "mortal"
+    ],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "Valkyrie captain of the Valhaulans, the sideways-landing sky pirates (Act 5)",
+      "notes": "Sklar Bjrornholt leads the Valhaulans, aerial techno-Viking pirates who rob you, apologise, and sell your goods back, and whose airships always land sideways. She is a towering, charismatic Valkyrie with impeccable leadership and no impulse control. She offers you a drink before she decides what you are, and decides while you drink it. She is mercenary and honest about it, delighted by boldness, bored by caution, and laughs at the wrong moments and means it. 'I like you already.'"
+    }
+  },
+  "prototypeToken": {
+    "name": "Sklar Bjrornholt",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/devin-knight/Vikings/F_Noble_Norse1.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "name": "Storm-Voiced",
+      "type": "feature",
+      "img": "icons/magic/sonic/scream-wail-shout-teal.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-mortal",
+          "lineage-trait",
+          "banner-valhaulan"
+        ],
+        "description": {
+          "value": "<p>The first time each scene Sklar is reduced below half Integrity, she roars: allies within 6 squares reroll the lowest die on their next attack roll, and she gains 5 temporary Integrity.</p><p><em>“I like you already.”</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "feature",
+              "lineageTrait": "mortal"
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "bloodied",
+                "do": {
+                  "tempIntegrity": 5,
+                  "prompt": "Storm-Voiced: allies within 6 squares reroll the lowest die on their next attack."
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "WZXFl6nrtN3SFBfq",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423992640,
+        "modifiedTime": 1791423992641,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Valkyrie's Axe",
+      "type": "weapon",
+      "img": "icons/weapons/axes/axe-double-engraved.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "3d10",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "a boarding axe the size of a door",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "bestiary",
+          "tier-iv",
+          "lineage-mortal"
+        ],
+        "effect": "On a hit the target is Staggered until the end of its next turn.",
+        "flavor": "She apologises mid-swing. She means it.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "staggered"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "",
+            "saveDcMode": "none",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square, one target. Damage: <code>3d10</code> kinetic (a boarding axe the size of a door) + violence. On a hit the target is Staggered until the end of its next turn.</p><p><em>She apologises mid-swing. She means it.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "attack",
+              "price": {
+                "marks": 1350,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIV attack × 1",
+                "bound": "free",
+                "saleBack": 540
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "Fd66DPFrHBn1OFFF",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423992640,
+        "modifiedTime": 1791423992642,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Pulsar Pistol",
+      "type": "weapon",
+      "img": "icons/weapons/guns/gun-pistol-flintlock-metal.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "2d10",
+          "attribute": "violence",
+          "type": "electrical",
+          "damageFlavor": "pulsar arc",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 8,
+          "long": 24
+        },
+        "tags": [
+          "bestiary",
+          "tier-iv",
+          "lineage-mortal"
+        ],
+        "effect": "",
+        "flavor": "Sold back to its previous owner twice.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 8 squares, one target. Damage: <code>2d10</code> electrical (pulsar arc) + violence.</p><p><em>Sold back to its previous owner twice.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "attack",
+              "price": {
+                "marks": 1350,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIV attack × 1",
+                "bound": "free",
+                "saleBack": 540
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "46jg2IF5vcu3ITji",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423992640,
+        "modifiedTime": 1791423992642,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Fractured Will (3/scene)",
+      "type": "feature",
+      "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-mortal",
+          "boss",
+          "fractured-will"
+        ],
+        "description": {
+          "value": "<p>When Sklar fails a check, some part of her refuses the outcome: Sklar succeeds instead. 3 times per scene.</p><p><em>She laughs at the wrong moment and the dice reconsider.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "feature"
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "JG1DhMyrjlNkLjpz",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423992641,
+        "modifiedTime": 1791423992642,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Sideways Landing (recharge 5–6)",
+      "type": "weapon",
+      "img": "icons/skills/movement/feet-winged-boots-brown.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "presence",
+        "skill": "channel",
+        "damage": {
+          "formula": "3d8",
+          "attribute": "presence",
+          "type": "kinetic",
+          "damageFlavor": "the airship arrives",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 18
+        },
+        "tags": [
+          "bestiary",
+          "tier-iv",
+          "lineage-mortal",
+          "boss",
+          "signature"
+        ],
+        "effect": "Cone 6 squares. — targets roll vs Evasion (DC 17). Half damage on success. On a failed save the target is knocked Prone by the wash of a ship landing on its side.",
+        "flavor": "Valhaulan airships always land sideways.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "prone"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "intrigue",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 17,
+            "saveAttributeOverrides": {}
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "intrigue",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 17,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "cone",
+            "size": 30
+          }
+        },
+        "description": {
+          "value": "<p><strong>Area Attack.</strong> Each creature in a 6-square. cone rolls vs DC 17. Damage: <code>3d8</code> kinetic (the airship arrives). On a failed save the target is knocked Prone by the wash of a ship landing on its side.</p><p><em>Valhaulan airships always land sideways.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "save",
+              "aoeShape": "cone",
+              "aoeSize": 30,
+              "dc": 17,
+              "price": {
+                "marks": 1350,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIV save × 1",
+                "bound": "free",
+                "saleBack": 540
+              }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "ofowKwVCKL7D53TG",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423992641,
+        "modifiedTime": 1792989139971,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Boarding Action (1/scene)",
+      "type": "weapon",
+      "img": "icons/tools/nautical/anchor.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "presence",
+        "skill": "channel",
+        "damage": {
+          "formula": "4d8",
+          "attribute": "presence",
+          "type": "kinetic",
+          "damageFlavor": "every Valhaulan at once",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 18
+        },
+        "tags": [
+          "bestiary",
+          "tier-iv",
+          "lineage-mortal",
+          "boss",
+          "ultimate"
+        ],
+        "effect": "Sphere 6 squares. — targets roll vs Resolve (DC 18). Half damage on success. ULTIMATE — usable only at or below half Integrity. On a failed save the target is Compelled for 1 round: hands off your goods, they're inventory now.",
+        "flavor": "“We'll sell it back. Promise.”",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "saveAttributeOverrides": {}
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 30
+          }
+        },
+        "description": {
+          "value": "<p><strong>Area Attack.</strong> Each creature within 6 squares. rolls vs DC 18. Damage: <code>4d8</code> kinetic (every Valhaulan at once). ULTIMATE — usable only at or below half Integrity. On a failed save the target is Compelled for 1 round: hands off your goods, they're inventory now.</p><p><em>“We'll sell it back. Promise.”</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "save",
+              "aoeShape": "sphere",
+              "aoeSize": 30,
+              "dc": 18,
+              "price": {
+                "marks": 1350,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIV save × 1",
+                "bound": "free",
+                "saleBack": 540
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "FwiA8zf4Sr6HfEzS",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423992641,
+        "modifiedTime": 1792977802926,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "effects": [],
+  "folder": "UAHVCMVXEDT8Q1B1",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "monster",
+      "creatureType": "humanoid",
+      "rfi": {
+        "actor": {
+          "tier": "IV",
+          "bracket": "boss",
+          "archetype": "sklar-bjrornholt",
+          "lineage": "mortal",
+          "subLineage": "valhaulan",
+          "title": "Valkyrie captain of the Valhaulans (Boss)",
+          "bestiary": {
+            "themes": [
+              "humanoid",
+              "valhaulan",
+              "sky-pirate",
+              "boss"
+            ],
+            "role": "brute",
+            "lootTable": [
+              {
+                "name": "Cradle-Rig Plating",
+                "qty": "1d3",
+                "weight": 4
+              },
+              {
+                "name": "Valhauler Pulsar Core",
+                "qty": "1",
+                "weight": 2
+              },
+              {
+                "name": "A Drink She Offered You",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "exemplar": true,
+          "price": {
+            "marks": 120,
+            "bounty": 120,
+            "hire": null,
+            "ransom": null,
+            "currency": "violence",
+            "gmOverride": false,
+            "notes": "TIV boss mortal — bounty 120 marks; credited to the pool matching the method (default violence)"
+          }
+        }
+      }
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the Valhaulans, the ships, landing sideways, the bunker, the Spark, the Seal, the heading, the client, the paper, fuel, pay, the island, Khezek-Tor, the mountain, terms, drinks, boldness, arithmetic",
+        "notes": "[FINALE-RETROFIT-2026-09-30] PRIVATE TRUTH — Sklar Bjrornholt leads the Valhaulans: aerial techno-Viking pirates whose airships always land sideways. A Valkyrie with impeccable leadership and no impulse control; she offers you a drink before she decides what you are, and decides while you drink it. VOICE: mercenary honesty, delighted by boldness, bored by caution; laughs at the wrong moments and means it; \"I like you already.\" She switched the Seal on. She knows the beam's HEADING (coastward, to their own Leygate) and NOT ITS COST — the client's paper never once mentioned an island, and she has never been shown a figure. She has seen the client's paper and WILL NOT SAY THE NAME: not out of loyalty — she is not being paid to say it, and she says exactly that. She does not want a dead island on her hands; that is the crack. ⚙ The paymaster is named only by Gloomgill (Act 6); Sklar never says it, in any branch. GUARDS: the crew's positions; Wick's cell (she finds them creepy and useful). TELLS: does arithmetic out loud when something costs more than it pays; stops laughing exactly once per conversation, and that is the moment.",
+        "secrets": [
+          "The Heading :: oppRollMinus2 :: a Steward shows her the Sideways Manifest, the Caravan Route or the verified Legansus heading :: She confirms it flatly — coastward, to their own Leygate, switched on on turn 2 — and adds that the client's paper never once mentioned an island. \"I was told it was a debt. Debts have headings. Islands don't.\"",
+          "Not Enough For An Island :: favorShift :: a Steward shows her the Paymaster's Numbers (or the Service Manifest, or the Pulled Files) :: THE TURN. She reads the figure, does the arithmetic out loud in front of people she was paid to fight, and says the line: \"I am not being paid enough for an island.\" Then she breaks with the paymaster, in that order. She still does not say the name; she says she is not being paid to."
+        ],
+        "secretsRaw": "The Heading :: oppRollMinus2 :: a Steward shows her the Sideways Manifest, the Caravan Route or the verified Legansus heading :: She confirms it flatly — coastward, to their own Leygate, switched on on turn 2 — and adds that the client's paper never once mentioned an island. \"I was told it was a debt. Debts have headings. Islands don't.\"\nNot Enough For An Island :: favorShift :: a Steward shows her the Paymaster's Numbers (or the Service Manifest, or the Pulled Files) :: THE TURN. She reads the figure, does the arithmetic out loud in front of people she was paid to fight, and says the line: \"I am not being paid enough for an island.\" Then she breaks with the paymaster, in that order. She still does not say the name; she says she is not being paid to."
+      }
+    },
+    "bbttcc-auto-link": {
+      "entityKind": "monster",
+      "createdViaMonsterBuilder": false,
+      "createdBy": "build-bestiary-slots.mjs 2026-10-07",
+      "lineage": "mortal"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.5",
+    "createdTime": 1791317103714,
+    "modifiedTime": 1791423992786,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!tlGzp9UpQU3PwKdB"
+}

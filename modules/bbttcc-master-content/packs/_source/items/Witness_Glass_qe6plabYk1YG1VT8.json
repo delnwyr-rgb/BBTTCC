@@ -44,15 +44,15 @@
           "charges": 3,
           "materialKey": "witness-glass",
           "price": {
-            "marks": 225,
+            "marks": 69,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1.5,
-            "notes": "TII material stamp × rarity 1.5",
+            "notes": "TII material × rarity 1.5",
             "bound": "free",
-            "saleBack": 90
+            "saleBack": 27
           }
         }
       }
@@ -67,11 +67,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137194163,
-    "modifiedTime": 1782156674954,
+    "modifiedTime": 1792977662547,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

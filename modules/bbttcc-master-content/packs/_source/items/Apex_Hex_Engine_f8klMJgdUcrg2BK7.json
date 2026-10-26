@@ -9,6 +9,7 @@
     ],
     "category": "gear",
     "source": "Phase 7 Seed (2026-05-10)",
+    "quantity": 1,
     "description": {
       "value": "<p>A drum-sized core of Yesodium and pre-Fall salvage. Installed in a war-rig, it transforms the chassis into something the world remembers.</p>",
       "chat": ""
@@ -70,18 +71,18 @@
   },
   "_id": "f8klMJgdUcrg2BK7",
   "effects": [],
-  "folder": "0JDB983lzPepXXNe",
+  "folder": "TNrB6kEiHS0KwwJT",
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
     "systemVersion": "0.6.0",
     "createdTime": 1778963271750,
-    "modifiedTime": 1778963271958,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988931566,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

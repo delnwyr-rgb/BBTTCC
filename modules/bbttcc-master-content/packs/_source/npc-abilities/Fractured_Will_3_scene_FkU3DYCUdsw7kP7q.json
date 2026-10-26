@@ -1,0 +1,63 @@
+{
+  "name": "Fractured Will (3/scene)",
+  "type": "feature",
+  "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-mortal",
+      "boss",
+      "fractured-will"
+    ],
+    "description": {
+      "value": "<p>When Sklar fails a check, some part of her refuses the outcome: Sklar succeeds instead. 3 times per scene.</p><p><em>She laughs at the wrong moment and the dice reconsider.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "feature"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Sklar Bjrornholt"
+        ],
+        "sourceIds": [
+          "tlGzp9UpQU3PwKdB"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "FkU3DYCUdsw7kP7q",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069935,
+    "modifiedTime": 1792989070017,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!FkU3DYCUdsw7kP7q"
+}

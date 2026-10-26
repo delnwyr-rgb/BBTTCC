@@ -3,14 +3,14 @@
   "type": "feat",
   "img": "icons/tools/navigation/watch-simple-blue.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": {
       "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<p>Pour a little static directly into the enemy's good ideas and watch every one of them curdle in real time.</p><p><b>Opponents roll at Disadvantage this round.</b></p>",
+      "value": "<p>Pour a little static directly into the enemy's good ideas and watch every one of them curdle in real time.</p><p><b>Opponents roll 3d10 and keep the lowest 2 this round.</b></p>",
       "chat": ""
     },
     "activities": {},
@@ -65,12 +65,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977107845,
-    "modifiedTime": 1779731346380,
-    "lastModifiedBy": "6ut7GT8pCAhpdWjS"
+    "modifiedTime": 1792989014333,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!v9S5YAmDuum9U6w1"
 }

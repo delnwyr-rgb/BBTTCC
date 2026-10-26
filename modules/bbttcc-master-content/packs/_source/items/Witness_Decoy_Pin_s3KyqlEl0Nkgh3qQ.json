@@ -38,21 +38,21 @@
             "charges": {
               "value": 1,
               "max": 1,
-              "recoverPer": "manual"
+              "recoverPer": "soma-break"
             },
             "failure": "inert",
             "origin": "hex-script"
           },
           "price": {
-            "marks": 20,
+            "marks": 40,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI consumable × 0.20 × tech 2.0",
+            "rarityMult": 2,
+            "notes": "TI consumable × tech 2.0 × rarity 2",
             "bound": "free",
-            "saleBack": 8
+            "saleBack": 16
           }
         }
       }
@@ -66,12 +66,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778963490040,
-    "modifiedTime": 1782149413390,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988926808,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

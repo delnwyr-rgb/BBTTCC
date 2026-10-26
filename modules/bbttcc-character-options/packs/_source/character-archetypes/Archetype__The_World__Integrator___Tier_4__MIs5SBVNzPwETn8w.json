@@ -1,18 +1,13 @@
 {
   "name": "Archetype: The World (Integrator) (Tier 4)",
   "type": "feat",
-  "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "Bad Eden – Archetype: The World (Integrator) (Tier 4)",
-      "book": ""
-    },
+    "source": "Bad Eden – Archetype: The World (Integrator) (Tier 4) (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 (Level 17) — The World (Integrator)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a campaign-scale integration, alliance-structure, logistics-network, or whole-system repair scenario, the Economy or Diplomacy OP cost is reduced by 3 (minimum 1).</li></ul>",
+      "value": "<p><strong>Tier 4 (Level 17) — The World (Integrator)</strong></p><ul><li><p><strong>Strategic:</strong> Whenever your Domain spends Economy or Diplomacy marks, it spends 30 fewer (never below 10).</p></li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -60,7 +55,21 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "economy",
+            "diplomacy"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Archetype: The World (Integrator) (Tier 4)",
+          "marks": 30
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": "Item.9UA78K71egaBJLaL",
@@ -72,12 +81,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986816349,
-    "modifiedTime": 1781116022239,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989156833,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

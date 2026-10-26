@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +79,26 @@
             "saleBack": 20
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Septless Wanderer"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Mumbled Prayer"
+            },
+            "do": {
+              "clarity": 1
+            },
+            "to": "self",
+            "label": "Mumbled Prayer — Clarity refreshes"
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "9c3317d6-5278-40fb-b872-5a9b90d5889d",
+      "id": "ft-mumbled-prayer",
       "label": "Mumbled Prayer",
       "macro": {
         "enable": false,
@@ -269,24 +273,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Septless Wanderer"
+        ],
+        "sourceIds": [
+          "WvR3YPMYK9dd1lEH"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "LMZpXtZuKupyEK7C",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024230425,
-    "modifiedTime": 1782167244996,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989033026,
+    "modifiedTime": 1792989033027,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!LMZpXtZuKupyEK7C"
 }

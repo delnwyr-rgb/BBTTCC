@@ -1,0 +1,55 @@
+{
+  "_id": "mySICMMec6AgoeWY",
+  "name": "Spark of Severity (Vestigial)",
+  "type": "spark",
+  "img": "icons/svg/anchor.svg",
+  "system": {
+    "category": "spark",
+    "sephirah": "geburah",
+    "kind": "vestigial",
+    "alignedMethods": [
+      "violence",
+      "siege"
+    ],
+    "misalignedMethods": [
+      "softpower",
+      "diplomacy",
+      "nonlethal"
+    ],
+    "repair": {
+      "materialKey": "anchorstone",
+      "materialAmount": 1,
+      "opCost": {
+        "pool": "logistics",
+        "amount": 3
+      },
+      "ritualDC": 15
+    },
+    "source": "BBTTCC Tikkun v1.0",
+    "tags": [
+      "geburah",
+      "vestigial",
+      "spark"
+    ],
+    "description": {
+      "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Geburah — Judgment, precision force.</p>\n<p><strong>Aligned methods:</strong> violence, siege. <strong>Misaligned (causes Corruption):</strong> softpower, diplomacy, nonlethal.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc-tikkun": {
+      "sparkVersion": "1.0.0",
+      "identifier": "spark_geburah_vestigial",
+      "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration."
+    }
+  },
+  "_stats": {
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": null
+  },
+  "_key": "!items!mySICMMec6AgoeWY"
+}

@@ -71,7 +71,17 @@
     },
     "dnd5e": {},
     "fourththing": {
-      "vocabScrub": "2026-05-16"
+      "vocabScrub": "2026-05-16",
+      "rerolls": [
+        {
+          "mode": "reroll-lowest",
+          "context": "check",
+          "skill": "faith",
+          "attribute": "mind",
+          "vs": "the Lore, weaknesses, bindings, and rituals of Qliphothic entities",
+          "note": "Kabbalist T3"
+        }
+      ]
     },
     "autoanimations": {
       "id": "445d4a8a-79b2-4d82-9359-ee878fb479e4",
@@ -264,12 +274,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987095107,
-    "modifiedTime": 1782167239250,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989177582,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

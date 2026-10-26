@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Arcane Attribution [Option]",
+  "name": "Arcane Attribution",
   "type": "feat",
   "img": "icons/skills/melee/strike-dagger-arcane-pink.webp",
   "system": {
@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Arcane Attribution [Option]</h3><p><em>No rules text registered.</em></p></div>",
+      "value": "<p><strong>Arcane Attribution</strong></p><p>The Magician (Scholar). Target any hex: it is revealed, a full dossier is whispered to you, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower.</p><p><em>Cost: Intrigue 10 · Soft Power 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "optact_arcane_attribution"
+      "key": "optact_arcane_attribution",
+      "effects": {
+        "text": "The Magician (Scholar). Target any hex: it is revealed, a full dossier is whispered to you, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower."
+      }
     }
   },
   "_id": "INPfQGLpmEvlErgA",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601761,
-    "modifiedTime": 1782703702687,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988995809,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

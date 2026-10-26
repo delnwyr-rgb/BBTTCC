@@ -1,0 +1,5331 @@
+{
+  "name": "Red Shirtman",
+  "type": "character",
+  "img": "art/bbttcc/asli-tokens/8.webp",
+  "prototypeToken": {
+    "texture": {
+      "src": "art/bbttcc/asli-tokens/8.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "name": "Red Shirtman",
+    "displayName": 30,
+    "actorLink": true,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 2,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1,
+      "alignment": ""
+    },
+    "attributes": {
+      "violence": {
+        "value": 3
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 4
+      },
+      "soul": {
+        "value": 5
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 2
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 0
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 1
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 1
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 0
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 0
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 1
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 1
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 1
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "fitting": {
+        "attribute": "intrigue",
+        "label": "Fitting",
+        "value": 1
+      },
+      "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "value": 1
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 22,
+        "max": 16,
+        "temp": 0
+      },
+      "stress": {
+        "value": 23,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 10,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 3,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "probabilityOverlay": {
+        "current": 1
+      },
+      "dreamCache": {
+        "banked": false,
+        "name": "",
+        "tier": 0,
+        "itemId": ""
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "sparks": {}
+    },
+    "faction": {
+      "id": "6H5Grt3HybAs1rSq",
+      "loyalty": 0,
+      "name": "The Errata Societ"
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
+  },
+  "_id": "vy7m4eigKC3fkpTw",
+  "items": [
+    {
+      "name": "Scion: Strategic Hooks",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunset_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“Even the world listens when you walk in.”</em></p><ul><li>Your Domain gains +20 Soft Power marks and +10 Diplomacy marks.</li><li>Shifting a controlled hex toward a Sephirah costs <strong>10% less</strong>.</li><li>The first Spark Identification each chapter is <strong>free</strong>.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "scion-strategic-hooks",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Sephirotic Scion",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Scion Strategic Hooks (OP Bonuses)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_box_1.png",
+          "type": "base",
+          "disabled": false,
+          "transfer": true,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091880,
+            "modifiedTime": 1792989091880
+          },
+          "_id": "QrSTwtebIPNt67Rh",
+          "system": {
+            "changes": [
+              {
+                "key": "flags.bbttcc.op.softPower.baseBonus",
+                "value": 1,
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.bbttcc.op.diplomacy.baseBonus",
+                "value": 1,
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "start": null,
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "FehDulVPgqIjjQEa",
+      "flags": {
+        "bbttcc": {
+          "kind": "ancestryHooks",
+          "opEffects": {
+            "softPower": 1,
+            "diplomacy": 1
+          },
+          "alignmentShiftDiscount": 0.1,
+          "sparkFreeIdentifyPerChapter": true,
+          "senseAlignment": true
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.dlHWQbSNuwpfn6Xc"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.dlHWQbSNuwpfn6Xc",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.I3NyRgkTbi52qnJq",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 200000,
+      "_id": "1jBMLdIbvoalJJfM"
+    },
+    {
+      "name": "Crew Type: Verdant Stalkers",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "revision": 2,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Crew Type (Bad Eden): Verdant Stalkers.</em></p><p><strong>“If the forest sees you, you’re already late.”</strong></p><p>Verdant Stalkers move through living terrain like they were invited. They conceal routes, read pressure from broken twigs and bent moss, and make hostile wilderness feel personal.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Stealth and Athletics.</li><li><strong>Strategic Identity:</strong> Your Domain starts with +1 Intrigue OPs.</li></ul>",
+          "chat": ""
+        },
+        "identifier": "crew-verdant-stalkers",
+        "requirements": "",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "intrigue": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "verdant-stalkers",
+            "progressionType": "level",
+            "domains": [
+              "op"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:verdant-stalkers",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:intrigue:+8",
+              "bbttcc:theme:ambush",
+              "bbttcc:theme:recon",
+              "bbttcc:theme:hidden-routes"
+            ]
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "folder": "3hFwHalyNvJcfIyJ",
+      "_stats": {
+        "compendiumSource": "Item.zwr2HRIYMGfZVSEw",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.zwr2HRIYMGfZVSEw",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "26wDOtqGfNQJX5UA",
+      "sort": 100000
+    },
+    {
+      "name": "Wyrdlens Adept",
+      "type": "class",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/WyrdlensAdept2.png",
+      "system": {
+        "category": "path",
+        "identifier": "wyrdlens-adept",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"Every structure has a flaw. You only have to look at it correctly.\"</em></p>\n<p>The Wyrdlens Adept turns perception into force. You run on <strong>Surge</strong> like everyone, and yours arrives when you <strong>land a manifestation</strong> (bank +1, max +2/round) — every revelation feeds the lens. The free <strong>Probability Overlay</strong> (1/round reroll-lowest, refreshes at the start of your turn) stays as your innate edge.</p>\n<h3>The Lens (spent via Surge)</h3>\n<ul>\n  <li><strong>Foresight</strong> (1) — you or an ally banks a reroll-lowest (you saw the thread).</li>\n  <li><strong>Expose</strong> (2) — a foe's next attack and its saves are rolling 3d10 and keeping the lowest 2 (you read the seam).</li>\n  <li><strong>Refract</strong> (3) — an ally gains DR equal to Tier and a freed reaction (harm bends aside).</li>\n  <li><strong>Revelation</strong> (5) — allies within 6 squares bank a reroll; a foe's next attack is rolling 3d10 and keeping the lowest 2.</li>\n</ul>\n<p><strong>Tikkun Sight</strong> endures — once per Soma Break, treat a misfire as a base-tier success (the Tree pays in Clarity instead).</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "WA00000000000001",
+            "type": "HitPoints",
+            "configuration": {},
+            "value": {},
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "WA00000000000005",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 4,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "WA00000000000008",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 8,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "WA00000000000011",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 12,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "WA00000000000016",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 16,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "WA00000000000019",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 19,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "WA00000000000028",
+            "type": "Subclass",
+            "configuration": {},
+            "value": {
+              "document": null,
+              "uuid": null
+            },
+            "level": 3,
+            "title": "",
+            "hint": "",
+            "flags": {}
+          },
+          {
+            "_id": "WA00000000000029",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "saves:int",
+                "saves:wis"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "defense check Proficiencies",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          {
+            "_id": "WA00000000000030",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "skills:arc",
+                "skills:his"
+              ],
+              "choices": [
+                {
+                  "count": 2,
+                  "pool": [
+                    "skills:ins",
+                    "skills:inv",
+                    "skills:rel",
+                    "skills:prc"
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Skill Proficiencies",
+            "hint": "Gain Occult (Mind) and Lore (Mind) automatically, then choose two from Insight (Soul) (Soul), Investigation (Mind) (Mind), Faith (Soul), Perception (Mind) (Mind).",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          {
+            "_id": "WA00000000000031",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "weapon:sim"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Weapon Proficiencies",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          {
+            "_id": "WA00000000000032",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "armor:lgt"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Armor Training",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          {
+            "_id": "WA00000000000033",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "defense check Proficiencies",
+            "hint": "",
+            "classRestriction": "secondary",
+            "flags": {}
+          },
+          {
+            "_id": "WA00000000000034",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "weapon:sim"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Weapon Proficiencies",
+            "hint": "",
+            "classRestriction": "secondary",
+            "flags": {}
+          },
+          {
+            "_id": "WA00000000000035",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "armor:lgt"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Armor Training",
+            "hint": "",
+            "classRestriction": "secondary",
+            "flags": {}
+          },
+          {
+            "_id": "WA00000000000002",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.r3YHnUbCJYrUuhn4",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.9HNxUBStk9ZQcVo1",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 1,
+            "title": "Wyrdlens Adept Core Features"
+          },
+          {
+            "_id": "WA00000000000003",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ITVYwcZhhXvK6ptk",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.1Nyj14RtQYCa8ts9",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 2,
+            "title": "Wyrdlens Adept: Level 2 Features"
+          },
+          {
+            "_id": "WA00000000000004",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.wybZlXpz67IS64fk",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.HBqlIr3lDYCtGaZn",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 3,
+            "title": "Wyrdlens Adept: Level 3 Features"
+          },
+          {
+            "_id": "WA00000000000006",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.aJgef4oQFiMVplza",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.5Ol7xTa7nbHAorK1",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 4,
+            "title": "Wyrdlens Adept: Level 4 Features"
+          },
+          {
+            "_id": "WA00000000000007",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.UkMu9mJVQd8lCv7Y",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.epAamkxdLCBOOLV4",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 5,
+            "title": "Wyrdlens Adept: Level 5 Features"
+          },
+          {
+            "_id": "WA00000000000009",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.SSDolF9UH4LINkM2",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 6,
+            "title": "Probability Threading"
+          },
+          {
+            "_id": "WA00000000000010",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.mtLfkdPa7TS8Daz3",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 7,
+            "title": "Fractal Cross-Reference"
+          },
+          {
+            "_id": "WA00000000000012",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.nUSQpB4zxBELHqQV",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 8,
+            "title": "Anomaly Backtrace"
+          },
+          {
+            "_id": "WA00000000000013",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.NXnio3Y6tuRJnSSu",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 9,
+            "title": "Narrative Refactor"
+          },
+          {
+            "_id": "WA00000000000014",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.sbv16vdaRpt1Z15m",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.9X62SPa6emtijeRr",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 10,
+            "title": "Wyrdlens Adept: Level 10 Features"
+          },
+          {
+            "_id": "WA00000000000015",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ee9slWH77dKvdyXi",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.8DQbUpylbqTBzkl0",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 11,
+            "title": "Wyrdlens Adept: Level 11 Features"
+          },
+          {
+            "_id": "WA00000000000017",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.dbmGJcTgEiHCiFe4",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 12,
+            "title": "Predictive Convergence Map"
+          },
+          {
+            "_id": "WA00000000000018",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.JClBHQVOqzC452it",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 13,
+            "title": "Global Symbol Index"
+          },
+          {
+            "_id": "WA00000000000020",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.d3NkaovFyI5CHU8G",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 14,
+            "title": "Causal Spine Trace"
+          },
+          {
+            "_id": "WA00000000000021",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.8mo6EwEjZrYGYGeP",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 15,
+            "title": "Hex-Scope Refactor"
+          },
+          {
+            "_id": "WA00000000000023",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.4ElebzTv9azsMGb0",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 16,
+            "title": "Lattice Profiler"
+          },
+          {
+            "_id": "WA00000000000024",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.Co8OEcRTwU1Apwpr",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 17,
+            "title": "Wyrdlens Adept: Tier 4 — Nonviolent Spark Harvest"
+          },
+          {
+            "_id": "WA00000000000027",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.HSoekiOL8gUzj1FC",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 20,
+            "title": "Root Access to the Lattice"
+          }
+        ],
+        "startingEquipment": [],
+        "hd": {
+          "additional": "",
+          "denomination": "d8",
+          "spent": 0
+        },
+        "levels": 1,
+        "primaryAbility": {
+          "value": [
+            "int"
+          ],
+          "all": false
+        },
+        "properties": [],
+        "spellcasting": {
+          "progression": "full",
+          "ability": "int",
+          "preparation": {
+            "formula": "@int.mod + @classes.wyrdlens_adept.levels"
+          }
+        },
+        "wealth": ""
+      },
+      "effects": [],
+      "folder": "AnlupqhUqRCmEi6Q",
+      "flags": {
+        "bbttcc": {
+          "primary": "intelligence",
+          "opBonus": {
+            "intrigue": 2
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16",
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.bgiFz9pi5mdS7aGl"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.bgiFz9pi5mdS7aGl",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "3UGETlkiFyepxltG"
+    },
+    {
+      "name": "Sephirotic Scion: Holy Conduit",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_4.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Holy Conduit.</strong> Your body routes excess metaphysical charge safely.</p><ul><li>You have resistance to <strong>psychic damage</strong>.</li><li>Your presence stabilizes magically turbulent areas.</li><li>Bad Eden engines treat you as a low-level metaphysical conductor (see world logic).</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "holy-conduit",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Sephirotic Scion",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Holy Conduit (Psychic Resistance)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_2.png",
+          "type": "base",
+          "disabled": false,
+          "transfer": true,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091880,
+            "modifiedTime": 1792989091880
+          },
+          "_id": "Ss0vEkuN1Vv6vz40",
+          "system": {
+            "changes": [
+              {
+                "key": "system.traits.dr.value",
+                "value": "psychic",
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "start": null,
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "FehDulVPgqIjjQEa",
+      "flags": {
+        "bbttcc": {
+          "speciesTrait": "scion_conduit",
+          "sparkAffinity": 1
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.SlKMUA0gElcOjrZ4"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.SlKMUA0gElcOjrZ4",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.6RJBcRcIeUIDAHuz",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 250000,
+      "_id": "4eG4zcOwsv9yRUpV"
+    },
+    {
+      "name": "Alignment: Tiphareth",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "Beauty - Balance that costs something. +1 Diplomacy, +1 Soft Power OPs\n\nTiphareth holds justice and mercy in living tension. It rewards balanced play, stability across multiple systems, and factions that survive by integrating contradictions instead of denying them.",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "alignment-tiphareth",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sun_1.png",
+      "effects": [],
+      "folder": "RAOWJYon3t34M5XY",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "diplomacy": 1,
+            "softpower": 1
+          },
+          "option": {}
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.sUbH6ds2iUNdFMz9",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.fxAlgcvKBqlWJ7ux",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "CfODHSsVB9RucVfB",
+      "sort": 900000
+    },
+    {
+      "name": "Refraction of Truth (Bad Eden)",
+      "type": "subclass",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_lightning_2.png",
+      "system": {
+        "category": "doctrine",
+        "classIdentifier": "wyrdlens-adept",
+        "source": "Bad Eden Originals — Sprint F (2026 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"I see what you actually are.\"</em></p>\n<p><strong>Refraction:</strong> Truth — perception bent toward exposure; lies, concealment, the thing that does not want to be named.</p>\n<p>The Refraction of Truth makes hiding impossible. Your Surge spends strip cover: read a foe true so its defenses fail, name the lie so it stops working, and lay an enemy so bare it has nowhere left to put a single intention.</p>\n<h3>Refraction (spent via Surge)</h3>\n<ul>\n  <li><strong>The Reading Eye</strong> (1) — a foe rolls its saves rolling 3d10 and keeping the lowest 2 (you read it true).</li>\n  <li><strong>The Unconcealed Word</strong> (2) — a foe is Staggered and its next attack is rolling 3d10 and keeping the lowest 2.</li>\n  <li><strong>The Exposure</strong> (5) — a foe cannot take reactions and rolls its saves rolling 3d10 and keeping the lowest 2.</li>\n</ul>",
+          "chat": ""
+        },
+        "identifier": "bbttcc-wyrdlens-adept-truth",
+        "advancement": [],
+        "spellcasting": {
+          "progression": "none",
+          "preparation": {}
+        }
+      },
+      "effects": [],
+      "folder": "4SZvMbYoYLB4LZnj",
+      "flags": {
+        "fourththing": {
+          "vocabScrub": "2026-05-16",
+          "principleSource": "subclass"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.nPPVJBMm9OCD0p6S"
+        }
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 500000,
+      "_stats": {
+        "systemId": "fourththing",
+        "coreVersion": "14.369",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "systemVersion": "0.6.37",
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.nPPVJBMm9OCD0p6S",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "Fr3vdg2NPQEJSNr3"
+    },
+    {
+      "name": "Sephirotic Scion",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/SephiroticScion4.png",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Sephirotic Scion.</strong> Your blood remembers the higher spheres. Light hangs around you a little too long, prayers sometimes answer themselves, and the world’s moral architecture feels less like an abstraction and more like the weather report.</p><hr><p><em><strong>Sephirotic Scion Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic).</p></li><li><p><strong>Size.</strong> You are Medium.</p></li><li><p><strong>Speed.</strong> Your walking speed is 6 squares</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Sephirotic Scion does not grant any attribute bonuses.</p></li></ul><p>Your Sephirotic heritage grants you additional features through advancements (Item Grants) added during character creation: sephirotic physiology, attunement to higher patterns, holy conduction, the Light of Harmony, and strategic hooks that tilt factions toward soft power, diplomacy, and alignment work.</p>",
+          "chat": ""
+        },
+        "advancement": {
+          "A1B2C3D4E5F6G7H8": {
+            "_id": "A1B2C3D4E5F6G7H8",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium Sephirotic Scion.",
+            "value": {},
+            "flags": {}
+          },
+          "I1J2K3L4M5N6O7P8": {
+            "_id": "I1J2K3L4M5N6O7P8",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.e0c6wt6GiL8dL33I",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Sephirotic Physiology",
+            "hint": "Gain the Sephirotic Physiology feature.",
+            "flags": {}
+          },
+          "Q1R2S3T4U5V6W7X8": {
+            "_id": "Q1R2S3T4U5V6W7X8",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.hW51wp7YORbeUToi",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Sefirot Attunement",
+            "hint": "Gain the Sefirot Attunement feature.",
+            "flags": {}
+          },
+          "Y1Z2A3B4C5D6E7F8": {
+            "_id": "Y1Z2A3B4C5D6E7F8",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.SlKMUA0gElcOjrZ4",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Holy Conduit",
+            "hint": "Gain the Holy Conduit feature.",
+            "flags": {}
+          },
+          "G1H2I3J4K5L6M7N8": {
+            "_id": "G1H2I3J4K5L6M7N8",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.zrNHJoHr6sjpY4ik",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Light of Harmony",
+            "hint": "Gain the Scion: Light of Harmony feature.",
+            "flags": {}
+          },
+          "O1P2Q3R4S5T6U7V8": {
+            "_id": "O1P2Q3R4S5T6U7V8",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.dlHWQbSNuwpfn6Xc",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Scion: Strategic Hooks",
+            "hint": "Grants OP bonuses and Sephirotic-alignment hooks used by Bad Eden faction and world systems.",
+            "flags": {}
+          }
+        },
+        "identifier": "sephirotic-scion",
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": ""
+        },
+        "type": {
+          "value": "humanoid",
+          "subtype": "Sephirotic Scion",
+          "custom": ""
+        }
+      },
+      "effects": [],
+      "folder": "087LoHAORwCBuexO",
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "race",
+          "ancestryKey": "sephirotic_scion",
+          "version": "1.0.0",
+          "date": "2025-12-08"
+        },
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.bIjHUVRVXKpYcUMJ"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.bIjHUVRVXKpYcUMJ",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "L5tr14bOLoXV69dV"
+    },
+    {
+      "name": "Scion: Light of Harmony",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You glow a little. Sometimes metaphorically. Sometimes not.”</em></p><ul><li>You can cast <strong>calm emotions</strong> 1/Soma Break (Presence is your manifestation aptitude).</li><li>Allies within 2 squares reroll the lowest die on checks against being <strong>frightened</strong>.</li><li>You automatically sense the Sephirothic/Qliphothic tilt of any hex you enter.</li></ul>",
+          "chat": ""
+        },
+        "activities": {
+          "castCalmEmotions": {
+            "type": "spell",
+            "spell": {
+              "uuid": "Compendium.dnd5e.spells.Item.M4qAVn7fB0p0X8Rv"
+            },
+            "activation": {
+              "type": "action",
+              "cost": 1
+            },
+            "consumption": {
+              "targets": [
+                "uses"
+              ],
+              "type": "charges",
+              "value": 1
+            }
+          }
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [
+            {
+              "period": "lr",
+              "type": "recoverAll"
+            }
+          ],
+          "max": "1"
+        },
+        "advancement": {},
+        "identifier": "scion-light-of-harmony",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Sephirotic Scion",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Aura of Harmony (Frightened Resistance)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_btools_2.png",
+          "type": "base",
+          "disabled": false,
+          "transfer": true,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091880,
+            "modifiedTime": 1792989091880
+          },
+          "_id": "No3Pkmg20U8O9kab",
+          "system": {
+            "changes": [
+              {
+                "key": "system.traits.tooltips",
+                "value": "Allies within 10 feet gain advantage on saves vs frightened.",
+                "priority": 20,
+                "type": "custom",
+                "phase": "initial"
+              }
+            ]
+          },
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "start": null,
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "FehDulVPgqIjjQEa",
+      "flags": {
+        "bbttcc": {
+          "speciesTrait": "scion_light",
+          "senseAlignment": true
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "autoanimations": {
+          "id": "3fb253ee-5ee1-4960-bb04-8b6a4dd81d7a",
+          "label": "Scion: Light of Harmony",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "sacredflame",
+              "variant": "target",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.zrNHJoHr6sjpY4ik"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.zrNHJoHr6sjpY4ik",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.lixFTlqcjyCv52Uh",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "LyMUoFjuDQCdJxlC"
+    },
+    {
+      "name": "Sephirotic Scion (Ophanic): The Wheel Never Stops",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_wheel.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><div data-ft-canon-sephirotic=\"v1\" style=\"display:none\"></div><p><em>\"There is no angle that is not a front, to a thing with no back.\"</em></p><p><strong>The Wheel Never Stops (1/Soma Break).</strong> When you move at least 2 squares on your turn, as a bonus action take either one weapon attack OR the Dash. Additional uses per Soma Break cost 1 Surge each (player-managed via Surge controls).</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"sephOphanicWheel\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>The Wheel Never Stops</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (+1 Surge per extra use)  ·  <strong>Action:</strong> Bonus action (after moving 2 squares)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">After moving ≥ 2 squares, bonus action: one weapon attack OR Dash. Each additional use this Soma Break costs 1 Surge — spend manually.</span></p></div>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "sephirotic_scion_ophanic_tier1",
+        "requirements": "Sephirotic Scion (Ophanic)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [
+            {
+              "period": "sr",
+              "type": "recoverAll",
+              "formula": ""
+            }
+          ],
+          "max": "1"
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "sephirotic_scion",
+          "feature": "the_wheel_never_stops",
+          "lineage": "Ophanic",
+          "tierLevel": 1,
+          "version": "1.1.0",
+          "date": "2026-04-19",
+          "rfiNative": true
+        },
+        "fourththing": {
+          "triggers": [
+            {
+              "event": "on-move",
+              "predicate": {
+                "amountMin": 10
+              },
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "The Wheel Never Stops (1/Soma Break; each extra use this Soma Break costs 1 Surge, spent manually). You moved at least 2 squares this turn: as a bonus action take one weapon attack OR the Dash."
+                }
+              }
+            }
+          ],
+          "principleSource": "ancestry"
+        },
+        "autoanimations": {
+          "id": "9fc79fe0-5ba5-4746-84d7-e66a370f41e6",
+          "label": "Sephirotic Scion (Ophanic): The Wheel Never Stops",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "yellowwhite",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.jpagUy0moeZlFgkX"
+        }
+      },
+      "folder": "a5biOVmssBh3zmWx",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.jpagUy0moeZlFgkX",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-heritages-v1.1",
+          "uuid": "Item.jpagUy0moeZlFgkX",
+          "coreVersion": "13.351",
+          "systemId": "fourththing",
+          "systemVersion": "0.6.0"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "On90rPKI5YN0Zx9u"
+    },
+    {
+      "name": "Deposition Lens",
+      "type": "power",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "system": {
+        "intent": "intrigue",
+        "channel": "mind",
+        "sephirah": "binah",
+        "mode": "hermetic",
+        "clarityRequired": 1,
+        "noiseGain": 0,
+        "activation": "action",
+        "target": "single",
+        "range": "near",
+        "damage": "",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "none",
+          "number": 0,
+          "die": "d6",
+          "attribute": "",
+          "type": "kinetic",
+          "flavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "effect": "One creature within 3 squares, sustained: Soul defense vs Cast DC. On fail: Compelled to answer what is asked plainly, re-saving each round under the lens.",
+        "tags": [
+          "starter-kit",
+          "wyrdlens",
+          "truth",
+          "cc",
+          "utility",
+          "new",
+          "path:wyrdlens-adept",
+          "doctrine-signature",
+          "tool",
+          "bind",
+          "sustained"
+        ],
+        "category": "manifestation",
+        "flavor": "Mal: 'Sworn testimony, except the oath is physics.'",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "A monocle-sized lens on a brass stalk. Whoever you study through it finds that lying has developed a paperwork problem.",
+          "form": "tool",
+          "function": "bind",
+          "stability": "sustained",
+          "interactionModel": "tool",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 15,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "Wyrdlens Adept — wyrdlens adept truth",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "maintenanceKey": "none",
+          "isSignature": false,
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "until-saved",
+            "saveEachRound": true,
+            "saveAttribute": "soul",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "chain": {
+            "enabled": false,
+            "count": 3,
+            "range": 30,
+            "damageFormula": "1d6",
+            "damageType": "",
+            "carryConditions": false,
+            "carryEffects": false
+          },
+          "conditionalDamage": [],
+          "appliedEffects": {
+            "modifiers": [],
+            "resists": [],
+            "immunes": []
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterKit": {
+            "path": "wyrdlens-adept",
+            "doctrine": "bbttcc-wyrdlens-adept-truth",
+            "core": false
+          }
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "QW7mVtF8YZHwCeIP",
+      "folder": null
+    },
+    {
+      "name": "Sephirotic Scion Heritage: Ophanic",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_spark.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Sephirotic Scion heritage: Ophanic.</p><p><em>“The wheels were full of eyes. You never stop turning. You never stop seeing.”</em></p><p><strong>Sephirotic Scion (Ophanic).</strong> Your blood runs rotating. The Ophanim are wheels-and-eyes — motion, sight, the order that is always already looking both ways. You are descended from a thing that could not be snuck up on because it had no back. You kept some of that. Not all. Enough.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic Scion).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Sephirotic Scion does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Sephirotic Scion Core: The Higher Register</h3><p><em>Shared across all Sephirotic Scion heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Sephirotic Physiology.</strong> You have resistance to sephirotic damage. Your blood runs a little bright under the right light; you do not technically age while on consecrated ground.</p></li><li><p><strong>Sefirot Attunement.</strong> At creation, pick one sephirah (player choice). Once per scene, you can invoke its register and gain a +1 rank bonus to one check that falls clearly within that sephirah's domain.</p></li><li><p><strong>Holy Conduit.</strong> Manifestations, rituals, and other sephirotic-register effects that target you or pass through your space treat their effective caster-attribute as +1 for the duration of that effect. Works on allies and on you; does not work on qliphothic-register effects.</p></li><li><p><strong>Light of Harmony.</strong> When two or more creatures within 6 squares of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity. This refreshes when a new agreement is reached between different creatures.</p></li></ul><h3>Ophanic Traits</h3><ul><li><p><strong>Wheel-and-Eye.</strong> You can see invisible creatures and objects within 6 squares as dimly lit shapes. You cannot be flanked.</p></li><li><p><strong>Concentric Sight.</strong> You reroll the lowest die on Mind (Perception) checks that involve noticing movement, pattern, or change over time. You roll 3d10 keep lowest 2 on Mind (Perception) checks to notice things that have been perfectly still since before you started looking — you see motion, not furniture.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Intrigue marks</strong> and <strong>+10 Violence marks</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Battlefield / Procession / High-Traffic</em> hexes, your Domain's observation and counter-intel operations gain +2 on the success check.</p></li><li><p><strong>Turning Witness.</strong> Once per turn, you may observe one exchange of goods, intelligence, or personnel between two rival factions within your field of influence. You learn that it happened and between whom, though not necessarily what was exchanged.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Sefirot Attunement</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Free (declare before roll)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Invoke your chosen sephirah for +1 rank bonus on a check clearly in its domain.</span></p></div>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "39a5d14ae0dc93f3",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.jpagUy0moeZlFgkX",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Ophanic Tier I",
+            "hint": "Gain your Ophanic Tier I feat."
+          }
+        ],
+        "identifier": "sephirotic_scion_ophanic_heritage",
+        "requirements": "Sephirotic Scion",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "sephirotic_scion",
+          "lineage": "Ophanic",
+          "version": "1.1.0",
+          "date": "2026-04-19",
+          "rfiNative": true,
+          "opEffects": {
+            "intrigue": 2,
+            "violence": 1
+          }
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "skill": "perception",
+              "mode": "reroll-lowest"
+            },
+            {
+              "context": "check",
+              "attribute": "mind",
+              "mode": "reroll-lowest"
+            },
+            {
+              "context": "check",
+              "skill": "perception",
+              "mode": "reroll-highest",
+              "note": "on Mind (Perception) checks to notice things that have been perfectly still s…"
+            },
+            {
+              "context": "check",
+              "attribute": "mind",
+              "mode": "reroll-highest",
+              "note": "on Mind (Perception) checks to notice things that have been perfectly still s…"
+            },
+            {
+              "context": "check",
+              "skill": "perception",
+              "mode": "reroll-lowest"
+            },
+            {
+              "context": "check",
+              "attribute": "mind",
+              "mode": "reroll-lowest"
+            },
+            {
+              "context": "check",
+              "skill": "perception",
+              "mode": "reroll-highest",
+              "note": "Mind (Perception) checks to notice things that have been perfectly still sinc…"
+            },
+            {
+              "context": "check",
+              "attribute": "mind",
+              "mode": "reroll-highest",
+              "note": "Mind (Perception) checks to notice things that have been perfectly still sinc…"
+            }
+          ],
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "violence-op",
+              "amount": 2
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "intrigue-op",
+              "amount": 2
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-agreement",
+              "effect": {
+                "kind": "add-temp-integrity",
+                "args": {
+                  "amount": 1,
+                  "target": "self"
+                }
+              }
+            },
+            {
+              "event": "on-agreement",
+              "effect": {
+                "kind": "add-temp-integrity",
+                "args": {
+                  "amount": 1,
+                  "target": "target"
+                }
+              }
+            }
+          ],
+          "principleSource": "ancestry"
+        },
+        "autoanimations": {
+          "id": "2f229d2e-75a3-47e7-9917-bbc99848bb82",
+          "label": "Sephirotic Scion Heritage: Ophanic",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "loop",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.09IqdCAcL2F1Y8xy"
+        }
+      },
+      "folder": "jZarWfKQgT5cujvt",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.09IqdCAcL2F1Y8xy",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-heritages-v1.1",
+          "uuid": "Item.09IqdCAcL2F1Y8xy",
+          "coreVersion": "13.351",
+          "systemId": "fourththing",
+          "systemVersion": "0.6.0"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "ZNe20nPMqRU82i9T"
+    },
+    {
+      "name": "Unmasking Flash",
+      "type": "power",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "system": {
+        "intent": "presence",
+        "channel": "mind",
+        "sephirah": "binah",
+        "mode": "hermetic",
+        "clarityRequired": 1,
+        "noiseGain": 0,
+        "activation": "action",
+        "target": "area",
+        "range": "near",
+        "damage": "",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "damage",
+          "number": 1,
+          "die": "d4",
+          "attribute": "presence",
+          "type": "psychic",
+          "flavor": "seen exactly",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "effect": "All enemies in a 3-square sphere: Soul defense vs Cast DC. On fail: 1d4 psychic (stress) and Shaken for 1 round; mundane disguises and surface glamours in the area collapse outright.",
+        "tags": [
+          "starter-kit",
+          "wyrdlens",
+          "truth",
+          "aoe",
+          "reveal",
+          "new",
+          "path:wyrdlens-adept",
+          "doctrine-signature",
+          "field",
+          "instant",
+          "event"
+        ],
+        "category": "manifestation",
+        "flavor": "Mal: 'Everybody looks like their ID photo for one second. No one has ever forgiven the lens for this.'",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "One camera-flash of absolute accuracy. Disguises, glamours, and comfortable self-images all develop at once, in public.",
+          "form": "field",
+          "function": "reveal",
+          "stability": "instant",
+          "interactionModel": "event",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "",
+          "duration": "instant",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "scene",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "Wyrdlens Adept — wyrdlens adept truth",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 15
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "maintenanceKey": "none",
+          "isSignature": false,
+          "appliedStates": {
+            "states": [
+              "shaken"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "chain": {
+            "enabled": false,
+            "count": 3,
+            "range": 30,
+            "damageFormula": "1d6",
+            "damageType": "",
+            "carryConditions": false,
+            "carryEffects": false
+          },
+          "conditionalDamage": [],
+          "appliedEffects": {
+            "modifiers": [],
+            "resists": [],
+            "immunes": []
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterKit": {
+            "path": "wyrdlens-adept",
+            "doctrine": "bbttcc-wyrdlens-adept-truth",
+            "core": false
+          }
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "dKMd8Zx78xXJWVmv",
+      "folder": null
+    },
+    {
+      "name": "Occult Association: Exorcist / Purifier (Tier 1)",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Exorcist</strong></p><p><strong>“That should not be here.”</strong></p><p>You can identify corruption, spiritual pressure, and Qliphothic influence.</p><p><strong>Tactical</strong></p><ul><li>reroll-lowest on checks vs corruption, fear, or possession</li></ul><p><strong>Strategic</strong></p><ul><li>When entering a Hex, automatically detect presence of corruption or unnatural influence</li></ul><p><strong>Cost:</strong> constant awareness of corruption creates strain and intolerance for ambiguity.</p>",
+          "chat": ""
+        },
+        "identifier": "occult-association-exorcist-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "tags": [
+              "bbttcc:tier:1",
+              "bbttcc:effect:detect:corruption",
+              "bbttcc:effect:advantage:saves:corruption",
+              "bbttcc:cost:strain"
+            ],
+            "category": "occult",
+            "key": "exorcist",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1
+          },
+          "category": "occult"
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "save",
+              "mode": "reroll-lowest",
+              "vs": "corruption, fear, or possession",
+              "note": "Exorcist / Purifier T1"
+            }
+          ]
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "effects": [],
+      "folder": "eZrB95VvJnQ4Pb77",
+      "_stats": {
+        "compendiumSource": "Item.HkKJUdADMuiHexr5",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.HkKJUdADMuiHexr5",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "ebGOErxK925F5PBp",
+      "sort": 0
+    },
+    {
+      "name": "Wide Angle",
+      "type": "power",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "system": {
+        "intent": "intrigue",
+        "channel": "mind",
+        "sephirah": "chokmah",
+        "mode": "hermetic",
+        "clarityRequired": 1,
+        "noiseGain": 0,
+        "activation": "action",
+        "target": "self",
+        "range": "near",
+        "damage": "",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "none",
+          "number": 0,
+          "die": "d6",
+          "attribute": "",
+          "type": "kinetic",
+          "flavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "effect": "Self, sustained for the scene: +2 Evasion while you watch the composition instead of the punches.",
+        "tags": [
+          "starter-kit",
+          "wyrdlens",
+          "ward",
+          "reused",
+          "path:wyrdlens-adept",
+          "path-core",
+          "vestment",
+          "protect",
+          "sustained",
+          "worn"
+        ],
+        "category": "manifestation",
+        "flavor": "Mal: 'Can't hit the photographer. Union rules. Cosmic union, but still.'",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "You stop looking at the fight and start looking at the whole frame — every line of fire a thread of light you simply stand between.",
+          "form": "vestment",
+          "function": "protect",
+          "stability": "sustained",
+          "interactionModel": "worn",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "Wyrdlens Adept",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "maintenanceKey": "none",
+          "isSignature": false,
+          "chain": {
+            "enabled": false,
+            "count": 3,
+            "range": 30,
+            "damageFormula": "1d6",
+            "damageType": "",
+            "carryConditions": false,
+            "carryEffects": false
+          },
+          "conditionalDamage": [],
+          "appliedEffects": {
+            "modifiers": [
+              {
+                "stat": "evasion",
+                "op": "+",
+                "value": 2
+              }
+            ],
+            "resists": [],
+            "immunes": []
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterKit": {
+            "path": "wyrdlens-adept",
+            "doctrine": "",
+            "core": true
+          }
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "g1ktZygKj95ftgX5",
+      "folder": null
+    },
+    {
+      "name": "Wyrdlens Adept: Tier 1 — Lens Read",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_16.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Lens Read.</strong> You read the cracks in the world's algorithm. Your manifestation misfire band is lowered by 1 (a result that would misfire instead lands as the next-lower outcome). Once per scene, an adjacent ally borrows the reduction by spending 1 of your Clarity.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (passive): Misfire shift −1.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Strategic carryover: scenes resolved through your Refraction count as one tier of Identification already paid for the directing faction's next strategic action (GM call). Skill rank +1 in Occult and Lore.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Lens Read</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene (loan) &nbsp;·&nbsp; <strong>Action:</strong> Free (loan) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Your manifestation misfire band is lowered by 1 always. Once per scene, an adjacent ally borrows the reduction by spending 1 of your Clarity.</div>\n</div>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "advancement": {},
+        "identifier": "wyrdlens_adept_tier_1_lens_read",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "Wyrdlens Adept (1st level)",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Shattered Algorithm Initiate (ID Intrigue Discount)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_12.png",
+          "origin": null,
+          "transfer": true,
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091880,
+            "modifiedTime": 1792989091880
+          },
+          "_id": "597gsNEa91G844ZK",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "flags.bbttcc.wyrdlensAdept.tier1",
+                "value": true,
+                "priority": 20,
+                "type": "custom",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.bbttcc.wyrdlensAdept.shatteredAlgorithmInitiate",
+                "value": true,
+                "priority": 20,
+                "type": "custom",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.bbttcc.tikkunHooks.identificationIntrigueHalved",
+                "value": true,
+                "priority": 20,
+                "type": "custom",
+                "phase": "initial"
+              }
+            ]
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "start": null,
+          "showIcon": 1,
+          "folder": null
+        },
+        {
+          "name": "Class L1: Brawl +1",
+          "img": "icons/skills/melee/sword-stylized-blue.webp",
+          "type": "base",
+          "disabled": true,
+          "transfer": true,
+          "description": "Granted by Wyrdlens Adept: Tier 1 — Lens Read at Tier 1.",
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "aptitudeStamp": "2026-05-04",
+              "aptitudeAnchor": "Wyrdlens Adept: Tier 1 — Lens Read",
+              "aptitudeKind": "brawl"
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.brawl.value",
+                "value": 1,
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "kD31VjiuJWVSY1ay",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989091880,
+            "modifiedTime": 1792989091880,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        },
+        {
+          "name": "Class L1: Fitting +1",
+          "img": "icons/skills/melee/sword-stylized-blue.webp",
+          "type": "base",
+          "disabled": true,
+          "transfer": true,
+          "description": "Granted by Wyrdlens Adept: Tier 1 — Lens Read at Tier 1.",
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "aptitudeStamp": "2026-05-04",
+              "aptitudeAnchor": "Wyrdlens Adept: Tier 1 — Lens Read",
+              "aptitudeKind": "fitting"
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.fitting.value",
+                "value": 1,
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "oBr0AhcbO242eShE",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989091880,
+            "modifiedTime": 1792989091880,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "folder": "gZHoMHBbaIJOJgZ5",
+      "flags": {
+        "bbttcc": {
+          "tikkunHooks": {
+            "identificationIntrigueHalved": true
+          },
+          "wyrdlensAdept": {
+            "tier1": true,
+            "shatteredAlgorithmInitiate": true
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "discipline": {
+            "passive": {
+              "misfireBandShift": -1
+            }
+          },
+          "vocabScrub": "2026-05-16",
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.9HNxUBStk9ZQcVo1"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.9HNxUBStk9ZQcVo1",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 150000,
+      "_id": "giZ32ivhwymQ82IZ"
+    },
+    {
+      "name": "Angle of Witness",
+      "type": "power",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "system": {
+        "intent": "intrigue",
+        "channel": "mind",
+        "sephirah": "chokmah",
+        "mode": "hermetic",
+        "clarityRequired": 1,
+        "noiseGain": 0,
+        "activation": "action",
+        "target": "single",
+        "range": "near",
+        "damage": "",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "none",
+          "number": 0,
+          "die": "d6",
+          "attribute": "",
+          "type": "kinetic",
+          "flavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "effect": "One creature within 6 squares, sustained for the scene: −2 Evasion while you keep the angle open for your allies.",
+        "tags": [
+          "starter-kit",
+          "wyrdlens",
+          "debuff",
+          "reused",
+          "path:wyrdlens-adept",
+          "path-core",
+          "field",
+          "reveal",
+          "sustained",
+          "mark"
+        ],
+        "category": "manifestation",
+        "flavor": "Mal: 'There's always a spot where the untouchable guy is just a guy. It's usually behind the ego.'",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "Everything impossible is only impossible from most angles. You hold open the one angle from which the target can absolutely, definitely, be hit.",
+          "form": "field",
+          "function": "reveal",
+          "stability": "sustained",
+          "interactionModel": "mark",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 30,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "Wyrdlens Adept",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "maintenanceKey": "none",
+          "isSignature": false,
+          "chain": {
+            "enabled": false,
+            "count": 3,
+            "range": 30,
+            "damageFormula": "1d6",
+            "damageType": "",
+            "carryConditions": false,
+            "carryEffects": false
+          },
+          "conditionalDamage": [],
+          "appliedEffects": {
+            "modifiers": [
+              {
+                "stat": "evasion",
+                "op": "-",
+                "value": 2
+              }
+            ],
+            "resists": [],
+            "immunes": []
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterKit": {
+            "path": "wyrdlens-adept",
+            "doctrine": "",
+            "core": true
+          }
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "hVaLt7qH7FdQBFRn",
+      "folder": null
+    },
+    {
+      "name": "Archetype: The World (Integrator)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_world.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Everything connects. Including you.”</em></p><p><strong>Archetype (Bad Eden): The World (Integrator).</strong> You see systems as wholes. Supply, ritual, morale, politics, travel, violence, myth — to you, these are not separate tracks, but one machine with many faces.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens cross-system alignment and broad operational cohesion. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Diplomacy</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {
+          "jKvcQJdujBjoWG1E": {
+            "_id": "jKvcQJdujBjoWG1E",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 3,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 1,
+            "title": "Archetype Ability Scores",
+            "hint": "Gain 3 ability score points (max +2 to any one score). See the Archetype text for recommended arrays.",
+            "flags": {}
+          }
+        },
+        "identifier": "archetype-world",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "2EZWi9nK8TsgCvFZ",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "character-archetypes",
+          "bonuses": {
+            "economy": 1,
+            "diplomacy": 1
+          },
+          "option": {
+            "category": "archetype",
+            "key": "world",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:world",
+              "bbttcc:expression:integrator",
+              "bbttcc:base"
+            ]
+          }
+        },
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": "Item.ToA0ImILQxH8e23p",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.ToA0ImILQxH8e23p",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "ix0v46BH1s7wQWOj",
+      "sort": 100000
+    },
+    {
+      "name": "Occult Association: Exorcist / Purifier",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Occult Association (Bad Eden): Exorcist / Purifier.</em></p><p><strong>“You don’t negotiate with the darkness. You end it.”</strong></p><p>Exorcists do not bargain. They do not reinterpret. They do not accept corruption as a usable state.</p><p>To an Exorcist, the Great Work is not about managing the broken world. It is about <strong>removing what should not be there</strong> and restoring the conditions under which something honest can exist again.</p><p>Where Goetics bind, Exorcists sever. Where Shamans listen, Exorcists intervene. Where Kabbalists align, Exorcists cleanse.</p><p><strong>How Exorcists pursue the Great Work:</strong></p><ul><li>By removing Qliphothic influence and corruption</li><li>By stabilizing Hexes under Darkness pressure</li><li>By preventing the spread of systemic decay</li><li>By refusing to let harmful systems persist just because they are useful</li></ul><p><strong>Resonance:</strong> <strong>Tiferet / Purity</strong> — clarity, balance, and the reassertion of what should be.</p><p><strong>Tell-tales:</strong> still air where there should be movement, silence after tension, things that stop being wrong without explanation.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on actions involving stabilization, cleansing, or anti-corruption pressure</strong></li></ul><p><strong>Cost Principle:</strong> removal is violent in its own way. Expect rigidity, collateral suppression, and consequences when something removed turns out to have been holding something worse in place.</p>",
+          "chat": ""
+        },
+        "identifier": "occult-association-exorcist",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "option": {
+            "category": "occult",
+            "key": "exorcist",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:exorcist",
+              "bbttcc:base",
+              "bbttcc:domain:anti-darkness",
+              "bbttcc:domain:cleansing",
+              "bbttcc:domain:stabilization",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op_roll:stabilization:+1",
+              "bbttcc:resonance:tiferet",
+              "bbttcc:drift:rigid-order",
+              "bbttcc:cost:rigidity",
+              "bbttcc:cost:overcorrection",
+              "bbttcc:theme:purification",
+              "bbttcc:theme:removal"
+            ]
+          }
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "effects": [],
+      "folder": "eZrB95VvJnQ4Pb77",
+      "_stats": {
+        "compendiumSource": "Item.0QIZuwvwNB201K3d",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.0QIZuwvwNB201K3d",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "jqyM78IVaQstKwur",
+      "sort": 100000
+    },
+    {
+      "name": "Crew Type: Verdant Stalkers (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Verdant Stalkers</strong></p><p><em>You’ve learned the first rule of green country: visibility is a choice.</em></p><ul><li><strong>Tactical:</strong> Stealth + Athletics proficiency.</li><li><strong>Strategic:</strong> In Forest or Jungle hexes, encounter rolls are made twice and you choose the result. Routes may be concealed.</li></ul>",
+          "chat": ""
+        },
+        "identifier": "crew-verdant-stalkers-t1",
+        "requirements": "Level 1+",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Verdant Stalkers T1 Skills",
+          "_id": "PobaIDuwSu4dCXI7",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_2.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.stealth.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 0
+              },
+              {
+                "key": "system.skills.athletics.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 0
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091880,
+            "modifiedTime": 1792989091880
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "category": "crew",
+            "key": "verdant-stalkers",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "travel",
+              "encounter"
+            ],
+            "terrains": [
+              "forest",
+              "jungle"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:verdant-stalkers",
+              "bbttcc:tier:1",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:encounter",
+              "bbttcc:terrain:forest",
+              "bbttcc:terrain:jungle",
+              "bbttcc:scope:hex",
+              "bbttcc:when:origin_terrain:forest",
+              "bbttcc:when:origin_terrain:jungle",
+              "bbttcc:effect:encounter:roll_twice_choose:true",
+              "bbttcc:effect:travel:conceal_routes:true",
+              "bbttcc:theme:ambush",
+              "bbttcc:theme:recon"
+            ],
+            "progressionType": "level"
+          },
+          "category": "crew"
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "folder": "3hFwHalyNvJcfIyJ",
+      "_stats": {
+        "compendiumSource": "Item.pRXK2Wvjnb54miJ0",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.pRXK2Wvjnb54miJ0",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "kv91mpPuWuYaAynx",
+      "sort": 0
+    },
+    {
+      "name": "Spoiler Alert",
+      "type": "power",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "system": {
+        "intent": "presence",
+        "channel": "mind",
+        "sephirah": "hod",
+        "mode": "hermetic",
+        "clarityRequired": 1,
+        "noiseGain": 0,
+        "activation": "action",
+        "target": "single",
+        "range": "near",
+        "damage": "",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "none",
+          "number": 0,
+          "die": "d6",
+          "attribute": "",
+          "type": "kinetic",
+          "flavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "effect": "One creature within 6 squares: Mind defense vs Cast DC. On fail: their telegraphed plan collapses — Staggered (movement halved, −2 attacks) for 1 round.",
+        "tags": [
+          "starter-kit",
+          "wyrdlens",
+          "cc",
+          "new",
+          "path:wyrdlens-adept",
+          "path-core",
+          "sigil",
+          "reveal",
+          "instant",
+          "mark"
+        ],
+        "category": "manifestation",
+        "flavor": "Mal: 'He was going to feint left. Everyone knows he was going to feint left. He knows everyone knows. Watch him not.'",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "You read the target's next move off the wyrd and announce it to the room, loudly, with commentary, before they do it.",
+          "form": "sigil",
+          "function": "reveal",
+          "stability": "instant",
+          "interactionModel": "mark",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "",
+          "duration": "instant",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 30,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "Wyrdlens Adept",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "maintenanceKey": "none",
+          "isSignature": false,
+          "appliedStates": {
+            "states": [
+              "staggered"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "mind",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "chain": {
+            "enabled": false,
+            "count": 3,
+            "range": 30,
+            "damageFormula": "1d6",
+            "damageType": "",
+            "carryConditions": false,
+            "carryEffects": false
+          },
+          "conditionalDamage": [],
+          "appliedEffects": {
+            "modifiers": [],
+            "resists": [],
+            "immunes": []
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterKit": {
+            "path": "wyrdlens-adept",
+            "doctrine": "",
+            "core": true
+          }
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "nhgK68rbiRtCsXv1",
+      "folder": null
+    },
+    {
+      "name": "Lensing",
+      "type": "power",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "system": {
+        "intent": "intrigue",
+        "channel": "mind",
+        "sephirah": "hod",
+        "mode": "hermetic",
+        "clarityRequired": 1,
+        "noiseGain": 0,
+        "activation": "action",
+        "target": "single",
+        "range": "near",
+        "damage": "",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "damage",
+          "number": 1,
+          "die": "d4",
+          "attribute": "intrigue",
+          "type": "psychic",
+          "flavor": "focused to a point",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "effect": "One creature within 6 squares: Mind defense vs Cast DC. On fail: 1d4 psychic (stress) and Shaken for 1 round.",
+        "tags": [
+          "starter-kit",
+          "wyrdlens",
+          "stress",
+          "reused",
+          "path:wyrdlens-adept",
+          "path-core",
+          "sigil",
+          "harm",
+          "instant",
+          "mark"
+        ],
+        "category": "manifestation",
+        "flavor": "Mal: 'Kid used to fry ants. Now the ants are existential and the magnifying glass is everyone's attention.'",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "You fold every stray glance in the room through one lens and focus it on a single point behind the target's eyes.",
+          "form": "sigil",
+          "function": "harm",
+          "stability": "instant",
+          "interactionModel": "mark",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "",
+          "duration": "instant",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 30,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "Wyrdlens Adept",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "maintenanceKey": "none",
+          "isSignature": false,
+          "appliedStates": {
+            "states": [
+              "shaken"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "mind",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "chain": {
+            "enabled": false,
+            "count": 3,
+            "range": 30,
+            "damageFormula": "1d6",
+            "damageType": "",
+            "carryConditions": false,
+            "carryEffects": false
+          },
+          "conditionalDamage": [],
+          "appliedEffects": {
+            "modifiers": [],
+            "resists": [],
+            "immunes": []
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterKit": {
+            "path": "wyrdlens-adept",
+            "doctrine": "",
+            "core": true
+          }
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "nqxLf6tpjvHChJS8",
+      "folder": null
+    },
+    {
+      "name": "Sefirot Attunement",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_binah.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Sefirot Attunement.</strong> You perceive the harmonic structure beneath events.</p><ul><li>You gain a bonus to <strong>Perception</strong> checks and passive Perception.</li><li>Your intuition occasionally warns you about moral or spiritual imbalances (GM discretion).</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "sefirot-attunement",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Sephirotic Scion",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Sefirot Attunement (Perception Edge)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_brawl_2.png",
+          "type": "base",
+          "disabled": false,
+          "transfer": true,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091880,
+            "modifiedTime": 1792989091880
+          },
+          "_id": "4cyMaXGkbAbpqpUx",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.perception.value",
+                "type": "add",
+                "value": "+1",
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "start": null,
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "FehDulVPgqIjjQEa",
+      "flags": {
+        "bbttcc": {
+          "speciesTrait": "scion_attunement"
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.hW51wp7YORbeUToi"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.hW51wp7YORbeUToi",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.QLk2SUnHLglsiQwR",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 300000,
+      "_id": "o5XqCzxIGGK6gel3"
+    },
+    {
+      "name": "Lens-Tuned Recall",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_13.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Lens-Tuned Recall.</strong> Your memory has grooves worn into it by repeated passes over the same strange patterns.</p><ul><li>You gain a small mechanical bonus on <strong>Occult (Mind)</strong> and <strong>Lore (Mind)</strong> checks made to recall information about <strong>Sparks, Tikkun workings, Qliphothic phenomena,</strong> or <strong>Sephirotic anomalies</strong>.</li><li>If you fail such a check by 5 or less, the GM may give you a partial or sideways answer instead of nothing.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "advancement": {},
+        "identifier": "lens-tuned-recall",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "Wyrdlens Adept (1st level)",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Lens-Tuned Recall (Occult (Mind) & Lore (Mind) Edge)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_lucid_4.png",
+          "origin": null,
+          "transfer": true,
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091880,
+            "modifiedTime": 1792989091880
+          },
+          "_id": "K60OQYURktly52Nu",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.occult.value",
+                "type": "add",
+                "value": "+1",
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.lore.value",
+                "type": "add",
+                "value": "+1",
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "flags.bbttcc.wyrdlensAdept.lensTunedRecall",
+                "type": "custom",
+                "value": true,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "start": null,
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "gZHoMHBbaIJOJgZ5",
+      "flags": {
+        "bbttcc": {
+          "wyrdlensAdept": {
+            "lensTunedRecall": true
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.r3YHnUbCJYrUuhn4"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.r3YHnUbCJYrUuhn4",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 200000,
+      "_id": "qXwHCB2i1mKMC3x3"
+    },
+    {
+      "name": "The Real Shape",
+      "type": "power",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "system": {
+        "intent": "presence",
+        "channel": "mind",
+        "sephirah": "binah",
+        "mode": "hermetic",
+        "clarityRequired": 1,
+        "noiseGain": 0,
+        "activation": "action",
+        "target": "single",
+        "range": "near",
+        "damage": "",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "damage",
+          "number": 1,
+          "die": "d6",
+          "attribute": "presence",
+          "type": "psychic",
+          "flavor": "the mirror with no favors in it",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "effect": "One creature within 6 squares: Soul defense vs Cast DC. On fail: 1d6 psychic (stress) and Shaken for 1 round.",
+        "tags": [
+          "starter-kit",
+          "wyrdlens",
+          "truth",
+          "stress",
+          "new",
+          "path:wyrdlens-adept",
+          "doctrine-signature",
+          "sigil",
+          "harm",
+          "instant",
+          "mark"
+        ],
+        "category": "manifestation",
+        "flavor": "Mal: 'The truth doesn't hurt. THIS truth hurts. There's a difference and it's 1d6.'",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "You show one enemy the exact shape of what they are, uncropped, unfiltered, with the lighting they've been avoiding since the war.",
+          "form": "sigil",
+          "function": "harm",
+          "stability": "instant",
+          "interactionModel": "mark",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "",
+          "duration": "instant",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 30,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "Wyrdlens Adept — wyrdlens adept truth",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "maintenanceKey": "none",
+          "isSignature": false,
+          "appliedStates": {
+            "states": [
+              "shaken"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "chain": {
+            "enabled": false,
+            "count": 3,
+            "range": 30,
+            "damageFormula": "1d6",
+            "damageType": "",
+            "carryConditions": false,
+            "carryEffects": false
+          },
+          "conditionalDamage": [],
+          "appliedEffects": {
+            "modifiers": [],
+            "resists": [],
+            "immunes": []
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterKit": {
+            "path": "wyrdlens-adept",
+            "doctrine": "bbttcc-wyrdlens-adept-truth",
+            "core": false
+          }
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "rUvzsbLWFQVAU9YM",
+      "folder": null
+    },
+    {
+      "name": "Correspondence Strike",
+      "type": "power",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "system": {
+        "intent": "intrigue",
+        "channel": "mind",
+        "sephirah": "chokmah",
+        "mode": "hermetic",
+        "clarityRequired": 1,
+        "noiseGain": 0,
+        "activation": "action",
+        "target": "single",
+        "range": "near",
+        "damage": "",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "damage",
+          "number": 1,
+          "die": "d6",
+          "attribute": "intrigue",
+          "type": "electrical",
+          "flavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "effect": "One creature within 6 squares: Body defense vs Cast DC. On fail: 1d6 energy and Staggered for 1 round as the correspondence lands.",
+        "tags": [
+          "starter-kit",
+          "wyrdlens",
+          "damage",
+          "reused",
+          "path:wyrdlens-adept",
+          "path-core",
+          "sigil",
+          "harm",
+          "instant",
+          "event"
+        ],
+        "category": "manifestation",
+        "flavor": "Mal: 'Sympathy is a beautiful force of cosmic unity. Also you can hit a guy with it.'",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "As above, so below; as the bottle you just cracked, so the knee of the man holding it. You break the small thing and the big thing agrees.",
+          "form": "sigil",
+          "function": "harm",
+          "stability": "instant",
+          "interactionModel": "event",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "",
+          "duration": "instant",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 30,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "Wyrdlens Adept",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "maintenanceKey": "none",
+          "isSignature": false,
+          "appliedStates": {
+            "states": [
+              "staggered"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "body",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "chain": {
+            "enabled": false,
+            "count": 3,
+            "range": 30,
+            "damageFormula": "1d6",
+            "damageType": "",
+            "carryConditions": false,
+            "carryEffects": false
+          },
+          "conditionalDamage": [],
+          "appliedEffects": {
+            "modifiers": [],
+            "resists": [],
+            "immunes": []
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterKit": {
+            "path": "wyrdlens-adept",
+            "doctrine": "",
+            "core": true
+          }
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "tRWPOlzxQFLkto3n",
+      "folder": null
+    },
+    {
+      "name": "Archetype: The World (Integrator) (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_world.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden – Archetype: The World (Integrator) (Tier 1)",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 (Level 1) — The World (Integrator)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Investigation and Insight.</li><li><strong>Strategic:</strong> Your Domain's passive OP bias now follows the base Archetype file.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "archetype-world-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Level 1+",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "name": "Archetype Tier 1 Proficiencies",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_blessed_2.png",
+          "_id": "30KpHnBFassI7jxI",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.investigation.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.insight.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091880,
+            "modifiedTime": 1792989091880
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "2EZWi9nK8TsgCvFZ",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "world",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:world",
+              "bbttcc:expression:integrator",
+              "bbttcc:tier:1",
+              "bbttcc:economy_op_cap:+1",
+              "bbttcc:diplomacy_op_cap:+1"
+            ]
+          }
+        },
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": "Item.stoO1lorJ2BHM5Ru",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.stoO1lorJ2BHM5Ru",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091880,
+        "modifiedTime": 1792989091880,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "tzgQijuXOtWnrJ2p",
+      "sort": 0
+    }
+  ],
+  "effects": [],
+  "folder": "7XKW4O4wpoxj6i5a",
+  "sort": 425000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3,
+    "B83uCa0IV4h5mTEp": 3,
+    "rzJQNVz5H3SHfP2i": 3,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "steward",
+      "bulwark": {},
+      "lastSomaBreakScene": "6YetGOfAK3IhsZ9k",
+      "triggerUsage": {},
+      "levelGrants": {
+        "2": {
+          "v": 1,
+          "ts": 1791824683242,
+          "attrKey": "violence",
+          "attrFrom": 2,
+          "attrTo": 3,
+          "skillPointsGranted": 0,
+          "techniqueItemId": null,
+          "importedFeatureIds": [],
+          "grantedSkills": [],
+          "signatureBumps": [],
+          "integrityTopUp": 3
+        }
+      },
+      "aptitudePromotions": {
+        "wyrdlens adept: tier 1 — lens read|brawl": {
+          "delta": 1,
+          "item": "Wyrdlens Adept: Tier 1 — Lens Read",
+          "at": 1791865237841
+        },
+        "wyrdlens adept: tier 1 — lens read|fitting": {
+          "delta": 1,
+          "item": "Wyrdlens Adept: Tier 1 — Lens Read",
+          "at": 1791865237841
+        }
+      }
+    },
+    "bbttcc-factions": {
+      "factionId": "6H5Grt3HybAs1rSq"
+    },
+    "bbttcc-territory": {
+      "faction": "The Errata Societ"
+    },
+    "bbttcc-character-options": {
+      "identity": {
+        "archetype": {
+          "key": "6cYK3ZPuq5YnkSP0",
+          "id": "6cYK3ZPuq5YnkSP0",
+          "pack": "bbttcc-character-options.character-archetypes",
+          "category": "character-archetypes",
+          "optionKey": "world",
+          "identifier": "archetype-world",
+          "name": "Archetype: The World (Integrator)",
+          "currentTier": 1,
+          "displayName": "The World (Integrator)"
+        },
+        "crew": {
+          "key": "OlbPKeA5xuiYD3LW",
+          "id": "OlbPKeA5xuiYD3LW",
+          "pack": "bbttcc-character-options.crew-types",
+          "category": "crew-types",
+          "optionKey": "verdant-stalkers",
+          "identifier": "crew-verdant-stalkers",
+          "name": "Crew Type: Verdant Stalkers",
+          "currentTier": 1,
+          "displayName": "Verdant Stalkers"
+        },
+        "sephirothicAlignment": {
+          "key": "ammb5TPGcVEbjCXb",
+          "id": "ammb5TPGcVEbjCXb",
+          "pack": "bbttcc-character-options.sephirothic-alignments",
+          "category": "sephirothic-alignments",
+          "optionKey": "alignment-tiphareth",
+          "identifier": "alignment-tiphareth",
+          "name": "Alignment: Tiphareth"
+        },
+        "occult": {
+          "key": "uzklMVc8EUDpGBA7",
+          "id": "uzklMVc8EUDpGBA7",
+          "pack": "bbttcc-character-options.occult-associations",
+          "category": "occult-associations",
+          "optionKey": "exorcist",
+          "identifier": "occult-association-exorcist",
+          "name": "Occult Association: Exorcist / Purifier",
+          "currentTier": 1,
+          "displayName": "Exorcist / Purifier"
+        }
+      },
+      "archetype": {
+        "pack": "bbttcc-character-options.character-archetypes",
+        "id": "6cYK3ZPuq5YnkSP0",
+        "name": "Archetype: The World (Integrator)",
+        "identifier": "archetype-world"
+      },
+      "crew": {
+        "pack": "bbttcc-character-options.crew-types",
+        "id": "OlbPKeA5xuiYD3LW",
+        "name": "Crew Type: Verdant Stalkers",
+        "identifier": "crew-verdant-stalkers"
+      },
+      "sephirot": {
+        "pack": "bbttcc-character-options.sephirothic-alignments",
+        "id": "ammb5TPGcVEbjCXb",
+        "name": "Alignment: Tiphareth",
+        "identifier": "alignment-tiphareth"
+      },
+      "occult": {
+        "pack": "bbttcc-character-options.occult-associations",
+        "id": "uzklMVc8EUDpGBA7",
+        "name": "Occult Association: Exorcist / Purifier",
+        "identifier": "occult-association-exorcist"
+      },
+      "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.bIjHUVRVXKpYcUMJ",
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.09IqdCAcL2F1Y8xy",
+      "classUuid": "Compendium.bbttcc-master-content.classes.Item.bgiFz9pi5mdS7aGl",
+      "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.nPPVJBMm9OCD0p6S",
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "nativeLinks": {
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.bIjHUVRVXKpYcUMJ",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.09IqdCAcL2F1Y8xy",
+        "classUuid": "Compendium.bbttcc-master-content.classes.Item.bgiFz9pi5mdS7aGl",
+        "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.nPPVJBMm9OCD0p6S",
+        "ancestryApplied": true,
+        "heritageApplied": true,
+        "classApplied": true,
+        "subclassApplied": true,
+        "ancestryName": "Sephirotic Scion",
+        "heritageName": "Sephirotic Scion Heritage: Ophanic",
+        "className": "Wyrdlens Adept",
+        "subclassName": "Refraction of Truth (Bad Eden)"
+      },
+      "calculatedOPs": {
+        "violence": 1,
+        "nonlethal": 0,
+        "intrigue": 5,
+        "economy": 1,
+        "softpower": 2,
+        "diplomacy": 3,
+        "logistics": 0,
+        "culture": 0,
+        "faith": 0
+      }
+    },
+    "bbttcc-aae": {
+      "politicalPhilosophy": "anarchist"
+    },
+    "bbttcc-auto-link": {
+      "guidedCharacterCreation": {
+        "stage": "complete",
+        "name": "Red Shirtman",
+        "factionId": "",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.bIjHUVRVXKpYcUMJ",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.09IqdCAcL2F1Y8xy",
+        "classUuid": "Compendium.bbttcc-master-content.classes.Item.bgiFz9pi5mdS7aGl",
+        "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.nPPVJBMm9OCD0p6S",
+        "picks": {
+          "archetype": {
+            "pack": "bbttcc-character-options.character-archetypes",
+            "id": "6cYK3ZPuq5YnkSP0"
+          },
+          "crew": {
+            "pack": "bbttcc-character-options.crew-types",
+            "id": "OlbPKeA5xuiYD3LW"
+          },
+          "sephirot": {
+            "pack": "bbttcc-character-options.sephirothic-alignments",
+            "id": "ammb5TPGcVEbjCXb"
+          },
+          "occult": {
+            "pack": "bbttcc-character-options.occult-associations",
+            "id": "uzklMVc8EUDpGBA7"
+          },
+          "political": {
+            "id": "anarchist"
+          }
+        },
+        "baseStats": {
+          "violence": 2,
+          "intrigue": 2,
+          "presence": 3,
+          "body": 3,
+          "mind": 4,
+          "soul": 5,
+          "_playerPick": true
+        }
+      }
+    },
+    "bbttcc-sorting-engine": {
+      "pillarTally": {
+        "mercy": 6,
+        "severity": 6,
+        "neutral": 8
+      },
+      "lastDescent": {
+        "timestamp": 1791776000466,
+        "confirmedBuild": {
+          "archetype": {
+            "name": "The World",
+            "score": 40
+          },
+          "ancestry": {
+            "name": "Sephirotic Scion",
+            "score": 36,
+            "alignmentBonus": 3
+          },
+          "heritage": {
+            "name": "Sephirotic Scion Heritage: Ophanic",
+            "_playerPick": true
+          },
+          "crew": {
+            "name": "Verdant Stalkers",
+            "score": 34
+          },
+          "path": {
+            "name": "Wyrdlens Adept",
+            "score": 32
+          },
+          "doctrine": {
+            "name": "Refraction of Truth",
+            "score": 21
+          },
+          "philosophy": {
+            "name": "Anarchist",
+            "score": 28
+          },
+          "occult": {
+            "name": "Exorcist/Purifier",
+            "score": 35
+          },
+          "alignment": {
+            "name": "Tiphareth",
+            "score": 19
+          },
+          "faculties": {
+            "violence": 2,
+            "intrigue": 2,
+            "presence": 3,
+            "body": 3,
+            "mind": 4,
+            "soul": 5,
+            "_playerPick": true
+          }
+        },
+        "traitMap": {
+          "sacrifice": 3,
+          "sorrow": 3,
+          "faith": 9,
+          "keter_signal": 2,
+          "speech": 3,
+          "independence": 8,
+          "severity": 6,
+          "stealth": 4,
+          "chokhmah_signal": 2,
+          "dread": 2,
+          "violence": 4,
+          "risk": 2,
+          "geburah_signal": 5,
+          "binah_signal": 2,
+          "ritual": 3,
+          "tiphareth_signal": 6,
+          "kinship": 4,
+          "chesed_signal": 2,
+          "discipline": 5,
+          "hierarchy": 2,
+          "study": 2,
+          "mercy": 2,
+          "netzach_signal": 3,
+          "compassion": 3,
+          "ambition": 4,
+          "hod_signal": 2,
+          "yesod_signal": 5,
+          "malkuth_signal": 6
+        },
+        "classification": "Balanced",
+        "mode": "sorting"
+      }
+    },
+    "bbttcc-onboarding": {}
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989091880,
+    "modifiedTime": 1792989091880,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!actors!vy7m4eigKC3fkpTw"
+}

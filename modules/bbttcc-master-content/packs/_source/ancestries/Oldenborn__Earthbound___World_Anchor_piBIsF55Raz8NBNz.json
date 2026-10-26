@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-oldenborn-furrykin=\"v1\" style=\"display:none\"></div>\n<p><em>\"Reality tries to slide. You say: no.\"</em></p><p><strong>World-Anchor (1/Soma Break).</strong> Reaction — when you or an ally within 6 squares would be teleported, displaced, banished, or forcibly moved by magical/metaphysical effect, anchor them. Effect fails; attacker takes psychic backlash = your tier.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldEarthboundWorldAnchor\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>World-Anchor</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Reaction (within 6 squares) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Negate teleport/displace/banish/forced-movement on you or ally within 6 squares; attacker takes psychic backlash = tier.</div>\n</div>",
+      "value": "\n<p><em>\"Reality tries to slide. You say: no.\"</em></p><p><strong>World-Anchor (1/Soma Break).</strong> Reaction — when you or an ally within 6 squares would be teleported, displaced, banished, or forcibly moved by magical/metaphysical effect, anchor them. Effect fails; attacker takes psychic backlash = your tier.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldEarthboundWorldAnchor\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>World-Anchor</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Reaction (within 6 squares) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Negate teleport/displace/banish/forced-movement on you or ally within 6 squares; attacker takes psychic backlash = tier.</div>\n</div>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 17
     },
     "properties": [],
     "requirements": "Oldenborn",
@@ -41,7 +41,6 @@
       "kind": "oldenborn",
       "feature": "world_anchor",
       "lineage": "Earthbound",
-      "tierLevel": 17,
       "version": "1.0.0"
     },
     "fourththing": {
@@ -53,10 +52,20 @@
             "uses": 1
           },
           "effect": {
-            "kind": "chat-prompt",
-            "args": {
-              "body": "Reality tries to slide. You say: no.” World-Anchor (1/a Soma Break). When you or an ally you can see within 30 feet would be teleported, displaced, banished, or forcibly moved by a magical or metaphysical e..."
-            }
+            "kind": "resist-forced-movement",
+            "args": {}
+          }
+        },
+        {
+          "event": "on-ally-forced-movement",
+          "radius": 6,
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "resist-forced-movement",
+            "args": {}
           }
         }
       ]
@@ -251,12 +260,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004114716,
-    "modifiedTime": 1782167240135,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988984709,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

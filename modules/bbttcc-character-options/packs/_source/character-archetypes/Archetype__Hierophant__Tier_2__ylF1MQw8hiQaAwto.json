@@ -1,5 +1,5 @@
 {
-  "name": "Archetype: Hierophant (Tier 2)",
+  "name": "Archetype: The Hierophant (Tier 2)",
   "type": "feat",
   "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
   "system": {
@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — Hierophant</strong></p>\n<ul>\n<li><strong>Tactical:</strong> —</li>\n<li><strong>Strategic:</strong> When spending <strong>Soft Power OPs</strong> to raise <strong>population loyalty</strong> or to <strong>inspire troops during a Siege</strong>, the <strong>effectiveness of the spent OPs is increased by 25%</strong>.</li>\n</ul>",
+      "value": "<p><strong>Tier 2 (Level 5) — Hierophant</strong></p>\n<ul>\n\n<li><strong>Strategic:</strong> Whenever your Domain spends Soft Power marks, it spends 20% less (never below 10).</li>\n</ul>",
       "chat": ""
     },
     "activities": {},
@@ -61,7 +61,20 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "softpower"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Archetype: The Hierophant (Tier 2)",
+          "pct": 20
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": null,
@@ -73,12 +86,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986744488,
-    "modifiedTime": 1781116038303,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989148964,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

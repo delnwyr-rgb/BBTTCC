@@ -1,126 +1,78 @@
 {
+  "_id": "mqAy29IIgdsKutDc",
   "name": "Audit Oversight Module",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/equipment/head/tech-helm-blue.webp",
   "system": {
-    "description": {
-      "value": "<p>Vehicle/construct upgrade for Attaccountant craft: 300‑ft Aura of Accountability (enemies −2 to deception/false reports).</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [
+      "rig-module"
+    ],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 25,
-      "units": "lb"
-    },
-    "price": {
-      "value": 7500,
-      "denomination": "gp"
-    },
-    "rarity": "veryRare",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "trinket",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "audit-oversight-module",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>A bolted-on ledger-brain for an Auditor's rig. Every lie told within its hearing gets a footnote.</p><p><b>Aura of Accountability.</b> While mounted on a rig, enemies within 15 squares take −2 on Intrigue checks to deceive or to file a false report.</p>",
+      "chat": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": []
-    },
-    "rfi": {
-      "item": {
-        "tier": "II",
-        "footprint": 1,
-        "reach": "self",
-        "frame": "armor",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "scene"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
-    },
     "fourththing": {
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
-            "currency": "economy",
+            "marks": 540,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 3,
+            "notes": "TII talisman × rarity 3",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 216
           },
           "tier": "II",
-          "frame": "armor",
+          "frame": "talisman",
           "origin": "looted",
           "bound": "free",
           "reach": "self",
           "footprint": 1,
-          "legacySystem": {
-            "description": {
-              "value": "<p>Vehicle/construct upgrade for Attaccountant craft: 15 squares Aura of Accountability (enemies −2 to deception/false reports).</p>"
-            }
-          }
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A bolted-on ledger-brain for an Auditor's rig. Every lie told within its hearing gets a footnote.</p><p><b>Aura of Accountability.</b> While mounted on a rig, enemies within 15 squares take −2 on Intrigue checks to deceive or to file a false report.</p>"
         }
+      },
+      "rigGear": {
+        "subtype": "rig-system",
+        "passive": true
       }
     }
   },
   "effects": [],
-  "folder": "TNrB6kEiHS0KwwJT",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834161760,
-    "modifiedTime": 1782164185979,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "folder": "0JDB983lzPepXXNe",
+  "sort": 700000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "mqAy29IIgdsKutDc",
-  "sort": 700000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988906892,
+    "modifiedTime": 1792988906893,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!mqAy29IIgdsKutDc"
 }

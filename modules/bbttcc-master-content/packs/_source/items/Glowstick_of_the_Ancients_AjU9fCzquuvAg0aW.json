@@ -1,98 +1,33 @@
 {
+  "_id": "AjU9fCzquuvAg0aW",
   "name": "Glowstick of the Ancients",
-  "type": "consumable",
+  "type": "gear",
   "img": "icons/sundries/lights/torch-brown-lit.webp",
   "system": {
-    "description": {
-      "value": "<p>Crack to emit bright light 60 ft for 8 hours; reveals invisible Qliphothic residue (faint outlines).</p>",
-      "chat": ""
-    },
-    "rarity": "common",
-    "price": {
-      "value": 5,
-      "denomination": "gp"
-    },
-    "type": {
-      "value": "potion",
-      "subtype": ""
-    },
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "autoDestroy": false,
-      "max": ""
-    },
-    "identifier": "glowstick-of-the-ancients",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "identified": true,
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 0,
-      "units": "lb"
-    },
-    "attunement": "",
-    "attuned": false,
-    "equipped": false,
-    "damage": {
-      "base": {
-        "types": [],
-        "custom": {
-          "enabled": false
-        },
-        "scaling": {
-          "number": 1
-        }
-      },
-      "replace": false
-    },
-    "properties": []
+    "description": {
+      "value": "<p>Crack to emit bright light 12 squares for 8 hours; reveals invisible Qliphothic residue (faint outlines).</p>",
+      "chat": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": []
-    },
-    "rfi": {
-      "item": {
-        "tier": "I",
-        "footprint": 0,
-        "reach": "self",
-        "frame": "consumable",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "none"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
-    },
     "fourththing": {
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
+            "marks": 10,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "notes": "TI consumable",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 4
           },
           "tier": "I",
           "frame": "consumable",
@@ -100,11 +35,21 @@
           "bound": "free",
           "reach": "self",
           "footprint": 0,
-          "legacySystem": {
-            "description": {
-              "value": "<p>Crack to emit bright light 12 squares for 8 hours; reveals invisible Qliphothic residue (faint outlines).</p>"
-            }
-          }
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "consume": {
+            "effects": [],
+            "decrement": true,
+            "target": "self"
+          },
+          "charges": 1
         }
       }
     },
@@ -288,22 +233,22 @@
   },
   "effects": [],
   "folder": "TNrB6kEiHS0KwwJT",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834173592,
-    "modifiedTime": 1782164185971,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1100000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "AjU9fCzquuvAg0aW",
-  "sort": 1100000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988908988,
+    "modifiedTime": 1792988908988,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!AjU9fCzquuvAg0aW"
 }

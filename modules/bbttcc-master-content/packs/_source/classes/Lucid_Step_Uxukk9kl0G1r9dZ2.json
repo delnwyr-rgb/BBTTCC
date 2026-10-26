@@ -91,7 +91,7 @@
   },
   "effects": [
     {
-      "name": "Lucid Step (Intrigue Check Edge)",
+      "name": "Lucid Step (+1 Evasion)",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_4.png",
       "type": "base",
       "transfer": true,
@@ -100,19 +100,19 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "systemVersion": "0.6.37",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1776459927034,
-        "modifiedTime": 1777346198907
+        "modifiedTime": 1792988965823
       },
       "_id": "MiARs96vI1F1iNtt",
       "system": {
         "changes": [
           {
-            "key": "system.abilities.dex.bonuses.save",
-            "value": "+1",
+            "key": "system.derived.evasion.aeBonus",
+            "value": "1",
             "priority": 20,
             "type": "add",
             "phase": "initial"
@@ -325,12 +325,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776459927034,
-    "modifiedTime": 1782167240821,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907909113,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

@@ -1,5 +1,5 @@
 {
-  "name": "Archetype: Wheel of Fortune",
+  "name": "Archetype: The Wheel of Fortune",
   "type": "feat",
   "img": "icons/tools/nautical/steering-wheel.webp",
   "system": {
@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>“You do not control chaos. You time it.”</em></p><p><strong>Archetype (Bad Eden): Wheel of Fortune.</strong> You are variance and leverage.</p>",
+      "value": "<p><em>“You do not control chaos. You time it.”</em></p><p><strong>Archetype (Bad Eden): Wheel of Fortune.</strong> You are variance and leverage.</p><p><strong>Domain edge:</strong> Your Domain earns <strong>+10 Soft Power</strong> and <strong>+10 Intrigue</strong> marks each turn while you serve it.</p>",
       "chat": ""
     },
     "activities": {},
@@ -94,12 +94,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986809498,
-    "modifiedTime": 1781116017363,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989148572,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

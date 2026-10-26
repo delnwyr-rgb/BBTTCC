@@ -13,7 +13,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-menhirkin=\"v1\" style=\"display:none\"></div>\n<p><em>\"Some things you carry around because you haven't figured out where to put them yet.\"</em></p>\n<p><strong>Magma Memory (1/Soma Break).</strong> Reaction — when you take thermal damage (any flavor) from a single source, bank a portion of the heat. Until your next Soma Break, spend the banked heat as a bonus action to add +2d10 exploding thermal damage (flavor: fire) to your next weapon attack or unarmed strike that hits.</p>\n<p>While the heat is held, reroll the lowest die on Body checks against environmental cold.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"menhirkinIgneousMagmaMemory\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Magma Memory</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break (bank + spend) &nbsp;·&nbsp; <strong>Action:</strong> Reaction (bank) → Bonus action (spend) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Reaction on thermal damage: bank the heat. Until next Soma Break, spend as bonus action to add +2d10 exploding thermal (fire) to next hitting attack. While held: reroll-lowest on Body checks vs cold.</div>\n</div>",
+      "value": "\n<p><em>\"Some things you carry around because you haven't figured out where to put them yet.\"</em></p>\n<p><strong>Magma Memory (1/Soma Break).</strong> Reaction — when you take thermal damage (any flavor) from a single source, bank a portion of the heat. Until your next Soma Break, spend the banked heat as a bonus action to add +2d10 exploding thermal damage (flavor: fire) to your next weapon attack or unarmed strike that hits.</p>\n<p>While the heat is held, reroll the lowest die on Body checks against environmental cold.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"menhirkinIgneousMagmaMemory\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Magma Memory</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break (bank + spend) &nbsp;·&nbsp; <strong>Action:</strong> Reaction (bank) → Bonus action (spend) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Reaction on thermal damage: bank the heat. Until next Soma Break, spend as bonus action to add +2d10 exploding thermal (fire) to next hitting attack. While held: reroll-lowest on Body checks vs cold.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -22,7 +22,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -39,14 +39,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "menhirkin",
       "feature": "magma_memory",
       "lineage": "Igneous",
-      "tierLevel": 1,
       "version": "1.1.0",
       "date": "2026-04-19",
       "rfiNative": true
@@ -55,8 +51,8 @@
       "grants": {
         "resistances": [
           {
-            "type": "energy",
-            "flavor": "fire"
+            "type": "thermal",
+            "flavor": "hot"
           }
         ]
       },
@@ -79,14 +75,38 @@
       "triggers": [
         {
           "event": "on-damage-taken",
+          "predicate": {
+            "tag": [
+              "thermal",
+              "hot",
+              "fire"
+            ]
+          },
           "limit": {
             "window": "soma-break",
             "uses": 1
           },
           "effect": {
-            "kind": "chat-prompt",
+            "kind": "bank-counter",
             "args": {
-              "body": "Magma Memory (1/Soma Break). As a reaction when you take energy damage (any flavor) from a single source, you may bank a portion of the heat"
+              "counter": "heat",
+              "delta": 1,
+              "max": 1
+            }
+          }
+        },
+        {
+          "event": "on-attack-hit",
+          "offer": true,
+          "offerText": "Magma Memory — spend the banked heat: +2d10 exploding thermal (fire) on this hit.",
+          "effect": {
+            "kind": "spend-counter",
+            "args": {
+              "counter": "heat",
+              "per": {
+                "dieFormula": "2d10x10"
+              },
+              "type": "thermal"
             }
           }
         }
@@ -281,12 +301,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776660294533,
-    "modifiedTime": 1782167281945,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988969451,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

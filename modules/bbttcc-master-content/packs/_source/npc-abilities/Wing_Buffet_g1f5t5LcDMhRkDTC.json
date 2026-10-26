@@ -1,0 +1,82 @@
+{
+  "name": "Wing Buffet",
+  "type": "feat",
+  "img": "icons/magic/holy/angel-wings-gray.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Each creature within 3 squares rolls an Evasion check vs DC 17. Fail: 2d6 kinetic damage and knocked Prone. The Archon may then fly up to 6 squares without provoking.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "condition": {
+                "key": "prone",
+                "duration": "1-round",
+                "save": {
+                  "attr": "intrigue",
+                  "dc": 17
+                }
+              },
+              "damage": {
+                "formula": "2d6",
+                "type": "kinetic"
+              }
+            }
+          },
+          {
+            "on": "use",
+            "do": {
+              "shift": 6
+            },
+            "who": "self",
+            "label": "then flies up to 6 squares"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Archon of the Twin Crown"
+        ],
+        "sourceIds": [
+          "IU1ykPyFaiFNFDRW"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "g1f5t5LcDMhRkDTC",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069986,
+    "modifiedTime": 1792989070058,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!g1f5t5LcDMhRkDTC"
+}

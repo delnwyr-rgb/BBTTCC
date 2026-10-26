@@ -44,18 +44,27 @@
             "frozen-sarcasm"
           ],
           "price": {
-            "marks": 50,
-            "currency": "economy",
+            "marks": 60,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI talisman stamp",
+            "notes": "TI talisman",
             "bound": "free",
-            "saleBack": 20
+            "saleBack": 24
           }
         }
-      }
+      },
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "intimidation",
+          "vs": "the first Intimidate or Mock check you make each scene",
+          "note": "Mascot's Last Dignity"
+        }
+      ]
     }
   },
   "folder": "Wxh1A343inwTUeoo",
@@ -67,11 +76,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777437725640,
-    "modifiedTime": 1784515282837,
+    "modifiedTime": 1792977668112,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

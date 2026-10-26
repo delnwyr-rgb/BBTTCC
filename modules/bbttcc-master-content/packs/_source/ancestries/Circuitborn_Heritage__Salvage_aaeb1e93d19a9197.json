@@ -14,7 +14,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn Line.</strong> The salvage-recursive. Built from the parts of older Circuitborn that didn’t make it. You carry their last instructions in your firmware.</p><p><em>“Nothing in this world is wasted. Some of it is just waiting to be re-purposed.”</em></p><p><strong>Salvage.</strong> You are a sentient chassis built around the principle of <em>recovery</em>. Broken things speak to you. So do broken people, when they don’t know they’re doing it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>BOD (Body)</strong>—expressed primarily through Tier powers.</li><li><strong>Scrap Memory.</strong> You can identify the original purpose of any handheld broken object you touch (1/Soma Break, GM adjudicates depth of detail).</li></ul>",
+      "value": "\n<p><strong>Circuitborn Line.</strong> The salvage-recursive. Built from the parts of older Circuitborn that didn’t make it. You carry their last instructions in your firmware.</p><p><em>“Nothing in this world is wasted. Some of it is just waiting to be re-purposed.”</em></p><p><strong>Salvage.</strong> You are a sentient chassis built around the principle of <em>recovery</em>. Broken things speak to you. So do broken people, when they don’t know they’re doing it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>BOD (Body)</strong>—expressed primarily through Tier powers.</li><li><strong>Scrap Memory.</strong> You can identify the original purpose of any handheld broken object you touch (1/Soma Break, GM adjudicates depth of detail).</li></ul>",
       "chat": ""
     },
     "advancement": [
@@ -58,9 +58,6 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "species"
-    },
     "bbttcc": {
       "kind": "heritage",
       "family": "circuitborn",
@@ -244,6 +241,17 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "skill": "investigation",
+          "mode": "reroll-lowest",
+          "vs": "identifying salvage, pre-collapse tech, or what a broken thing was for",
+          "note": "Scrap Memory"
+        }
+      ]
     }
   },
   "folder": "l5Yp6MzYn3IvH285",
@@ -251,12 +259,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776541800000,
-    "modifiedTime": 1781116086499,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988990473,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

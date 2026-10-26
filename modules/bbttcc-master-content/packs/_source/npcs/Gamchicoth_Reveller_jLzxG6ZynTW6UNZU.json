@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "art/bbttcc/qliphoth/gamchicoth-reveller.webp",
   "system": {
-    "role": "Qliphothic Tempter (Gamchicoth — Lesser)",
+    "role": "stealth",
     "tier": 2,
     "factionId": "",
     "notes": "<p>A manic, capering satyr-thing with feverish pink eyes and a plain wooden chalice that is never empty. It invites onlookers to the dance; those who drink are flooded with euphoric energy and then spend the rest of their short lives craving another sip. The Reveller feeds on the downward spiral, dancing gleefully in the wreckage.</p><p><strong>Qliphah:</strong> Gamchicoth, the Tumults — the Hull of Chesed. Generosity untempered by structure: the gift that consumes the receiver.</p><p><em>Mal's note: 'The first cup is free. So is the fall. Everything between costs.'</em></p>",
@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 32,
-        "max": 32
+        "max": 32,
+        "temp": 0
       },
       "stress": {
         "value": 20,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -141,9 +143,13 @@
         "qliphothic"
       ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "sephirotic"
+      ]
     },
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "charmed"
+    ],
     "tags": [
       "qliphothic",
       "5e-port",
@@ -152,6 +158,9 @@
       "hull-of-chesed",
       "lesser"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -164,6 +173,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Tempter (Gamchicoth — Lesser)",
+      "notes": "<p>A manic, capering satyr-thing with feverish pink eyes and a plain wooden chalice that is never empty. It invites onlookers to the dance; those who drink are flooded with euphoric energy and then spend the rest of their short lives craving another sip. The Reveller feeds on the downward spiral, dancing gleefully in the wreckage.</p><p><strong>Qliphah:</strong> Gamchicoth, the Tumults — the Hull of Chesed. Generosity untempered by structure: the gift that consumes the receiver.</p><p><em>Mal's note: 'The first cup is free. So is the fall. Everything between costs.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -263,7 +276,7 @@
       "_id": "faHWgtKYbAklqXkH",
       "name": "Chaotic Dance",
       "type": "feature",
-      "img": "icons/svg/walk.svg",
+      "img": "icons/equipment/feet/boots-collared-leather.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -281,23 +294,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188149,
-        "modifiedTime": 1787799188149,
+        "modifiedTime": 1791324410544,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!jLzxG6ZynTW6UNZU.faHWgtKYbAklqXkH"
+      }
     },
     {
       "_id": "i6kRXt6rR5VaYwEt",
       "name": "Slippery Grace",
       "type": "feature",
-      "img": "icons/svg/mage-shield.svg",
+      "img": "icons/magic/air/air-pressure-shield-blue.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -315,17 +327,16 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188149,
-        "modifiedTime": 1787799188149,
+        "modifiedTime": 1791324410544,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!jLzxG6ZynTW6UNZU.i6kRXt6rR5VaYwEt"
+      }
     },
     {
       "_id": "VTTSoKRDSbVWyL4Z",
@@ -349,23 +360,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188149,
-        "modifiedTime": 1787799188149,
+        "modifiedTime": 1791324410544,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!jLzxG6ZynTW6UNZU.VTTSoKRDSbVWyL4Z"
+      }
     },
     {
       "_id": "8PFOTuS5Zp2bzMDA",
       "name": "Addictive Touch",
       "type": "weapon",
-      "img": "icons/svg/heal.svg",
+      "img": "icons/magic/nature/root-vine-caduceus-healing.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -414,6 +424,19 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 14,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round"
           }
         },
         "description": {
@@ -429,23 +452,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188149,
-        "modifiedTime": 1787799188149,
+        "modifiedTime": 1791331978527,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!jLzxG6ZynTW6UNZU.8PFOTuS5Zp2bzMDA"
+      }
     },
     {
       "_id": "ifJ6a0lyoF2EH7Ru",
       "name": "Chalice of Excess (Recharge 5–6)",
       "type": "feat",
-      "img": "icons/svg/tankard.svg",
+      "img": "icons/containers/bags/pack-leather-stitched-tan.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -461,19 +483,239 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "save": {
+                    "attr": "soul",
+                    "dc": 14,
+                    "onSave": "negate"
+                  }
+                }
+              },
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Chalice of Excess (Recharge 5–6)"
+                },
+                "do": {
+                  "tempIntegrity": 10,
+                  "prompt": "Drinks: twice-keep-better attacks 1 rd; addicted — Soul DC 14 each turn or go drink."
+                }
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188149,
-        "modifiedTime": 1787799188149,
+        "modifiedTime": 1791331978527,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Aura of Excess",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "qliphothic",
+          "gamchicoth"
+        ],
+        "description": {
+          "value": "<p>Any creature that starts its turn within 4 squares must succeed a Resolve check (DC by tier) or spend its bonus action on one reckless, pleasurable thing.</p><p><em>Gamchicoth — hull of chesed.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!jLzxG6ZynTW6UNZU.ifJ6a0lyoF2EH7Ru"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "radius": 4,
+                "who": "enemies",
+                "do": {
+                  "save": {
+                    "attr": "soul",
+                    "dc": 15,
+                    "onSave": "negate"
+                  },
+                  "prompt": "Aura of Excess: on a fail, spends its bonus action on one reckless, pleasurable thing."
+                }
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "qliphothic"
+            }
+          }
+        }
+      },
+      "_id": "FAhx6PAwg9vXXPZe",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342350303,
+        "modifiedTime": 1791342350303,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Hollow Touch",
+      "type": "weapon",
+      "img": "icons/magic/death/hand-withered-gray.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "violence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "lineage-strike",
+          "qliphothic",
+          "bestiary"
+        ],
+        "effect": "Damage goes to Stress. On a hit the target rolls Resolve vs DC 15; on a failure it is Compelled toward the shell's vice until the end of its next turn.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul"
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 15,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> Reach 1 square, one target. Damage: <code>2d6</code> qliphothic to Stress + violence. On a hit the target rolls Resolve vs DC 15; on a failure it is Compelled toward the shell's vice until the end of its next turn.</p><p><em>The hollow reaches for what it lacks.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "attack",
+              "lineageStrike": "qliphothic",
+              "price": {
+                "marks": 150,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII attack × 1",
+                "bound": "free",
+                "saleBack": 60
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "fAfsatHufKrK4Y4K",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989137577,
+        "modifiedTime": 1792989137577,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -517,34 +759,38 @@
             ]
           },
           "price": {
-            "marks": 450,
-            "bounty": 600,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 10,
+            "bounty": 10,
+            "hire": 15,
+            "ransom": 15,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "II light Qliphothic Tempter (Gamchicoth — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TII light qliphothic — bounty 10 / hire 15 marks; credited to the pool matching the method (default softpower)"
           },
           "qliphah": {
             "name": "gamchicoth",
             "hullOf": "chesed",
             "grade": "lesser"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "gamchicoth",
+          "title": "Qliphothic Tempter (Gamchicoth — Lesser)"
         }
       },
-      "kind": "npc"
+      "kind": "npc",
+      "creatureType": "fiend"
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188149,
-    "modifiedTime": 1787799188149,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989137455,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "jLzxG6ZynTW6UNZU",
   "_key": "!actors!jLzxG6ZynTW6UNZU"

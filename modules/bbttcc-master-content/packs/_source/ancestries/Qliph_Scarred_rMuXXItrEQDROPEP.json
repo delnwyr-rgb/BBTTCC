@@ -7,11 +7,11 @@
     "source": "Bad Eden (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Qliph-Scarred.</strong> You walked out of a place that should have unmade you. The hollows and fractures in your soul never fully closed, and the world can feel the pressure leaking out.</p><hr><p><em><strong>Qliph-Scarred Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</p></li><li><p><strong>Size.</strong> You are Medium.</p></li><li><p><strong>Speed.</strong> Your walking speed is 6 squares</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Qliph-Scarred does not grant any attribute bonuses.</p></li></ul><p>Your Qliph-Scarred heritage grants you additional features through advancements (Item Grants) added during character creation.</p>",
+      "value": "\n<p><strong>Qliph-Scarred.</strong> You walked out of a place that should have unmade you. The hollows and fractures in your soul never fully closed, and the world can feel the pressure leaking out.</p><hr><p><em><strong>Qliph-Scarred Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</p></li><li><p><strong>Size.</strong> You are Medium.</p></li><li><p><strong>Speed.</strong> Your walking speed is 6 squares</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Qliph-Scarred does not grant any attribute bonuses.</p></li></ul><p><strong>Qliph-Scarred Core.</strong> At character creation you gain <strong>What Walked Out</strong> (Shadow Resilience, Qliphothic Saturation, Hunger Mask, Shadow-Wake). Your heritage adds its own traits and Tier powers at Initiation 1, 5, 11 and 17.</p>",
       "chat": ""
     },
-    "advancement": {
-      "QLSIZ00000000001": {
+    "advancement": [
+      {
         "_id": "QLSIZ00000000001",
         "type": "Size",
         "configuration": {
@@ -25,13 +25,13 @@
         "value": {},
         "flags": {}
       },
-      "QLSCAR0000000001": {
-        "_id": "QLSCAR0000000001",
+      {
+        "_id": "FNn9FiXyA5XtnWHz",
         "type": "ItemGrant",
         "configuration": {
           "items": [
             {
-              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.PFguHdcJ3AbtSDhx",
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.AnCoreQliphScar1",
               "optional": false
             }
           ],
@@ -40,87 +40,10 @@
         },
         "value": {},
         "level": 0,
-        "title": "Shadow Resilience",
-        "hint": "Gain the Qliph-Scarred: Shadow Resilience feature.",
-        "flags": {}
-      },
-      "QLSCAR0000000002": {
-        "_id": "QLSCAR0000000002",
-        "type": "ItemGrant",
-        "configuration": {
-          "items": [
-            {
-              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.AC1pQoGk2r1JsO1t",
-              "optional": false
-            }
-          ],
-          "optional": false,
-          "spell": null
-        },
-        "value": {},
-        "level": 0,
-        "title": "Qliphothic Saturation",
-        "hint": "Gain the Qliph-Scarred: Qliphothic Saturation feature.",
-        "flags": {}
-      },
-      "QLSCAR0000000003": {
-        "_id": "QLSCAR0000000003",
-        "type": "ItemGrant",
-        "configuration": {
-          "items": [
-            {
-              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.0Jar440SAvE96hdE",
-              "optional": false
-            }
-          ],
-          "optional": false,
-          "spell": null
-        },
-        "value": {},
-        "level": 0,
-        "title": "Hunger Mask",
-        "hint": "Gain the Qliph-Scarred: Hunger Mask feature.",
-        "flags": {}
-      },
-      "QLSCAR0000000004": {
-        "_id": "QLSCAR0000000004",
-        "type": "ItemGrant",
-        "configuration": {
-          "items": [
-            {
-              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.bLbk3JlqcS1MfBcn",
-              "optional": false
-            }
-          ],
-          "optional": false,
-          "spell": null
-        },
-        "value": {},
-        "level": 0,
-        "title": "Shadow-Wake",
-        "hint": "Gain the Qliph-Scarred: Shadow-Wake feature.",
-        "flags": {}
-      },
-      "QLSCAR0000000005": {
-        "_id": "QLSCAR0000000005",
-        "type": "ItemGrant",
-        "configuration": {
-          "items": [
-            {
-              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.JYdGhXK2dKB1wEg6",
-              "optional": false
-            }
-          ],
-          "optional": false,
-          "spell": null
-        },
-        "value": {},
-        "level": 0,
-        "title": "Strategic Hooks (Qliph-Scarred)",
-        "hint": "Grants OP and corruption hooks used by Bad Eden faction and world systems.",
-        "flags": {}
+        "title": "Qliph-Scarred Core: What Walked Out",
+        "hint": "Gain the Qliph-Scarred Core traits at character creation."
       }
-    },
+    ],
     "movement": {
       "walk": "30",
       "units": null,
@@ -144,47 +67,29 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "species"
-    },
     "bbttcc": {
-      "kind": "race",
+      "kind": "ancestry",
       "version": "1.0.0",
       "date": "2025-12-08",
-      "ancestryKey": "qliph_scarred"
+      "ancestryKey": "qliph_scarred",
+      "family": "qliph_scarred"
     },
     "bbttcc-character-options": {
       "option": {}
     },
-    "fourththing": {
-      "rfi": {
-        "item": {
-          "price": {
-            "marks": 30,
-            "currency": "economy",
-            "gmOverride": false,
-            "altCurrencies": {},
-            "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
-            "bound": "free",
-            "saleBack": 12
-          }
-        }
-      }
-    }
+    "fourththing": {}
   },
   "folder": "j42C7j9nQ8gpXSoM",
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1775014486366,
-    "modifiedTime": 1782167240136,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988970275,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

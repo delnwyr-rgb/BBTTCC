@@ -1,0 +1,92 @@
+{
+  "name": "Lead the Hunt",
+  "type": "feature",
+  "img": "icons/creatures/mammals/wolf-howl-moon-forest-blue.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-wild",
+      "aura"
+    ],
+    "description": {
+      "value": "<p>Allied wolves within 6 squares of the Alpha reroll the lowest die on their attack rolls. When the Alpha first drops below half Integrity, every allied wolf within 6 squares gains 5 temporary Integrity and may move 2 squares at once.</p><p><em>The pack does not look at her. It does not need to.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "frame": "feature"
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "bloodied",
+            "do": {
+              "tempIntegrity": 5,
+              "prompt": "Lead the Hunt: every allied wolf within 6 squares gains 5 temporary Integrity and may move 2 squares."
+            },
+            "limit": {
+              "per": "scene",
+              "uses": 1
+            }
+          }
+        ]
+      },
+      "passives": {
+        "aura": {
+          "radius": 6,
+          "who": "allies",
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "note": "Lead the Hunt — the Alpha is close"
+            }
+          ],
+          "note": "Lead the Hunt"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Burn-Zone Alpha"
+        ],
+        "sourceIds": [
+          "mKtVF9qB8ouHtYyf"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "eObmVpXMQT12P1Z5",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069948,
+    "modifiedTime": 1792989070034,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!eObmVpXMQT12P1Z5"
+}

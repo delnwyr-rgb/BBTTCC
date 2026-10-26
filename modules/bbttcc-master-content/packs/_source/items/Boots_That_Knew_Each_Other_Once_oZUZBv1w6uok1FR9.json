@@ -10,13 +10,15 @@
     "armorSkill": "fitting",
     "equipped": false,
     "tags": [
+      "mal-voiced",
       "footwear",
-      "salvaged"
+      "salvaged",
+      "light"
     ],
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>Salvaged from two different abandoned trucks at two different crossroads. The left boot was loved very much. The right boot was loved less, but more recently. Together they make a pair that walks faster than either of them used to. The previous owners are not asking for them back.</p><p><strong>Mismatched Stride.</strong> +1 zone to your standard Move action. Stealth checks reroll the lowest die because nobody expects a person walking this fast to be sneaky. (Mal: \"It's psychological. They're so confused they don't notice you.\")</p>",
+      "value": "<p>Salvaged from two different abandoned trucks at two different crossroads. The left boot was loved very much. The right boot was loved less, but more recently. Together they make a pair that walks faster than either of them used to. The previous owners are not asking for them back.</p><p><strong>Mismatched Stride.</strong> +1 Evasion while worn. Stealth checks reroll the lowest die because nobody expects a person walking this fast to be sneaky. (Mal: \"It's psychological. They're so confused they don't notice you.\")</p>",
       "chat": ""
     }
   },
@@ -41,24 +43,33 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>Salvaged from two different abandoned trucks at two different crossroads. The left boot was loved very much. The right boot was loved less, but more recently. Together they make a pair that walks faster than either of them used to. The previous owners are not asking for them back.</p><p><b>Mismatched Stride.</b> +1 zone to your standard Move action. Stealth checks reroll the lowest die because nobody expects a person walking this fast to be sneaky. (Mal: \"It's psychological. They're so confused they don't notice you.\")</p>",
+          "lore": "<p>Salvaged from two different abandoned trucks at two different crossroads. The left boot was loved very much. The right boot was loved less, but more recently. Together they make a pair that walks faster than either of them used to. The previous owners are not asking for them back.</p><p><b>Mismatched Stride.</b> +1 Evasion while worn. Stealth checks reroll the lowest die because nobody expects a person walking this fast to be sneaky. (Mal: \"It's psychological. They're so confused they don't notice you.\")</p>",
           "materialOf": [
             "road-leather",
             "two-different-stories"
           ],
           "price": {
             "marks": 50,
-            "currency": "economy",
+            "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI footwear stamp",
+            "notes": "TI footwear",
             "bound": "free",
             "saleBack": 20
           }
         }
-      }
+      },
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "stealth",
+          "vs": "nobody expects a person walking this fast to be sneaky",
+          "note": "Mismatched Stride"
+        }
+      ]
     }
   },
   "folder": "Wxh1A343inwTUeoo",
@@ -111,8 +122,7 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!oZUZBv1w6uok1FR9.Gq8bPauNUHFffc5T"
+      }
     }
   ],
   "sort": 650000,
@@ -121,12 +131,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777437725654,
-    "modifiedTime": 1778541977258,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988953382,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

@@ -7,43 +7,67 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>When the Lisa Frank Elemental is attacked, it releases a burst of overwhelming color and affirmation.</p><p>Attacker must succeed on a DC 15 Soul check or become <strong>Dazed</strong> until the end of their next turn.</p>",
+      "value": "<p>When the Elemental is attacked, it releases a burst of overwhelming colour and affirmation. The attacker must succeed a Soul check vs DC 15 or be Staggered until the end of its next turn.</p>",
       "chat": ""
     }
   },
-  "_id": "SCgFLD89G7Ftmwkj",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "struck",
+            "do": {
+              "condition": {
+                "key": "staggered",
+                "duration": "1-round",
+                "save": {
+                  "attr": "soul",
+                  "dc": 15
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Lisa Frank Elemental"
+          "CACA"
+        ],
+        "sourceIds": [
+          "a9orjOV99MnMObho"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "SCgFLD89G7Ftmwkj",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": 1782149341021,
-    "modifiedTime": 1782149341021,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989051529,
+    "modifiedTime": 1792989051530,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!SCgFLD89G7Ftmwkj"
 }

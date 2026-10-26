@@ -7,7 +7,7 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Demand Surrender</h3><p>Attacker issues an ultimatum. The defender responds: yield (won_surrender) · parley (besieger Buffer +10) · refuse (−1 morale) — via siege.resolveSurrender. Target the besieged hex.</p><p><strong>OP Cost:</strong> diplomacy 20, violence 10, softPower 10</p><p><strong>Tier:</strong> 2</p><p><strong>Rarity:</strong> rare</p></div>",
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Demand Surrender</h3><p>Attacker issues an ultimatum. The defender responds: yield (won_surrender) · parley (besieger Buffer +10) · refuse (Loyalty −1 on the besieged hex) — via siege.resolveSurrender. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 20 · Violence 10 · Soft Power 10 marks</p></div>",
       "chat": ""
     }
   },
@@ -19,19 +19,19 @@
   },
   "_id": "shRInx672Xa9jGgx",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601765,
-    "modifiedTime": 1782703702692,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989002297,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

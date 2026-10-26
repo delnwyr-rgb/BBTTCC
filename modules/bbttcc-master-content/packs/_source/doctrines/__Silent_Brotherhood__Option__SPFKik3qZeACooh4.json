@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Silent Brotherhood [Option]",
+  "name": "Silent Brotherhood",
   "type": "feat",
   "img": "icons/magic/fire/dagger-rune-enchant-flame-strong-purple.webp",
   "system": {
@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Silent Brotherhood [Option]</h3><p><em>No rules text registered.</em></p></div>",
+      "value": "<p><strong>Silent Brotherhood</strong></p><p>Rosicrucian. Target a hex held by a rival: their marks bank, their standing toward you and what they have planned this turn are whispered to you at once.</p><p><em>Cost: Intrigue 10 · Soft Power 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "optact_silent_brotherhood"
+      "key": "optact_silent_brotherhood",
+      "effects": {
+        "text": "Rosicrucian. Target a hex held by a rival: their marks bank, their standing toward you and what they have planned this turn are whispered to you at once."
+      }
     }
   },
   "_id": "SPFKik3qZeACooh4",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601761,
-    "modifiedTime": 1782703702689,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988997641,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

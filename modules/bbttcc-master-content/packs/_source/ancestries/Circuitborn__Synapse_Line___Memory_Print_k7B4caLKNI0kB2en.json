@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You do not remember. You archive.”</em></p>\n        <p><strong>Memory-Print.</strong> You perfectly recall the last 24 hours. As a bonus action, you may replay a scene fragment to an ally (granting reroll-lowest on one Investigation, Lore, or Insight check about it).</p>",
+      "value": "\n<p><em>“You do not remember. You archive.”</em></p>\n        <p><strong>Memory-Print.</strong> You perfectly recall the last 24 hours. As a bonus action, you may replay a scene fragment to an ally (granting reroll-lowest on one Investigation, Lore, or Insight check about it).</p>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 5
     },
     "properties": [],
     "requirements": "Circuitborn",
@@ -41,7 +41,6 @@
       "kind": "circuitborn",
       "feature": "memory_print",
       "chassis": "Synapse Line",
-      "tierLevel": 5,
       "version": "1.0.0"
     },
     "bbttcc-character-options": {
@@ -260,12 +259,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004099337,
-    "modifiedTime": 1781116095838,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988983957,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

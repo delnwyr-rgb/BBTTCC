@@ -14,7 +14,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Archon's Word (1/Soma Break).</strong> Speak a word of binding truth as an action. Creatures of your choice within 6 squares must Presence check (DC 8 + Tier + Spirit) or be unable to speak a deliberate lie for 1 minute. Your radiant resistance becomes immunity.</p>",
+      "value": "<p><strong>Archon's Word (1/Soma Break).</strong> Speak a word of binding truth as an action. Creatures of your choice within 6 squares must Presence check (DC 8 + Tier + Spirit) or be unable to speak a deliberate lie for 1 minute. Your sephirotic resistance becomes immunity.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -23,7 +23,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 17
     },
     "uses": {
       "spent": 0,
@@ -39,14 +39,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "angel",
       "lineage": "Angel (Empyrean)",
       "feature": "archon",
-      "tierLevel": 4,
       "version": "1.0.0",
       "date": "2026-05-15",
       "npAncestry": true
@@ -236,12 +232,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1778961512418,
-    "modifiedTime": 1782167240127,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988978507,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

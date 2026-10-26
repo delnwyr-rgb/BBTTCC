@@ -1,0 +1,87 @@
+{
+  "name": "Correction, Not Anger",
+  "type": "feature",
+  "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-sephirotic",
+      "lineage-trait"
+    ],
+    "description": {
+      "value": "<p>Immune to Charmed and Shaken — it is a principle, not a person. Creatures that deal qliphothic damage to it must succeed a Soul check (DC 19) or be Restrained by the sephirah's answer until the end of their next turn.</p><p><em>No pressure!</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "feature",
+          "lineageTrait": "sephirotic"
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "struck",
+            "if": {
+              "damageType": [
+                "qliphothic"
+              ]
+            },
+            "do": {
+              "condition": {
+                "key": "restrained",
+                "duration": "1-round",
+                "save": {
+                  "attr": "soul",
+                  "dc": 19
+                }
+              }
+            },
+            "label": "Correction, Not Anger"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gloomgill"
+        ],
+        "sourceIds": [
+          "F1bwkux5Uyq6wXQ4"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "UpsXV2RAlSMVAvBk",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069925,
+    "modifiedTime": 1792989070005,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!UpsXV2RAlSMVAvBk"
+}

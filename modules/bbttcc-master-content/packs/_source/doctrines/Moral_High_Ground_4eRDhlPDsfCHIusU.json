@@ -3,14 +3,14 @@
   "type": "feat",
   "img": "icons/environment/wilderness/terrain-rocky-ground.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": {
       "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<p>Winning is fine. Winning while visibly, insufferably RIGHT? That's the good stuff. People remember that kind.</p><p><b>+2 Unity after victory.</b></p>",
+      "value": "<p>Winning is fine. Winning while visibly, insufferably RIGHT? That's the good stuff. People remember that kind.</p><p><b>+20 Soft Power marks after victory.</b></p>",
       "chat": ""
     },
     "activities": {},
@@ -50,7 +50,8 @@
           "presence"
         ],
         "engine": "presence"
-      }
+      },
+      "effects": {}
     }
   },
   "_id": "4eRDhlPDsfCHIusU",
@@ -65,12 +66,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977107845,
-    "modifiedTime": 1779731344590,
-    "lastModifiedBy": "6ut7GT8pCAhpdWjS"
+    "modifiedTime": 1792988993609,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!4eRDhlPDsfCHIusU"
 }

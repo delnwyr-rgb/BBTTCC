@@ -1,58 +1,18 @@
 {
+  "_id": "MBfhfAzJY1KBY26D",
   "name": "Scrubber Harness",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/equipment/waist/belt-leather-black-brass.webp",
   "system": {
-    "description": {
-      "value": "<p><i>“The Geiger clicks slow, then stops.”</i></p><p><b>Radiation Dampening.</b> Reduce radiation exposure tier by 1 for the wearer (to a minimum of 0), if your Bad Eden radiation engine is enabled.</p><p><b>Cleanse.</b> 2/day. As an action, cleanse radiation effects from one ally within 5 ft (GM adjudication; engine hook planned).</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 0,
-      "units": "lb"
-    },
-    "price": {
-      "value": 0,
-      "denomination": "gp"
-    },
-    "rarity": "rare",
-    "attunement": "",
-    "identified": true,
-    "equipped": false,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "uses": {
-      "max": "2",
-      "recovery": [
-        {
-          "period": "day",
-          "type": "recoverAll"
-        }
-      ],
-      "spent": 0
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "activities": {},
-    "identifier": "scrubber-harness",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p><i>“The Geiger clicks slow, then stops.”</i></p><p><b>Radiation Dampening.</b> Every hex is one level cooler for the wearer.</p><p><b>Cleanse.</b> Twice per Soma Break, as an action, clear the radiation from one ally within 1 square.</p>",
+      "chat": ""
+    }
   },
   "flags": {
     "bbttcc": {
@@ -61,8 +21,7 @@
         "support"
       ],
       "radiation": {
-        "tierDelta": -1,
-        "cleanseCharges": 2
+        "tierDelta": -1
       }
     },
     "fourththing": {
@@ -75,64 +34,16 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 2,
-            "notes": "TII vestment stamp × rarity 2.0 (untiered pass 2026-10-12)",
+            "notes": "TII vestment stamp × rarity 2.0",
             "bound": "free",
             "saleBack": 180
           },
-          "legacySystem": {
-            "description": {
-              "value": "<p><i>“The Geiger clicks slow, then stops.”</i></p><p><b>Radiation Dampening.</b> Reduce radiation exposure tier by 1 for the wearer (to a minimum of 0), if your Bad Eden radiation engine is enabled.</p><p><b>Cleanse.</b> 2/day. As an action, cleanse radiation effects from one ally within 1 square (GM adjudication; engine hook planned).</p>",
-              "chat": ""
-            },
-            "quantity": 1,
-            "weight": {
-              "value": 0,
-              "units": "lb"
-            },
-            "price": {
-              "value": 0,
-              "denomination": "gp"
-            },
-            "rarity": "rare",
-            "attunement": "",
-            "identified": true,
-            "equipped": false,
-            "type": {
-              "value": "",
-              "baseItem": ""
-            },
-            "uses": {
-              "max": "2",
-              "recovery": [
-                {
-                  "period": "day",
-                  "type": "recoverAll"
-                }
-              ],
-              "spent": 0
-            },
-            "unidentified": {
-              "description": ""
-            },
-            "activities": {},
-            "identifier": "scrubber-harness",
-            "source": {
-              "revision": 1,
-              "rules": "2024"
-            },
-            "container": null,
-            "attuned": false,
-            "crewed": false,
-            "armor": {
-              "value": null,
-              "dex": null
-            },
-            "proficient": null,
-            "properties": [],
-            "strength": null
-          },
           "tier": "II",
-          "frame": "vestment"
+          "frame": "vestment",
+          "bound": "free",
+          "origin": "looted",
+          "reach": "self",
+          "footprint": 1
         }
       }
     },
@@ -316,22 +227,22 @@
   },
   "effects": [],
   "folder": "Wxh1A343inwTUeoo",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834201672,
-    "modifiedTime": 1782164185974,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 2000000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "MBfhfAzJY1KBY26D",
-  "sort": 2000000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988914715,
+    "modifiedTime": 1792988914715,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!MBfhfAzJY1KBY26D"
 }

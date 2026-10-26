@@ -1,0 +1,128 @@
+{
+  "name": "Streams of Vengeance",
+  "type": "weapon",
+  "img": "icons/commodities/treasure/stone-cracked-lightning-blue.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "violence",
+    "skill": "channel",
+    "damage": {
+      "formula": "3d8",
+      "attribute": "soul",
+      "type": "thermal",
+      "damageFlavor": "hot",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 24,
+      "long": 24
+    },
+    "tags": [],
+    "effect": "Ranged, 24 squares. On a hit, fiery tendrils solidify into a grasping hand: the target is grappled (escape: Violence check vs DC 18) and Restrained; while held, the Inferno's Streams hit it automatically.",
+    "flavor": "A jet of green fire that solidifies into a clawed, grasping hand.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "resolution": {
+        "saveAttribute": "violence",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 18,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "restrained"
+        ],
+        "duration": "until-saved",
+        "saveEachRound": true,
+        "saveAttribute": "violence"
+      }
+    },
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "8J7ih3iX5Ns9bOMx",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Inferno of Cruelty"
+        ],
+        "sourceIds": [
+          "vpPWkftzLsEwoY9k"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069969,
+    "modifiedTime": 1792989070048,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!8J7ih3iX5Ns9bOMx"
+}

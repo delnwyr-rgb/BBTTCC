@@ -413,20 +413,15 @@ function _bbttccBuildDoctrineDescription(kind, key, spec) {
   const bodyHtml = /<[a-z][\s\S]*>/i.test(rawText)
     ? rawText
     : (rawText ? `<p>${_bbttccEscapeHtml(rawText)}</p>` : `<p><em>No rules text registered for this ${kind}.</em></p>`);
-  const costs = spec?.opCosts || {};
+  // DC7 (2026-10-26): the wrapper card shows the rule and the price in marks — nothing else. Tier / Rarity / Raid Types /
+  // Defender Access are dev meta (the console tooltip still has them); "OP Cost" is pre-marks vocabulary.
+  const costs = spec?.opCosts || spec?.cost || {};
+  const CH = { violence:"Violence", nonlethal:"Nonlethal", intrigue:"Intrigue", economy:"Economy", softpower:"Soft Power", diplomacy:"Diplomacy", logistics:"Logistics", culture:"Culture", faith:"Faith" };
   const costPairs = Object.entries(costs).filter(([, v]) => Number(v));
   const costsHtml = costPairs.length
-    ? `<p><strong>OP Cost:</strong> ${costPairs.map(([k, v]) => `${_bbttccEscapeHtml(k)} ${v}`).join(", ")}</p>`
+    ? `<p><strong>Cost:</strong> ${costPairs.map(([k, v]) => `${_bbttccEscapeHtml(CH[String(k).toLowerCase()] || k)} ${Number(v)}`).join(" · ")} marks</p>`
     : "";
-  const tierHtml = spec?.tier != null ? `<p><strong>Tier:</strong> ${_bbttccEscapeHtml(spec.tier)}</p>` : "";
-  const rarityHtml = spec?.rarity ? `<p><strong>Rarity:</strong> ${_bbttccEscapeHtml(spec.rarity)}</p>` : "";
-  const raidTypesHtml = Array.isArray(spec?.raidTypes) && spec.raidTypes.length
-    ? `<p><strong>Raid Types:</strong> ${spec.raidTypes.map(_bbttccEscapeHtml).join(", ")}</p>`
-    : "";
-  const defenderHtml = spec?.defenderAccess
-    ? `<p><strong>Defender Access:</strong> ${_bbttccEscapeHtml(spec.defenderAccess)}</p>`
-    : "";
-  return `<div class="bbttcc-doctrine-desc"><h3>${_bbttccEscapeHtml(label)}</h3>${bodyHtml}${costsHtml}${tierHtml}${rarityHtml}${raidTypesHtml}${defenderHtml}</div>`;
+  return `<div class="bbttcc-doctrine-desc"><h3>${_bbttccEscapeHtml(label)}</h3>${bodyHtml}${costsHtml}</div>`;
 }
 
 
@@ -532,7 +527,8 @@ const _BBTTCC_STANDARD_START_STRATEGICS = [
   "found_site_port",
   "found_site_research",
   "upgrade_outpost_settlement",
-  "develop_infrastructure_std",   // retired in the planner — kept so already-planned entries resolve
+  // develop_infrastructure_std dropped from the package 2026-10-26 (DC2): the planner retired it 2026-09-09; the EFFECTS spec
+  // stays registered so already-planned entries still resolve, but no new Domain is handed a dead entitlement.
   "infrastructure_expansion"      // its replacement (Defense +2, Integration +1), 2026-10-12
 ];
 
@@ -947,7 +943,7 @@ const SEPHIROT = {
   chokmah:  { addPer:{ knowledge:+2, trade:+2 } },
   binah:    { addPer:{ knowledge:+2, trade:+2 } },
   chesed:   { diplomacy:+3, loyalty:+3 },
-  gevurah:  { addPer:{ military:+3 }, defense:+1 },
+  geburah:  { addPer:{ military:+3 }, defense:+1 },
   tiferet:  { diplomacy:+2, loyalty:+2 },
   netzach:  { addPer:{ military:+2 }, loyalty:+2 },
   hod:      { addPer:{ knowledge:+2, trade:+2 } },
@@ -1013,9 +1009,10 @@ const zRes = () => ({ food:0, materials:0, trade:0, military:0, knowledge:0 });
 const addRes = (A, B) => { for (const k in A) A[k] = Number(A[k]) + Number(B?.[k] ?? 0); return A; };
 
 async function resolveSephirotKeyFromFlags(f) {
-  if (f.sephirotKey) return String(f.sephirotKey).toLowerCase().trim();
+  const fold = (k) => (k === "gevurah" || k === "gevura") ? "geburah" : k;   // legacy spelling (2026-10-26)
+  if (f.sephirotKey) return fold(String(f.sephirotKey).toLowerCase().trim());
   if (!f.sephirotUuid) return "";
-  try { const it = await fromUuid(f.sephirotUuid); return (it?.name ?? "").toLowerCase().replace(/[^\p{L}]+/gu,""); }
+  try { const it = await fromUuid(f.sephirotUuid); return fold((it?.name ?? "").toLowerCase().replace(/[^\p{L}]+/gu,"")); }
   catch { return ""; }
 }
 
@@ -2823,24 +2820,34 @@ const doctrine = await (async () => {
   const all = (this.actor?.items ? Array.from(this.actor.items) : []);
   const idxMap = await _bbttccGetDoctrineIndexMap();
 
+  // NP11 (2026-10-26): ONE label per maneuver — the bbttcc-raid registry label wins over the compendium index and the
+  // embedded card name (the same key used to show as "Whispered Aside" / "Courtly Whispered Aside" / "⭐ Infernal Bargain
+  // [Option]" depending on when it was granted); cards whose registry entry has no rules text are hidden from the sheet
+  // until text exists (the entitlement stays on the actor; the registry is read at render, so a card reappears the
+  // moment its text is registered). An empty registry (not loaded yet) hides nothing.
+  const EFFECTS = game.bbttcc?.api?.raid?.EFFECTS || {};
+  const registryLoaded = Object.keys(EFFECTS).length > 0;
   const pick = (kind) => all
     .filter(it => _bbttccIsDoctrineItem(it, kind))
     .map(it => {
       const k0 = String(it.flags?.bbttcc?.key || "").toLowerCase().trim();
       const kind0 = String(it.flags?.bbttcc?.kind || kind).toLowerCase().trim();
       const hit = idxMap.get(kind0 + ":" + k0) || null;
+      const spec = EFFECTS[k0] || null;
 
       // Keep embedded id for remove operations; but prefer compendium UUID/img/name for display+drag.
       return {
         id: it.id,                  // embedded item id
         embeddedUuid: it.uuid,      // for fallback/debug only
         uuid: hit?.uuid || it.uuid, // preferred
-        name: hit?.name || it.name,
+        name: spec?.label || hit?.name || it.name,
         img: hit?.img || it.img,
         kind: kind0,
-        key: k0
+        key: k0,
+        registered: !registryLoaded || !!(spec && String(spec.text || "").trim())
       };
     })
+    .filter(r => r.registered)
     .sort((a,b)=> String(a.name||"").localeCompare(String(b.name||"")))
     // Duplicate doctrine items (same kind+key granted more than once) collapse to
     // one row with a ×N badge (2026-09-09); tools/dedupe-doctrine-items removes them.

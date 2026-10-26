@@ -42,10 +42,15 @@
       "triggers": [
         {
           "event": "on-delivery",
+          "predicate": {
+            "tag": [
+              "message"
+            ]
+          },
           "effect": {
             "kind": "chat-prompt",
             "args": {
-              "body": "On delivery of a Standing Appointment Message: Darkness in the recipient's hex is reduced by 2 points (in addition to any other reductions)"
+              "body": "The Standing Appointment. If this delivery was a Standing Appointment Message: reduce Darkness in the recipient's hex by 2 points (in addition to any other reductions) and the recipient's faction gains 2 Tikkun progress toward their next stage."
             }
           }
         }
@@ -57,12 +62,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.1",
     "createdTime": 1777005233967,
-    "modifiedTime": 1781116157342,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907885784,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

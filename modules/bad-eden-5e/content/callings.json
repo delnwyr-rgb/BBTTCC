@@ -4,7 +4,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-14",
+    "at": "2026-10-26",
     "overridesApplied": 0
   },
   "items": [
@@ -93,6 +93,24 @@
           "calling": {
             "key": "bravo",
             "tier": 1
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "allyDamaged",
+                "radius": 1,
+                "do": {
+                  "ward": 0,
+                  "redirect": true
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                },
+                "label": "Hold the Line"
+              }
+            ]
           }
         },
         "bbttcc-character-options": {
@@ -109,7 +127,7 @@
             "id": "becallingbrv0t01",
             "pack": "npc-callings",
             "identifier": "",
-            "hash": "5e31a546f4bb"
+            "hash": "7fa4b2360a50"
           }
         }
       }
@@ -122,7 +140,7 @@
       "folder": "NPC Callings",
       "system": {
         "description": {
-          "value": "<p><strong>Bravo — Archon</strong> (Tier IV).</p><p><strong>Trade — Raise the wall:</strong> Marshal a settlement's defense; the hex counts one bracket tougher for one raid (GM adjudicates). <span style=\"opacity:0.7\">Standard fee 270 marks (Strength).</span></p><p><strong>Trick — Last Stand</strong> <em>(1/short rest)</em>: When an ally within reach would drop to 0 hit points, the Bravo intercepts, takes the damage, and makes one immediate free strike.</p>",
+          "value": "<p><strong>Bravo — Archon</strong> (Tier IV).</p><p><strong>Trade — Raise the wall:</strong> Marshal a settlement's defense; the hex counts one bracket tougher for one Battle (GM adjudicates). <span style=\"opacity:0.7\">Standard fee 270 marks (Strength).</span></p><p><strong>Trick — Last Stand</strong> <em>(1/short rest)</em>: When an ally within reach who is below half hit points would take damage, the Bravo intercepts, takes the damage, and makes one immediate free Strike.</p>",
           "chat": ""
         },
         "type": {
@@ -144,6 +162,28 @@
           "calling": {
             "key": "bravo",
             "tier": 4
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "allyDamaged",
+                "radius": 1,
+                "if": {
+                  "targetBloodied": true
+                },
+                "do": {
+                  "ward": 0,
+                  "redirect": true,
+                  "prompt": "Last Stand — the Bravo makes one immediate free Strike."
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                },
+                "label": "Last Stand"
+              }
+            ]
           }
         },
         "bbttcc-character-options": {
@@ -160,7 +200,7 @@
             "id": "becallingbrv0t04",
             "pack": "npc-callings",
             "identifier": "",
-            "hash": "de2fe966847c"
+            "hash": "3cdfe69d4670"
           }
         }
       }
@@ -173,7 +213,7 @@
       "folder": "NPC Callings",
       "system": {
         "description": {
-          "value": "<p><strong>Bravo — Initiate</strong> (Tier II).</p><p><strong>Trade — Drill the green:</strong> Train a group; they count as proficient in one Strength skill for the next scene that tests it. <span style=\"opacity:0.7\">Standard fee 30 marks (Strength).</span></p><p><strong>Trick — Disarming Blow</strong> <em>(1/short rest)</em>: On a hit, the target drops its weapon or takes −2 on its next strike.</p>",
+          "value": "<p><strong>Bravo — Initiate</strong> (Tier II).</p><p><strong>Trade — Drill the green:</strong> Train a group; they count as proficient in one Strength skill for the next scene that tests it. <span style=\"opacity:0.7\">Standard fee 30 marks (Strength).</span></p><p><strong>Trick — Disarming Blow</strong> <em>(1/short rest)</em>: On a hit, the target is at disadvantage: its next strike rolls 3d10 and keeps the lowest 2.</p>",
           "chat": ""
         },
         "type": {
@@ -195,6 +235,22 @@
           "calling": {
             "key": "bravo",
             "tier": 2
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "do": {
+                  "impose": true
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                },
+                "label": "Disarming Blow"
+              }
+            ]
           }
         },
         "bbttcc-character-options": {
@@ -211,7 +267,7 @@
             "id": "becallingbrv0t02",
             "pack": "npc-callings",
             "identifier": "",
-            "hash": "e18830aa0e2b"
+            "hash": "3d1c41a61759"
           }
         }
       }
@@ -246,6 +302,26 @@
           "calling": {
             "key": "bravo",
             "tier": 3
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "who": "targets",
+                "do": {
+                  "bankBonus": {
+                    "bonus": 2,
+                    "context": "defense",
+                    "note": "Veteran's Read — vs the called move"
+                  }
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                }
+              }
+            ]
           }
         },
         "bbttcc-character-options": {
@@ -262,7 +338,7 @@
             "id": "becallingbrv0t03",
             "pack": "npc-callings",
             "identifier": "",
-            "hash": "24e95eb04f5b"
+            "hash": "9e80a7348682"
           }
         }
       }
@@ -611,6 +687,28 @@
           "calling": {
             "key": "keeper",
             "tier": 1
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "who": "targets",
+                "do": {
+                  "removeCondition": [
+                    "shaken"
+                  ],
+                  "bankReroll": {
+                    "context": "defense",
+                    "note": "Steady the Soul"
+                  }
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                }
+              }
+            ]
           }
         },
         "bbttcc-character-options": {
@@ -627,7 +725,7 @@
             "id": "becallingkpr0t01",
             "pack": "npc-callings",
             "identifier": "",
-            "hash": "ab410841a94a"
+            "hash": "72d9aa1f578b"
           }
         }
       }
@@ -713,7 +811,30 @@
           "calling": {
             "key": "keeper",
             "tier": 2
-          }
+          },
+          "triggers": [
+            {
+              "event": "on-ally-incoming-damage",
+              "radius": 6,
+              "predicate": {
+                "tag": [
+                  "psychic",
+                  "qliphothic"
+                ]
+              },
+              "limit": {
+                "window": "scene",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "modify-incoming-damage",
+                "args": {
+                  "mode": "minus",
+                  "amount": 2
+                }
+              }
+            }
+          ]
         },
         "bbttcc-character-options": {
           "rfiType": "feature",
@@ -729,7 +850,7 @@
             "id": "becallingkpr0t02",
             "pack": "npc-callings",
             "identifier": "",
-            "hash": "8e75c006fc86"
+            "hash": "e042e0447915"
           }
         }
       }
@@ -764,6 +885,27 @@
           "calling": {
             "key": "keeper",
             "tier": 3
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "who": "targets",
+                "do": {
+                  "removeCondition": [
+                    "shaken",
+                    "charmed",
+                    "compelled",
+                    "calmed"
+                  ]
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                }
+              }
+            ]
           }
         },
         "bbttcc-character-options": {
@@ -780,7 +922,7 @@
             "id": "becallingkpr0t03",
             "pack": "npc-callings",
             "identifier": "",
-            "hash": "da1abbb6778f"
+            "hash": "59bb507ddce3"
           }
         }
       }
@@ -1129,6 +1271,26 @@
           "calling": {
             "key": "savant",
             "tier": 1
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "who": "targets",
+                "do": {
+                  "bankBonus": {
+                    "bonus": 2,
+                    "context": "check",
+                    "note": "I've Read About This"
+                  }
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                }
+              }
+            ]
           }
         },
         "bbttcc-character-options": {
@@ -1145,7 +1307,7 @@
             "id": "becallingsav0t01",
             "pack": "npc-callings",
             "identifier": "",
-            "hash": "1c3d31466341"
+            "hash": "e92829fca1a5"
           }
         }
       }
@@ -1439,6 +1601,22 @@
           "calling": {
             "key": "stalwart",
             "tier": 4
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "zero",
+                "do": {
+                  "heal": 1
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                },
+                "label": "Too Stubborn to Die"
+              }
+            ]
           }
         },
         "bbttcc-character-options": {
@@ -1455,7 +1633,7 @@
             "id": "becallingstw0t04",
             "pack": "npc-callings",
             "identifier": "",
-            "hash": "131abafc29bc"
+            "hash": "44e576b08f04"
           }
         }
       }
@@ -1490,6 +1668,28 @@
           "calling": {
             "key": "stalwart",
             "tier": 2
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "allyDamaged",
+                "who": "self",
+                "if": {
+                  "damageType": [
+                    "kinetic"
+                  ]
+                },
+                "do": {
+                  "ward": 0.5
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                },
+                "label": "Endure"
+              }
+            ]
           }
         },
         "bbttcc-character-options": {
@@ -1506,7 +1706,7 @@
             "id": "becallingstw0t02",
             "pack": "npc-callings",
             "identifier": "",
-            "hash": "5f5f19ccc33c"
+            "hash": "30eb4c033cef"
           }
         }
       }
@@ -1541,6 +1741,23 @@
           "calling": {
             "key": "stalwart",
             "tier": 3
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "who": "self",
+                "do": {
+                  "heal": 6
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                },
+                "label": "Second Wind"
+              }
+            ]
           }
         },
         "bbttcc-character-options": {
@@ -1557,7 +1774,7 @@
             "id": "becallingstw0t03",
             "pack": "npc-callings",
             "identifier": "",
-            "hash": "aa2a8b2cdda1"
+            "hash": "56e949a9fa81"
           }
         }
       }

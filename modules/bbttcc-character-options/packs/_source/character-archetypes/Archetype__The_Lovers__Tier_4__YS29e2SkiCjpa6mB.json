@@ -1,17 +1,13 @@
 {
   "name": "Archetype: The Lovers (Tier 4)",
   "type": "feat",
-  "img": "icons/equipment/neck/amulet-heart.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_lovers.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "book": ""
-    },
+    "source": "(2024 rules)",
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 — The Lovers</strong></p><ul><li><strong>Strategic:</strong> −1 coordination penalty, coalition rolls reroll the lowest die.</li></ul>",
+      "value": "<p><strong>Tier 4 — The Lovers</strong></p><ul><li><p><strong>Strategic:</strong> Once per scene, your coalition rolls reroll the lowest die and shed one coordination penalty (the card fires it).</p></li></ul>",
       "chat": ""
     },
     "identifier": "archetype-lovers-t4",
@@ -66,12 +62,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986761329,
-    "modifiedTime": 1782167238589,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989162419,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

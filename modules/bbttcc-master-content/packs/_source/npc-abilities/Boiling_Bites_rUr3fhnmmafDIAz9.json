@@ -23,7 +23,7 @@
       "tier-i",
       "role-brute"
     ],
-    "effect": "Auto-hits any creature sharing the swarm's space. On a hit, target must succeed a DC 12 Body save or have reroll-the-highest on its next action (venom haze).",
+    "effect": "Auto-hits any creature sharing the swarm's space. On a hit, target must succeed a DC 12 Body check or be Imposed; dy save or have reroll-the-highest on its next action (venom haze).",
     "flavor": "There is no first bite. There is only the realization of biting.",
     "manifestation": {
       "tier": 1,
@@ -54,6 +54,19 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "saveAttribute": "body",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 12,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "imposed"
+        ],
+        "duration": "1-round"
       }
     },
     "description": {
@@ -61,7 +74,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -82,19 +94,8 @@
         }
       }
     },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Bog-Skitter Swarm"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
-      }
-    },
     "autoanimations": {
-      "id": "3d63cb36-a4ca-40c7-adc7-4dab21717843",
+      "id": "ft-boiling-bites",
       "label": "Boiling Bites",
       "macro": {
         "enable": false,
@@ -268,50 +269,41 @@
       "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
-      "version": 5,
-      "meleeSwitch": {
-        "video": {
-          "dbSection": "range",
-          "menuType": "weapon",
-          "animation": "arrow",
-          "variant": "regular",
-          "color": "regular",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "detect": "automatic",
-          "range": 2,
-          "returning": false,
-          "switchType": "on"
-        }
+      "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Bog-Skitter Swarm"
+        ],
+        "sourceIds": [
+          "juFbGL3HEuoWcuHV"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "rUr3fhnmmafDIAz9",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024240574,
-    "modifiedTime": 1782167245010,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989019769,
+    "modifiedTime": 1792989019770,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!rUr3fhnmmafDIAz9"
 }

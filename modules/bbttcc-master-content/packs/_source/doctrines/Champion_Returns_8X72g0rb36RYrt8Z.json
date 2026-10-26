@@ -7,7 +7,7 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Returns</h3><p>Coax an Absent attacker Champion back to the line (status Active). Optional note {\"championId\":\"...\"}; otherwise the first absent. Target the besieged hex.</p><p><strong>OP Cost:</strong> diplomacy 20, softPower 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> uncommon</p></div>",
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Returns</h3><p>Coax an Absent attacker Champion back to the line (status Active). Optional note {\"championId\":\"...\"}; otherwise the first absent. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 20 · Soft Power 10 marks</p></div>",
       "chat": ""
     }
   },
@@ -19,19 +19,19 @@
   },
   "_id": "8X72g0rb36RYrt8Z",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601766,
-    "modifiedTime": 1782703702691,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989000905,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

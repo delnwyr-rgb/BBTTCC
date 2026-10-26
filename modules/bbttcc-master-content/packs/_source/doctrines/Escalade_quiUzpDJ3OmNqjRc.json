@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Escalade</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> violence 25, logistics 10</p></div>",
+      "value": "<p><strong>Escalade</strong></p><p>Siege, attacker. Ladders up and swarm: 1d10+10 kinetic structure damage to the current wall layer. In the clash: 18 marks off the Buffer.</p><p><em>Queued on the turn: Violence 25 · Logistics 10 marks. Fired in the clash: 18 marks from the siege Buffer.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "escalade"
+      "key": "escalade",
+      "effects": {
+        "text": "Siege, attacker. Ladders up and swarm: 1d10+10 kinetic structure damage to the current wall layer. In the clash: 18 marks off the Buffer."
+      }
     }
   },
   "_id": "quiUzpDJ3OmNqjRc",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601768,
-    "modifiedTime": 1782703702692,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989003047,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

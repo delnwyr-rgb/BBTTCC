@@ -1,5 +1,5 @@
 {
-  "name": "Ondine Brakk",
+  "name": "Captain Ondine Brakk",
   "type": "character",
   "flags": {
     "bbttcc-auto-link": {
@@ -27,6 +27,18 @@
           "firedAt": 1783442536555,
           "itemName": "Oldenborn Heritage: Rustland Scavenger",
           "viaSwap": true
+        }
+      },
+      "aptitudePromotions": {
+        "archetype: the star (hopebringer) (tier 1)|performance": {
+          "delta": 1,
+          "item": "Archetype: The Star (Hopebringer) (Tier 1)",
+          "at": 1792346693466
+        },
+        "archetype: the star (hopebringer) (tier 1)|insight": {
+          "delta": 1,
+          "item": "Archetype: The Star (Hopebringer) (Tier 1)",
+          "at": 1792346693466
         }
       }
     },
@@ -103,7 +115,8 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "the Muster, the Town Militia, the East Wall, the North Gate, wall patrols, bandits, Marshal Yarrow Pike, Allesh-Gilliam, the second column, reformed recruits, the intake desk, the sign, the queue",
-        "notes": "[AG-TREATMENT-2026-07-04] PRIVATE TRUTH \u2014 Captain Ondine Brakk. Voice: clipped, drill-cadence, deadpan; compliments delivered like citations for minor infractions. The only professional soldier in a town of enthusiastic amateurs and she has OPINIONS about the drop in standards, all of which she keeps to exactly one raised eyebrow. On the Stewards: they freed the bandits that made her militia necessary AND possible in the same afternoon \u2014 she respects and resents this at identical volume and will say so if asked directly, because she answers direct questions directly, always, it's a policy. SECRET: she drills the militia hard because she's counted the town's actual defensible hours (the wall, the gate, the bell) and the number frightens her; she will share the real number only with someone who has PERSONALLY stood a wall shift. The truck that doesn't run: she could fix it, but the militia needs a shared enemy that can't fight back, and the truck volunteers. STAGING: found at the Muster running drills or at the North Gate checking rotations; conversations happen at walking pace, she does not stop moving for talk unless the bell rings.\n\n[BANDIT-ACCORD-2026-07-13] THE SECOND COLUMN \u2014 Captain Ondine Brakk, after the volunteers (speak of it only once the dossier shows the queue formed). Her ledger has a second column now, block capitals, REFORMED, and she'd deny to a tribunal that the lettering is proud. Facts she will state directly, per policy: the reformed recruits show up early, drill hard, and treat the wall like it's THEIR wall, which \u2014 she has checked the arithmetic on this \u2014 it now is. The queue outside the Muster formed on its own; the SIGN was hers, because an orderly queue is the difference between a program and a crowd. On the count itself: she knows the number the reeds know, because she counts too \u2014 it's a policy. TELLS: when a reformed recruit passes muster she notes it with exactly one nod more than a farmer gets, and if you point that out she cites drill-standards paragraph numbers that do not exist."
+        "notes": "[AG-TREATMENT-2026-07-04] PRIVATE TRUTH — Captain Ondine Brakk. Voice: clipped, drill-cadence, deadpan; compliments delivered like citations for minor infractions. The only professional soldier in a town of enthusiastic amateurs and she has OPINIONS about the drop in standards, all of which she keeps to exactly one raised eyebrow. On the Stewards: they freed the bandits that made her militia necessary AND possible in the same afternoon — she respects and resents this at identical volume and will say so if asked directly, because she answers direct questions directly, always, it's a policy. SECRET: she drills the militia hard because she's counted the town's actual defensible hours (the wall, the gate, the bell) and the number frightens her; she will share the real number only with someone who has PERSONALLY stood a wall shift. The truck that doesn't run: she could fix it, but the militia needs a shared enemy that can't fight back, and the truck volunteers. STAGING: found at the Muster running drills or at the North Gate checking rotations; conversations happen at walking pace, she does not stop moving for talk unless the bell rings.\n\n[BANDIT-ACCORD-2026-07-13] THE SECOND COLUMN — Captain Ondine Brakk, after the volunteers (speak of it only once the dossier shows the queue formed). Her ledger has a second column now, block capitals, REFORMED, and she'd deny to a tribunal that the lettering is proud. Facts she will state directly, per policy: the reformed recruits show up early, drill hard, and treat the wall like it's THEIR wall, which — she has checked the arithmetic on this — it now is. The queue outside the Muster formed on its own; the SIGN was hers, because an orderly queue is the difference between a program and a crowd. On the count itself: she knows the number the reeds know, because she counts too — it's a policy. TELLS: when a reformed recruit passes muster she notes it with exactly one nod more than a farmer gets, and if you point that out she cites drill-standards paragraph numbers that do not exist.",
+        "secretsRaw": "The Real Number :: rollPlus2 :: a Steward who has PERSONALLY stood a wall shift asks how many hours the town can actually hold :: She tells them the number. It frightens her, which is why she drills farmers. The truck that doesn't run she could fix in an afternoon; the militia needs a shared enemy that can't fight back, and the truck volunteers."
       }
     },
     "tokenflip": {
@@ -115,8 +128,8 @@
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Captain of the Town Militia; runs the Muster by the North Gate, Allesh-Gilliam",
+      "notes": "Captain Ondine Brakk is the only professional soldier in a town of enthusiastic amateurs, and runs the Muster out of a gutted fire station by the North Gate. She drills farmers, teamsters and anybody else who signs on into a wall crew, and keeps her opinions about the drop in standards to exactly one raised eyebrow. Compliments from her arrive like citations for minor infractions. She answers direct questions directly; it's a policy. She does not stop walking to talk. The Muster's famous truck does not run."
     },
     "details": {
       "level": 4,
@@ -209,7 +222,7 @@
       "performance": {
         "attribute": "presence",
         "label": "Performance",
-        "value": 1
+        "value": 2
       },
       "perception": {
         "attribute": "mind",
@@ -219,7 +232,7 @@
       "investigation": {
         "attribute": "mind",
         "label": "Investigation",
-        "value": 1
+        "value": 0
       },
       "lore": {
         "attribute": "mind",
@@ -249,7 +262,7 @@
       "insight": {
         "attribute": "soul",
         "label": "Insight",
-        "value": 1
+        "value": 2
       },
       "plating": {
         "attribute": "body",
@@ -258,10 +271,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 1
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 1
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 1
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 1
@@ -270,7 +293,8 @@
     "derived": {
       "integrity": {
         "value": 37,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 16,
@@ -360,7 +384,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -395,8 +420,8 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
       "id": null,
@@ -406,12 +431,15 @@
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
     "disposition": 1,
-    "name": "Ondine Brakk",
+    "name": "Captain Ondine Brakk",
     "displayName": 30,
     "width": 1,
     "height": 1,
@@ -568,7 +596,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Oldenborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Earthbound, Lumenwrought, Stormborn Nomad, Rustland Scavenger</strong>.</p><p>This root grants the shared Oldenborn core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>\u201cYou are not an elf. You are the memory of a place that learned to walk again.\u201d</em></p>\n<p><strong>Dream-Flesh.</strong> You do not sleep. When you rest, you drift into Yesod\u2014symbolic memory-space\u2014unless you choose otherwise. You are immune to magical sleep, and you can always tell when a dream, illusion, or constructed reality is present.</p>\n<p><strong>Old Memory, Old Paths.</strong> You reroll the lowest die on checks to interpret ruins, follow ley-lines, identify altered terrain, and sense metaphysical instability. You always know if a place feels <em>remembered</em>, <em>abandoned</em>, or <em>contested</em> (the GM answers vaguely).</p>\n<p><strong>Veil-Sight.</strong> You perceive the <em>presence</em> of spirits, ghosts, Spark echoes, and noospheric constructs. This grants awareness, not perfect sight.</p>\n<p><strong>You Are Remembered.</strong> When you first meet a community, the GM chooses (or rolls) whether you are met with reverence, fear, or familiarity. It\u2019s never neutral.</p>",
+          "value": "\n<p><strong>Oldenborn.</strong></p><p><em>“You are not an elf. You are the memory of a place that learned to walk again.”</em></p>\n<p><strong>Dream-Flesh.</strong> You do not sleep. When you rest, you drift into Yesod—symbolic memory-space—unless you choose otherwise. You are immune to magical sleep, and you can always tell when a dream, illusion, or constructed reality is present.</p>\n<p><strong>Old Memory, Old Paths.</strong> You reroll the lowest die on checks to interpret ruins, follow ley-lines, identify altered terrain, and sense metaphysical instability. You always know if a place feels <em>remembered</em>, <em>abandoned</em>, or <em>contested</em> (the GM answers vaguely).</p>\n<p><strong>Veil-Sight.</strong> You perceive the <em>presence</em> of spirits, ghosts, Spark echoes, and noospheric constructs. This grants awareness, not perfect sight.</p>\n<p><strong>You Are Remembered.</strong> When you first meet a community, the GM chooses (or rolls) whether you are met with reverence, fear, or familiarity. It’s never neutral.</p>",
           "chat": ""
         },
         "advancement": [
@@ -647,21 +675,21 @@
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "on checks to interpret ruins, follow ley-lines, identify altered terrain, and\u2026"
+              "note": "on checks to interpret ruins, follow ley-lines, identify altered terrain, and…"
             },
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "checks to interpret ruins, follow ley-lines, identify altered terrain, and se\u2026"
+              "note": "checks to interpret ruins, follow ley-lines, identify altered terrain, and se…"
             }
           ],
           "triggers": [
             {
-              "event": "on-rest",
+              "event": "on-soma-break",
               "effect": {
                 "kind": "chat-prompt",
                 "args": {
-                  "body": "Dream-Flesh. You do not sleep. When you rest, you drift into Yesod"
+                  "body": "Dream-Flesh. You do not sleep: this rest, you drift into Yesod — symbolic memory-space — unless you choose otherwise."
                 }
               }
             }
@@ -686,30 +714,23 @@
       },
       "effects": [],
       "folder": "5PPxNybRn7zD0k0G",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.7709222f8ff32964",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885545,
-        "modifiedTime": 1784177885545,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 0,
       "_id": "AXWZMkyxmWtTGpqY",
-      "_key": "!actors.items!AV36WowwN3iR4txH.AXWZMkyxmWtTGpqY"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989073536,
+        "modifiedTime": 1792989073536,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Oldenborn Heritage: Rustland Scavenger",
@@ -726,7 +747,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Rustlander Scavenger</em> while converting it from a species-root into an Oldenborn heritage. Renamed to <em>Rustland Scavenger</em> to match v2 canon.</p><p><em>\u201cYesod fell. The world remembered old names. You answered.\u201d</em></p><p><strong>Oldenborn (Rustland Scavenger).</strong> Your place-soul is a dead city that refused to finish dying. You are the genius loci of collapsed transit hubs, rebar graveyards, and the smell of old oil. Every ruin you walk into recognizes you on arrival and, quietly, offers you what\u2019s left.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Fey, Rustland).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 6 squares</li><li><strong>attributes.</strong> Oldenborn does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>MND (Mind)</strong> or <strong>INTR (Intrigue)</strong> in fiction and mechanics via Tier powers.</li></ul><h3>Oldenborn Core</h3><p>At character creation, you gain <strong>Old Memory, Old Flesh</strong> (Dream-Flesh, Old Paths, Veil-Sight, You Are Remembered).</p><h3>Rustland Scavenger Traits</h3><ul><li><strong>Toxic Lung Filters.</strong> reroll-lowest on checks against inhaled toxins, smoke, and industrial residue. You can function for up to 1 hour in atmospheres that would hospitalize a normal Medium creature.</li><li><strong>Urban Scrounger.</strong> You gain a skill rank with the <em>Investigation</em> skill. You can always tell which structure in a ruin is load-bearing, which doorway is the real exit, and which pile of junk has something useful in it.</li><li><strong>Patch &amp; Repurpose.</strong> During a Soma Break spent in a ruin or wreckage hex, you can recover one expended consumable (bandage, filter, torch, ration) per Soma Break by scavenging.</li><li><strong>Ruin Sense.</strong> You read marketplaces, ruins, and hex politics at a glance and can always tell what the last three meaningful events were in a trade hub.</li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Economy OP</strong> and <strong>+1 Intrigue OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Ruins / Urban Wreckage</em> hexes, faction travel Intrigue costs are reduced by <strong>1</strong> (minimum 0).</li><li><strong>Salvage Windfall.</strong> Once per Strategic Turn, your faction may perform an extra Salvage action in a controlled Ruins hex without consuming its action slot.</li></ul>",
+          "value": "\n<p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Rustlander Scavenger</em> while converting it from a species-root into an Oldenborn heritage. Renamed to <em>Rustland Scavenger</em> to match v2 canon.</p><p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Oldenborn (Rustland Scavenger).</strong> Your place-soul is a dead city that refused to finish dying. You are the genius loci of collapsed transit hubs, rebar graveyards, and the smell of old oil. Every ruin you walk into recognizes you on arrival and, quietly, offers you what’s left.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Fey, Rustland).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 6 squares</li><li><strong>attributes.</strong> Oldenborn does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>MND (Mind)</strong> or <strong>INTR (Intrigue)</strong> in fiction and mechanics via Tier powers.</li></ul><h3>Oldenborn Core</h3><p>At character creation, you gain <strong>Old Memory, Old Flesh</strong> (Dream-Flesh, Old Paths, Veil-Sight, You Are Remembered).</p><h3>Rustland Scavenger Traits</h3><ul><li><strong>Toxic Lung Filters.</strong> reroll-lowest on checks against inhaled toxins, smoke, and industrial residue. You can function for up to 1 hour in atmospheres that would hospitalize a normal Medium creature.</li><li><strong>Urban Scrounger.</strong> You gain a skill rank with the <em>Investigation</em> skill. You can always tell which structure in a ruin is load-bearing, which doorway is the real exit, and which pile of junk has something useful in it.</li><li><strong>Patch &amp; Repurpose.</strong> During a Soma Break spent in a ruin or wreckage hex, you can recover one expended consumable (bandage, filter, torch, ration) per Soma Break by scavenging.</li><li><strong>Ruin Sense.</strong> You read marketplaces, ruins, and hex politics at a glance and can always tell what the last three meaningful events were in a trade hub.</li></ul><h3>Domain Edge</h3><ul><li><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Intrigue marks</strong> and <strong>+20 Economy marks</strong> at campaign start.</li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -811,17 +832,16 @@
           "showIcon": 1,
           "folder": null,
           "_stats": {
-            "coreVersion": "14.364",
+            "coreVersion": "14.369",
             "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "createdTime": 1784177885545,
-            "modifiedTime": 1784177885545,
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989073536,
+            "modifiedTime": 1792989073536,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
             "compendiumSource": null,
             "duplicateSource": null,
             "exportSource": null
-          },
-          "_key": "!actors.items.effects!AV36WowwN3iR4txH.9fLGhj2a8afY4ZrZ.u3Q68RR8Z4mfkWYG"
+          }
         }
       ],
       "flags": {
@@ -1056,17 +1076,6 @@
         }
       },
       "folder": "7fnxyCtrYl8KlYbp",
-      "_stats": {
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885545,
-        "modifiedTime": 1784177885545,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "exportSource": null,
-        "compendiumSource": null,
-        "duplicateSource": null
-      },
       "ownership": {
         "default": 0,
         "PEWWUtMPC7h7WMIt": 3,
@@ -1074,7 +1083,17 @@
       },
       "sort": 100000,
       "_id": "9fLGhj2a8afY4ZrZ",
-      "_key": "!actors.items!AV36WowwN3iR4txH.9fLGhj2a8afY4ZrZ"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989073536,
+        "modifiedTime": 1792989605730,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Oldenborn (Rustland Scavenger): Ruin-Sense",
@@ -1091,7 +1110,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cThe dead cities are not silent. They are mid-sentence.\u201d</em></p>\n<p><strong>Ruin-Sense.</strong> When you spend 10 minutes examining a broken or ruined object, you can ask the GM one of: <em>What was its last use? Who broke it? What does it still want?</em> The answer is at least one truth.</p>\n<p><strong>Scavenger\u2019s Eye (1/Soma Break).</strong> Spend 10 minutes searching a rubble pile, gutted building, or wreckage of any kind. You recover one minor useful item \u2014 the GM picks from a short list of plausible salvage (a half-charged battery, a length of usable wire, a sealed container of clean water, a still-edible ration, a tool of one trade). It is what the place actually had.</p>\n<p><strong>Toxic-Lung Filters.</strong> You reroll the lowest die on checks against airborne poisons, toxic gas, and rad-dust. You can hold your breath for 10 minutes.</p>",
+          "value": "\n<p><em>“The dead cities are not silent. They are mid-sentence.”</em></p>\n<p><strong>Ruin-Sense.</strong> When you spend 10 minutes examining a broken or ruined object, you can ask the GM one of: <em>What was its last use? Who broke it? What does it still want?</em> The answer is at least one truth.</p>\n<p><strong>Scavenger’s Eye (1/Soma Break).</strong> Spend 10 minutes searching a rubble pile, gutted building, or wreckage of any kind. You recover one minor useful item — the GM picks from a short list of plausible salvage (a half-charged battery, a length of usable wire, a sealed container of clean water, a still-edible ration, a tool of one trade). It is what the place actually had.</p>\n<p><strong>Toxic-Lung Filters.</strong> You reroll the lowest die on checks against airborne poisons, toxic gas, and rad-dust. You can hold your breath for 10 minutes.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -1100,7 +1119,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 1
         },
         "uses": {
           "spent": 0,
@@ -1148,7 +1167,7 @@
               "effect": {
                 "kind": "chat-prompt",
                 "args": {
-                  "body": "The dead cities are not silent. They are mid-sentence.\u201d Ruin-Sense. When you spend 10 minutes examining a broken or ruined object, you can ask the GM one of: What was its last use? Who broke it? What does it still wa..."
+                  "body": "Ruin-Sense. After 10 minutes examining a broken or ruined object, ask the GM one of: What was its last use? Who broke it? What does it still want? The answer is at least one truth."
                 }
               }
             }
@@ -1158,24 +1177,23 @@
         }
       },
       "folder": "sLAoXdttpeuRXEex",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885545,
-        "modifiedTime": 1784177885545,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 200000,
       "_id": "0UrGpznLE37oIRt8",
-      "_key": "!actors.items!AV36WowwN3iR4txH.0UrGpznLE37oIRt8"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989073536,
+        "modifiedTime": 1792989605730,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: The Star (Hopebringer)",
@@ -1190,7 +1208,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cIt is not over. That is not optimism. That is doctrine.\u201d</em></p><p><strong>Archetype (Bad Eden): The Star (Hopebringer).</strong> You are morale after catastrophe, the refusal to collapse, the dangerous force that makes people try again when the math says they should not.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens inspiration, cohesion, and recovery after losses. This Archetype is associated with <strong>+1 Soft Power</strong> and <strong>+1 Culture</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“It is not over. That is not optimism. That is doctrine.”</em></p><p><strong>Archetype (Bad Eden): The Star (Hopebringer).</strong> You are morale after catastrophe, the refusal to collapse, the dangerous force that makes people try again when the math says they should not.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens inspiration, cohesion, and recovery after losses. Your Domain earns <strong>+10 Soft Power</strong> and <strong>+10 Culture</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1264,23 +1282,6 @@
         },
         "dnd5e": {}
       },
-      "_stats": {
-        "compendiumSource": "Item.uRfnOV2Lum8Sv0Xf",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.uRfnOV2Lum8Sv0Xf",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885545,
-        "modifiedTime": 1784177885545,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1288,7 +1289,17 @@
       },
       "_id": "RHmHMS39sqXVeiQD",
       "sort": 100000,
-      "_key": "!actors.items!AV36WowwN3iR4txH.RHmHMS39sqXVeiQD"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989073536,
+        "modifiedTime": 1792989605731,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: The Star (Hopebringer) (Tier 1)",
@@ -1299,12 +1310,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden \u2013 Archetype: The Star (Hopebringer) (Tier 1)",
+          "custom": "Bad Eden – Archetype: The Star (Hopebringer) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) \u2014 The Star (Hopebringer)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Performance and Insight. You learn the Friends Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Star (Hopebringer)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Performance and Insight.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1331,7 +1342,7 @@
       },
       "effects": [
         {
-          "disabled": false,
+          "disabled": true,
           "duration": {
             "value": null,
             "units": "seconds",
@@ -1340,7 +1351,7 @@
           },
           "flags": {},
           "name": "Archetype Tier 1 Proficiencies",
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_12.png",
+          "img": "icons/magic/symbols/star-rising-purple.webp",
           "_id": "VeYjrglaft9xrsuy",
           "type": "base",
           "system": {
@@ -1367,21 +1378,20 @@
           "transfer": true,
           "statuses": [],
           "sort": 0,
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885545,
-            "modifiedTime": 1784177885545
-          },
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!AV36WowwN3iR4txH.Fd1sKmG6hkaa29S7.VeYjrglaft9xrsuy"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989073536,
+            "modifiedTime": 1792989605834,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "LPn67mZIjggfprir",
@@ -1408,23 +1418,6 @@
         },
         "dnd5e": {}
       },
-      "_stats": {
-        "compendiumSource": "Item.HQDonIgWblwBuFJM",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.HQDonIgWblwBuFJM",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885545,
-        "modifiedTime": 1784177885545,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1432,7 +1425,17 @@
       },
       "_id": "Fd1sKmG6hkaa29S7",
       "sort": 0,
-      "_key": "!actors.items!AV36WowwN3iR4txH.Fd1sKmG6hkaa29S7"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989073536,
+        "modifiedTime": 1792989605731,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Alignment: Kether",
@@ -1446,7 +1449,7 @@
         },
         "tags": [],
         "description": {
-          "value": "The Crown - Divine unity. +1 Soft Power, +1 Diplomacy OPs\n\nYou are called upward toward unity, legitimacy, and the better shape of the world. Kether rewards coalition-building, visionary leadership, and factions that hold together under pressure.",
+          "value": "The Crown - Divine unity. +10 Diplomacy and +10 Soft Power marks to your Domain each turn.\n\nYou are called upward toward unity, legitimacy, and the better shape of the world. Kether rewards coalition-building, visionary leadership, and factions that hold together under pressure.",
           "chat": ""
         },
         "activities": {},
@@ -1484,23 +1487,6 @@
       "img": "icons/commodities/treasure/crown-gold-laurel-wreath.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
-      "_stats": {
-        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.ic3UDTws3eh7bIi9",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.icXFNIffu7YuIQoA",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885545,
-        "modifiedTime": 1784177885545,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 2,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1508,7 +1494,17 @@
       },
       "_id": "FZ1kplf91aMt983n",
       "sort": 600000,
-      "_key": "!actors.items!AV36WowwN3iR4txH.FZ1kplf91aMt983n"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989073536,
+        "modifiedTime": 1792989605731,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Cataclyst L1: The Exchange",
@@ -1519,7 +1515,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>Polarity is a pose. The hinge is what does the work.</em></p><p><strong>Mode: Hinge / drift: Sideways.</strong></p><p>As a <strong>bonus action</strong>, you may convert <strong>1 Frame Die into 1 Ruin Charge</strong> or <strong>1 Ruin Charge into 1 Frame Die</strong>. You may use this conversion up to <strong>your Initiation tier</strong> times per Soma Break (1 at T1, 2 at T2, 3 at T3, 4 at T4).</p><p><strong>Charged.</strong> When you convert this way, the resulting die or charge becomes <em>charged</em> until spent. The next time it's used:</p><ul><li><p><strong>Frame Die (charged) spent on absorption:</strong> grants +1 die step on the absorption roll (d8 \u2192 d10).</p></li><li><p><strong>Ruin Charge (charged) spent on damage:</strong> deals +1 die step of damage (replace one d6 with a d8, or one d8 with a d10, in the spending feature's damage expression).</p></li></ul><p>Charged status is consumed by the spend whether the spend produces a roll or a flat effect.</p>",
+          "value": "<p><em>Polarity is a pose. The hinge is what does the work.</em></p><p><strong>Mode:</strong> Hinge / <strong>drift:</strong> Sideways.</p><p>Once per Soma Break, as a bonus action, you prime the hinge: your <strong>next Surge spend costs 1 less</strong> (minimum 1), defensive or offensive. Use the ▶ button; the discount applies to whatever you spend next.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -1539,9 +1535,6 @@
       },
       "effects": [],
       "flags": {
-        "dnd5e": {
-          "originType": "feat"
-        },
         "bbttcc": {
           "kind": "subclassfeat",
           "classIdentifier": "bulwark",
@@ -1553,20 +1546,186 @@
         },
         "fourththing": {
           "grants": {}
+        },
+        "autoanimations": {
+          "id": "35d15732-e84d-478e-b069-c61ea8d37588",
+          "label": "Cataclyst L1: The Exchange",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "yellowwhite",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
         }
       },
       "folder": "HmbujXzEJL7v48Q9",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885545,
-        "modifiedTime": 1784177885545,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "PEWWUtMPC7h7WMIt": 3,
@@ -1574,7 +1733,17 @@
       },
       "sort": 0,
       "_id": "y1UGiLFehvgodjB8",
-      "_key": "!actors.items!AV36WowwN3iR4txH.y1UGiLFehvgodjB8"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989073536,
+        "modifiedTime": 1792989073536,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Combat Logistics",
@@ -1589,7 +1758,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<h2>Combat Logistics</h2><p><em>Wars are won before the first swing.</em></p><hr /><h3>Rules</h3><p>At the start of combat, choose one ally. That ally gains temporary Integrity equal to your skill rank bonus.</p>",
+          "value": "<h2>Combat Logistics</h2><p><em>Wars are won before the first swing.</em></p><hr /><h3>Rules</h3><p>At the start of combat, choose one ally. That ally gains temporary Integrity equal to your rank bonus.</p><p class=\"ft-engine-note\"><em>🃏 Card — target the ally and click ▶ at the start of combat: they gain temporary Integrity equal to your rank bonus.</em></p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_combat_logistics",
@@ -1620,6 +1789,183 @@
           "pack": "bbttcc-feats-batch3",
           "featNumber": 52,
           "generatedAt": "2026-01-19T05:04:20.693394Z"
+        },
+        "autoanimations": {
+          "id": "ft-combat-logistics",
+          "label": "Combat Logistics",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "intro",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
         }
       },
       "folder": "QbGNBV70xh9pF0eh",
@@ -1629,19 +1975,18 @@
         "DHBK2UGr58xKXzxK": 3,
         "bytUGWIOqq9eT7Or": 3
       },
-      "_stats": {
-        "compendiumSource": "Item.O3ox21QkblL6C0Kl",
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885545,
-        "modifiedTime": 1784177885545,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "_id": "lOiVxGirUVK55La5",
-      "_key": "!actors.items!AV36WowwN3iR4txH.lOiVxGirUVK55La5"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989073536,
+        "modifiedTime": 1792989073536,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "_id": "mLIpAa5jzoR2wtef",
@@ -1658,7 +2003,7 @@
           "violence"
         ],
         "description": {
-          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -1685,21 +2030,20 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885545,
-        "modifiedTime": 1784177885545,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989073536,
+        "modifiedTime": 1792989073536,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!AV36WowwN3iR4txH.mLIpAa5jzoR2wtef"
+      }
     },
     {
       "_id": "hk0JBzQe3iK2e6QN",
-      "name": "Bravo \u2014 Apprentice (Tier I)",
+      "name": "Bravo — Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
@@ -1711,7 +2055,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Bravo \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick \u2014 Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
           "chat": ""
         }
       },
@@ -1727,21 +2071,38 @@
           "calling": {
             "key": "bravo",
             "tier": 1
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "allyDamaged",
+                "radius": 1,
+                "do": {
+                  "ward": 0,
+                  "redirect": true
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                },
+                "label": "Hold the Line"
+              }
+            ]
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885545,
-        "modifiedTime": 1784177885545,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989073536,
+        "modifiedTime": 1792989605731,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!AV36WowwN3iR4txH.hk0JBzQe3iK2e6QN"
+      }
     }
   ],
   "effects": [],
@@ -1749,15 +2110,16 @@
   "sort": 212500,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177885545,
-    "modifiedTime": 1784177885545,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989073536,
+    "modifiedTime": 1792989073539,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

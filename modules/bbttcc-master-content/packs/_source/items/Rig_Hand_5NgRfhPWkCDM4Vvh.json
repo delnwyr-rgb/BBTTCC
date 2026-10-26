@@ -6,13 +6,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
-      "revision": 2,
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<h2>Rig Hand</h2><p><em>You know what keeps a moving fortress from becoming a coffin.</em></p><hr /><h3>Rules</h3><p>You gain a rank in Tinkering (tinker’s tools). If you already have it, its rank rises by one instead.</p><p>During a Scene Break, you can perform emergency maintenance on a vehicle, rig, or facility. Choose one:</p><ul><li>Restore 1d6 Integrity to a construct/vehicle/rig under the GM’s control rules, or</li><li>Remove one non-magical malfunction or minor condition (stuck mechanism, seized hatch, jammed lock, fouled intake) at the GM’s discretion.</li></ul><p>Once you use this principle, you can’t use it again until you finish a Soma Break.</p><p class=\"ft-engine-note\"><em>⚙ +1 Tinkering. 🃏 Card — once per Soma Break.</em></p>",
+      "value": "<h2>Rig Hand</h2><p><em>You know what keeps a moving fortress from becoming a coffin.</em></p><hr /><h3>Rules</h3><p>You gain a rank in Tinkering. If you already have it, its rank rises by one instead.</p><p>During a Scene Break, you can perform emergency maintenance on a vehicle, rig, or facility. Choose one:</p><ul><li>Restore 1d6 Integrity to a construct/vehicle/rig under the GM’s control rules, or</li><li>Remove one mundane malfunction or minor condition (stuck mechanism, seized hatch, jammed lock, fouled intake) at the GM’s discretion.</li></ul><p>Once you use this technique, you can’t use it again until you finish a Soma Break.</p><p class=\"ft-engine-note\"><em>⚙ +1 Tinkering. 🃏 Card — once per Soma Break.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_rig_hand",
@@ -43,7 +43,6 @@
       "pack": "bbttcc-feats-expansion-v1",
       "generatedAt": "2026-01-18T20:40:44.997352+00:00"
     },
-    "fourththing": {},
     "autoanimations": {
       "id": "ft-rig-hand",
       "label": "Rig Hand",
@@ -232,11 +231,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1768802465828,
-    "modifiedTime": 1781116200457,
+    "modifiedTime": 1792977606988,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!5NgRfhPWkCDM4Vvh"

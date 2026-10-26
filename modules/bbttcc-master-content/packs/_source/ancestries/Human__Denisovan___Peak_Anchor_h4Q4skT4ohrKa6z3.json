@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-human=\"v1\" style=\"display:none\"></div>\n<p><em>\"Gravity listens to you.\"</em></p>\n<p><strong>Peak-Anchor (1/Soma Break).</strong> Reaction — when you or an ally within 6 squares would be moved or teleported against your will, negate it. The effect fails, and the aggressor takes psychic backlash equal to your tier.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"humDenisovanPeakAnchor\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Peak-Anchor</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Reaction (within 6 squares) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Negate forced movement / teleport on you or ally within 6 squares; aggressor takes psychic backlash = your tier.</div>\n</div>",
+      "value": "\n<p><em>\"Gravity listens to you.\"</em></p>\n<p><strong>Peak-Anchor (1/Soma Break).</strong> Reaction — when you or an ally within 6 squares would be moved or teleported against your will, negate it. The effect fails, and the aggressor takes psychic backlash equal to your tier.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"humDenisovanPeakAnchor\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Peak-Anchor</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Reaction (within 6 squares) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Negate forced movement / teleport on you or ally within 6 squares; aggressor takes psychic backlash = your tier.</div>\n</div>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 17
     },
     "properties": [],
     "requirements": "Human",
@@ -41,7 +41,6 @@
       "kind": "human",
       "feature": "peak_anchor",
       "lineage": "Denisovan",
-      "tierLevel": 17,
       "version": "1.0.0"
     },
     "bbttcc-character-options": {
@@ -56,10 +55,20 @@
             "uses": 1
           },
           "effect": {
-            "kind": "chat-prompt",
-            "args": {
-              "body": "Gravity listens to you.” Peak-Anchor (1/a Soma Break). When you or an ally within 30 feet would be moved or teleported against your will, you can use your reaction to negate it"
-            }
+            "kind": "resist-forced-movement",
+            "args": {}
+          }
+        },
+        {
+          "event": "on-ally-forced-movement",
+          "radius": 6,
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "resist-forced-movement",
+            "args": {}
           }
         }
       ]
@@ -254,12 +263,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776540642444,
-    "modifiedTime": 1782167240131,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988982850,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

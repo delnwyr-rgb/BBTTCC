@@ -1,126 +1,80 @@
 {
+  "_id": "4GDtjohMhJcjQKjJ",
   "name": "Cloak of Null Profile",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/equipment/back/cloak-collared-pink-gold.webp",
   "system": {
-    "description": {
-      "value": "<p>You and carried gear have reroll the lowest die on checks to avoid detection by sensors/AAE and leave no heat signature [TODO(adv-call)].</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 2,
-      "units": "lb"
-    },
-    "price": {
-      "value": 2400,
-      "denomination": "gp"
-    },
-    "rarity": "rare",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "cloak-of-null-profile",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>You and carried gear reroll the lowest die on checks to avoid detection by sensors/AAE and leave no heat signature.</p>",
+      "chat": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": []
-    },
-    "rfi": {
-      "item": {
-        "tier": "III",
-        "footprint": 1,
-        "reach": "self",
-        "frame": "armor",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "scene"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
-    },
     "fourththing": {
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
-            "currency": "economy",
+            "marks": 1080,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 2,
+            "notes": "TIII talisman × rarity 2",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 432
           },
           "tier": "III",
-          "frame": "armor",
+          "frame": "talisman",
           "origin": "looted",
           "bound": "free",
           "reach": "self",
           "footprint": 1,
-          "legacySystem": {
-            "description": {
-              "value": "<p>You and carried gear reroll the lowest die on checks to avoid detection by sensors/AAE and leave no heat signature.</p>"
-            }
-          }
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {}
         }
-      }
+      },
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "stealth",
+          "vs": "avoiding detection by sensors / AAE; leaving no heat signature",
+          "note": "Cloak of Null Profile"
+        }
+      ]
     }
   },
   "effects": [],
   "folder": "TNrB6kEiHS0KwwJT",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834164584,
-    "modifiedTime": 1782164185970,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 800000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "4GDtjohMhJcjQKjJ",
-  "sort": 800000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988907418,
+    "modifiedTime": 1792988907418,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!4GDtjohMhJcjQKjJ"
 }

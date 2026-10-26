@@ -1,0 +1,50 @@
+{
+  "name": "Sun-Shy",
+  "type": "feature",
+  "img": "icons/magic/air/weather-sunlight-sky.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>In direct sunlight the Veil-Spinner rolls twice and keeps the worse result on attacks and sight-based checks. Honest light is the one thing it cannot spin.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "rX3LGuGV3K7xmLfT",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Satariel Veil-Spinner"
+        ],
+        "sourceIds": [
+          "zVWpSrwZCA3TL5Dp"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069969,
+    "modifiedTime": 1792989070049,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!rX3LGuGV3K7xmLfT"
+}

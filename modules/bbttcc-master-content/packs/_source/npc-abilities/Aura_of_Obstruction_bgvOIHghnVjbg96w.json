@@ -1,0 +1,76 @@
+{
+  "name": "Aura of Obstruction",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "qliphothic",
+      "bureaucracy",
+      "ghagiel"
+    ],
+    "description": {
+      "value": "<p>The 3 squares around this creature are difficult terrain for thought itself: a creature that starts its turn inside rolls twice-keep-worse on Mind checks until the start of its next turn.</p><p><em>Ghagiel — hull of chokmah.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "radius": 3,
+            "who": "enemies",
+            "do": {
+              "impose": true
+            }
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "qliphothic"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gerald, Assistant Regional Manager of the Apocalypse"
+        ],
+        "sourceIds": [
+          "3hQFAiFEsjwO9TKr"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "bgvOIHghnVjbg96w",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069911,
+    "modifiedTime": 1792989069994,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!bgvOIHghnVjbg96w"
+}

@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“If you stand near me, you’re harder to kill. That’s the point.”</em></p>\n        <p><strong>Shield Projector (tier/Soma Break).</strong> When a creature you can see within 6 squares is hit, you can use your reaction to project a barrier. Reduce the damage by 1d6 + your tier.</p>",
+      "value": "\n<p><em>“If you stand near me, you’re harder to kill. That’s the point.”</em></p>\n        <p><strong>Shield Projector (tier/Soma Break).</strong> When a creature you can see within 6 squares is hit, you can use your reaction to project a barrier. Reduce the damage by 1d6 + your tier.</p>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "properties": [],
     "requirements": "Circuitborn",
@@ -41,7 +41,6 @@
       "kind": "circuitborn",
       "feature": "shield_projector",
       "chassis": "Exo-Knight Line",
-      "tierLevel": 0,
       "version": "1.0.0"
     },
     "bbttcc-character-options": {
@@ -237,12 +236,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004099337,
-    "modifiedTime": 1782167240111,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988971544,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

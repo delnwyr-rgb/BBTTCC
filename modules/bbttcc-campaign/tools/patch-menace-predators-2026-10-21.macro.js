@@ -18,9 +18,9 @@
   const MENACES = {
     enc_apex_predator:      { label: "Apex Predator",      clock: 3 },
     enc_mutant_wildlife_t2: { label: "mutant pack",        clock: 3 },
-    enc_mutant_wildlife_t3: { label: "Waste Stalkers",     clock: 3 },
-    enc_geometry_serpent:   { label: "Geometry Serpent",   clock: 4 },
-    enc_qlipothic_shambler: { label: "Qlipothic Shambler", clock: 3 },
+    enc_mutant_wildlife_t3: { label: "Wastes Stalker",     clock: 3 },   // BS13 2026-10-26: pack name
+    enc_geometry_serpent:   { label: "Jommetry Serpent",   clock: 4 },   // BS13: pack name
+    enc_qlipothic_shambler: { label: "Qliphothic Shambler", clock: 3 },  // BS13: pack name (actor renamed 10-06)
     enc_slippage_wraith:    { label: "Slippage Wraith",    clock: 4 }
   };
   const LOOKS_LIKE = /predator|wildlife|stalker|wolves|wolf|pack\b|serpent|shambler|wraith|beast|hound|raptor/i;

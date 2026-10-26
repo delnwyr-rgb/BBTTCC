@@ -16,6 +16,18 @@
           "itemName": "Human Heritage: Denisovan",
           "viaSwap": true
         }
+      },
+      "aptitudePromotions": {
+        "archetype: death (transformer) (tier 1)|faith": {
+          "delta": 1,
+          "item": "Archetype: Death (Transformer) (Tier 1)",
+          "at": 1792346705135
+        },
+        "archetype: death (transformer) (tier 1)|intimidation": {
+          "delta": 1,
+          "item": "Archetype: Death (Transformer) (Tier 1)",
+          "at": 1792346705135
+        }
       }
     },
     "bbttcc-factions": {
@@ -105,12 +117,19 @@
     },
     "bbttcc-aae": {
       "politicalPhilosophy": "theocratic"
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the Generator Hall, the generators, load, surge, shielding, redundancy, that one night, the mountain, allies, escort, vibration",
+        "notes": "[FIXIT-RETROFIT-2026-09-27] PRIVATE TRUTH — Old Gearbox keeps the Generator Hall, a cathedral of vibration, and talks to the generators like a priest because, in his experience, they answer. VOICE: slow, low, reverent, one sentence at a time; \"Generators don't care who's in charge. I respect that.\" He does not stop working to talk; allies get the tour, nobody else gets in. THE SHIELDING: since that one night he has been adding redundant shielding nobody asked for, because the generators felt something from the direction of the mountain and he has been over-building for a surge, or an impact, or both. He does not say 'the Seal' because he doesn't know the word; he says 'weather from the east.'",
+        "secretsRaw": "Redundant Shielding :: rollPlus2 :: allies only; a Steward asks why the NEW shielding, not what's failing :: Someone is preparing for a surge. The generators felt something that one night, from the direction of the mountain, and he has been over-building for it since. 'Weather from the east.' He is right, and he will be right again."
+      }
     }
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Master mechanic of the Generator Hall, Furrier's Fixit Farm (Act 2-3)",
+      "notes": "Old Gearbox tends the Generator Hall at Furrier's Fixit Farm, a cathedral of vibration where massive turbines spin under heavy housing. He is a grease-stained old human who was here before the Jackalopes claimed the place, and he moves through the hall like a priest through ritual space. 'Generators don't care who's in charge,' he says. 'I respect that.' He speaks slow and low, one sentence at a time, and doesn't stop working to talk. Nobody gets into his hall unescorted. Lately he has been adding shielding nobody asked for."
     },
     "details": {
       "level": 1,
@@ -193,7 +212,7 @@
       "intimidation": {
         "attribute": "presence",
         "label": "Intimidation",
-        "value": 1
+        "value": 2
       },
       "empathy": {
         "attribute": "presence",
@@ -228,7 +247,7 @@
       "faith": {
         "attribute": "soul",
         "label": "Faith",
-        "value": 1
+        "value": 2
       },
       "meditation": {
         "attribute": "soul",
@@ -252,10 +271,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 1
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 1
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 1
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 1
@@ -264,7 +293,8 @@
     "derived": {
       "integrity": {
         "value": 22,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 21,
@@ -354,7 +384,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -389,8 +420,8 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
       "id": "U5YaO2p189LBMvVq",
@@ -401,7 +432,10 @@
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
@@ -507,7 +541,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Cro-Magnon, Denisovan, Florensis, Neanderthal</strong>.</p><p>This root grants the shared Human core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>\u201cHumanity is not special. It\u2019s just stubborn enough to keep moving when reality begs it to stop.\u201d</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
+          "value": "<p><strong>Human.</strong></p><p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
           "chat": ""
         },
         "advancement": [
@@ -586,34 +620,33 @@
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "on one checks [TODO(adv-call)] of your choice each round (declare before roll\u2026"
+              "when": "atOneIntegrity",
+              "note": "Tenacious — at 1 Integrity (one check per round; declare before rolling)"
             }
           ],
           "triggers": [
-            {
-              "event": "on-save-fail",
-              "limit": {
-                "window": "soma-break",
-                "uses": 1
-              },
-              "effect": {
-                "kind": "chat-prompt",
-                "args": {
-                  "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
-                }
-              }
-            },
             {
               "event": "on-skill-fail",
               "limit": {
                 "window": "soma-break",
                 "uses": 1
               },
+              "offerText": "Adaptive — you failed a check: choose to succeed instead (reroll; the GM may simply rule it a success).",
               "effect": {
-                "kind": "chat-prompt",
-                "args": {
-                  "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
-                }
+                "kind": "reroll-failed-check",
+                "args": {}
+              }
+            },
+            {
+              "event": "on-save-fail",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "offerText": "Adaptive — you failed a defense check: choose to succeed instead (reroll; the GM may simply rule it a success).",
+              "effect": {
+                "kind": "reroll-failed-check",
+                "args": {}
               }
             }
           ],
@@ -637,30 +670,23 @@
       },
       "effects": [],
       "folder": "byroU26YSQP4OQUn",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.a3057e55a2fc1026",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534460,
-        "modifiedTime": 1784177534460,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 0,
       "_id": "rkIrXvU11v8SIXNu",
-      "_key": "!actors.items!j6fNjNGmCfky6OND.rkIrXvU11v8SIXNu"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989083620,
+        "modifiedTime": 1792989614968,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Human: Stubborn Spark",
@@ -675,7 +701,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cHumanity is not special. It\u2019s just stubborn enough to keep moving when reality begs it to stop.\u201d</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Neanderthal, Denisovan, Florensis, Erectus). Your lineage grants Tier powers as you level.</p>",
+          "value": "\n<p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
           "chat": ""
         },
         "uses": {
@@ -885,28 +911,19 @@
           "version": 5
         },
         "fourththing": {
-          "grantedByAncestry": "Human"
+          "grantedByAncestry": "Human",
+          "rerolls": [
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "when": "atOneIntegrity",
+              "note": "Tenacious — at 1 Integrity (one check per round; declare before rolling)"
+            }
+          ]
         }
       },
       "effects": [],
       "folder": "byroU26YSQP4OQUn",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.jbiG7wAqTlBgEcDw",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534460,
-        "modifiedTime": 1784177534460,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -914,7 +931,17 @@
       },
       "sort": 100000,
       "_id": "XoD5NQB7W5vGDlNz",
-      "_key": "!actors.items!j6fNjNGmCfky6OND.XoD5NQB7W5vGDlNz"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989083620,
+        "modifiedTime": 1792989083620,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Human Heritage: Denisovan",
@@ -925,7 +952,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Human (Denisovan)</em> while converting it from a lineage-species into a heritage.</p><p><em>\u201cHumanity is the species that keeps walking even when the map says \u2018stop.\u2019\u201d</em></p><p><strong>Human (Denisovan).</strong> You are not a fantasy human. You are the rebooted inheritance of an older lineage resurfacing after Yesod\u2019s fall\u2014ancient adaptations, forgotten instincts, and Athletics strategies given room to matter again. You remember mountains that no longer exist. Gravity listens to you when you ask it to.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>BOD (Body)</strong>\u2014expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory) from the Human species root.</p><h3>Denisovan Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17):</p><ul><li><p><strong>Tier I \u2014 High-Altitude Blood.</strong> reroll-lowest on checks vs. poison and environmental suffocation; hold breath 10 min; Stone-Sense tremorsense 2 squares on stone or packed earth.</p></li><li><p><strong>Tier II \u2014 Stone-Singer.</strong> Mason\u2019s tool proficiency. 1/Soma Break reinforce a structure or barrier.</p></li><li><p><strong>Tier III \u2014 Ancient Logic.</strong> reroll-lowest on Investigation and Occult checks involving structures, mechanisms, or ruins; share the insight to grant an ally advantage once per scene.</p></li><li><p><strong>Tier IV \u2014 Peak-Anchor.</strong> 1/Soma Break reaction to negate forced movement or teleportation within 6 squares; aggressor takes psychic backlash equal to your tier.</p></li></ul>",
+          "value": "<p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Human (Denisovan)</em> while converting it from a lineage-species into a heritage.</p><p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Denisovan).</strong> You are not a fantasy human. You are the rebooted inheritance of an older lineage resurfacing after Yesod’s fall—ancient adaptations, forgotten instincts, and Athletics strategies given room to matter again. You remember mountains that no longer exist. Gravity listens to you when you ask it to.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>BOD (Body)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory) from the Human species root.</p><h3>Denisovan Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17):</p><ul><li><p><strong>Tier I — High-Altitude Blood.</strong> reroll-lowest on checks vs. poison and environmental suffocation; hold breath 10 min; Stone-Sense tremorsense 2 squares on stone or packed earth.</p></li><li><p><strong>Tier II — Stone-Singer.</strong> a skill rank in Tinkering. 1/Soma Break reinforce a structure or barrier.</p></li><li><p><strong>Tier III — Ancient Logic.</strong> reroll-lowest on Investigation and Occult checks involving structures, mechanisms, or ruins; share the insight to let an ally reroll the lowest die once per scene.</p></li><li><p><strong>Tier IV — Peak-Anchor.</strong> 1/Soma Break reaction to negate forced movement or teleportation within 6 squares; aggressor takes psychic backlash equal to your tier.</p></li></ul><h3>Domain Edge</h3><ul><li><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Logistics marks</strong> at campaign start.</li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -1006,35 +1033,28 @@
         }
       },
       "folder": "X8GnIzoaCFwLQbGU",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.TjBhlDjlMKL60wbo",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534460,
-        "modifiedTime": 1784177534460,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 0,
       "_id": "Zixnr5qGKHyWcTZd",
-      "_key": "!actors.items!j6fNjNGmCfky6OND.Zixnr5qGKHyWcTZd"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989083620,
+        "modifiedTime": 1792989614968,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: Death (Transformer)",
       "type": "feat",
-      "img": "icons/weapons/sickles/scythe-curved-steel.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_death.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1044,7 +1064,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cThis must end for something else to begin.\u201d</em></p><p><strong>Archetype (Bad Eden): Death (Transformer).</strong> You are not annihilation. You are necessary ending, painful transition, and the force that cuts dead things loose so the living can survive.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens sacrifice, transition, and value recovered from collapse. This Archetype is associated with <strong>+1 Violence</strong> and <strong>+1 Culture</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>“This must end for something else to begin.”</em></p><p><strong>Archetype (Bad Eden): Death (Transformer).</strong> You are not annihilation. You are necessary ending, painful transition, and the force that cuts dead things loose so the living can survive.</p><h3>Archetype Effects</h3><ul><li><p><strong>Faction Edge.</strong> Your archetype strengthens sacrifice, transition, and value recovered from collapse. Your Domain earns <strong>+10 Violence</strong> and <strong>+10 Culture</strong> marks each turn while you serve it.</p></li><li><p><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</p></li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1118,23 +1138,6 @@
         },
         "dnd5e": {}
       },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.bPpzmdnTTL0R6lMX",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534460,
-        "modifiedTime": 1784177534460,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1142,23 +1145,33 @@
       },
       "_id": "L9cG60ti4Si3r81z",
       "sort": 100000,
-      "_key": "!actors.items!j6fNjNGmCfky6OND.L9cG60ti4Si3r81z"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989083620,
+        "modifiedTime": 1792989614969,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: Death (Transformer) (Tier 1)",
       "type": "feat",
-      "img": "icons/weapons/sickles/scythe-curved-steel.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_death.webp",
       "system": {
         "category": "technique",
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden \u2013 Archetype: Death (Transformer) (Tier 1)",
+          "custom": "Bad Eden – Archetype: Death (Transformer) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) \u2014 Death (Transformer)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Intimidation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — Death (Transformer)</strong></p><ul><li><p><strong>Tactical:</strong> You gain a skill rank in Faith and Intimidation.</p></li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1185,7 +1198,7 @@
       },
       "effects": [
         {
-          "disabled": false,
+          "disabled": true,
           "duration": {
             "value": null,
             "units": "seconds",
@@ -1194,7 +1207,7 @@
           },
           "flags": {},
           "name": "Archetype Tier 1 Proficiencies",
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_3.png",
+          "img": "art/bbttcc/asli-archetypes/archetype_death.webp",
           "_id": "20klYsXI5oiLtO5c",
           "type": "base",
           "system": {
@@ -1221,21 +1234,20 @@
           "transfer": true,
           "statuses": [],
           "sort": 0,
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177534460,
-            "modifiedTime": 1784177534460
-          },
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!j6fNjNGmCfky6OND.Ld8xXu18GO8Lxeoh.20klYsXI5oiLtO5c"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989083620,
+            "modifiedTime": 1792989615193,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "Z28ttIM7Yzl2LgF9",
@@ -1265,23 +1277,6 @@
           "vocabScrub": "2026-05-16"
         }
       },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.w0NWa6GJiwn1jMDo",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534460,
-        "modifiedTime": 1784177534460,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1289,7 +1284,17 @@
       },
       "_id": "Ld8xXu18GO8Lxeoh",
       "sort": 200000,
-      "_key": "!actors.items!j6fNjNGmCfky6OND.Ld8xXu18GO8Lxeoh"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989083620,
+        "modifiedTime": 1792989614969,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Alignment: Chokmah",
@@ -1303,7 +1308,7 @@
         },
         "tags": [],
         "description": {
-          "value": "Soul - Creative energy. +1 Violence, +1 Soft Power OPs\n\nCreation arrives all at once. Chokmah rewards decisive action, inspired leadership, and bold openers that turn possibility into momentum before anyone else is ready.",
+          "value": "Soul - Creative energy. +10 Soft Power and +10 Violence marks to your Domain each turn.\n\nCreation arrives all at once. Chokmah rewards decisive action, inspired leadership, and bold openers that turn possibility into momentum before anyone else is ready.",
           "chat": ""
         },
         "activities": {},
@@ -1341,23 +1346,6 @@
       "img": "icons/weapons/staves/staff-blue-jewel.webp",
       "effects": [],
       "folder": "RAOWJYon3t34M5XY",
-      "_stats": {
-        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.YBryhDI3aQ92d65o",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.LilpQAsCU1MbIgsz",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534460,
-        "modifiedTime": 1784177534460,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 2,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1365,7 +1353,17 @@
       },
       "_id": "QW6d06Ud3vJ53QQh",
       "sort": 300000,
-      "_key": "!actors.items!j6fNjNGmCfky6OND.QW6d06Ud3vJ53QQh"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989083620,
+        "modifiedTime": 1792989614969,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Enlightenment: Seeking",
@@ -1375,8 +1373,8 @@
         "bbttcc-character-options": {
           "category": "enlightenment-levels",
           "bonuses": {
-            "intrigue": 1,
-            "softpower": 2
+            "intrigue": 2,
+            "softpower": 1
           }
         }
       },
@@ -1386,8 +1384,17 @@
         "source": "",
         "tags": [],
         "description": {
-          "value": "",
+          "value": "Actively pursuing knowledge. +20 Intrigue and +10 Soft Power marks to your Domain each turn.",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "effects": [],
@@ -1398,17 +1405,16 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534460,
-        "modifiedTime": 1784177534460,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989083620,
+        "modifiedTime": 1792989614969,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!j6fNjNGmCfky6OND.rEDbRJy2HAWy4077"
+      }
     },
     {
       "_id": "d6nE468PBThAgPy0",
@@ -1425,7 +1431,7 @@
           "soul"
         ],
         "description": {
-          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling — the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -1452,21 +1458,20 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534460,
-        "modifiedTime": 1784177534460,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989083620,
+        "modifiedTime": 1792989083620,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!j6fNjNGmCfky6OND.d6nE468PBThAgPy0"
+      }
     },
     {
       "_id": "1K5xftMR9WxNDVlT",
-      "name": "Keeper \u2014 Apprentice (Tier I)",
+      "name": "Keeper — Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/environment/settlement/temple-night.webp",
       "system": {
@@ -1478,7 +1483,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Keeper \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 The rites:</strong> Weddings, funerals, blessings; participants recover 2\u00d7tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick \u2014 Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
+          "value": "<p><strong>Keeper — Apprentice</strong> (Tier I).</p><p><strong>Trade — The rites:</strong> Weddings, funerals, blessings; participants recover 2×tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick — Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
           "chat": ""
         }
       },
@@ -1494,27 +1499,48 @@
           "calling": {
             "key": "keeper",
             "tier": 1
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "who": "targets",
+                "do": {
+                  "removeCondition": [
+                    "shaken"
+                  ],
+                  "bankReroll": {
+                    "context": "defense",
+                    "note": "Steady the Soul"
+                  }
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                }
+              }
+            ]
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534460,
-        "modifiedTime": 1784177534460,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989083620,
+        "modifiedTime": 1792989083620,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!j6fNjNGmCfky6OND.1K5xftMR9WxNDVlT"
+      }
     }
   ],
   "effects": [
     {
       "name": "Bad Eden: Seeking",
-      "img": "icons/magic/perception/third-eye-blue.webp",
+      "img": "icons/tools/scribal/magnifying-glass.webp",
       "origin": "Actor.j6fNjNGmCfky6OND",
       "disabled": false,
       "duration": {
@@ -1537,30 +1563,37 @@
       "system": {
         "changes": [
           {
-            "key": "flags.dnd5e.skills.rel.adv",
-            "value": true,
+            "key": "system.derived.resolve.aeBonus",
+            "value": 1,
             "priority": 20,
-            "type": "override",
+            "type": "add",
             "phase": "initial"
           },
           {
-            "key": "flags.dnd5e.skills.ins.adv",
-            "value": true,
+            "key": "system.skills.occult.value",
+            "value": 1,
             "priority": 20,
-            "type": "override",
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.skills.insight.value",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
             "phase": "initial"
           }
         ]
       },
-      "_id": "nX0qMD5WQ8lBhylO",
+      "_id": "w40XNhnQ3Am6doKT",
       "type": "base",
       "start": {
         "time": 0,
-        "combat": "QA0W2dp4ktbV6dBx",
-        "combatant": "tA2vckTuBiKKCfz4",
-        "initiative": 25,
-        "round": 3,
-        "turn": 0
+        "combat": null,
+        "combatant": null,
+        "initiative": null,
+        "round": null,
+        "turn": null
       },
       "description": "",
       "tint": "#ffffff",
@@ -1570,32 +1603,32 @@
       "folder": null,
       "sort": 0,
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534460,
-        "modifiedTime": 1784177534460,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989617905,
+        "modifiedTime": 1792989617905,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.effects!j6fNjNGmCfky6OND.nX0qMD5WQ8lBhylO"
+      }
     }
   ],
   "folder": "gzB3pxl3G3vzIO5V",
   "sort": -150000,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177534460,
-    "modifiedTime": 1784177534460,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989083620,
+    "modifiedTime": 1792989083623,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

@@ -10,6 +10,7 @@
     ],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>A small, slightly tacky golden beaver pendant on a brass chain. The smile is wide. The teeth are alarming. Several Frontier-Formerly-Known cults consider this a holy relic. Several other Frontier-Formerly-Known cults consider this an insult. Nobody is neutral. The beaver doesn't care.</p><p><strong>Cleanest Bathrooms in the Wasteland.</strong> +1 to wasteland-market negotiation rolls. Once per session, when a deal would fall through, you may invoke the Beaver — quote a pre-Fall slogan, gesture at the pendant, look serious. The deal goes through, but you owe the merchant a small future favor. Mal: \"That's the Beaver's contract. He always gets paid.\"</p>",
       "chat": ""
@@ -43,17 +44,27 @@
             "mascot-energy"
           ],
           "price": {
-            "marks": 150,
-            "currency": "economy",
+            "marks": 180,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TII talisman stamp",
+            "notes": "TII talisman",
             "bound": "free",
-            "saleBack": 60
+            "saleBack": 72
           }
         }
+      },
+      "passives": {
+        "checkBonus": [
+          {
+            "context": "check",
+            "skill": "diplomacy",
+            "bonus": 1,
+            "note": "Cleanest Bathrooms in the Wasteland — GM: wasteland-market negotiation only"
+          }
+        ]
       }
     }
   },
@@ -66,11 +77,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777437725666,
-    "modifiedTime": 1778541977403,
+    "modifiedTime": 1792977658870,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

@@ -7,7 +7,7 @@
     "intent": "violence",
     "skill": "ranged",
     "damage": {
-      "formula": "2d8",
+      "formula": "2d6",
       "attribute": "violence",
       "type": "psychic",
       "damageFlavor": "memory-thread",
@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +79,25 @@
             "saleBack": 180
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Soma-Reaper"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Echo-Pluck"
+            },
+            "do": {
+              "prompt": "Echo-Pluck: the target loses the benefit of its last meaningful action until its next turn ends."
+            },
+            "narrative": true
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "a0440c28-5f91-4b03-8fe4-6994ac721bf0",
+      "id": "ft-echo-pluck",
       "label": "Echo-Pluck",
       "macro": {
         "enable": false,
@@ -269,24 +272,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Soma-Reaper"
+        ],
+        "sourceIds": [
+          "lAn4USFvKWoAVVwy"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "RSmkxikU1s4SYSog",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024232917,
-    "modifiedTime": 1782167244998,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989026463,
+    "modifiedTime": 1792989026463,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!RSmkxikU1s4SYSog"
 }

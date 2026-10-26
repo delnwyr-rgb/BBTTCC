@@ -1,0 +1,142 @@
+{
+  "name": "Arc Enforcer (recharge 5–6)",
+  "type": "weapon",
+  "img": "icons/magic/lightning/bolt-strike-blue.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "violence",
+    "skill": "firearms",
+    "damage": {
+      "formula": "2d10",
+      "attribute": "violence",
+      "type": "electrical",
+      "damageFlavor": "arc",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 12,
+      "long": 36
+    },
+    "tags": [
+      "bestiary",
+      "tier-iii",
+      "lineage-pre-fall"
+    ],
+    "effect": "On a hit the target is Staggered until the end of its next turn.",
+    "flavor": "Filed under: enforcement.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "staggered"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "",
+        "saveDcMode": "none",
+        "saveDcFixed": 15,
+        "saveAttributeOverrides": {}
+      },
+      "area": {
+        "shape": "none",
+        "size": 0
+      }
+    },
+    "description": {
+      "value": "<p><strong>Strike.</strong> reach 12 squares, one target. Damage: <code>2d10</code> electrical (arc) + violence. On a hit the target is Staggered until the end of its next turn.</p><p><em>Filed under: enforcement.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "frame": "attack",
+          "price": {
+            "marks": 450,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII attack × 1",
+            "bound": "free",
+            "saleBack": 180
+          }
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [],
+        "recharge": {
+          "mode": "d6",
+          "min": 5
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Legansus Tal"
+        ],
+        "sourceIds": [
+          "ORNz9QgnCYclRSKR"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "o2Dgjt820nTCQk7a",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069906,
+    "modifiedTime": 1792989069989,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!o2Dgjt820nTCQk7a"
+}

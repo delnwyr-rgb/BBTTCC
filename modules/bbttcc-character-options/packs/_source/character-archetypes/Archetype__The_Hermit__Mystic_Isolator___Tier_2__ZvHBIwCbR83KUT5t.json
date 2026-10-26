@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During meditation, retreat, hidden study, or covert preparation scenarios, the time or resource cost is reduced by 25%.</li></ul>",
+      "value": "<p><strong>Tier 2 (Level 5) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Faith or Intrigue marks, it spends 25% less (never below 10).</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -59,18 +59,32 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "faith",
+            "intrigue"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Archetype: The Hermit (Mystic-Isolator) (Tier 2)",
+          "pct": 25
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1773893630634,
-    "modifiedTime": 1781116026445,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989157988,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

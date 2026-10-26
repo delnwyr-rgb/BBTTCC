@@ -4,7 +4,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-09",
+    "at": "2026-10-26",
     "overridesApplied": 0
   },
   "items": [
@@ -16,7 +16,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Netzach — Momentum, triumph.</p>\n<p><strong>Aligned methods:</strong> violence, siege, logistics. <strong>Misaligned (causes Corruption):</strong> nonlethal, intrigue.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Netzach — Momentum, triumph.</p>\n<p><strong>Aligned methods:</strong> violence, siege, logistics. <strong>Misaligned (causes Corruption):</strong> nonlethal, intrigue.</p>",
           "chat": ""
         },
         "type": {
@@ -40,6 +40,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_netzach_animate",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "netzach",
@@ -75,7 +76,7 @@
             "id": "sQUqOs2assyKs2is",
             "pack": "sparks",
             "identifier": "spark_netzach_animate",
-            "hash": "aba050e76c67"
+            "hash": "ddd72033be73"
           }
         }
       }
@@ -88,7 +89,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Netzach — Momentum, triumph.</p>\n<p><strong>Aligned methods:</strong> violence, siege, logistics. <strong>Misaligned (causes Corruption):</strong> nonlethal, intrigue.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Netzach — Momentum, triumph.</p>\n<p><strong>Aligned methods:</strong> violence, siege, logistics. <strong>Misaligned (causes Corruption):</strong> nonlethal, intrigue.</p>",
           "chat": ""
         },
         "type": {
@@ -112,6 +113,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_netzach_conceptual",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "netzach",
@@ -147,7 +149,7 @@
             "id": "6UQsaOAgOoUiwwUs",
             "pack": "sparks",
             "identifier": "spark_netzach_conceptual",
-            "hash": "4d2cdeb20a55"
+            "hash": "e41ae61a3819"
           }
         }
       }
@@ -160,7 +162,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Netzach — Momentum, triumph.</p>\n<p><strong>Aligned methods:</strong> violence, siege, logistics. <strong>Misaligned (causes Corruption):</strong> nonlethal, intrigue.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Netzach — Momentum, triumph.</p>\n<p><strong>Aligned methods:</strong> violence, siege, logistics. <strong>Misaligned (causes Corruption):</strong> nonlethal, intrigue.</p>",
           "chat": ""
         },
         "type": {
@@ -184,6 +186,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_netzach_vestigial",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "netzach",
@@ -219,7 +222,7 @@
             "id": "cq4uqEs4esOouwMw",
             "pack": "sparks",
             "identifier": "spark_netzach_vestigial",
-            "hash": "8057fa1485e3"
+            "hash": "5d65fa22e2f5"
           }
         }
       }
@@ -232,7 +235,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Yesod — Dreams, illusion, gateways.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Yesod — Dreams, illusion, gateways.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>",
           "chat": ""
         },
         "type": {
@@ -256,6 +259,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_yesod_animate",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "yesod",
@@ -291,7 +295,7 @@
             "id": "2IweYGIEc80qHWyG",
             "pack": "sparks",
             "identifier": "spark_yesod_animate",
-            "hash": "7b968636ec32"
+            "hash": "452110f96e68"
           }
         }
       }
@@ -304,7 +308,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Yesod — Dreams, illusion, gateways.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Yesod — Dreams, illusion, gateways.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>",
           "chat": ""
         },
         "type": {
@@ -328,6 +332,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_yesod_conceptual",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "yesod",
@@ -363,7 +368,7 @@
             "id": "kc6KuSG8gug6SwI2",
             "pack": "sparks",
             "identifier": "spark_yesod_conceptual",
-            "hash": "731e5bf143af"
+            "hash": "98edbc5bc3c0"
           }
         }
       }
@@ -376,7 +381,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Yesod — Dreams, illusion, gateways.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Yesod — Dreams, illusion, gateways.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>",
           "chat": ""
         },
         "type": {
@@ -400,6 +405,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_yesod_vestigial",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "yesod",
@@ -435,7 +441,7 @@
             "id": "q2MOGcuqo8oESasU",
             "pack": "sparks",
             "identifier": "spark_yesod_vestigial",
-            "hash": "ad46e249d4a1"
+            "hash": "82b5ad203019"
           }
         }
       }
@@ -448,7 +454,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Hod — Sigils, form, communication.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, softpower. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Hod — Sigils, form, communication.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, softpower. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>",
           "chat": ""
         },
         "type": {
@@ -472,6 +478,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_hod_animate",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "hod",
@@ -507,7 +514,7 @@
             "id": "UCM8wuWGIIM6w8Ug",
             "pack": "sparks",
             "identifier": "spark_hod_animate",
-            "hash": "a1aeab67f591"
+            "hash": "a2df1e5523a8"
           }
         }
       }
@@ -520,7 +527,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Hod — Sigils, form, communication.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, softpower. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Hod — Sigils, form, communication.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, softpower. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>",
           "chat": ""
         },
         "type": {
@@ -544,6 +551,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_hod_conceptual",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "hod",
@@ -579,7 +587,7 @@
             "id": "0cwOigK8OYKwiKOC",
             "pack": "sparks",
             "identifier": "spark_hod_conceptual",
-            "hash": "daed4287c420"
+            "hash": "fd9df8804524"
           }
         }
       }
@@ -592,7 +600,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Hod — Sigils, form, communication.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, softpower. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Hod — Sigils, form, communication.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, softpower. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>",
           "chat": ""
         },
         "type": {
@@ -616,6 +624,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_hod_vestigial",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "hod",
@@ -651,7 +660,7 @@
             "id": "Y8uGa824IQsIOKAA",
             "pack": "sparks",
             "identifier": "spark_hod_vestigial",
-            "hash": "2b406c32f10f"
+            "hash": "e155a2e7d6e6"
           }
         }
       }
@@ -664,7 +673,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Tiferet — Balance, integration.</p>\n<p><strong>Aligned methods:</strong> diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Tiferet — Balance, integration.</p>\n<p><strong>Aligned methods:</strong> diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence.</p>",
           "chat": ""
         },
         "type": {
@@ -688,6 +697,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_tiferet_animate",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "tiferet",
@@ -722,7 +732,7 @@
             "id": "ukS4saO2Ky6O66Qu",
             "pack": "sparks",
             "identifier": "spark_tiferet_animate",
-            "hash": "71581c7916a7"
+            "hash": "282af2bd9136"
           }
         }
       }
@@ -735,7 +745,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Tiferet — Balance, integration.</p>\n<p><strong>Aligned methods:</strong> diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Tiferet — Balance, integration.</p>\n<p><strong>Aligned methods:</strong> diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence.</p>",
           "chat": ""
         },
         "type": {
@@ -759,6 +769,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_tiferet_conceptual",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "tiferet",
@@ -793,7 +804,7 @@
             "id": "MO6QYGcGgaackA2Q",
             "pack": "sparks",
             "identifier": "spark_tiferet_conceptual",
-            "hash": "c5b9f1b8ca36"
+            "hash": "2487fcf36a5b"
           }
         }
       }
@@ -806,7 +817,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Tiferet — Balance, integration.</p>\n<p><strong>Aligned methods:</strong> diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Tiferet — Balance, integration.</p>\n<p><strong>Aligned methods:</strong> diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence.</p>",
           "chat": ""
         },
         "type": {
@@ -830,6 +841,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_tiferet_vestigial",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "tiferet",
@@ -864,7 +876,7 @@
             "id": "4cEekSQGgiIiuW2E",
             "pack": "sparks",
             "identifier": "spark_tiferet_vestigial",
-            "hash": "09a6d7be263f"
+            "hash": "19714ff9a0f9"
           }
         }
       }
@@ -877,7 +889,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Malkuth — Matter, stability, powers.</p>\n<p><strong>Aligned methods:</strong> economy, logistics, body. <strong>Misaligned (causes Corruption):</strong> violence.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Malkuth — Matter, stability, powers.</p>\n<p><strong>Aligned methods:</strong> economy, logistics, body. <strong>Misaligned (causes Corruption):</strong> violence.</p>",
           "chat": ""
         },
         "type": {
@@ -901,6 +913,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_malkuth_animate",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "malkuth",
@@ -935,7 +948,7 @@
             "id": "4GsSOOCOYCKwm0mK",
             "pack": "sparks",
             "identifier": "spark_malkuth_animate",
-            "hash": "055aec75cb80"
+            "hash": "644820f86520"
           }
         }
       }
@@ -948,7 +961,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Malkuth — Matter, stability, powers.</p>\n<p><strong>Aligned methods:</strong> economy, logistics, body. <strong>Misaligned (causes Corruption):</strong> violence.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Malkuth — Matter, stability, powers.</p>\n<p><strong>Aligned methods:</strong> economy, logistics, body. <strong>Misaligned (causes Corruption):</strong> violence.</p>",
           "chat": ""
         },
         "type": {
@@ -972,6 +985,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_malkuth_conceptual",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "malkuth",
@@ -1006,7 +1020,7 @@
             "id": "Cw0ewAYIOcYOSKAI",
             "pack": "sparks",
             "identifier": "spark_malkuth_conceptual",
-            "hash": "f616519ddad7"
+            "hash": "1c1409a57e2b"
           }
         }
       }
@@ -1019,7 +1033,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Malkuth — Matter, stability, powers.</p>\n<p><strong>Aligned methods:</strong> economy, logistics, body. <strong>Misaligned (causes Corruption):</strong> violence.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Malkuth — Matter, stability, powers.</p>\n<p><strong>Aligned methods:</strong> economy, logistics, body. <strong>Misaligned (causes Corruption):</strong> violence.</p>",
           "chat": ""
         },
         "type": {
@@ -1043,6 +1057,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_malkuth_vestigial",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "malkuth",
@@ -1077,7 +1092,7 @@
             "id": "QsQiOIEwwaO6ysUg",
             "pack": "sparks",
             "identifier": "spark_malkuth_vestigial",
-            "hash": "1fcc1e8a8348"
+            "hash": "a0be70bdf5ae"
           }
         }
       }
@@ -1090,7 +1105,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Chesed — Healing, generosity.</p>\n<p><strong>Aligned methods:</strong> nonlethal, diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Chesed — Healing, generosity.</p>\n<p><strong>Aligned methods:</strong> nonlethal, diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>",
           "chat": ""
         },
         "type": {
@@ -1114,6 +1129,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_chesed_animate",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "chesed",
@@ -1150,7 +1166,7 @@
             "id": "sU2Ukm2Goqo88MCM",
             "pack": "sparks",
             "identifier": "spark_chesed_animate",
-            "hash": "dc15cd1941e8"
+            "hash": "0d9f2a2c5a80"
           }
         }
       }
@@ -1163,7 +1179,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Chesed — Healing, generosity.</p>\n<p><strong>Aligned methods:</strong> nonlethal, diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Chesed — Healing, generosity.</p>\n<p><strong>Aligned methods:</strong> nonlethal, diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>",
           "chat": ""
         },
         "type": {
@@ -1187,6 +1203,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_chesed_conceptual",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "chesed",
@@ -1223,7 +1240,7 @@
             "id": "C4ey4YUKmoGaGS2K",
             "pack": "sparks",
             "identifier": "spark_chesed_conceptual",
-            "hash": "a79bdaae7e79"
+            "hash": "21e8ebc9ca61"
           }
         }
       }
@@ -1236,7 +1253,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Chesed — Healing, generosity.</p>\n<p><strong>Aligned methods:</strong> nonlethal, diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Chesed — Healing, generosity.</p>\n<p><strong>Aligned methods:</strong> nonlethal, diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>",
           "chat": ""
         },
         "type": {
@@ -1260,6 +1277,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_chesed_vestigial",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "chesed",
@@ -1296,7 +1314,7 @@
             "id": "oeo2UwSQUAweowo6",
             "pack": "sparks",
             "identifier": "spark_chesed_vestigial",
-            "hash": "97e001f5e854"
+            "hash": "3645cf58d072"
           }
         }
       }
@@ -1309,7 +1327,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Gevurah — Judgment, precision force.</p>\n<p><strong>Aligned methods:</strong> violence, siege. <strong>Misaligned (causes Corruption):</strong> softpower, diplomacy, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Geburah — Judgment, precision force.</p>\n<p><strong>Aligned methods:</strong> violence, siege. <strong>Misaligned (causes Corruption):</strong> softpower, diplomacy, nonlethal.</p>",
           "chat": ""
         },
         "type": {
@@ -1326,16 +1344,17 @@
           "denomination": "gp"
         },
         "rarity": "rare",
-        "identifier": "spark_gevurah_animate"
+        "identifier": "spark_geburah_animate"
       },
       "effects": [],
       "flags": {
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
-          "identifier": "spark_gevurah_animate",
+          "identifier": "spark_geburah_animate",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
-            "sephirah": "gevurah",
+            "sephirah": "geburah",
             "kind": "animate",
             "alignedMethods": [
               "violence",
@@ -1357,7 +1376,7 @@
             },
             "source": "BBTTCC Tikkun v1.0",
             "tags": [
-              "gevurah",
+              "geburah",
               "animate",
               "spark"
             ]
@@ -1367,8 +1386,8 @@
           "rfi": {
             "id": "4A4oY4UwKaW448SI",
             "pack": "sparks",
-            "identifier": "spark_gevurah_animate",
-            "hash": "9e3c3a776121"
+            "identifier": "spark_geburah_animate",
+            "hash": "ebe79564388f"
           }
         }
       }
@@ -1381,7 +1400,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Gevurah — Judgment, precision force.</p>\n<p><strong>Aligned methods:</strong> violence, siege. <strong>Misaligned (causes Corruption):</strong> softpower, diplomacy, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Geburah — Judgment, precision force.</p>\n<p><strong>Aligned methods:</strong> violence, siege. <strong>Misaligned (causes Corruption):</strong> softpower, diplomacy, nonlethal.</p>",
           "chat": ""
         },
         "type": {
@@ -1398,16 +1417,17 @@
           "denomination": "gp"
         },
         "rarity": "rare",
-        "identifier": "spark_gevurah_conceptual"
+        "identifier": "spark_geburah_conceptual"
       },
       "effects": [],
       "flags": {
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
-          "identifier": "spark_gevurah_conceptual",
+          "identifier": "spark_geburah_conceptual",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
-            "sephirah": "gevurah",
+            "sephirah": "geburah",
             "kind": "conceptual",
             "alignedMethods": [
               "violence",
@@ -1429,7 +1449,7 @@
             },
             "source": "BBTTCC Tikkun v1.0",
             "tags": [
-              "gevurah",
+              "geburah",
               "conceptual",
               "spark"
             ]
@@ -1439,8 +1459,8 @@
           "rfi": {
             "id": "eqoECAC6EAekY4mg",
             "pack": "sparks",
-            "identifier": "spark_gevurah_conceptual",
-            "hash": "5b1f86aefd2a"
+            "identifier": "spark_geburah_conceptual",
+            "hash": "65adb0c9979a"
           }
         }
       }
@@ -1453,7 +1473,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Gevurah — Judgment, precision force.</p>\n<p><strong>Aligned methods:</strong> violence, siege. <strong>Misaligned (causes Corruption):</strong> softpower, diplomacy, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Geburah — Judgment, precision force.</p>\n<p><strong>Aligned methods:</strong> violence, siege. <strong>Misaligned (causes Corruption):</strong> softpower, diplomacy, nonlethal.</p>",
           "chat": ""
         },
         "type": {
@@ -1470,16 +1490,17 @@
           "denomination": "gp"
         },
         "rarity": "rare",
-        "identifier": "spark_gevurah_vestigial"
+        "identifier": "spark_geburah_vestigial"
       },
       "effects": [],
       "flags": {
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
-          "identifier": "spark_gevurah_vestigial",
+          "identifier": "spark_geburah_vestigial",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
-            "sephirah": "gevurah",
+            "sephirah": "geburah",
             "kind": "vestigial",
             "alignedMethods": [
               "violence",
@@ -1501,7 +1522,7 @@
             },
             "source": "BBTTCC Tikkun v1.0",
             "tags": [
-              "gevurah",
+              "geburah",
               "vestigial",
               "spark"
             ]
@@ -1511,8 +1532,8 @@
           "rfi": {
             "id": "mySICMMec6AgoeWY",
             "pack": "sparks",
-            "identifier": "spark_gevurah_vestigial",
-            "hash": "dacb207c7468"
+            "identifier": "spark_geburah_vestigial",
+            "hash": "283ebe045659"
           }
         }
       }
@@ -1525,7 +1546,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Binah — Boundaries, law.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, logistics. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Binah — Boundaries, law.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, logistics. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>",
           "chat": ""
         },
         "type": {
@@ -1549,6 +1570,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_binah_animate",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "binah",
@@ -1584,7 +1606,7 @@
             "id": "IuUmQUYUCkI6K6aw",
             "pack": "sparks",
             "identifier": "spark_binah_animate",
-            "hash": "c997e5da083e"
+            "hash": "2dc3c8242450"
           }
         }
       }
@@ -1597,7 +1619,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Binah — Boundaries, law.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, logistics. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Binah — Boundaries, law.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, logistics. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>",
           "chat": ""
         },
         "type": {
@@ -1621,6 +1643,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_binah_conceptual",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "binah",
@@ -1656,7 +1679,7 @@
             "id": "gKWSeQG484CoqsEo",
             "pack": "sparks",
             "identifier": "spark_binah_conceptual",
-            "hash": "5d603f464eec"
+            "hash": "454df0146379"
           }
         }
       }
@@ -1669,7 +1692,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Binah — Boundaries, law.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, logistics. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Binah — Boundaries, law.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, logistics. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>",
           "chat": ""
         },
         "type": {
@@ -1693,6 +1716,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_binah_vestigial",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "binah",
@@ -1728,7 +1752,7 @@
             "id": "wgQwuk2qq0CU0Gus",
             "pack": "sparks",
             "identifier": "spark_binah_vestigial",
-            "hash": "9b18aed8d0ac"
+            "hash": "e33003466a60"
           }
         }
       }
@@ -1741,7 +1765,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Keter — Unity / nondual force.</p>\n<p><strong>Aligned methods:</strong> faith, soul, diplomacy. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Keter — Unity / nondual force.</p>\n<p><strong>Aligned methods:</strong> faith, soul, diplomacy. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>",
           "chat": ""
         },
         "type": {
@@ -1765,6 +1789,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_keter_animate",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "keter",
@@ -1800,7 +1825,7 @@
             "id": "s4aQg6KQWaMco6aQ",
             "pack": "sparks",
             "identifier": "spark_keter_animate",
-            "hash": "add7f07b2091"
+            "hash": "722c418ef60e"
           }
         }
       }
@@ -1813,7 +1838,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Keter — Unity / nondual force.</p>\n<p><strong>Aligned methods:</strong> faith, soul, diplomacy. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Keter — Unity / nondual force.</p>\n<p><strong>Aligned methods:</strong> faith, soul, diplomacy. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>",
           "chat": ""
         },
         "type": {
@@ -1837,6 +1862,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_keter_conceptual",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "keter",
@@ -1872,7 +1898,7 @@
             "id": "mmYwGeu26Cga2oU4",
             "pack": "sparks",
             "identifier": "spark_keter_conceptual",
-            "hash": "bba1e45d047f"
+            "hash": "584f95509e8a"
           }
         }
       }
@@ -1885,7 +1911,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Keter — Unity / nondual force.</p>\n<p><strong>Aligned methods:</strong> faith, soul, diplomacy. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Keter — Unity / nondual force.</p>\n<p><strong>Aligned methods:</strong> faith, soul, diplomacy. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>",
           "chat": ""
         },
         "type": {
@@ -1909,6 +1935,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_keter_vestigial",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "keter",
@@ -1944,7 +1971,7 @@
             "id": "Ga8cEcoUkmcE6Kog",
             "pack": "sparks",
             "identifier": "spark_keter_vestigial",
-            "hash": "f855b1cb8cf1"
+            "hash": "0be384f26305"
           }
         }
       }
@@ -1957,7 +1984,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Chokmah — Founding insight.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, logistics. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Chokmah — Founding insight.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, logistics. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>",
           "chat": ""
         },
         "type": {
@@ -1981,6 +2008,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_chokmah_animate",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "chokmah",
@@ -2016,7 +2044,7 @@
             "id": "akmawWmkKeeuGIqi",
             "pack": "sparks",
             "identifier": "spark_chokmah_animate",
-            "hash": "63bcaed0a0ef"
+            "hash": "cf53a5de5ef9"
           }
         }
       }
@@ -2029,7 +2057,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Chokmah — Founding insight.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, logistics. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Chokmah — Founding insight.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, logistics. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>",
           "chat": ""
         },
         "type": {
@@ -2053,6 +2081,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_chokmah_conceptual",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "chokmah",
@@ -2088,7 +2117,7 @@
             "id": "aAAEA4YqyyEkia40",
             "pack": "sparks",
             "identifier": "spark_chokmah_conceptual",
-            "hash": "b16757ff7413"
+            "hash": "fc6740cddafc"
           }
         }
       }
@@ -2101,7 +2130,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Chokmah — Founding insight.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, logistics. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Chokmah — Founding insight.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, logistics. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>",
           "chat": ""
         },
         "type": {
@@ -2125,6 +2154,7 @@
         "bbttcc-tikkun": {
           "sparkVersion": "1.0.0",
           "identifier": "spark_chokmah_vestigial",
+          "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration.",
           "spark": {
             "category": "spark",
             "sephirah": "chokmah",
@@ -2160,7 +2190,7 @@
             "id": "qq4I8w6uU6CSSS46",
             "pack": "sparks",
             "identifier": "spark_chokmah_vestigial",
-            "hash": "f10b396fc42f"
+            "hash": "b59998ae7c08"
           }
         }
       }

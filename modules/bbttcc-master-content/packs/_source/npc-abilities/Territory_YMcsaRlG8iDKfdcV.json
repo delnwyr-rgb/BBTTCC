@@ -1,0 +1,81 @@
+{
+  "name": "Territory",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "wild",
+      "geometric"
+    ],
+    "description": {
+      "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: reroll the lowest die on attack rolls against any creature within 1 square of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attack",
+            "if": {
+              "firstRound": true
+            },
+            "do": {
+              "reroll": "attack"
+            },
+            "limit": {
+              "per": "combat",
+              "uses": 1
+            },
+            "label": "Territory — the first strike rerolls the lowest"
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "wild"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Jommetry Serpent"
+        ],
+        "sourceIds": [
+          "xCHciB6b5HEF5926"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "YMcsaRlG8iDKfdcV",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069975,
+    "modifiedTime": 1792989070052,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!YMcsaRlG8iDKfdcV"
+}

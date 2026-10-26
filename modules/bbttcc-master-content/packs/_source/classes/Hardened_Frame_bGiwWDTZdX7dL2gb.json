@@ -54,12 +54,12 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "systemVersion": "0.6.37",
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "createdTime": 1776459996552,
-        "modifiedTime": 1777346199138
+        "modifiedTime": 1792906831679
       },
       "_id": "p8B8XYlk33Empiiu",
       "type": "base",
@@ -72,8 +72,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "changes": null
+      "folder": null
     }
   ],
   "folder": "qdqMhHfZdVgUs1gN",
@@ -88,12 +87,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776459996552,
-    "modifiedTime": 1781116168728,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907935135,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

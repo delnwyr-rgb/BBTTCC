@@ -1,0 +1,147 @@
+{
+  "name": "Total Compliance (1/scene)",
+  "type": "weapon",
+  "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "mind",
+    "skill": "channel",
+    "damage": {
+      "formula": "4d8",
+      "attribute": "mind",
+      "type": "electrical",
+      "damageFlavor": "stage three",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 6,
+      "long": 18
+    },
+    "tags": [
+      "bestiary",
+      "tier-iii",
+      "lineage-pre-fall",
+      "boss",
+      "ultimate"
+    ],
+    "effect": "Sphere 6 squares. — targets roll vs Resolve (DC 16). Half damage on success. ULTIMATE — usable only at or below half Integrity. On a failed save the target is Compelled for 1 round: kneel, hands visible, await processing.",
+    "flavor": "Stage three is final.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "compelled"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 16,
+        "saveAttributeOverrides": {}
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 16,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "sphere",
+        "size": 30
+      }
+    },
+    "description": {
+      "value": "<p><strong>Area Attack.</strong> Each creature within 6 squares. rolls vs DC 16. Damage: <code>4d8</code> electrical (stage three). ULTIMATE — usable only at or below half Integrity. On a failed save the target is Compelled for 1 round: kneel, hands visible, await processing.</p><p><em>Stage three is final.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "frame": "save",
+          "aoeShape": "sphere",
+          "aoeSize": 30,
+          "dc": 16,
+          "price": {
+            "marks": 450,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII save × 1",
+            "bound": "free",
+            "saleBack": 180
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Compliance Engine PRIME"
+        ],
+        "sourceIds": [
+          "qDuH7PdGNGGqeChb"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "ytgTB5z9IGGeHEAj",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069980,
+    "modifiedTime": 1792989070055,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ytgTB5z9IGGeHEAj"
+}

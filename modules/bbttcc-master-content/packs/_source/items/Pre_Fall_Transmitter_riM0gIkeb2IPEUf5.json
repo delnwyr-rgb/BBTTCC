@@ -9,8 +9,9 @@
     ],
     "category": "gear",
     "source": "Phase 7 Seed (2026-05-10)",
+    "quantity": 1,
     "description": {
-      "value": "<p>A relic-grade transmitter. Encrypts faction-wide comms across an entire hex; pre-Fall pattern, Witness-shielded against detection.</p>",
+      "value": "<p>A relic-grade transmitter. Encrypts Domain-wide comms across an entire hex; pre-Fall pattern, Witness-shielded against detection.</p>",
       "chat": ""
     }
   },
@@ -68,11 +69,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778963348889,
-    "modifiedTime": 1778963348889,
+    "modifiedTime": 1792977662827,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "exportSource": null,
     "compendiumSource": null,

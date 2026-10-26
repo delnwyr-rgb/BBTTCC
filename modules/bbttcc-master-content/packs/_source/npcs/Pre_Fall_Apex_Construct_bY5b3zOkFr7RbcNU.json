@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 105,
-        "max": 105
+        "max": 105,
+        "temp": 0
       },
       "stress": {
         "value": 52,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -139,11 +141,13 @@
     "defenses": {
       "resistances": [
         "kinetic",
-        "radiant",
+        "sephirotic",
         "psychic"
       ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "chemical"
+      ]
     },
     "conditionImmunities": [
       "charmed",
@@ -153,6 +157,9 @@
       "prone"
     ],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -165,6 +172,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "A relic war-machine from before the Fall, somehow still under power."
     }
   },
   "flags": {
@@ -205,16 +216,19 @@
             ]
           },
           "price": {
-            "marks": 20250,
-            "bounty": 20250,
-            "hire": 50625,
-            "ransom": 33750,
+            "marks": 80,
+            "bounty": 80,
+            "hire": 120,
+            "ransom": 120,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "TIV heavy hardened (bestiary) \u2014 bounty 20250 / hire 50625 / ransom 33750 marks (paid in intrigue)"
-          }
+            "notes": "TIV heavy pre-fall — bounty 80 / hire 120 marks; credited to the pool matching the method (default intrigue)"
+          },
+          "lineage": "pre-fall",
+          "subLineage": "war-machine"
         }
-      }
+      },
+      "creatureType": "construct"
     }
   },
   "_id": "bY5b3zOkFr7RbcNU",
@@ -359,6 +373,22 @@
               "tier": "IV",
               "frame": "trait"
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attacked",
+                "do": {
+                  "reroll": "attack-highest"
+                },
+                "limit": {
+                  "per": "round",
+                  "uses": 1
+                },
+                "label": "Pre-Fall Diagnostics — targeting solution recalibrates"
+              }
+            ]
           }
         }
       },
@@ -370,17 +400,16 @@
       },
       "_id": "KTK1AN47HnDX8phe",
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.5",
         "createdTime": 1780118720058,
-        "modifiedTime": 1780163239756,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1791422260402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!bY5b3zOkFr7RbcNU.KTK1AN47HnDX8phe"
+      }
     },
     {
       "name": "Sundering Hammer-Limb",
@@ -407,7 +436,7 @@
           "tier-iv",
           "role-hardened"
         ],
-        "effect": "On a hit, the target must succeed on a DC 16 Body save or be knocked prone and pushed 10 ft. away.",
+        "effect": "On a hit, the target must succeed on a DC 16 Body check or be knocked prone and pushed 2 squares. away.",
         "flavor": "The arm articulates wrong. The impact arrives at three places at once.",
         "manifestation": {
           "tier": 1,
@@ -438,6 +467,19 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "body",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 16,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "prone"
+            ],
+            "duration": "1-round"
           }
         },
         "description": {
@@ -459,11 +501,25 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack \u00d7 1",
+                "notes": "TIV attack × 1",
                 "bound": "free",
                 "saleBack": 540
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Sundering Hammer-Limb"
+                },
+                "do": {
+                  "push": 2
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -652,17 +708,16 @@
       },
       "_id": "1tVdNNqAzY3Xaz8D",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118720058,
-        "modifiedTime": 1782167243736,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989129111,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!bY5b3zOkFr7RbcNU.1tVdNNqAzY3Xaz8D"
+      }
     },
     {
       "name": "Pre-Fall Lance Battery",
@@ -675,7 +730,7 @@
         "damage": {
           "formula": "2d12",
           "attribute": "violence",
-          "type": "energy",
+          "type": "electrical",
           "damageFlavor": "lance-arc",
           "track": "integrity"
         },
@@ -689,7 +744,7 @@
           "tier-iv",
           "role-hardened"
         ],
-        "effect": "Ignores cover that is less than 1 ft. of solid alloy (it sees through and shoots through).",
+        "effect": "Ignores cover that is less than a hand's width of solid alloy (it sees through and shoots through).",
         "flavor": "A single still-charged capacitor lets go. The line briefly tastes of ozone and a forgotten language.",
         "manifestation": {
           "tier": 1,
@@ -723,7 +778,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> range 6/24 squares, one target. Damage: <code>2d12</code> electrical (lance-arc) + violence. Ignores cover that is less than 1 square of solid alloy (it sees through and shoots through).</p><p><em>A single still-charged capacitor lets go. The line briefly tastes of ozone and a forgotten language.</em></p>",
+          "value": "<p><strong>Strike.</strong> range 6/24 squares, one target. Damage: <code>2d12</code> electrical (lance-arc) + violence. Ignores cover that is less than a hand's width of solid alloy (it sees through and shoots through).</p><p><em>A single still-charged capacitor lets go. The line briefly tastes of ozone and a forgotten language.</em></p>",
           "chat": ""
         }
       },
@@ -741,7 +796,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack \u00d7 1",
+                "notes": "TIV attack × 1",
                 "bound": "free",
                 "saleBack": 540
               }
@@ -934,20 +989,19 @@
       },
       "_id": "5wohw1RGArmku7yK",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118720058,
-        "modifiedTime": 1782167283492,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989129112,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!bY5b3zOkFr7RbcNU.5wohw1RGArmku7yK"
+      }
     },
     {
-      "name": "Containment Pulse (recharges on a Soma Break)",
+      "name": "Containment Pulse (recharge 5–6)",
       "type": "weapon",
       "img": "icons/magic/sonic/explosion-shock-sound-wave.webp",
       "system": {
@@ -957,7 +1011,7 @@
         "damage": {
           "formula": "2d12",
           "attribute": "violence",
-          "type": "energy",
+          "type": "electrical",
           "damageFlavor": "thunder-pulse",
           "track": "integrity"
         },
@@ -973,7 +1027,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 30 ft. \u2014 targets roll vs Resolve (DC 14). Half damage on success. Failed-save targets are also Stunned until the end of the construct's next turn (containment protocol identifies them as non-cleared personnel). Recharge 5\u20136.",
+        "effect": "Radius 6 squares. — targets roll vs Resolve (DC 14). Half damage on success; on a fail the target is also Staggered. Failed-save targets are also Stunned until the end of the construct's next turn (containment protocol identifies them as non-cleared personnel). At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
         "flavor": "The shell flexes outward once. Something institutional and patient does the deciding.",
         "manifestation": {
           "tier": 1,
@@ -1004,6 +1058,24 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 14,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "staggered"
+            ],
+            "duration": "1-round"
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 30
           }
         },
         "description": {
@@ -1029,16 +1101,24 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV save \u00d7 1",
+                "notes": "TIV save × 1",
                 "bound": "free",
                 "saleBack": 540
               }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
             }
           }
         },
         "autoanimations": {
           "id": "ft-containment-pulse-recharge-5-6-",
-          "label": "Containment Pulse (Recharge 5\u20136)",
+          "label": "Containment Pulse (Recharge 5–6)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -1222,17 +1302,16 @@
       },
       "_id": "5dLVzJ2v0YDp6CYO",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118720058,
-        "modifiedTime": 1782167283492,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989129112,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!bY5b3zOkFr7RbcNU.5dLVzJ2v0YDp6CYO"
+      }
     },
     {
       "name": "Pre-Fall Frame",
@@ -1259,6 +1338,11 @@
               "tier": "IV",
               "frame": "feature"
             }
+          },
+          "grants": {
+            "resistances": [
+              "kinetic"
+            ]
           }
         }
       },
@@ -1270,17 +1354,83 @@
       },
       "_id": "cOHxLgpbVbe2X9f9",
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118720058,
-        "modifiedTime": 1780163239757,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989129112,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
+      }
+    },
+    {
+      "name": "Broken Protocol",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "pre-fall",
+          "war-machine"
+        ],
+        "description": {
+          "value": "<p>Immune to Charmed, Shaken and Compelled. Repeats a single directive (patrol, scan, enforce, greet) until attacked; then runs combat protocol for 3 rounds and returns to the directive if nothing hostile remains in sight. Anyone without pre-Fall credentials is an intruder — that is everyone alive.</p><p><em>It is still patrolling. The patrol route includes the place you are standing.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!bY5b3zOkFr7RbcNU.cOHxLgpbVbe2X9f9"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "do": {
+                  "disposition": {
+                    "set": -1,
+                    "rounds": 3
+                  },
+                  "prompt": "Broken Protocol: combat protocol for 3 rounds, then back to the directive if nothing hostile is in sight."
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                },
+                "label": "Broken Protocol"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "pre-fall"
+            }
+          }
+        }
+      },
+      "_id": "QEN7K6UTAwhtpTJ6",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791342350110,
+        "modifiedTime": 1792989129111,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -1290,12 +1440,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118720058,
-    "modifiedTime": 1783219918011,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989128989,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

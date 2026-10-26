@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 60,
-        "max": 60
+        "max": 60,
+        "temp": 0
       },
       "stress": {
         "value": 30,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,6 +145,9 @@
     },
     "conditionImmunities": [],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -155,6 +160,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "Mid-tier spy commander. Operates from shadows, reports up the Witness chain."
     }
   },
   "flags": {
@@ -190,16 +199,19 @@
             ]
           },
           "price": {
-            "marks": 3240,
-            "bounty": 3240,
-            "hire": 8100,
-            "ransom": 5400,
+            "marks": 30,
+            "bounty": 30,
+            "hire": 45,
+            "ransom": 45,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "TIII medium stealth (bestiary) \u2014 bounty 3240 / hire 8100 / ransom 5400 marks (paid in intrigue)"
-          }
+            "notes": "TIII medium mortal — bounty 30 / hire 45 marks; credited to the pool matching the method (default intrigue)"
+          },
+          "lineage": "mortal",
+          "subLineage": "witness"
         }
-      }
+      },
+      "creatureType": "humanoid"
     }
   },
   "_id": "5MA3L8ebRzPLhaBP",
@@ -344,6 +356,36 @@
               "tier": "III",
               "frame": "trait"
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "do": {
+                  "bankReroll": {
+                    "context": "attack",
+                    "note": "Reports Up"
+                  }
+                },
+                "radius": 999,
+                "who": "allies"
+              }
+            ]
+          },
+          "passives": {
+            "aura": {
+              "radius": 1056,
+              "who": "allies",
+              "rerolls": [
+                {
+                  "context": "attack",
+                  "mode": "reroll-lowest",
+                  "note": "Reports Up — the lieutenant relays"
+                }
+              ],
+              "note": "Initiate minions cannot be surprised (GM)"
+            }
           }
         }
       },
@@ -355,17 +397,16 @@
       },
       "_id": "MgBM9cn6wQrXK496",
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118774355,
-        "modifiedTime": 1780163238454,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989124630,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!5MA3L8ebRzPLhaBP.MgBM9cn6wQrXK496"
+      }
     },
     {
       "name": "Silenced-Glass",
@@ -392,7 +433,7 @@
           "tier-iii",
           "role-stealth"
         ],
-        "effect": "On a hit, no creature outside 30 ft. of the shot's path hears it. The lieutenant does not have to reveal her position.",
+        "effect": "On a hit, no creature outside 6 squares. of the shot's path hears it. The lieutenant does not have to reveal her position.",
         "flavor": "The bullet exists. The sound of the bullet does not.",
         "manifestation": {
           "tier": 1,
@@ -444,7 +485,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII attack \u00d7 1",
+                "notes": "TIII attack × 1",
                 "bound": "free",
                 "saleBack": 180
               }
@@ -637,17 +678,16 @@
       },
       "_id": "HoAThV8APyTLlPTi",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118774355,
-        "modifiedTime": 1782167242203,
+        "modifiedTime": 1792977753682,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!5MA3L8ebRzPLhaBP.HoAThV8APyTLlPTi"
+      }
     },
     {
       "name": "Commander's Gaze",
@@ -726,11 +766,30 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII attack \u00d7 1",
+                "notes": "TIII attack × 1",
                 "bound": "free",
                 "saleBack": 180
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "do": {
+                  "bankReroll": {
+                    "context": "attack",
+                    "note": "Commander's Gaze — priority target"
+                  }
+                },
+                "who": "allies",
+                "radius": 12,
+                "if": {
+                  "weapon": "Commander's Gaze"
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -919,17 +978,16 @@
       },
       "_id": "kJBSnNHYOvBQBwNW",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118774355,
-        "modifiedTime": 1782167242203,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989124629,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!5MA3L8ebRzPLhaBP.kJBSnNHYOvBQBwNW"
+      }
     },
     {
       "name": "Already Left",
@@ -944,7 +1002,7 @@
           "role-stealth"
         ],
         "description": {
-          "value": "<p><strong>Passive.</strong> If reduced below half Integrity, the lieutenant may use a reaction to vanish into a prepared egress \u2014 leaving combat entirely. Witnesses always have an exit. The exit was prepared before combat began.</p><p><em>Mid-tier commander. The 'mid' means she's high enough to leave.</em></p>",
+          "value": "<p><strong>Passive.</strong> If reduced below half Integrity, the lieutenant may use a reaction to vanish into a prepared egress — leaving combat entirely. Witnesses always have an exit. The exit was prepared before combat began.</p><p><em>Mid-tier commander. The 'mid' means she's high enough to leave.</em></p>",
           "chat": ""
         }
       },
@@ -956,6 +1014,18 @@
               "tier": "III",
               "frame": "feature"
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "bloodied",
+                "do": {
+                  "vanish": true,
+                  "prompt": "Already Left: a prepared exit — the lieutenant is gone."
+                }
+              }
+            ]
           }
         }
       },
@@ -967,17 +1037,16 @@
       },
       "_id": "jwOInpEbVFjVDQml",
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118774355,
-        "modifiedTime": 1780163238455,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989124630,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!5MA3L8ebRzPLhaBP.jwOInpEbVFjVDQml"
+      }
     }
   ],
   "effects": [],
@@ -987,12 +1056,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118774355,
-    "modifiedTime": 1783219938151,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989124464,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

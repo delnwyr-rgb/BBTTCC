@@ -1,0 +1,141 @@
+{
+  "name": "Hollow Touch",
+  "type": "weapon",
+  "img": "icons/magic/death/hand-dirt-undead-zombie.webp",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "melee",
+    "damage": {
+      "formula": "2d10",
+      "attribute": "violence",
+      "type": "qliphothic",
+      "damageFlavor": "the heat of being wronged",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1
+    },
+    "tags": [
+      "bestiary",
+      "tier-iv",
+      "lineage-qliphothic"
+    ],
+    "effect": "Damage goes to Stress. On a hit, Soul DC 15 or the target is Compelled toward the Shell's vice for 1 round: it strikes the nearest creature.",
+    "flavor": "It is not a touch. It is an accusation.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "compelled"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 15,
+        "saveAttributeOverrides": {}
+      },
+      "resolution": {
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 15,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "none",
+        "size": 0
+      }
+    },
+    "description": {
+      "value": "<p><strong>Strike.</strong> reach 1 square, one target. Damage: <code>2d10</code> qliphothic (the heat of being wronged) + violence. Damage goes to Stress. On a hit, Soul DC 15 or the target is Compelled toward the Shell's vice for 1 round: it strikes the nearest creature.</p><p><em>It is not a touch. It is an accusation.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "attack",
+          "price": {
+            "marks": 1350,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV attack × 1",
+            "bound": "free",
+            "saleBack": 540
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Golachab Immolator"
+        ],
+        "sourceIds": [
+          "kpkoeR7Tedyvqs4c"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "bRCs8V5tX3yhBb1y",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069942,
+    "modifiedTime": 1792989070024,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!bRCs8V5tX3yhBb1y"
+}

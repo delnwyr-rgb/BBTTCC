@@ -8,7 +8,7 @@
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p><strong>The Understudy's Grudge.</strong> Every favored courtier stands on someone who wanted that spot. That someone remembers. That someone has a price, and it is mostly spite.</p><p><em>Play:</em> Flip a courtier: −1 favor toward your opponent, +1 toward you.</p>",
+      "value": "<p><strong>The Understudy's Grudge.</strong> Every favored courtier stands on someone who wanted that spot. That someone remembers. That someone has a price, and it is mostly spite.</p><p><em>Play:</em> Flip a courtier: −1 Favor toward your opponent, +1 toward you.</p>",
       "chat": "",
       "unidentified": ""
     }
@@ -30,11 +30,11 @@
     "default": 0
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780000000000,
-    "modifiedTime": 1784079176429,
+    "modifiedTime": 1792977748862,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

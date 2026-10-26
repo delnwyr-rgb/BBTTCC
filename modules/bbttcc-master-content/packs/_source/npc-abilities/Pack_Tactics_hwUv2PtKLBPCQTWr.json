@@ -38,7 +38,6 @@
       "subtype": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -46,36 +45,63 @@
           "tier": "I",
           "frame": "trait"
         }
-      }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attack",
+            "if": {
+              "allyAdjacentToTarget": true
+            },
+            "do": {
+              "reroll": "attack"
+            }
+          }
+        ]
+      },
+      "rerolls": [
+        {
+          "context": "attack",
+          "mode": "reroll-lowest",
+          "when": "allyAdjacentToTarget",
+          "note": "Pack Tactics — an ally within 1 square of the target"
+        }
+      ]
     },
     "bbttcc": {
       "npcAbility": {
         "sources": [
           "Ash Wolf"
         ],
+        "sourceIds": [
+          "GZeM7IAl471weU8b"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "hwUv2PtKLBPCQTWr",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167245006,
-    "modifiedTime": 1782167245006,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989034641,
+    "modifiedTime": 1792989034641,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!hwUv2PtKLBPCQTWr"
 }

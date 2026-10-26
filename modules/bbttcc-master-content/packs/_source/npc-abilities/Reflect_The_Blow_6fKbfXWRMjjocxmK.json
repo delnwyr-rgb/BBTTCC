@@ -7,11 +7,11 @@
     "intent": "mind",
     "skill": "channel",
     "damage": {
-      "formula": "2d8",
+      "formula": "2d6",
       "attribute": "mind",
       "type": "qliphothic",
       "damageFlavor": "your own swing, returned with interest",
-      "track": "integrity"
+      "track": "stress"
     },
     "damageParts": [],
     "range": {
@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -84,16 +83,24 @@
             "saleBack": 60
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Please-Stop-Hitting-Yourself (Qliphothic Loop)"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "struck",
+            "do": {
+              "save": {
+                "attr": "mind",
+                "dc": 15,
+                "onSave": "negate"
+              },
+              "damage": {
+                "formula": "2d8",
+                "type": "qliphothic"
+              }
+            }
+          }
         ]
       }
     },
@@ -273,20 +280,37 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Please-Stop-Hitting-Yourself (Qliphothic Loop)"
+        ],
+        "sourceIds": [
+          "ipexaGZlhurZKpc3"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
   "_id": "6fKbfXWRMjjocxmK",
   "sort": 0,
+  "folder": null,
   "ownership": {
-    "default": 0
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
-    "createdTime": 1780000000000,
-    "modifiedTime": 1780000000000,
-    "lastModifiedBy": "ftSprintBuilder0",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989040795,
+    "modifiedTime": 1792989040795,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

@@ -7,7 +7,7 @@
     "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-human=\"v1\" style=\"display:none\"></div><p><em>\"The first thing worth defending was a circle of people who had decided, against all sense, to defend each other.\"</em></p><p><strong>Coalition Tongue (1/Soma Break).</strong> Bonus action — choose one ally within 6 squares who can hear and understand you. Their next attack roll, skill check, or defense check before the start of your next turn is made at +1 rank (max rank 5). Name the thing you said, even if it was wordless.</p><p><strong>Symbolic Memory (passive).</strong> After spending 10 minutes in any inhabited or formerly-inhabited space, ask the GM one of: <em>Who lived here? · What did they fear? · What did they leave?</em> The answer is at least one truth, even if the GM colours it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"humCroMagnonCoalitionTongue\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Coalition Tongue + Symbolic Memory</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break + always-on passive  ·  <strong>Action:</strong> Picker (Coalition Tongue · Symbolic Memory)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Bonus-action ally bump (+1 rank to next roll, max 5) and 10-min space-reading GM-info passive.</span></p></div>",
+      "value": "<p><em>\"The first thing worth defending was a circle of people who had decided, against all sense, to defend each other.\"</em></p><p><strong>Coalition Tongue (1/Soma Break).</strong> Bonus action — choose one ally within 6 squares who can hear and understand you. Their next attack roll, skill check, or defense check before the start of your next turn is made at +1 rank (max rank 5). Name the thing you said, even if it was wordless.</p><p><strong>Symbolic Memory (passive).</strong> After spending 10 minutes in any inhabited or formerly-inhabited space, ask the GM one of: <em>Who lived here? · What did they fear? · What did they leave?</em> The answer is at least one truth, even if the GM colours it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"humCroMagnonCoalitionTongue\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Coalition Tongue + Symbolic Memory</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break + always-on passive  ·  <strong>Action:</strong> Picker (Coalition Tongue · Symbolic Memory)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Bonus-action ally bump (+1 rank to next roll, max 5) and 10-min space-reading GM-info passive.</span></p></div>",
       "chat": ""
     },
     "advancement": {},
@@ -16,7 +16,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -33,14 +33,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "human",
       "feature": "coalition_tongue",
       "lineage": "Cro-Magnon",
-      "tierLevel": 1,
       "version": "1.1.0",
       "date": "2026-04-19",
       "rfiNative": true
@@ -235,12 +231,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776660294512,
-    "modifiedTime": 1782167240138,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988986961,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

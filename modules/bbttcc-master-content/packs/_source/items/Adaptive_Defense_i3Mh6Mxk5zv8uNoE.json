@@ -39,7 +39,6 @@
       "pack": "bbttcc-feats-core-v1",
       "generatedAt": "2026-01-18T18:59:59.544766+00:00"
     },
-    "fourththing": {},
     "autoanimations": {
       "id": "ft-adaptive-defense",
       "label": "Adaptive Defense",
@@ -228,11 +227,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.1",
     "createdTime": 1768802465828,
-    "modifiedTime": 1781116209832,
+    "modifiedTime": 1790037794741,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!i3Mh6Mxk5zv8uNoE"

@@ -1,121 +1,78 @@
 {
+  "_id": "HNDyhtTOQhhrt2xE",
   "name": "War Tower Teeth Halo",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/sundries/flags/banner-sword-blue.webp",
   "system": {
-    "description": {
-      "value": "<p>Vehicle upgrade: reactive radiant bite (2d8) vs attackers; stacks with sanctum shields.</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [
+      "rig-module"
+    ],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 30,
-      "units": "lb"
-    },
-    "price": {
-      "value": 7000,
-      "denomination": "gp"
-    },
-    "rarity": "veryRare",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "trinket",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "war-tower-teeth-halo",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>A ring of serrated emitters around a war tower's crown. Anything that bites the tower gets bitten back.</p><p><b>Reactive Bite.</b> When a creature or rig strikes the mounted rig in melee, it takes 2d8 electrical. Stacks with sanctum shields.</p>",
+      "chat": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": []
-    },
-    "rfi": {
-      "item": {
-        "tier": "II",
-        "footprint": 1,
-        "reach": "self",
-        "frame": "armor",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "scene"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
-    },
     "fourththing": {
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
-            "currency": "economy",
+            "marks": 540,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 3,
+            "notes": "TII talisman × rarity 3",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 216
           },
           "tier": "II",
-          "frame": "armor",
+          "frame": "talisman",
           "origin": "looted",
           "bound": "free",
           "reach": "self",
-          "footprint": 1
+          "footprint": 1,
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A ring of serrated emitters around a war tower's crown. Anything that bites the tower gets bitten back.</p><p><b>Reactive Bite.</b> When a creature or rig strikes the mounted rig in melee, it takes 2d8 electrical. Stacks with sanctum shields.</p>"
         }
+      },
+      "rigGear": {
+        "subtype": "rig-system",
+        "passive": true
       }
     }
   },
   "effects": [],
-  "folder": "TNrB6kEiHS0KwwJT",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834211942,
-    "modifiedTime": 1782159994982,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "folder": "0JDB983lzPepXXNe",
+  "sort": 2500000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "HNDyhtTOQhhrt2xE",
-  "sort": 2500000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988918907,
+    "modifiedTime": 1792988918908,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!HNDyhtTOQhhrt2xE"
 }

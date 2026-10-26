@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +79,25 @@
             "saleBack": 540
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Witness Apotheon"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Terminal Observation"
+            },
+            "do": {
+              "prompt": "Terminal Observation: target loses remaining once-per resources (only if hit before)."
+            },
+            "narrative": true
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "ac7f5be6-57f7-4b75-833c-a5e1dc8a9c80",
+      "id": "ft-terminal-observation",
       "label": "Terminal Observation",
       "macro": {
         "enable": false,
@@ -269,24 +272,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Witness Apotheon"
+        ],
+        "sourceIds": [
+          "le5vxgOyNRqbVnbo"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "JsCr5RZR8cZDQ8J4",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024229389,
-    "modifiedTime": 1782167244993,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989048463,
+    "modifiedTime": 1792989048464,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!JsCr5RZR8cZDQ8J4"
 }

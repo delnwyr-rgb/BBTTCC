@@ -7,6 +7,7 @@
     "tags": [],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>A two-seat scrambler with bald tires, an angry engine, and a single hardpoint that wishes it were a cannon. Built for the run, not the fight.</p><p><b>Frame · Light · Mobile</b></p>",
       "chat": ""
@@ -74,7 +75,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TI vehicle stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 100
@@ -94,11 +95,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.16",
     "createdTime": 1778205373536,
-    "modifiedTime": 1778963271956,
+    "modifiedTime": 1791865101703,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

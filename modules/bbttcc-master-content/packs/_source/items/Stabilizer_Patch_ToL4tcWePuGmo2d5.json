@@ -1,98 +1,33 @@
 {
+  "_id": "ToL4tcWePuGmo2d5",
   "name": "Stabilizer Patch",
-  "type": "consumable",
+  "type": "gear",
   "img": "icons/tools/medical/bandage-rough.webp",
   "system": {
-    "description": {
-      "value": "<p>Adhesive med patch. Bonus Action: remove 1 level of Stress from environmental travel once per day.</p>",
-      "chat": ""
-    },
-    "rarity": "common",
-    "price": {
-      "value": 20,
-      "denomination": "gp"
-    },
-    "type": {
-      "value": "potion",
-      "subtype": ""
-    },
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "autoDestroy": false,
-      "max": ""
-    },
-    "identifier": "stabilizer-patch",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "identified": true,
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 0,
-      "units": "lb"
-    },
-    "attunement": "",
-    "attuned": false,
-    "equipped": false,
-    "damage": {
-      "base": {
-        "types": [],
-        "custom": {
-          "enabled": false
-        },
-        "scaling": {
-          "number": 1
-        }
-      },
-      "replace": false
-    },
-    "properties": []
+    "description": {
+      "value": "<p>Adhesive med patch. Bonus Action: remove 1 level of Stress from environmental travel once per Soma Break.</p>",
+      "chat": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": []
-    },
-    "rfi": {
-      "item": {
-        "tier": "I",
-        "footprint": 0,
-        "reach": "self",
-        "frame": "consumable",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "none"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
-    },
     "fourththing": {
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
+            "marks": 10,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "notes": "TI consumable",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 4
           },
           "tier": "I",
           "frame": "consumable",
@@ -100,33 +35,50 @@
           "bound": "free",
           "reach": "self",
           "footprint": 0,
-          "legacySystem": {
-            "description": {
-              "value": "<p>Adhesive med patch. Bonus Action: remove 1 level of Stress from environmental travel once per Soma Break.</p>"
-            }
-          }
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "consume": {
+            "effects": [
+              {
+                "kind": "track",
+                "track": "stress",
+                "op": "add",
+                "delta": 1
+              }
+            ],
+            "decrement": true,
+            "target": "self"
+          },
+          "charges": 1
         }
       }
     }
   },
   "effects": [],
   "folder": "TNrB6kEiHS0KwwJT",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834204855,
-    "modifiedTime": 1782164185976,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1900000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "ToL4tcWePuGmo2d5",
-  "sort": 1900000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988916760,
+    "modifiedTime": 1792988916760,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!ToL4tcWePuGmo2d5"
 }

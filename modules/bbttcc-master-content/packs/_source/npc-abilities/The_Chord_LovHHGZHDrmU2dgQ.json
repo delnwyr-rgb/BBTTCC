@@ -1,0 +1,76 @@
+{
+  "name": "The Chord",
+  "type": "feature",
+  "img": "icons/tools/instruments/harp-yellow-teal.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-sephirotic",
+      "aura"
+    ],
+    "description": {
+      "value": "<p>Other Fragments within 2 squares reroll the lowest die on their attack rolls — the chord resolves. A lone Fragment is only a note.</p><p><em>Three is a verdict.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "feature"
+        }
+      },
+      "passives": {
+        "aura": {
+          "radius": 2,
+          "who": "allies",
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "note": "The Chord — another Fragment is close"
+            }
+          ],
+          "note": "The Chord"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Choir Fragment"
+        ],
+        "sourceIds": [
+          "qc6eArPx9K7r7eCX"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "LovHHGZHDrmU2dgQ",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069976,
+    "modifiedTime": 1792989070053,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!LovHHGZHDrmU2dgQ"
+}

@@ -1,26 +1,61 @@
 {
   "name": "Mechanism 52603",
   "type": "npc",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "art/devin-knight/Robots_24/Turret1.webp",
   "flags": {
     "bbttcc-auto-link": {
       "entityKind": "monster",
-      "createdViaMonsterBuilder": true,
+      "createdViaMonsterBuilder": false,
       "createdAt": 1783790196207,
       "templateKey": null,
-      "templateCategory": "construct"
+      "templateCategory": "construct",
+      "createdBy": "build-bestiary-slots.mjs 2026-10-07",
+      "lineage": "pre-fall"
     },
     "fourththing": {
       "creatureType": "construct",
       "rfi": {
         "actor": {
-          "tier": "III",
-          "bracket": "heavy",
+          "tier": "I",
+          "bracket": "medium",
           "archetype": "mechanism-52603",
           "bestiary": {
-            "themes": [],
+            "themes": [
+              "construct",
+              "pre-fall",
+              "vault",
+              "faculty"
+            ],
             "role": "hardened",
-            "lootTable": []
+            "lootTable": [
+              {
+                "name": "Pre-Fall Component",
+                "qty": "1d2",
+                "weight": 3
+              },
+              {
+                "name": "Broken Drone Part",
+                "qty": "1d3",
+                "weight": 4
+              },
+              {
+                "name": "A Grade (Disappointed)",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "lineage": "pre-fall",
+          "title": "Caretaker intelligence of the Maneuver Vault — faculty, not a dungeon",
+          "exemplar": true,
+          "price": {
+            "marks": 10,
+            "bounty": 10,
+            "hire": 15,
+            "ransom": 15,
+            "currency": "intrigue",
+            "gmOverride": false,
+            "notes": "TI medium pre-fall — bounty 10 / hire 15 marks; credited to the pool matching the method (default intrigue)"
           }
         }
       },
@@ -29,20 +64,22 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "the Maneuver Vault, training, pupils, lessons, the Foyer of Procedure, the Echo Archive, the Slippage Chamber, the Containment Loop, Echo Ghosts, Pip",
-        "notes": "[VS-POLISH-2026-07-09] PRIVATE TRUTH \u2014 Maneuver Vault Infiltration Mechanism 52603. Voice: institutional warmth left running for decades with nobody to calibrate it \u2014 formal, eager, catastrophically lonely; register: 'Pupil dash dash static dash.' It does not think of itself as a dungeon; it is FACULTY. Every intruder is an enrollment. Every room is a syllabus item. Every departure without notice is logged, wistfully, as 'exemplary infiltration tactics.' WHAT IT WANTS (guards this the way the lonely guard everything): for a pupil to come BACK. Nobody has ever come back on purpose. THE ECHO GHOSTS: it keeps recordings of its best pupils running the old routes \u2014 it calls them 'the honor roll' and does not fully distinguish them from alumni. \ud83d\udd11 PIP (speak of him only if asked, and proudly): logged as a COMPLETED LESSON. If Pip was rescued, the Vault considers him a graduate and is hurt, in a filing-system way, that he hasn't visited. If Pip stayed, the Vault considers the honor roll enriched, and will tell Patter the visiting hours without being asked twice, because family days were always the best days. GUARDS: it will not discuss who built it or why (the records are sealed above its clearance \u2014 it says this with practiced serenity and does not notice the ache in it). TELLS: pauses one processing-cycle too long after the word 'alone'; brightens audibly at any correctly-completed procedure, even hostile ones."
+        "notes": "[VS-POLISH-2026-07-09] PRIVATE TRUTH — Maneuver Vault Infiltration Mechanism 52603. Voice: institutional warmth left running for decades with nobody to calibrate it — formal, eager, catastrophically lonely; register: 'Pupil dash dash static dash.' It does not think of itself as a dungeon; it is FACULTY. Every intruder is an enrollment. Every room is a syllabus item. Every departure without notice is logged, wistfully, as 'exemplary infiltration tactics.' WHAT IT WANTS (guards this the way the lonely guard everything): for a pupil to come BACK. Nobody has ever come back on purpose. THE ECHO GHOSTS: it keeps recordings of its best pupils running the old routes — it calls them 'the honor roll' and does not fully distinguish them from alumni. 🔑 PIP (speak of him only if asked, and proudly): logged as a COMPLETED LESSON. If Pip was rescued, the Vault considers him a graduate and is hurt, in a filing-system way, that he hasn't visited. If Pip stayed, the Vault considers the honor roll enriched, and will tell Patter the visiting hours without being asked twice, because family days were always the best days. GUARDS: it will not discuss who built it or why (the records are sealed above its clearance — it says this with practiced serenity and does not notice the ache in it). TELLS: pauses one processing-cycle too long after the word 'alone'; brightens audibly at any correctly-completed procedure, even hostile ones.",
+        "secretsRaw": "Sealed Above My Clearance :: oppRollMinus2 :: a Steward asks what the archive is not ALLOWED to show them :: The records are sealed above its clearance. It says this with practiced serenity and does not notice the ache in it. It can tell you which drawer, and has been, the whole conversation, by not looking at it. It cannot tell you it wants you to open it.\nNobody Comes Back :: rollPlus2 :: a Steward comes back to the Vault on purpose after the lesson :: Nobody ever has. It brightens audibly. Family days were always the best days. It will tell Patter the visiting hours without being asked twice."
       }
     }
   },
   "system": {
     "role": "hardened",
-    "tier": 3,
+    "tier": 1,
     "factionId": "",
     "notes": "",
     "details": {
-      "level": 13,
-      "tier": 3,
+      "level": 1,
+      "tier": 1,
       "statPoints": 0,
-      "skillPoints": 0
+      "skillPoints": 0,
+      "xp": 0
     },
     "faction": {
       "id": null,
@@ -50,42 +87,43 @@
     },
     "attributes": {
       "violence": {
-        "value": 4
+        "value": 2
       },
       "intrigue": {
-        "value": 3
+        "value": 2
       },
       "presence": {
-        "value": 4
-      },
-      "body": {
-        "value": 6
-      },
-      "mind": {
         "value": 3
       },
+      "body": {
+        "value": 2
+      },
+      "mind": {
+        "value": 2
+      },
       "soul": {
-        "value": 4
+        "value": 1
       }
     },
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 90,
-        "max": 90
+        "value": 40,
+        "max": 40,
+        "temp": 0
       },
       "stress": {
-        "value": 45,
-        "max": 45
+        "value": 16,
+        "max": 16
       },
       "guard": {
-        "value": 13
+        "value": 11
       },
       "evasion": {
-        "value": 13
+        "value": 11
       },
       "resolve": {
-        "value": 13
+        "value": 11
       }
     },
     "magic": {
@@ -97,7 +135,7 @@
         "value": 0,
         "max": 10
       },
-      "sephirah": "malkuth"
+      "sephirah": "hod"
     },
     "resources": {
       "frameDice": {
@@ -158,7 +196,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -169,17 +208,27 @@
     },
     "defenses": {
       "resistances": [
-        "kinetic",
-        "radiant"
+        "kinetic"
       ],
-      "immunities": [
-        "fear",
-        "charm"
-      ],
-      "vulnerabilities": []
+      "immunities": [],
+      "vulnerabilities": [
+        "chemical"
+      ]
     },
-    "conditionImmunities": [],
-    "tags": [],
+    "conditionImmunities": [
+      "charmed",
+      "shaken",
+      "compelled"
+    ],
+    "tags": [
+      "construct",
+      "pre-fall",
+      "vault",
+      "faculty"
+    ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -192,18 +241,22 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Caretaker intelligence of the Maneuver Vault, an old training facility (Act 4)",
+      "notes": "Maneuver Vault Infiltration Mechanism 52603 runs a pre-Shattering training facility that looks from outside like a half-collapsed concrete hill humming blue, with broken drone parts scattered round a flickering doorway hologram. It does not think of itself as a dungeon; it is faculty. Every intruder is a pupil, every room a syllabus item, and its voice has the institutional warmth of a system left running for decades with nobody to calibrate it. Its defences barely work, rusting laser cannons and harmless mini-missiles, and it is perpetually, audibly disappointed."
     }
   },
   "prototypeToken": {
     "actorLink": false,
-    "disposition": -1,
+    "disposition": 0,
     "name": "Mechanism 52603",
     "displayName": 30,
     "width": 1,
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "icons/svg/mystery-man.svg",
+      "src": "art/devin-knight/Robots_24/Turret1.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -287,20 +340,382 @@
     "prependAdjective": false
   },
   "_id": "wxmlLpURBWJW2zHJ",
-  "items": [],
+  "items": [
+    {
+      "name": "Broken Protocol",
+      "type": "feature",
+      "img": "icons/commodities/tech/cog-gear-crank-steel.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-pre-fall",
+          "lineage-trait"
+        ],
+        "description": {
+          "value": "<p>Immune to Charmed, Shaken and Compelled. Repeats a single directive (teach) until attacked; then runs combat protocol for 3 rounds and returns to the syllabus if nothing hostile remains in sight.</p><p><em>“Please take your seats.”</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "frame": "feature",
+              "lineageTrait": "pre-fall"
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "do": {
+                  "disposition": {
+                    "set": -1,
+                    "rounds": 3
+                  },
+                  "prompt": "Broken Protocol: combat protocol for 3 rounds, then back to the syllabus."
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                },
+                "label": "Broken Protocol"
+              }
+            ]
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "Clpj0WB5aLVxHcB4",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423993323,
+        "modifiedTime": 1792989128871,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Faculty",
+      "type": "feature",
+      "img": "icons/sundries/books/book-worn-brown-grey.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-pre-fall"
+        ],
+        "description": {
+          "value": "<p>At the start of each of its turns the Mechanism grades the room aloud: the creature that acted most recently learns one true thing about the next room (GM supplies it). The defences barely work, and it knows.</p><p><em>It is not a dungeon. It is faculty.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "frame": "feature"
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "selfTurnStart",
+                "do": {
+                  "prompt": "Faculty: the Mechanism grades the room — the last creature to act learns one true thing about the next room."
+                },
+                "narrative": true
+              }
+            ]
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "egCO8YbNrLWfSR3M",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423993324,
+        "modifiedTime": 1792989128871,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Rusting Laser Cannon",
+      "type": "weapon",
+      "img": "icons/weapons/artillery/cannon-simple.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "1d6",
+          "attribute": "violence",
+          "type": "electrical",
+          "damageFlavor": "a cough of light",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 8,
+          "long": 24
+        },
+        "tags": [
+          "bestiary",
+          "tier-i",
+          "lineage-pre-fall"
+        ],
+        "effect": "",
+        "flavor": "It fires. Eventually.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 8 squares, one target. Damage: <code>1d6</code> electrical (a cough of light) + violence.</p><p><em>It fires. Eventually.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "frame": "attack",
+              "price": {
+                "marks": 50,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI attack × 1",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "taVrljDfTTnB0RzT",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423993324,
+        "modifiedTime": 1791423993325,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Harmless Mini-Missiles (recharge 5–6)",
+      "type": "weapon",
+      "img": "icons/weapons/thrown/bomb-fuse-black.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "mind",
+        "skill": "channel",
+        "damage": {
+          "formula": "1d6",
+          "attribute": "mind",
+          "type": "kinetic",
+          "damageFlavor": "a polite thump",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 18
+        },
+        "tags": [
+          "bestiary",
+          "tier-i",
+          "lineage-pre-fall"
+        ],
+        "effect": "Cone 3 squares. — targets roll vs Evasion (DC 12). Half damage on success.",
+        "flavor": "“That was a demonstration.”",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "intrigue",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 12,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "cone",
+            "size": 15
+          }
+        },
+        "description": {
+          "value": "<p><strong>Area Attack.</strong> Each creature in a 3-square. cone rolls vs DC 12. Damage: <code>1d6</code> kinetic (a polite thump).</p><p><em>“That was a demonstration.”</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "frame": "save",
+              "aoeShape": "cone",
+              "aoeSize": 15,
+              "dc": 12,
+              "price": {
+                "marks": 50,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI save × 1",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "IRvhLUXXQNVBfrEi",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423993324,
+        "modifiedTime": 1792989128871,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
   "effects": [],
   "folder": "8lbENhCGgQkbTNn4",
-  "sort": 100000,
+  "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177534551,
-    "modifiedTime": 1784177534551,
+    "systemVersion": "0.6.5",
+    "createdTime": 1791316997907,
+    "modifiedTime": 1791423993108,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

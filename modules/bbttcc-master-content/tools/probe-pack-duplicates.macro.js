@@ -9,7 +9,7 @@
 const PACK_ID = "bbttcc-master-content.items";
 const WATCH = [
   "Cloak of Null Profile", "Ego‑Dragon Scale Aegis", "Abacus Gauntlet", "Unicorn Ramming Module",
-  "Neon Spirit Armor", "Veilbreaker Mantle", "Reactor Shield Cape", "Wardstone of Gevurah",
+  "Neon Spirit Armor", "Veilbreaker Mantle", "Reactor Shield Cape", "Wardstone of Geburah",
 ];
 
 (async () => {

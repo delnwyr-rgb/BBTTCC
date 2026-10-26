@@ -15,12 +15,13 @@
       "warding",
       "vestment",
       "ceremonial",
-      "attunement"
+      "attunement",
+      "medium"
     ],
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>Formal warding vestments worn when a Steward swears an oath meant to outlast them. Vow-bone toggles, a hem weighted with witness-glass beads that click once for every promise kept. While the vow stands, no one else's word can move the wearer off it.</p><p><strong>Standing Vow.</strong> Resists qliphothic. The wearer cannot be compelled while attuned.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Defense:</strong> Guard +2, Evasion +1, Resolve +3</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Immune to:</strong> Compelled</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 675 Nonlethal marks</p></li></ul>",
+      "value": "<p>Formal warding vestments worn when a Steward swears an oath meant to outlast them. Vow-bone toggles, a hem weighted with witness-glass beads that click once for every promise kept. While the vow stands, no one else's word can move the wearer off it.</p><p><strong>Standing Vow.</strong> Resists qliphothic. The wearer cannot be compelled while attuned.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Defense:</strong> Guard +2, Evasion +1, Resolve +3</p></li><li><p><strong>Requires:</strong> Bracing (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Immune to:</strong> Compelled</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 675 Nonlethal marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -58,7 +59,7 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TIII armor \u00d7 1.50",
+            "notes": "TIII armor × 1.50",
             "bound": "attuned",
             "saleBack": 270
           }
@@ -85,12 +86,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782150391745,
-    "modifiedTime": 1787335076404,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988955816,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

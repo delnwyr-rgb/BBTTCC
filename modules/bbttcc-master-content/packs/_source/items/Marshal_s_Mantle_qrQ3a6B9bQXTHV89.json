@@ -111,6 +111,15 @@
         ],
         "resists": [],
         "immunes": []
+      },
+      "appliedStates": {
+        "states": [],
+        "duration": "scene",
+        "saveEachRound": false,
+        "saveAttribute": "body",
+        "saveDcMode": "cast-dc",
+        "saveDcFixed": 15,
+        "saveAttributeOverrides": {}
       }
     },
     "description": {
@@ -126,7 +135,7 @@
       }
     },
     "autoanimations": {
-      "id": "cbabd351-17ee-4ac1-ac0b-ddea6656b1f3",
+      "id": "47ad8b3a-af4b-49e6-ad93-7a04d9884965",
       "label": "Marshal's Mantle",
       "levels3d": {
         "type": "explosion",
@@ -155,10 +164,10 @@
       "primary": {
         "video": {
           "dbSection": "static",
-          "menuType": "shieldfx",
-          "animation": "earth",
-          "variant": "01",
-          "color": "darkorange",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "intro",
+          "color": "yellow",
           "enableCustom": false,
           "customPath": ""
         },
@@ -274,13 +283,13 @@
           "fadeIn": 250,
           "fadeOut": 500,
           "isMasked": false,
-          "isRadius": false,
-          "isWait": true,
+          "isRadius": true,
+          "isWait": false,
           "opacity": 1,
           "repeat": 1,
           "repeatDelay": 250,
           "saturate": 0,
-          "size": 1,
+          "size": 1.5,
           "tint": false,
           "tintColor": "#FFFFFF",
           "zIndex": 1
@@ -314,18 +323,19 @@
           "fadeIn": 250,
           "fadeOut": 500,
           "isMasked": false,
-          "isRadius": false,
+          "isRadius": true,
           "opacity": 1,
           "persistent": false,
           "repeat": 1,
           "repeatDelay": 250,
           "saturate": 0,
-          "size": 1,
+          "size": 1.5,
           "tint": false,
           "tintColor": "#FFFFFF",
           "unbindAlpha": false,
           "unbindVisibility": false,
-          "zIndex": 1
+          "zIndex": 1,
+          "isWait": false
         }
       },
       "isEnabled": true,
@@ -343,12 +353,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1788307800971,
-    "modifiedTime": 1788307800971,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792902899123,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

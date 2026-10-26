@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Temperance</strong></p><ul><li><strong>Tactical:</strong> Faith + Insight, Resistance Tier-0 manifestation.</li><li><strong>Strategic:</strong> +2 Logistics OP cap.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Temperance</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Insight.</li><li><strong>Strategic:</strong> Your Domain's Logistics marks cap rises by 20.</li></ul>",
       "chat": ""
     },
     "identifier": "archetype-temperance-t1",
@@ -30,7 +30,7 @@
       "level": null
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Level 1+",
     "type": {
       "value": "",
       "subtype": ""
@@ -54,10 +54,66 @@
       "category": "archetype"
     },
     "fourththing": {
-      "vocabScrub": "2026-05-16"
+      "vocabScrub": "2026-05-16",
+      "domainCapBonus": {
+        "logistics": 20
+      }
     }
   },
-  "effects": [],
+  "effects": [
+    {
+      "_id": "GEvj1Tx0ZVQ8ckiS",
+      "name": "Archetype Tier 1 Proficiencies",
+      "img": "icons/magic/holy/chalice-glowing-gold-water.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.faith.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "system.skills.insight.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989150202,
+        "modifiedTime": 1792989150202,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
   "folder": "oS7yNriqw8Jq5RHo",
   "_stats": {
     "compendiumSource": null,
@@ -69,12 +125,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986658337,
-    "modifiedTime": 1778970590300,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989150111,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

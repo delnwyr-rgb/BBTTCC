@@ -126,20 +126,20 @@
       }
     },
     "autoanimations": {
-      "id": "471bd541-e91f-4ca0-b453-3307bbeb2267",
+      "id": "ad404106-8926-4428-bb70-3a46838825be",
       "label": "Measured Breath Accord",
       "macro": {
         "enable": false,
         "playWhen": "0"
       },
-      "menu": "aura",
+      "menu": "ontoken",
       "primary": {
         "video": {
           "dbSection": "static",
-          "menuType": "magicsign",
-          "animation": "abjuration",
-          "variant": "01",
-          "color": "blue",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "loop",
+          "color": "purple",
           "enableCustom": false,
           "customPath": ""
         },
@@ -170,13 +170,17 @@
           "opacity": 1,
           "playbackRate": 1,
           "playOn": "source",
-          "size": 3,
+          "size": 1,
           "tint": false,
           "tintColor": "#FFFFFF",
           "tintSaturate": 0,
           "unbindAlpha": false,
           "unbindVisibility": false,
-          "zIndex": 1
+          "zIndex": 1,
+          "contrast": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0
         }
       },
       "secondary": {
@@ -257,13 +261,13 @@
           "fadeIn": 250,
           "fadeOut": 500,
           "isMasked": false,
-          "isRadius": false,
-          "isWait": true,
+          "isRadius": true,
+          "isWait": false,
           "opacity": 1,
           "repeat": 1,
           "repeatDelay": 250,
           "saturate": 0,
-          "size": 1,
+          "size": 1.5,
           "tint": false,
           "tintColor": "#FFFFFF",
           "zIndex": 1
@@ -297,18 +301,19 @@
           "fadeIn": 250,
           "fadeOut": 500,
           "isMasked": false,
-          "isRadius": false,
+          "isRadius": true,
           "opacity": 1,
           "persistent": false,
           "repeat": 1,
           "repeatDelay": 250,
           "saturate": 0,
-          "size": 1,
+          "size": 1.5,
           "tint": false,
           "tintColor": "#FFFFFF",
           "unbindAlpha": false,
           "unbindVisibility": false,
-          "zIndex": 1
+          "zIndex": 1,
+          "isWait": false
         }
       },
       "isEnabled": true,
@@ -326,12 +331,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1788307800925,
-    "modifiedTime": 1788307800925,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792902898672,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

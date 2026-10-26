@@ -128,7 +128,7 @@ import { RIG_BASE_OUTPUT_OP, RIG_OUTPUT_STATE_MULT } from "/modules/bbttcc-core/
       const rows = report.map(r => `<tr><td>${icon[r.state] || ""} ${esc(r.rig)}</td><td>${esc(r.faction)}</td><td>${esc(r.text)}${r.refused ? ` · ⚠ ${esc(r.refused)}` : ""}</td></tr>`).join("");
       try {
         await ChatMessage.create({ whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id), speaker: { alias: "Bad Eden" },
-          content: `<div style="border-left:3px solid #b9882e;padding:.35em .6em;"><b>🛻 Rig output — this turn</b><table style="font-size:.8em;width:100%;margin-top:.25em"><tr><th style="text-align:left">Rig</th><th style="text-align:left">Faction</th><th style="text-align:left">Earned</th></tr>${rows}</table><div style="opacity:.7;font-size:.78em;margin-top:.2em">Parked rigs earn in full; deployed rigs earn half; destroyed rigs earn nothing.</div></div>` });
+          content: `<div style="border-left:3px solid #b9882e;padding:.35em .6em;"><b>🛻 Rig output — this turn</b><table style="font-size:.8em;width:100%;margin-top:.25em"><tr><th style="text-align:left">Rig</th><th style="text-align:left">Domain</th><th style="text-align:left">Earned</th></tr>${rows}</table><div style="opacity:.7;font-size:.78em;margin-top:.2em">Parked rigs earn in full; deployed rigs earn half; destroyed rigs earn nothing.</div></div>` });
       } catch (e) { console.warn(TAG, "summary card failed", e); }
     }
     return report;

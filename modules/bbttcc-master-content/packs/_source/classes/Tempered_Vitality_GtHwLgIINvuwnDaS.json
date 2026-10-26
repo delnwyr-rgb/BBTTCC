@@ -38,7 +38,7 @@
   },
   "effects": [
     {
-      "name": "Tempered Vitality (Body Check Edge)",
+      "name": "Tempered Vitality (+1 Resolve)",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_7.png",
       "origin": null,
       "transfer": true,
@@ -54,20 +54,20 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "systemVersion": "0.6.37",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1776459996550,
-        "modifiedTime": 1777346198304
+        "modifiedTime": 1792988965781
       },
       "_id": "P5JyRfvjXoN3urlu",
       "type": "base",
       "system": {
         "changes": [
           {
-            "key": "system.abilities.con.bonuses.save",
-            "value": "+1",
+            "key": "system.derived.resolve.aeBonus",
+            "value": "1",
             "priority": 20,
             "type": "add",
             "phase": "initial"
@@ -102,12 +102,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776459996550,
-    "modifiedTime": 1781116133141,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907906289,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

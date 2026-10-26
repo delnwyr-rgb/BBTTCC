@@ -1,0 +1,53 @@
+{
+  "name": "Weakness: Boredom",
+  "type": "feature",
+  "img": "icons/magic/control/sleep-bubble-purple.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "rfi-scrubbed"
+    ],
+    "description": {
+      "value": "<p>If ignored for a full round, or if a creature successfully distracts it with a new aesthetic or a sincere compliment, the Elemental is Staggered until the end of its next turn.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "iE1K3inJV7qVsRWr",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "CACA"
+        ],
+        "sourceIds": [
+          "a9orjOV99MnMObho"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989051049,
+    "modifiedTime": 1792989051049,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!iE1K3inJV7qVsRWr"
+}

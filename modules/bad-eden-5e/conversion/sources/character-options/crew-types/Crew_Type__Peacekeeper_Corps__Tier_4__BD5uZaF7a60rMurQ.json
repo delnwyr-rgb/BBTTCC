@@ -4,7 +4,7 @@
   "img": "icons/sundries/misc/badge-law-sheriff.webp",
   "system": {
     "description": {
-      "value": "<p><strong>Tier 4 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Controlled Hexes are highly stable. The OP cost to prevent rebellion in Triumphant Hexes is reduced by 2, and it is easier to shift Hexes towards Gevurah (Severity/Order).</li></ul>",
+      "value": "<p><strong>Tier 4 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Controlled Hexes are highly stable. The OP cost to prevent rebellion in Triumphant Hexes is reduced by 2, and it is easier to shift Hexes towards Geburah (Severity/Order).</li></ul>",
       "chat": ""
     },
     "source": {
@@ -64,7 +64,7 @@
           "bbttcc:when:hex_state:triumphant",
           "bbttcc:effect:hex_stability:high",
           "bbttcc:effect:rebellion:cost:-2",
-          "bbttcc:effect:alignment_shift:gevurah:+easy",
+          "bbttcc:effect:alignment_shift:geburah:+easy",
           "bbttcc:theme:order",
           "bbttcc:theme:stability",
           "bbttcc:theme:control",

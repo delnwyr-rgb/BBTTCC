@@ -17,7 +17,7 @@
   //   scale: "macro" | "hybrid" | "micro",
   //   label: "Bandit Ambush",
   //   summary: "Short human description",
-  //   tikkunTie: "Gevurah",
+  //   tikkunTie: "Geburah",
   //   darknessHint: 0 | +1 | -1,
   //   exampleScenarioKey: "travel_bandit_ambush_t2" // optional
   // }
@@ -32,7 +32,7 @@
       scale: "hybrid",
       label: "Bandit Ambush on the Road",
       summary: "A raiding band strikes from cover; PCs (or scouts) are forced into a quick engagement.",
-      tikkunTie: "Gevurah",
+      tikkunTie: "Geburah",
       darknessHint: +1,
       exampleScenarioKey: "travel_bandit_ambush_t2"
     },
@@ -45,7 +45,7 @@
       scale: "hybrid",
       label: "The Hexknight in the Road",
       summary: "An oath-bound duelist holds the road and names a toll; pay it, or meet the lance.",
-      tikkunTie: "Gevurah",
+      tikkunTie: "Geburah",
       darknessHint: +1,
       exampleScenarioKey: "travel_hexknight_t3"
     },
@@ -97,7 +97,7 @@
       scale: "macro",
       label: "Rockslide / Canyon Collapse",
       summary: "A catastrophic slide reshapes the terrain, blocking paths and burying anything caught beneath.",
-      tikkunTie: "Gevurah",
+      tikkunTie: "Geburah",
       darknessHint: +2,
       exampleScenarioKey: "travel_rockslide_t3"
     },
@@ -124,7 +124,7 @@
       scale: "macro",
       label: "Enemy Counter-Strike",
       summary: "After a successful raid, the enemy regroup and hit back at a vulnerable asset.",
-      tikkunTie: "Gevurah",
+      tikkunTie: "Geburah",
       darknessHint: +2,
       exampleScenarioKey: null
     },

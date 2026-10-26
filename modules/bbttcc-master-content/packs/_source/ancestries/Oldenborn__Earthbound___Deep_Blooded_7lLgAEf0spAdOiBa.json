@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You were built for caves, collapse, and consequences.”</em></p>\n        <p><strong>Deep-Blooded.</strong> You reroll the lowest die on checks against poison and environmental Stress. You can’t be surprised by structural failure (collapsing ceilings, buckling catwalks) unless you are unconscious.</p>\n        <p><strong>Worksite Authority.</strong> You gain a skill rank with the Plating aptitude or the Plating aptitude. If you already have both, you gain expertise with one.</p>",
+      "value": "\n<p><em>“You were built for caves, collapse, and consequences.”</em></p>\n        <p><strong>Deep-Blooded.</strong> You reroll the lowest die on checks against poison and environmental Stress. You can’t be surprised by structural failure (collapsing ceilings, buckling catwalks) unless you are unconscious.</p>\n        <p><strong>Worksite Authority.</strong> You gain a skill rank with the Plating aptitude or the Plating aptitude. If you already have both, you gain expertise with one.</p>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 5
     },
     "properties": [],
     "requirements": "Oldenborn",
@@ -41,7 +41,6 @@
       "kind": "oldenborn",
       "feature": "deep_blooded",
       "lineage": "Earthbound",
-      "tierLevel": 5,
       "version": "1.0.0"
     },
     "fourththing": {
@@ -116,8 +115,7 @@
         "initiative": null
       },
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!7lLgAEf0spAdOiBa.773a14c965db4379"
+      "folder": null
     }
   ],
   "folder": "820o8CGCzl3DnTr2",
@@ -131,12 +129,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004114716,
-    "modifiedTime": 1782167240121,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988973419,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -170,14 +170,16 @@ const FT_ENLIGHTENMENT_LEVELS = [
   { key: "qliphothic",    label: "Qliphothic" }
 ];
 
+// Fallback shells only (ruling CO2, 2026-10-26): the pack bbttcc-character-options.enlightenment-levels carries the
+// bonuses and text; setActorEnlightenment imports from it and reaches for these only when the pack is missing.
 const FT_ENLIGHTENMENT_ITEM_DATA = {
-  unawakened:   { name: "Enlightenment: Unawakened",   type: "feat", img: "systems/dnd5e/icons/svg/items/feature.svg", flags: { "bbttcc-character-options": { category: "enlightenment-levels", bonuses: { economy: 1 } } } },
-  awakening:    { name: "Enlightenment: Awakening",    type: "feat", img: "systems/dnd5e/icons/svg/items/feature.svg", flags: { "bbttcc-character-options": { category: "enlightenment-levels", bonuses: { intrigue: 1, softpower: 1 } } } },
-  seeking:      { name: "Enlightenment: Seeking",      type: "feat", img: "systems/dnd5e/icons/svg/items/feature.svg", flags: { "bbttcc-character-options": { category: "enlightenment-levels", bonuses: { intrigue: 1, softpower: 2 } } } },
-  wisdom:       { name: "Enlightenment: Wisdom",       type: "feat", img: "systems/dnd5e/icons/svg/items/feature.svg", flags: { "bbttcc-character-options": { category: "enlightenment-levels", bonuses: { diplomacy: 1, intrigue: 1, softpower: 1 } } } },
-  understanding:{ name: "Enlightenment: Understanding",type: "feat", img: "systems/dnd5e/icons/svg/items/feature.svg", flags: { "bbttcc-character-options": { category: "enlightenment-levels", bonuses: { softpower: 2, diplomacy: 1 } } } },
-  enlightened:  { name: "Enlightenment: Enlightened",  type: "feat", img: "systems/dnd5e/icons/svg/items/feature.svg", flags: { "bbttcc-character-options": { category: "enlightenment-levels", bonuses: { diplomacy: 3, softpower: 2 } } } },
-  qliphothic:   { name: "Enlightenment: Qliphothic",   type: "feat", img: "systems/dnd5e/icons/svg/items/feature.svg", flags: { "bbttcc-character-options": { category: "enlightenment-levels", bonuses: { violence: 2, intrigue: 2 } } } }
+  unawakened:   { name: "Enlightenment: Unawakened",   type: "feat", img: "icons/magic/control/sleep-bubble-purple.webp",        flags: { "bbttcc-character-options": { category: "enlightenment-levels" } } },
+  awakening:    { name: "Enlightenment: Awakening",    type: "feat", img: "icons/magic/light/beam-rays-yellow.webp",             flags: { "bbttcc-character-options": { category: "enlightenment-levels" } } },
+  seeking:      { name: "Enlightenment: Seeking",      type: "feat", img: "icons/tools/scribal/magnifying-glass.webp",           flags: { "bbttcc-character-options": { category: "enlightenment-levels" } } },
+  wisdom:       { name: "Enlightenment: Wisdom",       type: "feat", img: "icons/commodities/treasure/figurine-owl.webp",        flags: { "bbttcc-character-options": { category: "enlightenment-levels" } } },
+  understanding:{ name: "Enlightenment: Understanding",type: "feat", img: "icons/skills/trades/academics-study-reading-book.webp", flags: { "bbttcc-character-options": { category: "enlightenment-levels" } } },
+  enlightened:  { name: "Enlightenment: Enlightened",  type: "feat", img: "icons/magic/nature/lotus-glow-pink.webp",             flags: { "bbttcc-character-options": { category: "enlightenment-levels" } } },
+  qliphothic:   { name: "Enlightenment: Qliphothic",   type: "feat", img: "icons/magic/unholy/hand-fire-skeleton-pink.webp",     flags: { "bbttcc-character-options": { category: "enlightenment-levels" } } }
 };
 
 export function ftLabelForPoliticalPhilosophy(key) {
@@ -276,7 +278,7 @@ async function ftIndexItemPackByType(packKey, allowedTypes) {
   const pack = game.packs?.get(packKey);
   if (!pack) return [];
   try {
-    const idx = await pack.getIndex({ fields: ["name", "type", "system.identifier", "system.classIdentifier"] });
+    const idx = await pack.getIndex({ fields: ["name", "type", "system.identifier", "system.classIdentifier", "flags.bbttcc.npAncestry"] });
     const allow = new Set(Array.isArray(allowedTypes) ? allowedTypes : [allowedTypes]);
     return idx
       .filter(e => allow.has(e.type))
@@ -284,7 +286,9 @@ async function ftIndexItemPackByType(packKey, allowedTypes) {
         id: e._id,
         name: e.name,
         identifier: e.system?.identifier ?? "",
-        classIdentifier: e.system?.classIdentifier ?? ""
+        classIdentifier: e.system?.classIdentifier ?? "",
+        // Non-player ancestries (Angel / Devil / Dragon / Eidolon) — GM-only in player pickers (ruling AN3, 2026-10-26)
+        npAncestry: (e.flags?.bbttcc?.npAncestry ?? e["flags.bbttcc.npAncestry"]) === true
       }))
       .sort((a, b) => String(a.name).localeCompare(String(b.name)));
   } catch (err) {
@@ -1388,8 +1392,8 @@ const TERRAIN_SEPHIRAH = {
   wetlands:     "chesed",
   river:        "chesed",
   ocean:        "chesed",
-  mountain:     "gevurah",
-  desert:       "gevurah",
+  mountain:     "geburah",
+  desert:       "geburah",
   tundra:       "malkuth",
   // Urban
   city:         "hod",
@@ -1409,9 +1413,9 @@ const TERRAIN_SEPHIRAH = {
 
   // ── Added 2026-10-02 (owner ruling — Dave may veto any row) ──────────────────
   // Same logic as above: living land → Netzach, water → Chesed / the Great Sea,
-  // severe relief → Gevurah, bare matter → Malkuth, the heavens → the supernals.
+  // severe relief → Geburah, bare matter → Malkuth, the heavens → the supernals.
   canyons:      "binah",    // Shabbathai (Saturn): time laid bare in the strata; the walls are the limit that gave the river its form
-  badlands:     "gevurah",  // Madim (Mars): earth stripped by Din, erosion as severity — kin to desert and mountain
+  badlands:     "geburah",  // Madim (Mars): earth stripped by Din, erosion as severity — kin to desert and mountain
   reef:         "netzach",  // Nogah (Venus, foam-born): the sea's forest, life by accretion — the forest/grassland rule underwater
   depths:       "binah",    // Marah, the Great Sea: the dark, bitter, form-giving waters of the Supernal Mother
   sky:          "chokmah"   // Mazloth: the sphere of the fixed stars / zodiac — the open heaven above every made form
@@ -1471,7 +1475,8 @@ export function getTerrainMagicModifiers(actor) {
       // Qliphothic / irradiated — adds Noise
       result.noiseBonus = 1;
     } else if (sephirahResonance) {
-      const actorSeph = (actor.system?.system ?? actor.system)?.magic?.sephirah ?? "tiferet";
+      let actorSeph = String((actor.system?.system ?? actor.system)?.magic?.sephirah ?? "tiferet").toLowerCase();
+      if (actorSeph === "gevurah" || actorSeph === "gevura") actorSeph = "geburah";   // legacy spelling (2026-10-26)
       if (actorSeph === sephirahResonance) result.alignBonus = 1;
     }
   } catch (e) {
@@ -1637,13 +1642,11 @@ async function ftBuildEditContext(actor) {
     ?? embeddedAncestry?.system?.identifier
   );
   const allHeritages = await ftIndexHeritagePack(FT_ID_PACK_ANCESTRIES);
-  // Cross-cutting heritage families bypass the species filter — Sephirotic
-  // Heritages key off sephirah alignment, not ancestry, so a Human or
-  // Cryptidkin character can equally take one. Add new cross-cutting roots
-  // here as they're authored.
-  const CROSS_CUTTING_FAMILIES = new Set(["sephirotic"]);
+  // Heritages are species-only (ruling AN4, 2026-10-26): the old cross-cutting
+  // "sephirotic" bypass never matched the live family key and is retired —
+  // every heritage text says "Humanoid (Sephirotic Scion)".
   const filteredHeritages = currentAncestryFamily
-    ? allHeritages.filter(h => !h.family || _normFam(h.family) === currentAncestryFamily || CROSS_CUTTING_FAMILIES.has(_normFam(h.family)))
+    ? allHeritages.filter(h => !h.family || _normFam(h.family) === currentAncestryFamily)
     : allHeritages;
 
   return {
@@ -1660,7 +1663,7 @@ async function ftBuildEditContext(actor) {
     currentEnlightenmentKey: actor.getFlag?.("bbttcc-character-options", "enlightenment")?.level ?? "unawakened",
     classes: await ftIndexItemPackByType(FT_ID_PACK_CLASSES, "class"),
     currentClassKey,
-    ancestries: await ftIndexItemPackByType(FT_ID_PACK_ANCESTRIES, ["species", "race"]),
+    ancestries: (await ftIndexItemPackByType(FT_ID_PACK_ANCESTRIES, ["species", "race"])).filter(a => game.user?.isGM || !a.npAncestry || a.id === currentAncestryKey),
     currentAncestryKey,
     subclasses: filteredSubclasses,
     currentSubclassKey,
@@ -1934,10 +1937,51 @@ export async function applyIdentitySlotChange(actor, slotKey, newKey) {
 export async function setActorPoliticalPhilosophy(actor, key) {
   if (!actor) return null;
   const nextKey = String(key ?? "").trim() || null;
-  await actor.setFlag("bbttcc-aae", "politicalPhilosophy", nextKey);
+  _ftPolSyncing.add(actor.id);
+  try {
+    await actor.setFlag("bbttcc-aae", "politicalPhilosophy", nextKey);
+    await ftSyncPoliticalAffiliationItem(actor, nextKey);
+  } finally { _ftPolSyncing.delete(actor.id); }
   await game.bbttcc?.api?.characterOptions?.recalcActor?.(actor.id);
   return nextKey;
 }
+
+// Ruling CO1 (2026-10-26): the political-affiliations pack is READ. A philosophy key (the wizard's / sorting engine's
+// 8 keys) resolves to the pack record stamped flags.bbttcc-character-options.option.philosophyKey — or by identifier
+// political-affiliation-<key> — and that record is embedded on the steward (one at a time), so its
+// flags.bbttcc-character-options.bonuses feed the Domain income reader like every other identity item.
+const FT_PACK_POLITICAL = "bbttcc-character-options.political-affiliations";
+const _ftPolSyncing = new Set();
+export async function ftFindPoliticalAffiliationDoc(key) {
+  const k = String(key ?? "").trim();
+  if (!k) return null;
+  const pack = game.packs?.get(FT_PACK_POLITICAL);
+  if (!pack) return null;
+  const idx = await pack.getIndex({ fields: ["system.identifier", "flags.bbttcc-character-options.option.philosophyKey"] });
+  const ident = `political-affiliation-${k.replace(/_/g, "-")}`;
+  const hit = idx.find(e => foundry.utils.getProperty(e, "flags.bbttcc-character-options.option.philosophyKey") === k)
+    ?? idx.find(e => foundry.utils.getProperty(e, "system.identifier") === ident);
+  return hit ? pack.getDocument(hit._id) : null;
+}
+export async function ftSyncPoliticalAffiliationItem(actor, key) {
+  if (!actor || actor.type !== "character") return null;
+  const items = actor.items?.contents ?? [];
+  const old = items.filter(it => it.getFlag?.("bbttcc-character-options", "category") === "political-affiliations");
+  const doc = await ftFindPoliticalAffiliationDoc(key);
+  const keep = doc ? old.find(it => String(it.system?.identifier || "") === String(doc.system?.identifier || "")) : null;
+  const del = old.filter(it => it !== keep).map(it => it.id);
+  if (del.length) await actor.deleteEmbeddedDocuments("Item", del);
+  if (doc && !keep) await actor.createEmbeddedDocuments("Item", [doc.toObject()]);
+  return doc?.system?.identifier ?? null;
+}
+// The wizard and the sorting engine write the flag directly — mirror the item on that write (single writer: the changing client).
+Hooks.on("updateActor", (actor, changes, _opts, userId) => {
+  try {
+    if (userId !== game.user?.id || _ftPolSyncing.has(actor?.id)) return;
+    if (!foundry.utils.hasProperty(changes, "flags.bbttcc-aae.politicalPhilosophy")) return;
+    ftSyncPoliticalAffiliationItem(actor, actor.getFlag?.("bbttcc-aae", "politicalPhilosophy"));
+  } catch (e) { console.warn("[fourththing] political affiliation item sync failed", e); }
+});
 
 // Crew / Occult are flag-only identity slots (no embedded items).
 // Mirrors the wizard's write pattern: `flags.bbttcc-character-options.identity.<slot>`
@@ -2009,8 +2053,17 @@ export async function setActorEnlightenment(actor, levelKey) {
 
   const src = FT_ENLIGHTENMENT_ITEM_DATA[nextKey];
   if (src) {
-    const worldSrc = game.items?.find(i => i.name === src.name && i.getFlag?.("bbttcc-character-options", "category") === "enlightenment-levels");
-    const createData = worldSrc ? worldSrc.toObject() : foundry.utils.deepClone(src);
+    // Ruling CO2 (2026-10-26): the enlightenment-levels pack is the source of truth (identifier enlightenment-<key>,
+    // Qliphothic included); a world copy is second; the inline table is only a name/img fallback with no bonuses.
+    let packSrc = null;
+    try {
+      const pack = game.packs?.get("bbttcc-character-options.enlightenment-levels");
+      const idx = pack ? await pack.getIndex({ fields: ["system.identifier"] }) : null;
+      const hit = idx?.find(e => foundry.utils.getProperty(e, "system.identifier") === `enlightenment-${nextKey}`);
+      packSrc = hit ? await pack.getDocument(hit._id) : null;
+    } catch (_e) { packSrc = null; }
+    const worldSrc = packSrc ? null : game.items?.find(i => i.name === src.name && i.getFlag?.("bbttcc-character-options", "category") === "enlightenment-levels");
+    const createData = packSrc ? packSrc.toObject() : worldSrc ? worldSrc.toObject() : foundry.utils.deepClone(src);
     foundry.utils.setProperty(createData, 'flags["bbttcc-character-options"].category', "enlightenment-levels");
     await actor.createEmbeddedDocuments("Item", [createData]);
   }

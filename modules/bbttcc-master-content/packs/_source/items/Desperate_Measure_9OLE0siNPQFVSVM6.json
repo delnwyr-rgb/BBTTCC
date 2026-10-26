@@ -6,13 +6,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
-      "revision": 2,
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<h2>Desperate Measure</h2><p><em>When you are out of options, you become one.</em></p><hr /><h3>Rules</h3><p>When you miss with an attack roll, you may choose to turn the miss into a glancing blow. The attack deals damage equal to your rank bonus (of the same type as the weapon or manifestation) and does not trigger additional effects.</p><p>Once you use this principle, you can’t use it again until you finish a Scene Break or Soma Break.</p><p class=\"ft-engine-note\"><em>🃏 Card — once per Scene Break: shows the glancing-blow damage (rank bonus).</em></p>",
+      "value": "<h2>Desperate Measure</h2><p><em>When you are out of options, you become one.</em></p><hr /><h3>Rules</h3><p>When you miss with an attack roll, you may choose to turn the miss into a glancing blow. The attack deals damage equal to your rank bonus (of the same type as the weapon or manifestation) and does not trigger additional effects.</p><p>Once you use this technique, you can’t use it again until you finish a Scene Break.</p><p class=\"ft-engine-note\"><em>🃏 Card — once per Scene Break: shows the glancing-blow damage (rank bonus).</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_desperate_measure",
@@ -43,7 +43,6 @@
       "pack": "bbttcc-feats-expansion-v1",
       "generatedAt": "2026-01-18T20:40:45.007290+00:00"
     },
-    "fourththing": {},
     "autoanimations": {
       "id": "ft-desperate-measure",
       "label": "Desperate Measure",
@@ -232,12 +231,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1768802465828,
-    "modifiedTime": 1781116201530,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988964077,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!9OLE0siNPQFVSVM6"
 }

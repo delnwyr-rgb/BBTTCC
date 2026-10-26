@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 (Level 17) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a hidden retreat, mystical preparation, covert pilgrimage, or occult seclusion scenario, the Faith or Intrigue OP cost is reduced by 3 (minimum 1).</li></ul>",
+      "value": "<p><strong>Tier 4 (Level 17) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Faith or Intrigue marks, it spends 30 fewer (never below 10).</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -60,18 +60,32 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "faith",
+            "intrigue"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Archetype: The Hermit (Mystic-Isolator) (Tier 4)",
+          "marks": 30
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1773893636709,
-    "modifiedTime": 1781116012587,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989156224,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

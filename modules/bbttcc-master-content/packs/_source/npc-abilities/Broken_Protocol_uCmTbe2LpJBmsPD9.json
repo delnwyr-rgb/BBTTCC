@@ -1,0 +1,82 @@
+{
+  "name": "Broken Protocol",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "pre-fall",
+      "war-machine"
+    ],
+    "description": {
+      "value": "<p>Immune to Charmed, Shaken and Compelled. Repeats a single directive (patrol, scan, enforce, greet) until attacked; then runs combat protocol for 3 rounds and returns to the directive if nothing hostile remains in sight. Anyone without pre-Fall credentials is an intruder — that is everyone alive.</p><p><em>It is still patrolling. The patrol route includes the place you are standing.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "struck",
+            "do": {
+              "disposition": {
+                "set": -1,
+                "rounds": 3
+              },
+              "prompt": "Broken Protocol: combat protocol for 3 rounds, then back to the directive if nothing hostile is in sight."
+            },
+            "limit": {
+              "per": "combat",
+              "uses": 1
+            },
+            "label": "Broken Protocol"
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "pre-fall"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Pre-Fall Apex Construct"
+        ],
+        "sourceIds": [
+          "bY5b3zOkFr7RbcNU"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "uCmTbe2LpJBmsPD9",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069918,
+    "modifiedTime": 1792989070000,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!uCmTbe2LpJBmsPD9"
+}

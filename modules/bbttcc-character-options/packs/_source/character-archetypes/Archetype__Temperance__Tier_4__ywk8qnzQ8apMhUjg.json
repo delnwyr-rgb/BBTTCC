@@ -3,8 +3,15 @@
   "type": "feat",
   "img": "icons/magic/holy/chalice-glowing-gold-water.webp",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 — Temperance</strong></p><ul><li><strong>Strategic:</strong> −1 OP cost when hitting extremes (empty/full).</li></ul>",
+      "value": "<p><strong>Tier 4 — Temperance</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends from a channel that sits empty or at its cap, it spends 10 fewer marks (never below 10).</li></ul>",
       "chat": ""
     },
     "identifier": "archetype-temperance-t4",
@@ -15,11 +22,6 @@
       "max": ""
     },
     "advancement": {},
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -28,7 +30,7 @@
       "level": null
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Level 17+",
     "type": {
       "value": "",
       "subtype": ""
@@ -50,6 +52,27 @@
         "levelMax": 4
       },
       "category": "archetype"
+    },
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "violence",
+            "nonlethal",
+            "intrigue",
+            "economy",
+            "softpower",
+            "diplomacy",
+            "logistics",
+            "culture",
+            "faith"
+          ],
+          "min": 10,
+          "when": "extreme",
+          "note": "Archetype: Temperance (Tier 4)",
+          "marks": 10
+        }
+      ]
     }
   },
   "effects": [],
@@ -64,12 +87,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986658337,
-    "modifiedTime": 1775063022585,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989150633,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

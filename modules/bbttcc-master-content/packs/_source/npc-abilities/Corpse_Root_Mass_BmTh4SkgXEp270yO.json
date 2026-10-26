@@ -7,43 +7,69 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>The shambler ignores difficult terrain made of plants, rubble, mud, or remains. A creature that starts its turn grappled by the shambler takes 5 (1d10) qliphothic damage.</p>",
+      "value": "<p>The shambler ignores difficult terrain made of plants, rubble, mud, or remains. A creature that starts its turn Restrained by the shambler takes 1d10 qliphothic damage to Stress.</p>",
       "chat": ""
     }
   },
-  "_id": "BmTh4SkgXEp270yO",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "if": {
+              "targetCondition": [
+                "restrained"
+              ]
+            },
+            "do": {
+              "damage": {
+                "formula": "1d10",
+                "type": "qliphothic"
+              }
+            },
+            "radius": 1
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Qlipothic Shambler"
+          "Qliphothic Shambler"
+        ],
+        "sourceIds": [
+          "dskzJNdpkiTFEbik"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "BmTh4SkgXEp270yO",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": null,
-    "modifiedTime": null,
-    "lastModifiedBy": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989024158,
+    "modifiedTime": 1792989024158,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!BmTh4SkgXEp270yO"
 }

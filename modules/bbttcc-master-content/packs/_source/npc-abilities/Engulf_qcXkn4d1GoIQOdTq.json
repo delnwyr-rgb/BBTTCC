@@ -1,0 +1,87 @@
+{
+  "name": "Engulf",
+  "type": "feat",
+  "img": "icons/magic/death/blood-corruption-vomit-red.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Abomination moves up to its speed, flowing into the spaces of creatures its size or smaller. Each rolls an Evasion check vs DC 18: success — pushed 1 square aside; fail — engulfed: 2d6 chemical damage, Blinded and Restrained inside it, and 2d6 chemical at the start of each of the Abomination's turns. Escape: Violence check vs DC 18, exiting prone in an adjacent square, filmed in ichor.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "condition": {
+                "key": "restrained",
+                "duration": "1-round",
+                "save": {
+                  "attr": "intrigue",
+                  "dc": 18
+                }
+              },
+              "damage": {
+                "formula": "2d6",
+                "type": "chemical"
+              }
+            }
+          },
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Engulf"
+            },
+            "do": {
+              "condition": {
+                "key": "blinded",
+                "duration": "scene"
+              },
+              "prompt": "Engulfed: 2d6 chem each Abomination turn; escape Violence DC 18."
+            }
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Abomination of Excess"
+        ],
+        "sourceIds": [
+          "P8e2EX1lbLBFk2gL"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "qcXkn4d1GoIQOdTq",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069928,
+    "modifiedTime": 1792989070012,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!qcXkn4d1GoIQOdTq"
+}

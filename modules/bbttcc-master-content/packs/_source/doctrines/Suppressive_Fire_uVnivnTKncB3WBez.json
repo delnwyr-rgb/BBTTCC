@@ -17,14 +17,14 @@
   },
   "img": "icons/magic/fire/flame-burning-earth-yellow.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": {
       "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<p>You don't kill the line. You just make every last one of 'em keep their heads down and their dice LOW.</p><p><b>Force the enemy to reroll their lowest 2d10x10 this round.</b></p>",
+      "value": "<p>You don't kill the line. You just make every last one of 'em keep their heads down and their dice LOW.</p><p><b>Force the enemy to reroll their lowest 2d10 this round.</b></p>",
       "chat": ""
     },
     "activities": {},
@@ -55,11 +55,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977107845,
-    "modifiedTime": 1782167245445,
+    "modifiedTime": 1792977702562,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

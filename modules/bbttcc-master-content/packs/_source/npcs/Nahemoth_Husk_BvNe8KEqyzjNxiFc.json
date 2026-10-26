@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "art/bbttcc/qliphoth/nahemoth-husk.webp",
   "system": {
-    "role": "Qliphothic Remnant (Nahemoth — Lesser)",
+    "role": "caster",
     "tier": 1,
     "factionId": "",
     "notes": "<p>The endpoint of a life consumed by materialism: the physical shell of a person whose soul faded from neglect, leaving only a mindless echo driven by the base impulse to acquire and possess. Husks shamble through the ruins of opulent pre-Disaster places, still going through the motions of their former lives, hands locked in a death grip around one meaningless object — a shattered smartphone, a tarnished medal.</p><p><strong>Qliphah:</strong> Nahemoth, the Whispering Ones — the Hull of Malkuth. The Kingdom with the spirit gone: matter, inertia, and grip.</p><p><em>Mal's note: 'You cannot have the thing it is holding. Nobody can. That is the whole tragedy, and also the treasure policy.'</em></p>",
@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 25,
-        "max": 25
+        "max": 25,
+        "temp": 0
       },
       "stress": {
         "value": 8,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -159,6 +161,9 @@
       "hull-of-malkuth",
       "lesser"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -171,6 +176,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Remnant (Nahemoth — Lesser)",
+      "notes": "<p>The endpoint of a life consumed by materialism: the physical shell of a person whose soul faded from neglect, leaving only a mindless echo driven by the base impulse to acquire and possess. Husks shamble through the ruins of opulent pre-Disaster places, still going through the motions of their former lives, hands locked in a death grip around one meaningless object — a shattered smartphone, a tarnished medal.</p><p><strong>Qliphah:</strong> Nahemoth, the Whispering Ones — the Hull of Malkuth. The Kingdom with the spirit gone: matter, inertia, and grip.</p><p><em>Mal's note: 'You cannot have the thing it is holding. Nobody can. That is the whole tragedy, and also the treasure policy.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -270,13 +279,13 @@
       "_id": "T8jBBA0InjtQJyMP",
       "name": "Mindless Materialism",
       "type": "feature",
-      "img": "icons/svg/daze.svg",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
         "tags": [],
         "description": {
-          "value": "<p>There are no thoughts in there to read, and nothing left that can be frightened or reasoned with. Immune to Shaken, Charmed, and Calmed, and to anything that reads minds.</p>",
+          "value": "<p>There are no thoughts in there to read, and nothing left that can be Shaken or reasoned with. Immune to Shaken, Charmed, and Calmed, and to anything that reads minds.</p>",
           "chat": ""
         }
       },
@@ -288,23 +297,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188179,
-        "modifiedTime": 1787799188179,
+        "modifiedTime": 1792977758672,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!BvNe8KEqyzjNxiFc.T8jBBA0InjtQJyMP"
+      }
     },
     {
       "_id": "ZQTwfoduz8IRPh0P",
       "name": "Husk Fortitude",
       "type": "feature",
-      "img": "icons/svg/bones.svg",
+      "img": "icons/weapons/daggers/dagger-bone-grey.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -320,25 +328,43 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "zero",
+                "do": {
+                  "heal": 1,
+                  "prompt": "Husk Fortitude: Body DC 5+damage (auto-fail vs sephirotic/crit) — if failed, undo."
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188179,
-        "modifiedTime": 1787799188179,
+        "modifiedTime": 1791331976526,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!BvNe8KEqyzjNxiFc.ZQTwfoduz8IRPh0P"
+      }
     },
     {
       "_id": "3rTOcwdNw3Ze5q5o",
       "name": "Inertial Grasp",
       "type": "weapon",
-      "img": "icons/svg/padlock.svg",
+      "img": "icons/containers/chest/chest-simple-box-blue.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -356,7 +382,7 @@
           "long": 1
         },
         "tags": [],
-        "effect": "On a hit against a creature its size or smaller, the target is grappled (escape: Violence check vs DC 12) — the same unbreakable grip that holds the trinket now holds you.",
+        "effect": "On a hit against a creature its size or smaller, the target is Restrained (escape: Violence check vs DC 12) — the same unbreakable grip that holds the trinket now holds you.",
         "flavor": "A skeletal grey hand, locked.",
         "manifestation": {
           "tier": 1,
@@ -387,6 +413,21 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "violence",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 12,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "restrained"
+            ],
+            "duration": "until-saved",
+            "saveEachRound": true,
+            "saveAttribute": "violence"
           }
         },
         "description": {
@@ -402,23 +443,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188179,
-        "modifiedTime": 1787799188179,
+        "modifiedTime": 1792977758671,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!BvNe8KEqyzjNxiFc.3rTOcwdNw3Ze5q5o"
+      }
     },
     {
       "_id": "0VacG3sHhI1PuXot",
       "name": "Apathetic Gaze",
       "type": "feat",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/weapons/staves/staff-ornate-eye.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -434,19 +474,241 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "condition": {
+                    "key": "staggered",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 12
+                    }
+                  }
+                }
+              },
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Apathetic Gaze"
+                },
+                "do": {
+                  "noReactions": true,
+                  "prompt": "Speed halved too (pointlessness)."
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188179,
-        "modifiedTime": 1787799188179,
+        "modifiedTime": 1791331976525,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Aura of Materialism",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "qliphothic",
+          "nahemoth"
+        ],
+        "description": {
+          "value": "<p>Any creature that starts its turn within 2 squares must succeed a Resolve check (DC by tier) or be Staggered until the end of its turn, crushed by pure pointlessness.</p><p><em>Nahemoth — hull of malkuth.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!BvNe8KEqyzjNxiFc.0VacG3sHhI1PuXot"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "radius": 2,
+                "who": "enemies",
+                "do": {
+                  "condition": {
+                    "key": "staggered",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 13
+                    }
+                  }
+                },
+                "label": "Aura of Materialism"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "qliphothic"
+            }
+          }
+        }
+      },
+      "_id": "VuMGggN9HdqYe46W",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342348863,
+        "modifiedTime": 1791342348863,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Hollow Touch",
+      "type": "weapon",
+      "img": "icons/magic/death/hand-withered-gray.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d8",
+          "attribute": "violence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "lineage-strike",
+          "qliphothic",
+          "bestiary"
+        ],
+        "effect": "Damage goes to Stress. On a hit the target rolls Resolve vs DC 13; on a failure it is Compelled toward the shell's vice until the end of its next turn.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul"
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 13,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> Reach 1 square, one target. Damage: <code>1d8</code> qliphothic to Stress + violence. On a hit the target rolls Resolve vs DC 13; on a failure it is Compelled toward the shell's vice until the end of its next turn.</p><p><em>The hollow reaches for what it lacks.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "frame": "attack",
+              "lineageStrike": "qliphothic",
+              "price": {
+                "marks": 50,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI attack × 1",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "hZoRi0FzIfa1zLwv",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989137335,
+        "modifiedTime": 1792989137335,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -485,34 +747,38 @@
             ]
           },
           "price": {
-            "marks": 150,
-            "bounty": 200,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 5,
+            "bounty": 5,
+            "hire": 10,
+            "ransom": 10,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "I light Qliphothic Remnant (Nahemoth — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TI light qliphothic — bounty 5 / hire 10 marks; credited to the pool matching the method (default softpower)"
           },
           "qliphah": {
             "name": "nahemoth",
             "hullOf": "malkuth",
             "grade": "lesser"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "nahemoth",
+          "title": "Qliphothic Remnant (Nahemoth — Lesser)"
         }
       },
-      "kind": "npc"
+      "kind": "npc",
+      "creatureType": "fiend"
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188179,
-    "modifiedTime": 1787799188179,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989137215,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "BvNe8KEqyzjNxiFc",
   "_key": "!actors!BvNe8KEqyzjNxiFc"

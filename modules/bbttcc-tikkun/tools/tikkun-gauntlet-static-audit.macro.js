@@ -31,7 +31,7 @@
   const api = game.bbttcc?.api?.tikkun;
   if (!api) return ui.notifications.error("game.bbttcc.api.tikkun not found — is bbttcc-tikkun active?");
 
-  const SEPH = ["keter","chokmah","binah","chesed","gevurah","tiferet","netzach","hod","yesod","malkuth"];
+  const SEPH = ["keter","chokmah","binah","chesed","geburah","tiferet","netzach","hod","yesod","malkuth"];
   const KINDS = ["conceptual","vestigial","animate"];
   // Method tags are the OP pools (mirrors tikkun-repair OP_POOLS + the alignment table).
   const METHODS = new Set(["violence","intrigue","softpower","diplomacy","economy","nonlethal","faith","logistics","siege","body","soul","culture"]);

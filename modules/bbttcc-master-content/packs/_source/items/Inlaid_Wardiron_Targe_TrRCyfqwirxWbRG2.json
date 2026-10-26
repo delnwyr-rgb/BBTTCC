@@ -1,0 +1,116 @@
+{
+  "name": "Inlaid Wardiron Targe",
+  "type": "armor",
+  "img": "icons/equipment/shield/heater-emossed-spiral-green.webp",
+  "system": {
+    "guardBonus": 3,
+    "evasionBonus": 0,
+    "resolveBonus": 2,
+    "resistances": [
+      "kinetic"
+    ],
+    "armorSkill": "bracing",
+    "equipped": false,
+    "tags": [
+      "shield",
+      "warding",
+      "wardiron",
+      "graded",
+      "grade-inlaid"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A heavy round targe banded in wardiron — anchorstone smelted with the steel so the metal sits a half-beat ahead of the blow. Favored by faction line-holders who'd rather lose the shield than the arm behind it.</p><p><strong>Wardiron.</strong> The banding grounds raw force. Resists kinetic. No attunement — the iron does the remembering.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +3, Resolve +2</p></li><li><p><strong>Requires:</strong> Bracing (trained)</p></li><li><p><strong>Resistance:</strong> Kinetic</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 315 Nonlethal marks</p></li></ul>\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Inlaid (+1). Hex-inlay along the working edge.</strong></p>\n<ul>\n  <li><strong>+1 on each of its defense bonuses</strong> → Guard +3, Resolve +2 (rank-scaled like all armor: Trained half, Proficient full).</li>\n  <li>Grade raises it to <strong>Tier III</strong> · free to wield.</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "shield",
+          "signature": "Cold-forged to take the hit you didn't see.",
+          "origin": "forged",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A heavy round targe banded in wardiron — anchorstone smelted with the steel so the metal sits a half-beat ahead of the blow. Favored by faction line-holders who'd rather lose the shield than the arm behind it.</p><p><b>Wardiron.</b> The banding grounds raw force. Resists kinetic. No attunement — the iron does the remembering.</p>",
+          "materialOf": [
+            {
+              "key": "wardiron",
+              "qty": 1
+            },
+            {
+              "key": "anchorstone",
+              "qty": 1
+            },
+            {
+              "key": "oak-core",
+              "qty": 1
+            },
+            {
+              "key": "sept-silver",
+              "qty": 1
+            }
+          ],
+          "price": {
+            "marks": 315,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII shield (Inlaid +1 on TII Wardiron Targe) × bound free",
+            "bound": "free",
+            "saleBack": 126
+          }
+        }
+      },
+      "grants": {
+        "resistances": [
+          {
+            "type": "kinetic"
+          }
+        ]
+      },
+      "grade": {
+        "rank": 1,
+        "name": "Inlaid",
+        "key": "inlaid",
+        "defense": 1
+      }
+    }
+  },
+  "folder": "paUl8Tj6Xx5fAkKN",
+  "_id": "TrRCyfqwirxWbRG2",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791427797929,
+    "modifiedTime": 1792988961208,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!TrRCyfqwirxWbRG2"
+}

@@ -325,17 +325,17 @@
                 <div class="flexrow" style="gap:1rem;">
                   <!-- Manage -->
                   <div class="flex2 card" style="padding:.5rem;">
-                    <h4 style="margin:0 0 .25rem 0;">{{#if r.view.noMarks}}Strength{{else}}{{#if ../isGM}}Manage Spend{{else}}Your Commitments{{/if}}{{/if}} — Key: {{upper r.view.cat}}</h4>
+                    <h4 style="margin:0 0 .25rem 0;">{{#if ../isGM}}Manage Spend{{else}}Your Commitments{{/if}} — Key: {{upper r.view.cat}}</h4>
 
-                    {{#if r.view.noMarks}}
-                    {{!-- ALPHA CUT ruling 5 (2026-10-18): no marks at raid time. One line per side — what the Domain owns, as the engine adds it. --}}
-                    <div class="bbttcc-strength" style="display:flex; flex-direction:column; gap:.3rem;">
+                    {{#if r.view.strengthOn}}
+                    {{!-- ALPHA CUT: one Strength line per side (what the Domain owns, as the engine adds it) + the stake. Ruling 5 (no marks at raid time) was RETIRED 2026-10-26 (DC5): every Battle, Heist and Parley costs marks, so the spend grid below always renders. --}}
+                    <div class="bbttcc-strength" style="display:flex; flex-direction:column; gap:.3rem; margin-bottom:.35rem;">
                       <p style="margin:.25rem 0;"><b>Strength +{{r.view.strengthAtt.total}}</b> — {{r.view.attackerName}} <small style="opacity:.8;">· {{r.view.strengthAtt.parts}}</small></p>
                       {{#if ../isGM}}{{#if r.view.hasDef}}<p style="margin:.25rem 0;"><b>Defence {{r.view.strengthDef.total}}</b> — {{r.view.defenderName}} <small style="opacity:.8;">· {{r.view.strengthDef.parts}}</small></p>{{/if}}{{/if}}
-                      {{#if r.view.stake}}<p style="margin:.25rem 0;"><b>Stake:</b> {{r.view.stake.text}}</p>{{/if}}
-                      <p class="hint" style="margin:.25rem 0; font-size:.78rem; opacity:.75;">No marks are spent in a {{default r.activityLabel "raid"}}. A Domain fights with what it owns: its ops, its people, its allies.{{#if r.view.stake}} A Battle is fought on the battlemap; the GM calls it.{{/if}}</p>
+                      {{#if r.view.stake}}<p style="margin:.25rem 0;"><b>Stake:</b> {{r.view.stake.text}}{{#if r.view.stake}} A Battle is fought on the battlemap; the GM calls it.{{/if}}</p>{{/if}}
                     </div>
-                    {{else}}
+                    {{/if}}
+                    <p class="hint bbttcc-spend-line" style="margin:.25rem 0; font-size:.78rem; opacity:.8;">Every {{default r.activityLabel "fight"}} costs marks, story-offered or not: staged marks and each maneuver's price leave the bank when the round is committed.{{#if r.view.spendAtt}} <b>This round's maneuvers spend</b> — {{r.view.attackerName}}: {{r.view.spendAtt}} marks{{#if r.view.spendDef}}; {{r.view.defenderName}}: {{r.view.spendDef}} marks{{/if}}.{{else}}{{#if r.view.spendDef}} <b>This round's maneuvers spend</b> — {{r.view.defenderName}}: {{r.view.spendDef}} marks.{{/if}}{{/if}}</p>
                     <div class="grid" style="grid-template-columns: {{#if ../isGM}}1fr 1fr{{else}}1fr{{/if}}; gap:.5rem;">
                       {{#if ../isGM}}
                       <div>
@@ -409,7 +409,6 @@
                       </div>
                       {{/if}}
                     </div>
-                    {{/if}}
 
                     {{#if ../isGM}}
                       <div style="margin-top:.5rem;">

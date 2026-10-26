@@ -38,7 +38,6 @@
       "subtype": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -46,6 +45,22 @@
           "tier": "II",
           "frame": "trait"
         }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "selfTurnStart",
+            "do": {
+              "prompt": "Ancestor Whispers: 3 finger-bone tokens — spend one to pass a failed save vs charm/compel/shaken."
+            },
+            "limit": {
+              "per": "combat",
+              "uses": 1
+            },
+            "narrative": true
+          }
+        ]
       }
     },
     "bbttcc": {
@@ -53,29 +68,34 @@
         "sources": [
           "Bone Patriarch"
         ],
+        "sourceIds": [
+          "tZv6AIxvw4v6dB5L"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "0TY9jUvGOIVx2z0a",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167244985,
-    "modifiedTime": 1782167244985,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989017838,
+    "modifiedTime": 1792989017839,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!0TY9jUvGOIVx2z0a"
 }

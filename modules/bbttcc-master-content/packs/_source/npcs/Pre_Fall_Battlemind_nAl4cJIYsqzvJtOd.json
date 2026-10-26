@@ -28,7 +28,7 @@
         "value": 4
       },
       "body": {
-        "value": 6
+        "value": 5
       },
       "mind": {
         "value": 3
@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 90,
-        "max": 90
+        "max": 90,
+        "temp": 0
       },
       "stress": {
         "value": 45,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -139,11 +141,13 @@
     "defenses": {
       "resistances": [
         "kinetic",
-        "radiant",
+        "sephirotic",
         "psychic"
       ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "chemical"
+      ]
     },
     "conditionImmunities": [
       "charmed",
@@ -152,6 +156,9 @@
       "burning"
     ],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -164,6 +171,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "An ancient battlefield AI in a still-functioning frame. Patient. Catastrophic."
     }
   },
   "flags": {
@@ -199,16 +210,19 @@
             ]
           },
           "price": {
-            "marks": 6750,
-            "bounty": 6750,
-            "hire": 16875,
-            "ransom": 11250,
+            "marks": 40,
+            "bounty": 40,
+            "hire": 60,
+            "ransom": 60,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "TIII heavy hardened (bestiary) \u2014 bounty 6750 / hire 16875 / ransom 11250 marks (paid in intrigue)"
-          }
+            "notes": "TIII heavy pre-fall — bounty 40 / hire 60 marks; credited to the pool matching the method (default intrigue)"
+          },
+          "lineage": "pre-fall",
+          "subLineage": "ai"
         }
-      }
+      },
+      "creatureType": "construct"
     }
   },
   "_id": "nAl4cJIYsqzvJtOd",
@@ -353,6 +367,22 @@
               "tier": "III",
               "frame": "trait"
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attacked",
+                "do": {
+                  "reroll": "attack-highest"
+                },
+                "limit": {
+                  "per": "round",
+                  "uses": 1
+                },
+                "label": "Battle Prediction — the first incoming Strike each round rerolls its highest"
+              }
+            ]
           }
         }
       },
@@ -364,17 +394,16 @@
       },
       "_id": "RWMRPue2yAWqNvv8",
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118733392,
-        "modifiedTime": 1780163240261,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989129426,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!nAl4cJIYsqzvJtOd.RWMRPue2yAWqNvv8"
+      }
     },
     {
       "name": "Mind-Spike",
@@ -453,11 +482,25 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII attack \u00d7 1",
+                "notes": "TIII attack × 1",
                 "bound": "free",
                 "saleBack": 180
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Mind-Spike"
+                },
+                "do": {
+                  "noBonusAction": true
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -646,17 +689,16 @@
       },
       "_id": "55dzpyJeovUhrOwd",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118733392,
-        "modifiedTime": 1782167244258,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989129426,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!nAl4cJIYsqzvJtOd.55dzpyJeovUhrOwd"
+      }
     },
     {
       "name": "Calculated Sweep",
@@ -683,7 +725,7 @@
           "tier-iii",
           "role-hardened"
         ],
-        "effect": "The battlemind attacks all enemies within reach in a single calculated motion \u2014 make one attack roll, apply to all.",
+        "effect": "The battlemind attacks all enemies within reach in a single calculated motion — make one attack roll, apply to all.",
         "flavor": "The same swing was the optimal answer to three different problems.",
         "manifestation": {
           "tier": 1,
@@ -717,7 +759,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> reach 2 squares, one target. Damage: <code>2d10</code> kinetic (frame-arm) + violence. The battlemind attacks all enemies within reach in a single calculated motion \u2014 make one attack roll, apply to all.</p><p><em>The same swing was the optimal answer to three different problems.</em></p>",
+          "value": "<p><strong>Strike.</strong> reach 2 squares, one target. Damage: <code>2d10</code> kinetic (frame-arm) + violence. The battlemind attacks all enemies within reach in a single calculated motion — make one attack roll, apply to all.</p><p><em>The same swing was the optimal answer to three different problems.</em></p>",
           "chat": ""
         }
       },
@@ -735,7 +777,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII attack \u00d7 1",
+                "notes": "TIII attack × 1",
                 "bound": "free",
                 "saleBack": 180
               }
@@ -937,11 +979,10 @@
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!nAl4cJIYsqzvJtOd.S0z54VgqBbBgtvKS"
+      }
     },
     {
-      "name": "Tactical Reset (recharges on a Soma Break)",
+      "name": "Tactical Reset (recharge 5–6)",
       "type": "weapon",
       "img": "icons/magic/time/arrows-circling-green.webp",
       "system": {
@@ -967,7 +1008,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 30 ft. \u2014 targets roll vs Resolve (DC 13). Half damage on success. On a failed save, the target loses any benefits they've gained this combat (buffs, marks, advantage states). The battlemind reads them in as if combat just started. Recharge 6.",
+        "effect": "Radius 6 squares. — targets roll vs Resolve (DC 13). Half damage on success. On a failed save, the target loses any benefits they've gained this combat (buffs, marks, banked rerolls). The battlemind reads them in as if combat just started. Recharge 6.",
         "flavor": "It restarts the simulation. You feel yourself reset, three seconds back. Three seconds you've already lost.",
         "manifestation": {
           "tier": 1,
@@ -998,6 +1039,18 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 13,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 30
           }
         },
         "description": {
@@ -1023,10 +1076,29 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII save \u00d7 1",
+                "notes": "TIII save × 1",
                 "bound": "free",
                 "saleBack": 180
               }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Tactical Reset (recharge 5–6)"
+                },
+                "do": {
+                  "clearBank": true,
+                  "prompt": "Every buff and mark gained this combat is gone."
+                }
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 6
             }
           }
         },
@@ -1216,17 +1288,16 @@
       },
       "_id": "mnk62zGEThPhHM4o",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118733392,
-        "modifiedTime": 1782167244258,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989129426,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!nAl4cJIYsqzvJtOd.mnk62zGEThPhHM4o"
+      }
     },
     {
       "name": "Still-Charged Frame",
@@ -1253,6 +1324,16 @@
               "tier": "III",
               "frame": "feature"
             }
+          },
+          "grants": {
+            "resistances": [
+              "kinetic",
+              "sephirotic",
+              "psychic"
+            ],
+            "conditionImmunities": [
+              "shaken"
+            ]
           }
         }
       },
@@ -1264,17 +1345,83 @@
       },
       "_id": "N6n1CL7iFTVsbBIx",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118733392,
-        "modifiedTime": 1782167283589,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989129426,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
+      }
+    },
+    {
+      "name": "Broken Protocol",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "pre-fall",
+          "ai"
+        ],
+        "description": {
+          "value": "<p>Immune to Charmed, Shaken and Compelled. Repeats a single directive (patrol, scan, enforce, greet) until attacked; then runs combat protocol for 3 rounds and returns to the directive if nothing hostile remains in sight. Anyone without pre-Fall credentials is an intruder — that is everyone alive.</p><p><em>It is still patrolling. The patrol route includes the place you are standing.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!nAl4cJIYsqzvJtOd.N6n1CL7iFTVsbBIx"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "do": {
+                  "disposition": {
+                    "set": -1,
+                    "rounds": 3
+                  },
+                  "prompt": "Broken Protocol: combat protocol for 3 rounds, then back to the directive if nothing hostile is in sight."
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                },
+                "label": "Broken Protocol"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "pre-fall"
+            }
+          }
+        }
+      },
+      "_id": "epNgzhvqgIetmSzd",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791342350449,
+        "modifiedTime": 1792989129425,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -1284,12 +1431,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118733392,
-    "modifiedTime": 1783219918007,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989129235,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

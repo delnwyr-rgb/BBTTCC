@@ -1,0 +1,72 @@
+{
+  "name": "Aura of Contention",
+  "type": "feature",
+  "img": "icons/magic/sonic/projectile-sound-rings-wave.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Any creature that starts its turn within 6 squares of the Disputant grows argumentative: it rolls twice-keep-worse on Presence checks to persuade or de-escalate, and rolls vs Resolve (DC 14) or becomes hostile toward one random creature within 6 squares — friend or foe — until the start of its next turn.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "do": {
+              "condition": {
+                "key": "compelled",
+                "duration": "1-round",
+                "save": {
+                  "attr": "soul",
+                  "dc": 14
+                }
+              },
+              "prompt": "Also twice-keep-worse on persuasion; Compelled = hostile to a random creature ≤6 sq."
+            },
+            "radius": 6
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Thagirion Disputant"
+        ],
+        "sourceIds": [
+          "VWK3Fg8ozMPRipmD"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "0gnkmTAcnuzoBwYs",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069908,
+    "modifiedTime": 1792989069991,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!0gnkmTAcnuzoBwYs"
+}

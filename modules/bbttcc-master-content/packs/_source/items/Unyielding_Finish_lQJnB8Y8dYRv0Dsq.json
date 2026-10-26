@@ -5,8 +5,8 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
-      "revision": 2,
+      "custom": "Bad Eden Core Feats (Batch 3)",
+      "revision": 1,
       "rules": "2026"
     },
     "tags": [],
@@ -43,7 +43,6 @@
       "featNumber": 60,
       "generatedAt": "2026-01-19T05:04:20.693394Z"
     },
-    "fourththing": {},
     "autoanimations": {
       "id": "ft-unyielding-finish",
       "label": "Unyielding Finish",
@@ -233,11 +232,11 @@
     "compendiumSource": "Item.lQJnB8Y8dYRv0Dsq",
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1768802465828,
-    "modifiedTime": 1782164185979,
+    "modifiedTime": 1790037795550,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!lQJnB8Y8dYRv0Dsq"

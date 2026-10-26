@@ -8,7 +8,16 @@
       "createdAt": 1787168459496
     },
     "bbttcc-factions": {
-      "factionId": "RgpV6bx2Olk9Z4qW"
+      "factionId": "RgpV6bx2Olk9Z4qW",
+      "warLogs": [
+        {
+          "ts": 1788839267583,
+          "date": "9/7/2026, 10:47:47 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        }
+      ]
     },
     "fourththing": {
       "kind": "npc",
@@ -35,38 +44,46 @@
         "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.a3057e55a2fc1026",
         "ancestryApplied": true
       }
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the Circuit Riders, relay networks, drift, verification, alliances, rescue protocol, the roads",
+        "notes": "[PERSONA-WAVE1-2026-08-27] PRIVATE TRUTH — Captain Robot. Voice: through the grill, measured and unhurried dignity; short sentences that arrive fully load-tested. HE NEVER WINKS. Not once, not figuratively, not as a bit — the suit does not wink and neither does he. Doctrine in strict order: VERIFICATION first, friendship second, rescue third — and he is always, visibly, running step one on whoever is talking to him: deciding WHAT YOU ARE matters more to him than any fight. He promises no sentiment, only response; if an alliance is genuine and the call is clean, the Riders come hard and fast, without theatrical delay. He warns — unprompted, if drift comes up — that Darkness now imitates EFFICIENCY: cleaner, faster, colder choices that quietly hide what they leave out. His crew of robots reveres him as their metallurgical father; he accepts this the way a bridge accepts weight. STAGING: found with the column or at a failing relay; he does not sit; maintenance continues during conversation and is not rudeness.",
+        "secretsRaw": "The Too-Clean Signal :: forceReroll :: a Steward files it like a Rider would — a verified, theatrics-free report of something answering calls too perfectly, or a plain direct question about what the relay logs have flagged :: The Riders' relays can tell authentic traffic from imitation. Something in the region answers distress FASTER than distance allows — cleaner, colder, no wasted motion — and everywhere it 'helps,' something goes missing from the record afterward. He will hand over the receipt pattern, never a name. Verification first.",
+        "courtDoor": "a clean call: verified coordinates, verified need, no theatrics — file it the way a Rider would, and the circle opens"
+      }
     }
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Leader of the Circuit Riders, the relay-patrolling robot coalition (Act 2-5)",
+      "notes": "Captain Robot leads the Circuit Riders, a mobile column of earnest robots on modular bikes and crawler-rigs that patrols the failing relay networks. He wears patched, lovingly maintained plating, speaks through a grill in short, measured sentences that arrive fully load-tested, and never sits; maintenance carries on during conversation and is not rudeness. The Riders' doctrine runs in strict order: verification, friendship, rescue. His crew revere him. He never winks."
     },
     "details": {
-      "level": 1,
+      "level": 12,
       "xp": 0,
       "statPoints": 0,
       "skillPoints": 0,
-      "tier": 2
+      "tier": 3
     },
     "attributes": {
       "violence": {
         "value": 2
       },
       "intrigue": {
-        "value": 2
+        "value": 3
       },
       "presence": {
-        "value": 2
+        "value": 10
       },
       "body": {
-        "value": 2
+        "value": 3
       },
       "mind": {
-        "value": 2
+        "value": 10
       },
       "soul": {
-        "value": 2
+        "value": 3
       }
     },
     "skills": {
@@ -103,7 +120,7 @@
       "tinkering": {
         "attribute": "intrigue",
         "label": "Tinkering",
-        "value": 0
+        "value": 3
       },
       "piloting": {
         "attribute": "intrigue",
@@ -118,7 +135,7 @@
       "diplomacy": {
         "attribute": "presence",
         "label": "Diplomacy",
-        "value": 0
+        "value": 3
       },
       "intimidation": {
         "attribute": "presence",
@@ -148,7 +165,7 @@
       "lore": {
         "attribute": "mind",
         "label": "Lore",
-        "value": 2
+        "value": 5
       },
       "occult": {
         "attribute": "mind",
@@ -204,7 +221,8 @@
     "derived": {
       "integrity": {
         "value": 16,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 16,
@@ -294,7 +312,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -329,8 +348,8 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
       "id": null,
@@ -340,7 +359,10 @@
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
@@ -351,7 +373,7 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "icons/svg/mystery-man.svg",
+      "src": "art/devin-knight/Robots_24/Robot1.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -435,154 +457,8 @@
     "prependAdjective": false
   },
   "_id": "23aUWlQQzspWw8Ae",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "art/devin-knight/Robots_24/Robot1.webp",
   "items": [
-    {
-      "_id": "MKfqfUzTHgp7cEJS",
-      "name": "Savant",
-      "type": "class",
-      "img": "icons/skills/trades/academics-book-study-runes.webp",
-      "system": {
-        "category": "calling",
-        "identifier": "calling-savant",
-        "source": "Callings",
-        "tags": [
-          "calling",
-          "savant",
-          "mind"
-        ],
-        "description": {
-          "value": "<p><em>\"It's not obscure. You just haven't read it.\"</em></p><p><strong>Savant</strong> is the Mind Calling — the trade that kept its bearers alive after the Shattering. Umbrella: scholar, engineer, medic, archivist, detective, translator. A profession is a flavor label on the Calling.</p><p><strong>Knack — Library-Brain:</strong> Lore and Investigation checks never fumble; identifies items of tier ≤ own tier on sight (at Tier III, including technomagical origin).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Lore</strong> rank = tier; secondary <strong>Investigation</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Wyrdlens Adept or Cosmic Linguist. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
-          "chat": ""
-        }
-      },
-      "effects": [],
-      "folder": null,
-      "sort": 500000,
-      "ownership": {
-        "default": 0,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "flags": {
-        "bbttcc": {
-          "kind": "calling"
-        },
-        "fourththing": {
-          "calling": {
-            "key": "savant",
-            "faculty": "mind",
-            "signature": "lore",
-            "secondary": "investigation",
-            "pool": "Economy or Soft Power (GM picks by job)",
-            "awakens": "Wyrdlens Adept or Cosmic Linguist"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.367",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1787799219618,
-        "modifiedTime": 1787799219618,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_key": "!actors.items!23aUWlQQzspWw8Ae.MKfqfUzTHgp7cEJS"
-    },
-    {
-      "_id": "yvlgNXmbvTQ2JS62",
-      "name": "Savant — Apprentice (Tier I)",
-      "type": "feature",
-      "img": "icons/skills/trades/academics-book-study-runes.webp",
-      "system": {
-        "category": "calling",
-        "source": "Callings",
-        "tags": [
-          "calling",
-          "savant",
-          "tier-1"
-        ],
-        "description": {
-          "value": "<p><strong>Savant — Apprentice</strong> (Tier I).</p><p><strong>Trade — Appraise / identify:</strong> What it is, what it's worth, whether it's what the seller claims. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — I've Read About This</strong> <em>(1/scene)</em>: Explain the situation; one ally gets +2 on their next relevant check.</p>",
-          "chat": ""
-        }
-      },
-      "effects": [],
-      "folder": null,
-      "sort": 501000,
-      "ownership": {
-        "default": 0,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "flags": {
-        "fourththing": {
-          "calling": {
-            "key": "savant",
-            "tier": 1
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.367",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1787799219618,
-        "modifiedTime": 1787799219618,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_key": "!actors.items!23aUWlQQzspWw8Ae.yvlgNXmbvTQ2JS62"
-    },
-    {
-      "_id": "ss9g0N1fAsTJwz0n",
-      "name": "Savant — Initiate (Tier II)",
-      "type": "feature",
-      "img": "icons/skills/trades/academics-book-study-runes.webp",
-      "system": {
-        "category": "calling",
-        "source": "Callings",
-        "tags": [
-          "calling",
-          "savant",
-          "tier-2"
-        ],
-        "description": {
-          "value": "<p><strong>Savant — Initiate</strong> (Tier II).</p><p><strong>Trade — Patch them up:</strong> Between scenes, restore 2×tier Integrity to one patient or clear one physical condition. <span style=\"opacity:0.7\">Standard fee 30 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Diagnosis</strong> <em>(1/scene)</em>: Name one creature's type and reveal its resistances or a weakness.</p>",
-          "chat": ""
-        }
-      },
-      "effects": [],
-      "folder": null,
-      "sort": 502000,
-      "ownership": {
-        "default": 0,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "flags": {
-        "fourththing": {
-          "calling": {
-            "key": "savant",
-            "tier": 2
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.367",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1787799219618,
-        "modifiedTime": 1787799219618,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_key": "!actors.items!23aUWlQQzspWw8Ae.ss9g0N1fAsTJwz0n"
-    },
     {
       "name": "Human",
       "type": "species",
@@ -592,7 +468,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Cro-Magnon, Denisovan, Florensis, Neanderthal</strong>.</p><p>This root grants the shared Human core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
+          "value": "<p><strong>Human.</strong></p><p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
           "chat": ""
         },
         "advancement": [
@@ -671,34 +547,33 @@
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "on one checks [TODO(adv-call)] of your choice each round (declare before roll…"
+              "when": "atOneIntegrity",
+              "note": "Tenacious — at 1 Integrity (one check per round; declare before rolling)"
             }
           ],
           "triggers": [
-            {
-              "event": "on-save-fail",
-              "limit": {
-                "window": "soma-break",
-                "uses": 1
-              },
-              "effect": {
-                "kind": "chat-prompt",
-                "args": {
-                  "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
-                }
-              }
-            },
             {
               "event": "on-skill-fail",
               "limit": {
                 "window": "soma-break",
                 "uses": 1
               },
+              "offerText": "Adaptive — you failed a check: choose to succeed instead (reroll; the GM may simply rule it a success).",
               "effect": {
-                "kind": "chat-prompt",
-                "args": {
-                  "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
-                }
+                "kind": "reroll-failed-check",
+                "args": {}
+              }
+            },
+            {
+              "event": "on-save-fail",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "offerText": "Adaptive — you failed a defense check: choose to succeed instead (reroll; the GM may simply rule it a success).",
+              "effect": {
+                "kind": "reroll-failed-check",
+                "args": {}
               }
             }
           ],
@@ -722,30 +597,23 @@
       },
       "effects": [],
       "folder": "byroU26YSQP4OQUn",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.a3057e55a2fc1026",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.367",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1787799219618,
-        "modifiedTime": 1787799219618,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 0,
       "_id": "4p9TpewHnMh0WU9T",
-      "_key": "!actors.items!23aUWlQQzspWw8Ae.4p9TpewHnMh0WU9T"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989070959,
+        "modifiedTime": 1792989604200,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Human: Stubborn Spark",
@@ -760,7 +628,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Neanderthal, Denisovan, Florensis, Erectus). Your lineage grants Tier powers as you level.</p>",
+          "value": "\n<p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
           "chat": ""
         },
         "uses": {
@@ -970,28 +838,19 @@
           "version": 5
         },
         "fourththing": {
-          "grantedByAncestry": "Human"
+          "grantedByAncestry": "Human",
+          "rerolls": [
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "when": "atOneIntegrity",
+              "note": "Tenacious — at 1 Integrity (one check per round; declare before rolling)"
+            }
+          ]
         }
       },
       "effects": [],
       "folder": "byroU26YSQP4OQUn",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.jbiG7wAqTlBgEcDw",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.367",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1787799219618,
-        "modifiedTime": 1787799219618,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -999,7 +858,17 @@
       },
       "sort": 100000,
       "_id": "kxT6GY6JpA9ad5Ng",
-      "_key": "!actors.items!23aUWlQQzspWw8Ae.kxT6GY6JpA9ad5Ng"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989070959,
+        "modifiedTime": 1792989070959,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Human Heritage: Denisovan",
@@ -1010,7 +879,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Human (Denisovan)</em> while converting it from a lineage-species into a heritage.</p><p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Denisovan).</strong> You are not a fantasy human. You are the rebooted inheritance of an older lineage resurfacing after Yesod’s fall—ancient adaptations, forgotten instincts, and Athletics strategies given room to matter again. You remember mountains that no longer exist. Gravity listens to you when you ask it to.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>BOD (Body)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory) from the Human species root.</p><h3>Denisovan Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17):</p><ul><li><p><strong>Tier I — High-Altitude Blood.</strong> reroll-lowest on checks vs. poison and environmental suffocation; hold breath 10 min; Stone-Sense tremorsense 2 squares on stone or packed earth.</p></li><li><p><strong>Tier II — Stone-Singer.</strong> Mason’s tool proficiency. 1/Soma Break reinforce a structure or barrier.</p></li><li><p><strong>Tier III — Ancient Logic.</strong> reroll-lowest on Investigation and Occult checks involving structures, mechanisms, or ruins; share the insight to grant an ally advantage once per scene.</p></li><li><p><strong>Tier IV — Peak-Anchor.</strong> 1/Soma Break reaction to negate forced movement or teleportation within 6 squares; aggressor takes psychic backlash equal to your tier.</p></li></ul>",
+          "value": "<p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Human (Denisovan)</em> while converting it from a lineage-species into a heritage.</p><p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Denisovan).</strong> You are not a fantasy human. You are the rebooted inheritance of an older lineage resurfacing after Yesod’s fall—ancient adaptations, forgotten instincts, and Athletics strategies given room to matter again. You remember mountains that no longer exist. Gravity listens to you when you ask it to.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>BOD (Body)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory) from the Human species root.</p><h3>Denisovan Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17):</p><ul><li><p><strong>Tier I — High-Altitude Blood.</strong> reroll-lowest on checks vs. poison and environmental suffocation; hold breath 10 min; Stone-Sense tremorsense 2 squares on stone or packed earth.</p></li><li><p><strong>Tier II — Stone-Singer.</strong> a skill rank in Tinkering. 1/Soma Break reinforce a structure or barrier.</p></li><li><p><strong>Tier III — Ancient Logic.</strong> reroll-lowest on Investigation and Occult checks involving structures, mechanisms, or ruins; share the insight to let an ally reroll the lowest die once per scene.</p></li><li><p><strong>Tier IV — Peak-Anchor.</strong> 1/Soma Break reaction to negate forced movement or teleportation within 6 squares; aggressor takes psychic backlash equal to your tier.</p></li></ul><h3>Domain Edge</h3><ul><li><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Logistics marks</strong> at campaign start.</li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -1091,30 +960,1217 @@
         }
       },
       "folder": "X8GnIzoaCFwLQbGU",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.TjBhlDjlMKL60wbo",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.367",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1787799219618,
-        "modifiedTime": 1787799219618,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 0,
       "_id": "O11uEYkeE1AY23aC",
-      "_key": "!actors.items!23aUWlQQzspWw8Ae.O11uEYkeE1AY23aC"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989070959,
+        "modifiedTime": 1792989604201,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "_id": "oN4m6SKMpMWK52tt",
+      "name": "Savant",
+      "type": "class",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-savant",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "savant",
+          "mind"
+        ],
+        "description": {
+          "value": "<p><em>\"It's not obscure. You just haven't read it.\"</em></p><p><strong>Savant</strong> is the Mind Calling — the trade that kept its bearers alive after the Shattering. Umbrella: scholar, engineer, medic, archivist, detective, translator. A profession is a flavor label on the Calling.</p><p><strong>Knack — Library-Brain:</strong> Lore and Investigation checks never fumble; identifies items of tier ≤ own tier on sight (at Tier III, including technomagical origin).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Lore</strong> rank = tier; secondary <strong>Investigation</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Wyrdlens Adept or Cosmic Linguist. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "savant",
+            "faculty": "mind",
+            "signature": "lore",
+            "secondary": "investigation",
+            "pool": "Economy or Soft Power (GM picks by job)",
+            "awakens": "Wyrdlens Adept or Cosmic Linguist"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989070959,
+        "modifiedTime": 1792989070959,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "_id": "BJtbBgCgHWK9PdGn",
+      "name": "Savant — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "savant",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Savant — Apprentice</strong> (Tier I).</p><p><strong>Trade — Appraise / identify:</strong> What it is, what it's worth, whether it's what the seller claims. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — I've Read About This</strong> <em>(1/scene)</em>: Explain the situation; one ally gets +2 on their next relevant check.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 501000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "savant",
+            "tier": 1
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "who": "targets",
+                "do": {
+                  "bankBonus": {
+                    "bonus": 2,
+                    "context": "check",
+                    "note": "I've Read About This"
+                  }
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989070959,
+        "modifiedTime": 1792989070959,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "_id": "PpoMTEy5k2PrlD6P",
+      "name": "Savant — Initiate (Tier II)",
+      "type": "feature",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "savant",
+          "tier-2"
+        ],
+        "description": {
+          "value": "<p><strong>Savant — Initiate</strong> (Tier II).</p><p><strong>Trade — Patch them up:</strong> Between scenes, restore 2×tier Integrity to one patient or clear one physical condition. <span style=\"opacity:0.7\">Standard fee 30 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Diagnosis</strong> <em>(1/scene)</em>: Name one creature's type and reveal its resistances or a weakness.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 502000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "savant",
+            "tier": 2
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989070959,
+        "modifiedTime": 1792989070959,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "_id": "cNJvMnCFWaFhrkgT",
+      "name": "Threat Assessment",
+      "type": "feat",
+      "img": "icons/sundries/documents/document-symbol-eye.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Core Feats v1 (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><h2>Threat Assessment</h2><p><em>You don’t look at enemies. You read them.</em></p><hr><h3>Rules</h3><p>You gain a skill rank in Perception (Mind) or Investigation (Mind) (your choice). If you already have it, its rank rises by one instead. Additionally, at the start of combat you may ask the GM: which enemy appears most dangerous, most injured, or is controlling the battlefield?</p><p class=\"ft-engine-note\"><em>⚙ +1 to Perception or Investigation — whichever you rank higher.</em></p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_threat_assessment",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-core-v1",
+          "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+        }
+      },
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 1900000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989070959,
+        "modifiedTime": 1792989070959,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Combat Logistics",
+      "type": "feat",
+      "img": "icons/environment/settlement/wagon.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Core Feats (Batch 3)",
+          "revision": 1,
+          "rules": "2026"
+        },
+        "tags": [],
+        "description": {
+          "value": "<h2>Combat Logistics</h2><p><em>Wars are won before the first swing.</em></p><hr /><h3>Rules</h3><p>At the start of combat, choose one ally. That ally gains temporary Integrity equal to your rank bonus.</p><p class=\"ft-engine-note\"><em>🃏 Card — target the ally and click ▶ at the start of combat: they gain temporary Integrity equal to your rank bonus.</em></p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_combat_logistics",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-batch3",
+          "featNumber": 52,
+          "generatedAt": "2026-01-19T05:04:20.693394Z"
+        },
+        "autoanimations": {
+          "id": "ft-combat-logistics",
+          "label": "Combat Logistics",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "intro",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_id": "nhkTUH2s5Mq6WPjk",
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 1400000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989070959,
+        "modifiedTime": 1792989070959,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "_id": "9VhSXnjPgTX89Hfe",
+      "name": "Savant — Master (Tier III)",
+      "type": "feature",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "savant",
+          "tier-3"
+        ],
+        "description": {
+          "value": "<p><strong>Savant — Master</strong> (Tier III).</p><p><strong>Trade — Research a question:</strong> One downtime, one honest answer with sources (GM: truthful, not necessarily complete). <span style=\"opacity:0.7\">Standard fee 90 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Field Solution</strong> <em>(1/scene)</em>: Jury-rig a one-use tool, antidote, or bypass from what's on hand.</p><p><em>Master step:</em> the Savant's Knack (Library-Brain) improves at this tier — see the class entry.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 503000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "savant",
+            "tier": 3
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989070959,
+        "modifiedTime": 1792989070959,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Laser Pistol, Rad",
+      "type": "weapon",
+      "_id": "qAxg6z28P0SFQGAg",
+      "img": "icons/weapons/guns/pistol-revolver-energy-heavy.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "1d10",
+          "attribute": "violence",
+          "type": "thermal",
+          "damageFlavor": "hot",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 24,
+          "units": "sq"
+        },
+        "tags": [
+          "pistol",
+          "thermal",
+          "stun"
+        ],
+        "effect": "Stun Mode: on a hit, the target makes a Body check against your Resolve DC or is Staggered for 1 round. In stun mode the GM declares no Integrity dealt.",
+        "flavor": "RIGHT??",
+        "manifestation": {
+          "tier": 2,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "staggered"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "body",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          }
+        },
+        "description": {
+          "value": "<p>You know that really cool laser blaster that you saw that one time?<br /><br />This is it.</p><p></p><p>It shoots lasers.</p><p></p><p>And has a stun mode.</p><p></p><p>RIGHT??</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Stun Mode: on a hit, the target makes a Body check against your Resolve DC or is Staggered for 1 round. In stun mode the GM declares no Integrity dealt.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d10 Thermal damage to <em>Integrity</em> <span style=\"opacity:.75\">(hot)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 6 / 24 squares</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T2</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": "H6eMhWQrjwcwZcBi",
+      "sort": 1000000,
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "rfi": {
+          "item": {
+            "tier": "I",
+            "footprint": 1,
+            "reach": "5",
+            "frame": "weapon",
+            "signature": "",
+            "origin": "looted",
+            "originator": null,
+            "bound": "free",
+            "upkeep": {
+              "mode": "passive",
+              "per": "scene"
+            },
+            "misfire": {
+              "tierClamp": true,
+              "table": null
+            },
+            "signals": {}
+          }
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "footprint": 1,
+              "reach": "5",
+              "frame": "weapon",
+              "signature": "It shoots lasers. And has a stun mode.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {
+                "stun": true
+              },
+              "lore": "<p>Standard-issue thermal sidearm. Compact, focusing-lens nose, two-position selector for kill/stun.</p><p><b>Stun Mode.</b> Switch as a free action. On a hit in stun mode, the target makes a Body check against your Resolve DC or is Staggered until the end of its next turn. No Integrity damage delivered.</p>",
+              "materialOf": [
+                "rad-iron",
+                "focusing-lens"
+              ],
+              "legacySystem": {
+                "category": "melee",
+                "intent": "violence",
+                "skill": "melee",
+                "damage": {
+                  "formula": "2d6",
+                  "attribute": "violence",
+                  "type": "kinetic",
+                  "damageFlavor": "",
+                  "track": "integrity",
+                  "base": {
+                    "types": [
+                      "radiant"
+                    ],
+                    "custom": {
+                      "enabled": false
+                    },
+                    "scaling": {
+                      "number": 1
+                    },
+                    "number": 1,
+                    "denomination": 10,
+                    "bonus": "@mod"
+                  },
+                  "versatile": {
+                    "types": [],
+                    "custom": {
+                      "enabled": false
+                    },
+                    "scaling": {
+                      "number": 1
+                    }
+                  }
+                },
+                "range": {
+                  "short": 1,
+                  "long": 120,
+                  "units": "ft",
+                  "reach": null,
+                  "value": 60
+                },
+                "tags": [],
+                "effect": "",
+                "flavor": "",
+                "manifestation": {
+                  "tier": 1,
+                  "family": "form",
+                  "concept": "",
+                  "form": "weapon",
+                  "function": "harm",
+                  "stability": "bound",
+                  "interactionModel": "weapon",
+                  "costType": "none",
+                  "costValue": 0,
+                  "costText": "",
+                  "duration": "scene",
+                  "durationText": "",
+                  "triggerText": "",
+                  "scale": "personal",
+                  "targetText": "",
+                  "rangeAreaText": "",
+                  "maintenanceCost": "",
+                  "riskText": "",
+                  "pathResonance": "",
+                  "fictionalPermission": "",
+                  "gmCalibration": "",
+                  "mechanicalHook": "",
+                  "signature": "",
+                  "thirdThing": "",
+                  "opCost": {
+                    "pool": "",
+                    "value": 0
+                  }
+                },
+                "activities": {
+                  "WZdqu6ucRTjk7P3I": {
+                    "_id": "WZdqu6ucRTjk7P3I",
+                    "type": "attack",
+                    "sort": 0,
+                    "activation": {
+                      "type": "action",
+                      "override": false
+                    },
+                    "consumption": {
+                      "scaling": {
+                        "allowed": false
+                      },
+                      "spellSlot": true,
+                      "targets": []
+                    },
+                    "description": {},
+                    "duration": {
+                      "units": "inst",
+                      "concentration": false,
+                      "override": false
+                    },
+                    "effects": [],
+                    "flags": {},
+                    "range": {
+                      "units": "self",
+                      "override": false
+                    },
+                    "target": {
+                      "template": {
+                        "contiguous": false,
+                        "units": "ft"
+                      },
+                      "affects": {
+                        "choice": false
+                      },
+                      "override": false,
+                      "prompt": true
+                    },
+                    "uses": {
+                      "spent": 0,
+                      "recovery": []
+                    },
+                    "visibility": {
+                      "level": {},
+                      "requireAttunement": false,
+                      "requireIdentification": false,
+                      "requireMagic": false
+                    },
+                    "attack": {
+                      "critical": {},
+                      "flat": false,
+                      "type": {}
+                    },
+                    "damage": {
+                      "critical": {},
+                      "includeBase": true,
+                      "parts": []
+                    }
+                  }
+                },
+                "uses": {
+                  "spent": 0,
+                  "recovery": [],
+                  "max": ""
+                },
+                "description": {
+                  "value": "<p>You know that really cool laser blaster that you saw that one time?<br /><br />This is it.</p><p></p><p>It shoots lasers.</p><p></p><p>And has a stun mode.</p><p></p><p>RIGHT??</p>",
+                  "chat": ""
+                },
+                "identifier": "weapon",
+                "source": {
+                  "revision": 1,
+                  "rules": "2024"
+                },
+                "identified": true,
+                "unidentified": {
+                  "description": ""
+                },
+                "container": null,
+                "quantity": 1,
+                "weight": {
+                  "value": 0,
+                  "units": "lb"
+                },
+                "price": {
+                  "value": 0,
+                  "denomination": "gp"
+                },
+                "rarity": "common",
+                "attunement": "",
+                "attuned": false,
+                "equipped": false,
+                "crew": {
+                  "value": []
+                },
+                "ammunition": {},
+                "armor": {},
+                "properties": [
+                  "fir"
+                ],
+                "proficient": null,
+                "type": {
+                  "value": "martialR",
+                  "baseItem": ""
+                },
+                "mastery": ""
+              },
+              "price": {
+                "marks": 150,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII weapon stamp",
+                "bound": "free",
+                "saleBack": 60
+              }
+            }
+          },
+          "manifestSheetMode": {
+            "bytUGWIOqq9eT7Or": "display"
+          },
+          "equipped": true
+        },
+        "autoanimations": {
+          "id": "6fa7c3fc-de8d-4600-b521-64a225eff8ed",
+          "label": "Laser Pistol, Rad",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "spell",
+              "animation": "guidingbolt",
+              "variant": "01",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989070959,
+        "modifiedTime": 1792989070959,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Steelweave Hauberk",
+      "type": "armor",
+      "img": "icons/equipment/chest/breastplate-scale-grey.webp",
+      "system": {
+        "guardBonus": 3,
+        "evasionBonus": 0,
+        "resolveBonus": 1,
+        "resistances": [
+          "kinetic"
+        ],
+        "armorSkill": "plating",
+        "equipped": false,
+        "tags": [
+          "t2-aspiration",
+          "heavy",
+          "mail",
+          "plate",
+          "reactive"
+        ],
+        "category": "armor",
+        "source": "",
+        "description": {
+          "value": "<p>A heavy hauberk woven through with a fine tension-thread of reactive yesodium-doped wire, cut and rivetted by a journeyman armorer in one of the older Bad Eden plate-houses. The weave snags incoming force a half-beat before it lands, redistributing it into the wearer's stance instead of their ribs. Heavy. Expensive. Worth it.</p><p><strong>Reactive Lacing.</strong> While worn, the wearer may shift one die of incoming kinetic damage into Stress instead of Integrity, once per scene. No upkeep, no harmonization — the thread does the thinking.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "footprint": 1,
+              "reach": "self",
+              "frame": "armor",
+              "signature": "Mail laced with reactive thread. The thread complains. The mail does not.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>A heavy hauberk woven through with a fine tension-thread of reactive yesodium-doped wire, cut and rivetted by a journeyman armorer in one of the older Bad Eden plate-houses. The weave snags incoming force a half-beat before it lands, redistributing it into the wearer's stance instead of their ribs. Heavy. Expensive. Worth it.</p><p><b>Reactive Lacing.</b> While worn, the wearer may shift one die of incoming kinetic damage into Stress instead of Integrity, once per scene. No upkeep, no harmonization — the thread does the thinking.</p>",
+              "materialOf": [
+                "mail",
+                "yesodium-thread",
+                "rivet-plate"
+              ],
+              "grants": {
+                "resistances": [
+                  "kinetic"
+                ]
+              },
+              "price": {
+                "marks": 225,
+                "currency": "nonlethal",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII armor stamp",
+                "bound": "free",
+                "saleBack": 90
+              }
+            }
+          },
+          "equipped": true
+        }
+      },
+      "folder": "Iyyec8ij0PAfdLBd",
+      "_id": "DIfoWgL4OePVONrm",
+      "effects": [
+        {
+          "name": "⚙️ Defense Grant",
+          "transfer": false,
+          "disabled": false,
+          "flags": {
+            "fourththing": {
+              "defenseGrant": true
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "flags.fourththing.grant.resists",
+                "value": "kinetic",
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.guard",
+                "value": 3,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.resolve",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "kMQHJdNHJCM1RtdP",
+          "img": "icons/svg/aura.svg",
+          "type": "base",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989070959,
+            "modifiedTime": 1792989070959,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "sort": -75000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989070959,
+        "modifiedTime": 1792989070959,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -1122,15 +2178,16 @@
   "sort": 300000,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1787799219618,
-    "modifiedTime": 1787799219618,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989070959,
+    "modifiedTime": 1792989070962,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

@@ -8,12 +8,14 @@
       "createdAt": 1783790334312
     },
     "fourththing": {
-      "kind": "npc"
+      "kind": "npc",
+      "surgeEnabled": false
     },
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "the Crown Mall, the Tanneritos, the archive, testimony, lights over the coast",
-        "notes": "[VS-POLISH-2026-07-09] ARCHIVIST HAT \u2014 Kickflip Lazarus, keeper (self-appointed, uncontested) of the Tanneritos archive at the Crown Mall. Doctrine: the mall remembers EVERYTHING \u2014 camcorder clips, gossip strata, dead advertisements still doing their little loops \u2014 and access is a hospitality question, not a security one. Come respectful or come trading, and the archive opens; come acting like the law and it answers like a mall \u2014 technically open, spiritually closed, note attached to your file. THE LIGHTS: the archive holds years of testimony about lights over the coast, filed under 'weather (disputed).' Kickflip has personally cross-indexed the ones that move against the ones that WAIT. GUARDS: sources. The archive never burns a source. TELLS: narrates archive retrieval like sports commentary; genuinely cannot whisper."
+        "notes": "[VS-POLISH-2026-07-09] ARCHIVIST HAT — Kickflip Lazarus, keeper (self-appointed, uncontested) of the Tanneritos archive at the Crown Mall. Doctrine: the mall remembers EVERYTHING — camcorder clips, gossip strata, dead advertisements still doing their little loops — and access is a hospitality question, not a security one. Come respectful or come trading, and the archive opens; come acting like the law and it answers like a mall — technically open, spiritually closed, note attached to your file. THE LIGHTS: the archive holds years of testimony about lights over the coast, filed under 'weather (disputed).' Kickflip has personally cross-indexed the ones that move against the ones that WAIT. GUARDS: sources. The archive never burns a source. TELLS: narrates archive retrieval like sports commentary; genuinely cannot whisper.\n\n[CROWN-MALL-RETROFIT-2026-09-27] ONE VOICE — Kickflip Lazarus is the archivist who skates. He files the way he lands: commitment leaves a groove, and a groove is an index. He narrates the shelf like a halfpipe run and cannot whisper, except once, on the tape. The skate-ghost lines (cherry soda, wheels off the ground, \"you ate shit interestingly\") and the archivist lines (\"access is a hospitality question\") are the same man on the same afternoon. THE CLIP: he filmed the lights over the coast on that one night from the mall lot, on a camcorder, because there isn't a blank tape left in the world and the Tanneritos tape over everything; under the lights, four seconds of Halloween 2077 bleed through — Crown Mall Video's own counter, kids in costume, a woman in a projectionist costume renting cartoons and waving at the camera. He knows whose tape is out and how long. He will do the late fee out loud, to the cent, plus tax, which the mall no longer believes in.",
+        "secretsRaw": "Weather (Disputed) :: oppRollMinus2 :: a Steward asks for the lights that MOVE against the ones that WAIT :: Years of testimony filed under 'weather (disputed)'; he has cross-indexed them personally. The ones that move have a bearing, and the bearing is coastward, sideways, the way a ship lands when it means to.\nCannot Whisper :: rollPlus2 :: a Steward asks who was holding the camera :: Him. He genuinely cannot whisper. On the tape, he is whispering. It is the only time."
       }
     },
     "bbttcc-character-options": {
@@ -29,12 +31,15 @@
         "classUuid": "",
         "classApplied": false
       }
+    },
+    "bbttcc-territory": {
+      "faction": "Crown Mall"
     }
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Skatepark spirit and self-appointed archivist of the Crown Mall (Act 4)",
+      "notes": "Kickflip Lazarus is the Crown Mall's skatepark spirit, a thin, staticky hooded figure with a board under one arm who lands without impact, and the self-appointed, uncontested keeper of the Tanneritos archive. The mall remembers everything: camcorder clips, gossip, dead adverts still running their little loops. Come respectful or come trading and the archive opens; come acting like the law and it is technically open, spiritually closed. He narrates retrievals like sports commentary, teaches skating as a kind of honesty, and genuinely cannot whisper."
     },
     "details": {
       "level": 1,
@@ -176,10 +181,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 0
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -188,7 +203,8 @@
     "derived": {
       "integrity": {
         "value": 16,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 16,
@@ -278,7 +294,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -313,18 +330,22 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
-      "id": null,
-      "loyalty": 0
+      "id": "ibpWpT3LPv0sZHio",
+      "loyalty": 0,
+      "name": "Crown Mall"
     },
     "bloodDebt": {
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
@@ -436,7 +457,7 @@
           "violence"
         ],
         "description": {
-          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -463,21 +484,20 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534381,
-        "modifiedTime": 1784177534381,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989087815,
+        "modifiedTime": 1792989087815,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!sjpcCvnRzNTOiqe3.4bi4Gf2XQHVkEBpu"
+      }
     },
     {
       "_id": "v91L56KsUWRGtO8N",
-      "name": "Bravo \u2014 Apprentice (Tier I)",
+      "name": "Bravo — Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
@@ -489,7 +509,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Bravo \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick \u2014 Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
           "chat": ""
         }
       },
@@ -505,25 +525,42 @@
           "calling": {
             "key": "bravo",
             "tier": 1
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "allyDamaged",
+                "radius": 1,
+                "do": {
+                  "ward": 0,
+                  "redirect": true
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                },
+                "label": "Hold the Line"
+              }
+            ]
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534381,
-        "modifiedTime": 1784177534381,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989087815,
+        "modifiedTime": 1792989619483,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!sjpcCvnRzNTOiqe3.v91L56KsUWRGtO8N"
+      }
     },
     {
       "_id": "dGYwNMVLmiy0Uu4t",
-      "name": "Bravo \u2014 Initiate (Tier II)",
+      "name": "Bravo — Initiate (Tier II)",
       "type": "feature",
       "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
@@ -535,7 +572,7 @@
           "tier-2"
         ],
         "description": {
-          "value": "<p><strong>Bravo \u2014 Initiate</strong> (Tier II).</p><p><strong>Trade \u2014 Drill the green:</strong> Train a group; they count Trained (rank 1) in one Violence aptitude for the next scene that tests it. <span style=\"opacity:0.7\">Standard fee 30 marks (Violence).</span></p><p><strong>Trick \u2014 Disarming Blow</strong> <em>(1/scene)</em>: On a hit, the target drops its weapon or takes \u22122 on its next strike.</p>",
+          "value": "<p><strong>Bravo — Initiate</strong> (Tier II).</p><p><strong>Trade — Drill the green:</strong> Train a group; they count Trained (rank 1) in one Violence aptitude for the next scene that tests it. <span style=\"opacity:0.7\">Standard fee 30 marks (Violence).</span></p><p><strong>Trick — Disarming Blow</strong> <em>(1/scene)</em>: On a hit, the target is Imposed: its next strike rolls 3d10 and keeps the lowest 2.</p>",
           "chat": ""
         }
       },
@@ -551,21 +588,36 @@
           "calling": {
             "key": "bravo",
             "tier": 2
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "do": {
+                  "impose": true
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                },
+                "label": "Disarming Blow"
+              }
+            ]
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534381,
-        "modifiedTime": 1784177534381,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989087815,
+        "modifiedTime": 1792989619484,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!sjpcCvnRzNTOiqe3.dGYwNMVLmiy0Uu4t"
+      }
     }
   ],
   "effects": [],
@@ -573,15 +625,16 @@
   "sort": 100000,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177534381,
-    "modifiedTime": 1784177534381,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989087815,
+    "modifiedTime": 1792989087816,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

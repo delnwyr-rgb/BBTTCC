@@ -19,7 +19,7 @@
     },
     "attributes": {
       "violence": {
-        "value": 4
+        "value": 3
       },
       "intrigue": {
         "value": 6
@@ -28,7 +28,7 @@
         "value": 3
       },
       "body": {
-        "value": 4
+        "value": 3
       },
       "mind": {
         "value": 4
@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 60,
-        "max": 60
+        "max": 60,
+        "temp": 0
       },
       "stress": {
         "value": 30,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -137,14 +139,21 @@
       "movementBudgetFt": 30
     },
     "defenses": {
-      "resistances": [],
+      "resistances": [
+        "kinetic"
+      ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "sephirotic"
+      ]
     },
     "conditionImmunities": [
       "shaken"
     ],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -157,6 +166,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "A dream-fiend that harvests Soma-Break echoes from sleepers. Half-real until it strikes."
     }
   },
   "flags": {
@@ -192,16 +205,19 @@
             ]
           },
           "price": {
-            "marks": 3240,
-            "bounty": 3240,
-            "hire": 8100,
-            "ransom": 5400,
+            "marks": 30,
+            "bounty": 30,
+            "hire": 45,
+            "ransom": 45,
             "currency": "nonlethal",
             "gmOverride": false,
-            "notes": "TIII medium stealth (bestiary) \u2014 bounty 3240 / hire 8100 / ransom 5400 marks (paid in nonlethal)"
-          }
+            "notes": "TIII medium dream — bounty 30 / hire 45 marks; credited to the pool matching the method (default nonlethal)"
+          },
+          "lineage": "dream",
+          "subLineage": "harvester"
         }
-      }
+      },
+      "creatureType": "undead"
     }
   },
   "_id": "lAn4USFvKWoAVVwy",
@@ -346,6 +362,21 @@
               "tier": "III",
               "frame": "trait"
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attacked",
+                "if": {
+                  "ownerNotAttacked": true
+                },
+                "do": {
+                  "reroll": "attack-highest"
+                },
+                "label": "Half-Real — until the first strike manifests it"
+              }
+            ]
           }
         }
       },
@@ -357,17 +388,16 @@
       },
       "_id": "vsHgivXqFWBRUTLj",
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.5",
         "createdTime": 1780118758112,
-        "modifiedTime": 1780163240121,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1791422261024,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!lAn4USFvKWoAVVwy.vsHgivXqFWBRUTLj"
+      }
     },
     {
       "name": "Dreamcut",
@@ -378,7 +408,7 @@
         "intent": "violence",
         "skill": "melee",
         "damage": {
-          "formula": "2d8",
+          "formula": "2d6",
           "attribute": "violence",
           "type": "psychic",
           "damageFlavor": "sleep-edge",
@@ -446,11 +476,25 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII attack \u00d7 1",
+                "notes": "TIII attack × 1",
                 "bound": "free",
                 "saleBack": 180
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Dreamcut"
+                },
+                "do": {
+                  "clarity": "-1d4"
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -639,17 +683,16 @@
       },
       "_id": "8YPlYjNTBg5RE28x",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118758112,
-        "modifiedTime": 1782167244109,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989133546,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!lAn4USFvKWoAVVwy.8YPlYjNTBg5RE28x"
+      }
     },
     {
       "name": "Echo-Pluck",
@@ -660,7 +703,7 @@
         "intent": "violence",
         "skill": "ranged",
         "damage": {
-          "formula": "2d8",
+          "formula": "2d6",
           "attribute": "violence",
           "type": "psychic",
           "damageFlavor": "memory-thread",
@@ -676,7 +719,7 @@
           "tier-iii",
           "role-stealth"
         ],
-        "effect": "On a hit, the target forgets the last meaningful thing they did until end of next turn (lose access to that action's benefits \u2014 e.g., a buff just granted is missed).",
+        "effect": "On a hit, the target forgets the last meaningful thing they did until end of next turn (lose access to that action's benefits — e.g., a buff just granted is missed).",
         "flavor": "It is not stealing memory. It is just reading the strand back. Backwards.",
         "manifestation": {
           "tier": 1,
@@ -710,7 +753,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> range 6/18 squares, one target. Damage: <code>2d8</code> psychic (memory-thread) + violence. On a hit, the target forgets the last meaningful thing they did until end of next turn (lose access to that action's benefits \u2014 e.g., a buff just granted is missed).</p><p><em>It is not stealing memory. It is just reading the strand back. Backwards.</em></p>",
+          "value": "<p><strong>Strike.</strong> range 6/18 squares, one target. Damage: <code>2d8</code> psychic (memory-thread) + violence. On a hit, the target forgets the last meaningful thing they did until end of next turn (lose access to that action's benefits — e.g., a buff just granted is missed).</p><p><em>It is not stealing memory. It is just reading the strand back. Backwards.</em></p>",
           "chat": ""
         }
       },
@@ -728,11 +771,26 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII attack \u00d7 1",
+                "notes": "TIII attack × 1",
                 "bound": "free",
                 "saleBack": 180
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Echo-Pluck"
+                },
+                "do": {
+                  "prompt": "Echo-Pluck: the target loses the benefit of its last meaningful action until its next turn ends."
+                },
+                "narrative": true
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -921,20 +979,19 @@
       },
       "_id": "gMbhnuYsqpyBIRSG",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118758112,
-        "modifiedTime": 1782167244109,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989133547,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!lAn4USFvKWoAVVwy.gMbhnuYsqpyBIRSG"
+      }
     },
     {
-      "name": "Soma-Drain Field (recharges on a Soma Break)",
+      "name": "Soma-Drain Field (recharge 5–6)",
       "type": "weapon",
       "img": "icons/magic/unholy/orb-glowing-purple.webp",
       "system": {
@@ -942,7 +999,7 @@
         "intent": "presence",
         "skill": "melee",
         "damage": {
-          "formula": "2d8",
+          "formula": "2d6",
           "attribute": "violence",
           "type": "psychic",
           "damageFlavor": "echo-pull",
@@ -960,7 +1017,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 20 ft. \u2014 targets roll vs Resolve (DC 13). Half damage on success. On a failed save, the target's next Soma Break restores half as much (one stage of harvest). Multiple failures stack; refreshes on a true rest. Recharge 5\u20136.",
+        "effect": "Radius 4 squares. — targets roll vs Resolve (DC 13). Half damage on success. On a failed save, the target's next Soma Break restores half as much (one stage of harvest). Multiple failures stack; refreshes on a true rest. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
         "flavor": "The room briefly tastes of someone else's morning.",
         "manifestation": {
           "tier": 1,
@@ -991,6 +1048,18 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 13,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 20
           }
         },
         "description": {
@@ -1016,16 +1085,35 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII save \u00d7 1",
+                "notes": "TIII save × 1",
                 "bound": "free",
                 "saleBack": 180
               }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Soma-Drain Field (recharge 5–6)"
+                },
+                "do": {
+                  "prompt": "Next Soma Break restores half (stacks)."
+                },
+                "narrative": true
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
             }
           }
         },
         "autoanimations": {
           "id": "ft-soma-drain-field-recharge-5-6-",
-          "label": "Soma-Drain Field (Recharge 5\u20136)",
+          "label": "Soma-Drain Field (Recharge 5–6)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -1209,17 +1297,16 @@
       },
       "_id": "vV2mcWIDEMnk7QlK",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118758112,
-        "modifiedTime": 1782167244110,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989133547,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!lAn4USFvKWoAVVwy.vV2mcWIDEMnk7QlK"
+      }
     }
   ],
   "effects": [],
@@ -1229,12 +1316,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118758112,
-    "modifiedTime": 1783219930642,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989133377,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

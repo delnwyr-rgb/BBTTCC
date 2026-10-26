@@ -1,0 +1,145 @@
+{
+  "name": "Whispering Flames",
+  "type": "weapon",
+  "img": "icons/weapons/guns/flamethrower-spray-fire-orange.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "violence",
+    "skill": "warding",
+    "damage": {
+      "formula": "3d10",
+      "attribute": "intrigue",
+      "type": "kinetic",
+      "damageFlavor": "hot",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 6,
+      "long": 6
+    },
+    "tags": [
+      "aoe",
+      "shape-cone"
+    ],
+    "effect": "A torrent of fiery ravens in a 6-square cone. Each creature rolls an Evasion check vs DC 18. Fail: 3d10 kinetic AND 3d10 thermal (hot). Success: half of each. The whispering is each bird pricing your organs.",
+    "flavor": "The cloud leans toward you and becomes beaks.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "intrigue",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 18,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "cone",
+        "size": 30
+      }
+    },
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Whispering Flames"
+            },
+            "do": {
+              "damage": {
+                "formula": "3d10",
+                "type": "thermal"
+              }
+            }
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Ashen Horde"
+        ],
+        "sourceIds": [
+          "knO0GK8qKCeyNC6N"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "j4rT66ogSifuHghk",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069986,
+    "modifiedTime": 1792989070058,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!j4rT66ogSifuHghk"
+}

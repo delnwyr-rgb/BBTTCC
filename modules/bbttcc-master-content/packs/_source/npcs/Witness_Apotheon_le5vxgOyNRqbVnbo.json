@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 105,
-        "max": 105
+        "max": 105,
+        "temp": 0
       },
       "stress": {
         "value": 52,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -139,7 +141,7 @@
     "defenses": {
       "resistances": [
         "psychic",
-        "radiant"
+        "sephirotic"
       ],
       "immunities": [],
       "vulnerabilities": []
@@ -150,6 +152,9 @@
       "shaken"
     ],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -162,6 +167,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "A Witness who looked too long and now sees everything. Speaks only when ending things."
     }
   },
   "flags": {
@@ -202,16 +211,19 @@
             ]
           },
           "price": {
-            "marks": 20250,
-            "bounty": 20250,
-            "hire": 50625,
-            "ransom": 33750,
+            "marks": 80,
+            "bounty": 80,
+            "hire": 120,
+            "ransom": 120,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "TIV heavy caster (bestiary) \u2014 bounty 20250 / hire 50625 / ransom 33750 marks (paid in intrigue)"
-          }
+            "notes": "TIV heavy mortal — bounty 80 / hire 120 marks; credited to the pool matching the method (default intrigue)"
+          },
+          "lineage": "mortal",
+          "subLineage": "witness"
         }
-      }
+      },
+      "creatureType": "humanoid"
     }
   },
   "_id": "le5vxgOyNRqbVnbo",
@@ -376,8 +388,7 @@
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!le5vxgOyNRqbVnbo.ahnpkz8c3dK1AMcz"
+      }
     },
     {
       "name": "Sight-Cuts-Sight",
@@ -456,11 +467,28 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack \u00d7 1",
+                "notes": "TIV attack × 1",
                 "bound": "free",
                 "saleBack": 540
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Sight-Cuts-Sight"
+                },
+                "do": {
+                  "damage": {
+                    "formula": "2d6",
+                    "type": "psychic"
+                  }
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -649,17 +677,16 @@
       },
       "_id": "mVNAIcMEWPfbHtDY",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1780118769972,
-        "modifiedTime": 1782167244160,
+        "modifiedTime": 1791331978854,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!le5vxgOyNRqbVnbo.mVNAIcMEWPfbHtDY"
+      }
     },
     {
       "name": "Terminal Observation",
@@ -738,11 +765,26 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack \u00d7 1",
+                "notes": "TIV attack × 1",
                 "bound": "free",
                 "saleBack": 540
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Terminal Observation"
+                },
+                "do": {
+                  "prompt": "Terminal Observation: target loses remaining once-per resources (only if hit before)."
+                },
+                "narrative": true
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -931,20 +973,19 @@
       },
       "_id": "VPzY3r4H1ccbckiT",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118769972,
-        "modifiedTime": 1782167244160,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989135353,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!le5vxgOyNRqbVnbo.VPzY3r4H1ccbckiT"
+      }
     },
     {
-      "name": "All-Seeing Flash (recharges on a Soma Break)",
+      "name": "All-Seeing Flash (recharge 5–6)",
       "type": "weapon",
       "img": "icons/magic/light/explosion-star-glow-blue-purple.webp",
       "system": {
@@ -970,7 +1011,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 30 ft. \u2014 targets roll vs Resolve (DC 15). Half damage on success. On a failed save, the target is Blinded until end of next turn AND the apotheon gains a Witness-Mark on them (next attack against them has reroll-the-lowest). Recharge 5\u20136.",
+        "effect": "Radius 6 squares. — targets roll vs Resolve (DC 15). Half damage on success. On a failed save, the target is Blinded until end of next turn AND the apotheon gains a Witness-Mark on them (next attack against them has reroll-the-lowest). At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
         "flavor": "It blinks. The room becomes briefly, painfully readable.",
         "manifestation": {
           "tier": 1,
@@ -1001,6 +1042,24 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 15,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "blinded"
+            ],
+            "duration": "1-round"
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 30
           }
         },
         "description": {
@@ -1026,16 +1085,24 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV save \u00d7 1",
+                "notes": "TIV save × 1",
                 "bound": "free",
                 "saleBack": 540
               }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
             }
           }
         },
         "autoanimations": {
           "id": "ft-all-seeing-flash-recharge-5-6-",
-          "label": "All-Seeing Flash (Recharge 5\u20136)",
+          "label": "All-Seeing Flash (Recharge 5–6)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -1219,17 +1286,16 @@
       },
       "_id": "JM50L4ieqzlhLVrA",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118769972,
-        "modifiedTime": 1782167244161,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989135353,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!le5vxgOyNRqbVnbo.JM50L4ieqzlhLVrA"
+      }
     },
     {
       "name": "Speaks Only When Ending Things",
@@ -1244,7 +1310,7 @@
           "role-caster"
         ],
         "description": {
-          "value": "<p><strong>Passive.</strong> The apotheon does not communicate during combat. The first time it speaks aloud in a scene, that scene ends within 1d4 rounds \u2014 narratively, mechanically, somehow. The GM picks how. The players know it is coming.</p><p><em>Silence, then a single sentence. The sentence is also the end credits.</em></p>",
+          "value": "<p><strong>Passive.</strong> The apotheon does not communicate during combat. The first time it speaks aloud in a scene, that scene ends within 1d4 rounds — narratively, mechanically, somehow. The GM picks how. The players know it is coming.</p><p><em>Silence, then a single sentence. The sentence is also the end credits.</em></p>",
           "chat": ""
         }
       },
@@ -1276,8 +1342,80 @@
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
+      }
+    },
+    {
+      "name": "Reports Up",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "mortal",
+          "witness"
+        ],
+        "description": {
+          "value": "<p>On death, the Witness's last sight is transmitted to the nearest Witness within a mile. While any other Witness is within a mile, this one cannot be surprised.</p><p><em>Gathers, reports, dies anonymously.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!le5vxgOyNRqbVnbo.XD8GLOEnxZrHZhOe"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "zero",
+                "do": {
+                  "prompt": "Reports Up: its last sight is transmitted to the nearest Witness within a hex."
+                },
+                "narrative": true
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "mortal"
+            }
+          },
+          "passives": {
+            "aura": {
+              "radius": 1056,
+              "who": "allies",
+              "rerolls": [
+                {
+                  "context": "attack",
+                  "mode": "reroll-lowest",
+                  "note": "Reports Up — the lieutenant relays"
+                }
+              ],
+              "note": "Initiate minions cannot be surprised (GM)"
+            }
+          }
+        }
+      },
+      "_id": "AcPKJuXOGWd5PpVe",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791342350401,
+        "modifiedTime": 1792989135352,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -1287,12 +1425,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118769972,
-    "modifiedTime": 1783219936453,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989135235,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

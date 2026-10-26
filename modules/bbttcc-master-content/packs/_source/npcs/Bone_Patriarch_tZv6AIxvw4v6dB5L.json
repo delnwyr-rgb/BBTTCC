@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 50,
-        "max": 50
+        "max": 50,
+        "temp": 0
       },
       "stress": {
         "value": 25,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,6 +145,9 @@
     },
     "conditionImmunities": [],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -155,6 +160,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "Old-blood ritualist who keeps a finger-bone of every ancestor. They speak; he listens."
     }
   },
   "flags": {
@@ -190,16 +199,19 @@
             ]
           },
           "price": {
-            "marks": 1080,
-            "bounty": 1080,
-            "hire": 2700,
-            "ransom": 1800,
+            "marks": 15,
+            "bounty": 15,
+            "hire": 25,
+            "ransom": 25,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "TII medium caster (bestiary) \u2014 bounty 1080 / hire 2700 / ransom 1800 marks (paid in softpower)"
-          }
+            "notes": "TII medium mortal — bounty 15 / hire 25 marks; credited to the pool matching the method (default softpower)"
+          },
+          "lineage": "mortal",
+          "subLineage": "cultist"
         }
-      }
+      },
+      "creatureType": "humanoid"
     }
   },
   "_id": "tZv6AIxvw4v6dB5L",
@@ -344,6 +356,22 @@
               "tier": "II",
               "frame": "trait"
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "selfTurnStart",
+                "do": {
+                  "prompt": "Ancestor Whispers: 3 finger-bone tokens — spend one to pass a failed save vs charm/compel/shaken."
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                },
+                "narrative": true
+              }
+            ]
           }
         }
       },
@@ -355,17 +383,16 @@
       },
       "_id": "PShdbnB30LduQNlB",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118699615,
-        "modifiedTime": 1782167244500,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989130243,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!tZv6AIxvw4v6dB5L.PShdbnB30LduQNlB"
+      }
     },
     {
       "name": "Marrow-Lash",
@@ -444,11 +471,28 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack \u00d7 1",
+                "notes": "TII attack × 1",
                 "bound": "free",
                 "saleBack": 60
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Marrow-Lash"
+                },
+                "do": {
+                  "damage": {
+                    "formula": "1d4",
+                    "type": "psychic"
+                  }
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -637,17 +681,16 @@
       },
       "_id": "rZzCaA2nVZMUJdsU",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1780118699615,
-        "modifiedTime": 1782167244500,
+        "modifiedTime": 1791331979371,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!tZv6AIxvw4v6dB5L.rZzCaA2nVZMUJdsU"
+      }
     },
     {
       "name": "Choir of Knuckles",
@@ -676,7 +719,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 20 ft. \u2014 targets roll vs Resolve (DC 13). Half damage on success. Failed-save targets are also Shaken until the start of their next turn.",
+        "effect": "Radius 4 squares. — targets roll vs Resolve (DC 13). Half damage on success. Failed-save targets are also Shaken until the start of their next turn.",
         "flavor": "The bones don't speak. They argue.",
         "manifestation": {
           "tier": 1,
@@ -707,6 +750,24 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 13,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "shaken"
+            ],
+            "duration": "1-round"
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 20
           }
         },
         "description": {
@@ -732,7 +793,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII save \u00d7 1",
+                "notes": "TII save × 1",
                 "bound": "free",
                 "saleBack": 60
               }
@@ -925,17 +986,85 @@
       },
       "_id": "k2jk46aHQutbnMHe",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118699615,
-        "modifiedTime": 1782167244501,
+        "modifiedTime": 1792977802586,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
+      }
+    },
+    {
+      "name": "Each Spell Is Also a Wound",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "mortal",
+          "cultist"
+        ],
+        "description": {
+          "value": "<p>Whenever the cultist uses a save-based or qliphothic attack, they also take 1 qliphothic damage to Stress. When they fail a check against being Charmed or Shaken, they may instead succeed once per scene by taking 1d4 Stress.</p><p><em>They were told the hum would stop. It did not stop.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!tZv6AIxvw4v6dB5L.k2jk46aHQutbnMHe"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "damageType": [
+                    "qliphothic"
+                  ]
+                },
+                "do": {
+                  "damage": {
+                    "formula": "1",
+                    "type": "qliphothic",
+                    "track": "stress"
+                  }
+                },
+                "to": "self",
+                "label": "Each Spell Is Also a Wound"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "mortal"
+            }
+          }
+        }
+      },
+      "_id": "hxjxEIByDOm7svWF",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791342350826,
+        "modifiedTime": 1792989130243,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -945,12 +1074,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118699615,
-    "modifiedTime": 1783219918020,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989130125,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

@@ -5,13 +5,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
-      "revision": 2,
+      "custom": "Bad Eden Core Feats (Batch 3)",
+      "revision": 1,
       "rules": "2026"
     },
     "tags": [],
     "description": {
-      "value": "<h2>Refuse the Narrative</h2><p><em>No. That is not how this ends.</em></p><hr /><h3>Rules</h3><p>Once per Soma Break, after rolling but before the result is resolved, you may treat a roll of 9 or lower on a 2d10x10 as a 10.</p><p class=\"ft-engine-note\"><em>🃏 Card — once per Soma Break.</em></p>",
+      "value": "<h2>Refuse the Narrative</h2><p><em>No. That is not how this ends.</em></p><hr /><h3>Rules</h3><p>Once per Soma Break, after rolling but before the result is resolved, you may treat a roll of 9 or lower on 2d10 as a 10.</p><p class=\"ft-engine-note\"><em>🃏 Card — once per Soma Break.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_refuse_the_narrative",
@@ -43,7 +43,6 @@
       "featNumber": 47,
       "generatedAt": "2026-01-19T05:04:20.693394Z"
     },
-    "fourththing": {},
     "autoanimations": {
       "id": "ft-refuse-the-narrative",
       "label": "Refuse the Narrative",
@@ -233,11 +232,11 @@
     "compendiumSource": "Item.L4LgC7GaLg56ET0X",
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1768802465828,
-    "modifiedTime": 1782164185973,
+    "modifiedTime": 1792977624162,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!L4LgC7GaLg56ET0X"

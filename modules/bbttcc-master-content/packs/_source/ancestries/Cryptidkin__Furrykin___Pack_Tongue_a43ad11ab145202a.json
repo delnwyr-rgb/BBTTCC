@@ -14,7 +14,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“The folklore in your blood is older than language. You don’t need to speak to be heard.”</em></p>\n<p><strong>Pack Tongue (1/Soma Break).</strong> As a bonus action, choose one ally within 6 squares who can see or hear you. They reroll the lowest die on the next Diplomacy, Intimidation, Stealth, or Animal Handling check they make before the start of your next turn.</p>\n<p><strong>Den-Sign.</strong> You can leave a small mark — scent, claw notch, fur knot — that other Furrykin and most beasts will recognize. The GM tells you what kind of marks have already been left in any area you spend 10 minutes searching.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"crypFurPackTongue\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Pack Tongue</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Bonus action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Pick one ally within 6 squares who can see or hear you. They reroll the lowest die on the next Diplomacy, Intimidation, Stealth, or Empathy check before the start of your next turn.</div>\n</div>",
+      "value": "\n<p><em>“The folklore in your blood is older than language. You don’t need to speak to be heard.”</em></p>\n<p><strong>Pack Tongue (1/Soma Break).</strong> As a bonus action, choose one ally within 6 squares who can see or hear you. They reroll the lowest die on the next Diplomacy, Intimidation, Stealth, or Animal Handling check they make before the start of your next turn.</p>\n<p><strong>Den-Sign.</strong> You can leave a small mark — scent, claw notch, fur knot — that other Furrykin and most beasts will recognize. The GM tells you what kind of marks have already been left in any area you spend 10 minutes searching.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"crypFurPackTongue\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Pack Tongue</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Bonus action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Pick one ally within 6 squares who can see or hear you. They reroll the lowest die on the next Diplomacy, Intimidation, Stealth, or Empathy check before the start of your next turn.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -39,14 +39,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "cryptidkin",
       "feature": "pack_tongue",
       "lineage": "Furrykin",
-      "tierLevel": 5,
       "version": "2.0.0",
       "date": "2026-04-19"
     },
@@ -262,12 +258,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776600000000,
-    "modifiedTime": 1782167240129,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988980456,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

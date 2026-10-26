@@ -1,0 +1,5701 @@
+{
+  "name": "Juniper Ash",
+  "type": "character",
+  "img": "art/bbttcc/asli-tokens/qliph_scarred_4.webp",
+  "prototypeToken": {
+    "texture": {
+      "src": "art/bbttcc/asli-tokens/qliph_scarred_4.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "name": "Juniper Ash",
+    "displayName": 30,
+    "actorLink": true,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 1,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1,
+      "alignment": ""
+    },
+    "attributes": {
+      "violence": {
+        "value": 5
+      },
+      "intrigue": {
+        "value": 4
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 1
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 2
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 1
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 1
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 1
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 1
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 1
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 1
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 1
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 1
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "fitting": {
+        "attribute": "intrigue",
+        "label": "Fitting",
+        "value": 0
+      },
+      "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 1
+      },
+      "warding": {
+        "value": 1
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 17,
+        "max": 16,
+        "temp": 0
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 1,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 3,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 2,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "probabilityOverlay": {
+        "current": 0
+      },
+      "dreamCache": {
+        "banked": false,
+        "name": "",
+        "tier": 0,
+        "itemId": ""
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": true,
+      "bonusUsed": true,
+      "reactionUsed": false,
+      "movementUsedFt": 721,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
+  },
+  "_id": "zTGQa6MhKNcnEsbB",
+  "items": [
+    {
+      "name": "Everyone Gets A Chair",
+      "type": "power",
+      "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+      "system": {
+        "intent": "presence",
+        "channel": "mind",
+        "sephirah": "chesed",
+        "mode": "hermetic",
+        "clarityRequired": 1,
+        "noiseGain": 0,
+        "activation": "action",
+        "target": "single",
+        "range": "near",
+        "damage": "",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "none",
+          "number": 0,
+          "die": "d6",
+          "attribute": "",
+          "type": "kinetic",
+          "flavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "effect": "Target within 6 squares: Soul defense vs Cast DC each round or Compelled — they must sit, parley, and take no hostile action until they save.",
+        "tags": [
+          "starter-kit",
+          "cc",
+          "parley",
+          "path:harmonymarshal",
+          "doctrine-signature",
+          "construct",
+          "command",
+          "sustained",
+          "structure"
+        ],
+        "category": "manifestation",
+        "flavor": "You can't stay mad in a chair with lumbar support. This is documented.",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "A chair that wasn't there, and now insists. Negotiation begins whether or not anyone scheduled it.",
+          "form": "construct",
+          "function": "command",
+          "stability": "sustained",
+          "interactionModel": "structure",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 30,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "Harmony Marshal — harmony marshal marshal accord",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "maintenanceKey": "none",
+          "isSignature": false,
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "until-saved",
+            "saveEachRound": true,
+            "saveAttribute": "soul",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "chain": {
+            "enabled": false,
+            "count": 3,
+            "range": 30,
+            "damageFormula": "1d6",
+            "damageType": "",
+            "carryConditions": false,
+            "carryEffects": false
+          },
+          "conditionalDamage": [],
+          "appliedEffects": {
+            "modifiers": [],
+            "resists": [],
+            "immunes": []
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterKit": {
+            "path": "harmonymarshal",
+            "doctrine": "bbttcc-harmony-marshal-marshal-accord",
+            "core": false
+          }
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "02ec3MFpMwPZBJ01",
+      "folder": null
+    },
+    {
+      "name": "Crew Type: Storm Wardens (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden – Crew Type: Storm Wardens (Tier 1)",
+          "revision": 2,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Storm Wardens</strong></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><p><em>You’ve learned the first law of bad weather: panic is usually deadlier than the rain.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Lore and Faith.</li><li><strong>Strategic:</strong> In hazardous weather or corrupted environmental conditions, your Domain reduces travel and exposure penalties.</li></ul>",
+          "chat": ""
+        },
+        "identifier": "crew-storm-wardens-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "requirements": "Level 1+",
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        }
+      },
+      "effects": [
+        {
+          "_id": "4c4c71f0b0be4694",
+          "name": "Storm Wardens T1 Skills",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music_2.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.lore.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.faith.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "dnd5e": {
+              "riders": {
+                "statuses": []
+              }
+            }
+          },
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091759,
+            "modifiedTime": 1792989091759
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "UA0NkRXG1eSXe9EL",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "storm-wardens",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "travel",
+              "hazard",
+              "weather"
+            ],
+            "terrains": [
+              "swamp",
+              "mire",
+              "wasteland",
+              "desert"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:storm-wardens",
+              "bbttcc:tier:1",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:hazard",
+              "bbttcc:domain:weather",
+              "bbttcc:terrain:swamp",
+              "bbttcc:terrain:mire",
+              "bbttcc:terrain:wasteland",
+              "bbttcc:terrain:desert",
+              "bbttcc:scope:hex",
+              "bbttcc:when:hazard:weather",
+              "bbttcc:when:hazard:environmental",
+              "bbttcc:when:origin_terrain:swamp",
+              "bbttcc:when:origin_terrain:mire",
+              "bbttcc:when:origin_terrain:wasteland",
+              "bbttcc:when:origin_terrain:desert",
+              "bbttcc:effect:travel:hazard_penalty:-1step",
+              "bbttcc:effect:hazard:exposure_reduction:+1step",
+              "bbttcc:theme:weather-control",
+              "bbttcc:theme:hazard-mitigation",
+              "bbttcc:theme:storm-discipline"
+            ]
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Item.jirlWvJhUI0C4gVU",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.jirlWvJhUI0C4gVU",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_id": "0bvzFh1i4Bw78pAX",
+      "sort": 0
+    },
+    {
+      "name": "Qliph-Scarred: Strategic Hooks (Qliph-Scarred)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_1.png.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“Send the Qliph-Scarred into the bad places. If they come back smiling, it means the rest of probably can still come back.”</em></p><p><strong>Domain Edge.</strong> Your Domain leans toward problem-solving in corrupted zones, containment operations, and subtle social pressure.</p><p><strong>Corruption-Tuned.</strong> You help keep others steady in the presence of Darkness, even when it whispers to you first.</p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "qliph-scarred-strategic-hooks",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Qliph-Scarred",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Qliph-Scarred: Strategic Hooks (Bad Eden OP Flags)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_book_1.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "flags.bbttcc.op.intrigue.baseBonus",
+                "value": 1,
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.bbttcc.op.nonLethal.baseBonus",
+                "value": 1,
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Data-only for your Bad Eden OP and world engines: Qliph-Scarred factions lean toward Intrigue and Non-Lethal lines, especially in corrupted or unstable zones.</p>",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091759,
+            "modifiedTime": 1792989091759
+          },
+          "_id": "peAXJ5Bzbrimm4Tc",
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "k2E5xzg6QsIqtHKN",
+      "flags": {
+        "bbttcc": {
+          "kind": "ancestryHooks",
+          "opEffects": {
+            "intrigue": 1,
+            "nonLethal": 1
+          },
+          "corruptionSpecialist": 1,
+          "version": "1.0.0"
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.JYdGhXK2dKB1wEg6"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.JYdGhXK2dKB1wEg6",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.7omOVWI5D3ujtxpg",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 200000,
+      "_id": "4l6SlherQ3kRQGkx"
+    },
+    {
+      "name": "Qliph-Scarred: Shadow Resilience",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“Darkness climbed into your bones and decided to stay.”</em></p><p><strong>Shadow Resilience.</strong> Your scars drink in hostile power instead of letting it tear you apart.</p><ul><li>You have resistance to <strong>qliphothic damage</strong>.</li><li>Your presence carries a subtle, unsettling weight; you gain a small bonus to Intimidation checks.</li><li>The deeper interactions with corruption, Qliphothic zones, and Darkness tracks are handled by Bad Eden engines and GM judgment.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "qliph-scarred-shadow-resilience",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Qliph-Scarred",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Qliph-Scarred: Shadow Resilience",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.traits.dr.value",
+                "type": "add",
+                "value": "necrotic",
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.intimidation.value",
+                "type": "add",
+                "value": "+1",
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>You have resistance to necrotic damage and a +1 bonus to Intimidation checks. Any extra “corruption handling” stays narrative/BBTTCC-engine side, not automated rolls.</p>",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091759,
+            "modifiedTime": 1792989091759
+          },
+          "_id": "DKqezshCK0IgSxRg",
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "k2E5xzg6QsIqtHKN",
+      "flags": {
+        "bbttcc": {
+          "speciesTrait": "qliph_scar_resilience"
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.PFguHdcJ3AbtSDhx"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.PFguHdcJ3AbtSDhx",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.pyafqkOEGubL4kPj",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 50000,
+      "_id": "5YGJQUZjI5fXwGIJ"
+    },
+    {
+      "name": "Reef Shard",
+      "type": "gear",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wave_3.png",
+      "system": {
+        "slot": "misc",
+        "tags": [
+          "relic",
+          "proving-ground"
+        ],
+        "category": "relic",
+        "source": "The Proving Ground — Trials",
+        "quantity": 1,
+        "description": {
+          "value": "<p>A splinter of magenta coral from the reef below the Proving Ground, cold enough to ache through cloth.</p><p><i>Held to the ear it does not sound like the sea. It sounds like the tide going out.</i></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "bbttcc-onboarding": {
+          "spawned": true,
+          "relicKey": "reef"
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool × 0.60",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "_id": "AY0FBMyf5V8zMk1K",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Occult Association: Prophet / Oracle",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Occult Association (Bad Eden): Prophet / Oracle.</em></p><p><strong>“The future is not hidden. It is just expensive to hear clearly.”</strong></p><p>Prophets do not control the future. They endure proximity to it.</p><p>Where Tarot Mages manipulate timing and probability like gamblers with dangerous discipline, Prophets stand closer to the signal itself. They hear pattern before it becomes event, consequence before it becomes story, and warning before anyone else admits there is something to warn about.</p><p>To a Prophet, the Great Work is not just about choosing well. It is about seeing the shape of what is coming early enough to alter who is prepared for it.</p><p><strong>How Prophets pursue the Great Work:</strong></p><ul><li>By reading emerging pressure before it resolves into action</li><li>By recognizing encounter patterns before they fully manifest</li><li>By turning foresight into factional advantage</li><li>By making ignorance more expensive than preparation</li></ul><p><strong>Resonance:</strong> <strong>Keter / Signal</strong> — possibility, revelation, pattern-emergence, and the unbearable weight of glimpsing too much too early.</p><p><strong>Tell-tales:</strong> pauses before bad news, unfinished sentences that become correct later, eyes that track causes before effects.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Intrigue, planning, or foresight-adjacent OP rolls</strong> (GM adjudicates the exact lane)</li></ul><p><strong>Cost Principle:</strong> foresight creates burden. Expect omen pressure, emotional Stress, false-positive anxiety, and resentment from people who preferred not to know what was coming.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "identifier": "occult-association-prophet-oracle",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "bonuses": {
+            "intrigue": 1
+          },
+          "option": {
+            "category": "occult",
+            "key": "prophet-oracle",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:prophet-oracle",
+              "bbttcc:base",
+              "bbttcc:domain:signal",
+              "bbttcc:domain:future",
+              "bbttcc:domain:foresight",
+              "bbttcc:scope:faction",
+              "bbttcc:when:passive",
+              "bbttcc:effect:op_roll:foresight-facing:+1",
+              "bbttcc:resonance:keter",
+              "bbttcc:drift:watchful-detached",
+              "bbttcc:cost:burden",
+              "bbttcc:cost:omen-pressure",
+              "bbttcc:theme:early-warning",
+              "bbttcc:theme:signal-reception"
+            ]
+          }
+        }
+      },
+      "effects": [],
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "folder": "lDdY5NMGIgNj06vQ",
+      "_stats": {
+        "compendiumSource": "Item.nZy87kN2gDBe9xLG",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.nZy87kN2gDBe9xLG",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_id": "BpqlziFjfNcf5DDT",
+      "sort": 100000
+    },
+    {
+      "name": "The Folding Verdict",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "weapon",
+          "command",
+          "sustained",
+          "zone"
+        ],
+        "effect": "",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "A steel folding chair that unfolds wherever a fight is about to start. Sit in it, and the room has to listen.",
+          "form": "weapon",
+          "function": "command",
+          "stability": "sustained",
+          "interactionModel": "zone",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "scene",
+          "targetText": "Everyone in the room who means to start something",
+          "rangeAreaText": "The room the chair unfolds in",
+          "rangeFt": 30,
+          "maintenanceCost": "1 Clarity per scene",
+          "riskText": "",
+          "pathResonance": "Mandate of Accord: everyone gets a seat, nobody gets to flip the table.",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "It's always one chair too many, and it's always warm.",
+          "thirdThing": "Anyone who sits in it hears their mother's voice say 'manners'.",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "maintenanceKey": "none",
+          "isSignature": false,
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "resolution": {
+            "shape": "save",
+            "attackVs": "evasion",
+            "attackBonus": "intent+channel",
+            "saveAttribute": "body",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "onSave": "negate",
+            "saveByPrompt": false,
+            "contestCasterAttribute": "intent+channel",
+            "contestTargetAttribute": "body",
+            "onContestLoss": "negate"
+          },
+          "appliedStates": {
+            "states": {
+              "compelled": true
+            },
+            "duration": "until-saved",
+            "saveEachRound": true,
+            "saveAttribute": "soul",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "chain": {
+            "enabled": false,
+            "count": 3,
+            "range": 30,
+            "damageFormula": "1d6",
+            "damageType": "",
+            "carryConditions": false,
+            "carryEffects": false
+          },
+          "conditionalDamage": [],
+          "appliedEffects": {
+            "modifiers": [],
+            "resists": [],
+            "immunes": []
+          }
+        }
+      },
+      "_id": "DKzSz2lnbIA0m67Z",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon × 1",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Archetype: The Empress (Caretaker)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_empress.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“If it lives, you are responsible for it.”</em></p><p><strong>Archetype (Bad Eden): The Empress (Caretaker).</strong> You are abundance under pressure: not softness, but stewardship. You keep people, places, and fragile futures alive long enough to matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype nurtures resilience, relief, and sustainable flourishing. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Culture</strong> in faction calculus in Bad Eden’s faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {
+          "ASIEmpressBase01": {
+            "_id": "ASIEmpressBase01",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 3,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 1,
+            "title": "Archetype Ability Scores",
+            "hint": "Gain 3 ability score points (max +2 to any one score). See the Archetype text for recommended arrays.",
+            "flags": {}
+          }
+        },
+        "identifier": "archetype_empress",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "OqJxCzLIDbhxHlVV",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "character-archetypes",
+          "bonuses": {
+            "culture": 1,
+            "economy": 1
+          },
+          "option": {
+            "category": "archetype",
+            "key": "empress",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:empress",
+              "bbttcc:expression:caretaker",
+              "bbttcc:base"
+            ]
+          }
+        },
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.bCREDGRfy4RVWcZR",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_id": "J4DwN7xMr6HeVx2k",
+      "sort": 100000
+    },
+    {
+      "name": "Cinder Key",
+      "type": "gear",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_volcano.png",
+      "system": {
+        "slot": "misc",
+        "tags": [
+          "relic",
+          "proving-ground"
+        ],
+        "category": "relic",
+        "source": "The Proving Ground — Trials",
+        "quantity": 1,
+        "description": {
+          "value": "<p>A key of fused slag, still warm no matter how long it sits in a pocket. It anchored the Proving Ground's lava sigil, and it remembers being load-bearing.</p><p><i>What it opens has not been built yet.</i></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "bbttcc-onboarding": {
+          "spawned": true,
+          "relicKey": "lava"
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool × 0.60",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "_id": "OZFqNnpdLrKn4zw3",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Qliph-Scarred (Husk): The Quiet Inside",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-canon-qliph-scarred=\"v1\" style=\"display:none\"></div><p><em>\"They looked for you in all the usual places. None of them were the right shape.\"</em></p><p><strong>The Quiet Inside (1/Soma Break).</strong> Reaction — when you are targeted by a divination, mind-reading, or truth-detection effect, force the caster to roll their effect against your Resolve instead of its normal save DC.</p><p><strong>Failure:</strong> the effect returns nothing — no partial information, no awareness that a target was present.</p><p><strong>Success:</strong> you take 1 point of Stress from the pressure of the probe.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"qliphHuskQuietInside\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>The Quiet Inside</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Reaction (when probed)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When divination / mind-read / truth-detect targets you, force caster to roll vs your Resolve. Fail → effect returns nothing, no detection. Success → 1 Stress.</span></p></div>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "qliph_scarred_husk_tier1",
+        "requirements": "Qliph-Scarred (Husk)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [
+            {
+              "period": "sr",
+              "type": "recoverAll",
+              "formula": ""
+            }
+          ],
+          "max": "1"
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "qliph_scarred",
+          "feature": "the_quiet_inside",
+          "lineage": "Husk",
+          "tierLevel": 1,
+          "version": "1.1.0",
+          "date": "2026-04-19",
+          "rfiNative": true
+        },
+        "fourththing": {
+          "grants": {
+            "resistances": [
+              "psychic"
+            ]
+          },
+          "principleSource": "ancestry"
+        },
+        "autoanimations": {
+          "id": "394a4943-0801-4953-ab30-60a5f459b74a",
+          "label": "Qliph-Scarred (Husk): The Quiet Inside",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.rihmlgn3MViwQFlG"
+        }
+      },
+      "folder": "haWSWxZUpQJOSJJ3",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.rihmlgn3MViwQFlG",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-heritages-v1.1",
+          "uuid": "Item.rihmlgn3MViwQFlG",
+          "coreVersion": "13.351",
+          "systemId": "fourththing",
+          "systemVersion": "0.6.0"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 0,
+      "_id": "WS7FSyP9zz4yaLF9"
+    },
+    {
+      "name": "Qliph-Scarred Heritage: Husk",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_invisible_1.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Qliph-Scarred heritage: Husk.</p><p><em>“What the void took, it didn’t replace. That’s the feature, not the bug.”</em></p><p><strong>Qliph-Scarred (Husk).</strong> Your scar is a hollow. Something was removed from you in a place that should have unmade you, and it never got put back. People who try to read you feel the draft. Manifestations that look inside find less to grab. You walked out emptier, and in this world, emptier can mean harder to kill.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Qliph-Scarred does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Mind</strong> in fiction and through Tier powers.</p></li></ul><h3>Qliph-Scarred Core: What Walked Out</h3><p><em>Shared across all Qliph-Scarred heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Shadow Resilience.</strong> You have resistance to qliphothic damage. You reroll the lowest die on Body checks against effects that would drain, wither, or corrupt your body.</p></li><li><p><strong>Qliphothic Saturation.</strong> Once per scene, when you fail a Soul check, you may reroll it — but your scene's Darkness-gain count increases by 1. The scar pays for what the scar saves.</p></li><li><p><strong>Hunger Mask.</strong> You can suppress a bodily need (hunger, thirst, sleep, breath) for up to 24 hours by deciding to; you do not suffer its penalties during that window. At the end of the 24 hours, all deferred needs strike you at once, each as a separate Stress-class consequence.</p></li><li><p><strong>Shadow-Wake.</strong> Creatures with qliphothic attunement (demons, corrupt sephirot, Radiation-warped entities) can sense you at 12 squares and know you have been marked. They may not know how to read the mark.</p></li></ul><h3>Husk Traits</h3><ul><li><p><strong>Hollow Core.</strong> You have resistance to psychic damage. Creatures attempting to read your thoughts, detect your lies, or determine your emotional state do so rolling 3d10 and keeping the lowest 2. Divination-register effects that would reveal information about you have a 50% chance to return nothing — just the hollow echo of the question.</p></li><li><p><strong>No Weight Inside.</strong> You do not need to eat or drink, though you still may. The void is not demanding, once you learn to carry it.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Intrigue marks</strong> and <strong>+10 Non-Lethal marks</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Empty / Abandoned / Liminal</em> hexes, your Domain's infiltration and passage operations cost 10 fewer marks.</p></li><li><p><strong>Nothing to Grab.</strong> Once per turn, when a rival Domain attempts a divination, intelligence, or surveillance operation targeting your Domain, you may force them to reroll that check. They find less than they expected.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Qliphothic Saturation</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Free  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Reroll a failed Soul check. Cost: scene's Darkness-gain count goes up by 1.</span></p></div>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "f7892d5069f69569",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.rihmlgn3MViwQFlG",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Husk Tier I",
+            "hint": "Gain your Husk Tier I feat."
+          }
+        ],
+        "identifier": "qliph_scarred_husk_heritage",
+        "requirements": "Qliph-Scarred",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "qliph_scarred",
+          "lineage": "Husk",
+          "version": "1.1.0",
+          "date": "2026-04-19",
+          "rfiNative": true,
+          "opEffects": {
+            "intrigue": 2,
+            "nonlethal": 1
+          }
+        },
+        "fourththing": {
+          "grants": {
+            "resistances": [
+              "psychic"
+            ]
+          },
+          "rerolls": [
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "vs": "vs:effects that would drain",
+              "note": "on Body checks against effects that would drain, wither, or corrupt your body"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "vs": "vs:effects that would drain",
+              "note": "Body checks against effects that would drain, wither, or corrupt your body"
+            }
+          ],
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "intrigue-op",
+              "amount": 2
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "non-lethal-op",
+              "amount": 2
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-skill-fail",
+              "predicate": {
+                "tag": [
+                  "soul"
+                ]
+              },
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "offerText": "Qliphothic Saturation — reroll the failed Soul check. The scene's Darkness-gain count rises by 1 (GM notes it).",
+              "effect": {
+                "kind": "reroll-failed-check",
+                "args": {}
+              }
+            }
+          ],
+          "principleSource": "ancestry"
+        },
+        "autoanimations": {
+          "id": "a09addc5-bc94-4801-86cd-780c74e69628",
+          "label": "Qliph-Scarred Heritage: Husk",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "darkpurple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.iDcPvxKbW6YAD9NF"
+        }
+      },
+      "folder": "ilwkAtIbfUTEkSdl",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.iDcPvxKbW6YAD9NF",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-heritages-v1.1",
+          "uuid": "Item.iDcPvxKbW6YAD9NF",
+          "coreVersion": "13.351",
+          "systemId": "fourththing",
+          "systemVersion": "0.6.0"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 0,
+      "_id": "XwLtwRNRyH3rxpgJ"
+    },
+    {
+      "name": "Verdant Mark",
+      "type": "gear",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bite_animal_2.png",
+      "system": {
+        "slot": "misc",
+        "tags": [
+          "relic",
+          "proving-ground"
+        ],
+        "category": "relic",
+        "source": "The Proving Ground — Trials",
+        "quantity": 1,
+        "description": {
+          "value": "<p>A ring of living green that grew wrong on purpose. It is warm, faintly moving, and pretends not to notice being watched.</p><p><i>Whatever is growing in there has been waiting a long time.</i></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "bbttcc-onboarding": {
+          "spawned": true,
+          "relicKey": "grove"
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool × 0.60",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "_id": "Y98JTfdseVPDf9CO",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Qliph-Scarred: Shadow-Wake",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_8.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Shadow-Wake.</strong> Wherever you go, the shadows remember.</p><ul><li>You leave behind subtle impressions in darkness and ruin; tracking you by mundane means is slightly harder.</li><li>You gain a small bonus to Stealth checks while in dim light or darkness.</li><li>Qliphothic entities may recognize the wake you leave, for better or worse (handled narratively).</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "qliph-scarred-shadow-wake",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Qliph-Scarred",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Qliph-Scarred: Shadow-Wake (Stealth Edge)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bow.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.stealth.value",
+                "type": "add",
+                "value": "+1",
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>You gain a +1 bonus to Stealth checks, especially when moving through dim light or deeper shadow.</p>",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091759,
+            "modifiedTime": 1792989091759
+          },
+          "_id": "28LN8m7xQcrOl9LS",
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "k2E5xzg6QsIqtHKN",
+      "flags": {
+        "bbttcc": {
+          "qliphFeature": "shadow_wake"
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.bLbk3JlqcS1MfBcn"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.bLbk3JlqcS1MfBcn",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.KCZHNg0m80kvPSlT",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 25000,
+      "_id": "ZBPS59GGDtSi7Fcm"
+    },
+    {
+      "name": "Harmony Marshal: Tier 1 — Harmony Initiate",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Harmony Initiate.</strong> You are a designated Harmony asset for your Domain.</p><ul><li>You gain a skill rank in <strong>Diplomacy (Presence)</strong> and <strong>Insight (Soul)</strong> (handled by the Harmony Marshal class traits).</li><li>When you are the active Harmony Marshal for a Domain, that Domain’s <strong>Soft Power generation increases by 10%</strong> (rounding in your favor). The GM can apply this as a +10% modifier or as a small bonus whenever it would meaningfully matter for the current campaign scale.</li><li>This feature is Bad Eden-only and interacts with your Domain sheet’s Soft Power track and marks pipeline.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "harmony-marshal-tier-1--harmony-initiate",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "Harmony Marshal (1st level)",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Harmony Initiate (Soft Power Boost)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_crown-1.png",
+          "origin": null,
+          "transfer": true,
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091759,
+            "modifiedTime": 1792989091759
+          },
+          "_id": "Ll0mz2KMyLkFqQji",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "flags.bbttcc.harmonyMarshal.tier1",
+                "value": true,
+                "priority": 20,
+                "type": "custom",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.bbttcc.opHooks.softPowerMultiplier",
+                "value": 1.1,
+                "priority": 20,
+                "type": "custom",
+                "phase": "initial"
+              }
+            ]
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "start": null,
+          "showIcon": 1,
+          "folder": null
+        },
+        {
+          "name": "Class L1: Melee +1",
+          "img": "icons/skills/melee/sword-stylized-blue.webp",
+          "type": "base",
+          "disabled": true,
+          "transfer": true,
+          "description": "Granted by Harmony Marshal: Tier 1 — Harmony Initiate at Tier 1.",
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "aptitudeStamp": "2026-05-04",
+              "aptitudeAnchor": "Harmony Marshal: Tier 1 — Harmony Initiate",
+              "aptitudeKind": "melee"
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.melee.value",
+                "value": 1,
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "mEPbxgozbXdmKzb6",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989091759,
+            "modifiedTime": 1792989091759,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        },
+        {
+          "name": "Class L1: Bracing +1",
+          "img": "icons/skills/melee/sword-stylized-blue.webp",
+          "type": "base",
+          "disabled": true,
+          "transfer": true,
+          "description": "Granted by Harmony Marshal: Tier 1 — Harmony Initiate at Tier 1.",
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "aptitudeStamp": "2026-05-04",
+              "aptitudeAnchor": "Harmony Marshal: Tier 1 — Harmony Initiate",
+              "aptitudeKind": "bracing"
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.bracing.value",
+                "value": 1,
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "oQxklpm5Gy6vqGEz",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989091759,
+            "modifiedTime": 1792989091759,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "folder": "6ELe0FPqgC58OzKS",
+      "flags": {
+        "bbttcc": {
+          "harmonyMarshal": {
+            "tier1": true
+          },
+          "opHooks": {
+            "softPowerMultiplier": 1.1
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.N37iOrOh5fD9r3gY"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.N37iOrOh5fD9r3gY",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": -400000,
+      "_id": "gcHPOBptjp9OpDeI"
+    },
+    {
+      "name": "Mandate of Accord (Bad Eden)",
+      "type": "subclass",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_hand_2.png",
+      "system": {
+        "category": "doctrine",
+        "classIdentifier": "harmonymarshal",
+        "source": "Bad Eden Originals — Sprint F (2026 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"Act as one.\"</em></p>\n<p><strong>Mode:</strong> Unity · <strong>Drift:</strong> Toward</p>\n<p>Accord makes a squad move like a single animal with too many legs and no argument about which way to run. Your Surge spends turn coordination into mechanics — partners feeding each other rerolls, focus-fire that compounds, a whole line acting on one breath.</p>\n<h3>Doctrine (spent via Surge)</h3>\n<ul>\n  <li><strong>Shared Breath</strong> (1) — name an Accord Partner: you and they each bank a reroll-lowest, and they may take a reaction right now.</li>\n  <li><strong>Synchronized Advance</strong> (3) — allies within 6 squares bank a reroll on their next attack. Pile onto one target; the second blow lands in the hole the first made.</li>\n  <li><strong>Group Turn</strong> (5) — allies within 6 squares each gain a freed bonus action, resolving together.</li>\n</ul>\n<p><em>Out-of-combat:</em> Accord Engine (bend a Parley toward peace), Unity Cadence (Soft Power for a clean scene), and Resonant Truce (the de-escalation aura) remain the strategic flourishes.</p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc-harmony-marshal-marshal-accord",
+        "advancement": [],
+        "spellcasting": {
+          "progression": "none",
+          "preparation": {}
+        }
+      },
+      "effects": [],
+      "folder": "w8AbiDc92Mb4wLnR",
+      "flags": {
+        "fourththing": {
+          "principleSource": "subclass"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.KWTrzLH76Aiia8Vw"
+        }
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 500000,
+      "_stats": {
+        "systemId": "fourththing",
+        "coreVersion": "14.369",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "systemVersion": "0.6.37",
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.KWTrzLH76Aiia8Vw",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "hQMIbSBWEDpAzEon"
+    },
+    {
+      "name": "Harmony Marshal",
+      "type": "class",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/HarmonyMarshal1.png",
+      "system": {
+        "category": "path",
+        "identifier": "harmonymarshal",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"You're not the hero. You're the reason the heroes don't trip over each other.\"</em></p>\n<p>The Harmony Marshal runs on <strong>Surge</strong> like everyone — but yours arrives sideways: when an ally within 6 squares lands a surging roll (an exploding 10), the brilliance resonates into you and you bank a Surge too (+1, max +2/round). The party's best moments are your fuel; you spend them feeding the party back. Your tier powers are Surge spends, and the rerolls <em>auto-fire</em> now — no GM bookkeeping:</p>\n<h3>The Mandate (spent via Surge)</h3>\n<ul>\n  <li><strong>Rallying Words</strong> (1) — an ally banks a <strong>reroll-lowest</strong> on their next roll.</li>\n  <li><strong>Ease Attrition</strong> (2) — heal an ally and clear one condition.</li>\n  <li><strong>Rally to Me</strong> (2) — an ally banks a reroll <em>and</em> frees a reaction.</li>\n  <li><strong>Unity Flourish</strong> (3) — every ally within 6 squares banks a reroll.</li>\n  <li><strong>Conductor's Crescendo</strong> (5) — the whole line banks a reroll and each clears a condition.</li>\n</ul>\n<p>The strategic layer endures out of combat — Attrition Easer, Loyalty Steward, and Unity Conductor still move Soft Power, attrition, and hex loyalty on the campaign turn. In a fight, though, you are a reroll engine: the dice obey you because you asked nicely, at exactly the right moment.</p>",
+          "chat": ""
+        },
+        "advancement": {
+          "HM00000000000001": {
+            "_id": "HM00000000000001",
+            "type": "HitPoints",
+            "configuration": {},
+            "value": {},
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000002": {
+            "_id": "HM00000000000002",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.N37iOrOh5fD9r3gY",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.fcQ0OjpPRyuuMA1f",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.PnovPwxPKXZWOZjs",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 1,
+            "title": "Harmony Marshal Core Features",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000003": {
+            "_id": "HM00000000000003",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.GeOUldCzlIuysKH9",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.EZsQ7BKAR9kYuEP1",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 2,
+            "title": "Read the Room & Rallying Words",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000004": {
+            "_id": "HM00000000000004",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 4,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000005": {
+            "_id": "HM00000000000005",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.djXkHJhYa3xdJhqK",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.SR0AViadIJybbhpV",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 5,
+            "title": "Extra Attack & Attrition Easer",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000006": {
+            "_id": "HM00000000000006",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.VkvsU3LPprCjWEZl",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 6,
+            "title": "Unity Field",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000007": {
+            "_id": "HM00000000000007",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 8,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000008": {
+            "_id": "HM00000000000008",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.AcUm77Ta6IaMvtHE",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 7,
+            "title": "Negotiated Advantage",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000009": {
+            "_id": "HM00000000000009",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 12,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000010": {
+            "_id": "HM00000000000010",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.04gMblRxvPKMTF7n",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 9,
+            "title": "Crisis Mediator",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000011": {
+            "_id": "HM00000000000011",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.cmCtLnHVkvsR8Pj9",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 10,
+            "title": "Voice of the Mandate",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000012": {
+            "_id": "HM00000000000012",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.chI9rQ6KQ7XOtKFK",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 11,
+            "title": "Loyalty Steward",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000013": {
+            "_id": "HM00000000000013",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 16,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000014": {
+            "_id": "HM00000000000014",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.mCZ9rXhRA78eBHmd",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 13,
+            "title": "Coordinated Advance",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000015": {
+            "_id": "HM00000000000015",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 19,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000016": {
+            "_id": "HM00000000000016",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.QbQOitLwTMGYH0k0",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 15,
+            "title": "Unbroken Line",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000018": {
+            "_id": "HM00000000000018",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.E9UxtbntZCkNuadY",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 17,
+            "title": "Unity Conductor",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000019": {
+            "_id": "HM00000000000019",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.HfUUYZZFRLqU8zVN",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 18,
+            "title": "Diplomatic Immunity",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000021": {
+            "_id": "HM00000000000021",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ALWyc9s109a4gtfY",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 20,
+            "title": "Emissary of the Great Accord",
+            "flags": {},
+            "hint": ""
+          },
+          "HM00000000000022": {
+            "_id": "HM00000000000022",
+            "type": "Subclass",
+            "configuration": {},
+            "value": {
+              "document": null,
+              "uuid": null
+            },
+            "level": 3,
+            "title": "",
+            "hint": "",
+            "flags": {}
+          },
+          "HM00000000000023": {
+            "_id": "HM00000000000023",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "saves:wis",
+                "saves:cha"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "defense check Proficiencies",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          "HM00000000000024": {
+            "_id": "HM00000000000024",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "skills:ins",
+                "skills:per"
+              ],
+              "choices": [
+                {
+                  "count": 2,
+                  "pool": [
+                    "skills:dec",
+                    "skills:itm",
+                    "skills:prc",
+                    "skills:rel",
+                    "skills:his"
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Skill Proficiencies",
+            "hint": "Gain Insight (Soul) (Soul) and Diplomacy (Presence) automatically, then choose two from Stealth (Intrigue) (Intrigue) (Presence), Intimidation (Presence) (Presence), Perception (Mind) (Mind), Faith (Soul), Lore (Mind).",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          "HM00000000000025": {
+            "_id": "HM00000000000025",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "weapon:sim",
+                "weapon:mar"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Weapon Proficiencies",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          "HM00000000000026": {
+            "_id": "HM00000000000026",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "armor:lgt",
+                "armor:med",
+                "armor:shl"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Armor Training",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          "HM00000000000027": {
+            "_id": "HM00000000000027",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "defense check Proficiencies",
+            "hint": "",
+            "classRestriction": "secondary",
+            "flags": {}
+          },
+          "HM00000000000028": {
+            "_id": "HM00000000000028",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "weapon:sim"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Weapon Proficiencies",
+            "hint": "",
+            "classRestriction": "secondary",
+            "flags": {}
+          },
+          "HM00000000000029": {
+            "_id": "HM00000000000029",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "armor:lgt",
+                "armor:shl"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Armor Training",
+            "hint": "",
+            "classRestriction": "secondary",
+            "flags": {}
+          }
+        },
+        "startingEquipment": [],
+        "hd": {
+          "additional": "",
+          "denomination": "d10",
+          "spent": 0
+        },
+        "levels": 1,
+        "primaryAbility": {
+          "value": [
+            "cha"
+          ],
+          "all": false
+        },
+        "properties": [],
+        "spellcasting": {
+          "progression": "half",
+          "ability": "cha",
+          "preparation": {
+            "formula": "@cha.mod + floor(@classes.harmony_marshal.levels/2)"
+          }
+        },
+        "wealth": ""
+      },
+      "effects": [],
+      "folder": "mQYT3fNbgXWO2BTF",
+      "flags": {
+        "bbttcc": {
+          "primary": "charisma",
+          "opBonus": {
+            "softPower": 3
+          }
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.BX48SRjk7yBp0bdY"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "exportSource": null,
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.BX48SRjk7yBp0bdY",
+        "duplicateSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 0,
+      "_id": "iq67lL0mlpP5YGhR"
+    },
+    {
+      "name": "Qliph-Scarred",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Qliph-Scarred4.png",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Qliph-Scarred.</strong> You walked out of a place that should have unmade you. The hollows and fractures in your soul never fully closed, and the world can feel the pressure leaking out.</p><hr><p><em><strong>Qliph-Scarred Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</p></li><li><p><strong>Size.</strong> You are Medium.</p></li><li><p><strong>Speed.</strong> Your walking speed is 6 squares</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Qliph-Scarred does not grant any attribute bonuses.</p></li></ul><p>Your Qliph-Scarred heritage grants you additional features through advancements (Item Grants) added during character creation.</p>",
+          "chat": ""
+        },
+        "advancement": {
+          "QLSIZ00000000001": {
+            "_id": "QLSIZ00000000001",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium Qliph-Scarred.",
+            "value": {},
+            "flags": {}
+          },
+          "QLSCAR0000000001": {
+            "_id": "QLSCAR0000000001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.PFguHdcJ3AbtSDhx",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Shadow Resilience",
+            "hint": "Gain the Qliph-Scarred: Shadow Resilience feature.",
+            "flags": {}
+          },
+          "QLSCAR0000000002": {
+            "_id": "QLSCAR0000000002",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.AC1pQoGk2r1JsO1t",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Qliphothic Saturation",
+            "hint": "Gain the Qliph-Scarred: Qliphothic Saturation feature.",
+            "flags": {}
+          },
+          "QLSCAR0000000003": {
+            "_id": "QLSCAR0000000003",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.0Jar440SAvE96hdE",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Hunger Mask",
+            "hint": "Gain the Qliph-Scarred: Hunger Mask feature.",
+            "flags": {}
+          },
+          "QLSCAR0000000004": {
+            "_id": "QLSCAR0000000004",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.bLbk3JlqcS1MfBcn",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Shadow-Wake",
+            "hint": "Gain the Qliph-Scarred: Shadow-Wake feature.",
+            "flags": {}
+          },
+          "QLSCAR0000000005": {
+            "_id": "QLSCAR0000000005",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.JYdGhXK2dKB1wEg6",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Strategic Hooks (Qliph-Scarred)",
+            "hint": "Grants OP and corruption hooks used by Bad Eden faction and world systems.",
+            "flags": {}
+          }
+        },
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": ""
+        },
+        "type": {
+          "value": "humanoid",
+          "custom": "",
+          "subtype": "Qliph-Scarred"
+        },
+        "identifier": "qliph-scarred"
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "race",
+          "version": "1.0.0",
+          "date": "2025-12-08",
+          "ancestryKey": "qliph_scarred"
+        },
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.rMuXXItrEQDROPEP"
+        }
+      },
+      "folder": "j42C7j9nQ8gpXSoM",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.rMuXXItrEQDROPEP",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 100000,
+      "_id": "jO5ioX21qmVL9K6c"
+    },
+    {
+      "name": "Qliph-Scarred: Hunger Mask",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_helmet_7.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Hunger Mask.</strong> You learned to wear your appetites like armor.</p><ul><li>You gain a small bonus to Stealth checks when hiding fear, pain, or desire.</li><li>Your body handles starvation, deprivation, and toxic cravings slightly better than most (handled narratively).</li><li>In Qliphothic zones, your mask sometimes slips, revealing the hollow radiance beneath.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "qliph-scarred-hunger-mask",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Qliph-Scarred",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Qliph-Scarred: Hunger Mask (Social Edge)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bite_animal_3.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.stealth.value",
+                "type": "add",
+                "value": "+1",
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>You gain a +1 bonus to Deception checks when concealing your true intentions or emotional state.</p>",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091759,
+            "modifiedTime": 1792989091759
+          },
+          "_id": "Hrvkk9sBKFEAQP51",
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "k2E5xzg6QsIqtHKN",
+      "flags": {
+        "bbttcc": {
+          "qliphFeature": "hunger_mask"
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16",
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.0Jar440SAvE96hdE"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.0Jar440SAvE96hdE",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.pOSdGDldqmRWAc1t",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 100000,
+      "_id": "kUiJEUfBLzmanbOz"
+    },
+    {
+      "name": "Marshal's Mantle",
+      "type": "power",
+      "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+      "system": {
+        "intent": "presence",
+        "channel": "soul",
+        "sephirah": "chesed",
+        "mode": "hermetic",
+        "clarityRequired": 1,
+        "noiseGain": 0,
+        "activation": "action",
+        "target": "self",
+        "range": "near",
+        "damage": "",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "none",
+          "number": 0,
+          "die": "d6",
+          "attribute": "",
+          "type": "kinetic",
+          "flavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "effect": "Sustained vestment (self): Guard +1 and Resolve +1 for the scene.",
+        "tags": [
+          "starter-kit",
+          "ward",
+          "stance",
+          "path:harmonymarshal",
+          "path-core",
+          "vestment",
+          "protect",
+          "sustained",
+          "worn"
+        ],
+        "category": "manifestation",
+        "flavor": "Authority is 90% posture, 9% laundry, and 1% cosmic mandate. The mantle handles the laundry.",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "A mantle of visible jurisdiction. People can tell you're the adult in the room. So can the room.",
+          "form": "vestment",
+          "function": "protect",
+          "stability": "sustained",
+          "interactionModel": "worn",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "Harmony Marshal",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "maintenanceKey": "none",
+          "isSignature": false,
+          "chain": {
+            "enabled": false,
+            "count": 3,
+            "range": 30,
+            "damageFormula": "1d6",
+            "damageType": "",
+            "carryConditions": false,
+            "carryEffects": false
+          },
+          "conditionalDamage": [],
+          "appliedEffects": {
+            "modifiers": [
+              {
+                "stat": "guard",
+                "op": "+",
+                "value": 1
+              },
+              {
+                "stat": "resolve",
+                "op": "+",
+                "value": 1
+              }
+            ],
+            "resists": [],
+            "immunes": []
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterKit": {
+            "path": "harmonymarshal",
+            "doctrine": "",
+            "core": true
+          }
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "kYBmRM4rLNGnN429",
+      "folder": null
+    },
+    {
+      "name": "Silver Tongue Protocol",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_chalice_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Silver Tongue Protocol.</strong> You have rehearsed, iterated, and field-tested the art of getting people to <em>actually</em> talk.</p><ul><li>Whenever you make a <strong>Diplomacy (Presence)</strong> or <strong>Stealth (Intrigue)</strong> check, you can treat a rolled result of 8 or lower on the 2d10 as a 9 instead. You can use this feature a number of times per Soma Break equal to your Presence value (minimum once).</li><li>In Parley, you can spend one use of this feature to reroll the lowest die on a single Influence roll.</li></ul><p>(The Active Effect below also gives you a small numeric edge on Diplomacy (Presence) and Stealth (Intrigue) checks as a quality-of-life bonus.)</p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "silver-tongue-protocol",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "Harmony Marshal (1st level)",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Silver Tongue Protocol (Diplomacy (Presence) & Stealth (Intrigue) (Presence) Edge)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_ice_1.png",
+          "origin": null,
+          "transfer": true,
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091759,
+            "modifiedTime": 1792989091759
+          },
+          "_id": "4jWUiJmOxNvIv9jZ",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.diplomacy.value",
+                "type": "add",
+                "value": "+1",
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.stealth.value",
+                "type": "add",
+                "value": "+1",
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "flags.bbttcc.harmonyMarshal.silverTongue",
+                "type": "custom",
+                "value": true,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "start": null,
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "6ELe0FPqgC58OzKS",
+      "flags": {
+        "bbttcc": {
+          "harmonyMarshal": {
+            "silverTongue": true
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.fcQ0OjpPRyuuMA1f"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.fcQ0OjpPRyuuMA1f",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": -484375,
+      "_id": "q5KOn2cOqmWx9cml"
+    },
+    {
+      "name": "Crew Type: Storm Wardens",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 2,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Crew Type (Bad Eden): Storm Wardens.</em></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Lore and Faith.</li><li><strong>Strategic Identity:</strong> Your Domain starts with +1 Faith OPs.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "crew-storm-wardens",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "UA0NkRXG1eSXe9EL",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "faith": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "storm-wardens",
+            "progressionType": "level",
+            "domains": [
+              "op",
+              "hazard",
+              "weather"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:storm-wardens",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:domain:hazard",
+              "bbttcc:domain:weather",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:faith:+8",
+              "bbttcc:theme:weather-control",
+              "bbttcc:theme:hazard-mitigation",
+              "bbttcc:theme:environmental-authority",
+              "bbttcc:theme:storm-discipline"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Item.NuER7siSAwq9YU9j",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.NuER7siSAwq9YU9j",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_id": "qJG4NYK7KXzKuG7l",
+      "sort": 100000
+    },
+    {
+      "name": "Occult Association: Prophet / Oracle (Tier 1)",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Prophet / Oracle</strong></p><p><strong>“You don’t know the future. You just know when something has started.”</strong></p><p>At Tier 1, you begin catching the edge of events before they fully arrive. Not enough to command them. Enough to stop being surprised.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> and <strong>Perception</strong></li><li>1/Soma Break, ask the GM one focused omen-question about an immediate situation, route, or known danger; the answer should be truthful but limited, symbolic, or pressure-based</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per turn, before a planning-heavy, reconnaissance, or intrigue-forward action, gain <strong>+2</strong> to one relevant OP roll by declaring what sign your Domain is acting on</li></ul><p><strong>Cost:</strong> early warning is rarely comfortable. Expect unease, distraction, or tension when you sense something going wrong before anyone else can justify reacting to it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Omen Question</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Ask the GM one focused omen-question. Truthful but limited / symbolic / pressure-based.</div>\n</div>",
+          "chat": ""
+        },
+        "advancement": {},
+        "requirements": "Level 1+",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": "1"
+        },
+        "identifier": "occult-association-prophet-oracle-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "prophet-oracle",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:prophet-oracle",
+              "bbttcc:tier:1",
+              "bbttcc:domain:signal",
+              "bbttcc:domain:omens",
+              "bbttcc:domain:planning",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:long_rest:once",
+              "bbttcc:when:strategic_turn:once",
+              "bbttcc:effect:proficiency:insight",
+              "bbttcc:effect:proficiency:perception",
+              "bbttcc:effect:ask:one_omen_question",
+              "bbttcc:effect:op_roll:planning-facing:+2",
+              "bbttcc:resonance:keter",
+              "bbttcc:drift:watchful-detached",
+              "bbttcc:cost:unease",
+              "bbttcc:cost:attention-strain",
+              "bbttcc:theme:first-omens",
+              "bbttcc:theme:edge-of-event"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "autoanimations": {
+          "id": "f6aedad3-1f7b-4dc8-9188-10bb6507070a",
+          "label": "Occult Association: Prophet / Oracle (Tier 1)",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "intro",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "effects": [
+        {
+          "name": "Occult Tier1 Proficiencies",
+          "disabled": false,
+          "transfer": true,
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bite_animal_1.png",
+          "_id": "oracleTier1Profs",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.insight.value",
+                "type": "add",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.perception.value",
+                "type": "add",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091759,
+            "modifiedTime": 1792989091759
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+      "folder": "lDdY5NMGIgNj06vQ",
+      "_stats": {
+        "compendiumSource": "Item.jZVffPmMYjFFTfB9",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.jZVffPmMYjFFTfB9",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_id": "rdH07qTFCFoXJKga",
+      "sort": 0
+    },
+    {
+      "name": "Archetype: The Empress (Caretaker) (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_empress.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden – Archetype: The Empress (Caretaker) (Tier 1)",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Diplomacy. You learn the Spare the Dying Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your Domain's passive OP bias now follows the base Archetype file.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "archetype-empress-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Level 1+",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "name": "Archetype Tier 1 Proficiencies",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_10.png",
+          "_id": "EmpressTier1FX01",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.faith.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.diplomacy.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091759,
+            "modifiedTime": 1792989091759
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "OqJxCzLIDbhxHlVV",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "empress",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:empress",
+              "bbttcc:expression:caretaker",
+              "bbttcc:tier:1",
+              "bbttcc:culture_op_cap:+2",
+              "bbttcc:economy_op_cap:+1"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.jxTVwjOZeVAZvBMt",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_id": "rnr8S7suBde6rwXb",
+      "sort": 200000
+    },
+    {
+      "name": "Peacekeeper's Poise",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_music_3.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Peacekeeper's Poise.</strong> Your presence steadies people at the exact moment everything could go sideways.</p><ul><li>When initiative is rolled, you can choose up to a number of creatures equal to your Presence value (minimum one) within 6 squares of you. Each gains temporary Integrity equal to your Presence value + your tier.</li><li>You can use this feature a number of times per Soma Break equal to your tier.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "peacekeepers-poise",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "Harmony Marshal (1st level)",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Peacekeeper's Poise (Initiative Temp Integrity)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dagger_3.png",
+          "origin": null,
+          "transfer": true,
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091759,
+            "modifiedTime": 1792989091759
+          },
+          "_id": "rVJfyeoRd4ioDQyk",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "flags.bbttcc.harmonyMarshal.peacekeepersPoise",
+                "value": true,
+                "priority": 20,
+                "type": "custom",
+                "phase": "initial"
+              }
+            ]
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "start": null,
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "6ELe0FPqgC58OzKS",
+      "flags": {
+        "bbttcc": {
+          "harmonyMarshal": {
+            "peacekeepersPoise": true
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.PnovPwxPKXZWOZjs"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.PnovPwxPKXZWOZjs",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": -700000,
+      "_id": "sZ6T4Zzu7jpzU7t0"
+    },
+    {
+      "name": "Qliph-Scarred: Qliphothic Saturation",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_6.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Qliphothic Saturation.</strong> The hollows in you are already full of poison light.</p><ul><li>You have resistance to <strong>poison damage</strong>.</li><li>You often sense when a place is spiritually “overclocked” or unsafe; your scars hum in high-corruption zones.</li><li>Any radiation/corruption hooks in Bad Eden are driven by flags on this feature rather than automatic rolls.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "qliph-scarred-qliphothic-saturation",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Qliph-Scarred",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Qliph-Scarred: Qliphothic Saturation (Resist Poison)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blood_hymn_2.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.traits.dr.value",
+                "value": "poison",
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>You have resistance to poison damage. Advantage on saves vs the poisoned condition is adjudicated by the GM.</p>",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989091759,
+            "modifiedTime": 1792989091759
+          },
+          "_id": "qqzfey89d0lMavVJ",
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "k2E5xzg6QsIqtHKN",
+      "flags": {
+        "bbttcc": {
+          "qliphFeature": "qliphothic_saturation",
+          "radiation": {
+            "corruptionResilience": 1
+          }
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.AC1pQoGk2r1JsO1t"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.AC1pQoGk2r1JsO1t",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.tRwLiTlpPCaTblAF",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 0,
+      "_id": "t7oWCjwxDSMaNjDt"
+    },
+    {
+      "name": "Measured Breath Accord",
+      "type": "power",
+      "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+      "system": {
+        "intent": "presence",
+        "channel": "soul",
+        "sephirah": "tiferet",
+        "mode": "hermetic",
+        "clarityRequired": 1,
+        "noiseGain": 0,
+        "activation": "action",
+        "target": "area",
+        "range": "near",
+        "damage": "",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "none",
+          "number": 0,
+          "die": "d6",
+          "attribute": "",
+          "type": "kinetic",
+          "flavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "effect": "Sustained zone (6-square sphere): hostiles inside save Soul vs Cast DC each round or are Calmed until they save. Upkeep 1 Clarity per scene.",
+        "tags": [
+          "starter-kit",
+          "aoe",
+          "cc",
+          "path:harmonymarshal",
+          "path-core",
+          "field",
+          "command",
+          "sustained",
+          "zone"
+        ],
+        "category": "manifestation",
+        "flavor": "In, two three four. Out, two three four. Riots are just breathing that got ahead of itself.",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "The room is set to one lawful breath. Chaos may proceed, but it pays rent, in advance, at the counter.",
+          "form": "field",
+          "function": "command",
+          "stability": "sustained",
+          "interactionModel": "zone",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "scene",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "Harmony Marshal",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 30
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "maintenanceKey": "1-clarity-scene",
+          "isSignature": false,
+          "appliedStates": {
+            "states": [
+              "calmed"
+            ],
+            "duration": "until-saved",
+            "saveEachRound": true,
+            "saveAttribute": "soul",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "chain": {
+            "enabled": false,
+            "count": 3,
+            "range": 30,
+            "damageFormula": "1d6",
+            "damageType": "",
+            "carryConditions": false,
+            "carryEffects": false
+          },
+          "conditionalDamage": [],
+          "appliedEffects": {
+            "modifiers": [],
+            "resists": [],
+            "immunes": []
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterKit": {
+            "path": "harmonymarshal",
+            "doctrine": "",
+            "core": true
+          }
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "tDaTTeYCHQPY6WQx",
+      "folder": null
+    },
+    {
+      "name": "Apology Knife, Mass-Produced",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/apology_knife.png",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "stab",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1,
+          "units": "sq"
+        },
+        "tags": [
+          "mal-voiced",
+          "knife",
+          "mercy"
+        ],
+        "effect": "Mercy Engraving: every strike with this knife is nonlethal — a target brought to 0 Integrity is out cold, not dead. The apology counts.",
+        "flavor": "It says it's sorry. It means it. Reality keeps the receipt.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>A cheap, mass-produced stiletto with an apology engraved up the fuller. The engraving is competent. The steel is mediocre. The point is sharp. They were sold in bulk before the Shattering as novelty items at gas stations. After the Shattering, somebody noticed they actually work — and not just in the obvious ways.</p><p><b>Mercy Engraving.</b> When you reduce a creature to 0 Integrity with this knife, it falls <b>unconscious and stable</b> instead of dying. The engraved apology counts. Reality accepts the receipt. (Mal: \"Don't think about this too hard. The metaphysics are at minimum dubious. The mechanic is real.\")</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Mercy Engraving: every strike with this knife is nonlethal — a target brought to 0 Integrity is out cold, not dead. The apology counts.</p>\n<ul>\n <li><strong>Damage:</strong> 1d6 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(stab)</span></li>\n <li><strong>Faculty:</strong> Violence</li>\n <li><strong>Attack:</strong> Melee (Violence)</li>\n <li><strong>Reach:</strong> Melee</li>\n <li><strong>Duration:</strong> Scene</li>\n <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+        },
+        "quantity": 1
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "footprint": 1,
+              "reach": "5",
+              "frame": "weapon",
+              "signature": "Cheap stiletto. \"I'M SORRY\" engraved on the blade in three pre-Shattering languages. Yes, three.",
+              "origin": "vendor",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>A cheap, mass-produced stiletto with an apology engraved up the fuller. The engraving is competent. The steel is mediocre. The point is sharp. They were sold in bulk before the Shattering as novelty items at gas stations. After the Shattering, somebody noticed they actually work — and not just in the obvious ways.</p><p><b>Mercy Engraving.</b> When you reduce a creature to 0 Integrity with this knife, it falls <b>unconscious and stable</b> instead of dying. The engraved apology counts. Reality accepts the receipt. (Mal: \"Don't think about this too hard. The metaphysics are at minimum dubious. The mechanic is real.\")</p>",
+              "materialOf": [
+                "pre-fall-stainless",
+                "regret",
+                "competent-engraving"
+              ],
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          },
+          "equipped": true
+        },
+        "autoanimations": {
+          "id": "03b7eb4e-e4cb-480b-8855-2b005a5c7e4b",
+          "label": "Apology Knife, Mass-Produced",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "dagger",
+              "variant": "01",
+              "color": "white",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5,
+          "meleeSwitch": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "arrow",
+              "variant": "regular",
+              "color": "regular",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "detect": "automatic",
+              "range": 2,
+              "returning": false,
+              "switchType": "on"
+            }
+          }
+        }
+      },
+      "folder": "Wxh1A343inwTUeoo",
+      "effects": [],
+      "sort": 700000,
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "tsmrPxkvVJ5O5prZ"
+    },
+    {
+      "name": "Alignment: Kether",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "The Crown - Divine unity. +1 Soft Power, +1 Diplomacy OPs\n\nYou are called upward toward unity, legitimacy, and the better shape of the world. Kether rewards coalition-building, visionary leadership, and factions that hold together under pressure.",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "alignment-kether",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "diplomacy": 1,
+            "softpower": 1
+          },
+          "option": {}
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_crown-1.png",
+      "effects": [],
+      "folder": "RAOWJYon3t34M5XY",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.ic3UDTws3eh7bIi9",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.icXFNIffu7YuIQoA",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 2,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_id": "z4QTOt72AzOgQUM4",
+      "sort": 600000
+    }
+  ],
+  "effects": [
+    {
+      "name": "Surge: Sundering Blow (primed)",
+      "img": "icons/svg/sword.svg",
+      "origin": "Actor.zTGQa6MhKNcnEsbB",
+      "flags": {
+        "fourththing": {
+          "surge": {
+            "oneShotMarker": "sundering-blow"
+          }
+        }
+      },
+      "system": {
+        "changes": []
+      },
+      "_id": "Hbm4FU5CKK8uy2MZ",
+      "type": "base",
+      "disabled": false,
+      "start": {
+        "time": 0,
+        "combat": null,
+        "combatant": null,
+        "initiative": null,
+        "round": null,
+        "turn": null
+      },
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091759,
+        "modifiedTime": 1792989091759,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "folder": "7XKW4O4wpoxj6i5a",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "rzJQNVz5H3SHfP2i": 3,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "steward",
+      "activeManifestations": [
+        {
+          "instanceId": "apTBlIUhua4pygcU",
+          "itemId": "02ec3MFpMwPZBJ01",
+          "itemName": "Everyone Gets A Chair",
+          "tier": 1,
+          "stability": "sustained",
+          "mode": "hermetic",
+          "reachPath": "",
+          "castAt": 1791592982763,
+          "targetUuid": "Scene.6YetGOfAK3IhsZ9k.Token.A87y8HQ7KodvjW9c.Actor.oLN5ZrePNJ3NZRVd",
+          "targetName": "Straw Adversary",
+          "pactBound": false,
+          "stabilizeBonus": 0
+        },
+        {
+          "instanceId": "cFc3Zl1iP0Ar0sba",
+          "itemId": "kYBmRM4rLNGnN429",
+          "itemName": "Marshal's Mantle",
+          "tier": 1,
+          "stability": "sustained",
+          "mode": "hermetic",
+          "reachPath": "",
+          "castAt": 1791594641116,
+          "targetUuid": "",
+          "targetName": "",
+          "pactBound": false,
+          "stabilizeBonus": 0
+        },
+        {
+          "instanceId": "duAPCKL2FqAYxd0o",
+          "itemId": "02ec3MFpMwPZBJ01",
+          "itemName": "Everyone Gets A Chair",
+          "tier": 1,
+          "stability": "sustained",
+          "mode": "hermetic",
+          "reachPath": "",
+          "castAt": 1791596576000,
+          "targetUuid": "Actor.e8PuG2dNOmSViMMs",
+          "targetName": "Raider Marauder 1",
+          "pactBound": false,
+          "stabilizeBonus": 0
+        }
+      ],
+      "bulwark": {},
+      "lastSomaBreakScene": "6YetGOfAK3IhsZ9k",
+      "triggerUsage": {},
+      "combat": {
+        "pilotActionUsedThisRound": true,
+        "rigWeaponsFiredThisRound": {},
+        "lastFiredRigId": "t30YSK0q9rNVY6Pg",
+        "lastFiredWeaponId": "A4V6YTipeHq7ycGX"
+      },
+      "surge": {
+        "oneShot": {
+          "sundering-blow": {
+            "tier": 1,
+            "cost": 2,
+            "appliedAt": 1791607550025
+          }
+        }
+      },
+      "aptitudePromotions": {
+        "harmony marshal: tier 1 — harmony initiate|melee": {
+          "delta": 1,
+          "item": "Harmony Marshal: Tier 1 — Harmony Initiate",
+          "at": 1791865235493
+        },
+        "harmony marshal: tier 1 — harmony initiate|bracing": {
+          "delta": 1,
+          "item": "Harmony Marshal: Tier 1 — Harmony Initiate",
+          "at": 1791865235493
+        }
+      }
+    },
+    "bbttcc-factions": {
+      "factionId": "ZPLtyyRziIwn6GzS"
+    },
+    "bbttcc-territory": {
+      "faction": ""
+    },
+    "bbttcc-onboarding": {
+      "progress": {
+        "currentStep": null,
+        "steps": {
+          "incarnation": {
+            "done": true,
+            "at": 1791592819056
+          },
+          "meatsuit": {
+            "done": true,
+            "at": 1791593001100
+          },
+          "driving": {
+            "done": true,
+            "at": 1791607582453
+          },
+          "stewardship_claim": {
+            "done": true,
+            "at": 1791605901949
+          },
+          "stewardship_turn": {
+            "done": true,
+            "at": 1791593858682
+          },
+          "outfitting": {
+            "done": true,
+            "at": 1791593983630
+          },
+          "crew_occult": {
+            "done": true,
+            "at": 1791594124184
+          },
+          "surge": {
+            "done": true,
+            "at": 1791594201287
+          },
+          "manifestations": {
+            "done": true,
+            "at": 1791594641867
+          },
+          "combat_sim": {
+            "done": true,
+            "at": 1791596593150
+          },
+          "travel": {
+            "done": true,
+            "at": 1791596752533
+          },
+          "raid_violence": {
+            "done": true,
+            "at": 1791599304949
+          },
+          "raid_intrigue": {
+            "done": true,
+            "at": 1791599318401
+          },
+          "raid_presence": {
+            "done": true,
+            "at": 1791599346438
+          },
+          "proving_trials": {
+            "done": true,
+            "at": 1791608706633
+          },
+          "final_showdown": {
+            "done": true,
+            "at": 1791599635232
+          },
+          "graduation": {
+            "done": true,
+            "at": 1791599696109
+          }
+        },
+        "startedAt": 1791592185509,
+        "completedAt": 1791604058287
+      },
+      "provingRelics": [
+        "lava",
+        "grove",
+        "healing",
+        "reef"
+      ]
+    },
+    "bbttcc-character-options": {
+      "identity": {
+        "archetype": {
+          "key": "EjzyiP3AiAz5OPGp",
+          "id": "EjzyiP3AiAz5OPGp",
+          "pack": "bbttcc-character-options.character-archetypes",
+          "category": "character-archetypes",
+          "optionKey": "empress",
+          "identifier": "archetype_empress",
+          "name": "Archetype: The Empress (Caretaker)",
+          "currentTier": 1,
+          "displayName": "The Empress (Caretaker)"
+        },
+        "crew": {
+          "key": "1YeZ2LpzbyIhUa8X",
+          "id": "1YeZ2LpzbyIhUa8X",
+          "pack": "bbttcc-character-options.crew-types",
+          "category": "crew-types",
+          "optionKey": "storm-wardens",
+          "identifier": "crew-storm-wardens",
+          "name": "Crew Type: Storm Wardens",
+          "currentTier": 1,
+          "displayName": "Storm Wardens"
+        },
+        "sephirothicAlignment": {
+          "key": "Yb7rLajuzX3HWtmx",
+          "id": "Yb7rLajuzX3HWtmx",
+          "pack": "bbttcc-character-options.sephirothic-alignments",
+          "category": "sephirothic-alignments",
+          "optionKey": "alignment-kether",
+          "identifier": "alignment-kether",
+          "name": "Alignment: Kether"
+        },
+        "occult": {
+          "key": "Kb4nKMfJtxW6rvH0",
+          "id": "Kb4nKMfJtxW6rvH0",
+          "pack": "bbttcc-character-options.occult-associations",
+          "category": "occult-associations",
+          "optionKey": "prophet-oracle",
+          "identifier": "occult-association-prophet-oracle",
+          "name": "Occult Association: Prophet / Oracle",
+          "currentTier": 1,
+          "displayName": "Prophet / Oracle"
+        }
+      },
+      "archetype": {
+        "pack": "bbttcc-character-options.character-archetypes",
+        "id": "EjzyiP3AiAz5OPGp",
+        "name": "Archetype: The Empress (Caretaker)",
+        "identifier": "archetype_empress"
+      },
+      "crew": {
+        "pack": "bbttcc-character-options.crew-types",
+        "id": "1YeZ2LpzbyIhUa8X",
+        "name": "Crew Type: Storm Wardens",
+        "identifier": "crew-storm-wardens"
+      },
+      "sephirot": {
+        "pack": "bbttcc-character-options.sephirothic-alignments",
+        "id": "Yb7rLajuzX3HWtmx",
+        "name": "Alignment: Kether",
+        "identifier": "alignment-kether"
+      },
+      "occult": {
+        "pack": "bbttcc-character-options.occult-associations",
+        "id": "Kb4nKMfJtxW6rvH0",
+        "name": "Occult Association: Prophet / Oracle",
+        "identifier": "occult-association-prophet-oracle"
+      },
+      "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.rMuXXItrEQDROPEP",
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.iDcPvxKbW6YAD9NF",
+      "classUuid": "Compendium.bbttcc-master-content.classes.Item.BX48SRjk7yBp0bdY",
+      "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.KWTrzLH76Aiia8Vw",
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "nativeLinks": {
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.rMuXXItrEQDROPEP",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.iDcPvxKbW6YAD9NF",
+        "classUuid": "Compendium.bbttcc-master-content.classes.Item.BX48SRjk7yBp0bdY",
+        "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.KWTrzLH76Aiia8Vw",
+        "ancestryApplied": true,
+        "heritageApplied": true,
+        "classApplied": true,
+        "subclassApplied": true,
+        "ancestryName": "Qliph-Scarred",
+        "heritageName": "Qliph-Scarred Heritage: Husk",
+        "className": "Harmony Marshal",
+        "subclassName": "Mandate of Accord (Bad Eden)"
+      },
+      "calculatedOPs": {
+        "violence": 0,
+        "nonlethal": 2,
+        "intrigue": 4,
+        "economy": 1,
+        "softpower": 4,
+        "diplomacy": 1,
+        "logistics": 0,
+        "culture": 1,
+        "faith": 1
+      },
+      "echoRoster": {
+        "storm-wardens": {
+          "displayName": "Storm Wardens",
+          "members": [
+            {
+              "id": "2hUxTtKUykrY",
+              "name": "Corvan Ustile",
+              "role": "Wall-warden",
+              "notes": "He and Juniper built the leyglass barricade at Mottram Reach board by board, and he still mutters that she left before the last plank was nailed.",
+              "portrait": "",
+              "defaultPresent": false,
+              "actorUuid": "Actor.B6dHCKtWyclZCoj2"
+            },
+            {
+              "id": "qTAHWiS9UVmQ",
+              "name": "Reine Tocsil",
+              "role": "Stormcaller",
+              "notes": "Calling the leyline surges costs her a year of smell and taste every time, and Juniper is the only one who still remembers to describe dinner to her.",
+              "portrait": "",
+              "defaultPresent": false,
+              "actorUuid": "Actor.eXT43ydkKa6qAMuE"
+            },
+            {
+              "id": "ZRJ5CxZoMEe2",
+              "name": "Puck Aldery",
+              "role": "Relief runner",
+              "notes": "Owes Juniper a debt he can't name out loud — she ran a storm-front alone so he could carry his brother's body out of the Quiet Chair Society's flooded annex, and he's been paying it back in small favors ever since.",
+              "portrait": "",
+              "defaultPresent": false,
+              "actorUuid": "Actor.Dh3Gx2zRyGRRsbqg"
+            }
+          ],
+          "updatedTs": 1791778002686
+        }
+      }
+    },
+    "bbttcc-aae": {
+      "politicalPhilosophy": "social_democratic"
+    },
+    "bbttcc-auto-link": {
+      "guidedCharacterCreation": {
+        "stage": "complete",
+        "name": "Juniper Ash",
+        "factionId": "",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.rMuXXItrEQDROPEP",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.iDcPvxKbW6YAD9NF",
+        "classUuid": "Compendium.bbttcc-master-content.classes.Item.BX48SRjk7yBp0bdY",
+        "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.KWTrzLH76Aiia8Vw",
+        "picks": {
+          "archetype": {
+            "pack": "bbttcc-character-options.character-archetypes",
+            "id": "EjzyiP3AiAz5OPGp"
+          },
+          "crew": {
+            "pack": "bbttcc-character-options.crew-types",
+            "id": "1YeZ2LpzbyIhUa8X"
+          },
+          "sephirot": {
+            "pack": "bbttcc-character-options.sephirothic-alignments",
+            "id": "Yb7rLajuzX3HWtmx"
+          },
+          "occult": {
+            "pack": "bbttcc-character-options.occult-associations",
+            "id": "Kb4nKMfJtxW6rvH0"
+          },
+          "political": {
+            "id": "social_democratic"
+          }
+        },
+        "baseStats": {
+          "violence": 5,
+          "intrigue": 4,
+          "presence": 3,
+          "body": 3,
+          "mind": 2,
+          "soul": 2,
+          "_playerPick": true
+        }
+      }
+    },
+    "bbttcc-sorting-engine": {
+      "pillarTally": {
+        "mercy": 6,
+        "severity": 6,
+        "neutral": 8
+      },
+      "lastDescent": {
+        "timestamp": 1791592190111,
+        "confirmedBuild": {
+          "archetype": {
+            "name": "The Empress",
+            "score": 35
+          },
+          "ancestry": {
+            "name": "Qliph-Scarred",
+            "score": 28
+          },
+          "heritage": {
+            "name": "Qliph-Scarred Heritage: Husk",
+            "_playerPick": true
+          },
+          "crew": {
+            "name": "Storm Wardens",
+            "score": 31
+          },
+          "path": {
+            "name": "Harmony Marshal",
+            "score": 35
+          },
+          "doctrine": {
+            "name": "Mandate of Accord",
+            "score": 21
+          },
+          "philosophy": {
+            "name": "Social Democratic",
+            "score": 36
+          },
+          "occult": {
+            "name": "Prophet/Oracle",
+            "score": 30
+          },
+          "alignment": {
+            "name": "Keter",
+            "score": 24
+          },
+          "faculties": {
+            "violence": 5,
+            "intrigue": 4,
+            "presence": 3,
+            "body": 3,
+            "mind": 2,
+            "soul": 2,
+            "_playerPick": true
+          }
+        },
+        "traitMap": {
+          "sacrifice": 8,
+          "sorrow": 6,
+          "faith": 3,
+          "keter_signal": 2,
+          "speech": 4,
+          "compassion": 5,
+          "chokhmah_signal": 2,
+          "stealth": 5,
+          "independence": 3,
+          "malkuth_signal": 5,
+          "dread": 6,
+          "binah_signal": 4,
+          "risk": 1,
+          "violence": 3,
+          "chesed_signal": 4,
+          "mercy": 5,
+          "hierarchy": 5,
+          "severity": 4,
+          "geburah_signal": 2,
+          "kinship": 4,
+          "ritual": 5,
+          "tiphareth_signal": 4,
+          "study": 4,
+          "netzach_signal": 2,
+          "ambition": 4,
+          "hod_signal": 3,
+          "yesod_signal": 4,
+          "discipline": 2
+        },
+        "classification": "Balanced",
+        "mode": "sorting"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989091759,
+    "modifiedTime": 1792989091759,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!actors!zTGQa6MhKNcnEsbB"
+}

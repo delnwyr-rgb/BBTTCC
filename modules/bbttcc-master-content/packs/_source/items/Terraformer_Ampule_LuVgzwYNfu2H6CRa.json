@@ -1,105 +1,53 @@
 {
+  "_id": "LuVgzwYNfu2H6CRa",
   "name": "Terraformer Ampule",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/consumables/potions/potion-vial-corked-purple.webp",
   "system": {
-    "description": {
-      "value": "<p>Crystal vial. Expend to cleanse a 30‑ft radius hazard; if used in Wasteland, reduce regional Darkness by 1 (once/region).</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 0.5,
-      "units": "lb"
-    },
-    "price": {
-      "value": 1200,
-      "denomination": "gp"
-    },
-    "rarity": "rare",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "terraformer-ampule",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>Crystal vial. Expend to cleanse a 6 squares radius hazard; if used in Wasteland, reduce regional Darkness by 1 (once per region).</p>",
+      "chat": ""
+    }
   },
   "flags": {
     "bbttcc": {
       "darknessDelta": -1,
       "tags": []
     },
-    "rfi": {
-      "item": {
-        "tier": "III",
-        "footprint": 1,
-        "reach": "self",
-        "frame": "armor",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "scene"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
-    },
     "fourththing": {
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
-            "currency": "economy",
+            "marks": 1080,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 2,
+            "notes": "TIII talisman × rarity 2",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 432
           },
           "tier": "III",
-          "frame": "armor",
+          "frame": "talisman",
           "origin": "looted",
           "bound": "free",
           "reach": "self",
           "footprint": 1,
-          "legacySystem": {
-            "description": {
-              "value": "<p>Crystal vial. Expend to cleanse a 6 squares radius hazard; if used in Wasteland, reduce regional Darkness by 1 (once/region).</p>"
-            }
-          }
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {}
         }
       }
     },
@@ -283,22 +231,22 @@
   },
   "effects": [],
   "folder": "TNrB6kEiHS0KwwJT",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834206249,
-    "modifiedTime": 1782164185974,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 2000000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "LuVgzwYNfu2H6CRa",
-  "sort": 2000000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988917163,
+    "modifiedTime": 1792988917163,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!LuVgzwYNfu2H6CRa"
 }

@@ -1,0 +1,50 @@
+{
+  "name": "Mindless Materialism",
+  "type": "feature",
+  "img": "icons/magic/control/sleep-bubble-purple.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>There are no thoughts in there to read, and nothing left that can be Shaken or reasoned with. Immune to Shaken, Charmed, and Calmed, and to anything that reads minds.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "2yikuBFjJqdNpsde",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Nahemoth Husk"
+        ],
+        "sourceIds": [
+          "BvNe8KEqyzjNxiFc"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069950,
+    "modifiedTime": 1792989070036,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!2yikuBFjJqdNpsde"
+}

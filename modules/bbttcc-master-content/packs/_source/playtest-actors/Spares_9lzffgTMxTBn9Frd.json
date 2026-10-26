@@ -1,0 +1,23 @@
+{
+  "_id": "9lzffgTMxTBn9Frd",
+  "name": "Spares",
+  "type": "Actor",
+  "folder": "FBhV32XeCO4JNcym",
+  "sorting": "a",
+  "sort": 900000,
+  "color": null,
+  "description": "Six built stewards without a table — spares for players (ruling NP3, 2026-10-26).",
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989089207,
+    "modifiedTime": 1792989089207,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!9lzffgTMxTBn9Frd"
+}

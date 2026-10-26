@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The High Priestess (Seer)</strong></p><ul><li><strong>Tactical:</strong> When you make a Soul check related to reading motives, lies, omens, hidden influence, or intuition under pressure, you can treat any 2d10x10 roll of 9 or lower as a 10.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The High Priestess (Seer)</strong></p><ul><li><strong>Tactical:</strong> When you make a Soul check related to reading motives, lies, omens, hidden influence, or intuition under pressure, you reroll the lowest die.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -59,7 +59,18 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "rerolls": [
+        {
+          "mode": "reroll-lowest",
+          "context": "check",
+          "attribute": "soul",
+          "vs": "reading motives, lies, omens, hidden influence, or intuition under pressure",
+          "note": "The High Priestess T3"
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": null,
@@ -71,12 +82,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986753400,
-    "modifiedTime": 1782167238592,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989164131,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

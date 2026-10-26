@@ -7,7 +7,7 @@
     "source": "Bad Eden (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You read a room the way others read a map.”</em></p><p><strong>Hearth-Reader.</strong> You reroll the lowest die on Insight checks, and you can’t be surprised by social betrayal if you have spoken to the betrayer for at least 1 minute (GM adjudicates).</p>",
+      "value": "\n<p><em>“You read a room the way others read a map.”</em></p><p><strong>Hearth-Reader.</strong> You reroll the lowest die on Insight checks, and once per Soma Break, when you still fail an Insight check, you may reroll it. You can’t be surprised by social betrayal if you have spoken to the betrayer for at least 1 minute (GM adjudicates).</p>",
       "chat": ""
     },
     "uses": {
@@ -22,7 +22,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 11
     },
     "properties": [],
     "requirements": "Human",
@@ -37,7 +37,6 @@
       "kind": "human",
       "feature": "hearth_reader",
       "lineage": "Neanderthal",
-      "tierLevel": 11,
       "version": "1.0.0"
     },
     "fourththing": {
@@ -56,11 +55,14 @@
               "insight"
             ]
           },
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "offerText": "Hearth-Reader — you read the room wrong; read it again (reroll the Insight check).",
           "effect": {
-            "kind": "chat-prompt",
-            "args": {
-              "body": "Hearth-Reader: GM, consider whether the social pattern was telegraphed and the failure should be re-narrated."
-            }
+            "kind": "reroll-failed-check",
+            "args": {}
           }
         }
       ]
@@ -123,8 +125,7 @@
         "initiative": null
       },
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!YgjtYIEYt2M4hX19.6fa7808881de4c20"
+      "folder": null
     }
   ],
   "folder": "QX8nwxDuMx1qPmXY",
@@ -138,12 +139,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004105807,
-    "modifiedTime": 1781116083383,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988979707,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

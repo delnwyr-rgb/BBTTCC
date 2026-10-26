@@ -1,0 +1,77 @@
+{
+  "name": "Aura of Concealment",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "qliphothic",
+      "satariel"
+    ],
+    "description": {
+      "value": "<p>Any creature that starts its turn within 6 squares hears faint whispers in a voice it knows: it rolls twice-keep-worse on checks to read intentions or see through deception until the start of its next turn.</p><p><em>Satariel — hull of binah.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "radius": 6,
+            "who": "enemies",
+            "do": {
+              "impose": true
+            }
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "qliphothic"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Satariel Veil-Spinner",
+          "Whispering Deceiver"
+        ],
+        "sourceIds": [
+          "hIOAU3bYR4KkdPhw",
+          "zVWpSrwZCA3TL5Dp"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "a5zzbaVpYWCv5JJe",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069907,
+    "modifiedTime": 1792989069991,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!a5zzbaVpYWCv5JJe"
+}

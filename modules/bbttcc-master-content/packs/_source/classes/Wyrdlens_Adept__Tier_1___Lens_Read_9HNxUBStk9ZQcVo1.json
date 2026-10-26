@@ -38,58 +38,6 @@
   },
   "effects": [
     {
-      "name": "Class L1: Fitting +1",
-      "img": "icons/skills/melee/sword-stylized-blue.webp",
-      "type": "base",
-      "disabled": false,
-      "transfer": true,
-      "description": "Granted by Wyrdlens Adept: Tier 1 — Lens Read at Tier 1.",
-      "flags": {
-        "fourththing": {
-          "passiveAuthored": true,
-          "aptitudeStamp": "2026-05-04",
-          "aptitudeAnchor": "Wyrdlens Adept: Tier 1 — Lens Read",
-          "aptitudeKind": "fitting"
-        }
-      },
-      "system": {
-        "changes": [
-          {
-            "key": "system.skills.fitting.value",
-            "value": 1,
-            "priority": 10,
-            "type": "add",
-            "phase": "initial"
-          }
-        ]
-      },
-      "_id": "1l4oFlF10Qxi6pN8",
-      "start": null,
-      "duration": {
-        "value": null,
-        "units": "seconds",
-        "expiry": null,
-        "expired": false
-      },
-      "origin": null,
-      "tint": "#ffffff",
-      "statuses": [],
-      "showIcon": 1,
-      "folder": null,
-      "sort": 0,
-      "_stats": {
-        "coreVersion": "14.369",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.16",
-        "createdTime": 1791864374409,
-        "modifiedTime": 1791864374409,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      }
-    },
-    {
       "name": "Shattered Algorithm Initiate (ID Intrigue Discount)",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_12.png",
       "origin": null,
@@ -201,39 +149,108 @@
       }
     },
     {
-      "name": "Lens Read (Occult +1, Lore +1)",
-      "img": "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
-      "origin": null,
-      "transfer": true,
+      "name": "Class L1: Fitting +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
       "disabled": false,
+      "transfer": true,
+      "description": "Granted by Wyrdlens Adept: Tier 1 — Lens Read at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Wyrdlens Adept: Tier 1 — Lens Read",
+          "aptitudeKind": "fitting"
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.fitting.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "1l4oFlF10Qxi6pN8",
+      "start": null,
       "duration": {
         "value": null,
         "units": "seconds",
         "expiry": null,
         "expired": false
       },
-      "flags": {},
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864374409,
+        "modifiedTime": 1791864374409,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
       "_id": "wlLensReadRanks1",
-      "type": "base",
+      "name": "Lens Read (Occult +1, Lore +1)",
+      "img": "icons/magic/perception/eye-ringed-glow-angry-small-red.webp",
+      "transfer": true,
       "system": {
         "changes": [
           {
             "key": "system.skills.occult.value",
-            "value": "1",
+            "value": 1,
             "priority": 20,
             "type": "add",
             "phase": "initial"
           },
           {
             "key": "system.skills.lore.value",
-            "value": "1",
+            "value": 1,
             "priority": 20,
             "type": "add",
             "phase": "initial"
           }
         ]
       },
-      "changes": null
+      "type": "base",
+      "disabled": false,
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792907869730,
+        "modifiedTime": 1792907869730,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "folder": "gZHoMHBbaIJOJgZ5",
@@ -437,12 +454,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776459984383,
-    "modifiedTime": 1781116118289,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907880797,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

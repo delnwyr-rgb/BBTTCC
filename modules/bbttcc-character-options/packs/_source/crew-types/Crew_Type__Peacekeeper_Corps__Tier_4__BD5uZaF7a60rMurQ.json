@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Controlled Hexes are highly stable. The OP cost to prevent rebellion in Triumphant Hexes is reduced by 2, and it is easier to shift Hexes towards Gevurah (Severity/Order).</li></ul>",
+      "value": "<p><strong>Tier 4 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Strategic:</strong> Your hexes stay calm: whenever your Domain spends Soft Power or Non-Lethal marks, it spends 20 fewer (never below 10).</li></ul>",
       "chat": ""
     },
     "identifier": "crew-peacekeeper-corps-t4",
@@ -66,13 +66,27 @@
           "bbttcc:when:hex_state:triumphant",
           "bbttcc:effect:hex_stability:high",
           "bbttcc:effect:rebellion:cost:-2",
-          "bbttcc:effect:alignment_shift:gevurah:+easy",
+          "bbttcc:effect:alignment_shift:geburah:+easy",
           "bbttcc:theme:order",
           "bbttcc:theme:stability",
           "bbttcc:theme:control",
           "bbttcc:theme:severity"
         ]
       }
+    },
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "softpower",
+            "nonlethal"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Crew Type: Peacekeeper Corps (Tier 4)",
+          "marks": 20
+        }
+      ]
     }
   },
   "effects": [],
@@ -87,12 +101,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986956943,
-    "modifiedTime": 1781116041197,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989170592,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

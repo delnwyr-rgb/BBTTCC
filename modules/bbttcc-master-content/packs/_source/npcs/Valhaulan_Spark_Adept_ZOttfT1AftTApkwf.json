@@ -3,15 +3,19 @@
   "type": "npc",
   "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/RaiderHymnspeaker2.png",
   "system": {
-    "role": "Martial Caster (Storm-Voiced)",
+    "role": "caster",
     "tier": 2,
     "factionId": "",
-    "notes": "",
+    "notes": "A Valhaulan hymn-speaker who wired the storm into a hammer. Fights at the front where the ward holds and the vow can hear its target.",
     "details": {
       "level": 8,
       "tier": 2,
       "statPoints": 0,
-      "skillPoints": 0
+      "skillPoints": 0,
+      "biography": {
+        "value": "<p><strong>Concept.</strong> A Valhaulan hymn-speaker who wired the storm into a hammer. Fights at the front where the ward holds and the vow can hear its target.</p>\n<p><strong>Signature.</strong> Every miss against them is answered by lightning. They count on it.</p>",
+        "public": ""
+      }
     },
     "faction": {
       "id": null,
@@ -40,8 +44,9 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 38,
-        "max": 38
+        "value": 50,
+        "max": 50,
+        "temp": 0
       },
       "stress": {
         "value": 19,
@@ -127,7 +132,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,11 +149,14 @@
     },
     "conditionImmunities": [],
     "tags": [
-      "5e-port",
       "cr-2",
       "common",
-      "phase2-narrative-applied"
+      "phase2-narrative-applied",
+      "rfi-scrubbed"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -160,22 +169,27 @@
       "value": 0,
       "taint": 0,
       "fragments": []
-    }
+    },
+    "biography": {
+      "concept": "Martial Caster (Storm-Voiced)",
+      "notes": "A Valhaulan hymn-speaker who wired the storm into a hammer. Fights at the front where the ward holds and the vow can hear its target."
+    },
+    "description": "<p><strong>Concept.</strong> A Valhaulan hymn-speaker who wired the storm into a hammer. Fights at the front where the ward holds and the vow can hear its target.</p>\n<p><strong>Signature.</strong> Every miss against them is answered by lightning. They count on it.</p>"
   },
   "items": [
     {
-      "name": "Yesodic Ward",
+      "name": "Hammer-Ward (reaction, 3/scene)",
       "type": "feature",
-      "img": "icons/magic/defensive/barrier-shield-dome-blue-purple.webp",
+      "img": "icons/skills/melee/shield-block-gray-yellow.webp",
       "system": {
         "category": "principle",
         "source": "",
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p>When hit by an attack, the adept can use its reaction to gain +2 Guard against that attack, potentially causing it to miss (3/Day).</p>",
+          "value": "<p><strong>Reaction, when hit by an attack.</strong> The adept gains +2 Guard against that attack, which may turn it into a miss. Three times per scene.</p>",
           "chat": ""
         }
       },
@@ -186,19 +200,42 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "do": {
+                  "bankBonus": {
+                    "bonus": 2,
+                    "context": "defense",
+                    "note": "Hammer-Ward"
+                  }
+                },
+                "to": "self",
+                "limit": {
+                  "per": "scene",
+                  "uses": 3
+                },
+                "label": "Hammer-Ward"
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829261,
-        "modifiedTime": 1780163239601,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989123583,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!ZOttfT1AftTApkwf.TdXyQmQDP3Q4M6vE"
+      }
     },
     {
       "name": "Spark Rite",
@@ -209,10 +246,10 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p>If the adept starts its turn within 2 squares of the Spark of Yesod, it regains 5 Integrity.</p>",
+          "value": "<p>If the adept starts its turn within 2 squares of a Spark (a bound Spark of the Tree in any state), it regains 5 Integrity.</p>",
           "chat": ""
         }
       },
@@ -225,17 +262,16 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.367",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1777700829261,
-        "modifiedTime": 1782167243592,
+        "modifiedTime": 1788546628071,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!ZOttfT1AftTApkwf.mT8KN8PtWGrynkyD"
+      }
     },
     {
       "name": "Radiant Spike",
@@ -246,7 +282,7 @@
         "intent": "violence",
         "skill": "firearms",
         "damage": {
-          "formula": "2d6+3",
+          "formula": "2d6",
           "attribute": "violence",
           "type": "sephirotic",
           "damageFlavor": "",
@@ -254,14 +290,14 @@
         },
         "damageParts": [],
         "range": {
-          "short": 1,
-          "long": 1
+          "short": 12,
+          "long": 12
         },
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
-        "effect": "<p><strong>Attack.</strong> +5 to hit, range 60 ft., one target. Hit: 10 (2d6+3) radiant.</p>",
+        "effect": "A thrown spike of storm-bright sephirotic light. On a hit against a target the adept has sworn a Spark Vow against, +1d6 electrical.",
         "flavor": "",
         "manifestation": {
           "tier": 1,
@@ -293,6 +329,9 @@
             "pool": "",
             "value": 0
           }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> range 12 squares., one target. Damage: <code>2d6</code> sephirotic + violence. On a hit against a target the adept has sworn a Spark Vow against, +1d6 electrical.</p><p><em>It hums the vow on the way in.</em></p>"
         }
       },
       "_id": "F1G6CmnCTtoljxdo",
@@ -479,23 +518,39 @@
           "isCustomized": true,
           "fromAmmo": false,
           "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Radiant Spike"
+                },
+                "do": {
+                  "prompt": "+1d6 electrical if the target is under the adept's Spark Vow."
+                },
+                "narrative": true
+              }
+            ]
+          }
         }
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829261,
-        "modifiedTime": 1780163239601,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989123584,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!ZOttfT1AftTApkwf.F1G6CmnCTtoljxdo"
+      }
     },
     {
-      "name": "Disorienting Pulse (recharges on a Soma Break)",
+      "name": "Disorienting Pulse (recharge 5–6)",
       "type": "feature",
       "img": "icons/magic/control/hypnosis-mesmerism-swirl.webp",
       "system": {
@@ -503,10 +558,10 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p><strong>Attack.</strong> Each creature of the adept\u2019s choice within 3 squares must succeed on a DC 13 Soul check or be disoriented until end of its next turn (cannot take reaction strikes; roll 3d10 keep lowest 2 on Perception (Mind)).</p>",
+          "value": "<p>Each creature of the adept's choice within 3 squares must succeed a Soul check vs DC 13 or be disoriented until the end of its next turn: no reaction strikes, and it rolls twice-keep-worse on Mind checks. Recharges on a Soma Break.</p>",
           "chat": ""
         }
       },
@@ -517,19 +572,54 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "save": {
+                    "attr": "soul",
+                    "dc": 13,
+                    "onSave": "negate"
+                  }
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                }
+              },
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Disorienting Pulse (recharge 5–6)"
+                },
+                "do": {
+                  "noReactions": true,
+                  "prompt": "Twice-keep-worse on Mind checks until its next turn ends."
+                }
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829261,
-        "modifiedTime": 1782167243592,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989123584,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!ZOttfT1AftTApkwf.TGSLF3JWFWRmz5u8"
+      }
     },
     {
       "name": "Spark Vow",
@@ -546,24 +636,24 @@
         "target": "single",
         "range": "far",
         "damage": "2d8",
-        "damageType": "energy",
+        "damageType": "electrical",
         "damageFlavor": "",
         "damageRoll": {
           "op": "none",
           "number": 0,
           "die": "d6",
           "attribute": "",
-          "type": "kinetic",
+          "type": "electrical",
           "flavor": "",
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "Name a target and speak a vow against them. The next time that target misses an attack against you or an ally, lightning answers \u2014 they take 2d8 energy to Integrity. Vow lasts one scene; only one Spark Vow may be active at a time.",
+        "effect": "Name a target and speak a vow against them. The next time that target misses an attack against you or an ally, lightning answers — they take 2d8 energy to Integrity. Vow lasts one scene; only one Spark Vow may be active at a time.",
         "tags": [
           "translated",
-          "5e-port",
           "phase2-narrative",
-          "manifestation"
+          "manifestation",
+          "rfi-scrubbed"
         ],
         "category": "manifestation",
         "flavor": "Ozone smell, and a bell rings somewhere in Valhaul.",
@@ -587,7 +677,7 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "If the named target dies before the vow pays out, the Adept takes 1 Stress.",
-          "pathResonance": "Geburah \u2014 severity, the answer that comes back.",
+          "pathResonance": "Geburah — severity, the answer that comes back.",
           "fictionalPermission": "May call lightning on a missed attack.",
           "gmCalibration": "Resolves once and ends; one Spark Vow at a time.",
           "mechanicalHook": "2d8 energy on triggered miss.",
@@ -612,6 +702,9 @@
             "dcMode": "derived",
             "dcFixed": 15
           }
+        },
+        "description": {
+          "value": "<p><strong>Working.</strong> <em>A martial pact with a sky that keeps score.</em></p>\n<p>Name a target within far range and speak a vow against them. The next time that target misses an attack against the adept or an ally, lightning answers: it takes 2d8 electrical damage. The vow lasts one scene; only one Spark Vow may be active at a time.</p>\n<p><strong>Cost.</strong> 2 Clarity, +1 Noise · action · single / far.</p>\n<p><em>Ozone smell, and a bell rings somewhere in Valhaul.</em></p>"
         }
       },
       "_id": "NcSWpVeoOdr7Jsdu",
@@ -799,20 +892,34 @@
           "isCustomized": true,
           "fromAmmo": false,
           "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "prompt": "Spark Vow: name a target; its next miss vs the adept or an ally → 2d8 electrical to it."
+                },
+                "who": "self",
+                "narrative": true
+              }
+            ]
+          }
         }
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700841904,
-        "modifiedTime": 1780163239602,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989123584,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!ZOttfT1AftTApkwf.NcSWpVeoOdr7Jsdu"
+      }
     },
     {
       "name": "Hammer-Bright Ward",
@@ -829,14 +936,14 @@
         "target": "self",
         "range": "self",
         "damage": "",
-        "damageType": "energy",
+        "damageType": "electrical",
         "damageFlavor": "",
         "damageRoll": {
           "op": "none",
           "number": 0,
           "die": "d6",
           "attribute": "",
-          "type": "kinetic",
+          "type": "electrical",
           "flavor": "",
           "track": "integrity"
         },
@@ -844,9 +951,9 @@
         "effect": "While wielding a martial Form, +1 Guard. While the ward holds, kinetic damage you deal counts as energy.",
         "tags": [
           "translated",
-          "5e-port",
           "phase2-narrative",
-          "manifestation"
+          "manifestation",
+          "rfi-scrubbed"
         ],
         "category": "manifestation",
         "flavor": "Sparks crawl up the haft.",
@@ -870,9 +977,9 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "While the ward is up, the Adept cannot benefit from cover.",
-          "pathResonance": "Geburah \u2014 bright martial discipline.",
+          "pathResonance": "Geburah — bright martial discipline.",
           "fictionalPermission": "May reflavor kinetic strikes as energy.",
-          "gmCalibration": "+1 Guard, kinetic\u2192energy on outgoing damage.",
+          "gmCalibration": "+1 Guard, kinetic→energy on outgoing damage.",
           "mechanicalHook": "+1 Guard; outgoing damage type swap.",
           "signature": "Sparks crawl up the haft.",
           "thirdThing": "Iron near the wielder rings faintly.",
@@ -895,6 +1002,9 @@
             "dcMode": "derived",
             "dcFixed": 15
           }
+        },
+        "description": {
+          "value": "<p><strong>Form.</strong> <em>A bright halo around the haft of any weapon.</em></p>\n<p>While wielding a martial Form, the adept has +1 Guard. While the ward holds, kinetic damage the adept deals counts as electrical.</p>\n<p><strong>Cost.</strong> 1 Clarity · bonus · self / self.</p>\n<p><em>Sparks crawl up the haft.</em></p>"
         }
       },
       "_id": "A7B9KAYVvGO58KWI",
@@ -1085,17 +1195,79 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.367",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.1",
         "createdTime": 1777700841904,
-        "modifiedTime": 1780163239602,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1788546628072,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Storm-Voiced",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "mortal",
+          "valhaulan"
+        ],
+        "description": {
+          "value": "<p>The first time each scene this Valhaulan is reduced below half Integrity, they roar: allies within 6 squares reroll the lowest die on their next attack roll, and the Valhaulan gains 5 temporary Integrity.</p><p><em>Storm's a-comin'. The storm has opinions.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!ZOttfT1AftTApkwf.A7B9KAYVvGO58KWI"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "bloodied",
+                "do": {
+                  "tempIntegrity": 5,
+                  "prompt": "Storm-Voiced: allies within 6 squares reroll the lowest die on their next attack."
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                }
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "mortal"
+            }
+          }
+        }
+      },
+      "_id": "IKpcBOgZLUW69ml2",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342349874,
+        "modifiedTime": 1791342349874,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -1198,14 +1370,36 @@
   },
   "folder": "uMhSIaldbbcnBh0H",
   "sort": 647657,
-  "flags": {},
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "lineage": "mortal",
+          "subLineage": "valhaulan",
+          "tier": "II",
+          "bracket": "medium",
+          "price": {
+            "marks": 15,
+            "bounty": 15,
+            "hire": 25,
+            "ransom": 25,
+            "currency": "violence",
+            "gmOverride": false,
+            "notes": "TII medium mortal — bounty 15 / hire 25 marks; credited to the pool matching the method (default violence)"
+          },
+          "title": "Martial Caster (Storm-Voiced)"
+        }
+      },
+      "creatureType": "humanoid"
+    }
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777700829261,
-    "modifiedTime": 1783219933216,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989123434,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

@@ -1,0 +1,323 @@
+{
+  "name": "Wasteland Shack",
+  "type": "rig",
+  "img": "modules/bbttcc-core/assets/rigs/infrastructure_3.webp",
+  "system": {
+    "identity": {
+      "mobility": "stationary",
+      "state": "parked",
+      "factionOwnerId": "",
+      "archetype": "Structure: Wasteland Shack",
+      "binding": {
+        "hexId": "",
+        "sceneId": "",
+        "tokenId": ""
+      }
+    },
+    "crew": {
+      "slots": [
+        {
+          "role": "pilot",
+          "actorId": "",
+          "label": "Toblerone"
+        }
+      ],
+      "capacity": {
+        "pilot": {
+          "min": 1,
+          "max": 1
+        },
+        "gunner": {
+          "min": 0,
+          "max": 2
+        },
+        "engineer": {
+          "min": 0,
+          "max": 1
+        },
+        "crew": {
+          "min": 0,
+          "max": 4
+        }
+      },
+      "crewMin": 1,
+      "crewMax": 8
+    },
+    "integrity": {
+      "value": 30,
+      "max": 30,
+      "tier": 1,
+      "bracket": "medium"
+    },
+    "derived": {
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 12
+      },
+      "resolve": {
+        "value": 11
+      },
+      "integrity": {},
+      "stress": {}
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "output": {
+      "modules": [],
+      "basePerTurn": {}
+    },
+    "travel": {
+      "speed": 1,
+      "range": 5,
+      "hazardResist": 0,
+      "domains": [
+        "land"
+      ],
+      "depthRating": 0
+    },
+    "tags": [],
+    "biography": {
+      "concept": "",
+      "notes": ""
+    }
+  },
+  "_id": "43fKY4WrzxxyVYUd",
+  "prototypeToken": {
+    "name": "Wasteland Shack",
+    "displayName": 30,
+    "actorLink": true,
+    "width": 4,
+    "height": 4,
+    "depth": 1,
+    "texture": {
+      "src": "modules/bbttcc-core/assets/rigs/infrastructure_3.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      },
+      "tokenflip": {
+        "tokenfaces": [
+          {
+            "actorId": "43fKY4WrzxxyVYUd",
+            "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_1.png",
+            "id": "ta3BhlkFW2GImZWLRF5e",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 4,
+            "height": 4,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          },
+          {
+            "actorId": "43fKY4WrzxxyVYUd",
+            "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_2.png",
+            "id": "9wK6oXdHO49KfGor6fE1",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 2,
+            "height": 2,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          },
+          {
+            "actorId": "43fKY4WrzxxyVYUd",
+            "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_3.png",
+            "id": "3rplyCMiG5hZlqTlEFBH",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 4,
+            "height": 4,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          }
+        ]
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [],
+  "effects": [],
+  "folder": "xQUOdeYWwVaU6c28",
+  "sort": -100000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "bbttcc-structures": {
+      "hasStructure": true,
+      "facilityMode": false,
+      "materialBOM": [
+        {
+          "materialKey": "scrap-salvage",
+          "qty": 3,
+          "originalQty": 3,
+          "family": "salvage",
+          "tier": "I",
+          "name": "scrap-salvage",
+          "tagsCache": []
+        }
+      ],
+      "state": "razed",
+      "plates": {
+        "current": 1,
+        "max": 16
+      },
+      "threshold": 0.57,
+      "resists": {
+        "kinetic": 0.75
+      },
+      "vulnerabilities": {
+        "energy|fire": {
+          "type": "energy",
+          "flavor": "fire",
+          "factor": 2
+        }
+      },
+      "loadBearing": false,
+      "collapseProfile": {
+        "fallFt": 5,
+        "damageDice": "1d6",
+        "nonlethal": true,
+        "knockbackFt": 5,
+        "triggerState": "breached"
+      },
+      "history": [
+        {
+          "at": 1781836529262,
+          "fromState": "intact",
+          "toState": "razed",
+          "dmg": 15,
+          "chipped": [
+            {
+              "k": "sept-cloth",
+              "n": 2
+            },
+            {
+              "k": "ash-wood",
+              "n": 4
+            }
+          ]
+        }
+      ],
+      "collapseFired": true
+    },
+    "bbttcc-auto-link": {
+      "entityKind": "infrastructure",
+      "createdViaRigBuilder": true
+    },
+    "tokenflip": {
+      "unfuck": true
+    },
+    "fourththing": {
+      "kind": "rig"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1791317003569,
+    "modifiedTime": 1792989117887,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!43fKY4WrzxxyVYUd"
+}

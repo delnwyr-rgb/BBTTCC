@@ -46,6 +46,21 @@
           "tier": "I",
           "frame": "trait"
         }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attacked",
+            "if": {
+              "ownerNotBloodied": true
+            },
+            "do": {
+              "reroll": "attack-highest"
+            },
+            "label": "Swarm — above half Integrity"
+          }
+        ]
       }
     },
     "bbttcc": {
@@ -63,12 +78,12 @@
   "sort": 0,
   "_id": "S3pShhbY5iTyyqLD",
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": null,
-    "modifiedTime": null,
-    "lastModifiedBy": null,
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.3",
+    "createdTime": 1791412953227,
+    "modifiedTime": 1791412953227,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

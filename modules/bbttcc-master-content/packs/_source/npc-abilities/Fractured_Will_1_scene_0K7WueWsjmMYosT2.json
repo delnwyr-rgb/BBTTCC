@@ -1,0 +1,63 @@
+{
+  "name": "Fractured Will (1/scene)",
+  "type": "feature",
+  "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-mortal",
+      "boss",
+      "fractured-will"
+    ],
+    "description": {
+      "value": "<p>When the Reeve fails a check, some part of him refuses the outcome: the Reeve succeeds instead. 1 time per scene.</p><p><em>He consults the ledger. The ledger disagrees with the dice.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "frame": "feature"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Hollis Varn, Reeve of the Broken Bridge"
+        ],
+        "sourceIds": [
+          "UpHwUANX26OoCqoH"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "0K7WueWsjmMYosT2",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069930,
+    "modifiedTime": 1792989070014,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!0K7WueWsjmMYosT2"
+}

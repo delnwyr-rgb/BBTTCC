@@ -7,7 +7,7 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Withdraws</h3><p>A named attacker Champion withdraws from the siege (status Absent) — the Achilles-in-his-tent lever. Optional note {\"championId\":\"...\"}; otherwise the first active. Target the besieged hex.</p><p><strong>OP Cost:</strong> softPower 15, diplomacy 10</p><p><strong>Tier:</strong> 2</p><p><strong>Rarity:</strong> rare</p></div>",
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Withdraws</h3><p>A named attacker Champion withdraws from the siege (status Absent) — the Achilles-in-his-tent lever. Optional note {\"championId\":\"...\"}; otherwise the first active. Target the besieged hex.</p><p><strong>Cost:</strong> Soft Power 15 · Diplomacy 10 marks</p></div>",
       "chat": ""
     }
   },
@@ -19,19 +19,19 @@
   },
   "_id": "ngbaj2Ye8Ap70sh3",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601766,
-    "modifiedTime": 1782703702691,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989001042,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

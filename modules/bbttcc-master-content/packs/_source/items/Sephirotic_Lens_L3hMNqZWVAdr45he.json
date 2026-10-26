@@ -58,7 +58,15 @@
             "saleBack": 36
           }
         }
-      }
+      },
+      "rerolls": [
+        {
+          "context": "caster-check",
+          "mode": "reroll-lowest",
+          "vs": "workings aligned to the sephirah this lens is tuned to (attuned + equipped)",
+          "note": "Sephirotic Lens · Aligned Sight"
+        }
+      ]
     }
   },
   "folder": "Wxh1A343inwTUeoo",
@@ -70,11 +78,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1777137142782,
-    "modifiedTime": 1782156674945,
+    "modifiedTime": 1791344265782,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

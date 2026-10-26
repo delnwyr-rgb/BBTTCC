@@ -1,0 +1,767 @@
+{
+  "name": "Legansus Tal",
+  "type": "npc",
+  "img": "art/devin-knight/Robots_24/Robot9.webp",
+  "folder": "Z3bqaptcJ3FkGa2I",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "prototypeToken": {
+    "name": "Legansus Tal",
+    "actorLink": false,
+    "disposition": -1,
+    "texture": {
+      "src": "art/devin-knight/Robots_24/Robot9.webp",
+      "scaleX": 1,
+      "scaleY": 1,
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "width": 3,
+    "height": 3,
+    "displayName": 30,
+    "depth": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "monster",
+      "createdViaMonsterBuilder": false,
+      "createdBy": "build-bestiary-slots.mjs 2026-10-07",
+      "lineage": "pre-fall"
+    },
+    "fourththing": {
+      "creatureType": "construct",
+      "rfi": {
+        "actor": {
+          "tier": "III",
+          "bracket": "heavy",
+          "archetype": "legansus-tal",
+          "lineage": "pre-fall",
+          "title": "Giant Rider frame, not fully under control — the second hearing",
+          "bestiary": {
+            "themes": [
+              "construct",
+              "pre-fall",
+              "circuit-riders",
+              "hearing"
+            ],
+            "role": "hardened",
+            "lootTable": [
+              {
+                "name": "Pre-Fall Component",
+                "qty": "1d3",
+                "weight": 3
+              },
+              {
+                "name": "Heart-Coil",
+                "qty": "1",
+                "weight": 2
+              },
+              {
+                "name": "Reclassification Form (Stamped)",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "exemplar": true,
+          "price": {
+            "marks": 40,
+            "bounty": 40,
+            "hire": 60,
+            "ransom": 60,
+            "currency": "intrigue",
+            "gmOverride": false,
+            "notes": "TIII heavy pre-fall — bounty 40 / hire 60 marks; credited to the pool matching the method (default intrigue)"
+          }
+        }
+      },
+      "kind": "monster"
+    }
+  },
+  "system": {
+    "role": "hardened",
+    "tier": 3,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 13,
+      "tier": 3,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "xp": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 6
+      },
+      "intrigue": {
+        "value": 3
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 7
+      },
+      "mind": {
+        "value": 4
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 309,
+        "max": 90,
+        "temp": 0
+      },
+      "stress": {
+        "value": 240,
+        "max": 36
+      },
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 13
+      },
+      "resolve": {
+        "value": 13
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "hod"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "kinetic"
+      ],
+      "immunities": [],
+      "vulnerabilities": [
+        "chemical"
+      ]
+    },
+    "conditionImmunities": [
+      "charmed",
+      "shaken",
+      "compelled"
+    ],
+    "tags": [
+      "construct",
+      "pre-fall",
+      "circuit-riders",
+      "hearing"
+    ],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "T III heavy · pre-fall. The Circuit Riders' giant frame, which hosts the second hearing on the Widening Trail: one shared filing desk, reclassification, and — if the paperwork holds — alliance. Not fully under anyone's control. Fights only when the hearing fails.",
+      "notes": "Legansus Tal is the largest thing the Circuit Riders have ever recovered and the only one they could not finish repairing. It walks the Trail under its own power and its own protocol, and the Riders have learned to let it. Allied parties are greeted — YOU ARE ON STEP TWO — and seated at the one filing desk, where the camp parley's record is read back and a reclassification is entered. Parties flagged at the camp get the same desk and a harder hearing. If the record cannot be reconciled, Legansus enforces, and the Riders stand well back. Captain Robot does not give it orders. He files requests."
+    }
+  },
+  "items": [
+    {
+      "name": "Broken Protocol",
+      "type": "feature",
+      "img": "icons/commodities/tech/cog-gear-crank-steel.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-pre-fall",
+          "lineage-trait"
+        ],
+        "description": {
+          "value": "<p>Immune to Charmed, Shaken and Compelled. Repeats a single directive (convene the hearing) until attacked; then runs combat protocol for 3 rounds and returns to the directive if nothing hostile remains in sight.</p><p><em>“YOU ARE ON STEP TWO.”</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "III",
+              "frame": "feature",
+              "lineageTrait": "pre-fall"
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "do": {
+                  "disposition": {
+                    "set": -1,
+                    "rounds": 3
+                  },
+                  "prompt": "Broken Protocol: combat protocol for 3 rounds, then back to the hearing."
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                },
+                "label": "Broken Protocol"
+              }
+            ]
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "Zy9WG6G6EKu9rZ26",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423993515,
+        "modifiedTime": 1792989128827,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Pre-Fall Diagnostics",
+      "type": "feat",
+      "img": "icons/commodities/tech/tube-chamber-lightning.webp",
+      "system": {
+        "category": "technique",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-pre-fall"
+        ],
+        "description": {
+          "value": "<p>Once per round, when Legansus would be hit by an attack, it imposes reroll-the-highest on the attack roll instead.</p><p><em>It does not flinch. It updates.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "III",
+              "frame": "feature"
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attacked",
+                "do": {
+                  "reroll": "attack-highest"
+                },
+                "limit": {
+                  "per": "round",
+                  "uses": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "PtXnBfqjVVl3PY9V",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423993515,
+        "modifiedTime": 1791423993515,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "The Filing Desk",
+      "type": "feature",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-pre-fall"
+        ],
+        "description": {
+          "value": "<p>At the start of its turn, if no creature has attacked it this combat, Legansus reads one line of the record aloud: the GM states one fact from the camp parley's tally and the hearing continues instead of combat.</p><p><em>One desk. Everyone files.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "III",
+              "frame": "feature"
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "selfTurnStart",
+                "do": {
+                  "prompt": "The Filing Desk: one line of the record is read aloud — the GM states a fact from the camp parley's tally; the hearing continues."
+                },
+                "narrative": true
+              }
+            ]
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "2QmGX4jNf9Qt05NI",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423993515,
+        "modifiedTime": 1792989128827,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Servo-Limb",
+      "type": "weapon",
+      "img": "icons/commodities/tech/claw-mechanical.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d10",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "actuator",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "bestiary",
+          "tier-iii",
+          "lineage-pre-fall"
+        ],
+        "effect": "On a hit, Body DC 15 or the target is knocked Prone and pushed 1 square. — it is enforcing a perimeter.",
+        "flavor": "The arm was built to lift relay towers.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "prone"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "body",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "resolution": {
+            "saveAttribute": "body",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 15,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square, one target. Damage: <code>2d10</code> kinetic (actuator) + violence. On a hit, Body DC 15 or the target is knocked Prone and pushed 1 square. — it is enforcing a perimeter.</p><p><em>The arm was built to lift relay towers.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "III",
+              "frame": "attack"
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "F3apaEwpHLOyspjL",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423993515,
+        "modifiedTime": 1792977769557,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Arc Enforcer (recharge 5–6)",
+      "type": "weapon",
+      "img": "icons/magic/lightning/bolt-strike-blue.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "2d10",
+          "attribute": "violence",
+          "type": "electrical",
+          "damageFlavor": "arc",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 12,
+          "long": 36
+        },
+        "tags": [
+          "bestiary",
+          "tier-iii",
+          "lineage-pre-fall"
+        ],
+        "effect": "On a hit the target is Staggered until the end of its next turn.",
+        "flavor": "Filed under: enforcement.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "staggered"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "",
+            "saveDcMode": "none",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 12 squares, one target. Damage: <code>2d10</code> electrical (arc) + violence. On a hit the target is Staggered until the end of its next turn.</p><p><em>Filed under: enforcement.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "III",
+              "frame": "attack"
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "hZqGk0ZMCyt66Myi",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423993515,
+        "modifiedTime": 1792989128827,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "_id": "ORNz9QgnCYclRSKR",
+  "effects": [],
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.5",
+    "createdTime": 1791423993515,
+    "modifiedTime": 1791423993821,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!ORNz9QgnCYclRSKR"
+}

@@ -1,0 +1,101 @@
+{
+  "name": "Ambush Crew",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "mortal",
+      "raider"
+    ],
+    "description": {
+      "value": "<p>In the first round of combat, the raider rerolls the lowest die on attack rolls against any creature that hasn't acted yet. If reduced below half Integrity, they must succeed a DC 12 Soul check at the start of their turn or disengage and run.</p><p><em>They fight like people who have to eat tonight.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attack",
+            "if": {
+              "firstRound": true,
+              "targetNotActed": true
+            },
+            "do": {
+              "reroll": "attack"
+            },
+            "label": "Ambush Crew"
+          },
+          {
+            "on": "bloodied",
+            "do": {
+              "morale": {
+                "attr": "soul",
+                "dc": 12,
+                "outcome": "disengages and runs at full speed"
+              }
+            }
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "mortal"
+        }
+      },
+      "rerolls": [
+        {
+          "context": "attack",
+          "mode": "reroll-lowest",
+          "when": "firstRound",
+          "vs": "a creature that hasn't taken a turn yet",
+          "note": "Ambush Crew"
+        }
+      ]
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Dust Scavenger",
+          "Raider Marauder",
+          "Razor Raider"
+        ],
+        "sourceIds": [
+          "8m5eJTobhX6riEEN",
+          "a3iLY82GvIfBScr2",
+          "oJw1L631OqPbIgAK"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "ooC0IKWGsN2YgKaY",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069905,
+    "modifiedTime": 1792989069988,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ooC0IKWGsN2YgKaY"
+}

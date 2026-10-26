@@ -9,7 +9,7 @@
     "damage": {
       "formula": "3d10",
       "attribute": "violence",
-      "type": "energy",
+      "type": "thermal",
       "damageFlavor": "two red dots, then no more problem",
       "track": "integrity"
     },
@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,16 +79,20 @@
             "saleBack": 20
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Varrenthyx, the Laser Dragon"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Strafing Eye-Beams"
+            },
+            "do": {
+              "prompt": "Strafing Eye-Beams: +1d10 if this target was hit by Coherent Breath this scene."
+            },
+            "narrative": true
+          }
         ]
       }
     },
@@ -269,20 +272,37 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Varrenthyx, the Laser Dragon"
+        ],
+        "sourceIds": [
+          "DeyWbEYxsEcV8pKp"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
   "_id": "DqEKrXPRFcdMbFd5",
   "sort": 0,
+  "folder": null,
   "ownership": {
-    "default": 0
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
-    "createdTime": 1780000000000,
-    "modifiedTime": 1780000000000,
-    "lastModifiedBy": "ftSprintBuilder0",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989046666,
+    "modifiedTime": 1792989046667,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

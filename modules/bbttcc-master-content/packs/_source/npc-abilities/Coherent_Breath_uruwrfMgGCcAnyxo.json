@@ -9,7 +9,7 @@
     "damage": {
       "formula": "4d8",
       "attribute": "violence",
-      "type": "energy",
+      "type": "thermal",
       "damageFlavor": "a single perfect line of light",
       "track": "integrity"
     },
@@ -25,7 +25,7 @@
       "boss",
       "signature"
     ],
-    "effect": "60 ft. line, 5 ft. wide. Evasion vs DC 18. Fail: 4d8 energy and Burning (1d6/turn until extinguished). Half and no Burning on success. Recharge: skips a turn to vent heat after firing.",
+    "effect": "12 squares. line, 1 square. wide. Evasion vs DC 18. Fail: 4d8 energy and Burning (1d6/turn until extinguished). Half and no Burning on success. Recharge: skips a turn to vent heat after firing.",
     "flavor": "",
     "manifestation": {
       "tier": 1,
@@ -56,6 +56,24 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "intrigue",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 18,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "burning"
+        ],
+        "duration": "until-saved"
+      },
+      "area": {
+        "shape": "line",
+        "size": 60
       }
     },
     "description": {
@@ -63,7 +81,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -86,17 +103,13 @@
             "saleBack": 60
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Varrenthyx, the Laser Dragon"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [],
+        "recharge": {
+          "mode": "nextTurn"
+        }
       }
     },
     "autoanimations": {
@@ -111,9 +124,9 @@
         "video": {
           "dbSection": "templatefx",
           "menuType": "ray",
-          "animation": "lasershot",
-          "variant": "01",
-          "color": "blue",
+          "animation": "breathweaponspray01",
+          "variant": "burst",
+          "color": "orange",
           "enableCustom": false,
           "customPath": ""
         },
@@ -275,24 +288,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Varrenthyx, the Laser Dragon"
+        ],
+        "sourceIds": [
+          "DeyWbEYxsEcV8pKp"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
   "_id": "uruwrfMgGCcAnyxo",
   "sort": 0,
+  "folder": null,
   "ownership": {
-    "default": 0
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1780000000000,
-    "modifiedTime": 1782167245011,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989023215,
+    "modifiedTime": 1792989023215,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
   },
-  "folder": null,
   "_key": "!items!uruwrfMgGCcAnyxo"
 }

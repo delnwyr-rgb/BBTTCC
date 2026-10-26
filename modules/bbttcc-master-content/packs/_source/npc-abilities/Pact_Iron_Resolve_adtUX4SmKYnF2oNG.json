@@ -1,0 +1,77 @@
+{
+  "name": "Pact-Iron Resolve",
+  "type": "feature",
+  "img": "icons/equipment/shield/heater-steel-grey.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "rfi-scrubbed"
+    ],
+    "description": {
+      "value": "<p>If reduced below half Integrity the hex takes the reins: the Hexknight's attack rolls reroll the lowest die for the rest of the scene, and it can no longer disengage or retreat.</p><p><em>The armour decides. The knight is informed.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attack",
+            "do": {
+              "reroll": "attack"
+            },
+            "label": "Pact-Iron Resolve — the hex takes the reins",
+            "if": {
+              "ownerBloodied": true
+            }
+          },
+          {
+            "on": "bloodied",
+            "do": {
+              "prompt": "The hex takes the reins: the Hexknight can no longer disengage or retreat."
+            },
+            "narrative": true
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Hexknight"
+        ],
+        "sourceIds": [
+          "QiFWQHYcmDZyUAuI"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "adtUX4SmKYnF2oNG",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069955,
+    "modifiedTime": 1792989070039,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!adtUX4SmKYnF2oNG"
+}

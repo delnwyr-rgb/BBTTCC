@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Bombard</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> violence 20, logistics 20</p></div>",
+      "value": "<p><strong>Bombard</strong></p><p>Siege, attacker. Batter the current wall layer for 2d10+15 concussive structure damage; when a layer is razed, the next one opens. In the clash: 15 marks off the Buffer.</p><p><em>Queued on the turn: Violence 20 · Logistics 20 marks. Fired in the clash: 15 marks from the siege Buffer.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "bombard"
+      "key": "bombard",
+      "effects": {
+        "text": "Siege, attacker. Batter the current wall layer for 2d10+15 concussive structure damage; when a layer is razed, the next one opens. In the clash: 15 marks off the Buffer."
+      }
     }
   },
   "_id": "aoOVqmpnLYPNclLD",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601764,
-    "modifiedTime": 1782703702690,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988999707,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

@@ -8,6 +8,7 @@
     "tags": [],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>The compromise: hover-bike with a saddlebag and a pillion that fits a body bag if folded carefully. Faster than a landspeeder, less dignified than a bike.</p><p><b>Frame · Personal · Mobile · Pilot + 1 passenger</b></p>",
       "chat": ""
@@ -75,7 +76,7 @@
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TI vehicle stamp (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 100
@@ -94,11 +95,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.16",
     "createdTime": 1778961742348,
-    "modifiedTime": 1778963271955,
+    "modifiedTime": 1791865101702,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

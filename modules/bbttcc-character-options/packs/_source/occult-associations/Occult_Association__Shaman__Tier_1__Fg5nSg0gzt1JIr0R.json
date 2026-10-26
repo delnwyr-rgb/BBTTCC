@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 — Shaman</strong></p><p><strong>“It was talking before. You just couldn’t hear it yet.”</strong></p><p>At Tier 1, you become perceptible to the world and the world becomes perceptible to you.</p><p>You can feel when a place is hungry, when a storm is about to turn mean, and when a Hex is carrying more pressure than its surface suggests. You are not commanding Lore yet. You are learning its tone.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Lore</strong> and <strong>Athletics</strong></li><li>You can perform a brief attunement to sense whether a nearby area is spiritually calm, distressed, corrupted, or unusually resonant</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Hex Attunement:</strong> upon entering a new Hex, you learn one of the following about it: dominant flow-state, unusual weather pressure, leyline disturbance, or corruption presence</li><li>Once per Strategic Turn, gain <strong>+1</strong> to one relevant travel, terrain, or wilderness-facing OP roll</li></ul><p><strong>Cost:</strong> once the world starts speaking to you, silence gets rare. Expect distraction, omen pressure, or spirit agitation when your faction ignores what a place is telling you.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"shamT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Hex Attunement</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">+1 to one travel/terrain/wilderness OP roll. (On-entry hex read is passive.)</div>\n</div>",
+      "value": "<p><strong>Tier 1 — Shaman</strong></p><p><strong>“It was talking before. You just couldn’t hear it yet.”</strong></p><p>At Tier 1, you become perceptible to the world and the world becomes perceptible to you.</p><p>You can feel when a place is hungry, when a storm is about to turn mean, and when a Hex is carrying more pressure than its surface suggests. You are not commanding Lore yet. You are learning its tone.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Lore</strong> and <strong>Athletics</strong></li><li>You can perform a brief attunement to sense whether a nearby area is spiritually calm, distressed, corrupted, or unusually resonant</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Hex Attunement:</strong> upon entering a new Hex, you learn one of the following about it: dominant flow-state, unusual weather pressure, leyline disturbance, or corruption presence</li><li>Once per turn, gain <strong>+1</strong> to one relevant travel, terrain, or wilderness-facing OP roll</li></ul><p><strong>Cost:</strong> once the world starts speaking to you, silence gets rare. Expect distraction, omen pressure, or spirit agitation when your Domain ignores what a place is telling you.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"shamT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Hex Attunement</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">+1 to one travel/terrain/wilderness OP roll. (On-entry hex read is passive.)</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -255,7 +255,7 @@
   },
   "effects": [
     {
-      "name": "Occult Tier1 Proficiencies",
+      "name": "Occult Tier 1 Proficiencies",
       "disabled": false,
       "transfer": true,
       "img": "icons/weapons/staves/staff-animal-skull-feathers.webp",
@@ -295,17 +295,16 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346196065,
-        "modifiedTime": 1777433499559
+        "modifiedTime": 1792989174790
       },
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!Fg5nSg0gzt1JIr0R.shamanTier1Profs"
+      "folder": null
     }
   ],
   "img": "icons/weapons/staves/staff-animal-skull-feathers.webp",
@@ -320,11 +319,11 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987102977,
-    "modifiedTime": 1782167239251,
+    "modifiedTime": 1792977827010,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You can be calm. Or you can be the storm behind calm.”</em></p>\n        <p><strong>Floodgate of Self (1/Soma Break).</strong> As a bonus action, enter a state for 1 minute. While active, you have resistance to psychic damage, and when you deal damage you may push a creature 2 squares (water pressure made literal).</p>",
+      "value": "\n<p><em>“You can be calm. Or you can be the storm behind calm.”</em></p>\n        <p><strong>Floodgate of Self (1/Soma Break).</strong> As a bonus action, enter a state for 1 minute. While active, you have resistance to psychic damage, and when you deal damage you may push a creature 2 squares (water pressure made literal).</p>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 11
     },
     "properties": [],
     "requirements": "Oldenborn",
@@ -41,7 +41,6 @@
       "kind": "oldenborn",
       "feature": "floodgate_self",
       "lineage": "Tideborne",
-      "tierLevel": 11,
       "version": "1.0.0"
     },
     "autoanimations": {
@@ -278,8 +277,7 @@
         "initiative": null
       },
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!4gyfxSRFhWseSZx8.0b68694387704ab4"
+      "folder": null
     }
   ],
   "folder": "Z23EKfzPHMTSN3f2",
@@ -293,12 +291,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004114716,
-    "modifiedTime": 1782167240111,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988972361,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

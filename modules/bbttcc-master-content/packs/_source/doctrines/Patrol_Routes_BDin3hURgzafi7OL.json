@@ -3,8 +3,14 @@
   "type": "feat",
   "img": "icons/tools/navigation/map-marked-blue.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Patrol Routes</b></p><p><b>Cost:</b> Violence 1 • Logistics 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>patrol_routes</code></p>",
+      "value": "<p><strong>Patrol Routes</strong></p><p>Target one hex you hold. At the turn: it gains the Patrolled tag, Defense +1 and Loyalty +1; if it is already Fortified there is a 40% chance it also becomes Well-Maintained.</p><p><em>Cost: Logistics 20 · Violence 10 marks.</em></p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "patrol-routes",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -44,6 +46,9 @@
         "storyOnly": false,
         "availability": null,
         "unlockKey": null
+      },
+      "effects": {
+        "text": "Target one hex you hold. At the turn: it gains the Patrolled tag, Defense +1 and Loyalty +1; if it is already Fortified there is a 40% chance it also becomes Well-Maintained."
       }
     }
   },
@@ -59,12 +64,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063178109,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989007991,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!BDin3hURgzafi7OL"
 }

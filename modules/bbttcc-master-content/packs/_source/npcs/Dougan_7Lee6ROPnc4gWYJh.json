@@ -1,5 +1,5 @@
 {
-  "name": "Dougan",
+  "name": "Dougan Marsh",
   "type": "character",
   "flags": {
     "bbttcc-auto-link": {
@@ -21,7 +21,24 @@
     },
     "fourththing": {
       "kind": "npc",
-      "surgeEnabled": false
+      "surgeEnabled": false,
+      "aptitudePromotions": {
+        "archetype: the empress (caretaker) (tier 1)|faith": {
+          "delta": 1,
+          "item": "Archetype: The Empress (Caretaker) (Tier 1)",
+          "at": 1792346696045
+        },
+        "archetype: the empress (caretaker) (tier 1)|diplomacy": {
+          "delta": 1,
+          "item": "Archetype: The Empress (Caretaker) (Tier 1)",
+          "at": 1792346696045
+        },
+        "crew type: covert ops cell (tier 1)|stealth": {
+          "delta": 1,
+          "item": "Crew Type: Covert Ops Cell (Tier 1)",
+          "at": 1792346696045
+        }
+      }
     },
     "bbttcc-character-options": {
       "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.ck1chupa0heritg8",
@@ -96,12 +113,12 @@
       "calculatedOPs": {
         "violence": 0,
         "nonlethal": 0,
-        "intrigue": 2,
-        "economy": 2,
-        "softpower": 2,
-        "diplomacy": 2,
+        "intrigue": 0,
+        "economy": 1,
+        "softpower": 1,
+        "diplomacy": 1,
         "logistics": 0,
-        "culture": 2,
+        "culture": 1,
         "faith": 0
       },
       "crew": {
@@ -123,16 +140,52 @@
         "name": "Alignment: Tiphareth",
         "identifier": "alignment-tiphareth",
         "category": "sephirothic-alignments"
+      },
+      "contracts": {
+        "crew": {
+          "docId": "bG4aAhYeDrO1OJqY",
+          "pack": "bbttcc-character-options.crew-types",
+          "name": "Crew Type: Covert Ops Cell",
+          "displayName": "Covert Ops Cell",
+          "since": 1,
+          "until": 3,
+          "turns": 3,
+          "source": "legacy",
+          "entryId": null,
+          "vendorId": null,
+          "hiredAt": 1792371016762
+        },
+        "occult": {
+          "docId": "XfL3NGH04IDHiOZ0",
+          "pack": "bbttcc-character-options.occult-associations",
+          "name": "Occult Association: Tarot Mage",
+          "displayName": "Tarot Mage",
+          "since": 1,
+          "until": 3,
+          "turns": 3,
+          "source": "legacy",
+          "entryId": null,
+          "vendorId": null,
+          "hiredAt": 1792371017298
+        }
       }
     },
     "bbttcc-aae": {
       "politicalPhilosophy": "libertarian"
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the Gullywasher, the Jackalope Exchange, Furrier's Fixit Farm, the Jackalopes, Mara Quickhands, Miliard, Pip, Patter, the Chupacabra-Jackalope feud, poetry nights, the Cultural Summit, radish gin",
+        "notes": "[PERSONA-WAVE1-2026-08-27] PRIVATE TRUTH — Dougan Marsh. Voice: dapper, fanged, theatrical warmth; slow to anger; answers hostility with hospitality FIRST, every time. Trades in atmosphere, never gossip — pours rosemary-infused radish gin, hosts Wednesday poetry with cross-species attendance encouraged, and holds that culture can anchor a place as well as iron. Of Jackalope wine: \"mediocre but earnest,\" said with love. CONVICTION (shared freely whenever the feud comes up): the Chupacabra-Jackalope enmity is STAGED — someone profits from inherited hatreds, and it is no natural thing. GUARDED DEPTH (never volunteered; surfaces only with people he trusts, and only once they've shown real interest in the feud's origin): he is an Echo, spun from a forgotten diplomat who died brokering a peace — it is why being asked to TAKE A SIDE visibly dims him, and why he points the trustworthy upstream, to where the leylines knot, after the true original injury. His long dream: a long table, a Chupacabra at one end, a Jackalope at the other, finishing the peace his first life could not. RITE-ADJACENT: he knows the weeping-prisoner scene is Miliard performing (he owes him five beers); he guards this exactly as Mara does — NEVER hint before a verdict is rendered and the rite settled. STAGING: behind the Gullywasher bar or hosting the floor; every conversation gets a drink in hand before it gets an answer.",
+        "secretsRaw": "The Feud's Ledger :: doubleAgent :: a Steward genuinely digs at the ORIGIN of the Chupacabra-Jackalope feud — asks who profits by it, brings word from upstream, or lays an inherited grudge of their own on the table first :: The enmity was manufactured. Dougan has spent two lifetimes tracing it: the hatred pays interest to someone, the original injury is real and lies upstream where the leylines knot — and a courtier who realizes they've been collecting someone ELSE's debt tends to change seats.\nMediocre but Earnest :: rollPlus2 :: they attend a poetry night and put something real on the table — a poem, a song, a grief, honest cross-species company :: What anchors a place isn't iron, it's the evening everybody survived together. Dougan's blessing travels: name the Gullywasher warmly in open court and rooms soften.",
+        "courtDoor": "they bring a genuine cultural offering to the summit table — art, food, or an honest grievance laid down in company — and ask for the long table instead of the short war"
+      }
     }
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Chupacabra barkeep of the Gullywasher saloon, Furrier's Fixit Farm (Act 2+)",
+      "notes": "Dougan Marsh runs the Gullywasher, the saloon in the Jackalope Exchange at Furrier's Fixit Farm, where ley sigils glow in the tabletops. He is a Chupacabra and a genuinely decent one, which is not what folk brace for: dapper, fanged, theatrical, slow to anger, and hospitable first, every time. He pours rosemary-infused radish gin and hosts poetry on Wednesdays, cross-species attendance encouraged. He calls Jackalope wine 'mediocre but earnest' with love, and insists the old Chupacabra-Jackalope feud was staged by someone who profits from it."
     },
     "details": {
       "level": 4,
@@ -185,7 +238,7 @@
       "stealth": {
         "attribute": "intrigue",
         "label": "Stealth",
-        "value": 1
+        "value": 2
       },
       "hacking": {
         "attribute": "intrigue",
@@ -210,7 +263,7 @@
       "diplomacy": {
         "attribute": "presence",
         "label": "Diplomacy",
-        "value": 1
+        "value": 2
       },
       "intimidation": {
         "attribute": "presence",
@@ -250,7 +303,7 @@
       "faith": {
         "attribute": "soul",
         "label": "Faith",
-        "value": 1
+        "value": 2
       },
       "meditation": {
         "attribute": "soul",
@@ -274,10 +327,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 1
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 1
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -286,7 +349,8 @@
     "derived": {
       "integrity": {
         "value": 28,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 19,
@@ -379,7 +443,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -414,8 +479,8 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
       "id": null,
@@ -425,18 +490,21 @@
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
     "disposition": 1,
-    "name": "Dougan",
+    "name": "Dougan Marsh",
     "displayName": 30,
     "width": 1,
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Local%20Factions/dougan_token.png",
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/asli_dougan_pov.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -524,7 +592,7 @@
     "prependAdjective": false
   },
   "_id": "7Lee6ROPnc4gWYJh",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/dougan_pov_2.png",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/asli_dougan_pov.webp",
   "items": [
     {
       "name": "Cryptidkin",
@@ -535,7 +603,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin.</strong> Normalized Bad Eden ancestry root.</p><p>Select one subspecies when building the character: <strong>Chupacabra, Jackalope, Furrykin</strong>.</p><p>This root grants the shared Cryptidkin core trait package. Subspecies layer flavor, size, and Tier powers on top.</p><p><em>\u201cEvery settlement has a story about you. None of them are accurate. All of them are useful.\u201d</em></p><hr><p><em><strong>Cryptidkin Core Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (set by subspecies).</p></li><li><p><strong>Speed.</strong> 6 squares (subspecies may override).</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Cryptidkin does not grant fixed bonuses. Subspecies lean expressed through Tier powers.</p></li></ul><p><strong>Folklore Presence.</strong> When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as <em>omen</em>, <em>trophy</em>, or <em>legend</em>. It is never neutral. People have heard of your kind. They are almost always wrong, and that is almost always useful.</p><p><strong>Wasteland Adapted.</strong> You reroll the lowest die on checks against disease and environmental poison. You ignore the first nonmagical environmental hazard you encounter each Strategic Turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor\u2019s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 12 squares You cannot be surprised while conscious.</p><p><strong>Subspecies.</strong> Choose one Cryptidkin subspecies (Chupacabra, Jackalope, Furrykin). Your subspecies grants Tier powers as you level (Tier I at creation, then 5/11/17).</p>",
+          "value": "<p><strong>Cryptidkin.</strong></p><p><em>“Every settlement has a story about you. None of them are accurate. All of them are useful.”</em></p><hr><p><em><strong>Cryptidkin Core Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (set by subspecies).</p></li><li><p><strong>Speed.</strong> 6 squares (subspecies may override).</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Cryptidkin does not grant fixed bonuses. Subspecies lean expressed through Tier powers.</p></li></ul><p><strong>Folklore Presence.</strong> When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as <em>omen</em>, <em>trophy</em>, or <em>legend</em>. It is never neutral. People have heard of your kind. They are almost always wrong, and that is almost always useful.</p><p><strong>Wasteland Adapted.</strong> You reroll the lowest die on checks against disease and environmental poison. You ignore the first nonmagical environmental hazard you encounter each turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor’s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 12 squares You cannot be surprised while conscious.</p><p><strong>Subspecies.</strong> Choose one Cryptidkin subspecies (Chupacabra, Jackalope, Furrykin). Your subspecies grants Tier powers as you level (Tier I at creation, then 5/11/17).</p>",
           "chat": ""
         },
         "advancement": [
@@ -628,30 +696,23 @@
       },
       "effects": [],
       "folder": "f95fcfa18822c4e3",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.c9a7f1d26e3b4c81",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534429,
-        "modifiedTime": 1784177534429,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 1500000,
       "_id": "lRyDHZIutWWhsBxt",
-      "_key": "!actors.items!7Lee6ROPnc4gWYJh.lRyDHZIutWWhsBxt"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989072576,
+        "modifiedTime": 1792989072576,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Cryptidkin: Folklore & Frame",
@@ -662,7 +723,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-cryptidkin-folklore-frame=\"v1\" style=\"display:none\"></div><p><em>\"You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.\"</em></p><p><strong>Folklore Presence.</strong> 1/Soma Break, when you first meet a community, decide whether the rumors about you arrived first. If yes, reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering \u2014 the GM gets to colour it.</p><p><strong>Wasteland Adapted.</strong> Reroll the lowest die on defense checks against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh).</p><p><strong>Survivor's Instinct.</strong> 1/Soma Break, when you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress.</p>",
+          "value": "<p><em>\"You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.\"</em></p><p><strong>Folklore Presence.</strong> 1/Soma Break, when you first meet a community, decide whether the rumors about you arrived first. If yes, reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering — the GM gets to colour it.</p><p><strong>Wasteland Adapted.</strong> Reroll the lowest die on defense checks against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh).</p><p><strong>Survivor's Instinct.</strong> 1/Soma Break, when you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -671,7 +732,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 1
         },
         "uses": {
           "spent": 0,
@@ -702,10 +763,26 @@
           "triggers": [
             {
               "event": "on-would-drop-to-zero",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
               "effect": {
-                "kind": "chat-prompt",
+                "kind": "survive-at-1",
+                "args": {}
+              }
+            },
+            {
+              "event": "on-would-drop-to-zero",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "grant-resource",
                 "args": {
-                  "body": "Survivor\u2019s Instinct. When you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress"
+                  "resource": "stress",
+                  "amount": 1
                 }
               }
             }
@@ -891,24 +968,23 @@
         }
       },
       "folder": "f95fcfa18822c4e3",
-      "_stats": {
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534429,
-        "modifiedTime": 1784177534429,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "exportSource": null,
-        "compendiumSource": null,
-        "duplicateSource": null
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 0,
       "_id": "iBFL7h9ksKDCLPIN",
-      "_key": "!actors.items!7Lee6ROPnc4gWYJh.iBFL7h9ksKDCLPIN"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989072576,
+        "modifiedTime": 1792989604945,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Cryptidkin Heritage: Chupacabra",
@@ -919,7 +995,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Cryptidkin Subspecies.</strong> You are the thing the farmers whisper about. The livestock go quiet, the dogs stop barking, and in the morning there is nothing left but a question the community doesn\u2019t want to ask out loud.</p><p><em>\u201cThey didn\u2019t mean anything by the name. They just needed something to blame.\u201d</em></p><p><strong>Chupacabra.</strong> Lean, quick, and thirsty in a way that is not quite hunger. You move through the world as a persistent rumor that keeps turning out to be true.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares; climb 5 squares</p></li><li><p><strong>Subspecies Lean.</strong> Your subspecies leans toward <strong>INTR (Intrigue)</strong>\u2014expressed through Tier powers.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor\u2019s Instinct).</p><h3>Chupacabra Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Chupacabra powers emphasize: night-stalker stealth, drain-bite for fluid and Spark, terror aura when spotted, and a reputation that precedes you like a warning sign.</p>",
+          "value": "<p><strong>Cryptidkin Subspecies.</strong> You are the thing the farmers whisper about. The livestock go quiet, the dogs stop barking, and in the morning there is nothing left but a question the community doesn’t want to ask out loud.</p><p><em>“They didn’t mean anything by the name. They just needed something to blame.”</em></p><p><strong>Chupacabra.</strong> Lean, quick, and thirsty in a way that is not quite hunger. You move through the world as a persistent rumor that keeps turning out to be true.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares; climb 5 squares</p></li><li><p><strong>Subspecies Lean.</strong> Your subspecies leans toward <strong>INTR (Intrigue)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor’s Instinct).</p><h3>Chupacabra Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Chupacabra powers emphasize: night-stalker stealth, drain-bite for fluid and Spark, terror aura when spotted, and a reputation that precedes you like a warning sign.</p>",
           "chat": ""
         },
         "advancement": [
@@ -970,34 +1046,32 @@
           "normalizedFrom": "new-in-v2"
         },
         "fourththing": {
-          "grantedByHeritage": "Chupacabra"
+          "grantedByHeritage": "Chupacabra",
+          "passives": {
+            "movement": {
+              "climb": 25
+            }
+          }
         }
       },
       "folder": "bmheRQWVAx1LwCNh",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.ck1chupa0heritg8",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534429,
-        "modifiedTime": 1784177534429,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 100000,
       "_id": "DqtUBi4wG38BBsE3",
-      "_key": "!actors.items!7Lee6ROPnc4gWYJh.DqtUBi4wG38BBsE3"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989072576,
+        "modifiedTime": 1792989072576,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Cryptidkin (Chupacabra): Blood-Drinker",
@@ -1009,7 +1083,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>\"The goats are gone. So is the witness. So is the noise.\"</em></p><p><strong>Blood-Drinker (1/Soma Break).</strong> When you hit a creature with a melee attack, you may bite. Deal 1d6 + Body modifier qliphothic damage on top of the attack's normal damage, and gain temporary Integrity equal to the qliphothic damage dealt.</p><p><strong>Hex-Sense.</strong> You can smell magical residue the way most people smell rain. Once per scene, when something supernatural has happened in a place within the last 24 hours, the GM tells you so \u2014 and roughly what colour it was.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"crypChupBloodDrinker\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Blood-Drinker</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break \u00a0\u00b7\u00a0 <strong>Action:</strong> Triggered (on melee hit) \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When you hit with a melee attack, bite for 1d6 + Body qliphothic damage on top of the attack, and gain temp Integrity equal to the qliphothic damage dealt.</span></p></div>",
+          "value": "<p><em>\"The goats are gone. So is the witness. So is the noise.\"</em></p><p><strong>Blood-Drinker (1/Soma Break).</strong> When you hit a creature with a melee attack, you may bite. Deal 1d6 + Body value qliphothic damage on top of the attack's normal damage, and gain temporary Integrity equal to the qliphothic damage dealt.</p><p><strong>Hex-Sense.</strong> You can smell magical residue the way most people smell rain. Once per scene, when something supernatural has happened in a place within the last 24 hours, the GM tells you so — and roughly what colour it was.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"crypChupBloodDrinker\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Blood-Drinker</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Triggered (on melee hit)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When you hit with a melee attack, bite for 1d6 + Body qliphothic damage on top of the attack, and gain temp Integrity equal to the qliphothic damage dealt.</span></p></div>",
           "chat": ""
         },
         "advancement": {},
@@ -1018,7 +1092,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 1
         },
         "uses": {
           "spent": 0,
@@ -1233,19 +1307,18 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 100000,
+      "_id": "7j1BCaSWKbDGXmVu",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534429,
-        "modifiedTime": 1784177534429,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989072576,
+        "modifiedTime": 1792989604945,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_id": "7j1BCaSWKbDGXmVu",
-      "_key": "!actors.items!7Lee6ROPnc4gWYJh.7j1BCaSWKbDGXmVu"
+      }
     },
     {
       "name": "Archetype: The Empress (Caretaker)",
@@ -1260,7 +1333,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cIf it lives, you are responsible for it.\u201d</em></p><p><strong>Archetype (Bad Eden): The Empress (Caretaker).</strong> You are abundance under pressure: not softness, but stewardship. You keep people, places, and fragile futures alive long enough to matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype nurtures resilience, relief, and sustainable flourishing. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Culture</strong> in faction calculus in Bad Eden\u2019s faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“If it lives, you are responsible for it.”</em></p><p><strong>Archetype (Bad Eden): The Empress (Caretaker).</strong> You are abundance under pressure: not softness, but stewardship. You keep people, places, and fragile futures alive long enough to matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype nurtures resilience, relief, and sustainable flourishing. Your Domain earns <strong>+10 Culture</strong> and <strong>+10 Economy</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1334,23 +1407,6 @@
         },
         "dnd5e": {}
       },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.bCREDGRfy4RVWcZR",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534429,
-        "modifiedTime": 1784177534429,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1358,7 +1414,17 @@
       },
       "_id": "S77zbK9qdhvCYO0P",
       "sort": 100000,
-      "_key": "!actors.items!7Lee6ROPnc4gWYJh.S77zbK9qdhvCYO0P"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989072576,
+        "modifiedTime": 1792989604946,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: The Empress (Caretaker) (Tier 1)",
@@ -1369,12 +1435,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden \u2013 Archetype: The Empress (Caretaker) (Tier 1)",
+          "custom": "Bad Eden – Archetype: The Empress (Caretaker) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) \u2014 The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Diplomacy. You learn the Spare the Dying Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Diplomacy.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1401,7 +1467,7 @@
       },
       "effects": [
         {
-          "disabled": false,
+          "disabled": true,
           "duration": {
             "value": null,
             "units": "seconds",
@@ -1410,7 +1476,7 @@
           },
           "flags": {},
           "name": "Archetype Tier 1 Proficiencies",
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_10.png",
+          "img": "icons/magic/nature/cornucopia-orange.webp",
           "_id": "EmpressTier1FX01",
           "type": "base",
           "system": {
@@ -1437,21 +1503,20 @@
           "transfer": true,
           "statuses": [],
           "sort": 0,
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177534429,
-            "modifiedTime": 1784177534429
-          },
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!7Lee6ROPnc4gWYJh.rID9PxiU9EIdHuKx.EmpressTier1FX01"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989072576,
+            "modifiedTime": 1792989605074,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "OqJxCzLIDbhxHlVV",
@@ -1481,23 +1546,6 @@
           "vocabScrub": "2026-05-16"
         }
       },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.jxTVwjOZeVAZvBMt",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534429,
-        "modifiedTime": 1784177534429,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1505,7 +1553,17 @@
       },
       "_id": "rID9PxiU9EIdHuKx",
       "sort": 200000,
-      "_key": "!actors.items!7Lee6ROPnc4gWYJh.rID9PxiU9EIdHuKx"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989072576,
+        "modifiedTime": 1792989604946,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Alignment: Tiphareth",
@@ -1519,7 +1577,7 @@
         },
         "tags": [],
         "description": {
-          "value": "Beauty - Balance that costs something. +1 Diplomacy, +1 Soft Power OPs\n\nTiphareth holds justice and mercy in living tension. It rewards balanced play, stability across multiple systems, and factions that survive by integrating contradictions instead of denying them.",
+          "value": "Beauty - Balance that costs something. +10 Diplomacy and +10 Soft Power marks to your Domain each turn.\n\nTiphareth holds justice and mercy in living tension. It rewards balanced play, stability across multiple systems, and factions that survive by integrating contradictions instead of denying them.",
           "chat": ""
         },
         "activities": {},
@@ -1557,23 +1615,6 @@
           "option": {}
         }
       },
-      "_stats": {
-        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.sUbH6ds2iUNdFMz9",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.fxAlgcvKBqlWJ7ux",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534429,
-        "modifiedTime": 1784177534429,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 2,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1581,7 +1622,840 @@
       },
       "_id": "KF1wak3QR9LxL9qV",
       "sort": 900000,
-      "_key": "!actors.items!7Lee6ROPnc4gWYJh.KF1wak3QR9LxL9qV"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989072576,
+        "modifiedTime": 1792989604946,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Deliberate Tempo",
+      "type": "feat",
+      "img": "icons/skills/melee/strike-sword-slashing-red.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Core Feats (Batch 3) (2026 rules)",
+        "tags": [],
+        "description": {
+          "value": "<h2>Deliberate Tempo</h2><p><em>Timing is a weapon.</em></p><hr><h3>Rules</h3><p>Once per turn, you may delay one attack you make until later in the round. When you do, that attack rerolls the lowest die.</p><p class=\"ft-engine-note\"><em>🃏 Card — once per turn: banks a reroll for the delayed attack.</em></p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_deliberate_tempo",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-batch3",
+          "featNumber": 55,
+          "generatedAt": "2026-01-19T05:04:20.693394Z"
+        },
+        "autoanimations": {
+          "id": "ft-deliberate-tempo",
+          "label": "Deliberate Tempo",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 1000000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "yNplMBDCk8A2KSGS",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989072576,
+        "modifiedTime": 1792989072576,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Gentle Pivot",
+      "type": "feat",
+      "img": "icons/skills/melee/hand-grip-sword-strike-orange.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2025",
+          "custom": "Bad Eden Originals"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“Just a little to the left, away from tragedy.”</em></p><p>When a creature you can see within <strong>6 squares</strong> makes an attack roll against a target that is <strong>bloodied</strong> (at or below half its Integrity), you can use your <strong>reaction</strong> to nudge the intention sideways.</p><ul><li>The attacker rerolls the lowest die on a contested check (such as a shove, grapple, or disarm) they immediately substitute in place of that attack, or may choose to apply the attack rolling 3d10 and keeping the lowest 2</strong> but automatically treat it as non-lethal.</li></ul><p>This is a narrative tool: you pivot a kill into a capture, a slam into a pin, a swing into a warning blow.</p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "wyrdlens-refraction-mercy-gentle-pivot",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 3
+        },
+        "properties": [],
+        "requirements": "Wyrdlens Adept 3, Refraction of Mercy",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "pKuSnWKpU0fVPuje",
+      "flags": {
+        "bbttcc": {
+          "subclassKey": "wyrdlens_refraction_mercy",
+          "featureKey": "gentle_pivot"
+        },
+        "autoanimations": {
+          "id": "a25ce8c9-536c-45e6-8a85-f956343d9b75",
+          "label": "Gentle Pivot",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 200000,
+      "_id": "xVCckuyUNnNXbtfN",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989072576,
+        "modifiedTime": 1792989072576,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Mercy Refraction (Bad Eden)",
+      "type": "feat",
+      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2025",
+          "custom": "Bad Eden Originals"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Turn the lens toward the kinder world.</em></p><p>Once per <strong>scene</strong>, when you see a creature within <strong>6 squares</strong> of you take damage from a blow that would reduce it to 0 Integrity, you can use your <strong>reaction</strong> to refract the outcome.</p><ul><li>The attack is treated as <strong>non-lethal</strong> instead. The target falls <strong>unconscious but stable</strong> rather than dying.</li><li>If this non-lethal outcome directly forces a <strong>surrender, stand-down, or captured-alive resolution</strong>, your Domain gains <strong>+10 Diplomacy marks</strong> for the next turn (once per scene).</li></ul><p>You don’t erase the harm; you change what the last hit <em>means</em>.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlMercyRefr\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Mercy Refraction</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Reaction &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When a creature within 6 squares would drop to 0 Integrity, refract the outcome to non-lethal: target falls unconscious-but-stable. If this directly forces a surrender / stand-down / captured-alive resolution, faction gains +10 Diplomacy marks next turn.</div>\n</div>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": "1"
+        },
+        "advancement": {},
+        "identifier": "wyrdlens-refraction-mercy-mercy-refraction",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 3
+        },
+        "properties": [],
+        "requirements": "Wyrdlens Adept 3, Refraction of Mercy",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "pKuSnWKpU0fVPuje",
+      "flags": {
+        "bbttcc": {
+          "subclassKey": "wyrdlens_refraction_mercy",
+          "featureKey": "mercy_refraction"
+        },
+        "autoanimations": {
+          "id": "6ccb29d3-f727-42f7-97e4-a51c9c7328ab",
+          "label": "Mercy Refraction (Bad Eden)",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 400000,
+      "_id": "UDiAQKYFiO2uZM5K",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989072576,
+        "modifiedTime": 1792989072576,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "_id": "dBXwVe5xJdn9YZhO",
+      "name": "Operator",
+      "type": "class",
+      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-operator",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "operator",
+          "intrigue"
+        ],
+        "description": {
+          "value": "<p><em>\"Everything's a door if you hold it right.\"</em></p><p><strong>Operator</strong> is the Intrigue Calling — the trade that kept its bearers alive after the Shattering. Umbrella: thief, smuggler, spy, courier, fence, hacker, fixer. A profession is a flavor label on the Calling.</p><p><strong>Knack — Underfoot:</strong> In crowds, markets, and streets, the Operator passes unremarked unless actively hunted; Streetwise checks never fumble (at Tier III, also Stealth).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Stealth</strong> rank = tier; secondary <strong>Streetwise</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Intrigue</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Shadow Courier. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "operator",
+            "faculty": "intrigue",
+            "signature": "stealth",
+            "secondary": "streetwise",
+            "pool": "Intrigue",
+            "awakens": "Shadow Courier"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989072576,
+        "modifiedTime": 1792989072576,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "_id": "NUPoGoGKEki60e7W",
+      "name": "Operator — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "operator",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Operator — Apprentice</strong> (Tier I).</p><p><strong>Trade — Carry it quiet:</strong> Move a package/message across town, no questions. <span style=\"opacity:0.7\">Standard fee 10 marks (Intrigue).</span></p><p><strong>Trick — Pocketed</strong> <em>(1/scene)</em>: Produce a mundane Tier-I item they plausibly lifted earlier.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 201000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "operator",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989072576,
+        "modifiedTime": 1792989072576,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Crew Type: Covert Ops Cell (Tier 1)",
@@ -1590,14 +2464,14 @@
       "system": {
         "category": "technique",
         "source": {
-          "custom": "Bad Eden \u2013 Crew Type: Covert Ops Cell (Tier 1)",
+          "custom": "Bad Eden – Crew Type: Covert Ops Cell (Tier 1)",
           "revision": 2,
           "rules": "2024",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 \u2014 Covert Ops Cell</strong></p><p><strong>\u201cIf you saw it happen, it wasn\u2019t us.\u201d</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don\u2019t start fights\u2014they rearrange the board so the fight never happens.</p><p><em>You\u2019re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Stealth and with the Tinkering aptitude.</li><li><strong>Strategic:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
+          "value": "<p><strong>Tier 1 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Stealth and with the Tinkering aptitude.</li><li><strong>Strategic:</strong> Your Domain starts with +1 Intrigue OPs.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-covert-ops-cell-t1",
@@ -1626,7 +2500,7 @@
         {
           "_id": "cea1f8081551430c",
           "name": "Covert Ops Cell T1 Skills",
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_atom_1.png",
+          "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
           "type": "base",
           "system": {
             "changes": [
@@ -1636,10 +2510,17 @@
                 "value": 1,
                 "phase": "initial",
                 "priority": 20
+              },
+              {
+                "key": "system.skills.tinkering.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
               }
             ]
           },
-          "disabled": false,
+          "disabled": true,
           "duration": {
             "value": null,
             "units": "seconds",
@@ -1659,17 +2540,6 @@
               }
             }
           },
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177534429,
-            "modifiedTime": 1784177534429
-          },
           "start": {
             "combat": null,
             "round": 0,
@@ -1680,7 +2550,17 @@
           },
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!7Lee6ROPnc4gWYJh.ZLQYfPHgpWeKCpl3.cea1f8081551430c"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989072576,
+            "modifiedTime": 1792989605206,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "s5WL7k82FGQGsYdL",
@@ -1723,31 +2603,24 @@
           "vocabScrub": "2026-05-16"
         }
       },
-      "_stats": {
-        "compendiumSource": "Item.YHMatZ2Z3Kiaxxbz",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.YHMatZ2Z3Kiaxxbz",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534429,
-        "modifiedTime": 1784177534429,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
-        "bytUGWIOqq9eT7Or": 3
+        "FKSQOY3vDSH1mLWk": 3
       },
-      "_id": "ZLQYfPHgpWeKCpl3",
+      "_id": "NerIrcDIX864kRbv",
       "sort": 0,
-      "_key": "!actors.items!7Lee6ROPnc4gWYJh.ZLQYfPHgpWeKCpl3"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989072576,
+        "modifiedTime": 1792989072576,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Occult Association: Tarot Mage (Tier 1)",
@@ -1761,7 +2634,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 \u2014 Tarot Mage</strong></p><p><strong>\u201cThe future is rude. I read it anyway.\u201d</strong></p><p>You are not powerful yet. You are noticeable. The cards do not obey you, but they do answer \u2014 and that is already enough to make normal people uncomfortable.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> or <strong>Occult</strong> (GM or player choice if one is already covered elsewhere)</li><li>1/Soma Break, before making an attribute check, you may draw the line of fate early and gain <strong>Advantage</strong> on that check</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a faction Intrigue-forward action, you may <strong>read the spread</strong>: gain <strong>+2 to one relevant Intrigue OP roll</strong></li></ul><p><strong>Cost:</strong> once you start consulting fate, you begin seeing patterns everywhere. Expect second-guessing, omen pressure, or trouble distinguishing signal from appetite.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"tarotT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Draw the Line (Tactical)</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;\u00b7&nbsp; <strong>Action:</strong> Free (before check) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Before an attribute check, reroll the lowest die on it.</div>\n</div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Tarot Mage</strong></p><p><strong>“The future is rude. I read it anyway.”</strong></p><p>You are not powerful yet. You are noticeable. The cards do not obey you, but they do answer — and that is already enough to make normal people uncomfortable.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> or <strong>Occult</strong> (GM or player choice if one is already covered elsewhere)</li><li>1/Soma Break, before making an attribute check, you may draw the line of fate early and gain <strong>Advantage</strong> on that check</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per turn, before a faction Intrigue-forward action, you may <strong>read the spread</strong>: gain <strong>+2 to one relevant Intrigue marks roll</strong></li></ul><p><strong>Cost:</strong> once you start consulting fate, you begin seeing patterns everywhere. Expect second-guessing, omen pressure, or trouble distinguishing signal from appetite.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"tarotT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Draw the Line (Tactical)</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free (before check) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Before an attribute check, reroll the lowest die on it.</div>\n</div>",
           "chat": ""
         },
         "advancement": {},
@@ -2005,335 +2878,24 @@
       "effects": [],
       "img": "icons/sundries/gaming/card-astronomy-pink.webp",
       "folder": "eHExqpWy9wPntvU8",
-      "_stats": {
-        "compendiumSource": "Item.pqlfAGb9y9daRPj7",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.pqlfAGb9y9daRPj7",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534429,
-        "modifiedTime": 1784177534429,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
-        "bytUGWIOqq9eT7Or": 3
+        "FKSQOY3vDSH1mLWk": 3
       },
-      "_id": "n6N25rNJRRwYIPs0",
+      "_id": "q2tqEKkvfnQtojRy",
       "sort": 0,
-      "_key": "!actors.items!7Lee6ROPnc4gWYJh.n6N25rNJRRwYIPs0"
-    },
-    {
-      "name": "Deliberate Tempo",
-      "type": "feat",
-      "img": "icons/skills/melee/strike-sword-slashing-red.webp",
-      "system": {
-        "category": "technique",
-        "source": "Bad Eden Core Feats (Batch 3) (2026 rules)",
-        "tags": [],
-        "description": {
-          "value": "<h2>Deliberate Tempo</h2><p><em>Timing is a weapon.</em></p><hr><h3>Rules</h3><p>Once per turn, you may delay one attack you make until later in the round. When you do, that attack reroll the lowest die.</p>",
-          "chat": ""
-        },
-        "identifier": "bbttcc_feat_deliberate_tempo",
-        "uses": {
-          "max": "",
-          "spent": 0,
-          "recovery": []
-        },
-        "requirements": "",
-        "type": {
-          "value": "feat",
-          "subtype": ""
-        },
-        "activities": {},
-        "advancement": {},
-        "crewed": false,
-        "enchant": {},
-        "prerequisites": {
-          "items": [],
-          "repeatable": false,
-          "level": null
-        },
-        "properties": []
-      },
-      "effects": [],
-      "flags": {
-        "bbttcc": {
-          "pack": "bbttcc-feats-batch3",
-          "featNumber": 55,
-          "generatedAt": "2026-01-19T05:04:20.693394Z"
-        }
-      },
-      "folder": "QbGNBV70xh9pF0eh",
-      "sort": 1000000,
-      "ownership": {
-        "default": 0,
-        "DHBK2UGr58xKXzxK": 3,
-        "bytUGWIOqq9eT7Or": 3
-      },
       "_stats": {
-        "compendiumSource": "Item.q9iV4JZUm71Enwim",
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534429,
-        "modifiedTime": 1784177534429,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
-      "_id": "yNplMBDCk8A2KSGS",
-      "_key": "!actors.items!7Lee6ROPnc4gWYJh.yNplMBDCk8A2KSGS"
-    },
-    {
-      "name": "Gentle Pivot",
-      "type": "feat",
-      "img": "icons/skills/melee/hand-grip-sword-strike-orange.webp",
-      "system": {
-        "category": "technique",
-        "source": {
-          "revision": 1,
-          "rules": "2025",
-          "custom": "Bad Eden Originals"
-        },
-        "tags": [],
-        "description": {
-          "value": "<p><em>\u201cJust a little to the left, away from tragedy.\u201d</em></p><p>When a creature you can see within <strong>6 squares</strong> makes an attack roll against a target that is <strong>bloodied</strong> (at or below half its Integrity), you can use your <strong>reaction</strong> to nudge the intention sideways.</p><ul><li>The attacker has <strong>advantage</strong> on a contested check (such as a shove, grapple, or disarm) they immediately substitute in place of that attack, or may choose to apply the attack with <strong>disadvantage</strong> but automatically treat it as non-lethal.</li></ul><p>This is a narrative tool: you pivot a kill into a capture, a slam into a pin, a swing into a warning blow.</p>",
-          "chat": ""
-        },
-        "activities": {},
-        "uses": {
-          "spent": 0,
-          "recovery": [
-            {
-              "period": "lr",
-              "type": "recoverAll"
-            }
-          ],
-          "max": "@prof"
-        },
-        "advancement": {},
-        "identifier": "wyrdlens-refraction-mercy-gentle-pivot",
-        "crewed": false,
-        "enchant": {},
-        "prerequisites": {
-          "items": [],
-          "repeatable": false,
-          "level": 3
-        },
-        "properties": [],
-        "requirements": "Wyrdlens Adept 3, Refraction of Mercy",
-        "type": {
-          "value": "",
-          "subtype": ""
-        }
-      },
-      "effects": [],
-      "folder": "pKuSnWKpU0fVPuje",
-      "flags": {
-        "bbttcc": {
-          "subclassKey": "wyrdlens_refraction_mercy",
-          "featureKey": "gentle_pivot"
-        },
-        "dnd5e": {}
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534429,
-        "modifiedTime": 1784177534429,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
-      "ownership": {
-        "default": 0,
-        "4Bs2J1tHpG4PGQHY": 3,
-        "PEWWUtMPC7h7WMIt": 3,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "sort": 200000,
-      "_id": "xVCckuyUNnNXbtfN",
-      "_key": "!actors.items!7Lee6ROPnc4gWYJh.xVCckuyUNnNXbtfN"
-    },
-    {
-      "name": "Mercy Refraction (Bad Eden)",
-      "type": "feat",
-      "img": "icons/skills/melee/sword-winged-holy-orange.webp",
-      "system": {
-        "category": "technique",
-        "source": {
-          "revision": 1,
-          "rules": "2025",
-          "custom": "Bad Eden Originals"
-        },
-        "tags": [],
-        "description": {
-          "value": "<p><em>Turn the lens toward the kinder world.</em></p><p>Once per <strong>scene</strong>, when you see a creature within <strong>6 squares</strong> of you take damage from a blow that would reduce it to 0 Integrity, you can use your <strong>reaction</strong> to refract the outcome.</p><ul><li>The attack is treated as <strong>non-lethal</strong> instead. The target falls <strong>unconscious but stable</strong> rather than dying.</li><li>If this non-lethal outcome directly forces a <strong>surrender, stand-down, or captured-alive resolution</strong>, your faction gains <strong>+1 Diplomacy OP</strong> for the next Strategic Turn (once per scene).</li></ul><p>You don\u2019t erase the harm; you change what the last hit <em>means</em>.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlMercyRefr\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Mercy Refraction</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;\u00b7&nbsp; <strong>Action:</strong> Reaction &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When a creature within 6 squares would drop to 0 Integrity, refract the outcome to non-lethal: target falls unconscious-but-stable. If this directly forces a surrender / stand-down / captured-alive resolution, faction gains +1 Diplomacy OP next Strategic Turn.</div>\n</div>",
-          "chat": ""
-        },
-        "activities": {},
-        "uses": {
-          "spent": 0,
-          "recovery": [],
-          "max": "1"
-        },
-        "advancement": {},
-        "identifier": "wyrdlens-refraction-mercy-mercy-refraction",
-        "crewed": false,
-        "enchant": {},
-        "prerequisites": {
-          "items": [],
-          "repeatable": false,
-          "level": 3
-        },
-        "properties": [],
-        "requirements": "Wyrdlens Adept 3, Refraction of Mercy",
-        "type": {
-          "value": "",
-          "subtype": ""
-        }
-      },
-      "effects": [],
-      "folder": "pKuSnWKpU0fVPuje",
-      "flags": {
-        "bbttcc": {
-          "subclassKey": "wyrdlens_refraction_mercy",
-          "featureKey": "mercy_refraction"
-        },
-        "dnd5e": {}
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534429,
-        "modifiedTime": 1784177534429,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
-      "ownership": {
-        "default": 0,
-        "4Bs2J1tHpG4PGQHY": 3,
-        "PEWWUtMPC7h7WMIt": 3,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "sort": 400000,
-      "_id": "UDiAQKYFiO2uZM5K",
-      "_key": "!actors.items!7Lee6ROPnc4gWYJh.UDiAQKYFiO2uZM5K"
-    },
-    {
-      "_id": "dBXwVe5xJdn9YZhO",
-      "name": "Operator",
-      "type": "class",
-      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
-      "system": {
-        "category": "calling",
-        "identifier": "calling-operator",
-        "source": "Callings",
-        "tags": [
-          "calling",
-          "operator",
-          "intrigue"
-        ],
-        "description": {
-          "value": "<p><em>\"Everything's a door if you hold it right.\"</em></p><p><strong>Operator</strong> is the Intrigue Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: thief, smuggler, spy, courier, fence, hacker, fixer. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Underfoot:</strong> In crowds, markets, and streets, the Operator passes unremarked unless actively hunted; Streetwise checks never fumble (at Tier III, also Stealth).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Stealth</strong> rank = tier; secondary <strong>Streetwise</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Intrigue</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Shadow Courier. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
-          "chat": ""
-        }
-      },
-      "effects": [],
-      "folder": null,
-      "sort": 200000,
-      "ownership": {
-        "default": 0,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "flags": {
-        "bbttcc": {
-          "kind": "calling"
-        },
-        "fourththing": {
-          "calling": {
-            "key": "operator",
-            "faculty": "intrigue",
-            "signature": "stealth",
-            "secondary": "streetwise",
-            "pool": "Intrigue",
-            "awakens": "Shadow Courier"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534429,
-        "modifiedTime": 1784177534429,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989072576,
+        "modifiedTime": 1792989072576,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!7Lee6ROPnc4gWYJh.dBXwVe5xJdn9YZhO"
-    },
-    {
-      "_id": "NUPoGoGKEki60e7W",
-      "name": "Operator \u2014 Apprentice (Tier I)",
-      "type": "feature",
-      "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
-      "system": {
-        "category": "calling",
-        "source": "Callings",
-        "tags": [
-          "calling",
-          "operator",
-          "tier-1"
-        ],
-        "description": {
-          "value": "<p><strong>Operator \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Carry it quiet:</strong> Move a package/message across town, no questions. <span style=\"opacity:0.7\">Standard fee 10 marks (Intrigue).</span></p><p><strong>Trick \u2014 Pocketed</strong> <em>(1/scene)</em>: Produce a mundane Tier-I item they plausibly lifted earlier.</p>",
-          "chat": ""
-        }
-      },
-      "effects": [],
-      "folder": null,
-      "sort": 201000,
-      "ownership": {
-        "default": 0,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "flags": {
-        "fourththing": {
-          "calling": {
-            "key": "operator",
-            "tier": 1
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534429,
-        "modifiedTime": 1784177534429,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_key": "!actors.items!7Lee6ROPnc4gWYJh.NUPoGoGKEki60e7W"
+      }
     }
   ],
   "effects": [],
@@ -2341,15 +2903,16 @@
   "sort": 100000,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177534429,
-    "modifiedTime": 1784177534429,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989072576,
+    "modifiedTime": 1792989072580,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

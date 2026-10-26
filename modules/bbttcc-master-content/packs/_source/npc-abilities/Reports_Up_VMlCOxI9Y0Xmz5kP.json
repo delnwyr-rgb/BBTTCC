@@ -38,13 +38,42 @@
       "subtype": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
         "item": {
           "tier": "III",
           "frame": "trait"
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "do": {
+              "bankReroll": {
+                "context": "attack",
+                "note": "Reports Up"
+              }
+            },
+            "radius": 999,
+            "who": "allies"
+          }
+        ]
+      },
+      "passives": {
+        "aura": {
+          "radius": 1056,
+          "who": "allies",
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "note": "Reports Up — the lieutenant relays"
+            }
+          ],
+          "note": "Initiate minions cannot be surprised (GM)"
         }
       }
     },
@@ -53,29 +82,34 @@
         "sources": [
           "Witness-Warden Lieutenant"
         ],
+        "sourceIds": [
+          "5MA3L8ebRzPLhaBP"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "VMlCOxI9Y0Xmz5kP",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": null,
-    "modifiedTime": null,
-    "lastModifiedBy": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989041791,
+    "modifiedTime": 1792989041791,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!VMlCOxI9Y0Xmz5kP"
 }

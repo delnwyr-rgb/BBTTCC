@@ -402,7 +402,7 @@ async function indexBBTTCCItemChoicesByType(kind) {
     try {
       const meta = pack.metadata || {};
       if (meta.type !== "Item") continue;
-      const index = await pack.getIndex({ fields: ["name", "type", "img", "system.identifier", "system.classIdentifier", "flags.bbttcc.kind", "flags.bbttcc.family"] });
+      const index = await pack.getIndex({ fields: ["name", "type", "img", "system.identifier", "system.classIdentifier", "flags.bbttcc.kind", "flags.bbttcc.family", "flags.bbttcc.npAncestry"] });
       for (const row of index) {
         const rowType = String(row.type || "").toLowerCase();
         // getIndex MAY deep-set nested fields (row.flags.bbttcc.kind) or expose
@@ -429,6 +429,9 @@ async function indexBBTTCCItemChoicesByType(kind) {
             bbttccFamily = identifier;
           }
         }
+        // Non-player ancestries (Angel / Devil / Dragon / Eidolon, flags.bbttcc.npAncestry) are GM-only (ruling AN3, 2026-10-26)
+        const npAncestry = (bbttccFlags.npAncestry ?? row["flags.bbttcc.npAncestry"]) === true;
+        if (kind === "species" && npAncestry && !game.user?.isGM) continue;
         const keep = kind === "species" ? looksLikePlayableSpeciesType(rowType)
           : kind === "class" ? looksLikePlayableClassType(rowType)
           : kind === "subclass" ? looksLikePlayableSubclassType(rowType)

@@ -12,7 +12,7 @@
       "tier-2"
     ],
     "description": {
-      "value": "<p><strong>Bravo — Initiate</strong> (Tier II).</p><p><strong>Trade — Drill the green:</strong> Train a group; they count Trained (rank 1) in one Violence aptitude for the next scene that tests it. <span style=\"opacity:0.7\">Standard fee 30 marks (Violence).</span></p><p><strong>Trick — Disarming Blow</strong> <em>(1/scene)</em>: On a hit, the target drops its weapon or takes −2 on its next strike.</p>",
+      "value": "<p><strong>Bravo — Initiate</strong> (Tier II).</p><p><strong>Trade — Drill the green:</strong> Train a group; they count Trained (rank 1) in one Violence aptitude for the next scene that tests it. <span style=\"opacity:0.7\">Standard fee 30 marks (Violence).</span></p><p><strong>Trick — Disarming Blow</strong> <em>(1/scene)</em>: On a hit, the target is Imposed: its next strike rolls 3d10 and keeps the lowest 2.</p>",
       "chat": ""
     }
   },
@@ -27,16 +27,32 @@
       "calling": {
         "key": "bravo",
         "tier": 2
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "do": {
+              "impose": true
+            },
+            "limit": {
+              "per": "scene",
+              "uses": 1
+            },
+            "label": "Disarming Blow"
+          }
+        ]
       }
     }
   },
   "_stats": {
-    "coreVersion": "14.364",
-    "systemId": null,
-    "systemVersion": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1784006633130,
-    "modifiedTime": 1784006633130,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989177887,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

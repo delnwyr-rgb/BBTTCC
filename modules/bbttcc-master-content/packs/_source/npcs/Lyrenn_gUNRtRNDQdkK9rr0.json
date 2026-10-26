@@ -49,7 +49,8 @@
     "derived": {
       "integrity": {
         "value": 10,
-        "max": 10
+        "max": 10,
+        "temp": 0
       },
       "stress": {
         "value": 8,
@@ -135,7 +136,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -151,6 +153,9 @@
     },
     "conditionImmunities": [],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -163,6 +168,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": ""
     }
   },
   "prototypeToken": {
@@ -276,8 +285,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Suppressive Fire</h3><p>Force enemy reroll lowest d20 this round.</p><p><strong>OP Cost:</strong> violence 20</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> Assault, Occupation</p><p><strong>Defender Access:</strong> Yes</p></div>",
+          "value": "<p>You don't kill the line. You just make every last one of 'em keep their heads down and their dice LOW.</p><p><b>Force the enemy to reroll their lowest 2d10 this round.</b></p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "T402GLasLLrFoR0X",
@@ -287,20 +305,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614115,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.T402GLasLLrFoR0X"
+      }
     },
     {
       "name": "Patch the Breach",
@@ -316,8 +334,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Patch the Breach</h3><p>Restore 1 Structure Point.</p><p><strong>OP Cost:</strong> nonLethal 10, economy 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> Assault (defense), Occupation (defense)</p><p><strong>Defender Access:</strong> Yes</p></div>",
+          "value": "<p>Slap some hope, rebar, and aggressive optimism over the hole before the bad outside becomes the bad inside.</p><p><b>Restore 1 Structure Point.</b></p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "2KIHK6WuU5OOvntW",
@@ -327,20 +354,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614115,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.2KIHK6WuU5OOvntW"
+      }
     },
     {
       "name": "Smoke and Mirrors",
@@ -356,8 +383,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Smoke and Mirrors</h3><p>Reduce Alarm Level by 1.</p><p><strong>OP Cost:</strong> intrigue 10, softPower 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> Infiltration, Espionage, Propaganda</p><p><strong>Defender Access:</strong> Conditional</p></div>",
+          "value": "<p>Was that a guard or a coat rack? Were you even HERE? ...even I'm not totally sure anymore. Nicely done.</p><p><b>−1 Alarm Level.</b></p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "hH5nMWCBWFDUnMCM",
@@ -367,20 +403,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614115,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.hH5nMWCBWFDUnMCM"
+      }
     },
     {
       "name": "Flank Attack",
@@ -396,8 +432,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Flank Attack</h3><p>Strike from an unexpected angle; pressure the line and seize momentum.</p><p><strong>OP Cost:</strong> violence 1</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> assault, occupation, liberation</p></div>",
+          "value": "<p>Come at 'em from the side nobody was watching. Rude. Effective. My favorite combination, frankly.</p><p><b>Strike from an unexpected angle — pressure the line and seize momentum.</b></p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "vHQ7b1nKVyN294BK",
@@ -407,20 +452,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614115,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.vHQ7b1nKVyN294BK"
+      }
     },
     {
       "name": "Logistics Surge",
@@ -436,7 +481,7 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Logistics Surge</h3><p>Sudden logistics push: +1 to all friendly rolls this round.</p><p><strong>Tier:</strong> 1</p><p><strong>Raid Types:</strong> any</p></div>",
+          "value": "<p>The quartermaster did a Thing. I've learned not to ask. The boxes move, the dice get friendlier all over the field.</p><p><strong>+1 to all friendly rolls this round.</strong></p>",
           "chat": ""
         }
       },
@@ -447,20 +492,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614116,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.bc0oI7i7kgVSg4IB"
+      }
     },
     {
       "name": "Infernal Bargain",
@@ -476,8 +521,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Infernal Bargain</h3><p>Offer the defender a sealed bargain: accept (+2 to defender&#39;s next roll, attacker gains 1 darkness) or refuse (defender morale −1 from the snubbed offer).</p><p><strong>Tier:</strong> 1</p><p><strong>Raid Types:</strong> presence</p></div>",
+          "value": "<p>A deal with a faint sulfur smell to it. Sign right here. Don't read the small print. Nobody ever reads the small print.</p><p><b>Defender accepts (+2 to their next roll; attacker gains 1 Darkness) or refuses (the defender's hex Loyalty −1).</b></p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "uqUob8ap1ItjWgUt",
@@ -487,20 +541,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614116,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.uqUob8ap1ItjWgUt"
+      }
     },
     {
       "name": "Whispered Aside",
@@ -516,7 +570,7 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Whispered Aside</h3><p>Pick a courtier. +1 Favor to your side.</p><p><strong>Tier:</strong> 1</p><p><strong>Raid Types:</strong> presence</p></div>",
+          "value": "<p>A bowed head, a brushed sleeve, a word folded into the music where nobody's listening but exactly the right somebody.</p><p><b>Pick a courtier: +1 Favor to your side.</b></p>",
           "chat": ""
         }
       },
@@ -527,20 +581,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614116,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.nVNFPZpnGKr5h88Q"
+      }
     },
     {
       "name": "Harvest Season",
@@ -556,8 +610,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Harvest Season</h3><p>+1 Economy regen next turn.</p><p><strong>OP Cost:</strong> economy 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p></div>",
+          "value": "<p><b>Harvest Season</b></p><p>+1 Economy regen next turn.</p><p><b>Cost:</b> Economy 10 marks</p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "AYbsy7V46UmwJaEe",
@@ -567,20 +630,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614116,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.AYbsy7V46UmwJaEe"
+      }
     },
     {
       "name": "Minor Repair",
@@ -596,8 +659,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Minor Repair</h3><p>Remove &#39;Damaged Infrastructure&#39;.</p><p><strong>OP Cost:</strong> economy 20</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p></div>",
+          "value": "<p><b>Minor Repair</b></p><p>Remove 'Damaged Infrastructure'.</p><p><b>Cost:</b> Economy 10 · Materials 10 marks</p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "6NKWxJawQwJrhqdh",
@@ -607,20 +679,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614116,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.6NKWxJawQwJrhqdh"
+      }
     },
     {
       "name": "Develop Outpost (Stability)",
@@ -636,8 +708,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Develop Outpost (Stability)</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> diplomacy 20, economy 10</p></div>",
+          "value": "<p><b>Develop Outpost (Stability)</b></p><p>Stabilize a young outpost: clear hazards, patrol, and build trust.</p><p><b>Cost:</b> Diplomacy 20 · Economy 10 marks</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>develop_outpost_stability</code></p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "1AhDaUMSPbC1rBUi",
@@ -647,20 +728,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989082448,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.1AhDaUMSPbC1rBUi"
+      }
     },
     {
       "name": "Establish Outpost",
@@ -676,8 +757,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Outpost</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 20, logistics 10</p></div>",
+          "value": "<p><b>Establish Outpost</b></p><p>Plant a flag and found a new outpost in an unclaimed hex.</p><p><b>Cost:</b> Economy 20 · Logistics 10 marks</p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "kQnlCWBfB3b8ysfK",
@@ -687,20 +777,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614116,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.kQnlCWBfB3b8ysfK"
+      }
     },
     {
       "name": "Establish Supply Line",
@@ -716,8 +806,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Supply Line</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> logistics 30, economy 10</p></div>",
+          "value": "<p><strong>Establish Supply Line</strong></p><p>Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Supply Line tag and the route is stored on both; sieges draw on it.</p><p><em>Cost: Logistics 30 · Economy 10 marks.</em></p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "7Rp50KU0jwikk9Yk",
@@ -727,20 +826,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614116,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.7Rp50KU0jwikk9Yk"
+      }
     },
     {
       "name": "Establish Trade Route",
@@ -756,8 +855,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Trade Route</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, diplomacy 10, logistics 10</p></div>",
+          "value": "<p><strong>Establish Trade Route</strong></p><p>Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Trade Hub tag (+50% trade output) and the route is stored on both hexes.</p><p><em>Cost: Economy 30 · Diplomacy 10 · Logistics 10 marks.</em></p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "vr34QOUKPF9BZYgk",
@@ -767,20 +875,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614116,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.vr34QOUKPF9BZYgk"
+      }
     },
     {
       "name": "Found Farm",
@@ -796,8 +904,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Farm</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 20, logistics 10</p></div>",
+          "value": "<p><b>Found Farm</b></p><p>Found a new farm site at a developed settlement.</p><p><b>Cost:</b> Economy 20 · Logistics 10 marks</p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "JRiZJDkqU0RVxeTM",
@@ -807,20 +924,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614116,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.JRiZJDkqU0RVxeTM"
+      }
     },
     {
       "name": "Found Fortress",
@@ -836,8 +953,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Fortress</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> violence 20, logistics 20, economy 10</p></div>",
+          "value": "<p><b>Found Fortress</b></p><p>Found a new fortress site at a developed settlement.</p><p><b>Cost:</b> Violence 20 · Logistics 20 · Economy 10 marks</p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "mVgMi00PFvC8EUY9",
@@ -847,20 +973,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614116,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.mVgMi00PFvC8EUY9"
+      }
     },
     {
       "name": "Found Mine",
@@ -876,8 +1002,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Mine</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, nonLethal 10, logistics 10</p></div>",
+          "value": "<p><b>Found Mine</b></p><p>Found a new mine site at a developed settlement.</p><p><b>Cost:</b> Economy 30 · Nonlethal 10 · Logistics 10 marks</p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "nhyvIi0JMTQgVyM2",
@@ -887,20 +1022,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614117,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.nhyvIi0JMTQgVyM2"
+      }
     },
     {
       "name": "Found Port",
@@ -916,8 +1051,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Port</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, logistics 10, diplomacy 10</p></div>",
+          "value": "<p><b>Found Port</b></p><p>Found a new port site at a developed settlement.</p><p><b>Cost:</b> Economy 30 · Logistics 10 · Diplomacy 10 marks</p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "Hor3eA1BYfDRE3m2",
@@ -927,20 +1071,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614117,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.Hor3eA1BYfDRE3m2"
+      }
     },
     {
       "name": "Found Research Site",
@@ -956,8 +1100,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Research Site</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> intrigue 20, softPower 20, economy 10</p></div>",
+          "value": "<p><b>Found Research Site</b></p><p>Found a new research site at a developed settlement.</p><p><b>Cost:</b> Intrigue 20 · Soft Power 20 · Economy 10 marks</p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "WB4bBoAsjXLYw9fz",
@@ -967,20 +1120,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614117,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.WB4bBoAsjXLYw9fz"
+      }
     },
     {
       "name": "Upgrade Outpost → Settlement",
@@ -996,8 +1149,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Upgrade Outpost → Settlement</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, softPower 20, logistics 20</p></div>",
+          "value": "<p><b>Upgrade Outpost → Settlement</b></p><p>Invest heavily to turn an outpost into a village-scale settlement.</p><p><b>Cost:</b> Economy 20 · Logistics 10 marks</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>upgrade_outpost_settlement</code></p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "yeUvb5ZUzNP9T4YR",
@@ -1007,20 +1169,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989082448,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.yeUvb5ZUzNP9T4YR"
+      }
     },
     {
       "name": "Develop Infrastructure",
@@ -1036,8 +1198,17 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Develop Infrastructure</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 40, logistics 20</p></div>",
+          "value": "<p><strong>Develop Infrastructure</strong></p><p>Target a hex you hold. At the turn: Defense +1 and Integration +1 (max 6). No new tag — the lighter cousin of Infrastructure Expansion.</p><p><em>Cost: Economy 40 · Logistics 20 marks.</em></p><p style=\"opacity:.6;font-size:.85em\">BBTTCC Doctrine • strategic • develop_infrastructure_std</p>",
           "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
         }
       },
       "_id": "hN1iIYm0Psi8MmdY",
@@ -1047,20 +1218,20 @@
       "sort": 0,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989082448,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.hN1iIYm0Psi8MmdY"
+      }
     },
     {
       "_id": "uhsYEurzoBwVbnVK",
@@ -1086,7 +1257,8 @@
       "sort": 100000,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "flags": {
         "bbttcc": {
@@ -1104,17 +1276,16 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989082448,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.uhsYEurzoBwVbnVK"
+      }
     },
     {
       "_id": "tu9qtsdlWsQ9z0ms",
@@ -1139,28 +1310,242 @@
       "sort": 101000,
       "ownership": {
         "default": 0,
-        "bytUGWIOqq9eT7Or": 3
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
       },
       "flags": {
         "fourththing": {
           "calling": {
             "key": "bravo",
             "tier": 1
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "allyDamaged",
+                "radius": 1,
+                "do": {
+                  "ward": 0,
+                  "redirect": true
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                },
+                "label": "Hold the Line"
+              }
+            ]
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177895267,
-        "modifiedTime": 1784177895267,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614117,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Build Bridge",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "build_bridge"
+        }
       },
-      "_key": "!actors.items!gUNRtRNDQdkK9rr0.tu9qtsdlWsQ9z0ms"
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<p><b>Build Bridge</b></p><p>Bridge an open-water hex you can reach — a river, a lake, a strait: free crossing for you and your allies, a 5-mark toll for the neutral, closed to the hostile. A cut bridge is rebuilt here. Cannot be planned on a hex held by a Domain hostile to you.</p><p><b>Cost:</b> Economy 20 · Logistics 14 marks</p>",
+          "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        }
+      },
+      "_id": "hLhGNNqLssXvbkG6",
+      "img": "icons/environment/settlement/bridge-stone.webp",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614117,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Cut the Bridge",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "cut_bridge"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<p><b>Cut the Bridge</b></p><p>Bring down a standing bridge: nobody crosses there until its holder plans Build Bridge again. Cutting your own bridge closes it to everyone, you included.</p><p><b>Cost:</b> Violence 10 · Intrigue 10 marks</p>",
+          "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        }
+      },
+      "_id": "P3qnAC2Q6MXJrmke",
+      "img": "icons/weapons/axes/axe-broad-brown.webp",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614117,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Charter Passage",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "charter_passage"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<p><b>Charter Passage</b></p><p>Charter another Domain's boats, flyers or subs (they must rate you neutral or better; pick their rig): it carries your people through those domains for 3 turns, and the carrier pockets 8 marks Economy.</p><p><b>Cost:</b> Diplomacy 20 · Economy 10 marks</p>",
+          "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        }
+      },
+      "_id": "myO2xAULFM2ym9lc",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614118,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Infrastructure Expansion",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "infrastructure_expansion"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Infrastructure Expansion</strong></p><p>Target a hex you hold. At the turn: it gains the Expanded Infrastructure tag, Defense +2 and Integration +1 (max 6).</p><p><em>Cost: Economy 40 · Logistics 20 marks.</em></p>",
+          "chat": ""
+        },
+        "requirements": "",
+        "uses": {
+          "max": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        }
+      },
+      "_id": "JuIlUoy78yLfmqXI",
+      "img": "icons/magic/fire/barrier-wall-flame-ring-yellow.webp",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989082448,
+        "modifiedTime": 1792989614118,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -1168,7 +1553,8 @@
   "sort": 300000,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "flags": {
     "fourththing": {
@@ -1200,7 +1586,6 @@
         "culture": 10,
         "faith": 10
       },
-      "raidPlan": {},
       "ops": {},
       "rigs": [],
       "activeRigId": "",
@@ -1212,18 +1597,11 @@
         "knowledge": 0,
         "defense": 0
       },
-      "morale": 25,
       "loyalty": 25,
       "darkness": {
         "global": 0
       },
-      "victory": {
-        "vp": 0,
-        "unity": 0,
-        "badgeKey": "emerging",
-        "badgeLabel": "Emerging",
-        "badge": null
-      },
+      "victory": {},
       "warLogs": [
         {
           "ts": 1783219640919,
@@ -1272,13 +1650,6 @@
         "updatedTs": 1783219642230
       },
       "progression": {
-        "victory": {
-          "badgeKey": "emerging",
-          "tierFromBadge": 0,
-          "requiredBadgeForNextTier": "rising",
-          "meetsNextTier": false,
-          "updatedTs": 1783979391674
-        },
         "stability": {
           "stableTurns": 1,
           "maxOverextDuringSpan": 0,
@@ -1366,12 +1737,12 @@
     }
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177895267,
-    "modifiedTime": 1784177895267,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989082448,
+    "modifiedTime": 1792989098043,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

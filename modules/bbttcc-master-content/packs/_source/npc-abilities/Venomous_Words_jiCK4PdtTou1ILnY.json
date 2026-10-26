@@ -1,0 +1,50 @@
+{
+  "name": "Venomous Words",
+  "type": "feature",
+  "img": "icons/equipment/head/hood-cloth-teal.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Poisoner rolls twice and keeps the better result on Presence checks to flatter, seduce, or deceive. Every word is technically true the way a syringe is technically a gift.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "jiCK4PdtTou1ILnY",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Samaelite Poisoner"
+        ],
+        "sourceIds": [
+          "sfNdTpowMundsPbC"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069983,
+    "modifiedTime": 1792989070057,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!jiCK4PdtTou1ILnY"
+}

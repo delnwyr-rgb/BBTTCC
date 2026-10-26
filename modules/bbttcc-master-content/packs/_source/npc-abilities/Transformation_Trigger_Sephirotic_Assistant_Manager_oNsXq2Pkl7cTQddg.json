@@ -1,0 +1,67 @@
+{
+  "name": "Transformation Trigger — Sephirotic Assistant Manager",
+  "type": "feature",
+  "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "5e-port"
+    ],
+    "description": {
+      "value": "<p><strong>Parley / redemption condition:</strong> If the party spends actions helping clean, reassuring Gilbert, invoking the sacred purpose of public gathering, or promising to reopen the theater properly, Gilbert can be talked down. Once he is below half Integrity <em>or</em> after a round in which at least two PCs forgo attacks to help the space, a successful DC 15 group social / insight / performance / faith approach transforms him into a <strong>Sephirotic Assistant Manager</strong> and ends the fight.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "bloodied",
+            "do": {
+              "prompt": "Gilbert can now be talked down: DC 15 group social/faith check ends the fight."
+            },
+            "narrative": true
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gilbert, Attendant Eternal"
+        ],
+        "sourceIds": [
+          "LQS2jaeFhzFMDpxA"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "oNsXq2Pkl7cTQddg",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989049420,
+    "modifiedTime": 1792989049420,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!oNsXq2Pkl7cTQddg"
+}

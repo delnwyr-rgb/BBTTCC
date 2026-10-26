@@ -1,0 +1,78 @@
+{
+  "name": "Threshold Iron",
+  "type": "gear",
+  "img": "icons/commodities/metal/ingot-worn-iron.webp",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "threshold-iron"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Iron that remembers a doorway.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Iron quenched across a lintel at the turn of the day. Wards like to be hung from it.</p>",
+          "charges": 3,
+          "materialKey": "threshold-iron",
+          "price": {
+            "marks": 45,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII material",
+            "bound": "free",
+            "saleBack": 18
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "WaWY91GF6s3QM5FT",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1789965940579,
+    "modifiedTime": 1792977638901,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!WaWY91GF6s3QM5FT"
+}

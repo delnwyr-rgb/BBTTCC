@@ -3,10 +3,10 @@
   "type": "npc",
   "img": "art/bbttcc/qliphoth/inferno-of-cruelty.webp",
   "system": {
-    "role": "Qliphothic Cataclysm (Golachab — Greater)",
+    "role": "brute",
     "tier": 4,
     "factionId": "",
-    "notes": "<p>Not a creature of flesh but a conflagration of pure hate: a sentient cataclysm born from an act of mass immolation, forever bound to the agony of its own creation. A swirling vortex of emerald-green soulfire, its flames crowded with the screaming psychic impressions of everyone it has ever burned. It does not merely want to burn you — it wants you to feel all of them.</p><p><strong>Qliphah:</strong> Golachab, the Pyres — the Hull of Gevurah. The executioner's fire that never learned to stop.</p><p><em>Mal's note: 'Green fire that screams. Every instinct you have about water is wrong and it knows.'</em></p>",
+    "notes": "<p>Not a creature of flesh but a conflagration of pure hate: a sentient cataclysm born from an act of mass immolation, forever bound to the agony of its own creation. A swirling vortex of emerald-green soulfire, its flames crowded with the screaming psychic impressions of everyone it has ever burned. It does not merely want to burn you — it wants you to feel all of them.</p><p><strong>Qliphah:</strong> Golachab, the Pyres — the Hull of Geburah. The executioner's fire that never learned to stop.</p><p><em>Mal's note: 'Green fire that screams. Every instinct you have about water is wrong and it knows.'</em></p>",
     "details": {
       "level": 18,
       "tier": 4,
@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 105,
-        "max": 105
+        "max": 105,
+        "temp": 0
       },
       "stress": {
         "value": 52,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -142,10 +144,17 @@
         "kinetic"
       ],
       "immunities": [
-        "thermal:hot"
+        {
+          "type": "thermal",
+          "flavor": "hot"
+        }
       ],
       "vulnerabilities": [
-        "thermal:cold"
+        {
+          "type": "thermal",
+          "flavor": "cold"
+        },
+        "sephirotic"
       ]
     },
     "conditionImmunities": [
@@ -158,9 +167,12 @@
       "5e-port",
       "cr-16",
       "qliphah-golachab",
-      "hull-of-gevurah",
+      "hull-of-geburah",
       "greater"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -173,6 +185,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Cataclysm (Golachab — Greater)",
+      "notes": "<p>Not a creature of flesh but a conflagration of pure hate: a sentient cataclysm born from an act of mass immolation, forever bound to the agony of its own creation. A swirling vortex of emerald-green soulfire, its flames crowded with the screaming psychic impressions of everyone it has ever burned. It does not merely want to burn you — it wants you to feel all of them.</p><p><strong>Qliphah:</strong> Golachab, the Pyres — the Hull of Geburah. The executioner's fire that never learned to stop.</p><p><em>Mal's note: 'Green fire that screams. Every instinct you have about water is wrong and it knows.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -272,7 +288,7 @@
       "_id": "urjfbKXejTt7J4Qm",
       "name": "Aura of Immolation",
       "type": "feature",
-      "img": "icons/svg/fire.svg",
+      "img": "icons/weapons/guns/flamethrower-spray-fire-orange.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -288,25 +304,44 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "do": {
+                  "damage": {
+                    "formula": "2d6",
+                    "type": "thermal"
+                  },
+                  "prompt": "Thermal resistance is burned away until the Inferno's next turn."
+                },
+                "radius": 6,
+                "who": "all"
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188157,
-        "modifiedTime": 1787799188157,
+        "modifiedTime": 1791331979612,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!vpPWkftzLsEwoY9k.urjfbKXejTt7J4Qm"
+      }
     },
     {
       "_id": "SLEZN5BKwQlKgs7s",
       "name": "Soulfire Form",
       "type": "feature",
-      "img": "icons/svg/fire-shield.svg",
+      "img": "icons/magic/defensive/shield-barrier-flaming-diamond-acid.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -322,25 +357,49 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "do": {
+                  "damage": {
+                    "formula": "2d6",
+                    "type": "thermal"
+                  }
+                }
+              },
+              {
+                "on": "use",
+                "do": {
+                  "prompt": "Entering a creature's space (first time this turn): 2d6 thermal to it."
+                },
+                "who": "self",
+                "narrative": true
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188157,
-        "modifiedTime": 1787799188157,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989122135,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!vpPWkftzLsEwoY9k.SLEZN5BKwQlKgs7s"
+      }
     },
     {
       "_id": "0SwDdDsA5u4k3M5U",
       "name": "Fractured Will (3/scene)",
       "type": "feature",
-      "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+      "img": "icons/magic/air/air-pressure-shield-blue.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -358,17 +417,16 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188157,
-        "modifiedTime": 1787799188157,
+        "modifiedTime": 1791324417211,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!vpPWkftzLsEwoY9k.0SwDdDsA5u4k3M5U"
+      }
     },
     {
       "_id": "LVrRMj6RoD8Izdys",
@@ -392,23 +450,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188157,
-        "modifiedTime": 1787799188157,
+        "modifiedTime": 1791324417211,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!vpPWkftzLsEwoY9k.LVrRMj6RoD8Izdys"
+      }
     },
     {
       "_id": "ZmIbRPKhGpxFiVbz",
       "name": "Streams of Vengeance",
       "type": "weapon",
-      "img": "icons/svg/lightning.svg",
+      "img": "icons/commodities/treasure/stone-cracked-lightning-blue.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -457,6 +514,21 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "violence",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "restrained"
+            ],
+            "duration": "until-saved",
+            "saveEachRound": true,
+            "saveAttribute": "violence"
           }
         },
         "description": {
@@ -472,23 +544,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188157,
-        "modifiedTime": 1787799188157,
+        "modifiedTime": 1791331979612,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!vpPWkftzLsEwoY9k.ZmIbRPKhGpxFiVbz"
+      }
     },
     {
       "_id": "S83NTa6lDadSr06U",
       "name": "Soul Supernova (Recharge 6)",
       "type": "weapon",
-      "img": "icons/svg/explosion.svg",
+      "img": "icons/magic/fire/explosion-fireball-medium-orange.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -540,6 +611,18 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "intrigue",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 30
           }
         },
         "description": {
@@ -553,25 +636,48 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Soul Supernova (Recharge 6)"
+                },
+                "do": {
+                  "damage": {
+                    "formula": "4d8",
+                    "type": "psychic"
+                  }
+                }
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 6
+            }
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188157,
-        "modifiedTime": 1787799188157,
+        "modifiedTime": 1791331979611,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!vpPWkftzLsEwoY9k.S83NTa6lDadSr06U"
+      }
     },
     {
       "_id": "YpKiImFjyNo41uSt",
       "name": "Melt Ground",
       "type": "feat",
-      "img": "icons/svg/cave.svg",
+      "img": "icons/environment/wilderness/cave-entrance.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -587,19 +693,161 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "template": {
+                    "shape": "cube",
+                    "size": 10
+                  },
+                  "prompt": "Slag for a minute: start or enter → 2d10 thermal."
+                },
+                "who": "self"
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188157,
-        "modifiedTime": 1787799188157,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989122135,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Hollow Touch",
+      "type": "weapon",
+      "img": "icons/magic/death/hand-withered-gray.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d10",
+          "attribute": "violence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "lineage-strike",
+          "qliphothic",
+          "bestiary"
+        ],
+        "effect": "Damage goes to Stress. On a hit the target rolls Resolve vs DC 19; on a failure it is Compelled toward the shell's vice until the end of its next turn.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul"
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 19,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> Reach 1 square, one target. Damage: <code>2d10</code> qliphothic to Stress + violence. On a hit the target rolls Resolve vs DC 19; on a failure it is Compelled toward the shell's vice until the end of its next turn.</p><p><em>The hollow reaches for what it lacks.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!vpPWkftzLsEwoY9k.YpKiImFjyNo41uSt"
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "attack",
+              "lineageStrike": "qliphothic",
+              "price": {
+                "marks": 1350,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIV attack × 1",
+                "bound": "free",
+                "saleBack": 540
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "tD9fn94XyLwIZAj2",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989122180,
+        "modifiedTime": 1792989122181,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -644,34 +892,38 @@
             ]
           },
           "price": {
-            "marks": 1800,
-            "bounty": 2400,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 80,
+            "bounty": 80,
+            "hire": 120,
+            "ransom": 120,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "IV heavy Qliphothic Cataclysm (Golachab — Greater) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TIV heavy qliphothic — bounty 80 / hire 120 marks; credited to the pool matching the method (default softpower)"
           },
           "qliphah": {
             "name": "golachab",
-            "hullOf": "gevurah",
+            "hullOf": "geburah",
             "grade": "greater"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "golachab",
+          "title": "Qliphothic Cataclysm (Golachab — Greater)"
         }
       },
-      "kind": "npc"
+      "kind": "npc",
+      "creatureType": "fiend"
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188157,
-    "modifiedTime": 1787799188157,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989122011,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "vpPWkftzLsEwoY9k",
   "_key": "!actors!vpPWkftzLsEwoY9k"

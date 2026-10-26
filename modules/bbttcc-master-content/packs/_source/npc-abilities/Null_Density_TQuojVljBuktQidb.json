@@ -1,0 +1,60 @@
+{
+  "name": "Null Density",
+  "type": "feature",
+  "img": "icons/magic/air/air-pressure-shield-blue.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The demon rolls twice and keeps the better result on checks to resist manifestations. Manifesting while within its Aura of Stagnation costs the caster +1 Noise — the working has to be shouted over the static.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "save",
+          "mode": "reroll-lowest",
+          "vs": "manifestations",
+          "note": "Null Density"
+        }
+      ]
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Obstructor Demon"
+        ],
+        "sourceIds": [
+          "vYVjgcHYwwYRM6J1"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "TQuojVljBuktQidb",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069954,
+    "modifiedTime": 1792989070039,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!TQuojVljBuktQidb"
+}

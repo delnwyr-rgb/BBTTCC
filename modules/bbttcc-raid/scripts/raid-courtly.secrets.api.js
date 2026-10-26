@@ -63,21 +63,21 @@
   // Human-readable one-liner per effect key — single source of truth for the
   // faction Assets sheet + any Play UI. Keep in sync with the handlers below.
   const EFFECT_INFO = Object.freeze({
-    rollPlus2:     "Queue +2 to your next courtly roll",
+    rollPlus2:     "Queue +2 to your next Parley roll",
     forceReroll:   "Force your opponent to reroll their next exchange",
     influenceDmg2: "Deal 2 Influence damage outside an exchange",
     clearScandal:  "Clear your own Scandal flag",
     favorPlus1:    "+1 Favor with a chosen courtier (your side)",
     favorShift:    "−1 Favor with two courtiers (toward your opponent)",
-    rollPlus3:     "Queue +3 to your next courtly roll",
+    rollPlus3:     "Queue +3 to your next Parley roll",
     influenceDmg3: "Deal 3 Influence damage outside an exchange",
     coverTracks:   "−2 Suspicion",
     favorPlus2:    "+2 Favor with a chosen courtier (your side)",
     doubleAgent:   "Flip a courtier — −1 to the opponent, +1 to you",
-    oppRollMinus2: "Queue −2 to your opponent's next courtly roll",
+    oppRollMinus2: "Queue −2 to your opponent's next Parley roll",
     stirThePot:    "+2 Suspicion — destabilize the court (defection favors the influence leader)",
     discardStolen: "Your opponent discards a random STOLEN secret",
-    freezePurse:   "No OP may be spent by either side next exchange"
+    freezePurse:   "No marks may be spent by either side next exchange"
   });
 
   // A secret's effect field may be compound: "rollPlus2+coverTracks" (or

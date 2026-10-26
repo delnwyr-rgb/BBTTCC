@@ -1,0 +1,141 @@
+{
+  "name": "The Collection",
+  "type": "weapon",
+  "img": "icons/containers/bags/sack-simple-leather-brown.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "soul",
+    "skill": "channel",
+    "damage": {
+      "formula": "2d10",
+      "attribute": "soul",
+      "type": "psychic",
+      "damageFlavor": "it asks, once",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 6,
+      "long": 18
+    },
+    "tags": [
+      "bestiary",
+      "tier-iv",
+      "lineage-dream"
+    ],
+    "effect": "Soul DC 18 or Compelled for 1 round: the target hands over one thing it is holding. Maarg keeps it.",
+    "flavor": "Things. Debts. It honestly isn't clear.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "compelled"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 18,
+        "saveAttributeOverrides": {}
+      },
+      "resolution": {
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 18,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "none",
+        "size": 0
+      }
+    },
+    "description": {
+      "value": "<p><strong>Strike.</strong> reach 6 squares, one target. Damage: <code>2d10</code> psychic (it asks, once) + soul. Soul DC 18 or Compelled for 1 round: the target hands over one thing it is holding. Maarg keeps it.</p><p><em>Things. Debts. It honestly isn't clear.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "attack",
+          "price": {
+            "marks": 1350,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV attack × 1",
+            "bound": "free",
+            "saleBack": 540
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Desenitarius Maarg"
+        ],
+        "sourceIds": [
+          "YreqW1q05O7dGoxK"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "pJ4UyWc2YIxHCzDx",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069976,
+    "modifiedTime": 1792989070053,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!pJ4UyWc2YIxHCzDx"
+}

@@ -131,8 +131,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!LhwaA7WbybhObu2G.ic1KvL72MfoFIFbg"
+      "folder": null
     },
     {
       "name": "Courage Thread (Shaken Resistance + Ally Save Bonus)",
@@ -181,8 +180,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!LhwaA7WbybhObu2G.vWYXTJfWpFvBhHFQ"
+      "folder": null
     },
     {
       "name": "Foresight Thread (1d4 Boost Storage)",
@@ -231,8 +229,7 @@
       "sort": 0,
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!LhwaA7WbybhObu2G.mfmFbzzYf0jcckTA"
+      "folder": null
     }
   ],
   "folder": "YLUIFZ5nPOUSaSH2",
@@ -424,12 +421,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776459927032,
-    "modifiedTime": 1782167240816,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907935662,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

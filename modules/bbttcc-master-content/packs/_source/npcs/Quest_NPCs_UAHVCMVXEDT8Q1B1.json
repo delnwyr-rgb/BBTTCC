@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": null,
+  "name": "Quest NPCs",
+  "color": null,
+  "sorting": "a",
+  "_id": "UAHVCMVXEDT8Q1B1",
+  "description": "",
+  "sort": 1300000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1791317103605,
+    "modifiedTime": 1791317103875,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!UAHVCMVXEDT8Q1B1"
+}

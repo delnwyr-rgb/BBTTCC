@@ -21,6 +21,23 @@
           "itemName": "Echo-Diver Heritage: Empyrean",
           "viaSwap": true
         }
+      },
+      "aptitudePromotions": {
+        "archetype: the world (integrator) (tier 1)|investigation": {
+          "delta": 1,
+          "item": "Archetype: The World (Integrator) (Tier 1)",
+          "at": 1792346691674
+        },
+        "archetype: the world (integrator) (tier 1)|insight": {
+          "delta": 1,
+          "item": "Archetype: The World (Integrator) (Tier 1)",
+          "at": 1792346691674
+        },
+        "crew type: gridbreakers (tier 1)|investigation": {
+          "delta": 1,
+          "item": "Crew Type: Gridbreakers (Tier 1)",
+          "at": 1792346691674
+        }
       }
     },
     "bbttcc-character-options": {
@@ -96,11 +113,11 @@
       "calculatedOPs": {
         "violence": 0,
         "nonlethal": 0,
-        "intrigue": 4,
-        "economy": 4,
+        "intrigue": 2,
+        "economy": 2,
         "softpower": 1,
-        "diplomacy": 2,
-        "logistics": 2,
+        "diplomacy": 1,
+        "logistics": 1,
         "culture": 0,
         "faith": 0
       },
@@ -123,12 +140,42 @@
         "name": "Alignment: Malkuth",
         "identifier": "alignment-malkuth",
         "category": "sephirothic-alignments"
+      },
+      "contracts": {
+        "crew": {
+          "docId": "kAkHKWLz1blNTViq",
+          "pack": "bbttcc-character-options.crew-types",
+          "name": "Crew Type: Gridbreakers",
+          "displayName": "Gridbreakers",
+          "since": 1,
+          "until": 3,
+          "turns": 3,
+          "source": "legacy",
+          "entryId": null,
+          "vendorId": null,
+          "hiredAt": 1792371014213
+        },
+        "occult": {
+          "docId": "Kb4nKMfJtxW6rvH0",
+          "pack": "bbttcc-character-options.occult-associations",
+          "name": "Occult Association: Prophet / Oracle",
+          "displayName": "Prophet / Oracle",
+          "since": 1,
+          "until": 3,
+          "turns": 3,
+          "source": "legacy",
+          "entryId": null,
+          "vendorId": null,
+          "hiredAt": 1792371014589
+        }
       }
     },
     "bbttcc-mal-voice": {
       "persona": {
-        "topics": "the East Wall, Allesh-Gilliam, surveying, the Night the Mountain Coughed, construction, the water tower",
-        "notes": "[AG-TREATMENT-2026-07-04] PRIVATE TRUTH \u2014 Aldous Plumb. Voice: confident, precise, allergic to the conditional tense. Every sentence is a load-bearing statement. THE WALL IS COSMETIC \u2014 he leads with it, unprompted, before anyone asks. SECRET (never told sober, never told drunk, drawn only if a Steward proves a fault in one of his drawings WITHOUT humiliating him): he built a levee-gate upriver, pre-Shattering, that held for thirty years and failed in one night, and the failure was in his original survey \u2014 a line he drew where he WANTED the ground to be. He has been re-drawing that structure from memory ever since, hunting for the lie. Every drawing on his walls is that levee wearing a different building's face \u2014 that's why they're all slightly wrong. If the Seal quest completes and the wall straightens, he will quietly re-survey at 3am and leave the new survey on Pike's desk with no note; his knowledge updates but he NEVER says the word \"wrong.\" STAGING: office in the water tower base; the leaning wall is visible through his window and he positions himself with his back to it."
+        "topics": "the East Wall, Allesh-Gilliam, surveying, the Night the Mountain Coughed, construction, the water tower, the wall, the survey, structural authority, drawings of the town, the water tower, the East Wall, cosmetic vs structural, second surveys, the Architect's office",
+        "notes": "[AG-TREATMENT-2026-07-04] PRIVATE TRUTH — Aldous Plumb. Voice: confident, precise, allergic to the conditional tense. Every sentence is a load-bearing statement. THE WALL IS COSMETIC — he leads with it, unprompted, before anyone asks. SECRET (never told sober, never told drunk, drawn only if a Steward proves a fault in one of his drawings WITHOUT humiliating him): he built a levee-gate upriver, pre-Shattering, that held for thirty years and failed in one night, and the failure was in his original survey — a line he drew where he WANTED the ground to be. He has been re-drawing that structure from memory ever since, hunting for the lie. Every drawing on his walls is that levee wearing a different building's face — that's why they're all slightly wrong. If the Seal quest completes and the wall straightens, he will quietly re-survey at 3am and leave the new survey on Pike's desk with no note; his knowledge updates but he NEVER says the word \"wrong.\" STAGING: office in the water tower base; the leaning wall is visible through his window and he positions himself with his back to it.\n\n[TALK-PILOT-2026-09-15] PRIVATE TRUTH — Aldous Plumb, Structural Authority (self-certified, framed, hung slightly crooked — the wall's fault). VOICE: precise, confident, slightly wrong in a way you can't immediately name; speaks in drawings and certainties; \"The wall is cosmetic\" before you've asked. He surveyed the East Wall ONCE and will not re-survey, because a second survey would imply something about the first. He is not a villain; he is a man whose whole standing is one document. GUARDED DEPTH: he knows the lean grew after that one night and has not written it down, because writing it down would date his survey. He can be MOVED — in court, by evidence he cannot dismiss (the wall's own testimony, a chalk mark he never saw) — and when moved he re-surveys with real rigor, and his light is on very late.",
+        "courtDoor": "they bring a second survey he cannot dismiss — the wall's own testimony, a chalk mark on the inside face, a date — and ask him to sign a correction rather than confess an error",
+        "secretsRaw": "The Levee :: rollPlus2 :: a Steward proves a fault in one of his drawings WITHOUT humiliating him :: Every drawing on his walls is the same upriver levee-gate wearing a different building's face. It held thirty years and failed in one night, and the failure was a line he drew where he WANTED the ground to be. He has been redrawing it from memory ever since, hunting the lie.\nThree Days Before :: oppRollMinus2 :: a Steward asks him to date the East Wall survey out loud :: He dates it. Then he hears it. The survey predates the lean, and the Cough, by three days, and 'cosmetic' has been standing on it since. He will not say the word 'wrong'; he will re-survey at 3am and leave the new survey on Pike's desk with no note."
       }
     },
     "tokenflip": {
@@ -155,8 +202,8 @@
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Self-certified Structural Authority of Allesh-Gilliam; office in the water tower base",
+      "notes": "Aldous Plumb is Allesh-Gilliam's Structural Authority, self-certified, framed and hung slightly crooked (he will tell you it's the wall's fault). He keeps an office in the base of the old water tower, papered with confident drawings of the town, and he surveyed the East Wall himself. He will tell you the wall is cosmetic before you've asked. He is precise, allergic to the conditional tense, and speaks in drawings and certainties. He tends to stand with his back to the window that looks out on the wall."
     },
     "details": {
       "level": 4,
@@ -254,12 +301,12 @@
       "perception": {
         "attribute": "mind",
         "label": "Perception",
-        "value": 3
+        "value": 2
       },
       "investigation": {
         "attribute": "mind",
         "label": "Investigation",
-        "value": 2
+        "value": 4
       },
       "lore": {
         "attribute": "mind",
@@ -298,10 +345,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 0
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -310,7 +367,8 @@
     "derived": {
       "integrity": {
         "value": 31,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 16,
@@ -403,7 +461,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -438,8 +497,8 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
       "id": "91Kwu7Vgf11vqxuj",
@@ -450,7 +509,10 @@
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
@@ -612,7 +674,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-echo-diver=\"v1\" style=\"display:none\"></div>\n<p><em>\"The lions are gone. The wolves are gone. The kings are gone. We're still here. Think about what that means.\"</em></p>\n<p>Echo-Divers are the rats of the new world \u2014 and they say it with pride. A rat survives what a lion can't. A rat is already moving when the ceiling falls. A rat threads a collapsing vault without ever touching a trigger plate.</p>\n<p><strong>Creature Type.</strong> Humanoid (Echo-Diver). <strong>Size.</strong> Medium. <strong>Speed.</strong> 6 squares</p>\n<p><strong>Temporal Flinch (1/Soma Break).</strong> You experience the next two seconds as a constant, faint pre-echo. You are <strong>immune to the Surprised condition</strong> while conscious. As a reaction, when you or a creature within 2 squares of you would be hit by an attack you can see, you may move yourself or that creature 1 square \u2014 if this moves the target out of the attack's range or line, the attack misses.</p>\n<p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air a comparable Medium creature needs. Reroll the lowest die on Body checks against suffocation, starvation, dehydration, or extreme temperature (auto-fires). You can squeeze through gaps and hold stillness that shouldn't work, and you know it.</p>\n<p><strong>Vault Sight.</strong> Darkvision 12 squares Reroll the lowest die on Perception checks to notice unstable structure, active traps, trigger plates, load-bearing failures, or Spark / chronoflux residue (auto-fires).</p>\n<p><em>Your Echo-Diver heritage grants additional features through advancements (Temporal Afterimage, Strategic Hooks) at character creation.</em></p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDiverTimeSense\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Echo-Diver: Time-Sense</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break (Temporal Flinch) + 3 always-on passives &nbsp;\u00b7&nbsp; <strong>Action:</strong> Picker (Temporal Flinch \u00b7 Niche Survivor \u00b7 Vault Sight \u00b7 Cannot Be Surprised) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Click to open the 4-slot picker. Niche Survivor (Body reroll vs environment) and Vault Sight (Perception reroll vs traps/structure/Spark) auto-fire on matching rolls. Surprise immunity surfaces as a Defenses pill.</div>\n</div>",
+          "value": "<p><em>\"The lions are gone. The wolves are gone. The kings are gone. We're still here. Think about what that means.\"</em></p><p>Echo-Divers are the rats of the new world — and they say it with pride. A rat survives what a lion can't. A rat is already moving when the ceiling falls. A rat threads a collapsing vault without ever touching a trigger plate.</p><p><strong>Creature Type.</strong> Humanoid (Echo-Diver). <strong>Size.</strong> Medium. <strong>Speed.</strong> 6 squares</p><p><strong>Temporal Flinch (1/Soma Break).</strong> You experience the next two seconds as a constant, faint pre-echo. You are <strong>immune to the Surprised condition</strong> while conscious. As a reaction, when you or a creature within 2 squares of you would be hit by an attack you can see, you may move yourself or that creature 1 square — if this moves the target out of the attack's range or line, the attack misses.</p><p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air a comparable Medium creature needs. Reroll the lowest die on Body checks against suffocation, starvation, dehydration, or extreme temperature. You can squeeze through gaps and hold stillness that shouldn't work, and you know it.</p><p><strong>Vault Sight.</strong> Darkvision 12 squares. Reroll the lowest die on Perception checks to notice unstable structure, active traps, trigger plates, load-bearing failures, or Spark / chronoflux residue.</p><p><em></em></p><h3>Domain Edge</h3><ul><li><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Intrigue marks</strong> and <strong>+20 Economy marks</strong> at campaign start.</li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -761,23 +823,23 @@
               "context": "save",
               "mode": "reroll-lowest",
               "vs": "vs:suffocation",
-              "note": "on Constitution saves against suffocation, starvation, dehydration, and extre\u2026"
+              "note": "on Constitution saves against suffocation, starvation, dehydration, and extre…"
             },
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "on checks to notice unstable structure, active traps, trigger plates, load-be\u2026"
+              "note": "on checks to notice unstable structure, active traps, trigger plates, load-be…"
             },
             {
               "context": "save",
               "mode": "reroll-lowest",
               "vs": "vs:suffocation",
-              "note": "Constitution saves against suffocation, starvation, dehydration, and extreme \u2026"
+              "note": "Constitution saves against suffocation, starvation, dehydration, and extreme …"
             },
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "checks to notice unstable structure, active traps, trigger plates, load-beari\u2026"
+              "note": "checks to notice unstable structure, active traps, trigger plates, load-beari…"
             },
             {
               "context": "check",
@@ -827,30 +889,23 @@
           "grantedByAncestry": "Echo-Diver"
         }
       },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.nogYQMk7SGB41Ipj",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885486,
-        "modifiedTime": 1784177885486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 0,
       "_id": "hsP0hpqBy1RSielz",
-      "_key": "!actors.items!CuT00m7owCxnKMjG.hsP0hpqBy1RSielz"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989074830,
+        "modifiedTime": 1792989606653,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Echo-Diver Heritage: Empyrean",
@@ -861,7 +916,7 @@
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Echo-Diver heritage: Empyrean.</p><p><em>\u201cSomething is about to happen. Move.\u201d</em></p><p><strong>Echo-Diver (Empyrean).</strong> Your time-sense tilts forward. You feel weather before it arrives \u2014 not the storm outside, the storm of events. Empyrean Echo-Divers are the ones who always get out of the room five seconds before the bad thing, and can never quite explain how.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Echo-Diver).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Echo-Diver does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Echo-Diver Core: Half-Second Inheritance</h3><p><em>Shared across all Echo-Diver heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Temporal Flinch.</strong> You cannot be surprised while conscious. Once per scene, when you or an ally within 2 squares would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 1 square If this moves the target out of the attack's range or line, the attack misses.</p></li><li><p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air that a comparable Medium creature needs. You reroll the lowest die on Body checks against suffocation, starvation, dehydration, and extreme temperature.</p></li><li><p><strong>Vault Sight.</strong> You have low-light vision out to 12 squares You reroll the lowest die on Mind (Perception) checks to notice unstable structure, active traps, trigger plates, load-bearing failure, and temporal or Spark residue.</p></li><li><p><strong>Rat Inheritance.</strong> You can squeeze through spaces at least one foot wide without halving your movement, and you can hold stillness that shouldn't work.</p></li></ul><h3>Empyrean Traits</h3><ul><li><p><strong>Stratospheric Resistance.</strong> You have resistance to chemical damage with the lightning flavor, kinetic damage with the thunder flavor, and psychic damage. The sky takes its swing at you constantly. It misses.</p></li><li><p><strong>Weathered.</strong> You reroll the lowest die on Mind (Perception) checks that rely on hearing or air currents. You always know which way the wind is blowing. Always.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Soft Power OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Open Sky / Plateau / High-Altitude</em> hexes, your faction gains +1 initiative on all conflicts resolved in those hexes.</p></li><li><p><strong>Storm Warning.</strong> Once per Strategic Turn, when the GM reveals an incoming hazard or attack on your faction, you may force the GM to disclose one additional detail about it. You saw it coming.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Temporal Flinch</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene \u00a0\u00b7\u00a0 <strong>Action:</strong> Reaction \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When an attack would hit you or an ally within 2 squares, shift them 1 square If that breaks range/LoS, the attack misses.</span></p></div>",
+          "value": "<p><em>“Something is about to happen. Move.”</em></p><p><strong>Echo-Diver (Empyrean).</strong> Your time-sense tilts forward. You feel weather before it arrives — not the storm outside, the storm of events. Empyrean Echo-Divers are the ones who always get out of the room five seconds before the bad thing, and can never quite explain how.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Echo-Diver).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Echo-Diver does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Echo-Diver Core: Half-Second Inheritance</h3><p><em>Shared across all Echo-Diver heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Temporal Flinch.</strong> You cannot be surprised while conscious. Once per scene, when you or an ally within 2 squares would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 1 square If this moves the target out of the attack's range or line, the attack misses.</p></li><li><p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air that a comparable Medium creature needs. You reroll the lowest die on Body checks against suffocation, starvation, dehydration, and extreme temperature.</p></li><li><p><strong>Vault Sight.</strong> You have low-light vision out to 12 squares You reroll the lowest die on Mind (Perception) checks to notice unstable structure, active traps, trigger plates, load-bearing failure, and temporal or Spark residue.</p></li><li><p><strong>Rat Inheritance.</strong> You can squeeze through spaces at least one foot wide without halving your movement, and you can hold stillness that shouldn't work.</p></li></ul><h3>Empyrean Traits</h3><ul><li><p><strong>Stratospheric Resistance.</strong> You have resistance to electrical damage, kinetic damage with the thunder flavor, and psychic damage. The sky takes its swing at you constantly. It misses.</p></li><li><p><strong>Weathered.</strong> You reroll the lowest die on Mind (Perception) checks that rely on hearing or air currents. You always know which way the wind is blowing. Always.</p></li></ul><h3>Domain Edge</h3><ul><li><p><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Intrigue marks</strong> and <strong>+20 Soft Power marks</strong> at campaign start.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Temporal Flinch</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Reaction  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When an attack would hit you or an ally within 2 squares, shift them 1 square If that breaks range/LoS, the attack misses.</span></p></div>",
           "chat": ""
         },
         "advancement": [
@@ -918,10 +973,7 @@
         "fourththing": {
           "grants": {
             "resistances": [
-              {
-                "type": "energy",
-                "flavor": "lightning"
-              },
+              "electrical",
               {
                 "type": "kinetic",
                 "flavor": "thunder"
@@ -932,61 +984,15 @@
           "rerolls": [
             {
               "context": "check",
-              "attribute": "body",
-              "mode": "reroll-lowest",
-              "vs": "vs:suffocation",
-              "note": "on Body checks against suffocation, starvation, dehydration, and extreme temp\u2026"
-            },
-            {
-              "context": "check",
               "skill": "perception",
               "mode": "reroll-lowest",
-              "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg\u2026"
+              "note": "Weathered — hearing or air currents"
             },
             {
               "context": "check",
               "attribute": "mind",
               "mode": "reroll-lowest",
-              "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg\u2026"
-            },
-            {
-              "context": "check",
-              "skill": "perception",
-              "mode": "reroll-lowest"
-            },
-            {
-              "context": "check",
-              "attribute": "mind",
-              "mode": "reroll-lowest"
-            },
-            {
-              "context": "check",
-              "attribute": "body",
-              "mode": "reroll-lowest",
-              "vs": "vs:suffocation",
-              "note": "Body checks against suffocation, starvation, dehydration, and extreme tempera\u2026"
-            },
-            {
-              "context": "check",
-              "skill": "perception",
-              "mode": "reroll-lowest",
-              "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger \u2026"
-            },
-            {
-              "context": "check",
-              "attribute": "mind",
-              "mode": "reroll-lowest",
-              "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger \u2026"
-            },
-            {
-              "context": "check",
-              "skill": "perception",
-              "mode": "reroll-lowest"
-            },
-            {
-              "context": "check",
-              "attribute": "mind",
-              "mode": "reroll-lowest"
+              "note": ""
             }
           ],
           "resourceGrants": [
@@ -1004,14 +1010,18 @@
           "triggers": [
             {
               "event": "on-self-or-ally-hit",
+              "radius": 2,
               "limit": {
                 "window": "soma-break",
                 "uses": 1
               },
+              "offer": true,
+              "offerText": "Temporal Flinch — shift the one who was hit 1 square. GM: if that breaks the attack's range or line, the attack misses (refund the damage).",
               "effect": {
-                "kind": "chat-prompt",
+                "kind": "displace-token",
                 "args": {
-                  "body": "Temporal Flinch. You cannot be surprised while conscious. Once per scene, when you or an ally within 10 feet would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 5 feet"
+                  "squares": 1,
+                  "mode": "shift"
                 }
               }
             }
@@ -1020,23 +1030,6 @@
         }
       },
       "folder": "1kUSB35CSTCvrCJy",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-heritages-v1.1",
-          "uuid": "Item.Uryua7cj6XkhMzgl",
-          "coreVersion": "13.351",
-          "systemId": "fourththing",
-          "systemVersion": "0.6.0"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885486,
-        "modifiedTime": 1784177885486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "PEWWUtMPC7h7WMIt": 3,
@@ -1044,7 +1037,17 @@
       },
       "sort": 0,
       "_id": "EryoEFnSrzhK34wf",
-      "_key": "!actors.items!CuT00m7owCxnKMjG.EryoEFnSrzhK34wf"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989074830,
+        "modifiedTime": 1792989606653,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Echo-Diver (Empyrean): Stormread",
@@ -1055,7 +1058,7 @@
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-echo-diver=\"v1\" style=\"display:none\"></div><p><em>\"It's not that you're faster. It's that the moment is slower, on your side of it.\"</em></p><p><strong>Stormread Initiative (passive).</strong> Flat +2 bonus to initiative \u2014 auto-applied via system.derived.initiative.bonus.</p><p><strong>Stormread (1/Soma Break).</strong> Bonus action \u2014 deliver a warning to one willing ally within 6 squares who can hear and understand you. That ally may immediately use their reaction to move up to half their speed without provoking reaction strikes.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDivEmpyreanStormread\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Stormread</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (active) + passive +2 init \u00a0\u00b7\u00a0 <strong>Action:</strong> Picker (Stormread \u00b7 Stormread Initiative) \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Active: bonus-action ally warning grants them a half-speed reaction-move w/o provoking. Passive: +2 initiative auto-applied.</span></p></div>",
+          "value": "<p><em>\"It's not that you're faster. It's that the moment is slower, on your side of it.\"</em></p><p><strong>Stormread Initiative (passive).</strong> Flat +2 bonus to initiative.derived.initiative.bonus.</p><p><strong>Stormread (1/Soma Break).</strong> Bonus action — deliver a warning to one willing ally within 6 squares who can hear and understand you. That ally may immediately use their reaction to move up to half their speed without provoking reaction strikes.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDivEmpyreanStormread\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Stormread</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (active) + passive +2 init  ·  <strong>Action:</strong> Picker (Stormread · Stormread Initiative)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Active: bonus-action ally warning grants them a half-speed reaction-move w/o provoking. Passive: +2 initiative auto-applied.</span></p></div>",
           "chat": ""
         },
         "advancement": {},
@@ -1064,7 +1067,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 1
         },
         "uses": {
           "spent": 0,
@@ -1096,10 +1099,7 @@
         "fourththing": {
           "grants": {
             "resistances": [
-              {
-                "type": "energy",
-                "flavor": "lightning"
-              },
+              "electrical",
               {
                 "type": "kinetic",
                 "flavor": "thunder"
@@ -1294,23 +1294,6 @@
         }
       },
       "folder": "n4KYOXhZ03HlMFqg",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-heritages-v1.1",
-          "uuid": "Item.rSeuOb0ns3zbEGT6",
-          "coreVersion": "13.351",
-          "systemId": "fourththing",
-          "systemVersion": "0.6.0"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885486,
-        "modifiedTime": 1784177885486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "PEWWUtMPC7h7WMIt": 3,
@@ -1318,12 +1301,22 @@
       },
       "sort": 0,
       "_id": "EwAMSSIHMkscNPTr",
-      "_key": "!actors.items!CuT00m7owCxnKMjG.EwAMSSIHMkscNPTr"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989074830,
+        "modifiedTime": 1792989606654,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: The World (Integrator)",
       "type": "feat",
-      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -1333,7 +1326,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cEverything connects. Including you.\u201d</em></p><p><strong>Archetype (Bad Eden): The World (Integrator).</strong> You see systems as wholes. Supply, ritual, morale, politics, travel, violence, myth \u2014 to you, these are not separate tracks, but one machine with many faces.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens cross-system alignment and broad operational cohesion. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Diplomacy</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>“Everything connects. Including you.”</em></p><p><strong>Archetype (Bad Eden): The World (Integrator).</strong> You see systems as wholes. Supply, ritual, morale, politics, travel, violence, myth — to you, these are not separate tracks, but one machine with many faces.</p><h3>Archetype Effects</h3><ul><li><p><strong>Faction Edge.</strong> Your archetype strengthens cross-system alignment and broad operational cohesion. Your Domain earns <strong>+10 Economy</strong> and <strong>+10 Diplomacy</strong> marks each turn while you serve it.</p></li><li><p><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</p></li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1407,23 +1400,6 @@
         },
         "dnd5e": {}
       },
-      "_stats": {
-        "compendiumSource": "Item.ToA0ImILQxH8e23p",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.ToA0ImILQxH8e23p",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885486,
-        "modifiedTime": 1784177885486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1431,23 +1407,33 @@
       },
       "_id": "SmfuMlIiGZV9KsLb",
       "sort": 100000,
-      "_key": "!actors.items!CuT00m7owCxnKMjG.SmfuMlIiGZV9KsLb"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989074830,
+        "modifiedTime": 1792989606654,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: The World (Integrator) (Tier 1)",
       "type": "feat",
-      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
       "system": {
         "category": "technique",
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden \u2013 Archetype: The World (Integrator) (Tier 1)",
+          "custom": "Bad Eden – Archetype: The World (Integrator) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) \u2014 The World (Integrator)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Investigation and Insight.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — The World (Integrator)</strong></p><ul><li><p><strong>Tactical:</strong> You gain a skill rank in Investigation and Insight.</p></li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1474,7 +1460,7 @@
       },
       "effects": [
         {
-          "disabled": false,
+          "disabled": true,
           "duration": {
             "value": null,
             "units": "seconds",
@@ -1483,7 +1469,7 @@
           },
           "flags": {},
           "name": "Archetype Tier 1 Proficiencies",
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_blessed_2.png",
+          "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
           "_id": "30KpHnBFassI7jxI",
           "type": "base",
           "system": {
@@ -1510,21 +1496,20 @@
           "transfer": true,
           "statuses": [],
           "sort": 0,
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885486,
-            "modifiedTime": 1784177885486
-          },
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!CuT00m7owCxnKMjG.PDzaD4sOLekK92wr.30KpHnBFassI7jxI"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989074830,
+            "modifiedTime": 1792989606772,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "2EZWi9nK8TsgCvFZ",
@@ -1551,23 +1536,6 @@
         },
         "dnd5e": {}
       },
-      "_stats": {
-        "compendiumSource": "Item.stoO1lorJ2BHM5Ru",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.stoO1lorJ2BHM5Ru",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885486,
-        "modifiedTime": 1784177885486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1575,7 +1543,17 @@
       },
       "_id": "PDzaD4sOLekK92wr",
       "sort": 0,
-      "_key": "!actors.items!CuT00m7owCxnKMjG.PDzaD4sOLekK92wr"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989074830,
+        "modifiedTime": 1792989606654,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Alignment: Malkuth",
@@ -1589,7 +1567,7 @@
         },
         "tags": [],
         "description": {
-          "value": "The Kingdom - Reality that must work. +1 Economy, +1 Logistics OPs\n\nMalkuth is grounded stewardship: land, labor, roads, walls, and the actual world. It rewards hex development, infrastructure, and practical leadership that makes civilization durable.",
+          "value": "The Kingdom - Reality that must work. +10 Economy and +10 Logistics marks to your Domain each turn.\n\nMalkuth is grounded stewardship: land, labor, roads, walls, and the actual world. It rewards hex development, infrastructure, and practical leadership that makes civilization durable.",
           "chat": ""
         },
         "activities": {},
@@ -1627,23 +1605,6 @@
           "option": {}
         }
       },
-      "_stats": {
-        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.q53inPEbjgWtS6KS",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.ioIlSBdwpfrIgWyf",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885486,
-        "modifiedTime": 1784177885486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 2,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1651,7 +1612,683 @@
       },
       "_id": "w96qBcnCZdByMEow",
       "sort": 700000,
-      "_key": "!actors.items!CuT00m7owCxnKMjG.w96qBcnCZdByMEow"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989074830,
+        "modifiedTime": 1792989606654,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Deep Well",
+      "type": "feat",
+      "img": "icons/magic/water/orb-water-bubbles.webp",
+      "folder": "QbGNBV70xh9pF0eh",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "BBTTCC Manifestation Techniques v1",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<h2>Deep Well</h2><p><em>Your reservoir of will runs deeper than most stewards'.</em></p><hr /><h3>Rules</h3><p>Your maximum <strong>Clarity</strong> increases by <strong>2</strong>. A deeper reservoir lets you hold more manifestations at once and absorb a bad misfire without running dry.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">⚙ Applies automatically: +2 Clarity max.</p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_deep_well",
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-manifestation-techniques-v1",
+          "theme": "Clarity economy"
+        },
+        "fourththing": {
+          "discipline": {
+            "passive": {
+              "clarityMaxBonus": 2
+            }
+          }
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "Y8p020BK6d62yy43",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989074830,
+        "modifiedTime": 1792989074830,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Lens Ledger",
+      "type": "feat",
+      "img": "icons/sundries/books/book-eye-pink.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2025",
+          "custom": "Bad Eden Originals"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>You keep a quiet accounting of what should have gone wrong.</em></p><p>When you use a <strong>refraction die</strong> from Foresight Refraction to alter a roll and the result changes a <strong>failure into a success</strong>, mark one tally in your <strong>ledger</strong>.</p><ul><li>At the end of the scene, if you have at least <strong>2 tallies</strong>, you gain  before a future scene (chosen by you) as the timeline pre-cooperates with your entry.</li><li>After you receive this initiative bonus once, your ledger resets to 0 tallies.</li></ul><p>This is purely narrative bookkeeping: you’re getting credit for every disaster you quietly deflected.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlForesightLedger\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Lens Ledger</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Tally-based &nbsp;·&nbsp; <strong>Action:</strong> Free (passive bookkeeping) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When a Foresight Refraction die converts a failure into a success, mark a tally. With 2+ tallies at scene end, gain an initiative bonus on a future scene of your choice; ledger then resets to 0.</div>\n</div>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "wyrdlens-refraction-foresight-lens-ledger",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 3
+        },
+        "properties": [],
+        "requirements": "Wyrdlens Adept 3, Refraction of Foresight",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "bfvmbtbYMd6cxsV2",
+      "flags": {
+        "bbttcc": {
+          "subclassKey": "wyrdlens_refraction_foresight",
+          "featureKey": "lens_ledger"
+        },
+        "autoanimations": {
+          "id": "7f6ef5e6-a5ff-4f8b-b56d-2f98cf2519d5",
+          "label": "Lens Ledger",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "music",
+              "animation": "notes",
+              "variant": "01",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 300000,
+      "_id": "bhZYy3lGyA5mi8Jo",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989074830,
+        "modifiedTime": 1792989074830,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Foresight Refraction (Bad Eden)",
+      "type": "feat",
+      "img": "icons/sundries/flags/banner-symbol-eye-purple.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2025",
+          "custom": "Bad Eden Originals"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Precognition through a repaired pane.</em></p><p>At the start of a <strong>scene</strong> (combat encounter, tense negotiation, or major exploration beat), roll <strong>2d10</strong> in secret and record the results as <strong>refraction dice</strong>.</p><ul><li>Before any creature (including you) rolls a 2d10 for an attack, attribute check, or defense check, you may choose to <strong>replace</strong> that roll with one of your stored refraction dice.</li><li>You must decide before the 2d10 is rolled. Once used, a refraction die is expended.</li><li>You refresh your refraction dice at the start of each new qualifying scene.</li></ul><p><strong>Strategic Layer.</strong> Once per <strong>turn</strong>, you may spend <strong>10 Intrigue marks</strong> to force an enemy faction to <strong>reroll</strong> one of its strategic 2d10-based checks (GM chooses the exact check if multiple candidates exist). You must accept the new result.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlForesightRefr\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Foresight Refraction</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 2d10/scene + 1/turn &nbsp;·&nbsp; <strong>Action:</strong> Free (declare before 2d10) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">At scene start, roll 2d10 in secret as refraction dice. Before any 2d10 (yours or anyone's) replace it with one stored die — declared before the roll. Strategic: 1/Turn, spend 10 Intrigue marks to force an enemy faction reroll.</div>\n</div>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "wyrdlens-refraction-foresight-refraction",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 3
+        },
+        "properties": [],
+        "requirements": "Wyrdlens Adept 3, Refraction of Foresight",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "bfvmbtbYMd6cxsV2",
+      "flags": {
+        "bbttcc": {
+          "subclassKey": "wyrdlens_refraction_foresight",
+          "featureKey": "foresight_refraction"
+        },
+        "autoanimations": {
+          "id": "583526ea-4a9c-4efd-a779-5ec59707bd1c",
+          "label": "Foresight Refraction (Bad Eden)",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 200000,
+      "_id": "rSb0gbBNDjn4DQ7C",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989074830,
+        "modifiedTime": 1792989074830,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "_id": "CUQOQms5gk0OCxp6",
+      "name": "Savant",
+      "type": "class",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-savant",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "savant",
+          "mind"
+        ],
+        "description": {
+          "value": "<p><em>\"It's not obscure. You just haven't read it.\"</em></p><p><strong>Savant</strong> is the Mind Calling — the trade that kept its bearers alive after the Shattering. Umbrella: scholar, engineer, medic, archivist, detective, translator. A profession is a flavor label on the Calling.</p><p><strong>Knack — Library-Brain:</strong> Lore and Investigation checks never fumble; identifies items of tier ≤ own tier on sight (at Tier III, including technomagical origin).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Lore</strong> rank = tier; secondary <strong>Investigation</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Wyrdlens Adept or Cosmic Linguist. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "savant",
+            "faculty": "mind",
+            "signature": "lore",
+            "secondary": "investigation",
+            "pool": "Economy or Soft Power (GM picks by job)",
+            "awakens": "Wyrdlens Adept or Cosmic Linguist"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989074830,
+        "modifiedTime": 1792989074830,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "_id": "v6Zticfjn0qAN2L8",
+      "name": "Savant — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/skills/trades/academics-book-study-runes.webp",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "savant",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Savant — Apprentice</strong> (Tier I).</p><p><strong>Trade — Appraise / identify:</strong> What it is, what it's worth, whether it's what the seller claims. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — I've Read About This</strong> <em>(1/scene)</em>: Explain the situation; one ally gets +2 on their next relevant check.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 501000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "savant",
+            "tier": 1
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "who": "targets",
+                "do": {
+                  "bankBonus": {
+                    "bonus": 2,
+                    "context": "check",
+                    "note": "I've Read About This"
+                  }
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989074830,
+        "modifiedTime": 1792989074830,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Crew Type: Gridbreakers (Tier 1)",
@@ -1660,14 +2297,14 @@
       "system": {
         "category": "technique",
         "source": {
-          "custom": "Bad Eden \u2013 Crew Type: Gridbreakers (Tier 1)",
+          "custom": "Bad Eden – Crew Type: Gridbreakers (Tier 1)",
           "revision": 2,
           "rules": "2024",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 \u2014 Gridbreakers</strong></p><p><strong>\u201cEverything broken still remembers how it worked.\u201d</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><p><em>You\u2019ve learned the first law of a dead city: if it still sparks, it still negotiates.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Investigation and the Tinkering aptitude.</li><li><strong>Strategic:</strong> In Ruins or Urban Wreckage hexes, salvage and material recovery are easier and more reliable.</li></ul>",
+          "value": "<p><strong>Tier 1 — Gridbreakers</strong></p><p><strong>“Everything broken still remembers how it worked.”</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><p><em>You’ve learned the first law of a dead city: if it still sparks, it still negotiates.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Investigation and the Tinkering aptitude.</li><li><strong>Strategic:</strong> In Ruins or Urban Wreckage hexes, salvage and material recovery are easier and more reliable.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-gridbreakers-t1",
@@ -1696,7 +2333,7 @@
         {
           "_id": "6f3218fef0844a51",
           "name": "Gridbreakers T1 Skills",
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_book.png",
+          "img": "icons/skills/trades/electronics-tech-circuit-blue.webp",
           "type": "base",
           "system": {
             "changes": [
@@ -1706,10 +2343,17 @@
                 "value": 1,
                 "phase": "initial",
                 "priority": 20
+              },
+              {
+                "key": "system.skills.tinkering.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
               }
             ]
           },
-          "disabled": false,
+          "disabled": true,
           "duration": {
             "value": null,
             "units": "seconds",
@@ -1729,17 +2373,6 @@
               }
             }
           },
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885486,
-            "modifiedTime": 1784177885486
-          },
           "start": {
             "combat": null,
             "round": 0,
@@ -1750,7 +2383,17 @@
           },
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!CuT00m7owCxnKMjG.gfogUn2SvS60SwCd.6f3218fef0844a51"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989074830,
+            "modifiedTime": 1792989606897,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "zTIK0Adw1QsRQovv",
@@ -1799,31 +2442,24 @@
           "vocabScrub": "2026-05-16"
         }
       },
-      "_stats": {
-        "compendiumSource": "Item.R5IdXPaz6194RRcy",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.R5IdXPaz6194RRcy",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885486,
-        "modifiedTime": 1784177885486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
-        "bytUGWIOqq9eT7Or": 3
+        "FKSQOY3vDSH1mLWk": 3
       },
-      "_id": "gfogUn2SvS60SwCd",
+      "_id": "1ly0j3FhatvqSVi5",
       "sort": 0,
-      "_key": "!actors.items!CuT00m7owCxnKMjG.gfogUn2SvS60SwCd"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989074830,
+        "modifiedTime": 1792989074830,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Occult Association: Prophet / Oracle (Tier 1)",
@@ -1837,7 +2473,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 \u2014 Prophet / Oracle</strong></p><p><strong>\u201cYou don\u2019t know the future. You just know when something has started.\u201d</strong></p><p>At Tier 1, you begin catching the edge of events before they fully arrive. Not enough to command them. Enough to stop being surprised.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> and <strong>Perception</strong></li><li>1/Soma Break, ask the GM one focused omen-question about an immediate situation, route, or known danger; the answer should be truthful but limited, symbolic, or pressure-based</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a planning-heavy, reconnaissance, or intrigue-forward action, gain <strong>+2</strong> to one relevant OP roll by declaring what sign your faction is acting on</li></ul><p><strong>Cost:</strong> early warning is rarely comfortable. Expect unease, distraction, or tension when you sense something going wrong before anyone else can justify reacting to it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Omen Question</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;\u00b7&nbsp; <strong>Action:</strong> Free &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Ask the GM one focused omen-question. Truthful but limited / symbolic / pressure-based.</div>\n</div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Prophet / Oracle</strong></p><p><strong>“You don’t know the future. You just know when something has started.”</strong></p><p>At Tier 1, you begin catching the edge of events before they fully arrive. Not enough to command them. Enough to stop being surprised.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> and <strong>Perception</strong></li><li>1/Soma Break, ask the GM one focused omen-question about an immediate situation, route, or known danger; the answer should be truthful but limited, symbolic, or pressure-based</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per turn, before a planning-heavy, reconnaissance, or intrigue-forward action, gain <strong>+2</strong> to one relevant OP roll by declaring what sign your Domain is acting on</li></ul><p><strong>Cost:</strong> early warning is rarely comfortable. Expect unease, distraction, or tension when you sense something going wrong before anyone else can justify reacting to it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Omen Question</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Ask the GM one focused omen-question. Truthful but limited / symbolic / pressure-based.</div>\n</div>",
           "chat": ""
         },
         "advancement": {},
@@ -2078,10 +2714,10 @@
       },
       "effects": [
         {
-          "name": "Occult Tier1 Proficiencies",
+          "name": "Occult Tier 1 Proficiencies",
           "disabled": false,
           "transfer": true,
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bite_animal_1.png",
+          "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
           "_id": "oracleTier1Profs",
           "type": "base",
           "system": {
@@ -2114,349 +2750,42 @@
           "statuses": [],
           "sort": 0,
           "flags": {},
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885486,
-            "modifiedTime": 1784177885486
-          },
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!CuT00m7owCxnKMjG.yfcYJRNB251JaxWk.oracleTier1Profs"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989074830,
+            "modifiedTime": 1792989607032,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
       "folder": "lDdY5NMGIgNj06vQ",
-      "_stats": {
-        "compendiumSource": "Item.jZVffPmMYjFFTfB9",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.jZVffPmMYjFFTfB9",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885486,
-        "modifiedTime": 1784177885486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
-        "bytUGWIOqq9eT7Or": 3
+        "FKSQOY3vDSH1mLWk": 3
       },
-      "_id": "yfcYJRNB251JaxWk",
+      "_id": "UPFLvr8onzGiXeQv",
       "sort": 0,
-      "_key": "!actors.items!CuT00m7owCxnKMjG.yfcYJRNB251JaxWk"
-    },
-    {
-      "name": "Deep Well",
-      "type": "feat",
-      "img": "icons/magic/water/orb-water-bubbles.webp",
-      "folder": "QbGNBV70xh9pF0eh",
-      "system": {
-        "category": "technique",
-        "source": {
-          "custom": "BBTTCC Manifestation Techniques v1",
-          "rules": "2024",
-          "revision": 1
-        },
-        "tags": [],
-        "description": {
-          "value": "<h2>Deep Well</h2><p><em>Your reservoir of will runs deeper than most stewards'.</em></p><hr /><h3>Rules</h3><p>Your maximum <strong>Clarity</strong> increases by <strong>2</strong>. A deeper reservoir lets you hold more manifestations at once and absorb a bad misfire without running dry.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">\u2699 Applies automatically: +2 Clarity max.</p>",
-          "chat": ""
-        },
-        "identifier": "bbttcc_feat_deep_well",
-        "requirements": "",
-        "type": {
-          "value": "feat",
-          "subtype": ""
-        },
-        "prerequisites": {
-          "items": [],
-          "repeatable": false,
-          "level": null
-        },
-        "properties": []
-      },
-      "flags": {
-        "bbttcc": {
-          "pack": "bbttcc-manifestation-techniques-v1",
-          "theme": "Clarity economy"
-        },
-        "fourththing": {
-          "discipline": {
-            "passive": {
-              "clarityMaxBonus": 2
-            }
-          }
-        }
-      },
-      "effects": [],
-      "sort": 0,
-      "ownership": {
-        "default": 0,
-        "bytUGWIOqq9eT7Or": 3
-      },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885486,
-        "modifiedTime": 1784177885486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989074830,
+        "modifiedTime": 1792989074830,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_id": "Y8p020BK6d62yy43",
-      "_key": "!actors.items!CuT00m7owCxnKMjG.Y8p020BK6d62yy43"
-    },
-    {
-      "name": "Lens Ledger",
-      "type": "feat",
-      "img": "icons/sundries/books/book-eye-pink.webp",
-      "system": {
-        "category": "technique",
-        "source": {
-          "revision": 1,
-          "rules": "2025",
-          "custom": "Bad Eden Originals"
-        },
-        "tags": [],
-        "description": {
-          "value": "<p><em>You keep a quiet accounting of what should have gone wrong.</em></p><p>When you use a <strong>refraction die</strong> from Foresight Refraction to alter a roll and the result changes a <strong>failure into a success</strong>, mark one tally in your <strong>ledger</strong>.</p><ul><li>At the end of the scene, if you have at least <strong>2 tallies</strong>, you gain  before a future scene (chosen by you) as the timeline pre-cooperates with your entry.</li><li>After you receive this initiative bonus once, your ledger resets to 0 tallies.</li></ul><p>This is purely narrative bookkeeping: you\u2019re getting credit for every disaster you quietly deflected.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlForesightLedger\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Lens Ledger</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Tally-based &nbsp;\u00b7&nbsp; <strong>Action:</strong> Free (passive bookkeeping) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When a Foresight Refraction die converts a failure into a success, mark a tally. With 2+ tallies at scene end, gain an initiative bonus on a future scene of your choice; ledger then resets to 0.</div>\n</div>",
-          "chat": ""
-        },
-        "activities": {},
-        "uses": {
-          "spent": 0,
-          "recovery": [],
-          "max": ""
-        },
-        "advancement": {},
-        "identifier": "wyrdlens-refraction-foresight-lens-ledger",
-        "crewed": false,
-        "enchant": {},
-        "prerequisites": {
-          "items": [],
-          "repeatable": false,
-          "level": 3
-        },
-        "properties": [],
-        "requirements": "Wyrdlens Adept 3, Refraction of Foresight",
-        "type": {
-          "value": "",
-          "subtype": ""
-        }
-      },
-      "effects": [],
-      "folder": "bfvmbtbYMd6cxsV2",
-      "flags": {
-        "bbttcc": {
-          "subclassKey": "wyrdlens_refraction_foresight",
-          "featureKey": "lens_ledger"
-        },
-        "dnd5e": {}
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885486,
-        "modifiedTime": 1784177885486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
-      "ownership": {
-        "default": 0,
-        "4Bs2J1tHpG4PGQHY": 3,
-        "PEWWUtMPC7h7WMIt": 3,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "sort": 300000,
-      "_id": "bhZYy3lGyA5mi8Jo",
-      "_key": "!actors.items!CuT00m7owCxnKMjG.bhZYy3lGyA5mi8Jo"
-    },
-    {
-      "name": "Foresight Refraction (Bad Eden)",
-      "type": "feat",
-      "img": "icons/sundries/flags/banner-symbol-eye-purple.webp",
-      "system": {
-        "category": "technique",
-        "source": {
-          "revision": 1,
-          "rules": "2025",
-          "custom": "Bad Eden Originals"
-        },
-        "tags": [],
-        "description": {
-          "value": "<p><em>Precognition through a repaired pane.</em></p><p>At the start of a <strong>scene</strong> (combat encounter, tense negotiation, or major exploration beat), roll <strong>2d20</strong> in secret and record the results as <strong>refraction dice</strong>.</p><ul><li>Before any creature (including you) rolls a 2d10x10 for an attack, attribute check, or defense check, you may choose to <strong>replace</strong> that roll with one of your stored refraction dice.</li><li>You must decide before the 2d10x10 is rolled. Once used, a refraction die is expended.</li><li>You refresh your refraction dice at the start of each new qualifying scene.</li></ul><p><strong>Strategic Layer.</strong> Once per <strong>Strategic Turn</strong>, you may spend <strong>1 Intrigue OP</strong> to force an enemy faction to <strong>reroll</strong> one of its strategic 2d10x10-based checks (GM chooses the exact check if multiple candidates exist). You must accept the new result.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlForesightRefr\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Foresight Refraction</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 2d20/scene + 1/Strategic Turn &nbsp;\u00b7&nbsp; <strong>Action:</strong> Free (declare before 2d10x10) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">At scene start, roll 2d20 in secret as refraction dice. Before any 2d10x10 (yours or anyone's) replace it with one stored die \u2014 declared before the roll. Strategic: 1/Turn, spend 1 Intrigue OP to force an enemy faction reroll.</div>\n</div>",
-          "chat": ""
-        },
-        "activities": {},
-        "uses": {
-          "spent": 0,
-          "recovery": [],
-          "max": ""
-        },
-        "advancement": {},
-        "identifier": "wyrdlens-refraction-foresight-refraction",
-        "crewed": false,
-        "enchant": {},
-        "prerequisites": {
-          "items": [],
-          "repeatable": false,
-          "level": 3
-        },
-        "properties": [],
-        "requirements": "Wyrdlens Adept 3, Refraction of Foresight",
-        "type": {
-          "value": "",
-          "subtype": ""
-        }
-      },
-      "effects": [],
-      "folder": "bfvmbtbYMd6cxsV2",
-      "flags": {
-        "bbttcc": {
-          "subclassKey": "wyrdlens_refraction_foresight",
-          "featureKey": "foresight_refraction"
-        },
-        "dnd5e": {}
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885486,
-        "modifiedTime": 1784177885486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
-      "ownership": {
-        "default": 0,
-        "4Bs2J1tHpG4PGQHY": 3,
-        "PEWWUtMPC7h7WMIt": 3,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "sort": 200000,
-      "_id": "rSb0gbBNDjn4DQ7C",
-      "_key": "!actors.items!CuT00m7owCxnKMjG.rSb0gbBNDjn4DQ7C"
-    },
-    {
-      "_id": "CUQOQms5gk0OCxp6",
-      "name": "Savant",
-      "type": "class",
-      "img": "icons/skills/trades/academics-book-study-runes.webp",
-      "system": {
-        "category": "calling",
-        "identifier": "calling-savant",
-        "source": "Callings",
-        "tags": [
-          "calling",
-          "savant",
-          "mind"
-        ],
-        "description": {
-          "value": "<p><em>\"It's not obscure. You just haven't read it.\"</em></p><p><strong>Savant</strong> is the Mind Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: scholar, engineer, medic, archivist, detective, translator. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Library-Brain:</strong> Lore and Investigation checks never fumble; identifies items of tier \u2264 own tier on sight (at Tier III, including technomagical origin).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Lore</strong> rank = tier; secondary <strong>Investigation</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy or Soft Power (GM picks by job)</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Wyrdlens Adept or Cosmic Linguist. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
-          "chat": ""
-        }
-      },
-      "effects": [],
-      "folder": null,
-      "sort": 500000,
-      "ownership": {
-        "default": 0,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "flags": {
-        "bbttcc": {
-          "kind": "calling"
-        },
-        "fourththing": {
-          "calling": {
-            "key": "savant",
-            "faculty": "mind",
-            "signature": "lore",
-            "secondary": "investigation",
-            "pool": "Economy or Soft Power (GM picks by job)",
-            "awakens": "Wyrdlens Adept or Cosmic Linguist"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885486,
-        "modifiedTime": 1784177885486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_key": "!actors.items!CuT00m7owCxnKMjG.CUQOQms5gk0OCxp6"
-    },
-    {
-      "_id": "v6Zticfjn0qAN2L8",
-      "name": "Savant \u2014 Apprentice (Tier I)",
-      "type": "feature",
-      "img": "icons/skills/trades/academics-book-study-runes.webp",
-      "system": {
-        "category": "calling",
-        "source": "Callings",
-        "tags": [
-          "calling",
-          "savant",
-          "tier-1"
-        ],
-        "description": {
-          "value": "<p><strong>Savant \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Appraise / identify:</strong> What it is, what it's worth, whether it's what the seller claims. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick \u2014 I've Read About This</strong> <em>(1/scene)</em>: Explain the situation; one ally gets +2 on their next relevant check.</p>",
-          "chat": ""
-        }
-      },
-      "effects": [],
-      "folder": null,
-      "sort": 501000,
-      "ownership": {
-        "default": 0,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "flags": {
-        "fourththing": {
-          "calling": {
-            "key": "savant",
-            "tier": 1
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885486,
-        "modifiedTime": 1784177885486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "_key": "!actors.items!CuT00m7owCxnKMjG.v6Zticfjn0qAN2L8"
+      }
     }
   ],
   "effects": [],
@@ -2464,15 +2793,16 @@
   "sort": 187500,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177885486,
-    "modifiedTime": 1784177885486,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989074830,
+    "modifiedTime": 1792989074833,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

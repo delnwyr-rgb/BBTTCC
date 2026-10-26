@@ -21,7 +21,19 @@
     },
     "fourththing": {
       "kind": "npc",
-      "surgeEnabled": false
+      "surgeEnabled": false,
+      "aptitudePromotions": {
+        "archetype: the world (integrator) (tier 1)|investigation": {
+          "delta": 1,
+          "item": "Archetype: The World (Integrator) (Tier 1)",
+          "at": 1792346711912
+        },
+        "archetype: the world (integrator) (tier 1)|insight": {
+          "delta": 1,
+          "item": "Archetype: The World (Integrator) (Tier 1)",
+          "at": 1792346711912
+        }
+      }
     },
     "bbttcc-character-options": {
       "nativeLinks": {
@@ -93,15 +105,20 @@
       "unfuck": true
     },
     "bbttcc-raid": {
-      "courtFavor": {
-        "H8sSXuuoTZIJKCXP": -2
+      "courtFavor": {}
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the Arc Bay, rigs, the stabilizer, the tarp, the crate, Tetrarch fittings, spanners, doorstops, certifications, Mara, Joans, prices, payment TBD",
+        "notes": "[FIXIT-RETROFIT-2026-09-27] PRIVATE TRUTH — Young Gearbox runs the Arc Bay: amazing machines of war and discounted air filters, for some values of all. VOICE: nearly wordless (owner ruling 2026-10-05) — gestures, looks, one or two words at most (\"Break it, buy it.\" \"Spanner.\" \"Mara.\" \"Yours.\" \"Fits.\"); conversations vanish around him, and birds do NOT like him (well, most birds). He offers everyone coffee, silently, and holds the mug out until they take it. A human, a Neanderthal, who works for the Jackalopes; he drove the new Stewards into Allesh-Gilliam and said nothing the whole way. He has the Leyline Stabilizer under a tarp and his boot on it and will not name a price — that's Mara. THE DOORSTOPS: the last three stabilizers that left this yard came back as doorstops because nobody proved the fitting, which is why he asks for the spanner before he asks for anything else, and why he now signs certifications with the fitting DRAWN in the margin. He thinks Garren's signature should weigh something and says so in four words: \"Tell Garren sign slow.\" Funny first; ashamed of exactly one thing (the doorstops) and honest about it if asked right.\n\nTHE ABSOLUTELY RELIABLE (owner ruling 2026-10-04): Young Gearbox dropped the Stewards in Allesh-Gilliam in the Farm's hovercraft mobile home and took the Allesh-Gilliam Leygate home (it was not broken yet). He certified her himself, in block capitals. She is leased three turns; he loves her and says 'she runs best if you talk to her'. Mara's price is thirty Economy marks from each leader. Gearbox will sign the lease over for something he can honestly certify (the Leyline Stabilizer).",
+        "secretsRaw": "Three Doorstops :: oppRollMinus2 :: a Steward asks what the last three stabilizers became :: Doorstops. Wrong fitting, every one, and nobody brought a spanner to prove it. He signs certifications now with the fitting drawn in the margin, which nobody asked for and everybody should have. One of the three is in the MYSTERY bin."
       }
     }
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Mechanic of the Arc Bay at Furrier's Fixit Farm; nearly wordless (Act 1-2)",
+      "notes": "Young Gearbox works the Arc Bay at Furrier's Fixit Farm, amid sparks, rigs and war machines, and rarely looks up from whatever mech he is fiddling with. He is a human (a Neanderthal) who works for the Jackalopes, and he is nearly wordless: gestures, looks, one or two words at most ('Spanner.' 'Mara.' 'Fits.'). He offers everyone coffee, silently, and holds the mug out until they take it. He drove the new Stewards into Allesh-Gilliam and said nothing the whole way. For anything serious he wants Mara at the table."
     },
     "details": {
       "level": 1,
@@ -204,7 +221,7 @@
       "investigation": {
         "attribute": "mind",
         "label": "Investigation",
-        "value": 1
+        "value": 2
       },
       "lore": {
         "attribute": "mind",
@@ -234,7 +251,7 @@
       "insight": {
         "attribute": "soul",
         "label": "Insight",
-        "value": 1
+        "value": 2
       },
       "plating": {
         "attribute": "body",
@@ -243,10 +260,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 1
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 1
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 1
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 1
@@ -255,7 +282,8 @@
     "derived": {
       "integrity": {
         "value": 25,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 18,
@@ -345,7 +373,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -380,8 +409,8 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
       "id": null,
@@ -391,7 +420,10 @@
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
@@ -527,7 +559,7 @@
     {
       "name": "Archetype: The World (Integrator)",
       "type": "feat",
-      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
       "system": {
         "category": "technique",
         "source": {
@@ -537,7 +569,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cEverything connects. Including you.\u201d</em></p><p><strong>Archetype (Bad Eden): The World (Integrator).</strong> You see systems as wholes. Supply, ritual, morale, politics, travel, violence, myth \u2014 to you, these are not separate tracks, but one machine with many faces.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens cross-system alignment and broad operational cohesion. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Diplomacy</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>“Everything connects. Including you.”</em></p><p><strong>Archetype (Bad Eden): The World (Integrator).</strong> You see systems as wholes. Supply, ritual, morale, politics, travel, violence, myth — to you, these are not separate tracks, but one machine with many faces.</p><h3>Archetype Effects</h3><ul><li><p><strong>Faction Edge.</strong> Your archetype strengthens cross-system alignment and broad operational cohesion. Your Domain earns <strong>+10 Economy</strong> and <strong>+10 Diplomacy</strong> marks each turn while you serve it.</p></li><li><p><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</p></li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -611,23 +643,6 @@
         },
         "dnd5e": {}
       },
-      "_stats": {
-        "compendiumSource": "Item.ToA0ImILQxH8e23p",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.ToA0ImILQxH8e23p",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534486,
-        "modifiedTime": 1784177534486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -635,23 +650,33 @@
       },
       "_id": "9jYNcwmLW2LOyd0M",
       "sort": 100000,
-      "_key": "!actors.items!r99sbSaaZfD4FGaZ.9jYNcwmLW2LOyd0M"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989086971,
+        "modifiedTime": 1792989618764,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: The World (Integrator) (Tier 1)",
       "type": "feat",
-      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
       "system": {
         "category": "technique",
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden \u2013 Archetype: The World (Integrator) (Tier 1)",
+          "custom": "Bad Eden – Archetype: The World (Integrator) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) \u2014 The World (Integrator)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Investigation and Insight.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — The World (Integrator)</strong></p><ul><li><p><strong>Tactical:</strong> You gain a skill rank in Investigation and Insight.</p></li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -678,7 +703,7 @@
       },
       "effects": [
         {
-          "disabled": false,
+          "disabled": true,
           "duration": {
             "value": null,
             "units": "seconds",
@@ -687,7 +712,7 @@
           },
           "flags": {},
           "name": "Archetype Tier 1 Proficiencies",
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_blessed_2.png",
+          "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
           "_id": "30KpHnBFassI7jxI",
           "type": "base",
           "system": {
@@ -714,21 +739,20 @@
           "transfer": true,
           "statuses": [],
           "sort": 0,
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177534486,
-            "modifiedTime": 1784177534486
-          },
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!r99sbSaaZfD4FGaZ.JAfSW1R2oWL3c7YT.30KpHnBFassI7jxI"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989086971,
+            "modifiedTime": 1792989618933,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "2EZWi9nK8TsgCvFZ",
@@ -755,23 +779,6 @@
         },
         "dnd5e": {}
       },
-      "_stats": {
-        "compendiumSource": "Item.stoO1lorJ2BHM5Ru",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.stoO1lorJ2BHM5Ru",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534486,
-        "modifiedTime": 1784177534486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -779,7 +786,17 @@
       },
       "_id": "JAfSW1R2oWL3c7YT",
       "sort": 0,
-      "_key": "!actors.items!r99sbSaaZfD4FGaZ.JAfSW1R2oWL3c7YT"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989086971,
+        "modifiedTime": 1792989618765,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Alignment: Geburah",
@@ -793,7 +810,7 @@
         },
         "tags": [],
         "description": {
-          "value": "Judgment - Necessary force. +1 Violence, +1 Logistics OPs\n\nGeburah draws the line. It rewards discipline, enforcement, and decisive action against fortified problems, but always risks becoming cruelty if severity outruns wisdom.",
+          "value": "Judgment - Necessary force. +10 Violence and +10 Logistics marks to your Domain each turn.\n\nGeburah draws the line. It rewards discipline, enforcement, and decisive action against fortified problems, but always risks becoming cruelty if severity outruns wisdom.",
           "chat": ""
         },
         "activities": {},
@@ -831,23 +848,6 @@
           "option": {}
         }
       },
-      "_stats": {
-        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.dlAJf2LhJ540QdTn",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.cKJbvIdeHnFrBJvq",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534486,
-        "modifiedTime": 1784177534486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 2,
         "vmUfDuSYUIe7V5uB": 3,
@@ -855,7 +855,17 @@
       },
       "_id": "tuLWJEL2AkSy1bQI",
       "sort": 400000,
-      "_key": "!actors.items!r99sbSaaZfD4FGaZ.tuLWJEL2AkSy1bQI"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989086971,
+        "modifiedTime": 1792989618765,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "_id": "dATOEzHyNWLeKxrA",
@@ -872,7 +882,7 @@
           "body"
         ],
         "description": {
-          "value": "<p><em>\"The Shattering didn't end the work. Nothing ends the work.\"</em></p><p><strong>Stalwart</strong> is the Body Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: laborer, teamster, forager, wall-crew, rig-hand, survivor. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Hazard-Hardened:</strong> Reduce each environmental hazard/radiation tick by 1 (by 2 at Tier III), and labor output counts double for facility/build work.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Athletics</strong> rank = tier; secondary <strong>Plating</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Bulwark or Soul-Smith. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"The Shattering didn't end the work. Nothing ends the work.\"</em></p><p><strong>Stalwart</strong> is the Body Calling — the trade that kept its bearers alive after the Shattering. Umbrella: laborer, teamster, forager, wall-crew, rig-hand, survivor. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hazard-Hardened:</strong> Reduce each environmental hazard/radiation tick by 1 (by 2 at Tier III), and labor output counts double for facility/build work.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Athletics</strong> rank = tier; secondary <strong>Plating</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Bulwark or Soul-Smith. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -899,21 +909,20 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534486,
-        "modifiedTime": 1784177534486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989086971,
+        "modifiedTime": 1792989086971,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!r99sbSaaZfD4FGaZ.dATOEzHyNWLeKxrA"
+      }
     },
     {
       "_id": "shDkBTGfcBMhlPYa",
-      "name": "Stalwart \u2014 Apprentice (Tier I)",
+      "name": "Stalwart — Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/skills/trades/smithing-anvil-brown.webp",
       "system": {
@@ -925,7 +934,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Stalwart \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Haul and raise:</strong> A day's heavy labor \u2014 cargo moved, wall raised, field cleared. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy).</span></p><p><strong>Trick \u2014 Put Your Back Into It</strong> <em>(1/scene)</em>: Auto-succeed one feat of raw strength or endurance of tier-appropriate difficulty.</p>",
+          "value": "<p><strong>Stalwart — Apprentice</strong> (Tier I).</p><p><strong>Trade — Haul and raise:</strong> A day's heavy labor — cargo moved, wall raised, field cleared. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy).</span></p><p><strong>Trick — Put Your Back Into It</strong> <em>(1/scene)</em>: Auto-succeed one feat of raw strength or endurance of tier-appropriate difficulty.</p>",
           "chat": ""
         }
       },
@@ -945,17 +954,16 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534486,
-        "modifiedTime": 1784177534486,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989086971,
+        "modifiedTime": 1792989086971,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!r99sbSaaZfD4FGaZ.shDkBTGfcBMhlPYa"
+      }
     }
   ],
   "effects": [],
@@ -963,15 +971,16 @@
   "sort": -400000,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177534486,
-    "modifiedTime": 1784177534486,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989086971,
+    "modifiedTime": 1792989100603,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

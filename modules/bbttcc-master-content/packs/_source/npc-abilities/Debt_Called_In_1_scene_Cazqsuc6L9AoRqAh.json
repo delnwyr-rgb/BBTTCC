@@ -1,0 +1,147 @@
+{
+  "name": "Debt Called In (1/scene)",
+  "type": "weapon",
+  "img": "icons/commodities/currency/coins-plain-pouch-gold.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "soul",
+    "skill": "channel",
+    "damage": {
+      "formula": "4d8",
+      "attribute": "soul",
+      "type": "psychic",
+      "damageFlavor": "everything owed, at once",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 6,
+      "long": 18
+    },
+    "tags": [
+      "bestiary",
+      "tier-iv",
+      "lineage-dream",
+      "boss",
+      "ultimate"
+    ],
+    "effect": "Sphere 6 squares. — targets roll vs Resolve (DC 18). Half damage on success. ULTIMATE — usable only at or below half Integrity. On a failed save the target is Restrained until the end of its next turn — held by what it owes.",
+    "flavor": "The ones who showed respect got to keep telling stories.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "restrained"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 18,
+        "saveAttributeOverrides": {}
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 18,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "sphere",
+        "size": 30
+      }
+    },
+    "description": {
+      "value": "<p><strong>Area Attack.</strong> Each creature within 6 squares. rolls vs DC 18. Damage: <code>4d8</code> psychic (everything owed, at once). ULTIMATE — usable only at or below half Integrity. On a failed save the target is Restrained until the end of its next turn — held by what it owes.</p><p><em>The ones who showed respect got to keep telling stories.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "save",
+          "aoeShape": "sphere",
+          "aoeSize": 30,
+          "dc": 18,
+          "price": {
+            "marks": 1350,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV save × 1",
+            "bound": "free",
+            "saleBack": 540
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Desenitarius Maarg"
+        ],
+        "sourceIds": [
+          "YreqW1q05O7dGoxK"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "Cazqsuc6L9AoRqAh",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069926,
+    "modifiedTime": 1792989070007,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!Cazqsuc6L9AoRqAh"
+}

@@ -44,8 +44,8 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 90,
-        "max": 90,
+        "value": 50,
+        "max": 50,
         "temp": 0
       },
       "stress": {
@@ -174,8 +174,8 @@
       "fragments": []
     },
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Humanoid",
+      "notes": "A hero who took a hex-pact to stay one. Plate, lance, visor down on whatever it decided to become. Keeps an oath nobody else remembers the wording of, and a toll on roads nobody gave it. The hex sings through the armor."
     },
     "description": "<p><strong>Concept.</strong> The one who owns the map. Keeps the crew pointed at the road and the loot pointed at the lockbox.</p>\n<p><strong>Signature.</strong> Shouts the plan loud enough that the party hears it too.</p>"
   },
@@ -238,7 +238,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. On a hit against a Prone or Restrained target, +1d4 kinetic.</p>"
+          "value": "<p><strong>Strike.</strong> reach 1 square., one target. Damage: <code>1d6</code> kinetic + violence. On a hit against a Prone or Restrained target, +1d4 kinetic.</p>"
         }
       },
       "_id": "Y1ldUVsNFqXHcISq",
@@ -433,7 +433,7 @@
               {
                 "on": "hit",
                 "if": {
-                  "weapon": "Shiv",
+                  "weapon": "Hex-Iron Lance",
                   "targetCondition": [
                     "prone",
                     "restrained"
@@ -451,12 +451,12 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1777700829085,
-        "modifiedTime": 1791331976277,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791944537751,
+        "modifiedTime": 1792989126501,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
@@ -520,7 +520,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> range 60/180 ft., one target. Damage: <code>1d8</code> kinetic + violence. On a hit, one ally bandit within 6 squares may immediately move 2 squares as a reaction — the commander's shot is the signal.</p><p><em>The one rifle in the crew with a real scope.</em></p>"
+          "value": "<p><strong>Strike.</strong> range 60/36 squares., one target. Damage: <code>1d8</code> kinetic + violence. On a hit, one ally bandit within 6 squares may immediately move 2 squares as a reaction — the commander's shot is the signal.</p><p><em>The one rifle in the crew with a real scope.</em></p>"
         }
       },
       "_id": "pqApYYEAoQ3PDYGs",
@@ -715,23 +715,24 @@
               {
                 "on": "hit",
                 "if": {
-                  "weapon": "Pipe Rifle"
+                  "weapon": "Scatter Carbine"
                 },
                 "do": {
                   "prompt": "Signal shot: one ally bandit within 6 sq may move 2 sq as a reaction."
-                }
+                },
+                "narrative": true
               }
             ]
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1777700829085,
-        "modifiedTime": 1791331976277,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791944537751,
+        "modifiedTime": 1792989126501,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
@@ -795,7 +796,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> reach 5 ft., one target. Damage: <code>1d6</code> kinetic + violence. Bonus action, only after a Shiv hit this turn, same target. Damage die rerolls the highest.</p><p><em>The off hand is the bad hand.</em></p>"
+          "value": "<p><strong>Strike.</strong> reach 1 square., one target. Damage: <code>1d6</code> kinetic + violence. Bonus action, only after a Shiv hit this turn, same target. Damage die rerolls the highest.</p><p><em>The off hand is the bad hand.</em></p>"
         }
       },
       "_id": "ZpkytQ1MAlZsH02a",
@@ -990,7 +991,7 @@
               {
                 "on": "attack",
                 "if": {
-                  "weapon": "Shiv (Offhand)"
+                  "weapon": "Hex-Iron Dirk"
                 },
                 "do": {
                   "reroll": "damage-highest"
@@ -1001,12 +1002,12 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1777700829085,
-        "modifiedTime": 1791331976277,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791944537751,
+        "modifiedTime": 1792989126501,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
@@ -1035,14 +1036,46 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "zero",
+                "do": {
+                  "heal": 1,
+                  "bankBonus": {
+                    "bonus": 2,
+                    "context": "attack",
+                    "note": "the oath tries one more thing"
+                  }
+                },
+                "to": "self",
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                },
+                "label": "Sworn"
+              }
+            ]
+          },
+          "grants": {
+            "conditionImmunities": [
+              "charmed",
+              "compelled",
+              "shaken"
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.368",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.5",
-        "createdTime": 1777700829085,
-        "modifiedTime": 1791422258655,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791944537751,
+        "modifiedTime": 1792989126500,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
@@ -1060,7 +1093,7 @@
           "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p>Immune to Shaken. If reduced below half Integrity the hex takes the reins: the Hexknight's attack rolls reroll the lowest die for the rest of the scene, and it can no longer disengage or retreat.</p>",
+          "value": "<p>If reduced below half Integrity the hex takes the reins: the Hexknight's attack rolls reroll the lowest die for the rest of the scene, and it can no longer disengage or retreat.</p><p><em>The armour decides. The knight is informed.</em></p>",
           "chat": ""
         }
       },
@@ -1071,14 +1104,39 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "do": {
+                  "reroll": "attack"
+                },
+                "label": "Pact-Iron Resolve — the hex takes the reins",
+                "if": {
+                  "ownerBloodied": true
+                }
+              },
+              {
+                "on": "bloodied",
+                "do": {
+                  "prompt": "The hex takes the reins: the Hexknight can no longer disengage or retreat."
+                },
+                "narrative": true
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.368",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1777700829085,
-        "modifiedTime": 1791331976278,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791944537751,
+        "modifiedTime": 1792989126500,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
@@ -1088,12 +1146,13 @@
   "effects": [],
   "ownership": {
     "default": 0,
-    "PEWWUtMPC7h7WMIt": 3
+    "PEWWUtMPC7h7WMIt": 3,
+    "bytUGWIOqq9eT7Or": 3
   },
   "_id": "QiFWQHYcmDZyUAuI",
   "prototypeToken": {
     "name": "Hexknight",
-    "displayName": 0,
+    "displayName": 30,
     "actorLink": false,
     "width": 1,
     "height": 1,
@@ -1112,7 +1171,7 @@
     "rotation": 0,
     "alpha": 1,
     "disposition": -1,
-    "displayBars": 0,
+    "displayBars": 30,
     "bar1": {
       "attribute": null
     },
@@ -1145,7 +1204,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -1232,7 +1291,20 @@
           }
         }
       },
-      "creatureType": "humanoid"
+      "creatureType": "humanoid",
+      "kind": "monster"
     }
-  }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791944537751,
+    "modifiedTime": 1792989126375,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!QiFWQHYcmDZyUAuI"
 }

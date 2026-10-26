@@ -7,7 +7,7 @@
     "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Sephirotic Scion heritage: Ophanic.</p><p><em>“The wheels were full of eyes. You never stop turning. You never stop seeing.”</em></p><p><strong>Sephirotic Scion (Ophanic).</strong> Your blood runs rotating. The Ophanim are wheels-and-eyes — motion, sight, the order that is always already looking both ways. You are descended from a thing that could not be snuck up on because it had no back. You kept some of that. Not all. Enough.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic Scion).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Sephirotic Scion does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Sephirotic Scion Core: The Higher Register</h3><p><em>Shared across all Sephirotic Scion heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Sephirotic Physiology.</strong> You have resistance to sephirotic damage. Your blood runs a little bright under the right light; you do not technically age while on consecrated ground.</p></li><li><p><strong>Sefirot Attunement.</strong> At creation, pick one sephirah (player choice). Once per scene, you can invoke its register and gain a +1 rank bonus to one check that falls clearly within that sephirah's domain.</p></li><li><p><strong>Holy Conduit.</strong> Manifestations, rituals, and other sephirotic-register effects that target you or pass through your space treat their effective caster-attribute as +1 for the duration of that effect. Works on allies and on you; does not work on qliphothic-register effects.</p></li><li><p><strong>Light of Harmony.</strong> When two or more creatures within 6 squares of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity. This refreshes when a new agreement is reached between different creatures.</p></li></ul><h3>Ophanic Traits</h3><ul><li><p><strong>Wheel-and-Eye.</strong> You can see invisible creatures and objects within 6 squares as dimly lit shapes. You cannot be flanked.</p></li><li><p><strong>Concentric Sight.</strong> You reroll the lowest die on Mind (Perception) checks that involve noticing movement, pattern, or change over time. You roll 3d10 keep lowest 2 on Mind (Perception) checks to notice things that have been perfectly still since before you started looking — you see motion, not furniture.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Violence OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Battlefield / Procession / High-Traffic</em> hexes, your faction's observation and counter-intel operations gain +2 on the success check.</p></li><li><p><strong>Turning Witness.</strong> Once per Strategic Turn, you may observe one exchange of goods, intelligence, or personnel between two rival factions within your field of influence. You learn that it happened and between whom, though not necessarily what was exchanged.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Sefirot Attunement</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Free (declare before roll)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Invoke your chosen sephirah for +1 rank bonus on a check clearly in its domain.</span></p></div>",
+      "value": "<p><em>“The wheels were full of eyes. You never stop turning. You never stop seeing.”</em></p><p><strong>Sephirotic Scion (Ophanic).</strong> Your blood runs rotating. The Ophanim are wheels-and-eyes — motion, sight, the order that is always already looking both ways. You are descended from a thing that could not be snuck up on because it had no back. You kept some of that. Not all. Enough.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic Scion).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Sephirotic Scion does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Sephirotic Scion Core: The Higher Register</h3><p><em>Shared across all Sephirotic Scion heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Sephirotic Physiology.</strong> You have resistance to sephirotic damage. Your blood runs a little bright under the right light; you do not technically age while on consecrated ground.</p></li><li><p><strong>Sefirot Attunement.</strong> At creation, pick one sephirah (player choice). Once per scene, you can invoke its register and gain a +1 rank bonus to one check that falls clearly within that sephirah's domain.</p></li><li><p><strong>Holy Conduit.</strong> Manifestations, rituals, and other sephirotic-register effects that target you or pass through your space treat their effective caster-attribute as +1 for the duration of that effect. Works on allies and on you; does not work on qliphothic-register effects.</p></li><li><p><strong>Light of Harmony.</strong> When two or more creatures within 6 squares of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity. This refreshes when a new agreement is reached between different creatures.</p></li></ul><h3>Ophanic Traits</h3><ul><li><p><strong>Wheel-and-Eye.</strong> You can see invisible creatures and objects within 6 squares as dimly lit shapes. You cannot be flanked.</p></li><li><p><strong>Concentric Sight.</strong> You reroll the lowest die on Mind (Perception) checks that involve noticing movement, pattern, or change over time. You roll 3d10 keep lowest 2 on Mind (Perception) checks to notice things that have been perfectly still since before you started looking — you see motion, not furniture.</p></li></ul><h3>Domain Edge</h3><ul><li><p><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Violence marks</strong> and <strong>+20 Intrigue marks</strong> at campaign start.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Sefirot Attunement</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Free (declare before roll)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Invoke your chosen sephirah for +1 rank bonus on a check clearly in its domain.</span></p></div>",
       "chat": ""
     },
     "advancement": [
@@ -46,66 +46,39 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "species"
-    },
     "bbttcc": {
       "kind": "heritage",
       "family": "sephirotic_scion",
       "lineage": "Ophanic",
       "version": "1.1.0",
       "date": "2026-04-19",
-      "rfiNative": true,
-      "opEffects": {
-        "intrigue": 2,
-        "violence": 1
-      }
+      "rfiNative": true
     },
     "fourththing": {
       "rerolls": [
         {
           "context": "check",
           "skill": "perception",
-          "mode": "reroll-lowest"
+          "mode": "reroll-lowest",
+          "note": "Concentric Sight — movement, pattern, change over time"
         },
         {
           "context": "check",
           "attribute": "mind",
-          "mode": "reroll-lowest"
+          "mode": "reroll-lowest",
+          "note": ""
         },
         {
           "context": "check",
           "skill": "perception",
           "mode": "reroll-highest",
-          "note": "on Mind (Perception) checks to notice things that have been perfectly still s…"
+          "note": "Mind (Perception) checks to notice things that have been perfectly still s"
         },
         {
           "context": "check",
           "attribute": "mind",
           "mode": "reroll-highest",
-          "note": "on Mind (Perception) checks to notice things that have been perfectly still s…"
-        },
-        {
-          "context": "check",
-          "skill": "perception",
-          "mode": "reroll-lowest"
-        },
-        {
-          "context": "check",
-          "attribute": "mind",
-          "mode": "reroll-lowest"
-        },
-        {
-          "context": "check",
-          "skill": "perception",
-          "mode": "reroll-highest",
-          "note": "Mind (Perception) checks to notice things that have been perfectly still sinc…"
-        },
-        {
-          "context": "check",
-          "attribute": "mind",
-          "mode": "reroll-highest",
-          "note": "Mind (Perception) checks to notice things that have been perfectly still sinc…"
+          "note": "Mind (Perception) checks to notice things that have been perfectly still s"
         }
       ],
       "resourceGrants": [
@@ -118,17 +91,6 @@
           "cadence": "per-campaign-start",
           "resource": "intrigue-op",
           "amount": 2
-        }
-      ],
-      "triggers": [
-        {
-          "event": "on-agreement",
-          "effect": {
-            "kind": "chat-prompt",
-            "args": {
-              "body": "Light of Harmony. When two or more creatures within 30 feet of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity"
-            }
-          }
         }
       ]
     },
@@ -321,12 +283,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776660294467,
-    "modifiedTime": 1782167240110,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988987474,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

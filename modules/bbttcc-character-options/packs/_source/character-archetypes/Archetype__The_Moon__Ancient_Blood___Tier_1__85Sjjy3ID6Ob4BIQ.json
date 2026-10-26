@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 (Level 1) — The Moon</strong></p><ul><li><strong>Tactical:</strong> You learn Message and gain a skill rank in Lore.</li><li><strong>Strategic:</strong> Soft Power OP cap +2.</li></ul>",
+      "value": "<p><strong>Tier 1 (Level 1) — The Moon</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Lore.</li><li><strong>Strategic:</strong> Your Domain's Soft Power marks cap rises by 20.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -37,7 +37,53 @@
       "subtype": ""
     }
   },
-  "effects": [],
+  "effects": [
+    {
+      "_id": "rtoKo5b0S4LqPeo9",
+      "name": "Archetype Tier 1 Proficiencies",
+      "img": "icons/magic/nature/moon-crescent.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.lore.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989154517,
+        "modifiedTime": 1792989154517,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
   "folder": "MGGAcIKk1sO8TgSt",
   "flags": {
     "bbttcc-character-options": {
@@ -61,7 +107,10 @@
     },
     "dnd5e": {},
     "fourththing": {
-      "vocabScrub": "2026-05-16"
+      "vocabScrub": "2026-05-16",
+      "domainCapBonus": {
+        "softpower": 20
+      }
     }
   },
   "_stats": {
@@ -74,12 +123,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986778048,
-    "modifiedTime": 1782167238586,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989154344,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

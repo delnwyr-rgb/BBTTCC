@@ -5,8 +5,8 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
-      "revision": 2,
+      "custom": "Bad Eden Core Feats (Batch 3)",
+      "revision": 1,
       "rules": "2026"
     },
     "tags": [],
@@ -43,7 +43,6 @@
       "featNumber": 45,
       "generatedAt": "2026-01-19T05:04:20.693394Z"
     },
-    "fourththing": {},
     "autoanimations": {
       "id": "ft-last-exit",
       "label": "Last Exit",
@@ -220,6 +219,48 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "fourththing": {
+      "triggers": [
+        {
+          "event": "on-would-gain-condition",
+          "predicate": {
+            "tag": [
+              "restrained",
+              "prone"
+            ]
+          },
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "negate-condition",
+            "args": {}
+          }
+        },
+        {
+          "event": "on-would-gain-condition",
+          "predicate": {
+            "tag": [
+              "restrained",
+              "prone"
+            ]
+          },
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "displace-token",
+            "args": {
+              "who": "self",
+              "squares": 2,
+              "mode": "shift"
+            }
+          }
+        }
+      ]
     }
   },
   "_id": "dJAoJ1cXbBR7miaX",
@@ -233,11 +274,11 @@
     "compendiumSource": "Item.dJAoJ1cXbBR7miaX",
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.3",
     "createdTime": 1768802465828,
-    "modifiedTime": 1782164185978,
+    "modifiedTime": 1791412962510,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!dJAoJ1cXbBR7miaX"

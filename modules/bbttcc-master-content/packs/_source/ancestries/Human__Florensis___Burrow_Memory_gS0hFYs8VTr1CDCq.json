@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You can smell safe paths.”</em></p>\n        <p><strong>Burrow Memory.</strong> You reroll the lowest die on Athletics checks, and you ignore difficult terrain in caves, tunnels, and ruins.</p>",
+      "value": "\n<p><em>“You can smell safe paths.”</em></p>\n        <p><strong>Burrow Memory.</strong> You reroll the lowest die on Athletics checks, and you ignore difficult terrain in caves, tunnels, and ruins.</p>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 11
     },
     "properties": [],
     "requirements": "Human",
@@ -41,7 +41,6 @@
       "kind": "human",
       "feature": "burrow_memory",
       "lineage": "Florensis",
-      "tierLevel": 11,
       "version": "1.0.0"
     },
     "fourththing": {
@@ -67,12 +66,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004105807,
-    "modifiedTime": 1781116091806,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988982699,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

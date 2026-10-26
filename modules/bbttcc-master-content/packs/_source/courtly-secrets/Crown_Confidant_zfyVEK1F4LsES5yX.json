@@ -7,7 +7,7 @@
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p><strong>Crown Confidant.</strong> The sovereign's own ear. <em>Play:</em> queue +3 to your next courtly exchange roll.</p>",
+      "value": "<p><strong>Crown Confidant.</strong> The sovereign's own ear. <em>Play:</em> queue +3 to your next Parley roll.</p>",
       "chat": "",
       "unidentified": ""
     }
@@ -31,11 +31,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782065103711,
-    "modifiedTime": 1784079176431,
+    "modifiedTime": 1792977750584,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

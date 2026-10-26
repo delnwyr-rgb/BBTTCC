@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 32,
-        "max": 32
+        "max": 32,
+        "temp": 0
       },
       "stress": {
         "value": 16,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -137,12 +139,19 @@
       "movementBudgetFt": 30
     },
     "defenses": {
-      "resistances": [],
+      "resistances": [
+        "kinetic"
+      ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "sephirotic"
+      ]
     },
     "conditionImmunities": [],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -155,6 +164,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "Hex-touched humanoid encased in slow-growing crystal armor. Strikes from cave shadows."
     }
   },
   "flags": {
@@ -190,16 +203,19 @@
             ]
           },
           "price": {
-            "marks": 450,
-            "bounty": 450,
-            "hire": 1125,
-            "ransom": 750,
+            "marks": 10,
+            "bounty": 10,
+            "hire": 15,
+            "ransom": 15,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "TII light stealth (bestiary) \u2014 bounty 450 / hire 1125 / ransom 750 marks (paid in intrigue)"
-          }
+            "notes": "TII light hex-touched — bounty 10 / hire 15 marks; credited to the pool matching the method (default intrigue)"
+          },
+          "lineage": "hex-touched",
+          "subLineage": "crystal"
         }
-      }
+      },
+      "creatureType": "aberration"
     }
   },
   "_id": "7APmN7sGfyALCeCc",
@@ -344,6 +360,22 @@
               "tier": "II",
               "frame": "trait"
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attacked",
+                "do": {
+                  "reroll": "attack-highest"
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                },
+                "label": "Crystal Carapace — the carapace turns the first blow"
+              }
+            ]
           }
         }
       },
@@ -355,17 +387,16 @@
       },
       "_id": "3bkHgvTZ1KrfFEGy",
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.5",
         "createdTime": 1780118704144,
-        "modifiedTime": 1780163238601,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1791422257933,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!7APmN7sGfyALCeCc.3bkHgvTZ1KrfFEGy"
+      }
     },
     {
       "name": "Crystal Spike",
@@ -444,11 +475,29 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack \u00d7 1",
+                "notes": "TII attack × 1",
                 "bound": "free",
                 "saleBack": 60
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Crystal Spike"
+                },
+                "do": {
+                  "dot": {
+                    "formula": "1",
+                    "type": "kinetic",
+                    "ends": "action"
+                  }
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -637,20 +686,19 @@
       },
       "_id": "d2Lv9dIjwRNeDlnv",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1780118704144,
-        "modifiedTime": 1782167242300,
+        "modifiedTime": 1791331976326,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!7APmN7sGfyALCeCc.d2Lv9dIjwRNeDlnv"
+      }
     },
     {
-      "name": "Dazzle-Burst (recharges on a Soma Break)",
+      "name": "Dazzle-Burst (recharge 5–6)",
       "type": "weapon",
       "img": "icons/magic/light/explosion-star-glow-blue-purple.webp",
       "system": {
@@ -676,7 +724,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 15 ft. \u2014 targets roll vs Resolve (DC 12). Half damage on success. Failed-save targets are Blinded until the start of their next turn. Recharge 5\u20136.",
+        "effect": "Radius 3 squares. — targets roll vs Resolve (DC 12). Half damage on success. Failed-save targets are Blinded until the start of their next turn. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
         "flavor": "The cavern catches fire. Slowly. In every direction.",
         "manifestation": {
           "tier": 1,
@@ -707,6 +755,24 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 12,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "blinded"
+            ],
+            "duration": "1-round"
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 15
           }
         },
         "description": {
@@ -732,16 +798,24 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII save \u00d7 1",
+                "notes": "TII save × 1",
                 "bound": "free",
                 "saleBack": 60
               }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
             }
           }
         },
         "autoanimations": {
           "id": "ft-dazzle-burst-recharge-5-6-",
-          "label": "Dazzle-Burst (Recharge 5\u20136)",
+          "label": "Dazzle-Burst (Recharge 5–6)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -925,17 +999,79 @@
       },
       "_id": "tWfSSGDOHF3ubR96",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118704144,
-        "modifiedTime": 1782167242301,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989138381,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
+      }
+    },
+    {
+      "name": "The Hex Tries One More Thing",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "hex-touched",
+          "crystal"
+        ],
+        "description": {
+          "value": "<p>When reduced to 0 Integrity, the creature acts for one more round with reroll-the-lowest on attacks, then drops. When a creature within 1 square drops to 0 Integrity, this one gains 5 temporary Integrity.</p><p><em>Still recognizably what it was. That is the worst part.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!7APmN7sGfyALCeCc.tWfSSGDOHF3ubR96"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "zero",
+                "do": {
+                  "heal": 1,
+                  "prompt": "The hex tries one more thing: it acts for ONE more round (reroll-the-lowest on attacks), then drops."
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                }
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "hex-touched"
+            }
+          }
+        }
+      },
+      "_id": "3QEl8ugiGS7NbAPB",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342348677,
+        "modifiedTime": 1791342348677,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -945,12 +1081,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118704144,
-    "modifiedTime": 1783219918016,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989138262,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

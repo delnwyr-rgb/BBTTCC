@@ -1,0 +1,50 @@
+{
+  "name": "Teleport",
+  "type": "feat",
+  "img": "icons/equipment/feet/boots-collared-leather.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Angel relocates up to 24 squares in a flourish of golden light. It never simply walks. Walking is for the adored.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "bF8jMnuVaWkt4V4u",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Angel of Hollow Glory"
+        ],
+        "sourceIds": [
+          "yQZAnkNsEcE5kKtg"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069972,
+    "modifiedTime": 1792989070051,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!bF8jMnuVaWkt4V4u"
+}

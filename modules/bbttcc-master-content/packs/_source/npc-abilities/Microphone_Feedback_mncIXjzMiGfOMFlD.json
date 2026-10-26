@@ -1,0 +1,141 @@
+{
+  "name": "Microphone Feedback",
+  "type": "weapon",
+  "img": "icons/magic/sonic/scream-wail-shout-teal.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "presence",
+    "skill": "channel",
+    "damage": {
+      "formula": "2d10",
+      "attribute": "presence",
+      "type": "psychic",
+      "damageFlavor": "a wrong answer, amplified",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 8,
+      "long": 24
+    },
+    "tags": [
+      "bestiary",
+      "tier-iv",
+      "lineage-sephirotic"
+    ],
+    "effect": "Soul DC 17 or Shaken until the end of the target's next turn.",
+    "flavor": "The microphone should not work under water. It does.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "shaken"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 17,
+        "saveAttributeOverrides": {}
+      },
+      "resolution": {
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 17,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "none",
+        "size": 0
+      }
+    },
+    "description": {
+      "value": "<p><strong>Strike.</strong> reach 8 squares, one target. Damage: <code>2d10</code> psychic (a wrong answer, amplified) + presence. Soul DC 17 or Shaken until the end of the target's next turn.</p><p><em>The microphone should not work under water. It does.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "attack",
+          "price": {
+            "marks": 1350,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV attack × 1",
+            "bound": "free",
+            "saleBack": 540
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gloomgill"
+        ],
+        "sourceIds": [
+          "F1bwkux5Uyq6wXQ4"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "mncIXjzMiGfOMFlD",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069950,
+    "modifiedTime": 1792989070035,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!mncIXjzMiGfOMFlD"
+}

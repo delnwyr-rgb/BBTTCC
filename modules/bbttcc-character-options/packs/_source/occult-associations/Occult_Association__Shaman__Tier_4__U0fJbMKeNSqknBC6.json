@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 — Shaman</strong></p><p><strong>“For a moment, the Hex remembers how to breathe.”</strong></p><p>At Tier 4, you do not merely survive living systems. You can reintroduce them to themselves.</p><p>You can persuade a place to recover its flow-state, quiet a spiritually violent weather pattern, or create a brief pocket of remembered balance in a Hex that has forgotten how to hold one.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, target one Hex your faction occupies, traverses, or is directly affecting. Choose one:</li><ul><li>temporarily stabilize a distressed leyline or hostile environmental state for one Scenario or one meaningful operation, <em>or</em></li><li>reduce one relevant corruption, weather, or terrain pressure affecting that Hex or operation by one significant step</li></ul></ul><p><strong>Additional Effect:</strong> when used in defense of a Hex aligned with living systems, the GM may treat your faction as having overwhelming positional sympathy with the terrain.</p><p><strong>Cost:</strong> restoration is never free. A Hex that remembers balance may ask to keep it. Expect duty, spirit claims, or consequences if your faction stabilizes a place only to exploit it immediately afterward.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"shamT4\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Stabilize the Hex</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Target a Hex: stabilize a leyline/environmental state for one Scenario, OR reduce a corruption/weather/terrain pressure by one significant step.</div>\n</div>",
+      "value": "<p><strong>Tier 4 — Shaman</strong></p><p><strong>“For a moment, the Hex remembers how to breathe.”</strong></p><p>At Tier 4, you do not merely survive living systems. You can reintroduce them to themselves.</p><p>You can persuade a place to recover its flow-state, quiet a spiritually violent weather pattern, or create a brief pocket of remembered balance in a Hex that has forgotten how to hold one.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per turn, target one Hex your Domain occupies, traverses, or is directly affecting. Choose one:</li><ul><li>temporarily stabilize a distressed leyline or hostile environmental state for one Scenario or one meaningful operation, <em>or</em></li><li>reduce one relevant corruption, weather, or terrain pressure affecting that Hex or operation by one significant step</li></ul></ul><p><strong>Additional Effect:</strong> when used in defense of a Hex aligned with living systems, the GM may treat your Domain as having overwhelming positional sympathy with the terrain.</p><p><strong>Cost:</strong> restoration is never free. A Hex that remembers balance may ask to keep it. Expect duty, spirit claims, or consequences if your Domain stabilizes a place only to exploit it immediately afterward.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"shamT4\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Stabilize the Hex</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Target a Hex: stabilize a leyline/environmental state for one Scenario, OR reduce a corruption/weather/terrain pressure by one significant step.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -261,12 +261,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987102977,
-    "modifiedTime": 1781024182926,
-    "lastModifiedBy": "MRFjjbUTBd66pWBY"
+    "modifiedTime": 1792977828537,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

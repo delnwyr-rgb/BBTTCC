@@ -1,0 +1,452 @@
+{
+  "name": "The Barbican Gate — Perspicacity",
+  "type": "rig",
+  "img": "art/bbttcc/GOTTGAIT/Structures/perspicacity_gate_2.png",
+  "system": {
+    "identity": {
+      "mobility": "stationary",
+      "state": "parked",
+      "factionOwnerId": "oK7VitQikQ6FN3PI",
+      "archetype": "Structure: Barbican Gate (siege layer)",
+      "binding": {
+        "hexId": "",
+        "sceneId": "",
+        "tokenId": ""
+      }
+    },
+    "crew": {
+      "slots": [],
+      "capacity": {
+        "pilot": {
+          "min": 0,
+          "max": 0
+        },
+        "gunner": {
+          "min": 0,
+          "max": 0
+        },
+        "engineer": {
+          "min": 0,
+          "max": 0
+        },
+        "crew": {
+          "min": 0,
+          "max": 0
+        }
+      },
+      "crewMin": 0,
+      "crewMax": 0
+    },
+    "integrity": {
+      "value": 30,
+      "max": 30,
+      "tier": 1,
+      "bracket": "medium"
+    },
+    "derived": {
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 12
+      },
+      "resolve": {
+        "value": 11
+      },
+      "integrity": {},
+      "stress": {}
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "output": {
+      "modules": [],
+      "basePerTurn": {}
+    },
+    "travel": {
+      "speed": 1,
+      "range": 5,
+      "hazardResist": 0,
+      "domains": [
+        "land"
+      ],
+      "depthRating": 0
+    },
+    "tags": [],
+    "biography": {
+      "concept": "",
+      "notes": ""
+    }
+  },
+  "_id": "vnHo9J78GcGOyEmr",
+  "prototypeToken": {
+    "name": "The Barbican Gate — Perspicacity",
+    "displayName": 30,
+    "actorLink": true,
+    "width": 8,
+    "height": 8,
+    "depth": 8,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/Structures/perspicacity_gate_2.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 2,
+      "scaleY": 2,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [],
+  "effects": [
+    {
+      "name": "Prone",
+      "img": "icons/svg/aura.svg",
+      "tint": "#78909c",
+      "origin": "Actor.vnHo9J78GcGOyEmr",
+      "statuses": [
+        "prone"
+      ],
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {
+        "fourththing": {
+          "condition": "prone",
+          "appliedManifestation": {
+            "source": "Actor.vnHo9J78GcGOyEmr",
+            "itemId": "vnHo9J78GcGOyEmr",
+            "itemName": "Structure Collapse",
+            "dc": 15,
+            "saveAttribute": "body",
+            "saveEachRound": false,
+            "durationKind": "1-round",
+            "startRound": null,
+            "startTurn": null
+          }
+        }
+      },
+      "system": {
+        "changes": []
+      },
+      "_id": "pfd6lxgMA6KyROJn",
+      "type": "base",
+      "disabled": false,
+      "start": {
+        "time": 0,
+        "combat": null,
+        "combatant": null,
+        "initiative": null,
+        "round": null,
+        "turn": null
+      },
+      "description": "",
+      "transfer": false,
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791317003562,
+        "modifiedTime": 1791317003562,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "folder": "xQUOdeYWwVaU6c28",
+  "sort": 300000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "bbttcc-structures": {
+      "hasStructure": true,
+      "facilityMode": true,
+      "materialBOM": [
+        {
+          "materialKey": "scribed-steel",
+          "qty": 16,
+          "originalQty": 16,
+          "family": "metal",
+          "tier": "III",
+          "name": "Scribed Steel",
+          "tagsCache": [
+            "material",
+            "scribed-steel"
+          ]
+        },
+        {
+          "materialKey": "mountain-stone",
+          "qty": 8,
+          "originalQty": 8,
+          "family": "stone",
+          "tier": "I",
+          "name": "mountain-stone",
+          "tagsCache": []
+        }
+      ],
+      "state": "intact",
+      "plates": {
+        "current": 80,
+        "max": 80
+      },
+      "threshold": 2.73,
+      "resists": {
+        "kinetic": 0.5,
+        "qliphothic": 0.5
+      },
+      "vulnerabilities": {
+        "energy|heat": {
+          "type": "energy",
+          "flavor": "heat",
+          "factor": 2
+        },
+        "kinetic|concussive": {
+          "type": "kinetic",
+          "flavor": "concussive",
+          "factor": 2
+        }
+      },
+      "loadBearing": false,
+      "collapseProfile": {
+        "fallFt": 10,
+        "damageDice": "2d10",
+        "nonlethal": true,
+        "knockbackFt": 5,
+        "triggerState": "breached"
+      },
+      "history": [
+        {
+          "at": 1780511870527,
+          "fromState": "intact",
+          "toState": "breached",
+          "dmg": 60,
+          "chipped": [
+            {
+              "k": "hex-glyph-plate",
+              "n": 8
+            },
+            {
+              "k": "hex-iron-cleat",
+              "n": 4
+            }
+          ]
+        },
+        {
+          "at": 1780512347381,
+          "fromState": "intact",
+          "toState": "breached",
+          "dmg": 50,
+          "chipped": [
+            {
+              "k": "hex-iron-cleat",
+              "n": 6
+            },
+            {
+              "k": "scribed-steel",
+              "n": 1
+            }
+          ]
+        },
+        {
+          "at": 1780512765699,
+          "fromState": "intact",
+          "toState": "breached",
+          "dmg": 50,
+          "chipped": [
+            {
+              "k": "scribed-steel",
+              "n": 9
+            }
+          ]
+        },
+        {
+          "at": 1780512854369,
+          "fromState": "intact",
+          "toState": "breached",
+          "dmg": 50,
+          "chipped": [
+            {
+              "k": "scribed-steel",
+              "n": 7
+            }
+          ]
+        }
+      ],
+      "crew": {
+        "assigned": [
+          {
+            "tokenId": "C3yQEaWrILEuiJA3",
+            "label": "⚔ Contingent · 18",
+            "joinedStrength": 18
+          },
+          {
+            "tokenId": "nOeTTY6nKjcChTXa",
+            "label": "🛡 Garrison · 5",
+            "joinedStrength": 5
+          },
+          {
+            "tokenId": "HUbjnb4J2O0BgBNU",
+            "label": "⚔ Contingent · 18",
+            "joinedStrength": 18
+          },
+          {
+            "tokenId": "HVAlQ65IZRtuvDOS",
+            "label": "🛡 Garrison · 5",
+            "joinedStrength": 5
+          },
+          {
+            "tokenId": "16DJlsg7wNbtBuEX",
+            "label": "🛡 Garrison · 5",
+            "joinedStrength": 5
+          },
+          {
+            "tokenId": "i8tsZCF7uVzWunpP",
+            "label": "🛡 Garrison · 8",
+            "joinedStrength": 8
+          },
+          {
+            "tokenId": "pEv9ang8UQdbfTVa",
+            "label": "🛡 Garrison · 4",
+            "joinedStrength": 4
+          },
+          {
+            "tokenId": "LV0eLB8VYx7f0cKA",
+            "label": "🛡 Garrison · 4",
+            "joinedStrength": 4
+          },
+          {
+            "tokenId": "ibBubxGh59TOIAnT",
+            "label": "🛡 Garrison · 2",
+            "joinedStrength": 2
+          },
+          {
+            "tokenId": "V7C3nMfamppQnCmS",
+            "label": "🛡 Garrison · 1",
+            "joinedStrength": 1
+          },
+          {
+            "tokenId": "3acu9rSSHKFc1Dco",
+            "label": "🛡 Garrison · 1",
+            "joinedStrength": 1
+          },
+          {
+            "tokenId": "kbsj5SSoVGDRbD81",
+            "label": "🛡 Garrison · 2",
+            "joinedStrength": 2
+          },
+          {
+            "tokenId": "XcDYIHyX2aG2i0hm",
+            "label": "🛡 Garrison · 4",
+            "joinedStrength": 4
+          }
+        ]
+      }
+    },
+    "fourththing": {
+      "kind": "rig"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791317003562,
+    "modifiedTime": 1792989114381,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!vnHo9J78GcGOyEmr"
+}

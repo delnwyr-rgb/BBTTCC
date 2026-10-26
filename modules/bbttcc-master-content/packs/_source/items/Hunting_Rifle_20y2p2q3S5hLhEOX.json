@@ -15,8 +15,9 @@
     },
     "damageParts": [],
     "range": {
-      "short": 60,
-      "long": 200
+      "short": 12,
+      "long": 40,
+      "units": "sq"
     },
     "tags": [
       "t1-baseline",
@@ -58,7 +59,7 @@
       }
     },
     "description": {
-      "value": "<p>Bolt-action long arm, walnut stock, iron sights with an optional clamp-mount for a scope nobody can afford. Slow, accurate, loud. Used for game, for guard duty, and once memorably for an argument over fence lines.</p><p><b>Standard Issue.</b> Long range, no electronics, no magic. The rifle every patrol cabinet has at least one of.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Long-arm ballistic. Two-handed.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d10 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(ballistic)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 60 / 200</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+      "value": "<p>Bolt-action long arm, walnut stock, iron sights with an optional clamp-mount for a scope nobody can afford. Slow, accurate, loud. Used for game, for guard duty, and once memorably for an argument over fence lines.</p><p><b>Standard Issue.</b> Long range, no electronics, no magic. The rifle every patrol cabinet has at least one of.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Long-arm ballistic. Two-handed.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d10 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(ballistic)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 12 / 40 squares</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
     }
   },
   "flags": {
@@ -113,7 +114,7 @@
         "video": {
           "dbSection": "range",
           "menuType": "weapon",
-          "animation": "arrow",
+          "animation": "bullet (+4 graded/bound twins)",
           "variant": "regular",
           "color": "regular",
           "enableCustom": false,
@@ -288,12 +289,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777869584459,
-    "modifiedTime": 1782160020983,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988946531,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

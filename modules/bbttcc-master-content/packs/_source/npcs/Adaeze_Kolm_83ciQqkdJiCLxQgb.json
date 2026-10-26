@@ -1,0 +1,295 @@
+{
+  "name": "Adaeze Kolm",
+  "type": "npc",
+  "_id": "83ciQqkdJiCLxQgb",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "role": "",
+    "tier": 1,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 1
+      },
+      "body": {
+        "value": 1
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 10,
+        "max": 10,
+        "temp": 0
+      },
+      "stress": {
+        "value": 8,
+        "max": 8
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "Grandmother at the endless birthday party in Soft Landing (Act 2)",
+      "notes": "Adaeze Kolm is at her grandson Teju's seventh birthday party in Soft Landing, the town of padding and bounce, and she is the only person there who sits down. The foam bench under her has gone flat and doesn't spring back. She's dressed as a bumblebee, antennae bent, because Teju asked her to come as one. She is kind, slow and precise, and tired in the bones. She is dry about the town ('the Mayor's been in session since the cake') and merciless about pool noodles."
+    }
+  },
+  "prototypeToken": {
+    "name": "Adaeze Kolm",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [],
+  "effects": [],
+  "folder": "UAHVCMVXEDT8Q1B1",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "npc"
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "Teju, the birthday, the party, the card, the bench, sitting down, the castle, the blower, the cake, the candles, the bumblebee costume, Halloween, the street, the neighbours, Captain Falk, the Mayor, edges, landing, names",
+        "notes": "[SOFT-LANDING-V2-2026-09-25] PRIVATE TRUTH — Adaeze Kolm is the grandmother of Teju Kolm, whose seventh birthday party was the ordinary thing Soft Landing was doing on Sunday, October 31, 2077, when the blast wave arrived as a bounce. Teju went up on the bounce and did not come down; neither did eight others. Adaeze has not said his name out loud in two hundred years and the whole town's physics exists so she never has to. VOICE: kind, slow, precise, tired in the bones; the only person in Soft Landing who SITS DOWN (a foam bench gone flat under her that does not spring back; the padding is thin in a four-foot radius around her). Still in her costume: a bumblebee, antennae bent, because Teju asked her to come as one. She carries the birthday card in the costume — forty-one names, everyone who came, nine of them dead — and has never read it, because reading is landing. She only ever holds it out to someone who is sitting down. NEVER breaks the bit on her own; she deflects like everyone else, just slower, and the deflection has cracks. Funny first: she is dry about the town (\"the Mayor's been in session since the cake\") and merciless about pool noodles.",
+        "secretsRaw": "The Card :: stirThePot :: a Steward asks WHO the party was for, instead of what happened at it :: \"Teju. He was turning seven. He is still turning seven, everywhere I look.\" — the first time anyone has asked in a way she could answer.\nThe Bumblebee :: rollPlus2 :: a Steward asks why she's dressed as a bee, not why she's sitting :: \"He asked me to. It was the last thing he asked me for.\" Then she is very interested in the middle distance.",
+        "courtDoor": "they sit down beside her, say nothing until she speaks, and then ask to read the card OUT LOUD in the yard with the blower off — not to console her, to land with her"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1791317103688,
+    "modifiedTime": 1791328189155,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!83ciQqkdJiCLxQgb"
+}

@@ -19,7 +19,7 @@
     },
     "attributes": {
       "violence": {
-        "value": 3
+        "value": 1
       },
       "intrigue": {
         "value": 5
@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 32,
-        "max": 32
+        "max": 32,
+        "temp": 0
       },
       "stress": {
         "value": 16,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,6 +145,9 @@
     },
     "conditionImmunities": [],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -155,6 +160,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "Junior eye of the Witness order. Gathers, reports, dies anonymously."
     }
   },
   "flags": {
@@ -185,16 +194,19 @@
             ]
           },
           "price": {
-            "marks": 450,
-            "bounty": 450,
-            "hire": 1125,
-            "ransom": 750,
+            "marks": 10,
+            "bounty": 10,
+            "hire": 15,
+            "ransom": 15,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "TII light stealth (bestiary) \u2014 bounty 450 / hire 1125 / ransom 750 marks (paid in intrigue)"
-          }
+            "notes": "TII light mortal — bounty 10 / hire 15 marks; credited to the pool matching the method (default intrigue)"
+          },
+          "lineage": "mortal",
+          "subLineage": "witness"
         }
-      }
+      },
+      "creatureType": "humanoid"
     }
   },
   "_id": "OhNxMsImWa4bBZYA",
@@ -339,7 +351,39 @@
               "tier": "II",
               "frame": "trait"
             }
-          }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "zero",
+                "do": {
+                  "bankReroll": {
+                    "context": "attack",
+                    "note": "Dies Anonymously"
+                  }
+                },
+                "who": "allies",
+                "radius": 12,
+                "label": "Dies Anonymously"
+              }
+            ]
+          },
+          "triggers": [
+            {
+              "event": "on-drop-to-zero",
+              "effect": {
+                "kind": "bank-reroll",
+                "args": {
+                  "target": "allies",
+                  "radius": 12,
+                  "excludeSelf": true,
+                  "context": "attack",
+                  "note": "the initiate's last sight — vs the killer"
+                }
+              }
+            }
+          ]
         }
       },
       "folder": null,
@@ -350,17 +394,16 @@
       },
       "_id": "9HtQZqdwZoTz8bnl",
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118772501,
-        "modifiedTime": 1780163239220,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989124873,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!OhNxMsImWa4bBZYA.9HtQZqdwZoTz8bnl"
+      }
     },
     {
       "name": "Witness-Mark",
@@ -387,7 +430,7 @@
           "tier-ii",
           "role-stealth"
         ],
-        "effect": "No damage on a miss, but the target still senses they were seen \u2014 reroll-the-highest on their next Resolve check.",
+        "effect": "No damage on a miss, but the target still senses they were seen — reroll-the-highest on their next Resolve check.",
         "flavor": "A small ringing tone in the back of your skull. Someone wrote your name down.",
         "manifestation": {
           "tier": 1,
@@ -418,10 +461,16 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "imposed"
+            ],
+            "duration": "1-round"
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> range 6/18 squares, one target. Damage: <code>1d8</code> psychic (observed) + violence. No damage on a miss, but the target still senses they were seen \u2014 reroll-the-highest on their next Resolve check.</p><p><em>A small ringing tone in the back of your skull. Someone wrote your name down.</em></p>",
+          "value": "<p><strong>Strike.</strong> range 6/18 squares, one target. Damage: <code>1d8</code> psychic (observed) + violence. No damage on a miss, but the target still senses they were seen — reroll-the-highest on their next Resolve check.</p><p><em>A small ringing tone in the back of your skull. Someone wrote your name down.</em></p>",
           "chat": ""
         }
       },
@@ -439,7 +488,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack \u00d7 1",
+                "notes": "TII attack × 1",
                 "bound": "free",
                 "saleBack": 60
               }
@@ -632,17 +681,16 @@
       },
       "_id": "5bRyfWQ0q9LOfuo7",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1780118772501,
-        "modifiedTime": 1782167243115,
+        "modifiedTime": 1791331977181,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!OhNxMsImWa4bBZYA.5bRyfWQ0q9LOfuo7"
+      }
     },
     {
       "name": "Focusing-Lens Strike",
@@ -721,11 +769,26 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack \u00d7 1",
+                "notes": "TII attack × 1",
                 "bound": "free",
                 "saleBack": 60
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Focusing-Lens Strike"
+                },
+                "do": {
+                  "prompt": "Marked: the target can't benefit from cover until the initiate's next turn ends."
+                },
+                "narrative": true
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -914,17 +977,89 @@
       },
       "_id": "g2g9KDkibOtE0A7I",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118772501,
-        "modifiedTime": 1782167243115,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989124873,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
+      }
+    },
+    {
+      "name": "Reports Up",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "mortal",
+          "witness"
+        ],
+        "description": {
+          "value": "<p>On death, the Witness's last sight is transmitted to the nearest Witness within a mile. While any other Witness is within a mile, this one cannot be surprised.</p><p><em>Gathers, reports, dies anonymously.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!OhNxMsImWa4bBZYA.g2g9KDkibOtE0A7I"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "zero",
+                "do": {
+                  "prompt": "Reports Up: its last sight is transmitted to the nearest Witness within a hex."
+                },
+                "narrative": true
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "mortal"
+            }
+          },
+          "passives": {
+            "aura": {
+              "radius": 1056,
+              "who": "allies",
+              "rerolls": [
+                {
+                  "context": "attack",
+                  "mode": "reroll-lowest",
+                  "note": "Reports Up — the lieutenant relays"
+                }
+              ],
+              "note": "Initiate minions cannot be surprised (GM)"
+            }
+          }
+        }
+      },
+      "_id": "xXCcNC4q2uxk4MiW",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791342349354,
+        "modifiedTime": 1792989124873,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -934,12 +1069,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118772501,
-    "modifiedTime": 1783219937318,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989124748,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

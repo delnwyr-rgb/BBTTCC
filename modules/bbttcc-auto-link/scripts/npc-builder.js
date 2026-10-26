@@ -27,9 +27,8 @@ const _pack = (id) => game.bbttcc?.packs?.get?.(id) ?? game.packs?.get?.(id) ?? 
  * applyActorHeritageChange so builder-made NPCs match sheet-edited ones. */
 
 const _normFam = (s) => String(s ?? "").toLowerCase().replace(/-/g, "_");
-// Cross-cutting heritage families bypass the ancestry filter (they key off
-// sephirah alignment, not species) — keep in sync with bbttcc-bridge.js.
-const CROSS_CUTTING_HERITAGE_FAMILIES = new Set(["sephirotic"]);
+// Heritages are species-only (ruling AN4, 2026-10-26) — the old cross-cutting
+// "sephirotic" bypass is retired here and in bbttcc-bridge.js.
 
 async function _ancestryIndex() {
   const pack = _pack(ANCESTRIES_PACK);
@@ -206,7 +205,7 @@ export async function openNPCBuilder() {
       <div class="form-group" style="display:flex; flex-direction:column; gap:0.2rem;">
         <label style="font-weight:600;">Heritage</label>
         <select data-bbttcc-field="heritageId" style="padding:0.35rem 0.5rem; border-radius:3px;"></select>
-        <span style="opacity:0.65; font-size:0.75rem;">Filtered by the chosen ancestry (Sephirotic heritages are always available).</span>
+        <span style="opacity:0.65; font-size:0.75rem;">Filtered by the chosen ancestry.</span>
       </div>` : ""}
 
       <div class="form-group" style="display:flex; flex-direction:column; gap:0.2rem;">
@@ -269,8 +268,7 @@ export async function openNPCBuilder() {
         const fam = _normFam(ancSel.selectedOptions[0]?.dataset?.family ?? "");
         const keep = herSel.value;
         const opts = heritages.filter(h => !fam || !h.family
-          || _normFam(h.family) === fam
-          || CROSS_CUTTING_HERITAGE_FAMILIES.has(_normFam(h.family)));
+          || _normFam(h.family) === fam);
         herSel.innerHTML = ['<option value="">— None —</option>']
           .concat(opts.map(h => `<option value="${h.id}">${esc(h.name)}</option>`))
           .join("");
@@ -876,8 +874,7 @@ async function _echoMintDialog({ steward, entryName, kind, members }) {
         const fam = _normFam(ancSel.selectedOptions[0]?.dataset?.family ?? "");
         const keep = herSel.value || idn?.heritageId || "";
         const opts = heritages.filter(h => !fam || !h.family
-          || _normFam(h.family) === fam
-          || CROSS_CUTTING_HERITAGE_FAMILIES.has(_normFam(h.family)));
+          || _normFam(h.family) === fam);
         herSel.innerHTML = ['<option value="">— None —</option>']
           .concat(opts.map(h => `<option value="${h.id}">${esc(h.name)}${h.id === idn?.heritageId ? " (suggested)" : ""}</option>`))
           .join("");

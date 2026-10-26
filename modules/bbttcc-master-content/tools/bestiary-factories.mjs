@@ -18,10 +18,11 @@ export const LIN = {
   "hex-touched": { creatureType: "aberration", resist: ["kinetic"], vuln: ["sephirotic"], condImm: [],                             stress: 0.5, currency: "intrigue",  tree: "malkuth" },
 };
 const STRESS_TYPES = new Set(["psychic", "qliphothic"]);
-export const ICON = { bite: "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/BBTTCC_button_icon_wolf_1.png", fire: "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/bbttcc_icons_flame_1.png", spirit: "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/BBTTCC_button_icon_spirit.png",
-  robot: "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/BBTTCC_button_icon_robot.png", stealth: "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/BBTTCC_button_icon_stealth_1.png", circuit: "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/BBTTCC_button_icon_circuit_1.png",
-  grave: "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/bbttcc_icons_gravewarden_1.png", runner: "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/bbttcc_icons_ghostly_runner_1.png", storm: "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/bbttcc_button_icon_storm_warden.png",
-  cone: "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/BBTTCC_button_icon_fire_cone_1.png", ball: "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/BBTTCC_button_icon_fireball_1.png", choir: "art/bbttcc/GOTTGAIT/BBTTCC Button Icons/bbttcc_icons_ghostly_runner_2.png" };
+// 2026-10-26 (BS audit §5): core Foundry webp — the GOTTGAIT button PNGs were re-introduced by every slot build after the 10-14 icon swap
+export const ICON = { bite: "icons/creatures/abilities/mouth-teeth-long-red.webp", fire: "icons/magic/fire/flame-burning-campfire-orange.webp", spirit: "icons/magic/control/silhouette-aura-energy.webp",
+  robot: "icons/commodities/tech/cog-brass.webp", stealth: "icons/magic/perception/silhouette-stealth-shadow.webp", circuit: "icons/commodities/tech/cog-gear-steel-glass.webp",
+  grave: "icons/magic/death/skull-horned-worn-fire-blue.webp", runner: "icons/magic/movement/trail-streak-impact-blue.webp", storm: "icons/magic/lightning/bolt-strike-blue.webp",
+  cone: "icons/magic/fire/beam-jet-stream-embers.webp", ball: "icons/magic/fire/projectile-fireball-smoke-orange.webp", choir: "icons/magic/sonic/explosion-shock-wave-teal.webp" };
 const id = () => Array.from({ length: 16 }, () => "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"[Math.floor(Math.random() * 62)]).join("");
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
 
@@ -33,14 +34,14 @@ export function weapon(sp, w) {
   if (w.states && w.save && !w.area) mf.resolution = { saveAttribute: w.save.attr, saveDcMode: "fixed", saveDcFixed: w.save.dc, onSave: "negate", statesOnFail: true };
   for (const k of Object.keys(mf)) if (mf[k] === undefined) delete mf[k];
   const use = w.recharge ? " (recharges on a Soma Break)" : w.perScene ? ` (${w.perScene}/scene)` : "";
-  const effect = w.area ? `${w.area.shape[0].toUpperCase() + w.area.shape.slice(1)} ${w.area.size} ft. — targets roll vs ${w.save.attr === "intrigue" ? "Evasion" : w.save.attr === "violence" ? "Guard" : "Resolve"} (DC ${w.save.dc}). ${w.onSave === "negate" ? "No effect" : "Half damage"} on success.${w.rider ? " " + w.rider : ""}`
+  const effect = w.area ? `${w.area.shape[0].toUpperCase() + w.area.shape.slice(1)} ${Math.max(1, Math.round(w.area.size / 5))} squares — targets roll vs ${w.save.attr === "intrigue" ? "Evasion" : w.save.attr === "violence" ? "Guard" : "Resolve"} (DC ${w.save.dc}). ${w.onSave === "negate" ? "No effect" : "Half damage"} on success.${w.rider ? " " + w.rider : ""}`
     : (w.rider ?? "");
   return { _id: id(), name: w.name + use, type: "weapon", img: w.img ?? ICON.bite,
     system: { category: melee ? "melee" : "ranged", intent: w.intent ?? "violence", skill: w.skill ?? (melee ? "melee" : "firearms"),
       damage: { formula: w.formula, attribute: w.attribute ?? (w.intent ?? "violence"), type, damageFlavor: w.flavor ?? "", track },
       range: melee ? { short: 1, long: 1 } : { short: w.range ?? 6, long: (w.range ?? 6) * 3 }, tags: ["bestiary", `tier-${ROMAN[sp.tier].toLowerCase()}`, `lineage-${sp.lineage}`, ...(w.tags ?? [])],
       effect, flavor: w.flavorLine ?? "", manifestation: mf,
-      description: { value: `<p><strong>${w.area ? "Area Attack" : "Strike"}.</strong> ${w.area ? `${w.targetText ?? `Each creature in a ${w.area.size}-ft. ${w.area.shape}`} rolls vs DC ${w.save.dc}.` : `reach ${melee ? "1 square" : `${w.range ?? 6} squares`}, one target.`} Damage: <code>${w.formula}</code> ${type}${w.flavor ? ` (${w.flavor})` : ""}${w.area ? "" : ` + ${w.attribute ?? (w.intent ?? "violence")}`}.${w.rider ? " " + esc(w.rider) : ""}</p>${w.flavorLine ? `<p><em>${esc(w.flavorLine)}</em></p>` : ""}`, chat: "" } },
+      description: { value: `<p><strong>${w.area ? "Area Attack" : "Strike"}.</strong> ${w.area ? `${w.targetText ?? `Each creature in a ${Math.max(1, Math.round(w.area.size / 5))}-square ${w.area.shape}`} rolls vs DC ${w.save.dc}.` : `reach ${melee ? "1 square" : `${w.range ?? 6} squares`}, one target.`} Damage: <code>${w.formula}</code> ${type}${w.flavor ? ` (${w.flavor})` : ""}${w.area ? "" : ` + ${w.attribute ?? (w.intent ?? "violence")}`}.${w.rider ? " " + esc(w.rider) : ""}</p>${w.flavorLine ? `<p><em>${esc(w.flavorLine)}</em></p>` : ""}`, chat: "" } },
     effects: [], flags: { fourththing: { rfi: { item: { tier: ROMAN[sp.tier], frame: w.area ? "save" : "attack", ...(w.area ? { aoeShape: w.area.shape, aoeSize: w.area.size, dc: w.save.dc } : {}) } }, ...(w.npcAuto ? { npcAuto: w.npcAuto } : {}) } }, folder: null, sort: 0, ownership: { default: 0 } };
 }
 export function ability(sp, a) {

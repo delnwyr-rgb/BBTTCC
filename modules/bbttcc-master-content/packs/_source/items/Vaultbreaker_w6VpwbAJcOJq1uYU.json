@@ -6,13 +6,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
-      "revision": 2,
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Vaultbreaker</h2><p><em>Locks are promises made by people who never met you.</em></p><hr /><h3>Rules</h3><p>You reroll the lowest die on checks made to locate hidden doors, panels, caches, and secret compartments.</p><p>Additionally, when you attempt to open a lock or disable a trap, you may treat a 2d10x10 roll of 9 or lower as a 10. Once you use this principle, you can’t use it again until you finish a Scene Break or Soma Break.</p><p class=\"ft-engine-note\"><em>⚙ Checks to find hidden doors and caches reroll the lowest die. 🃏 Card — the 9-or-lower-counts-as-10, once per Scene Break.</em></p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Vaultbreaker</h2><p><em>Locks are promises made by people who never met you.</em></p><hr /><h3>Rules</h3><p>You reroll the lowest die on checks made to locate hidden doors, panels, caches, and secret compartments.</p><p>Additionally, when you attempt to open a lock or disable a trap, you may treat a 2d10 roll of 9 or lower as a 10. Once you use this technique, you can’t use it again until you finish a Scene Break.</p><p class=\"ft-engine-note\"><em>⚙ Checks to find hidden doors and caches reroll the lowest die. 🃏 Card — the 9-or-lower-counts-as-10, once per Scene Break.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_vaultbreaker",
@@ -241,12 +241,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1768802465828,
-    "modifiedTime": 1782164185981,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988964538,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!w6VpwbAJcOJq1uYU"
 }

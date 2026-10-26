@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Formal Parley [Option]",
+  "name": "Formal Parley",
   "type": "feat",
   "img": "icons/sundries/documents/document-letter-formal-tan.webp",
   "system": {
@@ -7,31 +7,37 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Formal Parley [Option]</h3><p><em>No rules text registered.</em></p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> option</p><p><strong>Raid Types:</strong> assault, infiltration, occupation, liberation, espionage, propaganda, siege, ritual, assault_defense, courtly</p></div>",
+      "value": "<p><strong>Formal Parley</strong></p><p>Diplomatic Envoys, post-commit. On success your Domain's Loyalty +1 and the other side's Loyalty +1; in a Parley Suspicion falls 1.</p><p><em>Cost: Diplomacy 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "maneuver",
-      "key": "opt_formal_parley"
+      "key": "opt_formal_parley",
+      "effects": {
+        "text": "Diplomatic Envoys, post-commit. On success your Domain's Loyalty +1 and the other side's Loyalty +1; in a Parley Suspicion falls 1."
+      },
+      "meta": {
+        "storyOnly": false
+      }
     }
   },
   "_id": "qcNnt8IRyLywNLtk",
   "effects": [],
-  "folder": null,
+  "folder": "SziFuLdTIX4Y2Rav",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601758,
-    "modifiedTime": 1782703702688,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988995185,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

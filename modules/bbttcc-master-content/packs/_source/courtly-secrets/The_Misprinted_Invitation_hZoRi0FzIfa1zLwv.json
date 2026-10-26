@@ -1,0 +1,45 @@
+{
+  "_id": "hZoRi0FzIfa1zLwv",
+  "name": "The Misprinted Invitation",
+  "type": "feat",
+  "img": "icons/sundries/documents/envelope-sealed-red-tan.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>The Misprinted Invitation.</strong> Their seat card reads a name that is not theirs, at a table that was not set for them. They will spend the whole exchange recovering.</p><p><em>Play:</em> queue −2 to your opponent's next Parley roll.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "oppRollMinus2",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2900000,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989014761,
+    "modifiedTime": 1792989014762,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hZoRi0FzIfa1zLwv"
+}

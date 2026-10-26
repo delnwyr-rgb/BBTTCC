@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 50,
-        "max": 50
+        "max": 50,
+        "temp": 0
       },
       "stress": {
         "value": 25,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -139,10 +141,12 @@
     "defenses": {
       "resistances": [
         "kinetic",
-        "radiant"
+        "sephirotic"
       ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "chemical"
+      ]
     },
     "conditionImmunities": [
       "charmed",
@@ -150,6 +154,9 @@
       "compelled"
     ],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -162,6 +169,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "A relic guardian still patrolling a pre-Fall installation. Doesn't recognize the new world."
     }
   },
   "flags": {
@@ -197,16 +208,19 @@
             ]
           },
           "price": {
-            "marks": 1080,
-            "bounty": 1080,
-            "hire": 2700,
-            "ransom": 1800,
+            "marks": 15,
+            "bounty": 15,
+            "hire": 25,
+            "ransom": 25,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "TII medium hardened (bestiary) \u2014 bounty 1080 / hire 2700 / ransom 1800 marks (paid in intrigue)"
-          }
+            "notes": "TII medium pre-fall — bounty 15 / hire 25 marks; credited to the pool matching the method (default intrigue)"
+          },
+          "lineage": "pre-fall",
+          "subLineage": "guardian"
         }
-      }
+      },
+      "creatureType": "construct"
     }
   },
   "_id": "gIHcgJ2aS9L6y3yf",
@@ -351,6 +365,17 @@
               "tier": "II",
               "frame": "trait"
             }
+          },
+          "grants": {
+            "resistances": [
+              "kinetic",
+              "sephirotic"
+            ],
+            "conditionImmunities": [
+              "charmed",
+              "shaken",
+              "compelled"
+            ]
           }
         }
       },
@@ -362,17 +387,16 @@
       },
       "_id": "bNgUqQrropa4h0Uh",
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118739261,
-        "modifiedTime": 1780163239896,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989129676,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!gIHcgJ2aS9L6y3yf.bNgUqQrropa4h0Uh"
+      }
     },
     {
       "name": "Pre-Fall Halberd",
@@ -399,7 +423,7 @@
           "tier-ii",
           "role-hardened"
         ],
-        "effect": "On a hit, the target must succeed a DC 13 Body save or be pushed 5 ft. (the sentinel is enforcing a perimeter, not killing).",
+        "effect": "On a hit, the target must succeed a DC 13 Body check or be pushed 1 square. (the sentinel is enforcing a perimeter, not killing).",
         "flavor": "The blade has not been sharpened since before the Fall. It does not need to be.",
         "manifestation": {
           "tier": 1,
@@ -430,6 +454,13 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "body",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 13,
+            "onSave": "negate",
+            "statesOnFail": true
           }
         },
         "description": {
@@ -451,11 +482,25 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack \u00d7 1",
+                "notes": "TII attack × 1",
                 "bound": "free",
                 "saleBack": 60
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Pre-Fall Halberd"
+                },
+                "do": {
+                  "push": 1
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -644,17 +689,16 @@
       },
       "_id": "gpH9ZiUMjDDkIjiY",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118739261,
-        "modifiedTime": 1782167243833,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989129676,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!gIHcgJ2aS9L6y3yf.gpH9ZiUMjDDkIjiY"
+      }
     },
     {
       "name": "Classification Scan",
@@ -667,7 +711,7 @@
         "damage": {
           "formula": "1d10",
           "attribute": "violence",
-          "type": "energy",
+          "type": "electrical",
           "damageFlavor": "scan-beam",
           "track": "integrity"
         },
@@ -681,7 +725,7 @@
           "tier-ii",
           "role-hardened"
         ],
-        "effect": "On a hit, target is flagged: until the sentinel falls, ALL pre-fall constructs within 1 mile know the target's exact position. Cumulative \u2014 multiple scans deepen the flag.",
+        "effect": "On a hit, target is flagged: until the sentinel falls, ALL pre-fall constructs within 1 mile know the target's exact position. Cumulative — multiple scans deepen the flag.",
         "flavor": "A blue line touches you. You feel briefly less alone, and very afraid.",
         "manifestation": {
           "tier": 1,
@@ -715,7 +759,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> range 12/36 squares, one target. Damage: <code>1d10</code> energy (scan-beam) + violence. On a hit, target is flagged: until the sentinel falls, ALL pre-fall constructs within 1 mile know the target's exact position. Cumulative \u2014 multiple scans deepen the flag.</p><p><em>A blue line touches you. You feel briefly less alone, and very afraid.</em></p>",
+          "value": "<p><strong>Strike.</strong> range 12/36 squares, one target. Damage: <code>1d10</code> energy (scan-beam) + violence. On a hit, target is flagged: until the sentinel falls, ALL pre-fall constructs within 1 mile know the target's exact position. Cumulative — multiple scans deepen the flag.</p><p><em>A blue line touches you. You feel briefly less alone, and very afraid.</em></p>",
           "chat": ""
         }
       },
@@ -733,7 +777,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack \u00d7 1",
+                "notes": "TII attack × 1",
                 "bound": "free",
                 "saleBack": 60
               }
@@ -926,17 +970,83 @@
       },
       "_id": "qdEBwv1COiqpPRuR",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.367",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1780118739261,
-        "modifiedTime": 1782167243834,
+        "modifiedTime": 1788544799058,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
+      }
+    },
+    {
+      "name": "Broken Protocol",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "pre-fall",
+          "guardian"
+        ],
+        "description": {
+          "value": "<p>Immune to Charmed, Shaken and Compelled. Repeats a single directive (patrol, scan, enforce, greet) until attacked; then runs combat protocol for 3 rounds and returns to the directive if nothing hostile remains in sight. Anyone without pre-Fall credentials is an intruder — that is everyone alive.</p><p><em>It is still patrolling. The patrol route includes the place you are standing.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!gIHcgJ2aS9L6y3yf.qdEBwv1COiqpPRuR"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "do": {
+                  "disposition": {
+                    "set": -1,
+                    "rounds": 3
+                  },
+                  "prompt": "Broken Protocol: combat protocol for 3 rounds, then back to the directive if nothing hostile is in sight."
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                },
+                "label": "Broken Protocol"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "pre-fall"
+            }
+          }
+        }
+      },
+      "_id": "OL3z6cO7hOK1Q8J2",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791342350205,
+        "modifiedTime": 1792989129676,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -946,12 +1056,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118739261,
-    "modifiedTime": 1783219918005,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989129545,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

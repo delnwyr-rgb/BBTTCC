@@ -3,15 +3,19 @@
   "type": "npc",
   "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Apex2.png",
   "system": {
-    "role": "Elite Humanoid",
+    "role": "brute",
     "tier": 3,
     "factionId": "",
-    "notes": "",
+    "notes": "The thing the Wastes Stalkers are afraid of. A territory has exactly one, and the territory is wherever it is standing. It does not hunt the party; it hunts whatever is bleeding.",
     "details": {
       "level": 13,
       "tier": 3,
       "statPoints": 0,
-      "skillPoints": 0
+      "skillPoints": 0,
+      "biography": {
+        "value": "<p><strong>Concept.</strong> The thing the Wastes Stalkers are afraid of. A territory has exactly one, and the territory is wherever it is standing.</p>\n<p><strong>Signature.</strong> Stops eating to watch you. Then goes back to eating.</p>",
+        "public": ""
+      }
     },
     "faction": {
       "id": null,
@@ -40,8 +44,9 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 130,
-        "max": 130
+        "value": 90,
+        "max": 90,
+        "temp": 0
       },
       "stress": {
         "value": 65,
@@ -127,7 +132,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,9 +149,12 @@
     },
     "conditionImmunities": [],
     "tags": [
-      "5e-port",
-      "cr-5"
+      "cr-5",
+      "rfi-scrubbed"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -158,7 +167,12 @@
       "value": 0,
       "taint": 0,
       "fragments": []
-    }
+    },
+    "biography": {
+      "concept": "Elite Humanoid",
+      "notes": "The thing the Wastes Stalkers are afraid of. A territory has exactly one, and the territory is wherever it is standing. It does not hunt the party; it hunts whatever is bleeding."
+    },
+    "description": "<p><strong>Concept.</strong> The thing the Wastes Stalkers are afraid of. A territory has exactly one, and the territory is wherever it is standing.</p>\n<p><strong>Signature.</strong> Stops eating to watch you. Then goes back to eating.</p>"
   },
   "items": [
     {
@@ -170,10 +184,10 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p>If a creature ends its turn within 2 squares of the apex predator, the predator can make one bite attack against that creature as a reaction (1/round).</p>",
+          "value": "<p>If a creature ends its turn within 2 squares of the apex predator, the predator may make one Rending Bite against it as a reaction (1/round).</p>",
           "chat": ""
         }
       },
@@ -184,19 +198,57 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "radius": 2,
+                "who": "enemies",
+                "do": {
+                  "damage": {
+                    "formula": "2d10",
+                    "type": "kinetic"
+                  }
+                },
+                "limit": {
+                  "per": "round",
+                  "uses": 1
+                },
+                "label": "Territorial — a Rending Bite as a reaction"
+              }
+            ]
+          },
+          "triggers": [
+            {
+              "event": "on-enemy-turn-end-adjacent",
+              "limit": {
+                "window": "round",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "reaction-attack",
+                "args": {
+                  "reachSquares": 2
+                }
+              }
+            }
+          ]
+        }
+      },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829077,
-        "modifiedTime": 1782167244307,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989133022,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!oAS0ajjFzQ7ekFiw.iu5WUiQBbxTQSq0r"
+      }
     },
     {
       "name": "Blood Frenzy",
@@ -207,10 +259,10 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p>The predator reroll the lowest die on melee attack rolls against any creature that doesn\u2019t have all its Integrity.</p>",
+          "value": "<p>The predator rerolls the lowest die on melee attack rolls against any creature that isn't at full Integrity.</p>",
           "chat": ""
         }
       },
@@ -221,19 +273,29 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "when": "targetDamaged",
+              "note": "Blood Frenzy — the target is missing Integrity"
+            }
+          ]
+        }
+      },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.5",
         "createdTime": 1777700829077,
-        "modifiedTime": 1782167244308,
+        "modifiedTime": 1791422261348,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!oAS0ajjFzQ7ekFiw.MXh1m0hiFcUG8tpZ"
+      }
     },
     {
       "name": "Rending Bite",
@@ -244,7 +306,7 @@
         "intent": "violence",
         "skill": "melee",
         "damage": {
-          "formula": "2d10+5",
+          "formula": "2d10",
           "attribute": "violence",
           "type": "kinetic",
           "damageFlavor": "",
@@ -257,9 +319,9 @@
         },
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
-        "effect": "<p><strong>Attack.</strong> +7 to hit, reach 5 ft., one target. Hit: 16 (2d10+5) piercing.</p>",
+        "effect": "On a hit, the target is Restrained in the jaws (escape: Violence check vs DC 15). While a creature is held, the predator's Claws hit it automatically.",
         "flavor": "",
         "manifestation": {
           "tier": 1,
@@ -290,7 +352,25 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "violence",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 15,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "restrained"
+            ],
+            "duration": "until-saved",
+            "saveEachRound": true,
+            "saveAttribute": "violence"
           }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square., one target. Damage: <code>2d10</code> kinetic + violence. On a hit, the target is Restrained in the jaws (escape: Violence check vs DC 15). While a creature is held, the predator's Claws hit it automatically.</p>"
         }
       },
       "_id": "YoVWCcr6gROLru7f",
@@ -480,17 +560,16 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829077,
-        "modifiedTime": 1780163240309,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792977796492,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!oAS0ajjFzQ7ekFiw.YoVWCcr6gROLru7f"
+      }
     },
     {
       "name": "Pounce",
@@ -501,7 +580,7 @@
         "intent": "violence",
         "skill": "melee",
         "damage": {
-          "formula": "2d10+5",
+          "formula": "2d10",
           "attribute": "violence",
           "type": "kinetic",
           "damageFlavor": "",
@@ -514,9 +593,9 @@
         },
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
-        "effect": "<p><strong>Attack.</strong> If the predator moves at least 20 ft. straight toward a creature and hits it with a bite on the same turn, the target must succeed on a DC 15 Str save or be knocked prone. If prone, the predator can make one claws attack as a Bonus action.</p>",
+        "effect": "If the predator moves at least 4 squares straight toward a creature and hits it with this attack on the same turn, the target must succeed a Body check vs DC 15 or be knocked Prone. If it is Prone, the predator may make one Claws attack as a bonus action.",
         "flavor": "",
         "manifestation": {
           "tier": 1,
@@ -548,6 +627,9 @@
             "pool": "",
             "value": 0
           }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square., after 4+ squares of straight movement, one target. Damage: <code>2d10</code> kinetic + violence. The target must succeed a Body check vs DC 15 or be knocked Prone. If it is Prone, the predator may make one Claws attack as a bonus action.</p><p><em>It was already in the air when you noticed it.</em></p>"
         }
       },
       "_id": "UHsaved8rY2lqcW4",
@@ -734,20 +816,44 @@
           "isCustomized": true,
           "fromAmmo": false,
           "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Pounce",
+                  "ownerMovedSquares": 4
+                },
+                "do": {
+                  "condition": {
+                    "key": "prone",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "body",
+                      "dc": 15
+                    }
+                  },
+                  "prompt": "…then a bonus Claws attack."
+                }
+              }
+            ]
+          }
         }
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829077,
-        "modifiedTime": 1780163240309,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989133021,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!oAS0ajjFzQ7ekFiw.UHsaved8rY2lqcW4"
+      }
     },
     {
       "name": "Claws",
@@ -758,7 +864,7 @@
         "intent": "violence",
         "skill": "melee",
         "damage": {
-          "formula": "2d8+5",
+          "formula": "2d8",
           "attribute": "violence",
           "type": "kinetic",
           "damageFlavor": "",
@@ -771,9 +877,9 @@
         },
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
-        "effect": "<p><strong>Attack.</strong> +7 to hit, reach 5 ft., one target. Hit: 14 (2d8+5) slashing.</p>",
+        "effect": "Two sets. Against a Restrained or Prone target, the damage die rerolls the lowest.",
         "flavor": "",
         "manifestation": {
           "tier": 1,
@@ -805,6 +911,9 @@
             "pool": "",
             "value": 0
           }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square., one target. Damage: <code>2d8</code> kinetic + violence. Against a Restrained or Prone target, the damage die rerolls the lowest.</p>"
         }
       },
       "_id": "nz8aSLZaPbIvNpoj",
@@ -991,20 +1100,115 @@
           "isCustomized": true,
           "fromAmmo": false,
           "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "weapon": "Claws",
+                  "targetCondition": [
+                    "restrained",
+                    "prone"
+                  ]
+                },
+                "do": {
+                  "reroll": "damage"
+                }
+              }
+            ]
+          }
         }
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829077,
-        "modifiedTime": 1780163240309,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792977796492,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Territory",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "wild",
+          "predator"
+        ],
+        "description": {
+          "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: reroll the lowest die on attack rolls against any creature within 1 square of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!oAS0ajjFzQ7ekFiw.nz8aSLZaPbIvNpoj"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "firstRound": true
+                },
+                "do": {
+                  "reroll": "attack"
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                },
+                "label": "Territory — the first strike rerolls the lowest"
+              },
+              {
+                "on": "attack",
+                "if": {
+                  "allyAdjacentToTarget": true
+                },
+                "do": {
+                  "reroll": "attack"
+                },
+                "label": "Pack — reroll the lowest beside an ally"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "wild"
+            }
+          }
+        }
+      },
+      "_id": "y6RA8Ja0gBuMEKNa",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342350500,
+        "modifiedTime": 1791342350500,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -1111,14 +1315,36 @@
   },
   "folder": "uMhSIaldbbcnBh0H",
   "sort": 2800000,
-  "flags": {},
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "lineage": "wild",
+          "subLineage": "predator",
+          "tier": "III",
+          "bracket": "heavy",
+          "price": {
+            "marks": 40,
+            "bounty": 40,
+            "hire": 60,
+            "ransom": 60,
+            "currency": "violence",
+            "gmOverride": false,
+            "notes": "TIII heavy wild — bounty 40 / hire 60 marks; credited to the pool matching the method (default violence)"
+          },
+          "title": "Elite Humanoid"
+        }
+      },
+      "creatureType": "beast"
+    }
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777700829077,
-    "modifiedTime": 1783219918023,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989132811,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

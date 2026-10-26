@@ -1,0 +1,85 @@
+{
+  "name": "Nightmare Intrusion (1/scene)",
+  "type": "feat",
+  "img": "icons/magic/control/sleep-bubble-purple.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>One sleeping or unconscious creature within 12 squares. It rolls vs Resolve (DC 16). Fail: 4d10 psychic damage (Stress), the rest is ruined — no benefit from it, no Soma Break refresh — and until it completes an untwisted night's sleep it rolls twice-keep-worse on Resolve checks, deeply disturbed by what it almost remembers dreaming.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "save": {
+                "attr": "soul",
+                "dc": 16,
+                "onSave": "negate"
+              },
+              "damage": {
+                "formula": "4d10",
+                "type": "psychic"
+              }
+            },
+            "limit": {
+              "per": "combat",
+              "uses": 1
+            }
+          },
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Nightmare Intrusion (1/scene)"
+            },
+            "do": {
+              "prompt": "Rest ruined: no benefit, no Soma Break refresh; worse Resolve checks until a clean sleep."
+            },
+            "narrative": true
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gamalielite Dream-Twister"
+        ],
+        "sourceIds": [
+          "usU6xHOysv7adf8j"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "LYkHGMg5g9pGN5Yd",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069954,
+    "modifiedTime": 1792989070038,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!LYkHGMg5g9pGN5Yd"
+}

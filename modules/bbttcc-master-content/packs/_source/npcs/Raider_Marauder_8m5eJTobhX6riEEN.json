@@ -1,7 +1,7 @@
 {
   "name": "Raider Marauder",
   "type": "npc",
-  "img": "art/devin-knight/PowerArmor/FOC_HeavyGunner2_01.webp",
+  "img": "art/bbttcc/asli-tokens/stormborn-nomad-2.webp",
   "system": {
     "role": "brute",
     "tier": 2,
@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 50,
-        "max": 50
+        "max": 50,
+        "temp": 0
       },
       "stress": {
         "value": 25,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,6 +145,9 @@
     },
     "conditionImmunities": [],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -155,6 +160,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "Standing infantry of a raider warband. Disciplined enough to hold a line."
     }
   },
   "flags": {
@@ -190,16 +199,19 @@
             ]
           },
           "price": {
-            "marks": 1080,
-            "bounty": 1080,
-            "hire": 2700,
-            "ransom": 1800,
+            "marks": 15,
+            "bounty": 15,
+            "hire": 25,
+            "ransom": 25,
             "currency": "violence",
             "gmOverride": false,
-            "notes": "TII medium brute (bestiary) \u2014 bounty 1080 / hire 2700 / ransom 1800 marks (paid in violence)"
-          }
+            "notes": "TII medium mortal — bounty 15 / hire 25 marks; credited to the pool matching the method (default violence)"
+          },
+          "lineage": "mortal",
+          "subLineage": "raider"
         }
-      }
+      },
+      "creatureType": "humanoid"
     }
   },
   "_id": "8m5eJTobhX6riEEN",
@@ -211,7 +223,7 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "art/devin-knight/PowerArmor/FOC_HeavyGunner2_01.webp",
+      "src": "art/bbttcc/asli-tokens/stormborn-nomad-2.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -344,7 +356,34 @@
               "tier": "II",
               "frame": "trait"
             }
-          }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "selfTurnStart",
+                "do": {
+                  "bankReroll": {
+                    "context": "attack",
+                    "note": "Discipline of the Line"
+                  }
+                },
+                "to": "self",
+                "label": "Discipline of the Line — beside another Marauder",
+                "if": {
+                  "allyAdjacentToTarget": true
+                }
+              }
+            ]
+          },
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "when": "adjacentAlly",
+              "note": "Discipline of the Line — an allied Marauder within 1 square"
+            }
+          ]
         }
       },
       "folder": null,
@@ -355,17 +394,16 @@
       },
       "_id": "Gl9ahCgIZwShynz7",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118745743,
-        "modifiedTime": 1782167242394,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989124346,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!8m5eJTobhX6riEEN.Gl9ahCgIZwShynz7"
+      }
     },
     {
       "name": "Line-Cleaver",
@@ -392,7 +430,7 @@
           "tier-ii",
           "role-brute"
         ],
-        "effect": "On a hit, if any adjacent ally Marauder hasn't acted this round, that ally may immediately move up to 5 ft. as a reaction (closing the line).",
+        "effect": "On a hit, if any adjacent ally Marauder hasn't acted this round, that ally may immediately move up to 1 square. as a reaction (closing the line).",
         "flavor": "Big single-edged blade. Designed to interrupt postures, not lives.",
         "manifestation": {
           "tier": 1,
@@ -444,11 +482,26 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack \u00d7 1",
+                "notes": "TII attack × 1",
                 "bound": "free",
                 "saleBack": 60
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Line-Cleaver"
+                },
+                "do": {
+                  "prompt": "Line-Cleaver: an adjacent Marauder that hasn't acted may move 1 sq as a reaction."
+                },
+                "narrative": true
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -637,17 +690,16 @@
       },
       "_id": "wV3Gm882YXoL4qKJ",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118745743,
-        "modifiedTime": 1782167242394,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989124346,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!8m5eJTobhX6riEEN.wV3Gm882YXoL4qKJ"
+      }
     },
     {
       "name": "Suppression Volley",
@@ -705,6 +757,12 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "imposed"
+            ],
+            "duration": "1-round"
           }
         },
         "description": {
@@ -726,7 +784,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack \u00d7 1",
+                "notes": "TII attack × 1",
                 "bound": "free",
                 "saleBack": 60
               }
@@ -919,17 +977,98 @@
       },
       "_id": "evVsddPJGTIdXkC5",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1780118745743,
-        "modifiedTime": 1782167242394,
+        "modifiedTime": 1791331976426,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
+      }
+    },
+    {
+      "name": "Ambush Crew",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "mortal",
+          "raider"
+        ],
+        "description": {
+          "value": "<p>In the first round of combat, the raider rerolls the lowest die on attack rolls against any creature that hasn't acted yet. If reduced below half Integrity, they must succeed a DC 12 Soul check at the start of their turn or disengage and run.</p><p><em>They fight like people who have to eat tonight.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!8m5eJTobhX6riEEN.evVsddPJGTIdXkC5"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "firstRound": true,
+                  "targetNotActed": true
+                },
+                "do": {
+                  "reroll": "attack"
+                },
+                "label": "Ambush Crew"
+              },
+              {
+                "on": "bloodied",
+                "do": {
+                  "morale": {
+                    "attr": "soul",
+                    "dc": 12,
+                    "outcome": "disengages and runs at full speed"
+                  }
+                }
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "mortal"
+            }
+          },
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "when": "firstRound",
+              "vs": "a creature that hasn't taken a turn yet",
+              "note": "Ambush Crew"
+            }
+          ]
+        }
+      },
+      "_id": "1Vr3SOTTbKTrgWRE",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791342348771,
+        "modifiedTime": 1791422258076,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -939,12 +1078,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118745743,
-    "modifiedTime": 1783219918009,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989124227,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

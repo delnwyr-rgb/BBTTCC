@@ -1,0 +1,71 @@
+{
+  "name": "Aura of Avarice",
+  "type": "feature",
+  "img": "icons/containers/chest/chest-oak-steel-brown.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Any creature that starts its turn within 12 squares of the Horde rolls vs Resolve (DC 18). Fail: overcome with hunger for possession for one round — it must either move toward and attack whoever holds the most valuable-looking gear, or spend its action clutching and admiring a possession of its own. Repeat the check at the end of each of its turns.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "do": {
+              "condition": {
+                "key": "compelled",
+                "duration": "until-saved",
+                "save": {
+                  "attr": "soul",
+                  "dc": 18
+                }
+              }
+            },
+            "radius": 12
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Ashen Horde"
+        ],
+        "sourceIds": [
+          "knO0GK8qKCeyNC6N"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "Wj08MxqFoy7hU2YO",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069906,
+    "modifiedTime": 1792989069990,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!Wj08MxqFoy7hU2YO"
+}

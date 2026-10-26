@@ -1,0 +1,147 @@
+{
+  "name": "Mutagenic Spew (Recharge 5–6)",
+  "type": "weapon",
+  "img": "icons/equipment/body/suit-biohazard-protection.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "violence",
+    "skill": "warding",
+    "damage": {
+      "formula": "4d8",
+      "attribute": "body",
+      "type": "chemical",
+      "damageFlavor": "acid",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 12,
+      "long": 12
+    },
+    "tags": [
+      "aoe",
+      "shape-cone",
+      "signature"
+    ],
+    "effect": "12-square cone of caustic slime. Evasion check vs DC 18. Fail: full damage and the body briefly mutates in a painful, wrong direction — the target also gains 5 RP as the flesh forgets its blueprint. Success: half damage, no mutation.",
+    "flavor": "A torrent of green and purple, malformed helices visible in the stream.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "intrigue",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 18,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "cone",
+        "size": 60
+      }
+    },
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Mutagenic Spew (Recharge 5–6)"
+            },
+            "do": {
+              "radiation": 5
+            }
+          }
+        ],
+        "recharge": {
+          "mode": "d6",
+          "min": 5
+        }
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Abomination of Excess"
+        ],
+        "sourceIds": [
+          "P8e2EX1lbLBFk2gL"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "B9XRkS6RQn70Wf9m",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069954,
+    "modifiedTime": 1792989070038,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!B9XRkS6RQn70Wf9m"
+}

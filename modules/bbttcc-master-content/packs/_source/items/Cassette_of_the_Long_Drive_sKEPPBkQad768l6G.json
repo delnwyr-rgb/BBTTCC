@@ -10,12 +10,12 @@
     "default": 0
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1780000000000,
-    "modifiedTime": 1782159053346,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988924106,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
@@ -32,7 +32,7 @@
     "source": "",
     "quantity": 1,
     "description": {
-      "value": "<p>A pre-Fall mixtape someone made for someone they loved, labeled only FOR THE LONG DRIVE in faded marker. Plays on anything with the decency to have a tape deck. Mal is fond of it and will occasionally sing along, badly, on purpose.</p><p><strong>Use.</strong> During a rest, play it to clear 1d6 Stress from each ally who listens. Once per session — the magic is in the first listen.</p>",
+      "value": "<p>A pre-Fall mixtape someone made for someone they loved, labeled only FOR THE LONG DRIVE in faded marker. Plays on anything with the decency to have a tape deck. Mal is fond of it and will occasionally sing along, badly, on purpose.</p><p><strong>Use.</strong> During a Soma Break, target the allies who are listening and play it: each of them recovers 1d6 Stress. Once per session — the magic is in the first listen.</p>",
       "chat": ""
     }
   },
@@ -62,19 +62,31 @@
             "prefall-component"
           ],
           "price": {
-            "marks": 30,
-            "currency": "softpower",
+            "marks": 60,
+            "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI relic — morale",
+            "rarityMult": 2,
+            "notes": "TI gear × rarity 2",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 24
           },
           "consume": {
-            "decrement": true,
-            "target": "self"
+            "decrement": false,
+            "target": "target",
+            "effects": [
+              {
+                "kind": "track",
+                "track": "stress",
+                "op": "add",
+                "formula": "1d6"
+              }
+            ],
+            "limit": {
+              "window": "session",
+              "uses": 1
+            }
           }
         }
       }

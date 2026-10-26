@@ -10,6 +10,7 @@
     ],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>Not actually a full vending machine. A small folding kit — about the size of a lunchbox — that, when unfolded, is unmistakably the input slot, the selection grid, and the dispenser of a 1980s vending machine. Drop a small item in. Press a button (any button — it doesn't matter which). Wait six seconds. A different item drops out. The kit was built by someone who had clearly thought about this for a long time and lost.</p><p><strong>The Trade.</strong> Once per session, deposit any single Tier-I item. Roll 1d6: 1-2 = a roughly equivalent Tier-I item (GM choice), 3-4 = a Tier-II item that is *somehow related*, 5 = a small useful tool you didn't know you needed, 6 = the original item back, plus a sandwich. The kit refuses to operate twice in the same scene. The kit has opinions.</p>",
       "chat": ""
@@ -67,11 +68,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777437725674,
-    "modifiedTime": 1778541957230,
+    "modifiedTime": 1792974834886,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

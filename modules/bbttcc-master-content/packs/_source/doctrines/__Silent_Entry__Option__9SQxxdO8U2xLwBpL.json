@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Silent Entry [Option]",
+  "name": "Silent Entry",
   "type": "feat",
   "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
   "system": {
@@ -7,31 +7,37 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Silent Entry [Option]</h3><p><em>No rules text registered.</em></p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> option</p><p><strong>Raid Types:</strong> assault, infiltration, occupation, liberation, espionage, propaganda, siege, ritual, assault_defense, courtly</p></div>",
+      "value": "<p><strong>Silent Entry</strong></p><p>Covert Ops Cell, pre-roll. +1 to your roll this round; in a Heist the Alarm also drops 1.</p><p><em>Cost: Intrigue 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "maneuver",
-      "key": "opt_silent_entry"
+      "key": "opt_silent_entry",
+      "effects": {
+        "text": "Covert Ops Cell, pre-roll. +1 to your roll this round; in a Heist the Alarm also drops 1."
+      },
+      "meta": {
+        "storyOnly": false
+      }
     }
   },
   "_id": "9SQxxdO8U2xLwBpL",
   "effects": [],
-  "folder": null,
+  "folder": "SziFuLdTIX4Y2Rav",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601760,
-    "modifiedTime": 1782703702690,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988993886,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

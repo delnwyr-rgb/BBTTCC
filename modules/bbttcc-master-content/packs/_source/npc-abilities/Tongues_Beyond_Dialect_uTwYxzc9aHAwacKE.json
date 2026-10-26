@@ -38,7 +38,6 @@
       "subtype": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -46,6 +45,32 @@
           "tier": "II",
           "frame": "trait"
         }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "do": {
+              "save": {
+                "attr": "mind",
+                "dc": 13,
+                "onSave": "negate"
+              }
+            },
+            "radius": 6,
+            "who": "all"
+          },
+          {
+            "on": "saveFail",
+            "do": {
+              "noBonusAction": true
+            },
+            "if": {
+              "weapon": "Tongues Beyond Dialect"
+            }
+          }
+        ]
       }
     },
     "bbttcc": {
@@ -53,29 +78,34 @@
         "sources": [
           "Marsh-Tongue Hex"
         ],
+        "sourceIds": [
+          "u6JS59QSJHwoev1d"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "uTwYxzc9aHAwacKE",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167245011,
-    "modifiedTime": 1782167245011,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989049230,
+    "modifiedTime": 1792989049230,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!uTwYxzc9aHAwacKE"
 }

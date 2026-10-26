@@ -8,7 +8,7 @@
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p><strong>Whisper from the Scullery.</strong> The people who carry the trays hear everything and are paid to forget none of it — only to wait to be asked nicely.</p><p><em>Play:</em> +2 to your next courtly exchange roll.</p>",
+      "value": "<p><strong>Whisper from the Scullery.</strong> The people who carry the trays hear everything and are paid to forget none of it — only to wait to be asked nicely.</p><p><em>Play:</em> +2 to your next Parley roll.</p>",
       "chat": "",
       "unidentified": ""
     }
@@ -30,11 +30,11 @@
     "default": 0
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780000000000,
-    "modifiedTime": 1784079176429,
+    "modifiedTime": 1792977749349,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

@@ -1,0 +1,50 @@
+{
+  "name": "Chaotic Dance",
+  "type": "feature",
+  "img": "icons/equipment/feet/boots-collared-leather.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>As a bonus action the Reveller lets the dance carry it: it teleports up to 4 squares to a space it can see, arriving mid-caper.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "ofSFt7tNQ7stNRaj",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gamchicoth Reveller"
+        ],
+        "sourceIds": [
+          "jLzxG6ZynTW6UNZU"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069921,
+    "modifiedTime": 1792989070002,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ofSFt7tNQ7stNRaj"
+}

@@ -6,13 +6,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
-      "revision": 2,
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<h2>Medic of the Wastes</h2><p><em>Out here, healing is logistics.</em></p><hr /><h3>Rules</h3><p>You gain a skill rank in Faith (Soul). If you already have it, its rank rises by one instead.</p><p>When you use a medkit to stabilize a creature, it also regains Integrity equal to your rank bonus.</p><p>Additionally, during a Scene Break, you may allow up to two creatures to regain additional Integrity equal to your rank bonus. A creature can benefit from this principle only once per Scene Break.</p><p class=\"ft-engine-note\"><em>⚙ +1 Faith. 🃏 Card — shows the Integrity numbers.</em></p>",
+      "value": "<h2>Medic of the Wastes</h2><p><em>Out here, healing is logistics.</em></p><hr /><h3>Rules</h3><p>You gain a skill rank in Faith (Soul). If you already have it, its rank rises by one instead.</p><p>When you use a medkit to stabilize a creature, it also regains Integrity equal to your rank bonus.</p><p>Additionally, during a Scene Break, you may allow up to two creatures to regain additional Integrity equal to your rank bonus. A creature can benefit from this technique only once per Scene Break.</p><p class=\"ft-engine-note\"><em>⚙ +1 Faith. 🃏 Card — shows the Integrity numbers.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_medic_of_the_wastes",
@@ -43,7 +43,6 @@
       "pack": "bbttcc-feats-expansion-v1",
       "generatedAt": "2026-01-18T20:40:44.997674+00:00"
     },
-    "fourththing": {},
     "autoanimations": {
       "id": "ft-medic-of-the-wastes",
       "label": "Medic of the Wastes",
@@ -232,11 +231,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1768802465828,
-    "modifiedTime": 1781116208386,
+    "modifiedTime": 1792977642903,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!Zrv0q6PgygEWtxta"

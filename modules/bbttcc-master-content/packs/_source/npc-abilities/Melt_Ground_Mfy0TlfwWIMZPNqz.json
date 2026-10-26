@@ -1,0 +1,68 @@
+{
+  "name": "Melt Ground",
+  "type": "feat",
+  "img": "icons/environment/wilderness/cave-entrance.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Inferno chooses a 2×2-square patch of ground within 12 squares. It becomes molten slag for a minute: difficult terrain, and 2d10 thermal (hot) damage to any creature that starts its turn there or enters for the first time on a turn.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "template": {
+                "shape": "cube",
+                "size": 10
+              },
+              "prompt": "Slag for a minute: start or enter → 2d10 thermal."
+            },
+            "who": "self"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Inferno of Cruelty"
+        ],
+        "sourceIds": [
+          "vpPWkftzLsEwoY9k"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "Mfy0TlfwWIMZPNqz",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069949,
+    "modifiedTime": 1792989070035,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!Mfy0TlfwWIMZPNqz"
+}

@@ -25,7 +25,7 @@
       "aoe",
       "shape-radius"
     ],
-    "effect": "Radius 10 ft. — targets roll vs Evasion (DC 11). Half damage on success. Triggers automatically the first time the swarm drops below half Integrity — the swarm scatters wide before re-coalescing.",
+    "effect": "Radius 2 squares. — targets roll vs Evasion (DC 11). Half damage on success. Triggers automatically the first time the swarm drops below half Integrity — the swarm scatters wide before re-coalescing.",
     "flavor": "Wound it and it just becomes a wider problem.",
     "manifestation": {
       "tier": 1,
@@ -56,6 +56,18 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "intrigue",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 11,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "sphere",
+        "size": 10
       }
     },
     "description": {
@@ -63,7 +75,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -86,21 +97,32 @@
             "saleBack": 20
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Bog-Skitter Swarm"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "bloodied",
+            "who": "enemies",
+            "radius": 2,
+            "do": {
+              "save": {
+                "attr": "intrigue",
+                "dc": 11,
+                "onSave": "half"
+              },
+              "damage": {
+                "formula": "1d6",
+                "type": "poison"
+              }
+            },
+            "label": "Mire-Disperse fires"
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "b0f15716-688a-43ba-991a-a94e204567af",
+      "id": "ft-mire-disperse",
       "label": "Mire-Disperse",
       "macro": {
         "enable": false,
@@ -275,24 +297,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Bog-Skitter Swarm"
+        ],
+        "sourceIds": [
+          "juFbGL3HEuoWcuHV"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "7bp4qImugQBB05ZQ",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024226062,
-    "modifiedTime": 1782167244988,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989032079,
+    "modifiedTime": 1792989032080,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!7bp4qImugQBB05ZQ"
 }

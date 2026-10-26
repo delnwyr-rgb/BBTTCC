@@ -1,0 +1,71 @@
+{
+  "name": "Aura of Covetousness",
+  "type": "feature",
+  "img": "icons/containers/chest/chest-oak-steel-brown.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Any creature that starts its turn within 6 squares rolls vs Resolve (DC 16). Fail: seized by the need to possess a piece of the Tyrant — it must spend its movement approaching, and if it ends its turn adjacent it spends its action trying to pry off a chunk of gold, provoking as it does. Repeat the check at the end of each of its turns, richer in perspective.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "do": {
+              "condition": {
+                "key": "compelled",
+                "duration": "until-saved",
+                "save": {
+                  "attr": "soul",
+                  "dc": 16
+                }
+              }
+            },
+            "radius": 6
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Gilded Tyrant"
+        ],
+        "sourceIds": [
+          "m1Wzc1wbRFO7kl7j"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "33B5HGR4RzBlz5tj",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069908,
+    "modifiedTime": 1792989069992,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!33B5HGR4RzBlz5tj"
+}

@@ -27,15 +27,37 @@
       "calling": {
         "key": "keeper",
         "tier": 1
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "who": "targets",
+            "do": {
+              "removeCondition": [
+                "shaken"
+              ],
+              "bankReroll": {
+                "context": "defense",
+                "note": "Steady the Soul"
+              }
+            },
+            "limit": {
+              "per": "scene",
+              "uses": 1
+            }
+          }
+        ]
       }
     }
   },
   "_stats": {
-    "coreVersion": "14.364",
-    "systemId": null,
-    "systemVersion": null,
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.3",
     "createdTime": 1784006966672,
-    "modifiedTime": 1784006966672,
+    "modifiedTime": 1791412958926,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

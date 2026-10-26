@@ -10,8 +10,9 @@
     ],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
-      "value": "<p>A tiny stud of refined yesodium installed through the tongue by someone who absolutely knew what they were doing or absolutely didn't, no in-between. The wearer reports a faint pulse-memory taste, like licking a battery you used to own. Khezek Tor doesn't sell these. They also don't NOT sell these. You understand the distinction.</p><p><strong>Pulse-Memory.</strong> While installed, +1 to Soul-channel manifestation rolls. Counts as constantly active. Cannot be removed without a healer and an apology. Yesodium is a hell of a drug.</p><p><strong>Drawback.</strong> -1 to any check that requires you to be soberly persuasive to a Lyrenn elder.</p>",
+      "value": "<p>A tiny stud of refined yesodium installed through the tongue by someone who absolutely knew what they were doing or absolutely didn't, no in-between. The wearer reports a faint pulse-memory taste, like licking a battery you used to own. Khezek Tor doesn't sell these. They also don't NOT sell these. You understand the distinction.</p><p><strong>Pulse-Memory.</strong> While installed, +1 to Soul-channel casting checks. Counts as constantly active. Cannot be removed without a healer and an apology. Yesodium is a hell of a drug.</p><p><strong>Drawback.</strong> -1 to any check that requires you to be soberly persuasive to a Lyrenn elder.</p>",
       "chat": ""
     }
   },
@@ -36,25 +37,20 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A tiny stud of refined yesodium installed through the tongue by someone who absolutely knew what they were doing or absolutely didn't, no in-between. The wearer reports a faint pulse-memory taste, like licking a battery you used to own. Khezek Tor doesn't sell these. They also don't NOT sell these. You understand the distinction.</p><p><b>Pulse-Memory.</b> While installed, +1 to Soul-channel manifestation rolls. Counts as constantly active. Cannot be removed without a healer and an apology. Yesodium is a hell of a drug.</p><p><b>Drawback.</b> -1 to any check that requires you to be soberly persuasive to a Lyrenn elder.</p>",
+          "lore": "<p>A tiny stud of refined yesodium installed through the tongue by someone who absolutely knew what they were doing or absolutely didn't, no in-between. The wearer reports a faint pulse-memory taste, like licking a battery you used to own. Khezek Tor doesn't sell these. They also don't NOT sell these. You understand the distinction.</p><p><b>Pulse-Memory.</b> While installed, +1 to Soul-channel casting checks. Counts as constantly active. Cannot be removed without a healer and an apology. Yesodium is a hell of a drug.</p><p><b>Drawback.</b> -1 to any check that requires you to be soberly persuasive to a Lyrenn elder.</p>",
           "materialOf": [
             "yesodium",
             "anchor-quartz",
             "regret"
           ],
-          "grants": {
-            "somaModifiers": {
-              "soul": 1
-            }
-          },
           "price": {
-            "marks": 225,
+            "marks": 340,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TII implant stamp × soulbound 1.5",
+            "notes": "TII implant × soulbound",
             "bound": "soulbound",
             "saleBack": 0
           }
@@ -71,12 +67,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777437725651,
-    "modifiedTime": 1778541951189,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988926611,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

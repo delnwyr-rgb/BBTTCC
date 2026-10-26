@@ -1,0 +1,50 @@
+{
+  "name": "Multiattack",
+  "type": "feature",
+  "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Horde makes one Whispering Flames attack and uses Consume Magic.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "PITaLCvk0cB9qZe2",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Ashen Horde"
+        ],
+        "sourceIds": [
+          "knO0GK8qKCeyNC6N"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069952,
+    "modifiedTime": 1792989070037,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!PITaLCvk0cB9qZe2"
+}

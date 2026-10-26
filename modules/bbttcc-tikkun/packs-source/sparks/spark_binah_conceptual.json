@@ -32,14 +32,15 @@
       "spark"
     ],
     "description": {
-      "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Binah — Boundaries, law.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, logistics. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+      "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Binah — Boundaries, law.</p>\n<p><strong>Aligned methods:</strong> intrigue, diplomacy, logistics. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc-tikkun": {
       "sparkVersion": "1.0.0",
-      "identifier": "spark_binah_conceptual"
+      "identifier": "spark_binah_conceptual",
+      "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration."
     }
   },
   "_stats": {

@@ -38,7 +38,7 @@ const NAMES = [
   "Spark‑Tuned Rosary", "Stabilizer Patch", "Terraformer Ampule", "Tesseract Map",
   "Threshold Bell, Hand-Sized", "Unicorn Ramming Module", "Valhauler Pulsar Core",
   "Veilbreaker Mantle", "Vow-Bone Stamp", "Vow-Bound Cuffs", "Vow-Bound Forge Core",
-  "War Tower Teeth Halo", "Wardstone of Gevurah", "Witness-Glass Scope", "Wrath Resistance",
+  "War Tower Teeth Halo", "Wardstone of Geburah", "Witness-Glass Scope", "Wrath Resistance",
   "Yesodic Sigil of the Hearthward",
 ];
 

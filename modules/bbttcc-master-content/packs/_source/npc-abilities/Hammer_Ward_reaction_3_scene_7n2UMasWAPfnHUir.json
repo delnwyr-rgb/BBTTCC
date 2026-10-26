@@ -1,0 +1,76 @@
+{
+  "name": "Hammer-Ward (reaction, 3/scene)",
+  "type": "feature",
+  "img": "icons/skills/melee/shield-block-gray-yellow.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "rfi-scrubbed"
+    ],
+    "description": {
+      "value": "<p><strong>Reaction, when hit by an attack.</strong> The adept gains +2 Guard against that attack, which may turn it into a miss. Three times per scene.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "struck",
+            "do": {
+              "bankBonus": {
+                "bonus": 2,
+                "context": "defense",
+                "note": "Hammer-Ward"
+              }
+            },
+            "to": "self",
+            "limit": {
+              "per": "scene",
+              "uses": 3
+            },
+            "label": "Hammer-Ward"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Valhaulan Spark Adept"
+        ],
+        "sourceIds": [
+          "ZOttfT1AftTApkwf"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "7n2UMasWAPfnHUir",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069939,
+    "modifiedTime": 1792989070021,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!7n2UMasWAPfnHUir"
+}

@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 — Gridbreakers</strong></p><p><strong>“Everything broken still remembers how it worked.”</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><p><em>You’ve stopped scavenging ruins and started running them.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Your faction can restore or jury-rig infrastructure in Ruins/Urban Wreckage more efficiently. Facilities and urban systems are cheaper to reactivate, repair, or stabilize.</li></ul>",
+      "value": "<p><strong>Tier 2 — Gridbreakers</strong></p><p><strong>“Everything broken still remembers how it worked.”</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><p><em>You’ve stopped scavenging ruins and started running them.</em></p><ul><li><strong>Strategic:</strong> Dead cities negotiate: each Ruins or Urban Wreckage hex your Domain holds yields 10 extra Logistics marks a turn.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-gridbreakers-t2",
@@ -81,6 +81,22 @@
           "bbttcc:theme:system-hacking"
         ]
       }
+    },
+    "fourththing": {
+      "domainIncome": {
+        "perHexType": [
+          {
+            "types": [
+              "ruins",
+              "urbanWreckage",
+              "factory",
+              "research"
+            ],
+            "channel": "logistics",
+            "op": 1
+          }
+        ]
+      }
     }
   },
   "_stats": {
@@ -93,12 +109,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986948790,
-    "modifiedTime": 1781116040786,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989169502,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

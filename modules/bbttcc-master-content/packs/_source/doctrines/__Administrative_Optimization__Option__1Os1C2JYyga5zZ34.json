@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Administrative Optimization [Option]",
+  "name": "Administrative Optimization",
   "type": "feat",
   "img": "icons/sundries/flags/banner-flag-pirate-swords.webp",
   "system": {
@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Administrative Optimization [Option]</h3><p><em>No rules text registered.</em></p></div>",
+      "value": "<p><strong>Administrative Optimization</strong></p><p>The Emperor (Administrator). Domain-wide: marks income ×1.05 this turn.</p><p><em>Cost: Economy 10 · Soft Power 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "optact_administrative_optimization"
+      "key": "optact_administrative_optimization",
+      "effects": {
+        "text": "The Emperor (Administrator). Domain-wide: marks income ×1.05 this turn."
+      }
     }
   },
   "_id": "1Os1C2JYyga5zZ34",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601773,
-    "modifiedTime": 1782703702686,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988995663,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

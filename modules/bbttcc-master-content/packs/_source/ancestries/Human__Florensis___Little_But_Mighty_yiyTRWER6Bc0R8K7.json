@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "properties": [],
     "requirements": "Human",
@@ -41,7 +41,6 @@
       "kind": "human",
       "feature": "little_mighty",
       "lineage": "Florensis",
-      "tierLevel": 0,
       "version": "1.0.0"
     }
   },
@@ -57,12 +56,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004105807,
-    "modifiedTime": 1781116105107,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988987107,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

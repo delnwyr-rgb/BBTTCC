@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "art/bbttcc/qliphoth/the-ashen-horde.webp",
   "system": {
-    "role": "Qliphothic Calamity (Harab Serapel — Greater)",
+    "role": "brute",
     "tier": 4,
     "factionId": "",
     "notes": "<p>A single Scavenger is a menace; the Ashen Horde is a natural disaster. A mobile storm of countless burning ravens acting with one voracious intelligence — the manifestation of a kingdom that fell to its own greed. It descends on whole regions and strips them of life, magic, and treasure, leaving silent grey ash. To be caught inside it is to be torn apart by a thousand fiery beaks while an infinite, cawing hunger swallows your soul.</p><p><strong>Qliphah:</strong> Harab Serapel, the Ravens of Burning — the Hull of Netzach. What is left of triumph when only the taking remains.</p><p><em>Mal's note: 'You cannot fight weather. You can, however, be somewhere else. Strongly recommend somewhere else.'</em></p>",
@@ -19,7 +19,7 @@
     },
     "attributes": {
       "violence": {
-        "value": 4
+        "value": 5
       },
       "intrigue": {
         "value": 6
@@ -28,7 +28,7 @@
         "value": 6
       },
       "body": {
-        "value": 5
+        "value": 8
       },
       "mind": {
         "value": 2
@@ -40,8 +40,9 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 110,
-        "max": 110
+        "value": 135,
+        "max": 135,
+        "temp": 0
       },
       "stress": {
         "value": 48,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,7 +145,9 @@
         "qliphothic"
       ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "sephirotic"
+      ]
     },
     "conditionImmunities": [
       "charmed",
@@ -159,6 +163,9 @@
       "hull-of-netzach",
       "greater"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -171,6 +178,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Calamity (Harab Serapel — Greater)",
+      "notes": "<p>A single Scavenger is a menace; the Ashen Horde is a natural disaster. A mobile storm of countless burning ravens acting with one voracious intelligence — the manifestation of a kingdom that fell to its own greed. It descends on whole regions and strips them of life, magic, and treasure, leaving silent grey ash. To be caught inside it is to be torn apart by a thousand fiery beaks while an infinite, cawing hunger swallows your soul.</p><p><strong>Qliphah:</strong> Harab Serapel, the Ravens of Burning — the Hull of Netzach. What is left of triumph when only the taking remains.</p><p><em>Mal's note: 'You cannot fight weather. You can, however, be somewhere else. Strongly recommend somewhere else.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -270,7 +281,7 @@
       "_id": "prul436qRURut1uI",
       "name": "The Horde Is One",
       "type": "feature",
-      "img": "icons/svg/wing.svg",
+      "img": "icons/magic/holy/angel-wings-gray.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -288,23 +299,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188167,
-        "modifiedTime": 1787799188167,
+        "modifiedTime": 1791324411445,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!knO0GK8qKCeyNC6N.prul436qRURut1uI"
+      }
     },
     {
       "_id": "f5Nhv5Psi65ig7Tr",
       "name": "Fractured Will (3/scene)",
       "type": "feature",
-      "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+      "img": "icons/magic/air/air-pressure-shield-blue.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -322,23 +332,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188167,
-        "modifiedTime": 1787799188167,
+        "modifiedTime": 1791324411445,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!knO0GK8qKCeyNC6N.f5Nhv5Psi65ig7Tr"
+      }
     },
     {
       "_id": "agNngL4jU23gqrre",
       "name": "Aura of Avarice",
       "type": "feature",
-      "img": "icons/svg/chest.svg",
+      "img": "icons/containers/chest/chest-oak-steel-brown.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -354,19 +363,40 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "do": {
+                  "condition": {
+                    "key": "compelled",
+                    "duration": "until-saved",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 18
+                    }
+                  }
+                },
+                "radius": 12
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188167,
-        "modifiedTime": 1787799188167,
+        "modifiedTime": 1791331978756,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!knO0GK8qKCeyNC6N.agNngL4jU23gqrre"
+      }
     },
     {
       "_id": "LS2bmFwZBiur9UzD",
@@ -390,23 +420,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188167,
-        "modifiedTime": 1787799188167,
+        "modifiedTime": 1791324411444,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!knO0GK8qKCeyNC6N.LS2bmFwZBiur9UzD"
+      }
     },
     {
       "_id": "YcEN7o3ABAhUO2y4",
       "name": "Whispering Flames",
       "type": "weapon",
-      "img": "icons/svg/fire.svg",
+      "img": "icons/weapons/guns/flamethrower-spray-fire-orange.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -458,6 +487,18 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "intrigue",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "cone",
+            "size": 30
           }
         },
         "description": {
@@ -471,25 +512,44 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Whispering Flames"
+                },
+                "do": {
+                  "damage": {
+                    "formula": "3d10",
+                    "type": "thermal"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188167,
-        "modifiedTime": 1787799188167,
+        "modifiedTime": 1791331978756,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!knO0GK8qKCeyNC6N.YcEN7o3ABAhUO2y4"
+      }
     },
     {
       "_id": "m7zDB9v2eayGRZ6m",
       "name": "Consume Magic",
       "type": "feat",
-      "img": "icons/svg/book.svg",
+      "img": "icons/sundries/books/book-rounded-blue.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -507,23 +567,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188167,
-        "modifiedTime": 1787799188167,
+        "modifiedTime": 1791324411445,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!knO0GK8qKCeyNC6N.m7zDB9v2eayGRZ6m"
+      }
     },
     {
       "_id": "LgsZf9eiJxTijHlE",
       "name": "Blinding Cinders",
       "type": "feat",
-      "img": "icons/svg/blind.svg",
+      "img": "icons/creatures/eyes/humanoid-single-blind.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -539,25 +598,45 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "condition": {
+                    "key": "blinded",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "body",
+                      "dc": 18
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188167,
-        "modifiedTime": 1787799188167,
+        "modifiedTime": 1791331978756,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!knO0GK8qKCeyNC6N.LgsZf9eiJxTijHlE"
+      }
     },
     {
       "_id": "hsdUT0KvjUDFt64Y",
       "name": "Disperse and Reform (Recharge 5–6)",
       "type": "feat",
-      "img": "icons/svg/invisible.svg",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -573,19 +652,165 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "immune": {
+                    "rounds": 1
+                  },
+                  "shift": 24
+                },
+                "who": "self",
+                "label": "Disperse and Reform"
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188167,
-        "modifiedTime": 1787799188167,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989132092,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Hollow Touch",
+      "type": "weapon",
+      "img": "icons/magic/death/hand-withered-gray.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d10",
+          "attribute": "violence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "lineage-strike",
+          "qliphothic",
+          "bestiary"
+        ],
+        "effect": "Damage goes to Stress. On a hit the target rolls Resolve vs DC 19; on a failure it is Compelled toward the shell's vice until the end of its next turn.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul"
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 19,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> Reach 1 square, one target. Damage: <code>2d10</code> qliphothic to Stress + violence. On a hit the target rolls Resolve vs DC 19; on a failure it is Compelled toward the shell's vice until the end of its next turn.</p><p><em>The hollow reaches for what it lacks.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!knO0GK8qKCeyNC6N.hsdUT0KvjUDFt64Y"
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "attack",
+              "lineageStrike": "qliphothic",
+              "price": {
+                "marks": 1350,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIV attack × 1",
+                "bound": "free",
+                "saleBack": 540
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "daG1dh486wXP2lCw",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989132142,
+        "modifiedTime": 1792989132142,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -600,7 +825,7 @@
       "rfi": {
         "actor": {
           "tier": "IV",
-          "bracket": "elite",
+          "bracket": "boss",
           "archetype": "the-ashen-horde",
           "bestiary": {
             "themes": [
@@ -630,34 +855,41 @@
             ]
           },
           "price": {
-            "marks": 1800,
-            "bounty": 3000,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 120,
+            "bounty": 120,
+            "hire": null,
+            "ransom": null,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "IV elite Qliphothic Calamity (Harab Serapel — Greater) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TIV boss qliphothic — bounty 120 marks; credited to the pool matching the method (default softpower)"
           },
           "qliphah": {
             "name": "harab-serapel",
             "hullOf": "netzach",
             "grade": "greater"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "harab-serapel",
+          "title": "Qliphothic Calamity (Harab Serapel — Greater)"
         }
       },
-      "kind": "npc"
+      "kind": "npc",
+      "creatureType": [
+        "fiend",
+        "swarm"
+      ]
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188167,
-    "modifiedTime": 1787799188167,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989131970,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "knO0GK8qKCeyNC6N",
   "_key": "!actors!knO0GK8qKCeyNC6N"

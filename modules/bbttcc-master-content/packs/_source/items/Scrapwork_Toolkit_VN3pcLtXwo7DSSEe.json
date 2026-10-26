@@ -1,58 +1,20 @@
 {
+  "_id": "VN3pcLtXwo7DSSEe",
   "name": "Scrapwork Toolkit",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/tools/medical/toolkit-surgical-pink.webp",
   "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>Counts as tinker's tools; when repairing constructs/vehicles, reduce time by 25%.</p>",
       "chat": ""
-    },
-    "quantity": 1,
-    "weight": {
-      "value": 5,
-      "units": "lb"
-    },
-    "price": {
-      "value": 50,
-      "denomination": "gp"
-    },
-    "rarity": "common",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "scrapwork-toolkit",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": []
-    },
     "fourththing": {
       "rfi": {
         "item": {
@@ -63,34 +25,38 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI tool stamp (untiered pass 2026-10-12)",
+            "notes": "TI tool stamp",
             "bound": "free",
             "saleBack": 12
           },
           "tier": "I",
-          "frame": "tool"
+          "frame": "tool",
+          "bound": "free",
+          "origin": "looted",
+          "reach": "self",
+          "footprint": 1
         }
       }
     }
   },
   "effects": [],
   "folder": "Wxh1A343inwTUeoo",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834200523,
-    "modifiedTime": 1782156674948,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1900000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "VN3pcLtXwo7DSSEe",
-  "sort": 1900000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988914231,
+    "modifiedTime": 1792988914231,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!VN3pcLtXwo7DSSEe"
 }

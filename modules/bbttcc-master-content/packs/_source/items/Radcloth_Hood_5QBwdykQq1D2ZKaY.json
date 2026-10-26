@@ -1,53 +1,18 @@
 {
+  "_id": "5QBwdykQq1D2ZKaY",
   "name": "Radcloth Hood",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/equipment/head/hood-cowl-mask-purple.webp",
   "system": {
-    "description": {
-      "value": "<p>Provides reroll the lowest die on saves vs [TODO(adv-call)]. mild radiation &amp; spores; reduces Swamp/Mire and Wasteland exposure checks.</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 1,
-      "units": "lb"
-    },
-    "price": {
-      "value": 50,
-      "denomination": "gp"
-    },
-    "rarity": "common",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "radcloth-hood",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>Provides reroll the lowest die on checks vs. mild radiation &amp; spores; reduces Swamp/Mire and Wasteland exposure checks.</p>",
+      "chat": ""
+    }
   },
   "flags": {
     "bbttcc": {
@@ -69,39 +34,46 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI vestment stamp (untiered pass 2026-10-12)",
+            "notes": "TI vestment stamp",
             "bound": "free",
             "saleBack": 30
           },
-          "legacySystem": {
-            "description": {
-              "value": "<p>Provides reroll the lowest die on checks vs. mild radiation &amp; spores; reduces Swamp/Mire and Wasteland exposure checks.</p>"
-            }
-          },
           "tier": "I",
-          "frame": "vestment"
+          "frame": "vestment",
+          "bound": "free",
+          "origin": "looted",
+          "reach": "self",
+          "footprint": 1
         }
-      }
+      },
+      "rerolls": [
+        {
+          "context": "save",
+          "mode": "reroll-lowest",
+          "vs": "mild radiation and spores",
+          "note": "Radcloth Hood"
+        }
+      ]
     }
   },
   "effects": [],
   "folder": "Wxh1A343inwTUeoo",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834192697,
-    "modifiedTime": 1782164185970,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1600000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "5QBwdykQq1D2ZKaY",
-  "sort": 1600000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988912944,
+    "modifiedTime": 1792988912945,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!5QBwdykQq1D2ZKaY"
 }

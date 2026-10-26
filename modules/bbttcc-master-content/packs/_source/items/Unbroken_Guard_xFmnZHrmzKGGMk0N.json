@@ -6,8 +6,8 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
-      "revision": 2,
+      "custom": "Bad Eden Core Feats v1",
+      "revision": 1,
       "rules": "2024"
     },
     "tags": [],
@@ -43,7 +43,6 @@
       "pack": "bbttcc-feats-core-v1",
       "generatedAt": "2026-01-18T18:59:59.544766+00:00"
     },
-    "fourththing": {},
     "autoanimations": {
       "id": "ft-unbroken-guard",
       "label": "Unbroken Guard",
@@ -232,11 +231,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1768802465828,
-    "modifiedTime": 1782164185981,
+    "modifiedTime": 1790037798270,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!xFmnZHrmzKGGMk0N"

@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Veiled Access [Option]",
+  "name": "Veiled Access",
   "type": "feat",
   "img": "icons/skills/melee/strike-sword-dagger-runes-gray.webp",
   "system": {
@@ -7,31 +7,37 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Veiled Access [Option]</h3><p><em>No rules text registered.</em></p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> option</p><p><strong>Raid Types:</strong> assault, infiltration, occupation, liberation, espionage, propaganda, siege, ritual, assault_defense, courtly</p></div>",
+      "value": "<p><strong>Veiled Access</strong></p><p>Rosicrucian, pre-roll. +1 to your roll; in a Heist progress +1, in a Parley you draw one Secret.</p><p><em>Cost: Intrigue 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "maneuver",
-      "key": "opt_veiled_access"
+      "key": "opt_veiled_access",
+      "effects": {
+        "text": "Rosicrucian, pre-roll. +1 to your roll; in a Heist progress +1, in a Parley you draw one Secret."
+      },
+      "meta": {
+        "storyOnly": false
+      }
     }
   },
   "_id": "ZxsbbZzoIKKj1MXa",
   "effects": [],
-  "folder": null,
+  "folder": "SziFuLdTIX4Y2Rav",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601756,
-    "modifiedTime": 1782703702690,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988994500,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

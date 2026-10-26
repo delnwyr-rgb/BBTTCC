@@ -16,12 +16,12 @@
     "damageParts": [],
     "range": {
       "short": 1,
-      "long": 1
+      "long": 1,
+      "units": "sq"
     },
     "tags": [
       "t1-baseline",
-      "sword",
-      "versatile"
+      "sword"
     ],
     "effect": "Versatile: one hand beside a shield, two hands when you mean it. No signature ability.",
     "flavor": "The shape every other sword is apologizing for not being.",
@@ -57,7 +57,7 @@
       }
     },
     "description": {
-      "value": "<p>A straight double-edged blade with a plain cross-guard and a grip long enough for a second hand. Ground from pre-Fall leaf-spring or faction sheet-steel, depending on who made it and what they had. The weapon most hex militias train on first, because it forgives bad footwork and rewards good.</p><p><b>Standard Issue.</b> No signature, no hum, no history worth mentioning. It cuts.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Versatile: one hand beside a shield, two hands when you mean it. No signature ability.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d8 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(blade)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Melee (Violence)</li>\n  <li><strong>Reach:</strong> Melee</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+      "value": "<p>A straight double-edged blade with a plain cross-guard and a grip long enough for a second hand. Ground from pre-Fall leaf-spring or Domain tab-steel, depending on who made it and what they had. The weapon most hex militias train on first, because it forgives bad footwork and rewards good.</p><p><b>Standard Issue.</b> No signature, no hum, no history worth mentioning. It cuts.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Versatile: one hand beside a shield, two hands when you mean it. No signature ability.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d8 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(blade)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Melee (Violence)</li>\n  <li><strong>Reach:</strong> Melee</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
     }
   },
   "flags": {
@@ -299,21 +299,21 @@
       "version": 5
     }
   },
-  "folder": "bQhXd1gwJXtaVLGh",
   "_id": "bA1LongSwrd0001a",
   "effects": [],
+  "folder": "bQhXd1gwJXtaVLGh",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.16",
-    "createdTime": 1792009438689,
-    "modifiedTime": 1792009438689,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792009555915,
+    "modifiedTime": 1792988937612,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

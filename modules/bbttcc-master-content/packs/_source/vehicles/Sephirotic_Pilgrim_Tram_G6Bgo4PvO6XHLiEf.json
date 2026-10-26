@@ -7,79 +7,6 @@
       "entityKind": "rig",
       "createdViaContentSprint": "2026-06-13",
       "createdAt": 1781332649241
-    },
-    "bbttcc-structures": {
-      "hasStructure": true,
-      "facilityMode": false,
-      "materialBOM": [
-        {
-          "materialKey": "scribed-steel",
-          "qty": 6,
-          "originalQty": 6,
-          "family": "metal",
-          "tier": "III",
-          "name": "Scribed Steel",
-          "tagsCache": [
-            "material",
-            "scribed-steel"
-          ]
-        },
-        {
-          "materialKey": "heart-iron",
-          "qty": 3,
-          "originalQty": 3,
-          "family": "metal",
-          "tier": "II",
-          "name": "Heart-Iron",
-          "tagsCache": [
-            "material",
-            "heart-iron",
-            "heart-iron",
-            "aurablade",
-            "metal"
-          ]
-        },
-        {
-          "materialKey": "cold-iron",
-          "qty": 2,
-          "originalQty": 2,
-          "family": "metal",
-          "tier": "II",
-          "name": "Cold-Iron",
-          "tagsCache": [
-            "material",
-            "cold-iron",
-            "iron",
-            "cold-forge",
-            "hex-resistant"
-          ]
-        }
-      ],
-      "state": "intact",
-      "plates": {
-        "current": 33,
-        "max": 33
-      },
-      "threshold": 3.05,
-      "resists": {
-        "kinetic": 0.5
-      },
-      "vulnerabilities": {
-        "energy|heat": {
-          "type": "energy",
-          "flavor": "heat",
-          "factor": 2
-        }
-      },
-      "loadBearing": false,
-      "collapseProfile": {
-        "fallFt": 10,
-        "damageDice": "2d10",
-        "nonlethal": true,
-        "knockbackFt": 5,
-        "triggerState": "breached"
-      },
-      "history": []
     }
   },
   "system": {
@@ -148,8 +75,12 @@
     },
     "travel": {
       "speed": 3,
-      "range": 12,
-      "hazardResist": 0
+      "range": 10,
+      "hazardResist": 0,
+      "domains": [
+        "land"
+      ],
+      "depthRating": 0
     },
     "tags": [
       "faith",
@@ -158,6 +89,10 @@
       "pilgrimage",
       "faction-rig"
     ],
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
     "details": {
       "biography": {
         "value": "<p><strong>Concept.</strong> A Scion conveyance strung with prayer-thread and lit from inside by a Spark someone is definitely supposed to be guarding more carefully. It carries the faithful toward the Great Work and the curious toward awkward theological conversations.</p>\n<p><strong>Signature.</strong> Its passage steadies allied resolve and sways the undecided. The Spark in the lantern hums in a key that makes the air feel load-bearing.</p>",
@@ -171,11 +106,11 @@
     "disposition": 1,
     "name": "Sephirotic Pilgrim-Tram",
     "displayName": 30,
-    "width": 1,
-    "height": 1,
+    "width": 2,
+    "height": 2,
     "depth": 1,
     "texture": {
-      "src": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_goddess.png",
+      "src": "modules/bbttcc-core/assets/rigs/heavy_rig_11.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -269,8 +204,9 @@
         "tags": [],
         "category": "gear",
         "source": "",
+        "quantity": 1,
         "description": {
-          "value": "<p>A pleasure-galley with delusions of fortress. Docks at hexes to throw lavish productions; cuts loose to roam when the music demands it. Throne optional, mandatory.</p><p><b>Frame · Medium · Hybrid · Jabba canon</b></p>",
+          "value": "<p>A pleasure-galley with delusions of fortress. Docks at hexes to throw lavish productions; cuts loose to roam when the music demands it. Throne optional, mandatory.</p><p><b>Frame · Medium · Hybrid</b></p>",
           "chat": ""
         }
       },
@@ -284,6 +220,7 @@
             "baseIntegrity": 32,
             "tierStep": 10,
             "mobilityAllowed": [
+              "mobile",
               "hybrid"
             ],
             "slots": {
@@ -334,7 +271,7 @@
               ]
             },
             "travel": {
-              "speed": 2,
+              "speed": 3,
               "range": 10
             },
             "visualFrame": "anchor-ring"
@@ -364,23 +301,22 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1781398492950,
-        "modifiedTime": 1781398492950,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989015893,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
       },
-      "_id": "R4rYDc1F0ra7sThi",
-      "_key": "!actors.items!G6Bgo4PvO6XHLiEf.R4rYDc1F0ra7sThi"
+      "_id": "R4rYDc1F0ra7sThi"
     },
     {
       "name": "Resonance Howler",
       "type": "weapon",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
+      "img": "icons/weapons/artillery/cannon-energy-sonic.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -399,7 +335,7 @@
         },
         "tags": [
           "aoe",
-          "morale",
+          "nerve",
           "medium"
         ],
         "effect": "",
@@ -436,7 +372,7 @@
           }
         },
         "description": {
-          "value": "<p>Sub-audible siren that turns will into wet paper. Doesn't damage steel; ruins morale within the cone.</p>"
+          "value": "<p>Sub-audible siren that turns will into wet paper. Doesn't damage steel; shreds nerve within the cone.</p>"
         }
       },
       "flags": {
@@ -648,30 +584,30 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1781398492950,
-        "modifiedTime": 1781398492950,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989015893,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
       },
-      "_id": "QSCKITJk9HIaHuMv",
-      "_key": "!actors.items!G6Bgo4PvO6XHLiEf.QSCKITJk9HIaHuMv"
+      "_id": "QSCKITJk9HIaHuMv"
     },
     {
       "name": "Comms Array",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/tools/fasteners/washer-hex-copper-brown.webp",
       "system": {
         "slot": "misc",
         "tags": [],
         "category": "gear",
         "source": "",
+        "quantity": 1,
         "description": {
-          "value": "<p>A nest of antennae held together by faith. Extends signal range; allies on hex coordinate at +1 step.</p>",
+          "value": "<p>A nest of antennae held together by faith. Extends signal range; allies on hex coordinate at +1 step.</p><p><strong>Passive:</strong> Signal grants +2 on the ally's next roll instead of +1.</p>",
           "chat": ""
         }
       },
@@ -679,7 +615,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": true
+            "passive": {
+              "signalBonus": 1
+            }
           },
           "rfi": {
             "item": {
@@ -706,30 +644,30 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1781398492950,
-        "modifiedTime": 1781398492950,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989015894,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
       },
-      "_id": "nYCBXmRdtOCKBxvM",
-      "_key": "!actors.items!G6Bgo4PvO6XHLiEf.nYCBXmRdtOCKBxvM"
+      "_id": "nYCBXmRdtOCKBxvM"
     },
     {
       "name": "Sensor Suite",
       "type": "gear",
-      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "img": "icons/commodities/tech/electronics-sensor-eye.webp",
       "system": {
         "slot": "misc",
         "tags": [],
         "category": "gear",
         "source": "",
+        "quantity": 1,
         "description": {
-          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p>",
+          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p><p><strong>Passive:</strong> every crew member aboard adds +1 to initiative.</p>",
           "chat": ""
         }
       },
@@ -737,7 +675,9 @@
         "fourththing": {
           "rigGear": {
             "subtype": "rig-system",
-            "passive": true
+            "passive": {
+              "initiative": 1
+            }
           },
           "rfi": {
             "item": {
@@ -764,18 +704,17 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1781398492950,
-        "modifiedTime": 1781398492950,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989015894,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
       },
-      "_id": "hmygLDzmrOvBiJYU",
-      "_key": "!actors.items!G6Bgo4PvO6XHLiEf.hmygLDzmrOvBiJYU"
+      "_id": "hmygLDzmrOvBiJYU"
     },
     {
       "name": "Beacon Spire",
@@ -786,6 +725,7 @@
         "tags": [],
         "category": "gear",
         "source": "",
+        "quantity": 1,
         "description": {
           "value": "<p>A vertical hymn of light. Stationary-only: the spire's purpose is being a fixed point others can find.</p>",
           "chat": ""
@@ -797,7 +737,8 @@
             "subtype": "output-module",
             "yield": {
               "signal": 1,
-              "faith": 1
+              "faith": 1,
+              "softpower": 1
             },
             "mobileLegal": false
           },
@@ -826,18 +767,17 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1781398492950,
-        "modifiedTime": 1781398492950,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989015894,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
       },
-      "_id": "XxzVnXzwAkHk3av4",
-      "_key": "!actors.items!G6Bgo4PvO6XHLiEf.XxzVnXzwAkHk3av4"
+      "_id": "XxzVnXzwAkHk3av4"
     }
   ],
   "effects": [],
@@ -847,12 +787,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1781398492950,
-    "modifiedTime": 1781398493078,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989015799,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

@@ -41,15 +41,15 @@
           "charges": 3,
           "materialKey": "finger-bone",
           "price": {
-            "marks": 50,
+            "marks": 15,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI material stamp",
+            "notes": "TI material",
             "bound": "free",
-            "saleBack": 20
+            "saleBack": 6
           }
         }
       }
@@ -64,11 +64,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137161815,
-    "modifiedTime": 1782156674938,
+    "modifiedTime": 1792977602748,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

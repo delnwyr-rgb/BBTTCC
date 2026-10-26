@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +79,39 @@
             "saleBack": 60
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Cinder-Hawk Mother"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attack",
+            "do": {
+              "reroll": "damage"
+            },
+            "label": "Diving Talons — after a dive",
+            "if": {
+              "weapon": "Diving Talons",
+              "ownerMovedSquares": 6
+            }
+          },
+          {
+            "on": "hit",
+            "do": {
+              "condition": {
+                "key": "prone",
+                "duration": "1-round"
+              }
+            },
+            "if": {
+              "weapon": "Diving Talons",
+              "ownerMovedSquares": 6
+            }
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "8ac437d7-dad6-496a-835e-32f4543933fe",
+      "id": "ft-diving-talons",
       "label": "Diving Talons",
       "macro": {
         "enable": false,
@@ -268,50 +285,41 @@
       "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
-      "version": 5,
-      "meleeSwitch": {
-        "video": {
-          "dbSection": "range",
-          "menuType": "weapon",
-          "animation": "arrow",
-          "variant": "regular",
-          "color": "regular",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "detect": "automatic",
-          "range": 2,
-          "returning": false,
-          "switchType": "on"
-        }
+      "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Cinder-Hawk Mother"
+        ],
+        "sourceIds": [
+          "8l45F9lX2Cuzqk7B"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "NW3cq9671HAxOlOR",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024231470,
-    "modifiedTime": 1782167244997,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989025592,
+    "modifiedTime": 1792989025592,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!NW3cq9671HAxOlOR"
 }

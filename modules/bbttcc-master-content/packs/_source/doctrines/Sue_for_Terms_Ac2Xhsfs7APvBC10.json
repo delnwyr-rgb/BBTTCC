@@ -7,7 +7,7 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Sue for Terms</h3><p>Defender offers a negotiated surrender. The attacker may accept (won_sack) or refuse at next resolution (siege.resolveTerms). Target the besieged hex.</p><p><strong>OP Cost:</strong> diplomacy 20, softPower 15</p><p><strong>Tier:</strong> 2</p><p><strong>Rarity:</strong> rare</p></div>",
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Sue for Terms</h3><p>Defender offers a negotiated surrender. The attacker may accept (won_sack) or refuse at next resolution (siege.resolveTerms). Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 20 · Soft Power 15 marks</p></div>",
       "chat": ""
     }
   },
@@ -19,19 +19,19 @@
   },
   "_id": "Ac2Xhsfs7APvBC10",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601768,
-    "modifiedTime": 1782703702694,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989011796,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

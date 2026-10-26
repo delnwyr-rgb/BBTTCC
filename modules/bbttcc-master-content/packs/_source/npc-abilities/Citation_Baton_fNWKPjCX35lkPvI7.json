@@ -9,7 +9,7 @@
     "damage": {
       "formula": "1d10",
       "attribute": "violence",
-      "type": "energy",
+      "type": "electrical",
       "damageFlavor": "shock-baton, fully laminated",
       "track": "integrity"
     },
@@ -60,7 +60,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -79,16 +78,29 @@
             "saleBack": 20
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Crossing Guard (Lapsed Protocol)"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Citation Baton",
+              "targetCondition": [
+                "restrained"
+              ]
+            },
+            "do": {
+              "condition": {
+                "key": "staggered",
+                "duration": "1-round"
+              },
+              "damage": {
+                "formula": "1d6",
+                "type": "kinetic"
+              }
+            }
+          }
         ]
       }
     },
@@ -267,50 +279,41 @@
       "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
-      "version": 5,
-      "meleeSwitch": {
-        "video": {
-          "dbSection": "range",
-          "menuType": "weapon",
-          "animation": "arrow",
-          "variant": "regular",
-          "color": "regular",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "detect": "automatic",
-          "range": 2,
-          "returning": false,
-          "switchType": "on"
-        }
+      "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Crossing Guard (Lapsed Protocol)"
+        ],
+        "sourceIds": [
+          "57JfvyC87YsRERDe"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
   "_id": "fNWKPjCX35lkPvI7",
   "sort": 0,
+  "folder": null,
   "ownership": {
-    "default": 0
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
-    "createdTime": 1780000000000,
-    "modifiedTime": 1781737166195,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989022262,
+    "modifiedTime": 1792989022263,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
   },
-  "folder": null,
   "_key": "!items!fNWKPjCX35lkPvI7"
 }

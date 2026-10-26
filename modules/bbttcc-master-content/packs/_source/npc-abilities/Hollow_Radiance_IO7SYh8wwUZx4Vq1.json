@@ -1,0 +1,50 @@
+{
+  "name": "Hollow Radiance",
+  "type": "feature",
+  "img": "icons/weapons/swords/sword-gold-holy.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Angel rolls twice and keeps the better result on checks to resist manifestations. Other people's workings are, frankly, in poor taste.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "IO7SYh8wwUZx4Vq1",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Angel of Hollow Glory"
+        ],
+        "sourceIds": [
+          "yQZAnkNsEcE5kKtg"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069941,
+    "modifiedTime": 1792989070023,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!IO7SYh8wwUZx4Vq1"
+}

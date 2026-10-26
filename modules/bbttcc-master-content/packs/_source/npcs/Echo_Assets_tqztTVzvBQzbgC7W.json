@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": "C2ow2Hk1WhQ1T3bS",
+  "name": "Echo Assets",
+  "color": null,
+  "sorting": "a",
+  "_id": "tqztTVzvBQzbgC7W",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792773771505,
+    "modifiedTime": 1792773771505,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!tqztTVzvBQzbgC7W"
+}

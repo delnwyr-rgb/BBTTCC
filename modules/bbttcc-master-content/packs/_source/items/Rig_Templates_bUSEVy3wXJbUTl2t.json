@@ -1,0 +1,23 @@
+{
+  "_id": "bUSEVy3wXJbUTl2t",
+  "name": "Rig Templates",
+  "type": "Item",
+  "description": "GM drop tools — pulled from the market 2026-10-16; drop one on a rig sheet to apply its loadout.",
+  "folder": "0JDB983lzPepXXNe",
+  "sorting": "a",
+  "sort": 100000,
+  "color": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988927760,
+    "modifiedTime": 1792988927760,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!bUSEVy3wXJbUTl2t"
+}

@@ -32,14 +32,15 @@
       "spark"
     ],
     "description": {
-      "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Yesod — Dreams, illusion, gateways.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+      "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Yesod — Dreams, illusion, gateways.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, faith. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc-tikkun": {
       "sparkVersion": "1.0.0",
-      "identifier": "spark_yesod_vestigial"
+      "identifier": "spark_yesod_vestigial",
+      "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration."
     }
   },
   "_stats": {

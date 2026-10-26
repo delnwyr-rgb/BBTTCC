@@ -7,7 +7,7 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Duel</h3><p>Issue a 1v1 challenge between active Champions. The loser is wounded or slain.</p><p><strong>OP Cost:</strong> anytime 2</p><p><strong>Tier:</strong> 1</p><p><strong>Raid Types:</strong> siege</p></div>",
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Duel</h3><p>Issue a 1v1 challenge between active Champions. The loser is wounded or slain.</p><p><strong>Cost:</strong> 2 Anytime budget (no marks)</p></div>",
       "chat": ""
     }
   },
@@ -19,19 +19,19 @@
   },
   "_id": "Cgc5nWOTeY2s3qUd",
   "effects": [],
-  "folder": null,
+  "folder": "SziFuLdTIX4Y2Rav",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601773,
-    "modifiedTime": 1782703702691,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989000673,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

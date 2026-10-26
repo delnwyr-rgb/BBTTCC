@@ -13,7 +13,7 @@
     "target": "self",
     "range": "near",
     "damage": "",
-    "damageType": "energy",
+    "damageType": "electrical",
     "damageFlavor": "",
     "damageRoll": {
       "op": "none",
@@ -25,12 +25,12 @@
       "track": "integrity"
     },
     "damageParts": [],
-    "effect": "Move along an impossible chord; reappear at any point within near. The Serpent's next attack this turn rolls 2d10x10 with reroll-lowest.",
+    "effect": "Move along an impossible chord; reappear at any point within near. The Serpent's next attack this turn rolls 2d10 with reroll-lowest.",
     "tags": [
       "translated",
-      "5e-port",
       "phase2-narrative",
-      "manifestation"
+      "manifestation",
+      "rfi-scrubbed"
     ],
     "category": "manifestation",
     "flavor": "The room briefly grows a corner that wasn't drawn.",
@@ -81,25 +81,12 @@
       }
     },
     "description": {
-      "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Free reposition near + reroll the lowest die on next attack.</p>\n<ul>\n  <li><strong>Intent:</strong> Intrigue</li>\n  <li><strong>Action:</strong> Action</li>\n  <li><strong>Range:</strong> Near</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Target:</strong> Self.</li>\n  <li><strong>Cost:</strong> 1 Clarity, Clarity 1, 1 Clarity</li>\n  <li><strong>Duration:</strong> One repositioning.</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<p><strong>Risk:</strong> The Serpent appears unarmored for the moment of arrival.</p>\n<!-- BBTTCC:MECHANICS:END -->"
+      "value": "<p><strong>Working.</strong> <em>Travel along a line nobody drew.</em></p>\n<p>Move along an impossible chord and reappear at any point within near range without provoking reaction strikes. The Serpent's next attack this turn rerolls the lowest die.</p>\n<p><strong>Cost.</strong> 1 Clarity · action · self / near.</p>\n<p><em>The room briefly grows a corner that wasn't drawn.</em></p>"
     }
   },
-  "_id": "Lvg6k0Yf7eoAqc0Q",
-  "effects": [],
-  "sort": 0,
   "flags": {
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Jommetry Serpent"
-        ],
-        "worlds": [
-          "ember"
-        ]
-      }
-    },
     "autoanimations": {
-      "id": "01ddac0e-448c-4884-ad2c-bae81cb59a5b",
+      "id": "ft-angle-of-arrival",
       "label": "Angle of Arrival",
       "macro": {
         "enable": false,
@@ -274,22 +261,58 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "shift": 6,
+              "bankReroll": {
+                "context": "attack",
+                "note": "Angle of Arrival"
+              }
+            },
+            "who": "self"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Jommetry Serpent"
+        ],
+        "sourceIds": [
+          "xCHciB6b5HEF5926"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
+  "_id": "Lvg6k0Yf7eoAqc0Q",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024231012,
-    "modifiedTime": 1782167244996,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989018062,
+    "modifiedTime": 1792989018063,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!Lvg6k0Yf7eoAqc0Q"
 }

@@ -25,7 +25,7 @@
       "aoe",
       "shape-radius"
     ],
-    "effect": "Radius 20 ft. — targets roll vs Resolve (DC 13). Half damage on success. Failed-save targets are also Shaken until the start of their next turn.",
+    "effect": "Radius 4 squares. — targets roll vs Resolve (DC 13). Half damage on success. Failed-save targets are also Shaken until the start of their next turn.",
     "flavor": "The bones don't speak. They argue.",
     "manifestation": {
       "tier": 1,
@@ -56,6 +56,24 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "soul",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 13,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "shaken"
+        ],
+        "duration": "1-round"
+      },
+      "area": {
+        "shape": "sphere",
+        "size": 20
       }
     },
     "description": {
@@ -63,7 +81,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -88,19 +105,8 @@
         }
       }
     },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Bone Patriarch"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
-      }
-    },
     "autoanimations": {
-      "id": "f75264ee-1ded-4787-94d6-363972ed49d7",
+      "id": "ft-choir-of-knuckles",
       "label": "Choir of Knuckles",
       "macro": {
         "enable": false,
@@ -275,24 +281,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Bone Patriarch"
+        ],
+        "sourceIds": [
+          "tZv6AIxvw4v6dB5L"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "0LWtL8861u5C6cFz",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024223417,
-    "modifiedTime": 1782167244984,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989021870,
+    "modifiedTime": 1792989021870,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!0LWtL8861u5C6cFz"
 }

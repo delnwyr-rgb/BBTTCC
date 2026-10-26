@@ -38,6 +38,7 @@ import {
   getClarityMaxBonus,
   getUpkeepScale,
   getConcurrencyBonus,
+  getConcurrencyPasses,
   summarizeDiscipline,
   setMode
 } from "./manifestation-discipline.js";
@@ -57,6 +58,7 @@ import {
   promoteStampedAptitudeAEs,
   itemHasPromotableAptitudeAE,
   applyPathFeatures,
+  applyHeritageFeatures,
   grantStarterManifestations,
   syncAuraEffects,
   syncAurabladeEffects,
@@ -210,10 +212,24 @@ function ftSephirothFor(current = "") {
   return Object.fromEntries(Object.entries(FT.SEPHIROTH).filter(([k]) => !FT_LOCKED_SEPHIROTH.includes(k) || k === cur));
 }
 
+// One spelling per sephira (owner ruling 2026-10-26): GEBURAH is the canonical key.
+// "gevurah" (the pre-2026-10-26 system key) and the other transliterations are
+// accepted on input and folded here, so legacy stored values keep working while
+// the world-data migration (patch-geburah-spelling-2026-10-26) runs. Keter stays keter.
+const FT_SEPH_ALIAS = Object.freeze({
+  gevurah: "geburah", gevura: "geburah", gebura: "geburah",
+  chokhmah: "chokmah", hokhmah: "chokmah", tiphareth: "tiferet", tipheret: "tiferet", tiphereth: "tiferet",
+  kether: "keter", malkut: "malkuth", netzah: "netzach", binnah: "binah"
+});
+function ftSephKey(v) {
+  const k = String(v ?? "").toLowerCase().trim();
+  return FT_SEPH_ALIAS[k] || k;
+}
+
 const FT = {
   MARKS_PER_OP,                 // 1 OP = 10 marks — from rfi-pricing.js (the one authority)
   SEPHIROTH: {
-    gevurah: { label: "Gevurah", color: "#c03030", domain: "Judgment, precision force"      },
+    geburah: { label: "Geburah", color: "#c03030", domain: "Judgment, precision force"      },
     chesed:  { label: "Chesed",  color: "#4a90d9", domain: "Healing, generosity"            },
     yesod:   { label: "Yesod",   color: "#9b59b6", domain: "Dreams, illusion, gateways"    },
     netzach: { label: "Netzach", color: "#27ae60", domain: "Momentum, triumph"              },
@@ -553,6 +569,22 @@ function ftRigBracketFor(actor) {
                ?? sys?.integrity?.bracket
                ?? "medium";
   return FT_RIG_DEFENSE_BY_BRACKET[bracket] ? bracket : "medium";
+}
+
+/** RG8 (2026-10-26) — rig-system passives. A `rig-system` item declares `flags.fourththing.rigGear.passive =
+ *  { guard?, evasion?, integrityMaxPerTier?, initiative?, repairBonus?, signalBonus? }` (numbers). Summed over the
+ *  rig's equipped rig-system items; read by the rig derive pass (guard / evasion / integrity max), the boarded crew's
+ *  initiative (Sensor Suite), the engineer's repair check (Repair Bay) and the signal action (Comms Array). Before this
+ *  the five catalog systems were prose only. */
+const FT_RIG_PASSIVE_KEYS = ["guard", "evasion", "integrityMaxPerTier", "initiative", "repairBonus", "signalBonus"];
+function ftRigSystemPassives(rig) {
+  const out = { guard: 0, evasion: 0, integrityMaxPerTier: 0, initiative: 0, repairBonus: 0, signalBonus: 0 };
+  for (const it of (rig?.items ?? [])) {
+    const g = it?.flags?.fourththing?.rigGear;
+    if (g?.subtype !== "rig-system" || !g.passive || it.system?.equipped === false) continue;
+    for (const k of FT_RIG_PASSIVE_KEYS) { const v = Number(g.passive[k]); if (Number.isFinite(v)) out[k] += v; }
+  }
+  return out;
 }
 
 // Stability options surfaced in the manifestation wizard. Non-TCCs see only
@@ -903,7 +935,7 @@ const FT_MANIFESTATION_THIRD_THING_PROMPTS = [
 // Keter was +1 on every cast, Chokmah was +0 on every cast, Yesod and Binah had
 // five pairs each and Netzach had one.
 const FT_ALIGNMENT_PAIRS = Object.freeze({
-  gevurah: ["violence.body", "violence.mind", "violence.soul"],    // judgment = force, any channel
+  geburah: ["violence.body", "violence.mind", "violence.soul"],    // judgment = force, any channel
   chesed:  ["presence.body", "presence.mind", "presence.soul"],    // mercy = presence, any channel
   binah:   ["intrigue.body", "intrigue.mind", "intrigue.soul"],    // understanding = the hidden, any channel
   hod:     ["violence.mind", "intrigue.mind", "presence.mind"],    // form = mind, any intent
@@ -916,13 +948,13 @@ const FT_ALIGNMENT_PAIRS = Object.freeze({
 });
 
 function ftAlignmentMod(sephirah, intent, channel) {
-  const pairs = FT_ALIGNMENT_PAIRS[String(sephirah || "").toLowerCase()];
+  const pairs = FT_ALIGNMENT_PAIRS[ftSephKey(sephirah)];
   return pairs?.includes(`${intent}.${channel}`) ? 1 : 0;
 }
 
 // "Violence·Body, Intrigue·Mind, Presence·Soul" — for the sheet hint + tooltips.
 function ftAlignmentPairsLabel(sephirah) {
-  const pairs = FT_ALIGNMENT_PAIRS[String(sephirah || "").toLowerCase()] ?? [];
+  const pairs = FT_ALIGNMENT_PAIRS[ftSephKey(sephirah)] ?? [];
   return pairs.map(p => p.split(".").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join("·")).join(", ");
 }
 
@@ -933,8 +965,7 @@ function ftAlignmentPairsLabel(sephirah) {
 // pre-identity actors — they keep the free magic.sephirah select).
 function ftStewardSephirah(actor) {
   if (!actor) return "";
-  const ALIAS = { chokhmah: "chokmah", hokhmah: "chokmah", tiphareth: "tiferet", tipheret: "tiferet", tiphereth: "tiferet",
-                  geburah: "gevurah", gevura: "gevurah", kether: "keter", malkut: "malkuth", netzah: "netzach", binnah: "binah" };
+  const ALIAS = FT_SEPH_ALIAS;   // gevurah/gevura → geburah (2026-10-26), kether → keter, …
   const norm = (v) => {
     const k = String(v || "").toLowerCase().replace(/^alignment[:\-\s]+/, "").replace(/[^a-z]/g, "");
     const key = ALIAS[k] || k;
@@ -1849,9 +1880,10 @@ Hooks.on("bbttcc:rig:destroyed", ({ rig } = {}) => {
 });
 
 function ftManifestationGuide(sephirah = "tiferet") {
+  sephirah = ftSephKey(sephirah) || "tiferet";
   const seph = FT.SEPHIROTH[sephirah] ?? FT.SEPHIROTH.tiferet;
   const prompts = {
-    gevurah: ["clean cuts, verdicts, severance", "disciplined force", "hard edges and consequences"],
+    geburah: ["clean cuts, verdicts, severance", "disciplined force", "hard edges and consequences"],
     chesed:  ["shelter, mercy, restoration", "softening harm", "gifts that multiply"],
     yesod:   ["dream logic, mirrors, hidden doors", "echoes and doubles", "movement through the unreal"],
     netzach: ["speed, pressure, momentum", "unstoppable advance", "victory through motion"],
@@ -2097,8 +2129,25 @@ const _FT_RANGE_LABEL_FT = { self: 0, personal: 0, touch: 5, close: 15, near: 30
 // melee 5/5). One rule fits every authored value: multiples of 5 are feet,
 // anything else is squares. The old "≤4 = squares" cut read a 12-square
 // autocannon as 12 ft while its chip said 12 sq (trailer playtest 2026-10-09).
-function _ftWeaponRangeIsFeet(v) { const n = Number(v); return Number.isFinite(n) && n > 0 && n % 5 === 0; }
-function _ftWeaponRangeToFt(v) { const n = Number(v) || 0; return _ftWeaponRangeIsFeet(n) ? n : n * 5; }
+// AR4 (2026-10-26): an authored `system.range.units` ("sq" | "ft") wins over the multiple-of-5 guess — every pack weapon is
+// now authored in squares with units "sq"; the guess only remains for un-stamped copies on old actors.
+function _ftWeaponRangeIsFeet(v, units) {
+  const u = String(units ?? "").toLowerCase();
+  if (u === "sq" || u === "squares" || u === "square") return false;
+  if (u === "ft" || u === "feet" || u === "foot") return true;
+  const n = Number(v); return Number.isFinite(n) && n > 0 && n % 5 === 0;
+}
+function _ftWeaponRangeToFt(v, units) { const n = Number(v) || 0; return _ftWeaponRangeIsFeet(n, units) ? n : n * 5; }
+// Conflict-tab / loadout chip text for a weapon's range, always in squares ("Melee" at 1 square or less).
+function _ftWeaponRangeChip(sys) {
+  const r = sys?.range; if (!r || typeof r !== "object") return "";
+  const s = Number(r.short) || 0, l = Number(r.long ?? r.short) || 0;
+  if (!(s > 0 || l > 0)) return "";
+  const ft = _ftWeaponRangeIsFeet(l || s, r.units);
+  const S = ft ? Math.round(s / 5) : s, L = ft ? Math.round(l / 5) : l;
+  if (S <= 1 && L <= 1) return "Melee";
+  return L > S ? `${S}/${L} sq` : `${S} sq`;
+}
 
 function _ftItemRangeFt(item) {
   const sys = item?.system ?? {};
@@ -2108,7 +2157,7 @@ function _ftItemRangeFt(item) {
   const long  = Number(sys?.range?.long);
   const short = Number(sys?.range?.short);
   const wr = (Number.isFinite(long) && long > 0) ? long : ((Number.isFinite(short) && short > 0) ? short : 0);
-  if (wr > 0) return _ftWeaponRangeToFt(wr);
+  if (wr > 0) return _ftWeaponRangeToFt(wr, sys?.range?.units);
   // Power categorical label (string form) or rangeAreaText fallback.
   const cat = String(sys?.range ?? sys?.power?.range ?? "").trim().toLowerCase();
   if (cat in _FT_RANGE_LABEL_FT) return _FT_RANGE_LABEL_FT[cat];
@@ -3433,7 +3482,7 @@ function ftItemStatStrip(item, systemOverride = null) {
   const act = mf.activation?.type ?? sys.activation?.type;
   if (act && act !== "none") add("⏱", ftCap(act), "Action type to use");
   const rng = Number(mf.rangeFt) ? `${mf.rangeFt} ft`
-    : (sys.range?.short ? `${sys.range.short}/${sys.range.long ?? sys.range.short} ${_ftWeaponRangeIsFeet(sys.range.long ?? sys.range.short) ? "ft" : "sq"}` : (mf.rangeAreaText || ""));
+    : (sys.range?.short ? `${sys.range.short}/${sys.range.long ?? sys.range.short} ${_ftWeaponRangeIsFeet(sys.range.long ?? sys.range.short, sys.range.units) ? "ft" : "sq"}` : (mf.rangeAreaText || ""));
   add("→", rng, "Range");
   if (mf.area?.shape && mf.area.shape !== "none") add("◎", `${mf.area.size} ft ${mf.area.shape}`, "Area of effect");
   add("◌", mf.targetText, "Target");
@@ -3780,7 +3829,7 @@ function buildManifestationGlossaryHTML() {
     ["Clarity",     "Your focus pool. Spent on cast (T1=1, T2=2, T3=3, T4=5) and on per-tick upkeep for sustained manifestations. Max scales with Steward tier (T1=5, T2=7, T3=10, T4=14). Recovers fully on Soma Break, half-fills on Scene Break. TCCs +5 to max; Dreamwalker stacks up to +3 more."],
     ["Reach",       "Casting one tier above your own. Surge: cast at higher tier, misfire on the higher column. Blood Debt: cast at higher tier, +1 Blood Debt, no misfire. Two tiers above is rejected. Cosmic Linguist Discipline: −1 to −2 Blood-Debt-reach cost."],
     ["Misfire",     "The d10 failure table (1-2 Reality Flicker → 10 Catastrophic Resonance). Mode-bias: Hermetic −2, Chaos +2, Ascendant skip. Negative shifts = milder bands. Wyrdlens Discipline: −2 to −4 additive shift. Reach pushes the column up by one tier."],
-    ["Concurrency", "How many sustained / bound / enduring manifestations you have active at once. No hard cap — soft-capped by the Clarity needed to pay each tick's upkeep. Pactkeeper Discipline: passive +1, +3 with Sealed Pact (informational; surfaces on upkeep cards)."],
+    ["Concurrency", "How many sustained / bound / enduring manifestations you have active at once. No hard cap — soft-capped by the Clarity needed to pay each tick's upkeep. Each point of concurrency frees one entry's Clarity upkeep per tick: the Pactkeeper baseline (+1, +3 with Sealed Pact) frees pact-bound entries; technique concurrency (Many Hands, Refracted Attention) frees any sustained entry."],
     ["Noise",       "Metaphysical residue from Chaos-mode casts (+2 per cast). 0–10 pool, separate from Clarity. Doesn't drop on its own; high Noise feeds Corruption / Intrigue detection / Lattice attention at GM thresholds. Hermetic and Ascendant generate 0 Noise. Scene Break shaves 1."],
     ["Workings vs Forms", "Workings (instant) resolve and end; Forms (sustained / bound / enduring) persist and pay upkeep. <b>Only TCCs can manifest workings.</b> Non-TCCs are restricted to forms — they shape the world by holding it open, not by intervening directly."],
     ["TCC Bonuses", "Trad Caster Classes (Cosmic Linguist, Wyrdlens Adept, Dreamwalker, Pactkeeper) get: +5 Clarity max, −1 Clarity per cast (floor 0), exclusive access to T0 Fiats and to Workings."],
@@ -4631,7 +4680,7 @@ const _FT_SURGE_MENU = [
     fiction: "A line drawn that the enemy crosses at a price.", wired: true },
   // Mandate of Resolve — morale/anti-death:
   { cost: 1, key: "res-hold", tier: 1, bucket: "def", mandate: "resolve",
-    label: "Hold the Line — clear Shaken off an ally + they bank a reroll",
+    label: "Hold Fast — clear Shaken off an ally + they bank a reroll",
     fiction: "No one breaks.", wired: true },
   { cost: 3, key: "res-secondwind", tier: 2, bucket: "heal", mandate: "resolve",
     label: "Second Wind — ward an ally: the next hit that would drop them holds at 1",
@@ -6170,7 +6219,7 @@ async function _ftMandateSurge(actor, effectKey, tier) {
       let cl = "";
       if (ts?.conditions?.shaken === true) { try { await game.fourththing?.toggleCondition?.(target, "shaken"); cl = "cleared <b>Shaken</b> and "; } catch (e) {} }
       await bankReroll(target, "resolve");
-      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">⚔ Hold the Line — ${cl}<b>${tname}</b> banks a reroll-lowest.</p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">⚔ Hold Fast — ${cl}<b>${tname}</b> banks a reroll-lowest.</p>`;
     }
     case "res-secondwind": {
       if (!target) return needTarget;
@@ -9050,8 +9099,12 @@ async function ftChargeUpkeep(actor, { cadence = "scene" } = {}) {
   let curClarity = upkPool.current;
   // Discipline upkeep scale (e.g. Sealed Pact halves per-tick Clarity upkeep).
   const upkeepScale = Math.max(0, Number(getUpkeepScale(actor)) || 1);
-  // Concurrency free passes apply ONLY to pactBound entries (Phase D canon).
-  let freePasses = Math.max(0, Number(getConcurrencyBonus(actor)) || 0);
+  // Concurrency free passes (ruling TQ2, 2026-10-26): the Pactkeeper class
+  // baseline frees pact-bound entries only (Phase D canon); technique-granted
+  // passes (Many Hands, Refracted Attention …) free ANY sustained entry.
+  const passes = getConcurrencyPasses(actor);
+  let pactPasses = passes.pactBound;
+  let anyPasses  = passes.any;
 
   const billed = [];
   const dropped = [];
@@ -9081,7 +9134,8 @@ async function ftChargeUpkeep(actor, { cadence = "scene" } = {}) {
 
     if (resource === "clarity") {
       let cost = amount, freed = false;
-      if (cost > 0 && freePasses > 0 && entry.pactBound === true) { cost = 0; freed = true; freePasses -= 1; }
+      if (cost > 0 && entry.pactBound === true && pactPasses > 0) { cost = 0; freed = true; pactPasses -= 1; }
+      else if (cost > 0 && anyPasses > 0) { cost = 0; freed = true; anyPasses -= 1; }
       if (curClarity >= cost) {
         curClarity -= cost; paidClarity += cost;
         billed.push({ itemName: entry.itemName, tier: entry.tier, cost, resourceLabel: upkPool.label, freed });
@@ -11691,7 +11745,7 @@ FT.ARMOR_SKILLS = ["plating", "fitting", "bracing"];
 // Owner rename 2026-08-22: weave→fitting (light), warding→bracing (medium) —
 // the old names read as spellcraft, not armor use. Legacy values keep working
 // through FT.LEGACY_SKILL_ALIASES so old items/tools need no data edits.
-FT.ARMOR_WEIGHT_SKILL = { light: "fitting", medium: "bracing", heavy: "plating" };
+FT.ARMOR_WEIGHT_SKILL = { light: "fitting", medium: "bracing", heavy: "plating", shield: "bracing" };   // AR5 (2026-10-26): every shield gates on Bracing
 FT.LEGACY_SKILL_ALIASES = { weave: "fitting", warding: "bracing", weaver: "fitting" };
 
 function _ftArmorGateSkill(item) {
@@ -11751,7 +11805,7 @@ function _ftLineageStrip(actor) {
       title: a.title || "",
       envelope: `T${a.tier ?? "?"} · ${a.bracket ?? "?"}${a.bestiary?.role ? ` · ${a.bestiary.role}` : ""}`,
       creatureType,
-      qliphah: q ? `${q.name}${q.hullOf ? ` (hull of ${cap(q.hullOf)})` : ""} — ${cap(q.grade || "lesser")}` : "",
+      qliphah: q ? `${cap(typeof q === "string" ? q : q.name)}${q.hullOf ? ` (hull of ${cap(q.hullOf)})` : ""} — ${cap(q.grade || "lesser")}` : "",   // 2026-10-26 (BS4): object {name,hullOf,grade}; a legacy string still renders
       bounty: Number.isFinite(bounty) && bounty > 0 ? `${bounty} marks` : "",
       bountyTip: Number.isFinite(bounty) && bounty > 0
         ? `Bounty ${bounty} marks, credited to the OP pool matching how the creature is resolved (default ${a.price?.currency ?? "violence"}).${Number.isFinite(hire) && hire > 0 ? ` Hire ${hire} marks.` : " Not for hire."}`
@@ -12366,6 +12420,20 @@ async function runConsumeEffects(actor, item, consume, { targets = null } = {}) 
     }
   }
 
+  // 2026-10-26 (GR10): a payload that is NOT spent on use (decrement:false) may carry a per-window limit —
+  // `consume.limit = { window: "session"|"scene"|"soma-break", uses: N }`. Ledger on the item at
+  // flags.fourththing.rfi.item.useLedger = { key, count }: "session" keys by calendar day (one evening = one session),
+  // "scene" by the current scene id, "soma-break" is cleared by refillWorkingCharges on the Soma Break.
+  const lim = consume.limit;
+  if (lim && Number(lim.uses) > 0) {
+    const win = String(lim.window || "session");
+    const key = win === "scene" ? `scene:${game.scenes?.current?.id ?? "none"}` : win === "soma-break" ? "soma-break" : `session:${new Date().toISOString().slice(0, 10)}`;
+    const led = item.getFlag("fourththing", "rfi.item.useLedger") ?? {};
+    const used = led.key === key ? (Number(led.count) || 0) : 0;
+    if (used >= Number(lim.uses)) { ui.notifications?.warn(`${item.name}: already used ${used}/${lim.uses} this ${win === "soma-break" ? "Soma Break" : win}.`); return; }
+    await item.setFlag("fourththing", "rfi.item.useLedger", { key, count: used + 1 });
+  }
+
   const perRec = [];
   for (const rec of recipients) {
     // One bad recipient must not lose the card or the charge for the rest.
@@ -12659,7 +12727,7 @@ function buildMagicChatHTML({ label, intent, channel, sephirah, attrIntent, attr
                                misfireData, diceResults, terrainLabel,
                                explosionDice = [], surgeBanked = 0, doubleTen = false,
                                costNote = "", signature = "", thirdThing = "" }) {
-  const sephData = FT.SEPHIROTH[sephirah] ?? { label: sephirah, color: "#888" };
+  const sephData = FT.SEPHIROTH[ftSephKey(sephirah)] ?? { label: sephirah, color: "#888" };
   const ic = FT.INTENT_COLORS[intent]   ?? "#888";
   const cc = FT.CHANNEL_COLORS[channel] ?? "#888";
 
@@ -12746,7 +12814,7 @@ const FT_KNOB_TIPS = {
   clarity:     "Clarity — focus pool. Spent on cast (T1=1 / T2=2 / T3=3 / T4=5) and per-tick upkeep on sustained manifestations. Max scales with Steward tier (5/7/10/14). Recovers fully on Soma Break, half-fills on Scene Break. TCCs +5 to max; Dreamwalker stacks up to +3 more.",
   reach:       "Reach — casting one tier above your own. Surge: misfire on the higher column. Blood Debt: +1 Blood Debt, no misfire. Two tiers above is rejected. Cosmic Linguist Discipline reduces Blood-Debt-reach cost.",
   misfire:     "Misfire — d10 failure table (1-2 mild → 10 catastrophic). Hermetic shifts d10 −2, Chaos +2, Ascendant skips. Reach pushes the column up by one tier. Wyrdlens Discipline shifts the d10 down (better outcomes).",
-  concurrency: "Concurrency — count of sustained / bound / enduring manifestations active at once. No hard cap; soft-capped by Clarity needed to pay each tick's upkeep. Pactkeeper Discipline grants free upkeep slots (first N entries cost 0).",
+  concurrency: "Concurrency — count of sustained / bound / enduring manifestations active at once. No hard cap; soft-capped by Clarity needed to pay each tick's upkeep. Each point frees one entry's Clarity upkeep per tick — the Pactkeeper baseline frees pact-bound entries, technique concurrency frees any sustained entry.",
   noise:       "Noise — metaphysical residue from Chaos-mode casts (+2 per cast). 0–10 pool, and it doesn't drop on its own; Scene Break shaves 1. Hermetic and Ascendant generate 0. BITE: every point is a flat −1 to your own cast rolls, and the band adds more — Humming (3+) −1 to Intrigue checks; Loud (5+) −2 and misfires roll one band worse; Screaming (8+) −3 and two bands worse, with Corruption / Lattice attention live at the GM's discretion.",
   bloodDebt:   "Blood Debt — separate ledger that catches up later. Accrued by Blood-Debt-reach (+1) and Ascendant casts (+1). High Blood Debt has narrative consequences set by the GM.",
   workings:    "Workings vs Forms — Workings (instant) resolve and end. Forms (sustained / bound / enduring) persist and pay upkeep. Only Trad Caster Classes can manifest workings; non-TCCs are restricted to forms.",
@@ -14867,6 +14935,8 @@ Hooks.once("init", function () {
     collectTriggers,
     fireTriggers,
     getAlignmentModifier: ftAlignmentMod,
+    // Sephira spelling fold (2026-10-26): "gevurah"/"gevura" → "geburah", "kether" → "keter", … — modules normalize through this.
+    sephKey: ftSephKey,
     surge: {
       // Resolve the discrete compendium Item backing a Surge ability — for
       // debugging / wiring Automated Animations to a specific spend.
@@ -14986,6 +15056,7 @@ Hooks.once("init", function () {
       tierForLevel,
       deriveItemUnlockLevel,
       applyPathFeatures,
+      applyHeritageFeatures,
       grantStarterManifestations,
       applySkillGrantsFromFeatures,
       extractSkillGrantsFromFeature,
@@ -15104,9 +15175,9 @@ Hooks.once("init", function () {
 
   // ── Handlebars helpers ──────────────────────────────────────────────────────
   Handlebars.registerHelper("ftCap",        str    => ftCap(str));
-  Handlebars.registerHelper("ftSephColor",  key    => FT.SEPHIROTH[key]?.color  ?? "#888");
-  Handlebars.registerHelper("ftSephLabel",  key    => FT.SEPHIROTH[key]?.label  ?? key);
-  Handlebars.registerHelper("ftSephDomain", key    => FT.SEPHIROTH[key]?.domain ?? "");
+  Handlebars.registerHelper("ftSephColor",  key    => FT.SEPHIROTH[ftSephKey(key)]?.color  ?? "#888");
+  Handlebars.registerHelper("ftSephLabel",  key    => FT.SEPHIROTH[ftSephKey(key)]?.label  ?? key);
+  Handlebars.registerHelper("ftSephDomain", key    => FT.SEPHIROTH[ftSephKey(key)]?.domain ?? "");
   Handlebars.registerHelper("ftSephAlignPairs", key => ftAlignmentPairsLabel(key));
   Handlebars.registerHelper("ftNoiseClass", n      => ftNoiseClass(n));
   // Tooltip lookups for sheet labels — single source of truth
@@ -15185,7 +15256,7 @@ Hooks.once("init", function () {
   registerThreatChassisSetting();   // bestiary threat chassis (2026-10-06) — see threat-chassis.js
   // NPC ability automation engine (2026-10-06) — auras, morale, reactions, rerolls, DoT, recharge; see npc-automation.js
   (game.fourththing ??= {})._postSavePromptCard = _ftPostSavePromptCard;   // trigger kind apply-state (ft-progression) posts the same card
-  try { registerNpcAutomation({ actorKind, postSavePrompt: _ftPostSavePromptCard, playAnimation: ftPlayAutoAnimation, ftEscapeHtml }); }
+  try { registerNpcAutomation({ actorKind, postSavePrompt: _ftPostSavePromptCard, playAnimation: ftPlayAutoAnimation, ftEscapeHtml, placeAreaTemplate: ftPlaceAreaTemplate }); }
   catch (e) { console.error("Roll for Initiation | npc automation failed to register", e); }
   game.settings.register("fourththing", "autoApplyEffects", {
     name: "Auto-apply manifestation effects",
@@ -16606,7 +16677,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // armed on the attacker). The defender doesn't know the attacker, so we
     // decide it here (attacker known) and stamp the Apply-Damage button; consume
     // only on a hit, since it rides "next DAMAGING hit".
-    const _nonlethalHit = success && !!actor.flags?.fourththing?.aurablade?.oneShot?.nonlethalNextHit;
+    // AR10 (2026-10-26): a weapon tagged `mercy` / `nonlethal` (Mercy Driver, Gilded Atonement Blade, Apology Knife) always strikes
+    // nonlethal — the Apply button holds Integrity at 1 (the existing nonlethal path), no one-shot needed.
+    let _mercyWeapon = false;
+    try { const _mi = itemUuid ? fromUuidSync(itemUuid) : null; const _mt = Array.isArray(_mi?.system?.tags) ? _mi.system.tags : []; _mercyWeapon = _mi?.type === "weapon" && _mt.some(t => ["mercy", "nonlethal"].includes(String(t).toLowerCase())); } catch (_e) { _mercyWeapon = false; }
+    const _nonlethalHit = success && (!!actor.flags?.fourththing?.aurablade?.oneShot?.nonlethalNextHit || _mercyWeapon);
     if (_nonlethalHit) {
       try { await actor.update({ "flags.fourththing.aurablade.oneShot.-=nonlethalNextHit": null }); }
       catch (_e) { /* non-owner — clears on round commit */ }
@@ -16724,7 +16799,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       damageType, damageFlavor,
       targetUuid:    target?.uuid ?? "",
       itemUuid,
-      ignoreResists: !!_surge.sunderingBlow
+      ignoreResists: !!_surge.sunderingBlow || !!_npcAtkMods?.ignoreResists   // 2026-10-26: npcAuto.ignoreResists (Yesodium-Bolt)
     } : null;
     const _legendaryBtn = _legendaryCanSave
       ? `<button class="ft-legendary-invoke" data-message-id="" style="margin-top:0.35rem;background:#3a1f3a;color:#eb9beb;border:1px solid #eb5757;padding:0.3rem 0.6rem;border-radius:4px;cursor:pointer">✨ Invoke Legendary (1/scene) — ${Number(defenseValue) <= 20 ? "auto-succeed" : "+10"}</button>`
@@ -16742,7 +16817,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         damageRolledTotal, damageDiceTooltip,
         damageType, damageFlavor, rolledParts: success ? rolledParts : [],
         costNote, signature, thirdThing,
-        itemUuid, ignoreResists: !!_surge.sunderingBlow, nonlethal: _nonlethalHit,
+        itemUuid, ignoreResists: !!_surge.sunderingBlow || !!_npcAtkMods?.ignoreResists, nonlethal: _nonlethalHit,
         radPenalty: _radPen
       }) + restraintNote + (flankMod > 0
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">⚔ Flanking: +${flankMod} (${flankMod + 1} melee threats)</p>`
@@ -16802,7 +16877,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // NPC automation (2026-10-06): the attacker's "on a hit" rules (DoT, +Radiation, no reactions, conditions, …)
       try {
         const _hitItem = itemUuid ? await fromUuid(itemUuid) : null, _hitTgt = target?.actor ?? target;
-        await game.fourththing.npcAuto?.onHit?.(actor, _hitItem, _hitTgt);
+        await game.fourththing.npcAuto?.onHit?.(actor, _hitItem, _hitTgt, { maxDie });   // 2026-10-26: maxDie feeds if.critical
         await game.fourththing.npcAuto?.onStruck?.(_hitTgt, actor, _hitItem);   // the defender's retaliation rules
       } catch (e) { console.warn("[fourththing] npc automation on-hit failed", e); }
 
@@ -19234,6 +19309,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // Invoke sephira follows the steward's Sephirotic Alignment (owner ruling
       // 2026-10-21). Derived only — the stored magic.sephirah is untouched, so
       // removing the alignment hands the old free pick back.
+      // Legacy spelling fold (2026-10-26): a stored "gevurah" reads as "geburah" (derived only).
+      if (sys?.magic?.sephirah) sys.magic.sephirah = ftSephKey(sys.magic.sephirah);
       if (this.type === "character" && sys?.magic) {
         const _seph = ftStewardSephirah(this);
         if (_seph) sys.magic.sephirah = _seph;
@@ -19249,10 +19326,15 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         const tier = Math.max(1, Math.min(4, Number(sys.integrity.tier) || 1));
         const table = FT_RIG_DEFENSE_BY_BRACKET[bracket];
         sys.derived         ??= {};
-        sys.derived.guard   ??= {}; sys.derived.guard.value   = table.guard   + tier;
-        sys.derived.evasion ??= {}; sys.derived.evasion.value = table.evasion + tier;
+        // RG8 (2026-10-26): equipped rig-system passives (Phase Cloak +Evasion, Reinforced Plating +integrity max per tier …)
+        const _rigPassives = ftRigSystemPassives(this);
+        sys.derived.guard   ??= {}; sys.derived.guard.value   = table.guard   + tier + _rigPassives.guard;
+        sys.derived.evasion ??= {}; sys.derived.evasion.value = table.evasion + tier + _rigPassives.evasion;
         sys.derived.resolve ??= {}; sys.derived.resolve.value = table.resolve + tier;
         sys.derived.defenseBracket = bracket;
+        const _integrityBonus = Math.max(0, Math.round(_rigPassives.integrityMaxPerTier * tier));
+        sys.derived.integrityBonus = _integrityBonus;
+        if (_integrityBonus > 0 && Number.isFinite(Number(sys.integrity.max))) sys.integrity.max = Number(sys.integrity.max) + _integrityBonus;
         // B12: per-round combat state stacked onto base defenses. Pilot
         // holds → +1 Guard; pilot evades → +2 Evasion; any crew braces →
         // +1 Guard. Cleared by pilot's _onFtNewTurn.
@@ -19494,6 +19576,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         if (!init) continue;
         if (typeof init.bonus === "number") sys.derived.initiative.bonus += init.bonus;
       }
+      // RG8 (2026-10-26): boarded crew share the rig's Sensor Suite — rig-system passive `initiative` on the ridden rig.
+      try {
+        const _boarded = this.flags?.fourththing?.boardedRig;
+        const _rigId = typeof _boarded === "string" ? _boarded : _boarded?.rigId;
+        const _rig = _rigId ? game.actors?.get?.(_rigId) : null;
+        if (_rig?.type === "rig") sys.derived.initiative.bonus += ftRigSystemPassives(_rig).initiative;
+      } catch (_e) { /* actors not ready yet — re-prepared on the next update */ }
 
       // Vision reader (Phase 4 — 2026-04-29). Items declare
       // flags.fourththing.passives.vision.{darkvision, lowLight, tremorsense, blindsight} = ftRange.
@@ -20882,6 +20971,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       magic.clarity  ??= { value: 3, max: 5 };
       magic.noise    ??= { value: 0, max: 10 };
       magic.sephirah ??= "tiferet";
+      magic.sephirah = ftSephKey(magic.sephirah);   // legacy "gevurah" → "geburah" (2026-10-26) so the select matches
       // The steward's Sephirotic Alignment drives the invoke sephira (owner ruling 2026-10-21);
       // the select becomes a locked read-out. Unaligned actors keep the free select.
       {
@@ -21044,7 +21134,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         const dmgT = String(sys?.damage?.type ?? "kinetic");
         const skill = String(sys?.skill ?? "melee");
         const intent = String(sys?.intent ?? "violence");
-        const rangeText = sys?.range?.value ? `${sys.range.value}${sys.range.units ?? "ft"}` : "";
+        const rangeText = _ftWeaponRangeChip(sys);   // AR4 (2026-10-26): fourththing short/long in squares — the dnd5e `range.value` read left the chip blank
         return {
           id: it.id,
           name: it.name,
@@ -22990,6 +23080,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // Sprint F: Apply Path Features — import class core + chosen subclass features
     static async _onFtApplyPathFeatures(event, target) {
       const result = await applyPathFeatures(this.actor);
+      // Heritage tier features (Initiation 5 / 11 / 17) ride the same button (AN1b, 2026-10-26).
+      try {
+        const hf = await applyHeritageFeatures(this.actor);
+        if (hf?.imported?.length) { result.imported = [...(result.imported || []), ...hf.imported]; if (result.error) result.error = null; }
+        if (hf?.skipped?.length) result.skipped = [...(result.skipped || []), ...hf.skipped];
+      } catch (e) { console.error("Roll for Initiation | heritage feature grant failed:", e); }
       // Starter manifestation kit rides the same button so existing stewards
       // can claim theirs (the creation wizard grants it for new characters).
       // Runs before the error return: a narrative-stub class with no feature
@@ -23840,6 +23936,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       magic.clarity  ??= { value: 0, max: 5 };
       magic.noise    ??= { value: 0, max: 10 };
       magic.sephirah ??= "malkuth";
+      magic.sephirah = ftSephKey(magic.sephirah);   // legacy "gevurah" → "geburah" (2026-10-26) so the select matches
       const clarityPips = Array.from({ length: magic.clarity.max ?? 5 }, (_, i) => ({
         filled: i < (magic.clarity.value ?? 0)
       }));
@@ -24340,6 +24437,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           output: Number(frameFlags?.slots?.output ?? 0) || 0
         },
         mobilityAllowed: Array.isArray(frameFlags?.mobilityAllowed) ? frameFlags.mobilityAllowed : [],
+        // RG3 (2026-10-26): mobilityAllowed is a warning, not a lock — the sheet flags a rig whose mobility the frame
+        // does not list (nothing else reads the field).
+        mobilityViolated: Array.isArray(frameFlags?.mobilityAllowed) && frameFlags.mobilityAllowed.length > 0
+          && !frameFlags.mobilityAllowed.includes(String(actor.system?.identity?.mobility ?? "")),
         has: !!frameFlags
       } : null;
 
@@ -24659,6 +24760,28 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           const subtype = item.getFlag?.("fourththing", "rigGear")?.subtype;
           if (subtype === "rig-template") {
             return this._applyRigTemplate(item);
+          }
+          // RG6 (2026-10-26): the frame's slot caps are a hard stop — refuse to equip past them (weapon slots + the pilot
+          // mount, system slots, output slots) and refuse a second frame. Before this the sheet only displayed the caps,
+          // so four test rigs carried two guns in one slot.
+          if (subtype === "rig-frame" || subtype === "rig-weapon" || subtype === "rig-system" || subtype === "output-module") {
+            const _frame = this.actor.items.find(i => i.getFlag?.("fourththing", "rigGear")?.subtype === "rig-frame");
+            const _ff = _frame?.flags?.fourththing?.rigFrame ?? null;
+            if (subtype === "rig-frame" && _frame) {
+              ui.notifications?.warn(`${this.actor.name} already has a frame (${_frame.name}) — unequip it before fitting ${item.name}.`);
+              return;
+            }
+            if (subtype !== "rig-frame" && _ff) {
+              const _cap = subtype === "rig-weapon" ? (Number(_ff.slots?.weapon ?? 0) || 0) + (_ff.pilotMount ? 1 : 0)
+                         : subtype === "rig-system" ? (Number(_ff.slots?.system ?? 0) || 0)
+                         : (Number(_ff.slots?.output ?? 0) || 0);
+              const _used = this.actor.items.filter(i => i.getFlag?.("fourththing", "rigGear")?.subtype === subtype).length;
+              if (_used >= _cap) {
+                const _label = subtype === "rig-weapon" ? "weapon" : subtype === "rig-system" ? "system" : "output";
+                ui.notifications?.warn(`${this.actor.name}: every ${_label} slot on ${_frame.name} is taken (${_used}/${_cap}). Unequip one before fitting ${item.name}.`);
+                return;
+              }
+            }
           }
           const itemData = item.toObject();
           delete itemData._id;
@@ -26179,7 +26302,8 @@ function _buildRfiSheetStrip(item) {
     : "";
   const reachStr = rfi.reach === "self" ? "self"
                  : rfi.reach === "touch" ? "touch"
-                 : /^\d+$/.test(String(rfi.reach)) ? `${rfi.reach} ft`
+                 // 2026-10-26 (GR15): reach reads in squares; a legacy feet value (≥5, the un-converted T1 arms until AR4 lands) shows ÷5.
+                 : /^\d+$/.test(String(rfi.reach)) ? `${Number(rfi.reach) >= 5 ? Math.round(Number(rfi.reach) / 5) : Number(rfi.reach)} sq`
                  : rfi.reach;
 
   // Lore body — falls back to legacySystem.description.value (the dnd5e
@@ -26920,15 +27044,15 @@ Hooks.on("updateActor", (actor, changes) => {
 const _FT_CREW_ACTION_DESC = {
   steer:           "Move the rig at frame speed.",
   ram:             "Pilot charge — ram a TARGETED token: (tier × bracket + Piloting)d6 collision damage, half fed back to your rig. Structures take it as Plate damage and can collapse.",
-  "hold-position": "Steady the rig — gunners gain advantage until next pilot turn.",
-  evasive:         "Disadvantage on attacks against the rig until next turn.",
+  "hold-position": "Steady the rig — gunners reroll their lowest die until the next pilot turn.",
+  evasive:         "Attacks against the rig roll 3d10 and keep the lowest 2 until next turn.",
   swerve:          "Reaction — the off-turn dodge: +(2 + Piloting) Evasion until your next pilot turn. Shares the Evading state, so it does not stack with Evasive.",
   "tack-against-wind": "Pilot action — beat upwind at HALF steer distance; in exchange Ram and Stomp reach one extra square this round.",
   "raise-sail":    "Bonus — make sail one step (Reefed → Working → Full). Full Sail: double steer distance, −2 Evasion. Trim persists between rounds.",
   "lower-sail":    "Bonus — shorten sail one step (Full → Working → Reefed). Reefed: half steer distance, +2 Evasion. Trim persists between rounds.",
   "fire-weapon":   "Activate equipped rig-weapon (use the buttons below).",
   "aimed-shot":    "Spend action + bonus — increased damage / accuracy on next fire.",
-  suppression:     "Use weapon to impose a condition (per weapon's grant).",
+  suppression:     "Bonus — fire to pin: the target's next attack roll takes −2.",
   reload:          "Action — clear ONE fired weapon's per-round gate so it can fire again this round. Heat still applies.",
   "opportunity-fire": "Reaction — snap-fire a rig weapon off-turn. Spends the reaction, not the action; the weapon's own heat + round gates still apply.",
   repair:          "Tinkering check — restore rig integrity.",
@@ -27354,13 +27478,14 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       if (target.id === steward.id) { warn(`${steward.name}: pick someone other than yourself.`); return; }
       // Owner-or-GM-relay (2026-10-01): a rig-owning player signalling another
       // player's steward used to reject and abort mid-action.
-      if ((await _ftApplyEffectsToTarget(target, [], [], { flags: { "combat.signalBonus": 1 } })) === "none") return;
+      const _signalAmt = 1 + Math.max(0, ftRigSystemPassives(rig).signalBonus);   // RG8: Comms Array passive
+      if ((await _ftApplyEffectsToTarget(target, [], [], { flags: { "combat.signalBonus": _signalAmt } })) === "none") return;
       await consumeBonus();
       try { ftPlayCombatVfx(target, "signal"); } catch (e) { console.warn("[fourththing] signal VFX", e); }
       ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: steward }),
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">📡 ${steward.name} signals ${target.name}</span></div>
-          <p style="margin:0.2rem 0;font-size:0.82rem"><em>${target.name}</em>: <b>+1</b> on next roll.</p></div>`
+          <p style="margin:0.2rem 0;font-size:0.82rem"><em>${target.name}</em>: <b>+${_signalAmt}</b> on next roll${_signalAmt > 1 ? " (Comms Array)" : ""}.</p></div>`
       });
       return;
     }
@@ -27438,7 +27563,8 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
         // collision — that's what "+reach against downwind targets" pays for.
         const reachFt = Number(canvas?.grid?.distance ?? 5) * (cmb.tacking ? 2 : 1);
         if (Number.isFinite(gapFt) && gapFt > reachFt + 0.5) {
-          const msg = `${rig.name} is ~${Math.round(gapFt)} ft from ${targetActor.name} — a ram needs contact (within ${reachFt} ft). Drive closer first.`;
+          const _sqRam = (canvas?.grid?.distance || 5);   // squares, not feet (canon units)
+          const msg = `${rig.name} is ~${Math.round(gapFt / _sqRam)} squares from ${targetActor.name} — a ram needs contact (within ${Math.max(1, Math.round(reachFt / _sqRam))} square). Drive closer first.`;
           if (!_initiatorIsGM) { ui.notifications?.warn(msg); return; }
           ui.notifications?.warn(`${msg} Proceeding (GM's call).`);
         }
@@ -27524,7 +27650,8 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
         // collision — that's what "+reach against downwind targets" pays for.
         const reachFt = Number(canvas?.grid?.distance ?? 5) * (cmb.tacking ? 2 : 1);
         if (Number.isFinite(gapFt) && gapFt > reachFt + 0.5) {
-          const msg = `${rig.name} is ~${Math.round(gapFt)} ft from ${stompTarget.name} — a stomp needs contact (within ${reachFt} ft). Step closer first.`;
+          const _sqStomp = (canvas?.grid?.distance || 5);   // squares, not feet (canon units)
+          const msg = `${rig.name} is ~${Math.round(gapFt / _sqStomp)} squares from ${stompTarget.name} — a stomp needs contact (within ${Math.max(1, Math.round(reachFt / _sqStomp))} square). Step closer first.`;
           if (!_initiatorIsGM) { ui.notifications?.warn(msg); return; }
           ui.notifications?.warn(`${msg} Proceeding (GM's call).`);
         }
@@ -27850,7 +27977,8 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       if (stCmb.engineerRepairedThisRound) { ui.notifications?.warn(`${steward.name}: already repaired this round.`); return; }
       const intrigue = Number(stSys?.attributes?.intrigue?.value) || 0;
       const tinkering = Number(stSys?.skills?.tinkering?.value)   || 0;
-      const mod = intrigue + tinkering;
+      const repairBay = ftRigSystemPassives(rig).repairBonus;   // RG8: Repair Bay passive
+      const mod = intrigue + tinkering + repairBay;
       const dc  = 10;
       const roll = new Roll(`${_ftXd10(steward)} + ${mod}`);
       await roll.evaluate();
@@ -27870,7 +27998,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
         speaker: ChatMessage.getSpeaker({ actor: steward }),
         flavor: `<div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">🔧 ${steward.name} repairs ${rig.name} (DC${dc})</span></div>
           <p style="margin:0.2rem 0;font-size:0.82rem">${success ? `Success — <b>+${restore}</b> integrity (T${tier} + ${margin} margin).` : "Failed — no repair this round."}</p>
-          <p style="margin:0.2rem 0;font-size:0.72rem;opacity:0.7">Intrigue ${intrigue} + Tinkering ${tinkering} = +${mod}</p>`
+          <p style="margin:0.2rem 0;font-size:0.72rem;opacity:0.7">Intrigue ${intrigue} + Tinkering ${tinkering}${repairBay ? ` + Repair Bay ${repairBay}` : ""} = +${mod}</p>`
       });
       return;
     }

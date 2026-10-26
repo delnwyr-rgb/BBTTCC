@@ -1,0 +1,68 @@
+{
+  "name": "Husk Fortitude",
+  "type": "feature",
+  "img": "icons/weapons/daggers/dagger-bone-grey.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>When damage reduces the Husk to 0 Integrity, it rolls a Body check vs DC 5 + the damage taken (auto-fail against sephirotic damage or a critical hit). On a success it drops to 1 Integrity instead, and keeps shambling. The grip does not know it is dead.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "zero",
+            "do": {
+              "heal": 1,
+              "prompt": "Husk Fortitude: Body DC 5+damage (auto-fail vs sephirotic/crit) — if failed, undo."
+            },
+            "limit": {
+              "per": "combat",
+              "uses": 1
+            }
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Nahemoth Husk"
+        ],
+        "sourceIds": [
+          "BvNe8KEqyzjNxiFc"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "9dte4CPL9cy5ssJa",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069945,
+    "modifiedTime": 1792989070027,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!9dte4CPL9cy5ssJa"
+}

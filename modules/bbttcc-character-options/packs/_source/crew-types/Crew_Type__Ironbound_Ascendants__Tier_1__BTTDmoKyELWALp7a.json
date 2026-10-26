@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You’ve learned the first law of altitude: the hill fights for whoever arrives prepared.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic:</strong> In Mountains and Highlands, travel is more efficient for your faction and elevation penalties are easier to manage.</li></ul>",
+      "value": "<p><strong>Tier 1 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You’ve learned the first law of altitude: the hill fights for whoever arrives prepared.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Plating.</li><li><strong>Strategic:</strong> In Mountains and Highlands, travel is more efficient for your Domain and elevation penalties are easier to manage.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-ironbound-ascendants-t1",
@@ -53,7 +53,7 @@
             "priority": 20
           },
           {
-            "key": "system.skills.athletics.value",
+            "key": "system.skills.plating.value",
             "type": "upgrade",
             "value": 1,
             "phase": "initial",
@@ -85,12 +85,12 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "systemVersion": "0.6.37",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346195664,
-        "modifiedTime": 1777433499527
+        "modifiedTime": 1792989167621
       },
       "start": {
         "combat": null,
@@ -101,8 +101,7 @@
         "initiative": null
       },
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!BTTDmoKyELWALp7a.9e8c1c03e6d14b51"
+      "folder": null
     }
   ],
   "folder": "wmqio7Q7DY1BZeRJ",
@@ -161,12 +160,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986952092,
-    "modifiedTime": 1782167238948,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989167454,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

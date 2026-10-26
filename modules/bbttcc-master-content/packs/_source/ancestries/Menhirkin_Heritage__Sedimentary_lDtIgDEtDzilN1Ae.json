@@ -13,7 +13,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Menhirkin heritage: Sedimentary.</p><p><em>“The old stones remember what the new ones are pretending to be.”</em></p><p><strong>Menhirkin (Sedimentary).</strong> You are laid-down stone. Every year of every century of every epoch stacked on top of the year before, pressed into a single body. Other Menhirkin are events. You are a record. The ground under the bunker may be a grandparent to other Menhirkin. It’s your diary.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Menhirkin).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 6 squares walking.</li><li><strong>Lineage Lean.</strong> Menhirkin does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Mind</strong> in fiction and through Tier powers.</li></ul><h3>Menhirkin Core: The Land Stood Up</h3><p><em>Shared across all Menhirkin heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><strong>Stone Soul.</strong> You count as Large for carry, shove, and grapple despite your Medium frame. You reroll the lowest die on checks to resist being forcibly moved.</li><li><strong>Hex Recognition.</strong> Once per scene, while you are on a natural surface you are directly touching, you may whisper a single question about the place. The GM answers with one true thing the land knows.</li><li><strong>Slow to Wear.</strong> You reroll the lowest die on Body checks against Stress, long-duration physical wear, forced marches, climate exposure, and sustained labor. You do not tire the way softer things tire.</li><li><strong>Heavy Presence.</strong> Your weight and settledness are perceptible. Creatures within 2 squares of you know you are there even if they cannot see you; you roll 3d10 keep lowest 2 on Intrigue (Stealth) checks unless you are on or in stone.</li></ul><h3>Sedimentary Traits</h3><ul><li><strong>Old Layer Resilience.</strong> At creation, pick one damage type: poison, qliphothic, or energy with a single flavor of your choice. You have resistance to that damage. The land under you is old. Old land has outlasted a lot.</li><li><strong>Layer Reading.</strong> You can touch any worked surface older than a century and tell, without a check, its approximate age, the most recent meaningful thing that happened there, and whether anyone you can currently see has also touched it.</li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Economy OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Ruins / Archaeological / Old-Record</em> hexes, the first archival or recon operation your faction runs per Turn costs 1 fewer OP.</li><li><strong>Strata Witness.</strong> Once per Strategic Turn, while on a hex with recorded Lore, your faction may ask the GM one true thing about a past faction that held it. Useful on a contested claim.</li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#a8c4e0;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Hex Recognition</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">On a natural surface you're touching, whisper a question — GM answers with one true thing the land knows.</div>\n</div>",
+      "value": "\n<p><em>“The old stones remember what the new ones are pretending to be.”</em></p><p><strong>Menhirkin (Sedimentary).</strong> You are laid-down stone. Every year of every century of every epoch stacked on top of the year before, pressed into a single body. Other Menhirkin are events. You are a record. The ground under the bunker may be a grandparent to other Menhirkin. It’s your diary.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Menhirkin).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 6 squares walking.</li><li><strong>Lineage Lean.</strong> Menhirkin does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Mind</strong> in fiction and through Tier powers.</li></ul><h3>Menhirkin Core: The Land Stood Up</h3><p><em>Shared across all Menhirkin heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><strong>Stone Soul.</strong> You count as Large for carry, shove, and grapple despite your Medium frame. You reroll the lowest die on checks to resist being forcibly moved.</li><li><strong>Hex Recognition.</strong> Once per scene, while you are on a natural surface you are directly touching, you may whisper a single question about the place. The GM answers with one true thing the land knows.</li><li><strong>Slow to Wear.</strong> You reroll the lowest die on Body checks against Stress, long-duration physical wear, forced marches, climate exposure, and sustained labor. You do not tire the way softer things tire.</li><li><strong>Heavy Presence.</strong> Your weight and settledness are perceptible. Creatures within 2 squares of you know you are there even if they cannot see you; you roll 3d10 keep lowest 2 on Intrigue (Stealth) checks unless you are on or in stone.</li></ul><h3>Sedimentary Traits</h3><ul><li><strong>Old Layer Resilience.</strong> At creation, pick one damage type: poison, qliphothic, or energy with a single flavor of your choice. You have resistance to that damage. The land under you is old. Old land has outlasted a lot.</li><li><strong>Layer Reading.</strong> You can touch any worked surface older than a century and tell, without a check, its approximate age, the most recent meaningful thing that happened there, and whether anyone you can currently see has also touched it.</li></ul><h3>Domain Edge</h3><ul><li><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Intrigue marks</strong> and <strong>+20 Economy marks</strong> at campaign start.</li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#a8c4e0;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Hex Recognition</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">On a natural surface you're touching, whisper a question — GM answers with one true thing the land knows.</div>\n</div>",
       "chat": ""
     },
     "advancement": [
@@ -52,72 +52,16 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "species"
-    },
     "bbttcc": {
       "kind": "heritage",
       "family": "menhirkin",
       "lineage": "Sedimentary",
       "version": "1.1.0",
       "date": "2026-04-19",
-      "rfiNative": true,
-      "opEffects": {
-        "intrigue": 2,
-        "economy": 1
-      }
+      "rfiNative": true
     },
     "fourththing": {
-      "rerolls": [
-        {
-          "context": "forced-movement",
-          "mode": "reroll-lowest",
-          "note": "on checks to resist being forcibly moved"
-        },
-        {
-          "context": "check",
-          "attribute": "body",
-          "mode": "reroll-lowest",
-          "vs": "vs:exhaustion",
-          "note": "on Body checks against exhaustion, long-duration physical wear, forced marche…"
-        },
-        {
-          "context": "check",
-          "skill": "stealth",
-          "mode": "reroll-highest",
-          "note": "on Intrigue (Stealth) checks unless you are on or in stone"
-        },
-        {
-          "context": "check",
-          "attribute": "intrigue",
-          "mode": "reroll-highest",
-          "note": "on Intrigue (Stealth) checks unless you are on or in stone"
-        },
-        {
-          "context": "forced-movement",
-          "mode": "reroll-lowest",
-          "note": "checks to resist being forcibly moved"
-        },
-        {
-          "context": "check",
-          "attribute": "body",
-          "mode": "reroll-lowest",
-          "vs": "vs:exhaustion",
-          "note": "Body checks against exhaustion, long-duration physical wear, forced marches, …"
-        },
-        {
-          "context": "check",
-          "skill": "stealth",
-          "mode": "reroll-highest",
-          "note": "Intrigue (Stealth) checks unless you are on or in stone"
-        },
-        {
-          "context": "check",
-          "attribute": "intrigue",
-          "mode": "reroll-highest",
-          "note": "Intrigue (Stealth) checks unless you are on or in stone"
-        }
-      ],
+      "rerolls": [],
       "resourceGrants": [
         {
           "cadence": "per-campaign-start",
@@ -321,12 +265,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776660294439,
-    "modifiedTime": 1782167240133,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988988524,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

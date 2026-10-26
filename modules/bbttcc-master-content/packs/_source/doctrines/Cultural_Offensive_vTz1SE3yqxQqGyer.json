@@ -3,11 +3,11 @@
   "type": "feat",
   "img": "icons/skills/trades/music-notes-sound-blue.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p>Songs, stories, the right gift pressed into the right hand. Win the ground AND the legend they'll tell about the ground.</p><p><strong>On Success: faction morale +2.</strong></p>",
+      "value": "<p>Songs, stories, the right gift pressed into the right hand. Win the ground AND the legend they'll tell about the ground.</p><p><strong>On Success: Loyalty +2 on the target hex.</strong></p>",
       "chat": ""
     }
   },
@@ -36,25 +36,25 @@
         "authoredSprint": "balance-w1"
       },
       "effects": {
-        "text": "On success: win hearts as well as ground — faction morale +2."
+        "text": "On success: win hearts as well as ground — Loyalty +2 on the target hex."
       }
     }
   },
   "_id": "vTz1SE3yqxQqGyer",
   "effects": [],
-  "folder": null,
+  "folder": "SziFuLdTIX4Y2Rav",
   "sort": 0,
   "ownership": {
     "default": 0,
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1779731207893,
-    "modifiedTime": 1781402929823,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989013714,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

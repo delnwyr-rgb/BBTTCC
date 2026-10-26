@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Deep Cover Network [Option]",
+  "name": "Deep Cover Network",
   "type": "feat",
   "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
   "system": {
@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Deep Cover Network [Option]</h3><p><em>No rules text registered.</em></p></div>",
+      "value": "<p><strong>Deep Cover Network</strong></p><p>Covert Ops Cell. Target a hex held by a rival: an agent goes in, and at the next turn that Domain's marks banks and planned activities are whispered to you.</p><p><em>Cost: Intrigue 20 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "optact_deep_cover_network"
+      "key": "optact_deep_cover_network",
+      "effects": {
+        "text": "Covert Ops Cell. Target a hex held by a rival: an agent goes in, and at the next turn that Domain's marks banks and planned activities are whispered to you."
+      }
     }
   },
   "_id": "JhLIRA4BMxyjhWlG",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601760,
-    "modifiedTime": 1782703702687,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988996072,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

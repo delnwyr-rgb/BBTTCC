@@ -3,8 +3,14 @@
   "type": "feat",
   "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Crisis Summit</b></p><p>Prevent Morale loss globally for 1 turn.</p><p><b>Cost:</b> Diplomacy 3 • Faith 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>crisis_summit</code></p>",
+      "value": "<p><b>Crisis Summit</b></p><p>Convene every Domain for a turn of cooler heads: a GM note goes to every war log that no hostile offer should land on anyone for 1 turn. A note, not a veto — the story still offers every fight.</p><p><b>Cost:</b> Diplomacy 30 · Faith 20 marks</p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "crisis-summit",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -44,7 +46,8 @@
         "storyOnly": false,
         "availability": null,
         "unlockKey": null
-      }
+      },
+      "effects": {}
     }
   },
   "_id": "U6cuUBKwK5c0HEJB",
@@ -59,12 +62,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063184953,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792988991712,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!U6cuUBKwK5c0HEJB"
 }

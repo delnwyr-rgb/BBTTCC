@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>“You were not beautiful. You were <strong>wanted</strong>.”</em></p>\n        <p><strong>Glamourfield (At Will, Minor).</strong> You can create subtle illusions affecting light, sound, scent, or emotional tone. It never overwhelms; it always influences.</p>\n        <p><strong>Dream Anchor.</strong> You have a +1 bonus to checks against metaphysical hazards (slippage, dream traps, Spark backlash).</p>",
+      "value": "<p><em>“You were not beautiful. You were <strong>wanted</strong>.”</em></p>\n        <p><strong>Glamourfield (At Will, Minor).</strong> You can create subtle illusions affecting light, sound, scent, or emotional tone. It never overwhelms; it always influences.</p>\n        <p><strong>Dream Anchor.</strong> You have +1 Resolve, and the same edge on checks against metaphysical hazards (slippage, dream traps, Spark backlash).</p>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "properties": [],
     "requirements": "Oldenborn",
@@ -41,23 +41,23 @@
       "kind": "oldenborn",
       "feature": "glamourfield",
       "lineage": "Lumenwrought",
-      "tierLevel": 0,
       "version": "1.0.0"
     }
   },
   "effects": [
     {
       "_id": "9b52887635e340da",
-      "name": "Lumenwrought: Dream Anchor (+1 saves)",
+      "name": "Lumenwrought: Dream Anchor (+1 Resolve)",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_4.png",
       "type": "base",
       "system": {
         "changes": [
           {
-            "key": "system.bonuses.abilities.save",
-            "value": "+1",
+            "key": "system.derived.resolve.aeBonus",
+            "value": 1,
             "priority": 10,
-            "type": "add"
+            "type": "add",
+            "phase": "initial"
           }
         ]
       },
@@ -85,12 +85,12 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
-        "systemId": "dnd5e",
-        "systemVersion": "5.2.5",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346197030,
-        "modifiedTime": 1777346197030
+        "modifiedTime": 1792988966491
       },
       "start": {
         "combat": null,
@@ -101,8 +101,7 @@
         "initiative": null
       },
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!VCDspGrzcx0FkfEj.9b52887635e340da"
+      "folder": null
     }
   ],
   "folder": "AZpEGZW4ZA1Kjb9K",
@@ -116,12 +115,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004114716,
-    "modifiedTime": 1782167240128,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988979412,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

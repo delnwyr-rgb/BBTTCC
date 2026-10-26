@@ -5,11 +5,11 @@
  *
  * Slice 2:
  * - Inject L1 Tactical Maneuvers unlocked by Character Options
- * - Display inline with normal maneuvers, tagged ⭐ [Option]
+ * - Display inline with normal maneuvers (plain names since 2026-10-26, DC8 — the body opens with the archetype)
  *
  * Slice 3:
  * - Inject L2 Strategic Activities unlocked by Character Options
- * - Display in planner/activity lists, tagged ⭐ [Option]
+ * - Display in planner/activity lists (plain names since 2026-10-26, DC8)
  * - Mixed: mostly storyOnly; selected activities queue real hex tags via territory.turn.pending
  *
  * Slice 3.1 (Polish):
@@ -251,8 +251,8 @@ function buildOptionManeuverDef(key, meta){
     source: "character-option",
     optionKey: meta?.optionKey || null,
 
-    // UI: match existing look/feel
-    label: `⭐ ${pretty} [Option]`,
+    // UI: plain name (DC8, 2026-10-26 — the "⭐ … [Option]" affix retired; the card body names the archetype)
+    label: pretty,
     primaryKey,
     cost,           // Raid Console reads eff.cost
     opCosts: cost,  // Loader-style consumers read opCosts
@@ -349,8 +349,8 @@ function buildOptionStrategicDef(key, meta){
     source: "character-option",
     optionKey: meta?.optionKey || null,
 
-    // Planner polish metadata (slots into existing grouping look/feel)
-    label: `⭐ ${pretty} [Option]`,
+    // Planner polish metadata (slots into existing grouping look/feel); plain name since 2026-10-26 (DC8)
+    label: pretty,
     primaryKey,
     opCosts,
     cost: opCosts,

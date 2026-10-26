@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You’ve stopped crossing high ground and started governing it.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When defending from Mountains or Highlands, your faction gains a meaningful positional edge. Raids and hostile actions launched uphill against you are harder to execute cleanly.</li></ul>",
+      "value": "<p><strong>Tier 2 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You’ve stopped crossing high ground and started governing it.</em></p><ul><li><strong>Strategic:</strong> Mountain people fight uphill every day: your Domain adds +1 to its Violence Domain rolls.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-ironbound-ascendants-t2",
@@ -80,6 +80,11 @@
           "bbttcc:theme:uphill-war"
         ]
       }
+    },
+    "fourththing": {
+      "domainRollBonus": {
+        "violence": 1
+      }
     }
   },
   "_stats": {
@@ -92,12 +97,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986952092,
-    "modifiedTime": 1781116039590,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989169853,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

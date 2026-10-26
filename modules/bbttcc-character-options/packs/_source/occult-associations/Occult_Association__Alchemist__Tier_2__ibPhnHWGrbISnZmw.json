@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 — Alchemist</strong></p><p><strong>“Your practice has habits now. So do your consequences.”</strong></p><p>At Tier 2, you stop treating OPs as abstract resources. You treat them as <strong>states of matter</strong>.</p><p>Economy becomes influence. Influence becomes stability. Stability becomes leverage. You have learned how to rebalance a system without improving it — which is often exactly what Athletics requires.</p><p>You can now perform controlled conversions. They are never free.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Propaganda Distillate:</strong> once per Strategic Turn, convert <strong>3 Economy OP → 3 Soft Power OP</strong> <em>or</em> <strong>3 Soft Power OP → 3 Economy OP</strong></li><li>This conversion does not count as OP generation and does not trigger “on generation” effects</li><li>It leaves narrative residue: attention, rumors, audits, market weirdness, or opportunists</li></ul><p><strong>Cost:</strong> conversion creates imbalance somewhere else. The books may still add up. The world will not.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"alchT2\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Propaganda Distillate</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Convert 3 Economy ↔ 3 Soft Power. Doesn't count as OP generation. Leaves narrative residue.</div>\n</div>",
+      "value": "<p><strong>Tier 2 — Alchemist</strong></p><p><strong>“Your practice has habits now. So do your consequences.”</strong></p><p>At Tier 2, you stop treating OPs as abstract resources. You treat them as <strong>states of matter</strong>.</p><p>Economy becomes influence. Influence becomes stability. Stability becomes leverage. You have learned how to rebalance a system without improving it — which is often exactly what Athletics requires.</p><p>You can now perform controlled conversions. They are never free.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Propaganda Distillate:</strong> once per turn, convert <strong>30 Economy marks → 30 Soft Power marks</strong> <em>or</em> <strong>30 Soft Power marks → 30 Economy marks</strong></li><li>This conversion does not count as OP generation and does not trigger “on generation” effects</li><li>It leaves narrative residue: attention, rumors, audits, market weirdness, or opportunists</li></ul><p><strong>Cost:</strong> conversion creates imbalance somewhere else. The books may still add up. The world will not.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"alchT2\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Propaganda Distillate</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Convert 3 Economy ↔ 3 Soft Power. Doesn't count as OP generation. Leaves narrative residue.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -264,12 +264,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987084174,
-    "modifiedTime": 1781024184300,
-    "lastModifiedBy": "MRFjjbUTBd66pWBY"
+    "modifiedTime": 1792977831012,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

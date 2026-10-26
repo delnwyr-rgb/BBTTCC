@@ -23,7 +23,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 17
     },
     "uses": {
       "spent": 0,
@@ -39,32 +39,33 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "eidolon",
       "lineage": "Eidolon (Outsider)",
       "feature": "sovereign",
-      "tierLevel": 4,
       "version": "1.0.0",
       "date": "2026-05-15",
       "npAncestry": true
     },
     "fourththing": {
-      "principleSource": "ancestry"
+      "principleSource": "ancestry",
+      "grants": {
+        "immunities": [
+          "psychic"
+        ]
+      }
     }
   },
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1778961512781,
-    "modifiedTime": 1782167240127,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988978651,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

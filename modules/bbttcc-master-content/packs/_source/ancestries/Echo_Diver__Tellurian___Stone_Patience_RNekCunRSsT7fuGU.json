@@ -7,7 +7,7 @@
     "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-echo-diver=\"v1\" style=\"display:none\"></div><p><em>\"You are harder to move than most people are willing to try for.\"</em></p><p><strong>Object Sense (passive).</strong> You passively know, without rolling, the approximate age and structural integrity of any object you touch.</p><p><strong>Stone Patience (1/Soma Break).</strong> Bonus action — anchor yourself until the start of your next turn. You cannot be moved against your will, knocked Prone, or made Shaken. Forced-movement effects targeting you fail cleanly; the aggressor knows it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDivTellurianStonePatience\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Stone Patience</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (active) + passive object sense  ·  <strong>Action:</strong> Picker (Stone Patience · Object Sense)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Active: bonus-action anchor — immune to forced movement, Prone, Shaken until next turn. Passive: GM tells you age & structural integrity of any object you touch.</span></p></div>",
+      "value": "<p><em>\"You are harder to move than most people are willing to try for.\"</em></p><p><strong>Object Sense (passive).</strong> You passively know, without rolling, the approximate age and structural integrity of any object you touch.</p><p><strong>Stone Patience (1/Soma Break).</strong> Bonus action — anchor yourself until the start of your next turn. You cannot be moved against your will, knocked Prone, or made Shaken. Forced-movement effects targeting you fail cleanly; the aggressor knows it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDivTellurianStonePatience\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Stone Patience</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (active) + passive object sense  ·  <strong>Action:</strong> Picker (Stone Patience · Object Sense)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Active: bonus-action anchor — immune to forced movement, Prone, Shaken until next turn. Passive: GM tells you age & structural integrity of any object you touch.</span></p></div>",
       "chat": ""
     },
     "advancement": {},
@@ -16,7 +16,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -33,14 +33,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "echo_diver",
       "feature": "stone_patience",
       "lineage": "Tellurian",
-      "tierLevel": 1,
       "version": "1.1.0",
       "date": "2026-04-19",
       "rfiNative": true
@@ -49,8 +45,8 @@
       "grants": {
         "resistances": [
           {
-            "type": "energy",
-            "flavor": "fire"
+            "type": "thermal",
+            "flavor": "hot"
           },
           "poison"
         ]
@@ -245,12 +241,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776660294508,
-    "modifiedTime": 1781116079637,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988969072,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

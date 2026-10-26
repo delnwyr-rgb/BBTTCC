@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — Justice (Arbiter)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When spending Diplomacy OPs to settle disputes, restore legitimacy, arbitrate reforms, or de-escalate internal pressure, the effectiveness of spent OPs is increased by 25%.</li></ul>",
+      "value": "<p><strong>Tier 2 (Level 5) — Justice (Arbiter)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Diplomacy marks, it spends 20% less (never below 10).</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -59,7 +59,20 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "diplomacy"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Archetype: Justice (Arbiter) (Tier 2)",
+          "pct": 20
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": null,
@@ -71,12 +84,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986332024,
-    "modifiedTime": 1781116035393,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989156967,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

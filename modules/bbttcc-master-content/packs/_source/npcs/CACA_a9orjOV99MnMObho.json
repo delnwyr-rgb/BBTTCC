@@ -3,15 +3,19 @@
   "type": "npc",
   "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/caca.png",
   "system": {
-    "role": "Joy Elemental (Saturated)",
+    "role": "caster",
     "tier": 2,
     "factionId": "",
-    "notes": "",
+    "notes": "An elemental of saturated joy — colour given will and motion. Beautiful, overwhelming, and not remotely safe. Where it walks the air goes glittery and people remember being eight.",
     "details": {
       "level": 8,
       "tier": 2,
       "statPoints": 0,
-      "skillPoints": 0
+      "skillPoints": 0,
+      "biography": {
+        "value": "<p><strong>Concept.</strong> An elemental of saturated joy — colour given will and motion. Beautiful, overwhelming, and not remotely safe.</p>\n<p><strong>Signature.</strong> It does not roar. It hums a song you almost recognize, and the song is louder than your name.</p>",
+        "public": ""
+      }
     },
     "faction": {
       "id": null,
@@ -40,8 +44,9 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 78,
-        "max": 78
+        "value": 50,
+        "max": 50,
+        "temp": 0
       },
       "stress": {
         "value": 39,
@@ -127,7 +132,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -137,17 +143,27 @@
       "movementBudgetFt": 30
     },
     "defenses": {
-      "resistances": [],
+      "resistances": [
+        "psychic"
+      ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "qliphothic"
+      ]
     },
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "charmed",
+      "shaken"
+    ],
     "tags": [
-      "5e-port",
       "cr-4",
       "Common",
-      "phase2-narrative-applied"
+      "phase2-narrative-applied",
+      "rfi-scrubbed"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -160,7 +176,12 @@
       "value": 0,
       "taint": 0,
       "fragments": []
-    }
+    },
+    "biography": {
+      "concept": "Charismatic, Aggressive Cover Art (Saturated)",
+      "notes": "An elemental of saturated joy — colour given will and motion. Beautiful, overwhelming, and not remotely safe. Where it walks the air goes glittery and people remember being eight."
+    },
+    "description": "<p><strong>Concept.</strong> An elemental of saturated joy — colour given will and motion. Beautiful, overwhelming, and not remotely safe.</p>\n<p><strong>Signature.</strong> It does not roar. It hums a song you almost recognize, and the song is louder than your name.</p>"
   },
   "items": [
     {
@@ -172,11 +193,11 @@
         "intent": "violence",
         "skill": "melee",
         "damage": {
-          "formula": "2d8+4",
+          "formula": "2d8",
           "attribute": "violence",
           "type": "psychic",
           "damageFlavor": "",
-          "track": "integrity"
+          "track": "stress"
         },
         "damageParts": [],
         "range": {
@@ -185,9 +206,9 @@
         },
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
-        "effect": "",
+        "effect": "A fistful of impossible colour. Damage goes to Stress. On a hit, the target rerolls the highest die on its next damage roll against the Elemental — it is hard to swing meanly at a thing this pretty.",
         "flavor": "",
         "manifestation": {
           "tier": 1,
@@ -219,6 +240,9 @@
             "pool": "",
             "value": 0
           }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square., one target. Damage: <code>2d8</code> psychic + violence. Damage goes to Stress. On a hit, the target rerolls the highest die on its next damage roll against the Elemental.</p><p><em>It does not bruise. It dyes.</em></p>"
         }
       },
       "_id": "P4Cy2BPvBAyqMPrN",
@@ -405,20 +429,36 @@
           "isCustomized": true,
           "fromAmmo": false,
           "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Chromatic Slam"
+                },
+                "do": {
+                  "impose": true
+                },
+                "label": "Chromatic Slam — it is hard to swing meanly"
+              }
+            ]
+          }
         }
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829141,
-        "modifiedTime": 1780163239707,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989122420,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!a9orjOV99MnMObho.P4Cy2BPvBAyqMPrN"
+      }
     },
     {
       "name": "Weaponized Whimsy",
@@ -429,10 +469,10 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p>When the Lisa Frank Elemental is attacked, it releases a burst of overwhelming color and affirmation.</p><p>Attacker must succeed on a DC 15 Soul check or become <strong>Dazed</strong> until the end of their next turn.</p>",
+          "value": "<p>When the Elemental is attacked, it releases a burst of overwhelming colour and affirmation. The attacker must succeed a Soul check vs DC 15 or be Staggered until the end of its next turn.</p>",
           "chat": ""
         }
       },
@@ -443,19 +483,39 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "do": {
+                  "condition": {
+                    "key": "staggered",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 15
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.360",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.1",
         "createdTime": 1777700829141,
-        "modifiedTime": 1777700829141,
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "modifiedTime": 1791331978093,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!a9orjOV99MnMObho.CZ31MDOUkMad1Ivq"
+      }
     },
     {
       "name": "Feed on Attention",
@@ -480,19 +540,34 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "do": {
+                  "heal": 5
+                },
+                "to": "self",
+                "label": "Feed on Attention"
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829141,
-        "modifiedTime": 1777700829141,
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "modifiedTime": 1792989122420,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!a9orjOV99MnMObho.nOIzi6FZBEUUQXGT"
+      }
     },
     {
       "name": "Aura of Aggressive Positivity",
@@ -503,10 +578,10 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p>Creatures within 2 squares must make a DC 14 Presence check at the start of their turn or suffer roll 3d10 keep lowest 2 on hostile actions against the Elemental.</p>",
+          "value": "<p>Creatures within 2 squares must succeed a Presence check vs DC 14 at the start of their turn or roll twice-keep-worse on hostile actions against the Elemental until the start of their next turn.</p>",
           "chat": ""
         }
       },
@@ -517,19 +592,47 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "do": {
+                  "save": {
+                    "attr": "presence",
+                    "dc": 14,
+                    "onSave": "negate"
+                  }
+                },
+                "radius": 2,
+                "who": "enemies"
+              },
+              {
+                "on": "saveFail",
+                "do": {
+                  "impose": true
+                },
+                "if": {
+                  "weapon": "Aura of Aggressive Positivity"
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829141,
-        "modifiedTime": 1782167243687,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989122420,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!a9orjOV99MnMObho.WaUsizUwK6GqzyTS"
+      }
     },
     {
       "name": "Weakness: Boredom",
@@ -540,10 +643,10 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p>If ignored for a full round, or if a creature successfully distracts it with a new aesthetic or sincere compliment, the Elemental becomes <strong>Stunned</strong> until the end of its next turn.</p>",
+          "value": "<p>If ignored for a full round, or if a creature successfully distracts it with a new aesthetic or a sincere compliment, the Elemental is Staggered until the end of its next turn.</p>",
           "chat": ""
         }
       },
@@ -556,17 +659,16 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.360",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.1",
         "createdTime": 1777700829141,
-        "modifiedTime": 1777700829141,
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "modifiedTime": 1791324407979,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!a9orjOV99MnMObho.pgiA63TMmONV8aSX"
+      }
     },
     {
       "name": "Glitter Aftermath",
@@ -577,10 +679,10 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p>When reduced to 0 Integrity, the Elemental explodes into harmless glitter. Any creature present suffers a permanent cosmetic glitter effect and reroll the lowest die on their next Soft Power interaction.</p>",
+          "value": "<p>When reduced to 0 Integrity, the Elemental bursts into harmless glitter. Every creature present carries a cosmetic glitter effect that refuses to wash out for the rest of the arc, and rerolls the lowest die on its next Soft Power interaction.</p>",
           "chat": ""
         }
       },
@@ -591,19 +693,38 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "zero",
+                "do": {
+                  "bankReroll": {
+                    "context": "check",
+                    "note": "Glitter Aftermath — next Soft Power interaction"
+                  }
+                },
+                "who": "all",
+                "radius": 12,
+                "label": "Glitter Aftermath"
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829141,
-        "modifiedTime": 1782167243687,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989122420,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!a9orjOV99MnMObho.Mk72XFTfexTORJRL"
+      }
     },
     {
       "name": "Rainbow Cascade",
@@ -620,24 +741,24 @@
         "target": "burst",
         "range": "near",
         "damage": "2d6",
-        "damageType": "energy",
+        "damageType": "sephirotic",
         "damageFlavor": "",
         "damageRoll": {
           "op": "none",
           "number": 0,
           "die": "d6",
           "attribute": "",
-          "type": "kinetic",
+          "type": "sephirotic",
           "flavor": "",
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "Release a saturated wave. Each creature within near makes a Resolve check; on failure, take 2d6 energy damage and become Charmed for one exchange (they see only beauty in the Elemental).",
+        "effect": "Release a saturated wave. Each creature within near makes a Resolve check; on failure, take 2d6 sephirotic damage and become Charmed for one exchange (they see only beauty in the Elemental).",
         "tags": [
           "translated",
-          "5e-port",
           "phase2-narrative",
-          "manifestation"
+          "manifestation",
+          "rfi-scrubbed"
         ],
         "category": "manifestation",
         "flavor": "Animal silhouettes briefly inhabit the landscape behind targets — a unicorn, a kitten, a dolphin.",
@@ -686,6 +807,9 @@
             "dcMode": "derived",
             "dcFixed": 15
           }
+        },
+        "description": {
+          "value": "<p><strong>Working.</strong> <em>An eruption of impossible colour.</em></p>\n<p>Release a saturated wave. Each creature within near range makes a Resolve check (DC by tier); on a failure it takes 2d6 sephirotic damage and is Charmed for one exchange — it sees only beauty in the Elemental.</p>\n<p><strong>Cost.</strong> 2 Clarity, +1 Noise · action · burst / near.</p>\n<p><em>Animal silhouettes briefly inhabit the landscape behind the targets — a unicorn, a kitten, a dolphin.</em></p>"
         }
       },
       "_id": "RxhzsiHCBJJJniRU",
@@ -873,20 +997,43 @@
           "isCustomized": true,
           "fromAmmo": false,
           "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "condition": {
+                    "key": "charmed",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 15
+                    }
+                  },
+                  "damage": {
+                    "formula": "2d6",
+                    "type": "sephirotic"
+                  }
+                }
+              }
+            ]
+          }
         }
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700841957,
-        "modifiedTime": 1780163239707,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989122421,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!a9orjOV99MnMObho.RxhzsiHCBJJJniRU"
+      }
     },
     {
       "name": "Saturation Field",
@@ -924,8 +1071,78 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Correction, Not Anger",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "sephirotic",
+          "netzach"
+        ],
+        "description": {
+          "value": "<p>Immune to Charmed and Shaken — it is a principle, not a person. Creatures that deal qliphothic damage to it must succeed a Soul check (DC by tier) or be Restrained by the sephirah's answer until the end of their next turn. It does not pursue anyone who leaves its ground.</p><p><em>It does not hate intruders. It corrects them.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!a9orjOV99MnMObho.mXxJ99TzvETyaxQb"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "struck",
+                "if": {
+                  "damageType": [
+                    "qliphothic"
+                  ]
+                },
+                "do": {
+                  "condition": {
+                    "key": "restrained",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 15
+                    }
+                  }
+                },
+                "label": "Correction, Not Anger"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "sephirotic"
+            }
+          }
+        }
+      },
+      "_id": "QkDpxuwSMfvFTBKd",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342349970,
+        "modifiedTime": 1791342349970,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -1032,18 +1249,32 @@
     "fourththing": {
       "rfi": {
         "actor": {
+          "lineage": "sephirotic",
+          "subLineage": "netzach",
+          "tier": "II",
+          "bracket": "medium",
+          "price": {
+            "marks": 15,
+            "bounty": 15,
+            "hire": 25,
+            "ransom": 25,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "TII medium sephirotic — bounty 15 / hire 25 marks; credited to the pool matching the method (default softpower)"
+          },
           "title": "Charismatic, Aggressive Cover Art (Saturated)"
         }
-      }
+      },
+      "creatureType": "elemental"
     }
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777700829141,
-    "modifiedTime": 1783219918009,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989122302,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

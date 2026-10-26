@@ -14,7 +14,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-human=\"v1\" style=\"display:none\"></div>\n<p><em>\"The first time anyone drew an antelope on a wall, they were already two thoughts ahead of the antelope.\"</em></p>\n<p><strong>Pattern-Mind (1/Soma Break).</strong> Spend 1 minute observing a situation — a battle line, a marketplace, a council, a storm system, a faction's public posture — then ask the GM one of: <em>\"What is the actual goal here?\" · \"What is being deliberately hidden?\" · \"Who is about to break first?\"</em> The GM gives at least one true answer. They may colour it; they may not lie about it.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"humCroMagnonPatternMind\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Pattern-Mind</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Action (1-min observation) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Observe situation 1 min → ask GM one of three deep questions; at least one truth.</div>\n</div>",
+      "value": "\n<p><em>\"The first time anyone drew an antelope on a wall, they were already two thoughts ahead of the antelope.\"</em></p>\n<p><strong>Pattern-Mind (1/Soma Break).</strong> Spend 1 minute observing a situation — a battle line, a marketplace, a council, a storm system, a Domain's public posture — then ask the GM one of: <em>\"What is the actual goal here?\" · \"What is being deliberately hidden?\" · \"Who is about to break first?\"</em> The GM gives at least one true answer. They may colour it; they may not lie about it.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"humCroMagnonPatternMind\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Pattern-Mind</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Action (1-min observation) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Observe situation 1 min → ask GM one of three deep questions; at least one truth.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -39,14 +39,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "human",
       "feature": "pattern_mind",
       "lineage": "Cro-Magnon",
-      "tierLevel": 11,
       "version": "2.0.0",
       "date": "2026-04-19"
     },
@@ -233,12 +229,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776600000000,
-    "modifiedTime": 1781116066507,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988972592,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

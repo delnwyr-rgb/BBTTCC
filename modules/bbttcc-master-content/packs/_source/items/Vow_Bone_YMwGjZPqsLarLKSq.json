@@ -44,15 +44,15 @@
           "charges": 1,
           "materialKey": "vow-bone",
           "price": {
-            "marks": 675,
+            "marks": 68,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1.5,
-            "notes": "TIII material stamp × rarity 1.5",
+            "notes": "TIII material × rarity 1.5",
             "bound": "free",
-            "saleBack": 270
+            "saleBack": 27
           }
         }
       }
@@ -67,11 +67,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137194159,
-    "modifiedTime": 1782156674949,
+    "modifiedTime": 1792977641978,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

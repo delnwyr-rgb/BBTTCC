@@ -7,50 +7,17 @@
     "intent": "violence",
     "skill": "melee",
     "damage": {
-      "formula": "1d6",
+      "formula": "2d6",
       "attribute": "violence",
       "type": "sephirotic",
       "damageFlavor": "subdual",
-      "track": "integrity",
-      "versatile": {
-        "number": null,
-        "denomination": null,
-        "bonus": "",
-        "types": [],
-        "custom": {
-          "enabled": false,
-          "formula": ""
-        },
-        "scaling": {
-          "mode": "",
-          "number": null,
-          "formula": ""
-        }
-      },
-      "base": {
-        "number": 1,
-        "denomination": 6,
-        "bonus": "",
-        "types": [
-          "radiant"
-        ],
-        "custom": {
-          "enabled": false,
-          "formula": ""
-        },
-        "scaling": {
-          "mode": "",
-          "number": null,
-          "formula": ""
-        }
-      }
+      "track": "integrity"
     },
     "damageParts": [],
     "range": {
       "short": 1,
       "long": 1,
-      "value": null,
-      "units": "ft",
+      "units": "sq",
       "reach": 30
     },
     "tags": [
@@ -58,7 +25,7 @@
       "nonlethal",
       "mercy"
     ],
-    "effect": "Nonlethal by Design: kill becomes stable-unconscious. Stabilize 3/Soma Break: stabilize a visible creature, no action.",
+    "effect": "Nonlethal by Design: a kill becomes stable-unconscious. Stabilize (3 charges, recovered on a Soma Break): stabilize a creature you can see within 6 squares, no action, once per turn.",
     "flavor": "The handle is stained where the wielder grips it. The head is unmarked.",
     "manifestation": {
       "tier": 1,
@@ -92,114 +59,11 @@
       }
     },
     "description": {
-      "value": "<p><i>“Not every monster deserves a grave.”</i></p><p><b>Nonlethal by Design.</b> When you reduce a humanoid to 0 Integrity with this weapon, it becomes <b>unconscious and stable</b>.</p><p><b>Charges.</b> 3/day. Spend 1 charge to stabilize a creature you can see within range (no action; once per turn).</p>",
+      "value": "<p><i>“Not every monster deserves a grave.”</i></p><p><b>Nonlethal by Design.</b> When you reduce a humanoid to 0 Integrity with this weapon, it becomes <b>unconscious and stable</b>.</p><p><b>Charges.</b> 3 charges, all recovered on a Soma Break. Spend 1 charge to stabilize a creature you can see within 6 squares (no action; once per turn).</p>",
       "chat": ""
-    },
-    "quantity": 1,
-    "weight": {
-      "value": 0,
-      "units": "lb"
-    },
-    "price": {
-      "value": 0,
-      "denomination": "gp"
-    },
-    "rarity": "rare",
-    "attunement": "",
-    "identified": true,
-    "properties": [],
-    "equipped": false,
-    "proficient": 1,
-    "uses": {
-      "max": "3",
-      "recovery": [
-        {
-          "period": "day",
-          "type": "recoverAll"
-        }
-      ],
-      "spent": 0
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "activities": {
-      "m9eJ9MMSn1VSMfFU": {
-        "_id": "m9eJ9MMSn1VSMfFU",
-        "type": "attack",
-        "sort": 0,
-        "activation": {
-          "type": "action",
-          "override": false
-        },
-        "consumption": {
-          "scaling": {
-            "allowed": false
-          },
-          "spellSlot": true,
-          "targets": []
-        },
-        "description": {},
-        "duration": {
-          "units": "inst",
-          "concentration": false,
-          "override": false
-        },
-        "effects": [],
-        "range": {
-          "units": "self",
-          "override": false
-        },
-        "target": {
-          "template": {
-            "contiguous": false,
-            "units": "ft"
-          },
-          "affects": {
-            "choice": false
-          },
-          "override": false,
-          "prompt": true
-        },
-        "uses": {
-          "spent": 0,
-          "recovery": []
-        },
-        "attack": {
-          "critical": {},
-          "flat": false,
-          "type": {}
-        },
-        "damage": {
-          "critical": {},
-          "includeBase": true,
-          "parts": []
-        }
-      }
-    },
-    "identifier": "mercy-driver",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "ammunition": {},
-    "armor": {},
-    "type": {
-      "value": "simpleM",
-      "baseItem": ""
-    },
-    "mastery": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": [
-        "sanctified",
-        "nonlethal"
-      ]
-    },
     "rfi": {
       "item": {
         "tier": "III",
@@ -244,10 +108,20 @@
             "mercy": true,
             "nonlethal": true
           },
-          "lore": "<p>A short, heavy bludgeon. The head is plated in soft alloy that deforms on contact, transferring force without breaking bone. Sept-engraved.</p><p><b>Nonlethal by Design.</b> When this weapon reduces a humanoid to 0 Integrity, the target becomes <i>unconscious and stable</i>.</p><p><b>Stabilize Charges (3/day).</b> Spend 1 charge to stabilize a creature you can see within range (no action, once per turn).</p>",
+          "lore": "<p>A short, heavy bludgeon. The head is plated in soft alloy that deforms on contact, transferring force without breaking bone. Sept-engraved.</p><p><b>Nonlethal by Design.</b> When this weapon reduces a humanoid to 0 Integrity, the target becomes <i>unconscious and stable</i>.</p><p><b>Stabilize Charges (3, recovered on a Soma Break).</b> Spend 1 charge to stabilize a creature you can see within 6 squares (no action, once per turn).</p>",
           "materialOf": [
-            "soft-alloy",
-            "sept-stamped-haft"
+            {
+              "key": "soft-alloy",
+              "qty": 1
+            },
+            {
+              "key": "sept-stamped-haft",
+              "qty": 1
+            },
+            {
+              "key": "witness-glass",
+              "qty": 1
+            }
           ],
           "charges": 3,
           "rechargesOn": "soma-break",
@@ -437,15 +311,32 @@
             "mastery": ""
           },
           "price": {
-            "marks": 450,
+            "marks": 900,
             "currency": "violence",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TIII weapon stamp",
+            "notes": "TIII weapon × tech 2.0 (3 charges, Soma Break) × attuned (2026-10-26: tech multiplier replaces the wondrous ×2 — price unchanged)",
             "bound": "attuned",
-            "saleBack": 180
+            "saleBack": 360
+          },
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 3,
+              "max": 3,
+              "recoverPer": "soma-break"
+            },
+            "fuel": null,
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "signature": "mercy",
+            "failure": "misfire",
+            "origin": "sept-foundry",
+            "shielded": false
           }
         }
       },
@@ -662,12 +553,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1767834185365,
-    "modifiedTime": 1781737165953,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988936490,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

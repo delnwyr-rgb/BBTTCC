@@ -44,15 +44,15 @@
           "charges": 5,
           "materialKey": "cold-iron",
           "price": {
-            "marks": 150,
+            "marks": 75,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TII material stamp",
+            "notes": "TII material",
             "bound": "free",
-            "saleBack": 60
+            "saleBack": 30
           }
         }
       }
@@ -67,11 +67,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137194173,
-    "modifiedTime": 1782156674954,
+    "modifiedTime": 1792977662147,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

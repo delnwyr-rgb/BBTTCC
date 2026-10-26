@@ -3,8 +3,15 @@
   "type": "feat",
   "img": "icons/magic/fire/flame-burning-campfire-yellow-blue.webp",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 — Ashbound Survivors</strong></p><p><em>You’ve stopped fearing hardship and started budgeting it.</em></p><ul><li><strong>Strategic:</strong> When your faction survives or resolves hazard encounters in Desert, Ash Wastes, or Wasteland terrain, it can convert that hardship into useful recovery, salvage, or logistical gain.</li></ul>",
+      "value": "<p><strong>Tier 2 — Ashbound Survivors</strong></p><p><em>You’ve stopped fearing hardship and started budgeting it.</em></p><ul><li><strong>Strategic:</strong> Hardship becomes salvage: each Desert, Ash Wastes or Wasteland hex your Domain holds yields 10 extra Logistics marks a turn.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-ashbound-survivors-t2",
@@ -16,11 +23,6 @@
       "max": ""
     },
     "advancement": {},
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -79,6 +81,21 @@
         "progressionType": "level"
       },
       "category": "crew"
+    },
+    "fourththing": {
+      "domainIncome": {
+        "perHexType": [
+          {
+            "types": [
+              "desert",
+              "ashWastes",
+              "wasteland"
+            ],
+            "channel": "logistics",
+            "op": 1
+          }
+        ]
+      }
     }
   },
   "folder": "EV3LjQRYeE2vKgof",
@@ -92,12 +109,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986941276,
-    "modifiedTime": 1775063023888,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989168409,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — The Magician</strong></p>\n<ul>\n<li><strong>Tactical:</strong> Your obsessive research habits begin to pay off in the metaphysical lab.</li>\n<li><strong>Strategic:</strong> During the <strong>Identification</strong> phase of <strong>The Great Work</strong>, the time or resources required to uncover the Lore of an assigned Spark (Conceptual, Vestigial, or Animate) are <strong>halved</strong>.</li>\n</ul>",
+      "value": "<p><strong>Tier 2 (Level 5) — The Magician</strong></p>\n<ul>\n<li><strong>Tactical:</strong> Your obsessive research habits begin to pay off in the metaphysical lab.</li>\n<li><strong>Strategic:</strong> Once per scene of the Great Work's Identification phase, the time or resources needed to uncover the Lore of an assigned Spark are halved (the card fires it).</li>\n</ul>",
       "chat": ""
     },
     "activities": {},
@@ -74,12 +74,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986769802,
-    "modifiedTime": 1781116020680,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989160418,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

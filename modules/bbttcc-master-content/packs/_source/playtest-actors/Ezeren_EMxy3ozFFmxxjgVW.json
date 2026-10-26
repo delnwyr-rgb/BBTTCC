@@ -1,0 +1,3058 @@
+{
+  "name": "Ezeren",
+  "type": "character",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/ezeren_red_hat.png",
+  "prototypeToken": {
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/ezeren_red_hat.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1.1,
+      "scaleY": 1.1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "name": "Ezeren",
+    "displayName": 30,
+    "actorLink": true,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "tokenflip": {
+        "tokenfaces": [
+          {
+            "actorId": "EMxy3ozFFmxxjgVW",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/ezeren_red_hat.png",
+            "id": "spwavaucWJhZaBfOLFfW",
+            "scaleX": 1.1,
+            "scaleY": 1.1,
+            "width": 1,
+            "height": 1,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          }
+        ]
+      },
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 1,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1,
+      "alignment": ""
+    },
+    "attributes": {
+      "violence": {
+        "value": 5
+      },
+      "intrigue": {
+        "value": 4
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 2
+      },
+      "mind": {
+        "value": 3
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 1
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 1
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 1
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 1
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 2
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 1
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 1
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 2
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 1
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 1
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 2
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 0
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "fitting": {
+        "attribute": "intrigue",
+        "label": "Fitting",
+        "value": 1
+      },
+      "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 1
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 16,
+        "max": 16,
+        "temp": 0
+      },
+      "stress": {
+        "value": 18,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 1,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": [
+          0,
+          null
+        ],
+        "max": 2
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": true,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "sparks": {},
+      "stage": "sleeper"
+    },
+    "faction": {
+      "id": "kh2xHeifJoXjprr4",
+      "loyalty": 0,
+      "name": "The Faction of the Red Hat"
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
+  },
+  "_id": "EMxy3ozFFmxxjgVW",
+  "items": [
+    {
+      "name": "Archetype: The Moon (Ancient Blood) (Tier 1)",
+      "type": "feat",
+      "img": "icons/magic/nature/moon-crescent.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden – Archetype: The Moon (Ancient Blood) (Tier 1)",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 (Level 1) — The Moon</strong></p><ul><li><strong>Tactical:</strong> You learn Message and gain a skill rank in Lore.</li><li><strong>Strategic:</strong> Soft Power marks cap +2.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "archetype-moon-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Level 1+",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "MGGAcIKk1sO8TgSt",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "ancient_blood",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:moon",
+              "bbttcc:expression:ancient_blood",
+              "bbttcc:tier:1",
+              "bbttcc:softpower_op_cap:+2"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.xGN96RKzZmHqYD2d",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989092007,
+        "modifiedTime": 1792989092007,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "3aubzNN3Sn0j5Dka",
+      "sort": 0
+    },
+    {
+      "name": "Crew Type: Covert Ops Cell",
+      "type": "feat",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 2,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Crew Type (Bad Eden): Covert Ops Cell.</em></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Stealth and with the Tinkering aptitude.</li><li><strong>Strategic Identity:</strong> Your Domain starts with +1 Intrigue OPs.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "crew-covert-ops-cell",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "s5WL7k82FGQGsYdL",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "intrigue": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "covert-ops-cell",
+            "progressionType": "level",
+            "domains": [
+              "op",
+              "intel",
+              "infiltration"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:covert-ops-cell",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:domain:intel",
+              "bbttcc:domain:infiltration",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:intrigue:+8",
+              "bbttcc:theme:stealth",
+              "bbttcc:theme:subterfuge",
+              "bbttcc:theme:infiltration",
+              "bbttcc:theme:denial"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Item.Le37yVgfouPCBahg",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.Le37yVgfouPCBahg",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989092007,
+        "modifiedTime": 1792989092007,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "82XsQjpUBWSxLTRt",
+      "sort": 100000
+    },
+    {
+      "name": "Human",
+      "type": "species",
+      "img": "art/bbttcc/asli-icons/human_denisovan_1.webp",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Cro-Magnon, Denisovan, Florensis, Neanderthal</strong>.</p><p>This root grants the shared Human core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "36a73edc22fe4dab",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium.",
+            "value": {}
+          },
+          {
+            "_id": "1d8d99cab1380a3c",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.DViThQoRpsEri1Ta",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Stubborn Spark",
+            "hint": "Gain the core Human ancestry traits."
+          }
+        ],
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": "Lineage Memory (ancient human adaptations)."
+        },
+        "type": {
+          "value": "humanoid",
+          "custom": "",
+          "subtype": "Human"
+        },
+        "identifier": "human"
+      },
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "family": "human",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "heritageList": [
+            "cro_magnon",
+            "denisovan",
+            "florensis",
+            "neanderthal"
+          ],
+          "refactorNotes": "v2: Erectus retired, Cro-Magnon added. Denisovan retained from v1 canon (heritage list was underdocumented in v1 loose-JSON exports)."
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "on one checks [TODO(adv-call)] of your choice each round (declare before roll…"
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-save-fail",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
+                }
+              }
+            },
+            {
+              "event": "on-skill-fail",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
+                }
+              }
+            }
+          ],
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.a3057e55a2fc1026"
+        }
+      },
+      "effects": [],
+      "folder": "byroU26YSQP4OQUn",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.a3057e55a2fc1026",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.a3057e55a2fc1026",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989092007,
+        "modifiedTime": 1792989092007,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "DwPIOkL9vTumG7Jj"
+    },
+    {
+      "name": "Human: Stubborn Spark",
+      "type": "feat",
+      "img": "icons/magic/fire/orb-lightning-sun.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Neanderthal, Denisovan, Florensis, Erectus). Your lineage grants Tier powers as you level.</p>",
+          "chat": ""
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "human-stubborn-spark",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Human",
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "activities": {}
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "human",
+          "feature": "core",
+          "lineage": "any",
+          "version": "1.0.0"
+        },
+        "fourththing": {
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.DViThQoRpsEri1Ta"
+        }
+      },
+      "effects": [],
+      "folder": "byroU26YSQP4OQUn",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.DViThQoRpsEri1Ta",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.jbiG7wAqTlBgEcDw",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989092007,
+        "modifiedTime": 1792989092007,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "JryQRO1aCJnSSR5s"
+    },
+    {
+      "name": "Occult Association: Goetic Summoner (Tier 1)",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 2,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Goetic Summoner</strong></p><p><strong>“First lesson: the circle protects you. Second lesson: only if it’s perfect.”</strong></p><p>You learn the etiquette of predators: names, constraints, and the price of eye contact. You are not yet strong enough to command, but you are strong enough to be heard.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Occult</strong> and <strong>Intimidation</strong></li><li>Learn <strong>Find Familiar</strong>, flavored as unsettling, watchful, or veil-adjacent</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your Domain attempts intimidation, coercion, or violent leverage, gain <strong>+1 to the relevant Violence marks roll</strong></li><li>When your Domain runs reconnaissance, blackmail, or covert acquisition, gain <strong>+1 to the relevant Intrigue marks roll</strong></li><li>When your Domain attempts goodwill, legitimacy, or mass Diplomacy, suffer <strong>–1 to the relevant Soft Power marks roll</strong></li></ul><p><strong>Cost:</strong> early Goetic work leaves an obvious scent. Expect attention from the wrong entities, fear from the right people, and a reputation that arrives before you do.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "requirements": "Level 1+",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "identifier": "occult-association-goetic-summoner-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "goetic-summoner",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:goetic-summoner",
+              "bbttcc:tier:1",
+              "bbttcc:domain:darkness",
+              "bbttcc:domain:coercion",
+              "bbttcc:domain:recon",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:coercion",
+              "bbttcc:when:recon",
+              "bbttcc:when:goodwill",
+              "bbttcc:effect:proficiency:arcana",
+              "bbttcc:effect:proficiency:intimidation",
+              "bbttcc:effect:spell:find-familiar",
+              "bbttcc:effect:op_roll:violence:+2",
+              "bbttcc:effect:op_roll:intrigue:+2",
+              "bbttcc:effect:op_roll:softpower:-1",
+              "bbttcc:resonance:qliphoth",
+              "bbttcc:drift:pragmatic-corruptive",
+              "bbttcc:cost:attention",
+              "bbttcc:cost:fear-reputation",
+              "bbttcc:theme:predator-etiquette",
+              "bbttcc:theme:first-circle"
+            ]
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "effects": [
+        {
+          "name": "Occult Tier1 Proficiencies",
+          "disabled": false,
+          "transfer": true,
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bellows_2.png",
+          "_id": "n2WDIGozDB5hZr0q",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.occult.value",
+                "type": "add",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.intimidation.value",
+                "type": "add",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989092007,
+            "modifiedTime": 1792989092007
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
+      "folder": "8EpFv8GVkHaIuTnR",
+      "_stats": {
+        "compendiumSource": "Item.RqCQJVlh9BuZ0SsL",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.RqCQJVlh9BuZ0SsL",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989092007,
+        "modifiedTime": 1792989092007,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "MkGKxjUTkmuaarLS",
+      "sort": 0
+    },
+    {
+      "name": "Route of the Black Stair (Bad Eden)",
+      "type": "subclass",
+      "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
+      "system": {
+        "category": "doctrine",
+        "classIdentifier": "shadow_courier",
+        "source": "Bad Eden Originals — Sprint F (2026 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"You came through a door that wasn't for them.\"</em></p>\n<p><strong>Doctrine:</strong> Thresholds weaponized — covert, predatory; who gets through and who really, really doesn't.</p>\n<p>The Black Stair is the courier as ambush. Your Surge spends turn crossings into kills: strike from where they weren't watching, slam the threshold shut on a foe, and spring the stair that does not end.</p>\n<h3>Route (spent via Surge)</h3>\n<ul>\n  <li><strong>Ambush</strong> (1) — your next Strike +Tier d6; the target's next attack is rolling 3d10 and keeping the lowest 2.</li>\n  <li><strong>Cut Off</strong> (2) — a foe is Staggered and cannot take reactions until your next turn.</li>\n  <li><strong>Stair-Trap</strong> (5) — your next Strike lands as a max-die crit and knocks the target Prone; if it drops them, you regain a freed action.</li>\n</ul>",
+          "chat": ""
+        },
+        "identifier": "bbttcc-shadow-courier-courier-black-stair",
+        "advancement": [],
+        "spellcasting": {
+          "progression": "none",
+          "preparation": {}
+        }
+      },
+      "effects": [],
+      "folder": "eQl1GnJxLhG4BD19",
+      "flags": {
+        "fourththing": {
+          "principleSource": "subclass"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.P6cYL1DAZw3YPTsz"
+        }
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 700000,
+      "_stats": {
+        "systemId": "fourththing",
+        "coreVersion": "14.369",
+        "createdTime": 1792989092007,
+        "modifiedTime": 1792989092007,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "systemVersion": "0.6.37",
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.P6cYL1DAZw3YPTsz",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "YmpEmg6TIWhARZe1"
+    },
+    {
+      "name": "Occult Association: Goetic Summoner",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 2,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Occult Association (Bad Eden): Goetic Summoner.</em></p><p><strong>“I have friends. They’re just… contractual.”</strong></p><p>Goetic Summoners do not worship. They do not submit. They <em>negotiate</em>.</p><p>To a Goetic, the Great Work is not merely a path of purification. It is a war over <strong>leverage</strong>. Power exists in the Shatterlands, and much of it has teeth, names, appetites, and terms. If you can name it, you can sometimes bind it. If you can bind it, you can make it useful. For a while.</p><p>Goetics build circles, memorize taboos, track debts, and turn predatory forces into temporary infrastructure. They call this control. The world calls it an incident report waiting to happen.</p><p><strong>How Goetics pursue the Great Work:</strong></p><ul><li>By extracting leverage from Qliphothic forces instead of merely resisting them</li><li>By binding hazards into assets and paying the price later</li><li>By treating Darkness as a resource with teeth</li><li>By weaponizing fear, coercion, and forbidden access where cleaner traditions would hesitate</li></ul><p><strong>Resonance:</strong> <strong>Qliphoth / Shadow</strong> — rupture, appetite, inversion, and the dangerous intelligence inside corruption.</p><p><strong>Tell-tales:</strong> counted names, precise circles, a room that feels like it already agreed to terms before anyone spoke.</p><p><strong>Faction Effects (Passive):</strong></p><ul><li><strong>+1 to Violence marks rolls</strong></li><li><strong>+1 to Intrigue marks rolls</strong></li></ul><p><strong>Cost Principle:</strong> every Goetic gain creates obligation. Expect Debt, escalating Darkness pressure, hostile notice, and consequences that remember your name longer than you wanted them to.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "identifier": "occult-association-goetic-summoner",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "bonuses": {
+            "violence": 1,
+            "intrigue": 1
+          },
+          "option": {
+            "category": "occult",
+            "key": "goetic-summoner",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:goetic-summoner",
+              "bbttcc:base",
+              "bbttcc:domain:darkness",
+              "bbttcc:domain:binding",
+              "bbttcc:domain:intrigue",
+              "bbttcc:domain:violence",
+              "bbttcc:scope:faction",
+              "bbttcc:when:passive",
+              "bbttcc:resonance:qliphoth",
+              "bbttcc:drift:pragmatic-corruptive",
+              "bbttcc:cost:debt",
+              "bbttcc:cost:darkness-pressure",
+              "bbttcc:theme:contractual-power",
+              "bbttcc:theme:predator-management",
+              "bbttcc:effect:op_roll:violence:+1",
+              "bbttcc:effect:op_roll:intrigue:+1"
+            ]
+          }
+        }
+      },
+      "effects": [],
+      "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
+      "folder": "8EpFv8GVkHaIuTnR",
+      "_stats": {
+        "compendiumSource": "Item.yZj20DjRfIOrMajZ",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.yZj20DjRfIOrMajZ",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989092007,
+        "modifiedTime": 1792989092007,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "c6sqXWnZalHnBmCC",
+      "sort": 100000
+    },
+    {
+      "name": "Shadow Courier",
+      "type": "class",
+      "system": {
+        "category": "path",
+        "identifier": "shadow_courier",
+        "source": "",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">⚙ ENGINE NOTE — Pace is now ◆ Surge.</b> Movement banks Surge (capped per round); your courier moves are the ◆ Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>\"You're already moving. The fight rearranges around it.\"</em></p>\n<p>The Shadow Courier runs on <strong>Surge</strong>, like everyone — but yours comes from <strong>motion</strong>. Move <strong>30+ ft in a turn and you bank +1 Surge</strong> (again at 12 squares, max +2/round). A courier in motion has options; a courier standing still is just a target. The old <em>Pace</em> pool folds into this — same fuel, one number.</p>\n<h3>The Courier (spent via Surge)</h3>\n<ul>\n  <li><strong>Courier's Step</strong> (1) — +half-speed move (no provoke) and a freed reaction; flow through the fight.</li>\n  <li><strong>Ghoststep</strong> (3) — DR equal to Tier till your next turn, and reposition out of danger.</li>\n  <li><strong>Flank &amp; Strike</strong> (5) — reposition, then your next Strike reroll the lowest die <em>and</em> +Tier d6.</li>\n  <li><strong>No Such Door</strong> (8) — allies within Tier squares each gain a freed reaction and a reroll; open the road for the whole team.</li>\n</ul>\n<p>The <strong>Package</strong> endures as your work — designate it, carry it, deliver it. <strong>Delivery banks your Surge to full</strong> and still triggers the route's strategic payoff (Intrigue marks, Darkness reduction, the arrival that mattered).</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "ysJfJkeA2WfOMglf",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL01abcd",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL01abcd",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwClassFt01abc",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 1,
+            "title": "Shadow Courier Core Features"
+          },
+          {
+            "_id": "fKMpucL0iMdGK36R",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL05abcd",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL05abcd",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 5,
+            "title": "Shadow Courier: Level 5 Features"
+          },
+          {
+            "_id": "WWn1GvGPn6D5b7VT",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwClassFt02abc",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 6,
+            "title": "Shadow Courier — Tier 2: The Crossing"
+          },
+          {
+            "_id": "XTTN4qPwzYgfQmVV",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL09abcd",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL09abcd",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 9,
+            "title": "Shadow Courier: Level 9 Features"
+          },
+          {
+            "_id": "04Vm8pF6PL24VTNk",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwClassFt03abc",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 11,
+            "title": "Shadow Courier — Tier 3: Package Mastery"
+          },
+          {
+            "_id": "T33qFY91LUnCWm0K",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL13abcd",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL13abcd",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 13,
+            "title": "Shadow Courier: Level 13 Features"
+          },
+          {
+            "_id": "DssNqx6N2zCsLnbY",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwClassFt04abc",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 16,
+            "title": "Shadow Courier — Tier 4: Unfound Route"
+          },
+          {
+            "_id": "vZgryR38AUD5g5Is",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL17abcd",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL17abcd",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 17,
+            "title": "Shadow Courier: Level 17 Features"
+          }
+        ]
+      },
+      "flags": {
+        "bbttcc": {
+          "primary": "dexterity",
+          "opBonus": {
+            "intrigue": 2,
+            "logistics": 2
+          }
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.5Ncfbe1ReQhbLLUP"
+        }
+      },
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "effects": [],
+      "folder": "apQBjTCtfZVreQpj",
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 400000,
+      "_stats": {
+        "systemId": "fourththing",
+        "coreVersion": "14.369",
+        "createdTime": 1792989092007,
+        "modifiedTime": 1792989092007,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "systemVersion": "0.6.37",
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.5Ncfbe1ReQhbLLUP",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "hR6VMS7kuWTGJEF6"
+    },
+    {
+      "name": "Crew Type: Covert Ops Cell (Tier 1)",
+      "type": "feat",
+      "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden – Crew Type: Covert Ops Cell (Tier 1)",
+          "revision": 2,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Stealth and with the Tinkering aptitude.</li><li><strong>Strategic:</strong> Your Domain starts with +1 Intrigue OPs.</li></ul>",
+          "chat": ""
+        },
+        "identifier": "crew-covert-ops-cell-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "requirements": "Level 1+",
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        }
+      },
+      "effects": [
+        {
+          "_id": "cea1f8081551430c",
+          "name": "Covert Ops Cell T1 Skills",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_atom_1.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.stealth.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "dnd5e": {
+              "riders": {
+                "statuses": []
+              }
+            }
+          },
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "createdTime": 1792989092007,
+            "modifiedTime": 1792989092007
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null
+        }
+      ],
+      "folder": "s5WL7k82FGQGsYdL",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "covert-ops-cell",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "op",
+              "intel",
+              "infiltration"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:covert-ops-cell",
+              "bbttcc:tier:1",
+              "bbttcc:domain:op",
+              "bbttcc:domain:intel",
+              "bbttcc:domain:infiltration",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:intrigue:+8",
+              "bbttcc:effect:intel:stealth_baseline:true",
+              "bbttcc:effect:infiltration:tools_access:thieves_tools",
+              "bbttcc:theme:stealth",
+              "bbttcc:theme:subterfuge",
+              "bbttcc:theme:infiltration",
+              "bbttcc:theme:denial"
+            ]
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Item.YHMatZ2Z3Kiaxxbz",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.YHMatZ2Z3Kiaxxbz",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989092007,
+        "modifiedTime": 1792989092007,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "is2kNxNULQukEZ1B",
+      "sort": 0
+    },
+    {
+      "name": "Alignment: Chokmah",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "Soul - Creative energy. +1 Violence, +1 Soft Power OPs\n\nCreation arrives all at once. Chokmah rewards decisive action, inspired leadership, and bold openers that turn possibility into momentum before anyone else is ready.",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "alignment-chokmah",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "softpower": 1,
+            "violence": 1
+          },
+          "option": {}
+        }
+      },
+      "img": "icons/weapons/staves/staff-blue-jewel.webp",
+      "effects": [],
+      "folder": "RAOWJYon3t34M5XY",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.YBryhDI3aQ92d65o",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.LilpQAsCU1MbIgsz",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989092007,
+        "modifiedTime": 1792989092007,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "jVBX1i6rVxf2jCEY",
+      "sort": 300000
+    },
+    {
+      "name": "This Gun I Stole",
+      "type": "power",
+      "img": "icons/weapons/guns/gun-pistol-flintlock-metal.webp",
+      "system": {
+        "intent": "presence",
+        "channel": "soul",
+        "sephirah": "tiferet",
+        "mode": "hermetic",
+        "clarityRequired": 1,
+        "noiseGain": 0,
+        "activation": {
+          "type": "action",
+          "consumePool": true
+        },
+        "target": "single",
+        "range": "near",
+        "damage": "",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "damage",
+          "number": 2,
+          "die": "d10x10",
+          "attribute": "violence",
+          "type": "kinetic",
+          "flavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "effect": "",
+        "tags": [
+          "weapon",
+          "harm",
+          "enduring"
+        ],
+        "category": "manifestation",
+        "flavor": "",
+        "manifestation": {
+          "tier": 4,
+          "family": "working",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "enduring",
+          "interactionModel": "weapon",
+          "costType": "clarity",
+          "costValue": 0,
+          "costText": "",
+          "duration": "persistent",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "One foe",
+          "rangeAreaText": "120/200",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "I clearly stole it",
+          "thirdThing": "And it looks cool",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": false
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          },
+          "resolution": {
+            "shape": "attack",
+            "attackVs": "evasion",
+            "attackBonus": "intent+channel",
+            "saveAttribute": "body",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "onSave": "half",
+            "saveByPrompt": false,
+            "contestCasterAttribute": "intent+channel",
+            "contestTargetAttribute": "body",
+            "onContestLoss": "negate"
+          },
+          "appliedStates": {
+            "states": {
+              "staggered": false,
+              "scarred": false,
+              "calmed": false,
+              "blinded": false,
+              "prone": false,
+              "shaken": false,
+              "burning": false,
+              "restrained": false,
+              "charmed": false,
+              "compelled": false,
+              "dying": false,
+              "surprise": false
+            },
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "body",
+            "saveDcMode": "cast-dc",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          }
+        }
+      },
+      "_id": "k8zOftTWVBIRAO5P",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "autoanimations": {
+          "id": "8212d43a-8505-441e-8c04-9f30547b4ff2",
+          "label": "This Gun I Stole",
+          "levels3d": {
+            "type": "explosion",
+            "data": {
+              "color01": "#FFFFFF",
+              "color02": "#FFFFFF",
+              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+            },
+            "sound": {
+              "enable": false
+            },
+            "secondary": {
+              "enable": false,
+              "data": {
+                "color01": "#FFFFFF",
+                "color02": "#FFFFFF",
+                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+              }
+            }
+          },
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "lasershot",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isReturning": false,
+              "isWait": false,
+              "onlyX": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989092007,
+        "modifiedTime": 1792989092007,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Human Heritage: Cro-Magnon",
+      "type": "feat",
+      "img": "art/bbttcc/asli-icons/human_erectus_1.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>New Heritage (v2).</strong> Cro-Magnon replaces Erectus in the Human heritage lineup.</p><p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Cro-Magnon).</strong> You are not a fantasy human. You are the cognitive, symbolic, cooperative inheritance of the lineage that first painted ancestors on cave walls, buried its dead with flowers, and traded ochre across a continent it had no map for.</p><p>Where Neanderthal is <em>strength</em> and Florensis is <em>reach</em>, Cro-Magnon is <em>pattern</em>. Language, ritual, coalition. You are the human branch that kept explaining things until the explanation started working.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>MND (Mind)</strong> or <strong>PRE (Presence)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory).</p><h3>Cro-Magnon Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Cro-Magnon powers emphasize: <em>Symbolic Thought</em> (ritual and language sensitivity), <em>Coalition Instinct</em> (cooperation bonuses with allies), <em>Tool Mind</em> (improvisational tool use), and <em>Narrative Memory</em> (lore retention that persists across generations).</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "hcromagadv000001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.HCROMAGNONTIERI0",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Cro-Magnon Tier I",
+            "hint": "Gain your Cro-Magnon Tier I lineage power."
+          }
+        ],
+        "identifier": "human_cro_magnon_heritage",
+        "requirements": "Human",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "human",
+          "lineage": "Cro-Magnon",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "normalizedFrom": "new-in-v2",
+          "replaces": "human_erectus_heritage"
+        },
+        "fourththing": {
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "intrigue-op",
+              "amount": 2
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "soft-power-op",
+              "amount": 2
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-help-action",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Coalition Instinct. When you use the Help action on an ally's check and they succeed, the ally also recovers 1 point of Stress"
+                }
+              }
+            }
+          ]
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.hcromagn0h1tage8"
+        }
+      },
+      "folder": "XtVszfKGXh1D3T29",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.hcromagn0h1tage8",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.hcromagn0h1tage8",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989092007,
+        "modifiedTime": 1792989092007,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "q1MZOODEKOLqdpUJ"
+    },
+    {
+      "name": "Black Stair L1: The Crossing, Weaponized",
+      "type": "feat",
+      "img": "icons/skills/melee/strike-blade-knife-green-purple.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>A locked door is a suggestion.</em></p><p><strong>Mode: Thief / drift: Toward.</strong></p><p>Your default Package type is either a <strong>Blade</strong> or a <strong>Key</strong>. Declare which you are carrying at the start of each scene; you may switch on a Soma Break.</p><ul><li><p><strong>Blade.</strong> A single opportunistic strike, deployable once. While carrying a Blade, your <strong>first attack from concealment or surprise</strong> in the scene deals an extra <strong>+1d10 kinetic damage</strong> with <strong>(blade)</strong>. The damage explodes on 10s and banks Surge as normal. Using the strike consumes the Blade.</p></li><li><p><strong>Key.</strong> A single-use access bypass. While carrying a Key, you may bypass <strong>one non-magical lock, ward, or password challenge</strong> without rolling, once per scene. Using the Key consumes it.</p></li></ul><p><strong>On delivery</strong> (resolving the Blade strike on its intended target, or using the Key on its intended barrier): no Pace refill from this base feature — see Class Tier 3 Package Mastery for the Black Stair delivery bonus.</p><p>You may designate a new Package on your next Soma Break or on entering a new scene if your slot is empty.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "shadow_courier_blackstair_l1_crossing_weaponized",
+        "requirements": "Route of the Black Stair, Shadow Courier Initiation 1",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "subclassfeat",
+          "classIdentifier": "shadow_courier",
+          "subclassIdentifier": "bbttcc-shadow-courier-courier-black-stair",
+          "subclassLevel": 1,
+          "version": "1.0.0",
+          "date": "2026-04-23",
+          "rfiNative": true,
+          "defaultPackageType": "blade-or-key"
+        },
+        "fourththing": {
+          "grants": {},
+          "triggers": [
+            {
+              "event": "on-delivery",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Using the Key consumes it. On delivery (resolving the Blade strike on its intended target, or using the Key on its intended barrier): no Pace refill from this base f..."
+                }
+              }
+            }
+          ],
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL01abcd"
+        }
+      },
+      "folder": "eQl1GnJxLhG4BD19",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL01abcd",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989092007,
+        "modifiedTime": 1792989092007,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "szz1WFYP306TJl5U"
+    },
+    {
+      "name": "Shadow Courier — Tier 1: Liminal Operator",
+      "type": "feat",
+      "img": "icons/sundries/documents/envelope-letter-post.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">⚙ ENGINE NOTE — Pace is now ◆ Surge.</b> Movement banks Surge (capped per round); your courier moves are the ◆ Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>You cross what isn't supposed to be crossed — and you always come out the other side carrying something.</em></p><p><strong>On gaining Shadow Courier Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Stealth (Intrigue)</strong>.</p></li><li><p>Skill rank +1 in <strong>Tinkering (Intrigue)</strong>.</p></li><li><p><strong>Intrigue marks cap +2</strong> and <strong>Logistics marks cap +2</strong> on your Domain.</p></li><li><p><strong>Pace</strong> pool comes online (movement-generated). Max = max(2, ceil((Intrigue value + Shadow Courier Initiation) / 3)), capped at 8. Refills on Soma Break and on Package delivery.</p></li><li><p><strong>Package</strong> slot comes online — one Package at a time, type set by your chosen Route at L1.</p></li></ul><p><strong>Pace generation.</strong> Gain 1 Pace when you move at least 6 squares on your turn. Maximum 1 Pace generated per turn from this feature. Doctrine features may add their own generators.</p><p><strong>Baseline Pace spends</strong> (free action, 1 Pace each):</p><ul><li><p>Move 5 extra feet without spending an action.</p></li><li><p>Reroll a single Stealth (Intrigue), Athletics (Violence), or Tinkering (Intrigue) check — keep the new result.</p></li><li><p>Ignore a single reaction strike against you on this turn.</p></li></ul><p><strong>Liminal Sense.</strong> Once per encounter, ignore the first detection-style roll an opponent attempts against you (perception, scrying, Insight to read your intent, etc.). The roll is treated as if it had failed; resources spent on the attempt are not refunded.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "shadow_courier_tier1_liminal_operator",
+        "requirements": "Shadow Courier Initiation 1",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [
+        {
+          "name": "Liminal Operator: Tinkering +1",
+          "img": "icons/tools/smithing/anvil.webp",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.tinkering.value",
+                "value": 1,
+                "type": "add",
+                "priority": 10,
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Passive: Liminal Operator: Tinkering +1",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "sprint": "passive-ae-2026-04-28"
+            }
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "_id": "NY2BDWuBBR9JOQSn",
+          "showIcon": 1,
+          "folder": null,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989092007,
+            "modifiedTime": 1792989092007,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        },
+        {
+          "name": "Liminal Operator: Stealth +1",
+          "img": "icons/skills/movement/feet-winged-boots.webp",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.stealth.value",
+                "value": 1,
+                "type": "add",
+                "priority": 10,
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Passive: Liminal Operator: Stealth +1",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "sprint": "passive-ae-2026-04-28"
+            }
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "_id": "QmS7XNQZJGpbqJaM",
+          "showIcon": 1,
+          "folder": null,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989092007,
+            "modifiedTime": 1792989092007,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "classfeat",
+          "classIdentifier": "shadow_courier",
+          "tierLevel": 1,
+          "version": "1.0.0",
+          "date": "2026-04-23",
+          "rfiNative": true,
+          "opEffects": {
+            "capDelta": {
+              "intrigue": 2,
+              "logistics": 2
+            }
+          }
+        },
+        "fourththing": {
+          "grants": {},
+          "triggers": [
+            {
+              "event": "on-move",
+              "predicate": {
+                "amountMin": 30
+              },
+              "limit": {
+                "window": "turn",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "grant-resource",
+                "args": {
+                  "resource": "pace",
+                  "amount": 1,
+                  "target": "self"
+                }
+              }
+            }
+          ],
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.ShdwClassFt01abc"
+        }
+      },
+      "folder": "i2DrP0h8cZ7UFXpy",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.ShdwClassFt01abc",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989092007,
+        "modifiedTime": 1792989092007,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "vMoR3g9piwLnvW62"
+    },
+    {
+      "name": "Archetype: The Moon (Ancient Blood)",
+      "type": "feat",
+      "img": "icons/magic/nature/moon-crescent.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You were never alone in your body.”</em></p>\n<p><strong>Archetype (Bad Eden): The Moon (Ancient Blood).</strong> You carry something older than law. Memory moves through you. It expects to matter.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your presence amplifies symbolism, inherited legitimacy, buried memory, and eerie cultural authority. This Archetype is associated with <strong>+1 Soft Power</strong> in faction calculus in Bad Eden’s faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit; those are granted automatically by the Tier Engine at the appropriate character levels.</li>\n</ul>\n<h3>attributes (Archetype ASI)</h3>\n<p>When you choose this Archetype, you gain <strong>3 attribute points</strong> to distribute using the 2024 rules (no more than +2 to any one score). You can assign them however you like, but common patterns include:</p>\n<ul>\n  <li><strong>Dream-Blood Heir:</strong> +2 Presence, +1 Soul</li>\n  <li><strong>Oracle of Buried Wars:</strong> +2 Soul, +1 Mind</li>\n  <li><strong>Moon-Haunted Scion:</strong> +1 Mind, +1 Soul, +1 Presence</li>\n</ul>\n<p>These are suggestions, not shackles. Any valid 3-point distribution is allowed; pick what matches the kind of character you want to be.</p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {
+          "OkmoJSOIsbFAxMCL": {
+            "_id": "OkmoJSOIsbFAxMCL",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 3,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 1,
+            "title": "Archetype Ability Scores",
+            "hint": "Gain 3 ability score points (max +2 to any one score). See the Archetype text for recommended arrays.",
+            "flags": {}
+          }
+        },
+        "identifier": "archetype-moon",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "MGGAcIKk1sO8TgSt",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "character-archetypes",
+          "bonuses": {
+            "softpower": 1
+          },
+          "option": {
+            "category": "archetype",
+            "key": "ancient_blood",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:moon",
+              "bbttcc:expression:ancient_blood",
+              "bbttcc:base"
+            ]
+          }
+        },
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": "Item.JsSysQwxwJmnrTsL",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.JsSysQwxwJmnrTsL",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989092007,
+        "modifiedTime": 1792989092007,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "wc8fdMH6D3nH16o9",
+      "sort": 100000
+    }
+  ],
+  "effects": [],
+  "folder": "9lzffgTMxTBn9Frd",
+  "sort": 668750,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3,
+    "kiJJsblW8SzJukIZ": 3,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc-factions": {
+      "factionId": null,
+      "warLogs": [
+        {
+          "ts": 1780167120304,
+          "date": "5/30/2026, 1:52:00 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780167950286,
+          "date": "5/30/2026, 2:05:50 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780168660210,
+          "date": "5/30/2026, 2:17:40 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780168730318,
+          "date": "5/30/2026, 2:18:50 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780173119093,
+          "date": "5/30/2026, 3:31:59 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780178448269,
+          "date": "5/30/2026, 5:00:48 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780179932336,
+          "date": "5/30/2026, 5:25:32 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780211885606,
+          "date": "5/31/2026, 2:18:05 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780211930816,
+          "date": "5/31/2026, 2:18:50 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780211976674,
+          "date": "5/31/2026, 2:19:36 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780212022798,
+          "date": "5/31/2026, 2:20:22 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780212069135,
+          "date": "5/31/2026, 2:21:09 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780212107304,
+          "date": "5/31/2026, 2:21:47 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780212170344,
+          "date": "5/31/2026, 2:22:50 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780336214765,
+          "date": "6/1/2026, 12:50:14 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780336445931,
+          "date": "6/1/2026, 12:54:05 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780462181935,
+          "date": "6/2/2026, 11:49:41 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780462376788,
+          "date": "6/2/2026, 11:52:56 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780500419038,
+          "date": "6/3/2026, 10:26:59 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780510406187,
+          "date": "6/3/2026, 1:13:26 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780510513450,
+          "date": "6/3/2026, 1:15:13 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780510581077,
+          "date": "6/3/2026, 1:16:21 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780510690491,
+          "date": "6/3/2026, 1:18:10 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780510765775,
+          "date": "6/3/2026, 1:19:25 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780513605432,
+          "date": "6/3/2026, 2:06:45 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780521931913,
+          "date": "6/3/2026, 4:25:31 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780522370251,
+          "date": "6/3/2026, 4:32:50 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780522588803,
+          "date": "6/3/2026, 4:36:28 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780522852122,
+          "date": "6/3/2026, 4:40:52 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780599533005,
+          "date": "6/4/2026, 1:58:53 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781056407755,
+          "date": "6/9/2026, 8:53:27 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781559151132,
+          "date": "6/15/2026, 4:32:31 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781562200503,
+          "date": "6/15/2026, 5:23:20 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781567049160,
+          "date": "6/15/2026, 6:44:09 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781567252940,
+          "date": "6/15/2026, 6:47:32 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781567794828,
+          "date": "6/15/2026, 6:56:34 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781568794509,
+          "date": "6/15/2026, 7:13:14 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781570757123,
+          "date": "6/15/2026, 7:45:57 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781573109268,
+          "date": "6/15/2026, 8:25:09 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781573243810,
+          "date": "6/15/2026, 8:27:23 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781580444042,
+          "date": "6/15/2026, 10:27:24 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781580917860,
+          "date": "6/15/2026, 10:35:17 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781637132229,
+          "date": "6/16/2026, 2:12:12 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781736334172,
+          "date": "6/17/2026, 5:45:34 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781837275434,
+          "date": "6/18/2026, 9:47:55 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1783979397752,
+          "date": "7/13/2026, 4:49:57 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        }
+      ]
+    },
+    "bbttcc-territory": {
+      "faction": "The Faction of the Red Hat"
+    },
+    "bbttcc-character-options": {
+      "identity": {
+        "archetype": {
+          "key": "sKa3fbmCLPBH5Z2k",
+          "id": "sKa3fbmCLPBH5Z2k",
+          "pack": "bbttcc-character-options.character-archetypes",
+          "category": "character-archetypes",
+          "optionKey": "ancient_blood",
+          "identifier": "archetype-moon",
+          "name": "Archetype: The Moon (Ancient Blood)",
+          "currentTier": 1,
+          "displayName": "The Moon (Ancient Blood)"
+        },
+        "crew": {
+          "key": "bG4aAhYeDrO1OJqY",
+          "id": "bG4aAhYeDrO1OJqY",
+          "pack": "bbttcc-character-options.crew-types",
+          "category": "crew-types",
+          "optionKey": "covert-ops-cell",
+          "identifier": "crew-covert-ops-cell",
+          "name": "Crew Type: Covert Ops Cell",
+          "currentTier": 1,
+          "displayName": "Covert Ops Cell"
+        },
+        "sephirothicAlignment": {
+          "key": "SO8CCo1JqxifZ2c0",
+          "id": "SO8CCo1JqxifZ2c0",
+          "pack": "bbttcc-character-options.sephirothic-alignments",
+          "category": "sephirothic-alignments",
+          "optionKey": "alignment-chokmah",
+          "identifier": "alignment-chokmah",
+          "name": "Alignment: Chokmah"
+        },
+        "occult": {
+          "key": "hRYPYVvWp8VaE11I",
+          "id": "hRYPYVvWp8VaE11I",
+          "pack": "bbttcc-character-options.occult-associations",
+          "category": "occult-associations",
+          "optionKey": "goetic-summoner",
+          "identifier": "occult-association-goetic-summoner",
+          "name": "Occult Association: Goetic Summoner",
+          "currentTier": 1,
+          "displayName": "Goetic Summoner"
+        }
+      },
+      "archetype": {
+        "pack": "bbttcc-character-options.character-archetypes",
+        "id": "sKa3fbmCLPBH5Z2k",
+        "name": "Archetype: The Moon (Ancient Blood)",
+        "identifier": "archetype-moon"
+      },
+      "crew": {
+        "pack": "bbttcc-character-options.crew-types",
+        "id": "bG4aAhYeDrO1OJqY",
+        "name": "Crew Type: Covert Ops Cell",
+        "identifier": "crew-covert-ops-cell"
+      },
+      "sephirot": {
+        "pack": "bbttcc-character-options.sephirothic-alignments",
+        "id": "SO8CCo1JqxifZ2c0",
+        "name": "Alignment: Chokmah",
+        "identifier": "alignment-chokmah"
+      },
+      "occult": {
+        "pack": "bbttcc-character-options.occult-associations",
+        "id": "hRYPYVvWp8VaE11I",
+        "name": "Occult Association: Goetic Summoner",
+        "identifier": "occult-association-goetic-summoner"
+      },
+      "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.a3057e55a2fc1026",
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.hcromagn0h1tage8",
+      "classUuid": "Compendium.bbttcc-master-content.classes.Item.5Ncfbe1ReQhbLLUP",
+      "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.P6cYL1DAZw3YPTsz",
+      "nativeLinks": {
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.a3057e55a2fc1026",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.hcromagn0h1tage8",
+        "classUuid": "Compendium.bbttcc-master-content.classes.Item.5Ncfbe1ReQhbLLUP",
+        "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.P6cYL1DAZw3YPTsz",
+        "ancestryApplied": true,
+        "heritageApplied": true,
+        "classApplied": true,
+        "subclassApplied": true,
+        "ancestryName": "Human",
+        "heritageName": "Human Heritage: Cro-Magnon",
+        "className": "Shadow Courier",
+        "subclassName": "Route of the Black Stair (BBTTCC)"
+      },
+      "calculatedOPs": {
+        "violence": 4,
+        "nonlethal": 0,
+        "intrigue": 8,
+        "economy": 0,
+        "softpower": 4,
+        "diplomacy": 0,
+        "logistics": 4,
+        "culture": 0,
+        "faith": 0
+      },
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      }
+    },
+    "bbttcc-aae": {
+      "politicalPhilosophy": "anarchist"
+    },
+    "bbttcc-auto-link": {
+      "guidedCharacterCreation": {
+        "stage": "complete",
+        "name": "Ezeren",
+        "factionId": "",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.a3057e55a2fc1026",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.hcromagn0h1tage8",
+        "classUuid": "Compendium.bbttcc-master-content.classes.Item.5Ncfbe1ReQhbLLUP",
+        "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.P6cYL1DAZw3YPTsz",
+        "picks": {
+          "archetype": {
+            "pack": "bbttcc-character-options.character-archetypes",
+            "id": "sKa3fbmCLPBH5Z2k"
+          },
+          "crew": {
+            "pack": "bbttcc-character-options.crew-types",
+            "id": "bG4aAhYeDrO1OJqY"
+          },
+          "sephirot": {
+            "pack": "bbttcc-character-options.sephirothic-alignments",
+            "id": "SO8CCo1JqxifZ2c0"
+          },
+          "occult": {
+            "pack": "bbttcc-character-options.occult-associations",
+            "id": "hRYPYVvWp8VaE11I"
+          },
+          "political": {
+            "id": "anarchist"
+          }
+        },
+        "baseStats": {
+          "violence": 5,
+          "intrigue": 4,
+          "presence": 3,
+          "body": 2,
+          "mind": 3,
+          "soul": 2,
+          "_playerPick": true
+        }
+      }
+    },
+    "bbttcc-sorting-engine": {
+      "pillarTally": {
+        "mercy": 0,
+        "severity": 0,
+        "neutral": 0
+      },
+      "lastDescent": {
+        "timestamp": 1778996090849,
+        "confirmedBuild": {
+          "archetype": {
+            "name": "The Moon",
+            "_overridden": true
+          },
+          "ancestry": {
+            "name": "Human",
+            "_overridden": true
+          },
+          "heritage": {
+            "name": "Human Heritage: Cro-Magnon",
+            "_playerPick": true
+          },
+          "crew": {
+            "name": "Covert Ops Cell",
+            "_overridden": true
+          },
+          "path": {
+            "name": "Shadow Courier",
+            "_overridden": true
+          },
+          "doctrine": {
+            "name": "Route of the Black Stair",
+            "_overridden": true
+          },
+          "philosophy": {
+            "name": "Anarchist",
+            "_overridden": true
+          },
+          "occult": {
+            "name": "Goetic Summoner",
+            "_overridden": true
+          },
+          "alignment": {
+            "name": "Chokhmah",
+            "_overridden": true
+          },
+          "faculties": {
+            "violence": 5,
+            "intrigue": 4,
+            "presence": 3,
+            "body": 2,
+            "mind": 3,
+            "soul": 2,
+            "_playerPick": true
+          }
+        },
+        "traitMap": {},
+        "classification": "—",
+        "mode": "manual"
+      }
+    },
+    "tokenflip": {
+      "unfuck": true
+    },
+    "fourththing": {
+      "combat": {},
+      "activeManifestations": [],
+      "kind": "steward"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989092007,
+    "modifiedTime": 1792989092180,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!actors!EMxy3ozFFmxxjgVW"
+}

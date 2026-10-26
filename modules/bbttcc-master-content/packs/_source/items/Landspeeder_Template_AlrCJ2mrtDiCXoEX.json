@@ -1,8 +1,8 @@
 {
   "name": "Landspeeder Template",
   "type": "feature",
-  "img": "icons/sundries/scrolls/scroll-bound-sealed-red.webp",
-  "folder": "0JDB983lzPepXXNe",
+  "img": "icons/environment/settlement/wagon.webp",
+  "folder": "bUSEVy3wXJbUTl2t",
   "system": {
     "category": "principle",
     "source": "",
@@ -44,12 +44,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
     "systemVersion": "0.6.0",
     "createdTime": 1778961742440,
-    "modifiedTime": 1778963271955,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988930463,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

@@ -16,12 +16,12 @@
     "damageParts": [],
     "range": {
       "short": 1,
-      "long": 1
+      "long": 1,
+      "units": "sq"
     },
     "tags": [
       "t1-baseline",
       "axe",
-      "versatile",
       "thrown"
     ],
     "effect": "Versatile. May be thrown at short range as an improvised ranged attack.",
@@ -332,12 +332,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777869584244,
-    "modifiedTime": 1782160020992,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988938064,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

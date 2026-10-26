@@ -16,12 +16,12 @@
     "damageParts": [],
     "range": {
       "short": 1,
-      "long": 1
+      "long": 1,
+      "units": "sq"
     },
     "tags": [
       "t1-baseline",
       "club",
-      "light",
       "improvised"
     ],
     "effect": "Light. Improvised — nobody looks twice at it until it's too late. No signature ability.",
@@ -300,21 +300,21 @@
       "version": 5
     }
   },
-  "folder": "bQhXd1gwJXtaVLGh",
   "_id": "bA1SlugrBat0006f",
   "effects": [],
+  "folder": "bQhXd1gwJXtaVLGh",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.16",
-    "createdTime": 1792009438689,
-    "modifiedTime": 1792009438689,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792009555917,
+    "modifiedTime": 1792988939375,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

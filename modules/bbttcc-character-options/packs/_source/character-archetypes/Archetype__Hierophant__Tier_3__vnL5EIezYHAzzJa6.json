@@ -1,5 +1,5 @@
 {
-  "name": "Archetype: Hierophant (Tier 3)",
+  "name": "Archetype: The Hierophant (Tier 3)",
   "type": "feat",
   "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
   "system": {
@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Hierophant</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You reroll the lowest die on checks against effects caused by <strong>Qliphothic entities</strong> (Fiends, Aberrations) and effects related to the <strong>Darkness Track</strong>.</li>\n<li><strong>Strategic:</strong> —</li>\n</ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Hierophant</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You reroll the lowest die on checks against effects caused by <strong>Qliphothic entities</strong> (Fiends, Aberrations) and effects related to the <strong>Darkness Track</strong>.</li>\n\n</ul>",
       "chat": ""
     },
     "activities": {},
@@ -59,7 +59,17 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "rerolls": [
+        {
+          "mode": "reroll-lowest",
+          "context": "defense",
+          "vs": "Qliphothic entities or the Darkness Track",
+          "note": "The Hierophant T3"
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": null,
@@ -71,12 +81,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986744488,
-    "modifiedTime": 1782167238593,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989149096,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -40,7 +40,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
       tf?.sephirotName ||
       tf?.sephirotUuid || ""
     ).toLowerCase();
-    return ["keter","chokhmah","binah","chesed","gevurah","tiferet","netzach","hod","yesod","malkuth"].includes(k);
+    return ["keter","chokhmah","binah","chesed","geburah","gevurah","tiferet","netzach","hod","yesod","malkuth"].includes(k);
   }
 
   // --- Flag canonicalization ---

@@ -81,7 +81,7 @@
   },
   "effects": [
     {
-      "name": "Ascension Aura (Self Save Buff)",
+      "name": "Ascension Aura (+2 Resolve, +2 Evasion)",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_destruction_1.png",
       "origin": null,
       "transfer": false,
@@ -96,55 +96,27 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "systemVersion": "0.6.37",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1776459927033,
-        "modifiedTime": 1777346198777
+        "modifiedTime": 1792988965950
       },
       "_id": "GANgvbod3WwDNyRO",
       "type": "base",
       "system": {
         "changes": [
           {
-            "key": "system.abilities.str.bonuses.save",
-            "value": "+2",
+            "key": "system.derived.evasion.aeBonus",
+            "value": "4",
             "priority": 20,
             "type": "add",
             "phase": "initial"
           },
           {
-            "key": "system.abilities.dex.bonuses.save",
-            "value": "+2",
-            "priority": 20,
-            "type": "add",
-            "phase": "initial"
-          },
-          {
-            "key": "system.abilities.con.bonuses.save",
-            "value": "+2",
-            "priority": 20,
-            "type": "add",
-            "phase": "initial"
-          },
-          {
-            "key": "system.abilities.int.bonuses.save",
-            "value": "+2",
-            "priority": 20,
-            "type": "add",
-            "phase": "initial"
-          },
-          {
-            "key": "system.abilities.wis.bonuses.save",
-            "value": "+2",
-            "priority": 20,
-            "type": "add",
-            "phase": "initial"
-          },
-          {
-            "key": "system.abilities.cha.bonuses.save",
-            "value": "+2",
+            "key": "system.derived.resolve.aeBonus",
+            "value": "8",
             "priority": 20,
             "type": "add",
             "phase": "initial"
@@ -357,12 +329,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776459927033,
-    "modifiedTime": 1782167240819,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907891436,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

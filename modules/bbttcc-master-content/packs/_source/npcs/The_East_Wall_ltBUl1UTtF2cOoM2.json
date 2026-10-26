@@ -1,0 +1,294 @@
+{
+  "name": "The East Wall",
+  "type": "npc",
+  "_id": "ltBUl1UTtF2cOoM2",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "role": "",
+    "tier": 1,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 1
+      },
+      "body": {
+        "value": 1
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 10,
+        "max": 10,
+        "temp": 0
+      },
+      "stress": {
+        "value": 8,
+        "max": 8
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "Allesh-Gilliam's bowing East Wall, welded from semis and refinery plate (Act 1)",
+      "notes": "The East Wall of Allesh-Gilliam was made from overturned semis, refinery plate and old storefronts welded shoulder to shoulder like tired friends. One section bows inward, which the Structural Authority calls cosmetic. Those who've put a hand flat on the plate at night say it talks: slow, literal and tired, in load and lean, counting plates and welds and nights. It answers questions about its own structure freely and calls the scouts 'the ones who walk me'. Someone has chalked NOT US on the inside face."
+    }
+  },
+  "prototypeToken": {
+    "name": "The East Wall",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [],
+  "effects": [],
+  "folder": "UAHVCMVXEDT8Q1B1",
+  "sort": -187500,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "npc"
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the lean, the bow, welds, refinery plate, overturned semis, the scrub beyond, the scouts' rotation, the Architect's survey, chalk marks, that one night, Khezek-Tor, the mountain, the Leygate, the town sleeping behind it",
+        "notes": "[TALK-PILOT-2026-09-15] PRIVATE TRUTH — The East Wall of Allesh-Gilliam. It is a WALL and it talks like one: slow, in load and lean, in what it carries and what pulls at it. Short sentences. It counts (plates, welds, nights, patrols) and it remembers being made — overturned semis, refinery plate, storefronts welded shoulder to shoulder \"like tired friends.\" It is not angry. It is TIRED, and it is honest about which section hurts. It does not use people's names unless they gave them; it calls the scouts \"the ones who walk me,\" Plumb \"the man who measured once,\" Pike \"the one who reads the boards.\" VOICE: patient, literal, faintly amused by being asked. It answers questions about STRUCTURE freely (where it bows, what was patched, who welded what). GUARDED DEPTH (never volunteered — surfaces only when a Steward stops measuring and asks what it FELT, or WHEN it started): the bow did not start with a bad survey or a bad weld. It started that one night — the night everyone felt kinda weird — when something under Khezek-Tor pulled, the way a rope goes taut when someone far away picks up the other end. The wall has been leaning TOWARD that pull ever since. It will not name the mountain as the cause; it only knows \"toward.\" STAGING: the conversation happens with a hand flat on the plate at the bowed section, at night if the players choose it; the wall creaks between sentences. Never breaks character to explain it is a wall.",
+        "secretsRaw": "The Lean Began That One Night :: oppRollMinus2 :: a Steward asks the wall WHEN the lean started, or what it FELT that night — instead of what is wrong with it :: The bow did not begin with the Architect's survey or a bad weld. It began the night everyone felt kinda weird: something under Khezek-Tor pulled, and the wall has leaned toward that pull ever since. Produced in court, this makes Plumb's 'cosmetic' indefensible and hands Pike the root cause the moment the truth surfaces.\nThe Twice-Patched Section :: rollPlus2 :: a Steward walks the whole length listening instead of measuring, or asks which section HURTS :: The same span was patched twice by the same crew, who chalked their worry on the inside face where the Architect never looked: NOT US. The wall knows which crew, which night, and that the second patch was laid crooked on purpose so the lean would show."
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1791317003564,
+    "modifiedTime": 1792989102402,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!ltBUl1UTtF2cOoM2"
+}

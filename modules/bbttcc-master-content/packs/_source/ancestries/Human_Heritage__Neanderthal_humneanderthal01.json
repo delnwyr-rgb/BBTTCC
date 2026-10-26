@@ -8,7 +8,7 @@
     "source": "Bad Eden (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human Lineage.</strong> The branch that kept the strength. Heavy bone, deep lung, the ancestor who decided that an ice age is a problem you out-mass.</p><p><em>“The map says ‘stop.’ You keep walking. Slower. Heavier. The map gives up first.”</em></p><p><strong>Neanderthal.</strong> You are the broad lineage that survived by being the thing the cold couldn’t finish.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>VIO (Violence)</strong>—expressed primarily through Tier powers.</p></li><li><p><strong>Endurance Frame.</strong> You count as one size larger for the purposes of carrying capacity, push, drag, and lift.</p></li></ul>",
+      "value": "<p><strong>Human Lineage.</strong> The branch that kept the strength. Heavy bone, deep lung, the ancestor who decided that an ice age is a problem you out-mass.</p><p><em>“The map says ‘stop.’ You keep walking. Slower. Heavier. The map gives up first.”</em></p><p><strong>Neanderthal.</strong> You are the broad lineage that survived by being the thing the cold couldn’t finish.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>VIO (Violence)</strong>—expressed primarily through Tier powers.</p></li><li><p><strong>Endurance Frame.</strong> You count as one size larger for the purposes of carrying capacity, push, drag, and lift.</p></li></ul>",
       "chat": ""
     },
     "advancement": [
@@ -52,15 +52,23 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "species"
-    },
     "bbttcc": {
       "kind": "heritage",
       "family": "human",
       "lineage": "Neanderthal",
       "version": "2.0.0",
       "date": "2026-04-18"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "carrying, pushing, dragging or lifting",
+          "note": "Endurance Frame"
+        }
+      ]
     }
   },
   "folder": "xPvKnV19qnSzNoUM",
@@ -68,12 +76,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776543000000,
-    "modifiedTime": 1781116094273,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988989716,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

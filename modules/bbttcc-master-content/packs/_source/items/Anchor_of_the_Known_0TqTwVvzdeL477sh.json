@@ -1,116 +1,55 @@
 {
+  "_id": "0TqTwVvzdeL477sh",
   "name": "Anchor of the Known",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/equipment/neck/pendant-gold-anchor.webp",
   "system": {
-    "description": {
-      "value": "<p><i>“The world remembers this place.”</i></p><p><b>Deploy.</b> Once per a Soma Break, place an Anchor in your current hex. For 1 turn, random encounter chance is reduced (engine hook planned).</p><p><b>Safe:</b> Does not affect faction tracks.</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 0,
-      "units": "lb"
-    },
-    "price": {
-      "value": 0,
-      "denomination": "gp"
-    },
-    "rarity": "rare",
-    "attunement": "",
-    "identified": true,
-    "equipped": false,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "uses": {
-      "max": "1",
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "recoverAll"
-        }
-      ],
-      "spent": 0
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "activities": {},
-    "identifier": "anchor-of-the-known",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p><i>“The world remembers this place.”</i></p><p><b>Deploy.</b> Once per Soma Break, plant the Anchor in your current hex. For one turn the road out of it is quieter than it should be: the GM treats the hex as two steps safer on the travel table.</p>",
+      "chat": ""
+    }
   },
   "flags": {
     "bbttcc": {
       "tags": [
         "travel",
         "support"
-      ],
-      "travel": {
-        "encounterChanceDelta": 2,
-        "durationTurns": 1
-      }
-    },
-    "rfi": {
-      "item": {
-        "tier": "III",
-        "footprint": 1,
-        "reach": "self",
-        "frame": "armor",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "scene"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
+      ]
     },
     "fourththing": {
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
-            "currency": "economy",
+            "marks": 1080,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 2,
+            "notes": "TIII talisman × rarity 2",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 432
           },
           "tier": "III",
-          "frame": "armor",
+          "frame": "talisman",
           "origin": "looted",
           "bound": "free",
           "reach": "self",
           "footprint": 1,
-          "legacySystem": {
-            "description": {
-              "value": "<p><i>“The world remembers this place.”</i></p><p><b>Deploy.</b> Once per Soma Break, place an Anchor in your current hex. For 1 turn, random encounter chance is reduced (engine hook planned).</p><p><b>Safe:</b> Does not affect faction tracks.</p>"
-            }
-          }
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {}
         }
       }
     },
@@ -294,22 +233,22 @@
   },
   "effects": [],
   "folder": "TNrB6kEiHS0KwwJT",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834157942,
-    "modifiedTime": 1782164185968,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 500000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "0TqTwVvzdeL477sh",
-  "sort": 500000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988906321,
+    "modifiedTime": 1792988906322,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!0TqTwVvzdeL477sh"
 }

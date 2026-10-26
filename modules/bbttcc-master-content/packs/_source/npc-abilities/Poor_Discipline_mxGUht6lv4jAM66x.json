@@ -7,44 +7,64 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>If reduced below half Integrity, the bandit must succeed on a DC 12 Soul check at the start of its turn or take the Disengage action and move away.</p>",
+      "value": "<p>If reduced below half Integrity, the bandit must succeed a Soul check vs DC 12 at the start of its turn or disengage and move away at full speed.</p>",
       "chat": ""
     }
   },
-  "_id": "mxGUht6lv4jAM66x",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "bloodied",
+            "do": {
+              "morale": {
+                "attr": "soul",
+                "dc": 12,
+                "outcome": "disengages and moves away at full speed"
+              }
+            }
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Commander Road Bandit",
           "Road Bandit"
         ],
+        "sourceIds": [
+          "5QNrUdqGtIcr1f5Z"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "mxGUht6lv4jAM66x",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167245008,
-    "modifiedTime": 1782167245008,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989036795,
+    "modifiedTime": 1792989036795,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!mxGUht6lv4jAM66x"
 }

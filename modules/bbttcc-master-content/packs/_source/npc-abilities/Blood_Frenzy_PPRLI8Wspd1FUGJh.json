@@ -7,43 +7,57 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>The predator reroll the lowest die on melee attack rolls against any creature that doesn’t have all its Integrity.</p>",
+      "value": "<p>The predator rerolls the lowest die on melee attack rolls against any creature that isn't at full Integrity.</p>",
       "chat": ""
     }
   },
-  "_id": "PPRLI8Wspd1FUGJh",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "attack",
+          "mode": "reroll-lowest",
+          "when": "targetDamaged",
+          "note": "Blood Frenzy — the target is missing Integrity"
+        }
+      ]
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
           "Apex Predator"
         ],
+        "sourceIds": [
+          "oAS0ajjFzQ7ekFiw"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "PPRLI8Wspd1FUGJh",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167244997,
-    "modifiedTime": 1782167244997,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989019302,
+    "modifiedTime": 1792989019303,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!PPRLI8Wspd1FUGJh"
 }

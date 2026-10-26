@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Storm Wardens</strong></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><p><em>You’ve learned to hear danger in the air before it becomes visible.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on checks made to predict hazardous weather, navigate storms, resist environmental contamination, or stabilize people and equipment under severe conditions.</li><li><strong>Strategic:</strong> Your faction more reliably detects incoming environmental threats and corruption-weather events.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Storm Wardens</strong></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><p><em>You’ve learned to hear danger in the air before it becomes visible.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on checks made to predict hazardous weather, navigate storms, resist environmental contamination, or stabilize people and equipment under severe conditions.</li><li><strong>Strategic:</strong> Your Domain more reliably detects incoming environmental threats and corruption-weather events.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-storm-wardens-t3",
@@ -80,6 +80,30 @@
           "bbttcc:theme:corruption-watch"
         ]
       }
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "perception",
+          "vs": "predicting hazardous weather; stabilizing people and equipment under severe conditions",
+          "note": "Storm Wardens T3"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "piloting",
+          "vs": "navigating storms",
+          "note": "Storm Wardens T3"
+        },
+        {
+          "context": "save",
+          "mode": "reroll-lowest",
+          "vs": "environmental contamination",
+          "note": "Storm Wardens T3"
+        }
+      ]
     }
   },
   "_stats": {
@@ -92,11 +116,11 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986959359,
-    "modifiedTime": 1781116050656,
+    "modifiedTime": 1792977824764,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

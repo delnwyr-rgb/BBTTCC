@@ -1,0 +1,69 @@
+{
+  "name": "Aura of Pain",
+  "type": "feature",
+  "img": "icons/magic/unholy/strike-beam-blood-large-red-purple.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Any creature that takes damage while within 4 squares of the Flayer takes an extra 1d4 psychic damage (Stress) — the Flayer's attention makes every wound articulate.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "enemyDamaged",
+            "radius": 4,
+            "do": {
+              "damage": {
+                "formula": "1d4",
+                "type": "psychic",
+                "track": "stress"
+              }
+            },
+            "label": "Aura of Pain"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Golachab Flayer"
+        ],
+        "sourceIds": [
+          "QphIxEIKKyq8HLgf"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "JPcRjoIVzS83fYTa",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069912,
+    "modifiedTime": 1792989069994,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!JPcRjoIVzS83fYTa"
+}

@@ -106,6 +106,15 @@
         ],
         "resists": [],
         "immunes": []
+      },
+      "appliedStates": {
+        "states": [],
+        "duration": "scene",
+        "saveEachRound": false,
+        "saveAttribute": "body",
+        "saveDcMode": "cast-dc",
+        "saveDcFixed": 15,
+        "saveAttributeOverrides": {}
       }
     },
     "description": {
@@ -121,19 +130,19 @@
       }
     },
     "autoanimations": {
-      "id": "6692b4dd-dfeb-4346-9f90-59626e894ca7",
+      "id": "16160446-a905-4b6e-8ace-aece913bbeb2",
       "label": "Lucid Standard",
       "macro": {
         "enable": false,
         "playWhen": "0"
       },
-      "menu": "range",
+      "menu": "ontoken",
       "primary": {
         "video": {
-          "dbSection": "range",
-          "menuType": "spell",
-          "animation": "eldritchblast",
-          "variant": "01",
+          "dbSection": "static",
+          "menuType": "magicsign",
+          "animation": "enchantment",
+          "variant": "02",
           "color": "purple",
           "enableCustom": false,
           "customPath": ""
@@ -307,12 +316,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1788307801129,
-    "modifiedTime": 1788307801129,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792902898872,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

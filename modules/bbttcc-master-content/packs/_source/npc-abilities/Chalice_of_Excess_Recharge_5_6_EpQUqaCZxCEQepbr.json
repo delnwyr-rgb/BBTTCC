@@ -1,0 +1,81 @@
+{
+  "name": "Chalice of Excess (Recharge 5–6)",
+  "type": "feat",
+  "img": "icons/containers/bags/pack-leather-stitched-tan.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Reveller offers the chalice to one creature within 6 squares. Resolve check vs DC 14. Fail: the target drinks — it gains 10 temporary Integrity and rolls twice-keep-better on attacks for one round… and is now <strong>addicted</strong>: at the start of each of its turns, Soul check vs DC 14 or it must spend its action getting to the chalice for another drink. The addiction breaks on a Soma Break, or if the drinker is Calmed.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "save": {
+                "attr": "soul",
+                "dc": 14,
+                "onSave": "negate"
+              }
+            }
+          },
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Chalice of Excess (Recharge 5–6)"
+            },
+            "do": {
+              "tempIntegrity": 10,
+              "prompt": "Drinks: twice-keep-better attacks 1 rd; addicted — Soul DC 14 each turn or go drink."
+            }
+          }
+        ],
+        "recharge": {
+          "mode": "d6",
+          "min": 5
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gamchicoth Reveller"
+        ],
+        "sourceIds": [
+          "jLzxG6ZynTW6UNZU"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "EpQUqaCZxCEQepbr",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069920,
+    "modifiedTime": 1792989070001,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!EpQUqaCZxCEQepbr"
+}

@@ -1,0 +1,50 @@
+{
+  "name": "Multiattack",
+  "type": "feature",
+  "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Flayer makes two attacks with its Whip of Agony.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "YpsRD8SkkO0v3hLj",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Golachab Flayer"
+        ],
+        "sourceIds": [
+          "QphIxEIKKyq8HLgf"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069953,
+    "modifiedTime": 1792989070038,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!YpsRD8SkkO0v3hLj"
+}

@@ -1,0 +1,45 @@
+{
+  "name": "Stacked Deck",
+  "type": "feat",
+  "img": "icons/sundries/gaming/playing-cards-brown.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Stacked Deck.</strong> You stacked it, they cut it, and it did not matter. <em>Play:</em> force your opponent to reroll their next exchange.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "forceReroll",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "_id": "Bb5fWwUggBfW93TH",
+  "effects": [],
+  "folder": null,
+  "sort": 300000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1782065103710,
+    "modifiedTime": 1792989014854,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!Bb5fWwUggBfW93TH"
+}

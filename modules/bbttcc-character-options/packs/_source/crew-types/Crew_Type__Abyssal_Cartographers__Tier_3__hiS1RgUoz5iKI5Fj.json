@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You’ve learned to tell the difference between a dead passage and a sleeping one.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on checks made to navigate submerged or cavernous terrain, interpret spatial anomalies, or locate hidden access points and sealed routes.</li><li><strong>Strategic:</strong> Your faction is better at identifying unusual discovery sites and Spark-adjacent locations tied to water, depths, or buried passageways.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You’ve learned to tell the difference between a dead passage and a sleeping one.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on checks made to navigate submerged or cavernous terrain, interpret spatial anomalies, or locate hidden access points and sealed routes.</li><li><strong>Strategic:</strong> Your Domain is better at identifying unusual discovery sites and Spark-adjacent locations tied to water, depths, or buried passageways.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-abyssal-cartographers-t3",
@@ -93,6 +93,24 @@
           "bbttcc:theme:under-map"
         ]
       }
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "perception",
+          "vs": "navigating submerged or cavernous terrain; locating hidden access points and sealed routes",
+          "note": "Abyssal Cartographers T3"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "investigation",
+          "vs": "interpreting spatial anomalies; locating hidden access points and sealed routes",
+          "note": "Abyssal Cartographers T3"
+        }
+      ]
     }
   },
   "_stats": {
@@ -105,11 +123,11 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986939199,
-    "modifiedTime": 1781116047608,
+    "modifiedTime": 1792977823294,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

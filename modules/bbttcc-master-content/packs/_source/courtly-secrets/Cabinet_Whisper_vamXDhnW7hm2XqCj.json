@@ -7,7 +7,7 @@
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p><strong>Cabinet Whisper.</strong> A choice morsel of intel from a sympathetic minister, delivered just before the moment of need.</p><p><em>Play:</em> queue +2 to your next courtly exchange roll.</p>",
+      "value": "<p><strong>Cabinet Whisper.</strong> A choice morsel of intel from a sympathetic minister, delivered just before the moment of need.</p><p><em>Play:</em> queue +2 to your next Parley roll.</p>",
       "chat": "",
       "unidentified": ""
     }
@@ -31,11 +31,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1779393195597,
-    "modifiedTime": 1784079176431,
+    "modifiedTime": 1792977750100,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

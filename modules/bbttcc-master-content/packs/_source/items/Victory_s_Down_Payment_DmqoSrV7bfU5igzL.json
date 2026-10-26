@@ -16,7 +16,8 @@
     "damageParts": [],
     "range": {
       "short": 1,
-      "long": 1
+      "long": 1,
+      "units": "sq"
     },
     "tags": [
       "starter-kit",
@@ -361,10 +362,10 @@
   "_stats": {
     "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.16",
+    "systemVersion": "0.6.37",
     "createdTime": 1788307800830,
-    "modifiedTime": 1791865611193,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988944620,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

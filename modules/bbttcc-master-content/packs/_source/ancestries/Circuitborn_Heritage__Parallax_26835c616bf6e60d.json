@@ -14,7 +14,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn Line.</strong> The paradox-walking. Designed to be in the place no one expects, two seconds before the rest of the world catches up.</p><p><em>“Don’t look at where I am. Look at where I’m about to have already been.”</em></p><p><strong>Parallax.</strong> You are a sentient chassis built around the principle of <em>positional doubt</em>. The world keeps a fuzzy outline of where you are, and that fuzziness is your weapon.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>INTR (Intrigue)</strong>—expressed primarily through Tier powers.</li><li><strong>Phase Drift.</strong> When you take the Disengage, your speed increases by 2 squares for that turn.</li></ul>",
+      "value": "\n<p><strong>Circuitborn Line.</strong> The paradox-walking. Designed to be in the place no one expects, two seconds before the rest of the world catches up.</p><p><em>“Don’t look at where I am. Look at where I’m about to have already been.”</em></p><p><strong>Parallax.</strong> You are a sentient chassis built around the principle of <em>positional doubt</em>. The world keeps a fuzzy outline of where you are, and that fuzziness is your weapon.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>INTR (Intrigue)</strong>—expressed primarily through Tier powers.</li><li><strong>Phase Drift.</strong> Once per turn, when you move on your turn (your Disengage), you may slip 2 more squares.</li></ul>",
       "chat": ""
     },
     "advancement": [
@@ -58,15 +58,36 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "species"
-    },
     "bbttcc": {
       "kind": "heritage",
       "family": "circuitborn",
       "lineage": "Parallax",
       "version": "2.0.0",
       "date": "2026-04-18"
+    },
+    "fourththing": {
+      "triggers": [
+        {
+          "event": "on-move",
+          "predicate": {
+            "amountMin": 5
+          },
+          "limit": {
+            "window": "turn",
+            "uses": 1
+          },
+          "offer": true,
+          "offerText": "Phase Drift — you Disengage: slip 2 more squares.",
+          "effect": {
+            "kind": "displace-token",
+            "args": {
+              "who": "self",
+              "squares": 2,
+              "mode": "shift"
+            }
+          }
+        }
+      ]
     }
   },
   "folder": "I4c7puuhC808BtVW",
@@ -74,12 +95,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776541800000,
-    "modifiedTime": 1782167240111,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988990235,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

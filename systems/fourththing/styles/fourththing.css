@@ -5781,6 +5781,13 @@
   border: 1px solid rgba(160,200,216,0.3);
   border-radius: 10px;
 }
+/* RG3 (2026-10-26): the frame's mobilityAllowed is a warning, not a lock — flag the chip when the rig's mobility is outside it */
+.ft-rig-sheet .ft-rig-frame-mobility-chip.is-violated {
+  background: rgba(255,138,138,0.14);
+  color: #ff8a8a;
+  border-color: rgba(255,138,138,0.45);
+  text-transform: none;
+}
 .ft-rig-sheet .ft-rig-frame-stat-unsourced {
   color: #ff8a8a;
   font-size: 0.76rem;

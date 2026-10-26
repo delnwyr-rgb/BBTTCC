@@ -11,7 +11,9 @@
 //     misfireBandShift,     // int  — added to d10 misfire bias (negative=better)
 //     clarityMaxBonus,      // int  — added to clarity max in data prep
 //     upkeepScale,          // float — multiplier on per-tick upkeep cost
-//     concurrencyBonus      // int  — informational, surfaced in upkeep card
+//     concurrencyBonus      // int  — free Clarity-upkeep passes per tick (TQ2, 2026-10-26):
+//                           //        item-granted passes free ANY sustained entry; the
+//                           //        Pactkeeper class baseline frees pact-bound entries only
 //   }
 //   flags.fourththing.discipline.mode = {
 //     key,                  // string — actor's mode flag this item is gated on
@@ -26,7 +28,9 @@
 const FIELDS = ["reachDiscount", "misfireBandShift", "clarityMaxBonus", "upkeepScale", "concurrencyBonus"];
 
 function _zero() {
-  return { reachDiscount: 0, misfireBandShift: 0, clarityMaxBonus: 0, upkeepScale: 1, concurrencyBonus: 0 };
+  // concurrencyPactBound = the slice of concurrencyBonus that only frees pact-bound
+  // entries (Pactkeeper class baseline). Not in FIELDS — items never add to it.
+  return { reachDiscount: 0, misfireBandShift: 0, clarityMaxBonus: 0, upkeepScale: 1, concurrencyBonus: 0, concurrencyPactBound: 0 };
 }
 
 function _add(into, src) {
@@ -67,9 +71,9 @@ export function getDisciplineShifts(actor) {
     it => it?.type === "class" && it?.system?.identifier === "pactkeeper"
   );
   if (hasPactkeeper) {
-    out.concurrencyBonus += 1; // The Bargain (Initiation 1)
+    out.concurrencyBonus += 1; out.concurrencyPactBound += 1; // The Bargain (Initiation 1)
     if (isModeActive(actor, "pkSealedPact")) {
-      out.concurrencyBonus += 2; // Sealed Pact (Initiation 11) while stance ON
+      out.concurrencyBonus += 2; out.concurrencyPactBound += 2; // Sealed Pact (Initiation 11) while stance ON
       out.upkeepScale *= 0.5;    // Sealed Pact: upkeep halved (round up) on every active manifestation — ruling PK6, 2026-10-25
     }
   }
@@ -91,6 +95,15 @@ export function getMisfireBandShift(actor)   { return getDisciplineShifts(actor)
 export function getClarityMaxBonus(actor)    { return getDisciplineShifts(actor).clarityMaxBonus; }
 export function getUpkeepScale(actor)        { return getDisciplineShifts(actor).upkeepScale; }
 export function getConcurrencyBonus(actor)   { return getDisciplineShifts(actor).concurrencyBonus; }
+// Free-upkeep passes split by what they may free (ruling TQ2, 2026-10-26):
+//   pactBound — Pactkeeper class baseline, spent only on entries cast on the pact subject;
+//   any       — technique-granted (Many Hands, Refracted Attention …), spent on any sustained entry.
+export function getConcurrencyPasses(actor) {
+  const s = getDisciplineShifts(actor);
+  const total = Math.max(0, Number(s.concurrencyBonus) || 0);
+  const pactBound = Math.min(total, Math.max(0, Number(s.concurrencyPactBound) || 0));
+  return { total, pactBound, any: total - pactBound };
+}
 
 // Toggle a mode flag and announce in chat. Used by the four Signature Mode
 // dialogs in ft-class-automation.js.

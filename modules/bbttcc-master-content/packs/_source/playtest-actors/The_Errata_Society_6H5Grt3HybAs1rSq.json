@@ -1,0 +1,2690 @@
+{
+  "name": "The Errata Society",
+  "type": "npc",
+  "ownership": {
+    "default": 0,
+    "rzJQNVz5H3SHfP2i": 3,
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc-factions": {
+      "isFaction": true,
+      "roster": [
+        "Actor.IgTzmf0detjLtZFc"
+      ],
+      "foundedBy": "Marginalia",
+      "creed": "The world is a draft. We keep the corrections.",
+      "rigs": [],
+      "doctrineSeedMeta": {
+        "packageKey": "standard",
+        "version": "1.0.0",
+        "inProgress": false,
+        "applied": true,
+        "source": "ensureBaselineDoctrine",
+        "updatedTs": 1787289454447
+      },
+      "opBank": {
+        "violence": 50,
+        "nonlethal": 50,
+        "intrigue": 50,
+        "economy": 10,
+        "softpower": 50,
+        "diplomacy": 50,
+        "logistics": 40,
+        "culture": 50,
+        "faith": 50
+      },
+      "warLogs": [
+        {
+          "type": "gm_adjustment",
+          "ts": 1788024310272,
+          "date": "8/29/2026",
+          "summary": "OP clamped to caps: logistics:350→50(cap 50)"
+        },
+        {
+          "ts": 1787335769787,
+          "type": "market_purchase",
+          "summary": "Acquired: Field Patch (Standard Issue)",
+          "vendorId": "vendor-sybh3z-mop85ufr",
+          "entryId": "gear-v1r7pu-mop8coh8",
+          "econCost": 0,
+          "baseCost": 1,
+          "payDeltas": {
+            "economy": 0
+          },
+          "flagPrice": {
+            "marks": 10,
+            "currency": "economy",
+            "split": null,
+            "gmOverride": false,
+            "saleBack": 4,
+            "docFrame": "consumable",
+            "docKind": "Item"
+          },
+          "rarity": "uncommon",
+          "horizon": "uncommon",
+          "distance": 0,
+          "delivered": {
+            "to": "character",
+            "characterId": "IgTzmf0detjLtZFc"
+          },
+          "note": "",
+          "date": "8/21/2026, 1:09:29 PM"
+        },
+        {
+          "ts": 1787335757646,
+          "type": "market_purchase",
+          "summary": "Acquired: Clarity Wafer (Standard Issue)",
+          "vendorId": "vendor-sybh3z-mop85ufr",
+          "entryId": "gear-2g8gc1-mop8cehg",
+          "econCost": 0,
+          "baseCost": 1,
+          "payDeltas": {
+            "economy": 0
+          },
+          "flagPrice": {
+            "marks": 10,
+            "currency": "economy",
+            "split": null,
+            "gmOverride": false,
+            "saleBack": 4,
+            "docFrame": "consumable",
+            "docKind": "Item"
+          },
+          "rarity": "uncommon",
+          "horizon": "uncommon",
+          "distance": 0,
+          "delivered": {
+            "to": "character",
+            "characterId": "IgTzmf0detjLtZFc"
+          },
+          "note": "",
+          "date": "8/21/2026, 1:09:17 PM"
+        },
+        {
+          "ts": 1787335754422,
+          "type": "market_purchase",
+          "summary": "Acquired: Clarity Wafer (Standard Issue)",
+          "vendorId": "vendor-sybh3z-mop85ufr",
+          "entryId": "gear-2g8gc1-mop8cehg",
+          "econCost": 0,
+          "baseCost": 1,
+          "payDeltas": {
+            "economy": 0
+          },
+          "flagPrice": {
+            "marks": 10,
+            "currency": "economy",
+            "split": null,
+            "gmOverride": false,
+            "saleBack": 4,
+            "docFrame": "consumable",
+            "docKind": "Item"
+          },
+          "rarity": "uncommon",
+          "horizon": "uncommon",
+          "distance": 0,
+          "delivered": {
+            "to": "character",
+            "characterId": "IgTzmf0detjLtZFc"
+          },
+          "note": "",
+          "date": "8/21/2026, 1:09:14 PM"
+        },
+        {
+          "ts": 1787335745200,
+          "type": "market_purchase",
+          "summary": "Acquired: Field Patch (Standard Issue)",
+          "vendorId": "vendor-sybh3z-mop85ufr",
+          "entryId": "gear-v1r7pu-mop8coh8",
+          "econCost": 0,
+          "baseCost": 1,
+          "payDeltas": {
+            "economy": 0
+          },
+          "flagPrice": {
+            "marks": 10,
+            "currency": "economy",
+            "split": null,
+            "gmOverride": false,
+            "saleBack": 4,
+            "docFrame": "consumable",
+            "docKind": "Item"
+          },
+          "rarity": "uncommon",
+          "horizon": "uncommon",
+          "distance": 0,
+          "delivered": {
+            "to": "character",
+            "characterId": "IgTzmf0detjLtZFc"
+          },
+          "note": "",
+          "date": "8/21/2026, 1:09:05 PM"
+        },
+        {
+          "ts": 1787335685136,
+          "type": "market_purchase",
+          "summary": "Acquired: Clarity Wafer (Standard Issue)",
+          "vendorId": "vendor-sybh3z-mop85ufr",
+          "entryId": "gear-2g8gc1-mop8cehg",
+          "econCost": 0,
+          "baseCost": 1,
+          "payDeltas": {
+            "economy": 0
+          },
+          "flagPrice": {
+            "marks": 10,
+            "currency": "economy",
+            "split": null,
+            "gmOverride": false,
+            "saleBack": 4,
+            "docFrame": "consumable",
+            "docKind": "Item"
+          },
+          "rarity": "uncommon",
+          "horizon": "uncommon",
+          "distance": 0,
+          "delivered": {
+            "to": "character",
+            "characterId": "IgTzmf0detjLtZFc"
+          },
+          "note": "",
+          "date": "8/21/2026, 1:08:05 PM"
+        },
+        {
+          "ts": 1787335679006,
+          "type": "market_purchase",
+          "summary": "Acquired: Field Patch (Standard Issue)",
+          "vendorId": "vendor-sybh3z-mop85ufr",
+          "entryId": "gear-v1r7pu-mop8coh8",
+          "econCost": 0,
+          "baseCost": 1,
+          "payDeltas": {
+            "economy": 0
+          },
+          "flagPrice": {
+            "marks": 10,
+            "currency": "economy",
+            "split": null,
+            "gmOverride": false,
+            "saleBack": 4,
+            "docFrame": "consumable",
+            "docKind": "Item"
+          },
+          "rarity": "uncommon",
+          "horizon": "uncommon",
+          "distance": 0,
+          "delivered": {
+            "to": "character",
+            "characterId": "IgTzmf0detjLtZFc"
+          },
+          "note": "",
+          "date": "8/21/2026, 1:07:59 PM"
+        },
+        {
+          "ts": 1787335643431,
+          "type": "market_purchase",
+          "summary": "Purchased: Archivist's Spectacles (economy 30 marks)",
+          "vendorId": "vendor-sybh3z-mop85ufr",
+          "entryId": "gear-j2ujjd-mt39b8k1",
+          "econCost": 3,
+          "baseCost": 3,
+          "payDeltas": {
+            "economy": -30
+          },
+          "flagPrice": {
+            "marks": 30,
+            "currency": "economy",
+            "split": null,
+            "gmOverride": false,
+            "saleBack": 12,
+            "docFrame": "armor",
+            "docKind": "Item"
+          },
+          "rarity": "rare",
+          "horizon": "uncommon",
+          "distance": 1,
+          "delivered": {
+            "to": "character",
+            "characterId": "IgTzmf0detjLtZFc"
+          },
+          "note": "",
+          "date": "8/21/2026, 1:07:23 PM"
+        },
+        {
+          "ts": 1787335231055,
+          "type": "market_purchase",
+          "summary": "Acquired: Drifter's Weave (Standard Issue)",
+          "vendorId": "vendor-sybh3z-mop85ufr",
+          "entryId": "gear-3vhqmb-mt38yxey",
+          "econCost": 0,
+          "baseCost": 7.5,
+          "payDeltas": {
+            "nonlethal": 0
+          },
+          "flagPrice": {
+            "marks": 75,
+            "currency": "nonlethal",
+            "split": null,
+            "gmOverride": false,
+            "saleBack": 30,
+            "docFrame": "armor",
+            "docKind": "Item"
+          },
+          "rarity": "uncommon",
+          "horizon": "uncommon",
+          "distance": 0,
+          "delivered": {
+            "to": "character",
+            "characterId": "IgTzmf0detjLtZFc"
+          },
+          "note": "",
+          "date": "8/21/2026, 1:00:31 PM"
+        },
+        {
+          "ts": 1787334425756,
+          "type": "market_purchase",
+          "summary": "Acquired: Apology Knife, Mass-Produced (Standard Issue)",
+          "vendorId": "vendor-sybh3z-mop85ufr",
+          "entryId": "gear-urik3h-mop89suo",
+          "econCost": 0,
+          "baseCost": 5,
+          "payDeltas": {
+            "violence": 0
+          },
+          "flagPrice": {
+            "marks": 50,
+            "currency": "violence",
+            "split": null,
+            "gmOverride": false,
+            "saleBack": 20,
+            "docFrame": "weapon",
+            "docKind": "Item"
+          },
+          "rarity": "uncommon",
+          "horizon": "uncommon",
+          "distance": 0,
+          "delivered": {
+            "to": "character",
+            "characterId": "IgTzmf0detjLtZFc"
+          },
+          "note": "",
+          "date": "8/21/2026, 12:47:05 PM"
+        },
+        {
+          "ts": 1787374722307,
+          "date": "8/21/2026, 11:58:42 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.lqp1Yy4AnKcknerr.Drawing.bPjE02CpXk0799A9",
+          "hexTo": "Scene.lqp1Yy4AnKcknerr.Drawing.R9XGVCQG4gW8PHBA",
+          "terrain": "plains",
+          "opSpent": {
+            "economy": 10
+          },
+          "roll": 6,
+          "dc": 17,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787421779819,
+          "date": "8/22/2026, 1:02:59 PM",
+          "type": "raid",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "outcome": "loss",
+          "summary": "Violence Raid vs Rust Syndicate Hold — Normal; A 2 + 0 vs D 8 + 10 → A 2 vs D 18 (Δ -16) • OP−(Att) violence:21; Mans(Att): flank_attack, suppressive_fire; Mans(Def): —",
+          "activityKey": "violence",
+          "difficulty": "normal",
+          "attackerTotal": 2,
+          "defenderTotal": 18,
+          "margin": -16,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 0,
+          "defenderBonus": 10,
+          "supportFactionIds": [],
+          "supportFactionNames": [],
+          "targetType": "hex",
+          "targetUuid": "Scene.lqp1Yy4AnKcknerr.Drawing.R9XGVCQG4gW8PHBA",
+          "targetName": "Rust Syndicate Hold"
+        },
+        {
+          "ts": 1787423000310,
+          "date": "8/22/2026, 1:23:20 PM",
+          "type": "raid",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "outcome": "win",
+          "summary": "Violence Raid vs Rust Syndicate Hold — Normal; A 18 + 25 vs D 12 + 10 → A 43 vs D 22 (Δ +21) • OP−(Att) violence:51; Mans(Att): flank_attack; Mans(Def): —",
+          "activityKey": "violence",
+          "difficulty": "normal",
+          "attackerTotal": 43,
+          "defenderTotal": 22,
+          "margin": 21,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 25,
+          "defenderBonus": 10,
+          "supportFactionIds": [],
+          "supportFactionNames": [],
+          "targetType": "hex",
+          "targetUuid": "Scene.lqp1Yy4AnKcknerr.Drawing.R9XGVCQG4gW8PHBA",
+          "targetName": "Rust Syndicate Hold"
+        },
+        {
+          "ts": 1787423643523,
+          "date": "8/22/2026, 1:34:03 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "summary": "Infiltration: The Errata Society vs The Rust Syndicate — 17 vs 11 • Alarm 0/5 (quiet) • QUIET"
+        },
+        {
+          "ts": 1787424106528,
+          "type": "scenario",
+          "scenario": "infiltration",
+          "summary": "OP intrigue -2 (Infiltration)",
+          "date": "8/22/2026, 1:41:46 PM"
+        },
+        {
+          "ts": 1787424110261,
+          "date": "8/22/2026, 1:41:50 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "summary": "Infiltration: The Errata Society vs The Rust Syndicate — 18 vs 16 • Alarm 0/5 (quiet) • QUIET"
+        },
+        {
+          "ts": 1787424156298,
+          "date": "8/22/2026, 1:42:36 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "summary": "Infiltration: The Errata Society vs The Rust Syndicate — 24 vs 29 • Alarm 2/5 (suspicious) • SUSPICIOUS"
+        },
+        {
+          "ts": 1787424295327,
+          "type": "scenario",
+          "scenario": "infiltration",
+          "summary": "OP intrigue -2 (Infiltration)",
+          "date": "8/22/2026, 1:44:55 PM"
+        },
+        {
+          "ts": 1787424297068,
+          "type": "scenario",
+          "scenario": "infiltration",
+          "summary": "OP intrigue -2 (Infiltration)",
+          "date": "8/22/2026, 1:44:57 PM"
+        },
+        {
+          "ts": 1787424300677,
+          "date": "8/22/2026, 1:45:00 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "summary": "Infiltration: The Errata Society vs The Rust Syndicate — 20 vs 12 • Alarm 1/5 (quiet) • QUIET"
+        },
+        {
+          "ts": 1787426225636,
+          "type": "scenario",
+          "scenario": "infiltration",
+          "summary": "OP intrigue -2 (Infiltration)",
+          "date": "8/22/2026, 2:17:05 PM"
+        },
+        {
+          "ts": 1787426229420,
+          "date": "8/22/2026, 2:17:09 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "summary": "Infiltration: The Errata Society vs The Rust Syndicate — 15 vs 14 • Alarm 0/5 (quiet) • QUIET"
+        },
+        {
+          "ts": 1787426338868,
+          "type": "scenario",
+          "scenario": "infiltration",
+          "summary": "OP intrigue -2 (Infiltration)",
+          "date": "8/22/2026, 2:18:58 PM"
+        },
+        {
+          "ts": 1787426342657,
+          "date": "8/22/2026, 2:19:02 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "summary": "Infiltration: The Errata Society vs The Rust Syndicate — 24 vs 8 • Alarm 0/5 (quiet) • QUIET"
+        },
+        {
+          "ts": 1787426387221,
+          "date": "8/22/2026, 2:19:47 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "summary": "Infiltration: The Errata Society vs The Rust Syndicate — 21 vs 8 • Alarm 0/5 (quiet) • QUIET"
+        },
+        {
+          "ts": 1787426435011,
+          "date": "8/22/2026, 2:20:35 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "summary": "Infiltration: The Errata Society vs The Rust Syndicate — 17 vs 12 • Alarm 0/5 (quiet) • QUIET"
+        },
+        {
+          "ts": 1787426463955,
+          "date": "8/22/2026, 2:21:03 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "summary": "Infiltration: The Errata Society vs The Rust Syndicate — 16 vs 19 • Alarm 2/5 (suspicious) • SUSPICIOUS"
+        },
+        {
+          "ts": 1787426494894,
+          "date": "8/22/2026, 2:21:34 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "summary": "Infiltration: The Errata Society vs The Rust Syndicate — 14 vs 8 • Alarm 2/5 (suspicious) • SUSPICIOUS"
+        },
+        {
+          "ts": 1787427131437,
+          "date": "8/22/2026, 2:32:11 PM",
+          "type": "raid",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "outcome": "loss",
+          "summary": "Presence Raid vs Rust Syndicate Hold — Normal; A 7 + 2 vs D 18 + 10 → A 9 vs D 28 (Δ -19)",
+          "activityKey": "presence",
+          "difficulty": "normal",
+          "attackerTotal": 9,
+          "defenderTotal": 28,
+          "margin": -19,
+          "contested": true,
+          "contestedKey": "softpower",
+          "attackerBonus": 2,
+          "defenderBonus": 10,
+          "supportFactionIds": [],
+          "supportFactionNames": [],
+          "targetType": "hex",
+          "targetUuid": "Scene.lqp1Yy4AnKcknerr.Drawing.R9XGVCQG4gW8PHBA",
+          "targetName": "Rust Syndicate Hold"
+        },
+        {
+          "ts": 1787433383700,
+          "type": "scenario",
+          "scenario": "courtly",
+          "summary": "Courtly Intrigue: diplomacy -2",
+          "date": "8/22/2026, 4:16:23 PM"
+        },
+        {
+          "ts": 1787433387470,
+          "date": "8/22/2026, 4:16:27 PM",
+          "type": "scenario",
+          "scenario": "courtly",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "summary": "Courtly: The Errata Society vs The Rust Syndicate — 15 vs 4 • Influence 10/4 • ONGOING"
+        },
+        {
+          "ts": 1787433744627,
+          "type": "scenario",
+          "scenario": "courtly",
+          "summary": "Courtly Intrigue: diplomacy -2",
+          "date": "8/22/2026, 4:22:24 PM"
+        },
+        {
+          "ts": 1787433748241,
+          "date": "8/22/2026, 4:22:28 PM",
+          "type": "scenario",
+          "scenario": "courtly",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "summary": "Courtly: The Errata Society vs The Rust Syndicate — 11 vs 11 • Influence 10/2 • ONGOING"
+        },
+        {
+          "ts": 1787433812429,
+          "type": "scenario",
+          "scenario": "courtly",
+          "summary": "Courtly Intrigue: diplomacy -2",
+          "date": "8/22/2026, 4:23:32 PM"
+        },
+        {
+          "ts": 1787433816605,
+          "date": "8/22/2026, 4:23:36 PM",
+          "type": "scenario",
+          "scenario": "courtly",
+          "side": "att",
+          "opponent": "The Rust Syndicate",
+          "summary": "Courtly: The Errata Society vs The Rust Syndicate — 13 vs 8 • Influence 10/0 • ATTACKERWIN"
+        },
+        {
+          "ts": 1787716013066,
+          "date": "8/25/2026, 10:46:53 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.bohpJSLm7XPMC0Rg",
+          "terrain": "plains",
+          "opSpent": {
+            "economy": 10
+          },
+          "roll": 4,
+          "dc": 17,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787772881980,
+          "date": "8/26/2026, 2:34:41 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 10,
+          "dc": 17,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787773355425,
+          "date": "8/26/2026, 2:42:35 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 12,
+          "dc": 17,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787801982830,
+          "date": "8/26/2026, 10:39:42 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 14,
+          "dc": 17,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787802367158,
+          "date": "8/26/2026, 10:46:07 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 11,
+          "dc": 17,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787802614351,
+          "date": "8/26/2026, 10:50:14 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 14,
+          "dc": 17,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787861391014,
+          "date": "8/27/2026, 3:09:51 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 11,
+          "dc": 17,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787874267017,
+          "date": "8/27/2026, 6:44:27 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 18,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787874550917,
+          "date": "8/27/2026, 6:49:10 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 14,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787973355945,
+          "date": "8/28/2026, 10:15:55 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 14,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787974704165,
+          "date": "8/28/2026, 10:38:24 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 9,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787974704223,
+          "date": "8/28/2026, 10:38:24 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 9,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787974847142,
+          "date": "8/28/2026, 10:40:47 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 17,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787975994845,
+          "date": "8/28/2026, 10:59:54 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 12,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787976423473,
+          "date": "8/28/2026, 11:07:03 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 13,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787977345548,
+          "date": "8/28/2026, 11:22:25 PM",
+          "type": "travel",
+          "summary": "mountains • safe",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 20,
+          "dc": 19,
+          "result": "safe",
+          "note": ""
+        },
+        {
+          "ts": 1787977487041,
+          "date": "8/28/2026, 11:24:47 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 16,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787978001365,
+          "date": "8/28/2026, 11:33:21 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 8,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787979408763,
+          "date": "8/28/2026, 11:56:48 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 4,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787979662549,
+          "date": "8/29/2026, 12:01:02 AM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 16,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787980036429,
+          "date": "8/29/2026, 12:07:16 AM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 11,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1787980614060,
+          "date": "8/29/2026, 12:16:54 AM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 13,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1788024158826,
+          "date": "8/29/2026, 12:22:38 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 17,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1788024158868,
+          "date": "8/29/2026, 12:22:38 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 12,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1788024321286,
+          "date": "8/29/2026, 12:25:21 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 11,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1788025225792,
+          "date": "8/29/2026, 12:40:25 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 6,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1788025428194,
+          "date": "8/29/2026, 12:43:48 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "terrain": "plains",
+          "opSpent": {
+            "economy": 10
+          },
+          "roll": 8,
+          "dc": 17,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1788026855644,
+          "date": "8/29/2026, 1:07:35 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "terrain": "plains",
+          "opSpent": {
+            "economy": 10
+          },
+          "roll": 13,
+          "dc": 19,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1788026910315,
+          "date": "8/29/2026, 1:08:30 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.bohpJSLm7XPMC0Rg",
+          "terrain": "plains",
+          "opSpent": {
+            "economy": 10
+          },
+          "roll": 4,
+          "dc": 17,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1788552767942,
+          "date": "9/4/2026, 3:12:47 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "terrain": "mountains",
+          "opSpent": {
+            "economy": 20,
+            "logistics": 10
+          },
+          "roll": 9,
+          "dc": 17,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1788552854800,
+          "date": "9/4/2026, 3:14:14 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.dJYMowkKEv8FeM3P",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "terrain": "plains",
+          "opSpent": {
+            "economy": 10
+          },
+          "roll": 15,
+          "dc": 17,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "ts": 1788552863235,
+          "date": "9/4/2026, 3:14:23 PM",
+          "type": "travel",
+          "summary": "Encounter (Tier 1)",
+          "kind": "travel",
+          "hexFrom": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "hexTo": "Scene.zjVbB2ykTV6PcSiv.Drawing.bohpJSLm7XPMC0Rg",
+          "terrain": "plains",
+          "opSpent": {
+            "economy": 10
+          },
+          "roll": 10,
+          "dc": 17,
+          "result": "encounter",
+          "note": "Encounter (Tier 1)"
+        },
+        {
+          "type": "milestone",
+          "activity": "tier_reduce",
+          "date": "9/8/2026, 3:49:57 PM",
+          "summary": "GM set Faction Tier 1 → 0 — From-the-top reset.",
+          "ts": 1788900597000
+        },
+        {
+          "ts": 1788916573115,
+          "type": "buildUnits",
+          "activity": "buildUnitsSpend",
+          "summary": "Action: repair | Hex: ✦ Allesh-Gilliam | BUs −1 (3 → 2) | Note: Hex Sheet (Overview): repair",
+          "factionId": "6H5Grt3HybAs1rSq",
+          "hexUuid": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "action": "repair",
+          "buBefore": 3,
+          "buAfter": 2,
+          "cost": 1,
+          "date": "9/8/2026, 8:16:13 PM"
+        },
+        {
+          "ts": 1788916573688,
+          "type": "buildUnits",
+          "activity": "buildUnitsSpend",
+          "summary": "Action: repair | Hex: ✦ Allesh-Gilliam | BUs −1 (2 → 1) | Note: Hex Sheet (Overview): repair",
+          "factionId": "6H5Grt3HybAs1rSq",
+          "hexUuid": "Scene.zjVbB2ykTV6PcSiv.Drawing.Vf2kmVmSCkz90QI2",
+          "action": "repair",
+          "buBefore": 2,
+          "buAfter": 1,
+          "cost": 1,
+          "date": "9/8/2026, 8:16:13 PM"
+        }
+      ],
+      "opBankMarksMigrated": true,
+      "pools": {
+        "violence": 0,
+        "intrigue": 0,
+        "softpower": 0
+      },
+      "relations": {
+        "eIXghZ73hKSXmP3x": "allied"
+      },
+      "loyalty": 0,
+      "darkness": {
+        "global": 0
+      },
+      "victory": {},
+      "progression": {
+        "stability": {
+          "stableTurns": 0,
+          "maxOverextDuringSpan": 0,
+          "lastApplyTs": 1788839261658,
+          "lastUnpaidTs": null
+        }
+      },
+      "tier": 0,
+      "bannerColor": "#e96c47",
+      "stockpile": {
+        "food": 5,
+        "materials": 7,
+        "trade": 3,
+        "military": 4,
+        "knowledge": 0
+      },
+      "logistics": {
+        "demand": 3,
+        "capacity": 4.5,
+        "ratio": 0.667,
+        "band": "stable",
+        "updatedTs": 1788839255756,
+        "breakdown": {
+          "demand": {
+            "baseDemand": 3,
+            "integDemand": 0,
+            "distanceDemand": 0,
+            "specialDemand": 0,
+            "rigDemand": 0,
+            "sprawlDemand": 0
+          },
+          "capacity": {
+            "opCapacity": 3,
+            "tradeCapacity": 0,
+            "integrationCapacity": 1.5,
+            "infraCapacity": 0,
+            "rigCapacity": 0
+          },
+          "counts": {
+            "totalHexes": 3,
+            "sprawlExcess": 0,
+            "shortIntegCount": 0,
+            "occupationCount": 0,
+            "fullIntegCount": 3,
+            "cityCount": 0,
+            "specialCount": 0,
+            "infraDepotCount": 0,
+            "infraMajorPortCount": 0,
+            "infraRoadNetCount": 0,
+            "infraSupplyLineCount": 0,
+            "activeRigCount": 0,
+            "logisticsRigCount": 0,
+            "tradeRouteCount": 0,
+            "distSteps": 0
+          }
+        }
+      },
+      "post": {
+        "pending": {}
+      },
+      "turn": {
+        "pending": {
+          "moraleDelta": 6,
+          "loyaltyDelta": 6
+        }
+      },
+      "pressure": {
+        "overextensionBand": 0,
+        "unpaidUpkeep": false,
+        "risk": "low",
+        "logisticsBand": "stable",
+        "lastUpkeepTs": null,
+        "updatedTs": 1788839261656,
+        "source": "turn-driver.logistics + garrison_upkeep.warLogs"
+      },
+      "buildUnits": 0,
+      "matStockpile": {
+        "bog-iron": {
+          "qty": 11,
+          "name": "Bog-Iron",
+          "img": "icons/svg/mystery-man.svg",
+          "lastUuid": null
+        }
+      },
+      "bonuses": {
+        "nextTurn": {
+          "opGainPct": -20,
+          "defenseDC": -2
+        }
+      },
+      "quests": {
+        "schemaVersion": 1,
+        "active": {
+          "quest_Cq1v3hJpXarX5rXJ": {
+            "v": 1,
+            "questId": "quest_Cq1v3hJpXarX5rXJ",
+            "questName": "Allesh-Gilliam",
+            "status": "active",
+            "acceptedTs": 1792722491220,
+            "lastTouchedTs": 1792722491220,
+            "state": "",
+            "notes": "",
+            "progress": {
+              "beats": {}
+            },
+            "history": [
+              {
+                "ts": 1792722491220,
+                "type": "projection",
+                "to": "active",
+                "by": "FKSQOY3vDSH1mLWk"
+              }
+            ]
+          }
+        },
+        "completed": {},
+        "archived": {}
+      }
+    },
+    "bbttcc-onboarding": {
+      "foundedViaOnboarding": true,
+      "foundedTs": 1787289452663
+    },
+    "fourththing": {
+      "kind": "faction",
+      "echoAssets": {
+        "activeCrew": [
+          "Diplomatic Envoys",
+          "Covert Ops Cell",
+          "Mercenary Band"
+        ],
+        "reserveCrew": [],
+        "activeOccult": [
+          "Kabbalist",
+          "Rosicrucian",
+          "Tarot Mage"
+        ],
+        "reserveOccult": [],
+        "slots": null,
+        "updatedTs": 1792771676173,
+        "stewardId": "7skmbVCZa6uYE0Tu",
+        "stewardName": "Wren Threadbare",
+        "crewSlots": 2,
+        "occultSlots": 2,
+        "bySteward": {
+          "IgTzmf0detjLtZFc": {
+            "name": "Marginalia",
+            "crew": [],
+            "occult": [
+              "Kabbalist"
+            ],
+            "ts": 1792369744918
+          },
+          "D7xtE9ou3LIViFzy": {
+            "name": "Tally Vane",
+            "crew": [],
+            "occult": [],
+            "ts": 1792363319946
+          },
+          "peYI3KZH4WpEbqVw": {
+            "name": "Lune the Patient",
+            "crew": [],
+            "occult": [
+              "Rosicrucian"
+            ],
+            "ts": 1792685919506
+          },
+          "kMmbZHKJkXQTXOo7": {
+            "name": "Cinder Ashthroat",
+            "crew": [],
+            "occult": [],
+            "ts": 1792685930418
+          },
+          "qApE7FXUA7KPMuXK": {
+            "name": "Marn Crane",
+            "crew": [],
+            "occult": [],
+            "ts": 1792685946113
+          },
+          "wk3FmUfKnNEyTGzg": {
+            "name": "Ledger Voss",
+            "crew": [],
+            "occult": [],
+            "ts": 1792724141345
+          },
+          "0wzDrMkvkjZyMcBd": {
+            "name": "Hesper Okafor",
+            "crew": [],
+            "occult": [],
+            "ts": 1792767498838
+          },
+          "RUOb5W3X68mwEAIt": {
+            "name": "Garrick Halloran",
+            "crew": [
+              "Diplomatic Envoys"
+            ],
+            "occult": [],
+            "ts": 1792771597477
+          },
+          "dsLxD4eCltzDgPg2": {
+            "name": "Damaris Corvi",
+            "crew": [],
+            "occult": [],
+            "ts": 1792771611302
+          },
+          "p0M2DZkXzQn3u2ve": {
+            "name": "Odile Drummond",
+            "crew": [
+              "Covert Ops Cell"
+            ],
+            "occult": [],
+            "ts": 1792771660629
+          },
+          "JRW0Xerk0Q0fJPpN": {
+            "name": "Rax Sandoval",
+            "crew": [],
+            "occult": [],
+            "ts": 1792771663795
+          },
+          "eFYAnE7OeCex0zoI": {
+            "name": "Senna Ketch",
+            "crew": [
+              "Mercenary Band"
+            ],
+            "occult": [],
+            "ts": 1792771670750
+          },
+          "7skmbVCZa6uYE0Tu": {
+            "name": "Wren Threadbare",
+            "crew": [],
+            "occult": [
+              "Tarot Mage"
+            ],
+            "ts": 1792771676173
+          }
+        }
+      }
+    },
+    "core": {
+      "sheetClass": "bbttcc-factions.BBTTCCFactionSheet"
+    },
+    "bbttcc-raid": {},
+    "bbttcc-aae": {
+      "driftScore": 0,
+      "severityState": "stable",
+      "politicalPhilosophyOverride": "",
+      "lastPoliticalImpacts": []
+    }
+  },
+  "_id": "6H5Grt3HybAs1rSq",
+  "img": "art/bbttcc/asli-tokens/circuitborn-synapse-1.webp",
+  "system": {
+    "role": "",
+    "tier": 1,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "type": {
+        "value": "faction"
+      }
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 1
+      },
+      "body": {
+        "value": 1
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 10,
+        "max": 10,
+        "temp": 0
+      },
+      "stress": {
+        "value": 8,
+        "max": 8
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": ""
+    }
+  },
+  "prototypeToken": {
+    "name": "The Errata Society",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/BBTTCC%20Faction%20Tokens/bbttcc_faction_icon_bottlecap.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "name": "Harvest Season",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "harvest_season"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Harvest Season</h3><p>+1 Economy regen next turn.</p><p><strong>OP Cost:</strong> economy 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "23RdryizP7aMn0DM",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Upgrade Outpost → Settlement",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "upgrade_outpost_settlement"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Upgrade Outpost → Settlement</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, softPower 20, logistics 20</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "26lL3iBU9xC2lZLB",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Found Mine",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "found_site_mine"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Mine</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, nonLethal 10, logistics 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "2fo7op5QQRd5sEJO",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Logistics Surge",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "logistics_surge_s2"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Logistics Surge</h3><p>Sudden logistics push: +1 to all friendly rolls this round.</p><p><strong>Tier:</strong> 1</p><p><strong>Conflicts:</strong> any</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "3KFwh9URyQm7RJs7",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Patch the Breach",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "patch_the_breach"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Patch the Breach</h3><p>Restore 1 Structure Point.</p><p><strong>OP Cost:</strong> nonLethal 10, economy 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Conflicts:</strong> Assault (defense), Occupation (defense)</p><p><strong>Defender Access:</strong> Yes</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "4MD4us73ohNdflZW",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Establish Supply Line",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "establish_supply_line"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Supply Line</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> logistics 30, economy 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "6KGUb9SsPGkEDR08",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Found Research Site",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "found_site_research"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Research Site</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> intrigue 20, softPower 20, economy 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "6wXI8jFQQyL1wnk9",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Develop Outpost (Stability)",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "develop_outpost_stability"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Develop Outpost (Stability)</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> diplomacy 20, economy 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "7NdX2ZajjJXefKil",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Found Fortress",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "found_site_fortress"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Fortress</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> violence 20, logistics 20, economy 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "7Zr77icydlbECP0w",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Minor Repair",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "minor_repair"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Minor Repair</h3><p>Remove &#39;Damaged Infrastructure&#39;.</p><p><strong>OP Cost:</strong> economy 20</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "AOiBFTdj7cZMuqbR",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Smoke and Mirrors",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "smoke_and_mirrors"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Smoke and Mirrors</h3><p>Reduce Alarm Level by 1.</p><p><strong>OP Cost:</strong> intrigue 10, softPower 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Conflicts:</strong> Infiltration, Espionage, Propaganda</p><p><strong>Defender Access:</strong> Conditional</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "FGCYuv7OVDXMI7wJ",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Suppressive Fire",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "suppressive_fire"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Suppressive Fire</h3><p>Force enemy reroll lowest d20 this round.</p><p><strong>OP Cost:</strong> violence 20</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Conflicts:</strong> Assault, Occupation</p><p><strong>Defender Access:</strong> Yes</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "HHBKYqz3qn8KQzDV",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Establish Trade Route",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "establish_trade_route"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Trade Route</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, diplomacy 10, logistics 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "Hbjcb8wKQRUPuB6z",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Flank Attack",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "flank_attack"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Flank Attack</h3><p>Strike from an unexpected angle; pressure the line and seize momentum.</p><p><strong>OP Cost:</strong> violence 1</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Conflicts:</strong> assault, occupation, liberation</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "IVOYq7EFvRdzAJuO",
+      "img": "icons/skills/melee/strike-sword-slashing-red.webp",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Found Farm",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "found_site_farm"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Farm</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 20, logistics 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "JmFkNBKW0wnJQvcj",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Charter Passage",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "charter_passage"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Charter Passage</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> diplomacy 11, economy 6</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "L5n4q0AGPLWWs1qS",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Found Port",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "found_site_port"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Port</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, logistics 10, diplomacy 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "OooBXIoOhEci1b9j",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Develop Infrastructure",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "develop_infrastructure_std"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Develop Infrastructure</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 40, logistics 20</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "P5CL0QpHFdyWloXr",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Whispered Aside",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "courtly_whispered_aside"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Whispered Aside</h3><p>Pick a courtier. +1 Favor to your side.</p><p><strong>Tier:</strong> 1</p><p><strong>Conflicts:</strong> presence</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "PQ2IYJx6MG6BA9qe",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Infernal Bargain",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "opt_infernal_bargain"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Infernal Bargain</h3><p>Offer the defender a sealed bargain: accept (+2 to defender&#39;s next roll, attacker gains 1 darkness) or refuse (defender morale −1 from the snubbed offer).</p><p><strong>Tier:</strong> 1</p><p><strong>Conflicts:</strong> presence</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "PztTaw8GMvpFmSq0",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Establish Outpost",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "establish_outpost"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Outpost</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 20, logistics 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "UAGFhMaZZE02A5DR",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Infrastructure Expansion",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "infrastructure_expansion"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Infrastructure Expansion</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, logistics 15</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "XKNCAVgu3w2RcTkp",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Build Bridge",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "build_bridge"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Build Bridge</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 11, logistics 8</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "ZTc4WDbNemRRwABk",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Cut the Bridge",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "cut_bridge"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Cut the Bridge</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> violence 6, intrigue 6</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "vabXa69gE2NSSe6l",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989091522,
+        "modifiedTime": 1792989091522,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "effects": [],
+  "folder": "ytd3WZZ13kxuQyKA",
+  "sort": 200000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989091522,
+    "modifiedTime": 1792989091522,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_key": "!actors!6H5Grt3HybAs1rSq"
+}

@@ -10,6 +10,7 @@
     ],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>An old yellow Walkman with a single cassette permanently inside. The label is hand-written in a marker that has since stopped being manufactured. The headphones are foam-and-tinfoil affairs that ride over the ears with the dignity of a sleeping cat. The player is, somehow, ley-tuned. It plays when you need it to. Sometimes more.</p><p><strong>Side A — GENERIC MOTIVATIONAL.</strong> Once per scene as a free action, press play. You and one ally within Near range reroll the lowest die on the next Resolve check.</p><p><strong>Side B — EMERGENCY ONLY.</strong> Once per session, flip the cassette. The track plays for the rest of the scene. All allies within Near range reroll the lowest die on every Resolve check. The cassette will not flip back without 24 hours of silence. Mal does not recommend abusing this.</p>",
       "chat": ""
@@ -55,6 +56,25 @@
             "saleBack": 36
           }
         }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "who": "targets",
+            "do": {
+              "bankReroll": {
+                "context": "defense",
+                "note": "Hex-Tuner Side A — GENERIC MOTIVATIONAL"
+              }
+            },
+            "limit": {
+              "per": "scene",
+              "uses": 1
+            }
+          }
+        ]
       }
     }
   },
@@ -67,11 +87,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777437725658,
-    "modifiedTime": 1778541959484,
+    "modifiedTime": 1792974834886,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

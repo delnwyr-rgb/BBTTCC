@@ -12,8 +12,9 @@
     ],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
-      "value": "<p>Small enameled sigil of Yesodium-bonded sept-cloth and blessed thread, worn at the throat or pinned under the lapel.</p><p><strong>Reversion Shield (Harmonized, 1/raid).</strong> When the wearer (or one item they're carrying) would suffer a Reversion event, the sigil takes the hit instead — the sigil itself reverts to slag and is destroyed.</p><p><em>Unharmonized: a comforting weight at the throat. Nothing more.</em></p>",
+      "value": "<p>Small enameled sigil of Yesodium-bonded sept-cloth and blessed thread, worn at the throat or pinned under the lapel.</p><p><strong>Reversion Shield (while attuned, once per Battle, Heist or Parley).</strong> When the wearer (or one item they're carrying) would suffer a Reversion, the sigil takes it instead — the sigil itself reverts to slag and is destroyed.</p><p><em>Unattuned: a comforting weight at the throat. Nothing more.</em></p>",
       "chat": ""
     }
   },
@@ -42,7 +43,7 @@
             "hearthward": true
           },
           "requiresHarmonization": true,
-          "lore": "<p>Small enameled sigil of Yesodium-bonded sept-cloth and blessed thread, worn at the throat or pinned under the lapel.</p><p><b>Reversion Shield (Harmonized, 1/raid).</b> When the wearer (or one item they're carrying) would suffer a Reversion event, the sigil takes the hit instead — the sigil itself reverts to slag and is destroyed.</p><p><i>Unharmonized: a comforting weight at the throat. Nothing more.</i></p>",
+          "lore": "<p>Small enameled sigil of Yesodium-bonded sept-cloth and blessed thread, worn at the throat or pinned under the lapel.</p><p><b>Reversion Shield (while attuned, once per Battle, Heist or Parley).</b> When the wearer (or one item they're carrying) would suffer a Reversion, the sigil takes it instead — the sigil itself reverts to slag and is destroyed.</p><p><i>Unattuned: a comforting weight at the throat. Nothing more.</i></p>",
           "materialOf": [
             {
               "key": "yesodium",
@@ -81,12 +82,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137210139,
-    "modifiedTime": 1778541956736,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988926330,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

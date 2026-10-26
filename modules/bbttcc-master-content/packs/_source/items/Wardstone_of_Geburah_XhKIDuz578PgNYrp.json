@@ -1,0 +1,90 @@
+{
+  "_id": "XhKIDuz578PgNYrp",
+  "name": "Wardstone of Geburah",
+  "type": "gear",
+  "img": "icons/equipment/neck/necklace-simple-carved-stone.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Socketed stone. Allies within 6 squares gain +1 to Guard while defending a hex; counts as 'fortified' for one encounter.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "tags": [
+        "darkness"
+      ]
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 1080,
+            "currency": "softpower",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 2,
+            "notes": "TIII talisman × rarity 2",
+            "bound": "free",
+            "saleBack": 432
+          },
+          "tier": "III",
+          "frame": "talisman",
+          "origin": "looted",
+          "bound": "free",
+          "reach": "self",
+          "footprint": 1,
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {}
+        }
+      },
+      "passives": {
+        "aura": {
+          "radius": 6,
+          "who": "allies",
+          "includeSelf": true,
+          "requires": {
+            "equipped": true
+          },
+          "defenseBonus": {
+            "guard": 1
+          },
+          "note": "Wardstone of Geburah — +1 Guard while defending a hex (GM)"
+        }
+      }
+    }
+  },
+  "effects": [],
+  "folder": "TNrB6kEiHS0KwwJT",
+  "sort": 2600000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988919237,
+    "modifiedTime": 1792988919237,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!XhKIDuz578PgNYrp"
+}

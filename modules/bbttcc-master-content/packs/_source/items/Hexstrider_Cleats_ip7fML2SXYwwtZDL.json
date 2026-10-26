@@ -11,6 +11,7 @@
     ],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>Lightweight cleats fitted with hex-iron studs in a deliberate pattern. The pattern shifts when no one's watching.</p><p><strong>Sure-Footed.</strong> While equipped, you reroll the lowest die on Body checks to keep balance on hostile terrain (rubble, ice, slick blood, hex-warped ground).</p>",
       "chat": ""
@@ -57,7 +58,16 @@
             "saleBack": 36
           }
         }
-      }
+      },
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "attribute": "body",
+          "vs": "keeping balance on hostile terrain — rubble, ice, slick blood, hex-warped ground",
+          "note": "Hexstrider Cleats · Sure-Footed"
+        }
+      ]
     }
   },
   "folder": "Wxh1A343inwTUeoo",
@@ -69,11 +79,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.1",
     "createdTime": 1777137142784,
-    "modifiedTime": 1778541975534,
+    "modifiedTime": 1791344267024,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

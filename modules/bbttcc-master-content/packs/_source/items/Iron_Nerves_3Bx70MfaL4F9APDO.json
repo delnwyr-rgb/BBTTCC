@@ -6,13 +6,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
-      "revision": 2,
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<h2>Iron Nerves</h2><p><em>Panic is contagious. So is control.</em></p><hr /><h3>Rules</h3><p>When you roll Initiative (Intrigue), you gain temporary Integrity equal to your rank bonus.</p><p>Additionally, when you make a defense check against being Shaken or charmed, you may roll a d4 and add it to the save. Once you use this bonus, you can’t use it again until you finish a Scene Break or Soma Break.</p><p class=\"ft-engine-note\"><em>⚙ Rolling initiative grants temporary Integrity equal to your rank bonus. 🃏 Card — the +1d4, once per Scene Break.</em></p>",
+      "value": "<h2>Iron Nerves</h2><p><em>Panic is contagious. So is control.</em></p><hr /><h3>Rules</h3><p>When you roll Initiative (Intrigue), you gain temporary Integrity equal to your rank bonus.</p><p>Additionally, when you make a defense check against being Shaken or charmed, you may roll a d4 and add it to the save. Once you use this bonus, you can’t use it again until you finish a Scene Break.</p><p class=\"ft-engine-note\"><em>⚙ Rolling initiative grants temporary Integrity equal to your rank bonus. 🃏 Card — the +1d4, once per Scene Break.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_iron_nerves",
@@ -43,7 +43,6 @@
       "pack": "bbttcc-feats-expansion-v1",
       "generatedAt": "2026-01-18T20:40:44.998078+00:00"
     },
-    "fourththing": {},
     "autoanimations": {
       "id": "ft-iron-nerves",
       "label": "Iron Nerves",
@@ -232,12 +231,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1768802465828,
-    "modifiedTime": 1781116198670,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988964803,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!3Bx70MfaL4F9APDO"
 }

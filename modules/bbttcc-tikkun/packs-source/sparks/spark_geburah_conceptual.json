@@ -1,0 +1,55 @@
+{
+  "_id": "eqoECAC6EAekY4mg",
+  "name": "Spark of Severity (Conceptual)",
+  "type": "spark",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "category": "spark",
+    "sephirah": "geburah",
+    "kind": "conceptual",
+    "alignedMethods": [
+      "violence",
+      "siege"
+    ],
+    "misalignedMethods": [
+      "softpower",
+      "diplomacy",
+      "nonlethal"
+    ],
+    "repair": {
+      "materialKey": "vow-resin",
+      "materialAmount": 1,
+      "opCost": {
+        "pool": "culture",
+        "amount": 2
+      },
+      "ritualDC": 18
+    },
+    "source": "BBTTCC Tikkun v1.0",
+    "tags": [
+      "geburah",
+      "conceptual",
+      "spark"
+    ],
+    "description": {
+      "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Geburah — Judgment, precision force.</p>\n<p><strong>Aligned methods:</strong> violence, siege. <strong>Misaligned (causes Corruption):</strong> softpower, diplomacy, nonlethal.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc-tikkun": {
+      "sparkVersion": "1.0.0",
+      "identifier": "spark_geburah_conceptual",
+      "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration."
+    }
+  },
+  "_stats": {
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": null
+  },
+  "_key": "!items!eqoECAC6EAekY4mg"
+}

@@ -1,105 +1,53 @@
 {
+  "_id": "HjMIPWCXhnW59EIj",
   "name": "Crowd-Calmer Beacon",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/sundries/lights/lantern-bullseye-signal-copper.webp",
   "system": {
-    "description": {
-      "value": "<p>Action: emit soothing tone (Calm Emotions, DC 14) in 60‑ft radius; 3 charges/day.</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 2,
-      "units": "lb"
-    },
-    "price": {
-      "value": 400,
-      "denomination": "gp"
-    },
-    "rarity": "uncommon",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "crowd-calmer-beacon",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>Action: emit a soothing tone in a 12-square radius — everyone hostile in it rolls Resolve vs DC 14 or is Calmed. Three charges per Soma Break.</p>",
+      "chat": ""
+    }
   },
   "flags": {
     "bbttcc": {
       "charges": 3,
       "tags": []
     },
-    "rfi": {
-      "item": {
-        "tier": "II",
-        "footprint": 1,
-        "reach": "self",
-        "frame": "armor",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "scene"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
-    },
     "fourththing": {
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
-            "currency": "economy",
+            "marks": 270,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 1.5,
+            "notes": "TII talisman × rarity 1.5",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 108
           },
           "tier": "II",
-          "frame": "armor",
+          "frame": "talisman",
           "origin": "looted",
           "bound": "free",
           "reach": "self",
           "footprint": 1,
-          "legacySystem": {
-            "description": {
-              "value": "<p>Action: emit soothing tone (Calm Emotions, DC 14) in 12 squares radius; 3 charges/day.</p>"
-            }
-          }
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {}
         }
       }
     },
@@ -283,22 +231,22 @@
   },
   "effects": [],
   "folder": "TNrB6kEiHS0KwwJT",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834168938,
-    "modifiedTime": 1782164185972,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 900000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "HjMIPWCXhnW59EIj",
-  "sort": 900000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988907700,
+    "modifiedTime": 1792988907701,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!HjMIPWCXhnW59EIj"
 }

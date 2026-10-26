@@ -27,16 +27,38 @@
       "calling": {
         "key": "stalwart",
         "tier": 2
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "allyDamaged",
+            "who": "self",
+            "if": {
+              "damageType": [
+                "kinetic"
+              ]
+            },
+            "do": {
+              "ward": 0.5
+            },
+            "limit": {
+              "per": "scene",
+              "uses": 1
+            },
+            "label": "Endure"
+          }
+        ]
       }
     }
   },
   "_stats": {
-    "coreVersion": "14.364",
-    "systemId": null,
-    "systemVersion": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1784007337105,
-    "modifiedTime": 1784007337105,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989178236,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

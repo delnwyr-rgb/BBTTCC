@@ -28,7 +28,7 @@ const TAG = "[bbttcc-epic/daath]";
 const log  = (...a) => console.log(TAG, ...a);
 const warn = (...a) => console.warn(TAG, ...a);
 
-const SEPHIROT = ["keter", "chokmah", "binah", "chesed", "gevurah", "tiferet", "netzach", "hod", "yesod", "malkuth"];
+const SEPHIROT = ["keter", "chokmah", "binah", "chesed", "geburah", "tiferet", "netzach", "hod", "yesod", "malkuth"];
 const cap = (s) => String(s).charAt(0).toUpperCase() + String(s).slice(1);
 
 function isHexDoc(d) {
@@ -48,7 +48,8 @@ function lampsNow() {
       const s = d.flags?.[TER]?.spark;
       if (s?.state !== "integrated") continue;
       const m = /^spark_([a-z]+)_/.exec(String(s.key || ""));
-      if (m && SEPHIROT.includes(m[1])) seph.add(m[1]);
+      const k = (m && (m[1] === "gevurah" || m[1] === "gevura")) ? "geburah" : m?.[1];   // legacy spelling (2026-10-26)
+      if (k && SEPHIROT.includes(k)) seph.add(k);
     }
   }
   return [...seph];
@@ -56,9 +57,12 @@ function lampsNow() {
 
 function daathState() {
   const s = game.settings.get(MOD, "daath");
-  return (s && typeof s === "object")
+  const st = (s && typeof s === "object")
     ? { opened: false, openedAt: null, lampsLit: [], risen: false, darkDoor: false, outcome: null, ...s }
     : { opened: false, openedAt: null, lampsLit: [], risen: false, darkDoor: false, outcome: null };
+  // Legacy spelling (2026-10-26): a lamp stored as "gevurah" is the geburah lamp — never re-announce it.
+  if (Array.isArray(st.lampsLit)) st.lampsLit = [...new Set(st.lampsLit.map(k => (k === "gevurah" || k === "gevura") ? "geburah" : k))];
+  return st;
 }
 
 async function beatCard(title, body, foot) {

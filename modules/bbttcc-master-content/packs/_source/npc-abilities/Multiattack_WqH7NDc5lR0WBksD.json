@@ -1,0 +1,50 @@
+{
+  "name": "Multiattack",
+  "type": "feature",
+  "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Inferno makes two Streams of Vengeance attacks.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "WqH7NDc5lR0WBksD",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Inferno of Cruelty"
+        ],
+        "sourceIds": [
+          "vpPWkftzLsEwoY9k"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069953,
+    "modifiedTime": 1792989070038,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!WqH7NDc5lR0WBksD"
+}

@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": "FBhV32XeCO4JNcym",
+  "name": "Circuitous Roots",
+  "color": null,
+  "sorting": "a",
+  "_id": "g1w9h2f64fw4m0yV",
+  "description": "",
+  "sort": 800000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989089205,
+    "modifiedTime": 1792989089205,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!g1w9h2f64fw4m0yV"
+}

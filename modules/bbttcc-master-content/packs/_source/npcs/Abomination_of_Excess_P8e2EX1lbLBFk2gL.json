@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "art/bbttcc/qliphoth/abomination-of-excess.webp",
   "system": {
-    "role": "Qliphothic Catastrophe (Gamchicoth — Greater)",
+    "role": "brute",
     "tier": 4,
     "factionId": "",
     "notes": "<p>What happens when the impulse to grow is given infinite fuel: a sprawling, amorphous pile of glistening flesh — dozens of mouths, clusters of mismatched eyes, edges always bubbling outward in pseudopods. It may have started as an organism, a town, an ecosystem. Now it is a walking engine of absorption leaving a mutated wasteland behind it. Less a creature than a biological verdict.</p><p><strong>Qliphah:</strong> Gamchicoth, the Tumults — the Hull of Chesed. Growth as devourer of form.</p><p><em>Mal's note: 'Do not name it. People who name it start calling it “she”. People who call it “she” walk toward it.'</em></p>",
@@ -19,7 +19,7 @@
     },
     "attributes": {
       "violence": {
-        "value": 6
+        "value": 7
       },
       "intrigue": {
         "value": 2
@@ -40,8 +40,9 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 120,
-        "max": 120
+        "value": 105,
+        "max": 105,
+        "temp": 0
       },
       "stress": {
         "value": 45,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -159,6 +161,9 @@
       "hull-of-chesed",
       "greater"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -171,6 +176,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Catastrophe (Gamchicoth — Greater)",
+      "notes": "<p>What happens when the impulse to grow is given infinite fuel: a sprawling, amorphous pile of glistening flesh — dozens of mouths, clusters of mismatched eyes, edges always bubbling outward in pseudopods. It may have started as an organism, a town, an ecosystem. Now it is a walking engine of absorption leaving a mutated wasteland behind it. Less a creature than a biological verdict.</p><p><strong>Qliphah:</strong> Gamchicoth, the Tumults — the Hull of Chesed. Growth as devourer of form.</p><p><em>Mal's note: 'Do not name it. People who name it start calling it “she”. People who call it “she” walk toward it.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -270,7 +279,7 @@
       "_id": "wvtM4Bu9co0XkKoK",
       "name": "Aura of Chaos",
       "type": "feature",
-      "img": "icons/svg/explosion.svg",
+      "img": "icons/magic/fire/explosion-fireball-medium-orange.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -286,25 +295,108 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "selfTurnStart",
+                "do": {
+                  "random": [
+                    {
+                      "label": "reality hiccups",
+                      "who": "all",
+                      "radius": 6,
+                      "do": {
+                        "damage": {
+                          "formula": "2d6",
+                          "type": "kinetic"
+                        }
+                      }
+                    },
+                    {
+                      "label": "flung",
+                      "who": "all",
+                      "radius": 6,
+                      "do": {
+                        "save": {
+                          "attr": "body",
+                          "dc": 18,
+                          "onSave": "negate"
+                        }
+                      }
+                    },
+                    {
+                      "label": "it regains 15",
+                      "to": "self",
+                      "do": {
+                        "heal": 15
+                      }
+                    },
+                    {
+                      "label": "suppression",
+                      "who": "all",
+                      "radius": 12,
+                      "do": {
+                        "impose": true,
+                        "prompt": "Active manifestations within 12 squares are suppressed until its next turn."
+                      }
+                    },
+                    {
+                      "label": "gravity",
+                      "who": "all",
+                      "radius": 6,
+                      "do": {
+                        "condition": {
+                          "key": "prone",
+                          "duration": "1-round"
+                        }
+                      }
+                    },
+                    {
+                      "label": "extra action",
+                      "to": "self",
+                      "do": {
+                        "shift": 6,
+                        "prompt": "The Abomination takes an extra action this turn."
+                      }
+                    }
+                  ]
+                },
+                "label": "Aura of Chaos — roll 1d6"
+              },
+              {
+                "on": "saveFail",
+                "do": {
+                  "push": 6
+                },
+                "label": "flung",
+                "if": {
+                  "weapon": "Aura of Chaos"
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188152,
-        "modifiedTime": 1787799188152,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989126204,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!P8e2EX1lbLBFk2gL.wvtM4Bu9co0XkKoK"
+      }
     },
     {
       "_id": "nk1vH2yIAgOingxo",
       "name": "Fractured Will (3/scene)",
       "type": "feature",
-      "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+      "img": "icons/magic/air/air-pressure-shield-blue.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -322,23 +414,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188152,
-        "modifiedTime": 1787799188152,
+        "modifiedTime": 1791324403425,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!P8e2EX1lbLBFk2gL.nk1vH2yIAgOingxo"
+      }
     },
     {
       "_id": "5LbaVmLwFOTpL7lH",
       "name": "Siege-Thing",
       "type": "feature",
-      "img": "icons/svg/ruins.svg",
+      "img": "icons/environment/wilderness/wall-ruins.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -356,17 +447,16 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188152,
-        "modifiedTime": 1787799188152,
+        "modifiedTime": 1791324403424,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!P8e2EX1lbLBFk2gL.5LbaVmLwFOTpL7lH"
+      }
     },
     {
       "_id": "vTPDzgsl58RNSJ5G",
@@ -390,29 +480,28 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188152,
-        "modifiedTime": 1787799188152,
+        "modifiedTime": 1791324403425,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!P8e2EX1lbLBFk2gL.vTPDzgsl58RNSJ5G"
+      }
     },
     {
       "_id": "nJpqlQebrCWvltQZ",
       "name": "Pseudopod",
       "type": "weapon",
-      "img": "icons/svg/acid.svg",
+      "img": "icons/skills/melee/blade-tip-acid-poison-green.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
         "skill": "melee",
         "damage": {
-          "formula": "2d6",
+          "formula": "2d10",
           "attribute": "violence",
           "type": "kinetic",
           "damageFlavor": "acid",
@@ -468,25 +557,44 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Pseudopod"
+                },
+                "do": {
+                  "damage": {
+                    "formula": "1d6",
+                    "type": "chemical"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188152,
-        "modifiedTime": 1787799188152,
+        "modifiedTime": 1791331977229,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!P8e2EX1lbLBFk2gL.nJpqlQebrCWvltQZ"
+      }
     },
     {
       "_id": "qJR96xybRn9NDHB8",
       "name": "Mutagenic Spew (Recharge 5–6)",
       "type": "weapon",
-      "img": "icons/svg/biohazard.svg",
+      "img": "icons/equipment/body/suit-biohazard-protection.webp",
       "system": {
         "category": "ranged",
         "intent": "violence",
@@ -539,6 +647,18 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "intrigue",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 18,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "cone",
+            "size": 60
           }
         },
         "description": {
@@ -552,25 +672,45 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Mutagenic Spew (Recharge 5–6)"
+                },
+                "do": {
+                  "radiation": 5
+                }
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188152,
-        "modifiedTime": 1787799188152,
+        "modifiedTime": 1791331977229,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!P8e2EX1lbLBFk2gL.qJR96xybRn9NDHB8"
+      }
     },
     {
       "_id": "Lm0zELigOutRuAt2",
       "name": "Engulf",
       "type": "feat",
-      "img": "icons/svg/downgrade.svg",
+      "img": "icons/magic/death/blood-corruption-vomit-red.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -586,25 +726,62 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "condition": {
+                    "key": "restrained",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "intrigue",
+                      "dc": 18
+                    }
+                  },
+                  "damage": {
+                    "formula": "2d6",
+                    "type": "chemical"
+                  }
+                }
+              },
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Engulf"
+                },
+                "do": {
+                  "condition": {
+                    "key": "blinded",
+                    "duration": "scene"
+                  },
+                  "prompt": "Engulfed: 2d6 chem each Abomination turn; escape Violence DC 18."
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188152,
-        "modifiedTime": 1787799188152,
+        "modifiedTime": 1791331977229,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!P8e2EX1lbLBFk2gL.Lm0zELigOutRuAt2"
+      }
     },
     {
       "_id": "zlI85wWTRMoANFxr",
       "name": "Spawn Fragment",
       "type": "feat",
-      "img": "icons/svg/degen.svg",
+      "img": "icons/magic/death/blood-corruption-vomit-red.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -620,19 +797,161 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "spawn": {
+                    "name": "Nahemoth Husk",
+                    "count": 1
+                  },
+                  "prompt": "A Tier-1 fragment at half Integrity; it adores its parent."
+                },
+                "who": "self"
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188152,
-        "modifiedTime": 1787799188152,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989126205,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Hollow Touch",
+      "type": "weapon",
+      "img": "icons/magic/death/hand-withered-gray.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d10",
+          "attribute": "violence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "lineage-strike",
+          "qliphothic",
+          "bestiary"
+        ],
+        "effect": "Damage goes to Stress. On a hit the target rolls Resolve vs DC 19; on a failure it is Compelled toward the shell's vice until the end of its next turn.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul"
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 19,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> Reach 1 square, one target. Damage: <code>2d10</code> qliphothic to Stress + violence. On a hit the target rolls Resolve vs DC 19; on a failure it is Compelled toward the shell's vice until the end of its next turn.</p><p><em>The hollow reaches for what it lacks.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!P8e2EX1lbLBFk2gL.zlI85wWTRMoANFxr"
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "IV",
+              "frame": "attack",
+              "lineageStrike": "qliphothic",
+              "price": {
+                "marks": 1350,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIV attack × 1",
+                "bound": "free",
+                "saleBack": 540
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "FNn9FiXyA5XtnWHz",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989126253,
+        "modifiedTime": 1792989126254,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -682,34 +1001,38 @@
             ]
           },
           "price": {
-            "marks": 1800,
-            "bounty": 2400,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 80,
+            "bounty": 80,
+            "hire": 120,
+            "ransom": 120,
             "currency": "violence",
             "gmOverride": false,
-            "notes": "IV heavy Qliphothic Catastrophe (Gamchicoth — Greater) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TIV heavy qliphothic — bounty 80 / hire 120 marks; credited to the pool matching the method (default violence)"
           },
           "qliphah": {
             "name": "gamchicoth",
             "hullOf": "chesed",
             "grade": "greater"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "gamchicoth",
+          "title": "Qliphothic Catastrophe (Gamchicoth — Greater)"
         }
       },
-      "kind": "npc"
+      "kind": "npc",
+      "creatureType": "fiend"
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188152,
-    "modifiedTime": 1787799188152,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989126056,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "P8e2EX1lbLBFk2gL",
   "_key": "!actors!P8e2EX1lbLBFk2gL"

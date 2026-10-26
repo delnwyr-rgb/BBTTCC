@@ -1,0 +1,111 @@
+{
+  "name": "Hexmobile Frame",
+  "type": "gear",
+  "img": "icons/commodities/tech/wheel.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Two-seat scout chassis — a pilot, a passenger, and one weapon mounted at the pilot's hand. Bad Eden's signature scout-and-skirmish ride.</p><p><b>Frame · Personal · Mobile</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "rig-frame"
+      },
+      "rigFrame": {
+        "bracket": "personal",
+        "baseIntegrity": 14,
+        "tierStep": 4,
+        "pilotMount": true,
+        "mobilityAllowed": [
+          "mobile"
+        ],
+        "slots": {
+          "weapon": 0,
+          "system": 1,
+          "output": 0
+        },
+        "capacity": {
+          "pilot": {
+            "min": 1,
+            "max": 1
+          },
+          "gunner": {
+            "min": 0,
+            "max": 0
+          },
+          "engineer": {
+            "min": 0,
+            "max": 0
+          },
+          "crew": {
+            "min": 0,
+            "max": 1
+          }
+        },
+        "actions": {
+          "pilot": [
+            "steer",
+            "evasive",
+            "swerve",
+            "fire-weapon"
+          ],
+          "gunner": [],
+          "engineer": [],
+          "crew": [
+            "brace",
+            "hold-on"
+          ]
+        },
+        "travel": {
+          "speed": 5,
+          "range": 10
+        },
+        "visualFrame": "open-corners"
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 250,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "authored from the rig-builder preset (RG13, 2026-10-26)",
+            "bound": "free",
+            "saleBack": 100
+          },
+          "tier": "I",
+          "frame": "vehicle"
+        }
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "HzOrI0fZiFA1ZlWV",
+  "effects": [],
+  "sort": 1910000,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988928097,
+    "modifiedTime": 1792988928099,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!HzOrI0fZiFA1ZlWV"
+}

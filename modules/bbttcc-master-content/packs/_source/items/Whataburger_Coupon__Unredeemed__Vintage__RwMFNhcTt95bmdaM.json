@@ -10,6 +10,7 @@
     ],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
       "value": "<p>A laminated paper coupon. Two for one breakfast taquitos, valid through a date so old the typeface itself is illegal in three coalitions. Yes. People will trade you a horse for it. Yes, even now. Yes, I'm aware that doesn't make sense. Take it up with the Akashic field.</p><p><strong>Currency of the Frontier-Formerly-Known.</strong> Once per session, in any wasteland market or trading post, this coupon counts as a Tier-II trade good for purposes of barter. After the trade, it goes back in your pocket. The vendor is still happy about it three days later.</p>",
       "chat": ""
@@ -42,15 +43,15 @@
             "borderline-irrational-state-pride"
           ],
           "price": {
-            "marks": 150,
+            "marks": 60,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TII trade-good stamp",
+            "notes": "TII trade-good",
             "bound": "free",
-            "saleBack": 60
+            "saleBack": 24
           }
         }
       }
@@ -65,11 +66,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777437725645,
-    "modifiedTime": 1778541966822,
+    "modifiedTime": 1792977633308,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

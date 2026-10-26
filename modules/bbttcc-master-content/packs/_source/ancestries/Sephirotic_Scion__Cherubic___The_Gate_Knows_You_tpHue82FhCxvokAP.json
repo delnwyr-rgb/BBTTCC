@@ -7,7 +7,7 @@
     "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-sephirotic=\"v1\" style=\"display:none\"></div><p><em>\"Everything is a door if you can read the seams.\"</em></p><p><strong>The Gate Knows You (1/Soma Break).</strong> Reaction — when a creature you can see within 6 squares attempts to open, close, lock, unlock, cross, or pass through a door, gate, threshold, ley-line gate, or named boundary, the target rolls 3d10 keep lowest 2 on any check or defense check related to that crossing. The boundary listens to you.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"sephCherubicGate\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>The Gate Knows You</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Reaction (within 6 squares)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Force a creature attempting to open/close/cross any door, gate, threshold, ley-line gate, or named boundary to roll 3d10 keep lowest 2 on the related check or defense.</span></p></div>",
+      "value": "<p><em>\"Everything is a door if you can read the seams.\"</em></p><p><strong>The Gate Knows You (1/Soma Break).</strong> Reaction — when a creature you can see within 6 squares attempts to open, close, lock, unlock, cross, or pass through a door, gate, threshold, ley-line gate, or named boundary, the target rolls 3d10 keep lowest 2 on any check or defense check related to that crossing. The boundary listens to you.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"sephCherubicGate\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>The Gate Knows You</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Reaction (within 6 squares)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Force a creature attempting to open/close/cross any door, gate, threshold, ley-line gate, or named boundary to roll 3d10 keep lowest 2 on the related check or defense.</span></p></div>",
       "chat": ""
     },
     "advancement": {},
@@ -16,7 +16,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -33,14 +33,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "sephirotic_scion",
       "feature": "the_gate_knows_you",
       "lineage": "Cherubic",
-      "tierLevel": 1,
       "version": "1.1.0",
       "date": "2026-04-19",
       "rfiNative": true
@@ -243,12 +239,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776660294588,
-    "modifiedTime": 1782167240136,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988985754,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

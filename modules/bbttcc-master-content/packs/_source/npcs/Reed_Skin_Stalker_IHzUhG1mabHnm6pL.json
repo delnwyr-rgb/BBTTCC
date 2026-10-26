@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 25,
-        "max": 25
+        "max": 25,
+        "temp": 0
       },
       "stress": {
         "value": 12,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,6 +145,9 @@
     },
     "conditionImmunities": [],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -155,6 +160,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "Camouflaged amphibian predator. Strikes from still water, then vanishes."
     }
   },
   "flags": {
@@ -185,16 +194,19 @@
             ]
           },
           "price": {
-            "marks": 150,
-            "bounty": 150,
-            "hire": 375,
-            "ransom": 250,
+            "marks": 5,
+            "bounty": 5,
+            "hire": 10,
+            "ransom": 10,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "TI light stealth (bestiary) — bounty 150 / hire 375 / ransom 250 marks (paid in intrigue)"
-          }
+            "notes": "TI light wild — bounty 5 / hire 10 marks; credited to the pool matching the method (default intrigue)"
+          },
+          "lineage": "wild",
+          "subLineage": "amphibian"
         }
-      }
+      },
+      "creatureType": "beast"
     }
   },
   "_id": "IHzUhG1mabHnm6pL",
@@ -339,7 +351,30 @@
               "tier": "I",
               "frame": "trait"
             }
-          }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "firstRound": true
+                },
+                "do": {
+                  "reroll": "attack"
+                }
+              }
+            ]
+          },
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "when": "firstRound",
+              "vs": "your first attack this combat, launched from concealment",
+              "note": "Camouflaged"
+            }
+          ]
         }
       },
       "folder": null,
@@ -350,17 +385,16 @@
       },
       "_id": "1c8DA26cwlYVzBCb",
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.5",
         "createdTime": 1780118747933,
-        "modifiedTime": 1780163239123,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1791422259281,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!IHzUhG1mabHnm6pL.1c8DA26cwlYVzBCb"
+      }
     },
     {
       "name": "Drag-Tongue",
@@ -387,7 +421,7 @@
           "tier-i",
           "role-stealth"
         ],
-        "effect": "On a hit, the target is pulled up to 10 ft. toward the stalker; if it ends adjacent, the target is also Restrained (escape DC 12 Body) until end of stalker's next turn.",
+        "effect": "On a hit, the target is pulled up to 2 squares. toward the stalker; if it ends adjacent, the target is also Restrained (escape DC 12 Body) until end of stalker's next turn.",
         "flavor": "Not the tongue you were expecting.",
         "manifestation": {
           "tier": 1,
@@ -418,6 +452,19 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "body",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 12,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "restrained"
+            ],
+            "duration": "1-round"
           }
         },
         "description": {
@@ -444,6 +491,21 @@
                 "saleBack": 20
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Drag-Tongue"
+                },
+                "do": {
+                  "pull": 2,
+                  "prompt": "Restrained only if it ends adjacent to the stalker."
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -632,20 +694,19 @@
       },
       "_id": "PEvdRU9QlT27BHwt",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118747933,
-        "modifiedTime": 1782167242880,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989131809,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!IHzUhG1mabHnm6pL.PEvdRU9QlT27BHwt"
+      }
     },
     {
-      "name": "Reed-Vanish (recharges on a Soma Break)",
+      "name": "Reed-Vanish (recharge 5–6)",
       "type": "weapon",
       "img": "icons/consumables/plants/grass-leaves-stems-green.webp",
       "system": {
@@ -671,7 +732,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 10 ft. — targets roll vs Resolve (DC 11). Half damage on success. On a failed save, target loses sight of the stalker until the start of its next turn. Stalker may move up to its speed and re-conceal. Recharge 5–6.",
+        "effect": "Radius 2 squares. — targets roll vs Resolve (DC 11). Half damage on success. On a failed save, target loses sight of the stalker until the start of its next turn. Stalker may move up to its speed and re-conceal. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
         "flavor": "There is a splash. There is no stalker. There was, a moment ago.",
         "manifestation": {
           "tier": 1,
@@ -702,6 +763,18 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 11,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 10
           }
         },
         "description": {
@@ -731,6 +804,27 @@
                 "bound": "free",
                 "saleBack": 20
               }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "saveFail",
+                "if": {
+                  "weapon": "Reed-Vanish (recharge 5–6)"
+                },
+                "do": {
+                  "hide": true,
+                  "shift": 6
+                },
+                "to": "self",
+                "label": "Reed-Vanish — gone from sight"
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
             }
           }
         },
@@ -920,17 +1014,82 @@
       },
       "_id": "fPVxTO6CVNzyUJ3h",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118747933,
-        "modifiedTime": 1782167242881,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989131810,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
+      }
+    },
+    {
+      "name": "Territory",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "wild",
+          "amphibian"
+        ],
+        "description": {
+          "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: reroll the lowest die on attack rolls against any creature within 1 square of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!IHzUhG1mabHnm6pL.fPVxTO6CVNzyUJ3h"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "firstRound": true
+                },
+                "do": {
+                  "reroll": "attack"
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                },
+                "label": "Territory — the first strike rerolls the lowest"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "wild"
+            }
+          }
+        }
+      },
+      "_id": "I99UvO1VUzxcfg86",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342349207,
+        "modifiedTime": 1791342349207,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -940,12 +1099,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118747933,
-    "modifiedTime": 1783219919183,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989131691,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

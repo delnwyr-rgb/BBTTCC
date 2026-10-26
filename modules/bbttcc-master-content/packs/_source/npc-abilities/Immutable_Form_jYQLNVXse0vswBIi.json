@@ -1,0 +1,50 @@
+{
+  "name": "Immutable Form",
+  "type": "feature",
+  "img": "icons/commodities/treasure/statue-bust-stone-grey.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Immune to anything that would alter its form. It has decided what it is worth, permanently.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "jYQLNVXse0vswBIi",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Gilded Tyrant"
+        ],
+        "sourceIds": [
+          "m1Wzc1wbRFO7kl7j"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069946,
+    "modifiedTime": 1792989070032,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!jYQLNVXse0vswBIi"
+}

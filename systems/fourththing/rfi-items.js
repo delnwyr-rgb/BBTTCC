@@ -18,7 +18,7 @@ export const RFI_ITEM_FLAG_KEY  = "rfi.item";
 
 export const RFI_TIERS    = ["I", "II", "III", "IV"];
 export const RFI_FRAMES   = ["weapon", "armor", "tool", "sigil", "vehicle", "consumable", "container"];
-export const RFI_ORIGINS  = ["crafted", "looted", "found", "vendor", "faction-rig"];
+export const RFI_ORIGINS  = ["crafted", "forged", "looted", "found", "vendor", "faction-rig"];   // "forged" = item-ladder output (graded arms, Bound Working hosts) — gear, not a manifestation (AR1, 2026-10-26)
 export const RFI_BOUND    = ["free", "attuned", "soulbound"];
 export const RFI_REACH    = ["self", "touch", "5", "30", "60", "120", "scene", "faction", "hex"];
 
@@ -207,6 +207,10 @@ export const RfiItemQueries = {
   isManifestation: (item) => {
     if (!item) return false;
     if (item.type === "power") return true;
+    // AR1 (2026-10-26): a graded arm or a Bound Working HOST is gear — the ◆ Equipped loadout, not the Manifestations tab
+    // (the Working's companion power is the manifestation). The ladder used to stamp origin "crafted", which routed all 62 here.
+    const _lad = item.flags?.fourththing;
+    if (_lad && (_lad.grade || _lad.working)) return false;
     const mf = item.system?.manifestation;
     if (mf && (String(mf.concept ?? "").trim() || String(mf.signature ?? "").trim())) return true;
     const tags = Array.isArray(item.system?.tags) ? item.system.tags : [];

@@ -1,0 +1,50 @@
+{
+  "name": "Fractured Will (3/scene)",
+  "type": "feature",
+  "img": "icons/magic/air/air-pressure-shield-blue.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>When the Horde fails a check, ten thousand birds simply disagree. Three times per scene.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "2ROOPChsJaPwnvOy",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Ashen Horde"
+        ],
+        "sourceIds": [
+          "knO0GK8qKCeyNC6N"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069933,
+    "modifiedTime": 1792989070016,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!2ROOPChsJaPwnvOy"
+}

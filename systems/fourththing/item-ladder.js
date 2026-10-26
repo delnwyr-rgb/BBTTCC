@@ -15,7 +15,9 @@
  *   • castManifestation refuses at 0 charges, spends one per cast attempt (misfires included), and casts with freeClarity.
  *     Noise and misfire still apply — a bound Working is not a miracle.
  *   • Soma Break refills (recoverPer soma-break | rest | scene | day). The same refill now also recovers technomagical
- *     `rfi.item.tech.charges` (charged gear had no recharge engine before 2026-10-07).
+ *     `rfi.item.tech.charges` (charged gear had no recharge engine before 2026-10-07), plain charged gear that carries
+ *     `rfi.item.rechargesOn` + `chargesMax` (2026-10-26), and clears a consume `limit` ledger keyed soma-break.
+ *   • `working.power.flags.autoanimations` (optional) is copied onto the companion so the cast animates like the twin.
  * Generated content: modules/bbttcc-master-content/tools/build-item-ladder.mjs → seed-item-ladder-*.macro.js.
  */
 
@@ -47,13 +49,20 @@ export async function spendWorkingCharge(actor, powerItem) {
 /** Refill bound-Working charges and technomagical tech.charges on one actor (Soma Break). Returns the number of items refilled. */
 export async function refillWorkingCharges(actor, { cadence = "soma-break" } = {}) {
   if (!actor?.items) return 0;
-  const upd = [];
+  const rows = new Map(); const put = (id, k, v) => { const r = rows.get(id) ?? { _id: id }; r[k] = v; rows.set(id, r); };
   for (const it of actor.items) {
     const w = workingOf(it);
-    if (w?.charges && REFILL_CADENCES.has(String(w.charges.recoverPer || "soma-break")) && Number(w.charges.value) < Number(w.charges.max)) upd.push({ _id: it.id, "flags.fourththing.working.charges.value": Number(w.charges.max) || 0 });
-    const t = it.flags?.fourththing?.rfi?.item?.tech;
-    if (t?.kind === "charged" && t.charges && REFILL_CADENCES.has(String(t.charges.recoverPer || "")) && Number(t.charges.value) < Number(t.charges.max)) upd.push({ _id: it.id, "flags.fourththing.rfi.item.tech.charges.value": Number(t.charges.max) || 0 });
+    if (w?.charges && REFILL_CADENCES.has(String(w.charges.recoverPer || "soma-break")) && Number(w.charges.value) < Number(w.charges.max)) put(it.id, "flags.fourththing.working.charges.value", Number(w.charges.max) || 0);
+    const ri = it.flags?.fourththing?.rfi?.item; const t = ri?.tech;
+    // 2026-10-26 (GR18): any tech charge block with a max refills (paired / linked relics too, not only kind "charged").
+    if (t?.charges && Number(t.charges.max) > 0 && REFILL_CADENCES.has(String(t.charges.recoverPer || "")) && Number(t.charges.value) < Number(t.charges.max)) put(it.id, "flags.fourththing.rfi.item.tech.charges.value", Number(t.charges.max) || 0);
+    // 2026-10-26 (GR18): non-technomagical charged gear — `rfi.item.rechargesOn` (a cadence) refills `rfi.item.charges` to `chargesMax`
+    // (tech would double the list price under rubric §6; this keeps the Confession Crystal priced as a plain tool). Materials never carry rechargesOn.
+    if (!t?.charges && ri?.rechargesOn && REFILL_CADENCES.has(String(ri.rechargesOn)) && Number(ri.chargesMax) > 0 && Number(ri.charges ?? 0) < Number(ri.chargesMax)) put(it.id, "flags.fourththing.rfi.item.charges", Number(ri.chargesMax));
+    // 2026-10-26 (GR10): a consume payload limited per Soma Break (`consume.limit.window = "soma-break"`) gets its use ledger cleared here.
+    if (ri?.useLedger?.key === "soma-break" && Number(ri.useLedger.count) > 0) put(it.id, "flags.fourththing.rfi.item.useLedger", { key: "soma-break", count: 0 });
   }
+  const upd = [...rows.values()];
   if (upd.length) await actor.updateEmbeddedDocuments("Item", upd);
   return upd.length;
 }
@@ -66,7 +75,11 @@ function companionData(host) {
   system.tags = Array.from(new Set([...(system.tags || []), "bound-working"]));
   return {
     name: `${p.name} ⟡ ${host.name}`, type: "power", img: p.img || host.img,
-    system, flags: { fourththing: { workingOf: host.id, working: { tier: w.tier ?? system.manifestation?.tier ?? 1 } } }
+    system, flags: {
+      fourththing: { workingOf: host.id, working: { tier: w.tier ?? system.manifestation?.tier ?? 1 } },
+      // 2026-10-26 (GR7): the snapshot carries the twin's Automated Animations flag → casting from a Working plays the twin's animation.
+      ...(p.flags?.autoanimations ? { autoanimations: foundry.utils.deepClone(p.flags.autoanimations) } : {})
+    }
   };
 }
 /** Mint missing companions, retire orphans. Safe to call often; only the creating client / an owner writes.

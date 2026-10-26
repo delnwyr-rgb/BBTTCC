@@ -1,17 +1,21 @@
 {
   "name": "Razor Raider",
   "type": "npc",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/RaiderDE2.png",
+  "img": "art/bbttcc/asli-tokens/human-denisovan-1.webp",
   "system": {
-    "role": "Humanoid",
+    "role": "brute",
     "tier": 2,
     "factionId": "",
-    "notes": "",
+    "notes": "Warband shock trooper with a chainblade and one grenade. Opens with the grenade, closes with the blade, and follows anyone who drops.",
     "details": {
       "level": 8,
       "tier": 2,
       "statPoints": 0,
-      "skillPoints": 0
+      "skillPoints": 0,
+      "biography": {
+        "value": "<p><strong>Concept.</strong> Warband shock trooper with a chainblade and one grenade. Opens with the grenade, closes with the blade.</p>\n<p><strong>Signature.</strong> Revs the chainblade before the fight starts, just so you know.</p>",
+        "public": ""
+      }
     },
     "faction": {
       "id": null,
@@ -40,8 +44,9 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 52,
-        "max": 52
+        "value": 50,
+        "max": 50,
+        "temp": 0
       },
       "stress": {
         "value": 26,
@@ -127,7 +132,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,10 +149,13 @@
     },
     "conditionImmunities": [],
     "tags": [
-      "5e-port",
       "cr-3",
-      "common"
+      "common",
+      "rfi-scrubbed"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -159,7 +168,12 @@
       "value": 0,
       "taint": 0,
       "fragments": []
-    }
+    },
+    "biography": {
+      "concept": "Humanoid",
+      "notes": "Warband shock trooper with a chainblade and one grenade. Opens with the grenade, closes with the blade, and follows anyone who drops."
+    },
+    "description": "<p><strong>Concept.</strong> Warband shock trooper with a chainblade and one grenade. Opens with the grenade, closes with the blade.</p>\n<p><strong>Signature.</strong> Revs the chainblade before the fight starts, just so you know.</p>"
   },
   "items": [
     {
@@ -171,10 +185,10 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p>At the start of combat, one creature the raider can see within 6 squares must succeed on a DC 13 Soul check or be Shaken until end of its next turn.</p>",
+          "value": "<p>At the start of combat, one creature the raider can see within 6 squares must succeed a Soul check vs DC 13 or be Shaken until the end of its next turn.</p>",
           "chat": ""
         }
       },
@@ -185,19 +199,47 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "if": {
+                  "firstRound": true
+                },
+                "do": {
+                  "condition": {
+                    "key": "shaken",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 13
+                    }
+                  }
+                },
+                "radius": 6,
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1777700829196,
-        "modifiedTime": 1782167243641,
+        "modifiedTime": 1791331978045,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!a3iLY82GvIfBScr2.aV4HBQwDm135n4KE"
+      }
     },
     {
       "name": "Overkill",
@@ -208,10 +250,10 @@
         "source": "",
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
         "description": {
-          "value": "<p>When the raider reduces a creature to 0 Integrity, it can move up to half its movement and make one chainblade attack as a Bonus action.</p>",
+          "value": "<p>When the raider reduces a creature to 0 Integrity, it may move up to half its speed and make one Chainblade attack as a bonus action.</p>",
           "chat": ""
         }
       },
@@ -224,17 +266,16 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.367",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.1",
         "createdTime": 1777700829196,
-        "modifiedTime": 1780163239659,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1788546628414,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!a3iLY82GvIfBScr2.OdTLsdqrnGf3mO6Z"
+      }
     },
     {
       "name": "Chainblade",
@@ -245,7 +286,7 @@
         "intent": "violence",
         "skill": "melee",
         "damage": {
-          "formula": "1d12+5",
+          "formula": "1d12",
           "attribute": "violence",
           "type": "kinetic",
           "damageFlavor": "",
@@ -258,9 +299,9 @@
         },
         "tags": [
           "translated",
-          "5e-port"
+          "rfi-scrubbed"
         ],
-        "effect": "<p><strong>Attack.</strong> +6 to hit, reach 5 ft., one target. Hit: 11 (1d12+5) slashing.</p>",
+        "effect": "Chain-driven cleaver. On a hit, the target is Staggered until the start of its next turn; on a critical hit, it is also Prone.",
         "flavor": "",
         "manifestation": {
           "tier": 1,
@@ -291,7 +332,17 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "staggered",
+              "prone"
+            ],
+            "duration": "1-round"
           }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square., one target. Damage: <code>1d12</code> kinetic + violence. On a hit, the target is Staggered until the start of its next turn; on a critical hit, it is also Prone.</p><p><em>Pull cord. Swing. Repeat until quiet.</em></p>"
         }
       },
       "_id": "ZMdwOB7vEV7D0KzK",
@@ -478,23 +529,42 @@
           "isCustomized": true,
           "fromAmmo": false,
           "version": 5
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Chainblade",
+                  "critical": true
+                },
+                "do": {
+                  "condition": {
+                    "key": "prone",
+                    "duration": "1-round"
+                  }
+                }
+              }
+            ]
+          }
         }
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829196,
-        "modifiedTime": 1780163239659,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1792989132382,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!a3iLY82GvIfBScr2.ZMdwOB7vEV7D0KzK"
+      }
     },
     {
-      "name": "Fragmentation Grenade (1/Day)",
+      "name": "Fragmentation Grenade (1/scene)",
       "type": "weapon",
       "img": "icons/weapons/thrown/bomb-fuse-black.webp",
       "system": {
@@ -515,12 +585,12 @@
         },
         "tags": [
           "translated",
-          "5e-port",
           "npc-action-wired",
           "aoe",
-          "shape-radius"
+          "shape-radius",
+          "rfi-scrubbed"
         ],
-        "effect": "Each creature in a 10-ft. radius within 60 ft. rolls vs Evasion (DC 13). Half damage on success. 1/Day.",
+        "effect": "Radius 2 squares. within 12 squares. — targets roll vs Evasion (DC 13). Half damage on success. 1 per scene.",
         "flavor": "Pull pin. Throw. Apologize later.",
         "manifestation": {
           "tier": 1,
@@ -551,10 +621,22 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "intrigue",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 13,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 10
           }
         },
         "description": {
-          "value": "<p><strong>Area Attack.</strong> Each creature in a 2 squares radius within 12 squares rolls <strong>Evasion</strong> vs DC 13. Hit: <code>4d6</code> kinetic + violence; half on success.<br/><em>1 per Soma Break.</em></p><p><em>Pull pin. Throw. Apologize later.</em></p>",
+          "value": "<p><strong>Area Attack.</strong> Each creature in a 2-square. radius within 12 squares. rolls <strong>Evasion</strong> vs DC 13. Hit: <code>4d6</code> kinetic + violence; half on success.<br/><em>1 per scene.</em></p><p><em>Pull pin. Throw. Apologize later.</em></p>",
           "chat": ""
         }
       },
@@ -571,6 +653,13 @@
             "item": {
               "frame": "save",
               "wiredFrom": "feature"
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "combat"
             }
           }
         },
@@ -753,17 +842,98 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1777700829196,
-        "modifiedTime": 1782167243641,
+        "modifiedTime": 1792977778754,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Ambush Crew",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "mortal",
+          "raider"
+        ],
+        "description": {
+          "value": "<p>In the first round of combat, the raider rerolls the lowest die on attack rolls against any creature that hasn't acted yet. If reduced below half Integrity, they must succeed a DC 12 Soul check at the start of their turn or disengage and run.</p><p><em>They fight like people who have to eat tonight.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!a3iLY82GvIfBScr2.RbBG55PdHSQgb0SF"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "firstRound": true,
+                  "targetNotActed": true
+                },
+                "do": {
+                  "reroll": "attack"
+                },
+                "label": "Ambush Crew"
+              },
+              {
+                "on": "bloodied",
+                "do": {
+                  "morale": {
+                    "attr": "soul",
+                    "dc": 12,
+                    "outcome": "disengages and runs at full speed"
+                  }
+                }
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "mortal"
+            }
+          },
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "when": "firstRound",
+              "vs": "a creature that hasn't taken a turn yet",
+              "note": "Ambush Crew"
+            }
+          ]
+        }
+      },
+      "_id": "QlqnZP0plcaFbkrW",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791342349921,
+        "modifiedTime": 1791422260151,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -780,7 +950,7 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/RaiderDE2.png",
+      "src": "art/bbttcc/asli-tokens/human-denisovan-1.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -866,14 +1036,36 @@
   },
   "folder": "uMhSIaldbbcnBh0H",
   "sort": 650000,
-  "flags": {},
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "lineage": "mortal",
+          "subLineage": "raider",
+          "tier": "II",
+          "bracket": "medium",
+          "price": {
+            "marks": 15,
+            "bounty": 15,
+            "hire": 25,
+            "ransom": 25,
+            "currency": "violence",
+            "gmOverride": false,
+            "notes": "TII medium mortal — bounty 15 / hire 25 marks; credited to the pool matching the method (default violence)"
+          },
+          "title": "Humanoid"
+        }
+      },
+      "creatureType": "humanoid"
+    }
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777700829196,
-    "modifiedTime": 1783219918532,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989132260,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

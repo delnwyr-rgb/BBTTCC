@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Goetic Summoner</strong></p><p><strong>“Now we can talk like professionals.”</strong></p><p>You can negotiate across the veil without begging. You know the difference between a threat and an offer, and you can make either one land.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>You reroll the lowest die on Presence checks when interacting with Fiends or Celestials</li><li>You can cast <strong>Magic Circle</strong> 1/Soma Break</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a Scenario begins, you may declare a <strong>Binding Posture</strong></li><li>Gain <strong>+3 to a single Intrigue OP roll</strong> made during that Scenario</li><li>If you fail a key check during the Scenario, the GM may introduce a meaningful complication tied to your bindings, terms, or assumptions</li></ul><p><strong>Cost:</strong> the more fluently you bargain, the more the other side expects you to keep bargaining. Precision does not protect you from consequences. It only makes them legally enforceable.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"goeticT3\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Binding Posture</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic (declare) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Before a Scenario, declare a Binding Posture: +3 to one Intrigue OP roll during it. (Failure may introduce a binding-tied complication.)</div>\n</div>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Goetic Summoner</strong></p><p><strong>“Now we can talk like professionals.”</strong></p><p>You can negotiate across the veil without begging. You know the difference between a threat and an offer, and you can make either one land.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>You reroll the lowest die on Presence checks when interacting with Fiends or Celestials</li><li>You can cast <strong>Magic Circle</strong> 1/Soma Break</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per turn, before a Scenario begins, you may declare a <strong>Binding Posture</strong></li><li>Gain <strong>+3 to a single Intrigue marks roll</strong> made during that Scenario</li><li>If you fail a key check during the Scenario, the GM may introduce a meaningful complication tied to your bindings, terms, or assumptions</li></ul><p><strong>Cost:</strong> the more fluently you bargain, the more the other side expects you to keep bargaining. Precision does not protect you from consequences. It only makes them legally enforceable.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"goeticT3\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Binding Posture</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic (declare) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Before a Scenario, declare a Binding Posture: +3 to one Intrigue marks roll during it. (Failure may introduce a binding-tied complication.)</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -262,12 +262,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987093047,
-    "modifiedTime": 1781024182053,
-    "lastModifiedBy": "MRFjjbUTBd66pWBY"
+    "modifiedTime": 1792977826014,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

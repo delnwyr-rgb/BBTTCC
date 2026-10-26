@@ -23,7 +23,7 @@
       "tier-iii",
       "role-stealth"
     ],
-    "effect": "On a hit, no creature outside 30 ft. of the shot's path hears it. The lieutenant does not have to reveal her position.",
+    "effect": "On a hit, no creature outside 6 squares. of the shot's path hears it. The lieutenant does not have to reveal her position.",
     "flavor": "The bullet exists. The sound of the bullet does not.",
     "manifestation": {
       "tier": 1,
@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -82,19 +81,8 @@
         }
       }
     },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Witness-Warden Lieutenant"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
-      }
-    },
     "autoanimations": {
-      "id": "ebc38c52-0d31-4394-850c-1bd09edce252",
+      "id": "ft-silenced-glass",
       "label": "Silenced-Glass",
       "macro": {
         "enable": false,
@@ -269,24 +257,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Witness-Warden Lieutenant"
+        ],
+        "sourceIds": [
+          "5MA3L8ebRzPLhaBP"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "f3xehDfy7yV1NtHm",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024237221,
-    "modifiedTime": 1782167245005,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989044564,
+    "modifiedTime": 1792989044565,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!f3xehDfy7yV1NtHm"
 }

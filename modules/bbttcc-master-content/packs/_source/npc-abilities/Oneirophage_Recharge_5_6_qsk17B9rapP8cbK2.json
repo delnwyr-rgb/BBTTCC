@@ -1,0 +1,85 @@
+{
+  "name": "Oneirophage (Recharge 5–6)",
+  "type": "feat",
+  "img": "icons/magic/control/sleep-bubble-purple.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The fog leans in and starts eating minds. Every creature in the Miasma's space rolls vs Resolve (DC 18) or collapses into dreaming — helpless and unconscious for a minute, waking early only if damaged or shaken awake by an ally's action. For each dreamer it takes, the Miasma regains 15 Integrity. The dreams are not restful.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "save": {
+                "attr": "soul",
+                "dc": 18,
+                "onSave": "negate"
+              }
+            }
+          },
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Oneirophage (Recharge 5–6)"
+            },
+            "do": {
+              "condition": {
+                "key": "staggered",
+                "duration": "3-rounds"
+              },
+              "heal": 15,
+              "prompt": "Dreaming — wakes early only if damaged or shaken awake."
+            }
+          }
+        ],
+        "recharge": {
+          "mode": "d6",
+          "min": 5
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Lewd Miasma"
+        ],
+        "sourceIds": [
+          "Tw8Qy7Bg0pwKC29k"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "qsk17B9rapP8cbK2",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069954,
+    "modifiedTime": 1792989070039,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!qsk17B9rapP8cbK2"
+}

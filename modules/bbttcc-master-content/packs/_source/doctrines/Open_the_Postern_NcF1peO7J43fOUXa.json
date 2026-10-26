@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Open the Postern</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> intrigue 20, violence 10</p></div>",
+      "value": "<p><strong>Open the Postern</strong></p><p>Siege, attacker; needs a Shadow Courier on your roster. Slip the postern and breach from inside: 3d10+12 kinetic structure damage to the current layer. In the clash: 22 marks off the Buffer.</p><p><em>Queued on the turn: Intrigue 20 · Violence 10 marks. Fired in the clash: 22 marks from the siege Buffer.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "cls_courier"
+      "key": "cls_courier",
+      "effects": {
+        "text": "Siege, attacker; needs a Shadow Courier on your roster. Slip the postern and breach from inside: 3d10+12 kinetic structure damage to the current layer. In the clash: 22 marks off the Buffer."
+      }
     }
   },
   "_id": "NcF1peO7J43fOUXa",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601772,
-    "modifiedTime": 1782703702693,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989007852,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

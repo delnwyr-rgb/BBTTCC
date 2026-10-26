@@ -21,7 +21,29 @@
     },
     "fourththing": {
       "kind": "npc",
-      "surgeEnabled": false
+      "surgeEnabled": false,
+      "aptitudePromotions": {
+        "archetype: justice (arbiter) (tier 1)|insight": {
+          "delta": 1,
+          "item": "Archetype: Justice (Arbiter) (Tier 1)",
+          "at": 1792346704501
+        },
+        "archetype: justice (arbiter) (tier 1)|investigation": {
+          "delta": 1,
+          "item": "Archetype: Justice (Arbiter) (Tier 1)",
+          "at": 1792346704501
+        },
+        "crew type: peacekeeper corps (tier 1)|insight": {
+          "delta": 1,
+          "item": "Crew Type: Peacekeeper Corps (Tier 1)",
+          "at": 1792346704501
+        },
+        "crew type: peacekeeper corps (tier 1)|investigation": {
+          "delta": 1,
+          "item": "Crew Type: Peacekeeper Corps (Tier 1)",
+          "at": 1792346704501
+        }
+      }
     },
     "bbttcc-character-options": {
       "enlightenment": {
@@ -84,14 +106,14 @@
         }
       },
       "calculatedOPs": {
-        "violence": 2,
+        "violence": 1,
         "nonlethal": 0,
         "intrigue": 0,
         "economy": 0,
-        "softpower": 3,
-        "diplomacy": 2,
+        "softpower": 0,
+        "diplomacy": 1,
         "logistics": 0,
-        "culture": 2,
+        "culture": 1,
         "faith": 0
       },
       "crew": {
@@ -107,6 +129,21 @@
         "name": "Alignment: Netzach",
         "identifier": "alignment-netzach",
         "category": "sephirothic-alignments"
+      },
+      "contracts": {
+        "crew": {
+          "docId": "VuzqvsAB2qXH69YT",
+          "pack": "bbttcc-character-options.crew-types",
+          "name": "Crew Type: Peacekeeper Corps",
+          "displayName": "Peacekeeper Corps",
+          "since": 1,
+          "until": 3,
+          "turns": 3,
+          "source": "legacy",
+          "entryId": null,
+          "vendorId": null,
+          "hiredAt": 1792371022137
+        }
       }
     },
     "tokenflip": {
@@ -118,14 +155,32 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "",
-        "notes": "[AG-LEYGATE-2026-07-07] PRIVATE TRUTH \u2014 Marshal Yarrow Pike. Voice: economy in everything; stands like furniture that's judging you; measures distances, people, and claims automatically. STAGING: at the HQ map table by default; walks the East Wall when it's in question; never sits first. WHAT HE GUARDS: (1) He has done the Plumb math \u2014 survey dated three days BEFORE the Cough, \"cosmetic\" verdict standing on it \u2014 and says nothing publicly, because the town can afford exactly one crisis of authority at a time; he is waiting for someone ELSE to force the re-survey so the working relationship survives it. (2) The flicker report that killed his people was signed. He could find out by whom in five minutes. He has chosen, deliberately, for years, not to look \u2014 because the day he reads that signature he has to do something about it, and he does not trust what. If the Stewards ever put the name in front of him, he goes very quiet, and then he goes to the Leygate alone, and what happens there is forgiveness \u2014 but he'd have chosen not to know, and it will cost him a week of silence. His echo he tells if asked plainly; it is not a secret, it is a wound with a handle on it."
+        "notes": "[AG-LEYGATE-2026-07-07] PRIVATE TRUTH — Marshal Yarrow Pike. Voice: economy in everything; stands like furniture that's judging you; measures distances, people, and claims automatically. STAGING: at the HQ map table by default; walks the East Wall when it's in question; never sits first. WHAT HE GUARDS: (1) He has done the Plumb math — survey dated three days BEFORE the Cough, \"cosmetic\" verdict standing on it — and says nothing publicly, because the town can afford exactly one crisis of authority at a time; he is waiting for someone ELSE to force the re-survey so the working relationship survives it. (2) The flicker report that killed his people was signed. He could find out by whom in five minutes. He has chosen, deliberately, for years, not to look — because the day he reads that signature he has to do something about it, and he does not trust what. If the Stewards ever put the name in front of him, he goes very quiet, and then he goes to the Leygate alone, and what happens there is forgiveness — but he'd have chosen not to know, and it will cost him a week of silence. His echo he tells if asked plainly; it is not a secret, it is a wound with a handle on it.",
+        "secretsRaw": "The Signature :: oppRollMinus2 :: a Steward puts the name on the flicker report in front of him, or asks whether he has ever READ the signature :: He has not. He could in five minutes. He has chosen, for years, not to, because the day he reads it he has to do something about it and he does not trust what. He goes very quiet, and then he goes to the Leygate alone.\nThe Plumb Math :: rollPlus2 :: a Steward asks the DATE on Plumb's survey instead of whether it is right :: Three days before the Cough. 'Cosmetic' has been standing on a survey older than the lean. He has known all along; the town can afford exactly one crisis of authority at a time, and he has been waiting for someone else to force the re-survey."
+      },
+      "memories": [
+        {
+          "ts": 1792722605710,
+          "text": "Allesh-Gilliam — Pike Doesn't Get Up — the Stewards chose \"Leave him to it\"."
+        }
+      ]
+    },
+    "bbttcc-raid": {
+      "directionalArt": {
+        "enabled": true,
+        "images": {
+          "south": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/pike_front_pov_final_1400.webp",
+          "north": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/pike_back_pov_final_1400.webp",
+          "east": "",
+          "west": ""
+        }
       }
     }
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Marshal of Allesh-Gilliam, running the town HQ in the old burger joint (Act 1)",
+      "notes": "Marshal Yarrow Pike runs Allesh-Gilliam from the map table of a converted burger joint, under a tricorn, with the economy of a man who measures everything: distances, claims, people. He stands like furniture that is judging you and never sits first. New arrivals get their first errands from him (the East Wall, the Leygate, a ride out to Fixit) in a vaguely threatening, grandfatherly way. His advice is short: pick something visible, finish it, no speeches. He says the town believed the previous report the night the Leygate flickered, and he does not say it lightly."
     },
     "details": {
       "level": 4,
@@ -228,7 +283,7 @@
       "investigation": {
         "attribute": "mind",
         "label": "Investigation",
-        "value": 1
+        "value": 3
       },
       "lore": {
         "attribute": "mind",
@@ -258,7 +313,7 @@
       "insight": {
         "attribute": "soul",
         "label": "Insight",
-        "value": 1
+        "value": 3
       },
       "plating": {
         "attribute": "body",
@@ -267,10 +322,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 0
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 1
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 1
@@ -279,7 +344,8 @@
     "derived": {
       "integrity": {
         "value": 34,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 16,
@@ -369,7 +435,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -404,8 +471,8 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
       "id": null,
@@ -415,7 +482,10 @@
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
@@ -426,12 +496,12 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/marshal_yarrow_pike_TOM%20Background%20Removed.png",
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/pike_front_pov_final.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
-      "scaleX": 1,
-      "scaleY": 1,
+      "scaleX": 1.8,
+      "scaleY": 1.8,
       "tint": "#ffffff",
       "alphaThreshold": 0.75
     },
@@ -560,7 +630,7 @@
     "prependAdjective": false
   },
   "_id": "jldEh2mZeZ2YlYic",
-  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/marshal_yarrow_pike_TOM%20Background%20Removed.png",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/pike_front_pov_final.webp",
   "items": [
     {
       "name": "Oldenborn",
@@ -577,7 +647,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Oldenborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Earthbound, Lumenwrought, Stormborn Nomad, Rustland Scavenger</strong>.</p><p>This root grants the shared Oldenborn core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>\u201cYou are not an elf. You are the memory of a place that learned to walk again.\u201d</em></p>\n<p><strong>Dream-Flesh.</strong> You do not sleep. When you rest, you drift into Yesod\u2014symbolic memory-space\u2014unless you choose otherwise. You are immune to magical sleep, and you can always tell when a dream, illusion, or constructed reality is present.</p>\n<p><strong>Old Memory, Old Paths.</strong> You reroll the lowest die on checks to interpret ruins, follow ley-lines, identify altered terrain, and sense metaphysical instability. You always know if a place feels <em>remembered</em>, <em>abandoned</em>, or <em>contested</em> (the GM answers vaguely).</p>\n<p><strong>Veil-Sight.</strong> You perceive the <em>presence</em> of spirits, ghosts, Spark echoes, and noospheric constructs. This grants awareness, not perfect sight.</p>\n<p><strong>You Are Remembered.</strong> When you first meet a community, the GM chooses (or rolls) whether you are met with reverence, fear, or familiarity. It\u2019s never neutral.</p>",
+          "value": "\n<p><strong>Oldenborn.</strong></p><p><em>“You are not an elf. You are the memory of a place that learned to walk again.”</em></p>\n<p><strong>Dream-Flesh.</strong> You do not sleep. When you rest, you drift into Yesod—symbolic memory-space—unless you choose otherwise. You are immune to magical sleep, and you can always tell when a dream, illusion, or constructed reality is present.</p>\n<p><strong>Old Memory, Old Paths.</strong> You reroll the lowest die on checks to interpret ruins, follow ley-lines, identify altered terrain, and sense metaphysical instability. You always know if a place feels <em>remembered</em>, <em>abandoned</em>, or <em>contested</em> (the GM answers vaguely).</p>\n<p><strong>Veil-Sight.</strong> You perceive the <em>presence</em> of spirits, ghosts, Spark echoes, and noospheric constructs. This grants awareness, not perfect sight.</p>\n<p><strong>You Are Remembered.</strong> When you first meet a community, the GM chooses (or rolls) whether you are met with reverence, fear, or familiarity. It’s never neutral.</p>",
           "chat": ""
         },
         "advancement": [
@@ -656,21 +726,21 @@
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "on checks to interpret ruins, follow ley-lines, identify altered terrain, and\u2026"
+              "note": "on checks to interpret ruins, follow ley-lines, identify altered terrain, and…"
             },
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "checks to interpret ruins, follow ley-lines, identify altered terrain, and se\u2026"
+              "note": "checks to interpret ruins, follow ley-lines, identify altered terrain, and se…"
             }
           ],
           "triggers": [
             {
-              "event": "on-rest",
+              "event": "on-soma-break",
               "effect": {
                 "kind": "chat-prompt",
                 "args": {
-                  "body": "Dream-Flesh. You do not sleep. When you rest, you drift into Yesod"
+                  "body": "Dream-Flesh. You do not sleep: this rest, you drift into Yesod — symbolic memory-space — unless you choose otherwise."
                 }
               }
             }
@@ -695,30 +765,23 @@
       },
       "effects": [],
       "folder": "5PPxNybRn7zD0k0G",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.7709222f8ff32964",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885535,
-        "modifiedTime": 1784177885535,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 0,
       "_id": "0w2Eg2yPJmHLt33T",
-      "_key": "!actors.items!jldEh2mZeZ2YlYic.0w2Eg2yPJmHLt33T"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989084046,
+        "modifiedTime": 1792989084046,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Oldenborn Heritage: Earthbound",
@@ -729,7 +792,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Oldenborn Heritage.</strong> The branch that stayed in the dirt. Bone of the bedrock, slow blood, slow grudge. The land remembers your name and answers when you call.</p><p><em>\u201cThe world remembered old names. You answered.\u201d</em></p><p><strong>Earthbound.</strong> You are the place-soul that put down roots and refused to be moved. Folks call you a stout one\u2014dwarf, gnome, hill spirit, depending on the dialect. The truth is older than any of those words.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Fey).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>BOD (Body)</strong>\u2014expressed primarily through Tier powers.</p></li><li><p><strong>Stoneborn.</strong> You reroll the lowest die on checks to resist being knocked prone or forcibly moved while you stand on natural ground.</p></li></ul>",
+          "value": "<p><strong>Oldenborn Heritage.</strong> The branch that stayed in the dirt. Bone of the bedrock, slow blood, slow grudge. The land remembers your name and answers when you call.</p><p><em>“The world remembered old names. You answered.”</em></p><p><strong>Earthbound.</strong> You are the place-soul that put down roots and refused to be moved. Folks call you a stout one—dwarf, gnome, hill spirit, depending on the dialect. The truth is older than any of those words.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Fey).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>BOD (Body)</strong>—expressed primarily through Tier powers.</p></li><li><p><strong>Stoneborn.</strong> You reroll the lowest die on checks to resist being knocked prone or forcibly moved while you stand on natural ground.</p></li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -784,28 +847,41 @@
           "date": "2026-04-18"
         },
         "fourththing": {
-          "grantedByHeritage": "Earthbound"
+          "grantedByHeritage": "Earthbound",
+          "rerolls": [
+            {
+              "context": "forced-movement",
+              "mode": "reroll-lowest",
+              "vs": "on natural ground",
+              "note": "Stoneborn"
+            },
+            {
+              "context": "defense",
+              "mode": "reroll-lowest",
+              "vs": "being knocked Prone on natural ground",
+              "note": "Stoneborn"
+            }
+          ]
         }
       },
       "folder": "wt1y7NqX1Jj3gucj",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885535,
-        "modifiedTime": 1784177885535,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 100000,
       "_id": "Fc8o4pvatbTBYiUB",
-      "_key": "!actors.items!jldEh2mZeZ2YlYic.Fc8o4pvatbTBYiUB"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989084046,
+        "modifiedTime": 1792989615401,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Oldenborn (Earthbound): Stonecall",
@@ -820,7 +896,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cStone remembers pressure. So do you.\u201d</em></p>\n        <p><strong>Stonecall (1/Soma Break).</strong> When you plant your feet, the world updates its assumptions about where \u201cdown\u201d is. Until the start of your next turn, you can\u2019t be forcibly moved, you have resistance to kinetic damage, and you ignore difficult terrain caused by earth, rubble, or broken masonry.</p>",
+          "value": "\n<p><em>“Stone remembers pressure. So do you.”</em></p>\n        <p><strong>Stonecall (1/Soma Break).</strong> When you plant your feet, the world updates its assumptions about where “down” is. Until the start of your next turn, you can’t be forcibly moved, you have resistance to kinetic damage, and you ignore difficult terrain caused by earth, rubble, or broken masonry.</p>",
           "chat": ""
         },
         "uses": {
@@ -835,7 +911,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 1
         },
         "properties": [],
         "requirements": "Oldenborn",
@@ -895,17 +971,6 @@
               }
             }
           },
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885535,
-            "modifiedTime": 1784177885535
-          },
           "start": {
             "combat": null,
             "round": 0,
@@ -916,27 +981,20 @@
           },
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!jldEh2mZeZ2YlYic.sIYg5XVV8wOsrT8B.0a285901db5c4bba"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989084046,
+            "modifiedTime": 1792989084046,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "820o8CGCzl3DnTr2",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.0tRY3b7K5N42ao72",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885535,
-        "modifiedTime": 1784177885535,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -944,7 +1002,17 @@
       },
       "sort": 150000,
       "_id": "sIYg5XVV8wOsrT8B",
-      "_key": "!actors.items!jldEh2mZeZ2YlYic.sIYg5XVV8wOsrT8B"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989084046,
+        "modifiedTime": 1792989615401,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: Justice (Arbiter)",
@@ -959,7 +1027,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cBalance is not discovered. It is enforced.\u201d</em></p><p><strong>Archetype (Bad Eden): Justice (Arbiter).</strong> You are legitimacy under pressure: law, accountability, and the dangerous idea that consequences should actually mean something.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens social order, reform, and conflict resolution. This Archetype is associated with <strong>+1 Diplomacy</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Balance is not discovered. It is enforced.”</em></p><p><strong>Archetype (Bad Eden): Justice (Arbiter).</strong> You are legitimacy under pressure: law, accountability, and the dangerous idea that consequences should actually mean something.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens social order, reform, and conflict resolution. Your Domain earns <strong>+10 Diplomacy</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1032,23 +1100,6 @@
         },
         "dnd5e": {}
       },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.dJN1PZd7xjXW0o4G",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885535,
-        "modifiedTime": 1784177885535,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1056,7 +1107,17 @@
       },
       "_id": "G3LSiP3kmSlqCebn",
       "sort": 100000,
-      "_key": "!actors.items!jldEh2mZeZ2YlYic.G3LSiP3kmSlqCebn"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989084046,
+        "modifiedTime": 1792989615401,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: Justice (Arbiter) (Tier 1)",
@@ -1067,12 +1128,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden \u2013 Archetype: Justice (Arbiter) (Tier 1)",
+          "custom": "Bad Eden – Archetype: Justice (Arbiter) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) \u2014 Justice (Arbiter)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Insight and Investigation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — Justice (Arbiter)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Insight and Investigation.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1099,7 +1160,7 @@
       },
       "effects": [
         {
-          "disabled": false,
+          "disabled": true,
           "duration": {
             "value": null,
             "units": "seconds",
@@ -1108,7 +1169,7 @@
           },
           "flags": {},
           "name": "Archetype Tier 1 Proficiencies",
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_5.png",
+          "img": "icons/skills/social/trading-justice-scale-gold.webp",
           "_id": "JusticeTier1FX01",
           "type": "base",
           "system": {
@@ -1135,21 +1196,20 @@
           "transfer": true,
           "statuses": [],
           "sort": 0,
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885535,
-            "modifiedTime": 1784177885535
-          },
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!jldEh2mZeZ2YlYic.kXh5azW2TLpfIbns.JusticeTier1FX01"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989084046,
+            "modifiedTime": 1792989615541,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "9p6BDdD0i064vVwa",
@@ -1175,23 +1235,6 @@
         },
         "dnd5e": {}
       },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.qybswtwhmqvQSOmc",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885535,
-        "modifiedTime": 1784177885535,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1199,7 +1242,17 @@
       },
       "_id": "kXh5azW2TLpfIbns",
       "sort": 200000,
-      "_key": "!actors.items!jldEh2mZeZ2YlYic.kXh5azW2TLpfIbns"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989084046,
+        "modifiedTime": 1792989615402,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Alignment: Netzach",
@@ -1213,7 +1266,7 @@
         },
         "tags": [],
         "description": {
-          "value": "Victory - Endurance becomes momentum. +1 Violence, +1 Culture OPs\n\nNetzach is passion that refuses extinction. It rewards morale, persistence, and the emotional drive to keep moving when a lesser faction would break or quietly go home.",
+          "value": "Victory - Endurance becomes momentum. +10 Culture and +10 Violence marks to your Domain each turn.\n\nNetzach is passion that refuses extinction. It rewards Loyalty, persistence, and the emotional drive to keep moving when a lesser faction would break or quietly go home.",
           "chat": ""
         },
         "activities": {},
@@ -1251,23 +1304,6 @@
           "option": {}
         }
       },
-      "_stats": {
-        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.rD5cfO8T0wNdlosX",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.VwHrRTBmSa7J77WL",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885535,
-        "modifiedTime": 1784177885535,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 2,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1275,177 +1311,20 @@
       },
       "_id": "VXAWf3BK5I6sLGqY",
       "sort": 800000,
-      "_key": "!actors.items!jldEh2mZeZ2YlYic.VXAWf3BK5I6sLGqY"
-    },
-    {
-      "name": "Crew Type: Peacekeeper Corps (Tier 1)",
-      "type": "feat",
-      "img": "icons/sundries/misc/badge-law-sheriff.webp",
-      "system": {
-        "category": "technique",
-        "source": {
-          "custom": "Bad Eden \u2013 Crew Type: Peacekeeper Corps (Tier 1)",
-          "revision": 2,
-          "rules": "2024",
-          "book": ""
-        },
-        "tags": [],
-        "description": {
-          "value": "<p><strong>Tier 1 \u2014 Peacekeeper Corps</strong></p><p><strong>\u201cOrder is a gift. Stop making us wrap it in barbed wire.\u201d</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides \u2018peace\u2019 was optional.</p><p><em>You\u2019re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Insight and Investigation.</li><li><strong>Strategic:</strong> Your faction starts with +1 Non-Lethal OPs.</li></ul>",
-          "chat": ""
-        },
-        "identifier": "crew-peacekeeper-corps-t1",
-        "activities": {},
-        "uses": {
-          "spent": 0,
-          "recovery": [],
-          "max": ""
-        },
-        "advancement": {},
-        "crewed": false,
-        "enchant": {},
-        "requirements": "Level 1+",
-        "properties": [],
-        "type": {
-          "value": "",
-          "subtype": ""
-        },
-        "prerequisites": {
-          "items": [],
-          "repeatable": false,
-          "level": null
-        }
-      },
-      "flags": {
-        "bbttcc-character-options": {
-          "category": "crew",
-          "bonuses": {},
-          "option": {
-            "category": "crew",
-            "key": "peacekeeper-corps",
-            "progressionType": "level",
-            "tier": 1,
-            "levelMin": 1,
-            "levelMax": 1,
-            "domains": [
-              "op",
-              "intel"
-            ],
-            "scope": "faction",
-            "tags": [
-              "bbttcc:option:crew",
-              "bbttcc:crew:peacekeeper-corps",
-              "bbttcc:tier:1",
-              "bbttcc:domain:op",
-              "bbttcc:domain:intel",
-              "bbttcc:scope:faction",
-              "bbttcc:effect:op:nonlethal:+8",
-              "bbttcc:effect:intel:read_tension:true",
-              "bbttcc:theme:order",
-              "bbttcc:theme:stability",
-              "bbttcc:theme:de-escalation",
-              "bbttcc:theme:investigation"
-            ]
-          }
-        }
-      },
-      "effects": [
-        {
-          "_id": "264f8f132eec45dd",
-          "name": "Crew Type Tier 1 Proficiencies",
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_asteroid.png",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.skills.insight.value",
-                "type": "upgrade",
-                "value": 1,
-                "phase": "initial",
-                "priority": 20
-              },
-              {
-                "key": "system.skills.investigation.value",
-                "type": "upgrade",
-                "value": 1,
-                "phase": "initial",
-                "priority": 20
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "",
-          "origin": null,
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "dnd5e": {
-              "riders": {
-                "statuses": []
-              }
-            }
-          },
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885535,
-            "modifiedTime": 1784177885535
-          },
-          "start": {
-            "combat": null,
-            "round": 0,
-            "time": 0,
-            "turn": 0,
-            "combatant": null,
-            "initiative": null
-          },
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!jldEh2mZeZ2YlYic.wWBcbaWpihr5vWu2.264f8f132eec45dd"
-        }
-      ],
-      "folder": "YYzAyfS4RhZxZ0f7",
       "_stats": {
-        "compendiumSource": "Item.bhouyE64GtVEfoGB",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.bhouyE64GtVEfoGB",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885535,
-        "modifiedTime": 1784177885535,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
-      "ownership": {
-        "default": 0,
-        "vmUfDuSYUIe7V5uB": 3,
-        "bytUGWIOqq9eT7Or": 3
-      },
-      "_id": "wWBcbaWpihr5vWu2",
-      "sort": 0,
-      "_key": "!actors.items!jldEh2mZeZ2YlYic.wWBcbaWpihr5vWu2"
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989084046,
+        "modifiedTime": 1792989615402,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
-      "name": "Rallying Words",
+      "name": "Rallying Speech",
       "type": "feat",
       "img": "icons/sundries/scrolls/scroll-symbol-eye-blue.webp",
       "system": {
@@ -1457,7 +1336,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Rallying Words.</strong> You can deliver a short, targeted speech that makes people remember why you\u2019re here.</p><ul><li>As a bonus action, choose one creature other than yourself within 6 squares who can see or hear you. That creature gains a bonus to the next attack roll, attribute check, or defense check it makes before the start of your next turn. The bonus equals your Presence modifier (minimum +1).</li><li>You can use this feature a number of times per Soma Break equal to your tier.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Rallying Speech.</strong> You can deliver a short, targeted speech that makes people remember why you’re here.</p><ul><li>As a bonus action, choose one creature other than yourself within 6 squares who can see or hear you. That creature gains a bonus to the next attack roll, attribute check, or defense check it makes before the start of your next turn. The bonus equals your Presence value (minimum +1).</li><li>You can use this feature a number of times per Soma Break equal to your tier.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1476,7 +1355,7 @@
           "level": 2
         },
         "properties": [],
-        "requirements": "Harmony Marshal (2nd level)",
+        "requirements": "Harmony Marshal 2",
         "type": {
           "value": "",
           "subtype": ""
@@ -1484,7 +1363,7 @@
       },
       "effects": [
         {
-          "name": "Rallying Words (Inspiring Bonus)",
+          "name": "Rallying Speech (Inspiring Bonus)",
           "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_3.png",
           "origin": null,
           "transfer": true,
@@ -1496,17 +1375,6 @@
             "expired": false
           },
           "flags": {},
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885535,
-            "modifiedTime": 1784177885535
-          },
           "_id": "cAPrkPRQ6ETCdinM",
           "type": "base",
           "system": {
@@ -1527,7 +1395,17 @@
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!jldEh2mZeZ2YlYic.Z6G0wzgen2daEaJJ.cAPrkPRQ6ETCdinM"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989084046,
+            "modifiedTime": 1792989084046,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "6ELe0FPqgC58OzKS",
@@ -1537,18 +1415,183 @@
             "rallyingWords": true
           }
         },
-        "dnd5e": {}
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885535,
-        "modifiedTime": 1784177885535,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+        "autoanimations": {
+          "id": "04ca3f50-116d-4e29-b5d2-02faca280a2f",
+          "label": "Rallying Speech",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "music",
+              "animation": "notes",
+              "variant": "01",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
       },
       "ownership": {
         "default": 0,
@@ -1558,7 +1601,17 @@
       },
       "sort": -487500,
       "_id": "Z6G0wzgen2daEaJJ",
-      "_key": "!actors.items!jldEh2mZeZ2YlYic.Z6G0wzgen2daEaJJ"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989084046,
+        "modifiedTime": 1792989084046,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Read the Room",
@@ -1573,7 +1626,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Read the Room.</strong> You have an instinctive feel for the emotional geometry of conversations.</p><ul><li>When you make an <strong>Insight (Soul)</strong> or <strong>Perception (Mind)</strong> check to gauge mood, detect Stealth, or sense the underlying stakes of a scene, you can add a d4 to the roll.</li><li>You can use this feature after you roll but before the GM tells you whether you succeed. Uses per Soma Break equal to your Soul modifier (minimum once).</li></ul><p>(The Active Effect below also gives you a small numeric edge on Insight (Soul) and Perception (Mind) checks.)</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Read the Room.</strong> You have an instinctive feel for the emotional geometry of conversations.</p><ul><li>When you make an <strong>Insight (Soul)</strong> or <strong>Perception (Mind)</strong> check to gauge mood, detect Stealth, or sense the underlying stakes of a scene, you can add a d4 to the roll.</li><li>You can use this feature after you roll but before the GM tells you whether you succeed. Uses per Soma Break equal to your Soul value (minimum once).</li></ul><p>(The Active Effect below also gives you a small numeric edge on Insight (Soul) and Perception (Mind) checks.)</p>",
           "chat": ""
         },
         "activities": {},
@@ -1592,7 +1645,7 @@
           "level": 2
         },
         "properties": [],
-        "requirements": "Harmony Marshal (2nd level)",
+        "requirements": "Harmony Marshal 2",
         "type": {
           "value": "",
           "subtype": ""
@@ -1600,7 +1653,7 @@
       },
       "effects": [
         {
-          "name": "Read the Room (Insight (Soul) (Soul) & Perception (Mind) (Mind) Edge)",
+          "name": "Read the Room (Insight (Soul) & Perception (Mind) Edge)",
           "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_5.png",
           "origin": null,
           "transfer": true,
@@ -1612,17 +1665,6 @@
             "expired": false
           },
           "flags": {},
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885535,
-            "modifiedTime": 1784177885535
-          },
           "_id": "td2cFhPIKR65aGNY",
           "type": "base",
           "system": {
@@ -1657,7 +1699,17 @@
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!jldEh2mZeZ2YlYic.5iaVtKXXtzRCn7kD.td2cFhPIKR65aGNY"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989084046,
+            "modifiedTime": 1792989084046,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "6ELe0FPqgC58OzKS",
@@ -1667,21 +1719,9 @@
             "readTheRoom": true
           }
         },
-        "dnd5e": {},
         "fourththing": {
           "vocabScrub": "2026-05-16"
         }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885535,
-        "modifiedTime": 1784177885535,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
       },
       "ownership": {
         "default": 0,
@@ -1691,7 +1731,17 @@
       },
       "sort": -481250,
       "_id": "5iaVtKXXtzRCn7kD",
-      "_key": "!actors.items!jldEh2mZeZ2YlYic.5iaVtKXXtzRCn7kD"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989084046,
+        "modifiedTime": 1792989084046,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Backline Commander",
@@ -1702,7 +1752,7 @@
         "source": "Bad Eden Feats Expansion v1 (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<h2>Backline Commander</h2><p><em>You don\u2019t need to be closest to steer the fight.</em></p><hr><h3>Rules</h3><p>As a Bonus action, choose one ally who can see or hear you within 6 squares That ally may immediately move up to 2 squares without provoking reaction strikes.</p><p>You can use this principle a number of times equal to your skill rank bonus, and you regain all expended uses when you finish a Sanctuary.</p>",
+          "value": "<h2>Backline Commander</h2><p><em>You don’t need to be closest to steer the fight.</em></p><hr><h3>Rules</h3><p>As a Bonus Action, choose one ally who can see or hear you within 6 squares. That ally may immediately move up to 2 squares without provoking reaction strikes.</p><p>You can use this technique a number of times equal to your rank bonus, and you regain all expended uses when you finish a Soma Break.</p><p class=\"ft-engine-note\"><em>🃏 Card — bonus action, rank-bonus uses per Soma Break; target the ally first.</em></p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_backline_commander",
@@ -1918,19 +1968,18 @@
         "DHBK2UGr58xKXzxK": 3,
         "bytUGWIOqq9eT7Or": 3
       },
+      "_id": "Lv4ENFXIhLxlWbHc",
       "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989084046,
+        "modifiedTime": 1792989084046,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885535,
-        "modifiedTime": 1784177885535,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
-      "_id": "Lv4ENFXIhLxlWbHc",
-      "_key": "!actors.items!jldEh2mZeZ2YlYic.Lv4ENFXIhLxlWbHc"
+        "exportSource": null
+      }
     },
     {
       "name": "Conductor's Beat",
@@ -1945,7 +1994,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cOn my count, you\u2019re going to be brilliant.\u201d</em></p><p>As a <strong>bonus action</strong>, you can mark one ally within <strong>6 squares</strong> who can see or hear you.</p><ul><li>Before the start of your next turn, that ally may add your <strong>tier</strong> to <strong>one attribute check</strong> they make.</li><li>They decide to apply the bonus after seeing the roll but before the GM announces the result.</li><li>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</li></ul><p><em>You don\u2019t change what they can do. You change when they believe they can do it.</em></p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“On my count, you’re going to be brilliant.”</em></p><p>As a <strong>bonus action</strong>, you can mark one ally within <strong>6 squares</strong> who can see or hear you.</p><ul><li>Before the start of your next turn, that ally may add your <strong>tier</strong> to <strong>one attribute check</strong> they make.</li><li>They decide to apply the bonus after seeing the roll but before the GM announces the result.</li><li>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</li></ul><p><em>You don’t change what they can do. You change when they believe they can do it.</em></p>",
           "chat": ""
         },
         "activities": {
@@ -2000,13 +2049,8 @@
         },
         "uses": {
           "spent": 0,
-          "recovery": [
-            {
-              "period": "lr",
-              "type": "recoverAll"
-            }
-          ],
-          "max": "@prof"
+          "recovery": [],
+          "max": ""
         },
         "advancement": {},
         "identifier": "harmmarshal-mandate-conductors-beat",
@@ -2027,22 +2071,187 @@
       "effects": [],
       "folder": "w8AbiDc92Mb4wLnR",
       "flags": {
-        "dnd5e": {},
         "bbttcc": {
           "subclassKey": "harmmarshal_mandate_accord",
           "featureKey": "conductors_beat"
+        },
+        "autoanimations": {
+          "id": "53da325e-4285-4694-a425-7ec35c035680",
+          "label": "Conductor's Beat",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "music",
+              "animation": "notes",
+              "variant": "01",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
         }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885535,
-        "modifiedTime": 1784177885535,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
       },
       "ownership": {
         "default": 0,
@@ -2052,7 +2261,17 @@
       },
       "sort": 150000,
       "_id": "tegSF50V2Eys2EcJ",
-      "_key": "!actors.items!jldEh2mZeZ2YlYic.tegSF50V2Eys2EcJ"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989084046,
+        "modifiedTime": 1792989084046,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Accord Engine (Bad Eden)",
@@ -2067,7 +2286,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You tune people like instruments and cities like choirs.</em></p><p>During a <strong>Parley</strong> or formal negotiation scene where you have a clear seat at the table, you can lean on your faction\u2019s diplomatic machinery.</p><ul><li>When you or your party would roll an opposed check against an NPC faction or major NPC (such as a contested Diplomacy (Presence)/Stealth (Intrigue)/Insight (Soul) check), you may spend <strong>1 Diplomacy OP</strong> from your faction.</li><li>If you do, and the opposing side rolls a <strong>9 or lower</strong> on their 2d10x10, you may treat that roll as if it were a <strong>10</strong> instead\u2014<em>but only</em> if accepting that outcome clearly moves the situation toward <strong>peace, ceasefire, or de-escalation</strong>.</li><li>This represents pre-worked backchannels, community pressure, and your knack for letting the \u201cwe should probably not die today\u201d impulse win.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You tune people like instruments and cities like choirs.</em></p><p>During a <strong>Parley</strong> or formal negotiation scene where you have a clear seat at the table, you can lean on your Domain’s diplomatic machinery.</p><ul><li>When you or your party would roll an opposed check against an NPC faction or major NPC (such as a contested Diplomacy (Presence)/Stealth (Intrigue)/Insight (Soul) check), you may spend <strong>10 Diplomacy marks</strong> from your Domain.</li><li>If you do, and the opposing side rolls a <strong>9 or lower</strong> on their 2d10, you may treat that roll as if it were a <strong>10</strong> instead—<em>but only</em> if accepting that outcome clearly moves the situation toward <strong>peace, ceasefire, or de-escalation</strong>.</li><li>This represents pre-worked backchannels, community pressure, and your knack for letting the “we should probably not die today” impulse win.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2095,22 +2314,10 @@
       "effects": [],
       "folder": "w8AbiDc92Mb4wLnR",
       "flags": {
-        "dnd5e": {},
         "bbttcc": {
           "subclassKey": "harmmarshal_mandate_accord",
           "featureKey": "accord_engine"
         }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885535,
-        "modifiedTime": 1784177885535,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
       },
       "ownership": {
         "default": 0,
@@ -2120,11 +2327,21 @@
       },
       "sort": 100000,
       "_id": "u1InD4kXOcdzFpt5",
-      "_key": "!actors.items!jldEh2mZeZ2YlYic.u1InD4kXOcdzFpt5"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989084046,
+        "modifiedTime": 1792989084046,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "_id": "M7UlFSSZj2JWOXNp",
-      "name": "Broker \u2014 Apprentice (Tier I)",
+      "name": "Broker — Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
       "system": {
@@ -2136,7 +2353,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Broker \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Word on the street:</strong> Current prices, current rumors, who's buying. <span style=\"opacity:0.7\">Standard fee 10 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick \u2014 Read the Room</strong> <em>(1/scene)</em>: GM truthfully answers: who here has the real power, and what do they want right now?</p>",
+          "value": "<p><strong>Broker — Apprentice</strong> (Tier I).</p><p><strong>Trade — Word on the street:</strong> Current prices, current rumors, who's buying. <span style=\"opacity:0.7\">Standard fee 10 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Read the Room</strong> <em>(1/scene)</em>: GM truthfully answers: who here has the real power, and what do they want right now?</p>",
           "chat": ""
         }
       },
@@ -2156,17 +2373,16 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885535,
-        "modifiedTime": 1784177885535,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989084046,
+        "modifiedTime": 1792989084046,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!jldEh2mZeZ2YlYic.M7UlFSSZj2JWOXNp"
+      }
     },
     {
       "_id": "zyG3tETl9xd5ZDNs",
@@ -2183,7 +2399,7 @@
           "presence"
         ],
         "description": {
-          "value": "<p><em>\"There is no problem two reasonable parties can't monetize.\"</em></p><p><strong>Broker</strong> is the Presence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: merchant, envoy, entertainer, cult recruiter, gang face. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Fair Price:</strong> The Broker moves any negotiated price <strong>5% per tier</strong> in their side's favor inside the \u00b125% tolerance band (Tier IV: the full \u00b120% swing).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Diplomacy</strong> rank = tier; secondary <strong>Empathy</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Diplomacy or Soft Power (GM picks by job)</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Harmony Marshal. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"There is no problem two reasonable parties can't monetize.\"</em></p><p><strong>Broker</strong> is the Presence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: merchant, envoy, entertainer, cult recruiter, gang face. A profession is a flavor label on the Calling.</p><p><strong>Knack — Fair Price:</strong> The Broker moves any negotiated price <strong>5% per tier</strong> in their side's favor inside the ±25% tolerance band (Tier IV: the full ±20% swing).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Diplomacy</strong> rank = tier; secondary <strong>Empathy</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Diplomacy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Harmony Marshal. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -2210,33 +2426,192 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885535,
-        "modifiedTime": 1784177885535,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989084046,
+        "modifiedTime": 1792989084046,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Crew Type: Peacekeeper Corps (Tier 1)",
+      "type": "feat",
+      "img": "icons/sundries/misc/badge-law-sheriff.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden – Crew Type: Peacekeeper Corps (Tier 1)",
+          "revision": 2,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Insight and Investigation.</li><li><strong>Strategic:</strong> Your Domain starts with +1 Non-Lethal OPs.</li></ul>",
+          "chat": ""
+        },
+        "identifier": "crew-peacekeeper-corps-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "requirements": "Level 1+",
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        }
       },
-      "_key": "!actors.items!jldEh2mZeZ2YlYic.zyG3tETl9xd5ZDNs"
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "peacekeeper-corps",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "op",
+              "intel"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:peacekeeper-corps",
+              "bbttcc:tier:1",
+              "bbttcc:domain:op",
+              "bbttcc:domain:intel",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:nonlethal:+8",
+              "bbttcc:effect:intel:read_tension:true",
+              "bbttcc:theme:order",
+              "bbttcc:theme:stability",
+              "bbttcc:theme:de-escalation",
+              "bbttcc:theme:investigation"
+            ]
+          }
+        }
+      },
+      "effects": [
+        {
+          "_id": "264f8f132eec45dd",
+          "name": "Crew Type Tier 1 Proficiencies",
+          "img": "icons/sundries/misc/badge-law-sheriff.webp",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.insight.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.investigation.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": true,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "dnd5e": {
+              "riders": {
+                "statuses": []
+              }
+            }
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989084046,
+            "modifiedTime": 1792989615701,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "folder": "YYzAyfS4RhZxZ0f7",
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "5jvocX8k8yayCAtZ",
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989084046,
+        "modifiedTime": 1792989084046,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
   "folder": "CI9EJz4qle0pugEK",
-  "sort": 175000,
+  "sort": 218750,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177885535,
-    "modifiedTime": 1784177885535,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989084046,
+    "modifiedTime": 1792989084051,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

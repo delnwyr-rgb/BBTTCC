@@ -23,7 +23,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -39,32 +39,33 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "angel",
       "lineage": "Angel (Empyrean)",
       "feature": "lesser",
-      "tierLevel": 1,
       "version": "1.0.0",
       "date": "2026-05-15",
       "npAncestry": true
     },
     "fourththing": {
-      "principleSource": "ancestry"
+      "principleSource": "ancestry",
+      "grants": {
+        "resistances": [
+          "sephirotic"
+        ]
+      }
     }
   },
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1778961512089,
-    "modifiedTime": 1782167240131,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988982556,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

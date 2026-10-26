@@ -1,0 +1,83 @@
+{
+  "name": "Aura of Materialism",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "qliphothic",
+      "nahemoth"
+    ],
+    "description": {
+      "value": "<p>Any creature that starts its turn within 2 squares must succeed a Resolve check (DC by tier) or be Staggered until the end of its turn, crushed by pure pointlessness.</p><p><em>Nahemoth — hull of malkuth.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "radius": 2,
+            "who": "enemies",
+            "do": {
+              "condition": {
+                "key": "staggered",
+                "duration": "1-round",
+                "save": {
+                  "attr": "soul",
+                  "dc": 13
+                }
+              }
+            },
+            "label": "Aura of Materialism"
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "qliphothic"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Nahemoth Husk"
+        ],
+        "sourceIds": [
+          "BvNe8KEqyzjNxiFc"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "OosAYMjWtVpl6c9h",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069910,
+    "modifiedTime": 1792989069993,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!OosAYMjWtVpl6c9h"
+}

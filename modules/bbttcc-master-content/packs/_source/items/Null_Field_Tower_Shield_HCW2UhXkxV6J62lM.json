@@ -72,8 +72,7 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!HCW2UhXkxV6J62lM.8kIuh6s8OsmPf32P"
+      }
     }
   ],
   "folder": "TNrB6kEiHS0KwwJT",
@@ -82,12 +81,12 @@
     "default": 0
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1780000000000,
-    "modifiedTime": 1787334670002,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988952936,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
@@ -99,7 +98,7 @@
     "resistances": [
       "qliphothic"
     ],
-    "armorSkill": "plating",
+    "armorSkill": "bracing",
     "equipped": false,
     "tags": [
       "t3",
@@ -111,7 +110,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A slab of scribed steel and hex-glyph plate that projects a small reality-stabilizing null field. The broken, corrupted, please-stop-hitting-yourself things of the Qliphoth can't get a grip on what stands behind it. Heavy. Slow. Worth it.</p><p><strong>Null Field.</strong> Resists qliphothic damage and, while braced, extends the steadying field to one adjacent ally (they ignore Compelled until they move away).</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +3, Evasion -1, Resolve +1</p></li><li><p><strong>Requires:</strong> Plating (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 720 Nonlethal marks</p></li></ul>",
+      "value": "<p>A slab of scribed steel and hex-glyph plate that projects a small reality-stabilizing null field. The broken, corrupted, please-stop-hitting-yourself things of the Qliphoth can't get a grip on what stands behind it. Heavy. Slow. Worth it.</p><p><strong>Null Field.</strong> Resists qliphothic damage and, while braced, extends the steadying field to one adjacent ally (they ignore Compelled until they move away).</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +3, Evasion -1, Resolve +1</p></li><li><p><strong>Requires:</strong> Bracing (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 630 Nonlethal marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -148,15 +147,15 @@
             "focusing-lens"
           ],
           "price": {
-            "marks": 720,
+            "marks": 630,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TIII tower shield — qliphothic null field",
+            "rarityMult": 2,
+            "notes": "TIII shield × attuned × rarity 2",
             "bound": "attuned",
-            "saleBack": 288
+            "saleBack": 252
           },
           "grants": {
             "resistances": [

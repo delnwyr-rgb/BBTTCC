@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“The tide does not argue. It collects.”</em></p>\n        <p><strong>Undertow Grip (tier/Soma Break).</strong> When a creature within 2 squares moves willingly, you may use your reaction to slow them; their speed becomes 0 until the end of the turn unless they succeed on a Violence defense check against your DC.</p>\n        <p><strong>Fluid Form.</strong> You reroll the lowest die on checks to avoid being knocked prone, and you can squeeze through tight spaces without squeezing penalties.</p>",
+      "value": "\n<p><em>“The tide does not argue. It collects.”</em></p>\n        <p><strong>Undertow Grip (tier/Soma Break).</strong> When a creature within 2 squares moves willingly, you may use your reaction to slow them; their speed becomes 0 until the end of the turn unless they succeed on a Violence defense check against your DC.</p>\n        <p><strong>Fluid Form.</strong> You reroll the lowest die on checks to avoid being knocked prone, and you can squeeze through tight spaces without squeezing penalties.</p>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 5
     },
     "properties": [],
     "requirements": "Oldenborn",
@@ -41,7 +41,6 @@
       "kind": "oldenborn",
       "feature": "undertow_grip",
       "lineage": "Tideborne",
-      "tierLevel": 5,
       "version": "1.0.0"
     },
     "autoanimations": {
@@ -234,12 +233,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004114716,
-    "modifiedTime": 1782167240135,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988984856,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -14,7 +14,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You never really travel alone. Caravan chains, sky-routes, migrant camps — the map of where help <em>should</em> be is already in your head.”</em></p>\n<p><strong>Nomad Networks.</strong> You reroll the lowest die on Presence and Soul checks made to find shelter, guides, supplies, or black-market contacts along major travel routes, in caravan towns, or in any inhabited Desert / Ash Wastes / Swamp / Mire hex.</p>\n<p><strong>Route-Sense.</strong> When you spend at least 1 hour in a settlement of any size, the GM tells you one true thing about a route in or out of that settlement that an outsider would not know.</p>",
+      "value": "\n<p><em>“You never really travel alone. Caravan chains, sky-routes, migrant camps — the map of where help <em>should</em> be is already in your head.”</em></p>\n<p><strong>Nomad Networks.</strong> You reroll the lowest die on Presence and Soul checks made to find shelter, guides, supplies, or black-market contacts along major travel routes, in caravan towns, or in any inhabited Desert / Ash Wastes / Swamp / Mire hex.</p>\n<p><strong>Route-Sense.</strong> When you spend at least 1 hour in a settlement of any size, the GM tells you one true thing about a route in or out of that settlement that an outsider would not know.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -39,14 +39,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "oldenborn",
       "feature": "nomad_networks",
       "lineage": "Stormborn Nomad",
-      "tierLevel": 11,
       "version": "2.0.0",
       "date": "2026-04-19"
     },
@@ -57,17 +53,6 @@
           "attribute": "soul",
           "mode": "reroll-lowest",
           "note": "on Presence and Soul checks [TODO(adv-call)] made to find shelter, guides, su…"
-        }
-      ],
-      "triggers": [
-        {
-          "event": "on-search",
-          "effect": {
-            "kind": "chat-prompt",
-            "args": {
-              "body": "Route-Sense. When you spend at least 1 hour in a settlement of any size, the GM tells you one true thing about a route in or out of that settlement th..."
-            }
-          }
         }
       ]
     },
@@ -254,12 +239,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776600000000,
-    "modifiedTime": 1782167240130,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988981130,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

@@ -1,0 +1,147 @@
+{
+  "name": "Soulfire Beak",
+  "type": "weapon",
+  "img": "icons/weapons/guns/flamethrower-spray-fire-orange.webp",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "melee",
+    "damage": {
+      "formula": "2d8",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "hot",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 2,
+      "long": 2
+    },
+    "tags": [],
+    "effect": "On a hit the target takes an extra 1d6 thermal (hot) damage and rolls Body vs DC 14 — on a failure its maximum Integrity is reduced by the thermal damage dealt, until its next Soma Break. The bird is eating the part of you that heals.",
+    "flavor": "Jagged volcanic rock, wreathed in ghostly white and orange flame.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "resolution": {
+        "saveAttribute": "body",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 14,
+        "onSave": "negate",
+        "statesOnFail": true
+      }
+    },
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Soulfire Beak"
+            },
+            "do": {
+              "damage": {
+                "formula": "1d6",
+                "type": "thermal"
+              }
+            }
+          },
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Soulfire Beak"
+            },
+            "do": {
+              "prompt": "Max Integrity drops by the thermal dealt until a Soma Break."
+            },
+            "narrative": true
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Harab Serapel Scavenger"
+        ],
+        "sourceIds": [
+          "SmVDBIAjrDFTRjxt"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "Q2qNLAQC4GkRvsXr",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069966,
+    "modifiedTime": 1792989070046,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!Q2qNLAQC4GkRvsXr"
+}

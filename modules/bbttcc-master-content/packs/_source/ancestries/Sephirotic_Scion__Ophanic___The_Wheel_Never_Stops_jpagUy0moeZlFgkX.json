@@ -7,7 +7,7 @@
     "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><div data-ft-canon-sephirotic=\"v1\" style=\"display:none\"></div><p><em>\"There is no angle that is not a front, to a thing with no back.\"</em></p><p><strong>The Wheel Never Stops (1/Soma Break).</strong> When you move at least 2 squares on your turn, as a bonus action take either one weapon attack OR the Dash. Additional uses per Soma Break cost 1 Surge each (player-managed via Surge controls).</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"sephOphanicWheel\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>The Wheel Never Stops</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (+1 Surge per extra use)  ·  <strong>Action:</strong> Bonus action (after moving 2 squares)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">After moving ≥ 2 squares, bonus action: one weapon attack OR Dash. Each additional use this Soma Break costs 1 Surge — spend manually.</span></p></div>",
+      "value": "<p><em>\"There is no angle that is not a front, to a thing with no back.\"</em></p><p><strong>The Wheel Never Stops (1/Soma Break).</strong> When you move at least 2 squares on your turn, as a bonus action take either one weapon attack — rerolling its lowest die — or the Dash. Additional uses per Soma Break cost 1 Surge each (spend it from your Surge controls).</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"sephOphanicWheel\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>The Wheel Never Stops</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (+1 Surge per extra use)  ·  <strong>Action:</strong> Bonus action (after moving 2 squares)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">After moving ≥ 2 squares, bonus action: one weapon attack OR Dash. Each additional use this Soma Break costs 1 Surge — spend manually.</span></p></div>",
       "chat": ""
     },
     "advancement": {},
@@ -16,7 +16,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -33,14 +33,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "sephirotic_scion",
       "feature": "the_wheel_never_stops",
       "lineage": "Ophanic",
-      "tierLevel": 1,
       "version": "1.1.0",
       "date": "2026-04-19",
       "rfiNative": true
@@ -49,14 +45,22 @@
       "triggers": [
         {
           "event": "on-move",
+          "predicate": {
+            "amountMin": 10
+          },
           "limit": {
             "window": "soma-break",
             "uses": 1
           },
+          "offer": true,
+          "offerText": "The Wheel Never Stops — bonus action: one weapon attack (reroll its lowest die) or the Dash.",
           "effect": {
-            "kind": "chat-prompt",
+            "kind": "bank-reroll",
             "args": {
-              "body": "The Wheel Never Stops (1/Soma Break). When you move at least 10 feet on your turn, as a bonus action you may take either one weapon attack OR the Dash action"
+              "target": "self",
+              "count": 1,
+              "context": "attack",
+              "note": "The Wheel Never Stops"
             }
           }
         }
@@ -251,12 +255,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776660294594,
-    "modifiedTime": 1782167240132,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988983808,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

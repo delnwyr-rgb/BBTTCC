@@ -3,14 +3,14 @@
   "type": "feat",
   "img": "icons/environment/traps/pressure-plate.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": {
       "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<p>Lean on 'em. Not with hands — with the quiet, patient certainty that they're already losing. They feel it in the teeth.</p><p><b>Apply social/psychological pressure to the defender (GM adjudicates).</b></p>",
+      "value": "<p>Lean on 'em. Not with hands — with the quiet, patient certainty that they're already losing. They feel it in the teeth.</p><p><b>Cultural Ambassadors, pre-roll. The opposing side rolls 3d10 and keeps the lowest 2 this round.</b></p><p><em>Cost: Soft Power 10 marks.</em></p>",
       "chat": ""
     },
     "activities": {},
@@ -47,6 +47,9 @@
         "availability": "standard",
         "unlockKey": null,
         "engine": "presence"
+      },
+      "effects": {
+        "text": "Cultural Ambassadors, pre-roll. The opposing side rolls 3d10 and keeps the lowest 2 this round."
       }
     }
   },
@@ -62,12 +65,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977107845,
-    "modifiedTime": 1779731345556,
-    "lastModifiedBy": "6ut7GT8pCAhpdWjS"
+    "modifiedTime": 1792989014050,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!myH1DvZpxmxfmgKE"
 }

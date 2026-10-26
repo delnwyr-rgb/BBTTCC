@@ -1,0 +1,103 @@
+{
+  "name": "Inlaid Drifter's Weave",
+  "type": "armor",
+  "img": "icons/equipment/chest/vest-cloth-tattered-tan.webp",
+  "system": {
+    "guardBonus": 2,
+    "evasionBonus": 2,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "fitting",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "light",
+      "cloth",
+      "graded",
+      "grade-inlaid"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Layered travel cloth — patchwork canvas over a quilted underlayer, road-stained at the cuffs. Cut for moving. Sold on every frontier table from Allesh Gilliam to the edge of the Lyrenn line. The first armor most Stewards ever buy, and the first they outgrow.</p><p>Worn in the field, not the throne room. Easy to repair, easy to replace, easy to forget you have it on.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Light</li>\n  <li><strong>Defense:</strong> Guard +2, Evasion +2</li>\n  <li><strong>Requires:</strong> Fitting (trained)</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 225 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Inlaid (+1). Hex-inlay along the working edge.</strong></p>\n<ul>\n  <li><strong>+1 on each of its defense bonuses</strong> → Guard +2, Evasion +2 (rank-scaled like all armor: Trained half, Proficient full).</li>\n  <li>Grade raises it to <strong>Tier II</strong> · free to wield.</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Cloth that's already walked further than you have.",
+          "origin": "forged",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Layered travel cloth — patchwork canvas over a quilted underlayer, road-stained at the cuffs. Cut for moving. Sold on every frontier table from Allesh Gilliam to the edge of the Lyrenn line. The first armor most Stewards ever buy, and the first they outgrow.</p><p>Worn in the field, not the throne room. Easy to repair, easy to replace, easy to forget you have it on.</p>",
+          "materialOf": [
+            {
+              "key": "road-canvas",
+              "qty": 1
+            },
+            {
+              "key": "quilted-liner",
+              "qty": 1
+            },
+            {
+              "key": "sept-silver",
+              "qty": 1
+            }
+          ],
+          "price": {
+            "marks": 225,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII armor (Inlaid +1 on TI Drifter's Weave) × bound free",
+            "bound": "free",
+            "saleBack": 90
+          }
+        }
+      },
+      "grade": {
+        "rank": 1,
+        "name": "Inlaid",
+        "key": "inlaid",
+        "defense": 1
+      }
+    }
+  },
+  "folder": "paUl8Tj6Xx5fAkKN",
+  "_id": "Ghy2n6ZKL3KNwfGq",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791427797924,
+    "modifiedTime": 1792988958703,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!Ghy2n6ZKL3KNwfGq"
+}

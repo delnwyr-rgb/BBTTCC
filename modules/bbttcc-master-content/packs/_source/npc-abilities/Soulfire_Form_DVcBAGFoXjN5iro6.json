@@ -1,0 +1,74 @@
+{
+  "name": "Soulfire Form",
+  "type": "feature",
+  "img": "icons/magic/defensive/shield-barrier-flaming-diamond-acid.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Inferno flows through gaps an inch wide. A creature that touches it or hits it with a melee attack from within 1 square takes 2d6 thermal (hot) damage. It can enter hostile spaces and stop there; the first time it enters a creature's space on a turn, that creature takes 2d6 thermal (hot).</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "struck",
+            "do": {
+              "damage": {
+                "formula": "2d6",
+                "type": "thermal"
+              }
+            }
+          },
+          {
+            "on": "use",
+            "do": {
+              "prompt": "Entering a creature's space (first time this turn): 2d6 thermal to it."
+            },
+            "who": "self",
+            "narrative": true
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Inferno of Cruelty"
+        ],
+        "sourceIds": [
+          "vpPWkftzLsEwoY9k"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "DVcBAGFoXjN5iro6",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069966,
+    "modifiedTime": 1792989070046,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!DVcBAGFoXjN5iro6"
+}

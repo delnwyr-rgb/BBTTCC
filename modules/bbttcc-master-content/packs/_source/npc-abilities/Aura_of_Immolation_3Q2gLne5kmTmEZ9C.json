@@ -1,0 +1,69 @@
+{
+  "name": "Aura of Immolation",
+  "type": "feature",
+  "img": "icons/weapons/guns/flamethrower-spray-fire-orange.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>At the start of each of the Inferno's turns, every creature within 6 squares takes 2d6 thermal (hot) damage — and any protection it has against thermal damage is burned away until the start of the Inferno's next turn (treat thermal resistance as absent).</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "do": {
+              "damage": {
+                "formula": "2d6",
+                "type": "thermal"
+              },
+              "prompt": "Thermal resistance is burned away until the Inferno's next turn."
+            },
+            "radius": 6,
+            "who": "all"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Inferno of Cruelty"
+        ],
+        "sourceIds": [
+          "vpPWkftzLsEwoY9k"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "3Q2gLne5kmTmEZ9C",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069910,
+    "modifiedTime": 1792989069993,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!3Q2gLne5kmTmEZ9C"
+}

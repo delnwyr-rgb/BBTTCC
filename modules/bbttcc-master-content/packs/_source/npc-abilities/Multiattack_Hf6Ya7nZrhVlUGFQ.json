@@ -7,43 +7,47 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>The Tree Being makes two Slam attacks or one Slam and uses Bloom of Correction.</p>",
+      "value": "<p>Gilbert makes two attacks with Usher's Broom, or one Usher's Broom attack and uses Weaponized Shame.</p>",
       "chat": ""
     }
   },
-  "_id": "Hf6Ya7nZrhVlUGFQ",
   "effects": [],
+  "_id": "Hf6Ya7nZrhVlUGFQ",
   "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "flags": {
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Aggressive Tiferet Tree Person"
+          "Gilbert, Attendant Eternal"
+        ],
+        "sourceIds": [
+          "LQS2jaeFhzFMDpxA"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": null,
-    "modifiedTime": null,
-    "lastModifiedBy": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989032548,
+    "modifiedTime": 1792989032548,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!Hf6Ya7nZrhVlUGFQ"
 }

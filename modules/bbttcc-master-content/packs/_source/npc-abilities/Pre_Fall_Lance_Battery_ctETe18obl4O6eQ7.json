@@ -9,7 +9,7 @@
     "damage": {
       "formula": "2d12",
       "attribute": "violence",
-      "type": "energy",
+      "type": "electrical",
       "damageFlavor": "lance-arc",
       "track": "integrity"
     },
@@ -23,7 +23,7 @@
       "tier-iv",
       "role-hardened"
     ],
-    "effect": "Ignores cover that is less than 1 ft. of solid alloy (it sees through and shoots through).",
+    "effect": "Ignores cover that is less than a hand's width of solid alloy (it sees through and shoots through).",
     "flavor": "A single still-charged capacitor lets go. The line briefly tastes of ozone and a forgotten language.",
     "manifestation": {
       "tier": 1,
@@ -57,11 +57,10 @@
       }
     },
     "description": {
-      "value": "<p><strong>Strike.</strong> range 6/24 squares, one target. Damage: <code>2d12</code> electrical (lance-arc) + violence. Ignores cover that is less than 1 square of solid alloy (it sees through and shoots through).</p><p><em>A single still-charged capacitor lets go. The line briefly tastes of ozone and a forgotten language.</em></p>",
+      "value": "<p><strong>Strike.</strong> range 6/24 squares, one target. Damage: <code>2d12</code> electrical (lance-arc) + violence. Ignores cover that is less than a hand's width of solid alloy (it sees through and shoots through).</p><p><em>A single still-charged capacitor lets go. The line briefly tastes of ozone and a forgotten language.</em></p>",
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -82,19 +81,8 @@
         }
       }
     },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Pre-Fall Apex Construct"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
-      }
-    },
     "autoanimations": {
-      "id": "3d70a771-5131-44af-b890-75d8de5efd05",
+      "id": "ft-pre-fall-lance-battery",
       "label": "Pre-Fall Lance Battery",
       "macro": {
         "enable": false,
@@ -269,24 +257,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Pre-Fall Apex Construct"
+        ],
+        "sourceIds": [
+          "bY5b3zOkFr7RbcNU"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "ctETe18obl4O6eQ7",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024236286,
-    "modifiedTime": 1782167283968,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989038463,
+    "modifiedTime": 1792989038464,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!ctETe18obl4O6eQ7"
 }

@@ -76,7 +76,7 @@
   const rit = game.fourththing?.epic?.ritual;
   t("ritual API present", !!rit);
   for (const k of ["begin", "status", "next", "instrument", "answer", "abort"]) t(`ritual.${k}`, typeof rit?.[k] === "function");
-  t("ritual instruments cover all 10 sephirot", !!rit && ["keter","chokmah","binah","chesed","gevurah","tiferet","netzach","hod","yesod","malkuth"].every(s => !!rit.INSTRUMENTS?.[s]));
+  t("ritual instruments cover all 10 sephirot", !!rit && ["keter","chokmah","binah","chesed","geburah","tiferet","netzach","hod","yesod","malkuth"].every(s => !!rit.INSTRUMENTS?.[s]));
   let rsOk = true;
   try { game.settings.get("bbttcc-epic", "ritual"); } catch (_e) { rsOk = false; }
   t("ritual setting registered", rsOk);

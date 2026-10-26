@@ -7,8 +7,9 @@
     "tags": [],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
-      "value": "<p>A diesel-howling hulk of plate and bolted-on intent. The kind of vehicle that arrives like weather. Crew of five, four guns, room in back for whatever you took.</p><p><strong>Frame · Heavy · Mobile · Mad Max canon</strong></p>",
+      "value": "<p>A diesel-howling hulk of plate and bolted-on intent. The kind of vehicle that arrives like weather. Crew of five, four guns, room in back for whatever you took.</p><p><strong>Frame · Heavy · Mobile</strong></p>",
       "chat": ""
     }
   },
@@ -89,7 +90,7 @@
             "gmOverride": true,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1.0,
+            "rarityMult": 1,
             "notes": "TII vehicle stamp · Heavy Combatant chassis (T2 heavy) — war-rig pays Violence (rubric §7) (untiered pass 2026-10-12)",
             "bound": "free",
             "saleBack": 300
@@ -109,11 +110,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778205373670,
-    "modifiedTime": 1778998014712,
+    "modifiedTime": 1792977622585,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

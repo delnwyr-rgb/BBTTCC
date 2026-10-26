@@ -3,8 +3,14 @@
   "type": "feat",
   "img": "icons/magic/holy/prayer-hands-glowing-yellow-green.webp",
   "system": {
+    "category": "strategic",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><b>Enlightenment Congress</b></p><p>Raise Enlightenment for all PCs by 1.</p><p><b>Cost:</b> Diplomacy 5 • Faith 5</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>enlightenment_congress</code></p>",
+      "value": "<p><b>Enlightenment Congress</b></p><p>Raise Enlightenment for all PCs by 1.</p><p><b>Cost:</b> Faith 50 · Diplomacy 50 marks</p>",
       "chat": ""
     },
     "activities": {},
@@ -15,10 +21,6 @@
     },
     "advancement": {},
     "identifier": "enlightenment-congress",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -59,12 +61,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977109852,
-    "modifiedTime": 1775063183065,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989002822,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!OgHdU8TnBIMJ0OAZ"
 }

@@ -14,36 +14,56 @@
       "chat": ""
     }
   },
-  "_id": "mWPBVpbzB2PIYmTc",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "grants": {
+        "conditionImmunities": [
+          "prone"
+        ]
+      },
+      "triggers": [
+        {
+          "event": "on-forced-movement",
+          "effect": {
+            "kind": "resist-forced-movement",
+            "args": {}
+          }
+        }
+      ]
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Aggressive Tiferet Tree Person"
+          "The Tree Person of Early Tifaret"
+        ],
+        "sourceIds": [
+          "Wlk2fVGEGJKgROfD"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "mWPBVpbzB2PIYmTc",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167245008,
-    "modifiedTime": 1782167245008,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989042182,
+    "modifiedTime": 1792989042183,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!mWPBVpbzB2PIYmTc"
 }

@@ -91,6 +91,25 @@
       "subclassKey": "harmmarshal_overwatch",
       "featureKey": "signal_boost"
     },
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "who": "targets",
+            "do": {
+              "bankReroll": {
+                "context": "check",
+                "attribute": "presence",
+                "note": "Signal Boost — Diplomacy / Intimidation"
+              },
+              "prompt": "If the check shifts a crowd or faction, your faction gains +1 Soft Power OP next Strategic Turn (1/scene)."
+            }
+          }
+        ]
+      }
+    },
     "autoanimations": {
       "id": "0cad37f0-daf8-49de-bee5-c90107835515",
       "label": "Signal Boost",
@@ -273,12 +292,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776467813568,
-    "modifiedTime": 1782167240828,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907903503,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

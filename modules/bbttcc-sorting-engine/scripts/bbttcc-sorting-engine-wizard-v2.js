@@ -404,7 +404,7 @@ const _DEAD_INLINE_DESCRIPTIONS_REMOVED = {
     "Chokhmah":  "Wisdom. The flash before the knowing. To anchor here is to trust your first sight.",
     "Binah":     "Understanding. The womb that gives the flash structure. To anchor here is to be the one who organizes.",
     "Chesed":    "Mercy. The hand that keeps giving. To anchor here is to trust the open hand even when it costs.",
-    "Gevurah":   "Severity. The fist that cuts. To anchor here is to know that no is sometimes the kindest word.",
+    "Geburah":   "Severity. The fist that cuts. To anchor here is to know that no is sometimes the kindest word.",
     "Tiphareth": "Beauty. The balancing heart. To anchor here is to live where opposites have to share a room.",
     "Netzach":   "Endurance. The fire that won't go out. To anchor here is to have a cause you won't lay down.",
     "Hod":       "Splendor. The intellect that bows. To anchor here is to know your knowing has a horizon.",
@@ -456,11 +456,12 @@ function _normalizeOptionName(s) {
     .replace(/\s*\(Bad Eden\)\s*$/i, "")  // strip trailing "(Bad Eden)" suffix
     .replace(/\s*\/\s*/g, "/")           // canonicalize slash spacing: " / " or "/" both → "/"
     .toLowerCase().trim();
-  // Sefirot transliteration aliases — pack uses Kether/Chokmah/Geburah, spec uses Keter/Chokhmah/Gevurah.
+  // Sefirot transliteration aliases — pack uses Kether/Chokmah/Geburah, spec uses Keter/Chokhmah/Geburah
+  // (spec was Gevurah until the 2026-10-26 one-spelling ruling; the old spelling still folds in).
   // Both spellings normalize to the same canonical form so lookups work either direction.
   if (n === "kether") n = "keter";
   else if (n === "chokmah") n = "chokhmah";
-  else if (n === "geburah") n = "gevurah";
+  else if (n === "gevurah" || n === "gevura") n = "geburah";
   return n;
 }
 
@@ -540,7 +541,7 @@ async function _loadPackIndex(category) {
       continue;
     }
     try {
-      const idx = await pack.getIndex({ fields: ["name", "img", "type", "flags.bbttcc.kind"] });
+      const idx = await pack.getIndex({ fields: ["name", "img", "type", "flags.bbttcc.kind", "flags.bbttcc.family"] });
       let added = 0;
       for (const entry of idx) {
         if (wantType && entry.type !== wantType) continue;
@@ -548,7 +549,8 @@ async function _loadPackIndex(category) {
         if (processedName == null) continue;  // skipped by rules
         const norm = _normalizeOptionName(processedName);
         if (!map.has(norm)) {
-          map.set(norm, { id: entry._id, img: entry.img || "", packKey: pack.collection, displayName: entry.name, processedName });
+          map.set(norm, { id: entry._id, img: entry.img || "", packKey: pack.collection, displayName: entry.name, processedName,
+            family: String(entry.flags?.bbttcc?.family ?? entry["flags.bbttcc.family"] ?? "") });
           added++;
         }
       }
@@ -988,7 +990,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     }).join("");
     const nodesSvg = spec.stations.map(s => {
       const p = TREE_COORDS[s.index];
-      // Alignment names are the Hebrew sefirot (Keter, Gevurah…); compare normalized so Kether/Geburah spellings match too.
+      // Alignment names are the Hebrew sefirot (Keter, Geburah…); compare normalized so Kether/Gevurah spellings match too.
       const isAnchor = !!alignmentName && _normalizeOptionName(s.sefirah.hebrew) === _normalizeOptionName(alignmentName);
       const stateClass = isAnchor ? "current" : "lit";
       return `
@@ -1076,11 +1078,18 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       "Echo-Diver":       ["Abyssal", "Empyrean", "Tellurian"],
       "Human":            ["Cro-Magnon", "Denisovan", "Florensis", "Neanderthal"],
       "Menhirkin":        ["Igneous", "Metamorphic", "Sedimentary"],
-      "Oldenborn":        ["Earthbound", "Lumenwrought", "Rustland Scavenger", "Stormborn Nomad"],
+      "Oldenborn":        ["Earthbound", "Lumenwrought", "Rustland Scavenger", "Stormborn Nomad", "Tideborne"],
       "Qliph-Scarred":    ["Chthonic", "Diabolic", "Husk"],
       "Sephirotic Scion": ["Cherubic", "Ophanic", "Seraphic"]
     };
-    return (map[ancestryName] || []).map(h => `${ancestryName} Heritage: ${h}`);
+    const fromMap = (map[ancestryName] || []).map(h => `${ancestryName} Heritage: ${h}`);
+    // Species-family filter from the pack itself (ruling AN12, 2026-10-26): any heritage root whose
+    // flags.bbttcc.family matches the ancestry is offered too, so a new root needs no code change.
+    const famKey = String(ancestryName || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+    const idx = _SE_PACK_INDEX_CACHE.get("heritage");
+    if (!idx && !this._heritageIndexKicked) { this._heritageIndexKicked = true; _loadPackIndex("heritage").then(() => { try { this.render(false); } catch (_e) {} }); }
+    const fromPack = idx ? [...idx.values()].filter(e => e.family && String(e.family).toLowerCase().replace(/[^a-z0-9]+/g, "") === famKey).map(e => e.displayName) : [];
+    return [...new Set([...fromMap, ...fromPack])].sort();
   }
 
   _buildHeritageRow(options) {

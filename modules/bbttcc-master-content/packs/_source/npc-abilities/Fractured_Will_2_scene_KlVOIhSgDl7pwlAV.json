@@ -1,0 +1,63 @@
+{
+  "name": "Fractured Will (2/scene)",
+  "type": "feature",
+  "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-revenant",
+      "boss",
+      "fractured-will"
+    ],
+    "description": {
+      "value": "<p>When the Ferryman fails a check, some part of him refuses the outcome: the Ferryman succeeds instead. 2 times per scene.</p><p><em>The fare was paid. The outcome is not accepted.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "frame": "feature"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Ferryman of the Drowned South"
+        ],
+        "sourceIds": [
+          "MHVUvyZbNGxeWytB"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "KlVOIhSgDl7pwlAV",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069931,
+    "modifiedTime": 1792989070015,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!KlVOIhSgDl7pwlAV"
+}

@@ -7,7 +7,7 @@
     "intent": "violence",
     "skill": "melee",
     "damage": {
-      "formula": "2d12",
+      "formula": "3d10",
       "attribute": "violence",
       "type": "kinetic",
       "damageFlavor": "honored-edge",
@@ -61,7 +61,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +79,37 @@
             "saleBack": 540
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Hex-Warlord's Honored Guard"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attack",
+            "if": {
+              "weapon": "Warlord's Blade"
+            },
+            "do": {
+              "reroll": "damage"
+            }
+          },
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Warlord's Blade",
+              "critical": true
+            },
+            "do": {
+              "condition": {
+                "key": "prone",
+                "duration": "1-round"
+              }
+            }
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "c47d3351-ac17-41c7-a4cc-b74280e9e221",
+      "id": "ft-warlord-s-blade",
       "label": "Warlord's Blade",
       "macro": {
         "enable": false,
@@ -268,50 +283,41 @@
       "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
-      "version": 5,
-      "meleeSwitch": {
-        "video": {
-          "dbSection": "range",
-          "menuType": "weapon",
-          "animation": "arrow",
-          "variant": "regular",
-          "color": "regular",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "detect": "automatic",
-          "range": 2,
-          "returning": false,
-          "switchType": "on"
-        }
+      "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Hex-Warlord's Honored Guard"
+        ],
+        "sourceIds": [
+          "mUM4tXeqeUagkLRJ"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "R8GXEOfayVKFqlCs",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024232492,
-    "modifiedTime": 1782167244998,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989050851,
+    "modifiedTime": 1792989050852,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!R8GXEOfayVKFqlCs"
 }

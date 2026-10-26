@@ -1,0 +1,147 @@
+{
+  "name": "The River Remembers (1/scene)",
+  "type": "weapon",
+  "img": "icons/magic/water/wave-water-teal.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "soul",
+    "skill": "channel",
+    "damage": {
+      "formula": "3d8",
+      "attribute": "soul",
+      "type": "qliphothic",
+      "damageFlavor": "the whole flood",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 6,
+      "long": 18
+    },
+    "tags": [
+      "bestiary",
+      "tier-ii",
+      "lineage-revenant",
+      "boss",
+      "ultimate"
+    ],
+    "effect": "Sphere 6 squares. — targets roll vs Evasion (DC 14). Half damage on success. ULTIMATE — usable only at or below half Integrity. The water rises to the knee and holds; on a failed save the target is Restrained until the end of its next turn.",
+    "flavor": "The flood never left. It was only waiting for the fare.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "restrained"
+        ],
+        "duration": "1-round",
+        "saveEachRound": false,
+        "saveAttribute": "intrigue",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 14,
+        "saveAttributeOverrides": {}
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "intrigue",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 14,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "sphere",
+        "size": 30
+      }
+    },
+    "description": {
+      "value": "<p><strong>Area Attack.</strong> Each creature within 6 squares. rolls vs DC 14. Damage: <code>3d8</code> qliphothic (the whole flood). ULTIMATE — usable only at or below half Integrity. The water rises to the knee and holds; on a failed save the target is Restrained until the end of its next turn.</p><p><em>The flood never left. It was only waiting for the fare.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "frame": "save",
+          "aoeShape": "sphere",
+          "aoeSize": 30,
+          "dc": 14,
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII save × 1",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "The Ferryman of the Drowned South"
+        ],
+        "sourceIds": [
+          "MHVUvyZbNGxeWytB"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "aefsLDFvWdx9nE76",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069978,
+    "modifiedTime": 1792989070054,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!aefsLDFvWdx9nE76"
+}

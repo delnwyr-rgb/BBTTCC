@@ -1,7 +1,7 @@
 {
   "name": "Fewer Dead Fish Smell Saloon",
   "type": "rig",
-  "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_2.png",
+  "img": "modules/bbttcc-core/assets/rigs/infrastructure_2.webp",
   "system": {
     "identity": {
       "mobility": "stationary",
@@ -52,7 +52,9 @@
       },
       "resolve": {
         "value": 11
-      }
+      },
+      "integrity": {},
+      "stress": {}
     },
     "defenses": {
       "resistances": [],
@@ -73,7 +75,11 @@
       ],
       "depthRating": 0
     },
-    "tags": []
+    "tags": [],
+    "biography": {
+      "concept": "",
+      "notes": ""
+    }
   },
   "_id": "ES923aaaysqX5J7B",
   "prototypeToken": {
@@ -84,7 +90,7 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_2.png",
+      "src": "modules/bbttcc-core/assets/rigs/infrastructure_2.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
@@ -260,12 +266,12 @@
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
-    "createdTime": 1787799219721,
-    "modifiedTime": 1787799219721,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "createdTime": 1791316997811,
+    "modifiedTime": 1792989106640,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

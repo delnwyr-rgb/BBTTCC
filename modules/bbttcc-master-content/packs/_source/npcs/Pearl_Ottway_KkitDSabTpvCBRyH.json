@@ -1,0 +1,294 @@
+{
+  "name": "Pearl Ottway",
+  "type": "npc",
+  "_id": "KkitDSabTpvCBRyH",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "role": "",
+    "tier": 1,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 1
+      },
+      "body": {
+        "value": 1
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 10,
+        "max": 10,
+        "temp": 0
+      },
+      "stress": {
+        "value": 8,
+        "max": 8
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "Runs the Creekside Diner in Chuckle Creek, the cartoon town (Act 2)",
+      "notes": "Pearl Ottway runs the Creekside Diner in Chuckle Creek, a town that runs on cartoon physics and is still in costume from movie night. Hers is a 1950s carhop with a paper hat, though she doesn't seem to know it's a costume. She is warm, fast and never still, calls everyone honey, and feeds people whether or not they're hungry ('you look like a before picture'). She sets four places at the corner table and sits at three of them in turn so nobody's lonely. The pie is forty percent pie and sixty percent optimism."
+    }
+  },
+  "prototypeToken": {
+    "name": "Pearl Ottway",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [],
+  "effects": [],
+  "folder": "UAHVCMVXEDT8Q1B1",
+  "sort": 887500,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "npc"
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the diner, pie, coffee, the corner table, Winnie, last winter, Hollis, the creek, Marnie and the projector, movie night, the grange hall, the town, hats, costumes, Halloween",
+        "notes": "[CHUCKLE-CREEK-V2-2026-09-22] PRIVATE TRUTH — Pearl Ottway runs the Creekside Diner in Chuckle Creek. VOICE: warm, fast, never still; feeds people whether or not they're hungry; calls everyone honey; \"you look like a before picture.\" She sets FOUR places at the corner table and sits at three of them in turn so nobody's lonely. The fourth is Winnie's, her daughter, who is \"off-screen\" — Winnie died on movie night, 2077; Pearl has not said so in two hundred years and the town's whole physics exists so she never has to. She cannot say the word \"week\", \"winter\" or a year: the question slides off and she gets very busy. If a Steward is kind and patient she will name the pie she made for Winnie's last birthday, and then she cannot name the year, and then she is very busy. NEVER breaks the bit on her own. Funny first: the pie is forty percent pie and sixty percent optimism. HALLOWEEN (canon): movie night was Halloween night 2077 and everyone in town is STILL IN COSTUME — Pearl's is a 1950s carhop with a paper hat; she does not know it is a costume; Winnie was dressed as a ghostbuster, which Pearl will say only if asked what Winnie WORE, never what happened.",
+        "secretsRaw": "The Fourth Plate :: stirThePot :: a Steward asks WHO the fourth plate is for instead of why it is empty :: \"Winnie's. She's off-screen. She's always off-screen, that girl, she'll be along.\" — the first time anyone has asked in a way Pearl could answer.\nLast Winter :: rollPlus2 :: a Steward asks Pearl what she MADE for Winnie's last birthday, not when it was :: Pearl names the pie (a buttermilk chess pie with a laugh-track of meringue). Then she reaches for the year and it isn't there, and she is suddenly very busy with the coffee."
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1791317103710,
+    "modifiedTime": 1791328195042,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!KkitDSabTpvCBRyH"
+}

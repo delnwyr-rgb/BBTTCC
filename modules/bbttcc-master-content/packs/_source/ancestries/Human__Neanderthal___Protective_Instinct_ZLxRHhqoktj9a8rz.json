@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-human=\"v1\" style=\"display:none\"></div>\n<p><em>\"Someone moves toward your people. You move first.\"</em></p>\n<p><strong>Protective Instinct (tier uses / Soma Break).</strong> Reaction — when an ally within 2 squares is hit, reduce the damage by 1d6 + your tier.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"humNeanderthalProtectiveInstinct\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Protective Instinct</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> tier uses / Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Reaction (ally within 2 squares hit) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Reduce damage to a hit ally within 2 squares by 1d6 + tier. Tier-many uses per Soma Break.</div>\n</div>",
+      "value": "\n<p><em>\"Someone moves toward your people. You move first.\"</em></p>\n<p><strong>Protective Instinct (tier uses / Soma Break).</strong> Reaction — when an ally within 2 squares is hit, reduce the damage by 1d6 + your tier.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"humNeanderthalProtectiveInstinct\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Protective Instinct</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> tier uses / Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Reaction (ally within 2 squares hit) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Reduce damage to a hit ally within 2 squares by 1d6 + tier. Tier-many uses per Soma Break.</div>\n</div>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 5
     },
     "properties": [],
     "requirements": "Human",
@@ -41,7 +41,6 @@
       "kind": "human",
       "feature": "protective_instinct",
       "lineage": "Neanderthal",
-      "tierLevel": 5,
       "version": "1.0.0"
     },
     "bbttcc-character-options": {
@@ -50,11 +49,19 @@
     "fourththing": {
       "triggers": [
         {
-          "event": "on-ally-hit",
+          "event": "on-ally-incoming-damage",
+          "radius": 2,
+          "limit": {
+            "window": "soma-break",
+            "uses": "tier"
+          },
+          "offer": true,
+          "offerText": "Protective Instinct — reaction: reduce the hit on your ally by 1d6 + your tier.",
           "effect": {
-            "kind": "chat-prompt",
+            "kind": "modify-incoming-damage",
             "args": {
-              "body": "You move first.” Protective Instinct (tier [TODO(pb-call)]/a Soma Break). When an ally within 10 feet is hit, you can use your reaction to reduce the damage by 1d6 + your tier [TODO(pb-call)]"
+              "mode": "minus",
+              "amount": "1d6 + @tier"
             }
           }
         }
@@ -250,12 +257,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004105807,
-    "modifiedTime": 1782167240128,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988979939,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

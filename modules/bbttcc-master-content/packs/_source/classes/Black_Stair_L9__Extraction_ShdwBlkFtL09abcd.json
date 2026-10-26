@@ -38,17 +38,7 @@
     },
     "fourththing": {
       "grants": {},
-      "triggers": [
-        {
-          "event": "on-package-take",
-          "effect": {
-            "kind": "chat-prompt",
-            "args": {
-              "body": "What you carry, no one else can find. When you take a non-owned object , a piece of information , or a willing small creature into your possession as a Package, both you and the Package become untraceable by divinatio..."
-            }
-          }
-        }
-      ]
+      "triggers": []
     }
   },
   "folder": "eQl1GnJxLhG4BD19",
@@ -56,12 +46,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.3",
     "createdTime": 1777005233913,
-    "modifiedTime": 1781116151172,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907909376,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

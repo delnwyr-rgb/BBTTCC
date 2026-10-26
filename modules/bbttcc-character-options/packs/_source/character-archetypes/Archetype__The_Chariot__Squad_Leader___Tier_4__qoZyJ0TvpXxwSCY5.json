@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 (Level 17) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> —</li>\n<li><strong>Strategic:</strong> When undertaking a Bunker Busters (Strategic Raid) scenario, your presence and squad reroll the lowest die to your faction's Opposed Strategic Roll.</li>\n</ul>",
+      "value": "<p><strong>Tier 4 (Level 17) — The Chariot</strong></p>\n<ul>\n\n<li><strong>Strategic:</strong> Once per Bunker Busters scene, your presence and squad let your Domain reroll the lowest die on its Domain roll (the card fires it).</li>\n</ul>",
       "chat": ""
     },
     "activities": {},
@@ -72,12 +72,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986677898,
-    "modifiedTime": 1782167238592,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989161548,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

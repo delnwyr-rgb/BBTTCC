@@ -13,7 +13,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-oldenborn-furrykin=\"v1\" style=\"display:none\"></div>\n<p><em>\"You breathe what kills them.\"</em></p><p><strong>Toxic Lung Filters (passive).</strong> Reroll the lowest die on defense checks against inhaled toxins, smoke, and industrial residue (auto-fires). You can function for up to 1 hour in atmospheres that would hospitalize a normal Medium creature.</p><p><strong>Scavenger's Eye (1/Soma Break).</strong> Spend 10 minutes in a ruin, junkyard, or wreckage site; find one specific reasonable item. The GM may gate exotic items behind a Mind check.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldRustToxicLungFilters\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Toxic Lung Filters + Scavenger's Eye</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break (active) + always-on passive &nbsp;·&nbsp; <strong>Action:</strong> Action (10-min search) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Active: 10-min search → 1 plausible salvage item. Passive: reroll-lowest vs inhaled toxins/smoke/industrial residue (auto-fires); 1 hr in hospitalizing atmospheres.</div>\n</div>",
+      "value": "\n<p><em>\"You breathe what kills them.\"</em></p><p><strong>Toxic Lung Filters (passive).</strong> Reroll the lowest die on defense checks against inhaled toxins, smoke, and industrial residue. You can function for up to 1 hour in atmospheres that would hospitalize a normal Medium creature.</p><p><strong>Scavenger's Eye (1/Soma Break).</strong> Spend 10 minutes in a ruin, junkyard, or wreckage site; find one specific reasonable item. The GM may gate exotic items behind a Mind check.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldRustToxicLungFilters\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Toxic Lung Filters + Scavenger's Eye</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break (active) + always-on passive &nbsp;·&nbsp; <strong>Action:</strong> Action (10-min search) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Active: 10-min search → 1 plausible salvage item. Passive: reroll-lowest vs inhaled toxins/smoke/industrial residue; 1 hr in hospitalizing atmospheres.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -22,7 +22,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -39,14 +39,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "oldenborn",
       "feature": "toxic_lung_filters",
       "lineage": "Rustland Scavenger",
-      "tierLevel": 1,
       "version": "1.1.0",
       "date": "2026-04-19",
       "rfiNative": true
@@ -264,12 +260,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776660294549,
-    "modifiedTime": 1781116100610,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988985375,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

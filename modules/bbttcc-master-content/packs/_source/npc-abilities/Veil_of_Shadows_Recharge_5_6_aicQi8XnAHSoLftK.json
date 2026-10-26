@@ -1,0 +1,50 @@
+{
+  "name": "Veil of Shadows (Recharge 5–6)",
+  "type": "feat",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Veil-Spinner wraps itself in spun nothing and turns invisible until it attacks or loses the thread of the working.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "aicQi8XnAHSoLftK",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Satariel Veil-Spinner"
+        ],
+        "sourceIds": [
+          "zVWpSrwZCA3TL5Dp"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069983,
+    "modifiedTime": 1792989070057,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!aicQi8XnAHSoLftK"
+}

@@ -10,12 +10,12 @@
     "default": 0
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1780000000000,
-    "modifiedTime": 1782160020989,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988943509,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
@@ -23,18 +23,19 @@
   "system": {
     "category": "melee",
     "intent": "presence",
-    "skill": "channel",
+    "skill": "melee",
     "damage": {
       "formula": "1d12",
       "attribute": "presence",
       "type": "psychic",
-      "damageFlavor": "the hit you don't know the size of until it's over",
+      "damageFlavor": "",
       "track": "stress"
     },
     "damageParts": [],
     "range": {
-      "short": 5,
-      "long": 5
+      "short": 1,
+      "long": 1,
+      "units": "sq"
     },
     "tags": [
       "staff",
@@ -77,7 +78,7 @@
       }
     },
     "description": {
-      "value": "<p>A sealed box on the end of a stick. Do not open the box. Inside is, allegedly, a probability core and, allegedly, a cat, and the staff's whole function is to refuse to tell you which until the swing lands. Hits with the confidence of something that already knows how this ends.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>On a hit, roll the 1d12 twice — the wielder chooses which result the universe collapses to (cat alive / cat extremely not). Observers describe the noise differently afterward and are always certain they're right.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d12 Psychic damage to <em>Stress</em> <span style=\"opacity:.75\">(the hit you don't know the size of until it's over)</span></li>\n  <li><strong>Faculty:</strong> Presence</li>\n  <li><strong>Attack:</strong> Channel (Presence)</li>\n  <li><strong>Range:</strong> 5</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+      "value": "<p>A sealed box on the end of a stick. Do not open the box. Inside is, allegedly, a probability core and, allegedly, a cat, and the staff's whole function is to refuse to tell you which until the swing lands. Hits with the confidence of something that already knows how this ends.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>On a hit, roll the 1d12 twice — the wielder chooses which result the universe collapses to (cat alive / cat extremely not). Observers describe the noise differently afterward and are always certain they're right.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d12 Psychic damage to <em>Stress</em> <span style=\"opacity:.75\">(the hit you don't know the size of until it's over)</span></li>\n  <li><strong>Faculty:</strong> Presence</li>\n  <li><strong>Attack:</strong> Melee (Presence)</li>\n  <li><strong>Range:</strong> 1 square</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T2</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
     }
   },
   "flags": {
@@ -86,7 +87,7 @@
         "item": {
           "tier": "II",
           "footprint": 1,
-          "reach": "5",
+          "reach": "1",
           "frame": "weapon",
           "signature": "The damage is undecided until somebody looks.",
           "origin": "looted",
@@ -109,19 +110,16 @@
           ],
           "price": {
             "marks": 300,
-            "currency": "softpower",
+            "currency": "violence",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TII probability staff",
+            "rarityMult": 2,
+            "notes": "TII weapon × rarity 2",
             "bound": "free",
             "saleBack": 120
           }
         }
-      },
-      "manifestSheetMode": {
-        "bytUGWIOqq9eT7Or": "display"
       }
     },
     "autoanimations": {

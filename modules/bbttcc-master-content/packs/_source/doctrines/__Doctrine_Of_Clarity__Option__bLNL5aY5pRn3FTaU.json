@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Doctrine Of Clarity [Option]",
+  "name": "Doctrine Of Clarity",
   "type": "feat",
   "img": "icons/magic/fire/explosion-flame-lightning-strike.webp",
   "system": {
@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Doctrine Of Clarity [Option]</h3><p><em>No rules text registered.</em></p></div>",
+      "value": "<p><strong>Doctrine Of Clarity</strong></p><p>Gnostic. Domain-wide: your Domain's Darkness −1.</p><p><em>Cost: Faith 10 · Intrigue 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "optact_doctrine_of_clarity"
+      "key": "optact_doctrine_of_clarity",
+      "effects": {
+        "text": "Gnostic. Domain-wide: your Domain's Darkness −1."
+      }
     }
   },
   "_id": "bLNL5aY5pRn3FTaU",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601762,
-    "modifiedTime": 1782703702687,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988996415,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

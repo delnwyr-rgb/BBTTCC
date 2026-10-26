@@ -38,7 +38,6 @@
       "subtype": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -46,6 +45,22 @@
           "tier": "III",
           "frame": "trait"
         }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "attacked",
+            "do": {
+              "reroll": "attack-highest"
+            },
+            "limit": {
+              "per": "round",
+              "uses": 1
+            },
+            "label": "Battle Prediction — the first incoming Strike each round rerolls its highest"
+          }
+        ]
       }
     },
     "bbttcc": {
@@ -53,29 +68,34 @@
         "sources": [
           "Pre-Fall Battlemind"
         ],
+        "sourceIds": [
+          "nAl4cJIYsqzvJtOd"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "BiPjSxYRaH4bkC4A",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": null,
-    "modifiedTime": null,
-    "lastModifiedBy": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989018555,
+    "modifiedTime": 1792989018556,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!BiPjSxYRaH4bkC4A"
 }

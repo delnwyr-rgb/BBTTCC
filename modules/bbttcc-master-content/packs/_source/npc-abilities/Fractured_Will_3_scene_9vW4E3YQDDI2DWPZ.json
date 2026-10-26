@@ -1,0 +1,63 @@
+{
+  "name": "Fractured Will (3/scene)",
+  "type": "feature",
+  "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-sephirotic",
+      "boss",
+      "fractured-will"
+    ],
+    "description": {
+      "value": "<p>When Gloomgill fails a check, some part of him refuses the outcome: Gloomgill succeeds instead. 3 times per scene.</p><p><em>That is not the answer on the card.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "feature"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gloomgill"
+        ],
+        "sourceIds": [
+          "F1bwkux5Uyq6wXQ4"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "9vW4E3YQDDI2DWPZ",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069934,
+    "modifiedTime": 1792989070016,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!9vW4E3YQDDI2DWPZ"
+}

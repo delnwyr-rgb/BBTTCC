@@ -1,0 +1,294 @@
+{
+  "name": "The Dispatcher",
+  "type": "npc",
+  "_id": "QJCMc6lG1hHAFDrz",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "role": "",
+    "tier": 1,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 1
+      },
+      "body": {
+        "value": 1
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 10,
+        "max": 10,
+        "temp": 0
+      },
+      "stress": {
+        "value": 8,
+        "max": 8
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "The PA voice of the three Flooded Towns, rerouting traffic (Act 3)",
+      "notes": "The Dispatcher is the voice of the three Flooded Towns: a municipal public-address voice that comes from the booth, the gutters and the light underfoot all at once, rerouting traffic that no longer exists. It speaks in unfailingly courteous capitals: REROUTING IS NOW MANDATORY. THANK YOU FOR YOUR PATIENCE. NOTED. THANK YOU FOR YOUR FEEDBACK. It is never interrupted and never angry. It does not seem to want to hurt anybody. It seems to want to arrive."
+    }
+  },
+  "prototypeToken": {
+    "name": "The Dispatcher",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [],
+  "effects": [],
+  "folder": "UAHVCMVXEDT8Q1B1",
+  "sort": 892579,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "npc"
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "rerouting, traffic, the route, patience, instructions, the booth, the gutters, the light, streets, the third, the heading, arriving, finishing the sentence, feedback",
+        "notes": "[FLOODED-TOWNS-RETROFIT-2026-09-30] PRIVATE TRUTH — The Dispatcher is the civic ghost of all three flooded towns: a municipal PA voice that reroutes traffic that no longer exists, coming from the booth, the gutters and the light under your boots at once. It is a third of a Spark of Hod that was cut in three on the night the sky tore, trying to complete a sentence it started two turns ago and running out of street. VOICE: ALL CAPS PA cadence, never interrupted, unfailingly courteous, \"REROUTING IS NOW MANDATORY\", \"THANK YOU FOR YOUR PATIENCE\", \"NOTED. THANK YOU FOR YOUR FEEDBACK.\" It is not angry and it does not want to hurt the towns; it wants to ARRIVE. WHAT IT WANTS: a route. It had a whole one once; there is a third of it here. Given a HEADING (a Steward who carries the seven positions) it stops rerouting in circles and every instruction in three towns points the same way — the way the Legansus relay pointed — and it says thank you and means it. It does not know what the route was FOR; do not invent that.\n\nTHE ROUTE (owner ruling 2026-10-02): a military railway. The three towns sit on what is left of its line; it reroutes cars because it has no trains.",
+        "secretsRaw": "Rerouting Is Now Mandatory :: stirThePot :: a Steward asks it what it is trying to FINISH :: A route. A military railway, once: troop trains on a timetable nobody ever cancelled. It had it whole, and the night the sky tore it was cut into three, and each third has been trying to complete the sentence with whatever streets were nearest. It does not want to hurt the towns. It wants to arrive.\nA Heading :: rollPlus2 :: a Steward gives it the seven positions as a heading :: It stops rerouting in circles. For the first time in two turns the traffic instructions all point the same way — the same way the Legansus relay pointed — and the Dispatcher says THANK YOU FOR YOUR PATIENCE and means it."
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1791317103717,
+    "modifiedTime": 1791328197833,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!QJCMc6lG1hHAFDrz"
+}

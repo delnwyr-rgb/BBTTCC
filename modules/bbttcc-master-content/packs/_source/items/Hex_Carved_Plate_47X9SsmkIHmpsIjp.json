@@ -15,7 +15,8 @@
     "tags": [
       "plate",
       "hex-warded",
-      "attunement"
+      "attunement",
+      "heavy"
     ],
     "category": "armor",
     "source": "",
@@ -156,8 +157,7 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!47X9SsmkIHmpsIjp.RsiFLyhGwKdmohsR"
+      }
     }
   ],
   "sort": 100000,
@@ -166,12 +166,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137142766,
-    "modifiedTime": 1782151518971,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988953792,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

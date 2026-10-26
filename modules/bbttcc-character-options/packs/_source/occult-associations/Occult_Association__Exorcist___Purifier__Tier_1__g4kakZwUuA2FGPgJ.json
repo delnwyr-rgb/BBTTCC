@@ -29,7 +29,7 @@
       "level": null
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Level 1+",
     "type": {
       "value": "",
       "subtype": ""
@@ -52,6 +52,16 @@
         "levelMax": 1
       },
       "category": "occult"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "save",
+          "mode": "reroll-lowest",
+          "vs": "corruption, fear, or possession",
+          "note": "Exorcist / Purifier T1"
+        }
+      ]
     }
   },
   "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
@@ -67,12 +77,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987089076,
-    "modifiedTime": 1782167239253,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989175661,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

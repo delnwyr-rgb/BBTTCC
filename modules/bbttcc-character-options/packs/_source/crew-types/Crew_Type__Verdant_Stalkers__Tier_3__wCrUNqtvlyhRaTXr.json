@@ -72,7 +72,23 @@
       "category": "crew"
     },
     "fourththing": {
-      "vocabScrub": "2026-05-16"
+      "vocabScrub": "2026-05-16",
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "stealth",
+          "vs": "in natural terrain",
+          "note": "Verdant Stalkers T3"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "athletics",
+          "vs": "tracking or ambush",
+          "note": "Verdant Stalkers T3"
+        }
+      ]
     }
   },
   "folder": "3hFwHalyNvJcfIyJ",
@@ -86,11 +102,11 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.361",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.1",
     "createdTime": 1774986965136,
-    "modifiedTime": 1778970595707,
+    "modifiedTime": 1791344271333,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {

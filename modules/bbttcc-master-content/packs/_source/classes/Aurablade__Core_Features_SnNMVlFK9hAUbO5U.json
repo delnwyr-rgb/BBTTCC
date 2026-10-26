@@ -37,7 +37,112 @@
       "subtype": ""
     }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Class L1: Melee +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "description": "Granted by Aurablade: Core Features at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Aurablade: Core Features",
+          "aptitudeKind": "melee"
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.melee.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "86ClpsyF8D136RgR",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864373883,
+        "modifiedTime": 1791864373883,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Class L1: Fitting +1",
+      "img": "icons/skills/melee/sword-stylized-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "description": "Granted by Aurablade: Core Features at Tier 1.",
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "aptitudeStamp": "2026-05-04",
+          "aptitudeAnchor": "Aurablade: Core Features",
+          "aptitudeKind": "fitting"
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.fitting.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "AMaJB0oLiqtVoLbR",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.16",
+        "createdTime": 1791864373883,
+        "modifiedTime": 1791864373883,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
   "flags": {
     "bbttcc": {
       "identifier": "aurablade_core_features"
@@ -218,6 +323,11 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "fourththing": {
+      "aurablade": {
+        "meleeAttrOption": "presence"
+      }
     }
   },
   "folder": "jzZQust69VtMPSOe",
@@ -231,11 +341,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.16",
     "createdTime": 1776459909020,
-    "modifiedTime": 1781116157566,
+    "modifiedTime": 1791864373998,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!SnNMVlFK9hAUbO5U"

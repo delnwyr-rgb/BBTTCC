@@ -4,7 +4,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-11",
+    "at": "2026-10-26",
     "overridesApplied": 0
   },
   "actors": [
@@ -12,18 +12,18 @@
       "slug": "rig-menhir-kin-standing-stone-crawler",
       "name": "Menhir Kin Standing-Stone Crawler",
       "type": "vehicle",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_war_tower_1.png",
+      "img": "modules/bbttcc-core/assets/rigs/heavy_rig_6.webp",
       "folder": "Rigs",
       "prototypeToken": {
         "actorLink": true,
         "disposition": 1,
         "name": "Menhir Kin Standing-Stone Crawler",
         "displayName": 30,
-        "width": 1,
-        "height": 1,
+        "width": 3,
+        "height": 3,
         "depth": 1,
         "texture": {
-          "src": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_war_tower_1.png",
+          "src": "modules/bbttcc-core/assets/rigs/heavy_rig_6.webp",
           "anchorX": 0.5,
           "anchorY": 0.5,
           "fit": "contain",
@@ -112,7 +112,7 @@
           "hp": {
             "value": 120,
             "max": 120,
-            "dt": 20,
+            "dt": 15,
             "mt": null
           }
         },
@@ -134,121 +134,10 @@
       },
       "items": [
         {
-          "slug": "gear-forge-facility-frame",
-          "name": "Forge Facility Frame",
-          "type": "loot",
-          "img": "icons/environment/settlement/wagon-black.webp",
-          "system": {
-            "description": {
-              "value": "<p>A bolted-down industrial cathedral. Chimneys exhale slag and prayer in equal measure. Doesn't move; doesn't need to. Things come <em>to</em> it.</p><p><strong>Frame · Siege · Stationary</strong></p>",
-              "chat": ""
-            },
-            "identified": true,
-            "unidentified": {
-              "description": ""
-            },
-            "container": null,
-            "quantity": 1,
-            "weight": {
-              "value": 1,
-              "units": "lb"
-            },
-            "price": {
-              "value": 30,
-              "denomination": "gp"
-            },
-            "rarity": "",
-            "properties": [],
-            "type": {
-              "value": "gear",
-              "subtype": ""
-            }
-          },
-          "effects": [],
-          "flags": {
-            "fourththing": {
-              "rigGear": {
-                "subtype": "rig-frame"
-              },
-              "rigFrame": {
-                "bracket": "siege",
-                "baseIntegrity": 64,
-                "tierStep": 18,
-                "mobilityAllowed": [
-                  "stationary"
-                ],
-                "slots": {
-                  "weapon": 1,
-                  "system": 2,
-                  "output": 4
-                },
-                "capacity": {
-                  "pilot": {
-                    "min": 0,
-                    "max": 0
-                  },
-                  "gunner": {
-                    "min": 0,
-                    "max": 1
-                  },
-                  "engineer": {
-                    "min": 0,
-                    "max": 2
-                  },
-                  "crew": {
-                    "min": 0,
-                    "max": 4
-                  }
-                },
-                "actions": {
-                  "pilot": [],
-                  "gunner": [
-                    "fire-weapon",
-                    "suppression",
-                    "opportunity-fire"
-                  ],
-                  "engineer": [
-                    "repair",
-                    "boost-system",
-                    "vent-heat",
-                    "cycle-power",
-                    "counter-sabotage"
-                  ],
-                  "crew": [
-                    "operate-module",
-                    "reload",
-                    "brace"
-                  ]
-                },
-                "travel": {
-                  "speed": 0,
-                  "range": 0
-                },
-                "visualFrame": "anchor-corners"
-              },
-              "rfi": {
-                "item": {
-                  "price": {
-                    "marks": 30,
-                    "currency": "economy",
-                    "gmOverride": false,
-                    "altCurrencies": {},
-                    "split": null,
-                    "rarityMult": 1,
-                    "notes": "TI tool stamp",
-                    "bound": "free",
-                    "saleBack": 12
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
           "slug": "gear-mortar-battery",
           "name": "Mortar Battery",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/ammunition/explosive-artillery-mortar-shell.webp",
           "system": {
             "description": {
               "value": "<p>Indirect fire from pre-rotated tubes. Crew yells coordinates at each other; the math sometimes lands.</p>",
@@ -446,10 +335,10 @@
           "slug": "gear-reinforced-plating",
           "name": "Reinforced Plating",
           "type": "loot",
-          "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+          "img": "icons/commodities/tech/plating-metal-armor-tech-steel-blue.webp",
           "system": {
             "description": {
-              "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p>",
+              "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p><p><strong>Passive:</strong> +2 hit points max per rig tier while fitted.</p>",
               "chat": ""
             },
             "identified": true,
@@ -478,7 +367,9 @@
             "fourththing": {
               "rigGear": {
                 "subtype": "rig-system",
-                "passive": true
+                "passive": {
+                  "integrityMaxPerTier": 2
+                }
               },
               "rfi": {
                 "item": {
@@ -502,10 +393,10 @@
           "slug": "gear-sensor-suite",
           "name": "Sensor Suite",
           "type": "loot",
-          "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+          "img": "icons/commodities/tech/electronics-sensor-eye.webp",
           "system": {
             "description": {
-              "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p>",
+              "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p><p><strong>Passive:</strong> every crew member aboard adds +1 to initiative.</p>",
               "chat": ""
             },
             "identified": true,
@@ -534,7 +425,9 @@
             "fourththing": {
               "rigGear": {
                 "subtype": "rig-system",
-                "passive": true
+                "passive": {
+                  "initiative": 1
+                }
               },
               "rfi": {
                 "item": {
@@ -549,6 +442,127 @@
                     "bound": "free",
                     "saleBack": 12
                   }
+                }
+              }
+            }
+          }
+        },
+        {
+          "slug": "gear-war-rig-frame",
+          "name": "War Rig Frame",
+          "type": "loot",
+          "img": "icons/environment/settlement/wagon-black.webp",
+          "system": {
+            "description": {
+              "value": "<p>A diesel-howling hulk of plate and bolted-on intent. The kind of vehicle that arrives like weather. Crew of five, four guns, room in back for whatever you took.</p><p><strong>Frame · Heavy · Mobile</strong></p>",
+              "chat": ""
+            },
+            "identified": true,
+            "unidentified": {
+              "description": ""
+            },
+            "container": null,
+            "quantity": 1,
+            "weight": {
+              "value": 1,
+              "units": "lb"
+            },
+            "price": {
+              "value": 750,
+              "denomination": "gp"
+            },
+            "rarity": "",
+            "properties": [],
+            "type": {
+              "value": "gear",
+              "subtype": ""
+            }
+          },
+          "effects": [],
+          "flags": {
+            "fourththing": {
+              "rigGear": {
+                "subtype": "rig-frame"
+              },
+              "rigFrame": {
+                "bracket": "heavy",
+                "baseIntegrity": 48,
+                "tierStep": 14,
+                "mobilityAllowed": [
+                  "mobile"
+                ],
+                "slots": {
+                  "weapon": 4,
+                  "system": 2,
+                  "output": 1
+                },
+                "capacity": {
+                  "pilot": {
+                    "min": 1,
+                    "max": 1
+                  },
+                  "gunner": {
+                    "min": 0,
+                    "max": 2
+                  },
+                  "engineer": {
+                    "min": 0,
+                    "max": 1
+                  },
+                  "crew": {
+                    "min": 0,
+                    "max": 3
+                  }
+                },
+                "actions": {
+                  "pilot": [
+                    "steer",
+                    "ram",
+                    "hold-position",
+                    "evasive",
+                    "swerve"
+                  ],
+                  "gunner": [
+                    "fire-weapon",
+                    "aimed-shot",
+                    "suppression",
+                    "reload",
+                    "opportunity-fire"
+                  ],
+                  "engineer": [
+                    "repair",
+                    "boost-system",
+                    "vent-heat",
+                    "counter-sabotage"
+                  ],
+                  "crew": [
+                    "operate-module",
+                    "reload",
+                    "brace",
+                    "hold-on"
+                  ]
+                },
+                "travel": {
+                  "speed": 3,
+                  "range": 8
+                },
+                "visualFrame": "open-corners"
+              },
+              "rfi": {
+                "item": {
+                  "price": {
+                    "marks": 750,
+                    "currency": "violence",
+                    "gmOverride": true,
+                    "altCurrencies": {},
+                    "split": null,
+                    "rarityMult": 1,
+                    "notes": "TII vehicle stamp · Heavy Combatant chassis (T2 heavy) — war-rig pays Violence (rubric §7) (untiered pass 2026-10-12)",
+                    "bound": "free",
+                    "saleBack": 300
+                  },
+                  "tier": "II",
+                  "frame": "vehicle"
                 }
               }
             }
@@ -569,7 +583,7 @@
               "tokenId": ""
             },
             "tier": 3,
-            "bracket": "siege",
+            "bracket": "heavy",
             "crew": {
               "slots": [],
               "capacity": {
@@ -598,9 +612,13 @@
               "basePerTurn": {}
             },
             "travel": {
-              "speed": 1,
-              "range": 6,
-              "hazardResist": 2
+              "speed": 3,
+              "range": 8,
+              "hazardResist": 2,
+              "domains": [
+                "land"
+              ],
+              "depthRating": 0
             },
             "order": "none",
             "tags": [
@@ -618,7 +636,7 @@
             "id": "1wDeBK66hj3ISVFL",
             "pack": "vehicles",
             "identifier": "",
-            "hash": "4f2ca62c9280"
+            "hash": "7a33ab7dbcc6"
           }
         }
       }
@@ -627,18 +645,18 @@
       "slug": "rig-s-narchy-burger-drive-thru-mobile-unit",
       "name": "S'narchy Burger Drive-Thru (Mobile Unit)",
       "type": "vehicle",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
+      "img": "modules/bbttcc-core/assets/rigs/medium_rig_1.webp",
       "folder": "Rigs",
       "prototypeToken": {
         "actorLink": true,
         "disposition": 1,
         "name": "S'narchy Burger Drive-Thru (Mobile Unit)",
         "displayName": 30,
-        "width": 1,
-        "height": 1,
+        "width": 2,
+        "height": 2,
         "depth": 1,
         "texture": {
-          "src": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
+          "src": "modules/bbttcc-core/assets/rigs/medium_rig_1.webp",
           "anchorX": 0.5,
           "anchorY": 0.5,
           "fit": "contain",
@@ -753,124 +771,13 @@
       },
       "items": [
         {
-          "slug": "gear-forge-facility-frame",
-          "name": "Forge Facility Frame",
-          "type": "loot",
-          "img": "icons/environment/settlement/wagon-black.webp",
-          "system": {
-            "description": {
-              "value": "<p>A bolted-down industrial cathedral. Chimneys exhale slag and prayer in equal measure. Doesn't move; doesn't need to. Things come <em>to</em> it.</p><p><strong>Frame · Siege · Stationary</strong></p>",
-              "chat": ""
-            },
-            "identified": true,
-            "unidentified": {
-              "description": ""
-            },
-            "container": null,
-            "quantity": 1,
-            "weight": {
-              "value": 1,
-              "units": "lb"
-            },
-            "price": {
-              "value": 30,
-              "denomination": "gp"
-            },
-            "rarity": "",
-            "properties": [],
-            "type": {
-              "value": "gear",
-              "subtype": ""
-            }
-          },
-          "effects": [],
-          "flags": {
-            "fourththing": {
-              "rigGear": {
-                "subtype": "rig-frame"
-              },
-              "rigFrame": {
-                "bracket": "siege",
-                "baseIntegrity": 64,
-                "tierStep": 18,
-                "mobilityAllowed": [
-                  "stationary"
-                ],
-                "slots": {
-                  "weapon": 1,
-                  "system": 2,
-                  "output": 4
-                },
-                "capacity": {
-                  "pilot": {
-                    "min": 0,
-                    "max": 0
-                  },
-                  "gunner": {
-                    "min": 0,
-                    "max": 1
-                  },
-                  "engineer": {
-                    "min": 0,
-                    "max": 2
-                  },
-                  "crew": {
-                    "min": 0,
-                    "max": 4
-                  }
-                },
-                "actions": {
-                  "pilot": [],
-                  "gunner": [
-                    "fire-weapon",
-                    "suppression",
-                    "opportunity-fire"
-                  ],
-                  "engineer": [
-                    "repair",
-                    "boost-system",
-                    "vent-heat",
-                    "cycle-power",
-                    "counter-sabotage"
-                  ],
-                  "crew": [
-                    "operate-module",
-                    "reload",
-                    "brace"
-                  ]
-                },
-                "travel": {
-                  "speed": 0,
-                  "range": 0
-                },
-                "visualFrame": "anchor-corners"
-              },
-              "rfi": {
-                "item": {
-                  "price": {
-                    "marks": 30,
-                    "currency": "economy",
-                    "gmOverride": false,
-                    "altCurrencies": {},
-                    "split": null,
-                    "rarityMult": 1,
-                    "notes": "TI tool stamp",
-                    "bound": "free",
-                    "saleBack": 12
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
           "slug": "gear-repair-bay",
           "name": "Repair Bay",
           "type": "loot",
-          "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+          "img": "icons/tools/hand/wrench-adjustable-toothed.webp",
           "system": {
             "description": {
-              "value": "<p>A dedicated cubby with a wrench wall and a swearing engineer. Engineer's repair action gains traction here.</p>",
+              "value": "<p>A dedicated cubby with a wrench wall and a swearing engineer. Engineer's repair action gains traction here.</p><p><strong>Passive:</strong> the engineer's repair check gains +2.</p>",
               "chat": ""
             },
             "identified": true,
@@ -899,7 +806,9 @@
             "fourththing": {
               "rigGear": {
                 "subtype": "rig-system",
-                "passive": false
+                "passive": {
+                  "repairBonus": 2
+                }
               },
               "rfi": {
                 "item": {
@@ -923,10 +832,10 @@
           "slug": "gear-comms-array",
           "name": "Comms Array",
           "type": "loot",
-          "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+          "img": "icons/tools/fasteners/washer-hex-copper-brown.webp",
           "system": {
             "description": {
-              "value": "<p>A nest of antennae held together by faith. Extends signal range; allies on hex coordinate at +1 step.</p>",
+              "value": "<p>A nest of antennae held together by faith. Extends signal range; allies on hex coordinate at +1 step.</p><p><strong>Passive:</strong> Signal grants +2 on the ally's next roll instead of +1.</p>",
               "chat": ""
             },
             "identified": true,
@@ -955,7 +864,9 @@
             "fourththing": {
               "rigGear": {
                 "subtype": "rig-system",
-                "passive": true
+                "passive": {
+                  "signalBonus": 1
+                }
               },
               "rfi": {
                 "item": {
@@ -979,10 +890,10 @@
           "slug": "gear-sensor-suite",
           "name": "Sensor Suite",
           "type": "loot",
-          "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+          "img": "icons/commodities/tech/electronics-sensor-eye.webp",
           "system": {
             "description": {
-              "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p>",
+              "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p><p><strong>Passive:</strong> every crew member aboard adds +1 to initiative.</p>",
               "chat": ""
             },
             "identified": true,
@@ -1011,7 +922,9 @@
             "fourththing": {
               "rigGear": {
                 "subtype": "rig-system",
-                "passive": true
+                "passive": {
+                  "initiative": 1
+                }
               },
               "rfi": {
                 "item": {
@@ -1038,7 +951,7 @@
           "img": "icons/tools/smithing/anvil.webp",
           "system": {
             "description": {
-              "value": "<p>A clipboarded oracle that allocates rations, ammo, and small mercies. Faction supplies stack here.</p>",
+              "value": "<p>A clipboarded oracle that allocates rations, ammo, and small mercies. Domain supplies stack here.</p>",
               "chat": ""
             },
             "identified": true,
@@ -1089,6 +1002,124 @@
               }
             }
           }
+        },
+        {
+          "slug": "gear-sail-barge-frame",
+          "name": "Sail Barge Frame",
+          "type": "loot",
+          "img": "icons/environment/settlement/wagon-black.webp",
+          "system": {
+            "description": {
+              "value": "<p>A pleasure-galley with delusions of fortress. Docks at hexes to throw lavish productions; cuts loose to roam when the music demands it. Throne optional, mandatory.</p><p><b>Frame · Medium · Hybrid</b></p>",
+              "chat": ""
+            },
+            "identified": true,
+            "unidentified": {
+              "description": ""
+            },
+            "container": null,
+            "quantity": 1,
+            "weight": {
+              "value": 1,
+              "units": "lb"
+            },
+            "price": {
+              "value": 750,
+              "denomination": "gp"
+            },
+            "rarity": "",
+            "properties": [],
+            "type": {
+              "value": "gear",
+              "subtype": ""
+            }
+          },
+          "effects": [],
+          "flags": {
+            "fourththing": {
+              "rigGear": {
+                "subtype": "rig-frame"
+              },
+              "rigFrame": {
+                "bracket": "medium",
+                "baseIntegrity": 32,
+                "tierStep": 10,
+                "mobilityAllowed": [
+                  "mobile",
+                  "hybrid"
+                ],
+                "slots": {
+                  "weapon": 2,
+                  "system": 2,
+                  "output": 3
+                },
+                "capacity": {
+                  "pilot": {
+                    "min": 1,
+                    "max": 1
+                  },
+                  "gunner": {
+                    "min": 0,
+                    "max": 1
+                  },
+                  "engineer": {
+                    "min": 0,
+                    "max": 1
+                  },
+                  "crew": {
+                    "min": 0,
+                    "max": 6
+                  }
+                },
+                "actions": {
+                  "pilot": [
+                    "steer",
+                    "tack-against-wind",
+                    "raise-sail",
+                    "evasive"
+                  ],
+                  "gunner": [
+                    "fire-weapon",
+                    "suppression",
+                    "reload"
+                  ],
+                  "engineer": [
+                    "repair",
+                    "boost-system",
+                    "vent-heat"
+                  ],
+                  "crew": [
+                    "operate-module",
+                    "brace",
+                    "signal",
+                    "hold-on"
+                  ]
+                },
+                "travel": {
+                  "speed": 3,
+                  "range": 10
+                },
+                "visualFrame": "anchor-ring"
+              },
+              "rfi": {
+                "item": {
+                  "price": {
+                    "marks": 750,
+                    "currency": "economy",
+                    "gmOverride": false,
+                    "altCurrencies": {},
+                    "split": null,
+                    "rarityMult": 1,
+                    "notes": "TII vehicle stamp (untiered pass 2026-10-12)",
+                    "bound": "free",
+                    "saleBack": 300
+                  },
+                  "tier": "II",
+                  "frame": "vehicle"
+                }
+              }
+            }
+          }
         }
       ],
       "effects": [],
@@ -1135,7 +1166,7 @@
             },
             "travel": {
               "speed": 3,
-              "range": 14,
+              "range": 10,
               "hazardResist": 1,
               "domains": [
                 "land"
@@ -1157,7 +1188,7 @@
             "id": "h5hwUBEVASaJjP2e",
             "pack": "vehicles",
             "identifier": "",
-            "hash": "da05d0400b3b"
+            "hash": "9ff4a6ef2107"
           }
         }
       }
@@ -1166,18 +1197,18 @@
       "slug": "rig-sarmoung-whisper-skiff",
       "name": "Sarmoung Whisper-Skiff",
       "type": "vehicle",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_golbe_1.png",
+      "img": "modules/bbttcc-core/assets/rigs/personal_rig_5.webp",
       "folder": "Rigs",
       "prototypeToken": {
         "actorLink": true,
         "disposition": 1,
         "name": "Sarmoung Whisper-Skiff",
         "displayName": 30,
-        "width": 1,
-        "height": 1,
+        "width": 2,
+        "height": 2,
         "depth": 1,
         "texture": {
-          "src": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_golbe_1.png",
+          "src": "modules/bbttcc-core/assets/rigs/personal_rig_5.webp",
           "anchorX": 0.5,
           "anchorY": 0.5,
           "fit": "contain",
@@ -1386,10 +1417,10 @@
           "slug": "gear-twin-autocannons",
           "name": "Twin Autocannons",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/guns/gun-chain-gatling-belt.webp",
           "system": {
             "description": {
-              "value": "<p>Belt-fed twin barrels. Less aimed than <em>insisted upon</em>. Suppression in service of statement.</p>",
+              "value": "<p>Belt-fed twin barrels. Less aimed than <em>insisted upon</em>. Suppression in service of statement.</p>\n",
               "chat": ""
             },
             "identified": true,
@@ -1584,10 +1615,10 @@
           "slug": "gear-phase-cloak",
           "name": "Phase Cloak",
           "type": "loot",
-          "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+          "img": "icons/equipment/back/cloak-collared-blue-gold.webp",
           "system": {
             "description": {
-              "value": "<p>Burns coolant for invisibility. Active toggle; the rig is harder to target until cycled off.</p>",
+              "value": "<p>Burns coolant for invisibility. Active toggle; the rig is harder to target until cycled off.</p><p><strong>Passive:</strong> +1 Evasion while fitted.</p>",
               "chat": ""
             },
             "identified": true,
@@ -1616,7 +1647,9 @@
             "fourththing": {
               "rigGear": {
                 "subtype": "rig-system",
-                "passive": false
+                "passive": {
+                  "evasion": 1
+                }
               },
               "rfi": {
                 "item": {
@@ -1640,10 +1673,10 @@
           "slug": "gear-sensor-suite",
           "name": "Sensor Suite",
           "type": "loot",
-          "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+          "img": "icons/commodities/tech/electronics-sensor-eye.webp",
           "system": {
             "description": {
-              "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p>",
+              "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p><p><strong>Passive:</strong> every crew member aboard adds +1 to initiative.</p>",
               "chat": ""
             },
             "identified": true,
@@ -1672,7 +1705,9 @@
             "fourththing": {
               "rigGear": {
                 "subtype": "rig-system",
-                "passive": true
+                "passive": {
+                  "initiative": 1
+                }
               },
               "rfi": {
                 "item": {
@@ -1736,9 +1771,13 @@
               "basePerTurn": {}
             },
             "travel": {
-              "speed": 5,
-              "range": 16,
-              "hazardResist": 1
+              "speed": 4,
+              "range": 12,
+              "hazardResist": 1,
+              "domains": [
+                "land"
+              ],
+              "depthRating": 0
             },
             "order": "none",
             "tags": [
@@ -1756,7 +1795,7 @@
             "id": "5oohdnPcCJL6WoQY",
             "pack": "vehicles",
             "identifier": "",
-            "hash": "a6e6dbe4a72f"
+            "hash": "5b1bd5116f9e"
           }
         }
       }
@@ -1765,18 +1804,18 @@
       "slug": "rig-sephirotic-pilgrim-tram",
       "name": "Sephirotic Pilgrim-Tram",
       "type": "vehicle",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_goddess.png",
+      "img": "modules/bbttcc-core/assets/rigs/heavy_rig_11.webp",
       "folder": "Rigs",
       "prototypeToken": {
         "actorLink": true,
         "disposition": 1,
         "name": "Sephirotic Pilgrim-Tram",
         "displayName": 30,
-        "width": 1,
-        "height": 1,
+        "width": 2,
+        "height": 2,
         "depth": 1,
         "texture": {
-          "src": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_goddess.png",
+          "src": "modules/bbttcc-core/assets/rigs/heavy_rig_11.webp",
           "anchorX": 0.5,
           "anchorY": 0.5,
           "fit": "contain",
@@ -1891,7 +1930,7 @@
           "img": "icons/environment/settlement/wagon-black.webp",
           "system": {
             "description": {
-              "value": "<p>A pleasure-galley with delusions of fortress. Docks at hexes to throw lavish productions; cuts loose to roam when the music demands it. Throne optional, mandatory.</p><p><b>Frame · Medium · Hybrid · Jabba canon</b></p>",
+              "value": "<p>A pleasure-galley with delusions of fortress. Docks at hexes to throw lavish productions; cuts loose to roam when the music demands it. Throne optional, mandatory.</p><p><b>Frame · Medium · Hybrid</b></p>",
               "chat": ""
             },
             "identified": true,
@@ -1926,6 +1965,7 @@
                 "baseIntegrity": 32,
                 "tierStep": 10,
                 "mobilityAllowed": [
+                  "mobile",
                   "hybrid"
                 ],
                 "slots": {
@@ -1976,7 +2016,7 @@
                   ]
                 },
                 "travel": {
-                  "speed": 2,
+                  "speed": 3,
                   "range": 10
                 },
                 "visualFrame": "anchor-ring"
@@ -2003,10 +2043,10 @@
           "slug": "gear-resonance-howler",
           "name": "Resonance Howler",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/artillery/cannon-energy-sonic.webp",
           "system": {
             "description": {
-              "value": "<p>Sub-audible siren that turns will into wet paper. Doesn't damage steel; ruins morale within the cone.</p>",
+              "value": "<p>Sub-audible siren that turns will into wet paper. Doesn't damage steel; shreds nerve within the cone.</p>",
               "chat": ""
             },
             "identified": true,
@@ -2200,10 +2240,10 @@
           "slug": "gear-comms-array",
           "name": "Comms Array",
           "type": "loot",
-          "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+          "img": "icons/tools/fasteners/washer-hex-copper-brown.webp",
           "system": {
             "description": {
-              "value": "<p>A nest of antennae held together by faith. Extends signal range; allies on hex coordinate at +1 step.</p>",
+              "value": "<p>A nest of antennae held together by faith. Extends signal range; allies on hex coordinate at +1 step.</p><p><strong>Passive:</strong> Signal grants +2 on the ally's next roll instead of +1.</p>",
               "chat": ""
             },
             "identified": true,
@@ -2232,7 +2272,9 @@
             "fourththing": {
               "rigGear": {
                 "subtype": "rig-system",
-                "passive": true
+                "passive": {
+                  "signalBonus": 1
+                }
               },
               "rfi": {
                 "item": {
@@ -2256,10 +2298,10 @@
           "slug": "gear-sensor-suite",
           "name": "Sensor Suite",
           "type": "loot",
-          "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+          "img": "icons/commodities/tech/electronics-sensor-eye.webp",
           "system": {
             "description": {
-              "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p>",
+              "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p><p><strong>Passive:</strong> every crew member aboard adds +1 to initiative.</p>",
               "chat": ""
             },
             "identified": true,
@@ -2288,7 +2330,9 @@
             "fourththing": {
               "rigGear": {
                 "subtype": "rig-system",
-                "passive": true
+                "passive": {
+                  "initiative": 1
+                }
               },
               "rfi": {
                 "item": {
@@ -2346,7 +2390,8 @@
                 "subtype": "output-module",
                 "yield": {
                   "signal": 1,
-                  "faith": 1
+                  "faith": 1,
+                  "softpower": 1
                 },
                 "mobileLegal": false
               },
@@ -2413,8 +2458,12 @@
             },
             "travel": {
               "speed": 3,
-              "range": 12,
-              "hazardResist": 0
+              "range": 10,
+              "hazardResist": 0,
+              "domains": [
+                "land"
+              ],
+              "depthRating": 0
             },
             "order": "none",
             "tags": [
@@ -2432,27 +2481,27 @@
             "id": "G6Bgo4PvO6XHLiEf",
             "pack": "vehicles",
             "identifier": "",
-            "hash": "fcc6ec4809a9"
+            "hash": "f47fa2c4d989"
           }
         }
       }
     },
     {
-      "slug": "rig-valhaulan-lullaby-barge",
-      "name": "Valhaulan Lullaby-Barge",
+      "slug": "rig-valhaulan-valhauler",
+      "name": "Valhaulan Valhauler",
       "type": "vehicle",
-      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/AncientBlood3.png",
+      "img": "modules/bbttcc-core/assets/rigs/medium_rig_1.webp",
       "folder": "Rigs",
       "prototypeToken": {
         "actorLink": true,
         "disposition": 1,
-        "name": "Valhaulan Lullaby-Barge",
+        "name": "Valhaulan Valhauler",
         "displayName": 30,
-        "width": 1,
-        "height": 1,
+        "width": 3,
+        "height": 3,
         "depth": 1,
         "texture": {
-          "src": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/AncientBlood3.png",
+          "src": "modules/bbttcc-core/assets/rigs/medium_rig_1.webp",
           "anchorX": 0.5,
           "anchorY": 0.5,
           "fit": "contain",
@@ -2517,7 +2566,7 @@
             "ring": null,
             "background": null
           },
-          "effects": 1,
+          "effects": 0,
           "subject": {
             "scale": 1,
             "texture": null
@@ -2530,7 +2579,11 @@
           "disposition": false
         },
         "movementAction": null,
-        "flags": {},
+        "flags": {
+          "wall-height": {
+            "tokenHeight": 0
+          }
+        },
         "randomImg": false,
         "appendNumber": false,
         "prependAdjective": false
@@ -2575,7 +2628,7 @@
           "img": "icons/environment/settlement/wagon-black.webp",
           "system": {
             "description": {
-              "value": "<p>A diesel-howling hulk of plate and bolted-on intent. The kind of vehicle that arrives like weather. Crew of five, four guns, room in back for whatever you took.</p><p><strong>Frame · Heavy · Mobile · Mad Max canon</strong></p>",
+              "value": "<p>A diesel-howling hulk of plate and bolted-on intent. The kind of vehicle that arrives like weather. Crew of five, four guns, room in back for whatever you took.</p><p><strong>Frame · Heavy · Mobile</strong></p>",
               "chat": ""
             },
             "identified": true,
@@ -2691,7 +2744,7 @@
           "slug": "gear-mortar-battery",
           "name": "Mortar Battery",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/ammunition/explosive-artillery-mortar-shell.webp",
           "system": {
             "description": {
               "value": "<p>Indirect fire from pre-rotated tubes. Crew yells coordinates at each other; the math sometimes lands.</p>",
@@ -2889,10 +2942,10 @@
           "slug": "gear-twin-autocannons",
           "name": "Twin Autocannons",
           "type": "weapon",
-          "img": "icons/weapons/swords/sword-guard-blue.webp",
+          "img": "icons/weapons/guns/gun-chain-gatling-belt.webp",
           "system": {
             "description": {
-              "value": "<p>Belt-fed twin barrels. Less aimed than <em>insisted upon</em>. Suppression in service of statement.</p>",
+              "value": "<p>Belt-fed twin barrels. Less aimed than <em>insisted upon</em>. Suppression in service of statement.</p>\n",
               "chat": ""
             },
             "identified": true,
@@ -3087,10 +3140,10 @@
           "slug": "gear-reinforced-plating",
           "name": "Reinforced Plating",
           "type": "loot",
-          "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+          "img": "icons/commodities/tech/plating-metal-armor-tech-steel-blue.webp",
           "system": {
             "description": {
-              "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p>",
+              "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p><p><strong>Passive:</strong> +2 hit points max per rig tier while fitted.</p>",
               "chat": ""
             },
             "identified": true,
@@ -3119,7 +3172,9 @@
             "fourththing": {
               "rigGear": {
                 "subtype": "rig-system",
-                "passive": true
+                "passive": {
+                  "integrityMaxPerTier": 2
+                }
               },
               "rfi": {
                 "item": {
@@ -3143,10 +3198,10 @@
           "slug": "gear-repair-bay",
           "name": "Repair Bay",
           "type": "loot",
-          "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+          "img": "icons/tools/hand/wrench-adjustable-toothed.webp",
           "system": {
             "description": {
-              "value": "<p>A dedicated cubby with a wrench wall and a swearing engineer. Engineer's repair action gains traction here.</p>",
+              "value": "<p>A dedicated cubby with a wrench wall and a swearing engineer. Engineer's repair action gains traction here.</p><p><strong>Passive:</strong> the engineer's repair check gains +2.</p>",
               "chat": ""
             },
             "identified": true,
@@ -3175,7 +3230,9 @@
             "fourththing": {
               "rigGear": {
                 "subtype": "rig-system",
-                "passive": false
+                "passive": {
+                  "repairBonus": 2
+                }
               },
               "rfi": {
                 "item": {
@@ -3239,9 +3296,13 @@
               "basePerTurn": {}
             },
             "travel": {
-              "speed": 5,
-              "range": 16,
-              "hazardResist": 1
+              "speed": 3,
+              "range": 8,
+              "hazardResist": 1,
+              "domains": [
+                "land"
+              ],
+              "depthRating": 0
             },
             "order": "none",
             "tags": [
@@ -3258,7 +3319,7 @@
             "id": "vFQAzms1ZsAcyvze",
             "pack": "vehicles",
             "identifier": "",
-            "hash": "022a6a345363"
+            "hash": "02cd078dbdba"
           }
         }
       }

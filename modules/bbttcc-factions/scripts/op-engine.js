@@ -156,6 +156,67 @@ function _withMemberCapBonuses(faction, out) {
   for (const k of OP_KEYS) if (add[k] && out[k] > 0) out[k] = Math.max(1, Math.floor(out[k] + add[k]));
   return out;
 }
+// Member Domain income (ruling CO3 as amended, 2026-10-26): identity items on assigned stewards (archetype / crew /
+// occult / political / alignment / enlightenment) carry flags.bbttcc-character-options.bonuses { <opKey>: N } authored
+// in OP; the Domain earns N × MARKS_PER_OP marks of that channel on every Advance. This is the FLAT part — the pct /
+// per-hex parts of flags.fourththing.domainIncome need the owned hexes and are read by the turn driver next to it.
+export function factionMemberIncomeMarks(faction) {
+  const out = {}; for (const k of OP_KEYS) out[k] = 0;
+  if (!faction?.id || !globalThis.game?.actors) return out;
+  const per = _marksPerOp();
+  for (const a of game.actors) {
+    if (a.type !== "character") continue;
+    if (a.getFlag?.(MOD_ID, "factionId") !== faction.id) continue;
+    for (const it of (a.items ?? [])) {
+      const b = it.flags?.["bbttcc-character-options"]?.bonuses;
+      if (!b || typeof b !== "object") continue;
+      for (const k of OP_KEYS) { const v = _safeNum(b[k], 0); if (v) out[k] += v * per; }
+    }
+  }
+  for (const k of OP_KEYS) out[k] = Math.max(0, Math.floor(out[k]));
+  return out;
+}
+// Member spend discounts (ruling CO21, 2026-10-26): flags.fourththing.domainCostDiscount = [{ channels, marks?, pct?, min?,
+// when?, note }] on an assigned steward's items. Every spend through op.preview / op.commit in a listed channel is cut
+// by `marks` and/or `pct`% of the spend, never below `min` marks (default MARKS_PER_OP) and never below 0.
+// when: "extreme" applies only while that channel's bank sits at 0 or at/over its cap before the spend; "any" (default) always.
+export function factionSpendDiscounts(faction) {
+  const rows = [];
+  if (!faction?.id || !globalThis.game?.actors) return rows;
+  for (const a of game.actors) {
+    if (a.type !== "character") continue;
+    if (a.getFlag?.(MOD_ID, "factionId") !== faction.id) continue;
+    for (const it of (a.items ?? [])) {
+      const list = it.flags?.fourththing?.domainCostDiscount;
+      if (!Array.isArray(list)) continue;
+      for (const r of list) if (r && Array.isArray(r.channels)) rows.push({ ...r, source: it.name });
+    }
+  }
+  return rows;
+}
+function _applySpendDiscounts(faction, before, deltas, caps) {
+  const rows = factionSpendDiscounts(faction);
+  if (!rows.length) return { deltas, applied: [] };
+  const out = { ...deltas }; const applied = []; const floorDefault = _marksPerOp();
+  for (const k of OP_KEYS) {
+    const spend = -_safeNum(out[k], 0);
+    if (!(spend > 0)) continue;
+    const bank = _safeNum(before?.[k], 0), cap = _safeNum(caps?.[k], 0);
+    const extreme = bank <= 0 || (cap > 0 && bank >= cap);
+    let cut = 0, minFloor = Infinity;
+    for (const r of rows) {
+      if (!r.channels.includes(k)) continue;
+      if (String(r.when || "any") === "extreme" && !extreme) continue;
+      cut += _safeNum(r.marks, 0) + Math.floor(spend * _safeNum(r.pct, 0) / 100);
+      minFloor = Math.min(minFloor, _safeNum(r.min, floorDefault));
+      applied.push({ channel: k, source: r.source, note: r.note ?? null });
+    }
+    if (!(cut > 0)) continue;
+    const floor = Number.isFinite(minFloor) ? Math.max(0, minFloor) : 0;
+    out[k] = -Math.max(Math.min(spend, floor), spend - cut);
+  }
+  return { deltas: out, applied };
+}
 // Cap adjustments in MARKS (owner rulings 2026-10-02), each `{ all?, <opKey>? }`:
 //   opCapDelta             — PERMANENT (raid world effect permanentCapDelta, e.g. Ego Breaker −30 violence)
 //   victory.tempCapBonus   — until the next Advance Turn (Keter Unity Bonus +10 all; the turn driver
@@ -332,7 +393,9 @@ async function preview(factionId, deltas, context) {
   const ctx = context || null;
   const caps = (ctx?.opCaps && typeof ctx.opCaps === "object") ? ctx.opCaps : _readCaps(faction);
 
-  const result = _computePreview(before, deltas, ctx, caps);
+  const disc = _applySpendDiscounts(faction, before, _normalizeDeltas(deltas), caps);   // steward identity discounts (CO21)
+  const result = _computePreview(before, disc.deltas, ctx, caps);
+  if (disc.applied.length) result.discounts = disc.applied;
   result.factionId = faction.id;
   result.factionName = faction.name;
 
@@ -399,7 +462,9 @@ async function _commitNow(factionId, deltas, context) {
   const ctx = context || null;
   const caps = (ctx?.opCaps && typeof ctx.opCaps === "object") ? ctx.opCaps : _readCaps(faction);
 
-  const result = _computePreview(before, deltas, ctx, caps);
+  const disc = _applySpendDiscounts(faction, before, _normalizeDeltas(deltas), caps);   // steward identity discounts (CO21)
+  const result = _computePreview(before, disc.deltas, ctx, caps);
+  if (disc.applied.length) result.discounts = disc.applied;
   result.factionId = faction.id;
   result.factionName = faction.name;
 
@@ -562,7 +627,7 @@ function _attach() {
     apiRoot.runMarksMigration = _runMarksMigration;
     // Facts layer (2026-09-12): one home per faction fact.
     game.bbttcc.facts ??= {};
-    game.bbttcc.facts.faction = { tier: factionTier, caps: factionCaps, baseCaps: factionBaseCaps, siegeBonus: factionSiegeBonusMarks, capBand: tierCapBand, logisticsCapMarks: factionLogisticsCapMarks, CAP_BAND: TIER_CAP_BAND_MARKS.slice(), LOGI_CAP_FLOOR: LOGISTICS_CAPACITY_FLOOR_MARKS.slice() };
+    game.bbttcc.facts.faction = { tier: factionTier, caps: factionCaps, baseCaps: factionBaseCaps, siegeBonus: factionSiegeBonusMarks, capBand: tierCapBand, logisticsCapMarks: factionLogisticsCapMarks, memberIncome: factionMemberIncomeMarks, spendDiscounts: factionSpendDiscounts, CAP_BAND: TIER_CAP_BAND_MARKS.slice(), LOGI_CAP_FLOOR: LOGISTICS_CAPACITY_FLOOR_MARKS.slice() };
 
     log(`OP Engine API ready (marks unit, 1 OP = ${_marksPerOp()} marks) → game.bbttcc.api.op.{preview, commit, KEYS, OP_TO_MARKS, marksPerOp, fmt, fmtNum} — every quantity is MARKS`);
   } catch (e) {

@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> The Adaptive Adversary Engine has difficulty tracking you. In Bunker Busters scenarios, there is a 50% chance its resource shifts to counter your Intrigue-focused actions fail.</li></ul>",
+      "value": "<p><strong>Tier 4 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Strategic:</strong> The Adaptive Adversary Engine cannot track you: your Domain adds +2 to its Intrigue Domain rolls.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-covert-ops-cell-t4",
@@ -75,6 +75,11 @@
           "bbttcc:theme:denial"
         ]
       }
+    },
+    "fourththing": {
+      "domainRollBonus": {
+        "intrigue": 2
+      }
     }
   },
   "_stats": {
@@ -87,12 +92,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986943268,
-    "modifiedTime": 1781116048651,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989168887,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

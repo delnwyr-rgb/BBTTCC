@@ -31,14 +31,15 @@
       "spark"
     ],
     "description": {
-      "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Tiferet — Balance, integration.</p>\n<p><strong>Aligned methods:</strong> diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+      "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Tiferet — Balance, integration.</p>\n<p><strong>Aligned methods:</strong> diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence.</p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc-tikkun": {
       "sparkVersion": "1.0.0",
-      "identifier": "spark_tiferet_vestigial"
+      "identifier": "spark_tiferet_vestigial",
+      "gmHint": "When a quest beat resolves with an aligned method the spark gathers cleanly; a misaligned method still gathers it but flags it Corrupted — a repair ritual is required before it is eligible for Domain integration."
     }
   },
   "_stats": {

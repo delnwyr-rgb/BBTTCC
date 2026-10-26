@@ -6,13 +6,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
-      "revision": 2,
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<h2>Penultimate Rites</h2><p><em>If you can’t save them, you can at least keep them here.</em></p><hr /><h3>Rules</h3><p>When a creature you can reach drops to 0 Integrity, you may use your reaction to stabilize it. If you do, it also gains temporary Integrity equal to your rank bonus.</p><p>Once you use this principle, you can’t use it again until you finish a Scene Break or Soma Break.</p><p class=\"ft-engine-note\"><em>🃏 Card — reaction, once per Scene Break; target the fallen ally: stabilized, with temporary Integrity equal to your rank bonus.</em></p>",
+      "value": "<h2>Penultimate Rites</h2><p><em>If you can’t save them, you can at least keep them here.</em></p><hr /><h3>Rules</h3><p>When a creature you can reach drops to 0 Integrity, you may use your reaction to stabilize it. If you do, it also gains temporary Integrity equal to your rank bonus.</p><p>Once you use this technique, you can’t use it again until you finish a Scene Break.</p><p class=\"ft-engine-note\"><em>🃏 Card — reaction, once per Scene Break; target the fallen ally: stabilized, with temporary Integrity equal to your rank bonus.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_last_ritual",
@@ -43,7 +43,6 @@
       "pack": "bbttcc-feats-expansion-v1",
       "generatedAt": "2026-01-18T20:40:45.006835+00:00"
     },
-    "fourththing": {},
     "autoanimations": {
       "id": "ft-penultimate-rites",
       "label": "Penultimate Rites",
@@ -232,12 +231,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1768802465828,
-    "modifiedTime": 1781116202126,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988964346,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!CmO8Q6nr21zzgXjv"
 }

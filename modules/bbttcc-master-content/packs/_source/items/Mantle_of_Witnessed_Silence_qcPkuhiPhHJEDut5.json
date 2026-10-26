@@ -14,12 +14,13 @@
     "tags": [
       "ceremonial",
       "soulbound",
-      "sept-witness"
+      "sept-witness",
+      "medium"
     ],
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>Long ceremonial mantle worn by sept-witnesses at the trials of the lost. Silence-silk weave; vow-bone clasp at the throat.</p><p>The wearer cannot be moved by what is whispered. Charm finds no purchase; compulsion forgets its own intent.</p><p><strong>Soulbound.</strong> The mantle binds at first attunement. It cannot be re-bonded.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Defense:</strong> Guard +1, Evasion +1, Resolve +5</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Immune to:</strong> Charmed, Compelled</p></li><li><p><strong>Tier:</strong> IV</p></li><li><p><strong>Cost:</strong> 3040 Nonlethal marks</p></li></ul>",
+      "value": "<p>Long ceremonial mantle worn by sept-witnesses at the trials of the lost. Silence-silk weave; vow-bone clasp at the throat.</p><p>The wearer cannot be moved by what is whispered. Charm finds no purchase; compulsion forgets its own intent.</p><p><strong>Soulbound.</strong> The mantle binds at first attunement. It cannot be re-bonded.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Defense:</strong> Guard +1, Evasion +1, Resolve +5</p></li><li><p><strong>Requires:</strong> Bracing (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Immune to:</strong> Charmed, Compelled</p></li><li><p><strong>Tier:</strong> IV</p></li><li><p><strong>Cost:</strong> 3040 Nonlethal marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -168,8 +169,7 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!items.effects!qcPkuhiPhHJEDut5.OgOye0jdqMN6AnFd"
+      }
     }
   ],
   "sort": 0,
@@ -178,12 +178,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137142769,
-    "modifiedTime": 1782164185980,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988954441,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

@@ -96,6 +96,17 @@ const AA = {
   bbttcc_feat_improvised_engineer: "explosion", bbttcc_feat_controlled_collapse: "explosion", bbttcc_feat_breach_specialist: "explosion"
   // Threatening Silence + Backline Commander already carry AA (kept as-is).
 };
+// ── Trigger automation (ruling TQ15, 2026-10-26) — mirror of the live flags.fourththing.triggers
+//    on the two trigger-wired techniques, so a restamp re-stamps rather than deletes them.
+const TRIGGERS = {
+  bbttcc_feat_combat_intuition: [
+    { event: "on-missed-by", limit: { window: "round", uses: 1 }, effect: { kind: "reaction-attack", args: { reachSquares: 1 } } }
+  ],
+  bbttcc_feat_last_exit: [
+    { event: "on-would-gain-condition", predicate: { tag: ["restrained", "prone"] }, limit: { window: "soma-break", uses: 1 }, effect: { kind: "negate-condition", args: {} } },
+    { event: "on-would-gain-condition", predicate: { tag: ["restrained", "prone"] }, limit: { window: "soma-break", uses: 1 }, effect: { kind: "displace-token", args: { who: "self", squares: 2, mode: "shift" } } }
+  ]
+};
 // ── Engine notes appended to each text (⚙ wired · 🃏 card · ✍ table) ─────────
 const NOTES = {
   bbttcc_feat_adaptive_defense: "🃏 Card — click ▶ when you are hit: it shows the reduction (rank bonus + Violence or Intrigue).",
@@ -128,7 +139,7 @@ const NOTES = {
   bbttcc_feat_hold_the_line: "✍ Table rule.",
   bbttcc_feat_improvised_engineer: "⚙ +1 Tinkering. 🃏 Card — the device is built by hand.",
   bbttcc_feat_iron_nerves: "⚙ Rolling initiative grants temporary Integrity equal to your rank bonus. 🃏 Card — the +1d4, once per Scene Break.",
-  bbttcc_feat_iron_will: "⚙ +1 Guard (Body) or +1 Resolve (Soul) — the engine takes your higher faculty (ties → Soul); the GM can set flags.fourththing.ironWill. 🃏 Card — once per Soma Break: banks a reroll for the failed defense check.",
+  bbttcc_feat_iron_will: "⚙ +1 Guard (Body) or +1 Resolve (Soul) — the engine takes your higher faculty (ties → Soul); ask the GM to flip the pick. 🃏 Card — once per Soma Break: banks a reroll for the failed defense check.",
   bbttcc_feat_ironclad_training: "⚙ In armor or with a shield, defense checks vs prone reroll the lowest die.",
   bbttcc_feat_last_exit: "🃏 Card — once per Soma Break.",
   bbttcc_feat_leyline_attunement: "⚙ The initiative / Athletics / Stealth rerolls are wired with the attunement named as the gate — the GM reads which you chose.",
@@ -162,7 +173,8 @@ const NOTES = {
 // ── Text canon (R1) — ordered regex passes over the description HTML ─────────
 const TEXT_RULES = [
   [/\bSanctuary\b/g, "Soma Break"],
-  [/short or Soma Break/g, "Scene Break or Soma Break"],
+  [/short or Soma Break/g, "Scene Break"],
+  [/Scene Break or Soma Break/g, "Scene Break"],   // ruling TQ5 (2026-10-26): a Soma Break contains a Scene Break
   [/\bRespites?\b/g, (m) => m.endsWith("s") ? "Scene Breaks" : "Scene Break"],
   [/one level of Stress/g, "one level of Strain"],
   [/If you already have it, you gain mastery\./g, "If you already have it, its rank rises by one instead."],
@@ -227,10 +239,11 @@ for (const f of fs.readdirSync(SRC)) {
   j.system.description.value = canonText(id, j.system.description.value);
   j.flags ??= {}; j.flags.fourththing ??= {};
   if (REROLLS[id]) j.flags.fourththing.rerolls = REROLLS[id];
+  if (TRIGGERS[id]) j.flags.fourththing.triggers = TRIGGERS[id];
   if (GRANTS[id])  j.flags.fourththing.grants  = { ...(j.flags.fourththing.grants ?? {}), ...GRANTS[id] };
   if (AA[id] && !j.flags.autoanimations) j.flags.autoanimations = buildAA(AA[id], name);
   if (j.system.source && typeof j.system.source === "object") { j.system.source.custom = "Bad Eden Core Feats v1 — techniques canon 2026-09-21"; j.system.source.revision = 2; }
-  CANON[id] = { name, description: j.system.description.value, rerolls: REROLLS[id] ?? null, grants: GRANTS[id] ?? null, aa: j.flags.autoanimations ?? null };
+  CANON[id] = { name, description: j.system.description.value, rerolls: REROLLS[id] ?? null, triggers: TRIGGERS[id] ?? null, grants: GRANTS[id] ?? null, aa: j.flags.autoanimations ?? null };
   if (JSON.stringify(j) !== before) { fs.writeFileSync(p, JSON.stringify(j, null, 2) + "\n"); touched++; }
 }
 const ids = Object.keys(CANON);
@@ -259,6 +272,7 @@ const macro = `// restamp-techniques.macro.js — RUN IN-WORLD (GM). Run in BOTH
     if (doc.name !== row.name) upd["name"] = row.name;
     if (String(doc.system?.description?.value ?? "") !== row.description) upd["system.description.value"] = row.description;
     if (row.rerolls && JSON.stringify(doc.flags?.fourththing?.rerolls ?? null) !== JSON.stringify(row.rerolls)) upd["flags.fourththing.rerolls"] = row.rerolls;
+    if (row.triggers && JSON.stringify(doc.flags?.fourththing?.triggers ?? null) !== JSON.stringify(row.triggers)) upd["flags.fourththing.triggers"] = row.triggers;
     if (row.grants) for (const [k, v] of Object.entries(row.grants)) {
       if (JSON.stringify(doc.flags?.fourththing?.grants?.[k] ?? null) !== JSON.stringify(v)) upd[\`flags.fourththing.grants.\${k}\`] = v;
     }

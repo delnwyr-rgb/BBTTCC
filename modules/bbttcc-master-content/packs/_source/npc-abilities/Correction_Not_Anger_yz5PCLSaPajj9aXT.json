@@ -1,0 +1,86 @@
+{
+  "name": "Correction, Not Anger",
+  "type": "feature",
+  "img": "icons/magic/control/silhouette-aura-energy.webp",
+  "system": {
+    "category": "principle",
+    "source": "lineage",
+    "tags": [
+      "lineage-trait",
+      "sephirotic",
+      "netzach"
+    ],
+    "description": {
+      "value": "<p>Immune to Charmed and Shaken — it is a principle, not a person. Creatures that deal qliphothic damage to it must succeed a Soul check (DC by tier) or be Restrained by the sephirah's answer until the end of their next turn. It does not pursue anyone who leaves its ground.</p><p><em>It does not hate intruders. It corrects them.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "struck",
+            "if": {
+              "damageType": [
+                "qliphothic"
+              ]
+            },
+            "do": {
+              "condition": {
+                "key": "restrained",
+                "duration": "1-round",
+                "save": {
+                  "attr": "soul",
+                  "dc": 15
+                }
+              }
+            },
+            "label": "Correction, Not Anger"
+          }
+        ]
+      },
+      "rfi": {
+        "item": {
+          "frame": "trait",
+          "lineageTrait": "sephirotic"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "CACA"
+        ],
+        "sourceIds": [
+          "a9orjOV99MnMObho"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "yz5PCLSaPajj9aXT",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069925,
+    "modifiedTime": 1792989070006,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!yz5PCLSaPajj9aXT"
+}

@@ -1,0 +1,50 @@
+{
+  "name": "Dream-Shallows Slip (Recharge 5–6)",
+  "type": "feat",
+  "img": "icons/magic/control/sleep-bubble-purple.webp",
+  "system": {
+    "category": "technique",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>The Dream-Twister slides halfway out of the world into the shallow edge of the dream-layer. Until the start of its next turn only psychic or sephirotic damage can touch it; everything else passes through the space where it almost is.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "jQlqNcjsMPzpXjkX",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gamalielite Dream-Twister"
+        ],
+        "sourceIds": [
+          "usU6xHOysv7adf8j"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069927,
+    "modifiedTime": 1792989070010,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!jQlqNcjsMPzpXjkX"
+}

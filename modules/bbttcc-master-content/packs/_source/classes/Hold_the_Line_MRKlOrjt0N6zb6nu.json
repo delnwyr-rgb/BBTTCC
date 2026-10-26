@@ -219,18 +219,28 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "fourththing": {
+      "passives": {
+        "aura": {
+          "radius": 2,
+          "who": "allies",
+          "ignoreForcedMovementSquares": 1,
+          "note": "Hold the Line — allies within 2 squares ignore 1 square of forced movement; +1 to Clarity-hold checks (GM applies)"
+        }
+      }
     }
   },
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.3",
     "createdTime": 1776467813568,
-    "modifiedTime": 1782167240817,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792907896582,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR"
   },
   "ownership": {
     "default": 0,

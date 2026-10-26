@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "art/bbttcc/qliphoth/war-incarnate.webp",
   "system": {
-    "role": "Qliphothic Engine (Thagirion — Greater)",
+    "role": "hardened",
     "tier": 3,
     "factionId": "",
     "notes": "<p>The metaphysical embodiment of war itself — not a soldier fighting for a cause; the cause. Fifteen feet of rusted swords, broken spears, dented shields and twisted plate, swirling with ghostly green energy, four arms each ending in a different brutal weapon. It forms in the hearts of battlefields where conflict raged for centuries. It will arm one side of a fight solely to turn on them later. Its only goal is that the battle never ends.</p><p><strong>Qliphah:</strong> Thagirion, the Conflicts — the Hull of Tiferet. The balance point of the Tree, replaced by a blade's edge.</p><p><em>Mal's note: 'It cannot be Calmed. It CAN be bored. No one has ever survived long enough to bore it. Aim for the flail arm first.'</em></p>",
@@ -40,8 +40,9 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 95,
-        "max": 95
+        "value": 90,
+        "max": 90,
+        "temp": 0
       },
       "stress": {
         "value": 45,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -142,7 +144,9 @@
         "qliphothic"
       ],
       "immunities": [],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "sephirotic"
+      ]
     },
     "conditionImmunities": [
       "charmed",
@@ -157,6 +161,9 @@
       "hull-of-tiferet",
       "greater"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -169,6 +176,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Engine (Thagirion — Greater)",
+      "notes": "<p>The metaphysical embodiment of war itself — not a soldier fighting for a cause; the cause. Fifteen feet of rusted swords, broken spears, dented shields and twisted plate, swirling with ghostly green energy, four arms each ending in a different brutal weapon. It forms in the hearts of battlefields where conflict raged for centuries. It will arm one side of a fight solely to turn on them later. Its only goal is that the battle never ends.</p><p><strong>Qliphah:</strong> Thagirion, the Conflicts — the Hull of Tiferet. The balance point of the Tree, replaced by a blade's edge.</p><p><em>Mal's note: 'It cannot be Calmed. It CAN be bored. No one has ever survived long enough to bore it. Aim for the flail arm first.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -268,7 +279,7 @@
       "_id": "Nm0vHgsdufe9H9Wi",
       "name": "Aura of Battle Fury",
       "type": "feature",
-      "img": "icons/svg/combat.svg",
+      "img": "icons/skills/melee/blade-tip-damaged-acid-green.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -284,25 +295,48 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "do": {
+                  "condition": {
+                    "key": "compelled",
+                    "duration": "1-round",
+                    "save": {
+                      "attr": "soul",
+                      "dc": 16
+                    }
+                  },
+                  "prompt": "Bloodlust: twice-keep-better on melee attacks this turn."
+                },
+                "radius": 6,
+                "who": "all"
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188163,
-        "modifiedTime": 1787799188163,
+        "modifiedTime": 1791331979516,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!uyiTmCco8gDsuHde.Nm0vHgsdufe9H9Wi"
+      }
     },
     {
       "_id": "1F5WFkUYcXHWFN5g",
       "name": "Fractured Will (3/scene)",
       "type": "feature",
-      "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+      "img": "icons/magic/air/air-pressure-shield-blue.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -320,23 +354,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188163,
-        "modifiedTime": 1787799188163,
+        "modifiedTime": 1791324416688,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!uyiTmCco8gDsuHde.1F5WFkUYcXHWFN5g"
+      }
     },
     {
       "_id": "RxVGu3vDUNWQBLTw",
       "name": "Siege-Thing",
       "type": "feature",
-      "img": "icons/svg/ruins.svg",
+      "img": "icons/environment/wilderness/wall-ruins.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -354,17 +387,16 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188163,
-        "modifiedTime": 1787799188163,
+        "modifiedTime": 1791324416689,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!uyiTmCco8gDsuHde.RxVGu3vDUNWQBLTw"
+      }
     },
     {
       "_id": "sjU5La8L4G8KfR7o",
@@ -388,23 +420,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188163,
-        "modifiedTime": 1787799188163,
+        "modifiedTime": 1791324416689,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!uyiTmCco8gDsuHde.sjU5La8L4G8KfR7o"
+      }
     },
     {
       "_id": "ICrV9YonU3OENY2I",
       "name": "Weapon Limb",
       "type": "weapon",
-      "img": "icons/svg/combat.svg",
+      "img": "icons/skills/melee/blade-tip-damaged-acid-green.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -468,23 +499,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188163,
-        "modifiedTime": 1787799188163,
+        "modifiedTime": 1791324416688,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!uyiTmCco8gDsuHde.ICrV9YonU3OENY2I"
+      }
     },
     {
       "_id": "VPCkYyUmgJVPkp6D",
       "name": "Armor Shatter",
       "type": "feat",
-      "img": "icons/svg/downgrade.svg",
+      "img": "icons/magic/death/blood-corruption-vomit-red.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -502,23 +532,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188163,
-        "modifiedTime": 1787799188163,
+        "modifiedTime": 1791324416689,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!uyiTmCco8gDsuHde.VPCkYyUmgJVPkp6D"
+      }
     },
     {
       "_id": "hqE5pj8v7uVoqsP1",
       "name": "Summon Echoes of War (Recharge 5–6)",
       "type": "feat",
-      "img": "icons/svg/bones.svg",
+      "img": "icons/weapons/daggers/dagger-bone-grey.webp",
       "system": {
         "category": "technique",
         "source": "Qliphothic Bestiary",
@@ -534,19 +563,165 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "do": {
+                  "spawn": {
+                    "name": "Nahemoth Husk",
+                    "count": "1d3"
+                  },
+                  "prompt": "Echoes of war, on its initiative."
+                },
+                "who": "self"
+              }
+            ],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188163,
-        "modifiedTime": 1787799188163,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989135006,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Hollow Touch",
+      "type": "weapon",
+      "img": "icons/magic/death/hand-withered-gray.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d8",
+          "attribute": "violence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "lineage-strike",
+          "qliphothic",
+          "bestiary"
+        ],
+        "effect": "Damage goes to Stress. On a hit the target rolls Resolve vs DC 17; on a failure it is Compelled toward the shell's vice until the end of its next turn.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul"
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 17,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> Reach 1 square, one target. Damage: <code>2d8</code> qliphothic to Stress + violence. On a hit the target rolls Resolve vs DC 17; on a failure it is Compelled toward the shell's vice until the end of its next turn.</p><p><em>The hollow reaches for what it lacks.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!uyiTmCco8gDsuHde.hqE5pj8v7uVoqsP1"
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "III",
+              "frame": "attack",
+              "lineageStrike": "qliphothic",
+              "price": {
+                "marks": 450,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIII attack × 1",
+                "bound": "free",
+                "saleBack": 180
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "tVJqHWtkwTvTSz8H",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989135118,
+        "modifiedTime": 1792989135118,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -591,34 +766,38 @@
             ]
           },
           "price": {
-            "marks": 900,
-            "bounty": 1100,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 40,
+            "bounty": 40,
+            "hire": 60,
+            "ransom": 60,
             "currency": "violence",
             "gmOverride": false,
-            "notes": "III heavy Qliphothic Engine (Thagirion — Greater) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TIII heavy qliphothic — bounty 40 / hire 60 marks; credited to the pool matching the method (default violence)"
           },
           "qliphah": {
             "name": "thagirion",
             "hullOf": "tiferet",
             "grade": "greater"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "thagirion",
+          "title": "Qliphothic Engine (Thagirion — Greater)"
         }
       },
-      "kind": "npc"
+      "kind": "npc",
+      "creatureType": "fiend"
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188163,
-    "modifiedTime": 1787799188163,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989134886,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "uyiTmCco8gDsuHde",
   "_key": "!actors!uyiTmCco8gDsuHde"

@@ -1,0 +1,72 @@
+{
+  "name": "Deific Presence",
+  "type": "feature",
+  "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
+  "system": {
+    "category": "principle",
+    "source": "Qliphothic Bestiary",
+    "tags": [],
+    "description": {
+      "value": "<p>Any creature that starts its turn within 12 squares and can see the Angel rolls vs Resolve (DC 18). Fail: Charmed and Staggered — incapacitated with adoration. The effect breaks if the creature takes damage or an ally spends an action shaking them out of it. On a success, the creature is immune to this Presence for a day: it has seen the shadow.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "do": {
+              "condition": {
+                "key": "charmed",
+                "duration": "until-saved",
+                "save": {
+                  "attr": "soul",
+                  "dc": 18
+                }
+              },
+              "prompt": "Also Staggered (adoration); damage or an ally's action breaks it."
+            },
+            "radius": 12
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Angel of Hollow Glory"
+        ],
+        "sourceIds": [
+          "yQZAnkNsEcE5kKtg"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "fONEwexmhfJkPW9H",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069926,
+    "modifiedTime": 1792989070008,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!fONEwexmhfJkPW9H"
+}

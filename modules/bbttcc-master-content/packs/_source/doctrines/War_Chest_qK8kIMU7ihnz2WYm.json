@@ -3,7 +3,7 @@
   "type": "feat",
   "img": "icons/sundries/flags/banner-sword-blue.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": "",
     "tags": [],
     "description": {
@@ -41,19 +41,19 @@
   },
   "_id": "qK8kIMU7ihnz2WYm",
   "effects": [],
-  "folder": null,
+  "folder": "SziFuLdTIX4Y2Rav",
   "sort": 0,
   "ownership": {
     "default": 0,
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1779731207892,
-    "modifiedTime": 1780163526563,
-    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "modifiedTime": 1792977699710,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

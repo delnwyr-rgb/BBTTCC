@@ -1,0 +1,83 @@
+{
+  "name": "Broken Protocol",
+  "type": "feature",
+  "img": "icons/commodities/tech/cog-gear-crank-steel.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "bestiary",
+      "lineage-pre-fall",
+      "lineage-trait"
+    ],
+    "description": {
+      "value": "<p>Immune to Charmed, Shaken and Compelled. Repeats a single directive (teach) until attacked; then runs combat protocol for 3 rounds and returns to the syllabus if nothing hostile remains in sight.</p><p><em>“Please take your seats.”</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "frame": "feature",
+          "lineageTrait": "pre-fall"
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "struck",
+            "do": {
+              "disposition": {
+                "set": -1,
+                "rounds": 3
+              },
+              "prompt": "Broken Protocol: combat protocol for 3 rounds, then back to the syllabus."
+            },
+            "limit": {
+              "per": "combat",
+              "uses": 1
+            },
+            "label": "Broken Protocol"
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Mechanism 52603"
+        ],
+        "sourceIds": [
+          "wxmlLpURBWJW2zHJ"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "USWkHmaCTum3RtLV",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069919,
+    "modifiedTime": 1792989070000,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!USWkHmaCTum3RtLV"
+}

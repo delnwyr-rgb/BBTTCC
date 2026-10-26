@@ -3,11 +3,11 @@
   "type": "feat",
   "img": "icons/magic/fire/barrier-wall-explosion-orange.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": "",
     "tags": [],
     "description": {
-      "value": "<p>Everything you've got, thrown at one stubborn point in the stone. And then — that sound. That lovely, terrible sound of a keep giving up.</p><p><strong>On Success: 11 damage to all enemy tokens; breach burst; faction morale +1.</strong></p>",
+      "value": "<p>Everything you've got, thrown at one stubborn point in the stone. And then — that sound. That lovely, terrible sound of a keep giving up.</p><p><strong>On Success: 11 damage to all enemy tokens; breach burst; Loyalty +1 on the target hex.</strong></p>",
       "chat": ""
     }
   },
@@ -43,19 +43,19 @@
   },
   "_id": "jIenEUaLHXMXjngF",
   "effects": [],
-  "folder": null,
+  "folder": "SziFuLdTIX4Y2Rav",
   "sort": 0,
   "ownership": {
     "default": 0,
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1779731207892,
-    "modifiedTime": 1781402960438,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989013239,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

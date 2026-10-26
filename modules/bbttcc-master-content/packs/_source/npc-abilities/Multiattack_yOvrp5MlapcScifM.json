@@ -4,46 +4,47 @@
   "img": "icons/skills/melee/strikes-sword-triple-gray.webp",
   "system": {
     "category": "principle",
-    "source": "",
-    "tags": [
-      "translated",
-      "5e-port"
-    ],
+    "source": "Qliphothic Bestiary",
+    "tags": [],
     "description": {
-      "value": "<p>Gilbert makes <strong>two</strong> attacks with <em>Usher's Broom</em> or one <em>Usher's Broom</em> attack and uses <em>Weaponized Shame</em>.</p>",
+      "value": "<p>The Abomination makes two Pseudopod attacks, and can use Engulf if anyone is within reach of regret.</p>",
       "chat": ""
     }
   },
-  "_id": "yOvrp5MlapcScifM",
   "effects": [],
+  "_id": "yOvrp5MlapcScifM",
   "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "flags": {
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Gilbert, Eternally Cleaning Not Leaning Theater Attendant"
+          "Abomination of Excess"
+        ],
+        "sourceIds": [
+          "P8e2EX1lbLBFk2gL"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": null,
-    "modifiedTime": null,
-    "lastModifiedBy": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989032741,
+    "modifiedTime": 1792989032741,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!yOvrp5MlapcScifM"
 }

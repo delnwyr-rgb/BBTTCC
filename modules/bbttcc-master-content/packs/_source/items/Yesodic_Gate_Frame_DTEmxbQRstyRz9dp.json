@@ -13,8 +13,9 @@
     ],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
-      "value": "<p>Modular Yesodium frame component, hand-fitted at a Ley Gate site. One set of brackets — three are typically needed for a working gate.</p><p><strong>Leyline Stable (Harmonized).</strong> +1 to stabilization checks involving Leylines within the gate's cell.</p><p><strong>Gate Attunement (Harmonized).</strong> Reduces Gate-travel instability chance by one tier.</p><p><strong>Reversion Note.</strong> If Khezek-Tor's main vein destabilizes, every Yesodic structure globally rolls Reversion. Plan accordingly.</p><p><em>Unharmonized: structural value only — signal abilities inert.</em></p>",
+      "value": "<p>Modular Yesodium frame component, hand-fitted at a Ley Gate site. One set of brackets — three are typically needed for a working gate.</p><p><strong>Leyline Stable (while attuned).</strong> +1 to stabilization checks involving Leylines within the gate's cell.</p><p><strong>Gate Attunement (while attuned).</strong> Reduces Gate-travel instability chance by one tier.</p><p><strong>Reversion Note.</strong> If Khezek Tor's main vein destabilizes, every Yesodic structure in the world faces a Reversion — the GM calls it. Plan accordingly.</p><p><em>Unattuned: structural value only — its signal abilities are inert.</em></p>",
       "chat": ""
     }
   },
@@ -44,7 +45,7 @@
             "structuralFrame": true
           },
           "requiresHarmonization": true,
-          "lore": "<p>Modular Yesodium frame component, hand-fitted at a Ley Gate site. One set of brackets — three are typically needed for a working gate.</p><p><b>Leyline Stable (Harmonized).</b> +1 to stabilization checks involving Leylines within the gate's cell.</p><p><b>Gate Attunement (Harmonized).</b> Reduces Gate-travel instability chance by one tier.</p><p><b>Reversion Note.</b> If Khezek-Tor's main vein destabilizes, every Yesodic structure globally rolls Reversion. Plan accordingly.</p><p><i>Unharmonized: structural value only — signal abilities inert.</i></p>",
+          "lore": "<p>Modular Yesodium frame component, hand-fitted at a Ley Gate site. One set of brackets — three are typically needed for a working gate.</p><p><b>Leyline Stable (while attuned).</b> +1 to stabilization checks involving Leylines within the gate's cell.</p><p><b>Gate Attunement (while attuned).</b> Reduces Gate-travel instability chance by one tier.</p><p><b>Reversion Note.</b> If Khezek Tor's main vein destabilizes, every Yesodic structure in the world faces a Reversion — the GM calls it. Plan accordingly.</p><p><i>Unattuned: structural value only — its signal abilities are inert.</i></p>",
           "materialOf": [
             {
               "key": "yesodium",
@@ -74,7 +75,7 @@
       }
     }
   },
-  "folder": "Mzo3vreEeHyIsTWO",
+  "folder": "Wxh1A343inwTUeoo",
   "_id": "DTEmxbQRstyRz9dp",
   "effects": [],
   "sort": 474838,
@@ -83,12 +84,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137210137,
-    "modifiedTime": 1778541958284,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988925933,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

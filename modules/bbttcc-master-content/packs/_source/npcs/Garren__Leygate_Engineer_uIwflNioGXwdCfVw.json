@@ -21,7 +21,19 @@
     },
     "fourththing": {
       "kind": "npc",
-      "surgeEnabled": false
+      "surgeEnabled": false,
+      "aptitudePromotions": {
+        "archetype: the hanged man (tier 1)|insight": {
+          "delta": 1,
+          "item": "Archetype: The Hanged Man (Tier 1)",
+          "at": 1792346699046
+        },
+        "archetype: the hanged man (tier 1)|occult": {
+          "delta": 1,
+          "item": "Archetype: The Hanged Man (Tier 1)",
+          "at": 1792346699046
+        }
+      }
     },
     "bbttcc-character-options": {
       "enlightenment": {
@@ -102,14 +114,15 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "the Leygate, Allesh-Gilliam, leyline stabilizers, the Night the Mountain Coughed, Furrier's Fixit Farm, Marshal Yarrow Pike, the HQ",
-        "notes": "[AG-LEYGATE-2026-07-07] PRIVATE TRUTH \u2014 Garren, Leygate Engineer. Voice: tired competence; talks to the gate like a coworker he's covering shifts for. He has kept a broken Leygate alive on salvage, apology, and a maintenance log that reads like a hostage negotiation. THE SECRET: eleven days before the Night the Mountain Coughed, HE certified the old stabilizer \"good for another season\" \u2014 signed it because the parts weren't coming and somebody had to write something, and the flicker killed people who trusted the schedule his signature held up. Pike blames himself for believing the previous report. Garren WROTE the previous report. Neither of them has ever said it; Garren is fairly sure Pike has never read the signature, and he cannot decide if that's mercy or a fuse. TELL: when he's tired he quotes his own certification from memory, verbatim, flat (\"unit is serviceable and may be expected to perform within tolerances for the coming season\"), then changes the subject. GUARDING: gives the technical account of the flicker precisely to anyone; gives the HUMAN account only to someone who has helped him carry something heavy \u2014 literally or otherwise. DELIVERY DAY: when the new stabilizer arrives from Furrier's he installs it with steady hands, checks it three times, signs the new certification slowly like it weighs something \u2014 and only afterward, alone with the hum, do the hands shake. If redeemed by the work (the install completing), he sleeps a full night for the first time since the Cough; the dossier will know."
+        "notes": "[AG-LEYGATE-2026-07-07] PRIVATE TRUTH — Garren, Leygate Engineer. Voice: tired competence; talks to the gate like a coworker he's covering shifts for. He has kept a broken Leygate alive on salvage, apology, and a maintenance log that reads like a hostage negotiation. THE SECRET: eleven days before the Night the Mountain Coughed, HE certified the old stabilizer \"good for another season\" — signed it because the parts weren't coming and somebody had to write something, and the flicker killed people who trusted the schedule his signature held up. Pike blames himself for believing the previous report. Garren WROTE the previous report. Neither of them has ever said it; Garren is fairly sure Pike has never read the signature, and he cannot decide if that's mercy or a fuse. TELL: when he's tired he quotes his own certification from memory, verbatim, flat (\"unit is serviceable and may be expected to perform within tolerances for the coming season\"), then changes the subject. GUARDING: gives the technical account of the flicker precisely to anyone; gives the HUMAN account only to someone who has helped him carry something heavy — literally or otherwise. DELIVERY DAY: when the new stabilizer arrives from Furrier's he installs it with steady hands, checks it three times, signs the new certification slowly like it weighs something — and only afterward, alone with the hum, do the hands shake. If redeemed by the work (the install completing), he sleeps a full night for the first time since the Cough; the dossier will know.",
+        "secretsRaw": "Unit Is Serviceable :: oppRollMinus2 :: a Steward helps him carry something heavy, then asks what the previous report said :: He quotes it verbatim, flat: 'unit is serviceable and may be expected to perform within tolerances for the coming season.' He signed it eleven days before the Cough because the parts weren't coming and somebody had to write something. Pike has never read the signature.\nNot For This Gate :: rollPlus2 :: a Steward shows him a seven-position sequence from the channel :: \"That's an activation order.\" He reads it twice. \"Not for this gate.\" He can say what a gate that takes it looks like and roughly which way it faces: coastward, sideways, the way a Valhaulan ship lands."
       }
     }
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Engineer keeping Allesh-Gilliam's broken Leygate alive (Act 1-2)",
+      "notes": "Garren keeps Allesh-Gilliam's Leygate running, more or less, on salvage, apology and a maintenance log that reads like a hostage negotiation. He talks to the gate like a coworker he's covering shifts for. He has been waiting a long time for a new stabilizer from Furrier's Fixit Farm. Ask him what happened the night the gate flickered and you get the technical account, exactly, and then a change of subject. He has the tired competence of a man who has been on call for years."
     },
     "details": {
       "level": 4,
@@ -222,7 +235,7 @@
       "occult": {
         "attribute": "mind",
         "label": "Occult",
-        "value": 1
+        "value": 2
       },
       "faith": {
         "attribute": "soul",
@@ -242,7 +255,7 @@
       "insight": {
         "attribute": "soul",
         "label": "Insight",
-        "value": 1
+        "value": 2
       },
       "plating": {
         "attribute": "body",
@@ -251,10 +264,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 0
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 1
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 1
@@ -263,7 +286,8 @@
     "derived": {
       "integrity": {
         "value": 48,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 34,
@@ -353,7 +377,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -388,8 +413,8 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
       "id": null,
@@ -399,7 +424,10 @@
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
@@ -555,7 +583,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Exo-Knight, Parallax, Salvage, Synapse</strong>.</p><p>This root grants the shared Circuitborn core trait package (<em>Firmware of Identity</em>) and preserves live UUID compatibility for the four Line items.</p><p><em>\u201cYou are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.\u201d</em></p><p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p><p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you, you may regain either one spent Bad Eden OP (a category you used this scene) or Integrity equal to your tier.</p><p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor.</p><p><strong>Line Memory.</strong> Choose one Circuitborn line (Exo-Knight, Parallax, Salvage, Synapse). Your line grants Tier powers as you level.</p>",
+          "value": "\n<p><strong>Circuitborn.</strong></p><p><em>“You are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.”</em></p><p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p><p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you, you may regain either 10 marks you spent this scene or Integrity equal to your tier.</p><p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor.</p><p><strong>Line Memory.</strong> Choose one Circuitborn line (Exo-Knight, Parallax, Salvage, Synapse). Your line grants Tier powers as you level.</p>",
           "chat": ""
         },
         "advancement": [
@@ -635,25 +663,24 @@
               "context": "defense",
               "mode": "reroll-lowest",
               "vs": "vs:poison and disease",
-              "note": "on defense checks [TODO(adv-call)] against poison and disease, and you are im\u2026"
+              "note": "on defense checks [TODO(adv-call)] against poison and disease, and you are im…"
             }
           ],
           "triggers": [
             {
-              "event": "on-rest",
+              "event": "on-damage-taken",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "offer": true,
+              "offerText": "Attention Resonance — something is intensely focused on you: regain Integrity equal to your tier (or, GM's call, 10 marks you spent this scene).",
               "effect": {
-                "kind": "chat-prompt",
+                "kind": "heal",
                 "args": {
-                  "body": "You do not eat, drink, or sleep. You enter maintenance trance when you rest"
-                }
-              }
-            },
-            {
-              "event": "on-rest",
-              "effect": {
-                "kind": "chat-prompt",
-                "args": {
-                  "body": "You do not eat, drink, or sleep. You enter maintenance trance when you rest"
+                  "amount": "@tier",
+                  "target": "self",
+                  "track": "integrity"
                 }
               }
             }
@@ -678,24 +705,23 @@
       },
       "effects": [],
       "folder": "3H6h9q66XbEDFtAN",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 0,
       "_id": "rhe0xpysaaBn2HCC",
-      "_key": "!actors.items!uIwflNioGXwdCfVw.rhe0xpysaaBn2HCC"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989619674,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Circuitborn: Firmware of Identity",
@@ -710,7 +736,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou are not a robot. You are a decision the world keeps making about itself.\u201d</em></p>\n<p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p>\n<p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), you may regain either (a) one spent Bad Eden OP (a category you used this scene) or (b) Integrity equal to your tier.</p>\n<p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor. You reroll the lowest die on checks to identify surveillance, hidden speakers, encoded messages, or noospheric \u201cattention traps.\u201d</p>\n<p><strong>Glitch-Surge.</strong> When you drop to 0 Integrity, you can choose to emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In Bad Eden play, this is a perfect excuse for weird consequences.</p>",
+          "value": "\n<p><em>“You are not a robot. You are a decision the world keeps making about itself.”</em></p>\n<p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p>\n<p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), you may regain either (a) 10 marks you spent this scene or (b) Integrity equal to your tier.</p>\n<p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor. You reroll the lowest die on checks to identify surveillance, hidden speakers, encoded messages, or noospheric “attention traps.”</p>\n<p><strong>Glitch-Surge.</strong> When you drop to 0 Integrity, you can choose to emit a controlled burst of static (no damage, but loud and disorienting) before you fall.</p>",
           "chat": ""
         },
         "uses": {
@@ -963,17 +989,6 @@
               }
             }
           },
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885524,
-            "modifiedTime": 1784177885524
-          },
           "start": {
             "combat": null,
             "round": 0,
@@ -984,27 +999,20 @@
           },
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!uIwflNioGXwdCfVw.sEpkGRLsfXWTOngE.3e7f9ff1fcf44207"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989088164,
+            "modifiedTime": 1792989088164,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "3H6h9q66XbEDFtAN",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.a0bpTg2C1TVKxpLf",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 2,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1012,7 +1020,17 @@
       },
       "sort": 100000,
       "_id": "sEpkGRLsfXWTOngE",
-      "_key": "!actors.items!uIwflNioGXwdCfVw.sEpkGRLsfXWTOngE"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989619675,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Circuitborn (Salvage Line): Built-In Tools",
@@ -1027,7 +1045,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou were born with a wrench in your soul.\u201d</em></p>\n        <p><strong>Built-In Tools.</strong> You gain a skill rank with the Tinkering aptitude and one artisan tool set of your choice. As part of a Soma Break, you can repair a damaged object or patch armor (GM adjudicates small benefit).</p>",
+          "value": "\n<p><em>“You were born with a wrench in your soul.”</em></p>\n        <p><strong>Built-In Tools.</strong> You gain a skill rank with the Tinkering aptitude and one artisan tool set of your choice. As part of a Soma Break, you can repair a damaged object or patch armor (GM adjudicates small benefit).</p>",
           "chat": ""
         },
         "uses": {
@@ -1042,7 +1060,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 1
         },
         "properties": [],
         "requirements": "Circuitborn",
@@ -1066,28 +1084,16 @@
         "fourththing": {
           "vocabScrub": "2026-05-16",
           "principleSource": "ancestry",
-          "grantedByHeritage": "Salvage"
+          "grantedByHeritage": "Salvage",
+          "passives": {
+            "ranks": {
+              "tinkering": 1
+            }
+          }
         }
       },
       "effects": [],
       "folder": "gHKcv0ocAA3itByJ",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.wlig7TfgJmsUlJY6",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1095,7 +1101,17 @@
       },
       "sort": 100000,
       "_id": "u6iVTHqaZb3H93iG",
-      "_key": "!actors.items!uIwflNioGXwdCfVw.u6iVTHqaZb3H93iG"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989619675,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Circuitborn Heritage: Salvage",
@@ -1112,7 +1128,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn Line.</strong> The salvage-recursive. Built from the parts of older Circuitborn that didn\u2019t make it. You carry their last instructions in your firmware.</p><p><em>\u201cNothing in this world is wasted. Some of it is just waiting to be re-purposed.\u201d</em></p><p><strong>Salvage.</strong> You are a sentient chassis built around the principle of <em>recovery</em>. Broken things speak to you. So do broken people, when they don\u2019t know they\u2019re doing it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>BOD (Body)</strong>\u2014expressed primarily through Tier powers.</li><li><strong>Scrap Memory.</strong> You can identify the original purpose of any handheld broken object you touch (1/Soma Break, GM adjudicates depth of detail).</li></ul>",
+          "value": "\n<p><strong>Circuitborn Line.</strong> The salvage-recursive. Built from the parts of older Circuitborn that didn’t make it. You carry their last instructions in your firmware.</p><p><em>“Nothing in this world is wasted. Some of it is just waiting to be re-purposed.”</em></p><p><strong>Salvage.</strong> You are a sentient chassis built around the principle of <em>recovery</em>. Broken things speak to you. So do broken people, when they don’t know they’re doing it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>BOD (Body)</strong>—expressed primarily through Tier powers.</li><li><strong>Scrap Memory.</strong> You can identify the original purpose of any handheld broken object you touch (1/Soma Break, GM adjudicates depth of detail).</li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -1344,28 +1360,36 @@
           "version": 5
         },
         "fourththing": {
-          "grantedByHeritage": "Salvage"
+          "grantedByHeritage": "Salvage",
+          "rerolls": [
+            {
+              "context": "check",
+              "skill": "investigation",
+              "mode": "reroll-lowest",
+              "vs": "identifying salvage, pre-collapse tech, or what a broken thing was for",
+              "note": "Scrap Memory"
+            }
+          ]
         }
       },
       "folder": "l5Yp6MzYn3IvH285",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 100000,
       "_id": "RRn8ch6bHsyQ7J95",
-      "_key": "!actors.items!uIwflNioGXwdCfVw.RRn8ch6bHsyQ7J95"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989619675,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: The Hanged Man",
@@ -1380,7 +1404,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>\u201cYou understand cost.\u201d</em></p><p><strong>Archetype (Bad Eden): The Hanged Man.</strong> You gain power through sacrifice, inversion, and delay.</p>",
+          "value": "<p><em>“You understand cost.”</em></p><p><strong>Archetype (Bad Eden): The Hanged Man.</strong> You gain power through sacrifice, inversion, and delay.</p><p><strong>Domain edge:</strong> Your Domain earns <strong>+10 Intrigue</strong> marks each turn while you serve it.</p>",
           "chat": ""
         },
         "activities": {},
@@ -1452,23 +1476,6 @@
         }
       },
       "folder": "zeyG5XSzvv004b4I",
-      "_stats": {
-        "compendiumSource": "Item.CaD9EDHlMemikr2T",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.CaD9EDHlMemikr2T",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1476,7 +1483,17 @@
       },
       "_id": "2V2OvBuM1klGbojV",
       "sort": 100000,
-      "_key": "!actors.items!uIwflNioGXwdCfVw.2V2OvBuM1klGbojV"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989619676,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: The Hanged Man (Tier 1)",
@@ -1487,12 +1504,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden \u2013 Archetype: The Hanged Man (Tier 1)",
+          "custom": "Bad Eden – Archetype: The Hanged Man (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) \u2014 The Hanged Man</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Insight and Occult. You learn the <strong>Resistance</strong> Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Hanged Man</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Insight and Occult. You learn the <strong>Resistance</strong> Tier-0 manifestation.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1519,7 +1536,7 @@
       },
       "effects": [
         {
-          "disabled": false,
+          "disabled": true,
           "duration": {
             "value": null,
             "units": "seconds",
@@ -1528,7 +1545,7 @@
           },
           "flags": {},
           "name": "Archetype Tier 1 Proficiencies",
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_X.png",
+          "img": "icons/magic/death/gallows-hanged-humanoid.webp",
           "_id": "HngMnFX000000001",
           "type": "base",
           "system": {
@@ -1555,21 +1572,20 @@
           "transfer": true,
           "statuses": [],
           "sort": 0,
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885524,
-            "modifiedTime": 1784177885524
-          },
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!uIwflNioGXwdCfVw.h6EXj5wbCr6NHMx7.HngMnFX000000001"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989088164,
+            "modifiedTime": 1792989619884,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "zeyG5XSzvv004b4I",
@@ -1598,23 +1614,6 @@
           "vocabScrub": "2026-05-16"
         }
       },
-      "_stats": {
-        "compendiumSource": "Item.SlP3IDnB9OYtPgTw",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.SlP3IDnB9OYtPgTw",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1622,7 +1621,17 @@
       },
       "_id": "h6EXj5wbCr6NHMx7",
       "sort": 200000,
-      "_key": "!actors.items!uIwflNioGXwdCfVw.h6EXj5wbCr6NHMx7"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989619676,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Alignment: Chesed",
@@ -1636,7 +1645,7 @@
         },
         "tags": [],
         "description": {
-          "value": "Mercy - Expansion without fear. +1 Diplomacy, +1 Culture OPs\n\nChesed creates room for others to live, recover, and belong. It rewards community-building, morale recovery, and factions that grow stronger by sheltering rather than merely surviving.",
+          "value": "Mercy - Expansion without fear. +10 Diplomacy and +10 Culture marks to your Domain each turn.\n\nChesed creates room for others to live, recover, and belong. It rewards community-building, Loyalty recovery, and Domains that grow stronger by sheltering rather than merely surviving.",
           "chat": ""
         },
         "activities": {},
@@ -1674,23 +1683,6 @@
           "option": {}
         }
       },
-      "_stats": {
-        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.aickB2gnSqzrWmze",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.EwCwwr9w1kap3UD3",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 2,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1698,7 +1690,17 @@
       },
       "_id": "hfD63MQ0EfAatkdg",
       "sort": 200000,
-      "_key": "!actors.items!uIwflNioGXwdCfVw.hfD63MQ0EfAatkdg"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989619676,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Clean Extraction",
@@ -1713,18 +1715,13 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>\u201cYou can pull the teeth out of a monster without waking it up.\u201d</em></p><p>Once per <strong>a Soma Break</strong>, when a <strong>salvage, demolition, or deconstruction</strong> project you orchestrate would advance the <strong>Darkness Track</strong> (or an equivalent corruption flag) because of collateral harm, spiritual noise, or ecological fallout, you can choose to blunt that blow.</p><ul><li>You may <strong>negate</strong> one such Darkness increase entirely, representing careful rituals, shielding, or ethical disassembly.</li><li>This decision must be made at the moment the Darkness increase would be applied.</li></ul>",
+          "value": "<p><em>“You can pull the teeth out of a monster without waking it up.”</em></p><p>Once per <strong>Soma Break</strong>, when a <strong>salvage, demolition, or deconstruction</strong> project you orchestrate would advance the <strong>Darkness Track</strong> (or an equivalent corruption flag) because of collateral harm, spiritual noise, or ecological fallout, you can choose to blunt that blow.</p><ul><li>You may <strong>negate</strong> one such Darkness increase entirely, representing careful rituals, shielding, or ethical disassembly.</li><li>This decision must be made at the moment the Darkness increase would be applied.</li></ul>",
           "chat": ""
         },
         "activities": {},
         "uses": {
           "spent": 0,
-          "recovery": [
-            {
-              "period": "lr",
-              "type": "recoverAll"
-            }
-          ],
+          "recovery": [],
           "max": "1"
         },
         "advancement": {},
@@ -1734,7 +1731,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 14
         },
         "properties": [],
         "requirements": "Soul-Smith 14, Forge of the Spark Reclaimer",
@@ -1746,22 +1743,10 @@
       "effects": [],
       "folder": "BvmSP1PPc1ABT2OO",
       "flags": {
-        "dnd5e": {},
         "bbttcc": {
           "subclassKey": "soulsmith_forge_sparkreclaimer",
           "featureKey": "clean_extraction"
         }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
       },
       "ownership": {
         "default": 0,
@@ -1771,7 +1756,17 @@
       },
       "sort": 100000,
       "_id": "5pX3D6GL6qdz0IVm",
-      "_key": "!actors.items!uIwflNioGXwdCfVw.5pX3D6GL6qdz0IVm"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989088164,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Spark Resurrection",
@@ -1786,18 +1781,13 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cWhat was lost remembers you.\u201d</em></p><p>Once per <strong>a Soma Break</strong>, when a <strong>construct, vehicle, drone, or mech</strong> within <strong>12 squares</strong> of you is reduced to 0 Integrity, you can use your <strong>reaction</strong> to drag its pattern back through the wires.</p><ul><li>The target is immediately restored to <strong>half its Integrity maximum</strong>.</li><li>It can immediately take a <strong>full turn</strong> (move, action, and bonus action) as part of this reaction, acting on the current initiative.</li><li>It gains <strong>temporary Integrity equal to your Soul-Smith level</strong> and a bonus of <strong>+tier to all damage rolls</strong> it deals for 1 minute.</li><li>Allies within 2 squares of it deal <strong>+1 damage</strong> on their weapon attacks and have <strong>advantage</strong> on defense check against being <strong>stunned</strong> or <strong>paralyzed</strong> for the same duration.</li></ul><p><strong>OP Echo.</strong> If the resurrected construct contributes to completing a strategic or tactical goal before this aura ends, your faction gains <strong>+1 Economy OP</strong> and <strong>+1 Intrigue OP</strong> for the next strategic turn.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“What was lost remembers you.”</em></p><p>Once per <strong>Soma Break</strong>, when a <strong>construct, vehicle, drone, or mech</strong> within <strong>12 squares</strong> of you is reduced to 0 Integrity, you can use your <strong>reaction</strong> to drag its pattern back through the wires.</p><ul><li>The target is immediately restored to <strong>half its Integrity maximum</strong>.</li><li>It can immediately take a <strong>full turn</strong> (move, action, and bonus action) as part of this reaction, acting on the current initiative.</li><li>It gains <strong>temporary Integrity equal to your Soul-Smith level</strong> and a bonus of <strong>+tier to all damage rolls</strong> it deals for 1 minute.</li><li>Allies within 2 squares of it deal <strong>+1 damage</strong> on their weapon attacks and reroll the lowest die on defense checks against being <strong>stunned</strong> or <strong>paralyzed</strong> for the same duration.</li></ul><p><strong>Domain Echo..</strong> If the resurrected construct contributes to completing a strategic or tactical goal before this aura ends, your Domain gains <strong>+10 Economy marks</strong> and <strong>+10 Intrigue marks</strong> for the next turn.</p>",
           "chat": ""
         },
         "activities": {},
         "uses": {
           "spent": 0,
-          "recovery": [
-            {
-              "period": "lr",
-              "type": "recoverAll"
-            }
-          ],
+          "recovery": [],
           "max": "1"
         },
         "advancement": {},
@@ -1807,7 +1797,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 18
         },
         "properties": [],
         "requirements": "Soul-Smith 18, Forge of the Spark Reclaimer",
@@ -1819,7 +1809,6 @@
       "effects": [],
       "folder": "BvmSP1PPc1ABT2OO",
       "flags": {
-        "dnd5e": {},
         "bbttcc": {
           "subclassKey": "soulsmith_forge_sparkreclaimer",
           "featureKey": "spark_resurrection"
@@ -2002,17 +1991,6 @@
           "version": 5
         }
       },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "4Bs2J1tHpG4PGQHY": 3,
@@ -2021,7 +1999,17 @@
       },
       "sort": 250000,
       "_id": "cJ31B7ORb8HY0Oib",
-      "_key": "!actors.items!uIwflNioGXwdCfVw.cJ31B7ORb8HY0Oib"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989088164,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Reverse-Anvil",
@@ -2036,14 +2024,14 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou know where to hit a machine so it hits itself.\u201d</em></p><p>As a <strong>bonus action</strong>, you can target one <strong>construct</strong> or machine-like creature you can see within <strong>6 squares</strong>.</p><ul><li>The target must succeed on a <strong>Body check</strong> (DC = 8 + your tier + your Mind or Soul modifier; choose when you gain this feature) or suffer internal backlash.</li><li>On a failure, the target has <strong>disadvantage</strong> on the next attack roll it makes before the end of its next turn.</li><li>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You know where to hit a machine so it hits itself.”</em></p><p>As a <strong>bonus action</strong>, you can target one <strong>construct</strong> or machine-like creature you can see within <strong>6 squares</strong>.</p><ul><li>The target must succeed on a <strong>Body check</strong> (DC = 8 + your tier + your Mind or Soul value; choose when you gain this feature) or suffer internal backlash.</li><li>On a failure, the target rolls 3d10 and keeps the lowest 2 on the next attack roll it makes before the end of its next turn.</li><li>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</li></ul>",
           "chat": ""
         },
         "activities": {},
         "uses": {
           "spent": 0,
           "recovery": [],
-          "max": "@prof"
+          "max": ""
         },
         "advancement": {},
         "identifier": "soulsmith-forge-spark-reclaimer-reverse-anvil",
@@ -2052,7 +2040,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 10
         },
         "properties": [],
         "requirements": "Soul-Smith 10, Forge of the Spark Reclaimer",
@@ -2064,22 +2052,216 @@
       "effects": [],
       "folder": "BvmSP1PPc1ABT2OO",
       "flags": {
-        "dnd5e": {},
         "bbttcc": {
           "subclassKey": "soulsmith_forge_sparkreclaimer",
           "featureKey": "reverse_anvil"
+        },
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "who": "targets",
+                "do": {
+                  "save": {
+                    "attr": "body",
+                    "dc": 14,
+                    "onSave": "negate"
+                  }
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 2
+                }
+              },
+              {
+                "on": "saveFail",
+                "do": {
+                  "impose": true
+                },
+                "label": "Reverse-Anvil — internal backlash"
+              }
+            ]
+          }
+        },
+        "autoanimations": {
+          "id": "0b2546bd-292d-42a3-814b-d997134caa24",
+          "label": "Reverse-Anvil",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "sword",
+              "variant": "01",
+              "color": "white",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
         }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
       },
       "ownership": {
         "default": 0,
@@ -2089,7 +2271,17 @@
       },
       "sort": 187500,
       "_id": "n7EeDTDvOMzlHM3u",
-      "_key": "!actors.items!uIwflNioGXwdCfVw.n7EeDTDvOMzlHM3u"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989088164,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Spark Reclaimer (Bad Eden)",
@@ -2104,7 +2296,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Pull lost warmth from dead relics.</em></p><p>When you <strong>salvage</strong> a destroyed construct, relic, vehicle, or large device during or immediately after a scene, you can stabilize the ghost of its purpose.</p><ul><li>Once per <strong>scene</strong>, when you successfully salvage from such a wreck (at the GM\u2019s discretion that this is a meaningful recovery and not just scooping screws), your faction gains <strong>+1 Economy OP</strong> for the next strategic turn.</li><li>This doesn\u2019t stack from multiple wrecks in the same scene; think of it as one big reclamation per incident.</li></ul>",
+          "value": "<p><em>Pull lost warmth from dead relics.</em></p><p>When you <strong>salvage</strong> a destroyed construct, relic, vehicle, or large device during or immediately after a scene, you can stabilize the ghost of its purpose.</p><ul><li>Once per <strong>scene</strong>, when you successfully salvage from such a wreck (at the GM’s discretion that this is a meaningful recovery and not just scooping screws), your Domain gains <strong>+10 Economy marks</strong> for the next turn.</li><li>This doesn’t stack from multiple wrecks in the same scene; think of it as one big reclamation per incident.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2120,7 +2312,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 3
         },
         "properties": [],
         "requirements": "Soul-Smith 3, Forge of the Spark Reclaimer",
@@ -2132,22 +2324,187 @@
       "effects": [],
       "folder": "BvmSP1PPc1ABT2OO",
       "flags": {
-        "dnd5e": {},
         "bbttcc": {
           "subclassKey": "soulsmith_forge_sparkreclaimer",
           "featureKey": "spark_reclaimer"
+        },
+        "autoanimations": {
+          "id": "a483f81c-58d1-4054-ac87-e270f66f8072",
+          "label": "Spark Reclaimer (Bad Eden)",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "darkpurple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
         }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
       },
       "ownership": {
         "default": 0,
@@ -2157,7 +2514,17 @@
       },
       "sort": 162500,
       "_id": "tDLabVQTyRJMkR2W",
-      "_key": "!actors.items!uIwflNioGXwdCfVw.tDLabVQTyRJMkR2W"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989088164,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Residual Charge",
@@ -2172,7 +2539,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>\u201cWhen something powered down, it didn\u2019t stop talking to you.\u201d</em></p><p>When you reduce a <strong>construct</strong>, vehicle, drone, mech, or other obviously artificial entity to 0 Integrity, you can ride the dying current for insight.</p><ul><li>Until the end of the current <strong>scene</strong>, you have <strong>advantage</strong> on your next <strong>tool check</strong> related to engineering, salvage, or repair.</li><li>This includes checks to stabilize wreckage, reclaim parts, or jury-rig field repairs.</li></ul>",
+          "value": "<p><em>“When something powered down, it didn’t stop talking to you.”</em></p><p>When you reduce a <strong>construct</strong>, vehicle, drone, mech, or other obviously artificial entity to 0 Integrity, you can ride the dying current for insight.</p><ul><li>Until the end of the current <strong>scene</strong>, you reroll the lowest die on your next <strong>tool check</strong> related to engineering, salvage, or repair.</li><li>This includes checks to stabilize wreckage, reclaim parts, or jury-rig field repairs.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2188,7 +2555,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 6
         },
         "properties": [],
         "requirements": "Soul-Smith 6, Forge of the Spark Reclaimer",
@@ -2200,22 +2567,187 @@
       "effects": [],
       "folder": "BvmSP1PPc1ABT2OO",
       "flags": {
-        "dnd5e": {},
         "bbttcc": {
           "subclassKey": "soulsmith_forge_sparkreclaimer",
           "featureKey": "residual_charge"
+        },
+        "autoanimations": {
+          "id": "ceda099a-42ff-49bf-887e-ed1ca3deb855",
+          "label": "Residual Charge",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "spell",
+              "animation": "eldritchblast",
+              "variant": "01",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
         }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
       },
       "ownership": {
         "default": 0,
@@ -2225,7 +2757,17 @@
       },
       "sort": 300000,
       "_id": "sgDrzb489bTMSbd4",
-      "_key": "!actors.items!uIwflNioGXwdCfVw.sgDrzb489bTMSbd4"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989088164,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Overcharge Cycle",
@@ -2240,7 +2782,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>\u201cYou know how to wake dead metal just a little too well.\u201d</em></p><p>When you finish a <strong>a Soma Break</strong>, you may choose one <strong>construct, device, vehicle, or weapon</strong> you repaired, salvaged, or forged during or before the rest.</p><ul><li>For the next <strong>hour</strong>, it gains <strong>+1 to attack rolls</strong> (if it makes attacks) and <strong>+1 to Guard</strong> (if it can be targeted and has an Guard).</li><li>Once per round, the first time it hits or successfully completes a relevant action, it deals an extra <strong>1d8 lightning or sephirotic damage (radiant)</strong> (your choice when you apply the overcharge).</li><li>If the item or construct is destroyed while overcharged, you immediately gain <strong>advantage</strong> on your next tool check and salvage action this scene, as the feedback pours a blueprint directly into your hands.</li></ul><p><strong>OP Echo.</strong> If you successfully reclaim at least one meaningful Material, Component, or OP via salvage during the hour, your faction gains <strong>+1 Economy OP</strong> for the next strategic turn (once per scenario).</p>",
+          "value": "<p><em>“You know how to wake dead metal just a little too well.”</em></p><p>When you finish a Soma Break, you may choose one <strong>construct, device, vehicle, or weapon</strong> you repaired, salvaged, or forged during or before the rest.</p><ul><li>For the next <strong>hour</strong>, it gains <strong>+1 to attack rolls</strong> (if it makes attacks) and <strong>+1 to Guard</strong> (if it can be targeted and has a Guard).</li><li>Once per round, the first time it hits or successfully completes a relevant action, it deals an extra <strong>1d8 lightning or sephirotic damage</strong> (your choice when you apply the overcharge).</li><li>If the item or construct is destroyed while overcharged, you immediately reroll the lowest die on your next tool check and salvage action this scene, as the feedback pours a blueprint directly into your hands.</li></ul><p><strong>Domain Echo..</strong> If you successfully reclaim at least one meaningful Material, Component, or marks via salvage during the hour, your Domain gains <strong>+10 Economy marks</strong> for the next turn (once per scenario).</p>",
           "chat": ""
         },
         "activities": {},
@@ -2256,7 +2798,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 15
         },
         "properties": [],
         "requirements": "Soul-Smith 15, Forge of the Spark Reclaimer",
@@ -2268,22 +2810,187 @@
       "effects": [],
       "folder": "BvmSP1PPc1ABT2OO",
       "flags": {
-        "dnd5e": {},
         "bbttcc": {
           "subclassKey": "soulsmith_forge_sparkreclaimer",
           "featureKey": "overcharge_cycle"
+        },
+        "autoanimations": {
+          "id": "e0dc3e32-3cee-427a-b175-528a8271973e",
+          "label": "Overcharge Cycle",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "yellowwhite",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
         }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
       },
       "ownership": {
         "default": 0,
@@ -2293,7 +3000,17 @@
       },
       "sort": 175000,
       "_id": "UyASQZugU5OHB8sf",
-      "_key": "!actors.items!uIwflNioGXwdCfVw.UyASQZugU5OHB8sf"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989088164,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Echo Temper",
@@ -2308,7 +3025,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>\u201cMetal remembers how it died. You teach it better endings.\u201d</em></p><p>After you finish a <strong>a Soma Break</strong>, you can choose one weapon you have personally <strong>forged, repaired, or significantly modified</strong> during this adventure.</p><ul><li>For the next <strong>hour</strong>, that weapon deals an extra <strong>+1 damage</strong> on each hit.</li><li>The extra damage is the same type as the weapon\u2019s normal damage.</li><li>You can have only one weapon under this effect at a time. Starting Echo Temper again ends the previous echo.</li></ul>",
+          "value": "<p><em>“Metal remembers how it died. You teach it better endings.”</em></p><p>After you finish a Soma Break, you can choose one weapon you have personally <strong>forged, repaired, or significantly modified</strong> during this adventure.</p><ul><li>For the next <strong>hour</strong>, that weapon deals an extra <strong>+1 damage</strong> on each hit.</li><li>The extra damage is the same type as the weapon’s normal damage.</li><li>You can have only one weapon under this effect at a time. Starting Echo Temper again ends the previous echo.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2324,7 +3041,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 3
         },
         "properties": [],
         "requirements": "Soul-Smith 3, Forge of the Spark Reclaimer",
@@ -2336,22 +3053,187 @@
       "effects": [],
       "folder": "BvmSP1PPc1ABT2OO",
       "flags": {
-        "dnd5e": {},
         "bbttcc": {
           "subclassKey": "soulsmith_forge_sparkreclaimer",
           "featureKey": "echo_temper"
+        },
+        "autoanimations": {
+          "id": "ca4fef06-f8e1-4b19-8b62-611559c51ac2",
+          "label": "Echo Temper",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "yellowwhite",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
         }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
       },
       "ownership": {
         "default": 0,
@@ -2361,7 +3243,17 @@
       },
       "sort": 200000,
       "_id": "zqCR0npCnVzSrrju",
-      "_key": "!actors.items!uIwflNioGXwdCfVw.zqCR0npCnVzSrrju"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989088164,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Grim Persistence",
@@ -2372,7 +3264,7 @@
         "source": "Bad Eden Core Feats v1 (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<h2>Grim Persistence</h2><p><em>You are difficult to kill because you do not stop.</em></p><hr><h3>Rules</h3><p>Your Integrity maximum increases by an amount equal to twice your level. Additionally, once per Sanctuary, when you are reduced to 0 Integrity but not killed outright, you may remain at 1 Integrity instead.</p>",
+          "value": "<h2>Grim Persistence</h2><p><em>You are difficult to kill because you do not stop.</em></p><hr><h3>Rules</h3><p>Your Integrity maximum increases by an amount equal to twice your level. Additionally, once per Soma Break, when you are reduced to 0 Integrity but not killed outright, you may remain at 1 Integrity instead.</p><p class=\"ft-engine-note\"><em>⚙ Integrity max +2 × level applies automatically; the hold-at-1 fires by itself, once per Soma Break.</em></p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_grim_persistence",
@@ -2400,7 +3292,7 @@
       "effects": [
         {
           "_id": "N7ITxKLUkX0vyOYx",
-          "name": "Grim Persistence \u2014 Integrity",
+          "name": "Grim Persistence — Integrity",
           "origin": null,
           "disabled": false,
           "duration": {
@@ -2428,21 +3320,20 @@
           },
           "statuses": [],
           "sort": 0,
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177885524,
-            "modifiedTime": 1784177885524
-          },
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!uIwflNioGXwdCfVw.dvqRVOe9voH23s5h.N7ITxKLUkX0vyOYx"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989088164,
+            "modifiedTime": 1792989088164,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "flags": {
@@ -2458,19 +3349,18 @@
         "DHBK2UGr58xKXzxK": 3,
         "bytUGWIOqq9eT7Or": 3
       },
+      "_id": "dvqRVOe9voH23s5h",
       "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989088164,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
-      "_id": "dvqRVOe9voH23s5h",
-      "_key": "!actors.items!uIwflNioGXwdCfVw.dvqRVOe9voH23s5h"
+        "exportSource": null
+      }
     },
     {
       "_id": "3X0NKFdd504JEYZa",
@@ -2487,7 +3377,7 @@
           "soul"
         ],
         "description": {
-          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling — the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -2514,21 +3404,20 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989088164,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!uIwflNioGXwdCfVw.3X0NKFdd504JEYZa"
+      }
     },
     {
       "_id": "vbUyR4OMTVIQI4jx",
-      "name": "Keeper \u2014 Apprentice (Tier I)",
+      "name": "Keeper — Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/environment/settlement/temple-night.webp",
       "system": {
@@ -2540,7 +3429,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Keeper \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 The rites:</strong> Weddings, funerals, blessings; participants recover 2\u00d7tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick \u2014 Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
+          "value": "<p><strong>Keeper — Apprentice</strong> (Tier I).</p><p><strong>Trade — The rites:</strong> Weddings, funerals, blessings; participants recover 2×tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick — Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
           "chat": ""
         }
       },
@@ -2556,21 +3445,42 @@
           "calling": {
             "key": "keeper",
             "tier": 1
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "use",
+                "who": "targets",
+                "do": {
+                  "removeCondition": [
+                    "shaken"
+                  ],
+                  "bankReroll": {
+                    "context": "defense",
+                    "note": "Steady the Soul"
+                  }
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                }
+              }
+            ]
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177885524,
-        "modifiedTime": 1784177885524,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989088164,
+        "modifiedTime": 1792989088164,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!uIwflNioGXwdCfVw.vbUyR4OMTVIQI4jx"
+      }
     }
   ],
   "effects": [],
@@ -2578,15 +3488,16 @@
   "sort": 400000,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177885524,
-    "modifiedTime": 1784177885524,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989088164,
+    "modifiedTime": 1792989088168,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

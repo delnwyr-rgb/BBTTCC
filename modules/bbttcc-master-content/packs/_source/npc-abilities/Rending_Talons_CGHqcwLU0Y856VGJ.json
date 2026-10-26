@@ -23,7 +23,7 @@
       "reach",
       "boss"
     ],
-    "effect": "Reach 10 ft. Multiattack: may strike twice against the same or different targets.",
+    "effect": "Reach 2 squares. Two Strikes: may strike twice against the same or different targets.",
     "flavor": "Up close it remembers it is, after all, a dragon.",
     "manifestation": {
       "tier": 1,
@@ -57,11 +57,10 @@
       }
     },
     "description": {
-      "value": "<p>Reach 2 squares Multiattack: may strike twice against the same or different targets.</p>",
+      "value": "<p>Reach 2 squares Two Strikes: may strike twice against the same or different targets.</p>",
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,17 +79,6 @@
             "saleBack": 20
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Varrenthyx, the Laser Dragon"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
       }
     },
     "autoanimations": {
@@ -268,50 +256,41 @@
       "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
-      "version": 5,
-      "meleeSwitch": {
-        "video": {
-          "dbSection": "range",
-          "menuType": "weapon",
-          "animation": "arrow",
-          "variant": "regular",
-          "color": "regular",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "detect": "automatic",
-          "range": 2,
-          "returning": false,
-          "switchType": "on"
-        }
+      "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Varrenthyx, the Laser Dragon"
+        ],
+        "sourceIds": [
+          "DeyWbEYxsEcV8pKp"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
   "_id": "CGHqcwLU0Y856VGJ",
   "sort": 0,
+  "folder": null,
   "ownership": {
-    "default": 0
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1780000000000,
-    "modifiedTime": 1782167244990,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989041526,
+    "modifiedTime": 1792989041526,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
   },
-  "folder": null,
   "_key": "!items!CGHqcwLU0Y856VGJ"
 }

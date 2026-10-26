@@ -1,0 +1,78 @@
+{
+  "name": "Ley-Tuned Magnetic Tape",
+  "type": "gear",
+  "img": "icons/sundries/survival/tape-duct.webp",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "ley-tuned-magnetic-tape"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "A ribbon that hums at the right pitch.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Cassette tape re-magnetised on a leyline. Records more than sound.</p>",
+          "charges": 1,
+          "materialKey": "ley-tuned-magnetic-tape",
+          "price": {
+            "marks": 45,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII material",
+            "bound": "free",
+            "saleBack": 18
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "eXBc0i9cbg0DVfuD",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1789965941375,
+    "modifiedTime": 1792977647879,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!eXBc0i9cbg0DVfuD"
+}

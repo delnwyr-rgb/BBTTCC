@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Order is not an idea. It is a budget, a road network, and somebody staying late to sign the papers.”</em></p>\n<p><strong>Archetype (Bad Eden): The Emperor (Administrator).</strong> Civic architect, system-builder, and keeper of functional continuity. You turn collapse into policy and policy into Athletics.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your faction’s economy stretches farther around you. This Archetype is associated with <strong>+3 Economy OPs</strong> in faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of logistics, management, civic control, and state capacity.</li>\n</ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Order is not an idea. It is a budget, a road network, and somebody staying late to sign the papers.”</em></p>\n<p><strong>Archetype (Bad Eden): The Emperor (Administrator).</strong> Civic architect, system-builder, and keeper of functional continuity. You turn collapse into policy and policy into Athletics.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your Domain’s economy stretches farther around you. Your Domain earns <strong>+30 Economy</strong> marks each turn while you serve it.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of logistics, management, civic control, and state capacity.</li>\n</ul>",
       "chat": ""
     },
     "activities": {},
@@ -91,12 +91,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1773893513793,
-    "modifiedTime": 1781116027301,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989146478,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

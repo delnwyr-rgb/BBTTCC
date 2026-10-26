@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — The Sun (Beacon)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When spending Soft Power OPs to raise morale, stabilize public confidence, or project legitimacy in open view, the effectiveness of spent OPs is increased by 25%.</li></ul>",
+      "value": "<p><strong>Tier 2 (Level 5) — The Sun (Beacon)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Soft Power marks, it spends 20% less (never below 10).</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -59,7 +59,20 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "softpower"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Archetype: The Sun (Beacon) (Tier 2)",
+          "pct": 20
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": "Item.TqU6wZ1aRzCGehoC",
@@ -71,12 +84,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986794557,
-    "modifiedTime": 1781116028774,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989157446,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

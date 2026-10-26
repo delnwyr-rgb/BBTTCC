@@ -59,12 +59,13 @@
             "notes": "TIII tool stamp",
             "bound": "attuned",
             "saleBack": 108
-          }
+          },
+          "chargesMax": 1
         }
       }
     }
   },
-  "folder": "Mzo3vreEeHyIsTWO",
+  "folder": "Wxh1A343inwTUeoo",
   "_id": "GImanuAGAUJQtqpI",
   "effects": [],
   "sort": 500000,
@@ -73,12 +74,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137142786,
-    "modifiedTime": 1782164185972,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988927053,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

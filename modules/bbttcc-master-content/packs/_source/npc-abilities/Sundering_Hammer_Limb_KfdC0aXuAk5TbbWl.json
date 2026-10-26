@@ -23,7 +23,7 @@
       "tier-iv",
       "role-hardened"
     ],
-    "effect": "On a hit, the target must succeed on a DC 16 Body save or be knocked prone and pushed 10 ft. away.",
+    "effect": "On a hit, the target must succeed on a DC 16 Body check or be knocked prone and pushed 2 squares. away.",
     "flavor": "The arm articulates wrong. The impact arrives at three places at once.",
     "manifestation": {
       "tier": 1,
@@ -54,6 +54,19 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "saveAttribute": "body",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 16,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "prone"
+        ],
+        "duration": "1-round"
       }
     },
     "description": {
@@ -61,7 +74,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +92,24 @@
             "saleBack": 540
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Pre-Fall Apex Construct"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Sundering Hammer-Limb"
+            },
+            "do": {
+              "push": 2
+            }
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "d8e812c3-3a18-4ca4-a909-2cad451ff1e8",
+      "id": "ft-sundering-hammer-limb",
       "label": "Sundering Hammer-Limb",
       "macro": {
         "enable": false,
@@ -268,50 +283,41 @@
       "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
-      "version": 5,
-      "meleeSwitch": {
-        "video": {
-          "dbSection": "range",
-          "menuType": "weapon",
-          "animation": "arrow",
-          "variant": "regular",
-          "color": "regular",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "detect": "automatic",
-          "range": 2,
-          "returning": false,
-          "switchType": "on"
-        }
+      "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Pre-Fall Apex Construct"
+        ],
+        "sourceIds": [
+          "bY5b3zOkFr7RbcNU"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "KfdC0aXuAk5TbbWl",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024229804,
-    "modifiedTime": 1782167244995,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989046860,
+    "modifiedTime": 1792989046861,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!KfdC0aXuAk5TbbWl"
 }

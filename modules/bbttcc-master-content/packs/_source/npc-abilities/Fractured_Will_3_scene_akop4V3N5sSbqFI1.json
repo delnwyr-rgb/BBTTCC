@@ -1,0 +1,53 @@
+{
+  "name": "Fractured Will (3/scene)",
+  "type": "feature",
+  "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "rfi-scrubbed"
+    ],
+    "description": {
+      "value": "<p><strong>Passive.</strong> When Gilbert fails a check, the theater's protocol overrides the outcome: he succeeds instead. Three times per scene. Each time, something in the lobby breaks.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "akop4V3N5sSbqFI1",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gilbert, Attendant Eternal"
+        ],
+        "sourceIds": [
+          "LQS2jaeFhzFMDpxA"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069934,
+    "modifiedTime": 1792989070016,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!akop4V3N5sSbqFI1"
+}

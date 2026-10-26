@@ -23,7 +23,7 @@
       "tier-i",
       "role-stealth"
     ],
-    "effect": "On a hit, the target is pulled up to 10 ft. toward the stalker; if it ends adjacent, the target is also Restrained (escape DC 12 Body) until end of stalker's next turn.",
+    "effect": "On a hit, the target is pulled up to 2 squares. toward the stalker; if it ends adjacent, the target is also Restrained (escape DC 12 Body) until end of stalker's next turn.",
     "flavor": "Not the tongue you were expecting.",
     "manifestation": {
       "tier": 1,
@@ -54,6 +54,19 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "saveAttribute": "body",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 12,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "restrained"
+        ],
+        "duration": "1-round"
       }
     },
     "description": {
@@ -61,7 +74,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +92,25 @@
             "saleBack": 20
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Reed-Skin Stalker"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Drag-Tongue"
+            },
+            "do": {
+              "pull": 2,
+              "prompt": "Restrained only if it ends adjacent to the stalker."
+            }
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "7348e77c-a873-4ca6-9813-50332b042233",
+      "id": "ft-drag-tongue",
       "label": "Drag-Tongue",
       "macro": {
         "enable": false,
@@ -268,50 +284,41 @@
       "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
-      "version": 5,
-      "meleeSwitch": {
-        "video": {
-          "dbSection": "range",
-          "menuType": "weapon",
-          "animation": "arrow",
-          "variant": "regular",
-          "color": "regular",
-          "enableCustom": false,
-          "customPath": ""
-        },
-        "sound": {
-          "enable": false,
-          "delay": 0,
-          "repeat": 1,
-          "repeatDelay": 250,
-          "startTime": 0,
-          "volume": 0.75
-        },
-        "options": {
-          "detect": "automatic",
-          "range": 2,
-          "returning": false,
-          "switchType": "on"
-        }
+      "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Reed-Skin Stalker"
+        ],
+        "sourceIds": [
+          "IHzUhG1mabHnm6pL"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "0aUumVUEiwpGnrz7",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024223607,
-    "modifiedTime": 1782167244985,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989025785,
+    "modifiedTime": 1792989025785,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!0aUumVUEiwpGnrz7"
 }

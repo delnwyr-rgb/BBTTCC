@@ -1,0 +1,108 @@
+{
+  "name": "Inlaid Worker's Leathers",
+  "type": "armor",
+  "img": "icons/equipment/chest/breastplate-layered-leather-stitched.webp",
+  "system": {
+    "guardBonus": 2,
+    "evasionBonus": 2,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "fitting",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "light",
+      "leather",
+      "utility",
+      "graded",
+      "grade-inlaid"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Heavy work jacket, reinforced gloves, and a thigh-strap of tool loops. The standard kit for hex-laborers, salvage crews, scrap-line foremen, and anyone whose day involves both sharp edges and difficult conversations with their employer. Not glamorous. Hard to ruin.</p><p>Counts as armor for protection rolls and as gear for any skill check you can talk your way into calling \"work.\"</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Light</p></li><li><p><strong>Defense:</strong> Guard +2, Evasion +2</p></li><li><p><strong>Requires:</strong> Fitting (trained)</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 225 Nonlethal marks</p></li></ul>\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Inlaid (+1). Hex-inlay along the working edge.</strong></p>\n<ul>\n  <li><strong>+1 on each of its defense bonuses</strong> → Guard +2, Evasion +2 (rank-scaled like all armor: Trained half, Proficient full).</li>\n  <li>Grade raises it to <strong>Tier II</strong> · free to wield.</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Built for the kind of day where something might fall on you.",
+          "origin": "forged",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Heavy work jacket, reinforced gloves, and a thigh-strap of tool loops. The standard kit for hex-laborers, salvage crews, scrap-line foremen, and anyone whose day involves both sharp edges and difficult conversations with their employer. Not glamorous. Hard to ruin.</p><p>Counts as armor for protection rolls and as gear for any skill check you can talk your way into calling \"work.\"</p>",
+          "materialOf": [
+            {
+              "key": "work-leather",
+              "qty": 1
+            },
+            {
+              "key": "rivet-strap",
+              "qty": 1
+            },
+            {
+              "key": "tool-loop",
+              "qty": 1
+            },
+            {
+              "key": "sept-silver",
+              "qty": 1
+            }
+          ],
+          "price": {
+            "marks": 225,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII armor (Inlaid +1 on TI Worker's Leathers) × bound free",
+            "bound": "free",
+            "saleBack": 90
+          }
+        }
+      },
+      "grade": {
+        "rank": 1,
+        "name": "Inlaid",
+        "key": "inlaid",
+        "defense": 1
+      }
+    }
+  },
+  "folder": "paUl8Tj6Xx5fAkKN",
+  "_id": "naVSbrJKnkIGVkzc",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791427797924,
+    "modifiedTime": 1792988958050,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!naVSbrJKnkIGVkzc"
+}

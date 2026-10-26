@@ -1,7 +1,7 @@
 {
   "type": "Actor",
   "folder": "ZiFLx2LEOrGxvEmc",
-  "name": "Crown Mall",
+  "name": "Tanneritos",
   "color": "#c5372f",
   "sorting": "a",
   "_id": "0JJ7Hzte4oNxvGG1",
@@ -9,11 +9,11 @@
   "sort": 700000,
   "flags": {},
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
-    "createdTime": 1784177533966,
-    "modifiedTime": 1784177533966,
+    "createdTime": 1791316997173,
+    "modifiedTime": 1791316997173,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Make Do And Hold [Option]",
+  "name": "Make Do And Hold",
   "type": "feat",
   "img": "icons/magic/control/debuff-energy-hold-levitate-teal-blue.webp",
   "system": {
@@ -7,31 +7,37 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Make Do And Hold [Option]</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> logistics 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> option</p><p><strong>Raid Types:</strong> assault_defense, occupation, siege</p></div>",
+      "value": "<p><strong>Make Do And Hold</strong></p><p>Survivors' Militia, pre-roll. The defenders ignore the first Structure loss this round and roll +1.</p><p><em>Cost: Logistics 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "maneuver",
-      "key": "opt_make_do_and_hold"
+      "key": "opt_make_do_and_hold",
+      "effects": {
+        "text": "Survivors' Militia, pre-roll. The defenders ignore the first Structure loss this round and roll +1."
+      },
+      "meta": {
+        "storyOnly": false
+      }
     }
   },
   "_id": "c7yVN241zyCbla14",
   "effects": [],
-  "folder": null,
+  "folder": "SziFuLdTIX4Y2Rav",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601757,
-    "modifiedTime": 1782703702688,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988994706,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

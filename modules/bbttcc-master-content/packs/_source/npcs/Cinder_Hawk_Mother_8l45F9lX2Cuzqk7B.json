@@ -41,7 +41,8 @@
     "derived": {
       "integrity": {
         "value": 50,
-        "max": 50
+        "max": 50,
+        "temp": 0
       },
       "stress": {
         "value": 25,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,6 +145,9 @@
     },
     "conditionImmunities": [],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -155,6 +160,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "Apex aerial predator. Smaller than legend; meaner than expected."
     }
   },
   "flags": {
@@ -190,16 +199,19 @@
             ]
           },
           "price": {
-            "marks": 1080,
-            "bounty": 1080,
-            "hire": 2700,
-            "ransom": 1800,
+            "marks": 15,
+            "bounty": 15,
+            "hire": 25,
+            "ransom": 25,
             "currency": "violence",
             "gmOverride": false,
-            "notes": "TII medium scout (bestiary) \u2014 bounty 1080 / hire 2700 / ransom 1800 marks (paid in violence)"
-          }
+            "notes": "TII medium wild — bounty 15 / hire 25 marks; credited to the pool matching the method (default violence)"
+          },
+          "lineage": "wild",
+          "subLineage": "aerial"
         }
-      }
+      },
+      "creatureType": "beast"
     }
   },
   "_id": "8l45F9lX2Cuzqk7B",
@@ -344,7 +356,34 @@
               "tier": "II",
               "frame": "trait"
             }
-          }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attacked",
+                "if": {
+                  "ownerAirborne": true,
+                  "targetNotAirborne": true
+                },
+                "do": {
+                  "reroll": "attack-highest"
+                },
+                "label": "Aerial Dominance — ground-based attackers reroll their highest die"
+              }
+            ]
+          },
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "when": [
+                "airborne",
+                "targetGrounded"
+              ],
+              "note": "Aerial Dominance — airborne vs a grounded target"
+            }
+          ]
         }
       },
       "folder": null,
@@ -355,17 +394,16 @@
       },
       "_id": "gPFfE89bRQHTz4fh",
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.5",
         "createdTime": 1780118701738,
-        "modifiedTime": 1780163238704,
-        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "modifiedTime": 1791422258029,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!8l45F9lX2Cuzqk7B.gPFfE89bRQHTz4fh"
+      }
     },
     {
       "name": "Diving Talons",
@@ -444,11 +482,40 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack \u00d7 1",
+                "notes": "TII attack × 1",
                 "bound": "free",
                 "saleBack": 60
               }
             }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "do": {
+                  "reroll": "damage"
+                },
+                "label": "Diving Talons — after a dive",
+                "if": {
+                  "weapon": "Diving Talons",
+                  "ownerMovedSquares": 6
+                }
+              },
+              {
+                "on": "hit",
+                "do": {
+                  "condition": {
+                    "key": "prone",
+                    "duration": "1-round"
+                  }
+                },
+                "if": {
+                  "weapon": "Diving Talons",
+                  "ownerMovedSquares": 6
+                }
+              }
+            ]
           }
         },
         "autoanimations": {
@@ -637,20 +704,19 @@
       },
       "_id": "UVVdXEbrODNvOBMw",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118701738,
-        "modifiedTime": 1782167242345,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989125933,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
-      },
-      "_key": "!actors.items!8l45F9lX2Cuzqk7B.UVVdXEbrODNvOBMw"
+      }
     },
     {
-      "name": "Downdraft Burn (recharges on a Soma Break)",
+      "name": "Downdraft Burn (recharge 5–6)",
       "type": "weapon",
       "img": "icons/magic/fire/beam-jet-stream-embers.webp",
       "system": {
@@ -660,7 +726,7 @@
         "damage": {
           "formula": "1d10",
           "attribute": "violence",
-          "type": "energy",
+          "type": "thermal",
           "damageFlavor": "feather-cinder",
           "track": "integrity"
         },
@@ -676,7 +742,7 @@
           "aoe",
           "shape-cone"
         ],
-        "effect": "Cone 20 ft. \u2014 targets roll vs Evasion (DC 12). Half damage on success. Smoldering feathers cascade down; failed targets are Blinded until the end of their next turn. Recharge 5\u20136.",
+        "effect": "Cone 4 squares. — targets roll vs Evasion (DC 12). Half damage on success. Smoldering feathers cascade down; failed targets are Blinded until the end of their next turn. At the start of its turn it rolls 1d6; on a 5–6 it is ready again.",
         "flavor": "Her wings shed cinder when she beats them hard. She is beating them hard now.",
         "manifestation": {
           "tier": 1,
@@ -707,6 +773,24 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "intrigue",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 12,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "blinded"
+            ],
+            "duration": "1-round"
+          },
+          "area": {
+            "shape": "cone",
+            "size": 20
           }
         },
         "description": {
@@ -732,16 +816,24 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII save \u00d7 1",
+                "notes": "TII save × 1",
                 "bound": "free",
                 "saleBack": 60
               }
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
             }
           }
         },
         "autoanimations": {
           "id": "ft-downdraft-burn-recharge-5-6-",
-          "label": "Downdraft Burn (Recharge 5\u20136)",
+          "label": "Downdraft Burn (Recharge 5–6)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -925,17 +1017,82 @@
       },
       "_id": "dp028FSn7kYBTbNa",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780118701738,
-        "modifiedTime": 1782167283305,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "modifiedTime": 1792989125934,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "exportSource": null,
         "compendiumSource": null,
         "duplicateSource": null
+      }
+    },
+    {
+      "name": "Territory",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "wild",
+          "aerial"
+        ],
+        "description": {
+          "value": "<p>Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: reroll the lowest die on attack rolls against any creature within 1 square of an ally that isn't incapacitated.</p><p><em>It was here first. It intends to be here after.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!8l45F9lX2Cuzqk7B.dp028FSn7kYBTbNa"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "attack",
+                "if": {
+                  "firstRound": true
+                },
+                "do": {
+                  "reroll": "attack"
+                },
+                "limit": {
+                  "per": "combat",
+                  "uses": 1
+                },
+                "label": "Territory — the first strike rerolls the lowest"
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "wild"
+            }
+          }
+        }
+      },
+      "_id": "DqPaYkeykrtwDwWO",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342348725,
+        "modifiedTime": 1791342348725,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -945,12 +1102,12 @@
     "6ut7GT8pCAhpdWjS": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780118701738,
-    "modifiedTime": 1783219918002,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989125815,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

@@ -9,6 +9,7 @@
     ],
     "category": "gear",
     "source": "Phase 7 Seed (2026-05-10)",
+    "quantity": 1,
     "description": {
       "value": "<p>Two crystalline beads, manufactured before the Fall. Pair-linked — speak into one, the other hums in your partner's ear. Range: line-of-thought across one hex.</p>",
       "chat": ""
@@ -34,9 +35,9 @@
           "tech": {
             "kind": "linked",
             "charges": {
-              "value": 0,
-              "max": 0,
-              "recoverPer": "manual"
+              "value": 1,
+              "max": 1,
+              "recoverPer": "day"
             },
             "attunement": {
               "required": true,
@@ -68,12 +69,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778963345415,
-    "modifiedTime": 1778963345415,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988927250,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

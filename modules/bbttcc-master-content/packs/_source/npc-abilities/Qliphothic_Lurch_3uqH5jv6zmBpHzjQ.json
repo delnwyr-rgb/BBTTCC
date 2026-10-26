@@ -1,0 +1,77 @@
+{
+  "name": "Qliphothic Lurch",
+  "type": "feature",
+  "img": "icons/magic/death/undead-zombie-grave-green.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "rfi-scrubbed"
+    ],
+    "description": {
+      "value": "<p>If the shambler moves at least 3 squares straight toward a creature and then hits it with Rot-Branch on the same turn, the target must succeed a Body check vs DC 15 or fall Prone.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "if": {
+              "weapon": "Rot-Branch",
+              "ownerMovedSquares": 3
+            },
+            "do": {
+              "condition": {
+                "key": "prone",
+                "duration": "1-round",
+                "save": {
+                  "attr": "body",
+                  "dc": 15
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Qliphothic Shambler"
+        ],
+        "sourceIds": [
+          "dskzJNdpkiTFEbik"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "3uqH5jv6zmBpHzjQ",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069957,
+    "modifiedTime": 1792989070041,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!3uqH5jv6zmBpHzjQ"
+}

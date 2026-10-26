@@ -8,7 +8,7 @@
     "source": "Bad Eden (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<div data-ft-canon-human=\"v1\" style=\"display:none\"></div><p><em>\"The first thing worth defending was the circle of people who decided, against all sense, to keep each other warm through the night.\"</em></p><p><strong>First Fire (1/Soma Break).</strong> Spend 10 minutes building a coalition fire — a real one, not a metaphor. While it burns and creatures shelter within 6 squares (up to 1 hour, longer if tended):</p><ul><li><p>Friendly creatures reroll the lowest die on defense checks against being Shaken or Stressed.</p></li><li><p>After a Soma Break taken at the fire, each friendly creature present gains a single banked reroll-lowest they may spend on any check before the next Soma Break.</p></li><li><p>The first time any hostile creature crosses within 6 squares, every friendly creature there knows it.</p></li><li><p>The fire counts as a defensible camp narratively.</p></li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"humCroMagnonFirstFire\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>First Fire (Cro-Magnon)</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> 10-min build  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Build a coalition fire — 6 squares shelter zone for up to 1 hour granting friend reroll-lowest vs Shaken/Stressed, +1 Integrity/Hit Die at the fire, hostile-crossing alarm, narrative defensible camp.</span></p></div>",
+      "value": "\n<p><em>\"The first thing worth defending was the circle of people who decided, against all sense, to keep each other warm through the night.\"</em></p><p><strong>First Fire (1/Soma Break).</strong> Spend 10 minutes building a coalition fire — a real one, not a metaphor. While it burns and creatures shelter within 6 squares (up to 1 hour, longer if tended):</p><ul><li><p>Friendly creatures reroll the lowest die on defense checks against being Shaken or Stressed.</p></li><li><p>After a Soma Break taken at the fire, each friendly creature present gains a single banked reroll-lowest they may spend on any check before the next Soma Break.</p></li><li><p>The first time any hostile creature crosses within 6 squares, every friendly creature there knows it.</p></li><li><p>The fire counts as a defensible camp narratively.</p></li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"humCroMagnonFirstFire\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>First Fire (Cro-Magnon)</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> 10-min build  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Build a coalition fire — 6 squares shelter zone for up to 1 hour granting friend reroll-lowest vs Shaken/Stressed, +1 Integrity per Body die at the fire, hostile-crossing alarm, narrative defensible camp.</span></p></div>",
       "chat": ""
     },
     "advancement": {},
@@ -33,14 +33,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "human",
       "feature": "first_fire",
       "lineage": "Cro-Magnon",
-      "tierLevel": 17,
       "version": "2.0.0",
       "date": "2026-04-19"
     },
@@ -237,12 +233,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776600000000,
-    "modifiedTime": 1782167240111,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988971701,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 3 — Rosicrucian</strong></p><p><strong>“Civilization still has back doors.”</strong></p><p>You can reliably find shelter and safe passage in civilized places — not because they are safe, but because somebody still owes your order a favor.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>You can secure safe shelter, cover, or passage in GenPop Hexes without spending OPs, though the GM may require a short scene or check if the area is actively hostile</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, negate a single “lost time” complication caused by bureaucracy, checkpoints, or local authorities during a Diplomacy-forward operation</li></ul><p><strong>Cost:</strong> every route you use becomes a route you may have to protect. Shelter is never free when people can trace who provided it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"rosiT3\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Bypass Bureaucracy</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic (Diplo op) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Negate a single 'lost time' complication caused by bureaucracy / checkpoints / local authorities during a Diplomacy-forward op.</div>\n</div>",
+      "value": "<p><strong>Tier 3 — Rosicrucian</strong></p><p><strong>“Civilization still has back doors.”</strong></p><p>You can reliably find shelter and safe passage in civilized places — not because they are safe, but because somebody still owes your order a favor.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>You can secure safe shelter, cover, or passage in GenPop Hexes without spending OPs, though the GM may require a short scene or check if the area is actively hostile</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per turn, negate a single “lost time” complication caused by bureaucracy, checkpoints, or local authorities during a Diplomacy-forward operation</li></ul><p><strong>Cost:</strong> every route you use becomes a route you may have to protect. Shelter is never free when people can trace who provided it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"rosiT3\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Bypass Bureaucracy</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic (Diplo op) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Negate a single 'lost time' complication caused by bureaucracy / checkpoints / local authorities during a Diplomacy-forward op.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -265,12 +265,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987100132,
-    "modifiedTime": 1781024183426,
-    "lastModifiedBy": "MRFjjbUTBd66pWBY"
+    "modifiedTime": 1792977829181,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

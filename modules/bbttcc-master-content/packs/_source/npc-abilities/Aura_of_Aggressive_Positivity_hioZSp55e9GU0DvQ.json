@@ -7,43 +7,75 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>Creatures within 2 squares must make a DC 14 Presence check at the start of their turn or suffer roll 3d10 keep lowest 2 on hostile actions against the Elemental.</p>",
+      "value": "<p>Creatures within 2 squares must succeed a Presence check vs DC 14 at the start of their turn or roll twice-keep-worse on hostile actions against the Elemental until the start of their next turn.</p>",
       "chat": ""
     }
   },
-  "_id": "hioZSp55e9GU0DvQ",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "do": {
+              "save": {
+                "attr": "presence",
+                "dc": 14,
+                "onSave": "negate"
+              }
+            },
+            "radius": 2,
+            "who": "enemies"
+          },
+          {
+            "on": "saveFail",
+            "do": {
+              "impose": true
+            },
+            "if": {
+              "weapon": "Aura of Aggressive Positivity"
+            }
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Lisa Frank Elemental"
+          "CACA"
+        ],
+        "sourceIds": [
+          "a9orjOV99MnMObho"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "hioZSp55e9GU0DvQ",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167245006,
-    "modifiedTime": 1783220777983,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989018356,
+    "modifiedTime": 1792989018356,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!hioZSp55e9GU0DvQ"
 }

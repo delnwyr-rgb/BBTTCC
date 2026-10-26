@@ -1,0 +1,23 @@
+{
+  "name": "Graded Arms",
+  "type": "Item",
+  "_id": "paUl8Tj6Xx5fAkKN",
+  "description": "",
+  "folder": null,
+  "sorting": "a",
+  "sort": 0,
+  "color": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.6",
+    "createdTime": 1791427797848,
+    "modifiedTime": 1791427797848,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!paUl8Tj6Xx5fAkKN"
+}

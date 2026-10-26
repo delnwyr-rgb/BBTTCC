@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": null,
+  "name": "NPCs and Spares",
+  "color": null,
+  "sorting": "a",
+  "_id": "ZS0RsdDhIi27zl0c",
+  "description": "",
+  "sort": 1100000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1791317007847,
+    "modifiedTime": 1791317008455,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!ZS0RsdDhIi27zl0c"
+}

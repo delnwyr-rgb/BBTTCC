@@ -1,0 +1,142 @@
+{
+  "name": "Harmless Mini-Missiles (recharge 5–6)",
+  "type": "weapon",
+  "img": "icons/weapons/thrown/bomb-fuse-black.webp",
+  "system": {
+    "category": "ranged",
+    "intent": "mind",
+    "skill": "channel",
+    "damage": {
+      "formula": "1d6",
+      "attribute": "mind",
+      "type": "kinetic",
+      "damageFlavor": "a polite thump",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 6,
+      "long": 18
+    },
+    "tags": [
+      "bestiary",
+      "tier-i",
+      "lineage-pre-fall"
+    ],
+    "effect": "Cone 3 squares. — targets roll vs Evasion (DC 12). Half damage on success.",
+    "flavor": "“That was a demonstration.”",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "intrigue",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 12,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "area": {
+        "shape": "cone",
+        "size": 15
+      }
+    },
+    "description": {
+      "value": "<p><strong>Area Attack.</strong> Each creature in a 3-square. cone rolls vs DC 12. Damage: <code>1d6</code> kinetic (a polite thump).</p><p><em>“That was a demonstration.”</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "frame": "save",
+          "aoeShape": "cone",
+          "aoeSize": 15,
+          "dc": 12,
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI save × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [],
+        "recharge": {
+          "mode": "d6",
+          "min": 5
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Mechanism 52603"
+        ],
+        "sourceIds": [
+          "wxmlLpURBWJW2zHJ"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "qd5BMnIsH4eKm5yc",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069939,
+    "modifiedTime": 1792989070021,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!qd5BMnIsH4eKm5yc"
+}

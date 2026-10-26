@@ -21,7 +21,14 @@
     },
     "fourththing": {
       "kind": "npc",
-      "surgeEnabled": false
+      "surgeEnabled": false,
+      "aptitudePromotions": {
+        "archetype: the fool (catalyst) (tier 1)|athletics": {
+          "delta": 1,
+          "item": "Archetype: The Fool (Catalyst) (Tier 1)",
+          "at": 1792346706358
+        }
+      }
     },
     "bbttcc-character-options": {
       "nativeLinks": {
@@ -101,15 +108,16 @@
     },
     "bbttcc-mal-voice": {
       "persona": {
-        "topics": "the Maneuver Vault, the Containment Loop, running routes, Patter, the Jackalopes, the lesson",
-        "notes": "[VS-POLISH-2026-07-09] PRIVATE TRUTH \u2014 Pip, Jackalope runner, post-rescue. Voice: quicksilver understatement; jokes arrive half a beat early, like he's outrunning the sentence. WHAT HAPPENED IN THERE (tells only in pieces, only to Patter or someone who's earned it): the Loop didn't hurt. That's the part he doesn't say out loud \u2014 it FIT, like a route he'd been running his whole life without knowing the destination. IF HE CAME OUT CHANGED: something in his chest pulsed green, once, and he has decided not to mention it, because mentioning it makes it a thing, and he is fine, thank you, completely fine. He does NOT know Mara watches him; he absolutely knows Patter counts his hesitations, and lets her, because that's what partners are for. THE VAULT: he will not call it a monster. 'It's a school someone forgot to close. That's sadder.' He has caught himself, twice, thinking about visiting. GUARDS: the green pulse; the fact that the Loop felt like home. TELLS: rubs his sternum when he thinks nobody's looking; takes the long way around any building that hums."
+        "topics": "running routes, Patter, the Jackalopes, the Back Stairs, the Fixit board, the Maneuver Vault, the Containment Loop, the lesson",
+        "notes": "PRIVATE TRUTH — Pip, Jackalope runner of Furrier's Fixit Farm, one half of Pip-and-Patter. Voice: quicksilver, half a beat early, talks with his hands and leans in too close; a joke is how he checks you are still listening. WHAT HE KNOWS: every route between the Fixit hexes and Allesh-Gilliam, which boards are loose on the Back Stairs, which wagons are running light, and that the Fixit board has a pin nobody will explain. He trades in what is moving, not in why. WHAT HE WANTS: better gear for the pair of them and a route with his own name on it. GUARDS: Patter's mistakes (there are none, Pip made them all), and the fact that he is a little afraid of the Maneuver Vault and has never said so. Runners are never late, never lost, and never miss a check-in; when Pip goes quiet, nobody likes it.\n\n@after: beat:maneuver_vault_pip_changed\nAFTER THE MANEUVER VAULT — THE CHANGED ENDING. He came out. Voice unchanged on the surface: quicksilver understatement, jokes a beat early — a little more often now, and a little faster. WHAT HAPPENED IN THERE (tells only in pieces, only to Patter or someone who has earned it): the Loop didn't hurt. That is the part he does not say out loud — it FIT, like a route he had been running his whole life without knowing the destination. THE GREEN PULSE: something in his chest pulsed green, once, and he has decided not to mention it, because the moment he says it Patter will look at him differently. He will not call the Vault a monster: 'It's a school someone forgot to close. That's sadder.' He is back on the routes, and he keeps a check-in he never used to need: he tells Patter where he is going before he goes.\n\n@after: beat:maneuver_vault_pip_shaken\nAFTER THE MANEUVER VAULT — SHAKEN. The Stewards brought him home and it cost him. He runs the short routes only, and only with Patter in sight. The jokes still come but they land late. He does not remember the Loop as pain; he remembers it as a lesson he was halfway through learning when it stopped, and that frightens him more than pain would have. He is grateful to the Stewards in a way that makes him awkward around them: he owes them the thing he cannot name.\n\n@after: beat:maneuver_vault_pip_absored\nAFTER THE MANEUVER VAULT — ABSORBED. Pip did not come out. If this persona is ever spoken, it is Patter's memory of him, or something in the Vault wearing his cadence: the quicksilver half-beat with nobody behind it. The Loop finished its lesson. Nothing it says about routes is wrong, and nothing it says is Pip.",
+        "secretsRaw": "The Route Fit :: rollPlus2 :: a Steward asks what the Loop FELT like, not what it did :: It fit, like a route he'd been running his whole life without knowing the destination. Something in his chest pulsed green, once. He has decided not to mention it, and just did. He takes the long way around any building that hums."
       }
     }
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Young Jackalope runner of Furrier's Fixit Farm, half of Pip-and-Patter (Act 2-4)",
+      "notes": "Pip is a young Jackalope runner at Furrier's Fixit Farm, one half of the inseparable pair Pip-and-Patter, who move messages, light cargo and rumours between the hexes. The two are impossible to tell apart unless you already know them. Pip is motion incarnate: talks with his hands, leans in too close, and smiles like the world is something you can talk down if you just keep it busy. Runners are never late, never lost and never miss a check-in. When Pip goes quiet, nobody likes it."
     },
     "details": {
       "level": 1,
@@ -157,7 +165,7 @@
       "athletics": {
         "attribute": "violence",
         "label": "Athletics",
-        "value": 1
+        "value": 2
       },
       "stealth": {
         "attribute": "intrigue",
@@ -251,10 +259,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 1
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 1
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -263,7 +281,8 @@
     "derived": {
       "integrity": {
         "value": 19,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 16,
@@ -353,7 +372,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -388,8 +408,8 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
       "id": null,
@@ -399,7 +419,10 @@
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
@@ -541,7 +564,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin.</strong> Normalized Bad Eden ancestry root.</p><p>Select one subspecies when building the character: <strong>Chupacabra, Jackalope, Furrykin</strong>.</p><p>This root grants the shared Cryptidkin core trait package. Subspecies layer flavor, size, and Tier powers on top.</p><p><em>\u201cEvery settlement has a story about you. None of them are accurate. All of them are useful.\u201d</em></p><hr><p><em><strong>Cryptidkin Core Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (set by subspecies).</p></li><li><p><strong>Speed.</strong> 6 squares (subspecies may override).</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Cryptidkin does not grant fixed bonuses. Subspecies lean expressed through Tier powers.</p></li></ul><p><strong>Folklore Presence.</strong> When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as <em>omen</em>, <em>trophy</em>, or <em>legend</em>. It is never neutral. People have heard of your kind. They are almost always wrong, and that is almost always useful.</p><p><strong>Wasteland Adapted.</strong> You reroll the lowest die on checks against disease and environmental poison. You ignore the first nonmagical environmental hazard you encounter each Strategic Turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor\u2019s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 12 squares You cannot be surprised while conscious.</p><p><strong>Subspecies.</strong> Choose one Cryptidkin subspecies (Chupacabra, Jackalope, Furrykin). Your subspecies grants Tier powers as you level (Tier I at creation, then 5/11/17).</p>",
+          "value": "<p><strong>Cryptidkin.</strong></p><p><em>“Every settlement has a story about you. None of them are accurate. All of them are useful.”</em></p><hr><p><em><strong>Cryptidkin Core Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (set by subspecies).</p></li><li><p><strong>Speed.</strong> 6 squares (subspecies may override).</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Cryptidkin does not grant fixed bonuses. Subspecies lean expressed through Tier powers.</p></li></ul><p><strong>Folklore Presence.</strong> When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as <em>omen</em>, <em>trophy</em>, or <em>legend</em>. It is never neutral. People have heard of your kind. They are almost always wrong, and that is almost always useful.</p><p><strong>Wasteland Adapted.</strong> You reroll the lowest die on checks against disease and environmental poison. You ignore the first nonmagical environmental hazard you encounter each turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor’s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 12 squares You cannot be surprised while conscious.</p><p><strong>Subspecies.</strong> Choose one Cryptidkin subspecies (Chupacabra, Jackalope, Furrykin). Your subspecies grants Tier powers as you level (Tier I at creation, then 5/11/17).</p>",
           "chat": ""
         },
         "advancement": [
@@ -634,30 +657,23 @@
       },
       "effects": [],
       "folder": "f95fcfa18822c4e3",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.c9a7f1d26e3b4c81",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534468,
-        "modifiedTime": 1784177534468,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 1500000,
       "_id": "lkecrUp61QX4C7py",
-      "_key": "!actors.items!NmLFcrqCfEbheojz.lkecrUp61QX4C7py"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989077593,
+        "modifiedTime": 1792989077593,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Cryptidkin: Folklore & Frame",
@@ -668,7 +684,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-cryptidkin-folklore-frame=\"v1\" style=\"display:none\"></div><p><em>\"You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.\"</em></p><p><strong>Folklore Presence.</strong> 1/Soma Break, when you first meet a community, decide whether the rumors about you arrived first. If yes, reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering \u2014 the GM gets to colour it.</p><p><strong>Wasteland Adapted.</strong> Reroll the lowest die on defense checks against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh).</p><p><strong>Survivor's Instinct.</strong> 1/Soma Break, when you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress.</p>",
+          "value": "<p><em>\"You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.\"</em></p><p><strong>Folklore Presence.</strong> 1/Soma Break, when you first meet a community, decide whether the rumors about you arrived first. If yes, reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering — the GM gets to colour it.</p><p><strong>Wasteland Adapted.</strong> Reroll the lowest die on defense checks against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh).</p><p><strong>Survivor's Instinct.</strong> 1/Soma Break, when you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -677,7 +693,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 1
         },
         "uses": {
           "spent": 0,
@@ -708,10 +724,26 @@
           "triggers": [
             {
               "event": "on-would-drop-to-zero",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
               "effect": {
-                "kind": "chat-prompt",
+                "kind": "survive-at-1",
+                "args": {}
+              }
+            },
+            {
+              "event": "on-would-drop-to-zero",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "grant-resource",
                 "args": {
-                  "body": "Survivor\u2019s Instinct. When you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress"
+                  "resource": "stress",
+                  "amount": 1
                 }
               }
             }
@@ -897,24 +929,23 @@
         }
       },
       "folder": "f95fcfa18822c4e3",
-      "_stats": {
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534468,
-        "modifiedTime": 1784177534468,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
-        "exportSource": null,
-        "compendiumSource": null,
-        "duplicateSource": null
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 0,
       "_id": "zC4VNmhUwgkZHUEB",
-      "_key": "!actors.items!NmLFcrqCfEbheojz.zC4VNmhUwgkZHUEB"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989077593,
+        "modifiedTime": 1792989609336,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Cryptidkin Heritage: Jackalope",
@@ -925,7 +956,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin Subspecies.</strong> This heritage preserves the original UUID for <em>Jackalope (Bad Eden)</em> while converting it from a species-root to a Cryptidkin subspecies.</p><p><em>\u201cYou don\u2019t spot a Jackalope. You notice the world flinch, and then realize why.\u201d</em></p><p><strong>Jackalope.</strong> Fast because they have to be. Twitchy because the world has trained them that stillness is how you die. Half-remembered pre-Shattering folklore, half radiation-assembled rumor, and fully people.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium.</p></li><li><p><strong>Speed.</strong> 7 squares</p></li><li><p><strong>Subspecies Lean.</strong> Your subspecies leans toward <strong>INTR (Intrigue)</strong>\u2014expressed through Tier powers.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor\u2019s Instinct).</p><h3>Jackalope Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Jackalope powers emphasize: <em>Startle Reflex</em> (can\u2019t-be-caught-flat burst), <em>Wasteland Bound</em> (long-distance run), <em>Horns of Bad Luck</em> (jinx aura), <em>Can\u2019t Catch Me</em> (evasion), and strategic <em>Bad Omen Runner</em> faction hooks.</p><h3>Strategic Hooks (Foundry / Bad Eden)</h3><p>If you see Jackalope tracks circling your hex, you are not under attack. You are being <em>advised</em>.</p><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+1 Soft Power OP</strong> and <strong>+1 Non-Lethal OP</strong> at campaign start.</p></li><li><p><strong>Trail Whisper.</strong> Once per Strategic Turn, your faction can reroll a single Travel or Scout check made in a hex adjacent to your home territory.</p></li></ul>",
+          "value": "<p><strong>Cryptidkin Subspecies.</strong> This heritage preserves the original UUID for <em>Jackalope (Bad Eden)</em> while converting it from a species-root to a Cryptidkin subspecies.</p><p><em>“You don’t spot a Jackalope. You notice the world flinch, and then realize why.”</em></p><p><strong>Jackalope.</strong> Fast because they have to be. Twitchy because the world has trained them that stillness is how you die. Half-remembered pre-Shattering folklore, half radiation-assembled rumor, and fully people.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium.</p></li><li><p><strong>Speed.</strong> 7 squares</p></li><li><p><strong>Subspecies Lean.</strong> Your subspecies leans toward <strong>INTR (Intrigue)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor’s Instinct).</p><h3>Jackalope Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Jackalope powers emphasize: <em>Startle Reflex</em> (can’t-be-caught-flat burst), <em>Wasteland Bound</em> (long-distance run), <em>Horns of Bad Luck</em> (jinx aura), <em>Can’t Catch Me</em> (evasion), and strategic <em>Bad Omen Runner</em> Domain hooks.</p><h3>Strategic Hooks (Foundry / Bad Eden)</h3><p>If you see Jackalope tracks circling your hex, you are not under attack. You are being <em>advised</em>.</p><ul><li><p><strong>Domain Edge.</strong> Your Domain gains <strong>+10 Soft Power marks</strong> and <strong>+10 Non-Lethal marks</strong> at campaign start.</p></li><li><p><strong>Trail Whisper.</strong> Once per turn, your Domain can reroll a single Travel or Scout check made in a hex adjacent to your home territory.</p></li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -999,34 +1030,44 @@
           "normalizedFrom": "Jackalope (Bad Eden) [species]"
         },
         "fourththing": {
-          "grantedByHeritage": "Jackalope"
+          "grantedByHeritage": "Jackalope",
+          "passives": {
+            "movement": {
+              "walkBonus": 5
+            }
+          },
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "soft-power-op",
+              "amount": 1
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "non-lethal-op",
+              "amount": 1
+            }
+          ]
         }
       },
       "folder": "q86PDhfgI3ZNMpkJ",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "bbttcc-ancestry-v2",
-          "uuid": "Item.yiZiL1OaWx9qX5bF",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534468,
-        "modifiedTime": 1784177534468,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 100000,
       "_id": "ZLjmkZhewBpx6JN3",
-      "_key": "!actors.items!NmLFcrqCfEbheojz.ZLjmkZhewBpx6JN3"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989077593,
+        "modifiedTime": 1792989609336,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Cryptidkin (Jackalope): Startle Reflex",
@@ -1038,7 +1079,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-startle-reflex=\"v1\" style=\"display:none\"></div><p><em>\"You aren't fast because you're fast. You're fast because the world keeps deciding to miss.\"</em></p><p><strong>Startle Reflex (1/Soma Break).</strong> Reaction when you are targeted by an attack roll or fail an Intrigue check \u2014 move up to 2 squares without provoking opportunity attacks.</p><p><strong>Horns of Bad Luck.</strong> Your natural horns ship as a Jackalope-only Manifestation when you take the heritage \u2014 see your Manifestations tab. When violence escalates around you, the GM may describe unsettling omens tied to your presence \u2014 a mirror crack, a dropped knife, a candle going out the wrong direction.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"crypJackStartleReflex\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Startle Reflex</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break \u00a0\u00b7\u00a0 <strong>Action:</strong> Reaction \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When targeted by an attack roll or you fail an Intrigue check, move up to 2 squares without provoking opportunity attacks.</span></p></div>",
+          "value": "<p><em>\"You aren't fast because you're fast. You're fast because the world keeps deciding to miss.\"</em></p><p><strong>Startle Reflex (1/Soma Break).</strong> Reaction when you are targeted by an attack roll or fail an Intrigue check — move up to 2 squares without provoking reaction strikes.</p><p><strong>Horns of Bad Luck.</strong> Your natural horns ship as a Jackalope-only Manifestation when you take the heritage — see your Manifestations tab. When violence escalates around you, the GM may describe unsettling omens tied to your presence — a mirror crack, a dropped knife, a candle going out the wrong direction.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"crypJackStartleReflex\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Startle Reflex</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Reaction  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When targeted by an attack roll or you fail an Intrigue check, move up to 2 squares without provoking reaction strikes.</span></p></div>",
           "chat": ""
         },
         "advancement": {},
@@ -1047,7 +1088,7 @@
         "prerequisites": {
           "items": [],
           "repeatable": false,
-          "level": null
+          "level": 1
         },
         "uses": {
           "spent": 0,
@@ -1262,19 +1303,18 @@
         "bytUGWIOqq9eT7Or": 3
       },
       "sort": 150000,
+      "_id": "UsfGdvF4jAVilPBe",
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534468,
-        "modifiedTime": 1784177534468,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989077593,
+        "modifiedTime": 1792989609336,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_id": "UsfGdvF4jAVilPBe",
-      "_key": "!actors.items!NmLFcrqCfEbheojz.UsfGdvF4jAVilPBe"
+      }
     },
     {
       "name": "Archetype: The Fool (Catalyst)",
@@ -1289,7 +1329,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou move before the map exists.\u201d</em></p><p><strong>Archetype (Bad Eden): The Fool (Catalyst).</strong> You are motion before certainty, risk before consensus, and the destabilizing force that turns unknown ground into lived reality.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens exploration, scouting, improvisation, and risky openings. This Archetype is associated with <strong>+1 Intrigue</strong> and <strong>+1 Logistics</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You move before the map exists.”</em></p><p><strong>Archetype (Bad Eden): The Fool (Catalyst).</strong> You are motion before certainty, risk before consensus, and the destabilizing force that turns unknown ground into lived reality.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens exploration, scouting, improvisation, and risky openings. Your Domain earns <strong>+10 Logistics</strong> and <strong>+10 Intrigue</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1363,23 +1403,6 @@
         },
         "dnd5e": {}
       },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.rRvWQUXGD9XDYa2n",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534468,
-        "modifiedTime": 1784177534468,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1387,7 +1410,17 @@
       },
       "_id": "bV7LhZYsYrgmK2Tx",
       "sort": 100000,
-      "_key": "!actors.items!NmLFcrqCfEbheojz.bV7LhZYsYrgmK2Tx"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989077593,
+        "modifiedTime": 1792989609336,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Archetype: The Fool (Catalyst) (Tier 1)",
@@ -1398,12 +1431,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden \u2013 Archetype: The Fool (Catalyst) (Tier 1)",
+          "custom": "Bad Eden – Archetype: The Fool (Catalyst) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) \u2014 The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Perception.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1430,7 +1463,7 @@
       },
       "effects": [
         {
-          "disabled": false,
+          "disabled": true,
           "duration": {
             "value": null,
             "units": "seconds",
@@ -1439,7 +1472,7 @@
           },
           "flags": {},
           "name": "Archetype Tier 1 Proficiencies",
-          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_android_2.png",
+          "img": "icons/equipment/head/mask-clown.webp",
           "_id": "JoH3gYGJrthivYzI",
           "type": "base",
           "system": {
@@ -1452,7 +1485,7 @@
                 "priority": 20
               },
               {
-                "key": "system.skills.athletics.value",
+                "key": "system.skills.perception.value",
                 "type": "upgrade",
                 "value": 1,
                 "phase": "initial",
@@ -1466,21 +1499,20 @@
           "transfer": true,
           "statuses": [],
           "sort": 0,
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "14.364",
-            "systemId": "fourththing",
-            "systemVersion": "0.6.1",
-            "lastModifiedBy": "bytUGWIOqq9eT7Or",
-            "createdTime": 1784177534468,
-            "modifiedTime": 1784177534468
-          },
           "start": null,
           "showIcon": 1,
           "folder": null,
-          "_key": "!actors.items.effects!NmLFcrqCfEbheojz.rrTfuknqhWHHNVNR.JoH3gYGJrthivYzI"
+          "_stats": {
+            "coreVersion": "14.369",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.37",
+            "createdTime": 1792989077593,
+            "modifiedTime": 1792989609542,
+            "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
         }
       ],
       "folder": "lthIAA49boUx7C1S",
@@ -1510,23 +1542,6 @@
           "vocabScrub": "2026-05-16"
         }
       },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.rGh31TU4GcXzjI0m",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534468,
-        "modifiedTime": 1784177534468,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 0,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1534,7 +1549,17 @@
       },
       "_id": "rrTfuknqhWHHNVNR",
       "sort": 200000,
-      "_key": "!actors.items!NmLFcrqCfEbheojz.rrTfuknqhWHHNVNR"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989077593,
+        "modifiedTime": 1792989609337,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "name": "Alignment: Tiphareth",
@@ -1548,7 +1573,7 @@
         },
         "tags": [],
         "description": {
-          "value": "Beauty - Balance that costs something. +1 Diplomacy, +1 Soft Power OPs\n\nTiphareth holds justice and mercy in living tension. It rewards balanced play, stability across multiple systems, and factions that survive by integrating contradictions instead of denying them.",
+          "value": "Beauty - Balance that costs something. +10 Diplomacy and +10 Soft Power marks to your Domain each turn.\n\nTiphareth holds justice and mercy in living tension. It rewards balanced play, stability across multiple systems, and factions that survive by integrating contradictions instead of denying them.",
           "chat": ""
         },
         "activities": {},
@@ -1586,23 +1611,6 @@
           "option": {}
         }
       },
-      "_stats": {
-        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.sUbH6ds2iUNdFMz9",
-        "duplicateSource": null,
-        "exportSource": {
-          "worldId": "the-gotgait-files",
-          "uuid": "Item.fxAlgcvKBqlWJ7ux",
-          "coreVersion": "13.351",
-          "systemId": "dnd5e",
-          "systemVersion": "5.2.5"
-        },
-        "coreVersion": "14.364",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534468,
-        "modifiedTime": 1784177534468,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or"
-      },
       "ownership": {
         "default": 2,
         "vmUfDuSYUIe7V5uB": 3,
@@ -1610,7 +1618,17 @@
       },
       "_id": "FtXUEEY7IN9myQSd",
       "sort": 900000,
-      "_key": "!actors.items!NmLFcrqCfEbheojz.FtXUEEY7IN9myQSd"
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989077593,
+        "modifiedTime": 1792989609337,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     },
     {
       "_id": "zzKsBqWzROHeu10Y",
@@ -1627,7 +1645,7 @@
           "intrigue"
         ],
         "description": {
-          "value": "<p><em>\"Everything's a door if you hold it right.\"</em></p><p><strong>Operator</strong> is the Intrigue Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: thief, smuggler, spy, courier, fence, hacker, fixer. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Underfoot:</strong> In crowds, markets, and streets, the Operator passes unremarked unless actively hunted; Streetwise checks never fumble (at Tier III, also Stealth).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Stealth</strong> rank = tier; secondary <strong>Streetwise</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Intrigue</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Shadow Courier. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Everything's a door if you hold it right.\"</em></p><p><strong>Operator</strong> is the Intrigue Calling — the trade that kept its bearers alive after the Shattering. Umbrella: thief, smuggler, spy, courier, fence, hacker, fixer. A profession is a flavor label on the Calling.</p><p><strong>Knack — Underfoot:</strong> In crowds, markets, and streets, the Operator passes unremarked unless actively hunted; Streetwise checks never fumble (at Tier III, also Stealth).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Stealth</strong> rank = tier; secondary <strong>Streetwise</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Intrigue</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Shadow Courier. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -1654,21 +1672,20 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534468,
-        "modifiedTime": 1784177534468,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989077593,
+        "modifiedTime": 1792989077593,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!NmLFcrqCfEbheojz.zzKsBqWzROHeu10Y"
+      }
     },
     {
       "_id": "KZCgpfxTuztwlJt7",
-      "name": "Operator \u2014 Apprentice (Tier I)",
+      "name": "Operator — Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/skills/trades/security-lockpicking-chest-blue.webp",
       "system": {
@@ -1680,7 +1697,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Operator \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Carry it quiet:</strong> Move a package/message across town, no questions. <span style=\"opacity:0.7\">Standard fee 10 marks (Intrigue).</span></p><p><strong>Trick \u2014 Pocketed</strong> <em>(1/scene)</em>: Produce a mundane Tier-I item they plausibly lifted earlier.</p>",
+          "value": "<p><strong>Operator — Apprentice</strong> (Tier I).</p><p><strong>Trade — Carry it quiet:</strong> Move a package/message across town, no questions. <span style=\"opacity:0.7\">Standard fee 10 marks (Intrigue).</span></p><p><strong>Trick — Pocketed</strong> <em>(1/scene)</em>: Produce a mundane Tier-I item they plausibly lifted earlier.</p>",
           "chat": ""
         }
       },
@@ -1700,17 +1717,16 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177534468,
-        "modifiedTime": 1784177534468,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989077593,
+        "modifiedTime": 1792989077593,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!NmLFcrqCfEbheojz.KZCgpfxTuztwlJt7"
+      }
     }
   ],
   "effects": [],
@@ -1718,15 +1734,16 @@
   "sort": -175000,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177534468,
-    "modifiedTime": 1784177534468,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989077593,
+    "modifiedTime": 1792989094462,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

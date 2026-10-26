@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You were born with a wrench in your soul.”</em></p>\n        <p><strong>Built-In Tools.</strong> You gain a skill rank with the Tinkering aptitude and one artisan tool set of your choice. As part of a Soma Break, you can repair a damaged object or patch armor (GM adjudicates small benefit).</p>",
+      "value": "\n<p><em>“You were born with a wrench in your soul.”</em></p>\n        <p><strong>Built-In Tools.</strong> You gain a skill rank with the Tinkering aptitude and one artisan tool set of your choice. As part of a Soma Break, you can repair a damaged object or patch armor (GM adjudicates small benefit).</p>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "properties": [],
     "requirements": "Circuitborn",
@@ -41,14 +41,18 @@
       "kind": "circuitborn",
       "feature": "built_in_tools",
       "chassis": "Salvage Line",
-      "tierLevel": 0,
       "version": "1.0.0"
     },
     "bbttcc-character-options": {
       "option": {}
     },
     "fourththing": {
-      "vocabScrub": "2026-05-16"
+      "vocabScrub": "2026-05-16",
+      "passives": {
+        "ranks": {
+          "tinkering": 1
+        }
+      }
     }
   },
   "effects": [],
@@ -63,12 +67,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004099337,
-    "modifiedTime": 1782167240123,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988975566,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

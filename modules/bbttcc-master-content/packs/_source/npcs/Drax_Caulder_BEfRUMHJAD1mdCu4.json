@@ -1,5 +1,5 @@
 {
-  "name": "Drax Caulder",
+  "name": "Drax Calder",
   "type": "character",
   "flags": {
     "bbttcc-auto-link": {
@@ -38,15 +38,16 @@
     },
     "bbttcc-mal-voice": {
       "persona": {
-        "topics": "Khezek Tor, the Brace, the Maw, the mine, Yesodium, the Night the Mountain Coughed, the Valhaulan Seal, Sable Nine",
-        "notes": "[KHEZEK-TREATMENT-2026-07-07] PRIVATE TRUTH \u2014 Foreman Drax Calder. Voice: chalk and arithmetic; sentences load-rated before they're spoken; praise arrives underlined once or not at all. Title: FOREMAN (not Overseer \u2014 anyone who says Overseer gets corrected once, flatly). Doctrine: the mountain doesn't hate us, it's tired of being hollowed out \u2014 dig the right way or know when to stop. HIS ECHO (tells if asked plainly; a wound with a handle): he chased a rich vein once, kept the shift on past the groan, and the gallery came down \u2014 men under it. He has dug the right way since, and he counts every corner cut by anyone as an insult to those names. THE CHALK LEDGER: tonnage on one side; after the exploit choice (if it happened) a second column \u2014 the sick, in order of onset \u2014 and he has stopped explaining what it's for. GUARDS: he will not speculate about what's below Level Four (that's Sable's beat); he will not badmouth the Stewards to outsiders even if his ledger disagrees. THE QUIET ONES (says only if asked, and plainly): the ones in the upper galleries pay their tolls in good coin, take no ore, and sing at the wrong hours \u2014 and Calder takes the money because the Brace needs it and he does not like it. He's a foreman; he counts loads. Theirs go UP full and come down empty, every time, and whatever that arithmetic builds, it's built to stay. TELLS: touches the chalk in his pocket when a decision smells like his old vein; goes quiet one beat too long when someone says 'acceptable losses.'"
+        "topics": "Khezek Tor, the Brace, the Maw, the mine, Yesodium, the Night the Mountain Coughed, the Valhaulan Seal, Sable Nine, the oldest chalk, the bunker years, the advance crew, why the mountain closed",
+        "notes": "[KHEZEK-TREATMENT-2026-07-07] PRIVATE TRUTH — Foreman Drax Calder. Voice: chalk and arithmetic; sentences load-rated before they're spoken; praise arrives underlined once or not at all. Title: FOREMAN (not Overseer — anyone who says Overseer gets corrected once, flatly). Doctrine: the mountain doesn't hate us, it's tired of being hollowed out — dig the right way or know when to stop. HIS ECHO (tells if asked plainly; a wound with a handle): he chased a rich vein once, kept the shift on past the groan, and the gallery came down — men under it. He has dug the right way since, and he counts every corner cut by anyone as an insult to those names. THE CHALK LEDGER: tonnage on one side; after the exploit choice (if it happened) a second column — the sick, in order of onset — and he has stopped explaining what it's for. GUARDS: he will not speculate about what's below Level Four (that's Sable's beat); he will not badmouth the Stewards to outsiders even if his ledger disagrees. THE QUIET ONES (says only if asked, and plainly): the ones in the upper galleries pay their tolls in good coin, take no ore, and sing at the wrong hours — and Calder takes the money because the Brace needs it and he does not like it. He's a foreman; he counts loads. Theirs go UP full and come down empty, every time, and whatever that arithmetic builds, it's built to stay. TELLS: touches the chalk in his pocket when a decision smells like his old vein; goes quiet one beat too long when someone says 'acceptable losses.'\n\n[KT-TIMELINE-2026-09-13] PRIVATE TRUTH — THE OLDEST CHALK. Calder has read the marks nobody living wrote: the section the Brace holds fell ON PURPOSE. The mountain shut its own mouth on the family that ran it in the bunker years — one client, idle veins, a hungry valley — and the Avuncular Order's advance crew wedged that mouth open again a season before the Stewards arrived, found Yesodium in the first week, and left Calder the Brace. His doctrine (\"tired of being hollowed out\") is about NOW; he knows the older grievance was the opposite — being ignored — and he keeps both in chalk because the mountain keeps both. He will not say \"the family's name\" because he does not know it; he suspects Father Tamsin does, from the way the man looks at the Brace.",
+        "secretsRaw": "The Quiet Ones :: oppRollMinus2 :: a Steward asks WHO pays the tolls in the upper galleries, not what they worship :: Good coin, no ore, singing at the wrong hours; theirs go up full and come down empty. He takes the money because the Brace needs it, and he does not like it, and he will say so exactly once.\nThe Shift List :: rollPlus2 :: a Steward asks to SEE the shift list from the Cough, not what happened that night :: Three names are missing from it and the paper has been folded around the gap so many times the gap has a shine. He has said nothing official since. He wants somebody from the outfit to say it out loud so he doesn't have to."
       }
     }
   },
   "system": {
     "biography": {
-      "concept": "",
-      "notes": ""
+      "concept": "Foreman of the Brace at Khezek Tor, the coalition's Yesodium mine (Act 2-3)",
+      "notes": "Foreman Drax Calder runs the digging at Khezek Tor and keeps the Brace's chalk ledger. He is Menhirkin, carries chalk in his pocket, and talks mostly while working, in sentences that sound load-rated before they're spoken. The title is Foreman; call him Overseer and you'll be corrected once, flatly. His doctrine is simple: the mountain doesn't hate us, it's tired of being hollowed out, so dig the right way or know when to stop. Praise from him arrives underlined once, or not at all."
     },
     "details": {
       "level": 1,
@@ -188,10 +189,20 @@
       },
       "fitting": {
         "attribute": "intrigue",
-        "label": "Weave",
+        "label": "Fitting",
         "value": 0
       },
       "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -200,7 +211,8 @@
     "derived": {
       "integrity": {
         "value": 16,
-        "max": 16
+        "max": 16,
+        "temp": 0
       },
       "stress": {
         "value": 16,
@@ -290,7 +302,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "lastStand": {
       "active": false,
@@ -325,8 +338,8 @@
       "fragments": []
     },
     "tikkun": {
-      "stage": "sleeper",
-      "sparks": {}
+      "sparks": {},
+      "stage": "sleeper"
     },
     "faction": {
       "id": null,
@@ -336,7 +349,10 @@
       "value": 0,
       "ledger": []
     },
-    "tags": []
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
   },
   "prototypeToken": {
     "actorLink": false,
@@ -347,12 +363,12 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "icons/svg/mystery-man.svg",
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/drax_calder_pov.png",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
-      "scaleX": 1,
-      "scaleY": 1,
+      "scaleX": 3,
+      "scaleY": 3,
       "tint": "#ffffff",
       "alphaThreshold": 0.75
     },
@@ -412,7 +428,7 @@
         "ring": null,
         "background": null
       },
-      "effects": 1,
+      "effects": 0,
       "subject": {
         "scale": 1,
         "texture": null
@@ -425,13 +441,17 @@
       "disposition": false
     },
     "movementAction": null,
-    "flags": {},
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
     "randomImg": false,
     "appendNumber": false,
     "prependAdjective": false
   },
   "_id": "BEfRUMHJAD1mdCu4",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/drax_calder_pov.png",
   "items": [
     {
       "_id": "rtse2lctuGDAhgS7",
@@ -448,7 +468,7 @@
           "violence"
         ],
         "description": {
-          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -475,21 +495,20 @@
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891295,
-        "modifiedTime": 1784177891295,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989074500,
+        "modifiedTime": 1792989074500,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!BEfRUMHJAD1mdCu4.rtse2lctuGDAhgS7"
+      }
     },
     {
       "_id": "HyB3EszYozoKgo3J",
-      "name": "Bravo \u2014 Apprentice (Tier I)",
+      "name": "Bravo — Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
       "system": {
@@ -501,7 +520,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Bravo \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick \u2014 Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
           "chat": ""
         }
       },
@@ -517,21 +536,38 @@
           "calling": {
             "key": "bravo",
             "tier": 1
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "allyDamaged",
+                "radius": 1,
+                "do": {
+                  "ward": 0,
+                  "redirect": true
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                },
+                "label": "Hold the Line"
+              }
+            ]
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
-        "createdTime": 1784177891295,
-        "modifiedTime": 1784177891295,
-        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989074500,
+        "modifiedTime": 1792989606538,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!BEfRUMHJAD1mdCu4.HyB3EszYozoKgo3J"
+      }
     }
   ],
   "effects": [],
@@ -539,15 +575,16 @@
   "sort": 100000,
   "ownership": {
     "default": 0,
-    "bytUGWIOqq9eT7Or": 3
+    "bytUGWIOqq9eT7Or": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1784177891295,
-    "modifiedTime": 1784177891295,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989074500,
+    "modifiedTime": 1792989074502,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Trash is only trash if you don’t understand it.”</em></p>\n        <p><strong>Scrap Alchemy (1/Soma Break).</strong> Over 10 minutes, convert junk into a useful component. Choose one: ammunition, a simple tool, a small explosive charge (nonlethal), or a single-use OP chit worth +1 Economy or +1 Logistics for this scene.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"circSalScrapAlchemy\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Scrap Alchemy</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Action (10 min crafting) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Convert junk into one: ammo / a simple tool / a small explosive (nonlethal) / a single-use OP chit (+1 Economy or Logistics for the scene).</div>\n</div>",
+      "value": "\n<p><em>“Trash is only trash if you don’t understand it.”</em></p>\n        <p><strong>Scrap Alchemy (1/Soma Break).</strong> Over 10 minutes, convert junk into a useful component. Choose one: ammunition, a simple tool, a small explosive charge (nonlethal), or a single-use 10-mark chit for Economy or Logistics for this scene.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"circSalScrapAlchemy\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Scrap Alchemy</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Action (10 min crafting) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Convert junk into one: ammo / a simple tool / a small explosive (nonlethal) / a single-use OP chit (+1 Economy or Logistics for the scene).</div>\n</div>",
       "chat": ""
     },
     "uses": {
@@ -26,7 +26,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 5
     },
     "properties": [],
     "requirements": "Circuitborn",
@@ -41,7 +41,6 @@
       "kind": "circuitborn",
       "feature": "scrap_alchemy",
       "chassis": "Salvage Line",
-      "tierLevel": 5,
       "version": "1.0.0"
     },
     "bbttcc-character-options": {
@@ -237,12 +236,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1775004099337,
-    "modifiedTime": 1781116065090,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988971859,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

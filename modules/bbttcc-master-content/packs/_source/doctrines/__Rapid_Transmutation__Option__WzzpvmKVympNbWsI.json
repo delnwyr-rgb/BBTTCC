@@ -1,5 +1,5 @@
 {
-  "name": "⭐ Rapid Transmutation [Option]",
+  "name": "Rapid Transmutation",
   "type": "feat",
   "img": "icons/magic/holy/prayer-hands-glowing-yellow-white.webp",
   "system": {
@@ -7,31 +7,37 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Rapid Transmutation [Option]</h3><p><em>No rules text registered.</em></p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> option</p><p><strong>Raid Types:</strong> assault, infiltration, occupation, liberation, espionage, propaganda, siege, ritual, assault_defense, courtly</p></div>",
+      "value": "<p><strong>Rapid Transmutation</strong></p><p>Alchemist, post-commit. The 10 marks Economy you spend become 20 marks Faith.</p><p><em>Cost: Economy 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "maneuver",
-      "key": "opt_rapid_transmutation"
+      "key": "opt_rapid_transmutation",
+      "effects": {
+        "text": "Alchemist, post-commit. The 10 marks Economy you spend become 20 marks Faith."
+      },
+      "meta": {
+        "storyOnly": false
+      }
     }
   },
   "_id": "WzzpvmKVympNbWsI",
   "effects": [],
-  "folder": null,
+  "folder": "SziFuLdTIX4Y2Rav",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601759,
-    "modifiedTime": 1782703702689,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988994367,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

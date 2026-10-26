@@ -41,15 +41,15 @@
           "charges": 1,
           "materialKey": "tree-of-life-shard",
           "price": {
-            "marks": 1800,
+            "marks": 180,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
             "rarityMult": 4,
-            "notes": "TIII material stamp × rarity 4",
+            "notes": "TIII material × rarity 4",
             "bound": "free",
-            "saleBack": 720
+            "saleBack": 72
           }
         }
       }
@@ -64,11 +64,11 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137161828,
-    "modifiedTime": 1782156674953,
+    "modifiedTime": 1792977658475,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

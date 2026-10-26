@@ -7,8 +7,9 @@
     "tags": [],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
-      "value": "<p>A dedicated cubby with a wrench wall and a swearing engineer. Engineer's repair action gains traction here.</p>",
+      "value": "<p>A dedicated cubby with a wrench wall and a swearing engineer. Engineer's repair action gains traction here.</p><p><strong>Passive:</strong> the engineer's repair check gains +2.</p>",
       "chat": ""
     }
   },
@@ -16,7 +17,9 @@
     "fourththing": {
       "rigGear": {
         "subtype": "rig-system",
-        "passive": false
+        "passive": {
+          "repairBonus": 2
+        }
       },
       "rfi": {
         "item": {
@@ -46,12 +49,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778205374193,
-    "modifiedTime": 1778963271955,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988929600,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

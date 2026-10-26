@@ -7,7 +7,7 @@
     "intent": "intrigue",
     "skill": "engineering",
     "damage": {
-      "formula": "1d4",
+      "formula": "1d6",
       "attribute": "intrigue",
       "type": "kinetic",
       "damageFlavor": "scattered scrap-spikes",
@@ -23,7 +23,7 @@
       "control",
       "salvage"
     ],
-    "effect": "Scatters scrap-caltrops in a 10 ft. sphere. Each creature rolls Body vs DC 12 — fail: 1d4 kinetic and Restrained (movement-halved) until it spends an action to clear them.",
+    "effect": "Scatters scrap-caltrops in a 2 squares. sphere. Each creature rolls Body vs DC 12 — fail: 1d4 kinetic and Restrained (movement-halved) until it spends an action to clear them.",
     "flavor": "",
     "manifestation": {
       "tier": 1,
@@ -54,6 +54,26 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "body",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 12,
+        "onSave": "negate",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "restrained"
+        ],
+        "duration": "until-saved",
+        "saveEachRound": true,
+        "saveAttribute": "body"
+      },
+      "area": {
+        "shape": "sphere",
+        "size": 10
       }
     },
     "description": {
@@ -61,7 +81,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -84,17 +103,6 @@
             "saleBack": 60
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Jackalope Tinker-Scout"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
       }
     },
     "autoanimations": {
@@ -273,24 +281,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Jackalope Tinker-Scout"
+        ],
+        "sourceIds": [
+          "tYObKsKdkK5JHB0i"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
   "_id": "KAJ0hJTSDftD9b1J",
   "sort": 0,
+  "folder": null,
   "ownership": {
-    "default": 0
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1780000000000,
-    "modifiedTime": 1782167244994,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989020917,
+    "modifiedTime": 1792989020917,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
   },
-  "folder": null,
   "_key": "!items!KAJ0hJTSDftD9b1J"
 }

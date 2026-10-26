@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Cite the Clause</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> intrigue 15, culture 10</p></div>",
+      "value": "<p><strong>Cite the Clause</strong></p><p>Siege, attacker; needs a Cosmic Linguist on your roster. Cite a binding clause: the defenders' Renewal pool −1. In the clash: 15 marks off the Buffer.</p><p><em>Queued on the turn: Intrigue 15 · Culture 10 marks. Fired in the clash: 15 marks from the garrison's bank.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "cls_linguist"
+      "key": "cls_linguist",
+      "effects": {
+        "text": "Siege, attacker; needs a Cosmic Linguist on your roster. Cite a binding clause: the defenders' Renewal pool −1. In the clash: 15 marks off the Buffer."
+      }
     }
   },
   "_id": "PhD2Ph4AAYzvqnHs",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601772,
-    "modifiedTime": 1782703702691,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989001330,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

@@ -16,7 +16,7 @@
 //   2. Avuncular Order War Tower  → The Avuncular Order        (siege  · T3)
 //   3. Proselytizer               → Church of We're Tired...   (medium · T2 · hybrid)
 //   4. Unicorn VC Class           → Monodynamic Industries     (heavy  · T4)
-//   5. Valhauler                  → The Valhaulans             (heavy  · T2 · aerial)
+//   5. (retired 2026-10-26 — use the vehicles pack "Valhaulan Valhauler" vFQAzms1ZsAcyvze)
 //
 // Knobs:
 //   DRY_RUN       — true: log payloads, don't write
@@ -153,26 +153,9 @@
       signature: "A monocle-shaped sensor eye on the prow. An org-chart on the bridge that rewrites itself mid-engagement, promoting whoever's still alive. NDAs enforced via direct psychic assault (Resonance Howler). The Darkness Track loves this thing.",
       gmNotes: "Apex adversary flagship — Tier IV, the scariest of the set; scale down to T3 if it overshadows the table. Qliphothic-aligned (Phase Disruptor is on-theme). Immune to morale — no soul to break. Phase Cloak = corporate deniability. Mounted Forge monetizes everything that breathes. Secretly bankrolls the Valhaulans."
     },
-    {
-      name: "Valhauler",
-      img: "icons/svg/wing.svg",
-      archetype: "Sky Longship",
-      bracket: "heavy", tier: 2, mobility: "mobile", disposition: 0,
-      factionKeywords: ["valhaul"],
-      travel: { speed: 5, range: 18, hazardResist: 2 },
-      capacity: { pilot: [1,2], gunner: [1,4], engineer: [0,2], crew: [4,12] },
-      resistances: ["kinetic"], immunities: [], vulnerabilities: ["fire"],
-      tags: ["aerial", "airship", "pirate", "raider", "valhaulan", "faction-flagship"],
-      loadout: {
-        frame: "War Rig Frame",
-        weapons: ["Twin Autocannons", "Mortar Battery"],
-        systems: ["Reinforced Plating", "Repair Bay", "Comms Array"],
-        outputs: ["Quartermaster Dispenser"]
-      },
-      concept: "An aerial techno-Viking longship, patched together from dragon hide, sheet metal, and unconvincing optimism. The Valhaulans raid, steal, trade, vanish, return, apologize, steal again — and then sell you your own stuff back at a markup. Part war-barge, part ValLyft ride-share, all enthusiasm and zero accountability.",
-      signature: "Dragon-hide hull patches over a ValLyft livery painted over somebody else's raided sigil. Rigging tied by genuine knot-tying champions. The Mortar crew yells coordinates at each other and the math, sometimes, lands.",
-      gmNotes: "Aerial — it FLIES (high speed, long range, weather-resistant). Vulnerable to fire (dragon hide + optimism burns well). Quartermaster Dispenser is the plunder-locker. Led by Sklar Bjrornholdt, a Valkyrie with sky-high Presence and nonexistent impulse control. Secretly sponsored by Monodynamic Industries. Currently squatting in the Bunker of Great Narrative Importance™."
-    }
+    // RG2 (2026-10-26): the "Valhauler" spec was RETIRED — the live template is the vehicles pack's
+    // "Valhaulan Valhauler" (vFQAzms1ZsAcyvze, renamed live 2026-10); one concept, one record. This seeder never
+    // landed any of its five rigs live; the Valhaulan concept/signature/gmNotes text lives in the pack record's biography.
   ];
 
   // ── Build a rig actor payload from a spec ────────────────────────────────

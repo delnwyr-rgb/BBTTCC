@@ -27,15 +27,38 @@
       "calling": {
         "key": "keeper",
         "tier": 2
-      }
+      },
+      "triggers": [
+        {
+          "event": "on-ally-incoming-damage",
+          "radius": 6,
+          "predicate": {
+            "tag": [
+              "psychic",
+              "qliphothic"
+            ]
+          },
+          "limit": {
+            "window": "scene",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "modify-incoming-damage",
+            "args": {
+              "mode": "minus",
+              "amount": 2
+            }
+          }
+        }
+      ]
     }
   },
   "_stats": {
-    "coreVersion": "14.364",
-    "systemId": null,
-    "systemVersion": null,
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.3",
     "createdTime": 1784006974462,
-    "modifiedTime": 1784006974462,
+    "modifiedTime": 1791412961440,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

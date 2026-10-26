@@ -1,0 +1,88 @@
+{
+  "name": "Disorienting Pulse (recharge 5–6)",
+  "type": "feature",
+  "img": "icons/magic/control/hypnosis-mesmerism-swirl.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "rfi-scrubbed"
+    ],
+    "description": {
+      "value": "<p>Each creature of the adept's choice within 3 squares must succeed a Soul check vs DC 13 or be disoriented until the end of its next turn: no reaction strikes, and it rolls twice-keep-worse on Mind checks. Recharges on a Soma Break.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "use",
+            "do": {
+              "save": {
+                "attr": "soul",
+                "dc": 13,
+                "onSave": "negate"
+              }
+            },
+            "limit": {
+              "per": "combat",
+              "uses": 1
+            }
+          },
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Disorienting Pulse (recharge 5–6)"
+            },
+            "do": {
+              "noReactions": true,
+              "prompt": "Twice-keep-worse on Mind checks until its next turn ends."
+            }
+          }
+        ],
+        "recharge": {
+          "mode": "d6",
+          "min": 5
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Valhaulan Spark Adept"
+        ],
+        "sourceIds": [
+          "ZOttfT1AftTApkwf"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "effects": [],
+  "_id": "AtAuX56jYcrowLNW",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069927,
+    "modifiedTime": 1792989070008,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!AtAuX56jYcrowLNW"
+}

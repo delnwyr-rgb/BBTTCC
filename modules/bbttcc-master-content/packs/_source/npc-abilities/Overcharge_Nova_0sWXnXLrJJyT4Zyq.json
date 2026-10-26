@@ -7,9 +7,9 @@
     "intent": "violence",
     "skill": "channel",
     "damage": {
-      "formula": "5d10",
+      "formula": "3d12",
       "attribute": "violence",
-      "type": "energy",
+      "type": "thermal",
       "damageFlavor": "venting the whole capacitor at once",
       "track": "integrity"
     },
@@ -24,7 +24,7 @@
       "laser",
       "boss"
     ],
-    "effect": "ULTIMATE (1/scene, at or below half Integrity). Dumps the capacitor in a 30 ft. sphere centered on itself. Evasion vs DC 18. Fail: 5d10 energy and Blinded until end of next turn. Half and no Blind on success. The dragon is Staggered the following turn (overheated).",
+    "effect": "ULTIMATE (1/scene, at or below half Integrity). Dumps the capacitor in a 6 squares. sphere centered on itself. Evasion vs DC 18. Fail: 5d10 energy and Blinded until end of next turn. Half and no Blind on success. The dragon is Staggered the following turn (overheated).",
     "flavor": "",
     "manifestation": {
       "tier": 1,
@@ -55,6 +55,25 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "mode": "save",
+        "saveAttribute": "intrigue",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 18,
+        "onSave": "half",
+        "statesOnFail": true
+      },
+      "appliedStates": {
+        "states": [
+          "blinded",
+          "staggered"
+        ],
+        "duration": "1-round"
+      },
+      "area": {
+        "shape": "sphere",
+        "size": 30
       }
     },
     "description": {
@@ -62,7 +81,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -85,17 +103,16 @@
             "saleBack": 60
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Varrenthyx, the Laser Dragon"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [],
+        "recharge": {
+          "mode": "combat"
+        },
+        "requires": {
+          "ownerBloodied": true
+        }
       }
     },
     "autoanimations": {
@@ -274,24 +291,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Varrenthyx, the Laser Dragon"
+        ],
+        "sourceIds": [
+          "DeyWbEYxsEcV8pKp"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
+  "effects": [],
   "_id": "0sWXnXLrJJyT4Zyq",
   "sort": 0,
+  "folder": null,
   "ownership": {
-    "default": 0
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1780000000000,
-    "modifiedTime": 1782167244985,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989033980,
+    "modifiedTime": 1792989033980,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
   },
-  "folder": null,
   "_key": "!items!0sWXnXLrJJyT4Zyq"
 }

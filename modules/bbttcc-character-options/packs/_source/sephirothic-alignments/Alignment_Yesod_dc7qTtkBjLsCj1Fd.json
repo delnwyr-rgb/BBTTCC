@@ -1,0 +1,70 @@
+{
+  "name": "Alignment: Yesod",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "Foundation - The conduit the whole Tree pours through. +10 Intrigue and +10 Faith marks to your Domain each turn.\n\nYesod is the funnel beneath the Tree: dreams, gateways, and the quiet machinery that carries meaning down into the world. It rewards the steward who works unseen, holds the channel open, and lets others pass through — and it answers only once the first arc is done.",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "alignment-yesod",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "img": "icons/magic/symbols/rune-sigil-horned-white-purple.webp",
+  "effects": [],
+  "folder": "RAOWJYon3t34M5XY",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "sephirothic-alignments",
+      "bonuses": {
+        "intrigue": 1,
+        "faith": 1
+      },
+      "option": {}
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989140402,
+    "modifiedTime": 1792989140402,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_id": "dc7qTtkBjLsCj1Fd",
+  "sort": 850000,
+  "_key": "!items!dc7qTtkBjLsCj1Fd"
+}

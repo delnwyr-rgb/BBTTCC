@@ -4,78 +4,72 @@
   "img": "icons/commodities/gems/gem-rough-cushion-violet.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
+    "source": "",
     "tags": [
-      "seed-bestiary-attacks",
-      "tier-i",
-      "role-caster",
-      "passive"
+      "bestiary",
+      "lineage-revenant",
+      "lineage-trait"
     ],
     "description": {
-      "value": "<p>The wraith has resistance to kinetic damage and vulnerability to sephirotic damage. Cannot be Charmed or Shaken (it is already nothing but those things).</p><p><em>Salt remembers what salt is for. The wraith remembers the screaming.</em></p>",
+      "value": "<p>Immune to Charmed and Shaken — he is already nothing but those things. Resistant to kinetic damage, vulnerable to sephirotic. When he deals qliphothic damage he regains 1d4 Integrity. Laid to rest, not killed: at 0 Integrity he reforms at the next dusk unless the fare is returned to the bank.</p><p><em>Salt remembers what salt is for.</em></p>",
       "chat": ""
-    },
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": []
-    },
-    "advancement": {},
-    "identifier": "",
-    "crewed": false,
-    "enchant": {},
-    "prerequisites": {
-      "items": [],
-      "repeatable": false
-    },
-    "properties": [],
-    "requirements": "",
-    "type": {
-      "value": "",
-      "subtype": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
         "item": {
-          "tier": "I",
-          "frame": "trait"
+          "tier": "II",
+          "frame": "feature",
+          "lineageTrait": "revenant"
         }
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "hit",
+            "do": {
+              "heal": "1d4"
+            },
+            "label": "Crystallized Grief — the stolen warmth"
+          }
+        ]
       }
     },
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Salt Wraith"
+          "The Ferryman of the Drowned South"
+        ],
+        "sourceIds": [
+          "MHVUvyZbNGxeWytB"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "gmcOkmRxJUQYOT6O",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": null,
-    "modifiedTime": null,
-    "lastModifiedBy": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989024839,
+    "modifiedTime": 1792989024840,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!gmcOkmRxJUQYOT6O"
 }

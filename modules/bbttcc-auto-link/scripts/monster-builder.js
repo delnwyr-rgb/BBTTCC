@@ -106,7 +106,7 @@ const CONDITION_KEYS = ["charmed", "shaken", "compelled", "calmed", "staggered",
 
 const ROLE_OPTS = ["brute", "caster", "stealth", "scout", "hardened"];
 const BRACKET_OPTS = ["light", "medium", "heavy", "boss"];
-const SEPHIRAH_OPTS = ["kether", "chokmah", "binah", "chesed", "geburah", "tiferet", "netzach", "hod", "yesod", "malkuth", "qliphoth"];
+const SEPHIRAH_OPTS = ["keter", "chokmah", "binah", "chesed", "geburah", "tiferet", "netzach", "hod", "yesod", "malkuth", "qliphoth"];   // BS5 (2026-10-26): keter + geburah, one spelling
 const FACULTY_KEYS = ["violence", "intrigue", "presence", "body", "mind", "soul"];
 
 // Default attribute (faculty) per role — feeds engage dialog auto-bonus.
@@ -161,7 +161,7 @@ const QLIPHOTH = {
   nahemoth:        { label: "Nahemoth",        hullOf: "malkuth", vice: "Materialism", nounLesser: "Remnant",  nounGreater: "Golem",       aura: "Any creature that starts its turn within 2 squares must succeed a Resolve check (DC by tier) or be Staggered until the end of its turn, crushed by pure pointlessness." }
 };
 
-const SEPHIROTH_LABELS = { kether: "Kether", chokmah: "Chokmah", binah: "Binah", chesed: "Chesed", geburah: "Geburah", tiferet: "Tiferet", netzach: "Netzach", hod: "Hod", yesod: "Yesod", malkuth: "Malkuth" };
+const SEPHIROTH_LABELS = { keter: "Keter", chokmah: "Chokmah", binah: "Binah", chesed: "Chesed", geburah: "Geburah", tiferet: "Tiferet", netzach: "Netzach", hod: "Hod", yesod: "Yesod", malkuth: "Malkuth" };
 
 const LINEAGES = [
   { key: "wild", label: "Wild", domain: "Malkuth-born fauna · Predator authoring",
@@ -169,7 +169,7 @@ const LINEAGES = [
     damageType: "kinetic", damageFlavor: "bite", resist: [], vuln: [], condImm: [],
     stressRatio: 0.5, currency: "violence", themes: ["wild", "predator"],
     loot: [{ name: "Herd Leather", qty: "1d2", weight: 5 }, { name: "Reagent Gland", qty: "1", weight: 2 }],
-    trait: { name: "Territory", desc: "Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: reroll the lowest die on attack rolls against any creature within 1 square of an ally that isn't incapacitated.", flavor: "It was here first. It intends to be here after." },
+    trait: { name: "Territory", desc: "Choose terrain (still water, burn-zone, rubble, canopy) or pack. Terrain: while in it, the first attack each combat rerolls the lowest die and the creature is hidden until it acts. Pack: reroll the lowest die on attack rolls against any creature within 1 square of an ally that is still standing.", flavor: "It was here first. It intends to be here after." },
     strike: { name: "Bite", melee: true, reach: 5, damageType: "kinetic", damageFlavor: "bite", riderText: "On a hit, the target is marked by scent until the end of the scene — this creature and its kin reroll the lowest die when tracking it." },
     sub: null },
 
@@ -197,7 +197,7 @@ const LINEAGES = [
     stressRatio: 0.4, currency: "intrigue", themes: ["construct", "pre-fall"],
     loot: [{ name: "Pre-Fall Component", qty: "1", weight: 3 }, { name: "Heart-Coil", qty: "1", weight: 2 }],
     trait: { name: "Broken Protocol", desc: "Immune to Charmed, Shaken and Compelled. Repeats a single directive (patrol, scan, enforce, greet) until attacked; then runs combat protocol for 3 rounds and returns to the directive if nothing hostile remains in sight. Anyone without pre-Fall credentials is an intruder — that is everyone alive.", flavor: "It is still patrolling. The patrol route includes the place you are standing." },
-    strike: { name: "Servo-Limb", melee: true, reach: 5, damageType: "kinetic", damageFlavor: "actuator", riderText: "On a hit, the target must succeed a Body check (DC by tier) or be pushed 5 ft. — it is enforcing a perimeter, not killing." },
+    strike: { name: "Servo-Limb", melee: true, reach: 5, damageType: "kinetic", damageFlavor: "actuator", riderText: "On a hit, the target must succeed a Body check (DC by tier) or be pushed 1 square — it is enforcing a perimeter, not killing." },
     sub: null },
 
   { key: "sephirotic", label: "Sephirotic", domain: "Emanations of the Tree · Correction authoring",
@@ -263,7 +263,7 @@ function makeAttackItem(spec, atk) {
   const range   = isMelee
     ? { short: Math.max(1, Math.round((atk.reach ?? 5) / 5)), long: Math.max(1, Math.round((atk.reach ?? 5) / 5)) }
     : { short: Math.max(1, Math.round((atk.shortRange ?? 60) / 5)), long: Math.max(1, Math.round((atk.longRange ?? 180) / 5)) };
-  const reachLabel = isMelee ? `reach ${atk.reach ?? 5} ft.` : `range ${atk.shortRange ?? 60}/${atk.longRange ?? 180} ft.`;
+  const reachLabel = isMelee ? `reach ${range.short} square${range.short === 1 ? "" : "s"}` : `range ${range.short}/${range.long} squares`;   // squares (2026-10-26)
   return {
     name: atk.name, type: "weapon", img: atk.img ?? "icons/svg/sword.svg",
     system: {
@@ -299,9 +299,9 @@ function makeSaveItem(spec, save) {
       category: "ranged", intent, skill,
       damage: { formula, attribute: attr, type: dType, damageFlavor: flavor, track: rfiTrack(dType) },
       range, tags: _kitTags(spec, ["aoe", `shape-${shape}`, ...(save.tags ?? [])]),
-      effect: `${shape.charAt(0).toUpperCase() + shape.slice(1)} ${size} ft. — targets roll vs ${targetDefense} (DC ${dc}). Half damage on success.${save.riderText ? " " + save.riderText : ""}${useText}`,
+      effect: `${shape.charAt(0).toUpperCase() + shape.slice(1)} ${Math.max(1, Math.round(size / 5))} squares — targets roll vs ${targetDefense} (DC ${dc}). Half damage on success.${save.riderText ? " " + save.riderText : ""}${useText}`,
       flavor: save.flavor ?? "",
-      description: { value: `<p><strong>Area Attack.</strong> ${save.targetText ?? `Each creature in a ${size}-ft. ${shape}`} rolls <strong>${targetDefense}</strong> vs DC ${dc}. Hit: <code>${formula}</code> ${dType}${flavor ? ` (${flavor})` : ""} + ${attr}; half on success.${save.riderText ? " " + save.riderText : ""}${useText ? `<br/><em>${useText.trim()}</em>` : ""}</p>${save.flavor ? `<p><em>${save.flavor}</em></p>` : ""}`, chat: "" }
+      description: { value: `<p><strong>Area Attack.</strong> ${save.targetText ?? `Each creature in a ${Math.max(1, Math.round(size / 5))}-square ${shape}`} rolls <strong>${targetDefense}</strong> vs DC ${dc}. Hit: <code>${formula}</code> ${dType}${flavor ? ` (${flavor})` : ""} + ${attr}; half on success.${save.riderText ? " " + save.riderText : ""}${useText ? `<br/><em>${useText.trim()}</em>` : ""}</p>${save.flavor ? `<p><em>${save.flavor}</em></p>` : ""}`, chat: "" }
     },
     effects: [], flags: { fourththing: { rfi: { item: { tier: spec.tier, frame: "save", aoeShape: shape, aoeSize: size, dcAbility: save.saveAbility, dc } } } },
     folder: null, sort: 0, ownership: { default: 0 }
@@ -781,7 +781,7 @@ function _wireExemplarChips(root) {
       // Shape
       _set(root, "role", ROLE_OPTS.includes(String(a.bestiary?.role)) ? a.bestiary.role : (ROLE_OPTS.includes(String(sys.role)) ? sys.role : "brute"));
       _set(root, "tier", tierNum); _set(root, "bracket", bracket);
-      _set(root, "sephirah", SEPHIRAH_OPTS.includes(sys.magic?.sephirah) ? sys.magic.sephirah : (sys.magic?.sephirah === "gevurah" ? "geburah" : _val(root, "sephirah")));
+      _set(root, "sephirah", SEPHIRAH_OPTS.includes(sys.magic?.sephirah) ? sys.magic.sephirah : (sys.magic?.sephirah === "gevurah" ? "geburah" : sys.magic?.sephirah === "kether" ? "keter" : _val(root, "sephirah")));
       for (const k of FACULTY_KEYS) _setAttr(root, k, sys.attributes?.[k]?.value ?? 2);
       _set(root, "integrity", sys.derived?.integrity?.max ?? 25);
       _set(root, "stress", sys.derived?.stress?.max ?? 12);
@@ -899,7 +899,7 @@ async function _commit(root) {
           tier: tierRoman, bracket, archetype, lineage: lineageKey,
           ...(sub ? { subLineage: sub } : {}),
           ...(title ? { title } : {}),
-          ...(q ? { qliphah: { name: q.label, hullOf: q.hullOf, grade: grade || "lesser" } } : {}),
+          ...(q ? { qliphah: { name: sub, hullOf: q.hullOf, grade: grade || "lesser" } } : {}),   // BS4 (2026-10-26): name = the QLIPHOTH key, lowercase; the label is derived
           bestiary: { themes, role, lootTable: loot },
           ...(price ? { price } : {})
         } }

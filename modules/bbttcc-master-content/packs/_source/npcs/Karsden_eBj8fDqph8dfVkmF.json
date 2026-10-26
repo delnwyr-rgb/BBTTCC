@@ -1,0 +1,3066 @@
+{
+  "name": "Karsden",
+  "type": "character",
+  "img": "art/devin-knight/Monsters_October/Giant_Frost_Skald.webp",
+  "folder": "UAHVCMVXEDT8Q1B1",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "prototypeToken": {
+    "name": "Karsden",
+    "actorLink": true,
+    "disposition": 1,
+    "texture": {
+      "src": "art/devin-knight/Monsters_October/Giant_Frost_Skald.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc"
+    },
+    "fourththing": {
+      "kind": "npc"
+    },
+    "bbttcc-character-options": {
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      }
+    }
+  },
+  "_id": "eBj8fDqph8dfVkmF",
+  "system": {
+    "biography": {
+      "concept": "Eldest of the cinema-vigil family outside the Hidden Vault — Menhirkin Dreamwalker, T III, Initiation 13 (Act 3).",
+      "notes": "Karsden is the family's memory. A Menhirkin who stood up out of the Polygonal Grove's own bedrock, slow to speak and impossible to hurry, Karsden keeps the Night of the Premiere in dream: the old films are shown in the Yesod-side, projected on the back of closed eyelids, because the projector died a generation ago. The family's rites are Karsden's dreams, remembered aloud. Karsden does not believe the 300th Customer is coming. Karsden keeps the seat warm anyway."
+    },
+    "details": {
+      "level": 13,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 3
+    },
+    "attributes": {
+      "violence": {
+        "value": 2
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 4
+      },
+      "mind": {
+        "value": 10
+      },
+      "soul": {
+        "value": 10
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 0
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 0
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 0
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 0
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 0
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 3
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 5
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 3
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "fitting": {
+        "attribute": "intrigue",
+        "label": "Fitting",
+        "value": 0
+      },
+      "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 16,
+        "max": 16,
+        "temp": 0
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": [],
+    "strain": {
+      "value": 0
+    }
+  },
+  "items": [
+    {
+      "_id": "zb6dJ5w52vk7AXHd",
+      "name": "Menhirkin",
+      "type": "species",
+      "img": "art/bbttcc/asli-icons/menhirkin_1.webp",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"The land is not scenery. The land is a person. You are the version of it that finally stood up and walked over to complain.\"</em></p><p>You are not descended from the land. You are the land. A hex decided to become a person and the person is you. The standing stones on the ridge are distant cousins. The bedrock under the bunker is a grandparent. Mortals call you a Hex-Giant. You don't correct them.</p><p><strong>Creature Type.</strong> Humanoid (Menhirkin). <strong>Size.</strong> Medium, but you count as Large for carrying capacity and the size of creatures you can shove or grapple. <strong>Speed.</strong> 6 squares</p><p><strong>Heartstone (passive).</strong> A fragment of your home hex is literally inside you. While in any hex your Domain controls or has claimed: reroll the lowest die on Body checks, and you cannot be forcibly removed from the hex against your will (teleportation, banishment, forced march) without first being reduced to 0 Integrity.</p><p><strong>Land Memory (1/Soma Break).</strong> Lay a hand on any surface older than you; the GM tells you one true thing the land remembers.</p><p><strong>Living Rampart (1/Soma Break).</strong> Reaction — when a creature you can see targets an ally adjacent to you with an attack, the attacker rolls 3d10 keep lowest 2 on that attack roll.</p><p><strong>Stonebound (passive).</strong> Reroll the lowest die on Body checks to resist being pushed, knocked Prone, or otherwise forcibly moved. Reroll the lowest die on Body checks to build, repair, or fortify structures, siegeworks, and defensive emplacements.</p><p><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Violence marks</strong> and <strong>+20 Non-Lethal marks</strong> at campaign start.</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "mJh91oDMWDwzfq6L",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium (but you count as Large for carrying, shove, and grapple).",
+            "value": {}
+          },
+          {
+            "_id": "HS11111111111111",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.2wTyD2Lq1mbnwODi",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Heartstone",
+            "hint": "Gain the Menhirkin: Heartstone feature."
+          },
+          {
+            "_id": "SM22222222222222",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.nkLGYmro2QJxW5nA",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Land Memory",
+            "hint": "Gain the Menhirkin: Land Memory feature (v2 reframe of Stone Memory)."
+          },
+          {
+            "_id": "GW33333333333333",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.NIOQEm26wOoSuf2O",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Gravity Well",
+            "hint": "Gain the Menhirkin: Gravity Well feature."
+          },
+          {
+            "_id": "a1b2c3d4e5f6g7h8",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.Pf74lkSrv4Ogjyk6",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Living Rampart",
+            "hint": "Gain the Menhirkin: Living Rampart feature."
+          },
+          {
+            "_id": "h7g6f5e4d3c2b1a0",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.o9A2rhMAKPFI8Dnb",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Stonebound",
+            "hint": "Gain the Menhirkin: Stonebound feature."
+          },
+          {
+            "_id": "Z9Y8X7W6V5U4T3S2",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.qVOg838eU3areJzy",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Strategic Hooks (Menhirkin)",
+            "hint": "Grants OP edges and hex/Logistics hooks used by Bad Eden faction systems."
+          }
+        ],
+        "identifier": "menhirkin",
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": 10,
+          "truesight": null,
+          "units": null,
+          "special": "Tremorsense 10 ft while standing on natural ground."
+        },
+        "type": {
+          "value": "humanoid",
+          "subtype": "Menhirkin",
+          "custom": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Living Rampart: Athletics +1",
+          "img": "icons/magic/earth/strike-shock-stone.webp",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.athletics.value",
+                "value": 1,
+                "type": "add",
+                "priority": 10,
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Passive: Living Rampart: Athletics +1",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "sprint": "passive-ae-2026-04-28",
+              "batch": 2
+            }
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "_id": "ABtRlSRtwZtFWrcn",
+          "showIcon": 1,
+          "folder": null,
+          "_stats": {
+            "coreVersion": "14.368",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.5",
+            "createdTime": 1791423985189,
+            "modifiedTime": 1791423985189,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "folder": "DylQKvptEOaCqul8",
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "opEffects": {
+            "nonLethal": 2,
+            "violence": 1
+          },
+          "siegeRepairDiscount": 1,
+          "logisticsDiscountPerTurn": 1,
+          "sentientLandConsult": true,
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "normalizedFrom": "Hex-Giant (Menhirkin)",
+          "refactorNotes": "v2 reframe: living embodiment of sentient land. Heartstone now binds to hex. Stone Memory reframed as Land Memory. Added Sentient Land faction hook."
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "save",
+              "mode": "reroll-lowest",
+              "note": "on Constitution saves and cannot be forcibly removed from the hex against you…"
+            },
+            {
+              "context": "forced-movement",
+              "mode": "reroll-lowest",
+              "note": "on ability checks you make to resist being pushed, knocked prone, or otherwis…"
+            },
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "on checks you make to build, repair, or fortify structures, siegeworks, and d…"
+            },
+            {
+              "context": "save",
+              "mode": "reroll-lowest",
+              "note": "Constitution saves and cannot be forcibly removed from the hex against your w…"
+            },
+            {
+              "context": "forced-movement",
+              "mode": "reroll-lowest",
+              "note": "ability checks you make to resist being pushed, knocked prone, or otherwise f…"
+            },
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "checks you make to build, repair, or fortify structures, siegeworks, and defe…"
+            },
+            {
+              "context": "attack",
+              "mode": "reroll-highest"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "note": "while in a hex your faction controls or has claimed (Heartstone)"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "note": "to resist being pushed, knocked Prone, or otherwise forcibly moved (Stonebound)"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "note": "to build, repair, or fortify structures, siegeworks, or defensive emplacements (Stonebound)"
+            }
+          ],
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "violence-op",
+              "amount": 2
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "non-lethal-op",
+              "amount": 2
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-ally-hit",
+              "radius": 1,
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Living Rampart (1/Soma Break). Reaction — an ally adjacent to you was just attacked: the attacker rolls 3d10 keep lowest 2 on that attack roll (GM re-reads the roll)."
+                }
+              }
+            }
+          ],
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.kLmFqDPpLUBzqgR2",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423985189,
+        "modifiedTime": 1792989613681,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0
+    },
+    {
+      "name": "Menhirkin Heritage: Metamorphic",
+      "type": "feat",
+      "img": "art/bbttcc/asli-icons/menhirkin_1.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>“What you are now is not what you were. The pressure was the point.”</em></p><p><strong>Menhirkin (Metamorphic).</strong> You are land that was buried, squeezed, heated, and came back up harder and more interesting. Every Metamorphic has a before-self — a softer version of themselves that got pressed into something else. You remember being that. You are not going back.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Menhirkin).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Menhirkin does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Body</strong> in fiction and through Tier powers.</p></li></ul><h3>Menhirkin Core: The Land Stood Up</h3><p><em>Shared across all Menhirkin heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Stone Soul.</strong> You count as Large for carry, shove, and grapple despite your Medium frame. You reroll the lowest die on checks to resist being forcibly moved.</p></li><li><p><strong>Hex Recognition.</strong> Once per scene, while you are on a natural surface you are directly touching, you may whisper a single question about the place. The GM answers with one true thing the land knows.</p></li><li><p><strong>Slow to Wear.</strong> You reroll the lowest die on Body checks against Stress, long-duration physical wear, forced marches, climate exposure, and sustained labor. You do not tire the way softer things tire.</p></li><li><p><strong>Heavy Presence.</strong> Your weight and settledness are perceptible. Creatures within 2 squares of you know you are there even if they cannot see you; you roll 3d10 keep lowest 2 on Intrigue (Stealth) checks unless you are on or in stone.</p></li></ul><h3>Metamorphic Traits</h3><ul><li><p><strong>Pressure Remade.</strong> At the end of each Soma Break, the day chooses what you are until your next Soma Break. Roll a d4 or pick (GM discretion): (1) +1 Guard, (2) resistance to kinetic damage, (3) +1 rank on one skill of your choice, (4) reroll-lowest on Body checks to resist being knocked prone or grappled. You announce the result; you do not pre-pick.</p></li><li><p><strong>Unbreakable Core.</strong> You reroll the lowest die on defense checks against petrification, forced transmutation, and forced shape-change. You have been turned into something else once already; nobody does it twice without your say-so.</p></li></ul><h3>Domain Edge</h3><ul><li><p><strong>Domain Edge.</strong> Your Domain gains <strong>+20 Intrigue marks</strong> and <strong>+20 Non-Lethal marks</strong> at campaign start.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Hex Recognition</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Action  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">On a natural surface you're touching, whisper a question — GM answers with one true thing the land knows.</span></p></div>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "a32c603d15200f04",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.Y1FZ3Z6RzVQK0YLJ",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Metamorphic Tier I",
+            "hint": "Gain your Metamorphic Tier I feat."
+          }
+        ],
+        "identifier": "menhirkin_metamorphic_heritage",
+        "requirements": "Menhirkin",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "menhirkin",
+          "lineage": "Metamorphic",
+          "version": "1.1.0",
+          "date": "2026-04-19",
+          "rfiNative": true,
+          "opEffects": {
+            "nonlethal": 2,
+            "intrigue": 1
+          }
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "defense",
+              "mode": "reroll-lowest",
+              "vs": "vs:petr",
+              "note": "defense checks against petrification, forced transmutation, and forced sha"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "note": "Body checks to resist being knocked prone or grappled"
+            },
+            {
+              "context": "forced-movement",
+              "mode": "reroll-lowest",
+              "note": "Body checks to resist being knocked prone or grappled"
+            }
+          ],
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "intrigue-op",
+              "amount": 2
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "non-lethal-op",
+              "amount": 2
+            }
+          ]
+        },
+        "autoanimations": {
+          "id": "8d3f48df-b927-4d6e-969d-0c2c22f01a63",
+          "label": "Menhirkin Heritage: Metamorphic",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "NIrFWcA3AAMW6nsD",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-heritages-v1.1",
+          "uuid": "Item.MouN6qUadA976AZh",
+          "coreVersion": "13.351",
+          "systemId": "fourththing",
+          "systemVersion": "0.6.0"
+        },
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423985189,
+        "modifiedTime": 1792989613682,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "nw3tbToMLJzuhFLX",
+      "sort": 0
+    },
+    {
+      "name": "Dreamwalker",
+      "type": "class",
+      "img": "icons/magic/nature/root-vine-beanstalk-moon.webp",
+      "system": {
+        "category": "path",
+        "identifier": "dreamwalker",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"The future is just memory pointed the other way.\"</em></p>\n<p>The Dreamwalker reads the Tree and works manifestations — and that work <em>is</em> the fuel. You run on <strong>Surge</strong> like everyone, but yours arrives when you <strong>cast a manifestation</strong> (bank +1, max +2/round).</p>\n<h3>The Oracle (spent via Surge)</h3>\n<ul>\n  <li><strong>Omen</strong> (1) — you or an ally saw the thread coming: banks a reroll-lowest.</li>\n  <li><strong>Dream Ward</strong> (2) — an ally drifts into a protective dreamstate: DR + a reroll.</li>\n  <li><strong>Shared Dream</strong> (3) — allies within 6 squares bank a reroll and draw 1 Clarity (refuels their casting).</li>\n  <li><strong>Reality Hack</strong> (5) — rewrite the moment: the party banks a reroll and one enemy rolls its next attack rolling 3d10 and keeping the lowest 2.</li>\n</ul>\n<p>The <strong>Dream-Cache</strong> endures — bank a manifestation between scenes, deploy it next scene without paying Clarity. And the oracle's quiet work stays out of combat: Dream-Sense still reads a hex's Sephirah, and you still put your one question to the Great Work (Initiate of the Great Work) for a true answer.</p>",
+          "chat": ""
+        },
+        "advancement": {
+          "Je5XyZJWzXR6rcRs": {
+            "_id": "Je5XyZJWzXR6rcRs",
+            "type": "HitPoints",
+            "configuration": {},
+            "value": {},
+            "flags": {},
+            "hint": ""
+          },
+          "qSjjIW8ipMvEE2GP": {
+            "_id": "qSjjIW8ipMvEE2GP",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.5lwGyCBDn3nqoVHy",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.HfkD3IxUC2fHuzr5",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.Uxukk9kl0G1r9dZ2",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.moP2fK3ghD8S0Gz9",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 1,
+            "title": "Dreamwalker Core Features",
+            "flags": {},
+            "hint": ""
+          },
+          "jt0L8ZEeErUFM2C1": {
+            "_id": "jt0L8ZEeErUFM2C1",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.LhwaA7WbybhObu2G",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 2,
+            "title": "Dream-Thread Tuning",
+            "flags": {},
+            "hint": ""
+          },
+          "PDB65Hz3Z0WtW6hD": {
+            "_id": "PDB65Hz3Z0WtW6hD",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.VleHwUCtUlA7hkWM",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 3,
+            "title": "Shared Dreamwork",
+            "flags": {},
+            "hint": ""
+          },
+          "EUHlMzvpKDtazTT6": {
+            "_id": "EUHlMzvpKDtazTT6",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.F49sEy1mUfuAf2Nt",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 5,
+            "title": "Dream Rite",
+            "flags": {},
+            "hint": ""
+          },
+          "KvLsnjfPjedVUoSN": {
+            "_id": "KvLsnjfPjedVUoSN",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.W18UmvWhY6b5XJAD",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 6,
+            "title": "Dream Stability",
+            "flags": {},
+            "hint": ""
+          },
+          "gYPzq7TLWRwt81UH": {
+            "_id": "gYPzq7TLWRwt81UH",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.u3gQ0e5n5dxZ3SCR",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 7,
+            "title": "Symbolic Cartography",
+            "flags": {},
+            "hint": ""
+          },
+          "fXpi2qOEHgHfxUaC": {
+            "_id": "fXpi2qOEHgHfxUaC",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.TSWbYDz9nlW0dIQT",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 9,
+            "title": "Dreamer’s Poise",
+            "flags": {},
+            "hint": ""
+          },
+          "lRIz3t4BVzdFhEq7": {
+            "_id": "lRIz3t4BVzdFhEq7",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.G9fK2gX5Tcev21cU",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 10,
+            "title": "Omen-Thread Weaving",
+            "flags": {},
+            "hint": ""
+          },
+          "RWG5HVkHW6uOm0cQ": {
+            "_id": "RWG5HVkHW6uOm0cQ",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.NK1Ftukd4YPqziiR",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 11,
+            "title": "Vision of the Great Work",
+            "flags": {},
+            "hint": ""
+          },
+          "YEw2pcckrzCZe4YA": {
+            "_id": "YEw2pcckrzCZe4YA",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.tAsGXgZrgFdpNyVi",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 13,
+            "title": "Dream Echo Reservoir",
+            "flags": {},
+            "hint": ""
+          },
+          "HpcBa7sIT8JjS2qY": {
+            "_id": "HpcBa7sIT8JjS2qY",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.rvfPQwQq6rYBE1EG",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 14,
+            "title": "Mnemonic Spillway",
+            "flags": {},
+            "hint": ""
+          },
+          "UHLy2jPEHqhkFyVB": {
+            "_id": "UHLy2jPEHqhkFyVB",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.MHfSNNFN1e544eox",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 15,
+            "title": "Waking Dreamfield",
+            "flags": {},
+            "hint": ""
+          },
+          "GjYakAu0plcuXKOn": {
+            "_id": "GjYakAu0plcuXKOn",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.RQhSgy0Ps39BucuM",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 17,
+            "title": "Ascension Layer",
+            "flags": {},
+            "hint": ""
+          },
+          "rkRp98xxJ2RdSWro": {
+            "_id": "rkRp98xxJ2RdSWro",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.uD8rt09f8CkX4N94",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 18,
+            "title": "Fractal Self",
+            "flags": {},
+            "hint": ""
+          },
+          "2Bd8GqqpYxRRx3y8": {
+            "_id": "2Bd8GqqpYxRRx3y8",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.4imbYyUj1RKPkgNh",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 20,
+            "title": "Apotheosis of the Oneiric",
+            "flags": {},
+            "hint": ""
+          },
+          "b8wksBNI12HbCvy2": {
+            "_id": "b8wksBNI12HbCvy2",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 4,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          "1cY1wAxwzsTlsieq": {
+            "_id": "1cY1wAxwzsTlsieq",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 8,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          "cXmxEfF4g9VCjR0l": {
+            "_id": "cXmxEfF4g9VCjR0l",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 12,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          "X3EHR7qH9WODyoHd": {
+            "_id": "X3EHR7qH9WODyoHd",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 16,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          "v3yXQ0gSTo7RF5Vn": {
+            "_id": "v3yXQ0gSTo7RF5Vn",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 19,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          "YGxgq4j6rciK7l5N": {
+            "_id": "YGxgq4j6rciK7l5N",
+            "type": "Subclass",
+            "configuration": {},
+            "value": {
+              "document": null,
+              "uuid": null
+            },
+            "level": 3,
+            "title": "",
+            "hint": "",
+            "flags": {}
+          },
+          "o3OKm1MVhtL1ZIIz": {
+            "_id": "o3OKm1MVhtL1ZIIz",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "saves:wis",
+                "saves:cha"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "defense check Proficiencies",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          "aKZkHc9zHfV0iGxJ": {
+            "_id": "aKZkHc9zHfV0iGxJ",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [],
+              "choices": [
+                {
+                  "count": 3,
+                  "pool": [
+                    "skills:ins",
+                    "skills:prc",
+                    "skills:rel",
+                    "skills:arc",
+                    "skills:per",
+                    "skills:inv",
+                    "skills:prf",
+                    "skills:sur"
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Skill Proficiencies",
+            "hint": "Choose three skills from Insight (Soul) (Soul), Perception (Mind) (Mind), Faith (Soul), Occult (Mind), Diplomacy (Presence), Investigation (Mind) (Mind), Performance (Presence) (Presence), and Athletics (Violence) (Body).",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          "hK17RQadRRGZs06O": {
+            "_id": "hK17RQadRRGZs06O",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "weapon:sim"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Weapon Proficiencies",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          "m9tpw0gZGDj6oLJx": {
+            "_id": "m9tpw0gZGDj6oLJx",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "armor:lgt"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Armor Training",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          "14ef4b30d6b804ea": {
+            "_id": "14ef4b30d6b804ea",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.91dc5101e44cc01b",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": {
+                "ability": "",
+                "preparation": "",
+                "uses": {
+                  "max": "",
+                  "per": ""
+                }
+              }
+            },
+            "value": {},
+            "level": 1,
+            "title": "Dreamwalker Discipline (Tier 1 — Oneiric Reservoir)",
+            "icon": "",
+            "classRestriction": "",
+            "hint": "",
+            "flags": {}
+          },
+          "cf74de5c27701ca5": {
+            "_id": "cf74de5c27701ca5",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.e22a0f248b11df6a",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": {
+                "ability": "",
+                "preparation": "",
+                "uses": {
+                  "max": "",
+                  "per": ""
+                }
+              }
+            },
+            "value": {},
+            "level": 5,
+            "title": "Dreamwalker Discipline (Tier 2 — Dream-Cache)",
+            "icon": "",
+            "classRestriction": "",
+            "hint": "",
+            "flags": {}
+          },
+          "18c62314c7f7ac0f": {
+            "_id": "18c62314c7f7ac0f",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.4ea57d63c8f5db28",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": {
+                "ability": "",
+                "preparation": "",
+                "uses": {
+                  "max": "",
+                  "per": ""
+                }
+              }
+            },
+            "value": {},
+            "level": 11,
+            "title": "Dreamwalker Discipline (Tier 3 — The Walking Lane (Signature Mode))",
+            "icon": "",
+            "classRestriction": "",
+            "hint": "",
+            "flags": {}
+          },
+          "70eb7b4901b11b56": {
+            "_id": "70eb7b4901b11b56",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.40b52c149fd8f1ed",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": {
+                "ability": "",
+                "preparation": "",
+                "uses": {
+                  "max": "",
+                  "per": ""
+                }
+              }
+            },
+            "value": {},
+            "level": 17,
+            "title": "Dreamwalker Discipline (Tier 4 — Shared Dream)",
+            "icon": "",
+            "classRestriction": "",
+            "hint": "",
+            "flags": {}
+          }
+        },
+        "startingEquipment": [],
+        "hd": {
+          "additional": "",
+          "denomination": "d8",
+          "spent": 0
+        },
+        "levels": 1,
+        "primaryAbility": {
+          "value": [
+            "wis"
+          ],
+          "all": false
+        },
+        "properties": [],
+        "spellcasting": {
+          "progression": "full",
+          "ability": "wis",
+          "preparation": {
+            "formula": "@wis.mod + @classes.dreamwalker.levels"
+          }
+        },
+        "wealth": ""
+      },
+      "effects": [],
+      "folder": "Jnvq4R9WS9xhsS3k",
+      "flags": {
+        "bbttcc": {
+          "primary": "wisdom",
+          "opBonus": {
+            "faith": 2,
+            "softPower": 1
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423985190,
+        "modifiedTime": 1792989613682,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "0b4oc8vI8llomRbC",
+      "sort": 100000
+    },
+    {
+      "name": "Trance of the Quiet Sun (Bad Eden)",
+      "type": "subclass",
+      "img": "icons/magic/control/hypnosis-mesmerism-eye-tan.webp",
+      "system": {
+        "category": "doctrine",
+        "classIdentifier": "dreamwalker",
+        "source": {
+          "custom": "Bad Eden Originals — Sprint F",
+          "revision": 1,
+          "rules": "2026"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"Stillness is the loudest thing.\"</em></p>\n<p><strong>Mode:</strong> Contemplative</p>\n<p>The Quiet Sun is the dreamer who stops the room by going still. Your Surge spends turn perception and patience into mechanics — seeing clearly, refusing a death, and forcing a beat of peace into a fight that didn't ask for one.</p>\n<h3>Trance (spent via Surge)</h3>\n<ul>\n  <li><strong>Still Attention</strong> (1) — you and allies within 6 squares bank a reroll-lowest.</li>\n  <li><strong>Somnolent Peace</strong> (2) — the next lethal blow against an ally drops them to 1 Integrity (unconscious), not dead.</li>\n  <li><strong>Radiant Pause</strong> (3) — nearby enemies are Calmed: a contemplative beat where violence stalls.</li>\n</ul>\n<p><em>Out-of-combat:</em> Somnolent Peace, Stillness Between, Lull the Riot, Quiet March, Daybreak and Solar Stillpoint remain the strategic flourishes.</p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc-dreamwalker-quiet-sun",
+        "advancement": [],
+        "spellcasting": {
+          "progression": "none",
+          "preparation": {}
+        }
+      },
+      "effects": [],
+      "folder": "11soLvLsTohdUQFT",
+      "flags": {
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "x3VbaikD5XY7hrbs",
+      "sort": 500000,
+      "_stats": {
+        "systemId": "fourththing",
+        "coreVersion": "14.369",
+        "createdTime": 1791423985190,
+        "modifiedTime": 1792989613683,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "systemVersion": "0.6.37",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Dreamwalker: Tier 1 — Oneiric Reservoir",
+      "type": "feat",
+      "img": "icons/sundries/flags/banner-standard-moon.webp",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Oneiric Reservoir.</strong> Your Clarity maximum is +2. On Soma Break you recover Clarity equal to your tier instead of the flat default. Detect Spark resonance in adjacent hexes (carryover).</p><p><span style=\"opacity: 0.7; font-size: 0.85em\">Discipline (passive): Clarity max +2.</span> <span style=\"opacity: 0.7; font-size: 0.85em\">Skill rank +1 in Perception and Faith.</span></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Oneiric Reservoir</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> Passive  ·  <strong>Action:</strong> —  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Clarity max +2. On Soma Break recover Clarity equal to your tier (instead of flat default). Detect Spark resonance in adjacent hexes (carryover).</span></p></div>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "advancement": {},
+        "identifier": "dw_t1_oneiric_reservoir",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "Dreamwalker 1",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "YLUIFZ5nPOUSaSH2",
+      "flags": {
+        "fourththing": {
+          "discipline": {
+            "passive": {
+              "clarityMaxBonus": 2
+            }
+          },
+          "vocabScrub": "2026-05-16"
+        },
+        "bbttcc": {},
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423985190,
+        "modifiedTime": 1792989613683,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "FfjbrCVlJ9OYLg19",
+      "sort": 343750
+    },
+    {
+      "name": "Dreamwalker: Tier 2 — Dream-Cache",
+      "type": "feat",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 2 — Dream-Cache.</strong> Between scenes, you may bank one manifestation in a dream slot. The next scene, deploy it without paying Clarity — you still pay upkeep from your live pool.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (passive): Clarity max +1 (stacks with Tier 1 to total +3).</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Carryover: while you carry an active Dream-Cache, you reroll the lowest die on checks vs. illusion / fear / corruption (the cached manifestation is itself a hedge against unreality).</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwT2\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Dream-Cache</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene (between) &nbsp;·&nbsp; <strong>Action:</strong> Free (between scenes) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Bank one manifestation in a dream slot between scenes; deploy next scene without paying Clarity (still pay upkeep). While the cache is active, reroll lowest on checks vs. illusion / fear / corruption.</div>\n</div>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "advancement": {},
+        "identifier": "dw_t2_dream_cache",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 5
+        },
+        "properties": [],
+        "requirements": "Dreamwalker 5",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "YLUIFZ5nPOUSaSH2",
+      "flags": {
+        "fourththing": {
+          "discipline": {
+            "passive": {
+              "clarityMaxBonus": 1
+            }
+          }
+        },
+        "bbttcc": {},
+        "dnd5e": {},
+        "autoanimations": {
+          "id": "eb4df3fe-0a7f-4b38-9002-1ee5832fd7be",
+          "label": "Dreamwalker: Tier 2 — Dream-Cache",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423985191,
+        "modifiedTime": 1792989613683,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "j2GNP9aBjyH4TX5m",
+      "sort": 381250
+    },
+    {
+      "name": "Dreamwalker: Tier 3 — The Walking Lane (Signature Mode)",
+      "type": "feat",
+      "img": "icons/magic/nature/root-vine-beanstalk-moon.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 3 — The Walking Lane (Signature Mode).</strong> Stance. While the Lane is open, your sustained manifestations reach into adjacent realms (astral / dream / memory) — ignore one band of cover or distance for any one effect per round, and the GM is invited to attach a narrative hook (someone notices you went somewhere). Pays ongoing upkeep.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (mode <code>dwWalkingLane</code>): while ON, no engine deltas (the Lane is narrative reach + GM hint at this pilot stage). Click this feature on the sheet to toggle the stance.</p>\n<p><em>Pilot: lock exact upkeep curve and break condition after one playtest cycle.</em></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwMode\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>The Walking Lane</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Stance (signature) &nbsp;·&nbsp; <strong>Action:</strong> Action (open / drop) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">While open, sustained manifestations reach into adjacent realms — ignore one band of cover or distance for one effect per round. GM may attach a narrative hook (someone notices you went somewhere). Pays ongoing upkeep.</div>\n</div>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "advancement": {},
+        "identifier": "dw_mode_walking_lane",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 11
+        },
+        "properties": [],
+        "requirements": "Dreamwalker 11",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "YLUIFZ5nPOUSaSH2",
+      "flags": {
+        "fourththing": {
+          "discipline": {
+            "mode": {
+              "key": "dwWalkingLane",
+              "grants": {}
+            }
+          }
+        },
+        "bbttcc": {},
+        "dnd5e": {},
+        "autoanimations": {
+          "id": "1e82d706-9391-4ea4-b495-c6db740636ac",
+          "label": "Dreamwalker: Tier 3 — The Walking Lane (Signature Mode)",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "loop",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423985191,
+        "modifiedTime": 1792989613684,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "7nar53mWs4SHTOxe",
+      "sort": 359375
+    },
+    {
+      "_id": "AVD6breZB30TBq1L",
+      "name": "Enduring Focus",
+      "type": "feat",
+      "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Core Feats v1",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Enduring Focus</h2><p><em>You hold your will together when others lose it.</em></p><hr /><h3>Rules</h3><p>You reroll the lowest die on Body checks made to maintain Clarity hold. Additionally, you can shape a working’s gestures even with weapons or a shield in hand.</p><p class=\"ft-engine-note\"><em>⚙ Body checks reroll the lowest die; the Clarity-hold gate is read by the GM.</em></p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_enduring_focus",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-core-v1",
+          "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "vs": "maintaining a Clarity hold",
+              "note": "Enduring Focus"
+            }
+          ]
+        }
+      },
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 4100000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423985191,
+        "modifiedTime": 1792989613684,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+      }
+    },
+    {
+      "name": "Steady Hand",
+      "type": "feat",
+      "img": "icons/magic/defensive/shield-barrier-glowing-blue.webp",
+      "folder": "QbGNBV70xh9pF0eh",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "BBTTCC Manifestation Techniques v1",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<h2>Steady Hand</h2><p><em>When it goes wrong, your discipline pulls the backlash short.</em></p><hr /><h3>Rules</h3><p>When a manifestation misfires, the result lands <strong>one band safer</strong> — your control biases the backlash toward the mild end of the table.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">⚙ Applies automatically: misfire band shifted −1 (safer).</p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_steady_hand",
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-manifestation-techniques-v1",
+          "theme": "Misfire & risk"
+        },
+        "fourththing": {
+          "discipline": {
+            "passive": {
+              "misfireBandShift": -1
+            }
+          }
+        }
+      },
+      "_id": "kGHiXoYjQg8namfd",
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791423985191,
+        "modifiedTime": 1791423985191,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Quantum Staff",
+      "type": "weapon",
+      "img": "icons/weapons/staves/staff-simple-jeweled-green.webp",
+      "_id": "XYk6nIRvXO3GExPa",
+      "effects": [],
+      "folder": "TNrB6kEiHS0KwwJT",
+      "sort": 106250,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423985192,
+        "modifiedTime": 1792989119184,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "system": {
+        "category": "melee",
+        "intent": "mind",
+        "skill": "channel",
+        "damage": {
+          "formula": "1d10",
+          "attribute": "mind",
+          "type": "thermal",
+          "damageFlavor": "hot",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 2,
+          "long": 2,
+          "units": "sq"
+        },
+        "tags": [
+          "staff",
+          "quantum",
+          "two-handed",
+          "techno"
+        ],
+        "effect": "Reach 2 squares. The head exists in a small superposition: once per turn, if your attack misses, you may reroll it (it turns out it landed in the timeline where it connected). Reach attacks count as melee.",
+        "flavor": "Certainty is a luxury. So is dodging.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>A length of focusing-lens and witness-glass wound around a heart-coil that never quite decides where its business end is. Strikes register a half-second before and after they happen, which is unsettling for everyone, the wielder included.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Reach 2 squares. The head exists in a small superposition: once per turn, if your attack misses, you may reroll it (it turns out it landed in the timeline where it connected). Reach attacks count as melee.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d10 Thermal damage to <em>Integrity</em> <span style=\"opacity:.75\">(hot)</span></li>\n  <li><strong>Faculty:</strong> Mind</li>\n  <li><strong>Attack:</strong> Melee (Mind)</li>\n  <li><strong>Range:</strong> 2 squares (reach)</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T2</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "footprint": 1,
+              "reach": "10",
+              "frame": "weapon",
+              "signature": "It hits you, and the you from a second ago, just to be sure.",
+              "origin": "crafted",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>A length of focusing-lens and witness-glass wound around a heart-coil that never quite decides where its business end is. Strikes register a half-second before and after they happen, which is unsettling for everyone, the wielder included.</p>",
+              "materialOf": [
+                "focusing-lens",
+                "witness-glass",
+                "heart-coil"
+              ],
+              "price": {
+                "marks": 300,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII quantum staff",
+                "bound": "free",
+                "saleBack": 120
+              }
+            }
+          },
+          "manifestSheetMode": {
+            "bytUGWIOqq9eT7Or": "display"
+          },
+          "equipped": true
+        },
+        "autoanimations": {
+          "id": "5f1f946c-0c6a-4e87-8b69-1c40bcfb0116",
+          "label": "Quantum Staff",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "staff",
+              "variant": "01",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5,
+          "meleeSwitch": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "arrow",
+              "variant": "regular",
+              "color": "regular",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "detect": "automatic",
+              "range": 2,
+              "returning": false,
+              "switchType": "on"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Septhide Vestments",
+      "type": "armor",
+      "img": "icons/equipment/chest/vest-bulletproof-body-armor.webp",
+      "system": {
+        "guardBonus": 2,
+        "evasionBonus": 1,
+        "resolveBonus": 2,
+        "resistances": [
+          "qliphothic"
+        ],
+        "armorSkill": "fitting",
+        "equipped": false,
+        "tags": [
+          "light-cloth",
+          "sept-blessed",
+          "light"
+        ],
+        "category": "armor",
+        "source": "",
+        "description": {
+          "value": "<p>Layered cloth armor stitched in a sept-house. Light, breathable, embroidered with a single prayer running spine to hem.</p><p>Wards the wearer against the static the world drags in — corruption finds the cloth quieter than the body beneath.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Guard +2, Evasion +1, Resolve +2</li>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 225 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "footprint": 1,
+              "reach": "self",
+              "frame": "armor",
+              "signature": "Cloth that remembers the prayer it was woven for.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>Layered cloth armor stitched in a sept-house. Light, breathable, embroidered with a single prayer running spine to hem.</p><p>Wards the wearer against the static the world drags in — corruption finds the cloth quieter than the body beneath.</p>",
+              "materialOf": [
+                "sept-cloth",
+                "blessed-thread",
+                "prayer-resin"
+              ],
+              "grants": {
+                "resistances": [
+                  "qliphothic"
+                ]
+              },
+              "price": {
+                "marks": 225,
+                "currency": "nonlethal",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII armor stamp",
+                "bound": "free",
+                "saleBack": 90
+              }
+            }
+          },
+          "grants": {
+            "resistances": [
+              "qliphothic"
+            ]
+          },
+          "equipped": true
+        }
+      },
+      "folder": "Iyyec8ij0PAfdLBd",
+      "_id": "IhfcGMzD2jsuts9s",
+      "effects": [
+        {
+          "name": "⚙️ Defense Grant",
+          "transfer": false,
+          "disabled": false,
+          "flags": {
+            "fourththing": {
+              "defenseGrant": true
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "flags.fourththing.grant.resists",
+                "value": "qliphothic",
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.guard",
+                "value": 2,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.evasion",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.resolve",
+                "value": 2,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "lVFe9mUabaS6VJlW",
+          "img": "icons/svg/aura.svg",
+          "type": "base",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.368",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.5",
+            "createdTime": 1791423985192,
+            "modifiedTime": 1791423985192,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          }
+        }
+      ],
+      "sort": -50000,
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791423985192,
+        "modifiedTime": 1792989119184,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "effects": [],
+  "sort": 0,
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.5",
+    "createdTime": 1791423983883,
+    "modifiedTime": 1791423985437,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!eBj8fDqph8dfVkmF"
+}

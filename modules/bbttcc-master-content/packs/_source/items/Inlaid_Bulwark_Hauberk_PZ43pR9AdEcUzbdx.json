@@ -1,0 +1,108 @@
+{
+  "name": "Inlaid Bulwark Hauberk",
+  "type": "armor",
+  "img": "icons/equipment/chest/breastplate-layered-leather-black.webp",
+  "system": {
+    "guardBonus": 3,
+    "evasionBonus": 0,
+    "resolveBonus": 2,
+    "resistances": [],
+    "armorSkill": "plating",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "heavy",
+      "mail",
+      "plate",
+      "graded",
+      "grade-inlaid"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A long mail hauberk over a padded coat, with riveted plate at the chest and shoulders. The standard heavy issue for Bulwarks who haven't earned signature plate yet. Weight you have to carry. Weight that carries back.</p><p>Path-defining silhouette without path-defining cost. Surge still comes from your Bulwark features — the hauberk is just the surface it sits on.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Heavy</li>\n  <li><strong>Defense:</strong> Guard +3, Resolve +2</li>\n  <li><strong>Requires:</strong> Plating (trained)</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 225 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Inlaid (+1). Hex-inlay along the working edge.</strong></p>\n<ul>\n  <li><strong>+1 on each of its defense bonuses</strong> → Guard +3, Resolve +2 (rank-scaled like all armor: Trained half, Proficient full).</li>\n  <li>Grade raises it to <strong>Tier II</strong> · free to wield.</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Heavy enough to remind you you're standing somewhere on purpose.",
+          "origin": "forged",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A long mail hauberk over a padded coat, with riveted plate at the chest and shoulders. The standard heavy issue for Bulwarks who haven't earned signature plate yet. Weight you have to carry. Weight that carries back.</p><p>Path-defining silhouette without path-defining cost. Surge still comes from your Bulwark features — the hauberk is just the surface it sits on.</p>",
+          "materialOf": [
+            {
+              "key": "mail",
+              "qty": 1
+            },
+            {
+              "key": "rivet-plate",
+              "qty": 1
+            },
+            {
+              "key": "padded-coat",
+              "qty": 1
+            },
+            {
+              "key": "sept-silver",
+              "qty": 1
+            }
+          ],
+          "price": {
+            "marks": 225,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII armor (Inlaid +1 on TI Bulwark Hauberk) × bound free",
+            "bound": "free",
+            "saleBack": 90
+          }
+        }
+      },
+      "grade": {
+        "rank": 1,
+        "name": "Inlaid",
+        "key": "inlaid",
+        "defense": 1
+      }
+    }
+  },
+  "folder": "paUl8Tj6Xx5fAkKN",
+  "_id": "PZ43pR9AdEcUzbdx",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1791427797923,
+    "modifiedTime": 1792988956935,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!PZ43pR9AdEcUzbdx"
+}

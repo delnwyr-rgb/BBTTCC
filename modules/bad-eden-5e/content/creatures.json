@@ -3,7 +3,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-14",
+    "at": "2026-10-26",
     "overridesApplied": 0
   },
   "actors": [
@@ -23202,7 +23202,7 @@
         },
         "details": {
           "biography": {
-            "value": "<p><p>Master of the Wastes' torture pits: a tall, emaciated figure of blackened charcoal skin glowing from within, needle teeth, and a long whip of solidified flame. Flayers patrol the sites of old atrocities, drawn to the lingering psychic residue of pain, and their greatest joy is an echo — a scream coming back off the desolation.</p><p><strong>Qliphah:</strong> Golachab, the Pyres — the Hull of Gevurah. Severity unmoored from judgment: burning cruelty for its own sake.</p><p><em>Mal's note: 'It is an artist, and you are the medium. Deny it an audience: fight quiet.'</em></p></p><p><strong>Lineage:</strong> qliphothic (golachab) · <strong>Tier II</strong>, medium · Qliphothic Tormentor (Golachab — Lesser) · bounty 15 marks, hire 25</p>",
+            "value": "<p><p>Master of the Wastes' torture pits: a tall, emaciated figure of blackened charcoal skin glowing from within, needle teeth, and a long whip of solidified flame. Flayers patrol the sites of old atrocities, drawn to the lingering psychic residue of pain, and their greatest joy is an echo — a scream coming back off the desolation.</p><p><strong>Qliphah:</strong> Golachab, the Pyres — the Hull of Geburah. Severity unmoored from judgment: burning cruelty for its own sake.</p><p><em>Mal's note: 'It is an artist, and you are the medium. Deny it an audience: fight quiet.'</em></p></p><p><strong>Lineage:</strong> qliphothic (golachab) · <strong>Tier II</strong>, medium · Qliphothic Tormentor (Golachab — Lesser) · bounty 15 marks, hire 25</p>",
             "public": ""
           },
           "alignment": "",
@@ -23670,7 +23670,7 @@
               },
               "qliphah": {
                 "name": "golachab",
-                "hullOf": "gevurah",
+                "hullOf": "geburah",
                 "grade": "lesser"
               },
               "lineage": "qliphothic",
@@ -23698,7 +23698,7 @@
             "id": "QphIxEIKKyq8HLgf",
             "pack": "npcs",
             "identifier": "Golachab Flayer",
-            "hash": "6696b994c543"
+            "hash": "cc7d52a4dab9"
           }
         }
       }
@@ -23854,7 +23854,7 @@
         },
         "details": {
           "biography": {
-            "value": "<p><em>T4 medium · qliphothic (Golachab). Wrath given a furnace body: the hollow where Geburah's judgement should be, burning without anything to judge. A fair fight for one Tier-IV character, three or four rounds, and it will try to make them angry first.</em></p><p>Golachab is the hull of Geburah — severity with the justice scooped out. An Immolator is what is left when that hollow finds a body: a furnace shaped like a man, running on nothing but the heat of being wronged. It cannot say what wronged it. It burns whatever is nearest and calls that fairness. The Lost Statues of Gevurah draw them the way a hearth draws moths; the Garden count has twice gone up by one Immolator and down by two statues.</p><p><strong>Lineage:</strong> qliphothic (golachab) · <strong>Tier IV</strong>, medium · brute · bounty 60 marks, hire 90</p>",
+            "value": "<p><em>T4 medium · qliphothic (Golachab). Wrath given a furnace body: the hollow where Geburah's judgement should be, burning without anything to judge. A fair fight for one Tier-IV character, three or four rounds, and it will try to make them angry first.</em></p><p>Golachab is the hull of Geburah — severity with the justice scooped out. An Immolator is what is left when that hollow finds a body: a furnace shaped like a man, running on nothing but the heat of being wronged. It cannot say what wronged it. It burns whatever is nearest and calls that fairness. The Lost Statues of Geburah draw them the way a hearth draws moths; the Garden count has twice gone up by one Immolator and down by two statues.</p><p><strong>Lineage:</strong> qliphothic (golachab) · <strong>Tier IV</strong>, medium · brute · bounty 60 marks, hire 90</p>",
             "public": ""
           },
           "alignment": "",
@@ -24439,7 +24439,7 @@
             "id": "kpkoeR7Tedyvqs4c",
             "pack": "npcs",
             "identifier": "Golachab Immolator",
-            "hash": "09c3bc69813a"
+            "hash": "29a7d8fa09a2"
           }
         }
       }
@@ -31108,7 +31108,7 @@
         },
         "details": {
           "biography": {
-            "value": "<p><p>Not a creature of flesh but a conflagration of pure hate: a sentient cataclysm born from an act of mass immolation, forever bound to the agony of its own creation. A swirling vortex of emerald-green soulfire, its flames crowded with the screaming psychic impressions of everyone it has ever burned. It does not merely want to burn you — it wants you to feel all of them.</p><p><strong>Qliphah:</strong> Golachab, the Pyres — the Hull of Gevurah. The executioner's fire that never learned to stop.</p><p><em>Mal's note: 'Green fire that screams. Every instinct you have about water is wrong and it knows.'</em></p></p><p><strong>Lineage:</strong> qliphothic (golachab) · <strong>Tier IV</strong>, heavy · Qliphothic Cataclysm (Golachab — Greater) · bounty 80 marks, hire 120</p>",
+            "value": "<p><p>Not a creature of flesh but a conflagration of pure hate: a sentient cataclysm born from an act of mass immolation, forever bound to the agony of its own creation. A swirling vortex of emerald-green soulfire, its flames crowded with the screaming psychic impressions of everyone it has ever burned. It does not merely want to burn you — it wants you to feel all of them.</p><p><strong>Qliphah:</strong> Golachab, the Pyres — the Hull of Geburah. The executioner's fire that never learned to stop.</p><p><em>Mal's note: 'Green fire that screams. Every instinct you have about water is wrong and it knows.'</em></p></p><p><strong>Lineage:</strong> qliphothic (golachab) · <strong>Tier IV</strong>, heavy · Qliphothic Cataclysm (Golachab — Greater) · bounty 80 marks, hire 120</p>",
             "public": ""
           },
           "alignment": "",
@@ -31964,7 +31964,7 @@
               },
               "qliphah": {
                 "name": "golachab",
-                "hullOf": "gevurah",
+                "hullOf": "geburah",
                 "grade": "greater"
               },
               "lineage": "qliphothic",
@@ -31996,7 +31996,7 @@
             "id": "vpPWkftzLsEwoY9k",
             "pack": "npcs",
             "identifier": "Inferno of Cruelty",
-            "hash": "67a0f8f0374b"
+            "hash": "1a4495ff20aa"
           }
         }
       }

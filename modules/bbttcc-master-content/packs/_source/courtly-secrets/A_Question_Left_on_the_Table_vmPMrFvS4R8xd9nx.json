@@ -1,0 +1,45 @@
+{
+  "_id": "vmPMrFvS4R8xd9nx",
+  "name": "A Question Left on the Table",
+  "type": "feat",
+  "img": "icons/sundries/documents/document-symbol-person-brown.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>A Question Left on the Table.</strong> No accusation. Just a question, asked loudly enough, that nobody present can answer without naming someone.</p><p><em>Play:</em> +2 Suspicion — the court destabilizes (defection favors the Influence leader).</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "stirThePot",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3000000,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989014761,
+    "modifiedTime": 1792989014762,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!vmPMrFvS4R8xd9nx"
+}

@@ -1,23 +1,23 @@
 {
+  "_id": "eNi1uCWJUfkKDdUU",
+  "name": "Archivist of Precedent",
   "type": "Item",
   "folder": "qibebTsekqPdgSKt",
-  "name": "Archivist of Precedent",
-  "color": null,
   "sorting": "a",
-  "_id": "eNi1uCWJUfkKDdUU",
+  "color": null,
   "description": "",
   "sort": 0,
   "flags": {},
   "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792907875307,
+    "modifiedTime": 1792907875307,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR",
     "compendiumSource": null,
     "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.360",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.0",
-    "createdTime": 1776459908963,
-    "modifiedTime": 1776459908963,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "exportSource": null
   },
-  "_key": "!folders!KPLHk8VtCoaVM95K"
+  "_key": "!folders!eNi1uCWJUfkKDdUU"
 }

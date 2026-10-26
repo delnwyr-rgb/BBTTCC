@@ -7,43 +7,79 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>When the shambler first drops below half its Integrity, each hostile creature within 2 squares must succeed on a DC 14 Body check or be poisoned until the end of its next turn.</p>",
+      "value": "<p>When the shambler first drops below half Integrity, each hostile creature within 2 squares must succeed a Body check vs DC 14 or take 1d6 poison damage and roll twice-keep-worse on attacks until the end of its next turn.</p>",
       "chat": ""
     }
   },
-  "_id": "iQpkyaLMZktDpNCl",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "bloodied",
+            "do": {
+              "save": {
+                "attr": "body",
+                "dc": 14,
+                "onSave": "negate"
+              }
+            },
+            "radius": 2,
+            "who": "enemies"
+          },
+          {
+            "on": "saveFail",
+            "do": {
+              "damage": {
+                "formula": "1d6",
+                "type": "poison"
+              },
+              "impose": true
+            },
+            "if": {
+              "weapon": "Sloughing Filth"
+            }
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
-          "Qlipothic Shambler"
+          "Qliphothic Shambler"
+        ],
+        "sourceIds": [
+          "dskzJNdpkiTFEbik"
         ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "iQpkyaLMZktDpNCl",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167245006,
-    "modifiedTime": 1782167245006,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989045522,
+    "modifiedTime": 1792989045522,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!iQpkyaLMZktDpNCl"
 }

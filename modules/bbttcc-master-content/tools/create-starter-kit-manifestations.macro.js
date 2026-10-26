@@ -97,7 +97,7 @@ const SPECS_NONTCC = [
     intent: "violence", category: "melee", skill: "melee",
     damageFormula: "2d6", damageType: "kinetic", damageTrack: "integrity",
     rangeShort: 1, rangeLong: 1,
-    sephirah: "gevurah", channel: "body",
+    sephirah: "geburah", channel: "body",
     appliedStates: states(["staggered"], { saveAttribute: "body" }),
     concept: "A door-sized section of brutalist wall from a building that never existed, worn on the forearm. It has strong opinions about standing between you and things.",
     effect: "Melee attack: 2d6 kinetic (integrity). On hit: Body defense vs Cast DC or Staggered for 1 round.",
@@ -122,7 +122,7 @@ const SPECS_NONTCC = [
   {
     name: "Pressure Front",
     kind: "power", path: "bulwark", doctrine: "bbttcc-bulwark-avalanche", tier: 1,
-    intent: "violence", channel: "body", sephirah: "gevurah",
+    intent: "violence", channel: "body", sephirah: "geburah",
     form: "field", func: "harm", stability: "sustained", interactionModel: "zone",
     scale: "scene", duration: "action", target: "area",
     damageRoll: dmg(1, "d6", "kinetic", "integrity", "violence", "advancing weight"),
@@ -184,7 +184,7 @@ const SPECS_NONTCC = [
     intent: "violence", category: "melee", skill: "melee",
     damageFormula: "2d6", damageType: "energy", damageTrack: "integrity",
     rangeShort: 1, rangeLong: 1,
-    sephirah: "gevurah", channel: "body",
+    sephirah: "geburah", channel: "body",
     appliedStates: states(["burning"], { saveAttribute: "body" }),
     concept: "The same aura, run hot — a brand of righteous heat that says the quiet part with fire.",
     effect: "Melee attack: 2d6 energy (integrity). On hit: Body defense vs Cast DC or Burning for 1 round.",
@@ -194,7 +194,7 @@ const SPECS_NONTCC = [
   {
     name: "Hymn of the Open Vein",
     kind: "power", path: "aurablade", doctrine: "bbttcc-aurablade-blood-hymn", tier: 1,
-    intent: "presence", channel: "body", sephirah: "gevurah",
+    intent: "presence", channel: "body", sephirah: "geburah",
     form: "rite", func: "protect", stability: "sustained", interactionModel: "mark",
     scale: "personal", duration: "scene", target: "self",
     damageRoll: dmg(0),
@@ -481,7 +481,7 @@ const SPECS_CL_PK = [
   {
     name: "Strikethrough",
     kind: "power", path: "cosmic_linguist", doctrine: "", tier: 1,
-    intent: "intrigue", channel: "mind", sephirah: "gevurah",
+    intent: "intrigue", channel: "mind", sephirah: "geburah",
     form: "sigil", func: "harm", stability: "instant", interactionModel: "event",
     scale: "personal", duration: "instant", target: "single", rangeFt: 30,
     damageRoll: dmg(1, "d6", "psychic", "stress", "intrigue", "one load-bearing word, deleted"),
@@ -606,7 +606,7 @@ const SPECS_CL_PK = [
   {
     name: "Redacted",
     kind: "power", path: "cosmic_linguist", doctrine: "bbttcc-cosmic-linguist-linguist-redactor", tier: 1,
-    intent: "intrigue", channel: "mind", sephirah: "gevurah",
+    intent: "intrigue", channel: "mind", sephirah: "geburah",
     form: "sigil", func: "command", stability: "instant", interactionModel: "event",
     scale: "personal", duration: "instant", target: "single", rangeFt: 30,
     damageRoll: dmg(0),
@@ -619,7 +619,7 @@ const SPECS_CL_PK = [
   {
     name: "The Delete Key",
     kind: "power", path: "cosmic_linguist", doctrine: "bbttcc-cosmic-linguist-linguist-redactor", tier: 1,
-    intent: "intrigue", channel: "mind", sephirah: "gevurah",
+    intent: "intrigue", channel: "mind", sephirah: "geburah",
     form: "sigil", func: "harm", stability: "instant", interactionModel: "event",
     scale: "personal", duration: "instant", target: "single", rangeFt: 30,
     damageRoll: dmg(1, "d6", "psychic", "stress", "intrigue", "one word of theirs, gone"),
@@ -675,7 +675,7 @@ const SPECS_CL_PK = [
   {
     name: "Penalty Clause",
     kind: "power", path: "pactkeeper", doctrine: "", tier: 1,
-    intent: "presence", channel: "soul", sephirah: "gevurah",
+    intent: "presence", channel: "soul", sephirah: "geburah",
     form: "sigil", func: "harm", stability: "instant", interactionModel: "event",
     scale: "personal", duration: "instant", target: "single", rangeFt: 30,
     damageRoll: dmg(1, "d6", "qliphothic", "stress", "presence", "the lie cuts him"),
@@ -760,7 +760,7 @@ const SPECS_CL_PK = [
   {
     name: "Court of Seven",
     kind: "power", path: "pactkeeper", doctrine: "bbttcc-pactkeeper-auditor", tier: 1,
-    intent: "presence", channel: "soul", sephirah: "gevurah",
+    intent: "presence", channel: "soul", sephirah: "geburah",
     form: "rite", func: "command", stability: "sustained", interactionModel: "zone",
     scale: "scene", duration: "scene", target: "area", rangeFt: 30,
     maintenanceKey: "1-clarity-scene",
@@ -775,7 +775,7 @@ const SPECS_CL_PK = [
   {
     name: "Sanction Protocol",
     kind: "power", path: "pactkeeper", doctrine: "bbttcc-pactkeeper-auditor", tier: 1,
-    intent: "intrigue", channel: "mind", sephirah: "gevurah",
+    intent: "intrigue", channel: "mind", sephirah: "geburah",
     form: "sigil", func: "harm", stability: "instant", interactionModel: "event",
     scale: "personal", duration: "instant", target: "single", rangeFt: 30,
     damageRoll: dmg(1, "d4", "psychic", "stress", "intrigue", "irregularities, itemized"),
@@ -789,7 +789,7 @@ const SPECS_CL_PK = [
   {
     name: "Freeze Assets",
     kind: "power", path: "pactkeeper", doctrine: "bbttcc-pactkeeper-auditor", tier: 1,
-    intent: "presence", channel: "soul", sephirah: "gevurah",
+    intent: "presence", channel: "soul", sephirah: "geburah",
     form: "sigil", func: "bind", stability: "instant", interactionModel: "event",
     scale: "personal", duration: "instant", target: "single", rangeFt: 30,
     damageRoll: dmg(0),

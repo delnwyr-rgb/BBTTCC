@@ -1,0 +1,53 @@
+{
+  "name": "Spot Clean (bonus)",
+  "type": "feature",
+  "img": "icons/tools/hand/brush-paint-brown-white.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "rfi-scrubbed"
+    ],
+    "description": {
+      "value": "<p><strong>Bonus action.</strong> Gilbert moves up to half his speed without provoking reaction strikes, provided he moves toward spilled terrain, rubble, loose objects, or the nearest aesthetically offensive creature.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "_id": "9jed0CIPayHYHTDv",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gilbert, Attendant Eternal"
+        ],
+        "sourceIds": [
+          "LQS2jaeFhzFMDpxA"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989069968,
+    "modifiedTime": 1792989070048,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!9jed0CIPayHYHTDv"
+}

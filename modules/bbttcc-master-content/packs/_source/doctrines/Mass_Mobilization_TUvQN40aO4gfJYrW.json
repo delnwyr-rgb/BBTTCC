@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Mass Mobilization</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> violence 40, logistics 20, economy 10</p></div>",
+      "value": "<p><strong>Mass Mobilization</strong></p><p>Domain-wide. Your your next Battle or Heist rolls initiative rerolling the lowest die and gets one free maneuver.</p><p><em>Cost: Violence 40 · Logistics 20 · Economy 10 marks.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "mass_mobilization_std"
+      "key": "mass_mobilization_std",
+      "effects": {
+        "text": "Domain-wide. Your your next Battle or Heist rolls initiative rerolling the lowest die and gets one free maneuver."
+      }
     }
   },
   "_id": "TUvQN40aO4gfJYrW",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601763,
-    "modifiedTime": 1782703702692,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989007242,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

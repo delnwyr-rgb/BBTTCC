@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank with Medium Armor and one Martial Weapon of your choice.</li><li><strong>Strategic:</strong> Your faction starts with +1 Violence OPs.</li></ul>",
+      "value": "<p><strong>Tier 1 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Plating and Melee.</li><li><strong>Strategic:</strong> Your Domain's Violence marks cap rises by 10.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-mercenary-band-t1",
@@ -37,7 +37,60 @@
       "level": null
     }
   },
-  "effects": [],
+  "effects": [
+    {
+      "_id": "tRrnJrvsdat7Y8I5",
+      "name": "Mercenary Band T1 Skills",
+      "img": "icons/commodities/currency/coin-embossed-sword-copper.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.plating.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "system.skills.melee.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989167970,
+        "modifiedTime": 1792989167970,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
   "folder": "m4EIJI3cE6QISpe4",
   "flags": {
     "bbttcc-character-options": {
@@ -72,6 +125,11 @@
           "bbttcc:theme:paid-force"
         ]
       }
+    },
+    "fourththing": {
+      "domainCapBonus": {
+        "violence": 10
+      }
     }
   },
   "_stats": {
@@ -84,12 +142,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986954715,
-    "modifiedTime": 1782167238946,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989167883,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

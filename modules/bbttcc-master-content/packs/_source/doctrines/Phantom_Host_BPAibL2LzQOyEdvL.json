@@ -7,31 +7,34 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Phantom Host</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> intrigue 15, faith 10</p></div>",
+      "value": "<p><strong>Phantom Host</strong></p><p>Siege, defender; needs a Dreamwalker on your roster. A phantom host walks the siege lines: the besiegers' Buffer −2 marks; your Loyalty +1. In the clash: 15 marks from the garrison's bank.</p><p><em>Queued on the turn: Intrigue 15 · Faith 10 marks. Fired in the clash: 15 marks from the garrison's bank.</em></p>",
       "chat": ""
     }
   },
   "flags": {
     "bbttcc": {
       "kind": "strategic",
-      "key": "cls_dreamwalker"
+      "key": "cls_dreamwalker",
+      "effects": {
+        "text": "Siege, defender; needs a Dreamwalker on your roster. A phantom host walks the siege lines: the besiegers' Buffer −2 marks; your Loyalty +1. In the clash: 15 marks from the garrison's bank."
+      }
     }
   },
   "_id": "BPAibL2LzQOyEdvL",
   "effects": [],
-  "folder": null,
+  "folder": "UpsmhFcQUtMCrYu2",
   "sort": 0,
   "ownership": {
     "default": 0,
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1782702601773,
-    "modifiedTime": 1782703702693,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989008327,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

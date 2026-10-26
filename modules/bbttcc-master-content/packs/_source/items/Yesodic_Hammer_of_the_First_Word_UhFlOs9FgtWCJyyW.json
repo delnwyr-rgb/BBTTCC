@@ -7,7 +7,7 @@
     "intent": "violence",
     "skill": "melee",
     "damage": {
-      "formula": "1d12+2",
+      "formula": "2d10 + 2",
       "attribute": "violence",
       "type": "sephirotic",
       "damageFlavor": "first-cause",
@@ -16,7 +16,8 @@
     "damageParts": [],
     "range": {
       "short": 1,
-      "long": 1
+      "long": 1,
+      "units": "sq"
     },
     "tags": [
       "yesodic",
@@ -25,7 +26,7 @@
       "resonant",
       "attunement"
     ],
-    "effect": "Memory Edge, Adaptive Weight, Identity Cut. Resonant: the first strike of an exchange echoes; targets within 5 ft hear their own name.",
+    "effect": "Memory Edge: once per scene, after a roll resolves, add +1 to the result. Identity Cut: +1 damage die step against constructs, gates and dream-entities. Resonant: the first strike of an exchange echoes; targets within 1 square hear their own name.",
     "flavor": "Held wrong, it sings flat. Held right, the world quiets.",
     "manifestation": {
       "tier": 1,
@@ -59,7 +60,7 @@
       }
     },
     "description": {
-      "value": "<p>Two-handed maul cast from Yesodium around a sept-tuning-fork core, hafted on heart-iron and ballasted with anchor quartz.</p><p><b>Memory Edge.</b> Once per raid, after a roll resolves, add +1 margin retroactively.</p><p><b>Identity Cut.</b> +1 effective damageStep against constructs, gates, and dream-entities.</p><p><b>Adaptive Weight.</b> Wields as if balanced for the wielder, regardless of build.</p><p><i>Unharmonized: stats apply, signal abilities dormant.</i></p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Memory Edge, Adaptive Weight, Identity Cut. Resonant: the first strike of an exchange echoes; targets within 1 square hear their own name.</p>\n<ul>\n <li><strong>Damage:</strong> 1d12+2 Sephirotic damage to <em>Integrity</em> <span style=\"opacity:.75\">(first-cause)</span></li>\n <li><strong>Faculty:</strong> Violence</li>\n <li><strong>Attack:</strong> Melee (Violence)</li>\n <li><strong>Reach:</strong> Melee</li>\n <li><strong>Duration:</strong> Scene</li>\n <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+      "value": "<p>Two-handed maul cast from Yesodium around a sept-tuning-fork core, hafted on heart-iron and ballasted with anchor quartz.</p><p><b>Memory Edge.</b> Once per scene, after a roll resolves, add +1 to the result.</p><p><b>Identity Cut.</b> +1 damage die step against constructs, gates, and dream-entities.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Memory Edge: once per scene, after a roll resolves, add +1 to the result. Identity Cut: +1 damage die step against constructs, gates and dream-entities. Resonant: the first strike of an exchange echoes; targets within 1 square hear their own name.</p>\n<ul>\n <li><strong>Damage:</strong> 2d10 + 2 Sephirotic damage to <em>Integrity</em> <span style=\"opacity:.75\">(first-cause)</span></li>\n <li><strong>Faculty:</strong> Violence</li>\n <li><strong>Attack:</strong> Melee (Violence)</li>\n <li><strong>Reach:</strong> Melee</li>\n <li><strong>Duration:</strong> Scene</li>\n <li><strong>Tier:</strong> T4</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
     }
   },
   "flags": {
@@ -89,7 +90,7 @@
             "resonant": true
           },
           "requiresHarmonization": true,
-          "lore": "<p>Two-handed maul cast from Yesodium around a sept-tuning-fork core, hafted on heart-iron and ballasted with anchor quartz.</p><p><b>Memory Edge.</b> Once per raid, after a roll resolves, add +1 margin retroactively.</p><p><b>Identity Cut.</b> +1 effective damageStep against constructs, gates, and dream-entities.</p><p><b>Adaptive Weight.</b> Wields as if balanced for the wielder, regardless of build.</p><p><i>Unharmonized: stats apply, signal abilities dormant.</i></p>",
+          "lore": "<p>Two-handed maul cast from Yesodium around a sept-tuning-fork core, hafted on heart-iron and ballasted with anchor quartz.</p><p><b>Memory Edge.</b> Once per scene, after a roll resolves, add +1 to the result.</p><p><b>Identity Cut.</b> +1 damage die step against constructs, gates, and dream-entities.</p>",
           "materialOf": [
             {
               "key": "yesodium",
@@ -120,9 +121,6 @@
             "saleBack": 540
           }
         }
-      },
-      "manifestSheetMode": {
-        "bytUGWIOqq9eT7Or": "display"
       }
     },
     "autoanimations": {
@@ -337,12 +335,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137210126,
-    "modifiedTime": 1782164185976,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988936940,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

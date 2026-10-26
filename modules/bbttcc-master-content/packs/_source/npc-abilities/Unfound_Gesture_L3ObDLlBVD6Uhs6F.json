@@ -23,7 +23,7 @@
       "tier-iv",
       "role-caster"
     ],
-    "effect": "On a hit, the target must succeed a DC 16 Mind save or take their next turn from the wrong location (their token gets repositioned 20 ft. in a direction the GM chooses, before they act).",
+    "effect": "On a hit, the target must succeed a DC 16 Mind check or take their next turn from the wrong location (their token gets repositioned 4 squares. in a direction the GM chooses, before they act).",
     "flavor": "The avatar makes a sign you've never seen. The space behind you agrees with it.",
     "manifestation": {
       "tier": 1,
@@ -54,6 +54,13 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "resolution": {
+        "saveAttribute": "mind",
+        "saveDcMode": "fixed",
+        "saveDcFixed": 16,
+        "onSave": "negate",
+        "statesOnFail": true
       }
     },
     "description": {
@@ -61,7 +68,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -80,21 +86,24 @@
             "saleBack": 540
           }
         }
-      }
-    },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Avatar of the Veil"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
+      },
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "saveFail",
+            "if": {
+              "weapon": "Unfound-Gesture"
+            },
+            "do": {
+              "push": 4
+            }
+          }
         ]
       }
     },
     "autoanimations": {
-      "id": "382f2151-c552-42fe-8ec4-91c926f18f8c",
+      "id": "ft-unfound-gesture",
       "label": "Unfound-Gesture",
       "macro": {
         "enable": false,
@@ -269,24 +278,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Avatar of the Veil"
+        ],
+        "sourceIds": [
+          "PqhdO2hojxFosDX0"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "L3ObDLlBVD6Uhs6F",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024230245,
-    "modifiedTime": 1782167244995,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989049709,
+    "modifiedTime": 1792989049710,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!L3ObDLlBVD6Uhs6F"
 }

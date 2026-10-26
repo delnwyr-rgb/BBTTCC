@@ -3,14 +3,14 @@
   "type": "feat",
   "img": "icons/sundries/flags/banner-flag-skull-red.webp",
   "system": {
-    "category": "technique",
+    "category": "maneuver",
     "source": {
       "revision": 1,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<p>Hold. HOLD. ...there you go. One steady voice and the whole line quietly decides to keep on existing today.</p><p><b>+1 to allies' next attack/defense. On Success: +2 Morale and −1 Darkness.</b></p>",
+      "value": "<p>Hold. HOLD. ...there you go. One steady voice and the whole line quietly decides to keep on existing today.</p><p><b>+1 to allies' next attack/defense. On Success: +2 Loyalty and −1 Darkness.</b></p>",
       "chat": ""
     },
     "activities": {},
@@ -50,7 +50,8 @@
           "violence"
         ],
         "engine": "violence"
-      }
+      },
+      "effects": {}
     }
   },
   "_id": "uYpxpxRfTD1jCcYI",
@@ -65,12 +66,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1771977107845,
-    "modifiedTime": 1779731340703,
-    "lastModifiedBy": "6ut7GT8pCAhpdWjS"
+    "modifiedTime": 1792988992042,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_key": "!items!uYpxpxRfTD1jCcYI"
 }

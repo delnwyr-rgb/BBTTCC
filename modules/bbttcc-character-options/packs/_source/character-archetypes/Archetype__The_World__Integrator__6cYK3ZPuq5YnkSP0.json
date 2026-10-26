@@ -1,17 +1,13 @@
 {
   "name": "Archetype: The World (Integrator)",
   "type": "feat",
-  "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "Bad Eden"
-    },
+    "source": "Bad Eden (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Everything connects. Including you.”</em></p><p><strong>Archetype (Bad Eden): The World (Integrator).</strong> You see systems as wholes. Supply, ritual, morale, politics, travel, violence, myth — to you, these are not separate tracks, but one machine with many faces.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens cross-system alignment and broad operational cohesion. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Diplomacy</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>“Everything connects. Including you.”</em></p><p><strong>Archetype (Bad Eden): The World (Integrator).</strong> You see systems as wholes. Supply, ritual, morale, politics, travel, violence, myth — to you, these are not separate tracks, but one machine with many faces.</p><h3>Archetype Effects</h3><ul><li><p><strong>Faction Edge.</strong> Your archetype strengthens cross-system alignment and broad operational cohesion. Your Domain earns <strong>+10 Economy</strong> and <strong>+10 Diplomacy</strong> marks each turn while you serve it.</p></li><li><p><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</p></li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -95,12 +91,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986816349,
-    "modifiedTime": 1781116016501,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989148400,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

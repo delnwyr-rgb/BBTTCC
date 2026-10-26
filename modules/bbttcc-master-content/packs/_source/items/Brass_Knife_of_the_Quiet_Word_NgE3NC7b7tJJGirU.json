@@ -16,7 +16,8 @@
     "damageParts": [],
     "range": {
       "short": 1,
-      "long": 1
+      "long": 1,
+      "units": "sq"
     },
     "tags": [
       "knife",
@@ -57,7 +58,7 @@
       }
     },
     "description": {
-      "value": "<p>Small parry knife. Brass guard etched with a single word in three languages, all meaning <i>enough</i>.</p><p>Favored by Shadow Couriers. Light enough to draw between sentences.</p><p><b>Quiet Word.</b> While attuned and equipped, you have +1 to Evasion against the first attack each round.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Quiet Word: +1 Evasion vs the first attack each round while attuned and equipped.</p>\n<ul>\n <li><strong>Damage:</strong> 1d6 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(stab)</span></li>\n <li><strong>Faculty:</strong> Intrigue</li>\n <li><strong>Attack:</strong> Melee (Intrigue)</li>\n <li><strong>Reach:</strong> Melee</li>\n <li><strong>Duration:</strong> Scene</li>\n <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+      "value": "<p>Small parry knife. Brass guard etched with a single word in three languages, all meaning <i>enough</i>.</p><p>Favored by Shadow Couriers. Light enough to draw between sentences.</p><p><b>Quiet Word.</b> While attuned and equipped, you have +1 to Evasion against the first attack each round.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Quiet Word: +1 Evasion vs the first attack each round while attuned and equipped.</p>\n<ul>\n <li><strong>Damage:</strong> 1d6 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(stab)</span></li>\n <li><strong>Faculty:</strong> Intrigue</li>\n <li><strong>Attack:</strong> Melee (Intrigue)</li>\n <li><strong>Reach:</strong> Melee</li>\n <li><strong>Duration:</strong> Scene</li>\n <li><strong>Tier:</strong> T2</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
     }
   },
   "flags": {
@@ -101,9 +102,6 @@
             "saleBack": 60
           }
         }
-      },
-      "manifestSheetMode": {
-        "bytUGWIOqq9eT7Or": "display"
       }
     },
     "autoanimations": {
@@ -318,12 +316,12 @@
     "PEWWUtMPC7h7WMIt": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1777137142772,
-    "modifiedTime": 1782159946544,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988949001,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

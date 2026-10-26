@@ -14,7 +14,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-oldenborn-furrykin=\"v1\" style=\"display:none\"></div>\n<p><em>\"If it isn't nailed down, you can sell it. If it is nailed down, you can sell the nails.\"</em></p><p><strong>Salvage King (1/Scene).</strong> When the party is in any ruin, junkyard, scrap field, abandoned facility, or wrecked vehicle, declare that one specific reasonable object exists somewhere within sight or one room over. GM may set a brief search time, require a minor cost, or rule the object is in worse condition.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldRustSalvageKing\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Salvage King</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Scene &nbsp;·&nbsp; <strong>Action:</strong> Declaration &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Declare one specific reasonable object exists in nearby ruin/junkyard/scrap. GM may set short search time, minor cost, or worse condition.</div>\n</div>",
+      "value": "\n<p><em>\"If it isn't nailed down, you can sell it. If it is nailed down, you can sell the nails.\"</em></p><p><strong>Salvage King (1/Scene).</strong> When the party is in any ruin, junkyard, scrap field, abandoned facility, or wrecked vehicle, declare that one specific reasonable object exists somewhere within sight or one room over. GM may set a brief search time, require a minor cost, or rule the object is in worse condition.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldRustSalvageKing\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Salvage King</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Scene &nbsp;·&nbsp; <strong>Action:</strong> Declaration &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Declare one specific reasonable object exists in nearby ruin/junkyard/scrap. GM may set short search time, minor cost, or worse condition.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -39,14 +39,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "oldenborn",
       "feature": "salvage_king",
       "lineage": "Rustland Scavenger",
-      "tierLevel": 17,
       "version": "2.0.0",
       "date": "2026-04-19"
     },
@@ -243,12 +239,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1776600000000,
-    "modifiedTime": 1781116070147,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988973799,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0

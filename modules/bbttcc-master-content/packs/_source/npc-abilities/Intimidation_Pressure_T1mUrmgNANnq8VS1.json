@@ -7,43 +7,75 @@
     "source": "",
     "tags": [
       "translated",
-      "5e-port"
+      "rfi-scrubbed"
     ],
     "description": {
-      "value": "<p>At the start of combat, one creature the raider can see within 6 squares must succeed on a DC 13 Soul check or be Shaken until end of its next turn.</p>",
+      "value": "<p>At the start of combat, one creature the raider can see within 6 squares must succeed a Soul check vs DC 13 or be Shaken until the end of its next turn.</p>",
       "chat": ""
     }
   },
-  "_id": "T1mUrmgNANnq8VS1",
-  "effects": [],
-  "sort": 0,
   "flags": {
+    "fourththing": {
+      "npcAuto": {
+        "v": 1,
+        "rules": [
+          {
+            "on": "turnStart",
+            "if": {
+              "firstRound": true
+            },
+            "do": {
+              "condition": {
+                "key": "shaken",
+                "duration": "1-round",
+                "save": {
+                  "attr": "soul",
+                  "dc": 13
+                }
+              }
+            },
+            "radius": 6,
+            "limit": {
+              "per": "combat",
+              "uses": 1
+            }
+          }
+        ]
+      }
+    },
     "bbttcc": {
       "npcAbility": {
         "sources": [
           "Razor Raider"
         ],
+        "sourceIds": [
+          "a3iLY82GvIfBScr2"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
+  "effects": [],
+  "_id": "T1mUrmgNANnq8VS1",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1782167244999,
-    "modifiedTime": 1782167244999,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989030652,
+    "modifiedTime": 1792989030652,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!T1mUrmgNANnq8VS1"
 }

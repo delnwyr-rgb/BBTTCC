@@ -37,14 +37,14 @@
       </div>
 
       {{#if owner}}
-      <div class="ft-meta-pill ft-id-faction" data-tooltip="Faction owner. Click to clear.">
+      <div class="ft-meta-pill ft-id-faction" data-tooltip="Domain owner. Click to clear.">
         <span class="ft-meta-label">Owner</span>
         <span class="ft-meta-val">{{owner.name}}</span>
-        <button type="button" class="ft-mini-btn" data-action="ftRigOwnerClear" data-tooltip="Clear faction owner">×</button>
+        <button type="button" class="ft-mini-btn" data-action="ftRigOwnerClear" data-tooltip="Clear Domain owner">×</button>
       </div>
       {{else}}
-      <button type="button" class="ft-meta-pill ft-id-faction-empty" data-action="ftRigOwnerPick" data-tooltip="Pick the faction that owns this rig (or drop a faction actor anywhere on this sheet)." data-rig-owner-drop>
-        <span class="ft-meta-label">Owner</span><span class="ft-meta-val">— pick faction —</span>
+      <button type="button" class="ft-meta-pill ft-id-faction-empty" data-action="ftRigOwnerPick" data-tooltip="Pick the Domain that owns this rig (or drop a Domain actor anywhere on this sheet)." data-rig-owner-drop>
+        <span class="ft-meta-label">Owner</span><span class="ft-meta-val">— pick Domain —</span>
       </button>
       {{/if}}
     </div>
@@ -123,7 +123,7 @@
         </div>
       </div>
 
-      <div class="ft-rig-stat-tile ft-rig-stat-tier" data-tooltip="Tier (1–4) · Bracket (personal / light / medium / heavy / siege). Frame sets these.">
+      <div class="ft-rig-stat-tile ft-rig-stat-tier" data-tooltip="Tier (1–4; mecha 0–5) · Bracket (personal / light / medium / mecha / heavy / siege). Frame sets these.">
         <div class="ft-rig-stat-label">Tier · Bracket</div>
         <div class="ft-rig-stat-row">
           <span class="ft-rig-stat-val ft-rig-stat-val-text">T{{integrity.tier}}</span>
@@ -357,7 +357,7 @@
           <div class="ft-rig-frame-hero-body">
             <div class="ft-rig-frame-hero-name-row">
               <span class="ft-rig-frame-hero-name">{{gear.frameRow.name}}</span>
-              <span class="ft-manifest-chip ft-rig-frame-bracket" data-tooltip="Frame bracket — personal · light · medium · heavy · siege">{{gear.frameRow.bracket}}</span>
+              <span class="ft-manifest-chip ft-rig-frame-bracket" data-tooltip="Frame bracket — personal · light · medium · mecha · heavy · siege">{{gear.frameRow.bracket}}</span>
               <button type="button" class="ft-mini-btn ft-rig-gear-btn" data-action="ftItemEdit" data-tooltip="Open frame item">✎</button>
               <button type="button" class="ft-mini-btn ft-rig-gear-btn" data-action="ftItemDelete" data-tooltip="Unequip frame">×</button>
             </div>
@@ -372,6 +372,7 @@
               {{#if gear.frameRow.mobilityAllowed.length}}
               <span class="ft-rig-frame-mobility">
                 {{#each gear.frameRow.mobilityAllowed as |m|}}<span class="ft-rig-frame-mobility-chip" data-tooltip="Frame supports {{m}} mobility">{{m}}</span>{{/each}}
+                {{#if gear.frameRow.mobilityViolated}}<span class="ft-rig-frame-mobility-chip is-violated" data-tooltip="This rig is set to {{identity.mobility}}, which this frame does not allow. Pick an allowed mobility above or swap the frame.">⚠ {{identity.mobility}} not allowed</span>{{/if}}
               </span>
               {{/if}}
               {{else}}
@@ -475,7 +476,7 @@
         <div class="ft-block-title">Output <span class="ft-output-pct" data-tooltip="100% parked · 50% deployed · 0% destroyed">({{outputPct}}%)</span></div>
         {{#if outputPreview}}
         <table class="ft-rig-output-tradeoff-table" style="width:100%;font-size:.8rem;margin:.2rem 0 .5rem;border-collapse:collapse;">
-          <tr><th style="text-align:left;opacity:.7;font-weight:600">Each turn</th><th style="text-align:left;opacity:.7;font-weight:600">Earns the faction</th></tr>
+          <tr><th style="text-align:left;opacity:.7;font-weight:600">Each turn</th><th style="text-align:left;opacity:.7;font-weight:600">Earns the Domain</th></tr>
           <tr{{#if (eq outputPreview.state "parked")}} style="color:#9fe0a8"{{/if}}><td>🅿️ Parked</td><td>{{outputPreview.parkedText}}</td></tr>
           <tr{{#if (eq outputPreview.state "deployed")}} style="color:#9fe0a8"{{/if}}><td>🚚 Deployed</td><td>{{outputPreview.deployedText}}</td></tr>
           <tr style="opacity:.7"><td>💥 Destroyed</td><td>nothing</td></tr>

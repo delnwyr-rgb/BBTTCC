@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 (Level 17) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a travel, exploration, frontier-contact, or dangerous discovery scenario, the Logistics or Intrigue OP cost is reduced by 3 (minimum 1).</li></ul>",
+      "value": "<p><strong>Tier 4 (Level 17) — The Fool (Catalyst)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Logistics or Intrigue marks, it spends 30 fewer (never below 10).</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -60,7 +60,21 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "logistics",
+            "intrigue"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Archetype: The Fool (Catalyst) (Tier 4)",
+          "marks": 30
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": null,
@@ -72,12 +86,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986723243,
-    "modifiedTime": 1781116025736,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989156086,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

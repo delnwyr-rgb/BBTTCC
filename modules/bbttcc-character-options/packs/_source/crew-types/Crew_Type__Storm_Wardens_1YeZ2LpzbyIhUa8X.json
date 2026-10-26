@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>Crew Type (Bad Eden): Storm Wardens.</em></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Lore and Faith.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Faith OPs.</li></ul>",
+      "value": "<p><em>Crew Type (Bad Eden): Storm Wardens.</em></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Lore and Faith.</li><li><strong>Strategic Identity:</strong> Your Domain earns <strong>+10 Faith</strong> marks each turn while you serve it.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -85,12 +85,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986959359,
-    "modifiedTime": 1782167238947,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989166709,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

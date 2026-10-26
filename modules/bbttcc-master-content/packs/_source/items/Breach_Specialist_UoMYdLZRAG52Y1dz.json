@@ -8,7 +8,7 @@
     "source": "Bad Eden Feats Expansion v1 (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<h2>Breach Specialist</h2><p><em>Everything has a seam. Most people just don’t look.</em></p><hr><h3>Rules</h3><p>You gain a rank in Tinkering (thieves’ tools). If you already have it, its rank rises by one instead.</p><p>When you hit an object, door, barrier, or construct with a weapon attack, you may treat the attack as dealing maximum damage to the target’s objects-only resistances (GM adjudication). Once you do, you can’t do so again until the start of your next turn.</p><p class=\"ft-engine-note\"><em>⚙ +1 Tinkering. 🃏 Card — the max-damage-vs-objects rider, once per round.</em></p>",
+      "value": "<h2>Breach Specialist</h2><p><em>Everything has a seam. Most people just don’t look.</em></p><hr><h3>Rules</h3><p>You gain a rank in Tinkering. If you already have it, its rank rises by one instead.</p><p>When you hit an object, door, barrier, or construct with a weapon attack, you may treat the attack as dealing maximum damage to the target’s objects-only resistances (GM adjudication). Once you do, you can’t do so again until the start of your next turn.</p><p class=\"ft-engine-note\"><em>⚙ +1 Tinkering. 🃏 Card — the max-damage-vs-objects rider, once per round.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_breach_specialist",
@@ -39,7 +39,6 @@
       "pack": "bbttcc-feats-expansion-v1",
       "generatedAt": "2026-01-18T20:40:44.997510+00:00"
     },
-    "fourththing": {},
     "autoanimations": {
       "id": "ft-breach-specialist",
       "label": "Breach Specialist",
@@ -228,11 +227,11 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1768802465828,
-    "modifiedTime": 1781116207308,
+    "modifiedTime": 1792977636665,
     "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "_key": "!items!UoMYdLZRAG52Y1dz"

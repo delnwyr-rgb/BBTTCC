@@ -15,7 +15,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -23,6 +22,11 @@
           "tier": "IV",
           "frame": "feature"
         }
+      },
+      "grants": {
+        "resistances": [
+          "kinetic"
+        ]
       }
     },
     "bbttcc": {
@@ -30,29 +34,34 @@
         "sources": [
           "Pre-Fall Apex Construct"
         ],
+        "sourceIds": [
+          "bY5b3zOkFr7RbcNU"
+        ],
         "worlds": [
-          "ember",
-          "foundry"
-        ]
+          "pack"
+        ],
+        "generated": "2026-10-26"
       }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "U1zOHOwrpJQilAd8",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.363",
-    "systemId": null,
-    "systemVersion": null,
-    "createdTime": null,
-    "modifiedTime": null,
-    "lastModifiedBy": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989037839,
+    "modifiedTime": 1792989037839,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!U1zOHOwrpJQilAd8"
 }

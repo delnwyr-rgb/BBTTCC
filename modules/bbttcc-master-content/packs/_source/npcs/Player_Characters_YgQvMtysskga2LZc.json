@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": null,
+  "name": "Player Characters",
+  "color": null,
+  "sorting": "a",
+  "_id": "YgQvMtysskga2LZc",
+  "description": "",
+  "sort": 1600000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792773758694,
+    "modifiedTime": 1792773759222,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!YgQvMtysskga2LZc"
+}

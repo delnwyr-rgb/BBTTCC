@@ -41,7 +41,7 @@ console.log("[bbttcc-tikkun/beat-listener] LOADED");
     chokmah: "Wisdom mistaken for cleverness — the spark hums off-key, an insight too quickly seized.",
     binah:   "Boundary violated to be reached — the spark contains its lesson, but the lesson is now bitter.",
     chesed:  "Mercy curdles into bitterness — the bond is taut, suspicious, easier to break than to give.",
-    gevurah: "Severity gone soft on its own edge — the spark's discipline weeps where it should burn.",
+    geburah: "Severity gone soft on its own edge — the spark's discipline weeps where it should burn.",
     tiferet: "Harmony forced rather than found — the spark balances, but on a fulcrum of resentment.",
     netzach: "Endurance bought as a shortcut — the spark holds, but it remembers the corner cut.",
     hod:     "Glory bled to volume — the spark speaks, but it speaks too loudly to hear itself.",
@@ -61,7 +61,8 @@ console.log("[bbttcc-tikkun/beat-listener] LOADED");
   }
 
   function _flavorFor(sparkItem) {
-    const seph = String(_sparkSys(sparkItem)?.sephirah ?? "").toLowerCase();
+    let seph = String(_sparkSys(sparkItem)?.sephirah ?? "").toLowerCase();
+    if (seph === "gevurah" || seph === "gevura") seph = "geburah";   // legacy spelling (2026-10-26)
     return CORRUPTION_FLAVOR[seph] || "The spark is gathered, but its alignment with its own domain is shaken.";
   }
 

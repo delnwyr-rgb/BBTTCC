@@ -7,51 +7,17 @@
     "intent": "violence",
     "skill": "melee",
     "damage": {
-      "formula": "1d8",
+      "formula": "2d8",
       "attribute": "violence",
       "type": "sephirotic",
       "damageFlavor": "atonement",
-      "track": "integrity",
-      "versatile": {
-        "number": null,
-        "denomination": null,
-        "bonus": "",
-        "types": [],
-        "custom": {
-          "enabled": false,
-          "formula": ""
-        },
-        "scaling": {
-          "mode": "",
-          "number": null,
-          "formula": ""
-        }
-      },
-      "base": {
-        "number": 1,
-        "denomination": 8,
-        "bonus": "",
-        "types": [
-          "radiant"
-        ],
-        "custom": {
-          "enabled": false,
-          "formula": ""
-        },
-        "scaling": {
-          "mode": "",
-          "number": null,
-          "formula": ""
-        }
-      }
+      "track": "integrity"
     },
     "damageParts": [],
     "range": {
       "short": 1,
       "long": 1,
-      "value": null,
-      "units": "ft",
-      "reach": null
+      "units": "sq"
     },
     "tags": [
       "longsword",
@@ -59,7 +25,7 @@
       "atonement",
       "mercy"
     ],
-    "effect": "Mercy Finish: a kill turns into stable unconsciousness; a Qliphothic/Darkness state is suppressed.",
+    "effect": "Mercy Finish: a kill turns into stable unconsciousness; a Qliphothic state is suppressed.",
     "flavor": "Forged in a sept-foundry. Tempered in a confession.",
     "manifestation": {
       "tier": 1,
@@ -93,135 +59,11 @@
       }
     },
     "description": {
-      "value": "<p><em>“The edge hums when you lie, you know.”</em></p><p><strong>Sanctified.</strong> This weapon deals <strong>radiant</strong> damage.</p><p><strong>Mercy Finish.</strong> If a creature is reduced to 0 Integrity by this weapon’s damage, it falls <strong>unconscious and stable</strong> instead of dying. If it is Qliphothified/Corrupted/Darkness-bound, that state is suppressed; the GM may describe the target “coming back to themselves.”</p><p><strong>Playtest safety:</strong> This item is designed to avoid faction-level knock-on effects.</p>",
+      "value": "<p><em>“The edge hums when you lie, you know.”</em></p><p><strong>Sanctified.</strong> This weapon deals <strong>sephirotic</strong> damage.</p><p><strong>Mercy Finish.</strong> If a creature is reduced to 0 Integrity by this weapon’s damage, it falls <strong>unconscious and stable</strong> instead of dying. If it is in a Qliphothic state, that state is suppressed; the GM may describe the target “coming back to themselves.”</p>",
       "chat": ""
-    },
-    "quantity": 1,
-    "weight": {
-      "value": 0,
-      "units": "lb"
-    },
-    "price": {
-      "value": 0,
-      "denomination": "gp"
-    },
-    "rarity": "rare",
-    "attunement": "",
-    "identified": true,
-    "properties": [],
-    "equipped": false,
-    "proficient": 1,
-    "unidentified": {
-      "description": ""
-    },
-    "activities": {
-      "2vFHYEF2iZoCeQm4": {
-        "_id": "2vFHYEF2iZoCeQm4",
-        "type": "attack",
-        "sort": 0,
-        "activation": {
-          "type": "action",
-          "override": false
-        },
-        "consumption": {
-          "scaling": {
-            "allowed": false
-          },
-          "spellSlot": true,
-          "targets": []
-        },
-        "description": {},
-        "duration": {
-          "units": "inst",
-          "concentration": false,
-          "override": false
-        },
-        "effects": [],
-        "range": {
-          "units": "self",
-          "override": false
-        },
-        "target": {
-          "template": {
-            "contiguous": false,
-            "units": "ft"
-          },
-          "affects": {
-            "choice": false
-          },
-          "override": false,
-          "prompt": true
-        },
-        "uses": {
-          "spent": 0,
-          "recovery": []
-        },
-        "attack": {
-          "critical": {},
-          "flat": false,
-          "type": {}
-        },
-        "damage": {
-          "critical": {},
-          "includeBase": true,
-          "parts": []
-        }
-      }
-    },
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "gilded-atonement-blade",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "ammunition": {},
-    "armor": {},
-    "type": {
-      "value": "simpleM",
-      "baseItem": ""
-    },
-    "mastery": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": [
-        "sanctified",
-        "purification",
-        "nonlethal"
-      ],
-      "purification": {
-        "onKO": true,
-        "nonlethal": true
-      }
-    },
-    "rfi": {
-      "item": {
-        "tier": "III",
-        "footprint": 1,
-        "reach": "5",
-        "frame": "weapon",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "scene"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
-    },
     "fourththing": {
       "rfi": {
         "item": {
@@ -245,7 +87,7 @@
             "mercy": true,
             "sanctified": true
           },
-          "lore": "<p>Hand-forged longsword sheathed in gilt. The pommel is a sept-mark; the fuller is inscribed with a single word in three languages.</p><p><b>Sanctified.</b> Deals sephirotic damage.</p><p><b>Mercy Finish.</b> If this weapon reduces a creature to 0 Integrity, it falls <i>unconscious and stable</i> instead of dying. A target in a Qliphothic/Corrupted/Darkness-bound state has that state suppressed and may \"come back to themselves\" (GM discretion).</p>",
+          "lore": "<p>Hand-forged longsword sheathed in gilt. The pommel is a sept-mark; the fuller is inscribed with a single word in three languages.</p><p><b>Sanctified.</b> Deals sephirotic damage.</p><p><b>Mercy Finish.</b> If this weapon reduces a creature to 0 Integrity, it falls <i>unconscious and stable</i> instead of dying. A target in a Qliphothic state has that state suppressed and may \"come back to themselves\" (GM discretion).</p>",
           "materialOf": [
             "sacred-gold",
             "scribed-steel",
@@ -432,20 +274,17 @@
             "mastery": ""
           },
           "price": {
-            "marks": 450,
+            "marks": 900,
             "currency": "violence",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TIII weapon stamp",
+            "rarityMult": 2,
+            "notes": "TIII weapon × attuned × rarity 2 (hygiene 2026-10-07; was 450 violence)",
             "bound": "attuned",
-            "saleBack": 180
+            "saleBack": 360
           }
         }
-      },
-      "manifestSheetMode": {
-        "bytUGWIOqq9eT7Or": "display"
       }
     },
     "autoanimations": {
@@ -657,12 +496,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1767834172732,
-    "modifiedTime": 1782167732284,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988936239,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

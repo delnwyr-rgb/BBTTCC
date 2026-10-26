@@ -1,126 +1,76 @@
 {
+  "_id": "V5KuKfTWSONv7SqN",
   "name": "Ego‑Dragon Scale Aegis",
-  "type": "equipment",
+  "type": "gear",
   "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
   "system": {
-    "description": {
-      "value": "<p>Armor (breastplate). Grants resistance to psychic; once/day negate a charm/fear effect for you and allies within 30 ft.</p>",
-      "chat": ""
-    },
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
     "quantity": 1,
-    "weight": {
-      "value": 20,
-      "units": "lb"
-    },
-    "price": {
-      "value": 30000,
-      "denomination": "gp"
-    },
-    "rarity": "legendary",
-    "attunement": "",
-    "identified": true,
-    "type": {
-      "value": "",
-      "baseItem": ""
-    },
-    "equipped": false,
-    "activities": {},
-    "uses": {
-      "spent": 0,
-      "recovery": [],
-      "max": ""
-    },
-    "identifier": "egodragon-scale-aegis",
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
-    "unidentified": {
-      "description": ""
-    },
-    "container": null,
-    "attuned": false,
-    "crewed": false,
-    "armor": {
-      "value": null,
-      "dex": null
-    },
-    "proficient": null,
-    "properties": [],
-    "strength": null
+    "description": {
+      "value": "<p>Armor (breastplate). Grants resistance to psychic; once per Soma Break negate a charm/fear effect for you and allies within 6 squares</p>",
+      "chat": ""
+    }
   },
   "flags": {
-    "bbttcc": {
-      "tags": []
-    },
-    "rfi": {
-      "item": {
-        "tier": "IV",
-        "footprint": 1,
-        "reach": "self",
-        "frame": "armor",
-        "signature": "",
-        "origin": "looted",
-        "originator": null,
-        "bound": "free",
-        "upkeep": {
-          "mode": "passive",
-          "per": "scene"
-        },
-        "misfire": {
-          "tierClamp": true,
-          "table": null
-        },
-        "signals": {}
-      }
-    },
     "fourththing": {
       "rfi": {
         "item": {
           "price": {
-            "marks": 30,
-            "currency": "economy",
+            "marks": 8100,
+            "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
             "split": null,
-            "rarityMult": 1,
-            "notes": "TI tool stamp",
+            "rarityMult": 5,
+            "notes": "TIV talisman × rarity 5",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 3240
           },
           "tier": "IV",
-          "frame": "armor",
+          "frame": "talisman",
           "origin": "looted",
           "bound": "free",
           "reach": "self",
           "footprint": 1,
-          "legacySystem": {
-            "description": {
-              "value": "<p>Armor (breastplate). Grants resistance to psychic; once per Soma Break negate a charm/fear effect for you and allies within 6 squares</p>"
-            }
-          }
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {}
         }
+      },
+      "grants": {
+        "resistances": [
+          "psychic"
+        ]
       }
     }
   },
   "effects": [],
   "folder": "TNrB6kEiHS0KwwJT",
-  "_stats": {
-    "compendiumSource": null,
-    "duplicateSource": null,
-    "exportSource": null,
-    "coreVersion": "14.364",
-    "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1767834169815,
-    "modifiedTime": 1782164185977,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
-  },
+  "sort": 1000000,
   "ownership": {
     "default": 0,
-    "DHBK2UGr58xKXzxK": 3
+    "DHBK2UGr58xKXzxK": 3,
+    "FKSQOY3vDSH1mLWk": 3
   },
-  "_id": "V5KuKfTWSONv7SqN",
-  "sort": 1000000,
+  "_stats": {
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792988908224,
+    "modifiedTime": 1792988908225,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
   "_key": "!items!V5KuKfTWSONv7SqN"
 }

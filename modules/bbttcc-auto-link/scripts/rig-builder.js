@@ -1415,6 +1415,19 @@ async function _syncIntegrityToFrame(actor, tier) {
   else await actor.update({ "system.integrity.max": max, "system.integrity.value": max });
   return max;
 }
+/** RG5 (owner ruling 2026-10-26): the FRAME is the travel authority. A minted rig's `travel.speed/range` follow its
+ * frame's `rigFrame.travel` (Hexmobiles were minted 3/8 against a 5/10 frame — steer read the frame, chases read the
+ * actor). No frame, or a frame without travel → nothing written. Returns the travel applied, or null. */
+async function _syncTravelToFrame(actor) {
+  const frame = (actor?.items ?? []).find?.(i => i?.flags?.fourththing?.rigGear?.subtype === "rig-frame" || i?.flags?.fourththing?.rigFrame);
+  const t = frame?.flags?.fourththing?.rigFrame?.travel;
+  if (!t || t.speed == null) return null;
+  const speed = Math.max(0, Number(t.speed) || 0), range = Math.max(0, Number(t.range) || 0);
+  const R = game.bbttcc?.rigs;
+  if (R?.update) await R.update(actor, { "travel.speed": speed, "travel.range": range });
+  else await actor.update({ "system.travel.speed": speed, "system.travel.range": range });
+  return { speed, range };
+}
 
 function _rigBracketBOM(bracket, tier = 1) {
   const b = String(bracket || "").toLowerCase();
@@ -1623,6 +1636,7 @@ async function _commit(root) {
   if (loadout) {
     try {
       await _seedLoadout(actor, loadout, { tier });
+      await _syncTravelToFrame(actor);   // RG5: frame travel is the authority
     } catch (e) {
       console.warn("[bbttcc-auto-link/rig-builder] Loadout seed failed (non-fatal):", e);
     }
@@ -1748,7 +1762,17 @@ async function _seedLoadout(actor, loadout, { tier = 1 } = {}) {
         console.warn(TAG, `Frame not found in compendium: ${loadout.frame}`);
       }
     } else if (typeof loadout.frame === "object") {
-      itemsToCreate.push(_buildSyntheticFrame(loadout.frame));
+      // RG13 (2026-10-26): Hexmobile / ATR Transport / Power-Armor Frames now live in the catalog — embed the catalog
+      // record when `synthName` resolves there (so repair / replace / sell can find the frame by name); the synthetic
+      // copy stays as the fallback for a world whose catalog has not been updated.
+      const _synthHit = loadout.frame.synthName && idx ? idx.find?.(e => e.name === loadout.frame.synthName) : null;
+      const _synthDoc = _synthHit ? await pack.getDocument(_synthHit._id) : null;
+      const _synthData = _synthDoc?.toObject?.();
+      if (_synthData) {
+        delete _synthData._id;
+        foundry.utils.setProperty(_synthData, "flags.core.sourceId", _synthDoc.uuid);
+        itemsToCreate.push(_synthData);
+      } else itemsToCreate.push(_buildSyntheticFrame(loadout.frame));
     }
   }
 
@@ -1799,7 +1823,8 @@ function _buildSyntheticFrame(spec) {
     img: ({ personal: "icons/commodities/tech/wheel.webp", medium: "icons/environment/settlement/wagon.webp", heavy: "icons/containers/boxes/crate-metal-heavy-grey.webp", mecha: "icons/equipment/chest/breastplate-metal-scaled-grey.webp" })[spec.bracket] ?? "icons/commodities/tech/gear-wheels-double-steel.webp", // icon swap 2026-10-14: core webp, never icons/svg
     system: {
       description: {
-        value: `<p>Synthetic frame authored by the Rig Builder. Bracket: ${spec.bracket ?? "—"}. ${spec.pilotMount ? "Pilot Mount enabled — one pilot-fired weapon." : ""}</p>`,
+        // player wording (2026-10-26) — no builder notes in player-facing text
+        value: `<p>A ${spec.bracket ?? "medium"}-bracket chassis.${spec.pilotMount ? " One weapon rides at the pilot's hand." : ""}</p><p><b>Frame · ${String(spec.bracket ?? "medium").replace(/^./, c => c.toUpperCase())} · ${(Array.isArray(spec.mobilityAllowed) && spec.mobilityAllowed[0] ? spec.mobilityAllowed[0] : "mobile").replace(/^./, c => c.toUpperCase())}</b></p>`,
         chat: ""
       }
     },
@@ -1962,7 +1987,7 @@ export async function mintFromChassis(chassisKey, { factionOwnerId = "", free = 
   if (!actor) return null;
 
   if (loadout) {
-    try { await _seedLoadout(actor, loadout, { tier }); }
+    try { await _seedLoadout(actor, loadout, { tier }); await _syncTravelToFrame(actor); }   // RG5: frame travel is the authority
     catch (e) { console.warn("[bbttcc-auto-link/rig-builder] mintFromChassis loadout seed failed (non-fatal):", e); }
   }
   // Owner ruling 2026-10-21: a minted rig's integrity comes from its FRAME (baseIntegrity + tierStep × (tier − 1),

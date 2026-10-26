@@ -4,7 +4,7 @@
 // ending integrates the spark seated on its hex, so all ten sephirot are reachable by
 // play and the Ten Lamps / Daath / the Dragon become something a table can arrive at.
 // The two spark QUESTS become the two places where the spark is the subject:
-//   • The Lost Stone Statues teaches JUDGMENT — the three Gevurah kinds sit on the three
+//   • The Lost Stone Statues teaches JUDGMENT — the three Geburah kinds sit on the three
 //     judges; "worthy" integrates clean, "force" lands the fragment CORRUPTED.
 //   • The Hex Flooded Towns teaches REPAIR — the Hod sparks sit on the three flooded
 //     towns already CORRUPTED by the seal blast; the calm endings repair, "Echoes
@@ -17,9 +17,9 @@
 //   3. FIX — the Lost Stone Statues quest had TWO completers (Geburah Made Whole in act 3
 //      AND the Garden's count in act 4); the count now only opens The Ninth Guest.
 //
-// ⚠ KT_SPARK: the mine is the Yesodium mine. The 09-01 placement seated Gevurah there;
-//   this macro moves that Gevurah to statue III and seats Yesod (animate) at Khezek-Tor.
-//   Flip KT_SPARK to "spark_gevurah_animate" and remove the statue-III row to keep the
+// ⚠ KT_SPARK: the mine is the Yesodium mine. The 09-01 placement seated Geburah there;
+//   this macro moves that Geburah to statue III and seats Yesod (animate) at Khezek-Tor.
+//   Flip KT_SPARK to "spark_geburah_animate" and remove the statue-III row to keep the
 //   old reading. Owner's call — the report says which it did.
 //
 // Run as GM in the canonical world with "Thatward's Ho!" active. DRY_RUN = true prints
@@ -50,9 +50,9 @@
 
   // ── 1. PLACEMENTS ─────────────────────────────────────────────────────────
   const PLACEMENTS = [
-    { hex: "Northreach Expanse b",     key: "spark_gevurah_conceptual", state: "dormant",   why: "Lost Statue I — Measured Strength" },
-    { hex: "Inconvenient Mountains.q", key: "spark_gevurah_vestigial",  state: "dormant",   why: "Lost Statue II — Endurance" },
-    { hex: "Inconvenient Mountains.o", key: "spark_gevurah_animate",    state: "dormant",   why: "Lost Statue III — Protective Strength" },
+    { hex: "Northreach Expanse b",     key: "spark_geburah_conceptual", state: "dormant",   why: "Lost Statue I — Measured Strength" },
+    { hex: "Inconvenient Mountains.q", key: "spark_geburah_vestigial",  state: "dormant",   why: "Lost Statue II — Endurance" },
+    { hex: "Inconvenient Mountains.o", key: "spark_geburah_animate",    state: "dormant",   why: "Lost Statue III — Protective Strength" },
     { hex: "Khezek-Tor",               key: KT_SPARK,                   state: "dormant",   why: "the Yesodium mine (KT_SPARK)" },
     { hex: "Probably Beaumont",        key: "spark_hod_conceptual",     state: "corrupted", why: "Hex Flooded Town — carved by the seal blast" },
     { hex: "Maybe Beaumont?",          key: "spark_hod_vestigial",      state: "corrupted", why: "Hex Flooded Town — carved by the seal blast" },

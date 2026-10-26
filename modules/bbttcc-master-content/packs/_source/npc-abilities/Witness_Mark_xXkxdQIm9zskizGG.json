@@ -54,6 +54,12 @@
       "opCost": {
         "pool": "",
         "value": 0
+      },
+      "appliedStates": {
+        "states": [
+          "imposed"
+        ],
+        "duration": "1-round"
       }
     },
     "description": {
@@ -61,7 +67,6 @@
       "chat": ""
     }
   },
-  "effects": [],
   "flags": {
     "fourththing": {
       "rfi": {
@@ -82,19 +87,8 @@
         }
       }
     },
-    "bbttcc": {
-      "npcAbility": {
-        "sources": [
-          "Witness Initiate"
-        ],
-        "worlds": [
-          "ember",
-          "foundry"
-        ]
-      }
-    },
     "autoanimations": {
-      "id": "4542563c-6eb7-492d-9d03-915a32915d78",
+      "id": "ft-witness-mark",
       "label": "Witness-Mark",
       "macro": {
         "enable": false,
@@ -269,24 +263,40 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Witness Initiate"
+        ],
+        "sourceIds": [
+          "OhNxMsImWa4bBZYA"
+        ],
+        "worlds": [
+          "pack"
+        ],
+        "generated": "2026-10-26"
+      }
     }
   },
-  "sort": 0,
+  "effects": [],
   "_id": "xXkxdQIm9zskizGG",
+  "sort": 0,
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "FKSQOY3vDSH1mLWk": 3
+  },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
-    "createdTime": 1781024242295,
-    "modifiedTime": 1782167245012,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989052013,
+    "modifiedTime": 1792989052013,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
-  },
-  "folder": null,
-  "ownership": {
-    "default": 0
   },
   "_key": "!items!xXkxdQIm9zskizGG"
 }

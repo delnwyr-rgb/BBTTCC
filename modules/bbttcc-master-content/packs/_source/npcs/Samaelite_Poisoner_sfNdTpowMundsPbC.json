@@ -3,7 +3,7 @@
   "type": "npc",
   "img": "art/bbttcc/qliphoth/samaelite-poisoner.webp",
   "system": {
-    "role": "Qliphothic Seducer (Samael — Lesser)",
+    "role": "stealth",
     "tier": 2,
     "factionId": "",
     "notes": "<p>A beautiful serpentine creature — statuesque humanoid torso, shimmering iridescent scales, the long coiling tail of a massive serpent in vibrant, unnatural jewel tones. It speaks with a silver tongue, offering praise, secrets, and shortcuts to power. Its bite injects a venom that doesn't just kill the body: it floods the mind with delusions of grandeur, so the victim feels invincible even as their life ebbs away.</p><p><strong>Qliphah:</strong> Samael, the Poisons — the Hull of Hod. Splendor twisted into false glory: the poisoned compliment made flesh.</p><p><em>Mal's note: 'Anyone who opens with three sincere compliments and a shortcut is billing you later. This one bills in blood pressure.'</em></p>",
@@ -40,8 +40,9 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 55,
-        "max": 55
+        "value": 75,
+        "max": 75,
+        "temp": 0
       },
       "stress": {
         "value": 25,
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -143,9 +145,13 @@
       "immunities": [
         "poison"
       ],
-      "vulnerabilities": []
+      "vulnerabilities": [
+        "sephirotic"
+      ]
     },
-    "conditionImmunities": [],
+    "conditionImmunities": [
+      "charmed"
+    ],
     "tags": [
       "qliphothic",
       "5e-port",
@@ -154,6 +160,9 @@
       "hull-of-hod",
       "lesser"
     ],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -166,6 +175,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "Qliphothic Seducer (Samael — Lesser)",
+      "notes": "<p>A beautiful serpentine creature — statuesque humanoid torso, shimmering iridescent scales, the long coiling tail of a massive serpent in vibrant, unnatural jewel tones. It speaks with a silver tongue, offering praise, secrets, and shortcuts to power. Its bite injects a venom that doesn't just kill the body: it floods the mind with delusions of grandeur, so the victim feels invincible even as their life ebbs away.</p><p><strong>Qliphah:</strong> Samael, the Poisons — the Hull of Hod. Splendor twisted into false glory: the poisoned compliment made flesh.</p><p><em>Mal's note: 'Anyone who opens with three sincere compliments and a shortcut is billing you later. This one bills in blood pressure.'</em></p>"
     }
   },
   "prototypeToken": {
@@ -265,7 +278,7 @@
       "_id": "G52jUyOR5M5iARWh",
       "name": "Venomous Words",
       "type": "feature",
-      "img": "icons/svg/cowled.svg",
+      "img": "icons/equipment/head/hood-cloth-teal.webp",
       "system": {
         "category": "principle",
         "source": "Qliphothic Bestiary",
@@ -283,17 +296,16 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188170,
-        "modifiedTime": 1787799188170,
+        "modifiedTime": 1791324414746,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!sfNdTpowMundsPbC.G52jUyOR5M5iARWh"
+      }
     },
     {
       "_id": "t3nhTU10T4W9z4WM",
@@ -317,23 +329,22 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188170,
-        "modifiedTime": 1787799188170,
+        "modifiedTime": 1791324414746,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!sfNdTpowMundsPbC.t3nhTU10T4W9z4WM"
+      }
     },
     {
       "_id": "5U1saOoTAX6TL5VS",
       "name": "Bite of Pride",
       "type": "weapon",
-      "img": "icons/svg/poison.svg",
+      "img": "icons/weapons/daggers/dagger-poisoned.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -382,6 +393,22 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "body",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 14,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "compelled",
+              "shaken"
+            ],
+            "duration": "until-saved",
+            "saveEachRound": true,
+            "saveAttribute": "body"
           }
         },
         "description": {
@@ -395,25 +422,44 @@
       "ownership": {
         "default": 0
       },
-      "flags": {},
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "if": {
+                  "weapon": "Bite of Pride"
+                },
+                "do": {
+                  "damage": {
+                    "formula": "2d6",
+                    "type": "poison"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1787799188170,
-        "modifiedTime": 1787799188170,
+        "modifiedTime": 1792977801113,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
-      },
-      "_key": "!actors.items!sfNdTpowMundsPbC.5U1saOoTAX6TL5VS"
+      }
     },
     {
       "_id": "Xb2Zb0VNaXqYGVd2",
       "name": "Constrict",
       "type": "weapon",
-      "img": "icons/svg/net.svg",
+      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
       "system": {
         "category": "melee",
         "intent": "violence",
@@ -462,6 +508,21 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "saveAttribute": "violence",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 14,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "restrained"
+            ],
+            "duration": "until-saved",
+            "saveEachRound": true,
+            "saveAttribute": "violence"
           }
         },
         "description": {
@@ -477,17 +538,200 @@
       },
       "flags": {},
       "_stats": {
-        "coreVersion": "14.367",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
         "systemVersion": "0.6.1",
         "createdTime": 1787799188170,
-        "modifiedTime": 1787799188170,
+        "modifiedTime": 1791331979150,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
+      }
+    },
+    {
+      "name": "Aura of Vanity",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "qliphothic",
+          "samael"
+        ],
+        "description": {
+          "value": "<p>Any creature that starts its turn within 6 squares and can see this creature rolls twice-keep-worse on checks to resist being Charmed until the start of its next turn.</p><p><em>Samael — hull of hod.</em></p>",
+          "chat": ""
+        }
       },
-      "_key": "!actors.items!sfNdTpowMundsPbC.Xb2Zb0VNaXqYGVd2"
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "turnStart",
+                "radius": 6,
+                "who": "enemies",
+                "do": {
+                  "impose": true
+                }
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "qliphothic"
+            }
+          }
+        }
+      },
+      "_id": "PRH4X6YWJhC8XT3x",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791342350731,
+        "modifiedTime": 1792989126798,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Hollow Touch",
+      "type": "weapon",
+      "img": "icons/magic/death/hand-withered-gray.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "violence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "lineage-strike",
+          "qliphothic",
+          "bestiary"
+        ],
+        "effect": "Damage goes to Stress. On a hit the target rolls Resolve vs DC 15; on a failure it is Compelled toward the shell's vice until the end of its next turn.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul"
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 15,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> Reach 1 square, one target. Damage: <code>2d6</code> qliphothic to Stress + violence. On a hit the target rolls Resolve vs DC 15; on a failure it is Compelled toward the shell's vice until the end of its next turn.</p><p><em>The hollow reaches for what it lacks.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "attack",
+              "lineageStrike": "qliphothic",
+              "price": {
+                "marks": 150,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII attack × 1",
+                "bound": "free",
+                "saleBack": 60
+              }
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "FKSQOY3vDSH1mLWk": 3
+      },
+      "_id": "xStyC4BB9HCWf5iu",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989126845,
+        "modifiedTime": 1792989126845,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -531,34 +775,38 @@
             ]
           },
           "price": {
-            "marks": 450,
-            "bounty": 650,
-            "hire": 0,
-            "ransom": 0,
+            "marks": 20,
+            "bounty": 20,
+            "hire": 30,
+            "ransom": 30,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "II heavy Qliphothic Seducer (Samael — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+            "notes": "TII heavy qliphothic — bounty 20 / hire 30 marks; credited to the pool matching the method (default softpower)"
           },
           "qliphah": {
             "name": "samael",
             "hullOf": "hod",
             "grade": "lesser"
-          }
+          },
+          "lineage": "qliphothic",
+          "subLineage": "samael",
+          "title": "Qliphothic Seducer (Samael — Lesser)"
         }
       },
-      "kind": "npc"
+      "kind": "npc",
+      "creatureType": "fiend"
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null,
     "createdTime": 1787799188170,
-    "modifiedTime": 1787799188170,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989126620,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "_id": "sfNdTpowMundsPbC",
   "_key": "!actors!sfNdTpowMundsPbC"

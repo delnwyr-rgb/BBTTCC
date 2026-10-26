@@ -1,0 +1,930 @@
+{
+  "name": "The Ferryman of the Drowned South",
+  "type": "npc",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT Token/SlippageWraith2.png",
+  "folder": "uMhSIaldbbcnBh0H",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "prototypeToken": {
+    "name": "The Ferryman of the Drowned South",
+    "actorLink": false,
+    "disposition": -1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT Token/SlippageWraith2.png",
+      "scaleX": 1,
+      "scaleY": 1,
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "width": 1,
+    "height": 1,
+    "displayName": 30,
+    "depth": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "monster",
+      "createdViaMonsterBuilder": false,
+      "createdBy": "build-bestiary-slots.mjs 2026-10-07",
+      "lineage": "revenant"
+    },
+    "fourththing": {
+      "creatureType": "undead",
+      "rfi": {
+        "actor": {
+          "tier": "II",
+          "bracket": "boss",
+          "archetype": "the-ferryman-of-the-drowned-south",
+          "lineage": "revenant",
+          "title": "Revenant of the Flooded Towns — he still takes the fare (Boss)",
+          "bestiary": {
+            "themes": [
+              "revenant",
+              "haunting",
+              "drowned-south",
+              "river",
+              "boss"
+            ],
+            "role": "caster",
+            "lootTable": [
+              {
+                "name": "Salt Block",
+                "qty": "1d3",
+                "weight": 5
+              },
+              {
+                "name": "Memory Resin",
+                "qty": "1d2",
+                "weight": 3
+              },
+              {
+                "name": "A Fare, Still Wet",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "exemplar": true,
+          "price": {
+            "marks": 30,
+            "bounty": 30,
+            "hire": null,
+            "ransom": null,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "TII boss revenant — bounty 30 marks; credited to the pool matching the method (default softpower)"
+          }
+        }
+      },
+      "kind": "monster"
+    }
+  },
+  "system": {
+    "role": "caster",
+    "tier": 2,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 8,
+      "tier": 2,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "xp": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 3
+      },
+      "intrigue": {
+        "value": 3
+      },
+      "presence": {
+        "value": 5
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 3
+      },
+      "soul": {
+        "value": 5
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 235,
+        "max": 95,
+        "temp": 0
+      },
+      "stress": {
+        "value": 245,
+        "max": 76
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 16
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "yesod"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false,
+      "imposed": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "kinetic"
+      ],
+      "immunities": [],
+      "vulnerabilities": [
+        "sephirotic"
+      ]
+    },
+    "conditionImmunities": [
+      "charmed",
+      "shaken"
+    ],
+    "tags": [
+      "revenant",
+      "haunting",
+      "drowned-south",
+      "river",
+      "boss"
+    ],
+    "strain": {
+      "value": 0
+    },
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "biography": {
+      "concept": "T2 boss · revenant. The ferryman who drowned with his passengers when the Drowned South went under, and who has run the crossing every night since. He takes the fare. He does not deliver anyone.",
+      "notes": "When the waters took the flooded towns there was one ferry still running, and the ferryman would not leave while there were fares on the bank. The boat went down with eleven aboard. He still comes at dusk, pole in hand, lantern lit, and he still asks for the fare, and the people of the Drowned South still pay it because the alternative is to be rowed. The Evil Bad Faction tolerates him; Lady Ralph Maccio has twice tried to hire him and twice been told the fare. He is not angry. He is punctual."
+    }
+  },
+  "items": [
+    {
+      "name": "Crystallized Grief",
+      "type": "feat",
+      "img": "icons/commodities/gems/gem-rough-cushion-violet.webp",
+      "system": {
+        "category": "technique",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-revenant",
+          "lineage-trait"
+        ],
+        "description": {
+          "value": "<p>Immune to Charmed and Shaken — he is already nothing but those things. Resistant to kinetic damage, vulnerable to sephirotic. When he deals qliphothic damage he regains 1d4 Integrity. Laid to rest, not killed: at 0 Integrity he reforms at the next dusk unless the fare is returned to the bank.</p><p><em>Salt remembers what salt is for.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "feature",
+              "lineageTrait": "revenant"
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "hit",
+                "do": {
+                  "heal": "1d4"
+                },
+                "label": "Crystallized Grief — the stolen warmth"
+              }
+            ]
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "Fls204vBL1j2z9Av",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791422834076,
+        "modifiedTime": 1791422834076,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Pole-Strike",
+      "type": "weapon",
+      "img": "icons/weapons/staves/staff-simple.webp",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d10",
+          "attribute": "violence",
+          "type": "qliphothic",
+          "damageFlavor": "warmth-theft",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "bestiary",
+          "tier-ii",
+          "lineage-revenant"
+        ],
+        "effect": "On a hit the target is Shaken until the end of its next turn and feels cold for an hour.",
+        "flavor": "The pole finds the bottom. The bottom is you.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "shaken"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "",
+            "saveDcMode": "none",
+            "saveDcFixed": 15,
+            "saveAttributeOverrides": {}
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square, one target. Damage: <code>1d10</code> qliphothic (warmth-theft) + violence. On a hit the target is Shaken until the end of its next turn and feels cold for an hour.</p><p><em>The pole finds the bottom. The bottom is you.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "attack"
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "xXOU1mYcyDl8F3ee",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791422834076,
+        "modifiedTime": 1791422834076,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Lantern Toll",
+      "type": "weapon",
+      "img": "icons/sundries/lights/lantern-iron-lit-yellow.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "soul",
+        "skill": "channel",
+        "damage": {
+          "formula": "1d10",
+          "attribute": "soul",
+          "type": "qliphothic",
+          "damageFlavor": "lantern-light",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 18
+        },
+        "tags": [
+          "bestiary",
+          "tier-ii",
+          "lineage-revenant"
+        ],
+        "effect": "Soul DC 14 or Compelled for 1 round: the target walks toward the lantern.",
+        "flavor": "The light is warm. Nothing else is.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 14,
+            "saveAttributeOverrides": {}
+          },
+          "resolution": {
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 14,
+            "onSave": "negate",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 6 squares, one target. Damage: <code>1d10</code> qliphothic (lantern-light) + soul. Soul DC 14 or Compelled for 1 round: the target walks toward the lantern.</p><p><em>The light is warm. Nothing else is.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "attack"
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "2UYqA3ECxQPynDpk",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791422834076,
+        "modifiedTime": 1791422834076,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Fractured Will (2/scene)",
+      "type": "feature",
+      "img": "icons/skills/melee/sword-damaged-broken-orange.webp",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "bestiary",
+          "lineage-revenant",
+          "boss",
+          "fractured-will"
+        ],
+        "description": {
+          "value": "<p>When the Ferryman fails a check, some part of him refuses the outcome: the Ferryman succeeds instead. 2 times per scene.</p><p><em>The fare was paid. The outcome is not accepted.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "feature"
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "bTSrmKlUUirHxBAe",
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.5",
+        "createdTime": 1791422834076,
+        "modifiedTime": 1791422834076,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Fare Due (recharge 5–6)",
+      "type": "weapon",
+      "img": "icons/commodities/currency/coins-assorted-mix-copper.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "soul",
+        "skill": "channel",
+        "damage": {
+          "formula": "2d8",
+          "attribute": "soul",
+          "type": "qliphothic",
+          "damageFlavor": "the drowned count",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 18
+        },
+        "tags": [
+          "bestiary",
+          "tier-ii",
+          "lineage-revenant",
+          "boss",
+          "signature"
+        ],
+        "effect": "Cone 6 squares. — targets roll vs Resolve (DC 14). Half damage on success. On a failed save the target is Compelled for 1 round: it steps toward the water.",
+        "flavor": "Eleven voices say the fare together.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "compelled"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 14,
+            "saveAttributeOverrides": {}
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 14,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "cone",
+            "size": 30
+          }
+        },
+        "description": {
+          "value": "<p><strong>Area Attack.</strong> Each creature in a 6-square. cone rolls vs DC 14. Damage: <code>2d8</code> qliphothic (the drowned count). On a failed save the target is Compelled for 1 round: it steps toward the water.</p><p><em>Eleven voices say the fare together.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "save",
+              "aoeShape": "cone",
+              "aoeSize": 30,
+              "dc": 14
+            }
+          },
+          "npcAuto": {
+            "v": 1,
+            "rules": [],
+            "recharge": {
+              "mode": "d6",
+              "min": 5
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "ozUcaNtJ1gqIOZnH",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791422834076,
+        "modifiedTime": 1792989139650,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "The River Remembers (1/scene)",
+      "type": "weapon",
+      "img": "icons/magic/water/wave-water-teal.webp",
+      "system": {
+        "category": "ranged",
+        "intent": "soul",
+        "skill": "channel",
+        "damage": {
+          "formula": "3d8",
+          "attribute": "soul",
+          "type": "qliphothic",
+          "damageFlavor": "the whole flood",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 18
+        },
+        "tags": [
+          "bestiary",
+          "tier-ii",
+          "lineage-revenant",
+          "boss",
+          "ultimate"
+        ],
+        "effect": "Sphere 6 squares. — targets roll vs Evasion (DC 14). Half damage on success. ULTIMATE — usable only at or below half Integrity. The water rises to the knee and holds; on a failed save the target is Restrained until the end of its next turn.",
+        "flavor": "The flood never left. It was only waiting for the fare.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "restrained"
+            ],
+            "duration": "1-round",
+            "saveEachRound": false,
+            "saveAttribute": "intrigue",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 14,
+            "saveAttributeOverrides": {}
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "intrigue",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 14,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "area": {
+            "shape": "sphere",
+            "size": 30
+          }
+        },
+        "description": {
+          "value": "<p><strong>Area Attack.</strong> Each creature within 6 squares. rolls vs DC 14. Damage: <code>3d8</code> qliphothic (the whole flood). ULTIMATE — usable only at or below half Integrity. The water rises to the knee and holds; on a failed save the target is Restrained until the end of its next turn.</p><p><em>The flood never left. It was only waiting for the fare.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "save",
+              "aoeShape": "sphere",
+              "aoeSize": 30,
+              "dc": 14
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_id": "rPOtKOVPqtCkeTMK",
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1791422834076,
+        "modifiedTime": 1792977766126,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
+  "_id": "MHVUvyZbNGxeWytB",
+  "effects": [],
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.5",
+    "createdTime": 1791422834076,
+    "modifiedTime": 1791422834869,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!MHVUvyZbNGxeWytB"
+}

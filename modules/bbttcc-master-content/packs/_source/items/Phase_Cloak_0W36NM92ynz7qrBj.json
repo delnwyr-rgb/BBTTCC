@@ -7,8 +7,9 @@
     "tags": [],
     "category": "gear",
     "source": "",
+    "quantity": 1,
     "description": {
-      "value": "<p>Burns coolant for invisibility. Active toggle; the rig is harder to target until cycled off.</p>",
+      "value": "<p>Burns coolant for invisibility. Active toggle; the rig is harder to target until cycled off.</p><p><strong>Passive:</strong> +1 Evasion while fitted.</p>",
       "chat": ""
     }
   },
@@ -16,7 +17,9 @@
     "fourththing": {
       "rigGear": {
         "subtype": "rig-system",
-        "passive": false
+        "passive": {
+          "evasion": 1
+        }
       },
       "rfi": {
         "item": {
@@ -46,12 +49,12 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.361",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1778205374303,
-    "modifiedTime": 1778963271954,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792988929345,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

@@ -1,17 +1,13 @@
 {
   "name": "Archetype: The Lovers (Tier 3)",
   "type": "feat",
-  "img": "icons/equipment/neck/amulet-heart.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_lovers.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "book": ""
-    },
+    "source": "(2024 rules)",
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 3 — The Lovers</strong></p><ul><li><strong>Tactical:</strong> Reroll the lowest die vs charm/fear near allies.</li></ul>",
+      "value": "<p><strong>Tier 3 — The Lovers</strong></p><ul><li><p><strong>Tactical:</strong> Reroll the lowest die vs charm/fear near allies.</p></li></ul>",
       "chat": ""
     },
     "identifier": "archetype-lovers-t3",
@@ -52,6 +48,16 @@
         "levelMax": 3
       },
       "category": "archetype"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "mode": "reroll-lowest",
+          "context": "defense",
+          "vs": "charm or fear while an ally is near",
+          "note": "The Lovers T3"
+        }
+      ]
     }
   },
   "effects": [],
@@ -66,12 +72,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986761329,
-    "modifiedTime": 1782167238588,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792989162684,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

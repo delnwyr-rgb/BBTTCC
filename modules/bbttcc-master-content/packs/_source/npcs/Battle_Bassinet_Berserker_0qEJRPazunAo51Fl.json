@@ -1,20 +1,20 @@
 {
   "name": "Battle-Bassinet Berserker",
   "type": "npc",
-  "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+  "img": "art/bbttcc/asli-tokens/amy_battle_bassinet_berserker.webp",
   "system": {
     "role": "brute",
     "tier": 2,
     "factionId": "",
-    "notes": "A Valhaulan techno-viking strapped into an armored cradle-rig \u2014 the Battle-Bassinet \u2014 that screams lullabies at full volume while he swings. Storm's a comin'. The storm has a teething ring.",
+    "notes": "A Valhaulan techno-viking strapped into an armored cradle-rig — the Battle-Bassinet — that screams lullabies at full volume while he swings. Storm's a comin'. The storm has a teething ring.",
     "details": {
       "level": 8,
-      "tier": 2,
+      "tier": "2",
       "statPoints": 0,
       "skillPoints": 0
     },
     "faction": {
-      "id": null,
+      "id": "",
       "loyalty": 0
     },
     "attributes": {
@@ -40,21 +40,22 @@
     "skills": {},
     "derived": {
       "integrity": {
-        "value": 42,
-        "max": 42
+        "value": 75,
+        "max": 75,
+        "temp": 5
       },
       "stress": {
-        "value": 18,
-        "max": 18
+        "value": 105,
+        "max": 105
       },
       "guard": {
-        "value": 14
+        "value": 22
       },
       "evasion": {
-        "value": 10
+        "value": 18
       },
       "resolve": {
-        "value": 13
+        "value": 18
       }
     },
     "magic": {
@@ -66,7 +67,7 @@
         "value": 0,
         "max": 10
       },
-      "sephirah": "gevurah"
+      "sephirah": "geburah"
     },
     "resources": {
       "frameDice": {
@@ -127,7 +128,8 @@
       "radiationIrradiated": false,
       "radiationSickened": false,
       "radiationPoisoned": false,
-      "radiationTerminal": false
+      "radiationTerminal": false,
+      "imposed": false
     },
     "actions": {
       "actionUsed": false,
@@ -145,6 +147,9 @@
     },
     "conditionImmunities": [],
     "tags": [],
+    "strain": {
+      "value": 0
+    },
     "radiation": {
       "rp": 0,
       "thresholds": {
@@ -157,6 +162,10 @@
       "value": 0,
       "taint": 0,
       "fragments": []
+    },
+    "biography": {
+      "concept": "",
+      "notes": "A Valhaulan techno-viking strapped into an armored cradle-rig — the Battle-Bassinet — that screams lullabies at full volume while he swings. Storm's a comin'. The storm has a teething ring."
     }
   },
   "flags": {
@@ -188,15 +197,22 @@
             ]
           },
           "price": {
-            "marks": 450,
-            "bounty": 450,
-            "hire": 1125,
-            "ransom": 750,
+            "marks": 20,
+            "bounty": 20,
+            "hire": 30,
+            "ransom": 30,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "II heavy brute"
-          }
+            "notes": "TII heavy mortal — bounty 20 / hire 30 marks; credited to the pool matching the method (default softpower)"
+          },
+          "lineage": "mortal",
+          "subLineage": "valhaulan"
         }
+      },
+      "creatureType": "humanoid",
+      "surgeEnabled": false,
+      "npcAutoFired": {
+        "bloodied": "none"
       }
     }
   },
@@ -209,12 +225,12 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+      "src": "art/bbttcc/asli-tokens/amy_battle_bassinet_berserker.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",
-      "scaleX": 1,
-      "scaleY": 1,
+      "scaleX": 1.8,
+      "scaleY": 1.8,
       "tint": "#ffffff",
       "alphaThreshold": 0.75
     },
@@ -275,7 +291,7 @@
         "ring": null,
         "background": null
       },
-      "effects": 1,
+      "effects": 0,
       "subject": {
         "scale": 1,
         "texture": null
@@ -288,7 +304,11 @@
       "disposition": false
     },
     "movementAction": null,
-    "flags": {},
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
     "randomImg": false,
     "appendNumber": false,
     "prependAdjective": false
@@ -350,6 +370,12 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "appliedStates": {
+            "states": [
+              "staggered"
+            ],
+            "duration": "1-round"
           }
         },
         "description": {
@@ -573,18 +599,17 @@
         "default": 0
       },
       "_stats": {
-        "coreVersion": "14.363",
+        "coreVersion": "14.368",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
+        "systemVersion": "0.6.1",
         "createdTime": 1780000000000,
-        "modifiedTime": 1780000000000,
-        "lastModifiedBy": "ftSprintBuilder0",
+        "modifiedTime": 1791331975890,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
-      "folder": null,
-      "_key": "!actors.items!0qEJRPazunAo51Fl.wpcZ3ksQye5J7fBK"
+      "folder": null
     },
     {
       "name": "Battle-Lullaby",
@@ -612,7 +637,7 @@
           "storm-voiced",
           "fear"
         ],
-        "effect": "15 ft. cone. Resolve vs DC 13. Fail: 1d10 psychic to Stress and Shaken until the end of its next turn. Half on success, no Shaken.",
+        "effect": "3 squares. cone. Resolve vs DC 13. Fail: 1d10 psychic to Stress and Shaken until the end of its next turn. Half on success, no Shaken.",
         "flavor": "",
         "manifestation": {
           "tier": 1,
@@ -643,6 +668,24 @@
           "opCost": {
             "pool": "",
             "value": 0
+          },
+          "resolution": {
+            "mode": "save",
+            "saveAttribute": "soul",
+            "saveDcMode": "fixed",
+            "saveDcFixed": 13,
+            "onSave": "half",
+            "statesOnFail": true
+          },
+          "appliedStates": {
+            "states": [
+              "shaken"
+            ],
+            "duration": "1-round"
+          },
+          "area": {
+            "shape": "cone",
+            "size": 15
           }
         },
         "description": {
@@ -870,18 +913,80 @@
         "default": 0
       },
       "_stats": {
-        "coreVersion": "14.364",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.1",
+        "systemVersion": "0.6.37",
         "createdTime": 1780000000000,
-        "modifiedTime": 1782167242015,
+        "modifiedTime": 1792977750752,
         "lastModifiedBy": "bytUGWIOqq9eT7Or",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
       },
+      "folder": null
+    },
+    {
+      "name": "Storm-Voiced",
+      "type": "feature",
+      "img": "icons/magic/control/silhouette-aura-energy.webp",
+      "system": {
+        "category": "principle",
+        "source": "lineage",
+        "tags": [
+          "lineage-trait",
+          "mortal",
+          "valhaulan"
+        ],
+        "description": {
+          "value": "<p>The first time each scene this Valhaulan is reduced below half Integrity, they roar: allies within 6 squares reroll the lowest die on their next attack roll, and the Valhaulan gains 5 temporary Integrity.</p><p><em>Storm's a-comin'. The storm has opinions.</em></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "npcAuto": {
+            "v": 1,
+            "rules": [
+              {
+                "on": "bloodied",
+                "do": {
+                  "tempIntegrity": 5,
+                  "prompt": "Storm-Voiced: allies within 6 squares reroll the lowest die on their next attack."
+                },
+                "limit": {
+                  "per": "scene",
+                  "uses": 1
+                }
+              }
+            ]
+          },
+          "rfi": {
+            "item": {
+              "frame": "trait",
+              "lineageTrait": "mortal"
+            }
+          }
+        }
+      },
+      "_id": "JvxM0Yn9RzIIxTw6",
+      "effects": [],
       "folder": null,
-      "_key": "!actors.items!0qEJRPazunAo51Fl.e7HUs9wVIuYZhKFh"
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1791342348580,
+        "modifiedTime": 1791342348580,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
     }
   ],
   "effects": [],
@@ -890,12 +995,12 @@
     "default": 0
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1780000000000,
-    "modifiedTime": 1783219918021,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "modifiedTime": 1792989121616,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

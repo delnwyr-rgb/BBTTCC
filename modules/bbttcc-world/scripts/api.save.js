@@ -426,6 +426,28 @@
         if (extras.length) { try { await Actor.implementation.deleteDocuments(extras); report.actorsDeleted = extras.length; } catch (e) { report.errors.push(`delete actors: ${e?.message || e}`); } }
       }
 
+      // 2b. PARTY POSITION (owner ruling 2026-10-26: "a full reset should also strip" where the party stands). A story
+      //     reset to the GOLDEN MASTER clears every faction's recorded arrival (flags.bbttcc-factions.travel) and every
+      //     saved ride (bbttcc-travel.rideSessions), so the story's location guard falls back to tokens / unknown
+      //     (fail-open) instead of a position the golden happened to capture — live-caught: the 10-26 golden carried
+      //     Torvaal "at CanYAWN Amirite.b" from a 10-22 Iron Reaches ride and refused the opening beat at Allesh-Gilliam.
+      //     An ordinary save keeps its positions (resuming a session should put the party back where it stood).
+      //     opts.clearPartyPosition true/false overrides the rule.
+      const clearPos = opts.clearPartyPosition ?? (story && !!row.golden);
+      report.positionsCleared = 0;
+      if (clearPos) {
+        try {
+          if (game.settings.settings.has("bbttcc-travel.rideSessions")) {
+            const rides = game.settings.get("bbttcc-travel", "rideSessions") || {};
+            if (Object.keys(rides).length) { await game.settings.set("bbttcc-travel", "rideSessions", {}); report.positionsCleared += Object.keys(rides).length; }
+          }
+          for (const a of (game.actors?.contents ?? [])) {
+            if (a.getFlag?.("bbttcc-factions", "travel") === undefined) continue;
+            await a.unsetFlag("bbttcc-factions", "travel"); report.positionsCleared++;
+          }
+        } catch (e) { report.errors.push(`party position: ${e?.message || e}`); }
+      }
+
       // 3. scenes — flags + drawings (hexes) + tokens, every scene in the save.
       n = 0;
       for (const s of snap.scenes) {
@@ -495,6 +517,7 @@
         content: `<div class="bbttcc-card"><b>${story ? "⟲ Story reset to" : "💾 Save loaded"}: ${foundry.utils.escapeHTML(row.label)}</b><br/>` +
           `${report.settings} settings${story ? ` (${report.settingsKept} game-layer kept${report.settingsMerged ? `, ${report.settingsMerged} merged` : ""})` : ""} · actors ${report.actorsUpdated} updated / ${report.actorsCreated} created / ${report.actorsDeleted} deleted${story ? ` / ${report.actorsKept} library kept` : ""} · ${report.scenes} scenes (${story ? `${report.hexesMerged} hexes merged` : `${report.drawings} drawings`}, ${report.tokens} tokens) · ${report.journal} journal` +
           (report.staleCards ? ` · ${report.staleCards} newer invitation card(s) sealed` : "") +
+          (report.positionsCleared ? ` · party position cleared (${report.positionsCleared})` : "") +
           (report.errors.length ? `<br/><span style="color:#f87171">${report.errors.length} error(s) — see console</span>` : "") +
           `<br/><i>All clients reload now.</i></div>`
       });

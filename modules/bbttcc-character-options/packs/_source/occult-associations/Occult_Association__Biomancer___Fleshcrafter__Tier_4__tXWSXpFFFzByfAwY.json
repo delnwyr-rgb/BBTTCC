@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 — Biomancer</strong></p><p><strong>“This is what comes after Athletics.”</strong></p><p><strong>Strategic</strong></p><ul><li>Once per Strategic Turn, negate a major environmental, casualty, or biological crisis affecting your faction</li><li>Alternatively, convert a lethal condition into a survivable but transformed state</li></ul><p><strong>Cost:</strong> major mutation event — identity, physiology, or faction perception permanently altered.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"biomT4\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Negate Crisis</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Negate a major environmental/casualty/biological crisis affecting your faction, OR convert a lethal condition into a survivable but transformed state.</div>\n</div>",
+      "value": "<p><strong>Tier 4 — Biomancer</strong></p><p><strong>“This is what comes after Athletics.”</strong></p><p><strong>Strategic</strong></p><ul><li>Once per turn, negate a major environmental, casualty, or biological crisis affecting your Domain</li><li>Alternatively, convert a lethal condition into a survivable but transformed state</li></ul><p><strong>Cost:</strong> major mutation event — identity, physiology, or faction perception permanently altered.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"biomT4\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Negate Crisis</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Negate a major environmental/casualty/biological crisis affecting your Domain, OR convert a lethal condition into a survivable but transformed state.</div>\n</div>",
       "chat": ""
     },
     "identifier": "occult-association-biomancer-t4",
@@ -29,7 +29,7 @@
       "level": null
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Level 17+",
     "type": {
       "value": "",
       "subtype": ""
@@ -247,12 +247,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.363",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987087005,
-    "modifiedTime": 1781025125521,
-    "lastModifiedBy": "MRFjjbUTBd66pWBY"
+    "modifiedTime": 1792989175528,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

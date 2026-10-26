@@ -7,7 +7,7 @@
     "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-canon-qliph-scarred=\"v1\" style=\"display:none\"></div><p><em>\"It wasn't your voice. It was a voice you agreed to share.\"</em></p><p><strong>What's Inside You (1/Soma Break).</strong> Action — let the splinter speak. Choose one humanoid you can see within 6 squares who can hear and understand a language you know. They make a Soul check vs. your Resolve.</p><p><strong>Failure:</strong> they are <strong>Calmed</strong> by you for 1 minute, or until they take damage or witness you attack them or someone they consider an ally.</p><p><strong>Success:</strong> they know someone else briefly spoke through your mouth and can describe it to others — they are probably going to tell their friends.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"qliphDiabolicWhatsInside\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>What's Inside You</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Action (6 squares target)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">One humanoid in 6 squares makes Soul check vs your Resolve. Fail → Calmed by you for 1 min (or until damaged / witnesses you attack). Success → they know it happened and may talk.</span></p></div>",
+      "value": "<p><em>\"It wasn't your voice. It was a voice you agreed to share.\"</em></p><p><strong>What's Inside You (1/Soma Break).</strong> Action — let the splinter speak. Choose one humanoid you can see within 6 squares who can hear and understand a language you know. They make a Soul check vs. your Resolve.</p><p><strong>Failure:</strong> they are <strong>Calmed</strong> by you for 1 minute, or until they take damage or witness you attack them or someone they consider an ally.</p><p><strong>Success:</strong> they know someone else briefly spoke through your mouth and can describe it to others — they are probably going to tell their friends.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"qliphDiabolicWhatsInside\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>What's Inside You</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Action (6 squares target)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">One humanoid in 6 squares makes Soul check vs your Resolve. Fail → Calmed by you for 1 min (or until damaged / witnesses you attack). Success → they know it happened and may talk.</span></p></div>",
       "chat": ""
     },
     "advancement": {},
@@ -16,7 +16,7 @@
     "prerequisites": {
       "items": [],
       "repeatable": false,
-      "level": null
+      "level": 1
     },
     "uses": {
       "spent": 0,
@@ -33,14 +33,10 @@
   },
   "effects": [],
   "flags": {
-    "dnd5e": {
-      "originType": "feat"
-    },
     "bbttcc": {
       "kind": "qliph_scarred",
       "feature": "what’s_inside_you",
       "lineage": "Diabolic",
-      "tierLevel": 1,
       "version": "1.1.0",
       "date": "2026-04-19",
       "rfiNative": true
@@ -235,12 +231,12 @@
       "systemId": "fourththing",
       "systemVersion": "0.6.0"
     },
-    "coreVersion": "14.364",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.1",
+    "systemVersion": "0.6.37",
     "createdTime": 1776660294576,
-    "modifiedTime": 1782167240124,
-    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+    "modifiedTime": 1792988976626,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,
