@@ -1030,6 +1030,9 @@
     root.className = "bbttcc-player-hud-wrap";
     root.innerHTML = `
       <div class="bbttcc-player-hud-bar">
+        <button type="button" class="bbttcc-btn bbttcc-landing-door" data-action="landing" data-tooltip="Back to the Bad Eden landing page — training, the films, your Steward, make a Steward / Domain / rig">
+          <i class="fas fa-home"></i><span>Bad Eden</span>
+        </button>
         <button type="button" class="bbttcc-btn" data-action="faction">
           <i class="fas fa-flag"></i><span>Domain</span>
         </button>
@@ -1052,6 +1055,7 @@
       ev.preventDefault();
       ev.stopPropagation();
       switch (btnEl.dataset.action) {
+        case "landing":   return game.bbttcc?.onboarding?.landing?.open?.();   // the front door (bbttcc-onboarding landing.js)
         case "faction":   return openFaction();
         case "steward":   return openStewardOrRig();
         case "abilities": return toggleTray(root);

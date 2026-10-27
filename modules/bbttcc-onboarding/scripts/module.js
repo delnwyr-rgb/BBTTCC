@@ -16,6 +16,8 @@
  *   bbttcc-travel     (game.bbttcc.api.transition.dive for cinematic Scene dives)
  */
 
+import "./landing.js";   // the front door: studio ident → opening film → landing page (2026-10-26)
+
 const MODULE_ID = "bbttcc-onboarding";
 const TAG  = "[onboarding]";
 const log  = (...a) => console.log(TAG, ...a);

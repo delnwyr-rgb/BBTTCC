@@ -934,15 +934,57 @@ async function createActorShellFromPayload(payload) {
   // Aslı token from the review screen (2026-10-17) — portrait AND token; the
   // GOTTGAIT placeholder only when no art was picked (picker unavailable).
   const defaultImg = String(payload.img || "").trim() || "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/QlipothicWhorlDude2.png";
-  const actor = await Actor.create({
+  const shell = {
     name: payload.name || "New Operative",
     type: "character",
     img: defaultImg,
     prototypeToken: { texture: { src: defaultImg } },
     system: { details: { alignment: "" } }
-  });
+  };
+  // A player without the Create Actor permission (the landing-page hub,
+  // 2026-10-26) gets the empty shell from the GM, owned by them; the rest of the
+  // pipeline only touches that owned actor, so it runs here as before.
+  if (!game.user?.isGM && !game.user?.can?.("ACTOR_CREATE")) return _createShellViaGM(shell);
+  const actor = await Actor.create(shell);
   if (!actor) throw new Error("Actor.create returned null");
   return actor;
+}
+
+const SHELL_OP = "autoLink.createStewardShell";
+
+async function _createShellViaGM(shell) {
+  const gx = game.bbttcc?.api?.gmExec;
+  if (typeof gx?.call !== "function") throw new Error("Can't create a Steward from this seat: no Create Actor permission and the GM relay isn't loaded");
+  const r = await gx.call(SHELL_OP, { shell });
+  const id = r?.id;
+  if (!id) throw new Error("the GM couldn't create the Steward");
+  const t0 = Date.now();
+  while (!game.actors?.get?.(id) && Date.now() - t0 < 5000) await new Promise(res => setTimeout(res, 100));
+  const actor = game.actors?.get?.(id);
+  if (!actor) throw new Error("the new Steward never arrived from the GM");
+  return actor;
+}
+
+function _registerShellOp() {
+  const gx = game.bbttcc?.api?.gmExec;
+  if (typeof gx?.register !== "function") return warn("gmExec missing — Steward shell relay not registered");
+  gx.register(SHELL_OP, async ({ shell } = {}, meta = {}) => {
+    const user = game.users?.get?.(String(meta.fromUserId || ""));
+    if (!user) throw new Error("unknown sender");
+    const s = (shell && typeof shell === "object") ? shell : {};
+    const img = String(s.img || "").trim() || "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/QlipothicWhorlDude2.png";
+    const actor = await Actor.create({
+      name: String(s.name || "New Operative").slice(0, 120),
+      type: "character",
+      img,
+      prototypeToken: { texture: { src: img } },
+      system: { details: { alignment: "" } },
+      ownership: { default: 0, [user.id]: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
+      // the onboarding forge waits on this to know the shell is its player's
+      flags: { "bbttcc-auto-link": { createdFor: user.id } }
+    });
+    return { id: actor?.id ?? null };
+  });
 }
 
 async function syncIdentityAndRecalc(actor) {
@@ -1095,6 +1137,7 @@ Hooks.once("ready", () => {
 
   game.bbttcc.api.autoLink.runGuidedCreatePipeline = runGuidedCreatePipeline;
   game.bbttcc.api.autoLink.getGuidedState = getGuidedState;
+  _registerShellOp();
 
   log("Guided create pipeline ready (old wizard UI decommissioned — Tree Wizard v2 in bbttcc-sorting-engine is now canonical).");
 });

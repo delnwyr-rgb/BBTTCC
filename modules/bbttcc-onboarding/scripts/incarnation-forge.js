@@ -40,7 +40,9 @@ function _awaitForgedSteward() {
       resolve(actor || null);
     };
     const onCreate = (doc, _options, userId) => {
-      if (userId !== game.user.id) return;
+      // A seat without Create Actor gets its shell from the GM (auto-link relay,
+      // 2026-10-26) — then the creator is the GM and the flag names this seat.
+      if (userId !== game.user.id && doc?.getFlag?.("bbttcc-auto-link", "createdFor") !== game.user.id) return;
       if (doc?.documentName === "Actor" && doc.type === "character") finish(doc);
     };
     Hooks.on("createActor", onCreate);
@@ -96,7 +98,9 @@ async function _forgeSteward(user) {
     ui.notifications?.error?.("No character found, and the Sorting Engine (bbttcc-sorting-engine) isn't loaded — ask the GM to create/assign a Steward, then rerun onboarding.");
     return null;
   }
-  if (!game.user.can("ACTOR_CREATE")) {
+  // No Create Actor permission is fine while a GM can make the shell (auto-link's
+  // gmExec relay, 2026-10-26); only refuse when neither path exists.
+  if (!game.user.can("ACTOR_CREATE") && !(game.bbttcc?.api?.gmExec?.types?.() ?? []).includes("autoLink.createStewardShell")) {
     ui.notifications?.warn?.("Your player role can't create actors. Ask the GM to grant Create Actor permission (or forge the Steward together), then rerun onboarding.");
     await _speak("The forge needs clay your permissions don't carry, One. Flagging the GM— *bzzt* —try again once they hand it over.", { audience: "self" });
     try {
@@ -177,6 +181,32 @@ function _registerFoundingOp() {
     } catch (e) { console.warn(TAG, "standard package apply failed", e); }
     await steward.setFlag(FMOD, "factionId", faction.id);
     return { factionId: faction.id };
+  });
+}
+
+/** The landing page's "Found a Domain" (2026-10-26): the same founding op + starter
+ *  rig as the ceremony, through gmExec — no live tutorial run needed. The sender
+ *  must own the Steward, and a Steward founds only one Domain. */
+function _registerLandingFoundingOp() {
+  const gx = game.bbttcc?.api?.gmExec;
+  if (typeof gx?.register !== "function") return console.warn(TAG, "gmExec missing — landing founding op not registered.");
+  gx.register("onboarding.foundDomain", async ({ name, creed, stewardId, rigChassis, rigName } = {}, meta = {}) => {
+    const user = game.users?.get?.(String(meta.fromUserId || ""));
+    if (!user) throw new Error("unknown sender");
+    const steward = game.actors?.get?.(String(stewardId || ""));
+    if (!steward) throw new Error("Steward not found");
+    if (!user.isGM && !steward.testUserPermission?.(user, "OWNER")) throw new Error("that Steward isn't yours");
+    const cur = String(steward.getFlag?.(FMOD, "factionId") || "");
+    if (cur && game.actors?.get?.(cur)) throw new Error(`${steward.name} already has a Domain`);
+    const ns = _ns();
+    const userId = user.isGM ? "" : user.id;
+    const chassis = ["hexmobile", "space_marine"].includes(String(rigChassis)) ? String(rigChassis) : "hexmobile";
+    const res = await ns?.runAsGM?.("foundPlayerFaction", { name, creed, stewardId: steward.id, userId, rigChassis: chassis });
+    if (!res?.factionId) throw new Error("founding failed — see the GM console");
+    let rigId = null;
+    try { rigId = (await ns.runAsGM("mintRig", { factionId: res.factionId, chassis, userId, name: rigName || "" }))?.rigId ?? null; }
+    catch (e) { console.warn(TAG, "landing founding: starter rig failed", e); }
+    return { factionId: res.factionId, rigId };
   });
 }
 
@@ -322,6 +352,7 @@ Hooks.once("ready", () => {
   if (!ns) return console.warn(TAG, "onboarding namespace missing — forge not installed.");
 
   _registerFoundingOp();
+  _registerLandingFoundingOp();
   // Group induction Phase 2: a class member without a Steward forges on their
   // own screen while the class waits at the incarnation door.
   ns.forgeSteward = () => _forgeSteward(game.user);

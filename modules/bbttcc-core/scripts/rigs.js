@@ -90,8 +90,31 @@ async function update(actor, patch = {}, options = {}) {
   return Object.keys(u).length ? actor.update(u, options) : actor;
 }
 
-/** Create a rig from a normalised spec. */
+/** Create a rig from a normalised spec. A seat without the Create Actor permission
+ *  (the landing-page hub, 2026-10-26: players no longer need sidebar permissions)
+ *  has the GM create it through gmExec "rigs.create" — owned by that player. */
 async function create(spec = {}) {
+  if (game.user?.isGM || game.user?.can?.("ACTOR_CREATE")) return _createLocal(spec);
+  const gx = game.bbttcc?.api?.gmExec;
+  if (typeof gx?.call !== "function") throw new Error("rigs.create: this seat can't create actors and the GM relay isn't loaded");
+  const r = await gx.call("rigs.create", { spec });
+  return _awaitActor(r?.id);
+}
+
+/** The relayed actor arrives over the socket a beat after the GM's ack. */
+async function _awaitActor(id, ms = 5000) {
+  if (!id) return null;
+  const t0 = Date.now();
+  while (Date.now() - t0 < ms) {
+    const a = game.actors?.get?.(id);
+    if (a) return a;
+    await new Promise(r => setTimeout(r, 100));
+  }
+  return game.actors?.get?.(id) ?? null;
+}
+
+async function _createLocal(spec = {}, { ownership = null } = {}) {
+  const own = ownership ? { ownership } : {};
   const { name = "Rig", img, identity = {}, integrity = {}, crew = {}, travel = {}, output = {}, defenses = {}, items = [], token = {}, folder = null, tags = [] } = spec;
   const bracket = integrity.bracket ?? "medium";
   const tier = num(integrity.tier, 1);
@@ -107,13 +130,13 @@ async function create(spec = {}) {
     const system = { identity: { mobility: "mobile", state: "parked", factionOwnerId: "", archetype: "", binding: { hexId: "", sceneId: "", tokenId: "" }, ...identity },
       crew: { slots: [], capacity: DEFAULT_CAPACITY, crewMin: 1, crewMax: 8, ...crew }, integrity: { value, max, tier: num(integrity.tier, 1), bracket },
       output: { modules: [], basePerTurn: {}, ...output }, travel: { ...DEFAULT_TRAVEL, ...travel }, defenses: { resistances: [], immunities: [], vulnerabilities: [], ...defenses }, tags };
-    return Actor.create({ name, type: "rig", img: img ?? "icons/svg/castle.svg", folder, system, items, prototypeToken: token, flags: { [F]: { factionId: identity.factionOwnerId || null } } });
+    return Actor.create({ name, type: "rig", img: img ?? "icons/svg/castle.svg", folder, ...own, system, items, prototypeToken: token, flags: { [F]: { factionId: identity.factionOwnerId || null } } });
   }
   const rig = { mobility: identity.mobility ?? "mobile", state: identity.state ?? "parked", factionOwnerId: identity.factionOwnerId ?? "", archetype: identity.archetype ?? "",
     binding: { hexId: "", sceneId: "", tokenId: "", ...(identity.binding ?? {}) }, tier: num(integrity.tier, 1), bracket,
     crew: { slots: [], capacity: DEFAULT_CAPACITY, crewMin: 1, crewMax: 8, ...crew }, output: { modules: [], basePerTurn: {}, ...output }, travel: { ...DEFAULT_TRAVEL, ...travel }, order: "none", tags };
   const traits = {}; for (const [k, kind] of [["resistances", "dr"], ["immunities", "di"], ["vulnerabilities", "dv"]]) if (defenses[k]?.length) traits[kind] = { value: defenses[k] };
-  return Actor.create({ name, type: "vehicle", img: img ?? "icons/svg/castle.svg", folder,
+  return Actor.create({ name, type: "vehicle", img: img ?? "icons/svg/castle.svg", folder, ...own,
     system: { attributes: { hp: { value, max, dt: DT_BY_BRACKET[bracket] ?? 0 } }, traits },
     items, prototypeToken: token, flags: { [F]: { rig, factionId: identity.factionOwnerId || null } } });
 }
@@ -166,4 +189,24 @@ Hooks.once("init", () => {
     DT_BY_BRACKET, HP_BY_BRACKET, FLAG_SCOPE: F
   };
   console.log(TAG, `installed game.bbttcc.rigs (${isRFI() ? "fourththing rig actors" : "dnd5e vehicles + flags." + F + ".rig"})`);
+});
+
+Hooks.once("ready", () => {
+  // GM side of create()'s relay: the sender becomes the rig's OWNER, and may only
+  // name a Domain they own as its faction.
+  const gx = game.bbttcc?.api?.gmExec;
+  if (typeof gx?.register !== "function") return console.warn(TAG, "gmExec missing — rigs.create relay not registered");
+  gx.register("rigs.create", async ({ spec } = {}, meta = {}) => {
+    const user = game.users?.get?.(String(meta.fromUserId || ""));
+    if (!user) throw new Error("unknown sender");
+    const s = (spec && typeof spec === "object") ? { ...spec } : {};
+    if (!user.isGM) {
+      const fid = String(s.identity?.factionOwnerId || "").replace(/^Actor\./, "");
+      const fac = fid ? game.actors?.get?.(fid) : null;
+      if (fid && !fac?.testUserPermission?.(user, "OWNER")) throw new Error("you don't own that Domain");
+      s.folder = null;
+    }
+    const actor = await _createLocal(s, { ownership: { default: 0, [user.id]: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER } });
+    return { id: actor?.id ?? null };
+  });
 });
