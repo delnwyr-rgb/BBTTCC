@@ -2422,10 +2422,18 @@ function _storyTokenFacts(campaign) {
     const camp = campaign || (typeof getCampaign === "function" ? getCampaign(getActiveCampaignId()) : null);
     const roster = new Set([].concat((camp && camp.factionIds) || [], (camp && camp.factionId) ? [camp.factionId] : [])
       .map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean));
-    const scene = (game.scenes?.contents || []).find(sc => /river\s*heart/i.test(String(sc?.name || "")) &&
-      (sc.drawings?.contents || []).some(d => d?.flags?.["bbttcc-territory"]?.isHex));
-    if (!scene) return out;
-    const hexes = (scene.drawings?.contents || []).map(d => d?.flags?.["bbttcc-territory"]).filter(t => t && t.isHex);
+    // ONE MAP (2026-10-26): the River Heart is the hexes stamped regionKey "r4" (the June region carve), on whatever
+    // scene they sit — the merged map holds every region. Legacy fallback: the scene named River Heart.
+    let hexes = [];
+    for (const sc of (game.scenes?.contents || [])) for (const d of (sc.drawings?.contents || [])) {
+      const t = d?.flags?.["bbttcc-territory"]; if (t && t.isHex && d?.flags?.["bbttcc-travel"]?.regionKey === "r4") hexes.push(t);
+    }
+    if (!hexes.length) {
+      const scene = (game.scenes?.contents || []).find(sc => /river\s*heart/i.test(String(sc?.name || "")) &&
+        (sc.drawings?.contents || []).some(d => d?.flags?.["bbttcc-territory"]?.isHex));
+      if (!scene) return out;
+      hexes = (scene.drawings?.contents || []).map(d => d?.flags?.["bbttcc-territory"]).filter(t => t && t.isHex);
+    }
     const held = hexes.filter(t => roster.has(String(t.factionId || "").replace(/^Actor\./, "")));
     const name = t => String(t.name || "").replace(/[ \s]+/g, " ").trim();
     held.sort((a, b) => (b.capital ? 1 : 0) - (a.capital ? 1 : 0) || name(a).localeCompare(name(b)));

@@ -382,7 +382,10 @@
       // Prefer the shared transition primitive (adds the portal swirl on the region
       // drawing); fall back to the hub's private dive if the primitive isn't loaded.
       const tx = game.bbttcc?.api?.transition;
-      if (tx?.dive) tx.dive(link.targetSceneUuid, { focus: hit.center, hexUuid: hit.document?.uuid, label: link.label });
+      // ONE MAP (2026-10-26): every region link now targets the same big hex map, so a link may carry
+      // landAt {x, y, scale?} — the region's middle on that map — and the camera settles there.
+      const landAt = (link.landAt && Number.isFinite(Number(link.landAt.x)) && Number.isFinite(Number(link.landAt.y))) ? { x: Number(link.landAt.x), y: Number(link.landAt.y), scale: Number.isFinite(Number(link.landAt.scale)) ? Number(link.landAt.scale) : undefined } : null;
+      if (tx?.dive) tx.dive(link.targetSceneUuid, { focus: hit.center, hexUuid: hit.document?.uuid, label: link.label, landAt });
       else diveToScene(link.targetSceneUuid, hit.center);
     } catch (err) {
       console.error("[bbttcc worldmap] pointerdown error:", err);

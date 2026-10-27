@@ -90,18 +90,87 @@
     }
   }
 
-  Hooks.on("drawDrawing", (drawing) => { try { centerLabel(drawing); } catch {} });
-  Hooks.on("refreshDrawing", (drawing) => { try { centerLabel(drawing); } catch {} });
+  // ── BATCHED HEX LABELS (2026-10-26, map-travel perf pass) ───────────────────────────────────────────
+  // Measured in a lab copy of Bad Eden: every hex is a PrimaryGraphics with its PreciseText label as a CHILD,
+  // so the primary group draws outline, label, outline, label… — 2 objects per hex that never batch. 141
+  // hexes ≈ 10 fps on an M3 Max; the labels alone are half of it. Here each territory hex's label stops
+  // rendering in place (renderable=false, still laid out and centred above) and a Sprite sharing the label's
+  // own texture is drawn in ONE PrimaryCanvasContainer at the Drawings sort layer with a sort above every
+  // drawing — so labels sit over every hex and under every token, exactly as before, but as one run of
+  // sprites. The hex outlines then run back-to-back too. Client setting `batchHexLabels` (default on) is the
+  // per-browser escape hatch: off = Foundry's own labels.
+  const S_BATCH = "batchHexLabels";
+  Hooks.once("init", () => {
+    try {
+      game.settings.register(MOD, S_BATCH, {
+        name: "Batch hex labels (faster hex maps)",
+        hint: "Draws every hex name in one layer instead of one per hex, which roughly doubles the frame rate on hex maps. Turn off only if hex names look wrong.",
+        scope: "client", config: true, type: Boolean, default: true,
+        onChange: () => { try { canvas?.ready && canvas.draw(); } catch (_e) {} }
+      });
+    } catch (e) { warn("batch setting registration failed", e); }
+  });
+  const batchOn = () => { try { return game.settings.get(MOD, S_BATCH) !== false; } catch (_e) { return true; } };
+  const LIFT = { cont: null, sprites: new Map() };
+  function liftHost() {
+    if (LIFT.cont && !LIFT.cont.destroyed && LIFT.cont.parent === canvas?.primary) return LIFT.cont;
+    const PCC = foundry?.canvas?.primary?.PrimaryCanvasContainer;
+    if (!PCC || !canvas?.primary) return null;
+    const c = new PCC();
+    c.name = "bbttcc-hex-labels";
+    c.eventMode = "none"; c.interactiveChildren = false;
+    c.elevation = 0;
+    c.sortLayer = foundry.canvas.groups.PrimaryCanvasGroup.SORT_LAYERS.DRAWINGS;   // 600 — under TOKENS (700)
+    c.sort = Number.MAX_SAFE_INTEGER;                                            // above every drawing
+    canvas.primary.addChild(c);
+    LIFT.cont = c; LIFT.sprites = new Map();
+    return c;
+  }
+  function unlift(id) {
+    const sp = LIFT.sprites.get(id); if (!sp) return;
+    LIFT.sprites.delete(id);
+    try { if (!sp.destroyed) sp.destroy({ texture: false, baseTexture: false }); } catch (_e) {}
+  }
+  function liftLabel(drawing) {
+    if (!drawing?.id || !isTerritoryHex(drawing)) return;
+    const txt = drawing.text ?? drawing._text; const mesh = txt?.parent;
+    if (!batchOn() || !txt || !mesh || txt.destroyed) { if (txt && !txt.destroyed) txt.renderable = true; unlift(drawing.id); return; }
+    const host = liftHost(); if (!host) { txt.renderable = true; return; }
+    try { txt.updateText?.(true); } catch (_e) {}
+    txt.renderable = false;
+    let sp = LIFT.sprites.get(drawing.id);
+    if (!sp || sp.destroyed) { sp = new PIXI.Sprite(txt.texture); sp.eventMode = "none"; host.addChild(sp); LIFT.sprites.set(drawing.id, sp); }
+    if (sp.texture !== txt.texture) sp.texture = txt.texture;
+    sp.anchor.set(txt.anchor?.x ?? 0.5, txt.anchor?.y ?? 0.5);
+    // scene coords = the hex mesh's position + the label's offset inside it, through the mesh's rotation/scale/pivot
+    // (computed by hand: primary-group objects keep their own transform bookkeeping, so localTransform/toGlobal lie)
+    const r = mesh.rotation || 0, cs = Math.cos(r), sn = Math.sin(r);
+    const lx = ((txt.x || 0) - (mesh.pivot?.x || 0)) * (mesh.scale?.x ?? 1), ly = ((txt.y || 0) - (mesh.pivot?.y || 0)) * (mesh.scale?.y ?? 1);
+    sp.position.set((mesh.x || 0) + lx * cs - ly * sn, (mesh.y || 0) + lx * sn + ly * cs);
+    sp.scale.set((txt.scale?.x ?? 1) * (mesh.scale?.x ?? 1), (txt.scale?.y ?? 1) * (mesh.scale?.y ?? 1));
+    sp.rotation = (mesh.rotation || 0) + (txt.rotation || 0);
+    sp.alpha = (mesh.alpha ?? 1) * (txt.alpha ?? 1);
+    sp.visible = !!(String(txt.text || "").length && txt.visible !== false && mesh.visible !== false
+      && drawing.visible !== false && drawing.renderable !== false && (drawing.isVisible ?? true));
+  }
+  // the label's texture is ours to share, never to destroy; the Drawing owns it
+  Hooks.on("destroyDrawing", (drawing) => { try { unlift(drawing?.id); } catch {} });
+  Hooks.on("canvasTearDown", () => { LIFT.cont = null; LIFT.sprites = new Map(); });
+
+  Hooks.on("drawDrawing", (drawing) => { try { centerLabel(drawing); liftLabel(drawing); } catch {} });
+  Hooks.on("refreshDrawing", (drawing) => { try { centerLabel(drawing); liftLabel(drawing); } catch {} });
 
   Hooks.on("canvasReady", () => {
     try {
       const layer = canvas?.drawings;
-      for (const d of layer?.placeables ?? []) centerLabel(d);
-      log("Installed (polygon centroid centering).");
+      for (const d of layer?.placeables ?? []) { centerLabel(d); liftLabel(d); }
+      log(`Installed (polygon centroid centering${batchOn() ? `, ${LIFT.sprites.size} label(s) batched` : ""}).`);
     } catch (e) {
       warn("Init failed", e);
     }
   });
+  Hooks.once("ready", () => { try { game.bbttcc ??= {}; game.bbttcc.api ??= {}; game.bbttcc.api.territory ??= {};
+  game.bbttcc.api.territory.hexLabels = { relift: () => { for (const d of canvas?.drawings?.placeables ?? []) liftLabel(d); return LIFT.sprites.size; }, count: () => LIFT.sprites.size }; } catch (_e) {} });
 })();
 
 /* ── Quest markers on the hex map (owner ask 2026-09-22) ──────────────────────
@@ -115,7 +184,12 @@
   const MOD = "bbttcc-territory";
   const S_MARKERS = "questMarkers";
   const TAG = `[${MOD}][quest-markers]`;
-  let _cont = null, _timer = null;
+  let _cont = null, _timer = null, _shapes = null, _glyphs = null;
+  // BATCHED (2026-10-26 perf pass): every marker's Graphics live in _shapes and every glyph/number Text in
+  // _glyphs, so the frame draws all discs then all glyphs instead of disc, glyph, disc, glyph… (measured:
+  // 28 interleaved markers cost ~15 fps on a hex map). The per-marker Container in _shapes keeps the
+  // hover/click; glyphs are eventMode none and follow the marker's position + alpha.
+  const glyphAt = (g, t, lx = 0, ly = 0) => { t.eventMode = "none"; t.position.set(g.x + lx, g.y + ly); t.alpha = g.alpha; _glyphs.addChild(t); };
   const mode = () => { try { return String(game.settings.get(MOD, S_MARKERS) || "gm"); } catch (_e) { return "gm"; } };
   Hooks.once("init", () => {
     try {
@@ -127,7 +201,7 @@
       });
     } catch (e) { console.warn(TAG, "setting registration failed", e); }
   });
-  function clear() { try { if (_cont && !_cont.destroyed) _cont.destroy({ children: true }); } catch (_e) {} _cont = null; }
+  function clear() { try { if (_cont && !_cont.destroyed) _cont.destroy({ children: true }); } catch (_e) {} _cont = null; _shapes = null; _glyphs = null; }
   function centerOf(d) {
     try {
       const obj = d.object; const doc = d;
@@ -167,7 +241,7 @@
       g.on("pointerover", () => { try { ui.notifications?.info?.(tip, { permanent: false, console: false }); } catch (_e) {} });
       g.on("pointerdown", (ev) => { try { ev.stopPropagation?.(); const open = game.bbttcc?.api?.territory?.openHexSheet; if (open && isGM) open(d.uuid); else ui.notifications?.info?.(tip); } catch (_e) {} });
       g.position.set(c.x - (c.bounds ? c.bounds.width * 0.28 : size), c.y + (c.bounds ? c.bounds.height * 0.28 : size));
-      _cont.addChild(g);
+      _shapes.addChild(g);
     }
   }
   function draw() {
@@ -177,6 +251,8 @@
     // whenever it is not the active layer, so hover/click never fired on the Token layer.
     const parent = canvas.interface || canvas.drawings || canvas.stage;
     _cont = new PIXI.Container(); _cont.eventMode = "passive"; _cont.interactiveChildren = true; _cont.zIndex = 9000; parent.addChild(_cont);
+    _shapes = new PIXI.Container(); _shapes.eventMode = "passive"; _shapes.interactiveChildren = true; _cont.addChild(_shapes);
+    _glyphs = new PIXI.Container(); _glyphs.eventMode = "none"; _glyphs.interactiveChildren = false; _cont.addChild(_glyphs);
     try { drawBridges(); } catch (e) { console.warn(TAG, "bridge markers failed", e); }
     const m = mode(); if (m === "off") return;
     const api = game.bbttcc?.api?.territory?.questMarkers; if (!api?.list) return;
@@ -205,23 +281,24 @@
       if (state === "hinted") { bg.lineStyle(1.5, ring, 0.8); bg.drawCircle(0, 0, size * 0.78); }
       g.addChild(bg);
       const glyph = new PIXI.Text(state === "word" ? "✉" : "✦", new PIXI.TextStyle({ fontFamily: "sans-serif", fontSize: size, fill: color, stroke: 0x000000, strokeThickness: 3 }));
-      glyph.anchor.set(0.5, 0.55); g.addChild(glyph);
+      glyph.anchor.set(0.5, 0.55); const glyphLocal = [0, 0];
       const n = (r.linked?.length || 0) + (isGM ? (r.unplayed || 0) : 0);
       if (n > 1) {
         const badge = new PIXI.Text(String(n), new PIXI.TextStyle({ fontFamily: "sans-serif", fontSize: Math.round(size * 0.5), fontWeight: "700", fill: 0xffffff, stroke: 0x000000, strokeThickness: 3 }));
         const bb = new PIXI.Graphics(); bb.beginFill(0x000000, 0.75); bb.drawCircle(size * 0.5, -size * 0.45, size * 0.32); bb.endFill(); g.addChild(bb);
-        badge.anchor.set(0.5, 0.5); badge.position.set(size * 0.5, -size * 0.45); g.addChild(badge);
-      }
+        badge.anchor.set(0.5, 0.5); var badgeText = badge, badgeLocal = [size * 0.5, -size * 0.45];
+      } else { var badgeText = null, badgeLocal = null; }
       // dim, unhinted story = a whisper only the GM sees
       if (isGM && !r.anyHinted && !r.linked?.length) g.alpha = 0.7;
       g.position.set(c.x + (c.bounds ? c.bounds.width * 0.28 : size), c.y - (c.bounds ? c.bounds.height * 0.28 : size));
+      glyphAt(g, glyph, ...glyphLocal); if (badgeText) glyphAt(g, badgeText, ...badgeLocal);
       const names = [...(r.linked || []).map(l => `${l.name}${l.hinted ? " (hinted)" : ""}`), ...(isGM ? r.storyNames : [])];
       const tip = `${r.hexName}: ${names.join(" · ") || "story"}${isGM && r.unplayed ? ` — ${r.unplayed} unplayed beat${r.unplayed === 1 ? "" : "s"}` : ""}${r.wordSent && !r.visited ? " — word sent, unvisited" : ""}`;
       g.on("pointerover", () => { try { ui.notifications?.info?.(tip, { permanent: false, console: false }); } catch (_e) {} });
       g.on("pointerdown", (ev) => { try { ev.stopPropagation?.(); const open = game.bbttcc?.api?.territory?.openHexSheet; if (open && isGM) open(r.hexUuid); else ui.notifications?.info?.(tip); } catch (_e) {} });
-      _cont.addChild(g);
+      _shapes.addChild(g);
     }
-    console.log(TAG, `drew ${_cont.children.length} marker(s)`);
+    console.log(TAG, `drew ${_shapes.children.length} marker(s) (batched: ${_glyphs.children.length} glyph text(s))`);
   }
   function schedule() { if (_timer) clearTimeout(_timer); _timer = setTimeout(() => { _timer = null; try { draw(); } catch (e) { console.warn(TAG, "draw failed", e); } }, 250); }
   Hooks.on("canvasReady", schedule);

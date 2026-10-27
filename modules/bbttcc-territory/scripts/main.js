@@ -1377,6 +1377,21 @@ function bbttccBuildCapitalOverlayForDrawing(doc) {
   return root;
 }
 
+// BATCHED (2026-10-26 perf pass, measured live on the one big map): each overlay is five line Graphics plus the
+// marker icons, redrawn every frame — 11 of them cost ~26 → 39 fps. They are static (no ticker, no pointer events)
+// and rebuilt whenever their hex changes, so each one is cached to a single texture (3× resolution keeps it crisp
+// when zoomed). Same per-browser switch as the batched hex labels (client setting batchHexLabels).
+function bbttccFreezeOverlay(root) {
+  try {
+    if (!root) return root;
+    let on = true; try { on = game.settings.get(MOD, "batchHexLabels") !== false; } catch (_e) {}
+    if (!on) return root;
+    root.cacheAsBitmapResolution = 3;
+    root.cacheAsBitmap = true;
+  } catch (_e) {}
+  return root;
+}
+
 async function bbttccRefreshCapitalOverlayForDrawing(doc) {
   try {
     // Only for a hex on the scene being viewed, and only on the hex map (2026-10-01) —
@@ -1391,7 +1406,7 @@ async function bbttccRefreshCapitalOverlayForDrawing(doc) {
       try { existing.destroy({ children:true }); } catch (_e) {}
     }
     const built = bbttccBuildCapitalOverlayForDrawing(doc);
-    if (built) host.addChild(built);
+    if (built) host.addChild(bbttccFreezeOverlay(built));
   } catch (e) {
     console.warn("[bbttcc-territory] capital overlay refresh failed", e);
   }
@@ -1452,7 +1467,7 @@ async function bbttccRefreshAllCapitalOverlays() {
       const hasQuestLinks = !!(f.quests && typeof f.quests === "object" && Object.keys(f.quests).length);
       if (!f.capital && !owned && !hasQuestLinks) continue;
       const built = bbttccBuildCapitalOverlayForDrawing(doc);
-      if (built) host.addChild(built);
+      if (built) host.addChild(bbttccFreezeOverlay(built));
     }
   } catch (e) {
     console.warn("[bbttcc-territory] capital overlay rebuild failed", e);
