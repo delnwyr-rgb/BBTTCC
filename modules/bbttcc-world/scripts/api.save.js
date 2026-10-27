@@ -448,6 +448,18 @@
         } catch (e) { report.errors.push(`party position: ${e?.message || e}`); }
       }
 
+      // 2c. THE BOOKMARK (2026-10-27): "The last time we saw Lucky…" points at the beat that was open in the timeline this
+      //     load just replaced — any story-layer load clears it (the card falls back to the restored story store).
+      report.bookmarkCleared = false;
+      if (story) {
+        try {
+          if (game.settings.settings.has("bbttcc-campaign.bookmark")) {
+            const bm = game.settings.get("bbttcc-campaign", "bookmark") || {};
+            if (Object.keys(bm).length) { await game.settings.set("bbttcc-campaign", "bookmark", {}); report.bookmarkCleared = true; }
+          }
+        } catch (e) { report.errors.push(`bookmark: ${e?.message || e}`); }
+      }
+
       // 3. scenes — flags + drawings (hexes) + tokens, every scene in the save.
       n = 0;
       for (const s of snap.scenes) {

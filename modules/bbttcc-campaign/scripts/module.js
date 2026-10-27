@@ -9,6 +9,7 @@ import "../apps/campaign-tag-picker.js";
 import "../scripts/casualties-engine.js";
 import "../apps/player-beat-mirror-app.js";
 import "./stage-cues.js";   // STAGE CUES (2026-10-15): recorded before/after scene states, played by button or beat
+import "./resume.js";   // THE BOOKMARK (2026-10-27): "⏯ Where we left off" — the beat still open at logout, the last moves, the next beat
 import "./play-once-tiles.js";   // PLAY-ONCE VIDEO TILES (2026-10-25): slides rewind to frame 0 on canvasReady, play once, freeze
 import { registerFacilitationSettings, facilitation, installFacilitationAPI, GMEXEC_CHOICE_PICK } from "./facilitation.js";   // FACILITATION MODES (2026-10-07): Tabletop / Projectionist / Autopilot / Manual
 import { applyStoryData, rebuildRegistry, validateStoryData, scaffoldStory, codeStory, slugKey } from "./story-model.js";   // Layer 2 story data (2026-09-21)
@@ -1230,6 +1231,26 @@ let __bbttccCurrentBeatDialogPick = null;   // Autopilot: { beat, token, pick(i,
 // beat about to open closes its own stale copy, and a map door click closes them all (the table chose the map).
 // A closed dialog resolves as a dismissal, ending the chain it was waiting in.
 const __bbttccOpenBeatDialogs = new Set();   // { beatId, dlg }
+// THE BOOKMARK (Dave 2026-10-27: "a bookmark for the campaign that's easy to pick right back up"): the GM seat notes the
+// beat window that is OPEN right now in world setting `bookmark` ({campaignId, open:{beatId,label,since,token,sceneId},
+// lastResolved, ts}); resolving it clears `open`. Closing the browser resolves nothing, so the note survives the logout —
+// scripts/resume.js turns it into "⏯ Where we left off". Writes are queued so an open and its close never cross.
+let __bmQueue = Promise.resolve(); let __bmSeq = 0;
+function _bookmarkRead() { try { const v = game.settings.get(MOD_ID, "bookmark"); return (v && typeof v === "object") ? v : {}; } catch (_e) { return {}; } }
+function _bookmarkWrite(fn) {
+  if (!game.user?.isGM) return;
+  __bmQueue = __bmQueue.then(async () => { try { const cur = _bookmarkRead(); const next = fn(cur); if (next) await game.settings.set(MOD_ID, "bookmark", { ...cur, ...next, ts: Date.now() }); } catch (_e) {} });
+}
+function _bookmarkOpen(beat, campaign) {
+  const token = `${Date.now().toString(36)}.${++__bmSeq}`;
+  _bookmarkWrite(() => ({ campaignId: campaign?.id || getActiveCampaignId(), open: { beatId: String(beat?.id || ""), label: String(beat?.label || beat?.id || ""), since: Date.now(), token, sceneId: game.scenes?.active?.id || null } }));
+  return token;
+}
+function _bookmarkClose(token, payload) {
+  _bookmarkWrite((cur) => (cur?.open?.token !== token) ? null : {
+    open: null, lastResolved: { beatId: cur.open.beatId, label: cur.open.label, acted: !!payload?.acted, choice: payload?.choice?.label || null, at: Date.now() } });
+}
+
 async function _closeOpenBeatDialogs({ beatId = null } = {}) {
   let n = 0;
   for (const e of [...__bbttccOpenBeatDialogs]) {
@@ -2747,9 +2768,11 @@ ${
 
   return await new Promise(resolve => {
     let done = false;
+    let bmToken = null;   // THE BOOKMARK: set when the window opens, cleared by whatever resolves it
     const finish = (payload) => {
       if (done) return;
       done = true;
+      if (bmToken) { try { _bookmarkClose(bmToken, payload); } catch (_eBm) {} }
       try {
         if (isPlayerFacing) _broadcastPlayerFacingDialog("close", {});
       } catch (_ePFClose) {}
@@ -3035,6 +3058,7 @@ ${
     }, __bbttccBeatDockPosition());
     openEntry = { beatId: String(beat?.id || ""), dlg };
     __bbttccOpenBeatDialogs.add(openEntry);
+    try { bmToken = _bookmarkOpen(beat, campaign); } catch (_eBm) {}
 
     dlg.render(true);
     try { __bbttccAutosizeDialogDeferred(dlg, { pad: 40, maxH: window.innerHeight - 20 }); } catch (_eAuto) {}
@@ -9408,6 +9432,7 @@ Hooks.once("init", () => {
     default: {}
   });
   game.settings.register(MOD_ID, SETTING_STORY_STATE, { scope: "world", config: false, type: Object, default: {} });
+  game.settings.register(MOD_ID, "bookmark", { scope: "world", config: false, type: Object, default: {} });   // THE BOOKMARK (resume.js)
 
   game.settings.register(MOD_ID, SETTING_INVITES_PLAYER_ACCEPT, {
     name: "Invitations — players may accept",

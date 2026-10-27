@@ -3234,6 +3234,10 @@ try {
       ev.preventDefault();
       this._execToolMacro("reset-console.macro.js", "Reset Console");
     });
+    html.find("[data-action='flow-resume']").on("click", ev => {
+      ev.preventDefault();
+      (game.bbttcc?.api?.campaign?.resume?.open ?? globalThis.BBTTCCResume?.open)?.();
+    });
     html.find("[data-action='flow-census']").on("click", ev => {
       ev.preventDefault();
       this._execToolMacro("campaign-census.macro.js", "Campaign Census");

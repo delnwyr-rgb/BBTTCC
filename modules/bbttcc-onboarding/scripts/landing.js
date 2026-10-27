@@ -405,7 +405,8 @@ function _showLanding({ theme = false } = {}) {
   try { doneBefore = !!_ns()?.status?.()?.progress?.completedAt; } catch (_) {}
 
   const play = [
-    gm ? _tile("cohort-console", "⬡", "Cohort Console", "Conduct a training class — roster, bell, releases.", "gold")
+    ...(gm ? [_tile("resume", "⏯", "The Last Time We Saw Lucky…", "The beat still open when you logged off, the last moves, the next beat.", "gold")] : []),
+    gm ? _tile("cohort-console", "⬡", "Cohort Console", "Conduct a training class — roster, bell, releases.")
        : _tile("training", "⬡", doneBefore ? "Training — run it again" : "Training", "The Proving Ground: your body, your rig, your first hex. Solo or as a cohort.", "gold"),
     _tile("video", "🎞", "Training Video", "Offices of Fates and Destinies — how the world broke and what the job is. About five minutes."),
     _tile("opening", "▶", "Watch the Opening", "As Above, So Below — one more time.")
@@ -686,6 +687,7 @@ function _bindLanding(root) {
         else btn.disabled = false;
         return;
       }
+      case "resume": close(); try { (game.bbttcc?.api?.campaign?.resume?.open ?? globalThis.BBTTCCResume?.open)?.(); } catch (e) { console.warn(TAG, e); } return;
       case "cohort-console": close(); try { _ns()?.cohort?.console?.(); } catch (e) { console.warn(TAG, e); } return;
       case "video": return _playVideo("training");
       case "opening": return film({ ident: false });
