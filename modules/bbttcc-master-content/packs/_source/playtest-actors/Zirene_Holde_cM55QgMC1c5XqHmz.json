@@ -1892,8 +1892,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091687,
-        "modifiedTime": 1792989091687,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060088805,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": "Compendium.bbttcc-master-content.items.Item.qcPkuhiPhHJEDut5",
         "duplicateSource": null,
         "exportSource": null
@@ -3352,7 +3352,8 @@
         "range": {
           "short": 6,
           "long": 24,
-          "units": "sq"
+          "units": "sq",
+          "value": 60
         },
         "tags": [
           "pistol",
@@ -4775,8 +4776,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091687,
-        "modifiedTime": 1792989091687,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+        "modifiedTime": 1793060088805,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR"
       },
       "ownership": {
         "default": 0,
@@ -5986,7 +5987,8 @@
         "range": {
           "short": 12,
           "long": 48,
-          "units": "sq"
+          "units": "sq",
+          "value": 120
         },
         "tags": [
           "rifle",
@@ -7644,8 +7646,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091687,
-        "modifiedTime": 1792989091687,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060088805,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": "Compendium.bbttcc-master-content.items.Item.NgE3NC7b7tJJGirU",
         "duplicateSource": null,
         "exportSource": null

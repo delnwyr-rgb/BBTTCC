@@ -751,8 +751,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091622,
-        "modifiedTime": 1792989091622,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060087720,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "exportSource": null,
         "compendiumSource": "Compendium.bbttcc-master-content.items.Item.u6rtbwsjnL3gWNqN",
         "duplicateSource": null
@@ -4986,8 +4986,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091622,
-        "modifiedTime": 1792989091622,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060087721,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": "Compendium.fourththing.starter-manifestations.Item.b2dN2kJUUBWBz5jZ",
         "duplicateSource": null,
         "exportSource": null
@@ -5333,8 +5333,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091622,
-        "modifiedTime": 1792989091622,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060087721,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": "Compendium.bbttcc-master-content.items.Item.pfw4Gq7FZqbNMQvV",
         "duplicateSource": null,
         "exportSource": null
@@ -6754,78 +6754,6 @@
       }
     },
     {
-      "name": "Bad Eden: Enlightened",
-      "img": "icons/magic/holy/barrier-shield-winged-gold.webp",
-      "origin": "Actor.YK2PSxphYxXQYm8B",
-      "disabled": false,
-      "duration": {
-        "value": null,
-        "units": "seconds",
-        "expiry": null,
-        "expired": false
-      },
-      "flags": {
-        "bbttcc-character-options": {
-          "enlightenment": true,
-          "level": "enlightened"
-        },
-        "bbttcc": {
-          "enlightenment": {
-            "auraClarity": true,
-            "auraRange": 15,
-            "minorMiracles": true,
-            "opRegenBonus": 0.1
-          }
-        }
-      },
-      "system": {
-        "changes": [
-          {
-            "key": "system.bonuses.abilities.save",
-            "value": "+2",
-            "priority": 20,
-            "type": "add",
-            "phase": "initial"
-          },
-          {
-            "key": "system.bonuses.abilities.check",
-            "value": "+1",
-            "priority": 20,
-            "type": "add",
-            "phase": "initial"
-          }
-        ]
-      },
-      "_id": "cPH44Wx5stpA2rXx",
-      "type": "base",
-      "start": {
-        "time": 0,
-        "combat": "QA0W2dp4ktbV6dBx",
-        "combatant": "tA2vckTuBiKKCfz4",
-        "initiative": 25,
-        "round": 3,
-        "turn": 0
-      },
-      "description": "",
-      "tint": "#ffffff",
-      "transfer": false,
-      "statuses": [],
-      "showIcon": 1,
-      "folder": null,
-      "sort": 0,
-      "_stats": {
-        "coreVersion": "14.369",
-        "systemId": "fourththing",
-        "systemVersion": "0.6.37",
-        "createdTime": 1792989091622,
-        "modifiedTime": 1792989091622,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      }
-    },
-    {
       "name": "Mutation: Temporal Blur",
       "img": "icons/svg/biohazard.svg",
       "tint": "#7ec850",
@@ -6947,6 +6875,127 @@
         "createdTime": 1792989091622,
         "modifiedTime": 1792989091622,
         "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    },
+    {
+      "name": "Bad Eden: Enlightened",
+      "img": "icons/magic/nature/lotus-glow-pink.webp",
+      "origin": "Actor.YK2PSxphYxXQYm8B",
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "enlightenment": true,
+          "level": "enlightened"
+        },
+        "bbttcc": {
+          "enlightenment": {
+            "auraClarity": true,
+            "auraRange": 15,
+            "minorMiracles": true,
+            "opRegenBonus": 0.1
+          }
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.derived.resolve.aeBonus",
+            "value": 2,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.derived.guard.aeBonus",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.derived.evasion.aeBonus",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.derived.stress.aeBonus",
+            "value": 5,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.skills.occult.value",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.skills.insight.value",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.skills.meditation.value",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.skills.faith.value",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.skills.ritual.value",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "KxXW71XTBiQBkqws",
+      "type": "base",
+      "start": {
+        "time": 0,
+        "combat": null,
+        "combatant": null,
+        "initiative": null,
+        "round": null,
+        "turn": null
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1793060088975,
+        "modifiedTime": 1793060088975,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null

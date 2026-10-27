@@ -3542,8 +3542,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091745,
-        "modifiedTime": 1792989091745,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060087201,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": "Compendium.bbttcc-master-content.items.Item.a2Sg1JfSPRQMAD89",
         "duplicateSource": null,
         "exportSource": null
@@ -4783,10 +4783,10 @@
           "mercy": 4,
           "speech": 1,
           "discipline": 4,
-          "geburah_signal": 1,
           "tiphareth_signal": 3,
           "netzach_signal": 3,
-          "yesod_signal": 4
+          "yesod_signal": 4,
+          "geburah_signal": 1
         },
         "classification": "Balanced",
         "mode": "sorting"
@@ -4801,8 +4801,8 @@
     "systemId": "fourththing",
     "systemVersion": "0.6.37",
     "createdTime": 1792989091745,
-    "modifiedTime": 1792989092093,
-    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "modifiedTime": 1793060119960,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

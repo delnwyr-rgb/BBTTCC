@@ -1746,8 +1746,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091939,
-        "modifiedTime": 1792989091939,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060086303,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": "Compendium.bbttcc-master-content.items.Item.a2Sg1JfSPRQMAD89",
         "duplicateSource": null,
         "exportSource": null
@@ -3517,7 +3517,6 @@
           "yesod_signal": 5,
           "binah_signal": 2,
           "severity": 4,
-          "geburah_signal": 4,
           "sacrifice": 1,
           "chesed_signal": 4,
           "mercy": 2,
@@ -3530,7 +3529,8 @@
           "hod_signal": 3,
           "ritual": 1,
           "speech": 2,
-          "malkuth_signal": 4
+          "malkuth_signal": 4,
+          "geburah_signal": 4
         },
         "classification": "Balanced",
         "mode": "sorting"
@@ -3550,8 +3550,8 @@
     "systemId": "fourththing",
     "systemVersion": "0.6.37",
     "createdTime": 1792989091939,
-    "modifiedTime": 1792989092157,
-    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "modifiedTime": 1793060118901,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

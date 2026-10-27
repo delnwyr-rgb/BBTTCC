@@ -5293,7 +5293,6 @@
           "dread": 2,
           "violence": 4,
           "risk": 2,
-          "geburah_signal": 5,
           "binah_signal": 2,
           "ritual": 3,
           "tiphareth_signal": 6,
@@ -5308,7 +5307,8 @@
           "ambition": 4,
           "hod_signal": 2,
           "yesod_signal": 5,
-          "malkuth_signal": 6
+          "malkuth_signal": 6,
+          "geburah_signal": 5
         },
         "classification": "Balanced",
         "mode": "sorting"
@@ -5321,8 +5321,8 @@
     "systemId": "fourththing",
     "systemVersion": "0.6.37",
     "createdTime": 1792989091880,
-    "modifiedTime": 1792989091880,
-    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "modifiedTime": 1793060121671,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

@@ -3595,8 +3595,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091645,
-        "modifiedTime": 1792989091645,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+        "modifiedTime": 1793060089824,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR"
       }
     },
     {
@@ -4004,8 +4004,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091645,
-        "modifiedTime": 1792989091645,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060089825,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": "Compendium.fourththing.starter-manifestations.Item.b2dN2kJUUBWBz5jZ",
         "duplicateSource": null,
         "exportSource": null
@@ -4628,8 +4628,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091645,
-        "modifiedTime": 1792989091645,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060089827,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": "Compendium.bbttcc-master-content.items.Item.uIi6K3WMK1fF7EWw",
         "duplicateSource": null,
         "exportSource": null
@@ -5370,7 +5370,6 @@
           "severity": 12,
           "violence": 7,
           "chokhmah_signal": 2,
-          "geburah_signal": 7,
           "discipline": 9,
           "hierarchy": 4,
           "binah_signal": 2,
@@ -5386,7 +5385,8 @@
           "stealth": 1,
           "mercy": 1,
           "yesod_signal": 4,
-          "malkuth_signal": 4
+          "malkuth_signal": 4,
+          "geburah_signal": 7
         },
         "classification": "Balanced",
         "mode": "sorting"
@@ -5401,8 +5401,8 @@
     "systemId": "fourththing",
     "systemVersion": "0.6.37",
     "createdTime": 1792989091645,
-    "modifiedTime": 1792989092068,
-    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "modifiedTime": 1793060121004,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

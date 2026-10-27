@@ -4434,7 +4434,6 @@
           "binah_signal": 4,
           "chesed_signal": 2,
           "mercy": 4,
-          "geburah_signal": 2,
           "ambition": 4,
           "risk": 2,
           "tiphareth_signal": 3,
@@ -4444,7 +4443,8 @@
           "sacrifice": 2,
           "kinship": 2,
           "hod_signal": 4,
-          "yesod_signal": 4
+          "yesod_signal": 4,
+          "geburah_signal": 2
         },
         "classification": "Balanced",
         "mode": "sorting"
@@ -4467,8 +4467,8 @@
     "systemId": "fourththing",
     "systemVersion": "0.6.37",
     "createdTime": 1792989091705,
-    "modifiedTime": 1792989092084,
-    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "modifiedTime": 1793060118188,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

@@ -1510,7 +1510,8 @@
         "range": {
           "short": 6,
           "long": 24,
-          "units": "sq"
+          "units": "sq",
+          "value": 60
         },
         "tags": [
           "pistol",

@@ -9273,8 +9273,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091663,
-        "modifiedTime": 1792989091663,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060086769,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null
@@ -11351,7 +11351,6 @@
           "ritual": 10,
           "binah_signal": 5,
           "severity": 3,
-          "geburah_signal": 2,
           "compassion": 4,
           "sacrifice": 3,
           "chesed_signal": 3,
@@ -11367,7 +11366,8 @@
           "hod_signal": 4,
           "yesod_signal": 4,
           "stealth": 1,
-          "malkuth_signal": 4
+          "malkuth_signal": 4,
+          "geburah_signal": 2
         },
         "classification": "Balanced",
         "mode": "sorting"
@@ -11387,8 +11387,8 @@
     "systemId": "fourththing",
     "systemVersion": "0.6.37",
     "createdTime": 1792989091663,
-    "modifiedTime": 1792989091663,
-    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "modifiedTime": 1793060119184,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

@@ -5976,7 +5976,6 @@
           "chesed_signal": 1,
           "mercy": 2,
           "severity": 5,
-          "geburah_signal": 3,
           "ambition": 4,
           "ritual": 4,
           "hierarchy": 1,
@@ -5985,7 +5984,8 @@
           "sacrifice": 1,
           "netzach_signal": 3,
           "hod_signal": 3,
-          "malkuth_signal": 4
+          "malkuth_signal": 4,
+          "geburah_signal": 3
         },
         "classification": "Balanced",
         "mode": "sorting"
@@ -6001,8 +6001,8 @@
     "systemId": "fourththing",
     "systemVersion": "0.6.37",
     "createdTime": 1792989091777,
-    "modifiedTime": 1792989092105,
-    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "modifiedTime": 1793060118713,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

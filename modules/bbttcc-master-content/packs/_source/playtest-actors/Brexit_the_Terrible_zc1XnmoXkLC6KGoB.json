@@ -1876,8 +1876,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091953,
-        "modifiedTime": 1792989091953,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060090744,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "exportSource": null,
         "compendiumSource": "Compendium.bbttcc-master-content.items.Item.NTUN0Bh2mKVTkc7B",
         "duplicateSource": null
@@ -2202,8 +2202,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091953,
-        "modifiedTime": 1792989091953,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060090745,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": "Compendium.fourththing.starter-manifestations.Item.b2dN2kJUUBWBz5jZ",
         "duplicateSource": null,
         "exportSource": null
@@ -2653,8 +2653,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091953,
-        "modifiedTime": 1792989091953,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060090745,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": "Compendium.bbttcc-master-content.items.Item.pfw4Gq7FZqbNMQvV",
         "duplicateSource": null,
         "exportSource": null
@@ -7964,7 +7964,8 @@
         "range": {
           "short": 12,
           "long": 48,
-          "units": "sq"
+          "units": "sq",
+          "value": 120
         },
         "tags": [
           "rifle",

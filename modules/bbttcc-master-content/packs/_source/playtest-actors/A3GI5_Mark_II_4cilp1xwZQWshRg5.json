@@ -1222,8 +1222,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091813,
-        "modifiedTime": 1792989091813,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+        "modifiedTime": 1793060086129,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR"
       }
     },
     {
@@ -2218,8 +2218,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091813,
-        "modifiedTime": 1792989091813,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060086130,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": "Compendium.fourththing.starter-manifestations.Item.b2dN2kJUUBWBz5jZ",
         "duplicateSource": null,
         "exportSource": null
@@ -3826,8 +3826,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091813,
-        "modifiedTime": 1792989091813,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060086130,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": "Compendium.bbttcc-master-content.items.Item.uIi6K3WMK1fF7EWw",
         "duplicateSource": null,
         "exportSource": null
@@ -4866,7 +4866,6 @@
           "service": 1,
           "violence": 5,
           "risk": 1,
-          "geburah_signal": 6,
           "discipline": 11,
           "hierarchy": 4,
           "binah_signal": 2,
@@ -4880,7 +4879,8 @@
           "dread": 1,
           "yesod_signal": 4,
           "ambition": 2,
-          "malkuth_signal": 4
+          "malkuth_signal": 4,
+          "geburah_signal": 6
         },
         "classification": "Balanced",
         "mode": "sorting"
@@ -4982,8 +4982,8 @@
     "systemId": "fourththing",
     "systemVersion": "0.6.37",
     "createdTime": 1792989091813,
-    "modifiedTime": 1792989092119,
-    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "modifiedTime": 1793060118385,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

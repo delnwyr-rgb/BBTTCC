@@ -6047,12 +6047,12 @@
           "discipline": 8,
           "chesed_signal": 2,
           "mercy": 3,
-          "geburah_signal": 1,
           "compassion": 2,
           "tiphareth_signal": 2,
           "yesod_signal": 8,
           "malkuth_signal": 10,
-          "netzach_signal": 3
+          "netzach_signal": 3,
+          "geburah_signal": 1
         },
         "classification": "Balanced",
         "mode": "sorting"
@@ -6067,8 +6067,8 @@
     "systemId": "fourththing",
     "systemVersion": "0.6.37",
     "createdTime": 1792989091593,
-    "modifiedTime": 1792989092052,
-    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "modifiedTime": 1793060119761,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

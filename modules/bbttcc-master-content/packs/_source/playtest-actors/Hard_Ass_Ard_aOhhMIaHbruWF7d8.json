@@ -964,8 +964,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091898,
-        "modifiedTime": 1792989091898,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060120572,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": "Compendium.fourththing.starter-manifestations.Item.9aGm6ED0FR9fr7Qq",
         "duplicateSource": null,
         "exportSource": null
@@ -4507,8 +4507,8 @@
         "systemId": "fourththing",
         "systemVersion": "0.6.37",
         "createdTime": 1792989091898,
-        "modifiedTime": 1792989091898,
-        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "modifiedTime": 1793060088495,
+        "lastModifiedBy": "6rALV3dYr4YEa8TR",
         "compendiumSource": "Compendium.bbttcc-master-content.items.Item.EzQzFfONoq954fGE",
         "duplicateSource": null,
         "exportSource": null
@@ -5343,7 +5343,6 @@
           "violence": 3,
           "risk": 3,
           "chokhmah_signal": 2,
-          "geburah_signal": 4,
           "sorrow": 4,
           "stealth": 3,
           "binah_signal": 2,
@@ -5361,7 +5360,8 @@
           "malkuth_signal": 6,
           "yesod_signal": 4,
           "compassion": 1,
-          "kinship": 1
+          "kinship": 1,
+          "geburah_signal": 4
         },
         "classification": "Balanced",
         "mode": "sorting"
@@ -5380,8 +5380,8 @@
     "systemId": "fourththing",
     "systemVersion": "0.6.37",
     "createdTime": 1792989091898,
-    "modifiedTime": 1792989092144,
-    "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+    "modifiedTime": 1793060120435,
+    "lastModifiedBy": "6rALV3dYr4YEa8TR",
     "exportSource": null,
     "compendiumSource": null,
     "duplicateSource": null

@@ -87,7 +87,7 @@
   }
   // One document → its update object (name + the given top-level fields).
   function docDiff(doc, fields, label) {
-    const src = doc.toObject(false); const out = {};
+    const src = doc.toObject(); const out = {};
     for (const f of fields) {
       if (!(f in src)) continue;
       if (typeof src[f] === "string") { const n = fixStr(src[f]); if (n !== src[f]) { out[f] = n; report.push(`  ${label} ${f}: ${JSON.stringify(src[f]).slice(0, 90)} → ${JSON.stringify(n).slice(0, 90)}`); } }
@@ -105,11 +105,11 @@
 
   // ── actors (world + synthetic token actors share this) ───────────────────
   async function doActor(actor, label, isToken = false) {
-    const raw = JSON.stringify(actor.toObject(false));
+    const raw = JSON.stringify(actor.toObject());
     if (!HIT.test(raw)) return;
     await apply(actor, docDiff(actor, ["name", "system", "flags"], label), isToken ? "tokens" : "actors");
     for (const it of actor.items ?? []) {
-      if (!HIT.test(JSON.stringify(it.toObject(false)))) continue;
+      if (!HIT.test(JSON.stringify(it.toObject()))) continue;
       const u = docDiff(it, ["name", "system", "flags"], `${label} › item ${it.name}`);
       if (Object.keys(u).length) { if (!DRY_RUN) await it.update(u, { diff: false, recursive: true, render: false }); docsTouched++; fieldChanges += count(u); ctr.actorItems++; }
       for (const ef of it.effects ?? []) {
@@ -126,16 +126,16 @@
 
   // ── scenes: scene flags + embedded drawings / tiles / notes / tokens ─────
   for (const sc of game.scenes ?? []) {
-    if (!HIT.test(JSON.stringify(sc.toObject(false)))) continue;
+    if (!HIT.test(JSON.stringify(sc.toObject()))) continue;
     await apply(sc, docDiff(sc, ["flags"], `scene ${sc.name}`), "scenes");
     for (const coll of ["drawings", "tiles", "notes", "regions", "templates", "sounds", "lights"]) {
       for (const d of sc[coll] ?? []) {
-        if (!HIT.test(JSON.stringify(d.toObject(false)))) continue;
+        if (!HIT.test(JSON.stringify(d.toObject()))) continue;
         await apply(d, docDiff(d, ["flags", "text", "name"], `scene ${sc.name} › ${coll} ${d.id}`), "sceneEmbedded");
       }
     }
     for (const t of sc.tokens ?? []) {
-      const obj = t.toObject(false);
+      const obj = t.toObject();
       if (!HIT.test(JSON.stringify(obj))) continue;
       await apply(t, docDiff(t, ["flags", "name"], `scene ${sc.name} › token ${t.name}`), "sceneEmbedded");
       if (!t.actorLink && t.actor && HIT.test(JSON.stringify(obj.delta ?? {}))) await doActor(t.actor, `scene ${sc.name} › token ${t.name} (delta)`, true);
@@ -144,7 +144,7 @@
 
   // ── world items + journal ────────────────────────────────────────────────
   for (const it of game.items ?? []) {
-    if (!HIT.test(JSON.stringify(it.toObject(false)))) continue;
+    if (!HIT.test(JSON.stringify(it.toObject()))) continue;
     await apply(it, docDiff(it, ["name", "system", "flags"], `item ${it.name}`), "items");
     for (const ef of it.effects ?? []) {
       const e = docDiff(ef, ["name", "description", "changes", "flags"], `item ${it.name} › effect ${ef.name}`);
@@ -152,10 +152,10 @@
     }
   }
   for (const j of game.journal ?? []) {
-    if (!HIT.test(JSON.stringify(j.toObject(false)))) continue;
+    if (!HIT.test(JSON.stringify(j.toObject()))) continue;
     await apply(j, docDiff(j, ["name", "flags"], `journal ${j.name}`), "journal");
     for (const p of j.pages ?? []) {
-      if (!HIT.test(JSON.stringify(p.toObject(false)))) continue;
+      if (!HIT.test(JSON.stringify(p.toObject()))) continue;
       await apply(p, docDiff(p, ["name", "text", "flags", "system"], `journal ${j.name} › page ${p.name}`), "pages");
     }
   }
