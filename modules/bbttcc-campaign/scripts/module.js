@@ -223,6 +223,19 @@ function __bbttccAutosizeDialogDeferred(app, opts) {
   } catch (_e) {}
 }
 
+// Beat windows dock to the far left (Dave 2026-10-26): they used to open centred,
+// right on top of the thing the players are meant to be looking at. Sits just
+// right of the scene-controls rail so the tool buttons stay clickable.
+function __bbttccBeatDockPosition() {
+  var left = 10;
+  try {
+    var rail = document.getElementById("scene-controls") || document.getElementById("controls");
+    var r = rail ? rail.getBoundingClientRect() : null;
+    if (r && r.width > 0 && r.right < window.innerWidth / 3) left = Math.ceil(r.right) + 8;
+  } catch (_e) {}
+  return { left: left, top: 10 };
+}
+
 // ---------------------------------------------------------------------------
 // HexChrome Dialog hook (V1 Dialog)
 // Ensures any Dialog (including first render after reload) gets HexChrome classes.
@@ -1511,14 +1524,14 @@ function _showPlayerFacingDialogLocal(payload) {
       content: content,
       buttons: {},
       close: function () { __bbttccPlayerFacingDialog = null; }
-    });
+    }, __bbttccBeatDockPosition());
 
     __bbttccPlayerFacingDialog = dlg;
     dlg.render(true);
 
     try {
       setTimeout(function(){
-        try { __bbttccAutosizeDialogDeferred(dlg, { pad: 40, maxH: Math.floor(window.innerHeight * 0.94) }); } catch (_eA) {}
+        try { __bbttccAutosizeDialogDeferred(dlg, { pad: 40, maxH: window.innerHeight - 20 }); } catch (_eA) {}
         try {
           if (dlg && dlg.element && dlg.element.addClass) dlg.element.addClass("bbttcc-choice-roll-dialog bbttcc-hexchrome-dialog");
         } catch (_eB) {}
@@ -3001,10 +3014,10 @@ ${
       // Escape / header-X with no button = a real dismissal, resolve now.
       // A clicked button's callback owns the resolve (see buttonTaken above).
       close: () => { if (!buttonTaken) finish({ acted: false, closed: true }); }
-    });
+    }, __bbttccBeatDockPosition());
 
     dlg.render(true);
-    try { __bbttccAutosizeDialogDeferred(dlg, { pad: 40, maxH: Math.floor(window.innerHeight * 0.94) }); } catch (_eAuto) {}
+    try { __bbttccAutosizeDialogDeferred(dlg, { pad: 40, maxH: window.innerHeight - 20 }); } catch (_eAuto) {}
 
     // Autopilot (2026-10-07): a player's mirror click lands here through gmExec and presses the matching
     // button on THIS dialog — same callback, same roster/support reads, same chain. First pick wins.

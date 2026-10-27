@@ -1358,7 +1358,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;   /* narrow window: wrap the buttons, don't clip them (2026-10-26) */
 }
 .bbttcc-campaign-builder-root .bbttcc-flow-ctl-group {
   display: inline-flex;
@@ -1400,14 +1400,14 @@
 
 /* ── One-quest Visualizer (2026-09-07): bar · selection card · rail blocks ── */
 .bbttcc-campaign-builder-root .bbttcc-flowviz-bar {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  display: flex; align-items: center; justify-content: space-between; gap: 6px 12px; flex-wrap: wrap;
   padding: 6px 10px; margin: 0 0 8px; border: 1px solid var(--cb-border, rgba(148,163,184,0.25));
   border-radius: var(--cb-radius, 10px); background: var(--cb-bg-soft, rgba(15,23,42,0.5));
 }
-.bbttcc-campaign-builder-root .bbttcc-flowviz-bar .l { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.bbttcc-campaign-builder-root .bbttcc-flowviz-bar .l { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1 1 260px; flex-wrap: wrap; }
 .bbttcc-campaign-builder-root .bbttcc-flowviz-bar .lbl { font-weight: 800; color: var(--cb-data, #93c5fd); letter-spacing: .06em; }
 .bbttcc-campaign-builder-root .bbttcc-flowviz-bar .sel {
-  max-width: 420px; padding: 4px 8px; border-radius: var(--cb-radius, 8px);
+  max-width: min(420px, 100%); min-width: 0; padding: 4px 8px; border-radius: var(--cb-radius, 8px);
   border: 1px solid var(--cb-border, rgba(148,163,184,0.3)); background: var(--cb-bg-soft, rgba(2,6,23,0.4)); color: var(--cb-text-main, #e2e8f0);
 }
 .bbttcc-campaign-builder-root .bbttcc-flow-follow { border-radius: 999px; padding: 3px 12px; }
@@ -1415,8 +1415,10 @@
   border-color: rgba(251,191,36,0.7); background: rgba(251,191,36,0.14); color: #fde68a;
 }
 .bbttcc-campaign-builder-root .bbttcc-flowviz-bar .r {
-  display: flex; align-items: baseline; gap: 6px; font-size: 12px; color: var(--cb-text-muted, #94a3b8); white-space: nowrap;
+  display: flex; align-items: baseline; gap: 2px 6px; font-size: 12px; color: var(--cb-text-muted, #94a3b8);
+  flex-wrap: wrap; min-width: 0;   /* collapsed builder: the meta wraps under the quest picker instead of drawing over it (2026-10-26) */
 }
+.bbttcc-campaign-builder-root .bbttcc-flowviz-bar .r > span { white-space: nowrap; }
 .bbttcc-campaign-builder-root .bbttcc-flowviz-bar .r .act { color: var(--cb-data, #93c5fd); font-weight: 800; letter-spacing: .08em; }
 .bbttcc-campaign-builder-root .bbttcc-flowviz-bar .r .tik { color: var(--cb-accent, #fbbf24); font-weight: 800; letter-spacing: .08em; }
 .bbttcc-campaign-builder-root .bbttcc-flowviz-bar .r .sep { opacity: .5; }
