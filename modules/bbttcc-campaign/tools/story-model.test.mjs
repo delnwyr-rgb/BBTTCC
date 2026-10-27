@@ -35,7 +35,7 @@ const beats = [
 ];
 const script = {
   giver: "Marshal Yarrow Pike", description: "Pike gave you two errands.",
-  arrival: { act: 1, steps: [
+  arrival: { act: 1, giver: "Avuncular Joans", description: "AJ handed you a fortress.", steps: [
     { id: "welcome", label: "Welcome!", beats: ["a_welcome"], line: "Get off the Jackalope." },
     { id: "round", label: "The Welcome Round", beats: ["a_round"], line: "Walk the town." }
   ] },
@@ -127,6 +127,12 @@ test("closer: everything done → next = the closer; after the closer the quest 
   assert.equal(s.next?.beat?.id, "b_close"); assert.equal(s.next.line, "See your names on the map.");
   const s2 = q(situation({ fired: [...done, "b_close"], phase: 2, buckets: { [m.QUEST_MAP.quests[H].registryId]: "completed", quest_fixit_stab: "completed" } }));
   assert.equal(s2.state, "completed"); assert.equal(s2.next, null);
+});
+test("arrival speaks for itself: during the Arrival the card is the arrival's giver + description (inArrival); after it, Pike's", () => {
+  const a = q(situation({ fired: ["a_welcome"], phase: 1 })).script;
+  assert.equal(a.inArrival, true); assert.equal(a.giver, "Avuncular Joans"); assert.equal(a.description, "AJ handed you a fortress.");
+  const b = q(situation({ fired: ["a_welcome", "a_round", "b_hq"], phase: 2 })).script;
+  assert.equal(b.inArrival, false); assert.equal(b.giver, "Marshal Yarrow Pike"); assert.equal(b.description, "Pike gave you two errands.");
 });
 test("doors: listed with their line and readiness, never offered as next", () => {
   const s = q(situation({ fired: ["a_welcome", "a_round", "b_hq"], phase: 2 }));

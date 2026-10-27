@@ -1026,8 +1026,12 @@ export function scriptView(sc, ctx) {
     const line = rung?.line || String(chapters[ck]?.line || "");
     if (line) chapterLines[ck] = { line, rung: rung ? rung.id : null };
   }
+  // While an Arrival step is current the town is still being MET (Dave 2026-10-26: the Log showed Pike's errands and
+  // the Act-2 doors on the Jackalope's first stop) — the arrival's own giver + description speak, and the Log hides doors.
+  const inArrival = current.some(s => s.arrival);
+  const arr = (inArrival && sc.arrival && typeof sc.arrival === "object") ? sc.arrival : null;
   return {
-    giver: String(sc.giver || ""), description: String(sc.description || ""),
+    giver: String(arr?.giver || sc.giver || ""), description: String(arr?.description || sc.description || ""), inArrival,
     steps: steps.map(s => ({ id: s.id, label: s.label || "", line: s.line || "", status: s.status, group: s.group || null, arrival: !!s.arrival, chapter: s.chapter || null })),
     current: current.map(s => s.id), doors, after: Array.isArray(sc.after) ? sc.after.slice() : [], chapters, chapterLines,
     next, why, chapter: stepOf?.chapter || null

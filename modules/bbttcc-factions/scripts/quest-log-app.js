@@ -128,7 +128,9 @@
         const cur = (sc.steps || []).filter(st => st.status === "current");
         const lines = cur.map(st => st.line).filter(Boolean); if (!lines.length && q.next?.line) lines.push(q.next.line);
         const stepLabel = cur.map(st => st.label).filter(Boolean).join(" · ") || (q.state === "completed" ? "complete" : "");
-        const doors = (sc.doors || []).filter(d => d.line).map(d => ({ label: d.label, line: d.line, ready: d.ready }));
+        // "Also open" = doors that ARE open: none during the Arrival, and a door with beats only once its next beat's gates
+        // are met (Tamsin / Etta / the Muster are Act-2 doors; the Muster also waits for the militia) — 2026-10-26
+        const doors = sc.inArrival ? [] : (sc.doors || []).filter(d => d.line && (d.ready || !d.beat)).map(d => ({ label: d.label, line: d.line, ready: d.ready }));
         // renderHtml(lines) — the Log rebuilds this with a table-edited next line when one is stored (2026-09-21).
         const renderHtml = (ls) => `${sc.giver ? `<p class="bbttcc-muted"><b>From:</b> ${esc(sc.giver)}</p>` : ""}${sc.description ? `<p>${esc(sc.description)}</p>` : ""}` +
             (ls.length ? `<p><b>Next:</b></p><ul>${ls.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` : "") +
@@ -282,7 +284,21 @@
       if (selected && !selected.isInvite) {
         try {
           const doors = game.bbttcc?.api?.travel?.doors;
-          const hits = doors?.forQuest ? doors.forQuest(selected.questId) : [];
+          let hits = doors?.forQuest ? doors.forQuest(selected.questId) : [];
+          // a door is only "where" when one of its beats can actually play now (the Pilgrim's Room is an Act-2,
+          // confessor's-debt beat — it lit up on day one, 2026-10-26)
+          const gates = game.bbttcc?.api?.campaign?.gates;
+          if (gates?.requiresMet) {
+            const camp = game.bbttcc?.api?.campaign?.getCampaign?.(game.bbttcc?.api?.campaign?.getActiveCampaignId?.());
+            const byId = new Map((camp?.beats || []).map(b => [String(b.id), b]));
+            const open = [];
+            for (const h of hits) {
+              const ok = [];
+              for (const b of h.beats) { const beat = byId.get(String(b.beatId)); if (!beat || await gates.requiresMet(beat, camp, {}).catch(() => true)) ok.push(b); }
+              if (ok.length) open.push({ ...h, beats: ok });
+            }
+            hits = open;
+          }
           selected.locations = hits.map(h => ({
             drawingUuid: h.drawingUuid, label: h.label, hubLabel: h.hubLabel,
             here: !!(canvas?.scene?.uuid && canvas.scene.uuid === h.hubSceneUuid),

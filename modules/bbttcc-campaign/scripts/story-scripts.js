@@ -70,7 +70,7 @@ export const STORY_SCRIPTS = {
       { id: "close", label: "Pike Updates the Map", line: "Pike is updating the map. Go and see your names on it.", beats: ["allesh_gilliam_pike_closure"] }
     ],
     doors: [
-      { id: "tamsin", label: "Father Tamsin", line: "Father Tamsin has a night story. Ask about the dream.", beats: ["allesh_gilliam_father_tamsin_conversation", "ag_tamsin_the_dream", "ag_tamsin_the_dream_after", "ag_tamsin_the_dream_after_hundred"] },
+      { id: "tamsin", label: "Father Tamsin", line: "Father Tamsin has a night story and a kettle. Sit with him a while.", beats: ["allesh_gilliam_father_tamsin_conversation", "ag_tamsin_the_dream", "ag_tamsin_the_dream_after", "ag_tamsin_the_dream_after_hundred"] },   // no dream: he tells it later in the story (Dave 2026-10-26)
       { id: "etta", label: "Etta at the Long Market", line: "Etta said questions keep. They've kept. Go to the Long Market.", beats: ["allesh_gilliam_the_long_market_intro", "allesh_gilliam_etta_bloom_conversation", "allesh_gilliam_etta_bloom_convo_exit"] },
       { id: "muster", label: "The Muster", line: "The Muster is open by the North Gate. Captain Brakk is drilling farmers.", beats: ["allesh_gilliam_muster_intro"] },
       // The River Heart nod (owner ask 2026-09-22): listed all act under "Also open" — the grief towns

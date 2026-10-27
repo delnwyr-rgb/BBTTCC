@@ -166,9 +166,17 @@
     }
     return out;
   }
+  /** A beat gated to an act the story hasn't reached (inject.requires storyPhase gte) — no pill, no pulse for it yet. */
+  function _laterAct(beatId) {
+    let phase = 0;
+    try { phase = Number(game.settings.get("bbttcc-campaign", "storyPhase")) || 0; } catch (_e) { return false; }
+    const b = (_campaign()?.beats || []).find(x => String(x?.id) === String(beatId));
+    const req = Array.isArray(b?.inject?.requires) ? b.inject.requires : [];
+    return req.some(r => r && r.flag === "storyPhase" && r.gte != null && Number(r.gte) > phase);
+  }
   /** Doors a quest points at (un-completed beats with a sceneId that is a door target). */
   function forQuest(questId) {
-    const placed = beatsForQuest(questId); if (!placed.length) return [];
+    const placed = beatsForQuest(questId).filter(b => !_laterAct(b.beatId)); if (!placed.length) return [];
     const active = _activeQuests()[String(questId)];
     const done = active?.completed || new Set();
     const doors = listAll(); const hits = [];
