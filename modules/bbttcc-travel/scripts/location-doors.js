@@ -201,14 +201,20 @@
     return lit;
   }
 
-  // ---------- visuals: hover highlight + quest pulse + 📍 pins ----------
-  // Line widths are ZOOM-AWARE (a 10px line on a 15,000px map is sub-pixel zoomed out),
-  // and every destroy is tolerant: the canvas tears our objects down before canvasReady.
+  // ---------- visuals: HexChrome labels + NOW pins (Dave, 2026-10-26) ----------
+  // The door Drawings' own gold ellipses and plain text are hidden on the hub (shown again while a GM has the
+  // Drawings layer open, to edit them). Each door gets a glowing HexChrome label at its centre, kept at a readable
+  // SCREEN size at any zoom; the label is the thing you click (the ellipse still counts too). A door the story's
+  // NOW points at (each active quest's ready next beat lives behind it) gets a small glowing hex pin above its
+  // label — no rings anywhere.
   let _fx = null;           // PIXI container on the drawings layer
-  let _pulse = [];          // [{d, g, pin, phase}]
-  let _hover = null;
+  let _labels = [];         // [{d, c, plate, text, w, h, lit, hover, pin}]
+  let _hoverDoor = null;
+  let _flash = null;        // {d, t0, ms}
+  const LABEL_PX = 21;      // label font size in SCREEN px
+  const PIN_PX = 34;        // pin height in SCREEN px
+  const BLUE = 0x9fc8f2, BLUE_EDGE = 0x4a8fd6, GOLD = 0xf4c842, GOLD_GLOW = 0xffdf6b, PANEL = 0x060e20;
   const zoom = () => Math.max(0.01, canvas?.stage?.scale?.x || 1);
-  const px = (n) => n / zoom();                                  // n screen px → scene units
   const safeDestroy = (o) => { try { if (o && !o.destroyed) o.destroy({ children: true }); } catch (_e) {} };
   function fxLayer() {
     if (_fx && !_fx.destroyed && _fx.parent) return _fx;
@@ -220,67 +226,150 @@
     const shape = d.document.shape || {};
     return Math.max(Number(shape.width || d.document.width || 100), Number(shape.height || d.document.height || 100)) / 2;
   }
-  function clearHover() { safeDestroy(_hover); _hover = null; }
-  function drawHover(d) {
-    const z = zoom();
-    if (_hover && !_hover.destroyed && _hover._door === d && _hover._z === z) return;
-    clearHover();
-    const g = new PIXI.Graphics(); const c = centerOf(d); const r = radiusOf(d);
-    g.lineStyle(Math.max(px(5), r * 0.03), 0x7ff6ff, 0.95); g.drawCircle(c.x, c.y, r + px(6));
-    fxLayer().addChild(g); _hover = g; _hover._door = d; _hover._z = z;
-    try { document.body.style.cursor = "pointer"; } catch (_e) {}
+  /** Hide the Drawing's own ring + text (one graphics object holds both) unless a GM is editing drawings. */
+  function _syncDrawingVisibility() {
+    const editing = !!(game.user?.isGM && canvas?.drawings?.active);
+    for (const d of doorDrawings()) { try { if (d.shape) d.shape.visible = editing; } catch (_e) {} }
+    if (_fx) _fx.visible = !editing;
   }
-  function clearPulses() { for (const p of _pulse) { safeDestroy(p.g); safeDestroy(p.pin); } _pulse = []; }
+  // the Circuit face has no ⇩⇧⇦⇨ — the fallback drew them as hairlines
+  const ARROWS = { "⇩": "▼", "⇧": "▲", "⇦": "◀", "⇨": "▶" };
+  const _labelText = (d) => { const l = linkOf(d); return String(d.document.text || l?.label || l?.key || "door").trim().replace(/[⇩⇧⇦⇨]/g, ch => ARROWS[ch]); };
+  function _hexPath(g, cx, cy, w, h) {   // a label plate with hex-cut ends
+    const k = h / 2;
+    g.drawPolygon([cx - w / 2 + k, cy - h / 2, cx + w / 2 - k, cy - h / 2, cx + w / 2, cy, cx + w / 2 - k, cy + h / 2, cx - w / 2 + k, cy + h / 2, cx - w / 2, cy]);
+  }
+  function _drawPlate(L) {
+    const g = L.plate; g.clear();
+    const hot = L.hover || (_flash && _flash.d === L.d);
+    const edge = L.lit ? GOLD : (hot ? 0x7ff6ff : BLUE_EDGE);
+    g.lineStyle(hot ? 3 : 2, edge, 0.95); g.beginFill(PANEL, hot ? 0.9 : 0.8); _hexPath(g, 0, 0, L.w, L.h); g.endFill();
+    L.glow.clear(); L.glow.lineStyle(8, L.lit ? GOLD_GLOW : (hot ? 0x7ff6ff : BLUE_EDGE), L.lit || hot ? 0.55 : 0.28); _hexPath(L.glow, 0, 0, L.w, L.h);
+    L.text.style.fill = L.lit ? GOLD : (hot ? 0xe6fbff : BLUE);
+    L.text.style.dropShadowColor = L.lit ? GOLD_GLOW : 0x8fc0f0;
+  }
+  function _makePin() {
+    const pin = new PIXI.Container(); pin.eventMode = "none";
+    const hex = (g, r) => { const pts = []; for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i * Math.PI / 3; pts.push(Math.cos(a) * r, Math.sin(a) * r); } g.drawPolygon(pts); };
+    const glow = new PIXI.Graphics(); glow.beginFill(GOLD_GLOW, 0.75); hex(glow, 15); glow.endFill();
+    try { glow.filters = [new PIXI.BlurFilter(8)]; } catch (_e) {}
+    const body = new PIXI.Graphics(); body.lineStyle(2, 0xfff3c4, 1); body.beginFill(GOLD, 1); hex(body, 10); body.endFill();
+    body.lineStyle(0); body.beginFill(BLUE_EDGE, 1); hex(body, 4.5); body.endFill();
+    const stem = new PIXI.Graphics(); stem.beginFill(GOLD, 0.9); stem.drawPolygon([-3, 9, 3, 9, 0, 17]); stem.endFill();
+    pin.addChild(glow, stem, body);
+    return pin;
+  }
+  function clearLabels() { for (const L of _labels) safeDestroy(L.c); _labels = []; }
+  function _buildLabels() {
+    clearLabels();
+    const layer = fxLayer();
+    for (const d of doorDrawings()) {
+      const c = new PIXI.Container(); c.eventMode = "none";
+      const glow = new PIXI.Graphics(); try { glow.filters = [new PIXI.BlurFilter(5)]; } catch (_e) {}
+      const plate = new PIXI.Graphics();
+      const text = new PIXI.Text(_labelText(d), {
+        fontFamily: '"BBTTCC Display Circuit", "BBTTCC Display", Signika, sans-serif', fontSize: LABEL_PX * 2, fill: BLUE, letterSpacing: 1,
+        dropShadow: true, dropShadowColor: 0x8fc0f0, dropShadowBlur: 10, dropShadowDistance: 0, dropShadowAlpha: 0.9, align: "center"
+      });
+      text.scale.set(0.5); text.anchor.set(0.5);   // rendered at 2× for crisp edges
+      const w = text.width + LABEL_PX * 1.8, h = LABEL_PX * 1.9;
+      c.addChild(glow, plate, text); layer.addChild(c);
+      const L = { d, c, glow, plate, text, w, h, lit: false, hover: false, pin: null };
+      _drawPlate(L); _labels.push(L);
+    }
+    _syncDrawingVisibility();
+  }
+  function _labelOf(d) { return _labels.find(L => L.d === d) || null; }
+  /** Scene-space rect of a door's label (for the click / hover hit-test). */
+  function labelHitAt(x, y) {
+    const s = 1 / zoom();
+    for (const L of [..._labels].reverse()) {
+      const p = centerOf(L.d); const hw = (L.w * s) / 2, hh = (L.h * s) / 2;
+      if (Math.abs(x - p.x) <= hw && Math.abs(y - p.y) <= hh) return L.d;
+    }
+    return null;
+  }
   function _tick() {
-    if (!_pulse.length || !canvas?.ready) return;
-    const t = performance.now() / 1000;
-    for (const p of _pulse) {
-      if (!p.g || p.g.destroyed) continue;
-      const k = (Math.sin(t * 2.2 + p.phase) + 1) / 2;           // 0..1
-      const c = centerOf(p.d); const r = radiusOf(p.d);
-      p.g.clear();
-      p.g.lineStyle(Math.max(px(6), r * 0.05), 0xffd166, 0.45 + 0.5 * k); p.g.drawCircle(c.x, c.y, r + r * 0.02 + r * 0.06 * k);
-      p.g.lineStyle(Math.max(px(2), r * 0.015), 0xffffff, 0.7 * (1 - k)); p.g.drawCircle(c.x, c.y, r + r * 0.12 + r * 0.18 * k);
-      if (p.pin && !p.pin.destroyed) { p.pin.y = c.y - r - r * 0.05 - r * 0.06 * k; p.pin.alpha = 0.85 + 0.15 * k; }
+    if (!_labels.length || !canvas?.ready) return;
+    _syncDrawingVisibility();
+    const s = 1 / zoom(); const t = performance.now() / 1000;
+    for (const L of _labels) {
+      if (!L.c || L.c.destroyed) continue;
+      const p = centerOf(L.d);
+      let k = 1;
+      if (_flash && _flash.d === L.d) {
+        const u = (performance.now() - _flash.t0) / _flash.ms;
+        if (u >= 1) { _flash = null; _drawPlate(L); } else k = 1 + 0.18 * Math.abs(Math.sin(u * Math.PI * 3));
+      } else if (L.hover) k = 1.08;
+      L.c.position.set(p.x, p.y); L.c.scale.set(s * k);
+      if (L.pin && !L.pin.destroyed) {
+        const bob = Math.sin(t * 2.4) * 3;
+        L.pin.position.set(p.x, p.y - ((L.h / 2) + PIN_PX * 0.75 + bob) * s);
+        L.pin.scale.set(s * (PIN_PX / 26));
+        L.pin.alpha = 0.85 + 0.15 * (Math.sin(t * 2.4) + 1) / 2;
+      }
     }
   }
   let _tickBound = false;
   function ensureTicker() { if (_tickBound) return; canvas.app.ticker.add(_tick); _tickBound = true; }
   function dropTicker() { try { canvas?.app?.ticker?.remove(_tick); } catch (_e) {} _tickBound = false; }
-  function makePin(d, questCount) {
-    const c = centerOf(d); const r = radiusOf(d);
-    const size = Math.max(48, Math.round(r * 0.55));
-    const pin = new PIXI.Text(questCount > 1 ? `📍×${questCount}` : "📍", { fontFamily: "Signika, sans-serif", fontSize: size, fill: 0xffffff, stroke: 0x000000, strokeThickness: Math.round(size / 10), dropShadow: true, dropShadowBlur: size / 6, dropShadowAlpha: 0.6 });
-    pin.anchor.set(0.5, 1); pin.x = c.x; pin.y = c.y - r; pin.eventMode = "none";
-    return pin;
+  function clearHover() {
+    const L = _hoverDoor ? _labelOf(_hoverDoor) : null; _hoverDoor = null;
+    if (L) { L.hover = false; _drawPlate(L); }
   }
-  function refreshLit() {
-    clearPulses();
-    if (!isTownHub() || !canvas?.ready) return;
-    let lit; try { lit = litDoorsHere(); } catch (e) { warn("lit refresh failed", e); return; }
+  function drawHover(d) {
+    if (_hoverDoor === d) return;
+    clearHover(); _hoverDoor = d;
+    const L = _labelOf(d); if (L) { L.hover = true; _drawPlate(L); }
+    try { document.body.style.cursor = "pointer"; } catch (_e) {}
+  }
+
+  /** The beats the story's NOW points at: each active quest's ready next beat. */
+  async function _nowBeats() {
+    const api = game.bbttcc?.api?.campaign; if (!api?.director?.situation) return [];
+    const sit = await api.director.situation({ full: false }).catch(() => null);
+    return (sit?.quests || []).filter(q => q.state === "active" && q.next?.ready && q.next.beat).map(q => ({ quest: q.key, beat: q.next.beat }));
+  }
+  /** Doors the NOW lives behind: the beat's scene is one of the door's scenes (AJ's send-off plays on the North
+   *  Gate's scene), or the door's opener IS the beat. → Map drawingUuid → [{quest, beatId}] */
+  async function nowDoorsHere() {
+    const lit = new Map();
+    if (!isTownHub()) return lit;
+    const now = await _nowBeats(); if (!now.length) return lit;
     for (const d of doorDrawings()) {
-      const hits = lit.get(d.document.uuid); if (!hits) continue;
-      const g = new PIXI.Graphics(); const pin = makePin(d, hits.length);
-      fxLayer().addChild(g); fxLayer().addChild(pin);
-      _pulse.push({ d, g, pin, phase: Math.random() * 6.28 });
+      const l = linkOf(d); const keys = _sceneKeys(linkScenes(l));
+      for (const n of now) {
+        const sid = String(n.beat.sceneId || "").trim();
+        const here = (sid && keys.has(sid)) || String(l.beatId || "") === String(n.beat.id);
+        if (here) { const a = lit.get(d.document.uuid) || []; a.push({ questId: n.quest, beatId: n.beat.id }); lit.set(d.document.uuid, a); }
+      }
     }
-    if (_pulse.length) ensureTicker();
+    return lit;
   }
-  /** One-shot attention pulse on a door (Quest Log 📍 click). */
+  let _refreshSeq = 0;
+  async function refreshLit() {
+    const seq = ++_refreshSeq;
+    if (!isTownHub() || !canvas?.ready) { clearLabels(); return; }
+    if (_labels.length !== doorDrawings().length || _labels.some(L => L.c.destroyed || !doorDrawings().includes(L.d))) _buildLabels();
+    let lit; try { lit = await nowDoorsHere(); } catch (e) { warn("lit refresh failed", e); lit = new Map(); }
+    if (seq !== _refreshSeq) return;   // a newer refresh superseded this one
+    for (const L of _labels) {
+      L.lit = lit.has(L.d.document.uuid);
+      if (L.lit && !L.pin) { L.pin = _makePin(); fxLayer().addChild(L.pin); }
+      if (!L.lit && L.pin) { safeDestroy(L.pin); L.pin = null; }
+      _drawPlate(L);
+    }
+    ensureTicker();
+  }
+  /** One-shot attention flash on a door's label (Quest Log 📍 click). */
   async function pulse(drawingUuid, { ms = 2600 } = {}) {
     const d = doorDrawings().find(x => x.document.uuid === drawingUuid); if (!d) return false;
-    const g = new PIXI.Graphics(); fxLayer().addChild(g);
-    const t0 = performance.now(); const c = centerOf(d); const r = radiusOf(d);
-    const fn = () => {
-      const u = (performance.now() - t0) / ms;
-      if (u >= 1 || g.destroyed) { try { canvas.app.ticker.remove(fn); } catch (_e) {} safeDestroy(g); return; }
-      const k = (u * 3) % 1; g.clear();
-      g.lineStyle(Math.max(px(6), r * 0.05), 0x7ff6ff, 1 - k); g.drawCircle(c.x, c.y, r + r * 0.05 + r * 0.6 * k);
-    };
-    canvas.app.ticker.add(fn); return true;
+    if (!_labels.length) await refreshLit();
+    _flash = { d, t0: performance.now(), ms }; const L = _labelOf(d); if (L) _drawPlate(L);
+    ensureTicker(); return true;
   }
   /** The canvas is going away: forget our display objects (it destroys them itself). */
-  function forgetVisuals() { dropTicker(); _pulse = []; _hover = null; _fx = null; try { if (document.body.style.cursor === "pointer") document.body.style.cursor = ""; } catch (_e) {} }
+  function forgetVisuals() { dropTicker(); _labels = []; _hoverDoor = null; _flash = null; _fx = null; try { if (document.body.style.cursor === "pointer") document.body.style.cursor = ""; } catch (_e) {} }
 
   // ---------- the dive ----------
   /** GM seat only: run the door's opener beat with a pending cinematic dive; true if the beat took the table somewhere. */
@@ -425,7 +514,7 @@
       const oe = event.data?.originalEvent ?? event.originalEvent ?? event;
       if (oe?.shiftKey || oe?.ctrlKey || oe?.metaKey || oe?.altKey) return; // editor / planner clicks stay free
       const p = localPos(event);
-      const hit = hitDoorAt(p.x, p.y); if (!hit) return;
+      const hit = labelHitAt(p.x, p.y) || hitDoorAt(p.x, p.y); if (!hit) return;
       event.stopPropagation?.();
       dive(hit.document.uuid);
     } catch (err) { console.error(TAG, "pointerdown error:", err); }
@@ -434,7 +523,7 @@
   function onPointerMove(event) {
     if (_moveBroken) return;
     try {
-      const p = localPos(event); const hit = hitDoorAt(p.x, p.y);
+      const p = localPos(event); const hit = labelHitAt(p.x, p.y) || hitDoorAt(p.x, p.y);
       if (hit) drawHover(hit); else { clearHover(); try { if (document.body.style.cursor === "pointer") document.body.style.cursor = ""; } catch (_e) {} }
     } catch (err) { _moveBroken = true; clearHover(); console.error(TAG, "hover disabled after error:", err); }
   }
@@ -462,7 +551,10 @@
   // Quest progress lives on faction actors; a beat completing re-lights the doors.
   Hooks.on("updateActor", (a, diff) => { try { if (isTownHub() && foundry.utils.hasProperty(diff, `flags.${MOD_FAC}.quests`)) refreshLit(); } catch (_e) {} });
   Hooks.on("bbttcc:beat:resolved", () => { try { if (isTownHub()) refreshLit(); } catch (_e) {} });
-  for (const h of ["createDrawing", "updateDrawing", "deleteDrawing"]) Hooks.on(h, (doc) => { try { if (doc?.parent?.id === canvas?.scene?.id && isTownHub()) refreshLit(); } catch (_e) {} });
+  Hooks.on("bbttcc:story:changed", () => { try { if (isTownHub()) refreshLit(); } catch (_e) {} });
+  // the story store is a world setting: every seat hears it change, not just the GM who ran the beat
+  Hooks.on("updateSetting", (st) => { try { const k = String(st?.key || ""); if (isTownHub() && (k === `${MOD_CAM}.storyState` || k === `${MOD_CAM}.storyPhase`)) refreshLit(); } catch (_e) {} });
+  for (const h of ["createDrawing", "updateDrawing", "deleteDrawing"]) Hooks.on(h, (doc) => { try { if (doc?.parent?.id === canvas?.scene?.id && isTownHub()) { clearLabels(); setTimeout(() => refreshLit(), 50); } } catch (_e) {} });
 
   Hooks.once("init", () => {
     try {
@@ -477,7 +569,7 @@
   Hooks.once("ready", () => {
     game.bbttcc = game.bbttcc || { api: {} }; game.bbttcc.api = game.bbttcc.api || {};
     game.bbttcc.api.travel = game.bbttcc.api.travel || {};
-    game.bbttcc.api.travel.doors = { list: listAll, forQuest, beatsForQuest, litDoorsHere, dive, goto, pulse, refreshLit, isTownHub, enter, gateMet, _hitDoorAt: hitDoorAt };
+    game.bbttcc.api.travel.doors = { list: listAll, forQuest, beatsForQuest, litDoorsHere, nowDoorsHere, dive, goto, pulse, refreshLit, isTownHub, enter, gateMet, _hitDoorAt: hitDoorAt };
     // GM-side relay (walk-in gate, 2026-09-30): a player's token hit a gated door Region and the gate is shut —
     // the GM seat plays the fallback beat (Donny) at the table. The gate is re-checked here; players cannot skip it.
     try {
