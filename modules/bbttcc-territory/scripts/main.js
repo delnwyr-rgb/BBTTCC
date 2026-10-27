@@ -1386,8 +1386,20 @@ function bbttccFreezeOverlay(root) {
     if (!root) return root;
     let on = true; try { on = game.settings.get(MOD, "batchHexLabels") !== false; } catch (_e) {}
     if (!on) return root;
-    root.cacheAsBitmapResolution = 3;
-    root.cacheAsBitmap = true;
+    // 🪤 (Dave 10-26: "the tower/pickaxe/barn aren't showing") — the type icons are PNG textures that load AFTER the
+    // overlay is built (and the glyph fallback is a FontAwesome webfont). Caching at once baked an empty disc. So the
+    // snapshot waits for every sprite texture in the overlay + the fonts (the sprite's own "loaded" fit runs first —
+    // it registered first), capped at 8 s, and is skipped if the overlay was rebuilt/destroyed meanwhile.
+    const pending = [];
+    const walk = (o) => {
+      const bt = o?.texture?.baseTexture;
+      if (o instanceof PIXI.Sprite && !(o instanceof PIXI.Text) && bt && !bt.valid) pending.push(new Promise(res => { bt.once?.("loaded", res); bt.once?.("error", res); }));
+      for (const c of o?.children || []) walk(c);
+    };
+    walk(root);
+    if (document?.fonts?.ready) pending.push(document.fonts.ready.catch(() => {}));
+    const freeze = () => { try { if (!root.destroyed && root.parent) { root.cacheAsBitmapResolution = 3; root.cacheAsBitmap = true; } } catch (_e) {} };
+    Promise.race([Promise.all(pending), new Promise(res => setTimeout(res, 8000))]).then(() => requestAnimationFrame(freeze));
   } catch (_e) {}
   return root;
 }
