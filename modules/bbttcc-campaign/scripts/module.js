@@ -1225,6 +1225,21 @@ let __bbttccBeatAudioStartedAt = 0;
 let __bbttccCurrentBeatDialogBeat = null;
 let __bbttccCurrentBeatDialogPick = null;   // Autopilot: { beat, token, pick(i, callerUser) } for the open GM dialog
 
+// ONE WINDOW PER MOMENT (Dave 2026-10-26: walking the town by clicking the MAP left every Welcome Round open — each
+// door's chain routes back to the walk, so two, then three walks stacked). Every open beat dialog is tracked here; a
+// beat about to open closes its own stale copy, and a map door click closes them all (the table chose the map).
+// A closed dialog resolves as a dismissal, ending the chain it was waiting in.
+const __bbttccOpenBeatDialogs = new Set();   // { beatId, dlg }
+async function _closeOpenBeatDialogs({ beatId = null } = {}) {
+  let n = 0;
+  for (const e of [...__bbttccOpenBeatDialogs]) {
+    if (beatId && e.beatId !== String(beatId)) continue;
+    __bbttccOpenBeatDialogs.delete(e);
+    try { await e.dlg.close(); n++; } catch (_e) {}
+  }
+  return n;
+}
+
 // FACILITATION (2026-10-07): the one reader for "does this beat reach player screens" — the mode's
 // beatText policy over the authored flag (five aliases, all in live use).
 function _facPlayerFacing(beat, pol) {
@@ -2511,6 +2526,8 @@ function _partyIsAt(name) {
 }
 
 async function _runBeatDialog(campaign, beat, ctx={}) {
+  // before this beat's mirror goes out to the players (closing a stale copy broadcasts its own mirror close)
+  try { await _closeOpenBeatDialogs({ beatId: beat?.id }); } catch (_eStale) {}
   try { if (ctx && ctx.allowDesperation == null) ctx.allowDesperation = true; } catch (_eAD) {}
 
   // Dialogue-driven enactment (mal-voice contract): a choice already committed
@@ -3006,6 +3023,7 @@ ${
       };
     }
 
+    let openEntry = null;
     const dlg = new Dialog({
       title,
       content: bodyHtml,
@@ -3013,8 +3031,10 @@ ${
       default: Object.keys(buttons)[0] || "ok",
       // Escape / header-X with no button = a real dismissal, resolve now.
       // A clicked button's callback owns the resolve (see buttonTaken above).
-      close: () => { if (!buttonTaken) finish({ acted: false, closed: true }); }
+      close: () => { if (openEntry) __bbttccOpenBeatDialogs.delete(openEntry); if (!buttonTaken) finish({ acted: false, closed: true }); }
     }, __bbttccBeatDockPosition());
+    openEntry = { beatId: String(beat?.id || ""), dlg };
+    __bbttccOpenBeatDialogs.add(openEntry);
 
     dlg.render(true);
     try { __bbttccAutosizeDialogDeferred(dlg, { pad: 40, maxH: window.innerHeight - 20 }); } catch (_eAuto) {}
@@ -8527,6 +8547,7 @@ function scanStableKeysReport() {
 // API
 function buildCampaignAPI() {
   return {
+    closeOpenBeatDialogs: (opts = {}) => _closeOpenBeatDialogs(opts),   // one window per moment (2026-10-26)
     awards: STORY_AWARDS_API,   // story awards (2026-09-20): settle / pay / ledger / rewardFor
     listCampaigns,
     getCampaign,

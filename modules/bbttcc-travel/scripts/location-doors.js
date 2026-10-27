@@ -380,6 +380,9 @@
     if (!camp?.runBeat || !cid) return false;
     const c = centerOf(doc);
     try {
+      // the table chose the map: any beat window still waiting (the Welcome Round) closes, or the door's chain
+      // routing back to the walk would stack a second one on top of it (2026-10-26)
+      try { await camp.closeOpenBeatDialogs?.(); } catch (_eC) {}
       tx?.requestDive?.({ hexUuid: doc.uuid, focus: c, audience, label: label || link.label, originUuid: canvas?.scene?.uuid || null });
       const r = await camp.runBeat(cid, beatId, { source: "town-door", doorKey: link.key });
       if (r && r.ok === false) { warn(`door beat ${beatId} declined`, r); tx?.consumeDive?.(); return false; }
