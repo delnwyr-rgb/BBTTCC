@@ -482,6 +482,7 @@ export const FEATURE_ROUTER = {
   // exposes BOTH Hex Recognition (from core) AND Heat Memory (heritage).
   "menhirkin_igneous_heritage":          "menhirkin_igneous_picker",
   "oldenborn_rustland_scavenger_heritage": "oldenborn_rustland_patch",
+  "oldenborn-rustland-patch-repurpose":    "oldenborn_rustland_patch",   // the feature itself (Dave 10-27: tracked 1/Soma Break)
   "furrykin-felid-predator_patience":      "furrykin_predator_patience",
   "oldenborn-embertouched-phoenix_oath":   "oldenborn_phoenix_oath",
   "oldenborn-embertouched-hearth_dominion": "oldenborn_hearth_dominion",
@@ -595,6 +596,7 @@ export const NAME_ROUTER = [
   // === Phase 2 specific routes — MUST come before the prefix matches below
   // because routeFeature walks top-to-bottom and stops on first .includes().
   ["Menhirkin Heritage: Igneous",            "menhirkin_igneous_picker"],
+  ["Oldenborn (Rustland Scavenger): Patch & Repurpose", "oldenborn_rustland_patch"],
   ["Oldenborn Heritage: Rustland Scavenger", "oldenborn_rustland_patch"],
   ["Furrykin (Felid): Predator Patience",    "furrykin_predator_patience"],
   ["Oldenborn (Ember-Touched): Phoenix Oath", "oldenborn_phoenix_oath"],
@@ -4724,7 +4726,7 @@ export async function openMenhirkinIgneousHeatMemory(actor) {
 export async function openOldenbornRustlandPatch(actor) {
   return _openSomaBreakAbility(actor, "oldenbornRustlandPatch",
     "Patch & Repurpose (Oldenborn Rustland Scavenger)",
-    "1/Soma Break: while taking a Soma Break in a ruin or wreckage hex, recover one expended consumable (bandage, filter, torch, ration) by scavenging.");
+    "1/Soma Break: spend 10 minutes of a Soma Break on one broken or low-charge item (weapon, tool, power cell, vehicle component, armour) and restore it to one more use, scene, or day. The GM rules how it dies for real afterward.");
 }
 
 export async function openFurrykinPredatorPatience(actor) {
