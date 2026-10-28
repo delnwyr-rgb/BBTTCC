@@ -219,7 +219,7 @@
     },
     {
       "name": "doctrines",
-      "label": "Bad Eden Doctrines",
+      "label": "Bad Eden Maneuvers & Activities",
       "path": "packs/doctrines",
       "type": "Item",
       "system": "dnd5e",

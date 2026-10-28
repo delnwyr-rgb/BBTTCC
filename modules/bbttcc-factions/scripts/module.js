@@ -489,7 +489,7 @@ async function _bbttccGrantDoctrineEmbeddedItemNow(actor, { kind, key, silent=fa
     flags: { bbttcc: { kind: k, key: kk } },
     system: {
       category: k === "maneuver" ? "maneuver" : "strategic",
-      source: "Bad Eden Doctrine",
+      source: k === "maneuver" ? "Bad Eden Maneuver" : "Bad Eden Activity",   // 2026-10-28 (Dave): "Doctrine" is the subclass word only
       description: { value: _bbttccBuildDoctrineDescription(k, kk, spec), chat: "" }
     }
   };
@@ -503,7 +503,7 @@ async function _bbttccGrantDoctrineEmbeddedItemNow(actor, { kind, key, silent=fa
         ? foundry.utils.duplicate(a.getFlag(MODULE_ID, "warLogs"))
         : [];
       const ts = Date.now();
-      logs.push({ ts, date: new Date(ts).toLocaleString(), type: "doctrine", summary: `Doctrine gained: ${itemData.name}` });
+      logs.push({ ts, date: new Date(ts).toLocaleString(), type: "doctrine", summary: `${k === "maneuver" ? "Maneuver" : "Activity"} learned: ${itemData.name}` });
       await a.setFlag(MODULE_ID, "warLogs", logs);
     } catch (_e) {}
   }
@@ -3388,14 +3388,15 @@ try {
       if (act === "remove") {
         if (!itemId) return;
         const it = this.actor.items?.get?.(itemId) || null;
-        const name = it?.name || "doctrine item";
+        const name = it?.name || "item";
+        const kindWord = String(it?.flags?.bbttcc?.kind || kindAttr || "").toLowerCase() === "maneuver" ? "Maneuver" : "Activity";
         const ok = await Dialog.confirm({
-          title: "Remove Doctrine",
+          title: `Remove ${kindWord}`,
           content: `<p>Remove <b>${foundry.utils.escapeHTML(name)}</b> from <b>${foundry.utils.escapeHTML(this.actor.name)}</b>?</p>`
         });
         if (!ok) return;
         await this.actor.deleteEmbeddedDocuments("Item", [itemId]);
-        ui.notifications?.info?.("Doctrine removed.");
+        ui.notifications?.info?.(`${kindWord} removed.`);
         this.render(false);
         return;
       }
@@ -3448,7 +3449,7 @@ try {
         if (!api?.grant) return ui.notifications?.warn?.("Doctrine API missing.");
         await api.grant(this.actor.id, { kind: wantKind, key: picked, silent: false });
 
-        ui.notifications?.info?.("Doctrine granted.");
+        ui.notifications?.info?.(`${String(wantKind).toLowerCase() === "maneuver" ? "Maneuver" : "Activity"} granted.`);
         this.render(false);
         return;
       }
@@ -3527,13 +3528,13 @@ try {
       const f = doc.flags?.bbttcc || {};
       const kind = String(f.kind || "").toLowerCase().trim();
       const key  = String(f.key  || "").toLowerCase().trim();
-      if (!kind || !key) return ui.notifications?.warn?.("That item is not a Bad Eden doctrine item (missing flags.bbttcc.kind/key).");
+      if (!kind || !key) return ui.notifications?.warn?.("That item is not a Bad Eden maneuver or activity (missing flags.bbttcc.kind/key).");
 
       const api = game.bbttcc?.api?.factions?.doctrine;
       if (!api?.grant) return ui.notifications?.warn?.("Doctrine API missing.");
       await api.grant(this.actor.id, { kind, key, silent: false });
 
-      ui.notifications?.info?.("Doctrine granted.");
+      ui.notifications?.info?.(`${kind === "maneuver" ? "Maneuver" : "Activity"} granted.`);
       this.render(false);
     }, true);
   }
