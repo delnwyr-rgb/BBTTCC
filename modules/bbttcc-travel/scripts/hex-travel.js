@@ -1419,6 +1419,11 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
       ctx.cost.economy = Math.max(0, Math.round(Number(ctx.cost.economy || 0))) + Number(ctx.crossing.toll);
     }
     const spend = await spendOP({ factionId, cost: ctx.cost });
+    // What the bank ACTUALLY took (after steward spend discounts) — a console rollback refunds this, not ctx.cost.
+    if (spend && spend.ok !== false && spend.res?.finalCost) {
+      ctx.spentFinal = {};
+      for (const [k, v] of Object.entries(spend.res.finalCost)) { const n = -Number(v || 0); if (n > 0) ctx.spentFinal[k] = n; }
+    }
     if (spend && spend.ok !== false && ctx.crossing?.toll > 0 && ctx.crossing.tollTo) {
       try {
         const opApi = game.bbttcc?.api?.op;

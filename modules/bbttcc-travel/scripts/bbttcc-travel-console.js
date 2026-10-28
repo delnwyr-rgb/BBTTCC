@@ -2067,13 +2067,19 @@
           // Phase 2 RideSession (2026-08-29): persist the plan before riding —
           // a reload mid-ride no longer loses the route. Seat-safe via gmExec.
           const rideApi = game.bbttcc?.api?.travel?.rideSession;
+          // Resuming a paused/refused/handed-over ride to the same destination stays the SAME ride
+          // (id + createdTs) — the one-of-each encounter draws are keyed on it.
+          let priorRide = null;
+          try { priorRide = rideApi?.get?.(factionId) || null; } catch (_ePR) { priorRide = null; }
+          const sameRide = !!(priorRide?.createdTs && priorRide?.legs?.length
+            && String(priorRide.legs[priorRide.legs.length - 1]?.toUuid || "") === String(legs[legs.length - 1]?.toUuid || ""));
           const rideSession = {
-            id: `ride:${factionId}:${Date.now()}`,
+            id: sameRide && priorRide.id ? priorRide.id : `ride:${factionId}:${Date.now()}`,
             factionId,
             joiningFactionIds: joiningFactionIds.slice(),
             legs: legs.map(L => ({ fromUuid: L.fromUuid, toUuid: L.toUuid, fromId: L.fromId, toId: L.toId, gate: L.gate ?? null })),
             executed: 0, stage: "riding", encounter: null,
-            createdTs: Date.now(), updatedTs: Date.now()
+            createdTs: sameRide ? priorRide.createdTs : Date.now(), updatedTs: Date.now()
           };
           try { await rideApi?.save?.(factionId, rideSession); } catch (_eRS) {}
 
@@ -2092,7 +2098,10 @@
               for (let gi = 0; gi < legs.length; gi++) {
                 const dHex = hexes.find(h => h.id === legs[gi].toId);
                 const tKey = dHex?.terrainKey || "";
-                const gate = domApi.canEnterTerrainKey(factionId, tKey);
+                // Pass the hex itself — bridges, settled crossings and port boats only count when the gate can see it (same as travelHex).
+                let hexDoc = null;
+                try { hexDoc = canvas.drawings?.get?.(legs[gi].toId)?.document ?? (legs[gi].toUuid ? fromUuidSync(legs[gi].toUuid) : null); } catch (_eHD) { hexDoc = null; }
+                const gate = domApi.canEnterTerrainKey(factionId, tKey, hexDoc);
                 if (gate && gate.ok === false) {
                   const need = (gate.required || [])
                     .map(k => game.fourththing?.constants?.MOVEMENT_DOMAINS?.[k]?.label || k).join(" or ");
@@ -2348,17 +2357,21 @@
                   const mult = Number(costMultipliers[fid] ?? 1);
                   const deltas = {};
                   let anyDelta = false;
-                  // Passenger rides free onto a dev-6 hex it owns or is allied with (same rule the lead got).
-                  if (_passage(fid, destHex).free) { console.log(TAG, `passenger ${passenger.name} rides free on leg ${i + 1} (dev-6 owner/ally)`); continue; }
+                  // Developed-hex passage for THIS passenger (same rule the lead got): dev-6 owner/ally rides free,
+                  // dev-4/5 pays the engine's partial rate — matching the Stack Cost Preview.
+                  const pass = _passage(fid, destHex);
+                  if (pass.free) { console.log(TAG, `passenger ${passenger.name} rides free on leg ${i + 1} (dev-6 owner/ally)`); continue; }
+                  const passMult = (pass.why && Number.isFinite(pass.mult)) ? pass.mult : 1;
                   for (const [k, v] of Object.entries(legCost)) {
-                    const n = Math.max(0, Math.round(Number(v || 0) * mult));
+                    const n = Math.max(0, Math.round(Number(v || 0) * passMult * mult));
                     if (n > 0) { deltas[String(k).toLowerCase()] = -n; anyDelta = true; }
                   }
                   if (!anyDelta) continue;
                   try {
                     const res = await opApi.commit(passenger.id, deltas, { source: "travel-stack", label: `Leg ${i + 1}: rode with ${game.actors?.get(factionId)?.name || "lead"}` });
                     if (res?.ok) {
-                      successfulDebits.push({ fid, name: passenger.name, deltas });
+                      // Keep what the bank actually took (steward discounts apply in op.commit) — that is what a rollback returns.
+                      successfulDebits.push({ fid, name: passenger.name, deltas: res.finalCost || deltas });
                     } else {
                       failures.push({ fid, name: passenger.name, reason: "underflow" });
                     }
@@ -2372,7 +2385,7 @@
                   // Refund successful passengers — flip each delta sign.
                   for (const s of successfulDebits) {
                     const refund = {};
-                    for (const [k, v] of Object.entries(s.deltas)) refund[k] = -Number(v);
+                    for (const [k, v] of Object.entries(s.deltas)) { const n = -Number(v || 0); if (n > 0) refund[k] = n; }
                     try {
                       await opApi.commit(s.fid, refund, { source: "travel-stack-rollback", label: `Leg ${i + 1}: rollback (passenger underflow)` });
                     } catch (e) { console.warn(TAG, `passenger refund failed for ${s.name}`, e); }
@@ -2382,7 +2395,7 @@
                   // The bridge toll is refunded too (owner ruling 2026-10-02 — the step didn't happen): it is
                   // left out of leadRefund and reversed below, holder side first.
                   const leadRefund = {};
-                  const charged = (r?.devSixFreePassage || r?.context?.devSixFreePassage) ? {} : (r?.cost || r?.context?.cost || {});
+                  const charged = (r?.devSixFreePassage || r?.context?.devSixFreePassage) ? {} : (r?.context?.spentFinal || r?.cost || r?.context?.cost || {});
                   const toll = Number(r?.context?.crossing?.toll || 0);
                   const tollPaid = toll > 0 && !!r?.context?.crossing?.tollTo;
                   for (const [k, v] of Object.entries(charged)) {

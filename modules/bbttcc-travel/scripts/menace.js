@@ -144,8 +144,10 @@
 
   // ── 3. THE HEX MENACE STATE ────────────────────────────────────────────────
   function list(doc) { const rows = hexFlags(doc)[FLAG]; return Array.isArray(rows) ? rows.filter(r => r && typeof r === "object") : []; }
+  // One key shape everywhere — add() stores it, clear()/find() must look it up the same way.
+  const normKey = (v) => String(v || "").trim().toLowerCase().replace(/[^a-z0-9_:-]+/g, "_");
   function find({ key = null, beatId = null } = {}) {
-    const k = String(key || "").trim(), b = String(beatId || "").trim();
+    const k = normKey(key), b = String(beatId || "").trim();
     if (!k && !b) return null;
     for (const d of allHexDocs()) for (const row of list(d)) { if ((k && String(row.key) === k) || (b && String(row.beatId) === b)) return { doc: d, row }; }
     return null;
@@ -195,7 +197,7 @@
   async function add(hexRef, { key, label, beatId = "", campaignId = "", factionId = "", clock = null, source = "beat", note = "" } = {}) {
     if (!isGM()) return { ok: false, error: "GM only" };
     const doc = await resolveHex(hexRef); if (!doc) return { ok: false, error: "hex not found" };
-    const k = String(key || beatId || label || "").trim().toLowerCase().replace(/[^a-z0-9_:-]+/g, "_"); if (!k) return { ok: false, error: "menace needs a key" };
+    const k = normKey(key || beatId || label); if (!k) return { ok: false, error: "menace needs a key" };
     const rows = list(doc);
     if (rows.some(r => String(r.key) === k)) return { ok: true, already: true, doc, row: rows.find(r => String(r.key) === k) };
     const turn = worldTurn(); const c = Math.max(1, Number(clock ?? DEFAULTS.clock) || DEFAULTS.clock);
@@ -213,7 +215,7 @@
     let doc = hexRef ? await resolveHex(hexRef) : null;
     let rows = doc ? list(doc) : [];
     let idx = -1;
-    const k = String(key || "").trim().toLowerCase(), b = String(beatId || "").trim();
+    const k = normKey(key), b = String(beatId || "").trim();
     if (doc) idx = rows.findIndex(r => (k && String(r.key) === k) || (b && String(r.beatId) === b) || (!k && !b));
     if (idx < 0) { const hit = find({ key: k, beatId: b }); if (hit) { doc = hit.doc; rows = list(doc); idx = rows.findIndex(r => r === hit.row || String(r.key) === String(hit.row.key)); } }
     if (!doc || idx < 0) return { ok: false, error: "no such menace", key: k, beatId: b };
