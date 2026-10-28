@@ -171,12 +171,20 @@
         },
         permissions: ["any"],
         sideEffects: { audit: false },
-        handler: async ({ factionId, ...opts }) => agent.getObservationSnapshot(factionId, opts)
+        // #70 (2026-10-28): includeWarLogs:false actually drops the war-log slices (it was declared and never read).
+        handler: async ({ factionId, includeWarLogs, ...opts } = {}) => {
+          const r = await agent.getObservationSnapshot(factionId, opts);
+          if (includeWarLogs === false && r?.ok) {
+            if (r.faction) delete r.faction.recentWarLogs;
+            if (r.raid) delete r.raid.recentRaidLogs;
+          }
+          return r;
+        }
       },
       {
         name: "strategic.legalActions",
         layer: "query",
-        description: "List strategic actions a faction can attempt right now (raids, travels, infiltrations, courtly).",
+        description: "List the strategic activities (Domain-turn orders) the planner offers this faction now, priced at the billed marks cost; legal = the bank covers it. No raids — the story offers those (ruling 22).",
         args: {
           type: "object",
           required: ["factionId"],
@@ -249,7 +257,13 @@
             attackerFactionId: S_FACTION_ID,
             defenderFactionId: S_FACTION_ID,
             defenderHexUuid: S_HEX_UUID,
-            raidType: S_RAID_TYPE
+            raidType: S_RAID_TYPE,
+            // #70 (2026-10-28): inputs estimateRaid reads that the schema never declared.
+            activityKey: { type: "string", description: "Raid activity key (history match + label); defaults to the active session's" },
+            maneuvers: { type: "array", items: { type: "string" }, description: "Maneuver keys to preview and price" },
+            targetName: { type: "string" },
+            targetType: { type: "string" },
+            outcomeTier: S_OUTCOME_TIER
           }
         },
         returns: S_OBJ,
@@ -264,7 +278,7 @@
         description: "Score an array of action candidates against a faction's situation.",
         args: {
           type: "object",
-          required: ["candidates"],
+          required: ["factionId", "candidates"],   // #70 (2026-10-28): the scorer needs the faction's observation
           properties: {
             factionId: S_FACTION_ID,
             candidates: { type: "array", items: S_OBJ }
@@ -323,13 +337,49 @@
           required: ["factionId"],
           properties: {
             factionId: S_FACTION_ID,
-            n: { type: "integer", minimum: 1, maximum: 50, description: "Top-N to return" }
+            n: { type: "integer", minimum: 1, maximum: 50, description: "Top-N to return (default 5)" },
+            includeStrategic: S_BOOL,
+            includeTravel: S_BOOL,
+            includeRaid: { type: "boolean", description: "Raid candidates (default: GM seats only, and only while the raid doors are open — ruling 22)" },
+            debug: { type: "boolean", description: "Also return the full ranked buckets + debug block" }
           }
         },
         returns: S_OBJ,
         permissions: ["any"],
         sideEffects: { audit: false },
-        handler: async ({ factionId, n, ...opts } = {}) => agent.recommendNextActions(factionId, { ...opts, n })
+        // #68 (2026-10-28): honour n, compact fields first, full `ranked` only when debugging — the Faction Advisor's
+        // 2500-char cap used to slice the whole ranking mid-JSON.
+        handler: async ({ factionId, n, debug, ...opts } = {}) => {
+          const r = await agent.recommendNextActions(factionId, { ...opts, debug: !!debug });
+          if (!r?.ok) return r;
+          const k = (Number.isInteger(n) && n > 0) ? n : 5;
+          const compact = (c) => c ? {
+            label: c.label || c.key || c.activityKey || c.toHexName || null,
+            type: c.type || c.category || null,
+            key: c.key || c.activityKey || null,
+            legal: c.legal !== false,
+            score: c.score ?? null,
+            riskBand: c.riskBand || null,
+            costMarks: Number(c.projectedCostTotal || 0) || 0,
+            confidence: c.confidence || null,
+            why: (Array.isArray(c.decisionBasis) && c.decisionBasis.length ? c.decisionBasis : (c.relevanceReasons || [])).slice(0, 2),
+            reasons: (c.reasons || []).slice(0, 2)
+          } : null;
+          const out = {
+            ok: true,
+            factionId: r.factionId,
+            next: (r.ranked?.overall || []).slice(0, k).map(compact),
+            mal: r.mal,
+            top: { strategic: compact(r.top?.strategic), travel: compact(r.top?.travel), raid: compact(r.top?.raid), overall: compact(r.top?.overall) },
+            confidence: r.confidence,
+            warnings: r.warnings,
+            observationSummary: r.observationSummary,
+            spec: r.spec,
+            ts: r.ts
+          };
+          if (debug) { out.ranked = r.ranked; out.debug = r.debug; out.rationale = r.rationale; out.whyNot = r.whyNot; }
+          return out;
+        }
       },
       {
         name: "simulate.maneuver",

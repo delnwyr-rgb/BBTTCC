@@ -271,14 +271,14 @@
       {
         name: "territory.deployHolding",
         layer: "action",
-        description: "Deploy a stationed rig/boss/facility from a hex's Holdings onto the bound battle scene as an actorLink token.",
+        description: "Deploy ALL of a hex's stationed Holdings (rigs/bosses/facilities) onto the bound battle scene as actorLink tokens. Already-deployed ones are skipped.",
         args: {
           type: "object",
-          required: ["hexUuid", "actorId", "kind"],
+          required: ["hexUuid"],   // #72 (2026-10-28): the holdings API deploys the whole hex — actorId/kind are optional checks, not filters
           properties: {
             hexUuid: S_HEX_UUID,
-            actorId: { ...S_STR, minLength: 1, description: "Actor id to deploy" },
-            kind:    { type: "string", enum: ["rig", "boss", "facility"] }
+            actorId: { ...S_STR, minLength: 1, description: "Optional: refuse unless this actor is the hex's only Holding (deploy can't place one alone)" },
+            kind:    { type: "string", enum: ["rig", "boss", "facility"], description: "Optional: refuse unless every Holding is this kind" }
           }
         },
         returns: { type: "object", properties: { ok: S_BOOL, tokenId: S_STR } },
@@ -287,25 +287,34 @@
         handler: async (args) => {
           const fn = _resolveFn("game.bbttcc.api.territory.holdings.deployToScene");
           if (!fn) return _unavailable("game.bbttcc.api.territory.holdings.deployToScene not installed");
-          // The holdings API takes the hex Drawing DOCUMENT (and acts on all of its holdings;
-          // actorId/kind are informational) — resolve the uuid first.
+          // The holdings API takes the hex Drawing DOCUMENT and deploys ALL of its holdings — resolve the uuid first.
           const ref = await fromUuid(String(args.hexUuid || ""));
           const hexDoc = ref?.document ?? ref ?? null;
           if (!hexDoc) return { ok: false, error: "HEX_NOT_FOUND" };
+          // #72 (2026-10-28): an actorId/kind the call can't honour is refused, not silently widened to every holding.
+          if (args.actorId || args.kind) {
+            const read = _resolveFn("game.bbttcc.api.territory.holdings.readHoldings");
+            const rows = (read ? (read(hexDoc) || []) : []).filter(r => r && r.kind !== "missing" && r.actor);
+            const aid = String(args.actorId || "").replace(/^Actor\./, "");
+            const strays = rows.filter(r => (aid && String(r.actor.id) !== aid) || (args.kind && r.kind !== args.kind));
+            if (!read || strays.length || (aid && !rows.some(r => String(r.actor.id) === aid))) {
+              return { ok: false, error: "FILTER_UNSUPPORTED", message: `deployHolding places every Holding on the hex; it holds ${rows.map(r => r.actor.name).join(", ") || "none matching"}. Call without actorId/kind to deploy them all.` };
+            }
+          }
           return await fn(hexDoc, {});
         }
       },
       {
         name: "territory.recallHolding",
         layer: "action",
-        description: "Recall a deployed Holding token from the scene back to its hex.",
+        description: "Recall deployed Holding tokens from the hex's battle scene. With actorId and/or kind, only those; without, all of the hex's.",
         args: {
           type: "object",
-          required: ["hexUuid", "actorId", "kind"],
+          required: ["hexUuid"],   // #72 (2026-10-28): actorId/kind now filter (they were ignored)
           properties: {
             hexUuid: S_HEX_UUID,
-            actorId: { ...S_STR, minLength: 1, description: "Actor id to recall" },
-            kind:    { type: "string", enum: ["rig", "boss", "facility"] }
+            actorId: { ...S_STR, minLength: 1, description: "Only this actor's token" },
+            kind:    { type: "string", enum: ["rig", "boss", "facility"], description: "Only Holdings of this kind" }
           }
         },
         returns: S_STD_RETURN,
@@ -314,12 +323,24 @@
         handler: async (args) => {
           const fn = _resolveFn("game.bbttcc.api.territory.holdings.recallFromScene");
           if (!fn) return _unavailable("game.bbttcc.api.territory.holdings.recallFromScene not installed");
-          // The holdings API takes the hex Drawing DOCUMENT (and acts on all of its holdings;
-          // actorId/kind are informational) — resolve the uuid first.
+          // The holdings API takes the hex Drawing DOCUMENT (and recalls ALL of its holdings) — resolve the uuid first.
           const ref = await fromUuid(String(args.hexUuid || ""));
           const hexDoc = ref?.document ?? ref ?? null;
           if (!hexDoc) return { ok: false, error: "HEX_NOT_FOUND" };
-          return await fn(hexDoc, {});
+          if (!args.actorId && !args.kind) return await fn(hexDoc, {});
+          // #72 (2026-10-28): filtered recall — same scene + deployment tag the holdings API uses.
+          const resolveScene = _resolveFn("game.bbttcc.api.territory.holdings.resolveSceneForDeploy");
+          const scene = resolveScene ? resolveScene(hexDoc) : null;
+          if (!scene) return { ok: false, error: "no bound battle scene" };
+          const aid = String(args.actorId || "").replace(/^Actor\./, "");
+          const ids = (scene.tokens?.contents || []).filter(t => {
+            const tag = t?.flags?.["bbttcc-territory"]?.holdingDeployment;
+            return tag?.hexId === hexDoc.id && (!aid || String(tag.actorId) === aid) && (!args.kind || tag.kind === args.kind);
+          }).map(t => t.id);
+          if (!ids.length) return { ok: true, removed: 0 };
+          try { await scene.deleteEmbeddedDocuments("Token", ids); }
+          catch (e) { return { ok: false, error: "deleteEmbeddedDocuments failed", message: e?.message || String(e) }; }
+          return { ok: true, removed: ids.length };
         }
       }
     ];

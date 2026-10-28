@@ -7166,9 +7166,9 @@ try {
       .filter(Boolean);
 
     const spentLine =
-      (spentPartsA.length ? ` • OP−(Att) ${spentPartsA.join(", ")}` : "") +
-      (spentPartsD.length ? ` • OP−(Def) ${spentPartsD.join(", ")}` : "") +
-      (spentPartsS.length ? ` • OP−(Support) ${spentPartsS.join(" ; ")}` : "");
+      (spentPartsA.length ? ` • marks−(Att) ${spentPartsA.join(", ")}` : "") +
+      (spentPartsD.length ? ` • marks−(Def) ${spentPartsD.join(", ")}` : "") +
+      (spentPartsS.length ? ` • marks−(Support) ${spentPartsS.join(" ; ")}` : "");
     try {
       _bbttccFxPlay("raid_outcome", {
         root: __fxPanel,
@@ -7550,9 +7550,12 @@ function bindAPI() {
   try {
     if (!globalThis.__bbttccRaidSocketBound) {
       globalThis.__bbttccRaidSocketBound = true;
-      game.socket?.on?.(`module.${RAID_ID}`, async (msg)=>{
+      game.socket?.on?.(`module.${RAID_ID}`, async (msg, senderId)=>{
         try {
           if (!msg) return;
+          // #71 (2026-10-28): the server-supplied sender id (v11+) is the authority; a self-reported
+          // payload.by / msg.userId that disagrees with it is refused. Older cores: fall back to the stamp.
+          const __sockSender = (typeof senderId === "string" && senderId) ? senderId : "";
           if (msg.t === "raidSession") {
             if (!_rcIsActiveGM()) return; // exactly one GM persists session writes
             const attackerId = String(msg.attackerId || "");
@@ -7560,13 +7563,18 @@ function bindAPI() {
             if (!attackerId || !payload || typeof payload !== "object") return;
             const a = await getActorByIdOrUuid(attackerId);
             if (!a) return;
-            // Trusted-table check: the sending seat (payload.by — socket messages carry no
-            // authenticated sender) must own the lead attacker or a supporter the STORED
-            // session already lists. Stops a stray seat overwriting another faction's raid.
+            // The sending seat (server sender id; payload.by only as a fallback) must own the lead
+            // attacker or a supporter the STORED session already lists. Stops a stray seat
+            // overwriting another faction's raid.
             let __relayOwns = null;
             try {
               const stored0 = a.getFlag(RAID_ID, "raidSession");
-              const sender = game.users?.get?.(String(payload.by || "")) || null;
+              const __claimed = String(payload.by || "");
+              if (__sockSender && __claimed && __claimed !== __sockSender) {
+                console.warn(TAG, `raidSession relay DENIED — payload.by ${__claimed} is not the sending seat ${__sockSender}`);
+                return;
+              }
+              const sender = game.users?.get?.(__sockSender || __claimed) || null;
               const sup = Array.isArray(stored0?.supportFactionIds) ? stored0.supportFactionIds.map(String) : [];
               const owns = (act) => !!act && !!sender && act.testUserPermission(sender, "OWNER");
               __relayOwns = { ownsAtt: owns(a), ownsFid: (fid) => owns(game.actors?.get?.(String(fid))) };
@@ -7705,14 +7713,19 @@ function bindAPI() {
             // authority (joinSiege / musterToScene / recallMuster / fireManeuver are all
             // GM-only at the write layer). Outcome echoes back via siegeRequestResult so
             // the requesting player sees the success/refusal, not just the GM.
-            // Exactly one GM executes it (two GM seats charged the OP twice). msg.userId is
-            // self-reported (socket messages carry no authenticated sender) — trusted-table only.
+            // Exactly one GM executes it (two GM seats charged twice). #71 (2026-10-28): authorize on
+            // the server sender id; a msg.userId that disagrees with it is refused.
             if (!_rcIsActiveGM()) return;
             try {
               const action    = String(msg.action || "");
               const hexUuid   = String(msg.hexUuid || "");
               const factionId = String(msg.factionId || "");
-              const userId    = String(msg.userId || "");
+              const __claimedU = String(msg.userId || "");
+              if (__sockSender && __claimedU && __claimedU !== __sockSender) {
+                console.warn(TAG, `siegeRequest DENIED — msg.userId ${__claimedU} is not the sending seat ${__sockSender}`);
+                return;
+              }
+              const userId    = __sockSender || __claimedU;
               const payload   = (msg.payload && typeof msg.payload === "object") ? msg.payload : {};
               const reply = (ok, message) => {
                 try { game.socket?.emit?.(`module.${RAID_ID}`, { t: "siegeRequestResult", userId, ok: !!ok, message: String(message || "") }); } catch(_eR) {}

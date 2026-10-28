@@ -1552,6 +1552,12 @@
   // Agentic Testing Sprint 1 (v0.4.1)
   // Observation + Planner + Evals
   // ----------------------------
+  // Same predicate as the planner's factionList (module.raid-planner.js).
+  function isFactionActor(a) {
+    return !!a && (a.getFlag?.("bbttcc-factions", "isFaction") === true
+      || String(foundry.utils.getProperty(a, "system.details.type.value") || "").toLowerCase() === "faction");
+  }
+
   function getFactionActor(factionId) {
     // Accept the advertised "Actor.<id>" UUID form as well as a bare id (2026-10-28)
     const id = String(factionId || "").trim().replace(/^Actor\./, "");
@@ -1664,6 +1670,24 @@
   }
 
   function inferAvailableStrategicActions(actor) {
+    // #66 (2026-10-28): the planner's ONE availability answer + the billed price. Doctrine items carry only
+    // {kind, key}, so pricing from them made every row free and legal; and they ignored tier, story unlocks,
+    // the RETIRED list and the Alpha siege hide. Only status "available" rows are candidates.
+    const avail = game.bbttcc?.api?.raid?.strategicAvailability;
+    if (typeof avail === "function") {
+      try {
+        const price = game.bbttcc?.api?.turn?.activityCost;
+        const EFFECTS = game.bbttcc?.api?.raid?.EFFECTS || {};
+        const rows = avail(actor) || [];
+        return rows.filter(r => r && r.status === "available" && r.key).map(r => {
+          const key = String(r.key);
+          const eff = EFFECTS[key] || EFFECTS[key.toLowerCase()] || null;
+          let cost = {};
+          try { cost = normalizeCost(typeof price === "function" ? (price({ effect: eff, key, faction: actor }) || {}) : (eff?.cost || eff?.opCosts || r.opCosts || {})); } catch (_) { cost = {}; }
+          return { key, label: r.label || eff?.label || key, cost, source: "planner-availability", via: r.via || null, sourceCount: 1, itemIds: [] };
+        }).sort((a,b) => String(a.label || a.key).localeCompare(String(b.label || b.key)));
+      } catch (e) { console.warn("[bbttcc-agent-api] strategicAvailability failed; falling back to doctrine items", e); }
+    }
     const items = getActorItemsArray(actor);
     const byKey = new Map();
     for (const it of items) {
@@ -1832,7 +1856,7 @@
         actorItemCount: actorItems.length,
         sceneCount: game.scenes?.contents?.length || 0,
         warningCount: strategics.length ? 0 : 1,
-        warnings: strategics.length ? [] : ['No strategic actions found on actor items; planner may return no strategic candidates.']
+        warnings: strategics.length ? [] : ['No strategic actions are available to this Domain right now; planner may return no strategic candidates.']
       }
     };
   }
@@ -1854,7 +1878,7 @@
         label: s.label || s.key,
         legal: deficits.length === 0,
         cost,
-        reasons: deficits.length ? ['Insufficient OP: ' + deficits.join(', ')] : [],
+        reasons: deficits.length ? ['Not enough marks: ' + deficits.join(', ')] : [],
         source: s.source || 'actor-item',
         sourceCount: Number(s.sourceCount || 1) || 1,
         duplicateGrantWarning: (Number(s.sourceCount || 1) || 1) > 1 ? `Observed ${Number(s.sourceCount || 1)} copies of this strategic on the faction; deduped by key for planner output.` : null,
@@ -1942,7 +1966,9 @@
     let histCostRows = 0;
     for (const r of matchingRows) {
       const s = String(r?.summary || '');
-      const m = s.match(/OP−\(Att\)\s*([^;]+)/i) || s.match(/OP-\(Att\)\s*([^;]+)/i);
+      // #73 (2026-10-28): stop at the next " • " section — the capture used to run on into "OP−(Def) …" and bill the
+      // defender's spend to the attacker. (Accepts a future "marks−(Att)" label too.)
+      const m = s.match(/(?:OP|marks)\s*[−-]\s*\(Att\)\s*([^;•]+)/i);
       if (!m) continue;
       histCostRows += 1;
       const bits = String(m[1] || '').split(/,\s*/);
@@ -2191,6 +2217,8 @@
       out.explanation = c?.explanation || 'Heuristic score from cost, risk, darkness pressure, history, campaign context, and advisor tie-breakers.';
       return out;
     }).sort((a,b) => {
+      const lg = legalRank(a) - legalRank(b);   // #69 (2026-10-28): legal rows always rank above illegal ones
+      if (lg) return lg;
       const ds = (Number(b.score)||0) - (Number(a.score)||0);
       if (ds) return ds;
       const rb = bandRank(a?.riskBand) - bandRank(b?.riskBand);
@@ -2212,6 +2240,8 @@
     }
     return out;
   }
+
+  function legalRank(c) { return c?.legal === false ? 1 : 0; }
 
   function bandRank(b) {
     const s = String(b || "").toLowerCase();
@@ -2356,7 +2386,7 @@
 
   function formatFactorLabel(key) {
     const map = {
-      opEfficiency: "OP efficiency",
+      opEfficiency: "cost efficiency",
       risk: "risk",
       darknessBenefit: "darkness relief",
       historyPenalty: "history",
@@ -2466,7 +2496,7 @@
     if (loseRisk > topRisk) reasons.push(`carried higher risk`);
     const topCost = sumOP(top?.cost || top?.projectedCost || top?.expectedCost || {});
     const loseCost = sumOP(runnerUp?.cost || runnerUp?.projectedCost || runnerUp?.expectedCost || {});
-    if (loseCost > topCost) reasons.push(`cost more OP`);
+    if (loseCost > topCost) reasons.push(`cost more marks`);
 
     const negFactors = Object.entries(runnerUp?.factors || {}).filter(([,v]) => Number(v || 0) < 0).sort((a,b)=>Number(a[1])-Number(b[1]));
     if (negFactors.length) reasons.push(`lost ground on ${formatFactorLabel(negFactors[0][0])}`);
@@ -2569,8 +2599,8 @@
         reasons: copy(a.reasons || []),
         riskBand: a.legal ? "low" : "high",
         explanation: a.legal
-          ? "Legal strategic action available on actor items; dry-run only."
-          : "Strategic action is currently illegal due to OP deficit; dry-run only."
+          ? "Strategic action the planner offers this Domain now, at its billed price; dry-run only."
+          : "Strategic action the bank can't cover yet (not enough marks); dry-run only."
       });
     }
 
@@ -2681,7 +2711,14 @@
       out.push({
         type: "raid",
         category: "raid",
-        label: (() => { const k = String(seed.activityKey || "").replace(/[_-]+/g, " ").trim(); const pretty = k ? k.replace(/\b\w/g, ch => ch.toUpperCase()) : "Raid"; return seed.targetName ? `${pretty} — ${seed.targetName}` : pretty; })(),
+        // #50 (2026-10-28): the table's words (Battle / Heist / Parley) via raid.typeLabel, not "Violence — <hex>".
+        label: (() => {
+          const k = String(seed.activityKey || "");
+          let pretty = "";
+          try { pretty = String(game.bbttcc?.api?.raid?.typeLabel?.(k) || ""); } catch (_) { pretty = ""; }
+          if (!pretty || pretty === k) { const kk = k.replace(/[_-]+/g, " ").trim(); pretty = kk ? kk.replace(/\b\w/g, ch => ch.toUpperCase()) : "Conflict"; }
+          return seed.targetName ? `${pretty} — ${seed.targetName}` : pretty;
+        })(),
         activityKey: est.activityKey || seed.activityKey || null,
         targetUuid: est.targetUuid || seed.targetUuid || null,
         targetName: seed.targetName || null,
@@ -2719,7 +2756,11 @@
     opts = opts || {};
     const includeStrategic = opts.includeStrategic !== false;
     const includeTravel = opts.includeTravel !== false;
-    const includeRaid = opts.includeRaid !== false;
+    // #67 (2026-10-28), ruling 22: the STORY offers every Battle/Heist/Parley — stewards can't decide to raid. Raid
+    // candidates only when asked for, or by default for a GM seat while the raid doors are open.
+    const includeRaid = (typeof opts.includeRaid === "boolean")
+      ? opts.includeRaid
+      : (!!game.user?.isGM && game.bbttcc?.alpha?.hidden?.("raidDoors") !== true);
     const debug = !!opts.debug;
 
     const observation = opts.observation || await getObservationSnapshot(factionId, opts.observationOpts || {});
@@ -2767,6 +2808,8 @@
     buckets.overall = []
       .concat(buckets.strategic || [], buckets.travel || [], buckets.raid || [])
       .sort((a,b) => {
+        const lg = legalRank(a) - legalRank(b);   // #69: an illegal candidate never heads the overall pick
+        if (lg) return lg;
         const ds = (Number(b?.score || 0) - Number(a?.score || 0));
         if (ds) return ds;
         const rb = bandRank(a?.riskBand) - bandRank(b?.riskBand);
@@ -2928,16 +2971,16 @@
     } catch (_) {}
 
     try {
-      const actors = (game.actors && game.actors.contents) ? game.actors.contents : [];
+      // #27 (2026-10-28): fallbacks only ever pick a real Domain (isFaction), player-held ones first — any actor
+      // carrying bbttcc-factions flags (a rival NPC Domain, a character) used to win on sort order.
+      const all = (game.actors && game.actors.contents) ? game.actors.contents : [];
+      const facs = all.filter(isFactionActor);
+      const actors = facs.filter(a => a.hasPlayerOwner).concat(facs.filter(a => !a.hasPlayerOwner));
       for (const a of actors) {
-        const ff = a && a.flags ? a.flags["bbttcc-factions"] : null;
-        if (!ff) continue;
         const terr = collectTerritoryForFaction(a.id);
         if ((terr.ownedHexes && terr.ownedHexes.length) || (terr.travelTraces && terr.travelTraces.length)) return String(a.id);
       }
-      for (const a of actors) {
-        if (a && a.flags && a.flags["bbttcc-factions"]) return String(a.id);
-      }
+      if (actors.length) return String(actors[0].id);
     } catch (_) {}
 
     return null;

@@ -46,9 +46,16 @@
         properties: {
           t:          { type: "string", enum: ["raidSession"] },
           attackerId: { type: "string", minLength: 1, description: "Attacker faction actor id" },
-          payload:    { type: "object", description: "Actor flag update for bbttcc-raid/raidSession" }
+          payload:    {
+            type: "object",
+            required: ["by"],
+            properties: {
+              by: { type: "string", minLength: 1, description: "Saving seat's user id — must equal the socket sender or the GM refuses (#71, 2026-10-28)" }
+            },
+            description: "Actor flag update for bbttcc-raid/raidSession"
+          }
         },
-        description: "Player Commit Staging relay — players send writes; GM persists."
+        description: "Player Commit Staging relay — players send writes; GM persists after checking the real sender owns a faction in the raid."
       }
     },
     {
@@ -145,7 +152,7 @@
           action:    { type: "string", enum: ["join", "muster", "recall", "maneuver", "raise"], description: "Requested siege action" },
           hexUuid:   { type: "string", minLength: 1, description: "Besieged hex uuid" },
           factionId: { type: "string", minLength: 1, description: "Requesting faction actor id" },
-          userId:    { type: "string", minLength: 1, description: "Requesting user id (routes the siegeRequestResult ack)" },
+          userId:    { type: "string", minLength: 1, description: "Requesting user id (routes the siegeRequestResult ack; must equal the socket sender — #71)" },
           payload:   { type: "object", description: "Action-specific extras (side, label, key, …)" }
         },
         description: "Player→GM siege action relay; GM executes against the siege API and acks with siegeRequestResult."

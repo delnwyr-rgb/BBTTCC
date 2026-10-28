@@ -99,7 +99,8 @@ async function factionAdvisorContextBuilder(voice, triggerArgs) {
   const [obsR, legalR, recR] = await Promise.allSettled([
     agent.invoke("observation.snapshot",  { factionId }),
     agent.invoke("strategic.legalActions", { factionId }),
-    agent.invoke("strategic.recommendNext",{ factionId, n: 5 })
+    // #67 (2026-10-28), ruling 22: this whispers to the faction's owners — stewards can't decide to raid, so no raid picks.
+    agent.invoke("strategic.recommendNext",{ factionId, n: 5, includeRaid: false })
   ]);
 
   const observation     = (obsR.status === "fulfilled"   && obsR.value?.ok   !== false) ? obsR.value   : null;
@@ -123,7 +124,8 @@ async function factionAdvisorContextBuilder(voice, triggerArgs) {
     // Advisor needs richer context for a specific decision, they can run the
     // canned `strategic.*` UI directly.
     faction:         trunc(observation?.faction || null, 1500),
-    legalActions:    trunc(legalActions,    2000),
+    // #68 (2026-10-28): compact rows so the caps never slice the JSON mid-object.
+    legalActions:    trunc(_compactLegal(legalActions), 2000),
     recommendations: trunc(recommendations, 2500),
     mode,
     lengthHint:      triggerArgs.lengthHint || (mode === "sheet-glance" ? 25 : mode === "pre-raid" ? 100 : 40),
@@ -134,6 +136,14 @@ async function factionAdvisorContextBuilder(voice, triggerArgs) {
       ? `player:${args.userId}`
       : `faction:${factionId}`
   };
+}
+
+function _compactLegal(r) {
+  if (!r || !Array.isArray(r.actions)) return r;
+  const marks = (c) => Object.fromEntries(Object.entries(c || {}).filter(([, v]) => Number(v) > 0));
+  const rows = r.actions.map(a => ({ label: a.label || a.key, legal: a.legal !== false, cost: marks(a.cost), ...(a.reasons?.length ? { reasons: a.reasons } : {}) }));
+  rows.sort((a, b) => (a.legal === b.legal ? 0 : a.legal ? -1 : 1));
+  return { ok: r.ok, actions: rows };
 }
 
 function _minimalContext(triggerArgs, factionId) {
