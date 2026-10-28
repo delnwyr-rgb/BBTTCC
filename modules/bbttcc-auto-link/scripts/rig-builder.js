@@ -116,7 +116,8 @@ const CHASSIS_STARTERS = [
       bracket: "siege", mobility: "mobile", tier: 3,
       capacity: { pilot: [1,2], gunner: [1,4], engineer: [1,2], crew: [2,8] },
       tags: "siege, structural, terror",
-      loadout: { frame: "Forge Facility Frame", weapons: ["Mortar Battery"], systems: ["Reinforced Plating", "Sensor Suite"] }
+      // War Rig Frame (owner ruling 2026-10-28): the Forge Facility Frame is stationary-only, so a mobile siege chip seeded speed 0
+      loadout: { frame: "War Rig Frame", weapons: ["Mortar Battery"], systems: ["Reinforced Plating", "Sensor Suite"] }
     }
   },
   {
@@ -434,7 +435,7 @@ const CHASSIS_STARTERS = [
       concept: "A rolling bastion-cathedral that brings the potluck AND the artillery. The Avuncular Order's mobile strongpoint: it shelters refugees, hosts the best dinners in the wastes, and — if it absolutely must — drags the region into enlightenment kicking and screaming. The prettiest hex is wherever this thing parks.",
       signature: "A galley amidships that never goes cold; the smell of a hundred shared meals soaked into the plate. Strategos Joans' standard flies from the crown, and the hexes seem to align just by it being near.",
       loadout: {
-        frame: "Forge Facility Frame",
+        frame: "War Rig Frame",   // owner ruling 2026-10-28: a mobile frame (Forge Facility is stationary-only)
         weapons: ["Mortar Battery", "Twin Autocannons"],
         systems: ["Reinforced Plating", "Repair Bay", "Comms Array", "Sensor Suite"],
         outputs: ["Quartermaster Dispenser"]
