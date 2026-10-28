@@ -56,20 +56,32 @@
     return ref.document ?? ref;
   }
 
+  // #59 (2026-10-28): progress only. The frontier foundation spec (outcome + easy garrison + ×0.8 upkeep)
+  // used to be stamped on ANY hex a Develop/Upgrade/Found Site touched — a permanent upkeep discount on
+  // ground that was never founded. It is seeded by Establish Outpost alone (seedFoundation).
   function integrationFor(hexFlags){
     const f = copy(hexFlags || {});
     const integ = f.integration || {};
-    if (!integ.outcomeKey) integ.outcomeKey = "wilderness_foundation";
-    if (!integ.tier)       integ.tier       = "founding";
-    if (!integ.appliedAt)  integ.appliedAt  = Date.now();
-    if (!("spec" in integ)) integ.spec = {};
-    if (!("garrisonEase" in integ.spec))    integ.spec.garrisonEase = "easy";
-    if (!("integrationCostMult" in integ.spec)) integ.spec.integrationCostMult = 0.8;
     if (typeof integ.progress !== "number") integ.progress = 0;
-    if (!("lastTurnProcessed" in integ))    integ.lastProcessedAt = null;
     f.integration = integ;
     return f;
   }
+  function seedFoundation(f){
+    const integ = (f.integration && typeof f.integration === "object") ? f.integration : {};
+    if (!integ.outcomeKey) integ.outcomeKey = "wilderness_foundation";
+    if (!integ.tier)       integ.tier       = "founding";
+    if (!integ.appliedAt)  integ.appliedAt  = Date.now();
+    if (!integ.spec || typeof integ.spec !== "object") integ.spec = {};
+    if (!("garrisonEase" in integ.spec))        integ.spec.garrisonEase = "easy";
+    if (!("integrationCostMult" in integ.spec)) integ.spec.integrationCostMult = 0.8;
+    if (typeof integ.progress !== "number") integ.progress = 0;
+    if (!("lastTurnProcessed" in integ)) integ.lastTurnProcessed = null;   // was written as lastProcessedAt (no reader)
+    f.integration = integ;
+  }
+  const _recompute = async (doc, source) => {
+    try { const rc = game.bbttcc?.api?.territory?.recomputeHexResources; if (typeof rc === "function") await rc(doc, { source }); }
+    catch (eRc) { console.warn(TAG, `${source}: resource recompute failed (non-fatal)`, eRc); }
+  };
 
   async function queueHexUpdate(doc, mutFn){
     const f = copy(doc.flags?.[MOD_T] || {});
@@ -239,6 +251,7 @@
         f.population = f.population || "small";
         f.factionId  = String(A.id);
 
+        seedFoundation(f);
         bumpIntegrationProgress(f, 1);
 
         await doc.update({ [`flags.${MOD_T}`]: f }, parent ? { parent } : {});
@@ -324,25 +337,43 @@
     // -----------------------------------------------------------------------
     // 3) Upgrade Outpost → Settlement
     // -----------------------------------------------------------------------
+    const UPGRADE_FROM = ["outpost", "hamlet", "camp"];
+    const _heldBy = (tf, actor) => !!actor && String(tf?.factionId || tf?.ownerId || "").replace(/^Actor\./, "") === String(actor.id);
+    function upgradeBlock(tf, actor, sizes){
+      const name = tf?.name || "That hex";
+      if (!_heldBy(tf, actor)) return `${name} is not yours to upgrade.`;
+      const size = String(tf?.size || "").toLowerCase();
+      if (!sizes.includes(size)) return `${name} is a ${size || "settled hex"} — Upgrade is Outpost → Village; use the Townbuilder above that.`;
+      return null;
+    }
     EFFECTS.upgrade_outpost_settlement = Object.assign({}, EFFECTS.upgrade_outpost_settlement, {
       kind:  "strategic",
       band:  "standard",
       label: EFFECTS.upgrade_outpost_settlement?.label || "Upgrade Outpost → Settlement",
       cost:  EFFECTS.upgrade_outpost_settlement?.cost  || { economy:30, softpower:20, logistics:20 },
       description: EFFECTS.upgrade_outpost_settlement?.description || "Invest heavily to turn an outpost into a village-scale settlement.",
+      // #57 (2026-10-28): own canPlan (replaces the CAN_PLAN row) — same holder + size rule, plus no second
+      // Upgrade on the same hex in one turn (the second one billed for +1 integration and nothing else).
+      async canPlan({ actor, targetDoc, targetFlags, entry, resolving }){
+        const tf = targetFlags || targetDoc?.flags?.[MOD_T] || {};
+        const why = upgradeBlock(tf, actor, ["outpost"]);
+        if (why) return { ok:false, reason: why };
+        if (!resolving && targetDoc?.uuid) {
+          const wl = actor?.getFlag?.(MOD_F, "warLogs") || [];
+          if (wl.some(e => e?.type === "planned" && String(e.activityKey) === "upgrade_outpost_settlement" && String(e.targetUuid) === String(targetDoc.uuid) && e !== entry))
+            return { ok:false, reason: `${tf.name || "That hex"} already has an Upgrade planned this turn.` };
+        }
+        return { ok:true };
+      },
       async apply({ actor, entry }){
         if (!entry?.targetUuid) return "No target selected.";
         const doc = await getHexDocumentFromEntry(entry);
         if (!doc) return "Target is not a valid hex Drawing/Tile.";
+        // #57: re-check at resolution — a lost hex or an already-upgraded one is refused ({ok:false} → refund).
+        const why = upgradeBlock(doc.flags?.[MOD_T] || {}, actor, UPGRADE_FROM);
+        if (why) return { ok: false, reason: why };
 
         await queueHexUpdate(doc, (f)=>{
-          const status = String(f.status || "").toLowerCase();
-          const size   = String(f.size   || "outpost").toLowerCase();
-
-          // Only meaningful if it's an outpost / early-stage hex
-          if (size !== "outpost" && size !== "hamlet" && size !== "camp") {
-            // still allow progression but don't force revert
-          }
           f.size   = "village";
           f.status = "claimed";
 
@@ -350,11 +381,8 @@
           f.modifiers = Array.isArray(f.modifiers) ? f.modifiers.slice() : [];
           if (!f.modifiers.includes("Well-Maintained")) f.modifiers.push("Well-Maintained");
 
-          f.resources = f.resources || {};
-          f.resources.food      = Number(f.resources.food      || 0) + 1;
-          f.resources.materials = Number(f.resources.materials || 0) + 1;
-          f.resources.trade     = Number(f.resources.trade     || 0) + 1;
-
+          // #60 (2026-10-28): no flags.resources deltas — income is type × size, and the recompute below
+          // overwrote the +1s anyway. The bigger size IS the yield bump.
           bumpIntegrationProgress(f, 1);
 
           const pend = ensure(f,"turn.pending",{});
@@ -362,9 +390,10 @@
           f.turn.pending = pend;
           return true;
         });
+        await _recompute(doc, "upgrade_outpost_settlement");
 
         console.log(TAG, "upgrade_outpost_settlement", { actor: actor?.name, target: entry?.targetUuid });
-        return "Settlement upgrade queued: size → Village, status → Claimed, +Well-Maintained, +1 Food/Materials/Trade • Integration +1";
+        return "Settlement upgraded: size → Village (village yields from next income), status → Claimed, +Well-Maintained • Integration +1";
       }
     });
 
@@ -448,8 +477,12 @@
         cost:  EFFECTS[effKey]?.cost  || copy(spec.cost),
         description: EFFECTS[effKey]?.description || `Give a fresh outpost or village its identity as a ${key}: sets the hex type, adds ${(spec.addMods || []).join(", ")}, and shifts its yields. Established towns keep their type — add a ${key} DISTRICT through the Townbuilder instead.`,
         // Plan-time refusal (raid-planner planActivity honours canPlan) — no OP moves.
-        async canPlan({ targetFlags, targetDoc }){
-          const why = foundSiteBlock(targetFlags || targetDoc?.flags?.[MOD_T] || {}, spec, targetFlags?.name);
+        // #23 (2026-10-28): this canPlan replaces the CAN_PLAN row, so it carries the holder gate itself —
+        // Found Site on a wild or rival hex skipped ruling 20 (Found Farm + Establish Outpost = level 2 in one turn).
+        async canPlan({ actor, targetFlags, targetDoc }){
+          const tf = targetFlags || targetDoc?.flags?.[MOD_T] || {};
+          if (!_heldBy(tf, actor)) return { ok:false, reason: `${tf.name || "That hex"} is not yours — ${spec.label} gives an outpost or village you HOLD its identity.` };
+          const why = foundSiteBlock(tf, spec, tf.name);
           return why ? { ok:false, reason: why } : { ok:true };
         },
         async apply({ actor, entry }){
@@ -459,7 +492,8 @@
 
           // Belt and braces for entries planned before the canPlan gate existed.
           // {ok:false} → turn-driver consumePlanned refunds the price and logs "could not" (strategic review #2/#17, 2026-10-28).
-          const blockWhy = foundSiteBlock(doc.flags?.[MOD_T] || {}, spec, entry.targetName);
+          const tfNow = doc.flags?.[MOD_T] || {};
+          const blockWhy = !_heldBy(tfNow, actor) ? `${tfNow.name || entry.targetName || "That hex"} is not held by ${actor?.name || "this faction"}.` : foundSiteBlock(tfNow, spec, entry.targetName);
           if (blockWhy) {
             console.warn(TAG, effKey, "refused:", blockWhy);
             return { ok: false, reason: blockWhy };
@@ -472,12 +506,8 @@
               if (!f.modifiers.includes(m)) f.modifiers.push(m);
             }
 
-            f.resources = f.resources || {};
-            for (const [rk,val] of Object.entries(spec.resDelta || {})) {
-              f[rk] = Number(f[rk] || f.resources[rk] || 0) + Number(val||0);
-              f.resources[rk] = f[rk];
-            }
-
+            // #60 (2026-10-28): the old resDelta writes landed in a cache the next recompute overwrote —
+            // income follows the hex type, so the type change IS the yield shift.
             bumpIntegrationProgress(f, 1);
 
             const pend = ensure(f,"turn.pending",{});
@@ -486,8 +516,10 @@
             return true;
           });
 
+          await _recompute(doc, effKey);
+
           console.log(TAG, effKey, { actor: actor?.name, target: entry?.targetUuid, type: spec.type });
-          return `${spec.label} queued: type → ${spec.type}, modifiers: ${spec.addMods.join(", ")} • resources adjusted • Integration +1`;
+          return `${spec.label}: type → ${spec.type} (${spec.type} yields from next income), modifiers: ${spec.addMods.join(", ")} • Integration +1`;
         }
       });
     }
@@ -506,7 +538,9 @@
     };
     const DISTRICT_PRIMARY = { settlement:"softpower", fortress:"violence", mine:"economy", farm:"economy", port:"economy", factory:"logistics", research:"intrigue", temple:"faith" };
     const tb = () => game.bbttcc?.api?.territory?.townbuilder || null;
-    function districtBlock(doc, f, type, actor){
+    // #24 (2026-10-28): `enforce` keeps the size/slot rules on the GM seat. The GM waiver is for a GM planning
+    // by hand; planned rows always resolve on the GM, so resolution enforces (and foundDistrict too).
+    function districtBlock(doc, f, type, actor, enforce = false){
       const api = tb();
       if (!api) return "Townbuilder is not loaded on this client.";
       const name = f?.name || "This hex";
@@ -515,9 +549,9 @@
       const settlement = api.getSettlement(doc);
       if (!settlement) return `${name} has no buildings yet — districts grow out of a living town. Raise something through the Hex Sheet → Townbuilder first.`;
       const { size, tier } = api.ladderFor(doc);
-      const isGM = !!game.user?.isGM;
-      if (!tier?.districts && !isGM) return `${name} is a ${size} — district slots unlock at City size (Upgrade the settlement first).`;
-      if ((settlement.districts?.length || 0) >= (tier?.districts ?? 0) && !isGM) return `${name} has used all ${tier?.districts ?? 0} district slot(s) at ${size} size.`;
+      const waive = !!game.user?.isGM && !enforce;
+      if (!tier?.districts && !waive) return `${name} is a ${size} — district slots unlock at City size (Upgrade the settlement first).`;
+      if ((settlement.districts?.length || 0) >= (tier?.districts ?? 0) && !waive) return `${name} has used all ${tier?.districts ?? 0} district slot(s) at ${size} size.`;
       const hexType = String(f?.type || "").toLowerCase();
       if (type === hexType) return `${name} already IS a ${type} — found a district that adds something new.`;
       if ((settlement.districts || []).some(d => String(d.type).toLowerCase() === type)) return `${name} already has a ${type} district.`;
@@ -533,8 +567,8 @@
         cost: {}, opCosts: {},
         groupKey: "town_growth", groupLabel: "Town Growth", groupOrder: 6,
         description: `Grow a City-sized settlement you hold with a ${type} district: half of a ${type}'s base yield is added on top of the town's own, and the ${type} building menu opens there. Paid in BUILD UNITS through the Townbuilder (no OP). Needs a free district slot (City 1 · Metropolis 2 · Megalopolis 3) and a different type from the hex itself.`,
-        async canPlan({ actor, targetDoc, targetFlags }){
-          const why = districtBlock(targetDoc, targetFlags || targetDoc?.flags?.[MOD_T] || {}, type, actor);
+        async canPlan({ actor, targetDoc, targetFlags, resolving }){
+          const why = districtBlock(targetDoc, targetFlags || targetDoc?.flags?.[MOD_T] || {}, type, actor, !!resolving);
           return why ? { ok:false, reason: why } : { ok:true };
         },
         async apply({ actor, entry }){
@@ -542,11 +576,11 @@
           const doc = await getHexDocumentFromEntry(entry);
           if (!doc) return "Target is not a valid hex Drawing/Tile.";
           const f = doc.flags?.[MOD_T] || {};
-          const why = districtBlock(doc, f, type, actor);
+          const why = districtBlock(doc, f, type, actor, true);
           if (why) return { ok: false, reason: why };   // refused at resolution — nothing billed in BU (review #2, 2026-10-28)
           const name = String(entry?.note || "").trim().slice(0, 60) || "";   // the planner's GM note doubles as the district's name
-          const res = await tb().foundDistrict({ hexDoc: doc, type, name });
-          if (!res?.ok) return `${DISTRICT_LABELS[type]} failed — ${res?.error || "Townbuilder refused"}`;
+          const res = await tb().foundDistrict({ hexDoc: doc, type, name, enforceLimits: true });
+          if (!res?.ok) return { ok: false, reason: `${DISTRICT_LABELS[type]} failed — ${res?.error || "Townbuilder refused"}` };
           const d = res.settlement?.districts?.at?.(-1);
           console.log(TAG, effKey, { actor: actor?.name, target: entry?.targetUuid, district: d });
           return `${DISTRICT_LABELS[type]}: "${d?.name || type}" founded in ${f.name || "the hex"} — the ${type} menu is open there and its yield share starts next turn.`;

@@ -177,25 +177,23 @@
       const baseApply = spec.apply;
       E[key] = Object.assign({}, spec, {
         async apply(args = {}) {
-          let msg = "";
-          try {
-            msg = await baseApply(args);
-          } catch (e) {
-            console.warn(TAG, `base apply() failed for ${key}:`, e);
-            msg = msg || "(base effect failed; see console)";
-          }
+          // #58 (2026-10-28): a base that throws or refuses ({ok:false}) is passed straight up — turn-driver
+          // refunds it and logs "could not". It used to get "Integration +1" anyway (and the refusal object
+          // was stringified to "[object Object]").
+          const msg = await baseApply(args);
+          if (msg && typeof msg === "object" && msg.ok === false) return msg;
 
           let integMsg = "";
           try {
-            // Founding rows (setAtLeast) only bump a hex the acting faction now OWNS — a refused
-            // outpost (survey attempt, "already owned") must not seed integration on a wild or
-            // someone else's hex.
-            if (cfg.setAtLeast != null && !(await _ownedByActor(args))) return msg;
+            // #58: EVERY row bumps only a hex the acting faction now OWNS (was setAtLeast rows only) — a
+            // refused outpost, a lost hex or a rival's hex earns no integration.
+            if (!(await _ownedByActor(args))) return msg;
             integMsg = await bumpIntegrationForTarget(args.entry || args, { ...cfg, key });
           } catch (e) {
             console.warn(TAG, `integration bump failed for ${key}:`, e);
           }
-
+          if (!integMsg) return msg;
+          if (msg && typeof msg === "object") return Object.assign({}, msg, { integration: integMsg });
           return [msg, integMsg].filter(Boolean).join(" • ");
         }
       });

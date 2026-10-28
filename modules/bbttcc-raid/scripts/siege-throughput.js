@@ -100,12 +100,27 @@
     try { await attackerFactionActor?.unsetFlag?.(MOD_S, "siegeCostDiscount"); } catch (e) { console.warn("[bbttcc/siege-throughput] discount consume failed", e); }
   }
 
+  // #25 (2026-10-28): begin_siege is self-billing — this commit is its whole price — so the floor is the SHOWN
+  // price: EFFECTS.begin_siege.cost after the ×PRICE_MULT policy (scaled here if the policy hasn't run yet).
+  // It was a hard-coded unscaled 30/20/10 with any player override (0 included) winning. Marks.
+  function _beginSiegeMinCommit(){
+    const raid = game.bbttcc?.api?.raid || {};
+    const c = raid.EFFECTS?.begin_siege?.cost || { violence: 30, logistics: 20, economy: 10 };
+    const mult = c.__bbttccPriced ? 1 : (Number(raid.PRICE_MULT) || 1);
+    const out = {};
+    for (const [k, v] of Object.entries(c)) { const n = Number(v) || 0; if (n > 0) out[String(k).toLowerCase()] = Math.max(1, Math.round(n * mult)); }
+    return out;
+  }
   function _computeBufferCommit({ sizeProfile, override }){
-    // Default upfront commit derived from activity cost; player override per spec Q3 (open w/ defaults).
-    const base = { violence: 30, logistics: 20, economy: 10 };
+    // Player override per spec Q3 (open w/ defaults), never below the price in any bucket.
+    const base = _beginSiegeMinCommit();
     const out = { violence: 0, logistics: 0, economy: 0, softPower: 0, diplomacy: 0, faith: 0, intrigue: 0 };
-    Object.assign(out, base, override || {});
-    // Total = sum of all committed OP categories
+    Object.assign(out, base);
+    for (const [k, v] of Object.entries((override && typeof override === "object") ? override : {})) {
+      const n = Math.max(0, Math.round(Number(v) || 0));
+      out[k] = Math.max(Number(base[String(k).toLowerCase()]) || 0, n);
+    }
+    // Total = sum of all committed buckets (marks)
     const total = Object.values(out).reduce((a, b) => a + (Number(b) || 0), 0);
     return { buffer: out, bufferStartingTotal: total };
   }
@@ -473,9 +488,10 @@
           targetUuid: entry?.targetUuid,
           note: entry?.note || ""
         });
+        // {ok:false} → turn-driver refunds + logs "could not" (a string read as success) — 2026-10-28
         return r.ok
           ? `Begin Siege: ${r.siegeId} established.`
-          : `Begin Siege failed: ${r.reason}`;
+          : { ok: false, reason: `Begin Siege failed: ${r.reason}` };
       }
     });
 
@@ -508,6 +524,9 @@
       band: "standard",
       label: "Establish Siege Camp",
       cost: { violence: 10, logistics: 20 },
+      // #55 (2026-10-28): a siege row — the Alpha siege hide and the planner's Siege section key on
+      // `siege`. It targets the camp's OWN (forward) hex, so the besieged-hex auto-target skips it.
+      siege: true, siegeSide: "attacker", siegeOrder: 0, siegeOwnTarget: true,
       async apply({ entry }){
         const r = await _establishCampShared({
           factionId: entry?.attackerId,
@@ -516,7 +535,7 @@
         });
         return r.ok
           ? "Siege Camp established (Beached Camp queued)."
-          : `Establish Siege Camp failed: ${r.reason}`;
+          : { ok: false, reason: `Establish Siege Camp failed: ${r.reason}` };
       }
     });
 

@@ -197,16 +197,18 @@
     return parts.join(", ") || "no yield";
   }
 
-  async function foundDistrict({ hexDoc, type, name }) {
+  // #24 (2026-10-28): bill the hex's CURRENT holder (foundedFactionId never moves when a city changes hands),
+  // and `enforceLimits` keeps the size/slot rules on the GM seat — planned rows always resolve there.
+  async function foundDistrict({ hexDoc, type, name, enforceLimits = false }) {
     const settlement = getSettlement(hexDoc);
     if (!settlement) return { ok: false, error: "Build something first — districts grow out of a living town." };
-    const faction = game.actors.get(settlement.foundedFactionId) || factionOf(hexDoc);
+    const faction = factionOf(hexDoc) || game.actors.get(settlement.foundedFactionId);
     if (!faction) return { ok: false, error: "No owning faction on this hex." };
 
     const { tier } = ladderFor(hexDoc);
-    const isGM = !!game.user?.isGM;
-    if (!tier?.districts && !isGM) return { ok: false, error: "Districts unlock at City size." };
-    if ((settlement.districts.length >= (tier?.districts ?? 0)) && !isGM) {
+    const waive = !!game.user?.isGM && !enforceLimits;
+    if (!tier?.districts && !waive) return { ok: false, error: "Districts unlock at City size." };
+    if ((settlement.districts.length >= (tier?.districts ?? 0)) && !waive) {
       return { ok: false, error: `All ${tier?.districts ?? 0} district slots are used at this size.` };
     }
 

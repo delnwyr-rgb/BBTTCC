@@ -68,8 +68,38 @@
     if (cur.status !== "active") return { ok: false, reason: `siege is ${cur.status}, not active` };
     const state = foundry.utils.duplicate(cur);
     const out = await mutator(state) || {};
+    // #54 (2026-10-28): a mutator that found nothing to act on ({_bad}) writes nothing and reports it.
+    if (out._bad) return { ok: false, reason: out.reason || "nothing to resolve on that siege" };
     await S.setSiegeState(hexUuid, state);
     return Object.assign({ ok: true, state }, out);
+  }
+
+  // #52 (2026-10-28): who may run a siege move. Attacker moves = the lead besieger or a JOINED supporter;
+  // defender moves = the besieged hex's holder. Class moves also need a Steward of that class in play
+  // (same reading as the Siege HUD's gate). Returns a refusal string or null.
+  function _classPresent(cls){
+    if (!cls) return true;
+    try {
+      const has = (a) => a?.type === "character" && (a.items?.contents || a.items || []).some(it => it?.type === "class" && it?.system?.identifier === cls);
+      if ((game.actors?.contents || []).some(a => a.hasPlayerOwner && has(a))) return true;
+      if ((canvas?.tokens?.placeables || []).some(t => has(t.actor))) return true;
+    } catch (_e) {}
+    return false;
+  }
+  async function _sideRefusal(S, def, factionId, hexUuid, { skipClass = false } = {}){
+    const fid = String(factionId || "").replace(/^Actor\./, "");
+    const st = hexUuid ? await S.getSiegeState(hexUuid) : null;
+    if (!st || st.status !== "active") return "there is no active siege on that hex";
+    const name = game.actors.get(fid)?.name || "That Domain";
+    if ((def.siegeSide || "attacker") === "defender") {
+      let hexDoc = null; try { const ref = await fromUuid(hexUuid); hexDoc = ref?.document ?? ref ?? null; } catch (_e) {}
+      const owner = hexDoc ? String(S.hexOwner(hexDoc) || "") : "";
+      if (!owner || owner !== fid) return `${name} does not hold the besieged hex — ${def.label} is the garrison's move`;
+    } else if (fid !== String(st.attackerFactionId || "") && !st.participants?.[fid]?.joined) {
+      return `${name} is not besieging this hex — ${def.label} is the besiegers' move (Join Siege first)`;
+    }
+    if (!skipClass && def.grantedByClass && !_classPresent(def.grantedByClass)) return `${def.label} needs a ${def.grantedByClass} Steward in play`;
+    return null;
   }
 
   function _pickChampion(arr, { championId, wantStatus } = {}){
@@ -89,11 +119,11 @@
     const r = await _withSiege(S, targetUuid, (state) => {
       state.defenderAnytimeBudget = (state.defenderAnytimeBudget || 0) + 1;
       state.renewalPool = (state.renewalPool || 0) + 1;
-      S.appendNarrativeBeat(state, { turn: _turn(), kind: "reinforce_garrison", title: "Garrison reinforced", description: "+1 defender Anytime budget per round and +1 Renewal pool." });
+      S.appendNarrativeBeat(state, { turn: _turn(), kind: "reinforce_garrison", title: "Garrison reinforced", description: "+1 defender Anytime budget per round and +1 Renewal (the wall is refit at the next turn — siege-tick)." });
     });
     if (!r.ok) return r;
-    await _pushWarLog(actor, `Reinforce Garrison: +1 Anytime, +1 Renewal.`, { activityKey: "reinforce_garrison", hexUuid: targetUuid });
-    return { ok: true, summary: "Garrison reinforced (+1 Anytime, +1 Renewal)." };
+    await _pushWarLog(actor, `Reinforce Garrison: +1 Anytime, +1 Renewal (wall refit next turn).`, { activityKey: "reinforce_garrison", hexUuid: targetUuid });
+    return { ok: true, summary: "Garrison reinforced (+1 Anytime, +1 Renewal — wall refit next turn)." };
   }
 
   async function call_relief({ factionId, targetUuid, S }){
@@ -222,10 +252,11 @@
   // ============================================================
 
   async function resolveTerms(hexUuid, { accept = false } = {}){
+    if (!game.user?.isGM) return { ok: false, reason: "GM only" };   // #54 (2026-10-28)
     const S = globalThis.__bbttccSiegeState;
     const r = await _withSiege(S, hexUuid, (state) => {
       const pt = state.pendingTerms;
-      if (!pt || pt.type !== "sue" || pt.resolved) return { _bad: true };
+      if (!pt || pt.type !== "sue" || pt.resolved) return { _bad: true, reason: "no open Sue-for-Terms offer on that siege" };
       pt.resolved = true;
       const turn = _turn();
       if (accept) {
@@ -245,10 +276,11 @@
   }
 
   async function resolveSurrender(hexUuid, { response = "refuse" } = {}){
+    if (!game.user?.isGM) return { ok: false, reason: "GM only" };   // #54 (2026-10-28)
     const S = globalThis.__bbttccSiegeState;
     const r = await _withSiege(S, hexUuid, (state) => {
       const pt = state.pendingTerms;
-      if (!pt || pt.type !== "surrender" || pt.resolved) return { _bad: true };
+      if (!pt || pt.type !== "surrender" || pt.resolved) return { _bad: true, reason: "no open surrender demand on that siege" };
       pt.resolved = true;
       const turn = _turn();
       if (response === "yield") {
@@ -308,12 +340,16 @@
     // supporter co-funded it on Join). Default = the lead, exactly as before.
     let actingFactionId = st.attackerFactionId;
     const isDefenderMan = def.siegeSide === "defender";
+    // #53 (2026-10-28): class maneuvers are checked here too, not only hidden by the HUD.
+    if (def.grantedByClass && !_classPresent(def.grantedByClass)) return { ok: false, reason: `${def.label} needs a ${def.grantedByClass} Steward in play` };
     if (isDefenderMan) {
       // Defender clash maneuvers are the GARRISON's — run as the hex owner, never the besieger.
       let hexDoc = null;
       try { const ref = await fromUuid(uuid); hexDoc = ref?.document ?? ref ?? null; } catch (_e) {}
       const ownerId = hexDoc ? S.hexOwner(hexDoc) : null;
       if (!ownerId) return { ok: false, reason: "the besieged hex has no owning faction to fire a defender maneuver" };
+      // #53: a relayed factionId (player seat) must BE the garrison — any player could make the holder pay.
+      if (factionId && String(factionId) !== String(ownerId)) return { ok: false, reason: `${game.actors.get(factionId)?.name || "that faction"} does not hold the besieged hex — ${def.label} is the garrison's move` };
       actingFactionId = ownerId;
     } else if (factionId && factionId !== st.attackerFactionId) {
       if (!(st.participants?.[factionId]?.joined)) {
@@ -520,11 +556,11 @@
   // Attacker boons / control
   const cls_marshal  = (ctx) => _classBoon(ctx, { key: "clsRally",  title: "Rally the Standard", bufferDelta: +10, note: "the standard rises and the supply train steadies (+10 Buffer).", vfxHook: "clsRally" });   // ROI ruling 2026-10-06
   const cls_pact     = (ctx) => _classBoon(ctx, { key: "clsDebt",   title: "Call the Debt",      bufferDelta: +12,            note: "a sworn debt is called in; an ally's supply arrives (+12 Buffer).", vfxHook: "clsDebt" });   // ROI ruling 2026-10-06
-  const cls_linguist = (ctx) => _classBoon(ctx, { key: "clsClause", title: "Cite the Clause",    defRenewal: -1,              note: "a binding clause is cited; the defenders' renewal is voided (−1 Renewal).", vfxHook: "clsClause" });
+  const cls_linguist = (ctx) => _classBoon(ctx, { key: "clsClause", title: "Cite the Clause",    defRenewal: -1,              note: "a binding clause is cited; the defenders' renewal is voided (−1 Renewal — one less refit next turn).", vfxHook: "clsClause" });
   const cls_aurablade= (ctx) => _classBoon(ctx, { key: "clsMercy",  title: "Mercy's Edge",       defAnytime: -1,              note: "a merciful edge staggers the garrison without a death (−1 Anytime).", vfxHook: "clsMercy" });
   // Defender boons
   const cls_bulwark  = (ctx) => _classBoon(ctx, { key: "clsBrace",  title: "Brace the Breach",   defAnytime: +2, note: "the breach is braced; the line holds (+2 Anytime).", vfxHook: "clsBrace" });
-  const cls_soulsmith= (ctx) => _classBoon(ctx, { key: "clsRefit",  title: "Field Refit",        defRenewal: +2, note: "a field forge refits the wall under fire (+2 Renewal).", vfxHook: "clsRefit" });
+  const cls_soulsmith= (ctx) => _classBoon(ctx, { key: "clsRefit",  title: "Field Refit",        defRenewal: +2, note: "a field forge readies the wall's refit (+2 Renewal — plates restored at the next turn).", vfxHook: "clsRefit" });
   const cls_dreamwalker = (ctx) => _defenderBufferManeuver(ctx, { key: "clsPhantom", title: "Phantom Host", drain: 13, vfxHook: "clsPhantom" });   // ROI ruling 2026-10-06: 15 clash marks shave 13
 
   // ============================================================
@@ -569,6 +605,9 @@
     const EFFECTS = api.EFFECTS = api.EFFECTS || {};
     for (const [key, def] of Object.entries(HANDLERS)) {
       const shared = async ({ factionId, targetUuid, note }) => {
+        // #52 (2026-10-28): side re-check at resolution (class was gated at plan time).
+        const why = await _sideRefusal(S, def, factionId, targetUuid, { skipClass: true });
+        if (why) return { ok: false, reason: why };
         try { return await def.fn({ factionId, targetUuid, note, S }); }
         catch (err) {
           console.error(TAG, `${key} failed`, err);
@@ -580,9 +619,16 @@
       EFFECTS[key] = Object.assign({}, EFFECTS[key], {
         kind: "strategic", band: def.band, label: def.label, cost: def.cost, siegeCounterActivity: true,
         ...(def.siege ? { siege: true, siegeSide: def.siegeSide || "attacker", siegeOrder: def.siegeOrder ?? null } : {}),
+        grantedByClass: def.grantedByClass || null,
+        // #52 (2026-10-28): plan-time side + class gate (turn-driver re-asks it at resolution with ctx.resolving).
+        async canPlan({ actor, targetDoc, resolving }){
+          const why = await _sideRefusal(S, def, actor?.id, targetDoc?.uuid || null, { skipClass: !!resolving });
+          return why ? { ok: false, reason: `${why.charAt(0).toUpperCase()}${why.slice(1)}.` } : { ok: true };
+        },
         async apply({ entry }){
           const r = await shared({ factionId: entry?.attackerId || entry?.factionId, targetUuid: entry?.targetUuid, note: entry?.note || "" });
-          return r.ok ? `${def.label}: ${r.summary || "done"}.` : `${def.label} failed: ${r.reason}`;
+          // {ok:false} → turn-driver refunds + logs "could not" (a string read as success) — 2026-10-28
+          return r.ok ? `${def.label}: ${r.summary || "done"}.` : { ok: false, reason: `${def.label} failed: ${r.reason}` };
         }
       });
     }

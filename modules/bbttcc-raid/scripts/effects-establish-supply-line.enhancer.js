@@ -30,13 +30,20 @@
     if (!doc) return "Bad target UUID";
     let edgeMsg = "";
     if (toHexUuid) { try { await _queueEdge(String(targetUuid), String(toHexUuid), "supply"); const t2 = await fromUuid(toHexUuid); const n2 = (t2?.document ?? t2)?.flags?.[MOD_T]?.name || "the far hex"; edgeMsg = ` • route → ${n2}`; } catch (e) { console.warn(TAG, "route edge queue failed", e); } }
-    const f=foundry.utils.duplicate(doc.flags?.[MOD_T]||{}); const pend=foundry.utils.getProperty(f,"turn.pending")||{};
-    pend.repairs = pend.repairs || {};
-    pend.repairs.addModifiers = Array.isArray(pend.repairs.addModifiers) ? pend.repairs.addModifiers.slice() : [];
-    if (!pend.repairs.addModifiers.includes("Supply Line")) pend.repairs.addModifiers.push("Supply Line");
-    // tradeYieldDelta retired 2026-09-12 (pending-key registry): mods.tradeYield had no reader; the tag/route is the bonus
-    await doc.update({ [`flags.${MOD_T}.turn.pending`]: pend });
-    return `Queued: add "Supply Line"${edgeMsg}`;
+    // #20 (2026-10-28): tag BOTH ends — the siege supply search needs "Supply Line" on every non-depot hex
+    // of the path, and the FROM end was usually the depot (exempt), so the forward end went untagged.
+    const tagged = [];
+    for (const u of [String(targetUuid), toHexUuid ? String(toHexUuid) : null].filter(Boolean)) {
+      const h2 = u === String(targetUuid) ? hex : await fromUuid(u).catch(() => null); const d2 = h2?.document ?? h2; if (!d2) continue;
+      const f=foundry.utils.duplicate(d2.flags?.[MOD_T]||{}); const pend=foundry.utils.getProperty(f,"turn.pending")||{};
+      pend.repairs = pend.repairs || {};
+      pend.repairs.addModifiers = Array.isArray(pend.repairs.addModifiers) ? pend.repairs.addModifiers.slice() : [];
+      if (!pend.repairs.addModifiers.includes("Supply Line")) pend.repairs.addModifiers.push("Supply Line");
+      // tradeYieldDelta retired 2026-09-12 (pending-key registry): mods.tradeYield had no reader; the tag/route is the bonus
+      await d2.update({ [`flags.${MOD_T}.turn.pending`]: pend });
+      tagged.push(f.name || "hex");
+    }
+    return `Queued: add "Supply Line" on ${tagged.join(" + ")}${edgeMsg}`;
   }
 
   // Idempotent install (2026-09-12). A load-order race left this wrap missing at resolution on the

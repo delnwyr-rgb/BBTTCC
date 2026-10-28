@@ -144,7 +144,7 @@
       clashes: [],
       // ---- Counter-activity state (Phase E.1) ----
       defenderAnytimeBudget: 0,   // Reinforce Garrison / Champion Defends Wall — consumed by E.2 budget calc
-      renewalPool: 0,             // Reinforce Garrison — defender repair pool (Phase F)
+      renewalPool: 0,             // Reinforce Garrison / Field Refit (+) · Cite the Clause (−) — spent by siege-tick to refit the current wall's plates (#22, 2026-10-28)
       championLocks: {},          // Champion Defends Wall — { championId: untilTurn }
       omenReroll: false,          // Pray for Omen — next Event Deck draw re-rolls in defender's favor (Phase F)
       stormAssault: null,         // Storm Final Assault — { budgetMult, turn } consumed by the next clash (resolveClash)

@@ -11,6 +11,7 @@
 //   7. Resolve relief waves arriving this turn (Phase E hands off to Convene Relief Scene)
 //   8. Roll Event Deck (2d10 ≥ 14; full deck content in Phase F)
 //   9. Append narrativeBeats; persist updated state
+//   (+ #22 2026-10-28: spend state.renewalPool to refit the current wall's plates)
 //
 // Phase F adds: Champion Death Cascade, full Event Deck roster, scene-swap on layer breach.
 
@@ -136,6 +137,33 @@
   /**
    * The main per-siege tick.
    */
+  // ⚠ PROPOSAL VALUE (2026-10-28) — Dave tunes: plates restored per Renewal point, as a share of plate max.
+  const RENEWAL_PLATE_PCT = 0.1;
+  async function _spendRenewal(state, turn, S){
+    const pool = Math.max(0, Math.floor(Number(state.renewalPool) || 0));
+    if (!pool) return;
+    const idx = state.currentLayerIdx ?? 0;
+    const layer = (state.layers || [])[idx] || null;
+    const wall = layer && !layer.breached ? game.actors?.get?.(layer.structureActorId) : null;
+    const sApi = game.bbttcc?.api?.structures;
+    const st = wall ? sApi?.readState?.(wall) : null;
+    if (!st || st.state === "razed") return;
+    const max = Number(st.plates?.max) || 0, cur = Number(st.plates?.current) || 0;
+    const missing = Math.max(0, max - cur);
+    if (!(max > 0) || !missing) return;   // nothing to refit — the pool stays banked
+    const per = Math.max(1, Math.round(max * RENEWAL_PLATE_PCT));
+    const used = Math.min(pool, Math.ceil(missing / per));
+    const next = Math.min(max, cur + used * per);
+    const toState = typeof sApi.stateFromPlates === "function" ? sApi.stateFromPlates(next, max, st.loadBearing) : st.state;
+    await wall.update({ "flags.bbttcc-structures.plates.current": next, "flags.bbttcc-structures.state": toState });
+    state.renewalPool = pool - used;
+    S.appendNarrativeBeat(state, {
+      turn, kind: "renewal_refit", title: `${wall.name} refit`,
+      description: `The garrison spends ${used} Renewal: Plates ${cur} → ${next}/${max}${toState !== st.state ? ` (${st.state} → ${toState})` : ""}.${state.renewalPool ? ` ${state.renewalPool} Renewal banked.` : ""}`,
+      payload: { layerIdx: idx, used, before: cur, after: next }
+    });
+  }
+
   async function _tickSiege(siegeEntry, ctx){
     const S = globalThis.__bbttccSiegeState;
     if (!S) { console.warn(TAG, "siege-state not loaded; skipping tick"); return; }
@@ -305,6 +333,15 @@
     // Folded into the tick so there's a single writer per siege per turn (no race).
     try { if (stillActive) globalThis.__bbttccSiegeChampions?.processChampionsTurn?.(state, turn); }
     catch (e) { console.warn(TAG, "champion turn processing failed", e); }
+
+    // ---- #22 (2026-10-28): Renewal refits the wall ----
+    // state.renewalPool (Reinforce Garrison +1, Field Refit +2, Cite the Clause −1) had no reader — the
+    // moves were paid for nothing. Each point now restores RENEWAL_PLATE_PCT of the CURRENT layer's
+    // plate max; only the points needed are spent, the rest stay banked. A razed wall or a breached
+    // layer is past refitting (the layer already advanced).
+    if (stillActive) {
+      try { await _spendRenewal(state, turn, S); } catch (e) { console.warn(TAG, "renewal refit failed", e); }
+    }
 
     // ---- Phase C: reset per-turn pulse counters for the next turn ----
     // Interdiction/escort pulses are spent this tick; persistent severance lives in

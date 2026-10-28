@@ -19,6 +19,18 @@
 
   globalThis.__bbttcc_siege_planner_ui_loaded_v1 = Date.now();
 
+  // #25 (2026-10-28): the buffer commit IS Begin Siege's price (the row is self-billing), so its floor is the
+  // SHOWN price — EFFECTS.begin_siege.cost after the ×PRICE_MULT policy (scaled here if the policy hasn't run).
+  // Marks. Mirrors siege-throughput _beginSiegeMinCommit.
+  function _beginSiegeMinCommit(){
+    const raid = game.bbttcc?.api?.raid || {};
+    const c = raid.EFFECTS?.begin_siege?.cost || { violence: 30, logistics: 20, economy: 10 };
+    const mult = c.__bbttccPriced ? 1 : (Number(raid.PRICE_MULT) || 1);
+    const out = {};
+    for (const [k, v] of Object.entries(c)) { const n = Number(v) || 0; if (n > 0) out[String(k).toLowerCase()] = Math.max(1, Math.round(n * mult)); }
+    return out;
+  }
+
   // ---- State per planner instance ----
   // Stored on the planner app instance as __siegeCfg = { sizeProfile, depotHexUuid, intent, _activityFlags }
   function _getCfg(app){
@@ -27,8 +39,8 @@
       depotHexUuid: "",
       intent: "sack",
       supportingFactionIds: [],
-      // OP marshalled into the siege buffer (spent from the bank at Begin Siege, per-category).
-      bufferCommit: { violence: 30, logistics: 20, economy: 10 }
+      // Marks marshalled into the siege buffer (taken from the bank when Begin Siege resolves at Advance).
+      bufferCommit: _beginSiegeMinCommit()
     };
     return app.__siegeCfg;
   }
@@ -133,6 +145,7 @@
 
     const panel = document.createElement("div");
     panel.dataset.siegeConfigPanel = "1";
+    panel.dataset.targetUuid = targetUuid;   // #56: the hex watcher rebuilds when the target moves
     panel.style.cssText = `
       margin-top: 8px;
       padding: 8px 10px;
@@ -290,28 +303,29 @@
     }
     panel.appendChild(intentRow);
 
-    // ---- Buffer commit (OP marshalled into the siege) ----
-    // The attacker pours OP from its bank into the buffer. A bigger commit sustains a longer/
-    // harder siege before supply crisis, but it's SPENT NOW, per-category — the marshalling
-    // decision. begin_siege debits these exact buckets (violence/logistics/economy) from the bank.
-    // cfg.bufferCommit is stored in MARKS (1 OP = 10) to match state.buffer + the activity opCosts.
-    // The inputs DISPLAY in OP (÷10) to match the OP Bank + the activity cost badges.
-    cfg.bufferCommit = cfg.bufferCommit || { violence: 30, logistics: 20, economy: 10 };
+    // ---- Buffer commit (marks marshalled into the siege) ----
+    // The attacker pours marks from its bank into the buffer. A bigger commit sustains a longer/
+    // harder siege before supply crisis. begin_siege debits these exact buckets from the bank when
+    // it resolves at Advance — that debit IS Begin Siege's price, so the shown price is the floor (#25).
+    const minCommit = _beginSiegeMinCommit();
+    const commitKeys = Array.from(new Set(["violence", "logistics", "economy", ...Object.keys(minCommit)]));
+    cfg.bufferCommit = cfg.bufferCommit || Object.assign({}, minCommit);
+    for (const k of commitKeys) cfg.bufferCommit[k] = Math.max(Number(minCommit[k]) || 0, Math.round(Number(cfg.bufferCommit[k]) || 0));
     const bankRaw = attackerActor?.getFlag?.("bbttcc-factions", "opBank") || {};
     const bankMarks = (k) => Number(bankRaw[k]) || 0;
     const commitRow = document.createElement("div");
     commitRow.style.cssText = "margin-bottom:6px;font-size:0.72rem;";
     const commitLabel = document.createElement("div");
     commitLabel.style.cssText = "opacity:0.8;margin-bottom:3px;";
-    commitLabel.textContent = "Buffer commit (OP marshalled — spent now, per-category):";
+    commitLabel.textContent = `Buffer commit (marks — committed at Advance, per bucket; at least the price, ${Object.values(minCommit).reduce((a, b) => a + b, 0)} marks):`;
     commitRow.appendChild(commitLabel);
     const commitInputs = document.createElement("div");
     commitInputs.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap;";
     const commitTotal = document.createElement("span");
     commitTotal.style.cssText = "margin-left:auto;opacity:0.85;font-weight:600;";
-    const _commitMarks = () => ["violence", "logistics", "economy"].reduce((a, k) => a + (Number(cfg.bufferCommit[k]) || 0), 0);
+    const _commitMarks = () => commitKeys.reduce((a, k) => a + (Number(cfg.bufferCommit[k]) || 0), 0);
     const _updateCommitTotal = () => { commitTotal.textContent = `Σ ${_commitMarks()} marks`; };
-    for (const bk of ["violence", "logistics", "economy"]) {
+    for (const bk of commitKeys) {
       const haveOP = bankMarks(bk);   // marks
       const wrap = document.createElement("label");
       wrap.style.cssText = "display:flex;align-items:center;gap:3px;";
@@ -319,10 +333,11 @@
       cl.textContent = bk.charAt(0).toUpperCase() + bk.slice(1, 3);   // Vio / Log / Eco
       cl.style.cssText = "opacity:0.75;";
       const inp = document.createElement("input");
-      inp.type = "number"; inp.min = "0"; inp.step = "10";
+      const floor = Number(minCommit[bk]) || 0;
+      inp.type = "number"; inp.min = String(floor); inp.step = "1";
       inp.value = String(Number(cfg.bufferCommit[bk]) || 0);   // marks
       inp.style.cssText = "width:3.4rem;text-align:right;font-size:0.72rem;";
-      inp.title = `${bk} marks to commit (bank has ${haveOP} marks)`;
+      inp.title = `${bk} marks to commit — at least ${floor} (bank has ${haveOP} marks)`;
       const bankTag = document.createElement("span");
       bankTag.textContent = `/${haveOP}`;
       const _refresh = () => {
@@ -330,7 +345,8 @@
         bankTag.style.cssText = `font-size:0.66rem;${over ? "color:#fca5a5;opacity:0.9;" : "opacity:0.5;"}`;
       };
       inp.addEventListener("change", () => {
-        cfg.bufferCommit[bk] = Math.max(0, Math.round(Number(inp.value) || 0));   // marks
+        cfg.bufferCommit[bk] = Math.max(floor, Math.round(Number(inp.value) || 0));   // marks, never under the price
+        inp.value = String(cfg.bufferCommit[bk]);
         _updateCommitTotal(); _refresh();
       });
       _refresh();
@@ -431,6 +447,24 @@
     return panel;
   }
 
+  // #56 (2026-10-28): the layer list + supporter candidates are read from the target hex when the panel is
+  // built — rebuild it when the planner's hex select (or Pick Hex) moves the target. Capture phase, because
+  // Pick Hex dispatches a non-bubbling change; deferred so the planner's own listener updates state first.
+  function _wireHexWatcher(app, root){
+    if (root.__siegeHexWatch) return;
+    root.__siegeHexWatch = true;
+    root.addEventListener("change", (ev) => {
+      const t = ev.target;
+      if (!(t instanceof HTMLSelectElement) || t.closest?.("[data-siege-config-panel]")) return;
+      setTimeout(() => {
+        const panel = root.querySelector("[data-siege-config-panel]");
+        if (!panel || !panel.isConnected) return;
+        const now = String(app._plannerState?.selectedHexUuid || "");
+        if (now !== String(panel.dataset.targetUuid || "")) _buildSiegePanel(app, root);
+      }, 0);
+    }, true);
+  }
+
   // ---- Plan-button capture interceptor (serializes cfg into note BEFORE planner reads it) ----
 
   function _wirePlanButtonInterceptor(app, root){
@@ -505,8 +539,8 @@
     }
 
     // Detect siege activities robustly from the in-memory EFFECTS registry first
-    // (siegeRequiresTarget is set on EFFECTS.begin_siege / establish_siege_camp at
-    // registration). Fall back to the JSON catalog fetch only if EFFECTS is bare —
+    // (siegeRequiresTarget is set on EFFECTS.begin_siege at registration; establish_siege_camp is
+    // siege:true + siegeOwnTarget — no config panel, no auto-target). Fall back to the JSON catalog fetch only if EFFECTS is bare —
     // the fetch can silently 404 depending on module.url, which previously left the
     // siege config panel (size dial + depot picker) from ever rendering.
     const eff = game.bbttcc?.api?.raid?.EFFECTS?.[String(selectedKey).toLowerCase()];
@@ -517,7 +551,7 @@
     // hexless diorama where the hex isn't even on the current scene. Runs after every planner
     // render, so it wins over the hex-select's snap-to-first-option rebuild.
     try {
-      if (eff?.siege && !eff?.siegeRequiresTarget) {
+      if (eff?.siege && !eff?.siegeRequiresTarget && !eff?.siegeOwnTarget) {
         const fid = ps.factionId || ps.attackerId || null;
         const siegeApi = game.bbttcc?.api?.siege;
         let hit = fid ? siegeApi?.siegeForFaction?.(fid) : null;
@@ -549,6 +583,7 @@
 
     _buildSiegePanel(app, root);
     _wirePlanButtonInterceptor(app, root);
+    _wireHexWatcher(app, root);
   }
 
   // Foundry V13 AppV2 fires a CLASS-NAME-specific render hook — the ActivityPlanner
