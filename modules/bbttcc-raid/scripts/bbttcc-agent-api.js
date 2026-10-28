@@ -271,6 +271,7 @@
    * factionId (required when applying; optional in preview)
    * moraleDelta   (retired 2026-10-18, ruling 19 — accepted, no effect)
    * darknessDelta
+   * loyaltyDelta  (Domain Loyalty, 0–100 — replaces Unity/Morale in previews, 2026-10-28)
    * unityDelta    (retired 2026-10-18, ruling 18 — accepted, no effect)
    * deferred: { when:"nextRound"|..., opDeltas:{...} }
    * recurring: { turns:number, opDeltas:{...} }
@@ -321,7 +322,7 @@
         {
           factionId: ctx.attackerFactionId || null,
           deferred: { when: "nextRound", opDeltas: { faith: 10 } },   // marks
-          note: "Prayer in the Smoke (preview): +1 Faith OP next round on success."
+          note: "Prayer in the Smoke (preview): +10 Faith marks next round on success."
         }
       ],
       meta: { source: "throughput", maneuverKey: "prayer_in_the_smoke", preview: true }
@@ -367,7 +368,7 @@
     if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
     return {
       roundEffects: [
-        { type: "borrowOP", amount: 1, from: "defender", to: "attacker", note: "Flash Bargain (preview): Borrow +1 enemy OP for this round." }
+        { type: "borrowOP", amount: 1, from: "defender", to: "attacker", note: "Flash Bargain (preview): borrow from the defender's marks for this round." }
       ],
       meta: { source: "throughput", maneuverKey: "flash_bargain", preview: true }
     };
@@ -537,7 +538,7 @@
             turns: 3,
             opDeltas: { economy: -10 }   /* marks */
           },
-          note: "Industrial Sabotage (preview): Defender loses 1 Economy OP per turn for 3 turns on success."
+          note: "Industrial Sabotage (preview): Defender loses 10 Economy marks per turn for 3 turns on success."
         }
       ],
       meta: { source: "throughput", maneuverKey: "industrial_sabotage", preview: true }
@@ -618,9 +619,9 @@
       factionEffects: [
         {
           factionId: ctx.attackerFactionId || null,
-          unityDelta: +1,
+          loyaltyDelta: +2,   // review round 3 (Dave 10-28): Unity retired → Loyalty, as maneuvers-audit-wiring applies it
           when: "afterRound",
-          note: "Empathic Surge (preview): +1 Unity (Empathy) after round."
+          note: "Empathic Surge (preview): Loyalty +2 on success."
         }
       ],
       meta: { source: "throughput", maneuverKey: "empathic_surge", preview: true }
@@ -718,9 +719,9 @@
       factionEffects: [
         {
           factionId: ctx.attackerFactionId || null,
-          unityDelta: +2,
-          when: "afterVictory",
-          note: "Moral High Ground (preview): +2 Unity after victory on success (legacy Empathy Meter)."
+          darknessDelta: -1,  // review round 3 (Dave 10-28): Unity retired → Darkness −1, as maneuvers-audit-wiring applies it
+          when: "afterRound",
+          note: "Moral High Ground (preview): Darkness −1 on success."
         }
       ],
       meta: { source: "throughput", maneuverKey: "moral_high_ground", preview: true }
@@ -992,7 +993,7 @@
             when: "nextRound",
             opDeltas: opAll
           },
-          note: "Unity Surge (preview): Attacker gains +20 marks to every OP channel next round on success."
+          note: "Unity Surge (preview): Attacker gains +20 marks in every channel next round on success."
         }
       ],
       meta: { source: "throughput", maneuverKey: "unity_surge", preview: true }
@@ -1107,7 +1108,7 @@
           type: "purifySpark",
           target: ctx.target || null,
           requires: ["victoryContext"],
-          note: "Crown of Mercy (preview): Instantly purify a Corrupted Spark (requires Victory context) on success."
+          note: "Crown of Mercy (preview): Instantly purify a Corrupted Spark (needs a won fight) on success."
         }
       ],
       meta: { source: "throughput", maneuverKey: "crown_of_mercy", preview: true }
@@ -1924,7 +1925,7 @@
       encounterTier: encounterTier || null,
       riskBand,
       logisticsImpact,
-      explanation: 'Estimated from recorded travel traces/territory flags only; no OP committed.'
+      explanation: 'Estimated from recorded travel traces/territory flags only; no marks committed.'
     };
   }
 
@@ -2757,10 +2758,11 @@
     const includeStrategic = opts.includeStrategic !== false;
     const includeTravel = opts.includeTravel !== false;
     // #67 (2026-10-28), ruling 22: the STORY offers every Battle/Heist/Parley — stewards can't decide to raid. Raid
-    // candidates only when asked for, or by default for a GM seat while the raid doors are open.
+    // candidates only when asked for, or by default for a GM seat outside the Alpha (Dave 10-28: no GM raid picks in Alpha).
+    let alphaOn = false; try { alphaOn = game.bbttcc?.alpha?.enabled?.() === true; } catch (_e) {}
     const includeRaid = (typeof opts.includeRaid === "boolean")
       ? opts.includeRaid
-      : (!!game.user?.isGM && game.bbttcc?.alpha?.hidden?.("raidDoors") !== true);
+      : (!!game.user?.isGM && !alphaOn && game.bbttcc?.alpha?.hidden?.("raidDoors") !== true);
     const debug = !!opts.debug;
 
     const observation = opts.observation || await getObservationSnapshot(factionId, opts.observationOpts || {});

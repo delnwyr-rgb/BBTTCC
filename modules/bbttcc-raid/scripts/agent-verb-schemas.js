@@ -340,7 +340,7 @@
             n: { type: "integer", minimum: 1, maximum: 50, description: "Top-N to return (default 5)" },
             includeStrategic: S_BOOL,
             includeTravel: S_BOOL,
-            includeRaid: { type: "boolean", description: "Raid candidates (default: GM seats only, and only while the raid doors are open — ruling 22)" },
+            includeRaid: { type: "boolean", description: "Raid candidates (default: GM seats only, never while the Alpha is on — ruling 22)" },
             debug: { type: "boolean", description: "Also return the full ranked buckets + debug block" }
           }
         },
