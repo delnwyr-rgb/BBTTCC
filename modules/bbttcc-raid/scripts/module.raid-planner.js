@@ -1621,7 +1621,9 @@ if ((this._lockedFactionId || this._lockFaction) && !game.user.isGM) {
       }
 
       const ensureRigStateDefaults = () => {
-        if (!this._plannerState.rigFactionId) this._plannerState.rigFactionId = rigFactionSel.value || "";
+        // repair_rig defaults to the planning Domain's own rigs (2026-10-28)
+        const ownDefault = isCharterActivity(this._plannerState.selectedKey) ? "" : (this._plannerState.factionId || "");
+        if (!this._plannerState.rigFactionId) this._plannerState.rigFactionId = ownDefault || rigFactionSel.value || "";
         rigFactionSel.value = this._plannerState.rigFactionId || rigFactionSel.value || "";
       };
 
@@ -1673,6 +1675,11 @@ if ((this._lockedFactionId || this._lockFaction) && !game.user.isGM) {
       rigRow2.appendChild(rigSel);
 
       const lockedForUser = !!((this._lockedFactionId || this._lockFaction) && !game.user.isGM);
+      // A locked player seat repairs only its own Domain's rigs (2026-10-28)
+      if (lockedForUser && wantsRigTarget && !isCharterActivity(this._plannerState.selectedKey)) {
+        rigFactionSel.disabled = true;
+        rigFactionSel.title = "Repair Rig works on your own Domain's rigs.";
+      }
 
 if (!lockedForUser) {
   top.appendChild(mkLabel("Domain"));
@@ -2153,8 +2160,15 @@ wrap.appendChild(top);
 
           this._plannerState.selectedKey = key;
 
-          // If switching into repair_rig, ensure defaults exist next render
-          if (isRigActivity(key) && !this._plannerState.rigFactionId) {
+          // If switching into repair_rig, ensure defaults exist next render.
+          // repair_rig = YOUR rig → seed the planning Domain, not the alphabetically first (2026-10-28)
+          if (isRigActivity(key) && !isCharterActivity(key)) {
+            const ownFid = this._plannerState.factionId || facSel.value || "";
+            if (String(this._plannerState.rigFactionId || "") !== String(ownFid)) {
+              this._plannerState.rigFactionId = ownFid;
+              this._plannerState.rigId = "";
+            }
+          } else if (isRigActivity(key) && !this._plannerState.rigFactionId) {
             this._plannerState.rigFactionId = facs[0]?.id || "";
             this._plannerState.rigId = "";
           }
@@ -2415,7 +2429,8 @@ Hooks.once("init",()=>{
         if (n > best) { best = n; target = sc; }
       }
     }
-    if (target && canvas?.scene?.id !== target.id) target.view().catch(() => {});
+    if (target && canvas?.scene?.id !== target.id) { target.view().catch(() => {}); return true; }
+    return false;
   }
 
   raidAPI.openActivityPlanner = (opts = {})=>{
@@ -2428,16 +2443,24 @@ Hooks.once("init",()=>{
     // that opening the planner does the same thing?"). Off a hex map, THIS seat views the map holding the party (else
     // the active map, else the one with the most hexes) — a view, not an activation: one steward's planning doesn't
     // move the table.
-    try { _viewPlanningMap(factionId); } catch (_eMap) {}
+    let switching = false;
+    try { switching = _viewPlanningMap(factionId); } catch (_eMap) {}
 
     // Close any existing planner instance so lock context + state is deterministic.
+    // AppV2 lives in foundry.applications.instances, never ui.windows — and drop its canvas pick listener now (2026-10-28)
     try {
-      const existing = Object.values(ui?.windows || {}).find(w => w?.id === "bbttcc-activity-planner");
-      if (existing) existing.close?.();
+      const existing = foundry.applications?.instances?.get?.("bbttcc-activity-planner")
+        || Object.values(ui?.windows || {}).find(w => w?.id === "bbttcc-activity-planner");
+      if (existing) {
+        if (existing._pickHandler) { canvas?.stage?.off?.("pointerdown", existing._pickHandler); existing._pickHandler = null; }
+        existing.close?.({ animate: false })?.catch?.(() => {});
+      }
     } catch (_e) {}
 
     const app = new C({ bbttcc: { factionId, lockFaction } });
     app.render(true,{focus:true, window:{resizable:true, minimizable:true}});
+    // The map view isn't awaited — the first render read the old scene's (empty) hex list; refill once the map is up (2026-10-28)
+    if (switching) Hooks.once("canvasReady", () => { try { if (app.rendered) app.render(false); } catch (_eR) {} });
     return app;
   };
   raidAPI.openRaidConsole     = ()=>{ const C=globalThis.BBTTCC_RaidConsole;     if(!C) return ui.notifications?.warn?.("Domain Conflict console not available.");     new C().render(true,{focus:true, window:{resizable:true, minimizable:true}}); };

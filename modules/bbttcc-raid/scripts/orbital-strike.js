@@ -166,7 +166,9 @@
     // Cooldown (combat only): a few rounds between strikes.
     const cd = Number(opts.cooldownRounds ?? 3);
     if (!opts.bypassCooldown && game.combat?.started) {
-      const last = Number(bunker.getFlag(MOD, "orbitalLastRound") ?? -999);
+      // Stamp is {combatId, round} — a strike in an earlier combat (or an old bare-number stamp) never blocks this one (2026-10-28).
+      const stamp = bunker.getFlag(MOD, "orbitalLastRound");
+      const last = (stamp && typeof stamp === "object" && stamp.combatId === game.combat.id) ? Number(stamp.round ?? -999) : -999;
       const round = Number(game.combat.round || 0);
       if (round - last < cd) {
         const m = `Orbital strike recharging — ${cd - (round - last)} round(s) left.`;
@@ -208,7 +210,7 @@
       onDetonate: () => { _shakeFlash(); _detonate(scene, x, y, blastPx, { damage, damageType, scope, factionId }); }
     });
 
-    if (game.combat?.started) { try { await bunker.setFlag(MOD, "orbitalLastRound", Number(game.combat.round || 0)); } catch (_e) {} }
+    if (game.combat?.started) { try { await bunker.setFlag(MOD, "orbitalLastRound", { combatId: game.combat.id, round: Number(game.combat.round || 0) }); } catch (_e) {} }
     return { ok: true, bunker: bunker.name, x, y, radiusGrid };
   }
 
@@ -242,7 +244,8 @@
     const turn = Number(game.bbttcc?.api?.world?.getState?.().turn ?? 0) || 0;
     if (!opts.bypassCooldown) {
       const last = Number(bunker.getFlag(MOD, "orbitalLastTurn") ?? -999);
-      if (turn - last < cd) { const m = `Orbital strike recharging — ${cd - (turn - last)} turn(s) left.`; ui.notifications?.warn?.(m); return { ok: false, reason: "cooldown", message: m }; }
+      // turn < last = the turn counter went back (golden reset) — the old stamp no longer applies (2026-10-28).
+      if (turn >= last && turn - last < cd) { const m = `Orbital strike recharging — ${cd - (turn - last)} turn(s) left.`; ui.notifications?.warn?.(m); return { ok: false, reason: "cooldown", message: m }; }
     }
 
     // Cost: Violence OP (strategic strikes cost more than tactical).

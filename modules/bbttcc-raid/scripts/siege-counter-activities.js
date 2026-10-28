@@ -73,7 +73,8 @@
   }
 
   function _pickChampion(arr, { championId, wantStatus } = {}){
-    const list = Array.isArray(arr) ? arr : [];
+    // The dead stay on the roster — never pick one back to active (2026-10-28).
+    const list = (Array.isArray(arr) ? arr : []).filter(c => c && c.status !== "dead");
     if (championId) return list.find(c => c.actorId === championId) || null;
     if (wantStatus) return list.find(c => c.status === wantStatus) || null;
     return list[0] || null;
@@ -142,7 +143,7 @@
     const r = await _withSiege(S, targetUuid, (state) => {
       const champ = _pickChampion(state.defenderChampions, { championId: cfg.championId })
                  || _pickChampion(state.defenderChampions, { wantStatus: "wounded" })
-                 || (state.defenderChampions || [])[0];
+                 || _pickChampion(state.defenderChampions);
       if (!champ) return { _noChamp: true };
       chosen = champ.actorId;
       champ.status = "active";
@@ -326,6 +327,7 @@
     const costTotal = Number.isFinite(def.clashCost)
       ? def.clashCost
       : Object.values(def.cost || {}).reduce((a, b) => a + (Number(b) || 0), 0);
+    let paidBank = null, paidBuffer = null;   // what was charged — refunded if the handler fails (2026-10-28)
     if (costTotal > 0 && isDefenderMan) {
       // The Buffer is the BESIEGER's pool — a defender maneuver bills the defender's own bank:
       // the clash cost split across the maneuver's channels in proportion to its strategic cost.
@@ -341,11 +343,12 @@
       if (short) return { ok: false, reason: `${game.actors.get(actingFactionId)?.name || "the garrison"} can't afford ${def.label} now (${short[0]} needs ${-short[1]} marks, has ${Number(bank[short[0]]) || 0} marks)` };
       const res = await opApi.commit(actingFactionId, deltas, { source: "siege-clash", label: `${def.label} (in the moment)` });
       if (res && (res.ok === false || res.committed === false)) return { ok: false, reason: res.error || `couldn't pay for ${def.label}` };
+      paidBank = res?.finalCost || deltas;
     } else if (costTotal > 0) {
       const have = S.bufferTotal(st.buffer);
       if (have < costTotal) return { ok: false, reason: `not enough Buffer to fire ${def.label} now (need ${costTotal} marks, have ${have} marks)` };
       const dup = foundry.utils.duplicate(st);
-      S.shaveBuffer(dup.buffer, costTotal);
+      paidBuffer = S.shaveBuffer(dup.buffer, costTotal).deducted;
       S.appendNarrativeBeat(dup, { turn: _turn(), kind: "clash_maneuver", title: `${def.label} — in the moment`, description: `Fired during the clash (tactical tempo) by ${game.actors.get(actingFactionId)?.name || "the besiegers"}. Buffer −${costTotal} marks.` });
       await S.setSiegeState(uuid, dup);
     }
@@ -353,7 +356,28 @@
     // Run the SAME handler that the strategic clock uses — it does the real work + its own beat/VFX.
     let r;
     try { r = await def.fn({ factionId: actingFactionId, targetUuid: uuid, note: note || "", S }); }
-    catch (err) { console.error(TAG, `fireManeuver ${key} failed`, err); return { ok: false, reason: err.message }; }
+    catch (err) { console.error(TAG, `fireManeuver ${key} failed`, err); r = { ok: false, reason: err.message }; }
+
+    // The maneuver never fired (wall gone, damage path missing…) → give the charge back (2026-10-28).
+    if (r?.ok === false && (paidBank || paidBuffer)) {
+      try {
+        if (paidBank) {
+          const back = {}; for (const [k, d] of Object.entries(paidBank)) if (Number(d) < 0) back[k] = -Number(d);
+          const rr = Object.keys(back).length ? await game.bbttcc.api.op.commit(actingFactionId, back, { source: "siege-clash", label: `${def.label} refund (never fired)`, allowOvercap: true }) : { ok: true };
+          if (rr && (rr.ok === false || rr.committed === false)) console.warn(TAG, `fireManeuver ${key}: refund refused`, rr);
+        } else {
+          const cur = await S.getSiegeState(uuid);
+          if (cur) {
+            const dup2 = foundry.utils.duplicate(cur);
+            dup2.buffer = dup2.buffer || {};
+            let back = 0;
+            for (const [k, d] of Object.entries(paidBuffer)) if (d > 0) { dup2.buffer[k] = (Number(dup2.buffer[k]) || 0) + d; back += d; }
+            S.appendNarrativeBeat(dup2, { turn: _turn(), kind: "clash_maneuver_refund", title: `${def.label} — never fired`, description: `${r?.reason || "The maneuver failed"}. Buffer +${back} marks returned.` });
+            await S.setSiegeState(uuid, dup2);
+          }
+        }
+      } catch (e) { console.warn(TAG, `fireManeuver ${key}: refund failed`, e); }
+    }
 
     try { game.bbttcc?.api?.siege?.refreshHud?.(); } catch (_e) {}
     if (r?.ok !== false) ui.notifications?.info?.(`${def.label} (in the moment)${costTotal ? (isDefenderMan ? ` — garrison −${costTotal} marks` : ` — Buffer −${costTotal} marks`) : ""}: ${r?.summary || "done"}.`);

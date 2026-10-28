@@ -253,6 +253,12 @@
             return { ok: false, error: "ACTOR_NOT_FOUND", message: `Could not resolve uuid: ${e?.message || e}` };
           }
           if (!actor) return { ok: false, error: "ACTOR_NOT_FOUND", message: `No actor at uuid '${targetActorUuid}'` };
+          // A formula string is rolled here — the damage path does Number(amount)||0, so "2d6+3" was 0 damage (2026-10-28)
+          if (typeof amount === "string" && !Number.isFinite(Number(amount))) {
+            try { amount = (await new Roll(amount).evaluate()).total; }
+            catch (e) { return { ok: false, error: "BAD_FORMULA", message: `Could not roll '${amount}': ${e?.message || e}` }; }
+            if (!Number.isFinite(Number(amount))) return { ok: false, error: "BAD_FORMULA", message: "Formula did not roll a number." };
+          }
           return await fn(actor, amount, {
             damageType, track,
             origin: origin || "agent",

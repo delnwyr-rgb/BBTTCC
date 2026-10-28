@@ -52,6 +52,7 @@
 
   async function onChampionDeath(payload){
     if (!game.user?.isGM) return;   // single writer — shared hex/faction docs
+    if (game.users?.activeGM && game.users.activeGM !== game.user) return;   // the relay replays this on every GM seat — one cascade (2026-10-28)
     const S = globalThis.__bbttccSiegeState;
     if (!S) return;
     const { siegeId, hexUuid, championId, side } = payload || {};

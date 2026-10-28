@@ -472,6 +472,12 @@ async function _rcStoryRoute(app, word, why = "") {
     return res;
   } catch (e) { console.warn(TAG, "story route failed", e); return null; }
 }
+/** One tie rule (2026-10-28, Dave: stalemate isn't a core outcome unless it has its own story): a dice tie is the
+ *  attacker's Success (computeContested), so it's a win everywhere; "stalemate" only when the GM CALLS it on the battlemap. */
+function _rcRoundWord(r, margin = Number(r?.margin || 0)) {
+  if (r?.meta?.battlemap?.call === "stalemate") return "stalemate";
+  return Number(margin) >= 0 ? "win" : "loss";
+}
 /** After the round resolved: open ground changes hands on a won Battle (ruling 21 + 20). */
 async function _rcBattleGroundFlip(r, attacker, defender, hexDoc, opts = {}) {
   if (!_rcAlphaOn() || !_rcIsBattleKey(r?.activityKey) || r?.targetType !== "hex" || !hexDoc || !attacker) return null;
@@ -479,7 +485,7 @@ async function _rcBattleGroundFlip(r, attacker, defender, hexDoc, opts = {}) {
   const stake = await _rcBattleStake(r, attacker, d, opts);
   if (!stake) return null;
   r.meta ||= {}; r.meta.stake = stake;
-  const won = Number(r.margin || 0) > 0;
+  const won = _rcRoundWord(r) === "win";
   const esc = (t) => foundry.utils.escapeHTML(String(t ?? ""));
   const say = (html) => ChatMessage.create({ speaker: { alias: "Bad Eden Raid" }, content: `<section class="bbttcc-raid"><p style="margin:0;">${html}</p></section>` }).catch(() => {});
   if (!won) return stake;
@@ -1936,6 +1942,17 @@ function _rcMergeRelayedSession(payload, stored, { ownsAtt = true, ownsFid = () 
     for (const [fid, keys] of Object.entries(inc.mansSelectedSupport || {})) if (ownsFid(fid)) (r.mansSelectedSupport ||= {})[fid] = keys;
     if (inc.meta?.stewardChips) { r.meta ||= {}; r.meta.stewardChips = Object.assign({}, r.meta.stewardChips || {}, inc.meta.stewardChips); }
     _rcMergeRoundGates(r, inc);
+    // A player's cancel on an open round stands even when the payload is stale (2026-10-28).
+    if (ownsAtt && inc.cancelled && !inc.committed) { r.cancelled = true; r.open = false; }
+  }
+  // Rounds the player ADDED (not in the stored session yet) survive a stale payload too (2026-10-28) — they used to
+  // vanish, staged marks and all, when the GM saved in the same window.
+  if (ownsAtt) {
+    for (const inc of payload.rounds) {
+      const rid = String(inc?.roundId || "");
+      if (!rid || byId(out.rounds, rid) || inc.committed) continue;
+      out.rounds.push(foundry.utils.duplicate(inc));
+    }
   }
   out.rev = Math.max(storedRev, Number(payload.rev || 0)) + 1;
   out.ts = Date.now();
@@ -2189,6 +2206,76 @@ function manDefLabel(key) {
   catch (_e) { return String(key); }
 }
 
+// ── Round charges (Dave 2026-10-28: raids, maneuvers, Parleys and Heists all cost marks; an anytime maneuver is charged
+// WHEN IT FIRES, the rest when the round commits). An anytime fire stamps `charged` on its fired-bucket entry, so the
+// commit never bills it twice; a free Logistical Surge repeat is skipped too.
+function _rcFiredCharged(r, side, key, fid = null) {
+  try { return !!_rcFiredBucket(r, side, fid)?.[String(key)]?.charged; } catch (_e) { return false; }
+}
+/** { manOpA, manOpD, manOpSupport } for a round — maneuvers not yet charged + staged marks. Positive marks. */
+function _rcRoundCharges(r, listA, listD, cat) {
+  const EFFECTS = game.bbttcc?.api?.raid?.EFFECTS || {};
+  const manOpA = {}, manOpD = {}, manOpSupport = {};
+  const addInto = (dst, src) => { for (const [k, v] of Object.entries(src || {})) { const kk = String(k).toLowerCase(); dst[kk] = (dst[kk] || 0) + Number(v || 0); } };
+  for (const key of (listA || [])) {
+    try { if (_b3IsManeuverFreeOnRound(r, key)) continue; } catch (_eF) {}
+    if (_rcFiredCharged(r, "att", key)) continue;
+    const eff = EFFECTS[key]; if (!eff) continue;
+    addInto(manOpA, lcKeysCost(_rcCostOf(eff)).op);
+  }
+  for (const key of (listD || [])) {
+    if (_rcFiredCharged(r, "def", key)) continue;
+    const eff = EFFECTS[key]; if (!eff) continue;
+    addInto(manOpD, lcKeysCost(_rcCostOf(eff)).op);
+  }
+  const stagedA = Number(r?.localStaged?.att?.[cat] || 0), stagedD = Number(r?.localStaged?.def?.[cat] || 0);
+  if (stagedA > 0) manOpA[cat] = (manOpA[cat] || 0) + stagedA;
+  if (stagedD > 0) manOpD[cat] = (manOpD[cat] || 0) + stagedD;
+  for (const [sfid, bucket] of Object.entries(r?.localStaged?.support || {})) {
+    const clean = {};
+    for (const [k, v] of Object.entries(bucket || {})) { const n = Number(v || 0); if (n > 0) clean[String(k).toLowerCase()] = n; }
+    if (Object.keys(clean).length) manOpSupport[String(sfid)] = clean;
+  }
+  for (const [sfid, keys] of Object.entries(r?.mansSelectedSupport || {})) {
+    if (!Array.isArray(keys) || !keys.length) continue;
+    const dst = (manOpSupport[String(sfid)] ||= {});
+    for (const key of keys) {
+      if (_rcFiredCharged(r, "support", key, sfid)) continue;
+      const eff = EFFECTS[key]; if (!eff) continue;
+      addInto(dst, lcKeysCost(_rcCostOf(eff)).op);
+    }
+  }
+  return { manOpA, manOpD, manOpSupport };
+}
+/** Shortfall lines ([] = everyone can pay). Amounts in marks. */
+async function _rcShortfall(attacker, defender, ch) {
+  const short = [];
+  const check = (actor, need, label) => {
+    if (!actor) return;
+    const cur = getOPBank(actor);
+    for (const [k, v] of Object.entries(need || {})) {
+      const n = Number(v || 0);
+      if (n > 0 && n > Number(cur[k] || 0)) short.push(`${label}: ${k} ${_rcOP(n)} needed, ${_rcOP(cur[k] || 0)} in bank`);
+    }
+  };
+  check(attacker, ch.manOpA, attacker?.name || "Attacker");
+  if (defender) check(defender, ch.manOpD, defender.name);
+  for (const [sfid, spend] of Object.entries(ch.manOpSupport || {})) {
+    const sf = await getActorByIdOrUuid(sfid).catch(() => null);
+    check(sf, spend, sf?.name || "Support");
+  }
+  return short;
+}
+/** Debit a round's charges (each side its own bank). */
+async function _rcChargeRound(attacker, defender, ch) {
+  if (attacker) await _applyOPDeltaDual(attacker, _negate(ch.manOpA));
+  if (defender) await _applyOPDeltaDual(defender, _negate(ch.manOpD));
+  for (const [sfid, spend] of Object.entries(ch.manOpSupport || {})) {
+    const sf = await getActorByIdOrUuid(sfid).catch(() => null);
+    if (sf) await _applyOPDeltaDual(sf, _negate(spend));
+  }
+}
+
 async function _rcFireOneManeuver(r, side, key, attackerPre = null, defenderPre = null, app = null) {
   if (!r || !key) return false;
   // For support, the firing faction is the support actor passed as attackerPre;
@@ -2199,9 +2286,13 @@ async function _rcFireOneManeuver(r, side, key, attackerPre = null, defenderPre 
   try {
     const _budget = game.bbttcc?.api?.raid?.anytimeBudget;
     if (_budget?.canFire) {
+      // def: the RESOLVED defender (hex/facility rounds carry defenderId "" until roll time) — the same id the
+      // maneuver:fired hook consumes under, or the per-scene/per-raid caps never bite (2026-10-28).
+      let _defFid = r?.defenderId || null;
+      if (String(side) === "def" && !_defFid) { try { _defFid = (defenderPre || await _rcResolveDefenderForFire(r))?.id || null; } catch (_eD) { _defFid = null; } }
       const _fid = (String(side) === "support" ? _supportFid
-        : (String(side) === "att" ? r?.attackerId : r?.defenderId)) || null;
-      const _check = _budget.canFire(key, { factionId: _fid, sceneId: canvas?.scene?.id, raidId: r?.raidId });
+        : (String(side) === "att" ? r?.attackerId : _defFid)) || null;
+      const _check = _budget.canFire(key, { factionId: _fid, sceneId: r?.meta?.battleSceneId || canvas?.scene?.id, raidId: r?.raidId });   // same scene key consume() uses
       if (_check && _check.ok === false) {
         ui.notifications?.warn(`Anytime budget exhausted (${_check.scope}) — ${key} cannot fire again this ${String(_check.scope || "").replace("per-", "")}.`);
         return false;
@@ -2213,7 +2304,25 @@ async function _rcFireOneManeuver(r, side, key, attackerPre = null, defenderPre 
   const defender = defenderPre || await _rcResolveDefenderForFire(r);
   const manDef = (game.bbttcc?.api?.raid?.EFFECTS || {})[String(key)] || { label: key };
   const fireMode = _rcGetFireMode(manDef);
+  // An anytime maneuver is paid WHEN IT FIRES (2026-10-28) — the firing side's own bank; refused if it can't pay.
+  let __fireCost = null, __payer = null;
+  if (fireMode === "anytime" && !(String(side) === "att" && _b3IsManeuverFreeOnRound(r, key))) {
+    __payer = String(side) === "def" ? defender : attacker;   // support: attackerPre IS the support faction
+    const need = {};
+    for (const [k, v] of Object.entries(lcKeysCost(_rcCostOf(manDef)).op || {})) { const n = Number(v || 0); if (n > 0) need[String(k).toLowerCase()] = n; }
+    if (__payer && Object.keys(need).length) {
+      const cur = getOPBank(__payer);
+      const short = Object.entries(need).filter(([k, n]) => n > Number(cur[k] || 0)).map(([k, n]) => `${k} ${_rcOP(n)} needed, ${_rcOP(cur[k] || 0)} in bank`);
+      if (short.length) { ui.notifications?.warn?.(`${__payer.name} can't pay for ${manDef.label || key}: ${short.join(" • ")}.`); return false; }
+      __fireCost = need;
+    }
+  }
+  if (__fireCost) {
+    try { await _applyOPDeltaDual(__payer, _negate(__fireCost)); }
+    catch (eC) { ui.notifications?.warn?.(`Couldn't charge ${__payer.name} for ${manDef.label || key} — not fired.`); warn("anytime charge failed", eC); return false; }
+  }
   _rcMarkManFired(r, side, key, _supportFid);
+  if (__fireCost) { try { const b = _rcFiredBucket(r, side, _supportFid); if (b?.[String(key)]) b[String(key)].charged = __fireCost; } catch (_eCh) {} }
   _rcPlayManFireVfx(side, attacker, defender);
   await _rcRouteManFireFx(key, fireMode, r, app, manDef, attacker, defender, side);
 
@@ -2235,7 +2344,9 @@ async function _rcFireOneManeuver(r, side, key, attackerPre = null, defenderPre 
   // Surface C v2: anytime fires apply mechanical effects immediately so the
   // button feels like a real fire, not just narrative. Pre-roll / post-commit
   // fires let B2 apply their effects at commit time (their normal pipeline).
-  if (fireMode === "anytime") {
+  // Player seats can't write other Domains (the defender's actor): their fire leaves mechApplied unset, and the GM's
+  // commit-time B2 applies the effects (2026-10-28 — the effects used to fail silently and be marked applied anyway).
+  if (fireMode === "anytime" && game.user?.isGM) {
     const applyRes = await _rcApplyManeuverEffectsNow(app, r, side, key, attacker, defender);
     if (applyRes?.ok) {
       try {
@@ -2790,7 +2901,9 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       logWar: !!this.vm.logWar,
       includeDefender: !!this.vm.includeDefender,
       // Ruling 22 — the story's fields ride the session so a reload (or the player seats) keep them.
-      by: this.vm.offeredBy ? "story" : String(game.user?.id || ""),
+      // `by` is ALWAYS the saving seat — the GM relay authorizes on it (a literal "story" here denied every player-seat
+      // save on a story-offered raid). The story origin rides `offeredBy`.
+      by: String(game.user?.id || ""),
       offeredBy: String(this.vm.offeredBy || ""), stake: String(this.vm.stake || ""), parley: this.vm.parley || null,
       objectiveOnly: this.vm.objectiveOnly === true, routes: this.vm.routes || null, routeFired: String(this.vm.routeFired || ""), campaignId: String(this.vm.campaignId || "")
     };
@@ -4881,6 +4994,8 @@ r.view = {
           round.meta ||= {};
           round.meta.b3 ||= {};
           round.meta.b3.repeatOffer = { key: k, free: true, srcRoundId: pending.srcRoundId || null, ts: pending.ts || Date.now() };
+          // One round per token (2026-10-28): seeding spends it — two Add Rounds no longer both ride free.
+          _b3ClearNextRoundRepeat(attacker).catch(() => {});
         }
       } catch(_eLSB) {}
 
@@ -5299,6 +5414,20 @@ async _postRoundCard(idx){
       ui.notifications?.warn?.("Waiting for GM to resolve the round.");
       return;
     }
+    // Once only (2026-10-28): a resolved/cancelled round never re-rolls or re-charges (Manage reopens it; a double-click
+    // opened two confirms), and an in-flight commit locks out a second one.
+    const __r0 = this.vm?.rounds?.[idx];
+    if (!__r0) return;
+    if (__r0.committed || __r0.cancelled) { ui.notifications?.info?.("That round is already resolved."); return; }
+    const __lock = (this.__committingRounds ||= new Set());   // on the app, never in the saved session
+    const __key = String(__r0.roundId || idx);
+    if (__lock.has(__key)) { ui.notifications?.info?.("That round is already resolving."); return; }
+    __lock.add(__key);
+    try { return await this.__commitRoundInner(idx); }
+    finally { __lock.delete(__key); }
+  }
+
+  async __commitRoundInner(idx){
 
     // Heads-up: a supporter player could have staged OP locally and not yet
     // clicked "Commit Staging to GM" — that contribution won't be in the
@@ -5390,6 +5519,18 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
       } catch {}
       if (!defender) return ui.notifications?.warn?.("Scenario modes require a defender Domain (hex/facility/rig target).");
       r.defenderId = defender.id || r.defenderId || "";
+
+      // Parleys and Heists cost marks like any fight (2026-10-28): refuse BEFORE the board / Heist step opens when a side
+      // can't pay for its round maneuvers + staging — nothing rolled, nothing charged yet.
+      const __scnCat = r.view?.cat || primaryKeyFor(r.activityKey);
+      const __scnCharges = _rcRoundCharges(r, r.mansSelected || [], r.mansSelectedDef || [], __scnCat);
+      try {
+        const __scnShort = await _rcShortfall(attacker, defender, __scnCharges);
+        if (__scnShort.length) {
+          ui.notifications?.warn?.(`Cannot commit — not enough marks for the selected maneuvers/staging. ${__scnShort.join(" • ")}. Deselect maneuvers or reduce staging.`);
+          return;
+        }
+      } catch (eAffS) { warn("scenario affordability check failed (non-fatal)", eAffS); }
 
       const raidApi = game.bbttcc?.api?.raid || {};
 
@@ -5608,6 +5749,8 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
         // Ruling 22 — a concluded Parley goes where the story said.
         try { const o = String(st?.outcome || "ongoing"); if (o !== "ongoing") await _rcStoryRoute(this, o === "attackerWin" ? "win" : o === "defenderWin" ? "loss" : "stalemate", st?.outcomeKind || o); } catch (_e) {}
         try { await _rcAutoFireMode(r, "post-commit", attacker, defender, this); } catch (e) { console.warn("[bbttcc-raid] post-commit auto-fire (courtly)", e); }
+        // The Parley's round maneuvers + staged marks are paid now (2026-10-28 — the courtly path used to charge nothing).
+        try { await _rcChargeRound(attacker, defender, _rcRoundCharges(r, r.mansSelected || [], r.mansSelectedDef || [], __scnCat)); } catch (eSpendC) { warn("Parley maneuver/staging spend failed (non-fatal)", eSpendC); }
         r.open = false; r.committed = true; r.committedAt = Date.now();
         r.meta ||= {};
         r.meta.scenario = {
@@ -5853,94 +5996,9 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           const listA = Array.isArray(r.mansSelected) ? r.mansSelected.slice() : [];
           const listD = Array.isArray(r.mansSelectedDef) ? r.mansSelectedDef.slice() : [];
 
-          const manOpA = {};
-          const manOpD = {};
-          const manOpSupport = {}; // { [factionId]: { [opKey]: n } }
-          const addInto = (dst, src)=>{ for (const [k,v] of Object.entries(src||{})){ const kk=String(k).toLowerCase(); dst[kk]=(dst[kk]||0)+Number(v||0); } };
-
-          for (const key of listA){
-            try { if (_b3IsManeuverFreeOnRound(r, key)) continue; } catch(_eF) {}
-            const eff = EFFECTS[key]; if (!eff) continue;
-            const {op} = lcKeysCost(_rcCostOf(eff));
-            addInto(manOpA, op);
-          }
-          // Defender maneuver selection is GM-only; still costed if present.
-          for (const key of listD){
-            const eff = EFFECTS[key]; if (!eff) continue;
-            const {op} = lcKeysCost(_rcCostOf(eff));
-            addInto(manOpD, op);
-          }
-
-          const stagedA = Number(r?.localStaged?.att?.[cat]||0);
-          const stagedD = Number(r?.localStaged?.def?.[cat]||0);
-          if (stagedA>0) manOpA[cat] = (manOpA[cat]||0)+stagedA;
-          if (stagedD>0) manOpD[cat] = (manOpD[cat]||0)+stagedD;
-
-          // Support OP — staged + maneuver costs, charged to each support
-          // faction's OWN bank. (Pre-existing gap: scenario commit spent none.)
-          const supportStageS = r?.localStaged?.support || {};
-          for (const [sfid, bucket] of Object.entries(supportStageS)) {
-            const clean = {};
-            for (const [k, v] of Object.entries(bucket || {})) {
-              const n = Number(v || 0);
-              if (n > 0) clean[String(k).toLowerCase()] = n;
-            }
-            if (Object.keys(clean).length) manOpSupport[String(sfid)] = clean;
-          }
-          for (const [sfid, keys] of Object.entries(r.mansSelectedSupport || {})) {
-            if (!Array.isArray(keys) || !keys.length) continue;
-            const dst = (manOpSupport[String(sfid)] ||= {});
-            for (const key of keys) {
-              const eff = EFFECTS[key]; if (!eff) continue;
-              const {op} = lcKeysCost(_rcCostOf(eff));
-              addInto(dst, op);
-            }
-          }
-
-          // Snapshot defender bank once resolved (for double-spend safety)
-          try { if (__bankDefBefore == null && defender) __bankDefBefore = getOPBank(defender); } catch(_eB) {}
-
-          const expectA = foundry.utils.duplicate(manOpA || {});
-          const expectD = foundry.utils.duplicate(manOpD || {});
-          const curA = getOPBank(attacker);
-
-          for (const k of Object.keys(expectA)) {
-            const need = Number(expectA[k] || 0);
-            if (!need) continue;
-            const before = Number((__bankAttBefore && __bankAttBefore[k]) || 0);
-            const now = Number(curA[k] || 0);
-            const already = Math.max(0, before - now);
-            expectA[k] = Math.max(0, need - already);
-          }
-          if (defender) {
-            const curD = getOPBank(defender);
-            for (const k of Object.keys(expectD)) {
-              const need = Number(expectD[k] || 0);
-              if (!need) continue;
-              const before = Number((__bankDefBefore && __bankDefBefore[k]) || 0);
-              const now = Number(curD[k] || 0);
-              const already = Math.max(0, before - now);
-              expectD[k] = Math.max(0, need - already);
-            }
-          }
-
-          await _applyOPDeltaDual(attacker, _negate(expectA));
-          if (defender) await _applyOPDeltaDual(defender, _negate(expectD));
-
-          // Support factions spend their own OP (staged + maneuvers).
-          for (const [sfid, spend] of Object.entries(manOpSupport)) {
-            const sf = await getActorByIdOrUuid(sfid);
-            if (!sf) continue;
-            const curS = getOPBank(sf);
-            const expectS = foundry.utils.duplicate(spend || {});
-            for (const k of Object.keys(expectS)) {
-              const need = Number(expectS[k] || 0);
-              if (!need) { expectS[k] = 0; continue; }
-              const now = Number(curS[k] || 0);
-              expectS[k] = Math.max(0, Math.min(need, now));
-            }
-            await _applyOPDeltaDual(sf, _negate(expectS));
-          }
+          // Charged in full from the round's own list (2026-10-28): the old "already debited" subtraction counted the Heist
+          // step + flashback Intrigue as maneuver/staging money paid, so the round went (nearly) free.
+          await _rcChargeRound(attacker, defender, _rcRoundCharges(r, listA, listD, cat));
         } catch (eSpend) {
           warn("scenario maneuver OP spend failed (non-fatal)", eSpend);
         }
@@ -6110,6 +6168,7 @@ const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3DefMode, __b3ThisRound?
       try {
         if (_b3IsManeuverFreeOnRound(r, key)) continue;
       } catch(_eF) {}
+      if (_rcFiredCharged(r, "att", key)) continue;   // anytime: already paid when it fired
       const eff = EFFECTS[key];
       if (!eff) continue;
       const {op} = lcKeysCost(_rcCostOf(eff));
@@ -6117,6 +6176,7 @@ const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3DefMode, __b3ThisRound?
     }
 
     for (const key of listD){
+      if (_rcFiredCharged(r, "def", key)) continue;
       const eff = EFFECTS[key];
       if (!eff) continue;
       const {op} = lcKeysCost(_rcCostOf(eff));
@@ -6150,6 +6210,7 @@ const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3DefMode, __b3ThisRound?
       if (!Array.isArray(keys) || !keys.length) continue;
       const dst = (manOpSupport[String(sfid)] ||= {});
       for (const key of keys) {
+        if (_rcFiredCharged(r, "support", key, sfid)) continue;
         const eff = EFFECTS[key];
         if (!eff) continue;
         const { op } = lcKeysCost(_rcCostOf(eff));
@@ -6693,7 +6754,7 @@ try {
           attackerId: attacker?.id || null,
           defenderId: defender?.id || null,
           success: finalMargin >= 0,
-          outcome: finalMargin > 0 ? "win" : finalMargin < 0 ? "loss" : "stalemate",
+          outcome: _rcRoundWord(r, finalMargin),
           margin: finalMargin,
           activityKey: r.activityKey || this.vm?.activityKey || null,
           maneuversAtt: listA,
@@ -6705,7 +6766,7 @@ try {
     // ALPHA CUT ruling 21 — open ground changes hands on a won Battle (ruling 20 decides whether it can be kept).
     try { await _rcBattleGroundFlip(r, attacker, defender, targetHex, { objectiveOnly: this.vm.objectiveOnly === true }); } catch (eGF) { warn("battle ground flip failed (non-fatal)", eGF); }
     // Ruling 22 — a Battle concludes in one call (or one roll): go where the story said.
-    try { if (_rcIsBattleKey(r.activityKey)) { const m = Number(r.margin || 0); await _rcStoryRoute(this, m > 0 ? "win" : m < 0 ? "loss" : "stalemate", r.outcome || ""); } } catch (_e) {}
+    try { if (_rcIsBattleKey(r.activityKey)) await _rcStoryRoute(this, _rcRoundWord(r), r.outcome || ""); } catch (_e) {}
 
 // Legacy fields: keep a Roll object for non-contested raids; contested raids store a friendly string in r.roll.result.
     if (!r.contested) {
@@ -6779,6 +6840,17 @@ try {
     const priorKey = _b3PickPriorManeuverForRepeat(this.vm?.rounds || [], idx, attacker?.id || "");
     if (priorKey) {
       await _b3SetNextRoundRepeat(attacker, { key: priorKey, free: true, srcRoundId: String(r.roundId||""), ts: Date.now() });
+      // The next round may already exist (added before this one resolved) — seed it now, or the next commit clears the
+      // token unspent (2026-10-28). Otherwise Add Round seeds it.
+      const nxt = (this.vm?.rounds || []).slice(idx + 1).find(x => x && !x.committed && !x.cancelled);
+      if (nxt) {
+        nxt.mansSelected = Array.isArray(nxt.mansSelected) ? nxt.mansSelected : [];
+        if (!nxt.mansSelected.map(v => String(v || "").toLowerCase()).includes(priorKey)) nxt.mansSelected.push(priorKey);
+        _b3MarkManeuverFreeOnRound(nxt, priorKey);
+        nxt.meta ||= {}; nxt.meta.b3 ||= {};
+        nxt.meta.b3.repeatOffer = { key: priorKey, free: true, srcRoundId: String(r.roundId || ""), ts: Date.now() };
+        await _b3ClearNextRoundRepeat(attacker);
+      }
       // Breadcrumb for debugging / war logs
       r.meta ||= {};
       r.meta.b3 ||= {};
@@ -7321,7 +7393,7 @@ async function _findActiveRaidForFaction(factionId) {
       const hasTarget   = !!String(s.targetUuid || "").trim();
       const hasRounds   = Array.isArray(s.rounds) && s.rounds.length > 0;
       const hasSupports = supports.length > 0;
-      if (!hasTarget && !hasRounds && !hasSupports && s.by !== "story") continue;   // ruling 22: a story offer is live even before a target resolves
+      if (!hasTarget && !hasRounds && !hasSupports && s.by !== "story" && !s.offeredBy) continue;   // ruling 22: a story offer is live even before a target resolves
       candidates.push({
         attackerId, isAttacker,
         rev: Number(s.rev || 0), ts: Number(s.ts || 0)
@@ -8729,7 +8801,7 @@ function _b2ApplyReflectFirst(byManeuver, { attackerId=null, defenderId=null, de
     if (side !== "att") continue;
     const k = String(row?.maneuverKey||"").toLowerCase().trim();
     if (!k) continue;
-    const b = row?.bundle || {};
+    const b = row?.reflectSource || row?.bundle || {};   // a failed attacker's re-simulated success rides reflectSource
     const has = (b.factionEffects && b.factionEffects.length) || (b.roundEffects && b.roundEffects.length) || (b.scenarioEffects && b.scenarioEffects.length) || (b.worldEffects && b.worldEffects.length);
     if (has) { targetIdx = i; break; }
   }
@@ -8738,7 +8810,7 @@ function _b2ApplyReflectFirst(byManeuver, { attackerId=null, defenderId=null, de
   const out = list.map(r=>r);
   const source = list[targetIdx];
   const srcKey = String(source?.maneuverKey||"").toLowerCase().trim();
-  const srcBundle = source?.bundle || {};
+  const srcBundle = source?.reflectSource || source?.bundle || {};
 
   const rev = foundry.utils.duplicate(out[reversalIdx] || {});
   const revBundle = rev.bundle || { factionEffects: [], scenarioEffects: [], roundEffects: [], worldEffects: [] };
@@ -8914,12 +8986,24 @@ const __tier = (__tier0 !== "unknown") ? __tier0
         try {
           if (side === "att" && String(__tier||"") === "fail" && __hasDefReversal) {
             const res2 = await simFn(Object.assign({}, Object.assign({}, ctxForSide(side, maneuverKey), { outcomeTier: "success" }), { maneuverKey })) || {};
-            bundle = res2.previewWorldEffects || null;
+            const sim = res2.previewWorldEffects || null;
+            // The success re-sim is REFLECTION MATERIAL only (2026-10-28): the losing attacker gets none of it. It rides
+            // the row as reflectSource with an empty bundle; _b2ApplyReflectFirst copies it onto the Reversal.
+            if (sim) merged.byManeuver.push({
+              side, maneuverKey, meta: sim.meta || null,
+              bundle: { factionEffects: [], scenarioEffects: [], roundEffects: [], worldEffects: [] },
+              reflectSource: {
+                factionEffects: _b2FixFactionIds(sim.factionEffects || [], _b2FiringIds(side, maneuverKey, attackerId, defenderId)),
+                scenarioEffects: foundry.utils.duplicate(sim.scenarioEffects || []),
+                roundEffects: foundry.utils.duplicate(sim.roundEffects || []),
+                worldEffects: foundry.utils.duplicate(sim.worldEffects || [])
+              },
+              has: { faction: false, scenario: false, round: false, world: false }
+            });
           }
         } catch(_eReSim) {}
+        return;
       }
-
-      if (!bundle) return;
 
       const fx = _b2FixFactionIds(bundle.factionEffects || [], _b2FiringIds(side, maneuverKey, attackerId, defenderId));
       merged.factionEffects.push(...fx);
@@ -9266,6 +9350,11 @@ const _B2_SIDE_RELATIVE_KEYS = new Set([
   "ghost_slip_infiltration","sympathetic_stabilization","gradient_surge","supply_surge","command_overdrive",
   "echo_strike_protocol","overclock_the_golems","radiant_retaliation","temporal_armistice","ego_dragon_echo",
   "diplomatic_channel","prayer_in_the_smoke","signal_hijack",
+  // Base throughput bodies with the same shape (self = ctx.attackerFactionId, target = ctx.defenderFactionId) — a
+  // defender firing them used to buff the attacker / hit itself (raid review #17, 2026-10-28).
+  "supply_overrun","rally_the_line","divine_favor","empathic_surge","faithful_intervention","moral_high_ground",
+  "harmonic_chant","chrono_loop_command","qliphothic_gambit","sephirotic_intervention","unity_surge",
+  "void_signal_collapse","reality_hack","industrial_sabotage","ego_breaker",
   ...["shock_command","liturgical_rally","bureaucratic_override","prepared_insight","inherited_deference",
       "coordinated_advance","hardened_advance","containment_protocol","silent_entry","psychological_pressure",
       "formal_parley","make_do_and_hold","sight_of_the_tree","rapid_transmutation","turn_the_card",
@@ -9332,7 +9421,7 @@ async function _b3StoreNextRollMods(attackerActor, mods){
   } catch (_e) { return false; }
 }
 
-function _b3ApplyEffectToMods(effect, mods, fallbackSide){
+function _b3ApplyEffectToMods(effect, mods, fallbackSide, firingSide = null){
   if (!effect || typeof effect !== "object") return;
   const t = String(effect.type||"").trim();
   const when = String(effect.when || effect.window || "").toLowerCase();
@@ -9341,21 +9430,21 @@ function _b3ApplyEffectToMods(effect, mods, fallbackSide){
   if (t === "rollBonus") {
     const amt = Number(effect.amount || 0) || 0;
     if (!amt) return;
-    const side = _b3PickSideFromScope(effect.scope, fallbackSide);
+    const side = (firingSide ? _b3PickSideForFiring(effect.scope, firingSide) : _b3PickSideFromScope(effect.scope, fallbackSide));
     if (side === "def") mods.nextRoll.def.bonus += amt;
     else mods.nextRoll.att.bonus += amt;
     return;
   }
 
   if (t === "advantage") {
-    const side = _b3PickSideFromScope(effect.scope, fallbackSide);
+    const side = (firingSide ? _b3PickSideForFiring(effect.scope, firingSide) : _b3PickSideFromScope(effect.scope, fallbackSide));
     if (side === "def") mods.nextRoll.def.mode = "adv";
     else mods.nextRoll.att.mode = "adv";
     return;
   }
 
   if (t === "disadvantage") {
-    const side = _b3PickSideFromScope(effect.scope, fallbackSide);
+    const side = (firingSide ? _b3PickSideForFiring(effect.scope, firingSide) : _b3PickSideFromScope(effect.scope, fallbackSide));
     if (side === "def") mods.nextRoll.def.mode = "dis";
     else mods.nextRoll.att.mode = "dis";
     return;
@@ -9775,8 +9864,22 @@ async function _b3ExecuteRoundEffectsPostCommit({ round, attackerActor, defender
     const mods = _b3EmptyMods();
     mods.src = round?.roundId || round?.ts || null;
 
-    // Default: effects generated by attacker maneuvers are "att" unless scope says otherwise.
-    for (const e of effs) _b3ApplyEffectToMods(e, mods, "att");
+    // Per maneuver row, by the side that FIRED it (2026-10-28): a defender's "allies"/"attacker"-scoped nextRoll buff
+    // is the defender's (same mirror as the pre-roll path). Support fires as att. The flat list only when rows are absent.
+    const rows = Array.isArray(round?.meta?.intents?.byManeuver) ? round.meta.intents.byManeuver.filter(x => x && !x.error) : null;
+    if (rows && rows.length) {
+      const seen = new Set();
+      for (const row of rows) {
+        const firing = String(row.side || "") === "def" ? "def" : "att";
+        for (const e of (row.bundle?.roundEffects || [])) {
+          const k = firing + ":" + JSON.stringify(e);
+          if (seen.has(k)) continue; seen.add(k);   // the flat list was deduped; keep that
+          _b3ApplyEffectToMods(e, mods, "att", firing);
+        }
+      }
+    } else {
+      for (const e of effs) _b3ApplyEffectToMods(e, mods, "att");
+    }
 
     const stored = await _b3StoreNextRollMods(attackerActor, mods);
 
@@ -9796,6 +9899,23 @@ async function _b3ExecuteRoundEffectsPostCommit({ round, attackerActor, defender
     return { ok:false, stored:false, error: String(e) };
   }
 }
+
+// A Parley ended OUTSIDE an exchange (influence damage from a secret / maneuver) routes to the story like one ended by
+// the console's own step (2026-10-28). Hooks.callAll is local, so only the seat that dealt the blow routes; the GM-only
+// + one-ending-per-offer guards live in _rcStoryRoute. Same outcome words as the courtly commit path.
+Hooks.on("bbttcc:courtly:resolved", async ({ state } = {}) => {
+  try {
+    const o = String(state?.outcome || "");
+    if (!o || o === "ongoing") return;
+    const aid = String(state?.attackerId || "").replace(/^Actor\./, "");
+    const word = o === "attackerWin" ? "win" : o === "defenderWin" ? "loss" : "stalemate";
+    for (const app of (foundry.applications?.instances?.values?.() || [])) {
+      if (!(app instanceof BBTTCC_RaidConsole)) continue;
+      if (aid && String(app.vm?.attackerId || "") !== aid) continue;
+      await _rcStoryRoute(app, word, state?.outcomeKind || o);
+    }
+  } catch (e) { warn("courtly resolved → story route failed", e); }
+});
 
 // --- API export shim (unchanged external surface) ---------------------------
 Hooks.once("ready", () => {

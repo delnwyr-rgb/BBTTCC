@@ -81,7 +81,9 @@
       const res = await orig(args);
       try {
         const targetHexId = args?.targetHexId;
-        if (!targetHexId || args?.success !== true) return res;
+        // Only a WIN advances — a stalemate is not a win (owner ruling 2026-10-28); success is margin ≥ 0 and includes it.
+        const won = args?.outcome ? args.outcome === "win" : args?.success === true;
+        if (!targetHexId || !won) return res;
         const hexDoc = findHexDrawing(targetHexId); if (!hexDoc) return res;
         const l = list(hexDoc); if (!l.length) return res;
         const cur = current(hexDoc), next = cur + 1, isFinal = cur >= l.length - 1;

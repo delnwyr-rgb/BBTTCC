@@ -64,6 +64,7 @@
       return (current / max) <= pct;
     }
     if (rule === "stockpile") {
+      if (layer.stockpileCurrent == null) return false;   // never seeded ≠ depleted (Number(null) is 0) (2026-10-28)
       return Number(layer.stockpileCurrent) <= 0;
     }
     // "razed" (default)
@@ -149,8 +150,30 @@
     }
   }
 
+  // Threshold layers are plate-driven, not band-driven: a hit that crosses thresholdPct
+  // without changing the state band raises no stateChanged, so check every plate change too.
+  // Band changes are left to _onStateChanged (one check per hit — no double breach) (2026-10-28).
+  async function _onDamageApplied(payload){
+    const { actor, result } = payload || {};
+    if (!result || result.newState !== result.oldState) return;
+    if (!game.user?.isGM || !actor?.id) return;
+    const S = globalThis.__bbttccSiegeState;
+    if (!S?.listActiveSieges) return;
+    for (const entry of S.listActiveSieges()) {
+      const s = entry.siege;
+      if (!s || s.status !== "active") continue;
+      const layer = (s.layers || [])[s.currentLayerIdx ?? 0];
+      if (!layer || layer.breached || layer.structureActorId !== actor.id) continue;
+      if ((layer.transitionRule || "razed") !== "threshold") continue;
+      if (!layerBreaches(layer, actor, result.newState)) continue;
+      try { await _breachLayer(entry.hexUuid, S); }
+      catch (err) { console.error(TAG, `breach failed for siege ${s.siegeId}`, err); }
+    }
+  }
+
   function _install(){
     Hooks.on("bbttcc:structure:stateChanged", _onStateChanged);
+    Hooks.on("bbttcc:structure:damageApplied", _onDamageApplied);
     game.bbttcc = game.bbttcc || { api: {} };
     game.bbttcc.api = game.bbttcc.api || {};
     game.bbttcc.api.siege = game.bbttcc.api.siege || {};

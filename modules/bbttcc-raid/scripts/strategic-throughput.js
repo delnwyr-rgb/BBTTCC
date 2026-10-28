@@ -177,9 +177,11 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
   const esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
   function bonusesOf(A){ return foundry.utils.duplicate(A?.getFlag(MODF, "bonuses") || {}); }
   async function writeBonuses(A, mut){ const b = bonusesOf(A); await mut(b); await A.update({ [`flags.${MODF}.bonuses`]: b }); return b; }
-  // Per-channel regen multiplier plan — consumed by turn-driver advanceOPRegen (inTurns 1 = this Advance's income).
+  // Per-channel regen multiplier plan — consumed by turn-driver advanceOPRegen (inTurns 1 = the next income).
+  // Regen runs BEFORE plannedRaidsStep and tickFactionBonuses drops inTurns ≤ 1 right after, so callers' inTurns
+  // are shifted +1 here — "1" lands on the first regen after the activity resolves (2026-10-28).
   async function addRegenPlan(A, entries){
-    return writeBonuses(A, (b) => { b.regenPlan = Array.isArray(b.regenPlan) ? b.regenPlan : []; for (const e of entries) b.regenPlan.push(e); });
+    return writeBonuses(A, (b) => { b.regenPlan = Array.isArray(b.regenPlan) ? b.regenPlan : []; for (const e of entries) b.regenPlan.push(Object.assign({}, e, { inTurns: Number(e?.inTurns ?? 1) + 1 })); });
   }
   // Temporary cap bump — consumed by turn-driver's two cap clamps; never touches opCaps (tier-up would make it permanent).
   async function addCapBump(A, channel, add, turns){
@@ -209,7 +211,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     const take = Math.max(0, Math.min(have, Math.abs(marks)));
     if (!take) return 0;
     const op = game.bbttcc?.api?.op;
-    if (op && typeof op.commit === "function") { try { await op.commit(A.id, { [channel]: -take }, { source: "strategic", label }); return take; } catch (_e) {} }
+    // Credit only what actually left the bank — commit applies steward discounts and refuses with {ok:false} (2026-10-28).
+    if (op && typeof op.commit === "function") { try { const r = await op.commit(A.id, { [channel]: -take }, { source: "strategic", label }); if (r?.ok === false) return 0; return Math.max(0, -Number(r?.finalCost?.[channel] ?? -take)); } catch (_e) {} }
     const bank = foundry.utils.duplicate(A.getFlag(MODF, "opBank") || {}); bank[channel] = have - take; await A.update({ [`flags.${MODF}.opBank`]: bank }); return take;
   }
   const ENLIGHTENMENT_LADDER = ["unawakened","awakening","seeking","wisdom","understanding","enlightened"];
@@ -249,9 +252,12 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
   // A steward's own sephirah: identity flags (bbttcc-character-options) → mirror flag → the "Alignment: X" Item.
   function stewardSephirah(actor){
     if (!actor) return "";
-    const norm = (v) => { const k = String(v || "").toLowerCase().replace(/^alignment[:\-\s]+/, "").replace(/[^a-z]/g, ""); return { chokhmah:"chokmah", tiphareth:"tiferet", tipheret:"tiferet", gevurah:"geburah", gevura:"geburah", kether:"keter" }[k] || k; };
-    try { const id = game.bbttcc?.api?.identity?.getIdentityFlags?.(actor.id) ?? actor.getFlag?.("bbttcc-character-options", "identity"); const k = id?.sephirothicAlignment?.key || id?.sephirothicAlignment?.name; if (k) return norm(k); } catch (_e) {}
-    try { const m = actor.flags?.["bbttcc-character-options"]?.sephirot; const k = m?.key || m?.id || m?.name; if (k && isNaN(Number(k))) return norm(k); } catch (_e) {}
+    const norm = (v) => { const k = String(v || "").toLowerCase().replace(/^alignment[:\-\s]+/, "").replace(/[^a-z]/g, ""); return { chokhmah:"chokmah", chochmah:"chokmah", hokhmah:"chokmah", tiphareth:"tiferet", tipharet:"tiferet", tiphereth:"tiferet", tipheret:"tiferet", gevurah:"geburah", gevura:"geburah", kether:"keter" }[k] || k; };
+    // review P2 (2026-10-28): slot.key is the compendium doc id — never trust it; accept only a real sephirah.
+    const SEPH = new Set(["keter","chokmah","binah","chesed","geburah","tiferet","netzach","hod","yesod","malkuth"]);
+    const pick = (...vals) => { for (const v of vals) { const k = norm(v); if (k && SEPH.has(k)) return k; } return ""; };
+    try { const id = game.bbttcc?.api?.identity?.getIdentityFlags?.(actor.id) ?? actor.getFlag?.("bbttcc-character-options", "identity"); const s = id?.sephirothicAlignment; const k = pick(s?.name, s?.identifier, s?.optionKey); if (k) return k; } catch (_e) {}
+    try { const m = actor.flags?.["bbttcc-character-options"]?.sephirot; const k = pick(m?.name, m?.identifier, m?.optionKey, m?.key); if (k) return k; } catch (_e) {}
     try { const it = (actor.items?.contents ?? []).find(i => /^alignment[:\-]/i.test(String(i?.name || "")) || i.getFlag?.("bbttcc-character-options", "category") === "sephirothic-alignments"); if (it) return norm(it.name); } catch (_e) {}
     return "";
   }
@@ -569,7 +575,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async mass_mobilization(ctx){
       const A = game.actors.get(ctx.factionId); if (!A) return;
       await addRegenPlan(A, [{ inTurns: 1, mult: 1.25, label: "Mass Mobilization" }, { inTurns: 2, mult: 0.75, label: "Mass Mobilization (exhaustion)" }]);
-      await pushWarLog(A, "Mass Mobilization: OP income ×1.25 this turn, ×0.75 next turn.");
+      await pushWarLog(A, "Mass Mobilization: OP income ×1.25 next turn, ×0.75 the turn after.");
     },
     // Mass Mobilization (std): next raid gets initiative advantage + one free maneuver (raid-roundflags reads bonuses.nextTurn).
     async mass_mobilization_std(ctx){
@@ -644,7 +650,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const A = game.actors.get(ctx.factionId); if (!A) return;
       await addRegenPlan(A, [{ inTurns: 1, mult: 2, channels: ["economy"], label: "Industrial Revolution" }, { inTurns: 2, mult: 2, channels: ["economy"], label: "Industrial Revolution" }]);
       if (ctx.targetUuid) await adjustHexTrack(ctx.targetUuid, "loyalty", -1);
-      await pushWarLog(A, "Industrial Revolution: Economy income ×2 for 2 turns; target hex Loyalty −1.");
+      await pushWarLog(A, "Industrial Revolution: Economy income ×2 for the next 2 turns; target hex Loyalty −1.");
     },
     // Alliance Summit — with a mutual ally (target hex's holder): both factions' OP income ×1.15 this turn.
     async alliance_summit(ctx){
@@ -654,8 +660,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       if (!mutuallyAllied(A, B)) { await pushWarLog(A, `Alliance Summit: ${B.name} is not a mutual ally — no summit.`); return; }
       await addRegenPlan(A, [{ inTurns: 1, mult: 1.15, label: `Alliance Summit with ${B.name}` }]);
       await addRegenPlan(B, [{ inTurns: 1, mult: 1.15, label: `Alliance Summit with ${A.name}` }]);
-      await pushWarLog(A, `Alliance Summit with ${B.name}: both Domains' marks income ×1.15 this turn.`);
-      await pushWarLog(B, `Alliance Summit with ${A.name}: both Domains' marks income ×1.15 this turn.`);
+      await pushWarLog(A, `Alliance Summit with ${B.name}: both Domains' marks income ×1.15 next turn.`);
+      await pushWarLog(B, `Alliance Summit with ${A.name}: both Domains' marks income ×1.15 next turn.`);
     },
     // Crisis Summit — used to shield every faction from the Darkness → Morale tick (noMoraleLoss); faction Morale retired
     // 2026-10-18 (ruling 19). DC10 (2026-10-26): the summit is a GM note, not an engine veto — every Domain's war log says
@@ -740,7 +746,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const A = game.actors.get(ctx.factionId); if (!A) return;
       await addRegenPlan(A, [{ inTurns: 1, mult: 1.05, label: "Policy Reforms" }]);
       _queueAttackDC(A, -1);   // next raid DC −1 (was enhancer-only)
-      await pushWarLog(A, "Policy Reforms: OP income ×1.05 this turn; next raid DC −1.");
+      await pushWarLog(A, "Policy Reforms: OP income ×1.05 next turn; next raid DC −1.");
     },
 
     // ═══════════════════════════ T3 / T4 — THE LEGENDARY BLOCK ═══════════════════════════
@@ -920,7 +926,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const r = typeof align === "function" ? await align(doc, steward.key, { source: "consecrated alignment", overwrite: false, byName: steward.s.name }) : { ok: false, error: "alignHexToSephirot missing" };
       await pushWarLog(A, r?.ok && !r.skipped ? `Consecrated Alignment: ${hexName(doc)} is aligned to ${r.sephirotName || steward.key} by ${steward.s.name}.` : `Consecrated Alignment: ${hexName(doc)} — ${r?.reason || r?.error || "already aligned; kept"}.`);
     },
-    async optact_administrative_optimization(ctx){ const A = game.actors.get(ctx.factionId); await addRegenPlan(A, [{ inTurns: 1, mult: 1.05, label: "Administrative Optimization" }]); await pushWarLog(A, "Administrative Optimization: OP income ×1.05 this turn."); },
+    async optact_administrative_optimization(ctx){ const A = game.actors.get(ctx.factionId); await addRegenPlan(A, [{ inTurns: 1, mult: 1.05, label: "Administrative Optimization" }]); await pushWarLog(A, "Administrative Optimization: OP income ×1.05 next turn."); },
     async optact_arcane_attribution(ctx){ return STRATEGIC_THROUGHPUT.gather_intel(ctx); },
     async optact_dynastic_resonance(ctx){
       const A = game.actors.get(ctx.factionId);

@@ -80,7 +80,8 @@
       let live = 0;
       for (const m of (cr.assigned || [])) {
         const t = canvas?.scene?.tokens?.get?.(m.tokenId);
-        if (t) live += Math.max(0, Number(t.flags?.["bbttcc-raid"]?.unitStrength) || 0);
+        const side = t?.flags?.["bbttcc-raid"]?.musterDeployment?.side;
+        if (t && (!side || side === "defender")) live += Math.max(0, Number(t.flags?.["bbttcc-raid"]?.unitStrength) || 0);   // attackers never man the wall (2026-10-28)
       }
       return { live, cap, frac: cap > 0 ? live / cap : 0 };
     } catch (_e) { return null; }
@@ -745,7 +746,10 @@
         ev.preventDefault(); ev.stopPropagation();
         const hex = btn.dataset.hex;
         const fn = game.bbttcc?.api?.siege?.formUpBoth;
-        if (typeof fn === "function") fn({ hexUuid: hex }).catch(e => { console.error(TAG, "formUp failed", e); ui.notifications?.error?.("Form Up failed — see console."); });
+        // Surface each side's {ok:false} — musterToScene/garrisonWalls return errors, never throw (2026-10-28)
+        if (typeof fn === "function") fn({ hexUuid: hex })
+          .then(r => { for (const s of [r?.attacker, r?.defender]) if (s && s.ok === false) ui.notifications?.warn?.(s.error || "Form Up failed."); })
+          .catch(e => { console.error(TAG, "formUp failed", e); ui.notifications?.error?.("Form Up failed — see console."); });
         else ui.notifications?.warn?.("Form Up not available (siege-muster.js not loaded?).");
       });
     });

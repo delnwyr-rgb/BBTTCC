@@ -510,7 +510,7 @@
           source: `door:${invited ? "invited" : "conceded"}(${door.npcName || "an insider"})`,
           fireOnRound: 1
         });
-        if (!invited) state.suspicion = Math.max(state.suspicion, 1);
+        if (!invited && !_suspOff()) state.suspicion = Math.max(state.suspicion, 1);   // ruling 3: no Suspicion for Persuade / Deceive (2026-10-28)
         // unsetFlag, not a raw "-=key" update — v14 deprecated the legacy
         // deletion syntax (owner hit the compat error 2026-07-14); the core
         // helper always emits whatever the running core expects.
@@ -579,6 +579,7 @@
         let defSpendInt = defSpendM / 10;
 
         // Phase D — Call the Question: cap spending for `roundsRemaining` round(s).
+        const _lockCapM = state.spendLock?.roundsRemaining > 0 ? Number(state.spendLock.maxSpend ?? 0) * 10 : null;   // rule unit: maxSpend is per 10 marks — Sweeten obeys the lock too (2026-10-28)
         if (state.spendLock?.roundsRemaining > 0) {
           const cap = Number(state.spendLock.maxSpend ?? 0);
           if (atkSpendInt > cap || defSpendInt > cap) {
@@ -600,7 +601,8 @@
         const SWEETEN_PER = Math.max(1, Math.round(10 * 2 * ((Number(raidApi.PRICE_MULT) > 0) ? Number(raidApi.PRICE_MULT) : 0.75)));
         const _sweeten = async (from, to, poolKey, marks) => {
           const pk = poolKey || "diplomacy";
-          const m = Math.min(_m10(marks), bankOpOf(from, pk));
+          let m = Math.min(_m10(marks), bankOpOf(from, pk));
+          if (_lockCapM !== null && m > _lockCapM) { sweetNotes.push(`Spending lock: ${foundry.utils.escapeHTML(from.name)}'s sweetener capped at ${_lockCapM} marks.`); m = _lockCapM; }   // freezePurse / Call the Question (2026-10-28)
           if (m <= 0) return 0;
           await adjustOpBank(from, pk, -m, `${label}: sweetened the deal`);
           await adjustOpBank(to, pk, +m, `${label}: ${from.name} sweetened the deal`);
@@ -665,7 +667,7 @@
 
         // Phase C — Suspicion threshold-5 effects ("Court is uneasy" per
         // spec §4.1). Reads suspicion BEFORE this round's updates.
-        const uneasy = state.suspicion >= 5;
+        const uneasy = !_suspOff() && state.suspicion >= 5;   // ruling 3: hidden track never makes the court uneasy (2026-10-28)
         if (uneasy) {
           if (atkAct === "expose")   atkBonus += 1;
           if (defAct === "expose")   defBonus += 1;
@@ -820,10 +822,11 @@
           if (act === "expose" && ((isAtk && result === "defender" && (-margin) >= 5) || (!isAtk && result === "attacker" && margin >= 5))) s += 2;
           return s;
         };
+        const _lwA = !!state.lastWordA, _lwD = !!state.lastWordD;   // Envoys can't cut below zero once Last Word zeroed the side (2026-10-28)
         if (state.lastWordA) { const s = _sideSuspContribution(atkAct, true); if (s > 0) { suspDelta -= s; susReasons.push("⚜ The Last Word — attacker raises no Suspicion"); } state.lastWordA = false; }
         if (state.lastWordD) { const s = _sideSuspContribution(defAct, false); if (s > 0) { suspDelta -= s; susReasons.push("⚜ The Last Word — defender raises no Suspicion"); } state.lastWordD = false; }
-        if (state.envoysA) { if (_sideSuspContribution(atkAct, true) > 0) { suspDelta -= 1; susReasons.push("Diplomatic Envoys — attacker Suspicion −1"); } }
-        if (state.envoysD) { if (_sideSuspContribution(defAct, false) > 0) { suspDelta -= 1; susReasons.push("Diplomatic Envoys — defender Suspicion −1"); } }
+        if (state.envoysA && !_lwA) { if (_sideSuspContribution(atkAct, true) > 0) { suspDelta -= 1; susReasons.push("Diplomatic Envoys — attacker Suspicion −1"); } }
+        if (state.envoysD && !_lwD) { if (_sideSuspContribution(defAct, false) > 0) { suspDelta -= 1; susReasons.push("Diplomatic Envoys — defender Suspicion −1"); } }
 
         // Ruling 3 — Suspicion only runs for Stay unnoticed (Impress keeps it as the crowd track). Persuade / Deceive: nobody is hiding.
         if (!PERF && state.suspicionEnabled === false) { suspDelta = 0; susReasons.length = 0; state.suspicionQuietStreak = 0; }
@@ -842,7 +845,7 @@
 
         // Phase C — Suspicion threshold reactions (spec §4.1).
         // Threshold 8 — neutral courtier defects to higher-influence side.
-        if (state.suspicion >= 8 && suspBefore < 8) {
+        if (!_suspOff() && state.suspicion >= 8 && suspBefore < 8) {
           try {
             const higherSideId = (state.influenceA >= state.influenceD) ? state.attackerId : state.defenderId;
             const neutralToken = (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []).find(tk => {   // courtiers on ANY scene (2026-10-22)
@@ -861,7 +864,7 @@
         }
         // Threshold 10 — court collapses; force outcome by lower influence.
         // Phase E will replace with the full Public Humiliation 5-outcome.
-        if (state.suspicion >= 10 && !state.courtCollapsed) {
+        if (!_suspOff() && state.suspicion >= 10 && !state.courtCollapsed) {
           state.courtCollapsed = true;
           extraNotes.push(`Collapse (suspicion = 10): the court turns on the noisier side.`);
         }
@@ -1016,7 +1019,10 @@
       }
 
       // Phase C — API surface for Phase D anytimes + GM/macro callers.
+      // Ruling 3 — Suspicion is off for Persuade / Deceive: outside raises (stolen receipts, Stir the Pot, Mask Off…) do nothing (2026-10-28).
+      function _suspOff() { return !PERF && state.suspicionEnabled === false; }
       async function raiseSuspicion(n = 1, why = "") {
+        if (_suspOff()) return state.suspicion;
         const before = state.suspicion;
         state.suspicion = clamp(before + Math.max(0, Math.floor(Number(n) || 0)), 0, 10);
         // External rises break the quiet streak.
@@ -1036,8 +1042,17 @@
         }
         return state.suspicion;
       }
+      // One write target for favor (2026-10-28): the courtier TOKEN's actor (unlinked → its ActorDelta), which is what
+      // every reader (court bonus, HUD pills, Patron gate) sees. Accepts an Actor document, a token id, or an actor id.
+      function _courtierActor(ref) {
+        if (ref && typeof ref === "object" && typeof ref.update === "function") return ref;
+        const id = String(ref || "").replace(/^(Actor|Token)\./, "");
+        if (!id) return null;
+        const toks = (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []);
+        return toks.find(t => t.id === id)?.actor || toks.find(t => t.actor?.id === id)?.actor || game.actors?.get(id) || null;
+      }
       async function adjustFavor(actorId, factionId, delta) {
-        const actor = game.actors?.get(String(actorId || "").replace(/^Actor\./, ""));
+        const actor = _courtierActor(actorId);
         if (!actor || !factionId || !delta) return null;
         const cur = foundry.utils.duplicate(actor.flags?.[MOD_R]?.courtFavor || {});
         const before = Number(cur[factionId] ?? 0);
@@ -1089,8 +1104,12 @@
           if (state.outcome !== "ongoing") {
             // Same once-only outcome transition step() runs (kind → rel deltas → marks → VFX).
             if (!state.outcomeKind) state.outcomeKind = detectOutcomeKind(state);
+            if (!PERF) {   // a performance contest is friendly — same guard as step() (2026-10-28)
             try { await applyRelDeltas(A, D, state.outcomeKind, outcomeWinner(state), label); } catch (e) { console.warn(TAG, e); }
             try { await _applyOutcomeMarks(); } catch (e) { console.warn(TAG, "_applyOutcomeMarks failed", e); }
+            } else { try { Hooks.callAll("bbttcc:performance:resolved", { profile: PERF.key, state: getState() }); } catch (_e) {} }
+            // Ended OUTSIDE an exchange — the console only routes after its own step(), so say so (2026-10-28).
+            try { Hooks.callAll("bbttcc:courtly:resolved", { scenario: apiObj, state: getState(), source }); } catch (_e) {}
             try {
               await _expireParleyReceipts().catch(() => {});
           _emitCourtlyVfx("outcome", {
@@ -1287,13 +1306,13 @@
           ui.notifications?.warn?.(`No courtier has favor ≥ ${minFavor} toward you. Cannot invoke Patron's Word.`);
           return null;
         }
-        const opts2 = candidates.map(t => `<option value="${esc(t.actor.id)}">${esc(t.actor.name)} (favor ${_favorOf(t.actor, factionId)})</option>`).join("");
+        const opts2 = candidates.map(t => `<option value="${esc(t.id)}">${esc(t.actor.name)} (favor ${_favorOf(t.actor, factionId)})</option>`).join("");   // token id → token's actor (2026-10-28)
         const pick = await new Promise(resolve => {
           new Dialog({
             title: "Patron's Word",
             content: `<form><p>Spend −1 favor with a patron (favor ≥ ${minFavor}) to call in their boon.</p><div class="form-group"><label>Patron</label><select name="cid">${opts2}</select></div></form>`,
             buttons: {
-              ok: { label: "Invoke", callback: html => resolve(game.actors.get(html[0].querySelector("[name=cid]").value) || null) },
+              ok: { label: "Invoke", callback: html => resolve(_courtierActor(html[0].querySelector("[name=cid]").value)) },
               cancel: { label: "Cancel", callback: () => resolve(null) }
             },
             default: "ok",
@@ -1301,7 +1320,7 @@
           }, { width: 360 }).render(true);
         });
         if (!pick) return null;
-        await adjustFavor(pick.id, factionId, -1);
+        await adjustFavor(pick, factionId, -1);
         queueActionBonus(s, ["persuade", "inspire", "expose"], 3, `Patron's Word (${pick.name})`);
         return pick;
       }
@@ -1327,7 +1346,9 @@
           return _normSide(s) || selfSide;
         };
         const resolveFaction = (s) => resolveSide(s) === "A" ? state.attackerId : state.defenderId;
+        let burnFailed = false;   // Mask Off: no scar to burn → the rest of the bundle doesn't fire (2026-10-28)
         for (const eff of (Array.isArray(scenarioEffects) ? scenarioEffects : [])) {
+          if (burnFailed) break;
           const t = String(eff?.type || "");
           try {
             switch (t) {
@@ -1348,20 +1369,20 @@
                 const fid = resolveFaction(eff.side);
                 const tokens = (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []);   // courtiers on ANY scene (2026-10-22)
                 if (!tokens.length) { ui.notifications?.warn?.("No courtiers on this scene — mark one with the 🎭 button on its token HUD."); break; }
-                const opts2 = tokens.map(t => `<option value="${esc(t.actor.id)}">${esc(t.actor.name)} (favor ${_favorOf(t.actor, fid)})</option>`).join("");
+                const opts2 = tokens.map(t => `<option value="${esc(t.id)}">${esc(t.actor.name)} (favor ${_favorOf(t.actor, fid)})</option>`).join("");   // token id → token's actor (2026-10-28)
                 const pick = await new Promise(resolve => {
                   new Dialog({
                     title: eff.title || "Adjust Favor",
                     content: `<form><p>${esc(eff.prompt || `Choose courtier (favor ${eff.delta > 0 ? "+" : ""}${eff.delta} toward ${selfSide === "A" ? A.name : D.name})`)}.</p><div class="form-group"><label>Courtier</label><select name="cid">${opts2}</select></div></form>`,
                     buttons: {
-                      ok: { label: "Choose", callback: html => resolve(game.actors.get(html[0].querySelector("[name=cid]").value) || null) },
+                      ok: { label: "Choose", callback: html => resolve(_courtierActor(html[0].querySelector("[name=cid]").value)) },
                       cancel: { label: "Cancel", callback: () => resolve(null) }
                     },
                     default: "ok",
                     close: () => resolve(null)
                   }, { width: 360 }).render(true);
                 });
-                if (pick) await adjustFavor(pick.id, fid, eff.delta || 1);
+                if (pick) await adjustFavor(pick, fid, eff.delta || 1);
                 break;
               }
               case "discardSecret":
@@ -1384,7 +1405,7 @@
               case "burnScandalScar": {
                 const ok = await burnScandalScar(resolveSide(eff.side));
                 // If burn failed (no scar), suppress subsequent effects on this entry.
-                if (!ok) break;
+                if (!ok) burnFailed = true;
                 break;
               }
               case "phaseEStub":

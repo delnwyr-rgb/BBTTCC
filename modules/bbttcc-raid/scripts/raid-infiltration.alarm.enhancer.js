@@ -214,7 +214,8 @@
         if (!game.user?.isGM) return null;
         let choice = null;
         try {
-          const dlg = new foundry.applications.api.DialogV2({
+          // Static wait() — a DialogV2 INSTANCE has no wait(), so the old render-then-wait never waited (2026-10-28).
+          const r = await foundry.applications.api.DialogV2.wait({
             window: { title: `${label}: Detected — Choose Outcome`, resizable: false },
             position: { width: 520 },
             content: `<form><div style="padding:8px 6px;">
@@ -233,9 +234,8 @@
               { action: "negotiate", label: "🤝 Negotiate",                           callback: () => { choice = "negotiate"; } }
             ],
             rejectClose: false
-          });
-          await dlg.render(true);
-          if (typeof dlg.wait === "function") await dlg.wait().catch(() => null);
+          }).catch(() => null);
+          if (!choice && ["violence", "escape", "negotiate"].includes(r)) choice = r;
         } catch (e) { console.warn(TAG, "promptFlipDialog failed", e); }
         state.flipResolution = choice;
         if (choice) {

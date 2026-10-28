@@ -147,7 +147,7 @@
       renewalPool: 0,             // Reinforce Garrison — defender repair pool (Phase F)
       championLocks: {},          // Champion Defends Wall — { championId: untilTurn }
       omenReroll: false,          // Pray for Omen — next Event Deck draw re-rolls in defender's favor (Phase F)
-      stormAssault: null,         // Storm Final Assault — { budgetMult, turn } consumed by the next convene
+      stormAssault: null,         // Storm Final Assault — { budgetMult, turn } consumed by the next clash (resolveClash)
       pendingTerms: null,         // Sue for Terms / Demand Surrender — { type, turn, resolved }
       reliefWaves: [],
       // ---- Pending faction-morale deltas (Phase E.3 → drained by Phase F) ----
@@ -428,9 +428,10 @@
       let drewAny = false;
       for (const cat of categories) {
         if (buffer[cat] <= 0) continue;
-        buffer[cat] -= 1;
-        deducted[cat] += 1;
-        remaining -= 1;
+        const take = Math.min(1, remaining, buffer[cat]);   // a fractional bucket never goes negative (2026-10-28)
+        buffer[cat] -= take;
+        deducted[cat] += take;
+        remaining -= take;
         drewAny = true;
         if (remaining <= 0) break;
       }

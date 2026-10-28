@@ -212,7 +212,11 @@
     app.__rcApplying = true;
     try { compactBanks(app, root); compactPicker(app, root); }
     catch (e) { console.warn(TAG, "apply failed", e); }
-    finally { app.__rcApplying = false; }
+    finally {
+      // Drop our own mutations — the observer fires as a microtask after this flag resets, so the guard alone looped every frame (2026-10-28).
+      try { app.__rcObserver?.takeRecords?.(); } catch (_e) {}
+      app.__rcApplying = false;
+    }
   }
 
   function observe(app) {

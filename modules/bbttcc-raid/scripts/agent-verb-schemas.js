@@ -380,21 +380,23 @@
         name: "gm.getWorldSignals",
         layer: "query",
         description: "Collect canon-grounded world signals for GM advisor reasoning.",
-        args: { type: "object" },
+        args: { type: "object", properties: { factionId: S_FACTION_ID } },
         returns: S_OBJ,
         permissions: ["gm"],
         sideEffects: { audit: false },
-        handler: async () => agent.gm?.getWorldSignals?.()
+        // forward the caller's factionId — it was validated then dropped (2026-10-28)
+        handler: async ({ factionId, ...opts } = {}) => agent.gm?.getWorldSignals?.(factionId || null, opts)
       },
       {
         name: "gm.recommendWorldSignals",
         layer: "query",
         description: "Score world signals and return recommended GM-facing observations.",
-        args: { type: "object" },
+        args: { type: "object", properties: { factionId: S_FACTION_ID } },
         returns: S_OBJ,
         permissions: ["gm"],
         sideEffects: { audit: false },
-        handler: async () => agent.gm?.recommendWorldSignals?.()
+        // forward the caller's factionId — it was validated then dropped (2026-10-28)
+        handler: async ({ factionId, ...opts } = {}) => agent.gm?.recommendWorldSignals?.(factionId || null, opts)
       },
       {
         name: "gm.computeAdvisorTableTier",

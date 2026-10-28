@@ -192,7 +192,9 @@
       if (prevId) { try { await tokDoc.update({ [`flags.${MOD_R}.crewingStructureId`]: null }); } catch (_e) {} }
       return;
     }
-    const structTok = _structureTokenUnder(scene, tokDoc);
+    // Only DEFENDER contingents man fortifications — an attacker storming party dragged onto
+    // the enemy wall must not join (and stiffen) its garrison (2026-10-28).
+    const structTok = (md.side === "defender") ? _structureTokenUnder(scene, tokDoc) : null;
     const newId = structTok?.actor?.id || null;
     if (prevId === newId) return;                      // no change (also breaks the flag-write loop)
     if (prevId) { const a = game.actors.get(prevId); if (a) { try { await crew.release(a, tokDoc.id); } catch (_e) {} } }
@@ -418,20 +420,36 @@
     const sib = await _resolveSiege(opts.hexUuid);
     const hexUuid = sib?.hexUuid || opts.hexUuid || null;
     const side = opts.side ? (opts.side === "defender" ? "defender" : "attacker") : null;
-    const scene = opts.sceneId ? game.scenes.get(opts.sceneId) : (canvas?.scene || null);
-    if (!scene) return { ok: false, error: "no scene" };
-    const ids = (scene.tokens?.contents || []).filter(t => {
-      const m = t?.flags?.[MOD_R]?.musterDeployment; if (!m) return false;
-      if (hexUuid && m.hexUuid !== hexUuid) return false;
-      if (side && m.side !== side) return false;
-      if (opts.factionId && m.factionId !== opts.factionId) return false;   // supporter recalls only ITS host
-      return true;
-    }).map(t => t.id);
-    if (!ids.length) return { ok: true, removed: 0 };
-    try { await scene.deleteEmbeddedDocuments("Token", ids); }
-    catch (e) { return { ok: false, error: e.message }; }
-    ui.notifications?.info(`Recalled ${ids.length} muster unit(s).`);
-    return { ok: true, removed: ids.length };
+    // Scenes: explicit → every scene Form Up could have used (recorded deployments, the current
+    // layer's scene) + the one the GM is looking at — recall from the hex map still finds a host
+    // formed up on a layer's battle scene (2026-10-28).
+    const scenes = [];
+    const _addScene = (sc) => { if (sc && !scenes.includes(sc)) scenes.push(sc); };
+    if (opts.sceneId) _addScene(game.scenes.get(opts.sceneId));
+    else {
+      const st = sib?.state || {};
+      for (const sd of (side ? [side] : ["attacker", "defender"])) { const sid = st.musterDeployments?.[sd]?.sceneId; if (sid) _addScene(game.scenes.get(sid)); }
+      const lsid = (st.layers || [])[st.currentLayerIdx ?? 0]?.sceneId; if (lsid) _addScene(game.scenes.get(lsid));
+      _addScene(canvas?.scene || null);
+    }
+    if (!scenes.length) return { ok: false, error: "no scene" };
+    let removed = 0;
+    for (const scene of scenes) {
+      const ids = (scene.tokens?.contents || []).filter(t => {
+        const m = t?.flags?.[MOD_R]?.musterDeployment; if (!m) return false;
+        if (hexUuid && m.hexUuid !== hexUuid) return false;
+        if (side && m.side !== side) return false;
+        if (opts.factionId && m.factionId !== opts.factionId) return false;   // supporter recalls only ITS host
+        return true;
+      }).map(t => t.id);
+      if (!ids.length) continue;
+      try { await scene.deleteEmbeddedDocuments("Token", ids); }
+      catch (e) { return { ok: false, error: e.message, removed }; }
+      removed += ids.length;
+    }
+    if (!removed) return { ok: true, removed: 0 };
+    ui.notifications?.info(`Recalled ${removed} muster unit(s).`);
+    return { ok: true, removed };
   }
 
   async function musterSize(opts = {}) {
@@ -525,16 +543,22 @@
 
     const tokenData = [];
     const plannedGarrison = {};   // layerId → { full, units, per }
+    // Exact splits (floor + remainder, like Form Up) so the tokens sum to exactly `total` —
+    // rounded per-unit strengths overshot the pool and minted troops on recall (2026-10-28).
+    const _split = (n, k) => { const b = Math.floor(n / k), r = n - b * k; return Array.from({ length: k }, (_, i) => b + (i < r ? 1 : 0)); };
+    let gLeft = garrisonTotal;
     for (let wi = 0; wi < walls.length; wi++) {
       const wall = walls[wi];
-      const g = Math.round(garrisonTotal * weights[wi] / wsum);
+      const g = (wi === walls.length - 1) ? gLeft : Math.min(gLeft, Math.round(garrisonTotal * weights[wi] / wsum));
       if (g <= 0) continue;
-      const K = Math.max(1, Math.min(5, Math.round(g / 25) || 1));
+      gLeft -= g;
+      const K = Math.max(1, Math.min(5, g, Math.round(g / 25) || 1));
       const per = Math.max(1, Math.round(g / K));
+      const strs = _split(g, K);
       const slots = _garrisonSlots(wall, K, gs);
       for (let i = 0; i < K; i++) {
         // hidden:true → the garrison is BOARDED inside the wall (invisible) until it crumbles.
-        const d = await mkTok(slots[i].x, slots[i].y, per, { garrisonLayerId: wall.layer.layerId }, "Garrison", wall.td.actorId, true);
+        const d = await mkTok(slots[i].x, slots[i].y, strs[i], { garrisonLayerId: wall.layer.layerId }, "Garrison", wall.td.actorId, true);
         if (d) tokenData.push(d);
       }
       plannedGarrison[wall.layer.layerId] = { full: g, units: K, per, structureActorId: wall.td.actorId };
@@ -543,8 +567,9 @@
     // Field reserve — a band at the defender's deep position (far/small on the tableau).
     let plannedReserve = null;
     if (reserveTotal > 0) {
-      const Kr = Math.max(1, Math.min(6, Math.round(reserveTotal / 30) || 1));
+      const Kr = Math.max(1, Math.min(6, reserveTotal, Math.round(reserveTotal / 30) || 1));
       const perR = Math.max(1, Math.round(reserveTotal / Kr));
+      const strsR = _split(reserveTotal, Kr);
       const cols = Math.max(1, Math.min(Kr, 4));
       const stride = gs * 1.6;
       const baseY = (opts.reserveBaseY != null) ? _num(opts.reserveBaseY) : _num(cfg.backY, 200) + stride;
@@ -553,7 +578,7 @@
         const col = i % cols, row = Math.floor(i / cols);
         const x = Math.round(clamp(anchorX + (col - (cols - 1) / 2) * stride, gs, sw - gs));
         const y = Math.round(clamp(baseY + row * stride, gs, sh - gs));
-        const d = await mkTok(x, y, perR, { reserve: true }, "Reserve");
+        const d = await mkTok(x, y, strsR[i], { reserve: true }, "Reserve");
         if (d) tokenData.push(d);
       }
       plannedReserve = { total: reserveTotal, units: Kr, per: perR };
@@ -595,7 +620,7 @@
     try {
       const S = _siege(); const st = await S.getState(hexUuid);
       if (st) {
-        st.defenderMuster = total;
+        st.defenderMuster = created.reduce((a, t) => a + _num(t.flags?.[MOD_R]?.unitStrength, 0), 0);   // what actually took the field (2026-10-28)
         st.musterDeployments = st.musterDeployments || {};
         const garrison = {};
         for (const [layerId, meta] of Object.entries(plannedGarrison)) {
@@ -750,7 +775,11 @@
       if (cap > 0) {
         const cr = crewApi.read?.(wallActor) || { assigned: [] };
         let live = 0;
-        for (const m of (cr.assigned || [])) { const t = scene.tokens.get(m.tokenId); if (t) live += _tokStrength(t); }
+        for (const m of (cr.assigned || [])) {
+          const t = scene.tokens.get(m.tokenId);
+          const side = t?.flags?.[MOD_R]?.musterDeployment?.side;
+          if (t && (!side || side === "defender")) live += _tokStrength(t);   // attackers never man the wall (2026-10-28)
+        }
         garrisonFrac = Math.max(0, Math.min(1, live / cap));
       }
     }
@@ -823,6 +852,7 @@
         st.clashCasualties.defender += defLost;
         st.clashes = Array.isArray(st.clashes) ? st.clashes : [];
         st.clashes.push({ turn, rounds: roundLog.length, atkLost, defLost, atkLeft: A, defLeft: D, outcome });
+        if (state.stormAssault) st.stormAssault = null;   // Storm Final Assault is one clash, not the rest of the siege (2026-10-28)
         S.appendNarrativeBeat(st, {
           turn, kind: "clash", title: _clashTitle(outcome),
           description: `The lines meet ${breached ? "at the breach" : "before the wall"}: attacker −${atkLost} (${A} left), defender −${defLost} (${D} left).`,
@@ -866,6 +896,7 @@
     // actor). One update per token (cull + eject merged), applied in a single batch.
     const updateMap = new Map();   // tokenId → token update obj
     let hexUuid = null, culled = 0;
+    const culledBy = { attacker: 0, defender: 0 };   // per side — attackers caught in the rubble aren't defender dead (2026-10-28)
 
     // 1. Casualty cull — the caught contingents lose unitStrength by the rubble toll.
     for (const res of results) {
@@ -879,6 +910,7 @@
       const prev = _tokStrength(tok);
       const next = Math.max(0, prev - loss);
       culled += (prev - next);
+      culledBy[md.side === "attacker" ? "attacker" : "defender"] += (prev - next);
       const routed = next <= 0;
       const label = String(tok.name || "").replace(/^💀\s*/, "").replace(/\s*·\s*\d+.*$/, "").trim() || "Garrison";
       const u = updateMap.get(tok.id) || { _id: tok.id };
@@ -934,13 +966,17 @@
       try {
         const S = _siege(); const st = await S.getState(hexUuid);
         if (st) {
-          const survivors = (scene.tokens?.contents || [])
-            .filter(t => { const m = t?.flags?.[MOD_R]?.musterDeployment; return m && m.hexUuid === hexUuid && m.side === "defender"; })
+          const _surv = (sd) => (scene.tokens?.contents || [])
+            .filter(t => { const m = t?.flags?.[MOD_R]?.musterDeployment; return m && m.hexUuid === hexUuid && m.side === sd; })
             .reduce((a, t) => a + _tokStrength(t), 0);
+          const survivors = _surv("defender");
           st.defenderMuster = survivors;
+          if (culledBy.attacker > 0) st.attackerMuster = _surv("attacker");
           st.clashCasualties = st.clashCasualties || { attacker: 0, defender: 0 };
-          st.clashCasualties.defender += culled;
-          S.appendNarrativeBeat(st, { turn: _turn(), kind: "garrison_culled", title: "The garrison falls with the wall", description: `Defenders caught in the collapse — −${culled}, defender muster down to ${survivors}.` });
+          st.clashCasualties.defender += culledBy.defender;
+          st.clashCasualties.attacker += culledBy.attacker;
+          const atkLine = culledBy.attacker > 0 ? ` Attackers caught with it — −${culledBy.attacker}.` : "";
+          S.appendNarrativeBeat(st, { turn: _turn(), kind: "garrison_culled", title: "The garrison falls with the wall", description: `Defenders caught in the collapse — −${culledBy.defender}, defender muster down to ${survivors}.${atkLine}` });
           await S.setState(hexUuid, st);
         }
       } catch (e) { console.warn(TAG, "garrison muster reconcile failed", e); }

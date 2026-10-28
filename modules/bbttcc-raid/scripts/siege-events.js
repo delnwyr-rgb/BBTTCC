@@ -174,6 +174,8 @@
       case "supplySever": {
         state.supplyStatus = "severed";
         if (state.supplySeveredAtTurn == null) state.supplySeveredAtTurn = ctx.turn;
+        // Persist the sever — the next tick's BFS recompute used to flip it straight back (2026-10-28).
+        state.eventSeveredUntilTurn = Math.max(Number(state.eventSeveredUntilTurn) || 0, (Number(ctx.turn) || 0) + Math.max(1, Number(eff.turns) || 1));
         return "supply severed";
       }
       case "truce": {

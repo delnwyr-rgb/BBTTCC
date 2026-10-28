@@ -306,7 +306,7 @@
           });
 
           // bump goodwill
-          pend.loyaltyDelta = Number(pend.loyaltyDelta || 0) + 1;   // +1 Loyalty +1 Morale folded into Loyalty — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)
+          pend.loyaltyDelta = Number(pend.loyaltyDelta || 0) + 2;   // +1 Loyalty +1 Morale folded into Loyalty — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.); the fold now actually adds (+1 → +2, 2026-10-28)
 
           bumpIntegrationProgress(f, 1);
 
@@ -661,10 +661,12 @@
         const doms = rig ? (game.bbttcc?.api?.travel?.domains?.rigDomains?.(rig) || []).filter(d => d !== "land") : null;
         const r = await ch.grant(A.id, { fromFactionId: carrier.id, rigName: rig?.name || "", domains: doms && doms.length ? doms : null, turns: CHARTER_TURNS, source: "charter" });
         if (!r?.ok) return `Charter refused — ${r?.error || "unknown"}.`;
-        try { const op = game.bbttcc?.api?.op; if (op?.commit) await op.commit(carrier.id, { economy: CHARTER_FEE_MARKS }, `charter fee from ${A.name}`); } catch (_e) {}
-        const msg = `Charter with ${carrier.name}: ${rig?.name || "their boats"} carry you (${r.row.domains.join(", ")}) through turn ${r.row.until}. ${carrier.name} pocket ${CHARTER_FEE_MARKS} marks.`;
+        // Report the fee only if commit took it — a capped carrier bank refuses with {ok:false}, no throw (2026-10-28).
+        let feePaid = false;
+        try { const op = game.bbttcc?.api?.op; if (op?.commit) { const fr = await op.commit(carrier.id, { economy: CHARTER_FEE_MARKS }, { source: "charter", label: `charter fee from ${A.name}` }); feePaid = !!fr && fr.ok !== false; } } catch (_e) {}
+        const msg = `Charter with ${carrier.name}: ${rig?.name || "their boats"} carry you (${r.row.domains.join(", ")}) through turn ${r.row.until}. ${feePaid ? `${carrier.name} pocket ${CHARTER_FEE_MARKS} marks.` : `Fee lost — ${carrier.name}'s Economy is at cap.`}`;
         await warLog(A, msg);
-        await warLog(carrier, `${A.name} chartered ${rig?.name || "your boats"} through turn ${r.row.until} — ${CHARTER_FEE_MARKS} marks Economy in.`);
+        await warLog(carrier, `${A.name} chartered ${rig?.name || "your boats"} through turn ${r.row.until} — ${feePaid ? `${CHARTER_FEE_MARKS} marks Economy in` : "fee lost (Economy at cap)"}.`);
         console.log(TAG, "charter_passage", { faction: A.name, carrier: carrier.name, rig: rig?.name, row: r.row });
         return msg;
       }

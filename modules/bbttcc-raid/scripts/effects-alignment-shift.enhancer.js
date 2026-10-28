@@ -1,6 +1,6 @@
 // v1.0.0 — Alignment Shift (Sephirot) — light mechanical, mostly narrative
 // Adds "Sanctified" + "Pilgrimage Site" to the hex, queues +2 Loyalty (was +1 Morale +1 Loyalty — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)),
-// and flags the faction with a one-turn faith boon.
+// and schedules the faction +10 marks Faith next turn (bonuses.scheduled, 2026-10-28).
 
 (() => {
   const MOD_R = "bbttcc-raid";
@@ -36,16 +36,17 @@
     pend.loyaltyDelta = Number(pend.loyaltyDelta || 0) + Number(loyaltyDelta || 0);
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pend });
 
-    // 2) Faction: one-turn faith boon
+    // 2) Faction: one-turn faith boon — turn.pending.nextTurn.faithBoon had no reader; write the live
+    //    bonuses.scheduled slot (turn-driver applyScheduledOPBonuses), same +10 marks Faith as the throughput handler (2026-10-28).
     const A = actor;
     if (A) {
-      const F = foundry.utils.duplicate(A.flags?.[MOD_F] || {});
-      const p = F.turn?.pending || {};
-      p.nextTurn = Object.assign({}, p.nextTurn, { faithBoon: true });
-      await A.update({ [`flags.${MOD_F}.turn.pending`]: p }, { diff:true, recursive:true });
+      const b = foundry.utils.duplicate(A.getFlag(MOD_F, "bonuses") || {});
+      b.scheduled = Array.isArray(b.scheduled) ? b.scheduled : [];
+      b.scheduled.push({ turnOffset: 1, opDelta: { faith: 10 } });
+      await A.update({ [`flags.${MOD_F}.bonuses`]: b });
     }
 
-    return `Queued: Sanctified & Pilgrimage Site • +${loyaltyDelta} Loyalty • (faction faith boon next turn)`;
+    return `Queued: Sanctified & Pilgrimage Site • +${loyaltyDelta} Loyalty • +10 marks Faith next turn`;
   }
 
   whenRaidReady((api)=>{
@@ -68,6 +69,6 @@
       }
     });
 
-    console.log(TAG, "installed (Sanctified + Pilgrimage Site, +2 Loyalty, faithBoon next turn).");
+    console.log(TAG, "installed (Sanctified + Pilgrimage Site, +2 Loyalty, +10 marks Faith next turn).");
   });
 })();

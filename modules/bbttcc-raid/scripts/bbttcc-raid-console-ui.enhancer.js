@@ -196,8 +196,8 @@
         lbl.dataset.fmRow = fireMode;
         const fmBadgeHtml = fireModeBadgeHTML(fireMode);
 
-        // Cost line
-        const costStr = costLine(spec.opCosts || spec.cost || {});
+        // Cost line — `cost` first: it's what the console bills (opCosts can hold unpriced JSON numbers) (2026-10-28).
+        const costStr = costLine(spec.cost || spec.opCosts || {});
         const costHtml = costStr
           ? `<div class="bbttcc-m-cost" style="font-size:0.7rem; opacity:0.9; margin-left:18px; margin-top:0px;">${costStr}</div>`
           : "";
@@ -231,12 +231,15 @@
         // data-faction-id left support factions unable to select, pay for, or fire maneuvers.
         const facAttr = cb.dataset.factionId ? ` data-faction-id="${cb.dataset.factionId}"` : "";
         const idAttr = cb.id ? ` id="${cb.id}"` : "";
+        // Keep the console's ⓘ tooltip icon — the rebuild used to drop it (2026-10-28).
+        const tipHtml = lbl.querySelector(".bbttcc-tip-icon")?.outerHTML || "";
         lbl.innerHTML = `
           <input type="checkbox" ${cb.checked?"checked":""} data-maneuver="${cb.dataset.maneuver}" data-side="${cb.dataset.side}"${facAttr}${idAttr}${cb.disabled?" disabled":""}>
           <span>${baseLabel}</span>
           ${fmBadgeHtml}
           ${badgeHtml}
           ${grantHtml}
+          ${tipHtml}
           ${costHtml}
           ${fireHtml}
         `;

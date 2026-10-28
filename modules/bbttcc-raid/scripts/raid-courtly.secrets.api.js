@@ -202,7 +202,7 @@
   async function _effectFavorPlus1(actor, side, scenario) {
     const courtier = await _pickCourtier("Choose courtier — +1 favor toward your side");
     if (!courtier) return { effect: "favorPlus1", cancelled: true };
-    await scenario.adjustFavor(courtier.id, side.factionId, +1);
+    await scenario.adjustFavor(courtier, side.factionId, +1);
     return { effect: "favorPlus1", courtier: courtier.name };
   }
   async function _effectFavorShift(actor, side, scenario) {
@@ -210,15 +210,15 @@
     if (!c1) return { effect: "favorShift", cancelled: true };
     const c2 = await _pickCourtier("Choose second courtier — −1 favor toward opponent");
     if (!c2) return { effect: "favorShift", cancelled: true };
-    await scenario.adjustFavor(c1.id, side.oppFactionId, -1);
-    await scenario.adjustFavor(c2.id, side.oppFactionId, -1);
+    await scenario.adjustFavor(c1, side.oppFactionId, -1);
+    await scenario.adjustFavor(c2, side.oppFactionId, -1);
     return { effect: "favorShift", courtiers: [c1.name, c2.name] };
   }
 
   async function _pickCourtier(prompt) {
     const tokens = (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []);   // courtiers on ANY scene (2026-10-22)
     if (tokens.length === 0) { ui.notifications?.warn?.("No courtiers on this scene — mark one with the 🎭 button on its token HUD."); return null; }
-    const opts = tokens.map(t => `<option value="${esc(t.actor.id)}">${esc(t.actor.name)}</option>`).join("");
+    const opts = tokens.map(t => `<option value="${esc(t.id)}">${esc(t.actor.name)}</option>`).join("");   // token id → the token's actor, the favor every reader sees (2026-10-28)
     return new Promise(resolve => {
       new Dialog({
         title: "Receipt",
@@ -226,7 +226,7 @@
         buttons: {
           ok: { label: "Choose", callback: html => {
             const id = html[0].querySelector("[name=cid]").value;
-            resolve(game.actors.get(id) || null);
+            resolve(tokens.find(t => t.id === id)?.actor || null);
           }},
           cancel: { label: "Cancel", callback: () => resolve(null) }
         },
@@ -253,14 +253,14 @@
   async function _effectFavorPlus2(actor, side, scenario) {
     const courtier = await _pickCourtier("Choose courtier — +2 favor toward your side");
     if (!courtier) return { effect: "favorPlus2", cancelled: true };
-    await scenario.adjustFavor(courtier.id, side.factionId, +2);
+    await scenario.adjustFavor(courtier, side.factionId, +2);
     return { effect: "favorPlus2", courtier: courtier.name };
   }
   async function _effectDoubleAgent(actor, side, scenario) {
     const courtier = await _pickCourtier("Choose courtier — flip them: −1 from opponent, +1 to you");
     if (!courtier) return { effect: "doubleAgent", cancelled: true };
-    await scenario.adjustFavor(courtier.id, side.oppFactionId, -1);
-    await scenario.adjustFavor(courtier.id, side.factionId, +1);
+    await scenario.adjustFavor(courtier, side.oppFactionId, -1);
+    await scenario.adjustFavor(courtier, side.factionId, +1);
     return { effect: "doubleAgent", courtier: courtier.name };
   }
 
@@ -370,7 +370,8 @@
     const result = (results.length === 1) ? results[0] : { effects: results };
 
     // Consume item, fire suspicion bump, broadcast.
-    await actor.deleteEmbeddedDocuments("Item", [item.id]);
+    // A receipt that ENDS the Parley was already expired with the rest of this table's receipts (2026-10-28).
+    if (actor.items?.has(item.id)) await actor.deleteEmbeddedDocuments("Item", [item.id]);
     if (secretMeta.acquisition === "stolen") {
       try { await scenario.raiseSuspicion(2, `played stolen secret: ${item.name}`); } catch (e) { console.warn(TAG, e); }
     }

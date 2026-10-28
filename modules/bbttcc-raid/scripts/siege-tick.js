@@ -73,7 +73,7 @@
     const totalDrain = (coreMult + distanceCost + harassmentCost) * graceMult;
 
     return {
-      totalDrain: Math.max(1, Math.round(totalDrain * 10) / 10),
+      totalDrain: Math.max(1, Math.round(totalDrain)),   // whole marks — fractional drain drove buckets negative (2026-10-28)
       breakdown: {
         base,
         terrain: tMod.drain,
@@ -102,7 +102,7 @@
       let drewAny = false;
       for (const cat of categories) {
         if (buffer[cat] <= 0) continue;
-        const take = Math.min(remaining, 1);
+        const take = Math.min(remaining, 1, buffer[cat]);   // never below 0 (2026-10-28)
         buffer[cat] -= take;
         deducted[cat] += take;
         remaining -= take;
@@ -178,8 +178,11 @@
       navalAllowed: !!state.isNavalSupply
     });
 
+    // An Event Deck sever holds for its turns even over an intact path (2026-10-28).
+    const eventSevered = state.eventSeveredUntilTurn != null && turn <= Number(state.eventSeveredUntilTurn);
+    if (state.eventSeveredUntilTurn != null && !eventSevered) state.eventSeveredUntilTurn = null;
     let supplyStatus = "supplied";
-    if (!bfs.ok) {
+    if (!bfs.ok || eventSevered) {
       supplyStatus = "severed";
     } else if ((state.interdictionsThisTurn || 0) > 0) {
       supplyStatus = "harassed";
@@ -192,7 +195,7 @@
         turn,
         kind: "supply_status",
         title: `Supply ${state.supplyStatus} → ${supplyStatus}`,
-        description: bfs.reason || ""
+        description: (bfs.ok && eventSevered) ? "severed by event" : (bfs.reason || "")
       });
     }
     state.supplyStatus = supplyStatus;
@@ -250,7 +253,9 @@
     // The tick is the single writer per siege per turn, so the arrival is marked HERE
     // (on the state we're about to persist) — not from a reliefArrives hook subscriber,
     // which would race the step-9 persist below.
-    for (const wave of (state.reliefWaves || [])) {
+    // An ended siege (step 6) gets no relief arrival, Event Deck draw or champion turn (2026-10-28).
+    const stillActive = state.status === "active";
+    for (const wave of (stillActive ? (state.reliefWaves || []) : [])) {
       if (wave.resolved || wave.arrived) continue;
       // `<=` (not `===`) so a wave isn't silently skipped if a strategic tick was missed.
       if ((wave.arrivesTurn ?? Infinity) <= turn) {
@@ -274,7 +279,7 @@
 
     // ---- 8. Event Deck roll (F.3: real draw→apply via siege-events.js) ----
     const deckId = state.eventDeckId || "generic";
-    const ev = _rollEventDeck(deckId);
+    const ev = stillActive ? _rollEventDeck(deckId) : { fired: false };
     state.eventsFired = Array.isArray(state.eventsFired) ? state.eventsFired : [];
     if (ev.fired) {
       const engine = globalThis.__bbttccSiegeEvents;
@@ -298,7 +303,7 @@
 
     // ---- E.2: champion status machine (lock expiry + wounded→active recovery) ----
     // Folded into the tick so there's a single writer per siege per turn (no race).
-    try { globalThis.__bbttccSiegeChampions?.processChampionsTurn?.(state, turn); }
+    try { if (stillActive) globalThis.__bbttccSiegeChampions?.processChampionsTurn?.(state, turn); }
     catch (e) { console.warn(TAG, "champion turn processing failed", e); }
 
     // ---- Phase C: reset per-turn pulse counters for the next turn ----

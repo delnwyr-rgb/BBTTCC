@@ -127,7 +127,13 @@
         existing.kind       = existing.kind       || spec.kind;
         existing.label      = existing.label      || spec.label;
         existing.primaryKey = existing.primaryKey || spec.primaryKey;
-        existing.opCosts    = Object.assign({}, spec.opCosts, existing.opCosts || {});
+        // Never replace a row's price object: a fresh copy dropped the non-enumerable __bbttccPriced stamp (re-priced ×0.75)
+        // and put JSON prices on rows that bill `cost`. Fill only — missing channels, at the row's own price stamp (2026-10-28).
+        if (!existing.cost && !existing.opCosts) existing.opCosts = spec.opCosts;
+        else if (!existing.cost && existing.opCosts && typeof existing.opCosts === "object") {
+          const m = Number(existing.opCosts.__bbttccPriced) || 0;
+          for (const [k, v] of Object.entries(spec.opCosts)) if (existing.opCosts[k] == null) existing.opCosts[k] = m ? Math.max(1, Math.round(v * m)) : v;
+        }
         if (spec.tier   != null && existing.tier   == null) existing.tier   = spec.tier;
         if (spec.minFactionTier != null && existing.minFactionTier == null) existing.minFactionTier = spec.minFactionTier;
         if (spec.rarity != null && !existing.rarity) existing.rarity = spec.rarity;
@@ -153,6 +159,9 @@
       if (!hasOpCosts && spec.cost) {
         const opCosts = normalizeCost(spec.cost);
         if (Object.keys(opCosts).length) {
+          // Derived from an already-priced `cost` → carry the stamp so the price policy doesn't scale it twice (2026-10-28).
+          const m = spec.cost.__bbttccPriced;
+          if (m) Object.defineProperty(opCosts, "__bbttccPriced", { value: m, enumerable: false });
           spec.opCosts = opCosts;
           spec.primaryKey = spec.primaryKey || pickPrimaryOp(opCosts);
           normalized++;
@@ -195,6 +204,9 @@
   async function runLoader() {
     await loadActivitiesFromJson();
     normalizeExistingStrategicEffects();
+    // The JSON-only rows land after the registry settled — signal a rebuild so pricing, CAN_PLAN gates,
+    // normalize + fire-mode passes all reach them regardless of which fetch finished first (2026-10-28).
+    try { Hooks.callAll("bbttcc:raid:maneuversLoaded", { source: "activities-json" }); } catch (_e) {}
   }
 
   Hooks.once("ready", () => {

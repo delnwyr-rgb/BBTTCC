@@ -127,7 +127,13 @@
         existing.kind       = existing.kind       || spec.kind;
         existing.label      = existing.label      || spec.label;
         existing.primaryKey = existing.primaryKey || spec.primaryKey;
-        existing.opCosts    = Object.assign({}, spec.opCosts, existing.opCosts || {});
+        // Fill only, never replace (same rule as the strategic loader, 2026-10-28): a fresh copy dropped the __bbttccPriced
+        // stamp (re-priced ×0.75) and put JSON prices on rows that bill `cost`.
+        if (!existing.cost && !existing.opCosts) existing.opCosts = spec.opCosts;
+        else if (!existing.cost && existing.opCosts && typeof existing.opCosts === "object") {
+          const m = Number(existing.opCosts.__bbttccPriced) || 0;
+          for (const [k, v] of Object.entries(spec.opCosts || {})) if (existing.opCosts[k] == null) existing.opCosts[k] = m ? Math.max(1, Math.round(v * m)) : v;
+        }
         if (spec.tier   != null && existing.tier   == null) existing.tier   = spec.tier;
         if (spec.rarity != null && !existing.rarity) existing.rarity = spec.rarity;
         if (spec.text   && !existing.text)         existing.text   = spec.text;

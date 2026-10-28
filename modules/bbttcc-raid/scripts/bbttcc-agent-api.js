@@ -1553,9 +1553,11 @@
   // Observation + Planner + Evals
   // ----------------------------
   function getFactionActor(factionId) {
-    if (!factionId) return null;
-    return game.actors?.get?.(factionId)
-      || game.actors?.contents?.find?.(a => a?.id === factionId)
+    // Accept the advertised "Actor.<id>" UUID form as well as a bare id (2026-10-28)
+    const id = String(factionId || "").trim().replace(/^Actor\./, "");
+    if (!id) return null;
+    return game.actors?.get?.(id)
+      || game.actors?.contents?.find?.(a => a?.id === id)
       || null;
   }
 
@@ -2902,7 +2904,10 @@
     }
 
     const storyState = getStoryStateSafe();
-    const activeCampaignId = String(opts.activeCampaignId || storyState.activeCampaignId || "").trim();
+    // The active campaign lives in the bbttcc-campaign world setting — gottgait never stores it (2026-10-28)
+    let settingCampaignId = "";
+    try { settingCampaignId = String(game.settings?.get?.("bbttcc-campaign", "activeCampaignId") || ""); } catch (_) {}
+    const activeCampaignId = String(opts.activeCampaignId || settingCampaignId || storyState.activeCampaignId || "").trim();
 
     try {
       if (activeCampaignId) {
@@ -2912,7 +2917,8 @@
           if (!c) continue;
           const cid = String(c.id || c.campaignId || "").trim();
           if (cid !== activeCampaignId) continue;
-          const fid = c.factionId || c.defaultFactionId || (c.campaign && c.campaign.factionId) || null;
+          const fid = c.factionId || c.defaultFactionId || (c.campaign && c.campaign.factionId)
+            || (Array.isArray(c.factionIds) ? c.factionIds[0] : null) || null;
           if (fid) {
             const rawF = String(fid || "").trim();
             return rawF.startsWith("Actor.") ? rawF.slice(6) : rawF;

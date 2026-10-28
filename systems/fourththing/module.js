@@ -8254,7 +8254,7 @@ async function castManifestation(actor, item, {
   const rawSys = actor?.system?.system ?? actor?.system ?? {};
   // 2026-10-07 (item ladder): a Bound Working casts from its HOST item's charges — never Clarity; Noise/misfire still apply.
   const _wk = item ? workingCharges(actor, item) : null;
-  if (_wk) {
+  if (_wk && !miracle) {   // review P3 (2026-10-28): a free Minor Miracle never spends the host's charge
     if (!_wk.host) { ui.notifications?.warn(`${item.name}: its host item is gone — this bound Working is inert.`); return false; }
     if (_wk.value <= 0) { ui.notifications?.warn(`${item.name}: ${_wk.host.name} has no charges left (recovers on a Soma Break).`); return false; }
     freeClarity = true;
@@ -30964,7 +30964,8 @@ Hooks.once("ready", async () => {
       // 2026-05-13 diagnostic — log every decision point so the advance-
       // prompt-not-firing bug can be diagnosed from the console.
       const targetHexId = args?.targetHexId;
-      const success = args?.success === true;
+      // Only a WIN advances (2026-10-28, Dave: a stalemate is not a win) — the outcome word decides when it's given.
+      const success = args?.outcome ? String(args.outcome) === "win" : args?.success === true;
       console.log("[fourththing:phase5] applyPostRoundEffects fired", {
         targetHexId,
         success,

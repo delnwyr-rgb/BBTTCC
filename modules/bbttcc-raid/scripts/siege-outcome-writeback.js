@@ -62,12 +62,32 @@
       if (marks > 0) { deltas[ok] = (deltas[ok] || 0) + marks; refundedMarks += marks; }
     }
     if (!refundedMarks) return { refunded: 0 };
+    // Clamp to cap headroom (per bucket + total) — op.commit refuses the WHOLE refund if any
+    // bucket would go over, and the card used to announce marks that never landed (2026-10-28).
+    let credited = 0;
     try {
-      const fn = game.bbttcc?.api?.op?.commit;
-      if (typeof fn === "function") await fn(factionId, deltas, { source: "siege", label: "Siege Buffer refund", allowOvercap: false });
-      else console.warn(TAG, "op.commit unavailable; refund skipped", deltas);
-    } catch (e) { console.warn(TAG, "buffer refund failed", e); }
-    return { refunded: Math.round(refundedMarks) };   // marks, for the chat card
+      const op = game.bbttcc?.api?.op;
+      if (typeof op?.commit !== "function") { console.warn(TAG, "op.commit unavailable; refund skipped", deltas); return { refunded: 0 }; }
+      if (typeof op.preview === "function") {
+        const pv = await op.preview(factionId, deltas, { source: "siege" });
+        const before = pv?.before || {}, caps = pv?.caps || {};
+        for (const k of Object.keys(deltas)) {
+          const cap = Number(caps[k]) || 0;
+          if (cap > 0) deltas[k] = Math.max(0, Math.min(deltas[k], cap - (Number(before[k]) || 0)));
+        }
+        const tCap = Number(pv?.totals?.cap) || 0;
+        if (tCap > 0) {
+          let over = (Number(pv?.totals?.before) || 0) + Object.values(deltas).reduce((a, b) => a + b, 0) - tCap;
+          for (const k of Object.keys(deltas).sort((a, b) => deltas[b] - deltas[a])) { if (over <= 0) break; const cut = Math.min(deltas[k], over); deltas[k] -= cut; over -= cut; }
+        }
+        for (const k of Object.keys(deltas)) if (!(deltas[k] > 0)) delete deltas[k];
+      }
+      if (!Object.keys(deltas).length) return { refunded: 0 };
+      const res = await op.commit(factionId, deltas, { source: "siege", label: "Siege Buffer refund", allowOvercap: false });
+      if (res && (res.ok === false || res.committed === false)) { console.warn(TAG, "buffer refund refused", res); return { refunded: 0 }; }
+      credited = Object.values(res?.finalCost || deltas).reduce((a, b) => a + Math.max(0, Number(b) || 0), 0);
+    } catch (e) { console.warn(TAG, "buffer refund failed", e); return { refunded: 0 }; }
+    return { refunded: Math.round(credited) };   // marks actually credited, for the chat card
   }
 
   function _hexFlags(hexDoc){ return foundry.utils.duplicate(hexDoc.flags?.[MOD_T] || {}); }
@@ -236,6 +256,9 @@
 
   async function applyOutcomeWriteback(payload){
     if (!game.user?.isGM) return;   // single writer — shared hex/faction docs
+    // The outcome hook is relayed to every seat — only the active GM writes back (a manual
+    // recovery call passes force) (2026-10-28).
+    if (!payload?.force && game.users?.activeGM && game.users.activeGM !== game.user) return;
     const S = globalThis.__bbttccSiegeState;
     if (!S) return;
     const hexUuid = payload?.hexUuid;
@@ -335,10 +358,14 @@
     game.bbttcc = game.bbttcc || { api: {} };
     game.bbttcc.api = game.bbttcc.api || {};
     game.bbttcc.api.siege = game.bbttcc.api.siege || {};
-    game.bbttcc.api.siege.applyOutcomeWriteback = (hexUuid) => {
+    // Manual recovery: read the siege flag directly — listActiveSieges() only lists ACTIVE
+    // sieges, and the write-back needs an ENDED one (2026-10-28).
+    game.bbttcc.api.siege.applyOutcomeWriteback = async (hexUuid) => {
       const S = globalThis.__bbttccSiegeState;
-      const hit = S?.listActiveSieges?.().find(s => s.hexUuid === hexUuid);
-      return applyOutcomeWriteback({ hexUuid, siegeId: hit?.siege?.siegeId });
+      const st = hexUuid ? await S?.getSiegeState?.(hexUuid) : null;
+      if (!st) { ui.notifications?.warn?.("No siege on that hex."); return; }
+      if (st.status === "active") { ui.notifications?.warn?.("That siege is still active — nothing to write back."); return; }
+      return applyOutcomeWriteback({ hexUuid, siegeId: st.siegeId, force: true });
     };
     game.bbttcc.api.siege.OUTCOME_MATRIX = MATRIX;
   }

@@ -387,7 +387,10 @@
   }
 
   async function _openFavorDialog(actorId, side, state) {
-    const actor = game.actors.get(actorId);
+    // The courtier TOKEN's actor (unlinked courtiers carry their own delta) — where every favor reader looks (2026-10-28).
+    const id = String(actorId || "").replace(/^(Actor|Token)\./, "");
+    const toks = (game.bbttcc?.api?.raid?.tableau?.courtiers?.() ?? []);
+    const actor = toks.find(t => t.id === id)?.actor || toks.find(t => t.actor?.id === id)?.actor || game.actors.get(id);
     if (!actor) return;
     const factionId = side === "attacker" ? state.attackerId : state.defenderId;
     const current = _favorOf(actor, factionId);

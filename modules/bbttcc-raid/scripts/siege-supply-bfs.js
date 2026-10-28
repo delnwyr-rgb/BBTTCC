@@ -140,12 +140,18 @@
     const neighbors = _buildNeighborMap(hexes);
     const targetNeighborSet = new Set(neighbors.get(siegeTargetHexUuid) || []);
 
-    // Trivial case: depot IS adjacent to (or IS) the target.
-    if (siegeTargetHexUuid === depotHexUuid || targetNeighborSet.has(depotHexUuid)) {
-      return { ok: true, path: [depotHexUuid], length: 0, hops: 0, reason: "depot adjacent to target" };
+    const allowed = new Set(allowedFactionIds.filter(Boolean));
+
+    // The depot must still be held by the besiegers — the tick re-runs this every turn, and a
+    // captured depot used to keep the siege "supplied" forever (2026-10-28).
+    if (siegeTargetHexUuid === depotHexUuid || (allowed.size && !allowed.has(_hexOwner(depot.tf)))) {
+      return { ok: false, path: [], length: 0, reason: "depot lost" };
     }
 
-    const allowed = new Set(allowedFactionIds.filter(Boolean));
+    // Trivial case: depot IS adjacent to the target.
+    if (targetNeighborSet.has(depotHexUuid)) {
+      return { ok: true, path: [depotHexUuid], length: 0, hops: 0, reason: "depot adjacent to target" };
+    }
 
     function canTraverse(uuid){
       if (uuid === siegeTargetHexUuid) return false;  // never traverse THROUGH target
