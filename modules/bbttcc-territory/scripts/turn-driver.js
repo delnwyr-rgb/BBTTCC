@@ -106,6 +106,13 @@ const turnLockMessage = (l) => `Advance Turn skipped — a Turn is already runni
 async function runAdvance(args = {}){
   const terr = game.bbttcc?.api?.territory;
   if (!args?.apply) return terr.advanceTurn(args);
+  // Lock Turn Advance (World State panel, wired 2026-10-28 — the checkbox used to do nothing)
+  try {
+    if (game.bbttcc?.api?.world?.getState?.()?.locks?.turnAdvance === true) {
+      ui.notifications?.warn?.("Turn Advance is locked. Untick Lock Turn Advance in the World State panel to advance.");
+      return { changed:false, skipped:true, locked:"world" };
+    }
+  } catch (_eL) {}
   if (window._bbttccTurnOuter) { ui.notifications?.warn?.(turnLockMessage({ userName: game.user?.name })); return { changed:false, skipped:true }; }
   window._bbttccTurnOuter = "pending";   // synchronous — a double click can't slip in while the lock write is in flight
   let token = null;

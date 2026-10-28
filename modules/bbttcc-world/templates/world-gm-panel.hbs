@@ -20,39 +20,23 @@
 
   <fieldset style="border:1px solid rgba(255,255,255,.12); border-radius:10px; padding:.6rem;">
     <legend style="padding:0 .35rem; opacity:.9;">Core</legend>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:.5rem;">
-      <div>
-        <label>Turn</label>
-        <input type="number" name="turn" />
-      </div>
-      <div>
-        <label>Darkness</label>
-        <input type="number" name="darkness" min="0" max="100" step="1" />
-      </div>
-    </div>
-    <div style="margin-top:.5rem;">
-      <label>Pressure Mod</label>
-      <input type="number" name="pressureMod" min="0" max="5" step="0.1" />
+    <div>
+      <label>Turn</label>
+      <input type="number" name="turn" />
     </div>
   </fieldset>
 
   <fieldset style="border:1px solid rgba(255,255,255,.12); border-radius:10px; padding:.6rem; margin-top:.6rem;">
     <legend style="padding:0 .35rem; opacity:.9;">Time</legend>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:.5rem;">
-      <div>
-        <label>Epoch</label>
-        <input type="number" name="time.epoch" />
-      </div>
-      <div>
-        <label>Turn Length (TP)</label>
-        <input type="number" name="time.turnLength" min="1" step="1" />
-      </div>
+    <div>
+      <label>Turn Length (days)</label>
+      <input type="number" name="time.turnLength" min="1" step="1" />
     </div>
     <div style="margin-top:.5rem;">
-      <label>Progress (Time Points)</label>
+      <label>Days spent this turn</label>
       <input type="number" name="time.progress" min="0" step="any" />
       <div class="bbttcc-muted" style="opacity:.75; margin-top:.15rem;">
-        TP toward the next Strategic Turn:
+        Days spent toward the next Strategic Turn (the Turn Ledger; overspend carries over, it never forces a turn):
         <b data-bind="timeProgress">{{timeProgress}}</b>/<b data-bind="timeTurnLength">{{timeTurnLength}}</b>
       </div>
     </div>
@@ -77,12 +61,8 @@
 
   <fieldset style="border:1px solid rgba(255,255,255,.12); border-radius:10px; padding:.6rem; margin-top:.6rem;">
     <legend style="padding:0 .35rem; opacity:.9;">Locks</legend>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:.5rem;">
-      <label style="display:flex; gap:.4rem; align-items:center;"><input type="checkbox" name="locks.turnAdvance" /> Lock Turn Advance</label>
-      <label style="display:flex; gap:.4rem; align-items:center;"><input type="checkbox" name="locks.mutation" /> Lock Mutation</label>
-      <label style="display:flex; gap:.4rem; align-items:center;"><input type="checkbox" name="locks.politics" /> Lock Politics</label>
-      <label style="display:flex; gap:.4rem; align-items:center;"><input type="checkbox" name="locks.logistics" /> Lock Logistics</label>
-    </div>
+    <label style="display:flex; gap:.4rem; align-items:center;"><input type="checkbox" name="locks.turnAdvance" /> Lock Turn Advance</label>
+    <div class="bbttcc-muted" style="opacity:.75; font-size:.85rem; margin-top:.2rem;">While ticked, Advance Turn refuses to run (previews still work). Untick and Apply to allow it again.</div>
   </fieldset>
 
   <fieldset style="border:1px solid rgba(255,255,255,.12); border-radius:10px; padding:.6rem; margin-top:.6rem;">

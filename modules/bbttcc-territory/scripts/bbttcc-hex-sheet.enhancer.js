@@ -156,7 +156,7 @@
     tracks:      "Tracks & State — the hex's live gauges: Integration (how developed it is), Radiation, local Darkness, and any active weather.",
     integration: "Integration (0–6) — how thoroughly the owner has absorbed this hex. 0 wild, 1–2 outpost, 3–4 developing, 5 settled, 6 integrated heartland. Higher integration multiplies all production: ×1.05 at 3+, ×1.10 at 5, ×1.20 at 6.",
     radiation:   "Radiation — this hex's level, 0–3 (Clean · Radiated · Contaminated · Radiation Zone). Each Steward who travels in takes that many RP (gear reduces it). It stays until cleaned (Purify, cleanup maneuvers, the GM). At 3 it can spread each turn (25% chance per neighbor to make it Radiated). While a hex is Radiated, its owning faction's global Darkness climbs 1 per turn. Purify the hex to zero it out.",
-    darkness:    "Local Darkness — Qliphothic taint pooled in this hex itself, tracked separately from the owning faction's global Darkness. Faction Darkness rises 1/turn while the faction owns any Radiated hex, and cleansing a Purified hex drops it by 2.",
+    darkness:    "Hex Darkness — taint pooled in this hex (0–6). At 3 or more it feeds its holder: the Domain's Darkness rises 1 a turn while it holds any hex this dark (and 1 more for any Radiated hex). Cleansing, Purification and Judgment of Light bring it down.",
     weather:     "Weather — active weather on this hex and how many turns it has left. Hover the chip for the full effect breakdown; weather is written by the Travel engine and ticks down each turn.",
 
     // ---- Pressure & Conditions ----

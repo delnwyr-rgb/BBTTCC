@@ -54,20 +54,17 @@
 
     var patch = {};
     patch.turn = toInt(get("turn"), null);
-    patch.darkness = clampNumber(get("darkness"), 0, 100, null);
-    patch.pressureMod = clampNumber(get("pressureMod"), 0, 5, null);
+    // 2026-10-28 (Dave): World Darkness, Pressure Mod, Epoch and the Mutation / Politics / Logistics locks left the
+    // panel — nothing in the game read them. The fields stay in the world record (harmless); the panel no longer
+    // edits them. Lock Turn Advance is real now: turn-driver runAdvance refuses while it is ticked.
 
     patch.time = {
-      epoch: toInt(get("time.epoch"), 0),
       turnLength: toInt(get("time.turnLength"), 1),
       progress: clampNumber(get("time.progress"), 0, 1e9, 0)   // fractional (half-day site visits) — never truncate
     };
 
     patch.locks = {
-      turnAdvance: has("locks.turnAdvance"),
-      mutation: has("locks.mutation"),
-      politics: has("locks.politics"),
-      logistics: has("locks.logistics")
+      turnAdvance: has("locks.turnAdvance")
     };
 
     var note = get("note");
@@ -84,12 +81,9 @@
     if (!prev) return patch;
 
     if (patch.turn !== prev.turn) out.turn = patch.turn;
-    if (patch.darkness !== prev.darkness) out.darkness = patch.darkness;
-    if (patch.pressureMod !== prev.pressureMod) out.pressureMod = patch.pressureMod;
 
     if (patch.time && prev.time) {
       var t = {};
-      if (patch.time.epoch !== prev.time.epoch) t.epoch = patch.time.epoch;
       if (patch.time.turnLength !== prev.time.turnLength) t.turnLength = patch.time.turnLength;
       if (patch.time.progress !== prev.time.progress) t.progress = patch.time.progress;
       if (Object.keys(t).length) out.time = t;
@@ -98,9 +92,6 @@
     if (patch.locks && prev.locks) {
       var l = {};
       if (!!patch.locks.turnAdvance !== !!prev.locks.turnAdvance) l.turnAdvance = !!patch.locks.turnAdvance;
-      if (!!patch.locks.mutation    !== !!prev.locks.mutation)    l.mutation    = !!patch.locks.mutation;
-      if (!!patch.locks.politics    !== !!prev.locks.politics)    l.politics    = !!patch.locks.politics;
-      if (!!patch.locks.logistics   !== !!prev.locks.logistics)   l.logistics   = !!patch.locks.logistics;
       if (Object.keys(l).length) out.locks = l;
     }
 
@@ -644,17 +635,10 @@
       }
 
       setVal('input[name="turn"]', st.turn);
-      setVal('input[name="darkness"]', st.darkness);
-      setVal('input[name="pressureMod"]', st.pressureMod);
-
-      setVal('input[name="time.epoch"]', t.epoch);
       setVal('input[name="time.turnLength"]', t.turnLength);
       setVal('input[name="time.progress"]', t.progress);
 
       setChk('input[name="locks.turnAdvance"]', locks.turnAdvance);
-      setChk('input[name="locks.mutation"]', locks.mutation);
-      setChk('input[name="locks.politics"]', locks.politics);
-      setChk('input[name="locks.logistics"]', locks.logistics);
 
       setText('[data-bind="userName"]', (game && game.user && game.user.name) ? game.user.name : "Unknown");
       setText('[data-bind="turn"]', st.turn != null ? st.turn : 0);

@@ -413,6 +413,10 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
   }
   function ownsHex(fid, tf){ const o = tf?.factionId || tf?.ownerId; return String(o) === String(fid); }
   function isRadiated(tf){ return Number(tf?.mods?.radiation || 0) > 0; }   // the hex Radiation level (2026-10-22)
+  // Dark ground (owner ruling 2026-10-28: "make Hex Darkness feed Domain Darkness"): a held hex at Darkness 3+ adds +1
+  // to its Domain each turn, like radiated ground (the two stack: +1 each). 1–2 pips are a warning only.
+  const HEX_DARK_FEED = 3;
+  function isDarkGround(tf){ return Number(tf?.mods?.darkness || 0) >= HEX_DARK_FEED; }
 
   async function doDarknessTrack() {
     const facs = facActors();
@@ -420,12 +424,13 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
     const lines = [];
 
     for (const A of facs) {
-      let ownedRadiated = 0, blessed = 0;
+      let ownedRadiated = 0, ownedDark = 0, blessed = 0;
       for (const sc of game.scenes ?? []) {
         for (const d of sc.drawings ?? []) {
           const tf = d.flags?.[MODT]; if (!tf) continue;
           if (!ownsHex(A.id, tf)) continue;
           if (isRadiated(tf)) ownedRadiated++;
+          if (isDarkGround(tf)) ownedDark++;
           // Sanctum Expansion (2026-09-09): each Blessed Ground hex you hold is −1 Darkness per turn.
           if (Array.isArray(tf.modifiers) && tf.modifiers.some(m => String(m).toLowerCase() === "blessed ground")) blessed++;
         }
@@ -441,6 +446,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
       // should be real." It falls only through deliberate work: Blessed Ground (below), cleansing a hex, the
       // rites and councils in the planner, story beats. (A clean Domain used to shed 1 a turn for free.)
       if (ownedRadiated > 0) g = Math.min(DARK_CAP, g + 1);
+      if (ownedDark > 0)     g = Math.min(DARK_CAP, g + 1);
       if (blessed > 0)       g = Math.max(0, g - blessed);
 
       if (g !== before) {
@@ -450,7 +456,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
         const dir = (g > before) ? "↑" : "↓";
         lines.push(
           `• <b>${foundry.utils.escapeHTML(A.name)}</b>: Darkness ${dir} ${before} → ${g}`
-          + (ownedRadiated>0 ? ` (radiated hexes: ${ownedRadiated})` : "") + (blessed>0 ? ` (Blessed Ground: ${blessed})` : "")
+          + (ownedRadiated>0 ? ` (radiated hexes: ${ownedRadiated})` : "") + (ownedDark>0 ? ` (dark ground, Darkness ${HEX_DARK_FEED}+: ${ownedDark})` : "") + (blessed>0 ? ` (Blessed Ground: ${blessed})` : "")
         );
       }
     }
