@@ -1251,6 +1251,21 @@ function _bookmarkClose(token, payload) {
     open: null, lastResolved: { beatId: cur.open.beatId, label: cur.open.label, acted: !!payload?.acted, choice: payload?.choice?.label || null, at: Date.now() } });
 }
 
+// A CHOICE can carry the ride (2026-10-27, Dave: "Saddle up" did nothing — the ride beat's worldEffects.openTravel opened
+// the Travel Console with the window, so riding never needed the button and the window sat open for the whole ride).
+// choice.openTravel = { hexName?, note? } opens the console when THAT choice is picked (same op as the beat-level stage
+// direction, via the world-mutation engine; already at the destination → the arrival runs instead).
+async function _choiceOpenTravel(campaign, beat, ch, ctx) {
+  const ot = ch && ch.openTravel;
+  if (!ot || typeof ot !== "object") return null;
+  const wm = game.bbttcc?.api?.worldMutation;
+  if (!wm?.applyWorldEffects) return null;
+  return wm.applyWorldEffects(
+    { id: beat.id, worldEffects: { openTravel: ot } },
+    { source: "bbttcc-campaign", campaignId: campaign.id, campaignTitle: campaign.label, beatId: beat.id, factionId: ctx?.factionId || campaign.factionId || null }
+  );
+}
+
 async function _closeOpenBeatDialogs({ beatId = null } = {}) {
   let n = 0;
   for (const e of [...__bbttccOpenBeatDialogs]) {
@@ -3005,6 +3020,7 @@ ${
                   : (ch.failNext || beat.outcomes?.failure || "");
 
                 try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
+                if (res.ok) { try { await _choiceOpenTravel(campaign, beat, ch, ctx); } catch (_eOT) {} }
                 if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
                 if (!res.ok && ch.secret !== true) await _offerRetryInChain(campaign, beat, ctx);   // a secret miss stands quietly
 
@@ -3021,6 +3037,7 @@ ${
 // No check: route to next
               const nextId = ch.next || "";
               try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
+              try { await _choiceOpenTravel(campaign, beat, ch, ctx); } catch (_eOT) {}   // Saddle up carries the ride
               if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
 
               finish({

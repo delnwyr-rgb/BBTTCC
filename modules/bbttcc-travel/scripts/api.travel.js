@@ -247,7 +247,7 @@
     return null;
   }
 
-  function pickEncounterFromCampaignTables({ campaignId, terrainKey, tier, scale = null }) {
+  function pickEncounterFromCampaignTables({ campaignId, terrainKey, tier, scale = null, exclude = null }) {
     const tables = safeGetEncounterTablesSetting();
     const tableId = resolveTravelTableId(tables, terrainKey, tier);
     if (!tableId) return { ok: false, reason: "table_not_found", candidates: { terrainKey, tier } };
@@ -270,6 +270,9 @@
       eligible = eligible.filter(ent => !(ent && ent.once && fired[String(ent.beatId || "")]));
     } catch (_e) {}
     if (!eligible.length) return { ok: false, reason: "no_eligible", tableId };
+    // One of each per ride (2026-10-27, Dave: three Weather Fronts on one ride Lyrenn → Khezek-Tor).
+    if (exclude && exclude.size) eligible = eligible.filter(ent => !exclude.has(String(ent.beatId || "")));
+    if (!eligible.length) return { ok: false, reason: "drawn_this_ride", tableId };
 
     const pick = weightedPick(eligible);
     if (!pick) return { ok: false, reason: "roll_failed", tableId };
@@ -546,13 +549,32 @@
   // mis-authored. Returns the successful pick plus a full escalation trail so
   // the GM can see exactly what was tried. Prevents the "blank Tier N modal"
   // where the engine reported an encounter but carried no beat data.
+  // The encounters this ride has already drawn (per seat, per ride session; a loose move with no session keeps an hour).
+  const _rideDraws = new Map();
+  function _rideDrawKey(factionId) {
+    const fid = String(factionId || "").replace(/^Actor\./, ""); if (!fid) return null;
+    let ts = 0; try { ts = Number((rideGet(fid) || {}).createdTs || 0); } catch (_e) { ts = 0; }
+    return `${fid}:${ts || "loose"}`;
+  }
+  function _rideDrawn(factionId) {
+    const k = _rideDrawKey(factionId); const rec = k ? _rideDraws.get(k) : null;
+    if (!rec || (Date.now() - rec.ts) > 3600000) return new Set();
+    return rec.set;
+  }
+  function _rideNoteDraw(factionId, beatId) {
+    const k = _rideDrawKey(factionId); if (!k || !beatId) return;
+    const rec = _rideDraws.get(k); const fresh = rec && (Date.now() - rec.ts) <= 3600000;
+    const set = fresh ? rec.set : new Set(); set.add(String(beatId)); _rideDraws.set(k, { set, ts: Date.now() });
+  }
+
   function pickEncounterWithFallback({ campaignId, terrainKey, tier, scale = null, factionId = null }) {
     const startTier = clampTier(tier);
     const trail = [];
+    const exclude = factionId ? _rideDrawn(factionId) : null;
     // MENACES (2026-10-21): resolve the party's scale once per pick (boarded rig → owned rigs → foot)
     if (!scale && factionId) { try { scale = game.bbttcc?.api?.travel?.menace?.partyScale?.(factionId)?.scale || null; } catch (_eS) { scale = null; } }
     for (let cur = startTier; cur >= 1; cur--) {
-      const pick = pickEncounterFromCampaignTables({ campaignId, terrainKey, tier: cur, scale });
+      const pick = pickEncounterFromCampaignTables({ campaignId, terrainKey, tier: cur, scale, exclude });
       trail.push({
         tier: cur,
         ok: !!(pick && pick.ok),
@@ -560,6 +582,7 @@
         tableId: (pick && pick.tableId) || null
       });
       if (pick && pick.ok) {
+        if (factionId) _rideNoteDraw(factionId, pick.beatId);
         return {
           ok: true,
           pick,
@@ -836,11 +859,22 @@
     // A road-fired campaign beat (a pinned leg, a pool draw) whose chain is still unwinding counts as an encounter for the
     // arrival (2026-09-18): the town opens AFTER the road's business, not on top of it.
     const injectedInFlight = (() => { try { const c = game.bbttcc && game.bbttcc._injectedChain; return !!(c && !c.settledTs && (Date.now() - Number(c.startTs || 0)) < 2700000); } catch (_e) { return false; } })();
-    const hasEncounter = !!(result && result.encounter && result.encounter.triggered) || injectedInFlight;
+    const lateInjected = !!(opts && opts.__lateInjected);
+    const hasEncounter = !!(result && result.encounter && result.encounter.triggered) || injectedInFlight || lateInjected;
 
     if (!hasEncounter) {
-      setTimeout(() => { runHexEnterBeatNow(result, opts).catch(e => warn("Hex enter failed:", e)); }, 0);
-      return;
+      // The leg's road beat (a pinned leg, a pool draw) is injected fire-and-forget and stamps its chain a beat later —
+      // give it a moment to show up before arriving (2026-10-27).
+      const t0 = Date.now();
+      await new Promise(r => setTimeout(r, 1500));
+      const c = game.bbttcc && game.bbttcc._injectedChain;
+      const late = !!(c && Number(c.startTs || 0) >= t0 - 5000 && (!c.settledTs || Number(c.settledTs) > t0));
+      if (!late) {
+        setTimeout(() => { runHexEnterBeatNow(result, opts).catch(e => warn("Hex enter failed:", e)); }, 0);
+        return;
+      }
+      log("Hex enter: a road beat started on this leg — waiting for it", { beatId: c.beatId });
+      return maybeRunHexEnterBeatDeferred(result, Object.assign({}, opts, { __lateInjected: true }));
     }
 
     // Pending-arrival marker (2026-08-28): the encounter auto-return in
@@ -893,11 +927,17 @@
       // launches a beat (declined at arbitration, beatless) never settles —
       // after 120s of genuine quiet (no Bad Eden modal, no combat) treat it as
       // never-launched. Hard stop 45 min. No scene sniffing, no 15-min polls.
+      // A road beat that starts AFTER this deferral was scheduled counts too (2026-10-27, Lyrenn → Khezek-Tor: the leg's
+      // pinned Ambush was injected fire-and-forget and stamped its chain a moment after `injectedInFlight` was read, so the
+      // arrival only waited on the leg's second Weather Front — closing that window dove the table into Khezek-Tor with
+      // the Ambush still on screen). Read the stamp on every pass, not once.
+      const injectedNow = () => { try { const c = game.bbttcc && game.bbttcc._injectedChain; return !!(c && !c.settledTs && (Date.now() - Number(c.startTs || 0)) < 2700000); } catch (_e) { return false; } };
+      const injectedSince = () => { try { const c = game.bbttcc && game.bbttcc._injectedChain; return Number((c && c.startTs) || 0) >= deferT0 - 5000; } catch (_e) { return false; } };
       const waitForSettlement = async () => {
         const started = Date.now();
         let quietSince = 0;
         while (true) {
-          if (injectedInFlight) {
+          if (injectedInFlight || lateInjected || injectedNow() || injectedSince()) {
             // the injected lane: the chain's promise unwound, then 3 s of genuine quiet (no Bad Eden modal, no combat —
             // the Obstructor's fight and a GM-fired tally both hold the arrival); hard stop 45 min
             const c = game.bbttcc && game.bbttcc._injectedChain; const unwound = !!(c && c.settledTs);

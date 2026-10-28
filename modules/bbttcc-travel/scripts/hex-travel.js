@@ -1512,7 +1512,21 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
 
     let encounterLabel = "";
     let encounter = { triggered: false };
+    // A scripted (pinned) leg is the leg's event — no random encounter on top of it (2026-10-27).
+    let scriptedLeg = null;
     if (!success && !ctx.preventHazard) {
+      try {
+        const tfTo = to?.document?.flags?.[MOD_TERR] || to?.flags?.[MOD_TERR] || {};
+        const tfFrom = from?.document?.flags?.[MOD_TERR] || from?.flags?.[MOD_TERR] || {};
+        scriptedLeg = await CampaignBeatInjector.pinnedFor({
+          hexName: String(tfTo.name || to?.document?.text || "").trim() || null,
+          fromHexName: String(tfFrom.name || from?.document?.text || "").trim() || null,
+          hexUuid: to?.document?.uuid || to?.uuid || null, factionId: ctx.factionId || actor?.id || null
+        });
+      } catch (_ePin) { scriptedLeg = null; }
+      if (scriptedLeg) console.log("[bbttcc-travel/hex-travel]", `scripted leg (${scriptedLeg}) — the random encounter stands down`);
+    }
+    if (!success && !ctx.preventHazard && !scriptedLeg) {
       const raid = getRaidAPI();
       if (raid?.scheduleEvent) {
         await raid.scheduleEvent({ kind: "travelEncounter", tier: ctx.terrainTier, hexId: to.id, terrain: raw || key, factionId });
@@ -2192,6 +2206,29 @@ const CampaignBeatInjector = {
     }
 
     return { ok: true, triggerType, ctxTags, candidates, winner };
+  },
+
+  // The leg's PINNED beat, if one will fire (read-only — same match as maybeInject's pinned lane, nothing recorded). The leg
+  // asks BEFORE it rolls its random encounter: a scripted leg is the leg's event (2026-10-27, Dave: the Ambush leg also
+  // rolled a second Weather Front).
+  pinnedFor: async (ctx) => {
+    try {
+      const campaignId = _getActiveCampaignId(); if (!campaignId) return null;
+      const { map } = _getCampaignStore(); const campaign = map[campaignId];
+      const beats = Array.isArray(campaign?.beats) ? campaign.beats : []; if (!beats.length) return null;
+      const nowTurn = _getTurnIndexFallback(); const state = _getInjectorState();
+      const norm = (x) => String(x || "").replace(/[\s\u00a0]+/g, " ").trim().replace(/\.(?=[a-z]$)/i, " ").trim().toLowerCase();
+      const toN = norm(ctx?.hexName), fromN = norm(ctx?.fromHexName);
+      for (const beat of beats) {
+        const pin = beat?.pinLeg; if (!pin || typeof pin !== "object") continue;
+        if (pin.to && (!toN || norm(pin.to) !== toN)) continue;
+        if (pin.from && (!fromN || norm(pin.from) !== fromN)) continue;
+        if (_blockedByBeatRules(state, beat, ctx, nowTurn).blocked) continue;
+        if (!(await _requiresMet(beat, campaign, ctx))) continue;
+        return beat.id;
+      }
+    } catch (e) { console.warn("[bbttcc-travel/injector]", "pinnedFor failed (non-blocking)", e); }
+    return null;
   },
 
   maybeInject: async (triggerType, ctx) => {
