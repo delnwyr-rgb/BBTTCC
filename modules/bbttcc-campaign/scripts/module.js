@@ -1266,6 +1266,23 @@ async function _choiceOpenTravel(campaign, beat, ch, ctx) {
   );
 }
 
+// Press a choice on an OPEN beat window, as if the GM clicked it (2026-10-27, Dave: the Battle console's "call it" and the
+// first-road Aftermath card asked the same question twice). Matches the button whose text starts with `label` (case and
+// emoji ignored); same callback path as the facilitation autopilot. Returns { ok, label } or { ok:false, why }.
+function _pickOpenBeatChoice({ beatId, label } = {}) {
+  const norm = (t) => String(t || "").replace(/<[^>]*>/g, " ").replace(/[^\p{L}\p{N} ]+/gu, " ").replace(/\s+/g, " ").trim().toLowerCase();
+  const want = norm(label); if (!beatId || !want) return { ok: false, why: "beatId and label required" };
+  const entry = [...__bbttccOpenBeatDialogs].reverse().find(e => e.beatId === String(beatId));
+  if (!entry) return { ok: false, why: "not open" };
+  const buttons = entry.dlg?.data?.buttons || {};
+  const key = Object.keys(buttons).find(k => norm(buttons[k]?.label).startsWith(want));
+  if (!key || typeof buttons[key].callback !== "function") return { ok: false, why: "no such choice" };
+  const p = buttons[key].callback(entry.dlg.element);   // sync prefix reads the DOM before close
+  try { entry.dlg.close(); } catch (_eCl) {}
+  Promise.resolve(p).catch(e => warn("[pickOpenBeatChoice] chain failed:", e));
+  return { ok: true, label: norm(buttons[key].label) };
+}
+
 async function _closeOpenBeatDialogs({ beatId = null } = {}) {
   let n = 0;
   for (const e of [...__bbttccOpenBeatDialogs]) {
@@ -2608,7 +2625,7 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
     try {
       _broadcastPlayerFacingDialog("show", {
         title: title,
-        desc: desc,
+        desc: _stripGmNotes(desc),   // review P1 (2026-10-27): the first show leaked GM notes; re-mirror already stripped
         beatId: beat.id || null,
         choicesHidden: facChoicesHidden,
         canPick: facCanPick,
@@ -2879,7 +2896,7 @@ ${
                   const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
                   try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
                   if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
-                  if (!ok) await _offerRetryInChain(campaign, beat, ctx);
+                  if (!ok && ch.secret !== true) await _offerRetryInChain(campaign, beat, ctx);   // a secret miss stands quietly (review P2, 2026-10-27)
 
                   finish({
                     acted: true,
@@ -2922,7 +2939,7 @@ ${
                   const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
                   try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
                   if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
-                  if (!ok) await _offerRetryInChain(campaign, beat, ctx);
+                  if (!ok && ch.secret !== true) await _offerRetryInChain(campaign, beat, ctx);   // a secret miss stands quietly (review P2, 2026-10-27)
 
                   finish({
                     acted: true,
@@ -3665,10 +3682,13 @@ async function _applyBeatEffectsOnce(campaign, beat, ctx = {}, { skipOpenTravel 
     ctx.__beatFxApplied = ctx.__beatFxApplied || new Set();
     if (ctx.__beatFxApplied.has(beat.id)) return false;
     ctx.__beatFxApplied.add(beat.id);
+    if (ctx.__openTravelDone?.has?.(beat.id)) skipOpenTravel = true; // executeBeat already ran the ride early (review P2, 2026-10-27)
     try {
       const wm = game.bbttcc?.api?.worldMutation;
       if (wm?.applyWorldEffects) {
-        await wm.applyWorldEffects(beat, { source: "bbttcc-campaign", campaignId: campaign.id, campaignTitle: campaign.label, beatId: beat.id, skipOpenTravel });
+        // The run's chain rides along (review P1, 2026-10-27): a bare hexMenace {action:"clear"} on a winning ending finds
+        // its menace through __chain.encounter.beatId / __menace. hexUuid deliberately does NOT ride (scene auto-returns).
+        await wm.applyWorldEffects(beat, { source: "bbttcc-campaign", campaignId: campaign.id, campaignTitle: campaign.label, beatId: beat.id, skipOpenTravel, __chain: ctx.__chain, __menace: ctx.__menace });
       }
     } catch (eWm) { warn("World effects failed:", eWm); }
     // Quest effects (Beat Editor -> World Effects -> Quest Effects)
@@ -4039,10 +4059,14 @@ async function executeBeat(campaign, beat, ctx = {}) {
           { source: "bbttcc-campaign", campaignId: campaign.id, campaignTitle: campaign.label, beatId: beat.id, factionId: ctx?.factionId || campaign.factionId || null }
         );
         openTravelApplied = true;
+        // review P2 (2026-10-27): the pick-time _applyBeatEffectsOnce is the first full apply — it must skip the ride too.
+        try { if (ctx && typeof ctx === "object") (ctx.__openTravelDone ||= new Set()).add(beat.id); } catch (_eOTD) {}
         // Already at the destination (2026-09-09): the arrival ran; the ride
         // dialog ("plot the ride on the Travel Console") would be nonsense.
         if (rEarly?.alreadyHere) {
           log(`[openTravel] '${beat.id}' — party already at ${beat.worldEffects.openTravel.hexName}; arrived instead of riding.`);
+          // review P3 (2026-10-27): only the ride dialog is skipped — the beat's other effects still land.
+          if (ctx?.force !== "preview") { try { await _applyBeatEffectsOnce(campaign, beat, ctx, { skipOpenTravel: true, at: "tail" }); } catch (_eAH) {} }
           return { ok: true, alreadyHere: true };
         }
       }
@@ -5348,6 +5372,7 @@ async function _storyProject(campaign, ctx = {}) {
       if (have === want) continue;
       if (have === "archived") continue;                       // an archived quest is the GM's call, not the projection's
       if (!want) continue;                                     // the projection never un-starts a quest (the GM's cleanup macros do)
+      if (have === "completed" && want === "active") continue; // review P2 (2026-10-27): a hand-completed quest (Quest Log / questEffects) stays completed
       const entry = next[have]?.[qid] || { v: 1, questId: qid, questName: String(game.bbttcc?.api?.campaign?.quests?.getQuest?.(qid)?.name || qid), status: want, acceptedTs: Date.now(), lastTouchedTs: Date.now(), state: "", notes: "", progress: { beats: {} }, history: [] };
       if (have) delete next[have][qid];
       entry.status = want; entry.lastTouchedTs = Date.now();
@@ -5596,7 +5621,7 @@ async function _beatRequiresMet(beat, campaign, ctx) {
       // { anyOf: [cond, cond, …] } — OR inside the AND list (STORY FLOW D-1, 2026-09-17: "make camp" waits for ANY ride)
       if (Array.isArray(c.anyOf)) {
         let any = false;
-        for (const sub of c.anyOf) { if (await _beatRequiresMet({ id: beat?.id, inject: { requires: [sub] } }, campaign, ctx)) { any = true; break; } }
+        for (const sub of c.anyOf) { if (await _beatRequiresMet({ id: beat?.id, worldEffects: beat?.worldEffects, inject: { requires: [sub] } }, campaign, ctx)) { any = true; break; } }
         if (!any) return false;
         continue;
       }
@@ -5727,7 +5752,7 @@ async function _beatGateReport(beat, campaign, ctx = {}) {
       if (c && Array.isArray(c.anyOf)) {
         let any = false; const texts = [];
         for (const sub of c.anyOf) {
-          let r = null; try { r = await _beatGateReport({ id: beat?.id, inject: { requires: [sub] } }, campaign, ctx); } catch (_eA) {}
+          let r = null; try { r = await _beatGateReport({ id: beat?.id, worldEffects: beat?.worldEffects, inject: { requires: [sub] } }, campaign, ctx); } catch (_eA) {}
           const m = !!(r && r.met); any = any || m;
           texts.push(String(r?.conditions?.[0]?.text || JSON.stringify(sub)) + (m ? " ✓" : ""));
         }
@@ -8589,6 +8614,7 @@ function scanStableKeysReport() {
 function buildCampaignAPI() {
   return {
     closeOpenBeatDialogs: (opts = {}) => _closeOpenBeatDialogs(opts),   // one window per moment (2026-10-26)
+    pickOpenBeatChoice: (opts = {}) => _pickOpenBeatChoice(opts),       // the Battle call presses the Aftermath card (2026-10-27)
     awards: STORY_AWARDS_API,   // story awards (2026-09-20): settle / pay / ledger / rewardFor
     listCampaigns,
     getCampaign,

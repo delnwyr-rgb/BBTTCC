@@ -458,6 +458,15 @@ async function _rcStoryRoute(app, word, why = "") {
     if (!capi?.runBeat || !cid) return null;
     vm.routeFired = `${w}:${beatId}`;
     try { await app._saveSessionNow?.(); } catch (_e) {}
+    // "pick:<beatId>#<choice label>" (2026-10-27): the story already has an Aftermath card waiting — the call PRESSES its
+    // matching choice instead of asking twice. If the card isn't open, it opens so the GM can pick.
+    const pm = /^pick:([^#]+)#(.+)$/.exec(beatId);
+    if (pm) {
+      const picked = capi.pickOpenBeatChoice?.({ beatId: pm[1].trim(), label: pm[2].trim() }) || { ok: false };
+      if (!picked.ok) await capi.runBeat(cid, pm[1].trim(), { source: "raid", force: true, outcome: w, why: String(why || "") });
+      try { Hooks.callAll("bbttcc:raid:routed", { outcome: w, beatId: pm[1].trim(), picked: picked.ok ? picked.label : null, offeredBy: vm.offeredBy || "", attackerId: vm.attackerId || "" }); } catch (_e) {}
+      return picked;
+    }
     const res = await capi.runBeat(cid, beatId, { source: "raid", force: true, outcome: w, why: String(why || "") });
     try { Hooks.callAll("bbttcc:raid:routed", { outcome: w, beatId, offeredBy: vm.offeredBy || "", attackerId: vm.attackerId || "" }); } catch (_e) {}
     return res;

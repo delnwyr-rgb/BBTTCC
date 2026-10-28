@@ -2394,11 +2394,41 @@ Hooks.once("init",()=>{
     return entry;
   };
 
+  function _sceneHasHexes(sc) {
+    try { return (sc?.drawings?.contents || []).some(d => { const f = d.flags?.["bbttcc-territory"]; return !!(f && (f.isHex || f.kind === "territory-hex")); }); } catch (_e) { return false; }
+  }
+  function _viewPlanningMap(factionId) {
+    if (_sceneHasHexes(canvas?.scene)) return;
+    let target = null;
+    try {
+      const ch = game.user?.character;
+      const fid = String(factionId || ch?.flags?.["bbttcc-factions"]?.factionId || ch?.flags?.["bbttcc-auto-link"]?.factionId || ch?.flags?.["bbttcc-aae"]?.factionId || "").replace(/^Actor\./, "");
+      const here = fid ? game.bbttcc?.api?.travel?.whereIs?.(fid) : null;
+      const sid = String(here?.hexUuid || "").split(".")[1];
+      if (sid) target = game.scenes?.get(sid) || null;
+    } catch (_e) {}
+    if (!target && _sceneHasHexes(game.scenes?.active)) target = game.scenes.active;
+    if (!target) {
+      let best = 0;
+      for (const sc of game.scenes ?? []) {
+        const n = (sc.drawings?.contents || []).filter(d => { const f = d.flags?.["bbttcc-territory"]; return !!(f && (f.isHex || f.kind === "territory-hex")); }).length;
+        if (n > best) { best = n; target = sc; }
+      }
+    }
+    if (target && canvas?.scene?.id !== target.id) target.view().catch(() => {});
+  }
+
   raidAPI.openActivityPlanner = (opts = {})=>{
     const C=globalThis.BBTTCC_ActivityPlanner;
     if(!C) return ui.notifications?.warn?.("Activity Planner not available.");
 
     const { factionId = null, lockFaction = false } = (opts && typeof opts === "object") ? opts : {};
+
+    // Planning happens on the map (2026-10-27, Dave: "I love that we get pulled to the map for travel. Can we make it so
+    // that opening the planner does the same thing?"). Off a hex map, THIS seat views the map holding the party (else
+    // the active map, else the one with the most hexes) — a view, not an activation: one steward's planning doesn't
+    // move the table.
+    try { _viewPlanningMap(factionId); } catch (_eMap) {}
 
     // Close any existing planner instance so lock context + state is deterministic.
     try {
