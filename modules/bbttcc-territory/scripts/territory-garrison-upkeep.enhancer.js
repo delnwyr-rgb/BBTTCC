@@ -449,13 +449,21 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
     // Integration-based loyalty stabilization:
     // each short_integration hex with paid upkeep: +1 loyalty
     // each full_integration hex with paid upkeep: +2 loyalty
-    const loyaltyBonus = (loyaltyShortCount * 1) + (loyaltyFullCount * 2);
+    // Owner ruling 2026-10-28: the bonus restores a Domain to steady, never past it — it stops at
+    // Loyalty 50 (+6 a turn with no ceiling walked every 3-hex Domain to 100 on autopilot).
+    const LOYALTY_BONUS_CEILING = 50;
+    const loyaltyBonusRaw = (loyaltyShortCount * 1) + (loyaltyFullCount * 2);
+    const loyaltyNow = (fFlags.loyalty === undefined || fFlags.loyalty === null) ? 50 : N(fFlags.loyalty);
+    const loyaltyBonus = Math.min(loyaltyBonusRaw, Math.max(0, LOYALTY_BONUS_CEILING - (loyaltyNow + dLoyalty)));
     if (loyaltyBonus > 0) {
       dLoyalty += loyaltyBonus;
       logLines.push(
         `• Integration loyalty bonus: +${loyaltyBonus} Loyalty ` +
-        `(${loyaltyShortCount} short-integration, ${loyaltyFullCount} full-integration hexes with paid upkeep)`
+        `(${loyaltyShortCount} short-integration, ${loyaltyFullCount} full-integration hexes with paid upkeep` +
+        `${loyaltyBonus < loyaltyBonusRaw ? `; stops at ${LOYALTY_BONUS_CEILING}` : ""})`
       );
+    } else if (loyaltyBonusRaw > 0) {
+      logLines.push(`• Integration loyalty bonus: none — Loyalty is already at ${LOYALTY_BONUS_CEILING} or above (the bonus only restores a Domain to steady)`);
     }
 
     // Apply faction updates — loyalty lands NOW (clamped 0..100).
