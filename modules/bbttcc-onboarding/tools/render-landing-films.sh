@@ -5,6 +5,7 @@
 #   training_video.mp4 — Teaching Slides 1–9 + v2 VO, "Vintage Movie" (leberch, Pixabay 252205) looped under
 #                        the voice, faded in and out
 #   shattered_lens_logo.webp — the studio ident shown before the film
+# The A0 beat VO mp3s come from ~/Movies/BadEdenTitles/v5 (schedule5.py --write → cut_opening_beats.sh).
 # Output → <Foundry Data>/art/bbttcc/GOTTGAIT/GOTTGAIT Scene files/landing/ ; then rsync that folder to both
 # Lightsail instances (it's media — not an ft-deploy path).
 set -euo pipefail
@@ -16,6 +17,7 @@ OUT="$G/GOTTGAIT Scene files/landing"
 PIANO="${PIANO:-/Users/gamingaccount/Downloads/leberch-vintage-movie-252205.mp3}"
 LOGO="${LOGO:-/Users/gamingaccount/bad_eden_file_repository/Aslı stuff/shattered _lens_studios_logo.PNG}"
 MUSIC_GAIN="${MUSIC_GAIN:-0.16}"   # ≈ −16 dB under the VO (both sources sit near −20 dB mean)
+ONLY="${ONLY:-all}"                # ONLY=opening → just the opening film (after re-cutting the A0 beat VO)
 mkdir -p "$OUT"
 
 dur() { ffprobe -v error -show_entries format=duration -of csv=p=0 "$1"; }
@@ -48,6 +50,7 @@ concat_pairs "$OUT/opening_film.mp4" \
   "$OT/a0_b6_remember_and_be.mp4" "$OT/a0_b6_remember_and_be.mp3" \
   "$OT/a0_b7_incarnate.mp4" "$OT/a0_b7_incarnate.mp3" \
   "$OT/a0_b8_adam_kadmon.mp4" "$OT/a0_b8_adam_kadmon.mp3"
+if [ "$ONLY" = opening ]; then printf "%-26s %8s s  %s\n" opening_film.mp4 "$(dur "$OUT/opening_film.mp4")" "$(md5 -q "$OUT/opening_film.mp4")"; exit 0; fi
 
 echo "→ training video (slides 1–9, VO only)"
 TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT

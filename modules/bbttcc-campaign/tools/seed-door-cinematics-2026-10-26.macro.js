@@ -58,7 +58,7 @@
         const ms = await filmMs(film);
         const req = opener ? JSON.parse(JSON.stringify(opener.inject?.requires || [])) : [{ flag: "storyPhase", gte: 1 }];
         const beat = {
-          id, label: `${town} - ${link.label} Exterior`, type: "cinematic",
+          id, label: `${town} - ${link.label}`, type: "cinematic",   // named for what the film shows (10-27: not every door film is an exterior)
           description: "",
           sceneId: tgt.id, cinematic: { enabled: true, durationMs: ms, startSceneId: tgt.uuid, nextSceneId: null },
           playerFacing: true, questId: opener?.questId || null, questRole: null, questStep: null,
