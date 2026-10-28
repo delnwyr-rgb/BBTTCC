@@ -86,7 +86,7 @@
       <div class="ft-domain-card-title">Next turn</div>
       {{#if domain.planned.length}}
       <ul class="ft-domain-planned">
-        {{#each domain.planned}}<li><b>{{label}}</b>{{#if costLine}} <span class="ft-muted">· {{costLine}}</span>{{/if}}{{#if targetName}} <span class="ft-muted">→ {{targetName}}</span>{{/if}}</li>{{/each}}
+        {{#each domain.planned}}<li><b>{{label}}</b>{{#if costLine}} <span class="ft-muted">· {{costLine}}</span>{{/if}}{{#if targetName}} <span class="ft-muted">→ {{targetName}}</span>{{/if}}{{#if ref}} <a href="#" data-domain-act="unplan:{{ref}}" title="Cancel this order" style="margin-left:.35rem; opacity:.7;">✕</a>{{/if}}</li>{{/each}}
       </ul>
       {{else}}
       <p class="ft-hint">Nothing planned. Plan the turn, then run it at Day's End.</p>

@@ -159,6 +159,12 @@ const bridgeTour = {
 
 function _resolveFactionForTour(ctx) {
   if (ctx.faction) return ctx.faction;
+  // #48 (2026-10-28): a player seat tours ITS Domain (the assigned steward's) — never "the first faction in the world".
+  try {
+    const ch = game.user?.character; const fid = ch?.getFlag?.("bbttcc-factions", "factionId");
+    if (fid && game.actors.get(fid)) return game.actors.get(fid);
+    if (!game.user?.isGM) return null;
+  } catch (_) {}
   const api = game.bbttcc?.api;
   return game.actors.find(a => {
     try {
@@ -572,6 +578,9 @@ const plannerTour = {
   open: async (ctx) => {
     const openPlanner = game.bbttcc?.api?.raid?.openActivityPlanner;
     if (!openPlanner) { ui.notifications?.warn?.("Activity Planner not loaded — is bbttcc-raid enabled?"); return false; }
+    // #48: a planner the player already opened (from steward B's Domain tab, say) is toured as it is — not closed and
+    // reopened on another Domain.
+    if (document.querySelector("section.bbttcc-activity-planner")) return null;
     const faction = _resolveFactionForTour(ctx);
     if (!faction) { ui.notifications?.warn?.("No faction found — the planner needs one."); return false; }
     openPlanner({ factionId: faction.id, lockFaction: true });

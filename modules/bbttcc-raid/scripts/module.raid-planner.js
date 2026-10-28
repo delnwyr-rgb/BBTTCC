@@ -981,9 +981,11 @@ Hooks.once("init",()=>{
 
   // Activities whose effect lands on the FACTION (meters, flags, income), not on the target hex (owner ask 2026-09-21:
   // "call out the activities that apply to the whole faction"). Read off the throughput adapters.
-  const FACTION_WIDE = new Set(["harvest_season", "sell_surplus", "civic_audit", "local_festival", "charity_drive", "border_patrol", "training_parade",
-    "muster_drill", "training_drills", "justice_tribunal", "mass_mobilization", "mass_mobilization_std", "policy_reforms", "industrial_revolution",
-    "alliance_summit", "crisis_summit", "world_reformation_council", "enlightenment_congress", "rite_of_atonement"]);
+  // #43 (2026-10-28): Alliance Summit (picks the ally from the hex) and Industrial Revolution (that hex Loyalty −1) are
+  // hex-sensitive — not Domain-wide. Training Parade is retired.
+  const FACTION_WIDE = new Set(["harvest_season", "sell_surplus", "civic_audit", "local_festival", "charity_drive", "border_patrol",
+    "muster_drill", "training_drills", "justice_tribunal", "mass_mobilization", "mass_mobilization_std", "policy_reforms",
+    "crisis_summit", "world_reformation_council", "enlightenment_congress", "rite_of_atonement"]);
 
   // Human-friendly labels for primary OP categories
   const CATEGORY_LABELS = {
@@ -1437,9 +1439,9 @@ if (_fid) {
       if (!this._plannerState.factionId && facs[0]?.id) this._plannerState.factionId = facs[0].id;
       facSel.value = this._plannerState.factionId || facSel.value;
       facSel.addEventListener("change", () => {
-        // Hard safety: ignore faction changes if locked (belt + suspenders).
-        if (this._lockedFactionId && !game.user.isGM) return;
-        if (this._lockFaction && !game.user.isGM) return;
+        // Hard safety: ignore faction changes if locked — GM seats too (#45: the selector snapped back after a
+        // render while Plan already used the new Domain against the old Domain's targets).
+        if (this._lockedFactionId || this._lockFaction) return;
 
         this._plannerState.factionId = facSel.value;
         // Reset selectedKey when switching factions to avoid hidden selections.
@@ -1449,7 +1451,7 @@ if (_fid) {
 
 
 // If a factionId was provided on open, freeze the selector to that faction (player-safe).
-if ((this._lockedFactionId || this._lockFaction) && !game.user.isGM) {
+if (this._lockedFactionId || this._lockFaction) {
   facSel.disabled = true;
   facSel.title = "The Domain is locked for this window.";
 }
@@ -1869,7 +1871,7 @@ wrap.appendChild(top);
           if (FACTION_WIDE.has(String(a.key || "").toLowerCase())) {
             const chip = document.createElement("span");
             chip.textContent = "⚑ Domain-wide";
-            chip.title = "Affects the whole Domain, not a hex — the hex you pick is only where it's staged. Staging it N times applies it N times.";
+            chip.title = "Affects the whole Domain, not a hex — the hex you pick is only where it's staged. Every order is billed; planning the same one twice only helps when its effect adds up (Harvest Season, Sell Surplus).";
             chip.style.cssText = "margin-left:6px;font-size:0.68rem;font-weight:600;padding:0 5px;border-radius:999px;background:rgba(76,245,255,0.14);color:var(--ft-hud-accent-soft,#bfefff);vertical-align:middle;";
             labelSpan.appendChild(chip);
           }
@@ -1967,6 +1969,8 @@ wrap.appendChild(top);
       noteInput.style.width = "100%";
       noteInput.style.padding = "2px 6px";
       noteInput.style.fontSize = "0.8rem";
+      noteInput.value = String(this._plannerState.note || "");   // #47: survives a re-render
+      noteInput.addEventListener("input", (ev) => { this._plannerState.note = ev.target.value || ""; });
 
       noteWrap.appendChild(noteLabel);
       noteWrap.appendChild(noteInput);
@@ -2153,7 +2157,11 @@ wrap.appendChild(top);
         }
 
         if (act === "plan") {
-          const attackerId = facSel.value;
+          // #30: one save at a time (a double click filed two orders, or lost one while both toasted success).
+          if (this._planning) return;
+          this._planning = true;
+          try {
+          const attackerId = this._plannerState.factionId || facSel.value;   // #45: the rendered Domain, not a half-changed select
           const activityKey = this._plannerState.selectedKey || filtered[0]?.key;
           const note = noteInput.value || "";
 
@@ -2214,8 +2222,10 @@ wrap.appendChild(top);
           }
 
           ui.notifications?.info?.("Planned activity recorded.");
+          this._plannerState.note = "";
           this.render(false);   // stays open for the next one (owner ask 2026-09-21); Cancel/× closes
           return;
+          } finally { this._planning = false; }
         }
       });
 
@@ -2288,7 +2298,7 @@ Hooks.once("init",()=>{
   // UPDATED: supports both hex targets and rig targets
   // The ONE "what can this Domain plan" answer — the faction sheet + campaign lint read it (2026-10-28).
   raidAPI.strategicAvailability = (factionOrId) => bbttccStrategicAvailability(typeof factionOrId === "string" ? bbttccGetFactionActor(factionOrId) : factionOrId);
-  raidAPI.planActivity = async function({ attackerId, targetUuid=null, activityKey, note="", targetType="hex", defenderId=null, rigId=null, targetName=null, toHexUuid=null, recipe=null }){
+  raidAPI.planActivity = async function({ attackerId, targetUuid=null, activityKey, note="", targetType="hex", defenderId=null, rigId=null, targetName=null, toHexUuid=null, recipe=null, practice=false }){
     if(!attackerId || !activityKey) throw new Error("Missing required params.");
     const attacker = game.actors.get(attackerId); if(!attacker) throw new Error("Attacker not found.");
 
@@ -2308,8 +2318,22 @@ Hooks.once("init",()=>{
     if (String(targetType).toLowerCase() === "rig") {
       if (!defenderId || !rigId) throw new Error("Missing defenderId or rigId for rig target.");
       resolvedTargetName = targetName || `Rig ${rigId}`;
+      // #14 (2026-10-28): the rig branch now runs canPlan like the hex branch (the UI did; a direct API call didn't),
+      // and Repair Rig only ever repairs the planning Domain's own rig.
+      const defActor = game.actors.get(String(defenderId).replace(/^Actor\./, "")) || null;
+      if (String(activityKey) === "repair_rig" && defActor && String(defActor.id) !== String(attacker.id)) {
+        const err = new Error("Repair Rig fixes one of YOUR rigs — pick a rig your Domain owns."); err.bbttccRefused = true; throw err;
+      }
+      try {
+        const effR = (raidAPI.EFFECTS || {})[String(activityKey)];
+        if (effR && typeof effR.canPlan === "function") {
+          const verdict = await effR.canPlan({ actor: attacker, targetType: "rig", defender: defActor, rigId, rigActor: game.actors.get(rigId) || null, activityKey: String(activityKey) });
+          if (verdict && verdict.ok === false) { const err = new Error(String(verdict.reason || "That cannot be planned.")); err.bbttccRefused = true; throw err; }
+        }
+      } catch (eCan) { if (eCan?.bbttccRefused) throw eCan; console.warn("[bbttcc-raid-planner] rig canPlan check failed (fail-open)", eCan); }
 
       entry = {
+        id: foundry.utils.randomID(),   // #30: a stable id (ts alone collided on quick double plans)
         ts: Date.now(),
         date: (new Date()).toLocaleString(),
         type: "planned",
@@ -2351,6 +2375,7 @@ Hooks.once("init",()=>{
         try { const t2 = await fromUuid(toHexUuid); const d2 = t2?.document ?? t2; const tf2 = d2?.getFlag?.(TERR_ID) || d2?.flags?.[TERR_ID] || {}; toHexName = tf2?.name || d2?.text || d2?.id || "Unknown Hex"; } catch (_e) { toHexName = "Unknown Hex"; }
       }
       entry = {
+        id: foundry.utils.randomID(),   // #30: a stable id (ts alone collided on quick double plans)
         ts: Date.now(),
         date: (new Date()).toLocaleString(),
         type: "planned",
@@ -2388,6 +2413,7 @@ Hooks.once("init",()=>{
       } catch (eSur) { console.warn("[bbttcc-raid-planner] terrain surcharge failed (planned at base price)", eSur); }
     }
 
+    if (practice) entry.practice = true;   // onboarding's practice order — turn-driver consumePlanned never runs it (#15)
     const prev = deepClone(attacker.getFlag(FCT_ID,"warLogs") || []);
     prev.push(entry);
     await attacker.setFlag(FCT_ID,"warLogs", prev);

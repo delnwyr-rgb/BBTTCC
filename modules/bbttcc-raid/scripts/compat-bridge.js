@@ -621,6 +621,7 @@ divine_favor: {
     // before the 20 economy moves — turn-driver consumePlanned re-asks canPlan on the GM before billing.
     canPlan: async ({ actor, defender, rigId, entry }) => {
       const id = rigId || entry?.rigId; if (!id) return { ok: true };
+      if (defender && actor && String(defender.id) !== String(actor.id)) return { ok: false, reason: "Repair Rig fixes one of YOUR rigs — that one belongs to another Domain." };   // #14
       const owner = defender || actor; if (!owner) return { ok: true };
       const rig = _getRigs(owner).find(r => r.rigId === id);
       if (!rig) return { ok: false, reason: "That rig is no longer on the Domain's books." };

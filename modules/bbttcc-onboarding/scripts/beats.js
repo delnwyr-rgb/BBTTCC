@@ -551,6 +551,19 @@ async function _hexIntegration(hexUuid) {
   } catch (_) { return null; }
 }
 
+// Practice orders (#15, 2026-10-28): the stewardship beat files a real planned entry tagged practice:true. Every one
+// (plus untagged ones filed before the tag, by their note) is swept on enter/exit; consumePlanned never runs them.
+async function _dropPracticeOrders(faction){
+  try {
+    if (!faction) return 0;
+    const logs = faction.getFlag("bbttcc-factions", "warLogs") || [];
+    const isPractice = (e) => e?.type === "planned" && (e.practice === true || String(e.note || "").startsWith("Tutorial order — the Operator files it"));
+    const keep = logs.filter(e => !isPractice(e));
+    if (keep.length !== logs.length) await faction.setFlag("bbttcc-factions", "warLogs", keep);
+    return logs.length - keep.length;
+  } catch (e) { console.warn(TAG, "practice order cleanup failed", e); return 0; }
+}
+
 const stewardshipTurn = {
   id: "stewardship_turn",
   title: "Stewardship — OP & Turn",
@@ -562,6 +575,7 @@ const stewardshipTurn = {
   // exit), then ONE quiet practice Turn — the driver's ledgers and previews are muted on this seat.
   enter: async (ctx) => {
     ctx._tutorialPlan = null;
+    await _dropPracticeOrders(ctx.faction);   // #15: a reload mid-beat orphaned the last one — sweep before filing again
     let total = null;
     try {
       const op = globalThis.game?.bbttcc?.api?.op;
@@ -592,9 +606,13 @@ const stewardshipTurn = {
         let tdoc = null, tf = {};
         try { const t = await fromUuid(hexUuid); tdoc = t?.document ?? t; tf = tdoc?.getFlag?.("bbttcc-territory") || tdoc?.flags?.["bbttcc-territory"] || {}; } catch (_) {}
         const EFFECTS = raid.EFFECTS || {};
+        // Only orders this Domain can really plan — the same answer the planner + planActivity use (2026-10-28).
+        let canPlanKeys = null;
+        try { const av = raid.strategicAvailability?.(ctx.faction); if (Array.isArray(av)) canPlanKeys = new Set(av.filter(a => a.status === "available").map(a => String(a.key).toLowerCase())); } catch (_) {}
         for (const c of CANDIDATES) {
           if (options.length >= 3) break;
           const def = EFFECTS[c.key]; if (!def) continue;
+          if (canPlanKeys && !canPlanKeys.has(c.key)) continue;
           try {
             if (typeof def.canPlan === "function" && tdoc) {
               const v = await def.canPlan({ actor: ctx.faction, targetDoc: tdoc, targetFlags: tf, activityKey: c.key, toHexUuid: null });
@@ -624,7 +642,7 @@ const stewardshipTurn = {
         const before = (ctx.faction.getFlag("bbttcc-factions", "warLogs") || []).length;
         const chosen = options.find(o => o.key === pick) || options[0];
         try {
-          await raid.planActivity({ attackerId: fid, targetUuid: hexUuid, activityKey: chosen.key, targetType: "hex", note: "Tutorial order — the Operator files it and clears it." });
+          await raid.planActivity({ attackerId: fid, targetUuid: hexUuid, activityKey: chosen.key, targetType: "hex", note: "Tutorial order — the Operator files it and clears it.", practice: true });
           const logs = ctx.faction.getFlag("bbttcc-factions", "warLogs") || [];
           const mine = logs.slice(before).reverse().find(e => e?.type === "planned") || null;
           ctx._tutorialPlan = Object.assign(mine?.ts ? { ts: mine.ts } : {}, { key: chosen.key, label: chosen.label, catalogLabel: chosen.catalogLabel, price: chosen.price });
@@ -702,13 +720,9 @@ const stewardshipTurn = {
   },
 
   exit: async (ctx) => {
-    // The tutorial order never reaches a real Turn: pull it from the Domain's log before the hold goes back.
-    try {
-      if (ctx.faction && ctx._tutorialPlan?.ts) {
-        const logs = (ctx.faction.getFlag("bbttcc-factions", "warLogs") || []).filter(e => !(e?.type === "planned" && e?.ts === ctx._tutorialPlan.ts));
-        await ctx.faction.setFlag("bbttcc-factions", "warLogs", logs);
-      }
-    } catch (e) { console.warn(TAG, "tutorial plan cleanup failed", e); }
+    // The tutorial order never reaches a real Turn: pull EVERY practice order (not just the one this run filed) from the
+    // Domain's log before the hold goes back. consumePlanned also skips them (#15, 2026-10-28).
+    await _dropPracticeOrders(ctx.faction);
     ctx._tutorialPlan = null;
     try { if (ctx._sandboxHex?.hexUuid) await _stage()?.unclaimHex?.(ctx._sandboxHex.hexUuid); } catch (_) {}
     try { await _stage()?.cleanup?.(ctx._spawned || []); } catch (_) {}

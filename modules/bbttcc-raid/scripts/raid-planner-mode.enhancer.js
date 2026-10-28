@@ -10,7 +10,7 @@
 //        game.bbttcc.api.raid.forcePlanningMode();
 //
 // This will:
-//   - Add a banner: "Planning Mode — simulation only. No OP spend, no war logs."
+//   - Add a banner: "Planning Mode — simulation only. No marks spent, no war logs." (kept on every re-render, #46)
 //   - Disable Commit buttons in the Manage panel
 //   - Disable "Post" buttons in the rounds table
 //   - Disable Log Attacker / Log Defender checkboxes.
@@ -35,7 +35,7 @@
       banner.style.fontWeight = "600";
       banner.style.background = "rgba(30,64,175,0.15)";
       banner.style.color = "#bfdbfe";
-      banner.textContent = "Planning Mode — simulation only. No OP spend, no war logs.";
+      banner.textContent = "Planning Mode — simulation only. No marks spent, no war logs.";
       header.parentElement.insertBefore(banner, header.nextSibling);
     }
 
@@ -64,6 +64,16 @@
     });
   }
 
+  let _active = false;
+  const _reapply = (app, html) => {
+    if (!_active) return;
+    const root = document.querySelector("#bbttcc-raid-console") || document.querySelector(".bbttcc-raid-console");
+    if (root) applyPlanningModeToRoot(root);
+  };
+  Hooks.on("renderApplication", _reapply);
+  Hooks.on("renderApplicationV2", _reapply);
+  Hooks.on("closeApplicationV2", (app) => { try { if (app?.element?.matches?.("#bbttcc-raid-console, .bbttcc-raid-console") || app?.element?.querySelector?.(".bbttcc-raid-console")) _active = false; } catch (_e) {} });
+
   Hooks.once("init", () => {
     game.bbttcc = game.bbttcc || {};
     game.bbttcc.api = game.bbttcc.api || {};
@@ -82,8 +92,13 @@
       }
 
       applyPlanningModeToRoot(root);
+      // #46 (2026-10-28): the console rebuilds its buttons on every render — the lock used to last one render.
+      // Stays on until the console closes or game.bbttcc.api.raid.forcePlanningMode(false).
+      _active = true;
       console.log(TAG, "Forced planning-mode UI applied.");
     };
+    const _off = game.bbttcc.api.raid.forcePlanningMode;
+    game.bbttcc.api.raid.forcePlanningMode = function (on = true) { if (on === false) { _active = false; return; } return _off(); };
 
     console.log(TAG, "forcePlanningMode helper registered on game.bbttcc.api.raid.");
   });

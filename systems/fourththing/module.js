@@ -25852,7 +25852,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const label = String(_EFF[key]?.label || _EFF[key.toLowerCase()]?.label || e.label || (key ? key.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()) : "") || "Planned action");
       let costLine = String(e.costLine || "");
       try { if (!costLine && _turn.activityCost) costLine = _turn.formatActivityCost?.(_turn.activityCost({ entry: e })) || ""; } catch (_e) {}
-      return { label, costLine, targetName: String(e.targetName || "") };
+      return { label, costLine, targetName: String(e.targetName || ""), ref: String(e.id || e.ts || "") };
     });
     // ruling 17 (2026-10-18): Convictions = the steward's sworn philosophy + the Domain's drift from it (bbttcc-aae)
     let convictions = "—"; let convictionsMeter = null;
@@ -25893,6 +25893,18 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
     if (!faction) return ui.notifications?.info?.("No Domain is linked to this steward yet.");
     const A = game.bbttcc?.api ?? {};
+    if (String(act).startsWith("unplan:")) {     // #31 (2026-10-28): a steward cancels a planned order from the Domain tab
+      const ref = String(act).slice(7);
+      const logs = faction.getFlag("bbttcc-factions", "warLogs") || [];
+      const hit = logs.find(e => String(e?.type || "").toLowerCase() === "planned" && (String(e.id || "") === ref || String(e.ts || "") === ref));
+      if (!hit) return sheet.render(false);   // already consumed by a Turn — nothing to cancel
+      const ok = await Dialog.confirm({ title: "Cancel this order?", content: `<p>Take <b>${foundry.utils.escapeHTML(String(game.bbttcc?.api?.raid?.EFFECTS?.[hit.activityKey]?.label || hit.activityKey || "this order"))}</b> off next turn's plan? Nothing has been paid for it yet.</p>` });
+      if (!ok) return;
+      const fresh = faction.getFlag("bbttcc-factions", "warLogs") || [];   // re-read: a Turn may have run while the dialog was up
+      const keep = fresh.filter(e => e !== undefined && !(String(e?.type || "").toLowerCase() === "planned" && (String(e.id || "") === ref || String(e.ts || "") === ref)));
+      if (keep.length !== fresh.length) await faction.setFlag("bbttcc-factions", "warLogs", keep);
+      return sheet.render(false);
+    }
     if (String(act).startsWith("hex:")) {        // a hex of the Domain: jump there when it is on this map, and open its sheet
       const uuid = String(act).slice(4);
       try {

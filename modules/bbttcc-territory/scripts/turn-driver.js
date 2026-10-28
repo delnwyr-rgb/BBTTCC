@@ -490,8 +490,13 @@ function ensureConsumePlannedShim(){
     if (!factionActor) throw new Error("consumePlanned: faction actor not found.");
 
     const wl = deepClone(factionActor.getFlag(FCT_ID, "warLogs") || []);
-    const planned = wl.filter(e => e?.type === "planned" && String(e?.attackerId) === String(factionActor.id));
-    if (!planned.length) return { changed:false, count:0, rows:[] };
+    // Onboarding practice orders (#15, 2026-10-28) never run and never bill — they are dropped here.
+    const practice = wl.filter(e => e?.type === "planned" && e?.practice === true);
+    const planned = wl.filter(e => e?.type === "planned" && e?.practice !== true && String(e?.attackerId) === String(factionActor.id));
+    if (!planned.length) {
+      if (apply && practice.length) await factionActor.setFlag(FCT_ID, "warLogs", wl.filter(e => !(e?.type === "planned" && e?.practice === true)));
+      return { changed: !!(apply && practice.length), count:0, rows:[] };
+    }
 
     const finalizedEntries = [];
 
@@ -598,7 +603,7 @@ function ensureConsumePlannedShim(){
     // Re-fetch warLogs to preserve any Strategic Throughput handler writes
     const currentLogs = deepClone(factionActor.getFlag(FCT_ID, "warLogs") || []);
     const plannedTsSet = new Set(planned.map(e => e.ts));
-    const next = currentLogs.filter(e => !(e?.type === "planned" && plannedTsSet.has(e.ts)));
+    const next = currentLogs.filter(e => !(e?.type === "planned" && (plannedTsSet.has(e.ts) || e?.practice === true)));
     next.push(...finalizedEntries);
     await factionActor.setFlag(FCT_ID, "warLogs", next);
 
