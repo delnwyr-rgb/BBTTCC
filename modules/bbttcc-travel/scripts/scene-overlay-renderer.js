@@ -59,6 +59,9 @@
     clearFrame(doc.id);
     const o = doc.getFlag?.(MOD, "overlay");
     if (!o?.frame) { tile._bbttccFrame = null; return; }
+    // A hidden tile's frame is hidden too — players must not see the outline of a reveal
+    // (toggling hidden fires refreshTile, so the frame comes back with the tile).
+    if (doc.hidden && !game.user?.isGM) { tile._bbttccFrame = null; return; }
     const L = frameLayer();
     if (!L) return;
     const w = doc.width, h = doc.height;

@@ -2217,13 +2217,20 @@
                   cancel: {
                     label: "No Override",
                     callback: () => resolve({ costMult: 1, costAdd: {}, encDcMod: 0, encounterPolicy: "auto" })
+                  },
+                  abort: {
+                    label: "Cancel Route",
+                    callback: () => resolve(null)
                   }
                 },
                 default: "ok",
-                close: () => resolve({ costMult: 1, costAdd: {}, encDcMod: 0, encounterPolicy: "auto" })
+                // Closing the window (X / Escape) CANCELS — it must never ride, spend, or move the token.
+                // (A button's callback resolves first; this later resolve is then a no-op.)
+                close: () => resolve(null)
               });
               d.render(true);
             });
+            if (!gmOverrides) { $rout.textContent = "Route cancelled — nothing spent, nobody moved. The legs are still planned."; return; }
           }
 
 

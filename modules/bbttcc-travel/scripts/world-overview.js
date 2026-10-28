@@ -210,9 +210,15 @@
     return (Number(tf?.mods?.radiation) || 0) > 0;
   }
 
-  // Aggregate one region scene's hexes → { total, revealed, hazard, dom, factions }.
-  function aggregateScene(scene) {
-    const hexes = (scene?.drawings ?? []).filter(isHexDoc);
+  // Aggregate one region's hexes → { total, revealed, hazard, dom, factions }.
+  // One map (10-26): every region link targets the same scene, so count only the hexes
+  // stamped with this region's key; a scene with no keyed hexes (split world) counts whole.
+  function aggregateScene(scene, regionKey = null) {
+    let hexes = (scene?.drawings ?? []).filter(isHexDoc);
+    if (regionKey) {
+      const mine = hexes.filter(d => d.flags?.["bbttcc-travel"]?.regionKey === regionKey);
+      if (mine.length) hexes = mine;
+    }
     let revealed = 0, hazard = 0;
     const byFaction = new Map();
     for (const d of hexes) {
@@ -283,7 +289,7 @@
       const link = regionLinkOf(d);
       const scene = link?.targetSceneUuid ? fromUuidSync(link.targetSceneUuid) : null;
       if (!(scene instanceof Scene)) continue;
-      const agg = aggregateScene(scene);
+      const agg = aggregateScene(scene, link.regionKey || null);
       if (!agg.total) continue;
       const { text, color } = statusOf(agg);
       const nameFont = Number(d.document.fontSize) || 48;
