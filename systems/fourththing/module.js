@@ -25771,10 +25771,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     return            { key: "best", band: "Fervent",  hint: "Loyalty 85+: the land is yours in every sense — best income, best defence, no unrest." };
   }
   function _ftDomainDarknessBand(v) {
-    if (v < 1) return { key: "ok",   band: "Clear",    hint: "No darkness on the land." };
-    if (v < 4) return { key: "warn", band: "Shadowed", hint: "Darkness 1–3: something is wrong out there. It spreads if ignored." };
-    if (v < 7) return { key: "bad",  band: "Dim",      hint: "Darkness 4–6: the land is sickening. Redeem it, or it will redeem itself of you." };
-    return           { key: "worst", band: "Dark",     hint: "Darkness 7+: the land has turned. Everything costs more here." };
+    // Bands owner-ruled 2026-10-28 (advance-turn.tracks DARK_BANDS) — Darkness never fades on its own.
+    if (v < 1)  return { key: "ok",    band: "Clear",     hint: "No Darkness on the land. Darkness never fades by itself — keep it this way." };
+    if (v < 4)  return { key: "warn",  band: "Shaded",    hint: "Darkness 1–3: income −5% every turn. It will not fade on its own — cleanse a hex, hold Blessed Ground, or convene the other Domains." };
+    if (v < 7)  return { key: "bad",   band: "Shadowed",  hint: "Darkness 4–6: income −10%, Loyalty −1 every turn and no recovery, and unrest can break out. Work it down before it reaches 7." };
+    if (v < 10) return { key: "worst", band: "Intrusion", hint: "Darkness 7–9: income −15%, Loyalty −1, and each turn the dark leaks into a neighbouring hex — usually another Domain's. Their Darkness rises with yours. Travel is harder." };
+    return             { key: "worst", band: "Calamity",  hint: "Darkness 10: income −20%, Loyalty −2, the leak, and each turn your least loyal hex loses 2 integration and turns Hostile." };
   }
   /** The hexes that make up the Domain (Dave 2026-10-18: "room for more stuff … like hexes that make up the domain").
    *  → { count, list:[{uuid, name, kind, hint, here}] } — `here` = on the scene currently on the canvas. */

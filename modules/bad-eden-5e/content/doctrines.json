@@ -2764,7 +2764,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p>Something upstairs blinks in your direction. Don't ask what's upstairs. I asked once. I do not recommend it.</p><p><b>On Success: reduce Darkness pressure or negate a minor setback (GM adjudicates).</b></p>",
+          "value": "<p>Something upstairs blinks in your direction. Don't ask what's upstairs. I asked once. I do not recommend it.</p><p><b>On success: your Domain's Loyalty +1, or negate a minor setback (GM adjudicates).</b></p>",
           "chat": ""
         },
         "type": {
@@ -2803,7 +2803,7 @@
             "id": "ALpq7bO1Bfj22kX2",
             "pack": "doctrines",
             "identifier": "divine-favor",
-            "hash": "3ec9f4f9b128"
+            "hash": "3716c07b30eb"
           }
         }
       }
@@ -3699,7 +3699,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p>The broken stuff loosens its grip for a breath. <em>Please stop hitting yourselves,</em> says the universe, almost kindly.</p><p><b>Remove 1 Darkness; cancel Qliphothic effects.</b></p>",
+          "value": "<p>The broken stuff loosens its grip for a breath. <em>Please stop hitting yourselves,</em> says the universe, almost kindly.</p><p><b>Cancel Qliphothic effects this round; on success your Domain's Loyalty +1.</b></p>",
           "chat": ""
         },
         "type": {
@@ -3738,7 +3738,7 @@
             "id": "a7nzNPdcVaa7v2Or",
             "pack": "doctrines",
             "identifier": "faithful-intervention",
-            "hash": "c610ebb056c7"
+            "hash": "c4692ef90795"
           }
         }
       }
@@ -3799,7 +3799,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p>A steady voice walking the line between the volleys. Hands on shoulders. Names said out loud. It matters more than the math admits.</p><p><strong>Darkness −1; friendly tokens gain Blessed for 2 rounds.</strong></p>",
+          "value": "<p>A steady voice walking the line between the volleys. Hands on shoulders. Names said out loud. It matters more than the math admits.</p><p><strong>Your Domain's Loyalty +1; friendly tokens gain Blessed for 2 rounds.</strong></p>",
           "chat": ""
         },
         "type": {
@@ -3849,7 +3849,7 @@
             "id": "69sG1sY7wW282j5D",
             "pack": "doctrines",
             "identifier": "",
-            "hash": "eab41b52c624"
+            "hash": "a135f696783d"
           }
         }
       }
@@ -4820,7 +4820,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p>Everybody humming the same note at the same time. Spooky. Effective. The dark genuinely HATES a choir.</p><p><b>Allies gain advantage; Darkness −1.</b></p>",
+          "value": "<p>Everybody humming the same note at the same time. Spooky. Effective. The dark genuinely HATES a choir.</p><p><b>Allies gain Advantage; on success your Domain's Loyalty +1.</b></p>",
           "chat": ""
         },
         "type": {
@@ -4859,7 +4859,7 @@
             "id": "ukxfNHqfwBaNlRxV",
             "pack": "doctrines",
             "identifier": "harmonic-chant",
-            "hash": "b3d25cf86e94"
+            "hash": "31a362abb49d"
           }
         }
       }
@@ -6041,7 +6041,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p>Winning is fine. Winning while visibly, insufferably RIGHT? That's the good stuff. People remember that kind.</p><p><b>On success: your Domain's Darkness −1.</b></p>",
+          "value": "<p>Winning is fine. Winning while visibly, insufferably RIGHT? That's the good stuff. People remember that kind.</p><p><b>On success: your Domain's Loyalty +1.</b></p>",
           "chat": ""
         },
         "type": {
@@ -6081,7 +6081,7 @@
             "id": "4eRDhlPDsfCHIusU",
             "pack": "doctrines",
             "identifier": "moral-high-ground",
-            "hash": "bc2b0233c11e"
+            "hash": "59af4b6b072e"
           }
         }
       }
@@ -6987,7 +6987,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p>A few quiet words aimed at a sky that has, frankly, seen some things. It helps. Don't overthink it.</p><p><b>Allies gain advantage vs Fear; Darkness −1 in the region.</b></p>",
+          "value": "<p>A few quiet words aimed at a sky that has, frankly, seen some things. It helps. Don't overthink it.</p><p><b>Advantage on the attacker's roll this round; on success your Domain's Loyalty +1.</b></p>",
           "chat": ""
         },
         "type": {
@@ -7026,7 +7026,7 @@
             "id": "eE4cb9yKafMswvyj",
             "pack": "doctrines",
             "identifier": "prayer-in-the-smoke",
-            "hash": "2c97ba7bf5a1"
+            "hash": "c60714ef3d03"
           }
         }
       }
@@ -7039,7 +7039,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p>The faithful all hit the same note at once and the dark actually FLINCHES. I felt that one somewhere in my circuits.</p><p><b>On Success: Loyalty +2 on the target hex, Darkness −1; allies gain Prayer's Grace and the scene pulses gold.</b></p>",
+          "value": "<p>The faithful all hit the same note at once and the dark actually FLINCHES. I felt that one somewhere in my circuits.</p><p><b>On success: your Domain's Loyalty +1; allies gain Prayer's Grace and the scene pulses gold.</b></p>",
           "chat": ""
         },
         "type": {
@@ -7089,7 +7089,7 @@
             "id": "zkIBCip3YaPczXES",
             "pack": "doctrines",
             "identifier": "",
-            "hash": "58e398807006"
+            "hash": "7a841ce40f79"
           }
         }
       }
@@ -7675,7 +7675,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p>They reach for the dark, and somehow YOU come out cleaner for it. The cosmic accounting is deeply petty and I love it.</p><p><b>Convert an enemy's Darkness gain into −1 Darkness for you.</b></p>",
+          "value": "<p>They reach for the dark, and somehow YOU come out cleaner for it. The cosmic accounting is deeply petty and I love it.</p><p><b>On success: your Domain's Loyalty +1 and the enemy Domain's Darkness +1.</b></p>",
           "chat": ""
         },
         "type": {
@@ -7714,7 +7714,7 @@
             "id": "2bBfyz90F6HcQ53h",
             "pack": "doctrines",
             "identifier": "radiant-retaliation",
-            "hash": "8caf13fab6ad"
+            "hash": "5fc26f624ee3"
           }
         }
       }
@@ -7727,7 +7727,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p>Hold. HOLD. ...there you go. One steady voice and the whole line quietly decides to keep on existing today.</p><p><b>+1 to allies' next attack/defense. On Success: +2 Loyalty and −1 Darkness.</b></p>",
+          "value": "<p>Hold. HOLD. ...there you go. One steady voice and the whole line quietly decides to keep on existing today.</p><p><b>+1 to allies' next attack/defense. On success: your Domain's Loyalty +1.</b></p>",
           "chat": ""
         },
         "type": {
@@ -7767,7 +7767,7 @@
             "id": "uYpxpxRfTD1jCcYI",
             "pack": "doctrines",
             "identifier": "rally-the-line",
-            "hash": "dc84a540f9b0"
+            "hash": "5ab4e5b29ffb"
           }
         }
       }
@@ -8755,7 +8755,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p>The structure of everything leans in and quietly says, <em>yeah — this one's yours.</em> Doesn't happen often, stewards. Savor it.</p><p><b>Auto-win one opposed roll; Darkness −1.</b></p>",
+          "value": "<p>The structure of everything leans in and quietly says, <em>yeah — this one's yours.</em> Doesn't happen often, stewards. Savor it.</p><p><b>In a contested round you lose, your total is raised to match the defender's; Loyalty +1.</b></p>",
           "chat": ""
         },
         "type": {
@@ -8794,7 +8794,7 @@
             "id": "zrbCT4XQx9AwOp03",
             "pack": "doctrines",
             "identifier": "sephirotic-intervention",
-            "hash": "85767d985643"
+            "hash": "d545c988ef99"
           }
         }
       }
@@ -9078,7 +9078,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p><strong>Sight Of The Tree</strong></p><p>Kabbalist, pre-roll. Gain advantage on the attacker's roll this round; on success your Domain's Darkness −1.</p><p><em>Cost: Faith 8 marks.</em></p>",
+          "value": "<p><strong>Sight Of The Tree</strong></p><p>Kabbalist, pre-roll. Gain advantage on the attacker's roll this round; on success your Domain's Loyalty +1.</p><p><em>Cost: Faith 8 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -9111,7 +9111,7 @@
             "id": "iNLybbJVsEZhMjKj",
             "pack": "doctrines",
             "identifier": "",
-            "hash": "40602bd54cfa"
+            "hash": "f748f30ef3b5"
           }
         }
       }
@@ -10270,7 +10270,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p>Call a hard time-out on the entire war for one round. Everybody breathes. Some of 'em even mean it.</p><p><b>End combat for 1 round; Darkness −2 if the enemy accepts.</b></p>",
+          "value": "<p>Call a hard time-out on the entire war for one round. Everybody breathes. Some of 'em even mean it.</p><p><b>All enemy maneuvers this round are nullified while yours resolve; on success your Domain's Loyalty +2.</b></p>",
           "chat": ""
         },
         "type": {
@@ -10309,7 +10309,7 @@
             "id": "oFJINUROWs7ms7ki",
             "pack": "doctrines",
             "identifier": "temporal-armistice",
-            "hash": "62502ab8f13d"
+            "hash": "6286b4e9a37d"
           }
         }
       }

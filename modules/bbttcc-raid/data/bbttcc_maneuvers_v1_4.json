@@ -63,7 +63,7 @@
           "softPower": 10
         },
         "effects": {
-          "text": "+1 to allies' next attack/defense. On Success: Darkness −1 (merged from Radiant Rally)."
+          "text": "+1 to allies' next attack/defense. On success: your Domain's Loyalty +1."
         },
         "raidTypes": [
           "Assault",
@@ -192,7 +192,7 @@
           "faith": 10
         },
         "effects": {
-          "text": "Advantage on the attacker's roll this round; on success your Domain's Darkness −1."
+          "text": "Advantage on the attacker's roll this round; on success your Domain's Loyalty +1."
         },
         "raidTypes": [
           "Ritual/Tikkun",
@@ -376,7 +376,7 @@
           "softPower": 10
         },
         "effects": {
-          "text": "Remove 1 Darkness; cancel Qliphothic effects."
+          "text": "Cancel Qliphothic effects this round; on success your Domain's Loyalty +1."
         },
         "raidTypes": [
           "Ritual/Tikkun",
@@ -529,7 +529,7 @@
           "softPower": 30
         },
         "effects": {
-          "text": "On success: your Domain's Darkness −1."
+          "text": "On success: your Domain's Loyalty +1."
         },
         "raidTypes": [
           "Liberation",
@@ -637,7 +637,7 @@
           "violence": 20
         },
         "effects": {
-          "text": "On success: your Domain's Darkness −1 and the enemy Domain's Darkness +1."
+          "text": "On success: your Domain's Loyalty +1 and the enemy Domain's Darkness +1."
         },
         "raidTypes": [
           "Ritual/Tikkun",
@@ -715,7 +715,7 @@
           "softPower": 20
         },
         "effects": {
-          "text": "Allies gain Advantage; Darkness −1."
+          "text": "Allies gain Advantage; on success your Domain's Loyalty +1."
         },
         "raidTypes": [
           "Ritual/Tikkun",
@@ -767,7 +767,7 @@
           "softPower": 50
         },
         "effects": {
-          "text": "In a contested round you lose, your total is raised to match the defender's; Darkness −1."
+          "text": "In a contested round you lose, your total is raised to match the defender's; Loyalty +1."
         },
         "raidTypes": [
           "Ritual/Tikkun",
@@ -897,7 +897,7 @@
           "faith": 40
         },
         "effects": {
-          "text": "All enemy maneuvers this round are nullified while yours resolve; on success your Darkness −2 and the enemy's Morale +1."
+          "text": "All enemy maneuvers this round are nullified while yours resolve; on success your Domain's Loyalty +2."
         },
         "raidTypes": [
           "Courtly Intrigue",

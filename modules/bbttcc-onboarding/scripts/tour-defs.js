@@ -215,7 +215,7 @@ const DOMAIN_TAB_STEPS = [
   {
     id: "land", title: "The land — how it feels about you",
     selector: ".ft-domain-feel",
-    text: "Loyalty is how your people hold; Darkness is the Qliphothic taint creeping in; Momentum is the strategic surge you bank from strong turns.\nThey move on their own each Turn. The labels tell you the band before the numbers get dangerous."
+    text: "Loyalty is how your people hold; Darkness is the Qliphothic taint creeping in; Momentum is the strategic surge you bank from strong turns.\nLoyalty drifts each Turn; Darkness only falls when you work it down. The labels tell you the band before the numbers get dangerous."
   },
   {
     id: "holdings", title: "Holdings — hexes and rigs",

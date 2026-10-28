@@ -140,16 +140,16 @@
       fireMode: "post-commit",
       costBand: "medium",
       cost: { faith: 40, softpower: 20 }, // 40 marks (faith=10/mark + softpower=10/mark)
-      effectsText: "On success: faction darkness −1. Scene-bound: 'Prayer's Grace' on allies + gold pulse VFX.",   // (Morale +2 retired 2026-10-18, ruling 19)
-      description: "<p>The faction's faithful raise their voices as one. On a successful round, the rebuke of the dark resonates outward.</p><p><b>Faction darkness −1.</b> If a battle scene is bound, all friendly tokens gain <i>Prayer's Grace</i> for 3 rounds and the canvas pulses gold.</p>",
+      effectsText: "On success: Domain Loyalty +1. Scene-bound: 'Prayer's Grace' on allies + gold pulse VFX.",   // (Morale +2 retired 2026-10-18, ruling 19)
+      description: "<p>The faction's faithful raise their voices as one. On a successful round, the rebuke of the dark resonates outward.</p><p><b>Domain Loyalty +1.</b> If a battle scene is bound, all friendly tokens gain <i>Prayer's Grace</i> for 3 rounds and the canvas pulses gold.</p>",
       throughput: function (ctx) {
         if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
         return {
           factionEffects: [{
             factionId: ctx.attackerFactionId || null,
-            darknessDelta: -1,
+            loyaltyDelta: 1,   // 2026-10-28 (Dave): raids never lower Darkness — the cleansers give Loyalty instead
             when: "afterRound",
-            note: "Prayer Pulse: −1 Darkness on success."
+            note: "Prayer Pulse: Loyalty +1 on success."
           }],
           roundEffects: [
             { type: "buffSceneTokens", scope: "allies", factionId: ctx.attackerFactionId || null,

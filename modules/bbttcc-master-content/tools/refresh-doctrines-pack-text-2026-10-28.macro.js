@@ -8,13 +8,21 @@
 // Run as GM: DRY_RUN = true first, then false; a rerun reports 0 to update. Packs are per instance — run once on
 // each instance (any world where the module is active).
 const DRY_RUN = true;
+// Applied in order; a later file's "old" is the earlier file's "new". Second file = the Darkness ruling (raids never
+// lower Darkness — 12 raid cards read Loyalty instead), added 2026-10-28 late.
+const DATA = [
+  "modules/bbttcc-master-content/tools/doctrines-pack-text-2026-10-28.json",
+  "modules/bbttcc-master-content/tools/doctrines-pack-text-darkness-2026-10-28.json"
+];
 (async () => {
   if (!game.user?.isGM) return ui.notifications.warn("GM only.");
-  const data = await fetch("modules/bbttcc-master-content/tools/doctrines-pack-text-2026-10-28.json", { cache: "no-store" }).then(r => r.json());
   const report = {};
+  for (const url of DATA) {
+  const data = await fetch(url, { cache: "no-store" }).then(r => r.json());
+  const tag = url.split("/").pop();
   for (const [packId, rows] of Object.entries(data.packs)) {
     const pack = game.packs.get(packId);
-    if (!pack) { report[packId] = "not available in this world"; continue; }
+    if (!pack) { report[`${tag} → ${packId}`] = "not available in this world"; continue; }
     const docs = await pack.getDocuments();
     const byKey = new Map(docs.map(d => [`${d.flags?.bbttcc?.kind}:${d.flags?.bbttcc?.key}`, d]));
     const updates = [], conflicts = []; let already = 0;
@@ -34,7 +42,8 @@ const DRY_RUN = true;
       try { await Item.updateDocuments(updates, { pack: packId }); }
       finally { if (wasLocked) await pack.configure({ locked: true }); }
     }
-    report[packId] = { [DRY_RUN ? "wouldUpdate" : "updated"]: updates.length, alreadyCurrent: already, conflicts };
+    report[`${tag} → ${packId}`] = { [DRY_RUN ? "wouldUpdate" : "updated"]: updates.length, alreadyCurrent: already, conflicts };
+  }
   }
   console.log("[refresh-doctrines-pack-text]", DRY_RUN ? "DRY RUN" : "APPLIED", report);
   ui.notifications.info(`Doctrine pack text ${DRY_RUN ? "(dry run)" : "applied"} — see console.`);

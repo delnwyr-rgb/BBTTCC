@@ -49,8 +49,8 @@
       text: "+3 to the attacker's roll this round; your own tokens on the bound battle scene take 1 damage (the constructs strain).",
       throughput: (ctx) => bundle("overclock_the_golems", { roundEffects: [bonus("attacker", 3, "Overclock: +3"), { type: "damageSceneTokens", scope: "allies", factionId: att(ctx), damage: 1, damageType: "strain", note: "Overclock the Golems: strain" }] }) },
     { key: "radiant_retaliation", fireMode: "post-commit",
-      text: "On success: your Domain's Darkness −1 and the enemy Domain's Darkness +1.",
-      throughput: (ctx) => bundle("radiant_retaliation", { factionEffects: ok(ctx) ? [{ factionId: att(ctx), darknessDelta: -1, label: "Radiant Retaliation" }, ...(def(ctx) ? [{ factionId: def(ctx), darknessDelta: 1, label: "Radiant Retaliation" }] : [])] : [] }) },
+      text: "On success: your Domain's Loyalty +1 and the enemy Domain's Darkness +1.",   // 2026-10-28 (Dave): raids never lower Darkness — the cleansers give Loyalty instead
+      throughput: (ctx) => bundle("radiant_retaliation", { factionEffects: ok(ctx) ? [{ factionId: att(ctx), loyaltyDelta: 1, label: "Radiant Retaliation" }, ...(def(ctx) ? [{ factionId: def(ctx), darknessDelta: 1, label: "Radiant Retaliation" }] : [])] : [] }) },
     { key: "siege_breaker_volley", fireMode: "post-commit",
       text: "On success the target hex loses its Fortified modifier (applied at commit).",
       throughput: (ctx) => bundle("siege_breaker_volley", {}) },
@@ -58,8 +58,8 @@
       text: "On success the enemy Domain's Violence cap drops 30 marks, permanently (applied at commit).",
       throughput: (ctx) => bundle("ego_breaker", {}) },
     { key: "temporal_armistice", fireMode: "pre-roll",
-      text: "All ENEMY maneuvers this round are nullified (yours resolve); on success your Darkness −2.",   // (enemy Morale +1 retired 2026-10-18, ruling 19)
-      throughput: (ctx) => bundle("temporal_armistice", { roundEffects: [{ type: "nullifyAllManeuvers", scope: "enemy", window: "thisRound", note: "Temporal Armistice" }], factionEffects: ok(ctx) ? [{ factionId: att(ctx), darknessDelta: -2, label: "Temporal Armistice" }] : [] }) },
+      text: "All ENEMY maneuvers this round are nullified (yours resolve); on success your Domain's Loyalty +2.",   // (enemy Morale +1 retired 2026-10-18, ruling 19; Darkness −2 → Loyalty +2 2026-10-28)
+      throughput: (ctx) => bundle("temporal_armistice", { roundEffects: [{ type: "nullifyAllManeuvers", scope: "enemy", window: "thisRound", note: "Temporal Armistice" }], factionEffects: ok(ctx) ? [{ factionId: att(ctx), loyaltyDelta: 2, label: "Temporal Armistice" }] : [] }) },
     { key: "crown_of_mercy", fireMode: "post-commit",
       text: "On success the corrupted Spark seated on the target hex is repaired — or, if it has none, one corrupted spark carried by your Domain is purified (applied at commit).",
       throughput: (ctx) => bundle("crown_of_mercy", {}) },
@@ -77,12 +77,12 @@
       text: "On success: your Domain's Loyalty +2.",
       throughput: (ctx) => bundle("empathic_surge", { factionEffects: ok(ctx) ? [{ factionId: att(ctx), loyaltyDelta: 2, label: "Empathic Surge" }] : [] }) },
     { key: "moral_high_ground", fireMode: "post-commit",
-      text: "On success: your Domain's Darkness −1.",
-      throughput: (ctx) => bundle("moral_high_ground", { factionEffects: ok(ctx) ? [{ factionId: att(ctx), darknessDelta: -1, label: "Moral High Ground" }] : [] }) },
+      text: "On success: your Domain's Loyalty +1.",   // 2026-10-28: raids never lower Darkness
+      throughput: (ctx) => bundle("moral_high_ground", { factionEffects: ok(ctx) ? [{ factionId: att(ctx), loyaltyDelta: 1, label: "Moral High Ground" }] : [] }) },
     // Copy-vs-behaviour fixes (owner ruling 3): behaviour fixed, not the copy.
     { key: "prayer_in_the_smoke", fireMode: "pre-roll",
-      text: "Advantage on the attacker's roll this round; on success your Domain's Darkness −1.",
-      throughput: (ctx) => bundle("prayer_in_the_smoke", { roundEffects: [adv("attacker", "Prayer in the Smoke")], factionEffects: ok(ctx) ? [{ factionId: att(ctx), darknessDelta: -1, label: "Prayer in the Smoke" }] : [] }) },
+      text: "Advantage on the attacker's roll this round; on success your Domain's Loyalty +1.",   // 2026-10-28: raids never lower Darkness
+      throughput: (ctx) => bundle("prayer_in_the_smoke", { roundEffects: [adv("attacker", "Prayer in the Smoke")], factionEffects: ok(ctx) ? [{ factionId: att(ctx), loyaltyDelta: 1, label: "Prayer in the Smoke" }] : [] }) },
     { key: "signal_hijack", fireMode: "pre-roll",
       text: "Enemy communications fail: the opposing side rolls with disadvantage this round; in an Infiltration-Alarm raid the alarm also drops 1.",
       throughput: (ctx) => bundle("signal_hijack", { roundEffects: [dis("enemy", "Signal Hijack")], scenarioEffects: [{ type: "alarmDecay", delta: 1, reason: "Signal Hijack" }] }) },
@@ -105,7 +105,7 @@
     psychological_pressure: { fireMode: "pre-roll", text: "Cultural Ambassadors: the opposing side rolls 3d10 and keeps the lowest 2 this round.", t: (c) => ({ roundEffects: [dis("enemy", "Psychological Pressure")] }) },
     formal_parley:          { fireMode: "post-commit", text: "Diplomatic Envoys: on success your Domain's Loyalty +1 and the other side's Loyalty +1; in a Parley Suspicion falls 1.", t: (c) => ({ factionEffects: ok(c) ? [{ factionId: att(c), loyaltyDelta: 1, label: "Formal Parley" }, ...(def(c) ? [{ factionId: def(c), loyaltyDelta: 1, label: "Formal Parley (the other side)" }] : [])] : [], scenarioEffects: [{ type: "suspicionFall", delta: 1, reason: "Formal Parley" }] }) },   // the other side's +1 matches the blessed card text (DC1, 2026-10-26)
     make_do_and_hold:       { fireMode: "pre-roll", text: "Survivors' Militia: defenders ignore the first Structure loss this round and roll +1.", t: (c) => ({ roundEffects: [{ type: "ignoreStructureLoss", scope: "defender", count: 1, window: "thisRound" }, bonus("defender", 1, "Make Do and Hold")] }) },
-    sight_of_the_tree:      { fireMode: "pre-roll", text: "Kabbalist: the attacker rerolls the lowest die this round; on success Darkness −1.", t: (c) => ({ roundEffects: [adv("attacker", "Sight of the Tree")], factionEffects: ok(c) ? [{ factionId: att(c), darknessDelta: -1, label: "Sight of the Tree" }] : [] }) },
+    sight_of_the_tree:      { fireMode: "pre-roll", text: "Kabbalist: the attacker rerolls the lowest die this round; on success Loyalty +1.", t: (c) => ({ roundEffects: [adv("attacker", "Sight of the Tree")], factionEffects: ok(c) ? [{ factionId: att(c), loyaltyDelta: 1, label: "Sight of the Tree" }] : [] }) },
     rapid_transmutation:    { fireMode: "post-commit", text: "Rapid Transmutation: the 10 marks Economy you spent become 20 marks Faith.", t: (c) => ({ factionEffects: [{ factionId: att(c), opDeltas: { faith: 20 }, label: "Rapid Transmutation" }] }) },   // 2026-10-06: the maneuver cost already bills economy 10 — no second debit; yield doubled
     turn_the_card:          { fireMode: "pre-roll", text: "Tarot Mage: reroll the lowest die on your roll this round.", t: (c) => ({ roundEffects: [adv("attacker", "Turn the Card")] }) },
     pierce_the_veil:        { fireMode: "pre-roll", text: "Gnostic: the opposing side rolls 3d10 and keeps the lowest 2, and any enemy Qliphothic maneuver is cancelled.", t: (c) => ({ roundEffects: [dis("enemy", "Pierce the Veil"), { type: "cancelEffectTags", tags: ["qliphothic"], scope: "enemy" }] }) },

@@ -196,13 +196,13 @@
       fireMode: "anytime",
       costBand: "medium",
       cost: { faith: 20, softpower: 10 }, // 30 marks
-      effectsText: "Chaplains walk the line: darkness −1; friendly tokens gain 'Blessed' for 2 rounds.",
-      description: "<p>A steady voice between the volleys, hands on shoulders, names remembered. <b>Darkness −1.</b> If a battle scene is bound, all friendly tokens gain <i>Blessed</i> for 2 rounds.</p>",
+      effectsText: "Chaplains walk the line: Domain Loyalty +1; friendly tokens gain 'Blessed' for 2 rounds.",
+      description: "<p>A steady voice between the volleys, hands on shoulders, names remembered. <b>Domain Loyalty +1.</b> If a battle scene is bound, all friendly tokens gain <i>Blessed</i> for 2 rounds.</p>",
       throughput: function (ctx) {
         return {
           factionEffects: [{
-            factionId: ctx.attackerFactionId || null, darknessDelta: -1, when: "thisRound",
-            note: "Field Chaplaincy: −1 darkness."
+            factionId: ctx.attackerFactionId || null, loyaltyDelta: 1, when: "thisRound",   // 2026-10-28: raids never lower Darkness
+            note: "Field Chaplaincy: Loyalty +1."
           }],
           roundEffects: [{
             type: "buffSceneTokens", scope: "allies", factionId: ctx.attackerFactionId || null,

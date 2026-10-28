@@ -388,6 +388,29 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
   // ===========================================================================
 
   const DARK_CAP = 10;
+
+  // DARKNESS BANDS (owner ruling 2026-10-28) — every band bites, and each includes the ones below it:
+  //   1–3 Shaded     income −5% next turn
+  //   4–6 Shadowed   income −10%, Loyalty −1 a turn (and no upward drift), the unrest roll opens
+  //   7–9 Intrusion  income −15%, Loyalty −1, unrest, and the dark leaks: one neighbouring hex's
+  //                  Radiation +1 each turn (Radiated → Contaminated), a neighbour's before your own
+  //   10  Calamity   income −20%, Loyalty −2, unrest, the leak, and your least loyal hex loses 2
+  //                  integration and turns Hostile
+  // (Travel DC +2, Qliphothic spikes and leyline rot at 7+ are unchanged.)
+  const DARK_BANDS = [
+    { min: 10, key: "calamity",  label: "Calamity",  incomePct: -20, loyalty: -2 },
+    { min: 7,  key: "intrusion", label: "Intrusion", incomePct: -15, loyalty: -1 },
+    { min: 4,  key: "shadowed",  label: "Shadowed",  incomePct: -10, loyalty: -1 },
+    { min: 1,  key: "shaded",    label: "Shaded",    incomePct: -5,  loyalty: 0 }
+  ];
+  function factionDarkness(A) {
+    const box = A?.getFlag?.(MODF, "darkness");
+    return Math.max(0, Math.min(DARK_CAP, Number((box && typeof box === "object") ? box.global : box) || 0));
+  }
+  function darknessBand(g) {
+    const n = Number(g) || 0;
+    return DARK_BANDS.find(b => n >= b.min) || { min: 0, key: "clear", label: "Clear", incomePct: 0, loyalty: 0 };
+  }
   function ownsHex(fid, tf){ const o = tf?.factionId || tf?.ownerId; return String(o) === String(fid); }
   function isRadiated(tf){ return Number(tf?.mods?.radiation || 0) > 0; }   // the hex Radiation level (2026-10-22)
 
@@ -414,8 +437,10 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
         : (typeof box === "number" ? box : 0);
 
       const before = g;
+      // Owner ruling 2026-10-28: Darkness does NOT fade on its own — "Darkness is the reason to cooperate; it
+      // should be real." It falls only through deliberate work: Blessed Ground (below), cleansing a hex, the
+      // rites and councils in the planner, story beats. (A clean Domain used to shed 1 a turn for free.)
       if (ownedRadiated > 0) g = Math.min(DARK_CAP, g + 1);
-      else                   g = Math.max(0, g - 1);
       if (blessed > 0)       g = Math.max(0, g - blessed);
 
       if (g !== before) {
@@ -443,25 +468,94 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
   // DARKNESS THRESHOLDS (4/7/10) — NARRATIVE PINGS
   // ===========================================================================
 
+  // Bands with teeth (owner ruling 2026-10-28) — Intrusion leaks Radiation into a neighbouring hex,
+  // Calamity breaks the Domain's least loyal hex. Income / Loyalty bites live in doLoyaltyPhase1,
+  // the unrest roll in doLoyaltyPhase2. Both rows also land in the Domains' war logs.
+  async function _darkWarLog(A, summary, extra = {}) {
+    try {
+      const wl = Array.isArray(A.getFlag(MODF, "warLogs")) ? A.getFlag(MODF, "warLogs").slice() : [];
+      wl.push({ ts: Date.now(), date: new Date().toLocaleString(), type: "turn", activity: "darkness_band", summary, ...extra });
+      await A.update({ [`flags.${MODF}.warLogs`]: wl });
+    } catch (e) { console.warn(TAG, "darkness war log failed", e); }
+  }
+
   async function doDarknessThresholds() {
     const facs = facActors();
-    const gm   = gmIds();
     const lines4 = [];
     const lines7 = [];
     const lines10 = [];
+    const radApi = game.bbttcc?.api?.territory?.radiation;
+    const byScene = hexDocsByScene();
+    const leaked = new Set();   // one leak per hex per turn, whoever's Darkness caused it
 
     for (const A of facs) {
-      const box = A.getFlag(MODF, "darkness") || {};
-      const g   = typeof box.global === "number" ? box.global : 0;
+      const g = factionDarkness(A);
+      const band = darknessBand(g);
+      const name = foundry.utils.escapeHTML(A.name);
 
       if (g >= 4 && g <= 6) {
-        lines4.push(`• <b>${foundry.utils.escapeHTML(A.name)}</b>: Night terrors, unrest omens (Shadowed 4–6)`);
+        lines4.push(`• <b>${name}</b> (Darkness ${g}, Shadowed): income ${band.incomePct}%, Loyalty ${band.loyalty} a turn, unrest stirs`);
       }
-      if (g >= 7 && g <= 9) {
-        lines7.push(`• <b>${foundry.utils.escapeHTML(A.name)}</b>: Intrusion — neighboring hexes marked <i>Contaminated</i>`);
+
+      // INTRUSION (7+) — the dark leaks: one hex next to the Domain's ground gains a Radiation level
+      // (Radiated → Contaminated, never past 2 from this), a neighbour's hex before the Domain's own.
+      if (g >= 7) {
+        let pick = null;
+        if (radApi) {
+          const outside = [], inside = [];
+          for (const { hexes } of byScene) {
+            const mine = hexes.filter(d => String(d.flags?.[MODT]?.factionId || d.flags?.[MODT]?.ownerId) === String(A.id));
+            if (!mine.length) continue;
+            for (const h of mine) {
+              for (const n of hexNeighborsOf(h, hexes)) {
+                if (leaked.has(n.id) || radApi.level(n) >= 2) continue;
+                const own = String(n.flags?.[MODT]?.factionId || n.flags?.[MODT]?.ownerId) === String(A.id);
+                (own ? inside : outside).push({ n });
+              }
+              if (!leaked.has(h.id) && radApi.level(h) < 2) inside.push({ n: h });
+            }
+          }
+          const pool = outside.length ? outside : inside;
+          if (pool.length) pick = pool[Math.floor(Math.random() * pool.length)].n;
+        }
+        if (pick) {
+          leaked.add(pick.id);
+          const before = radApi.level(pick);
+          const after = await radApi.set(pick, before + 1, { source: "darkness_intrusion" });
+          const hexName = pick.flags?.[MODT]?.name || pick.text || pick.name || pick.id;
+          const ownerId = pick.flags?.[MODT]?.factionId || pick.flags?.[MODT]?.ownerId;
+          const B = ownerId ? game.actors.get(String(ownerId)) : null;
+          const rung = after >= 2 ? "Contaminated" : "Radiated";
+          lines7.push(`• <b>${name}</b> (Darkness ${g}, Intrusion): the dark leaks into <b>${foundry.utils.escapeHTML(hexName)}</b> — Radiation ${before} → ${after} (${rung})${B && B.id !== A.id ? `, held by ${foundry.utils.escapeHTML(B.name)}` : ""}`);
+          await _darkWarLog(A, `Darkness ${g} (Intrusion): the dark leaked into ${hexName} — Radiation ${before} → ${after} (${rung}).`, { hexUuid: pick.uuid });
+          if (B && B.id !== A.id) await _darkWarLog(B, `${A.name}'s Darkness leaked into ${hexName} — Radiation ${before} → ${after} (${rung}). A radiated hex raises your Darkness every turn until it is cleansed.`, { hexUuid: pick.uuid, sourceFactionId: A.id });
+        } else {
+          lines7.push(`• <b>${name}</b> (Darkness ${g}, Intrusion): income ${band.incomePct}%, Loyalty ${band.loyalty} a turn — no clean hex left nearby to leak into`);
+        }
       }
+
+      // CALAMITY (10) — the Domain's least loyal hex breaks: integration −2 and Hostile Population.
       if (g >= 10) {
-        lines10.push(`• <b>${foundry.utils.escapeHTML(A.name)}</b>: <span style="color:#b22222"><b>Regional Calamity</b></span> — corruption wave`);
+        const owned = ownedHexDocs(A);
+        const hex = owned.slice().sort((a, b) => hexLoyaltyScore(a.flags?.[MODT] || {}) - hexLoyaltyScore(b.flags?.[MODT] || {}))[0];
+        if (hex) {
+          const tf = hex.flags?.[MODT] || {};
+          const integ = foundry.utils.duplicate(tf.integration || {});
+          const pBefore = Number(integ.progress ?? tf.integrationProgress ?? 0) || 0;
+          integ.progress = Math.max(0, pBefore - 2);
+          const mods = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];
+          const addHostile = !mods.includes("Hostile Population");
+          if (addHostile) mods.push("Hostile Population");
+          const patch = { [`flags.${MODT}.integration`]: integ, [`flags.${MODT}.modifiers`]: mods };
+          if (tf.integrationProgress !== undefined) patch[`flags.${MODT}.integrationProgress`] = integ.progress;
+          await hex.update(patch, { parent: hex.parent });
+          if (addHostile) {
+            try { const rec = game?.bbttcc?.api?.territory?.recordHexModifierTransition; if (typeof rec === "function") await rec(hex, "Hostile Population", "added", { activity: "darkness_calamity", factionId: A.id }, `calamity:${hex.id}:${Date.now()}`); } catch (_e) {}
+          }
+          const hexName = tf.name || hex.text || hex.name || hex.id;
+          lines10.push(`• <b>${name}</b> (Darkness ${g}): <span style="color:#b22222"><b>Calamity</b></span> — ${foundry.utils.escapeHTML(hexName)} integration ${pBefore} → ${integ.progress}${addHostile ? ", now Hostile" : ""}`);
+          await _darkWarLog(A, `Darkness ${g} (Calamity): ${hexName} breaks — integration ${pBefore} → ${integ.progress}${addHostile ? ", Hostile Population" : ""}.`, { hexUuid: hex.uuid });
+        }
       }
     }
 
@@ -471,9 +565,9 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
       speaker: { alias: "Bad Eden Darkness" }
     }).catch(()=>{});
 
-    await mk("Darkness Event (4–6)", lines4);
-    await mk("Darkness Intrusion (7–9)", lines7);
-    await mk("Darkness Calamity (10)", lines10);
+    await mk("Darkness — Shadowed (4–6)", lines4);
+    await mk("Darkness — Intrusion (7–9)", lines7);
+    await mk("Darkness — Calamity (10)", lines10);
   }
 
   // ===========================================================================
@@ -558,17 +652,22 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
     for (const A of facs) {
       let L = Number(A.getFlag(MODF, "loyalty") ?? 50);
       const before = L;
+      const band = darknessBand(factionDarkness(A));   // Darkness bands (2026-10-28)
 
-      const drift = L < 50 ? +1 : (L > 50 ? -1 : 0);
-      L = clamp(L + drift, 0, 100);
+      // Shadowed and worse: the people stop coming back on their own — no upward drift, and the band's pull.
+      let drift = L < 50 ? +1 : (L > 50 ? -1 : 0);
+      if (band.loyalty < 0 && drift > 0) drift = 0;
+      L = clamp(L + drift + band.loyalty, 0, 100);
 
       let bonus = 0;
       if (L < 15)      bonus = -20;
       else if (L < 30) bonus = -10;
       else if (L > 85) bonus = +10;
       else if (L > 70) bonus = +5;
+      bonus += band.incomePct;
 
-      if (drift !== 0 || bonus !== 0) {
+      const bonusStored = Number(A.getFlag(MODF, "bonuses")?.nextTurn?.opGainPct ?? 0) || 0;
+      if (L !== before || bonus !== bonusStored) {   // a band that lifted must clear its old penalty too
         // SET, never add (2026-09-21): the band IS the value for the next Advance — a running sum doubled the penalty
         // whenever the phase ran twice between expiries (Errata read −40% at loyalty 25; the band says −10%).
         updates.push(A.update({
@@ -578,8 +677,10 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
 
         lines.push(
           `• <b>${foundry.utils.escapeHTML(A.name)}</b>: `
-          + `Loyalty ${drift>0?"↑":drift<0?"↓":""} ${before}→${L} `
-          + `(Stability ${bonus>=0?"+":""}${bonus}% income next turn)`
+          + `Loyalty ${L>before?"↑":L<before?"↓":""} ${before}→${L} `
+          + `(Stability ${bonus>=0?"+":""}${bonus}% income next turn`
+          + (band.min > 0 ? `; Darkness ${factionDarkness(A)} — ${band.label}: ${band.incomePct}% income${band.loyalty ? `, Loyalty ${band.loyalty}` : ""}` : "")
+          + `)`
         );
       }
     }
@@ -644,7 +745,9 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
       // #63 (2026-10-28): the militia only spends its once-per-turn absorb on a strike that would DO something — a hex
       // that already carries Hostile Population gains nothing, and the absorb used to burn on it.
       const _alreadyHostile = (h) => { const m = h?.flags?.[MODT]?.modifiers; return Array.isArray(m) && m.includes("Hostile Population"); };
-      if (owned.length > 0 && (L < 30 || lowScore <= -3) && Math.random() < unrestOdds && !_alreadyHostile(lowest()) && !(await militiaAbsorb(lowest(), "unrest"))) {
+      // Shadowed Darkness (4+) opens the roll too (2026-10-28) — fear does what low Loyalty does.
+      const darkUnrest = factionDarkness(A) >= 4;
+      if (owned.length > 0 && (L < 30 || lowScore <= -3 || darkUnrest) && Math.random() < unrestOdds && !_alreadyHostile(lowest()) && !(await militiaAbsorb(lowest(), "unrest"))) {
         const hex = lowest();
         const tf  = foundry.utils.deepClone(hex.flags[MODT] || {});
         tf.modifiers = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];
@@ -652,7 +755,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
           tf.modifiers.push("Hostile Population");
           updates.push(hex.update({ [`flags.${MODT}`]: tf }, { parent: hex.parent }));
           lines.push(
-            `• ${A.name}: <b>Unrest</b> — ${hex.text||hex.name} gained <i>Hostile Population</i> (faction Loyalty ${L}; hex score ${lowScore}, odds ${Math.round(unrestOdds * 100)}%)`
+            `• ${A.name}: <b>Unrest</b> — ${hex.text||hex.name} gained <i>Hostile Population</i> (faction Loyalty ${L}${darkUnrest ? `, Darkness ${factionDarkness(A)}` : ""}; hex score ${lowScore}, odds ${Math.round(unrestOdds * 100)}%)`
           );
           // Hex Dossier — record loyalty-driven unrest event.
           try {

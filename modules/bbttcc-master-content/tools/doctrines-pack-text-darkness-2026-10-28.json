@@ -1,0 +1,201 @@
+{
+ "about": "Darkness ruling 2026-10-28 (Dave: raids never lower Darkness): the 12 raid-maneuver doctrine cards that promised Darkness −1/−2 now read Loyalty +1/+2 (Radiant Retaliation: your Loyalty +1, the enemy's Darkness +1). Rules line only, flavour untouched. Applied by refresh-doctrines-pack-text-2026-10-28.macro.js with DATA pointed here — old must match live or the row is skipped.",
+ "packs": {
+  "bbttcc-master-content.doctrines": [
+   {
+    "id": "ALpq7bO1Bfj22kX2",
+    "key": "divine_favor",
+    "kind": "maneuver",
+    "name": "Divine Favor",
+    "old": "<p>Something upstairs blinks in your direction. Don't ask what's upstairs. I asked once. I do not recommend it.</p><p><b>On Success: reduce Darkness pressure or negate a minor setback (GM adjudicates).</b></p>",
+    "new": "<p>Something upstairs blinks in your direction. Don't ask what's upstairs. I asked once. I do not recommend it.</p><p><b>On success: your Domain's Loyalty +1, or negate a minor setback (GM adjudicates).</b></p>"
+   },
+   {
+    "id": "a7nzNPdcVaa7v2Or",
+    "key": "faithful_intervention",
+    "kind": "maneuver",
+    "name": "Faithful Intervention",
+    "old": "<p>The broken stuff loosens its grip for a breath. <em>Please stop hitting yourselves,</em> says the universe, almost kindly.</p><p><b>Remove 1 Darkness; cancel Qliphothic effects.</b></p>",
+    "new": "<p>The broken stuff loosens its grip for a breath. <em>Please stop hitting yourselves,</em> says the universe, almost kindly.</p><p><b>Cancel Qliphothic effects this round; on success your Domain's Loyalty +1.</b></p>"
+   },
+   {
+    "id": "69sG1sY7wW282j5D",
+    "key": "field_chaplaincy",
+    "kind": "maneuver",
+    "name": "Field Chaplaincy",
+    "old": "<p>A steady voice walking the line between the volleys. Hands on shoulders. Names said out loud. It matters more than the math admits.</p><p><strong>Darkness −1; friendly tokens gain Blessed for 2 rounds.</strong></p>",
+    "new": "<p>A steady voice walking the line between the volleys. Hands on shoulders. Names said out loud. It matters more than the math admits.</p><p><strong>Your Domain's Loyalty +1; friendly tokens gain Blessed for 2 rounds.</strong></p>"
+   },
+   {
+    "id": "ukxfNHqfwBaNlRxV",
+    "key": "harmonic_chant",
+    "kind": "maneuver",
+    "name": "Harmonic Chant",
+    "old": "<p>Everybody humming the same note at the same time. Spooky. Effective. The dark genuinely HATES a choir.</p><p><b>Allies reroll the lowest die; Darkness −1.</b></p>",
+    "new": "<p>Everybody humming the same note at the same time. Spooky. Effective. The dark genuinely HATES a choir.</p><p><b>Allies gain Advantage; on success your Domain's Loyalty +1.</b></p>"
+   },
+   {
+    "id": "4eRDhlPDsfCHIusU",
+    "key": "moral_high_ground",
+    "kind": "maneuver",
+    "name": "Moral High Ground",
+    "old": "<p>Winning is fine. Winning while visibly, insufferably RIGHT? That's the good stuff. People remember that kind.</p><p><b>On success: your Domain's Darkness −1.</b></p>",
+    "new": "<p>Winning is fine. Winning while visibly, insufferably RIGHT? That's the good stuff. People remember that kind.</p><p><b>On success: your Domain's Loyalty +1.</b></p>"
+   },
+   {
+    "id": "zkIBCip3YaPczXES",
+    "key": "prayer_pulse",
+    "kind": "maneuver",
+    "name": "Prayer Pulse",
+    "old": "<p>The faithful all hit the same note at once and the dark actually FLINCHES. I felt that one somewhere in my circuits.</p><p><b>On Success: Loyalty +2 on the target hex, Darkness −1; allies gain Prayer's Grace and the scene pulses gold.</b></p>",
+    "new": "<p>The faithful all hit the same note at once and the dark actually FLINCHES. I felt that one somewhere in my circuits.</p><p><b>On success: your Domain's Loyalty +1; allies gain Prayer's Grace and the scene pulses gold.</b></p>"
+   },
+   {
+    "id": "eE4cb9yKafMswvyj",
+    "key": "prayer_in_the_smoke",
+    "kind": "maneuver",
+    "name": "Prayer in the Smoke",
+    "old": "<p>A few quiet words aimed at a sky that has, frankly, seen some things. It helps. Don't overthink it.</p><p><b>Allies reroll the lowest die vs Fear; Darkness −1 in the region.</b></p>",
+    "new": "<p>A few quiet words aimed at a sky that has, frankly, seen some things. It helps. Don't overthink it.</p><p><b>Advantage on the attacker's roll this round; on success your Domain's Loyalty +1.</b></p>"
+   },
+   {
+    "id": "2bBfyz90F6HcQ53h",
+    "key": "radiant_retaliation",
+    "kind": "maneuver",
+    "name": "Radiant Retaliation",
+    "old": "<p>They reach for the dark, and somehow YOU come out cleaner for it. The cosmic accounting is deeply petty and I love it.</p><p><b>Convert an enemy's Darkness gain into −1 Darkness for you.</b></p>",
+    "new": "<p>They reach for the dark, and somehow YOU come out cleaner for it. The cosmic accounting is deeply petty and I love it.</p><p><b>On success: your Domain's Loyalty +1 and the enemy Domain's Darkness +1.</b></p>"
+   },
+   {
+    "id": "uYpxpxRfTD1jCcYI",
+    "key": "rally_the_line",
+    "kind": "maneuver",
+    "name": "Rally the Line",
+    "old": "<p>Hold. HOLD. ...there you go. One steady voice and the whole line quietly decides to keep on existing today.</p><p><b>+1 to allies' next attack/defense. On Success: +2 Loyalty and −1 Darkness.</b></p>",
+    "new": "<p>Hold. HOLD. ...there you go. One steady voice and the whole line quietly decides to keep on existing today.</p><p><b>+1 to allies' next attack/defense. On success: your Domain's Loyalty +1.</b></p>"
+   },
+   {
+    "id": "zrbCT4XQx9AwOp03",
+    "key": "sephirotic_intervention",
+    "kind": "maneuver",
+    "name": "Sephirotic Intervention",
+    "old": "<p>The structure of everything leans in and quietly says, <em>yeah — this one's yours.</em> Doesn't happen often, stewards. Savor it.</p><p><b>Auto-win one opposed roll; Darkness −1.</b></p>",
+    "new": "<p>The structure of everything leans in and quietly says, <em>yeah — this one's yours.</em> Doesn't happen often, stewards. Savor it.</p><p><b>In a contested round you lose, your total is raised to match the defender's; Loyalty +1.</b></p>"
+   },
+   {
+    "id": "oFJINUROWs7ms7ki",
+    "key": "temporal_armistice",
+    "kind": "maneuver",
+    "name": "Temporal Armistice",
+    "old": "<p>Call a hard time-out on the entire war for one round. Everybody breathes. Some of 'em even mean it.</p><p><b>End combat for 1 round; Darkness −2 if the enemy accepts.</b></p>",
+    "new": "<p>Call a hard time-out on the entire war for one round. Everybody breathes. Some of 'em even mean it.</p><p><b>All enemy maneuvers this round are nullified while yours resolve; on success your Domain's Loyalty +2.</b></p>"
+   },
+   {
+    "id": "iNLybbJVsEZhMjKj",
+    "key": "opt_sight_of_the_tree",
+    "kind": "maneuver",
+    "name": "Sight Of The Tree",
+    "old": "<p><strong>Sight Of The Tree</strong></p><p>Kabbalist, pre-roll. Reroll the lowest die on the attacker's roll this round; on success your Domain's Darkness −1.</p><p><em>Cost: Faith 8 marks.</em></p>",
+    "new": "<p><strong>Sight Of The Tree</strong></p><p>Kabbalist, pre-roll. Reroll the lowest die on the attacker's roll this round; on success your Domain's Loyalty +1.</p><p><em>Cost: Faith 8 marks.</em></p>"
+   }
+  ],
+  "bad-eden-5e.doctrines": [
+   {
+    "key": "divine_favor",
+    "kind": "maneuver",
+    "name": "Divine Favor",
+    "old": "<p>Something upstairs blinks in your direction. Don't ask what's upstairs. I asked once. I do not recommend it.</p><p><b>On Success: reduce Darkness pressure or negate a minor setback (GM adjudicates).</b></p>",
+    "new": "<p>Something upstairs blinks in your direction. Don't ask what's upstairs. I asked once. I do not recommend it.</p><p><b>On success: your Domain's Loyalty +1, or negate a minor setback (GM adjudicates).</b></p>",
+    "rfiHash": "3716c07b30eb"
+   },
+   {
+    "key": "faithful_intervention",
+    "kind": "maneuver",
+    "name": "Faithful Intervention",
+    "old": "<p>The broken stuff loosens its grip for a breath. <em>Please stop hitting yourselves,</em> says the universe, almost kindly.</p><p><b>Remove 1 Darkness; cancel Qliphothic effects.</b></p>",
+    "new": "<p>The broken stuff loosens its grip for a breath. <em>Please stop hitting yourselves,</em> says the universe, almost kindly.</p><p><b>Cancel Qliphothic effects this round; on success your Domain's Loyalty +1.</b></p>",
+    "rfiHash": "c4692ef90795"
+   },
+   {
+    "key": "field_chaplaincy",
+    "kind": "maneuver",
+    "name": "Field Chaplaincy",
+    "old": "<p>A steady voice walking the line between the volleys. Hands on shoulders. Names said out loud. It matters more than the math admits.</p><p><strong>Darkness −1; friendly tokens gain Blessed for 2 rounds.</strong></p>",
+    "new": "<p>A steady voice walking the line between the volleys. Hands on shoulders. Names said out loud. It matters more than the math admits.</p><p><strong>Your Domain's Loyalty +1; friendly tokens gain Blessed for 2 rounds.</strong></p>",
+    "rfiHash": "a135f696783d"
+   },
+   {
+    "key": "harmonic_chant",
+    "kind": "maneuver",
+    "name": "Harmonic Chant",
+    "old": "<p>Everybody humming the same note at the same time. Spooky. Effective. The dark genuinely HATES a choir.</p><p><b>Allies gain advantage; Darkness −1.</b></p>",
+    "new": "<p>Everybody humming the same note at the same time. Spooky. Effective. The dark genuinely HATES a choir.</p><p><b>Allies gain Advantage; on success your Domain's Loyalty +1.</b></p>",
+    "rfiHash": "31a362abb49d"
+   },
+   {
+    "key": "moral_high_ground",
+    "kind": "maneuver",
+    "name": "Moral High Ground",
+    "old": "<p>Winning is fine. Winning while visibly, insufferably RIGHT? That's the good stuff. People remember that kind.</p><p><b>On success: your Domain's Darkness −1.</b></p>",
+    "new": "<p>Winning is fine. Winning while visibly, insufferably RIGHT? That's the good stuff. People remember that kind.</p><p><b>On success: your Domain's Loyalty +1.</b></p>",
+    "rfiHash": "59af4b6b072e"
+   },
+   {
+    "key": "prayer_in_the_smoke",
+    "kind": "maneuver",
+    "name": "Prayer in the Smoke",
+    "old": "<p>A few quiet words aimed at a sky that has, frankly, seen some things. It helps. Don't overthink it.</p><p><b>Allies gain advantage vs Fear; Darkness −1 in the region.</b></p>",
+    "new": "<p>A few quiet words aimed at a sky that has, frankly, seen some things. It helps. Don't overthink it.</p><p><b>Advantage on the attacker's roll this round; on success your Domain's Loyalty +1.</b></p>",
+    "rfiHash": "c60714ef3d03"
+   },
+   {
+    "key": "prayer_pulse",
+    "kind": "maneuver",
+    "name": "Prayer Pulse",
+    "old": "<p>The faithful all hit the same note at once and the dark actually FLINCHES. I felt that one somewhere in my circuits.</p><p><b>On Success: Loyalty +2 on the target hex, Darkness −1; allies gain Prayer's Grace and the scene pulses gold.</b></p>",
+    "new": "<p>The faithful all hit the same note at once and the dark actually FLINCHES. I felt that one somewhere in my circuits.</p><p><b>On success: your Domain's Loyalty +1; allies gain Prayer's Grace and the scene pulses gold.</b></p>",
+    "rfiHash": "7a841ce40f79"
+   },
+   {
+    "key": "radiant_retaliation",
+    "kind": "maneuver",
+    "name": "Radiant Retaliation",
+    "old": "<p>They reach for the dark, and somehow YOU come out cleaner for it. The cosmic accounting is deeply petty and I love it.</p><p><b>Convert an enemy's Darkness gain into −1 Darkness for you.</b></p>",
+    "new": "<p>They reach for the dark, and somehow YOU come out cleaner for it. The cosmic accounting is deeply petty and I love it.</p><p><b>On success: your Domain's Loyalty +1 and the enemy Domain's Darkness +1.</b></p>",
+    "rfiHash": "5fc26f624ee3"
+   },
+   {
+    "key": "rally_the_line",
+    "kind": "maneuver",
+    "name": "Rally the Line",
+    "old": "<p>Hold. HOLD. ...there you go. One steady voice and the whole line quietly decides to keep on existing today.</p><p><b>+1 to allies' next attack/defense. On Success: +2 Loyalty and −1 Darkness.</b></p>",
+    "new": "<p>Hold. HOLD. ...there you go. One steady voice and the whole line quietly decides to keep on existing today.</p><p><b>+1 to allies' next attack/defense. On success: your Domain's Loyalty +1.</b></p>",
+    "rfiHash": "5ab4e5b29ffb"
+   },
+   {
+    "key": "sephirotic_intervention",
+    "kind": "maneuver",
+    "name": "Sephirotic Intervention",
+    "old": "<p>The structure of everything leans in and quietly says, <em>yeah — this one's yours.</em> Doesn't happen often, stewards. Savor it.</p><p><b>Auto-win one opposed roll; Darkness −1.</b></p>",
+    "new": "<p>The structure of everything leans in and quietly says, <em>yeah — this one's yours.</em> Doesn't happen often, stewards. Savor it.</p><p><b>In a contested round you lose, your total is raised to match the defender's; Loyalty +1.</b></p>",
+    "rfiHash": "d545c988ef99"
+   },
+   {
+    "key": "opt_sight_of_the_tree",
+    "kind": "maneuver",
+    "name": "Sight Of The Tree",
+    "old": "<p><strong>Sight Of The Tree</strong></p><p>Kabbalist, pre-roll. Gain advantage on the attacker's roll this round; on success your Domain's Darkness −1.</p><p><em>Cost: Faith 8 marks.</em></p>",
+    "new": "<p><strong>Sight Of The Tree</strong></p><p>Kabbalist, pre-roll. Gain advantage on the attacker's roll this round; on success your Domain's Loyalty +1.</p><p><em>Cost: Faith 8 marks.</em></p>",
+    "rfiHash": "f748f30ef3b5"
+   },
+   {
+    "key": "temporal_armistice",
+    "kind": "maneuver",
+    "name": "Temporal Armistice",
+    "old": "<p>Call a hard time-out on the entire war for one round. Everybody breathes. Some of 'em even mean it.</p><p><b>End combat for 1 round; Darkness −2 if the enemy accepts.</b></p>",
+    "new": "<p>Call a hard time-out on the entire war for one round. Everybody breathes. Some of 'em even mean it.</p><p><b>All enemy maneuvers this round are nullified while yours resolve; on success your Domain's Loyalty +2.</b></p>",
+    "rfiHash": "6286b4e9a37d"
+   }
+  ]
+ }
+}

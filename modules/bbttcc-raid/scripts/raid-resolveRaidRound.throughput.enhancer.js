@@ -68,13 +68,13 @@
 
     const factionEffects = [];
 
-    // Rally the Line — attacker throughput. The −1 Darkness rider (its +2 Morale retired 2026-10-18, ruling 19)
+    // Rally the Line — attacker throughput. The rider (Darkness −1 until 2026-10-28, now Loyalty +1 — raids never lower Darkness) (its +2 Morale retired 2026-10-18, ruling 19)
     // was merged in from the retired Radiant Rally (MANEUVER_BALANCE_PASS.md §3.C).
     // "radiant_rally" kept in the test for back-compat with any legacy in-flight round.
     if ((attMans.includes("rally_the_line") || attMans.includes("radiant_rally")) && attackerFactionId) {
       factionEffects.push({
         factionId: attackerFactionId,
-        darknessDelta: -1,
+        loyaltyDelta: 1,
         note: "Rally the Line"
       });
     }

@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p>Call a hard time-out on the entire war for one round. Everybody breathes. Some of 'em even mean it.</p><p><b>End combat for 1 round; Darkness −2 if the enemy accepts.</b></p>",
+      "value": "<p>Call a hard time-out on the entire war for one round. Everybody breathes. Some of 'em even mean it.</p><p><b>All enemy maneuvers this round are nullified while yours resolve; on success your Domain's Loyalty +2.</b></p>",
       "chat": ""
     },
     "activities": {},

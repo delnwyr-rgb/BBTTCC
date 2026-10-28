@@ -385,7 +385,7 @@ const EFFECTS = {
    * ============================================================ */
 
   // RETIRED 2026-05-24 (MANEUVER_BALANCE_PASS.md §3.C) — Radiant Rally merged
-  // into Rally the Line (which now carries the −1 Darkness rider; its +2 Morale retired 2026-10-18, ruling 19).
+  // into Rally the Line (which now carries the Loyalty +1 rider — Darkness −1 until 2026-10-28; its +2 Morale retired 2026-10-18, ruling 19).
   // EFFECTS entry removed so it no longer surfaces in the raid console picker.
 
   supply_overrun: {
@@ -514,7 +514,7 @@ divine_favor: {
   opCosts: { faith: 10 },
   raidTypes: ["ritual","liberation","any"],
   defenderAccess: "Conditional",
-  text: "Call on providence; on success reduce Darkness pressure or negate a minor setback (GM adjudicates)."
+  text: "Call on providence; on success Domain Loyalty +1 or negate a minor setback (GM adjudicates)."
 },
 
   /* ============================================================

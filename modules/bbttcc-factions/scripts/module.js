@@ -4219,7 +4219,7 @@ Hooks.once("init", () => {
         maxOPs:     "Bank capacity — the summed per-channel caps, in marks. Edit to reflect campaign-level scale; no auto-deduction across categories.",
         // morale tip removed 2026-10-18 (ruling 19): faction Morale is retired.
         loyalty:    "Loyalty — adherence to faction leadership (0–100%). Low Loyalty risks defections, sabotage from within, Pressure flips.",
-        darkness:   "Darkness — accumulated Qliphothic taint. Rises from atrocity, ritual desecration, sephirotic neglect. High Darkness corrupts rolls and recruits.",
+        darkness:   "Darkness — accumulated Qliphothic taint. Rises from cruel choices, dirty tricks in a fight and radiated ground; it never fades on its own. Every band bites: 1–3 income −5%; 4–6 −10% and Loyalty −1 a turn; 7–9 −15% and it leaks into a neighbour's hex; 10 Calamity. Cleanse it together.",
         momentum:   "Momentum — strategic-layer Surge. Banked +1 each 10 rolled on OP checks; resets each turn. Spend menu: 1=arm +1d10 next OP roll · 2=force opposed reroll · 3=refund OP cost · 5=Reshape Strategy (GM-gated).",
         bonusDieArmed: "Next OP roll fires 3d10 (still exploding). Auto-consumed when used.",
         center:     "Political Center — the philosophy plurality currently dominant in this faction. Drives narrative tone and which factions you naturally align/clash with.",

@@ -293,7 +293,7 @@
   const THROUGHPUT = Object.create(null);
 
   // RETIRED 2026-05-24 (MANEUVER_BALANCE_PASS.md §3.C) — radiant_rally merged
-  // into rally_the_line; its −1 Darkness rider now lives on the
+  // into rally_the_line; its rider (Loyalty +1 since 2026-10-28) now lives on the
   // rally_the_line handler below. Handler removed so the GM-only stub synthesis
   // in _mansForType doesn't resurrect it.
 
@@ -346,8 +346,8 @@
       factionEffects: [
         {
           factionId: ctx.attackerFactionId || null,
-          darknessDelta: -1,
-          note: "Rally the Line (preview): −1 Darkness on success."   // (+2 Morale retired 2026-10-18, ruling 19)
+          loyaltyDelta: 1,   // 2026-10-28 (Dave): raids never lower Darkness — the cleansers give Loyalty instead
+          note: "Rally the Line (preview): Loyalty +1 on success."   // (+2 Morale retired 2026-10-18, ruling 19)
         }
       ],
       meta: { source: "throughput", maneuverKey: "rally_the_line", preview: true }
@@ -432,8 +432,8 @@
   };
 
   // --- T1 STANDARD: Divine Favor ---
-  // Text (runtime): "Call on providence; on success reduce Darkness pressure or negate a minor setback (GM adjudicates)."
-  // Preview intent: reduce Darkness by 1 (attacker) as a safe default.
+  // Text (runtime): "Call on providence; on success Loyalty +1 or negate a minor setback (GM adjudicates)."
+  // Preview intent: Loyalty +1 (attacker) — raids never lower Darkness (2026-10-28).
   THROUGHPUT["divine_favor"] = function (ctx) {
     if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
 
@@ -441,8 +441,8 @@
       factionEffects: [
         {
           factionId: ctx.attackerFactionId || null,
-          darknessDelta: -1,
-          note: "Divine Favor (preview): Reduce attacker Darkness by 1 on success (default; GM may adjudicate alternate minor negation)."
+          loyaltyDelta: 1,   // 2026-10-28 (Dave): raids never lower Darkness — the cleansers give Loyalty instead
+          note: "Divine Favor (preview): Loyalty +1 on success (default; GM may adjudicate alternate minor negation)."
         }
       ],
       meta: { source: "throughput", maneuverKey: "divine_favor", preview: true }
@@ -629,7 +629,7 @@
   };
 
   // --- T2 LEARNED: Faithful Intervention ---
-  // "Remove 1 Darkness; cancel Qliphothic effects."
+  // "Cancel Qliphothic effects; Loyalty +1." (raids never lower Darkness, 2026-10-28)
   THROUGHPUT["faithful_intervention"] = function (ctx) {
     if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
 
@@ -637,8 +637,8 @@
       factionEffects: [
         {
           factionId: ctx.attackerFactionId || null,
-          darknessDelta: -1,
-          note: "Faithful Intervention (preview): Remove 1 Darkness on success."
+          loyaltyDelta: 1,   // 2026-10-28 (Dave): raids never lower Darkness — the cleansers give Loyalty instead
+          note: "Faithful Intervention (preview): Loyalty +1 on success."
         }
       ],
       roundEffects: [
@@ -719,9 +719,9 @@
       factionEffects: [
         {
           factionId: ctx.attackerFactionId || null,
-          darknessDelta: -1,  // review round 3 (Dave 10-28): Unity retired → Darkness −1, as maneuvers-audit-wiring applies it
+          loyaltyDelta: 1,   // 2026-10-28 (Dave): raids never lower Darkness — the cleansers give Loyalty instead
           when: "afterRound",
-          note: "Moral High Ground (preview): Darkness −1 on success."
+          note: "Moral High Ground (preview): Loyalty +1 on success."
         }
       ],
       meta: { source: "throughput", maneuverKey: "moral_high_ground", preview: true }
@@ -787,7 +787,7 @@
   };
 
   // --- T3 LEARNED: Harmonic Chant ---
-  // "Allies gain Advantage; Darkness −1."
+  // "Allies gain Advantage; Loyalty +1." (raids never lower Darkness, 2026-10-28)
   THROUGHPUT["harmonic_chant"] = function (ctx) {
     if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
 
@@ -803,8 +803,8 @@
       factionEffects: [
         {
           factionId: ctx.attackerFactionId || null,
-          darknessDelta: -1,
-          note: "Harmonic Chant (preview): Attacker Darkness −1 on success."
+          loyaltyDelta: 1,   // 2026-10-28 (Dave): raids never lower Darkness — the cleansers give Loyalty instead
+          note: "Harmonic Chant (preview): Loyalty +1 on success."
         }
       ],
       meta: { source: "throughput", maneuverKey: "harmonic_chant", preview: true }
@@ -908,18 +908,21 @@
   };
 
   // --- T3 LEARNED: Radiant Retaliation ---
-  // "Convert enemy Darkness gain to −1 for you."
+  // On success: your Loyalty +1, the enemy Domain's Darkness +1 (raids never lower Darkness, 2026-10-28).
   THROUGHPUT["radiant_retaliation"] = function (ctx) {
     if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
 
     return {
       roundEffects: [
         {
-          type: "convertEnemyDarknessGain",
-          conversion: { enemyDarknessGainToAttacker: -1 },
-          window: "thisRound",
-          note: "Radiant Retaliation (preview): Convert enemy Darkness gain into Darkness −1 for attacker this round on success."
+          type: "note",
+          window: "afterRound",
+          note: "Radiant Retaliation (preview): on success your Loyalty +1 and the enemy Domain's Darkness +1."
         }
+      ],
+      factionEffects: [
+        { factionId: ctx.attackerFactionId || null, loyaltyDelta: 1, note: "Radiant Retaliation (preview): Loyalty +1." },   // 2026-10-28 (Dave): raids never lower Darkness — the cleansers give Loyalty instead
+        ...(ctx.defenderFactionId ? [{ factionId: ctx.defenderFactionId, darknessDelta: 1, note: "Radiant Retaliation (preview): enemy Darkness +1." }] : [])
       ],
       meta: { source: "throughput", maneuverKey: "radiant_retaliation", preview: true }
     };
@@ -953,7 +956,7 @@
   };
 
   // --- T4 LEARNED: Sephirotic Intervention ---
-  // "Auto-win one opposed roll; Darkness −1."
+  // "Auto-win one opposed roll; Loyalty +1." (raids never lower Darkness, 2026-10-28)
   THROUGHPUT["sephirotic_intervention"] = function (ctx) {
     if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
 
@@ -970,8 +973,8 @@
       factionEffects: [
         {
           factionId: ctx.attackerFactionId || null,
-          darknessDelta: -1,
-          note: "Sephirotic Intervention (preview): Attacker Darkness −1 on success."
+          loyaltyDelta: 1,   // 2026-10-28 (Dave): raids never lower Darkness — the cleansers give Loyalty instead
+          note: "Sephirotic Intervention (preview): Loyalty +1 on success."
         }
       ],
       meta: { source: "throughput", maneuverKey: "sephirotic_intervention", preview: true }
@@ -1028,7 +1031,7 @@
   };
 
   // --- T4 LEARNED: Temporal Armistice ---
-  // "End combat for 1 round; Darkness −2 if enemy accepts."
+  // "End combat for 1 round; Loyalty +2 if enemy accepts." (raids never lower Darkness, 2026-10-28)
   THROUGHPUT["temporal_armistice"] = function (ctx) {
     if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
 
@@ -1043,8 +1046,8 @@
         {
           type: "conditionalReward",
           condition: "enemyAccepts",
-          factionDelta: { darknessDelta: -2 },
-          note: "Temporal Armistice (preview): If enemy accepts, attacker Darkness −2."
+          factionDelta: { loyaltyDelta: 2 },   // 2026-10-28 (Dave): raids never lower Darkness — the cleansers give Loyalty instead
+          note: "Temporal Armistice (preview): If enemy accepts, attacker Loyalty +2."
         }
       ],
       meta: { source: "throughput", maneuverKey: "temporal_armistice", preview: true }

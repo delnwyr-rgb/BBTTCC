@@ -33,7 +33,7 @@
     quantum_shield:            "Reduce incoming damage by half for one round.",
     overclock_the_golems:      "+3 attack for one construct unit; loses 1 HP.",
     counter_propaganda_wave:   "Cancel enemy Soft Power effect this round.",
-    sephirotic_intervention:   "Auto-win one opposed roll; Darkness −1.",
+    sephirotic_intervention:   "Auto-win one opposed roll; Loyalty +1.",
     ego_breaker:               "Reduce enemy leader’s OP cap by 3 permanently.",
     reality_hack:              "Re-run last round as if it never occurred.",
     unity_surge:               "All allies gain +2 to every OP next round.",
