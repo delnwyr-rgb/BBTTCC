@@ -1,4 +1,4 @@
-import { factionTier, tierCapBand } from "./op-engine.js";   // facts (2026-09-12): the one home for tier + cap band
+import { factionTier, tierCapBand, factionCaps } from "./op-engine.js";   // facts (2026-09-12): the one home for tier + cap band
 /* modules/bbttcc-factions/scripts/module.js
  * Bad Eden — Faction Sheet (v13-safe)
  *
@@ -438,7 +438,24 @@ function _bbttccDoctrineImg(name, kind, spec) {
   return kind === "maneuver" ? "icons/skills/melee/weapons-crossed-swords-yellow.webp" : "icons/sundries/documents/document-sealed-signatures-red.webp";
 }
 
-async function _bbttccGrantDoctrineEmbeddedItem(actor, { kind, key, silent=false } = {}) {
+// review P2 (2026-10-28): the owned-key check below is check-then-await-create, so two seeders running at once
+// (ensureFactionHints from an updateActor hook + applyStartingPackage, or two hooks in one tick) both saw the key
+// missing and both created it. Grants are now serialized per actor: each waits for the previous one on the same
+// actor, so the owned check always sees the earlier create.
+const _bbttccDoctrineGrantChains = new Map();
+function _bbttccGrantDoctrineEmbeddedItem(actor, opts = {}) {
+  const a = resolveFactionActor(actor) || actor;
+  const id = a?.id;
+  if (!id) return _bbttccGrantDoctrineEmbeddedItemNow(actor, opts);
+  const prev = _bbttccDoctrineGrantChains.get(id) || Promise.resolve();
+  const run = prev.catch(() => {}).then(() => _bbttccGrantDoctrineEmbeddedItemNow(a, opts));
+  const tail = run.catch(() => {});
+  _bbttccDoctrineGrantChains.set(id, tail);
+  tail.then(() => { if (_bbttccDoctrineGrantChains.get(id) === tail) _bbttccDoctrineGrantChains.delete(id); });
+  return run;
+}
+
+async function _bbttccGrantDoctrineEmbeddedItemNow(actor, { kind, key, silent=false } = {}) {
   const a = resolveFactionActor(actor) || actor;
   if (!a) throw new Error("Doctrine grant: invalid faction actor");
 
@@ -532,10 +549,24 @@ const _BBTTCC_STANDARD_START_STRATEGICS = [
   "infrastructure_expansion"      // its replacement (Defense +2, Integration +1), 2026-10-12
 ];
 
+// review P2 (2026-10-28): seedMeta.inProgress was checked but never set before the ~23 awaited grants, so a second
+// ensureFactionHints (fired by its own actor.update → updateActor hook) seeded the same Domain again. This
+// synchronous set is the real lock: taken before the first await, released in finally. applyStartingPackage takes it too.
+const _bbttccSeedLocks = new Set();
+
 // Ensure a faction has baseline doctrine (standard package).
 // - If the faction has zero doctrine items, stamp the standard baseline silently.
 // - Safe to call repeatedly (grant checks for duplicates).
 async function _bbttccEnsureBaselineDoctrine(actor){
+  let id = null;
+  try { id = (resolveFactionActor(actor) || actor)?.id ?? null; } catch (_e) { id = null; }
+  if (id && _bbttccSeedLocks.has(id)) return false;
+  if (id) _bbttccSeedLocks.add(id);
+  try { return await _bbttccEnsureBaselineDoctrineLocked(actor); }
+  finally { if (id) _bbttccSeedLocks.delete(id); }
+}
+
+async function _bbttccEnsureBaselineDoctrineLocked(actor){
   try {
     // Reached from createActor/updateActor/ready on EVERY client: only the primary active
     // GM seeds, or two seats each grant the same 24 items (duplicates). 2026-10-01.
@@ -552,9 +583,23 @@ async function _bbttccEnsureBaselineDoctrine(actor){
       // granted once, silently, so a running world gets them without re-seeding (Errata, Sweet Release).
       if (String(seedMeta.packageKey || "standard") !== "standard") return false;
       if (!game.user?.isGM) return false;   // the ready loop hits every client; only the GM writes
+      // review P3 (2026-10-28): "granted once" is now recorded in seedMeta.topups (keys already owned count as done),
+      // so a GM who deletes a top-up strategic keeps it deleted instead of seeing it return on the next flag update.
       const have = _bbttccOwnedDoctrineKeys(a, "strategic");
+      const done = new Set(Array.isArray(seedMeta.topups) ? seedMeta.topups.map(k => String(k).toLowerCase()) : []);
+      const before = done.size;
       let n = 0;
-      for (const k of _BBTTCC_STANDARD_TOPUP_STRATEGICS) { if (have.has(k)) continue; try { await _bbttccGrantDoctrineEmbeddedItem(a, { kind:"strategic", key:String(k), silent:true }); n++; } catch(_e){} }
+      for (const k of _BBTTCC_STANDARD_TOPUP_STRATEGICS) {
+        if (done.has(k)) continue;
+        if (have.has(k)) { done.add(k); continue; }
+        try {
+          const r = await _bbttccGrantDoctrineEmbeddedItem(a, { kind:"strategic", key:String(k), silent:true });
+          if (r?.ok) { done.add(k); if (r.created) n++; }
+        } catch(_e){}
+      }
+      if (done.size !== before) {
+        try { await a.update({ [`flags.${MODULE_ID}.doctrineSeedMeta.topups`]: [...done] }); } catch(_e){}
+      }
       return n > 0;
     }
 
@@ -578,6 +623,7 @@ async function _bbttccEnsureBaselineDoctrine(actor){
           version: "1.0.0",
           inProgress: false,
           applied: true,
+          topups: [..._BBTTCC_STANDARD_TOPUP_STRATEGICS],   // all in the start list — a later delete stays deleted
           source: "ensureBaselineDoctrine",
           updatedTs: Date.now()
         }
@@ -2566,7 +2612,10 @@ class BBTTCCFactionSheet extends ActorSheet {
     // 30 OP against a 45 OP ceiling. Tier band mirrors op-engine exactly.
     const derivedCapPerMarks = tierCapBand(factionTier(this.actor));   // facts (op-engine) — 2026-09-12
 
+    // review P3 (2026-10-28): the header ceiling now reads the engine's EFFECTIVE caps (member cap bonuses +
+    // opCapDelta / tempCapBonus), the same ceiling turn regen fills to; the hand-derived base caps stay as fallback.
     const opCaps = (() => {
+      try { const eff = factionCaps(this.actor); if (eff && OP_KEYS.every(k => Number.isFinite(Number(eff[k])))) return eff; } catch (_e) {}
       const out = {};
       if (_isObj(rawCaps)) {
         for (const k of OP_KEYS) out[k] = Math.max(0, Number(rawCaps[k] ?? 0) || 0);
@@ -3672,11 +3721,19 @@ try {
         }
       };
 
-      const caps = _readCaps(this.actor);
+      // review P2 (2026-10-28): clamp to the engine's EFFECTIVE caps (factionCaps: base + member cap bonuses +
+      // opCapDelta / tempCapBonus), the ceiling turn regen fills to. The local base-cap reader stays as fallback only.
+      // A channel the GM left untouched (input == current bank) is never clamped, so applying a Darkness
+      // edit can't delete legitimately banked marks.
+      let caps = null;
+      try { caps = factionCaps(this.actor); } catch (_e) { caps = null; }
+      if (!caps) caps = _readCaps(this.actor);
+      const curBank = this.actor.getFlag(MODULE_ID, "opBank") || {};
       const newOpBank = {};
       const clamped = [];
       for (const k of OP_KEYS) {
         const want = _safeNum(newOpBankRaw[k], 0);
+        if (want === Math.max(0, Math.round(_safeNum(curBank?.[k], 0)))) { newOpBank[k] = want; continue; }
         const capK = _safeNum(caps?.[k], 0);
         // Treat capK<=0 as "no cap" (alpha-safe), but in normal play caps should always be >0.
         const val = (capK > 0) ? Math.max(0, Math.min(want, capK)) : Math.max(0, want);
@@ -4434,6 +4491,12 @@ factionApi.applyStartingPackage ??= (async ({
     updatedTs: now
   };
 
+  // review P2 (2026-10-28): hold the baseline-seed lock across the whole package write, so the updateActor →
+  // ensureFactionHints → _bbttccEnsureBaselineDoctrine path can't run its own grant loop alongside this one.
+  const _seedLockId = a.id;
+  const _ownsSeedLock = !!_seedLockId && !_bbttccSeedLocks.has(_seedLockId);
+  if (_ownsSeedLock) _bbttccSeedLocks.add(_seedLockId);
+  try {
   await a.update(update);
 
   // Baseline doctrine (starting package): grant embedded feat items silently.
@@ -4457,6 +4520,7 @@ factionApi.applyStartingPackage ??= (async ({
       }
     });
   } catch (_e) {}
+  } finally { if (_ownsSeedLock) _bbttccSeedLocks.delete(_seedLockId); }
 
   // Free Tier-0 starter rig (2026-06-14): every new faction begins with a free
   // rig of the chosen chassis — the Hexmobile (default) or the Space Marine

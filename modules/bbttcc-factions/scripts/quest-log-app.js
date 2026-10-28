@@ -348,12 +348,36 @@
         this.render(false);
       }, { capture: true, signal: sig });
 
+      // review P2 (2026-10-28): the re-render replaces the search input, and v13 only restores focus to an element
+      // with an id / [name] — this one has neither, so focus was lost after every keystroke. Put focus + caret back
+      // here, and debounce the render (~150 ms) so a burst of typing doesn't stack overlapping async renders.
+      if (this.__qlSearchFocus) {
+        const want = this.__qlSearchFocus;
+        this.__qlSearchFocus = null;
+        const inp = root.querySelector?.("[data-ql-search]");
+        if (inp) {
+          try {
+            inp.focus({ preventScroll: true });
+            const len = String(inp.value || "").length;
+            const at = Math.min(Number.isFinite(want.caret) ? want.caret : len, len);
+            inp.setSelectionRange(at, at);
+          } catch (_e) {}
+        }
+      }
+
       // Search
       root.addEventListener("input", (ev) => {
         const inp = ev.target?.closest?.("[data-ql-search]");
         if (!inp) return;
         this.__state.search = String(inp.value || "");
-        this.render(false);
+        if (this.__qlSearchTimer) clearTimeout(this.__qlSearchTimer);
+        this.__qlSearchTimer = setTimeout(() => {
+          this.__qlSearchTimer = null;
+          const live = (this.element?.[0] ?? this.element)?.querySelector?.("[data-ql-search]");
+          const focused = !!live && document.activeElement === live;
+          if (focused) this.__qlSearchFocus = { caret: live.selectionStart };
+          this.render(false);
+        }, 150);
       }, { capture: true, signal: sig });
 
       // Select
@@ -641,6 +665,7 @@
     async close(options) {
       try {
         if (this._abort) { try { this._abort.abort(); } catch {} }
+        if (this.__qlSearchTimer) { clearTimeout(this.__qlSearchTimer); this.__qlSearchTimer = null; }
         if (this.__updateHook) { try { Hooks.off("updateActor", this.__updateHook); } catch {} }
         if (this.__settingHook) { try { Hooks.off("updateSetting", this.__settingHook); } catch {} }
       } catch (_e) {}

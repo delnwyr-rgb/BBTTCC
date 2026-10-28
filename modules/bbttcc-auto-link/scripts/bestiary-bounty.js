@@ -77,19 +77,32 @@ export function listFactions() {
 
 /* ── Card ─────────────────────────────────────────────────────────────── */
 
-function _cardHTML(actor, { factionId = "" } = {}) {
-  const b = bountyFor(actor);
-  const a = actor.flags?.fourththing?.rfi?.actor ?? {};
+// review P2 (2026-10-28): monster-builder actors are unlinked, so the creature that drops is a
+// synthetic token actor whose uuid dies with its token. Freeze what the card and the credit need
+// at kill/offer time so a deleted corpse token can still be posted and paid.
+function _snapshot(actor) {
+  const a = actor?.flags?.fourththing?.rfi?.actor ?? {};
+  return {
+    uuid: actor.uuid, id: actor.id, name: actor.name, img: actor.img,
+    bounty: bountyFor(actor),
+    title: a.title || "", lineage: a.lineage || "", subLineage: a.subLineage || "",
+    tier: a.tier ?? null, bracket: a.bracket ?? ""
+  };
+}
+
+function _cardHTML(snap, { factionId = "" } = {}) {
+  const b = snap.bounty;
+  const a = snap;
   const factions = listFactions();
   const opts = ['<option value="">— choose the faction that resolved it —</option>']
     .concat(factions.map(f => `<option value="${f.id}"${f.id === factionId ? " selected" : ""}>${_esc(f.name)}</option>`)).join("");
   const buttons = Object.entries(METHODS).map(([k, m]) =>
     `<button type="button" data-bbttcc-bounty-method="${k}" title="credits ${m.pool}" style="flex:1 1 45%; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.05rem; height:auto; line-height:1.15; white-space:normal; word-break:normal; overflow-wrap:normal; text-align:center; font-size:0.78rem; padding:0.3rem 0.4rem;"><span>${_esc(m.label)}</span><span style="opacity:0.7; font-size:0.72rem;">→ ${m.pool}</span></button>`).join("");
   return `
-<div class="bbttcc-bounty-card" data-bbttcc-bounty-actor="${_esc(actor.uuid)}" style="border:1px solid rgba(46,170,94,0.6); border-radius:6px; padding:0.5rem;">
+<div class="bbttcc-bounty-card" data-bbttcc-bounty-actor="${_esc(snap.uuid)}" style="border:1px solid rgba(46,170,94,0.6); border-radius:6px; padding:0.5rem;">
   <div style="display:flex; align-items:center; gap:0.5rem;">
-    <img src="${_esc(actor.img)}" style="width:36px; height:36px; object-fit:cover; border:none;"/>
-    <div><strong>${_esc(actor.name)}</strong><br/><span style="font-size:0.78rem; opacity:0.8;">${_esc(a.title || [a.lineage, a.subLineage].filter(Boolean).join(" · ") || "bestiary")} · T${_esc(a.tier ?? "?")} ${_esc(a.bracket ?? "")}</span></div>
+    <img src="${_esc(snap.img)}" style="width:36px; height:36px; object-fit:cover; border:none;"/>
+    <div><strong>${_esc(snap.name)}</strong><br/><span style="font-size:0.78rem; opacity:0.8;">${_esc(a.title || [a.lineage, a.subLineage].filter(Boolean).join(" · ") || "bestiary")} · T${_esc(a.tier ?? "?")} ${_esc(a.bracket ?? "")}</span></div>
   </div>
   <div style="margin-top:0.4rem; font-size:0.8rem;">Bounty <strong>${_opFmt(b.marks)}</strong>${b.source === "rubric" ? " <em>(rubric — no stamped price)</em>" : ""}. Credited to the pool that matches how it was resolved.</div>
   <select data-bbttcc-bounty-faction style="width:100%; margin-top:0.4rem;">${opts}</select>
@@ -113,27 +126,35 @@ export async function offer(actor, { factionId = "" } = {}) {
     ui.notifications?.info?.(`${actor.name} has already paid its bounty.`);
     return null;
   }
+  return _postOffer(_snapshot(actor), { factionId });
+}
+
+function _postOffer(snap, { factionId = "" } = {}) {
   const gmIds = game.users.filter(u => u.isGM).map(u => u.id);
   return ChatMessage.create({
-    content: _cardHTML(actor, { factionId }),
+    content: _cardHTML(snap, { factionId }),
     whisper: gmIds,
     speaker: { alias: "Bestiary" },
-    flags: { [MOD]: { bountyOffer: { actorUuid: actor.uuid } } }
+    flags: { [MOD]: { bountyOffer: { actorUuid: snap.uuid, snapshot: snap } } }
   });
 }
 
 /* ── The authority ────────────────────────────────────────────────────── */
 
-export async function resolve(actorOrUuid, { method = "kill", factionId, marks = null, messageId = null } = {}) {
+export async function resolve(actorOrUuid, { method = "kill", factionId, marks = null, messageId = null, snapshot = null } = {}) {
   if (!game.user.isGM) { ui.notifications?.warn?.("Bounties are GM work."); return { ok: false, reason: "not-gm" }; }
-  const actor = typeof actorOrUuid === "string" ? await fromUuid(actorOrUuid) : actorOrUuid;
-  if (!actor) return { ok: false, reason: "no-actor" };
+  let actor = actorOrUuid;
+  if (typeof actorOrUuid === "string") { try { actor = await fromUuid(actorOrUuid); } catch (_e) { actor = null; } }
+  // review P2 (2026-10-28): token gone → pay from the card's snapshot (nothing to stamp).
+  const snap = actor ? null : (snapshot?.uuid ? snapshot : null);
+  if (!actor && !snap) { ui.notifications?.warn?.("That creature is gone (its token was deleted) and the card has no snapshot — credit it by hand with api.bestiary.resolve(..., { marks })."); return { ok: false, reason: "no-actor" }; }
   const m = METHODS[method]; if (!m) return { ok: false, reason: "bad-method" };
   const faction = factionId ? game.actors.get(factionId) : null;
   if (!faction) { ui.notifications?.warn?.("Pick the faction that resolved it."); return { ok: false, reason: "no-faction" }; }
-  if (actor.flags?.fourththing?.rfi?.actor?.resolved) { ui.notifications?.info?.(`${actor.name} has already paid its bounty.`); return { ok: false, reason: "already" }; }
+  if (actor?.flags?.fourththing?.rfi?.actor?.resolved) { ui.notifications?.info?.(`${actor.name} has already paid its bounty.`); return { ok: false, reason: "already" }; }
+  if (!actor) actor = { uuid: snap.uuid, id: snap.id, name: snap.name };
 
-  const b = bountyFor(actor);
+  const b = snap ? snap.bounty : bountyFor(actor);
   const amount = Number.isFinite(Number(marks)) && Number(marks) > 0 ? Number(marks) : b.marks;
   const pool = m.pool;
   const op = game.bbttcc?.api?.op;
@@ -159,7 +180,7 @@ export async function resolve(actorOrUuid, { method = "kill", factionId, marks =
     if (!res?.committed) { ui.notifications?.warn?.(`Bounty for ${actor.name} was refused by the OP engine (see console).`); console.warn(`[${NS}] commit refused`, res); return { ok: false, reason: "refused", res }; }
   }
 
-  try { await actor.update({ "flags.fourththing.rfi.actor.resolved": { method, factionId: faction.id, marks: amount, credited, lost, at: Date.now(), by: game.user.id } }); }
+  if (!snap) try { await actor.update({ "flags.fourththing.rfi.actor.resolved": { method, factionId: faction.id, marks: amount, credited, lost, at: Date.now(), by: game.user.id } }); }
   catch (e) { console.warn(`[${NS}] could not stamp resolution on ${actor.name}`, e); }
 
   const receipt = _receiptHTML({ actor, faction, method, marks: amount, credited, lost, pool });
@@ -184,7 +205,8 @@ function _bindCard(message, html) {
     btn.addEventListener("click", async () => {
       const factionId = card.querySelector("[data-bbttcc-bounty-faction]")?.value ?? "";
       card.querySelectorAll("button").forEach(b => { b.disabled = true; });
-      const r = await resolve(card.dataset.bbttccBountyActor, { method: btn.dataset.bbttccBountyMethod, factionId, messageId: message.id });
+      const snapshot = message.flags?.[MOD]?.bountyOffer?.snapshot ?? null;
+      const r = await resolve(card.dataset.bbttccBountyActor, { method: btn.dataset.bbttccBountyMethod, factionId, messageId: message.id, snapshot });
       if (!r?.ok) card.querySelectorAll("button").forEach(b => { b.disabled = false; });
     });
   });
@@ -216,9 +238,12 @@ Hooks.on("updateActor", (actor, changes, options) => {
       // roll cards). Out of combat the card posts at once, as before.
       const combat = _activeCombatOf(actor);
       if (combat) {
-        const q = _pendingBounties.get(combat.id) || [];
-        if (!q.includes(actor.uuid)) q.push(actor.uuid);
+        // review P3 (2026-10-28): the queue lives on the combat document (a flag) so a GM reload
+        // or a primary-GM handoff mid-fight doesn't lose it; the Map is just a write-through cache.
+        const q = _pendingBounties.get(combat.id) ?? _queueOf(combat);
+        if (!q.some(e => e.uuid === actor.uuid)) q.push(_snapshot(actor));
         _pendingBounties.set(combat.id, q);
+        combat.setFlag(MOD, "pendingBounties", q).catch(e => console.warn(`[${NS}] could not persist bounty queue`, e));
         return;
       }
       offer(actor).catch(() => {});
@@ -226,7 +251,16 @@ Hooks.on("updateActor", (actor, changes, options) => {
   } catch (e) { console.warn(`[${NS}] auto-offer failed`, e); }
 });
 
-const _pendingBounties = new Map(); // combatId -> actor uuids
+const _pendingBounties = new Map(); // combatId -> bounty snapshots (cache of the combat flag)
+function _queueOf(combat) {
+  const raw = combat?.getFlag?.(MOD, "pendingBounties") ?? combat?.flags?.[MOD]?.pendingBounties ?? [];
+  return (Array.isArray(raw) ? raw : []).map(e => (typeof e === "string" ? { uuid: e } : e)).filter(e => e?.uuid);
+}
+function _isPrimaryGM() {
+  if (!game.user.isGM) return false;
+  const primary = game.users?.activeGM ?? null;
+  return !primary || primary.id === game.user.id;
+}
 function _activeCombatOf(actor) {
   try {
     for (const c of game.combats ?? []) {
@@ -236,16 +270,24 @@ function _activeCombatOf(actor) {
   } catch (_e) {}
   return null;
 }
-async function _flushBounties(combatId) {
-  const q = _pendingBounties.get(combatId);
-  _pendingBounties.delete(combatId);
-  for (const uuid of q || []) {
-    try { const a = await fromUuid(uuid); if (a) await offer(a); } catch (_e) {}
+async function _flushBounties(combat, { clearFlag = false } = {}) {
+  const q = [];
+  for (const e of [...(_pendingBounties.get(combat.id) ?? []), ..._queueOf(combat)]) if (!q.some(x => x.uuid === e.uuid)) q.push(e);
+  _pendingBounties.delete(combat.id);
+  if (clearFlag && q.length) { try { await combat.unsetFlag(MOD, "pendingBounties"); } catch (_e) {} }
+  for (const snap of q) {
+    try {
+      let a = null;
+      try { a = await fromUuid(snap.uuid); } catch (_e) {}
+      if (a) await offer(a);
+      else if (snap.name) await _postOffer(snap);   // token deleted mid-fight — post from the snapshot
+      else ui.notifications?.warn?.(`A queued bounty (${snap.uuid}) lost its creature before combat ended.`);
+    } catch (_e) {}
   }
 }
-Hooks.on("deleteCombat", (combat) => { try { if (game.user.isGM) _flushBounties(combat.id); } catch (_e) {} });
+Hooks.on("deleteCombat", (combat) => { try { if (_isPrimaryGM()) _flushBounties(combat); } catch (_e) {} });
 Hooks.on("updateCombat", (combat, changes) => {
-  try { if (game.user.isGM && changes.started === false) _flushBounties(combat.id); } catch (_e) {}
+  try { if (_isPrimaryGM() && changes.started === false) _flushBounties(combat, { clearFlag: true }); } catch (_e) {}
 });
 
 /* ── Install ──────────────────────────────────────────────────────────── */

@@ -270,6 +270,10 @@ function scrubActorFlags(flags) {
   try {
     const clone = JSON.parse(JSON.stringify(flags ?? {}));
     if (clone?.[MOD]?.calculatedOPs) delete clone[MOD].calculatedOPs;
+    // review P1 (2026-10-28): the wizard's stored state keeps the Faculty array
+    // (baseStats: violence/intrigue/presence/body/mind/soul) at scan depth 3 —
+    // those are Faculties, not OP bonuses, and were being counted as OPs.
+    if (clone?.["bbttcc-auto-link"]?.guidedCharacterCreation) delete clone["bbttcc-auto-link"].guidedCharacterCreation;
     return clone;
   } catch {
     return {};

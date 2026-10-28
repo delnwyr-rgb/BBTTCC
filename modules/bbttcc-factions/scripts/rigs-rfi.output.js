@@ -11,7 +11,7 @@
 //     · × the state throttle (RIG_OUTPUT_STATE_MULT): parked 1, deployed 0.5 (modules that are not mobileLegal → 0),
 //       destroyed 0. Marks are halved in MARKS (no OP flooring); materials floor.
 //   preview(rig)          → { state, parked, deployed, parkedText, deployedText, lostText }  — the opportunity cost
-//   applyTurnOutput()     → pays every faction-owned rig at `bbttcc:advanceTurn:end` (apply, active GM) + GM card
+//   applyTurnOutput()     → pays every faction-owned rig at `bbttcc:advanceTurn:end` (apply, the GM seat that ran it) + GM card
 //
 // Registered on game.bbttcc.rigs.impl as { outputFor, outputPreview, applyTurnOutput, describeOutput } — fourththing only.
 import { RIG_BASE_OUTPUT_OP, RIG_OUTPUT_STATE_MULT } from "/modules/bbttcc-core/scripts/economy.constants.js";
@@ -136,8 +136,8 @@ import { RIG_BASE_OUTPUT_OP, RIG_OUTPUT_STATE_MULT } from "/modules/bbttcc-core/
 
   Hooks.on("bbttcc:advanceTurn:end", async (payload = {}) => {
     try {
+      // review P2 (2026-10-28): the hook is a local Hooks.callAll on the seat that ran the turn — no activeGM election, or a second GM's turn pays nothing.
       if (!game.user?.isGM) return;
-      if (game.users?.activeGM?.id !== game.user?.id) return;
       if (payload?.apply !== true) return;
       await new Promise(r => setTimeout(r, 0));
       await applyTurnOutput();

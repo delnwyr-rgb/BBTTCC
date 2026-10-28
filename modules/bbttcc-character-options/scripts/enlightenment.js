@@ -122,6 +122,9 @@ const EFFECTS = {
       // RFI resists live at system.defenses.* — the Bucket-A grant row is what the derive reads.
       { key: "flags.fourththing.grant.resists", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "qliphothic", priority: 20 },
       { key: "system.skills.intimidation.value", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      // review P2 (2026-10-28): an AE's own flags never reach the actor, but the system's _ftDarkSpikes reads
+      // the ACTOR (flags.bbttcc-core.enlightenment.darknessSpikes) — so the spike rides in as a change row.
+      { key: "flags.bbttcc-core.enlightenment.darknessSpikes", mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, value: "true", priority: 20 },
     ],
     flags: {
       "bbttcc.enlightenment.healingHalved": true,
@@ -171,19 +174,27 @@ function detectLevel(actor) {
   return [...found][0];
 }
 
-async function ensureEffect(actor, key) {
-  const toRemove = actor.effects?.filter(e => e.getFlag(MOD, "enlightenment") === true) ?? [];
-  if (toRemove.length) await actor.deleteEmbeddedDocuments("ActiveEffect", toRemove.map(e => e.id));
-  if (!key || !EFFECTS[key]) return;
+// review P3 (2026-10-28): the stored effect already matches this level's definition → leave it alone
+// (no delete/recreate churn on every item change, and a GM's manual disable sticks).
+const _changeSig = (changes) => (changes ?? []).map(c => `${c.key}|${Number(c.mode)}|${String(c.value)}|${Number(c.priority ?? 0)}`).join(";");
 
-  const def = EFFECTS[key];
+async function ensureEffect(actor, key) {
+  const mine = actor.effects?.filter(e => e.getFlag(MOD, "enlightenment") === true) ?? [];
+  const def = (key && EFFECTS[key]) ? EFFECTS[key] : null;
+  const changes = def ? (game.bbttcc?.dice?.aeChanges?.(def.changes) ?? def.changes) : null;
+  if (def && mine.length === 1 && mine[0].getFlag(MOD, "level") === key
+      && mine[0].name === def.label && _changeSig(mine[0].changes) === _changeSig(changes)) return;
+
+  if (mine.length) await actor.deleteEmbeddedDocuments("ActiveEffect", mine.map(e => e.id));
+  if (!def) return;
+
   const data = {
     name: def.label,
     img: def.icon,
     origin: `Actor.${actor.id}`,
     disabled: false,
     // RFI aeBonus / skill-rank keys → their dnd5e twins (AC, saves, skill check bonuses) — step 4 parity 2026-10-08
-    changes: game.bbttcc?.dice?.aeChanges?.(def.changes) ?? def.changes,
+    changes,
     duration: {},
     flags: { [MOD]: { enlightenment: true, level: key }, ...(def.flags ?? {}) }
   };
@@ -201,8 +212,11 @@ function ascensionRank(level) {
 // characters, so faction-tier mechanics (Enlightened darkness decay) read a live value instead
 // of a hand-set flag that drifts from the roster.
 async function syncFactionLevel(actor) {
+  return syncFactionById(actor?.getFlag?.(FCT, "factionId"));
+}
+
+async function syncFactionById(factionId) {
   try {
-    const factionId = actor.getFlag(FCT, "factionId");
     if (!factionId) return;
     const faction = game.actors?.get(factionId);
     if (!faction || !faction.isOwner) return; // only a client that can write the faction does so
@@ -216,10 +230,25 @@ async function syncFactionLevel(actor) {
       const r = ascensionRank(lvl);
       if (r > bestRank) { bestRank = r; best = lvl; }
     }
-    if (!sawAny) return;
+    if (!sawAny) {
+      // review P2 (2026-10-28): no member holds a level any more (moved, deleted, item removed) —
+      // lower a stale level so the Enlightened Darkness decay stops applying.
+      const cur = faction.getFlag(FCT, "enlightenmentLevel");
+      if (cur && cur !== "unawakened") await faction.setFlag(FCT, "enlightenmentLevel", "unawakened");
+      return;
+    }
     if (faction.getFlag(FCT, "enlightenmentLevel") !== best)
       await faction.setFlag(FCT, "enlightenmentLevel", best);
   } catch (e) { warn("Faction enlightenment sync failed", e); }
+}
+
+const _isFactionActor = (a) => a?.getFlag?.(FCT, "isFaction") === true || String(a?.type ?? "").toLowerCase() === "faction";
+
+// Resync every faction (roster moves / deletions can strand a level on a faction no member points at).
+async function syncAllFactionLevels() {
+  for (const f of game.actors?.contents ?? []) {
+    if (_isFactionActor(f)) await syncFactionById(f.id);
+  }
 }
 
 // Per-actor serialization: a batch create of >1 level item (or any rapid-fire trigger) fires
@@ -307,9 +336,22 @@ Hooks.on("ready", async () => {
     for (const a of game.actors?.contents ?? []) {
       if (a.type === "character" && a.isOwner) await applyEnlightenment(a);
     }
+    if (gm?.isSelf) await syncAllFactionLevels(); // review P2 (2026-10-28): factions with no current member too
     log("Enlightenment hook ready.");
   } catch (e) { warn("init error", e); }
 });
+
+// review P3 (2026-10-28): only level items (or an update that renames / re-identifies / re-categorises an item)
+// can change the detected level — skip the reconcile for powers, gear, Market buys.
+function _isLevelItem(item) {
+  return !!(levelSlug(item?.system?.identifier) || levelSlug(item?.name) || item?.getFlag?.(MOD, "category") === CATEGORY);
+}
+function _touchesLevel(item, hook, changes) {
+  if (_isLevelItem(item)) return true;
+  if (hook !== "updateItem" || !changes) return false;
+  return ("name" in changes) || foundry.utils.hasProperty(changes, "system.identifier")
+      || foundry.utils.hasProperty(changes, `flags.${MOD}.category`);
+}
 
 for (const h of ["createItem","updateItem","deleteItem"]) {
   // Document hooks differ in arity: create/delete = (doc, options, userId) [3 args],
@@ -320,6 +362,7 @@ for (const h of ["createItem","updateItem","deleteItem"]) {
     const actor = item?.parent ?? item?.actor;
     if (!actor || actor.type !== "character") return;
     if (userId !== game.user?.id) return;
+    if (!_touchesLevel(item, h, h === "updateItem" ? rest[0] : null)) return;
     await applyEnlightenment(actor);
   });
 }
@@ -473,9 +516,10 @@ async function refreshClarityAuras() {
     for (const t of toks) if (t.actor) visit.add(t.actor);
 
     for (const actor of visit) {
-      const has = actor.effects?.find(e => e.getFlag(MOD, AURA_AE_FLAG) === true);
+      // review P2 (2026-10-28): collect EVERY aura copy — keep one when wanted, drop them all when not.
+      const auras = actor.effects?.filter(e => e.getFlag(MOD, AURA_AE_FLAG) === true) ?? [];
       const want = wanted.has(actor);
-      if (want && !has) {
+      if (want && !auras.length) {
         await actor.createEmbeddedDocuments("ActiveEffect", [{
           name: AURA_NAME,
           img: "icons/magic/holy/meditation-chi-focus-blue.webp",
@@ -487,26 +531,51 @@ async function refreshClarityAuras() {
           duration: {},
           flags: { [MOD]: { [AURA_AE_FLAG]: true } }
         }]);
-      } else if (!want && has) {
-        await actor.deleteEmbeddedDocuments("ActiveEffect", [has.id]);
+      } else if (want && auras.length > 1) {
+        await actor.deleteEmbeddedDocuments("ActiveEffect", auras.slice(1).map(e => e.id));
+      } else if (!want && auras.length) {
+        await actor.deleteEmbeddedDocuments("ActiveEffect", auras.map(e => e.id));
       }
     }
   } catch (e) { warn("clarity aura refresh failed", e); }
 }
 
-let _auraTimer = null;
+// review P2 (2026-10-28): one refresh at a time — an AE create on an unlinked token fires updateToken,
+// which used to start a second pass mid-flight (both saw "no aura" → two +1/+1 effects). A request that
+// lands while a pass runs marks it dirty and gets exactly one rerun.
+let _auraTimer = null, _auraRunning = false, _auraDirty = false;
+async function runAuraRefresh() {
+  if (_auraRunning) { _auraDirty = true; return; }
+  _auraRunning = true;
+  try {
+    do { _auraDirty = false; await refreshClarityAuras(); } while (_auraDirty);
+  } finally { _auraRunning = false; }
+}
 function scheduleAuraRefresh() {
   if (_auraTimer) clearTimeout(_auraTimer);
-  _auraTimer = setTimeout(() => { _auraTimer = null; refreshClarityAuras(); }, 200);
+  _auraTimer = setTimeout(() => { _auraTimer = null; runAuraRefresh(); }, 200);
 }
 Hooks.on("canvasReady", scheduleAuraRefresh);
 for (const h of ["createToken", "updateToken", "deleteToken"]) Hooks.on(h, () => scheduleAuraRefresh());
 Hooks.on("updateActor", (actor, changes) => {
+  // review P2 (2026-10-28): a roster move changes two factions' levels — the active GM resyncs all of them
+  // (the old id isn't on the actor any more, and preUpdate options don't reach the GM's client reliably).
+  const fk = changes?.flags?.[FCT];
+  if (fk && (("factionId" in fk) || ("-=factionId" in fk)) && actor?.type === "character" && game.users?.activeGM?.isSelf) {
+    syncAllFactionLevels();
+  }
   if (!foundry.utils.hasProperty(changes, `flags.${MOD}.enlightenment`)) return;
   scheduleAuraRefresh();
   // A player seat can't write the faction, so the active GM mirrors every
   // roster level change onto flags.bbttcc-factions.enlightenmentLevel.
   if (game.users?.activeGM?.isSelf && actor?.type === "character") syncFactionLevel(actor);
+});
+
+Hooks.on("deleteActor", (actor) => {
+  // review P2 (2026-10-28): a deleted member no longer counts toward its faction's level.
+  if (actor?.type !== "character" || !game.users?.activeGM?.isSelf) return;
+  const fid = actor.getFlag?.(FCT, "factionId");
+  if (fid) syncFactionById(fid);
 });
 
 /* ───────────────────────── Minor Miracles (Enlightened) ───────────────────────
@@ -528,7 +597,7 @@ async function _pickMiraclePower(actor) {
   const powers = (actor.items?.contents ?? []).filter(i => (i.type === "power" || i.type === "weapon") && _miracleTier(i) <= 4);
   if (!powers.length) { ui.notifications?.warn(`${actor.name}: no powers/manifestations to work as a miracle.`); return null; }
   const opts = powers.sort((a, b) => _miracleTier(a) - _miracleTier(b) || a.name.localeCompare(b.name))
-    .map(p => `<option value="${p.id}">T${_miracleTier(p)} · ${p.name}</option>`).join("");
+    .map(p => `<option value="${p.id}">T${_miracleTier(p)} · ${foundry.utils.escapeHTML(p.name)}</option>`).join("");
   const id = await Dialog.wait({
     title: "✦ Minor Miracle",
     content: `<p>Cast any power up to <b>Tier 4</b> — free, silent, no backlash.</p>
@@ -558,7 +627,7 @@ async function castMinorMiracle(actor, item = null) {
     if (ok === false) { await actor.unsetFlag(MOD, "miracleUsed"); return; } // cast aborted → refund
     ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor }),
-      content: `<div class="bbttcc card">✦ <b>${actor.name}</b> works a <b>Minor Miracle</b> — ${item.name} (T${tier}): free, silent, no backlash.</div>`
+      content: `<div class="bbttcc card">✦ <b>${foundry.utils.escapeHTML(actor.name)}</b> works a <b>Minor Miracle</b> — ${foundry.utils.escapeHTML(item.name)} (T${tier}): free, silent, no backlash.</div>`
     });
   } catch (e) { warn("miracle cast failed", e); await actor.unsetFlag(MOD, "miracleUsed"); }
 }

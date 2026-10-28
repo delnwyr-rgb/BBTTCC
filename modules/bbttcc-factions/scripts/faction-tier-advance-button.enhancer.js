@@ -56,7 +56,10 @@ import { TIER_CAP_BAND_MARKS } from "./op-engine.js";
     if (!actor || !isFactionActor(actor)) return { ok: false, reason: "not a faction" };
     if (!isGM()) return { ok: false, reason: "GM only" };
     const to = Math.max(0, Math.min(4, Math.floor(Number(tier) || 0)));
-    const from = Math.max(0, Math.min(4, Math.floor(Number(get(actor, `flags.${MODF}.tier`, 0)) || 0)));
+    // review P3 (2026-10-28): read tier the engine's way (missing flag = 1, not 0) — an unflagged Domain set to T0
+    // used to compare 0 === 0 and write nothing while the engine kept it at Standing 1.
+    const from = readTier(actor);
+    const hasTierFlag = get(actor, `flags.${MODF}.tier`, null) != null;
     const update = { [`flags.${MODF}.tier`]: to };
     let capsChanged = false;
     const raw = get(actor, `flags.${MODF}.opCaps`, null);
@@ -73,7 +76,7 @@ import { TIER_CAP_BAND_MARKS } from "./op-engine.js";
       }
       if (capsChanged) update[`flags.${MODF}.opCaps`] = next;
     }
-    if (to === from && !capsChanged) return { ok: true, from, to, capsChanged: false, unchanged: true };
+    if (to === from && !capsChanged && hasTierFlag) return { ok: true, from, to, capsChanged: false, unchanged: true };
     if (to !== from) {
       const warLogs = (get(actor, `flags.${MODF}.warLogs`, []) || []).slice();
       warLogs.push({
@@ -101,7 +104,7 @@ import { TIER_CAP_BAND_MARKS } from "./op-engine.js";
       game.bbttcc.api = game.bbttcc.api || {};
       const root = (game.bbttcc.api.factions ??= {});
       root.tier = Object.assign(root.tier || {}, {
-        get: (actor) => Math.max(0, Math.min(4, Math.floor(Number(get(actor, `flags.${MODF}.tier`, 0)) || 0))),
+        get: (actor) => readTier(actor),
         set: setTier,
         band: CAP_BAND.slice()
       });
@@ -116,6 +119,17 @@ import { TIER_CAP_BAND_MARKS } from "./op-engine.js";
   const get = (o, p, d) => {
     try { return foundry.utils.getProperty(o, p) ?? d; } catch { return d; }
   };
+
+  // Tier through the engine's one accessor (op-engine factionTier: missing/invalid flag = 1). review P3 (2026-10-28).
+  function readTier(actor) {
+    try {
+      const fn = game.bbttcc?.facts?.faction?.tier;
+      if (typeof fn === "function") return fn(actor);
+    } catch (_e) {}
+    const raw = get(actor, `flags.${MODF}.tier`, null);
+    const n = Number(raw);
+    return (raw == null || !Number.isFinite(n) || n < 0) ? 1 : Math.max(0, Math.min(4, Math.floor(n)));
+  }
 
   function isFactionActor(a) {
     try { return a?.getFlag?.(MODF, "isFaction") === true; } catch { return false; }
@@ -193,7 +207,7 @@ import { TIER_CAP_BAND_MARKS } from "./op-engine.js";
       return;
     }
 
-    const curTier = Number(get(actor, `flags.${MODF}.tier`, 0)) || 0;
+    const curTier = readTier(actor);   // review P3 (2026-10-28): engine default (missing = 1)
     const nextTier = rep.nextTier;
 
     await actor.update({

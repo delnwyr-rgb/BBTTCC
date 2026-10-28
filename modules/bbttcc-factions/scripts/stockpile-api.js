@@ -229,6 +229,17 @@ async function withdrawToCharacter(character, faction, matKey, qtyAmt, _opts = {
   const have = _safeQty(entry?.qty);
   if (have < q) return { ok: false, error: `stockpile has ${have}, need ${q}` };
 
+  // review P2 (2026-10-28): RESERVE the stock first. The check above runs outside the serial
+  // chain, so a concurrent sell/withdraw could pass it too and adjust() clamped at 0 — goods
+  // duplicated. The serialized adjust is the authority: deliver only what it actually removed.
+  const metaOpts = { name: entry?.name, img: entry?.img, lastUuid: entry?.lastUuid };
+  const res = await adjust(F, matKey, -q, metaOpts);
+  const taken = res?.ok ? Math.max(0, _safeQty(res.before) - _safeQty(res.after)) : 0;
+  if (taken < q) {
+    if (taken > 0) await adjust(F, matKey, +taken, metaOpts);
+    return { ok: false, error: res?.ok ? `stockpile has ${_safeQty(res.before)}, need ${q}` : (res?.error || "stockpile adjust refused") };
+  }
+
   // Build the item data to clone onto the character.
   let itemData = null;
   if (entry?.lastUuid) {
@@ -262,11 +273,14 @@ async function withdrawToCharacter(character, faction, matKey, qtyAmt, _opts = {
     };
   }
 
-  const created = await C.createEmbeddedDocuments("Item", [itemData]);
+  let created = null;
+  try { created = await C.createEmbeddedDocuments("Item", [itemData]); }
+  catch (e) { console.warn(TAG, "withdraw item create failed", e); }
   const newId = created?.[0]?.id || null;
-
-  // Decrement stockpile via adjust to fire the hook.
-  await adjust(F, matKey, -q, { name: entry?.name, img: entry?.img, lastUuid: entry?.lastUuid });
+  if (!newId) {   // review P2 (2026-10-28): the item never landed — put the reserved stock back
+    await adjust(F, matKey, +q, metaOpts);
+    return { ok: false, error: "could not create the item on the character" };
+  }
 
   return { ok: true, itemId: newId };
 }
@@ -326,12 +340,22 @@ async function sell(faction, matKey, qtyWanted, opts = {}) {
   let n = Math.min(have, Math.max(0, Math.floor(Number(qtyWanted) || 0))); let clamped = 0;
   if (!opts.allowOvercap) { const room = headroom(F, channel); const fit = Math.floor(room / unitMarks); if (fit < n) { clamped = n - fit; n = fit; } }
   if (n <= 0) return { ok: false, error: clamped ? `the ${channel} bank is at its cap — nothing fits` : "nothing to sell", have, clamped };
-  const marks = unitMarks * n;
   const op = game.bbttcc?.api?.op; if (!op?.commit) return { ok: false, error: "OP api unavailable" };
   const name = (_readMap(F)[matKey]?.name) || matKey;
-  const res = await op.commit(F.id, { [channel]: marks }, { source: "stockpile-sell", label: `Sold ${n}× ${name} → ${channel}`, note: `${n} × ${unitMarks} marks (retail ${price.retail}, T${price.tier}${mult !== 1 ? `, ×${mult}` : ""}${home ? "" : `, off-channel ×${MATERIAL_MARKET.OFF_CHANNEL_FRACTION}`})`, allowOvercap: !!opts.allowOvercap });
-  if (res && res.ok === false) return { ok: false, error: res.error || "commit refused", marks };
+  // review P2 (2026-10-28): RESERVE the units through the serialized adjust before paying. `have`
+  // was read outside the chain, so a concurrent withdraw/sell could pass the same check and both
+  // be paid while the stockpile clamped at 0. Sell only what the adjust actually removed.
   const adj = await adjust(F, matKey, -n, { name });
+  const taken = adj?.ok ? Math.max(0, _safeQty(adj.before) - _safeQty(adj.after)) : 0;
+  if (taken < n) clamped += n - taken;
+  n = taken;
+  if (n <= 0) return { ok: false, error: adj?.ok ? "nothing to sell" : (adj?.error || "stockpile adjust refused"), have: adj?.ok ? _safeQty(adj.before) : have, clamped };
+  const marks = unitMarks * n;
+  const res = await op.commit(F.id, { [channel]: marks }, { source: "stockpile-sell", label: `Sold ${n}× ${name} → ${channel}`, note: `${n} × ${unitMarks} marks (retail ${price.retail}, T${price.tier}${mult !== 1 ? `, ×${mult}` : ""}${home ? "" : `, off-channel ×${MATERIAL_MARKET.OFF_CHANNEL_FRACTION}`})`, allowOvercap: !!opts.allowOvercap });
+  if (!res || res.ok === false) {   // unpaid → the reserved units go back
+    await adjust(F, matKey, +n, { name });
+    return { ok: false, error: res?.error || "commit refused", marks };
+  }
   try { await ChatMessage.create({ speaker: { alias: F.name }, content: `<div class="bbttcc-stockpile-sale" style="border-left:3px solid #d4a72c;padding:.35em .6em;background:rgba(212,167,44,.08);">💰 <b>${foundry.utils.escapeHTML(F.name)}</b> sold <b>${n}× ${foundry.utils.escapeHTML(name)}</b> for <b>${marks} marks</b> of ${channel[0].toUpperCase() + channel.slice(1)}${home ? "" : " (off-channel)"} <span style="opacity:.7;">(${unitMarks}/unit · retail ${price.retail})</span>.</div>` }); } catch (_eC) {}
   try { Hooks.callAll("bbttcc:stockpile:sold", { factionId: F.id, materialKey: matKey, qty: n, marks, unit: price.sell }); } catch (_e) {}
   return { ok: true, qty: n, clamped, channel, home, marks, unit: unitMarks, retail: price.retail, remaining: adj?.after ?? qty(F, matKey) };

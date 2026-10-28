@@ -569,6 +569,18 @@ function _csvCount(str) {
 }
 
 // Equipped-module counts from a chassis-starter loadout.
+/* Same counts as _chassisLoadoutCounts, read from item data (Duplicate Rig prices the copy's real loadout). */
+function _itemLoadoutCounts(items) {
+  const c = { weapons: 0, systems: 0, outputs: 0 };
+  for (const it of items ?? []) {
+    const sub = it?.flags?.fourththing?.rigGear?.subtype ?? it?.flags?.bbttcc?.rigGear?.subtype;
+    if (sub === "rig-weapon" || (it?.type === "weapon" && sub !== "rig-frame")) c.weapons++;
+    else if (sub === "rig-system") c.systems++;
+    else if (sub === "output-module") c.outputs++;
+  }
+  return c;
+}
+
 function _chassisLoadoutCounts(chassis) {
   const lo = chassis?.defaults?.loadout || {};
   return {
@@ -705,6 +717,27 @@ function _infraChipsHTML() {
     </div>`).join("");
 }
 
+/* Split a rig's description back into the builder's Concept / Signature / GM Notes fields (the
+ * shape _commit writes). Unlabelled prose falls back to Concept so nothing is dropped. */
+function _rigProseFromActor(actor) {
+  const out = { concept: "", signature: "", gmNotes: "" };
+  const html = String(foundry.utils.getProperty(actor, "system.details.biography.value")
+    || (typeof actor?.system?.description === "string" ? actor.system.description : "") || "");
+  if (!html.trim()) return out;
+  const doc = new DOMParser().parseFromString(`<div>${html}</div>`, "text/html");
+  const LABELS = { "Concept.": "concept", "Signature.": "signature", "GM Notes.": "gmNotes" };
+  let matched = false;
+  doc.querySelectorAll("p").forEach(p => {
+    const lab = p.querySelector("strong, em");
+    const key = lab ? LABELS[lab.textContent.trim()] : null;
+    if (!key) return;
+    matched = true;
+    out[key] = p.textContent.replace(lab.textContent, "").trim();
+  });
+  if (!matched) out.concept = (doc.body.textContent || "").trim();
+  return out;
+}
+
 /* Extract a field-level draft from a source Rig actor for duplicate flows.
  * Returns null if the actor isn't a rig. The returned object matches the
  * data-bbttcc-field keys the builder dialog uses, plus a `capacity` map of
@@ -721,8 +754,22 @@ export function rigSeedFromActor(actor) {
   const travel = sys.travel ?? {};
   const cap = sys.crew?.capacity ?? {};
   const tagsArr = Array.isArray(sys.tags) ? sys.tags : [];
+  // review P2 (2026-10-28): the duplicate used to be a bare chassis — carry art, disposition, prose,
+  // output and every embedded item (frame / weapons / systems / output modules) so the copy is the rig.
+  const prose = _rigProseFromActor(actor);
+  const items = (actor.items?.contents ?? Array.from(actor.items ?? [])).map(i => {
+    const o = i.toObject(); delete o._id; return o;
+  });
+  const tierN = Number(integ.tier ?? 1);
   return {
     name: `${actor.name} (Copy)`,
+    img: actor.img || "",
+    disposition: Number(actor.prototypeToken?.disposition ?? 0),
+    concept: prose.concept, signature: prose.signature, gmNotes: prose.gmNotes,
+    output: foundry.utils.deepClone(sys.output ?? { modules: [], basePerTurn: {} }),
+    items,
+    // True when the source already follows the 10-21 frame-integrity rule — only then may the copy re-sync to its frame.
+    integrityFromFrame: _frameIntegrityMax(actor, tierN) === Number(integ.max),
     archetype: String(ident.archetype ?? ""),
     factionOwnerId: String(ident.factionOwnerId ?? ""),
     bracket: String(integ.bracket ?? "medium"),
@@ -927,6 +974,9 @@ export async function openRigBuilder({ seed = null } = {}) {
        avoids the dataset/jQuery-wrap discrepancy that caused the loadout
        seed to silently skip on first ship (2026-05-17 patch). -->
   <input type="hidden" data-bbttcc-field="_starterKey" value=""/>
+  <!-- Integrity the form prefilled (chip formula / duplicate source). Commit re-syncs a moving rig to its
+       frame only while the field still holds this value, so a GM-typed integrity is kept. -->
+  <input type="hidden" data-bbttcc-field="_integrityPrefill" value=""/>
   </div><!-- /[data-bbttcc-pane="rigform"] -->
 
   <div class="bbttcc-rb-pane" data-bbttcc-pane="infra" style="display:none;">
@@ -974,7 +1024,9 @@ export async function openRigBuilder({ seed = null } = {}) {
           label: buttonLabel,
           callback: async (html) => {
             const root = (html instanceof HTMLElement ? html : html[0]);
-            const actor = await _commit(root);
+            // review P2 (2026-10-28): the seed rides the closure — root.dataset written in the render hook
+            // lives on .dialog-content, but this callback's root is the outer window (domains/depth were lost).
+            const actor = await _commit(root, seed);
             resolve(actor);
           }
         },
@@ -1022,7 +1074,7 @@ export async function openRigBuilder({ seed = null } = {}) {
         // Live fabrication-cost readout. Recompute on relevant field edits and
         // after chip / category-tab clicks (deferred so the chip handler's
         // synchronous field writes land first).
-        const recost = () => _updateRigCost(root);
+        const recost = () => _updateRigCost(root, seed);
         // refresh = keep the mecha tier rungs in sync with the bracket, then reprice.
         const refresh = () => { _syncTierOptions(root); recost(); };
         ["bracket", "tier", "resistances", "immunities", "vulnerabilities", "hazardResist", "bypassCost"].forEach(name => {
@@ -1069,8 +1121,15 @@ function _applySeed(html, seed) {
       if (maxEl && c.max != null) maxEl.value = Number(c.max) || 0;
     }
   }
-  if (Array.isArray(seed.domains)) root.dataset.bbttccSeedDomains = JSON.stringify(seed.domains);
-  if (seed.depthRating != null) root.dataset.bbttccSeedDepth = String(Number(seed.depthRating) || 0);
+  // Domains / depth / items / output are read straight from the seed by _commit (closure), not dataset.
+  if (seed.img) {
+    set("img", seed.img);
+    const prev = root.querySelector("[data-bbttcc-art-preview]");
+    const nameEl = root.querySelector("[data-bbttcc-art-name]");
+    if (prev) { prev.src = seed.img; prev.style.display = ""; }
+    if (nameEl) nameEl.textContent = String(seed.img).split("/").pop();
+  }
+  set("_integrityPrefill", seed.integrityFromFrame ? String(seed.integrity) : "");
 }
 
 /* Recompute + render the live fabrication-cost readout in #bbttcc-rb-cost.
@@ -1078,7 +1137,7 @@ function _applySeed(html, seed) {
  * selected chassis chip's loadout (weapon/system/output counts), the defense
  * CSV fields, and hazard resist. Infrastructure prices via its own material
  * bill, so the box is hidden on that tab. */
-function _updateRigCost(root) {
+function _updateRigCost(root, seed = null) {
   if (!root) return;
   const box = root.querySelector("#bbttcc-rb-cost");
   if (!box) return;
@@ -1093,7 +1152,8 @@ function _updateRigCost(root) {
   const cost = computeRigCost({
     bracket: String(val("bracket") || "medium"),
     tier: val("tier"),
-    counts: _chassisLoadoutCounts(chassis),
+    // Duplicate with no chip picked prices the copied loadout — same rule as _commit (review P2 2026-10-28).
+    counts: (seed && !chassis) ? _itemLoadoutCounts(seed.items) : _chassisLoadoutCounts(chassis),
     defenses: {
       resistances: _csvCount(val("resistances")),
       immunities: _csvCount(val("immunities")),
@@ -1171,8 +1231,14 @@ function _wireStarterChips(html) {
       // explicit value (flagships do, to match their seed-macro sizing).
       const brk = BRACKETS.find(b => b.key === d.bracket);
       if (d.integrity != null) set("integrity", d.integrity);
+      // Pinned chip integrity is never re-synced; a formula prefill is (review P2 2026-10-28, see _commit).
+      set("_integrityPrefill", "");
       if (brk) {
-        if (d.integrity == null) set("integrity", brk.base + (d.tier - 1) * Math.round(brk.base * 0.3));
+        if (d.integrity == null) {
+          const pre = brk.base + (d.tier - 1) * Math.round(brk.base * 0.3);
+          set("integrity", pre);
+          set("_integrityPrefill", String(pre));
+        }
         set("speed", d.travel?.speed ?? brk.speed);
         set("range", d.travel?.range ?? brk.range);
       }
@@ -1208,9 +1274,17 @@ function _wireCategoryTabs(html) {
   const activeCss = "cursor:pointer; padding:0.25rem 0.75rem; border:1px solid #3e8ec8; border-radius:4px; font-size:0.8rem; background:rgba(62,142,200,0.28); color:inherit;";
   const idleCss   = "cursor:pointer; padding:0.25rem 0.75rem; border:1px solid rgba(255,255,255,0.18); border-radius:4px; font-size:0.8rem; background:rgba(255,255,255,0.06); color:inherit;";
 
-  const setCat = (cat) => {
-    root.dataset.bbttccCategory = cat;                       // secondary (defense in depth)
+  const setCat = (cat, { initial = false } = {}) => {
     const catEl = root.querySelector('[data-bbttcc-field="_category"]');
+    // review P3 (2026-10-28): a chip picked on another tab must not carry its loadout + cost into this one.
+    // Skipped on the initial call so a duplicate seed is kept.
+    if (!initial && catEl && catEl.value !== cat) {
+      const keyEl = root.querySelector('[data-bbttcc-field="_starterKey"]');
+      if (keyEl) keyEl.value = "";
+      delete root.dataset.bbttccSelectedStarter;
+      root.querySelectorAll("[data-bbttcc-starter]").forEach(b => { b.style.background = "rgba(255,255,255,0.06)"; });
+    }
+    root.dataset.bbttccCategory = cat;                       // secondary (defense in depth)
     if (catEl) catEl.value = cat;                            // PRIMARY — read at commit
     root.querySelectorAll(".bbttcc-rb-tab").forEach(t => {
       t.style.cssText = (t.dataset.bbttccCat === cat) ? activeCss : idleCss;
@@ -1242,7 +1316,7 @@ function _wireCategoryTabs(html) {
   root.querySelectorAll(".bbttcc-rb-tab").forEach(tab => {
     tab.addEventListener("click", () => setCat(tab.dataset.bbttccCat));
   });
-  setCat(root.querySelector('[data-bbttcc-field="_category"]')?.value || root.dataset.bbttccCategory || "rig");
+  setCat(root.querySelector('[data-bbttcc-field="_category"]')?.value || root.dataset.bbttccCategory || "rig", { initial: true });
 }
 
 /* Wire infrastructure recipe chips + the inputs that affect the cost preview. */
@@ -1436,7 +1510,7 @@ function _rigBracketBOM(bracket, tier = 1) {
   return CHASSIS_BRACKET_BOM.light;                        // safe default for unknown brackets
 }
 
-async function _commit(root) {
+async function _commit(root, seed = null) {
   if (!root) return null;
 
   // Three-category router: infrastructure goes through the structures recipe
@@ -1504,15 +1578,16 @@ async function _commit(root) {
   // track the debited amount and refund it if Actor.create later throws.
   const selectedKey = String(read("_starterKey") || root.dataset.bbttccSelectedStarter || "");
   const chosen = CHASSIS_STARTERS.find(s => s.key === selectedKey);
-  // Duplicate flow: domains/depth stashed on the root by _applySeed.
-  let seedDomains;
-  try { seedDomains = root.dataset.bbttccSeedDomains ? JSON.parse(root.dataset.bbttccSeedDomains) : undefined; }
-  catch (_e) { seedDomains = undefined; }
-  const seedDepth = root.dataset.bbttccSeedDepth != null ? Number(root.dataset.bbttccSeedDepth) : undefined;
+  // Duplicate flow (review P2 2026-10-28): domains/depth/items/output come straight off the seed. A chip
+  // picked in the duplicate dialog replaces the seed's loadout (and its domains) entirely.
+  const useSeed = !!seed && !chosen;
+  const seedDomains = useSeed && Array.isArray(seed.domains) ? seed.domains : undefined;
+  const seedDepth = useSeed && seed.depthRating != null ? Number(seed.depthRating) : undefined;
+  const seedItems = useSeed && Array.isArray(seed.items) ? seed.items : [];
   const bypassCost = !!root.querySelector('[data-bbttcc-field="bypassCost"]')?.checked;
   const rigCost = computeRigCost({
     bracket, tier,
-    counts: _chassisLoadoutCounts(chosen),
+    counts: useSeed ? _itemLoadoutCounts(seedItems) : _chassisLoadoutCounts(chosen),
     defenses: {
       resistances: resistances.length,
       immunities: immunities.length,
@@ -1570,14 +1645,14 @@ async function _commit(root) {
         bracket
       },
       defenses: { resistances, immunities, vulnerabilities },
-      output: { modules: [], basePerTurn: {} },
+      output: (useSeed && seed.output) ? foundry.utils.deepClone(seed.output) : { modules: [], basePerTurn: {} },
       // Movement domains are not yet a form field — carry them from the selected
       // starter chassis, else from a duplicate seed, so a Submersible/Skiff
       // build (or its copy) keeps its water/air domain.
       travel: {
         speed, range, hazardResist,
-        domains: _normalizeDomains(chosen?.defaults?.travel?.domains ?? seedDomains),
-        depthRating: Math.max(0, Math.min(3, Number(chosen?.defaults?.travel?.depthRating ?? seedDepth ?? 0) || 0))
+        domains: _normalizeDomains(chosen ? chosen.defaults?.travel?.domains : seedDomains),
+        depthRating: Math.max(0, Math.min(3, Number((chosen ? chosen.defaults?.travel?.depthRating : seedDepth) ?? 0) || 0))
       },
       tags
     },
@@ -1640,8 +1715,25 @@ async function _commit(root) {
     } catch (e) {
       console.warn("[bbttcc-auto-link/rig-builder] Loadout seed failed (non-fatal):", e);
     }
+  } else if (seedItems.length) {
+    // Duplicate: embed the source rig's items as-is (already in this world's item shape — no _rigItemForSystem).
+    try {
+      await actor.createEmbeddedDocuments("Item", foundry.utils.deepClone(seedItems));
+      await _syncTravelToFrame(actor);   // RG5: frame travel is the authority
+    } catch (e) {
+      console.warn("[bbttcc-auto-link/rig-builder] Duplicate item copy failed (non-fatal):", e);
+    }
   } else if (selectedKey) {
     console.warn(`[bbttcc-auto-link/rig-builder] Starter chip '${selectedKey}' had no loadout — rig minted bare.`);
+  }
+
+  // review P2 (2026-10-28): owner ruling 2026-10-21 — a moving rig's integrity comes from its FRAME, same as
+  // mintFromChassis. Only while the field still holds the form's own prefill (a GM-typed value wins; pinned
+  // flagship integrity never sets a prefill).
+  const integrityPrefill = String(read("_integrityPrefill") || "");
+  if (mobility !== "stationary" && integrityPrefill !== "" && String(read("integrity")).trim() === integrityPrefill) {
+    try { await _syncIntegrityToFrame(actor, tier); }
+    catch (e) { console.warn("[bbttcc-auto-link/rig-builder] frame integrity sync failed (non-fatal):", e); }
   }
 
   // Phase E (2026-05-26) — auto-stamp a structural BOM so the rig has a hardness

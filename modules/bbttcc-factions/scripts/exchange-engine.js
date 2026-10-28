@@ -177,7 +177,8 @@ async function _applyDeltas(actor, delta, contextLabel, matApplied = null) {
   // exchange income should always land (sender pre-flight already caught underflow).
   if (Object.keys(delta.marks || {}).length) {
     if (!opApi?.commit) throw new Error("op.commit not available");
-    const res = await opApi.commit(actor.id, delta.marks, { source: "exchange", label: contextLabel, allowOvercap: true });
+    // review P1 (2026-10-28): noDiscount — a transfer debits exactly what the other side is credited.
+    const res = await opApi.commit(actor.id, delta.marks, { source: "exchange", label: contextLabel, allowOvercap: true, noDiscount: true });
     if (!res?.committed) {
       throw new Error(`OP commit refused for ${actor.name}: ${res?.error || "unknown"}`);
     }
@@ -219,8 +220,12 @@ async function _applyDeltasAtomic(deltas, contextLabel) {
   for (const [actorId] of entries) {
     const actor = game.actors.get(actorId);
     if (!actor) continue;
+    // review P3 (2026-10-28): the rollback is a recursive merge, so every OP key must be in the
+    // snapshot (0 when missing) or a bucket the commit created survives the rollback.
+    const opBank = foundry.utils.deepClone(actor.getFlag(MOD_ID, "opBank") ?? {});
+    for (const k of OP_KEYS) if (!(k in opBank)) opBank[k] = 0;
     snap.set(actorId, {
-      opBank: foundry.utils.deepClone(actor.getFlag(MOD_ID, "opBank") ?? {}),
+      opBank,
       buildUnits: _readBU(actor),
     });
   }

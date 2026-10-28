@@ -10,7 +10,7 @@
 //   bbttcc-factions.fairTradeTolerance      Number    default 0.20  (0..1)
 //   bbttcc-factions.nudgeCooldownHours      Number    default 24
 //
-// Only the active GM applies the nudge (avoids multi-client write storms).
+// Runs on the GM client that settled the exchange (the hook is a local callAll there).
 
 const MOD_ID = "bbttcc-factions";
 const TAG    = "[bbttcc-rel-nudge]";
@@ -80,18 +80,6 @@ async function _resourceValue(r, receiver = null) {
   return v;
 }
 
-function _isActiveGM() {
-  // Pick exactly one client to apply: prefer game.users.activeGM if available,
-  // otherwise fall back to "the lowest-id active GM" (deterministic).
-  if (!game.user?.isGM) return false;
-  try {
-    const active = game.users?.activeGM;
-    if (active) return active.id === game.user.id;
-  } catch (_e) {}
-  const gms = (game.users?.contents ?? []).filter(u => u.isGM && u.active).sort((a, b) => a.id.localeCompare(b.id));
-  return gms[0]?.id === game.user.id;
-}
-
 function _readNudgeStamps(actor) {
   return foundry.utils.deepClone(actor?.getFlag?.(MOD_ID, "lastNudgeTs") ?? {});
 }
@@ -103,7 +91,10 @@ async function _stampNudge(actor, otherId, ts) {
 }
 
 async function _onExchange(payload) {
-  if (!_isActiveGM()) return;
+  // review P3 (2026-10-28): bbttcc:economy:exchange is a LOCAL Hooks.callAll on the GM client that
+  // ran trade() (gmExec primary or the GM who clicked Accept) — gating on activeGM dropped the
+  // nudge whenever that was a different GM. The firing client is already unique.
+  if (!game.user?.isGM) return;
   if (!game.settings.get(MOD_ID, SETTING_ENABLED)) return;
 
   const { fromId, toId, offer, ask } = payload || {};
@@ -151,9 +142,11 @@ async function _onExchange(payload) {
     return;
   }
 
-  // Bump each side at most one step, capped at Friendly.
-  const targetA = TIER_KEYS[Math.min(FRIENDLY_IDX, idxA + 1)];
-  const targetB = TIER_KEYS[Math.min(FRIENDLY_IDX, idxB + 1)];
+  // Bump each side at most one step, capped at Friendly — and never LOWER a side.
+  // review P2 (2026-10-28): a one-sided Allied (A→B allied, B→A neutral) was written down to Friendly.
+  // An unknown tier string (idx −1) is left alone rather than mapped to index 0 (At War).
+  const targetA = idxA < 0 ? beforeA : TIER_KEYS[Math.max(idxA, Math.min(FRIENDLY_IDX, idxA + 1))];
+  const targetB = idxB < 0 ? beforeB : TIER_KEYS[Math.max(idxB, Math.min(FRIENDLY_IDX, idxB + 1))];
 
   let changed = false;
   if (targetA !== beforeA) {
@@ -172,10 +165,12 @@ async function _onExchange(payload) {
     try {
       const labels = relApi.TIER_LABELS || {};
       const lbl = (k) => labels[k] || k;
+      const esc = (v) => foundry.utils.escapeHTML(String(v ?? ""));   // review P3 (2026-10-28): players name Domains
+      const nA = esc(A.name), nB = esc(B.name);
       const lines = [];
-      if (targetA !== beforeA) lines.push(`${A.name} → ${B.name}: ${lbl(beforeA)} → ${lbl(targetA)}`);
-      if (targetB !== beforeB) lines.push(`${B.name} → ${A.name}: ${lbl(beforeB)} → ${lbl(targetB)}`);
-      const content = `<div class="bbttcc-rel-nudge"><b>Relationship strengthened</b> — fair trade between <b>${A.name}</b> and <b>${B.name}</b>.<br>${lines.join("<br>")}</div>`;
+      if (targetA !== beforeA) lines.push(`${nA} → ${nB}: ${esc(lbl(beforeA))} → ${esc(lbl(targetA))}`);
+      if (targetB !== beforeB) lines.push(`${nB} → ${nA}: ${esc(lbl(beforeB))} → ${esc(lbl(targetB))}`);
+      const content = `<div class="bbttcc-rel-nudge"><b>Relationship strengthened</b> — fair trade between <b>${nA}</b> and <b>${nB}</b>.<br>${lines.join("<br>")}</div>`;
       const gmIds = (game.users?.contents ?? []).filter(u => u.isGM).map(u => u.id);
       ChatMessage.create({
         content,

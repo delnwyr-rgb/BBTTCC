@@ -276,7 +276,9 @@ async function _moveMarks(src, tgt, marks, ctx) {
   // Debit source first only if it actually holds marks; credit target after.
   if (_holdsMarks(src.kind)) {
     const neg = {}; for (const [k, v] of Object.entries(clean)) neg[k] = -v;
-    const r = await opApi.commit(src.actor.id, neg, { source: "bank", label: ctx?.label || "Bank withdraw", allowOvercap: true });
+    // review P1 (2026-10-28): noDiscount on every bank debit/reversal — a move is not a spend, and a
+    // discounted debit reversed at full value minted marks on every cap bounce.
+    const r = await opApi.commit(src.actor.id, neg, { source: "bank", label: ctx?.label || "Bank withdraw", allowOvercap: true, noDiscount: true });
     if (!r?.committed) throw new Error(`marks debit refused for ${src.actor.name}: ${r?.error || "insufficient"}`);
     applied.push({ actorId: src.actor.id, delta: neg });
   }
@@ -287,7 +289,7 @@ async function _moveMarks(src, tgt, marks, ctx) {
       // Cap bounce: reverse any debit we already applied, then signal the bounce.
       for (const a of applied) {
         const rev = {}; for (const [k, v] of Object.entries(a.delta)) rev[k] = -v;
-        try { await opApi.commit(a.actorId, rev, { source: "bank", label: "bank bounce", allowOvercap: true }); }
+        try { await opApi.commit(a.actorId, rev, { source: "bank", label: "bank bounce", allowOvercap: true, noDiscount: true }); }
         catch (re) { console.error(TAG, "marks bounce reversal failed", re); }
       }
       const err = new Error(`marks credit refused for ${tgt.actor.name} (over cap)`);
@@ -304,7 +306,7 @@ async function _reverseMarks(applied) {
   if (!opApi?.commit) return;
   for (const a of (applied || []).reverse()) {
     const rev = {}; for (const [k, v] of Object.entries(a.delta)) rev[k] = -v;
-    try { await opApi.commit(a.actorId, rev, { source: "bank", label: "rollback", allowOvercap: true }); }
+    try { await opApi.commit(a.actorId, rev, { source: "bank", label: "rollback", allowOvercap: true, noDiscount: true }); }
     catch (re) { console.error(TAG, "marks rollback failed", re); }
   }
 }

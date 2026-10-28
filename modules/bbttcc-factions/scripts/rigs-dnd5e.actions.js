@@ -36,6 +36,89 @@
   const subtypeOf = (item) => R()?.gearOf?.(item)?.subtype ?? "";
 
   const RAM_DICE = { personal: "1d6", light: "2d6", medium: "4d6", heavy: "6d6", siege: "8d6" };
+  const esc = (v) => foundry.utils.escapeHTML(String(v ?? ""));   // review P3 (2026-10-28): names are player-editable
+
+  // review P2 (2026-10-28): a GM can board a player's steward onto a rig the
+  // player does not own, so every rig write goes through rigWrite(): local when
+  // this seat can modify the rig, else gmExec "rigs.action" (the GM checks the
+  // sender owns a steward boarded on that rig). AEs are built from this table
+  // on the writing seat — the relay carries a key, never raw changes.
+  const ADV = [
+    { key: "flags.midi-qol.advantage.attack.all", mode: 5, value: "1", priority: 20 },
+    { key: "flags.dnd5e.advantage.attack.all", mode: 5, value: "1", priority: 20 },
+  ];
+  const AE_SPECS = {
+    "hold-position": { name: "Hold Position (gunner advantage)", changes: ADV, note: "rig weapon attacks have advantage until the pilot's next turn" },
+    "evasive": { name: "Evasive (attackers disadvantaged)", changes: [{ key: "flags.midi-qol.grants.disadvantage.attack.all", mode: 5, value: "1", priority: 20 }], note: "attacks against the rig are at disadvantage until the pilot's next turn" },
+    "raise-sail": { name: "Sails Raised", changes: [], note: "speed mode: faster, harder to turn" },
+    "aimed-shot": { name: "Aimed Shot (advantage, next attack)", changes: ADV, note: "next rig weapon attack has advantage", extraFlags: { dae: { specialDuration: ["1Attack"] } } },
+    "boost-system": { name: "System Boosted", changes: [], note: "one rig system performs at +1 effect step until end of round (GM applies)" },
+    "brace": { name: "Braced (+1 AC)", changes: [{ key: "system.attributes.ac.bonus", mode: 2, value: "1", priority: 20 }], note: "+1 AC until end of round" },
+  };
+  // The write itself (runs on a seat that can modify the rig).
+  async function doRigWrite(rig, op, args = {}) {
+    if (op === "ae") {
+      const spec = AE_SPECS[args.key];
+      if (!spec) throw new Error(`unknown rig effect "${args.key}"`);
+      await rig.createEmbeddedDocuments("ActiveEffect", [{
+        name: spec.name, img: "icons/vehicles/wheels/wheel-spokes-six-brown.webp", origin: rig.uuid,
+        duration: { rounds: 1, seconds: 6 }, changes: foundry.utils.deepClone(spec.changes),
+        flags: foundry.utils.mergeObject({ bbttcc: { rigAction: true, cue: spec.note || "" } }, foundry.utils.deepClone(spec.extraFlags ?? {})),
+      }]);
+      return { ok: true };
+    }
+    if (op === "lowerSail") {
+      const aes = (rig.effects ?? []).filter(e => e.name === AE_SPECS["raise-sail"].name);
+      if (aes.length) await rig.deleteEmbeddedDocuments("ActiveEffect", aes.map(e => e.id));
+      return { ok: true };
+    }
+    if (op === "heal") {
+      const amount = Math.max(0, Math.floor(Number(args.amount) || 0));
+      const hp = Number(get(rig, "system.attributes.hp.value", 0)) || 0;
+      const max = Number(get(rig, "system.attributes.hp.max", 0)) || 0;
+      const value = Math.min(max, hp + amount);
+      await R().update(rig, { "integrity.value": value });
+      return { ok: true, value, max };
+    }
+    if (op === "resetUses") {
+      const it = rig.items?.get?.(args.itemId);
+      if (!it) throw new Error("no such rig item");
+      await it.update({ "system.uses.spent": 0 });
+      return { ok: true };
+    }
+    throw new Error(`unknown rig op "${op}"`);
+  }
+  async function rigWrite(rig, steward, op, args = {}) {
+    try {
+      if (rig.canUserModify?.(game.user, "update")) return await doRigWrite(rig, op, args);
+      const gx = game.bbttcc?.api?.gmExec;
+      if (!gx?.call) throw new Error("no GM relay available");
+      const res = await gx.call("rigs.action", { rigId: rig.id, stewardId: steward?.id ?? null, op, args });
+      if (res?.ok === false) throw new Error(res.error || "refused");
+      return res;
+    } catch (e) {
+      console.warn(TAG, `rig write "${op}" failed`, e);
+      ui.notifications?.warn?.(`${rig.name}: the rig action didn't land — ${e?.message ?? e}`);
+      return { ok: false, error: String(e?.message ?? e) };
+    }
+  }
+  // GM side: the sender must own a steward that is boarded on this rig.
+  async function rigsActionHandler(payload = {}, meta = {}) {
+    const user = game.users?.get?.(meta.fromUserId);
+    const rig = game.actors?.get?.(String(payload.rigId ?? ""));
+    const st = game.actors?.get?.(String(payload.stewardId ?? ""));
+    if (!user || !rig || !data(rig)) return { ok: false, error: "unknown rig" };
+    if (!user.isGM) {
+      if (!st || !st.testUserPermission?.(user, "OWNER")) return { ok: false, error: "you don't own that steward" };
+      if (R()?.boardedRigOf?.(st)?.rigId !== rig.id || !(data(rig)?.crew?.slots ?? []).some(s => s.actorId === st.id)) return { ok: false, error: `${st.name} is not aboard ${rig.name}` };
+      if (payload.op === "heal") {   // clamp to the action's own ceiling (1d6 + PB)
+        const pb = Number(get(st, "system.attributes.prof", 2)) || 2;
+        payload.args = { amount: Math.min(Number(payload.args?.amount) || 0, 6 + pb) };
+      }
+    }
+    try { return await doRigWrite(rig, String(payload.op ?? ""), payload.args ?? {}); }
+    catch (e) { return { ok: false, error: String(e?.message ?? e) }; }
+  }
 
   // ── Appliers ───────────────────────────────────────────────────────────────
   async function cue(rig, steward, title, lines) {
@@ -44,20 +127,16 @@
         speaker: ChatMessage.getSpeaker({ actor: rig }),
         content: `<div class="bbttcc-class-cue" style="border:1px solid #b9882e;border-radius:6px;padding:.4rem .6rem">
           <p style="margin:.1rem 0;font-weight:700">🎛 ${title}</p>
-          <p style="margin:.1rem 0;font-size:.74rem;opacity:.7">${steward?.name ?? "Crew"} aboard ${rig.name}</p>
+          <p style="margin:.1rem 0;font-size:.74rem;opacity:.7">${esc(steward?.name ?? "Crew")} aboard ${esc(rig.name)}</p>
           ${(lines || []).map(l => `<p style="margin:.1rem 0;font-size:.82rem">${l}</p>`).join("")}
         </div>`
       });
     } catch (e) { /* best-effort */ }
   }
-  async function rigAE(rig, name, changes, note, extraFlags = {}) {
-    try {
-      await rig.createEmbeddedDocuments("ActiveEffect", [{
-        name, img: "icons/vehicles/wheels/wheel-spokes-six-brown.webp", origin: rig.uuid,
-        duration: { rounds: 1, seconds: 6 }, changes,
-        flags: foundry.utils.mergeObject({ bbttcc: { rigAction: true, cue: note || "" } }, extraFlags),
-      }]);
-    } catch (e) { console.warn(TAG, "rig AE failed", e); }
+  // Returns true when the effect landed — callers post their cue only on success.
+  async function rigAE(rig, steward, key) {
+    const res = await rigWrite(rig, steward, "ae", { key });
+    return res?.ok !== false;
   }
   async function pickOne(title, options) {
     if (!options.length) return null;
@@ -67,7 +146,7 @@
       content: options.map((o, i) => `
         <label style="display:flex;align-items:flex-start;gap:.4rem;padding:.25rem .35rem;cursor:pointer">
           <input type="radio" name="pick" value="${o.id}" ${i === 0 ? "checked" : ""}/>
-          <span><b>${o.label}</b>${o.desc ? `<br/><span style="font-size:.72rem;opacity:.6">${o.desc}</span>` : ""}</span>
+          <span><b>${esc(o.label)}</b>${o.desc ? `<br/><span style="font-size:.72rem;opacity:.6">${o.desc}</span>` : ""}</span>
         </label>`).join(""),
       ok: { label: "Choose", callback: (_ev, b) => b.form.elements.pick?.value ?? null },
       rejectClose: false,
@@ -98,28 +177,22 @@
         } },
       { id: "hold-position", type: "action", label: "Hold Position", desc: "Steady the rig — gunners gain advantage on attacks until your next turn.",
         handler: async (rig, st) => {
-          await rigAE(rig, "Hold Position (gunner advantage)", [
-            { key: "flags.midi-qol.advantage.attack.all", mode: 5, value: "1", priority: 20 },
-            { key: "flags.dnd5e.advantage.attack.all", mode: 5, value: "1", priority: 20 },
-          ], "rig weapon attacks have advantage until the pilot's next turn");
+          if (!(await rigAE(rig, st, "hold-position"))) return;
           await cue(rig, st, "Hold Position", ["The rig steadies — weapon attacks from it have <b>advantage</b> until the pilot's next turn (auto with midi)."]);
         } },
       { id: "evasive", type: "bonus", label: "Evasive Maneuvers", desc: "Attacks against the rig have disadvantage until your next turn.",
         handler: async (rig, st) => {
-          await rigAE(rig, "Evasive (attackers disadvantaged)", [
-            { key: "flags.midi-qol.grants.disadvantage.attack.all", mode: 5, value: "1", priority: 20 },
-          ], "attacks against the rig are at disadvantage until the pilot's next turn");
+          if (!(await rigAE(rig, st, "evasive"))) return;
           await cue(rig, st, "Evasive Maneuvers", ["Attacks <b>against</b> the rig are at disadvantage until the pilot's next turn (auto with midi)."]);
         } },
       { id: "swerve", type: "reaction", label: "Swerve", desc: "React to an incoming attack — pilot's check vs the attack roll to slip it (GM adjudicates)." },
       // Sail variants — only surfaced when an equipped frame lists them.
       { id: "tack-against-wind", type: "action", frameOnly: true, label: "Tack Against the Wind", desc: "Move + the rig gains reach advantage against downwind targets (GM adjudicates the wind)." },
       { id: "raise-sail", type: "bonus", frameOnly: true, label: "Raise Sail", desc: "Shift to speed mode — faster, harder to turn (GM applies the trade).",
-        handler: async (rig, st) => { await rigAE(rig, "Sails Raised", [], "speed mode: faster, harder to turn"); await cue(rig, st, "Raise Sail", ["Sails up — speed mode until lowered."]); } },
+        handler: async (rig, st) => { if (!(await rigAE(rig, st, "raise-sail"))) return; await cue(rig, st, "Raise Sail", ["Sails up — speed mode until lowered."]); } },
       { id: "lower-sail", type: "bonus", frameOnly: true, label: "Lower Sail", desc: "Shift to maneuver mode.",
         handler: async (rig, st) => {
-          const aes = (rig.effects ?? []).filter(e => e.name === "Sails Raised");
-          if (aes.length) await rig.deleteEmbeddedDocuments("ActiveEffect", aes.map(e => e.id));
+          if ((await rigWrite(rig, st, "lowerSail"))?.ok === false) return;
           await cue(rig, st, "Lower Sail", ["Sails down — maneuver mode."]);
         } },
     ],
@@ -130,14 +203,11 @@
           if (!ws.length) return cue(rig, st, "Fire Weapon", ["No mounted weapons on this rig."]);
           const id = await pickOne("Fire which weapon?", ws.map(w => ({ id: w.id, label: w.name })));
           const w = ws.find(x => x.id === id);
-          if (w) { try { await w.use(); } catch (e) { await cue(rig, st, "Fire Weapon", [`${w.name}: use failed — fire it from the rig sheet.`]); } }
+          if (w) { try { await w.use(); } catch (e) { await cue(rig, st, "Fire Weapon", [`${esc(w.name)}: use failed — fire it from the rig sheet.`]); } }
         } },
       { id: "aimed-shot", type: "action+bonus", label: "Aimed Shot", desc: "Spend action AND bonus action: the rig's next weapon attack has advantage.",
         handler: async (rig, st) => {
-          await rigAE(rig, "Aimed Shot (advantage, next attack)", [
-            { key: "flags.midi-qol.advantage.attack.all", mode: 5, value: "1", priority: 20 },
-            { key: "flags.dnd5e.advantage.attack.all", mode: 5, value: "1", priority: 20 },
-          ], "next rig weapon attack has advantage", { dae: { specialDuration: ["1Attack"] } });
+          if (!(await rigAE(rig, st, "aimed-shot"))) return;
           await cue(rig, st, "Aimed Shot", ["Next rig weapon attack: <b>advantage</b> (auto with midi; expires after the attack). Costs action + bonus action."]);
         } },
       { id: "suppression", type: "action", label: "Suppression", desc: "Use a weapon to impose its condition rider instead of damage (per the weapon's text — GM adjudicates)." },
@@ -147,7 +217,7 @@
           if (!ws.length) return cue(rig, st, "Reload", ["Nothing needs reloading."]);
           const id = await pickOne("Reload which weapon?", ws.map(w => ({ id: w.id, label: w.name })));
           const w = ws.find(x => x.id === id);
-          if (w) { await w.update({ "system.uses.spent": 0 }); await cue(rig, st, "Reload", [`${w.name} reloaded — uses restored.`]); }
+          if (w && (await rigWrite(rig, st, "resetUses", { itemId: w.id }))?.ok !== false) await cue(rig, st, "Reload", [`${esc(w.name)} reloaded — uses restored.`]);
         } },
       { id: "opportunity-fire", type: "reaction", label: "Opportunity Fire", desc: "Fire at an enemy entering the weapon's reach (GM adjudicates the trigger)." },
     ],
@@ -160,17 +230,16 @@
           await check.toMessage({ speaker: ChatMessage.getSpeaker({ actor: st ?? rig }), flavor: "Emergency Repair — tool check (DC 15)" });
           if (check.total >= 15) {
             const heal = await new Roll(`1d6 + ${pb}`).evaluate();
-            const hp = Number(get(rig, "system.attributes.hp.value", 0)) || 0;
-            const max = Number(get(rig, "system.attributes.hp.max", 0)) || 0;
-            await R().update(rig, { "integrity.value": Math.min(max, hp + heal.total) });
-            await cue(rig, st, "Emergency Repair", [`Success (${check.total} vs 15) — hull restored <b>${heal.total}</b> (${Math.min(max, hp + heal.total)}/${max}).`]);
+            const res = await rigWrite(rig, st, "heal", { amount: heal.total });
+            if (res?.ok === false) return;
+            await cue(rig, st, "Emergency Repair", [`Success (${check.total} vs 15) — hull restored <b>${heal.total}</b> (${res.value}/${res.max}).`]);
           } else {
             await cue(rig, st, "Emergency Repair", [`Failed (${check.total} vs 15) — the seam doesn't hold this round.`]);
           }
         } },
       { id: "boost-system", type: "bonus", label: "Boost System", desc: "Overdrive one rig system until end of round.",
         handler: async (rig, st) => {
-          await rigAE(rig, "System Boosted", [], "one rig system performs at +1 effect step until end of round (GM applies)");
+          if (!(await rigAE(rig, st, "boost-system"))) return;
           await cue(rig, st, "Boost System", ["One system runs hot until end of round — +1 effect step (GM applies)."]);
         } },
       { id: "vent-heat", type: "bonus", label: "Vent Heat / Cycle Power", desc: "Reset a weapon or system's cooldown/uses.",
@@ -179,7 +248,7 @@
           if (!its.length) return cue(rig, st, "Vent Heat", ["Nothing is overheated or spent."]);
           const id = await pickOne("Cycle which system?", its.map(i => ({ id: i.id, label: i.name })));
           const it = its.find(x => x.id === id);
-          if (it) { await it.update({ "system.uses.spent": 0 }); await cue(rig, st, "Vent Heat", [`${it.name} cycled — uses restored.`]); }
+          if (it && (await rigWrite(rig, st, "resetUses", { itemId: it.id }))?.ok !== false) await cue(rig, st, "Vent Heat", [`${esc(it.name)} cycled — uses restored.`]);
         } },
       { id: "counter-sabotage", type: "reaction", label: "Counter-Sabotage", desc: "Cancel a hostile boarding or sabotage attempt (contested check — GM adjudicates)." },
     ],
@@ -190,12 +259,12 @@
           if (!its.length) return cue(rig, st, "Operate Module", ["No operable modules aboard."]);
           const id = await pickOne("Operate which module?", its.map(i => ({ id: i.id, label: i.name })));
           const it = its.find(x => x.id === id);
-          if (it) { try { await it.use(); } catch (e) { await cue(rig, st, "Operate Module", [`${it.name}: use it from the rig sheet.`]); } }
+          if (it) { try { await it.use(); } catch (e) { await cue(rig, st, "Operate Module", [`${esc(it.name)}: use it from the rig sheet.`]); } }
         } },
       { id: "reload-assist", type: "bonus", label: "Assist Reload", desc: "Help a gunner — their next Reload is free (GM adjudicates)." },
       { id: "brace", type: "bonus", label: "Brace", desc: "+1 AC to the rig until end of round.",
         handler: async (rig, st) => {
-          await rigAE(rig, "Braced (+1 AC)", [{ key: "system.attributes.ac.bonus", mode: 2, value: "1", priority: 20 }], "+1 AC until end of round");
+          if (!(await rigAE(rig, st, "brace"))) return;
           await cue(rig, st, "Brace", ["The crew braces — rig +1 AC until end of round."]);
         } },
       { id: "signal", type: "bonus", label: "Signal", desc: "Coordinate — one crewmate gains +1 on their next rig action check (GM applies)." },
@@ -205,7 +274,7 @@
             const pb = Number(get(st, "system.attributes.prof", 2)) || 2;
             const cur = Number(get(st, "system.attributes.hp.temp", 0)) || 0;
             if (pb > cur) await st.update({ "system.attributes.hp.temp": pb });
-            await cue(rig, st, "Hold On!", [`${st.name} braces: ${pb} temp HP against the impact.`]);
+            await cue(rig, st, "Hold On!", [`${esc(st.name)} braces: ${pb} temp HP against the impact.`]);
           }
         } },
     ],
@@ -242,7 +311,7 @@
     const band = bandFor(rig, role);
 
     const picked = await foundry.applications.api.DialogV2.prompt({
-      window: { title: `🎛 ${rig.name} — ${steward?.name ?? slot.label} (${role})` },
+      window: { title: `🎛 ${rig.name} — ${steward?.name ?? slot.label} (${role})` },   // window titles are text, not HTML
       content: band.map((a, i) => `
         <label style="display:flex;align-items:flex-start;gap:.4rem;padding:.3rem .4rem;cursor:pointer">
           <input type="radio" name="act" value="${a.id}" ${i === 0 ? "checked" : ""}/>
@@ -333,9 +402,9 @@
     const role = slot?.role ?? "crew";
     const crewPicker = (!ctx.steward && slots.length > 1)
       ? `<select data-rig-bar-crew style="width:auto;font-size:.68rem;padding:0 .2rem;background:rgba(20,28,48,.92);color:#bcd3ff;border:1px solid #b9882e44;border-radius:4px">
-          ${slots.map((s, i) => `<option value="${i}" ${s === slot ? "selected" : ""}>${(s.actorId ? game.actors?.get?.(s.actorId)?.name : null) ?? s.label} · ${s.role}</option>`).join("")}
+          ${slots.map((s, i) => `<option value="${i}" ${s === slot ? "selected" : ""}>${esc((s.actorId ? game.actors?.get?.(s.actorId)?.name : null) ?? s.label)} · ${esc(s.role)}</option>`).join("")}
         </select>`
-      : `<span style="font-size:.62rem;opacity:.7;color:#bcd3ff;text-transform:capitalize;white-space:nowrap">${steward?.name ?? slot.label} · ${role}</span>`;
+      : `<span style="font-size:.62rem;opacity:.7;color:#bcd3ff;text-transform:capitalize;white-space:nowrap">${esc(steward?.name ?? slot.label)} · ${esc(role)}</span>`;
 
     const bar = document.createElement("div");
     bar.id = "bbttcc-rig-bar";
@@ -344,10 +413,10 @@
       background:rgba(10,16,32,.92);box-shadow:0 2px 12px rgba(0,0,0,.5);backdrop-filter:blur(3px);
       flex-wrap:wrap;max-width:80vw`;
     bar.innerHTML = `
-      <span style="font-size:.72rem;font-weight:700;color:#e8c84a;white-space:nowrap">🛻 ${rig.name}</span>
+      <span style="font-size:.72rem;font-weight:700;color:#e8c84a;white-space:nowrap">🛻 ${esc(rig.name)}</span>
       ${crewPicker}
       ${bandButtonsHtml(rig, role)}
-      <button type="button" data-rig-bar-leave title="Disembark ${steward?.name ?? slot.label}"
+      <button type="button" data-rig-bar-leave title="Disembark ${esc(steward?.name ?? slot.label)}"
         style="width:auto;padding:.15rem .45rem;font-size:.72rem;border:1px solid #c0303066;border-radius:4px;
         background:rgba(48,16,16,.9);color:#f0c0c0;cursor:pointer">🪂</button>`;
     document.body.appendChild(bar);
@@ -381,7 +450,7 @@
       strip.className = "bbttcc-rig-banner";
       strip.style.cssText = `display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;padding:.25rem .5rem;
         border-bottom:1px solid #b9882e88;background:rgba(20,28,48,.55)`;
-      strip.innerHTML = `<span style="font-size:.72rem;font-weight:700;color:#e8c84a">🛻 Aboard ${rig.name} · <span style="text-transform:capitalize">${role}</span></span>
+      strip.innerHTML = `<span style="font-size:.72rem;font-weight:700;color:#e8c84a">🛻 Aboard ${esc(rig.name)} · <span style="text-transform:capitalize">${esc(role)}</span></span>
         ${bandButtonsHtml(rig, role)}`;
       const anchor = root.querySelector(".window-content") ?? root;
       anchor.prepend(strip);
@@ -394,6 +463,7 @@
     const impl = game.bbttcc?.rigs?.impl;
     if (!impl) { console.warn(TAG, "game.bbttcc.rigs accessor missing — rig role actions NOT installed"); return; }
     Object.assign(impl, { openRigActions, registerAction, ACTIONS, renderRigBar });
+    game.bbttcc?.api?.gmExec?.register?.("rigs.action", rigsActionHandler);   // player-seat rig writes (review P2 2026-10-28)
     renderRigBar();
     // Re-render the bar whenever boarding state / crew roster changes, plus
     // canvas swaps (scene loads rebuild the DOM around the hotbar).

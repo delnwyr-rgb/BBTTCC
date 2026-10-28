@@ -174,7 +174,10 @@
     const clamp = (n) => Math.max(0, Math.min(100, n));
 
     const loyaltyPct  = clamp(vals.loyalty);
-    const darknessPct = clamp(vals.darkness);
+    // review P3 (2026-10-28): Darkness `global` runs 0..10 (DARK_CAP in advance-turn.tracks / strategic-throughput),
+    // not 0..100 — max Darkness used to read "10%" with a one-tenth bar.
+    const DARK_CAP = 10;
+    const darknessPct = clamp(vals.darkness / DARK_CAP * 100);
 
     const lTrend = makeTrend(vals.loyalty, vals.loyaltyHome);
 
@@ -200,7 +203,7 @@
             <span class="fdash-value">${vals.darkness.toFixed(0)}</span>
             <span class="fdash-unit">pt</span>
             <div class="fdash-meta">
-              <span>${darknessPct.toFixed(0)}%</span>
+              <span>${vals.darkness.toFixed(0)}/${DARK_CAP}</span>
             </div>
           </div>
           <div class="fdash-bar">

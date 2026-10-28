@@ -21,10 +21,11 @@
  *                  mobile/hybrid: parked ⇄ deployed → destroyed
  *                  (restore() = explicit GM mercy; not a normal transition)
  *
- *   OUTPUT  each BBTTCC strategic turn (`bbttcc:advanceTurn:end`, active GM
+ *   OUTPUT  each BBTTCC strategic turn (`bbttcc:advanceTurn:end`, the GM seat that ran it
  *           AND apply:true — dry runs never credit), every faction-owned rig
  *           credits its faction's OP bank through game.bbttcc.api.op.commit:
- *             parked ×1.0 · deployed ×0.5 (floor; output-modules with
+ *             parked ×1.0 · deployed ×0.5 (halved, never floored — the
+ *             chokepoint rounds once in MARKS; output-modules with
  *             mobileLegal:false → 0 while deployed) · destroyed ×0
  *           Rig output + orders are AUTHORED IN OP; the bank is MARKS, so the
  *           single write chokepoint converts with op.marksPerOp().
@@ -142,7 +143,7 @@
       tokenId: state === "deployed" ? (binding.tokenId ?? null) : null,
     };
     await R().update(actor, { "identity.state": state, "identity.binding": nextBinding });
-    await chatNote(actor, `${ICONS[state] ?? ""} ${actor.name} → ${state}`,
+    await chatNote(actor, `${ICONS[state] ?? ""} ${foundry.utils.escapeHTML(actor.name)} → ${state}`,
       state === "deployed" ? [`Deployed${nextBinding.sceneId ? ` on scene ${game.scenes?.get(nextBinding.sceneId)?.name ?? nextBinding.sceneId}` : ""}. Output halves while deployed.`]
       : state === "parked" ? [`Parked${nextBinding.hexId ? ` at hex ${nextBinding.hexId}` : ""}. Full output resumes next strategic turn.`]
       : ["Destroyed. Output ceases until restored."]);
@@ -155,7 +156,7 @@
     actor = baseActor(actor);
     if (!data(actor)) throw new Error(`${TAG} ${actor?.name} is not a rig`);
     await R().update(actor, { "identity.state": "parked", "identity.binding": { hexId, sceneId: null, tokenId: null } });
-    await chatNote(actor, `🔧 ${actor.name} restored`, ["Back to parked (GM restoration)."]);
+    await chatNote(actor, `🔧 ${foundry.utils.escapeHTML(actor.name)} restored`, ["Back to parked (GM restoration)."]);
     return data(actor);
   }
 
@@ -170,7 +171,8 @@
     const add = (channel, n, mobileLegal = true) => {
       let v = Number(n) || 0;
       if (v <= 0) return;
-      if (deployed) v = mobileLegal ? Math.floor(v * 0.5) : 0;
+      // review P3 (2026-10-28): no OP floor — a 1-OP channel pays half its marks while deployed; creditFaction rounds in marks.
+      if (deployed) v = mobileLegal ? v * 0.5 : 0;
       if (v <= 0) return;
       if (!CHANNELS.includes(channel)) console.warn(TAG, `${actor.name}: unknown OP channel "${channel}" (credited anyway)`);
       acc[channel] = (acc[channel] ?? 0) + v;
@@ -260,15 +262,19 @@
       if (res && res.ok === false) entry.refused = res.error ?? "refused (cap?)";
     }
     if (!quiet && report.some(r => Object.keys(r.out).length || r.order)) {
+      const esc = (v) => foundry.utils.escapeHTML(String(v ?? ""));
+      // review P3 (2026-10-28): halved output can be fractional OP — show the card in marks (the bank unit).
+      const perOp = Number(OP()?.marksPerOp?.() ?? OP()?.OP_TO_MARKS) || 0;
+      const fmt = (n) => perOp ? `${Math.round(n * perOp)} marks` : `${n}`;
       const rows = report.filter(r => r.faction || r.order).map(r =>
-        `<tr><td>${ICONS[r.state] ?? ""} ${r.rig}</td><td>${r.state}</td><td>${r.faction ?? "—"}</td>
-         <td>${Object.entries(r.out).map(([c, n]) => `+${n} ${c}`).join(", ") || "—"}${r.order ? ` · 📋 ${r.order.key}: ${r.order.note}` : ""}${r.refused ? ` · ⚠ ${r.refused}` : ""}</td></tr>`).join("");
+        `<tr><td>${ICONS[r.state] ?? ""} ${esc(r.rig)}</td><td>${esc(r.state)}</td><td>${esc(r.faction ?? "—")}</td>
+         <td>${Object.entries(r.out).map(([c, n]) => `+${fmt(n)} ${c}`).join(", ") || "—"}${r.order ? ` · 📋 ${r.order.key}: ${r.order.note}` : ""}${r.refused ? ` · ⚠ ${esc(r.refused)}` : ""}</td></tr>`).join("");
       try {
         await ChatMessage.create({
           whisper: ChatMessage.getWhisperRecipients?.("GM")?.map(u => u.id) ?? [],
           content: `<div class="bbttcc-class-cue" style="border:1px solid #b9882e;border-radius:6px;padding:.4rem .6rem">
             <p style="margin:.1rem 0;font-weight:700">🛻 Rig output — strategic turn</p>
-            <table style="font-size:.78rem;width:100%"><tr><th style="text-align:left">Rig</th><th style="text-align:left">State</th><th style="text-align:left">Faction</th><th style="text-align:left">Output (OP)</th></tr>${rows}</table>
+            <table style="font-size:.78rem;width:100%"><tr><th style="text-align:left">Rig</th><th style="text-align:left">State</th><th style="text-align:left">Faction</th><th style="text-align:left">Output</th></tr>${rows}</table>
           </div>`
         });
       } catch (e) { console.warn(TAG, "summary card failed", e); }
@@ -298,7 +304,8 @@
       patch["integrity.max"] = max;
       // a rig sitting at its old full value (a fresh mint seeded by bracket) rides up to the new max
       const hp = hpOf(rig); const atFull = !hp.max || (hp.value ?? 0) >= hp.max;
-      patch["integrity.value"] = atFull ? max : Math.min(hp.value || max, max);
+      // review P2 (2026-10-28): a wreck (0 HP) stays at 0 — `hp.value || max` used to fully repair it on re-equip.
+      patch["integrity.value"] = atFull ? max : Math.min(hp.value, max);
     }
     if (f.bracket) patch["integrity.bracket"] = f.bracket;          // accessor seats dt by bracket
     if (Array.isArray(f.mobilityAllowed) && f.mobilityAllowed.length && !f.mobilityAllowed.includes(d.identity.mobility)) patch["identity.mobility"] = f.mobilityAllowed[0];
@@ -307,7 +314,7 @@
     // the item is the source; this is a copy.
     patch["frame"] = { name: frameItem.name, itemId: frameItem.id, slots: f.slots ?? {}, capacity: f.capacity ?? {}, actions: f.actions ?? null, bracket: f.bracket ?? d.integrity.bracket };
     await R().update(rig, patch);
-    await chatNote(rig, `⚙ Frame equipped: ${frameItem.name}`, [
+    await chatNote(rig, `⚙ Frame equipped: ${foundry.utils.escapeHTML(frameItem.name)}`, [
       `Bracket <b>${f.bracket ?? d.integrity.bracket}</b>${f.baseIntegrity ? ` · hull ${f.baseIntegrity}+${f.tierStep ?? 0}/tier` : ""}.`,
       f.capacity ? `Crew capacity: ${Object.entries(f.capacity).map(([r, c]) => `${r} ${c.min ?? 0}–${c.max ?? 0}`).join(" · ")}.` : ""].filter(Boolean));
   }
@@ -316,10 +323,11 @@
       try {
         if (userId !== game.user?.id) return;
         const rig = baseActor(item?.parent);
-        if (!rig || !data(rig)) return;
         const gear = gearOf(item);
+        // review P3 (2026-10-28): a template bootstraps a plain vehicle (applyTemplate → ensure), so dispatch it before the rig check.
+        if (gear?.subtype === "rig-template" && rig?.type === "vehicle") { applyTemplate(rig, item); return; }
+        if (!rig || !data(rig)) return;
         if (gear?.subtype === "rig-frame") applyFrame(rig, item);
-        else if (gear?.subtype === "rig-template") applyTemplate(rig, item);
       } catch (e) { console.warn(TAG, "createItem hook failed", e); }
     });
     Hooks.on("deleteItem", (item, _opts, userId) => {
@@ -354,7 +362,7 @@
       }
     }
     await tplItem.delete().catch(() => {});
-    await chatNote(rig, `📦 Template applied: ${tplItem.name}`, [
+    await chatNote(rig, `📦 Template applied: ${foundry.utils.escapeHTML(tplItem.name)}`, [
       imported.length ? `Installed: ${imported.join(" · ")}.` : "No gear imported (pack missing? install gear by hand).",
       "The template item consumed itself."]);
   }
@@ -413,7 +421,7 @@
     const tok = token ?? tokenOf(steward);
     await steward.setFlag(SCOPE, "boardedRig", { rigId: rig.id, tokenId: tok?.id ?? null, sceneId: tok?.scene?.id ?? null });
     if (tok) { try { await tok.document.update({ hidden: true }); } catch (e) { /* best-effort */ } }
-    await chatNote(rig, `🛻 ${steward.name} boards ${rig.name}`, [`Role: <b>${role}</b>. They spend their own action economy on rig actions.`]);
+    await chatNote(rig, `🛻 ${foundry.utils.escapeHTML(steward.name)} boards ${foundry.utils.escapeHTML(rig.name)}`, [`Role: <b>${role}</b>. They spend their own action economy on rig actions.`]);
     return true;
   }
   async function disembark(steward, _opts = {}) {
@@ -441,9 +449,9 @@
     if (role === "pilot" && d2 && d2.identity.mobility !== "stationary" && d2.identity.state === "deployed"
         && !(d2.crew?.slots ?? []).some(s => s.role === "pilot")) {
       await park(rig, {});
-      await chatNote(rig, `🅿️ ${rig.name} auto-parks`, ["Its pilot stepped off (canon: no pilot, no motion)."]);
+      await chatNote(rig, `🅿️ ${foundry.utils.escapeHTML(rig.name)} auto-parks`, ["Its pilot stepped off (canon: no pilot, no motion)."]);
     }
-    await chatNote(rig, `🪂 ${steward.name} disembarks ${rig.name}`, []);
+    await chatNote(rig, `🪂 ${foundry.utils.escapeHTML(steward.name)} disembarks ${foundry.utils.escapeHTML(rig.name)}`, []);
     return true;
   }
 
@@ -580,12 +588,12 @@
     const keys = OP()?.KEYS;
     if (Array.isArray(keys) && keys.length) CHANNELS.splice(0, CHANNELS.length, ...keys);
 
-    // Turn integration: ACTIVE GM only (every client hears the hook) AND the
-    // real apply pass — `bbttcc:advanceTurn:end` carries { apply } for dry runs.
+    // Turn integration: GM seat only AND the real apply pass — `bbttcc:advanceTurn:end`
+    // carries { apply } for dry runs. review P2 (2026-10-28): the hook is a LOCAL
+    // Hooks.callAll on the seat that ran the turn, so no activeGM election here.
     Hooks.on("bbttcc:advanceTurn:end", async (payload = {}) => {
       try {
         if (!game.user?.isGM) return;
-        if (game.users?.activeGM?.id !== game.user?.id) return;
         if (payload?.apply === false) return;
         await new Promise(r => setTimeout(r, 0));   // let other end-of-turn writers finish
         await applyTurnOutput();

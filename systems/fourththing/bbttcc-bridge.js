@@ -1983,6 +1983,32 @@ Hooks.on("updateActor", (actor, changes, _opts, userId) => {
   } catch (e) { console.warn("[fourththing] political affiliation item sync failed", e); }
 });
 
+// review P3 (2026-10-28): a slot change must drop the old family's Tier Engine feats and attach the new one's —
+// the sheet dropdown used to leave "Crew Type:"/"Occult Association:" feats behind. Same match as bbttcc-market
+// contracts.js _purgeFamilyItems (one pick per family, so every item of the family belongs to the old pick).
+const FT_ECHO_FAMILY_MATCH = {
+  crew:   { namePattern: /^(?:Crew Type|Awesome Crew):\s*/i,           idPrefix: "crew-" },
+  occult: { namePattern: /^(?:Occult Association|Occult):\s*/i, idPrefix: "occult-" }
+};
+async function ftPurgeEchoFamilyItems(actor, slotKey) {
+  const fam = FT_ECHO_FAMILY_MATCH[slotKey];
+  if (!fam) return;
+  const ids = (actor.items?.contents ?? []).filter(it => {
+    const co = it.flags?.["bbttcc-character-options"] ?? {};
+    const cat = co.category || co.option?.category || "";
+    return fam.namePattern.test(String(it.name ?? "")) || String(it.system?.identifier ?? "").startsWith(fam.idPrefix)
+      || cat === slotKey || cat === `${slotKey}-types` || (slotKey === "occult" && cat === "occult-associations");
+  }).map(it => it.id);
+  if (ids.length) {
+    try { await actor.deleteEmbeddedDocuments("Item", ids); }
+    catch (e) { console.warn("[fourththing] echo-asset family cleanup failed", e); }
+  }
+}
+async function ftSyncEchoTierFeats(actor) {
+  try { await game.bbttcc?.api?.identity?.syncOptionTiers?.(actor, { silent: true }); }
+  catch (e) { console.warn("[fourththing] syncOptionTiers failed", e); }
+}
+
 // Crew / Occult are flag-only identity slots (no embedded items).
 // Mirrors the wizard's write pattern: `flags.bbttcc-character-options.identity.<slot>`
 // plus the per-slot shortcut flag `flags.bbttcc-character-options.<slot>`.
@@ -2006,6 +2032,8 @@ export async function setActorEchoAssetSlot(actor, slotKey, packEntryId) {
     else await actor.setFlag("bbttcc-character-options", "identity", next);
     try { await actor.unsetFlag("bbttcc-character-options", slotKey); }
     catch (_e) { await actor.setFlag("bbttcc-character-options", slotKey, null); }
+    await ftPurgeEchoFamilyItems(actor, slotKey);
+    await ftSyncEchoTierFeats(actor);
     await game.bbttcc?.api?.characterOptions?.recalcActor?.(actor.id);
     return next;
   }
@@ -2036,6 +2064,8 @@ export async function setActorEchoAssetSlot(actor, slotKey, packEntryId) {
     name: rawName,
     identifier: slotData.identifier
   });
+  await ftPurgeEchoFamilyItems(actor, slotKey);
+  await ftSyncEchoTierFeats(actor);
   await game.bbttcc?.api?.characterOptions?.recalcActor?.(actor.id);
   return next;
 }

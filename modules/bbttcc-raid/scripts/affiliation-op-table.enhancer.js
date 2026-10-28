@@ -137,6 +137,17 @@ function _slotKey(slot){
   return _normKey(slot.identifier || slot.optionKey || slot.name || slot.key || "");
 }
 
+// review P1 (2026-10-28): the alignment pack stores identifier "alignment-kether" / name
+// "Alignment: Tiphareth", so strip the prefix and fold the pack spellings onto the table keys.
+const _SEPH_ALIAS = {
+  kether: "keter", tiphareth: "tiferet", tipharet: "tiferet", tiphereth: "tiferet",
+  gevurah: "geburah", gevura: "geburah", chochmah: "chokmah", hokhmah: "chokmah"
+};
+function _sephKey(slot){
+  const k = _slotKey(slot).replace(/^alignment[:_-]*/, "");
+  return _SEPH_ALIAS[k] || k;
+}
+
 /** Resolve the world item document for an identity slot, if loadable.
  *  Used to read per-item-flag overrides (flags.bbttcc-factions.opContribution).
  *  Returns null if the slot has no resolvable item or fromUuidSync isn't available.
@@ -232,11 +243,11 @@ function contributionBreakdown(actor){
   // --- 1. Sephirotic alignment (static table; per-item override allowed)
   try {
     const slot = identity.sephirothicAlignment;
-    const key = _slotKey(slot);
+    const key = _sephKey(slot);
     if (key) {
       const itemDoc = _slotItemDoc(slot);
       const ovr = _itemOverride(itemDoc);
-      const ops = ovr || SEPHIRAH_TABLE[(key === "gevurah" || key === "gevura") ? "geburah" : key] || null;   // legacy spelling fold (2026-10-26)
+      const ops = ovr || SEPHIRAH_TABLE[key] || null;   // spelling folds live in _sephKey
       if (ops && Object.keys(ops).length) {
         const norm = {};
         _addInto(norm, ops);
@@ -248,10 +259,19 @@ function contributionBreakdown(actor){
 
   // --- 2. Ancestry (static table w/ tier-stripping; per-item override allowed)
   try {
-    const slot = identity.ancestry;
+    let slot = identity.ancestry;
+    // review P2 (2026-10-28): nothing writes identity.ancestry (the wizard only flags speciesUuid /
+    // nativeLinks), so fall back to the embedded species item, then nativeLinks.ancestryName.
+    let embedded = null;
+    if (!_slotKey(slot)) {
+      embedded = (actor.items?.find?.(i => ["species","race","ancestry"].includes(i?.type))) || null;
+      const linkName = actor?.flags?.[CHO_ID]?.nativeLinks?.ancestryName || "";
+      slot = embedded ? { identifier: embedded.system?.identifier || "", name: embedded.name }
+           : (linkName ? { name: linkName } : null);
+    }
     const rawKey = _slotKey(slot);
     if (rawKey) {
-      const itemDoc = _slotItemDoc(slot);
+      const itemDoc = embedded || _slotItemDoc(slot);
       const ovr = _itemOverride(itemDoc);
       const rootKey = _ancestryRootKey(rawKey);
       const ops = ovr || ANCESTRY_TABLE[rootKey] || ANCESTRY_TABLE[rawKey] || null;

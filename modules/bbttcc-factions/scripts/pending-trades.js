@@ -12,7 +12,7 @@
 //   ]
 //
 // API on game.bbttcc.api.factions.pending:
-//   list(faction)                                  → entries (live + filtered to toId === faction.id)
+//   list(faction)                                  → pending, unexpired entries on the faction's inbox
 //   create({ from, to, offer, ask, reason })       → { ok, id, entry }
 //   accept(faction, id)                            → { ok, applied?, error? } (settles via exchange.trade)
 //   decline(faction, id, reason?)                  → { ok }
@@ -52,8 +52,16 @@ function _newId() {
 }
 
 const RELAY_CREATE = "factions.pending.create";
+const RELAY_ACTION = "factions.pending.action";   // player-seat Accept/Decline/Counter (review P3 2026-10-28)
 function _registerRelay() {
   const gx = game.bbttcc?.api?.gmExec; if (!gx?.register) return;
+  gx.register(RELAY_ACTION, async (p, meta) => {
+    const faction = _resolveActor(p?.factionId);
+    if (!faction) return { ok: false, error: "faction not found" };
+    const requester = meta?.local ? game.user : game.users?.get?.(meta?.fromUserId);
+    if (!_userOwnsFaction(requester, faction)) return { ok: false, error: `${meta?.fromUserName || "That seat"} does not own ${faction.name}.` };
+    return _runAction(faction, String(p?.entryId || ""), String(p?.action || ""), p?.payload || null);
+  });
   gx.register(RELAY_CREATE, async (p, meta) => {
     const A = _resolveActor(p?.from), B = _resolveActor(p?.to);
     if (!A || !B) return { ok: false, error: "actor not found" };
@@ -66,7 +74,10 @@ function _registerRelay() {
 function list(faction) {
   const F = _resolveActor(faction);
   if (!F) return [];
-  return _readInbox(F).filter(e => e?.status === "pending");
+  // review P3 (2026-10-28): hide entries past expiresAt that the 30-minute sweep hasn't flipped yet,
+  // so the card never offers Accept on an offer accept() will refuse.
+  const now = Date.now();
+  return _readInbox(F).filter(e => e?.status === "pending" && !(Number(e.expiresAt || 0) && now > Number(e.expiresAt)));
 }
 
 async function create({ from, to, offer, ask, reason } = {}) {
@@ -176,8 +187,13 @@ async function accept(faction, id) {
 }
 
 async function decline(faction, id, reason = "") {
+  // review P3 (2026-10-28): same guards as accept/counter — only a PENDING entry can be declined,
+  // and never while this client is mid-accept (a Decline landing during Accept's "settling" write
+  // fired declined, then the trade applied and the status flipped to accepted).
   const cur = _readInbox(_resolveActor(faction)).find(e => e?.id === id);
-  if (cur?.status === "settling") return { ok: false, error: "entry is being settled" };
+  if (!cur) return { ok: false, error: "entry not found" };
+  if (_settling.has(id)) return { ok: false, error: "entry is being settled" };
+  if (cur.status !== "pending") return { ok: false, error: `entry already ${cur.status}` };
   const updated = await _setStatus(faction, id, {
     status: "declined", settledTs: Date.now(), settledBy: game.user?.id || null,
     declineReason: String(reason || "")
@@ -320,11 +336,8 @@ async function _handleSocketMessage(msg) {
     return;
   }
   try {
-    let res = null;
-    if (action === "accept")       res = await accept(faction, entryId);
-    else if (action === "decline") res = await decline(faction, entryId, payload?.reason || "");
-    else if (action === "counter") res = await counter(faction, entryId, payload?.offer, payload?.ask, payload?.reason || "");
-    else { console.warn(TAG, "socket: unknown action", action); return; }
+    const res = await _runAction(faction, entryId, action, payload);
+    if (res?.unknown) { console.warn(TAG, "socket: unknown action", action); return; }
 
     if (!res?.ok) {
       ui.notifications?.warn?.(`Player ${requester.name} ${action} on ${faction.name} failed: ${res?.error || "unknown"}`);
@@ -334,9 +347,31 @@ async function _handleSocketMessage(msg) {
   }
 }
 
-function emitPlayerAction({ faction, entryId, action, payload }) {
+async function _runAction(faction, entryId, action, payload) {
+  if (action === "accept")  return accept(faction, entryId);
+  if (action === "decline") return decline(faction, entryId, payload?.reason || "");
+  if (action === "counter") return counter(faction, entryId, payload?.offer, payload?.ask, payload?.reason || "");
+  return { ok: false, unknown: true, error: `unknown action "${action}"` };
+}
+
+// Player-seat relay for inbox actions. ASYNC (review P3 2026-10-28): resolves to the GM's real
+// result { ok, error?, noGm? } via gmExec, instead of `true` the moment socket.emit didn't throw.
+// The legacy fire-and-forget socket path remains only for a client without gmExec
+// (→ { ok: true, unconfirmed: true }).
+async function emitPlayerAction({ faction, entryId, action, payload }) {
   const factionId = faction?.id || String(faction || "").replace(/^Actor\./, "");
-  if (!factionId || !entryId || !action) return false;
+  if (!factionId || !entryId || !action) return { ok: false, error: "missing faction, entry or action" };
+  const gx = game.bbttcc?.api?.gmExec;
+  if (gx?.call) {
+    if (!gx.primaryGmId?.()) return { ok: false, noGm: true, error: "No GM is connected — nothing was sent. Try again when the GM is online." };
+    try {
+      return (await gx.call(RELAY_ACTION, { factionId, entryId, action, payload: payload ?? null }, { timeoutMs: 30000 }))
+        || { ok: false, error: "GM relay returned nothing" };
+    } catch (e) {
+      console.warn(TAG, `${action} relay failed`, e);
+      return { ok: false, error: String(e?.message || e) };
+    }
+  }
   try {
     game.socket?.emit?.(SOCKET_CHANNEL, {
       t: SOCKET_TYPE,
@@ -346,10 +381,10 @@ function emitPlayerAction({ faction, entryId, action, payload }) {
       payload: payload ?? null,
       requesterId: game.user?.id || null
     });
-    return true;
+    return { ok: true, unconfirmed: true };
   } catch (e) {
     console.warn(TAG, "socket emit failed", e);
-    return false;
+    return { ok: false, error: "Could not relay to GM." };
   }
 }
 

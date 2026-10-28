@@ -14,6 +14,8 @@
  */
 
 const MOD = "bbttcc-auto-link";
+// Entry level per tier — matches tierForLevel (systems/fourththing/ft-progression.js).
+const TIER_LEVEL = { 1: 1, 2: 6, 3: 11, 4: 16 };
 const CALLINGS_PACK = "bbttcc-character-options.npc-callings";
 const ANCESTRIES_PACK = "bbttcc-master-content.ancestries";
 const BRIDGE_PATH = "systems/fourththing/bbttcc-bridge.js";
@@ -187,10 +189,10 @@ export async function openNPCBuilder() {
       <div class="form-group" style="display:flex; flex-direction:column; gap:0.2rem;">
         <label style="font-weight:600;">Tier</label>
         <select data-bbttcc-field="tier" style="padding:0.35rem 0.5rem; border-radius:3px;">
-          <option value="1">Tier I (level 1–4)</option>
-          <option value="2">Tier II (level 5–10)</option>
-          <option value="3">Tier III (level 11–16)</option>
-          <option value="4">Tier IV (level 17+)</option>
+          <option value="1">Tier I (level 1–5)</option>
+          <option value="2">Tier II (level 6–10)</option>
+          <option value="3">Tier III (level 11–15)</option>
+          <option value="4">Tier IV (level 16+)</option>
         </select>
       </div>
 
@@ -303,8 +305,10 @@ export async function openNPCBuilder() {
         createdAt: Date.now()
       }
     },
+    // review P1 (2026-10-28): the system derives Integrity/Stress/strikes/signature
+    // slots from details.level (tierForLevel), so write the tier's entry level too.
     system: {
-      details: { tier }
+      details: { tier, level: TIER_LEVEL[tier] ?? 1 }
     },
     prototypeToken: {
       // NPCs default to UNLINKED tokens so each placed token is an independent
@@ -948,7 +952,7 @@ export async function mintEchoMember(opts = {}) {
         }
       }
     },
-    system: { details: { tier } },
+    system: { details: { tier, level: TIER_LEVEL[tier] ?? 1 } },  // review P1 (2026-10-28)
     prototypeToken: {
       actorLink: false,
       disposition: 1,

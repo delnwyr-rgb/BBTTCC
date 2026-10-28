@@ -380,6 +380,7 @@ async function _getFactionActor(idOrUuid) {
  * - context: string or object describing the source ("raid","travel","strategic", etc.)
  *   - Optional: context.maxOPs can be supplied to override cap discovery.
  *   - Optional: context.allowOvercap=true to allow preview/commit above cap.
+ *   - Optional: context.noDiscount=true skips steward spend discounts (transfers, reversals).
  */
 async function preview(factionId, deltas, context) {
   const faction = await _getFactionActor(factionId);
@@ -393,7 +394,12 @@ async function preview(factionId, deltas, context) {
   const ctx = context || null;
   const caps = (ctx?.opCaps && typeof ctx.opCaps === "object") ? ctx.opCaps : _readCaps(faction);
 
-  const disc = _applySpendDiscounts(faction, before, _normalizeDeltas(deltas), caps);   // steward identity discounts (CO21)
+  // review P1 (2026-10-28): transfers (exchanges, vault moves, reversals) pass ctx.noDiscount so
+  // the debit equals the credit — a discounted debit against a full credit minted marks.
+  // Real spending (raid, travel, strategic…) keeps the default: discounts apply.
+  const disc = ctx?.noDiscount
+    ? { deltas: _normalizeDeltas(deltas), applied: [] }
+    : _applySpendDiscounts(faction, before, _normalizeDeltas(deltas), caps);   // steward identity discounts (CO21)
   const result = _computePreview(before, disc.deltas, ctx, caps);
   if (disc.applied.length) result.discounts = disc.applied;
   result.factionId = faction.id;
@@ -462,7 +468,12 @@ async function _commitNow(factionId, deltas, context) {
   const ctx = context || null;
   const caps = (ctx?.opCaps && typeof ctx.opCaps === "object") ? ctx.opCaps : _readCaps(faction);
 
-  const disc = _applySpendDiscounts(faction, before, _normalizeDeltas(deltas), caps);   // steward identity discounts (CO21)
+  // review P1 (2026-10-28): transfers (exchanges, vault moves, reversals) pass ctx.noDiscount so
+  // the debit equals the credit — a discounted debit against a full credit minted marks.
+  // Real spending (raid, travel, strategic…) keeps the default: discounts apply.
+  const disc = ctx?.noDiscount
+    ? { deltas: _normalizeDeltas(deltas), applied: [] }
+    : _applySpendDiscounts(faction, before, _normalizeDeltas(deltas), caps);   // steward identity discounts (CO21)
   const result = _computePreview(before, disc.deltas, ctx, caps);
   if (disc.applied.length) result.discounts = disc.applied;
   result.factionId = faction.id;

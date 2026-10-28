@@ -127,21 +127,26 @@
     $card.off("click.bbttccinbox");
 
     const isGM = !!game.user?.isGM;
+    // review P3 (2026-10-28): one click locks the whole row (Accept/Decline/Counter), so a
+    // Decline can't land while an Accept is settling; failures unlock it again.
+    const _rowButtons = (id) => $card.find("button[data-id]").filter((_i, b) => b.dataset.id === id);
+    const _lockRow = (id, on) => _rowButtons(id).prop("disabled", !!on);
 
     $card.on("click.bbttccinbox", '[data-action="accept"]', async (ev) => {
       const id = ev.currentTarget?.dataset?.id;
       if (!id) return;
       const api = _pendingApi();
       if (!api) return ui.notifications?.error?.("Pending API not loaded.");
-      ev.currentTarget.disabled = true;
+      _lockRow(id, true);
       if (isGM) {
         const res = await api.accept(faction, id);
         if (res?.ok) ui.notifications?.info?.("Trade accepted and settled.");
-        else { ui.notifications?.error?.(res?.error || "Accept failed"); ev.currentTarget.disabled = false; }
+        else { ui.notifications?.error?.(res?.error || "Accept failed"); _lockRow(id, false); }
       } else {
-        const ok = api.emitPlayerAction?.({ faction, entryId: id, action: "accept" });
-        if (ok) ui.notifications?.info?.("Accept relayed to GM for settlement.");
-        else { ui.notifications?.error?.("Could not relay to GM."); ev.currentTarget.disabled = false; }
+        // emitPlayerAction is async and resolves to the GM's real result (review P3 2026-10-28).
+        const res = await api.emitPlayerAction?.({ faction, entryId: id, action: "accept" });
+        if (res?.ok) ui.notifications?.info?.(res.unconfirmed ? "Accept relayed to GM for settlement." : "Trade accepted and settled.");
+        else { ui.notifications?.error?.(res?.error || "Could not relay to GM."); _lockRow(id, false); }
       }
     });
 
@@ -150,15 +155,15 @@
       if (!id) return;
       const api = _pendingApi();
       if (!api) return ui.notifications?.error?.("Pending API not loaded.");
-      ev.currentTarget.disabled = true;
+      _lockRow(id, true);
       if (isGM) {
         const res = await api.decline(faction, id);
         if (res?.ok) ui.notifications?.info?.("Trade declined.");
-        else { ui.notifications?.error?.(res?.error || "Decline failed"); ev.currentTarget.disabled = false; }
+        else { ui.notifications?.error?.(res?.error || "Decline failed"); _lockRow(id, false); }
       } else {
-        const ok = api.emitPlayerAction?.({ faction, entryId: id, action: "decline" });
-        if (ok) ui.notifications?.info?.("Decline relayed to GM.");
-        else { ui.notifications?.error?.("Could not relay to GM."); ev.currentTarget.disabled = false; }
+        const res = await api.emitPlayerAction?.({ faction, entryId: id, action: "decline" });
+        if (res?.ok) ui.notifications?.info?.(res.unconfirmed ? "Decline relayed to GM." : "Trade declined.");
+        else { ui.notifications?.error?.(res?.error || "Could not relay to GM."); _lockRow(id, false); }
       }
     });
 
@@ -280,12 +285,12 @@
               if (res?.ok) ui.notifications?.info?.("Counter-offer sent.");
               else ui.notifications?.error?.(res?.error || "Counter failed");
             } else {
-              const ok = api.emitPlayerAction?.({
+              const res = await api.emitPlayerAction?.({
                 faction, entryId: entry.id, action: "counter",
                 payload: { offer, ask, reason }
               });
-              if (ok) ui.notifications?.info?.("Counter relayed to GM.");
-              else ui.notifications?.error?.("Could not relay counter to GM.");
+              if (res?.ok) ui.notifications?.info?.(res.unconfirmed ? "Counter relayed to GM." : "Counter-offer sent.");
+              else ui.notifications?.error?.(res?.error || "Could not relay counter to GM.");
             }
           }
         },
