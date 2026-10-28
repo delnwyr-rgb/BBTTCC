@@ -175,6 +175,9 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     } catch (e) { console.warn("[bbttcc-strategic] whisper failed", e); }
   }
   const esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
+  // A planned activity that cannot happen returns {ok:false, reason}: turn-driver consumePlanned refunds what it
+  // billed, skips the fuel fx and writes ONE "could not …" war-log line (strategic review #2, 2026-10-28).
+  const _refused = (msg) => ({ ok:false, reason: String(msg || "refused").replace(/^[^:]{2,40}:\s*/, "").replace(/[.\s]+$/, "") });
   function bonusesOf(A){ return foundry.utils.duplicate(A?.getFlag(MODF, "bonuses") || {}); }
   async function writeBonuses(A, mut){ const b = bonusesOf(A); await mut(b); await A.update({ [`flags.${MODF}.bonuses`]: b }); return b; }
   // Per-channel regen multiplier plan — consumed by turn-driver advanceOPRegen (inTurns 1 = the next income).
@@ -479,7 +482,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const A = game.actors.get(ctx.factionId);
       if (!A) return;
       const st = militiaState(A);
-      if (st.rung < 1) { await pushWarLog(A, "Muster Drill: there is no militia to drill — the Muster opens when the Stewards let bandits walk."); return; }
+      if (st.rung < 1) return { ok:false, reason: "there is no militia to drill — the Muster opens when the Stewards let bandits walk" };   // turn-driver refunds + logs (2026-10-28)
       const drills = st.drills + 1;
       const rung = Math.max(st.rung, drills >= 2 ? 3 : 2);
       await militiaSet(A, { drills, rung, lastDrillTurn: (() => { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch (_e) { return 0; } })() });
@@ -489,7 +492,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     // Rite of Atonement (owner ruling 2026-10-02; dials in ATONEMENT above). Stamps the pending atonement and queues the GM card.
     async rite_of_atonement(ctx){
       const A = game.actors.get(ctx.factionId); if (!A) return;
-      if (!atonementCorrupted(A)) { await pushWarLog(A, "Rite of Atonement: there is no failed Final Ritual on your books — the plate went round anyway."); return; }
+      if (!atonementCorrupted(A)) return { ok:false, reason: "there is no failed Final Ritual on your books to atone for" };   // turn-driver refunds + logs (2026-10-28)
       let turn = 0; try { turn = Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch (_e) {}
       await A.update({ [`flags.${MODF}.tikkun.atonement`]: { pending: true, turn, ts: Date.now() } });
       _pendingAtonement.add(A.id);
@@ -508,12 +511,12 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async sell_surplus(ctx){
       const A = game.actors.get(ctx.factionId); if (!A) return;
       const stock = game.bbttcc?.api?.factions?.stockpile;
-      if (!stock?.list || !stock?.sell) { await pushWarLog(A, "Sell Surplus: stockpile API unavailable — nothing sold."); return; }
+      if (!stock?.list || !stock?.sell) return _refused("Sell Surplus: stockpile API unavailable — nothing sold.");
       const rows = (stock.list(A) || []).filter(r => Number(r?.qty || 0) > 0).sort((a, b) => Number(b.qty) - Number(a.qty));
-      if (!rows.length) { await pushWarLog(A, "Sell Surplus: the stockpile is empty — nothing to take to market."); return; }
+      if (!rows.length) return _refused("Sell Surplus: the stockpile is empty — nothing to take to market.");
       const top = rows[0]; const n = Math.max(1, Math.floor(Number(top.qty) / 2));
       const r = await stock.sell(A, top.key, n, { priceMult: MATERIAL_MARKET.SURPLUS_MULT });
-      if (!r?.ok) { await pushWarLog(A, `Sell Surplus: ${top.name || top.key} would not sell — ${r?.error || "refused"}.`); return; }
+      if (!r?.ok) return _refused(`Sell Surplus: ${top.name || top.key} would not sell — ${r?.error || "refused"}.`);
       await pushWarLog(A, `Sell Surplus: sold ${r.qty}× ${top.name || top.key} for ${r.marks} marks ${r.channel} (its home channel, sell price ×${MATERIAL_MARKET.SURPLUS_MULT})${r.clamped ? ` — ${r.clamped} held back, the bank is at its cap` : ""}.`);
     },
     async ration_distribution(ctx){
@@ -539,7 +542,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async recon_sweep(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid);
-      if (!doc) { await pushWarLog(A, "Recon Sweep: no target hex."); return; }
+      if (!doc) return _refused("Recon Sweep: no target hex.");
       const ring = nearestNeighbors(doc, 6);
       const hidden = ring.find(d => d.hidden);
       if (hidden) await revealHex(hidden);
@@ -585,7 +588,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     },
     async propaganda_tour(ctx){
       const A = game.actors.get(ctx.factionId);
-      if (!ctx.targetUuid) { await pushWarLog(A, "Propaganda: No target hex."); return; }
+      if (!ctx.targetUuid) return _refused("Propaganda: No target hex.");
       await enqueuePendingRepairs(ctx.targetUuid, ["Propaganda"], []);
       await adjustHexTrack(ctx.targetUuid, "loyalty", +2);   // was +2 Morale +1 Loyalty — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)
       await pushWarLog(A, 'Propaganda: +Propaganda; +3 Loyalty (target hex).');
@@ -593,7 +596,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async propaganda_campaign(ctx){ return STRATEGIC_THROUGHPUT.propaganda_tour(ctx); },
     async psych_ops_broadcast(ctx){
       const A = game.actors.get(ctx.factionId);
-      if (!ctx.targetUuid) { await pushWarLog(A, "Psych Ops Broadcast: No target hex."); return; }
+      if (!ctx.targetUuid) return _refused("Psych Ops Broadcast: No target hex.");
       await enqueuePendingRepairs(ctx.targetUuid, ["Propaganda"], []);
       await adjustHexTrack(ctx.targetUuid, "loyalty", -2);
       await pushWarLog(A, 'Psych Ops Broadcast: +Propaganda; −2 Loyalty (target hex).');
@@ -606,7 +609,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async peace_accords(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid); const B = doc ? await factionOfHex(doc) : null;
-      if (!B || B.id === A?.id) { await pushWarLog(A, "Peace Accords: target a hex held by ANOTHER Domain — no counterpart found."); return; }
+      if (!B || B.id === A?.id) return _refused("Peace Accords: target a hex held by ANOTHER Domain — no counterpart found.");
       await adjustHexTrack(ctx.targetUuid, "loyalty", +1);
       let until = ""; try { const t = Number(game.bbttcc?.api?.world?.getState?.()?.turn); if (Number.isFinite(t)) until = ` (through turn ${t + 2})`; } catch (_e) {}
       await pushWarLog(A, `Peace Accords with ${B.name}: ${hexName(doc)} Loyalty +1 for the other side. GM note — no hostile offer against either side for 2 turns${until}.`);
@@ -616,7 +619,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async resource_expropriation(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid); const B = doc ? await factionOfHex(doc) : null;
-      if (!B || B.id === A?.id) { await pushWarLog(A, "Resource Expropriation: the target hex has no rival holder to expropriate."); return; }
+      if (!B || B.id === A?.id) return _refused("Resource Expropriation: the target hex has no rival holder to expropriate.");
       const took = await debitOP(B, "economy", 20, `Expropriated by ${A.name}`);
       if (took > 0) await creditOP(A, "economy", took, `Expropriated from ${B.name}`);
       await adjustHexTrack(ctx.targetUuid, "loyalty", -1);
@@ -656,8 +659,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async alliance_summit(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid); const B = doc ? await factionOfHex(doc) : null;
-      if (!B || B.id === A?.id) { await pushWarLog(A, "Alliance Summit: target a hex held by an ALLIED faction."); return; }
-      if (!mutuallyAllied(A, B)) { await pushWarLog(A, `Alliance Summit: ${B.name} is not a mutual ally — no summit.`); return; }
+      if (!B || B.id === A?.id) return _refused("Alliance Summit: target a hex held by an ALLIED faction.");
+      if (!mutuallyAllied(A, B)) return _refused(`Alliance Summit: ${B.name} is not a mutual ally — no summit.`);
       await addRegenPlan(A, [{ inTurns: 1, mult: 1.15, label: `Alliance Summit with ${B.name}` }]);
       await addRegenPlan(B, [{ inTurns: 1, mult: 1.15, label: `Alliance Summit with ${A.name}` }]);
       await pushWarLog(A, `Alliance Summit with ${B.name}: both Domains' marks income ×1.15 next turn.`);
@@ -677,8 +680,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const A = game.actors.get(ctx.factionId);
       const from = await hexDoc(ctx.targetUuid); const to = ctx.toHexUuid ? await hexDoc(ctx.toHexUuid) : null;
       const key = String(tfOf(from).sephirotKey || "").toLowerCase();
-      if (!from || !to) { await pushWarLog(A, "Cultural Exchange: needs a FROM hex and a TO hex (planner asks for both)."); return; }
-      if (!key) { await pushWarLog(A, `Cultural Exchange: ${hexName(from)} carries no sephirot alignment to share.`); return; }
+      if (!from || !to) return _refused("Cultural Exchange: needs a FROM hex and a TO hex (planner asks for both).");
+      if (!key) return _refused(`Cultural Exchange: ${hexName(from)} carries no sephirot alignment to share.`);
       const align = game.bbttcc?.api?.territory?.alignHexToSephirot;
       const r = typeof align === "function" ? await align(to, key, { source: "cultural exchange", overwrite: false, byName: A?.name }) : { ok: false, error: "alignHexToSephirot missing" };
       await pushWarLog(A, r?.ok && !r.skipped ? `Cultural Exchange: ${hexName(to)} now shares ${hexName(from)}'s ${r.sephirotName || key} alignment.` : `Cultural Exchange: ${hexName(to)} — ${r?.reason || r?.error || "already aligned"}.`);
@@ -691,7 +694,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     // Reconstruction Drive (T2 canon row is retired from the planner; kept for already-planned entries).
     async reconstruction_drive(ctx){
       const A = game.actors.get(ctx.factionId);
-      if (!ctx.targetUuid) { await pushWarLog(A, "Reconstruction Drive: No target hex."); return; }
+      if (!ctx.targetUuid) return _refused("Reconstruction Drive: No target hex.");
       await enqueuePendingRepairs(ctx.targetUuid, ["Well-Maintained"], ["Damaged Infrastructure"]);
       const doc = await hexDoc(ctx.targetUuid); const st = String(tfOf(doc).status || "").toLowerCase();
       if (doc && (st === "occupied" || st === "contested")) await patchHex(doc, { [`flags.${MODT}.status`]: "claimed" });
@@ -701,7 +704,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async spy_insertion(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid); const B = doc ? await factionOfHex(doc) : null;
-      if (!B || B.id === A?.id) { await pushWarLog(A, "Spy Insertion: target a hex held by a RIVAL faction."); return; }
+      if (!B || B.id === A?.id) return _refused("Spy Insertion: target a hex held by a RIVAL faction.");
       await setNextTurnFlag(A, { spyInsertion: { targetFactionId: B.id, targetName: B.name, due: 2 } });   // reports at the NEXT Advance
       await pushWarLog(A, `Spy Insertion: an agent is inside ${B.name} — their OP pools and plans report next turn.`);
     },
@@ -709,7 +712,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async courtly_intrigue_council(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid); const B = doc ? await factionOfHex(doc) : null;
-      if (!B || B.id === A?.id) { await pushWarLog(A, "Courtly Intrigue Council: target a hex held by ANOTHER faction."); return; }
+      if (!B || B.id === A?.id) return _refused("Courtly Intrigue Council: target a hex held by ANOTHER faction.");
       const bank = B.getFlag(MODF, "opBank") || {};
       const planned = (B.getFlag(MODF, "warLogs") || []).filter(e => e?.type === "planned").map(e => `${esc(e.activityKey || e.activity)} → ${esc(e.targetName || "?")}`);
       const rel = relationsApi(); let standing = "";
@@ -721,7 +724,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async gather_intel(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid);
-      if (!doc) { await pushWarLog(A, "Gather Intel: no target hex."); return; }
+      if (!doc) return _refused("Gather Intel: no target hex.");
       await enqueuePendingRepairs(ctx.targetUuid, ["Intel"], []);
       await revealHex(doc);
       const tf = tfOf(doc); const owner = tf.faction || tf.ownerName || (hexOwnerId(doc) ? game.actors.get(hexOwnerId(doc))?.name : "") || "unclaimed";
@@ -734,7 +737,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     // Alignment Shift (std) — +Sanctified, +Pilgrimage Site, Loyalty +2 next turn (was Morale/Loyalty +1 — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)), and the faith boon is real: +10 marks Faith next turn.
     async alignment_shift(ctx){
       const A = game.actors.get(ctx.factionId);
-      if (!ctx.targetUuid) { await pushWarLog(A, "Alignment Shift: no target hex."); return; }
+      if (!ctx.targetUuid) return _refused("Alignment Shift: no target hex.");
       await enqueuePendingRepairs(ctx.targetUuid, ["Sanctified", "Pilgrimage Site"], []);
       const doc = await hexDoc(ctx.targetUuid);
       if (doc) { const f = foundry.utils.duplicate(doc.flags?.[MODT] || {}); const pend = foundry.utils.getProperty(f, "turn.pending") || {}; pend.loyaltyDelta = Number(pend.loyaltyDelta || 0) + 1; await patchHex(doc, { [`flags.${MODT}.turn.pending`]: pend }); }
@@ -794,7 +797,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async dark_harvest(ctx){
       const A = game.actors.get(ctx.factionId);
       const raw = A?.getFlag(MODF, "darkness"); const g = (raw && typeof raw === "object") ? Number(raw.global || 0) : Number(raw || 0);
-      if (g < 1) { await pushWarLog(A, "Dark Harvest: no Darkness to harvest — nothing happens."); return; }
+      if (g < 1) return _refused("Dark Harvest: no Darkness to harvest — nothing happens.");
       const d = await adjustFactionDarkness(A, -1);
       await creditOP(A, "economy", 20, "Dark Harvest");
       await pushWarLog(A, `Dark Harvest: Darkness ${d.before} → ${d.after} burned for +20 marks Economy.`);
@@ -803,7 +806,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async great_work_ritual(ctx){
       const A = game.actors.get(ctx.factionId);
       const hx = game.bbttcc?.api?.tikkun?.hex;
-      if (!hx || !game.user?.isGM) { await pushWarLog(A, "Great Work Ritual: the Tikkun hex engine needs a GM seat to integrate."); return; }
+      if (!hx || !game.user?.isGM) return _refused("Great Work Ritual: the Tikkun hex engine needs a GM seat to integrate.");
       const steward = stewardsOf(ctx.factionId)[0] || null;
       let r = null; try { r = await hx.integrate(ctx.targetUuid, { actorId: steward?.id || null }); } catch (e) { r = { ok: false, error: e.message }; }
       const doc = await hexDoc(ctx.targetUuid);
@@ -813,7 +816,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async judgment_of_light(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid);
-      if (!doc) { await pushWarLog(A, "Judgment of Light: no target hex."); return; }
+      if (!doc) return _refused("Judgment of Light: no target hex.");
       const m = await setHexModifiers(doc, [], CLEAN_TAGS, { activity: "judgment_of_light", factionId: ctx.factionId });
       const z = await setHexDarkness(doc, { set: 0 });
       await setCondition(ctx.targetUuid, "Purified", true);
@@ -834,7 +837,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async project_eden(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid);
-      if (!doc || hexOwnerId(doc) !== String(ctx.factionId)) { await pushWarLog(A, "Project Eden: target a hex you HOLD."); return; }
+      if (!doc || hexOwnerId(doc) !== String(ctx.factionId)) return _refused("Project Eden: target a hex you HOLD.");
       const align = game.bbttcc?.api?.territory?.alignHexToSephirot;
       const r = typeof align === "function" ? await align(doc, "tiferet", { source: "project eden", overwrite: false, byName: A?.name }) : null;
       await setHexModifiers(doc, ["Well-Maintained", "Loyal Population", "Garden City"], CLEAN_TAGS, { activity: "project_eden", factionId: ctx.factionId });
@@ -846,7 +849,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async terraforming_project(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid);
-      if (!doc || hexOwnerId(doc) !== String(ctx.factionId)) { await pushWarLog(A, "Terraforming Project: target a hex you HOLD."); return; }
+      if (!doc || hexOwnerId(doc) !== String(ctx.factionId)) return _refused("Terraforming Project: target a hex you HOLD.");
       const m = await setHexModifiers(doc, ["Well-Maintained"], CLEAN_TAGS, { activity: "terraforming_project", factionId: ctx.factionId });
       const z = await setHexDarkness(doc, { set: 0 });
       await setCondition(ctx.targetUuid, "Purified", true);
@@ -857,7 +860,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async sanctum_expansion(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid);
-      if (!doc || hexOwnerId(doc) !== String(ctx.factionId)) { await pushWarLog(A, "Sanctum Expansion: target a hex you HOLD."); return; }
+      if (!doc || hexOwnerId(doc) !== String(ctx.factionId)) return _refused("Sanctum Expansion: target a hex you HOLD.");
       await setHexModifiers(doc, ["Blessed Ground"], [], { activity: "sanctum_expansion", factionId: ctx.factionId });
       await scheduleFactionOP(A, { faith: 10 }, 1);
       await pushWarLog(A, `Sanctum Expansion: ${hexName(doc)} is Blessed Ground — Darkness −1 every turn it stands; +10 marks Faith next turn.`);
@@ -870,10 +873,10 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const daath = epic?.daath?.status?.() || {};
       const rit = epic?.ritual?.status?.() || { active: false };
       const integrated = Number(gw?.integratedCount || 0);
-      if (rit.active) { await pushWarLog(A, `The Final Weave: the Final Ritual is already underway (station ${rit.station || "?"}).`); return; }
+      if (rit.active) return _refused(`The Final Weave: the Final Ritual is already underway (station ${rit.station || "?"}).`);
       if (daath.risen && game.user?.isGM) {
         const ids = stewardsOf(ctx.factionId).map(s => s.id);
-        try { await epic.ritual.begin(ids.length ? { actorIds: ids } : {}); await pushWarLog(A, `The Final Weave: the Final Ritual BEGINS — ${integrated} integrated spark(s) carried in.`); return; } catch (e) { await pushWarLog(A, `The Final Weave: the ritual would not begin — ${e.message}.`); return; }
+        try { await epic.ritual.begin(ids.length ? { actorIds: ids } : {}); await pushWarLog(A, `The Final Weave: the Final Ritual BEGINS — ${integrated} integrated spark(s) carried in.`); return; } catch (e) { return _refused(`The Final Weave: the ritual would not begin — ${e.message}.`); }
       }
       await pushWarLog(A, `The Final Weave: not yet — Lamps ${Number(daath.lampsCount || 0)}/10${daath.opened ? ", Daath open" : ""}${daath.risen ? "" : ", the Dragon has not risen"}; ${integrated} integrated spark(s), ${(gw?.corruptedKeys || []).length} corrupted.`);
     },
@@ -881,7 +884,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async apocalyptic_weapon_test(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid);
-      if (!doc) { await pushWarLog(A, "Apocalyptic Weapon Test: no target hex."); return; }
+      if (!doc) return _refused("Apocalyptic Weapon Test: no target hex.");
       const B = await factionOfHex(doc);
       await setHexModifiers(doc, ["Contaminated", "Radiation Zone"], ["Well-Maintained", "Loyal Population", "Trade Hub", "Garden City", "Blessed Ground"], { activity: "apocalyptic_weapon_test", factionId: ctx.factionId });
       const z = await setHexDarkness(doc, { delta: +3 });
@@ -919,9 +922,9 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async optact_doctrine_force_projection(ctx){ const A = game.actors.get(ctx.factionId); await setNextTurnFlag(A, { initiativeAdv: true }); await pushWarLog(A, "Doctrine: Force Projection — your next raid gains initiative advantage."); },
     async optact_consecrated_alignment(ctx){
       const A = game.actors.get(ctx.factionId);
-      const doc = await hexDoc(ctx.targetUuid); if (!doc) { await pushWarLog(A, "Consecrated Alignment: no target hex."); return; }
+      const doc = await hexDoc(ctx.targetUuid); if (!doc) return _refused("Consecrated Alignment: no target hex.");
       const steward = stewardsOf(ctx.factionId).map(s => ({ s, key: stewardSephirah(s) })).find(x => x.key);
-      if (!steward) { await pushWarLog(A, "Consecrated Alignment: no steward of yours carries a sephirotic alignment to consecrate with."); return; }
+      if (!steward) return _refused("Consecrated Alignment: no steward of yours carries a sephirotic alignment to consecrate with.");
       const align = game.bbttcc?.api?.territory?.alignHexToSephirot;
       const r = typeof align === "function" ? await align(doc, steward.key, { source: "consecrated alignment", overwrite: false, byName: steward.s.name }) : { ok: false, error: "alignHexToSephirot missing" };
       await pushWarLog(A, r?.ok && !r.skipped ? `Consecrated Alignment: ${hexName(doc)} is aligned to ${r.sephirotName || steward.key} by ${steward.s.name}.` : `Consecrated Alignment: ${hexName(doc)} — ${r?.reason || r?.error || "already aligned; kept"}.`);
@@ -931,11 +934,11 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async optact_dynastic_resonance(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid); const B = doc ? await factionOfHex(doc) : null;
-      if (!B || B.id === A?.id) { await pushWarLog(A, "Dynastic Resonance: target a hex held by ANOTHER faction."); return; }
-      const rel = relationsApi(); if (!rel?.get || !rel?.set) { await pushWarLog(A, "Dynastic Resonance: relations engine unavailable."); return; }
+      if (!B || B.id === A?.id) return _refused("Dynastic Resonance: target a hex held by ANOTHER faction.");
+      const rel = relationsApi(); if (!rel?.get || !rel?.set) return _refused("Dynastic Resonance: relations engine unavailable.");
       const ladder = rel.TIER_KEYS || ["at_war","hostile","unfriendly","neutral","friendly","allied"];
       const cur = rel.get(B, A); const i = ladder.indexOf(cur);
-      if (i < 0 || i >= ladder.length - 1) { await pushWarLog(A, `Dynastic Resonance: ${B.name} already stands ${cur} toward you.`); return; }
+      if (i < 0 || i >= ladder.length - 1) return _refused(`Dynastic Resonance: ${B.name} already stands ${cur} toward you.`);
       const r = await rel.set(B, A, ladder[i + 1], { reason: "Dynastic Resonance" });
       await pushWarLog(A, r?.ok === false ? `Dynastic Resonance: ${r.error}` : `Dynastic Resonance: ${B.name} now stands ${ladder[i + 1]} toward you (was ${cur}).`);
     },
@@ -943,21 +946,21 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     // crew
     async optact_contract_warfare_doctrine(ctx){ const A = game.actors.get(ctx.factionId); await addCapBump(A, "violence", 10, 1); await pushWarLog(A, "Contract Warfare Doctrine: Violence cap +10 marks this turn."); },
     async optact_stability_enforcement(ctx){
-      const A = game.actors.get(ctx.factionId); const doc = await hexDoc(ctx.targetUuid); if (!doc) { await pushWarLog(A, "Stability Enforcement: no target hex."); return; }
+      const A = game.actors.get(ctx.factionId); const doc = await hexDoc(ctx.targetUuid); if (!doc) return _refused("Stability Enforcement: no target hex.");
       const m = await setHexModifiers(doc, ["Patrolled"], ["Hostile Population"], { activity: "optact_stability_enforcement", factionId: ctx.factionId });
       await adjustHexTrack(ctx.targetUuid, "loyalty", +1);
       await pushWarLog(A, `Stability Enforcement at ${hexName(doc)}: ${m.removed.length ? "Hostile Population removed; " : ""}+Patrolled; Loyalty +1.`);
     },
     async optact_deep_cover_network(ctx){ return STRATEGIC_THROUGHPUT.spy_insertion(ctx); },
     async optact_cultural_diffusion(ctx){
-      const A = game.actors.get(ctx.factionId); const doc = await hexDoc(ctx.targetUuid); if (!doc) { await pushWarLog(A, "Cultural Diffusion: no target hex."); return; }
+      const A = game.actors.get(ctx.factionId); const doc = await hexDoc(ctx.targetUuid); if (!doc) return _refused("Cultural Diffusion: no target hex.");
       await setHexModifiers(doc, ["Loyal Population"], [], { activity: "optact_cultural_diffusion", factionId: ctx.factionId });
       await adjustHexTrack(ctx.targetUuid, "loyalty", +1);   // was Morale +1 — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)
       await pushWarLog(A, `Cultural Diffusion at ${hexName(doc)}: +Loyal Population; Loyalty +1.`);
     },
     async optact_integration_framework(ctx){
       const A = game.actors.get(ctx.factionId); const doc = await hexDoc(ctx.targetUuid);
-      if (!doc || hexOwnerId(doc) !== String(ctx.factionId)) { await pushWarLog(A, "Integration Framework: target a hex you HOLD."); return; }
+      if (!doc || hexOwnerId(doc) !== String(ctx.factionId)) return _refused("Integration Framework: target a hex you HOLD.");
       const integ = foundry.utils.duplicate(tfOf(doc).integration || {}); const before = Number(integ.progress || 0) || 0; integ.progress = Math.min(6, before + 1);
       await patchHex(doc, { [`flags.${MODT}.integration`]: integ });
       await pushWarLog(A, `Integration Framework: ${hexName(doc)} integration ${before} → ${integ.progress}/6.`);
@@ -1039,6 +1042,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
   // planned until someone of the faction has stood there. (The FIRST attempt is allowed — that attempt IS
   // the survey.) Reads the territory API; silent when it is not loaded.
   const _surveyNo = (c) => {
+    if (c?.resolving) return null;   // plan-time rule only — turn-driver re-asks canPlan at resolution (2026-10-28)
     try {
       const sv = game.bbttcc?.api?.territory?.survey; if (!sv?.check || !c.targetDoc) return null;
       const r = sv.check({ hexDoc: c.targetDoc, factionId: c.actor?.id });
@@ -1083,7 +1087,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     industrial_revolution:  (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours — the revolution happens in YOUR works.`) : ok,
     pilgrimage_route:       (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours — the route blesses a hex you HOLD.`) : ok,
     ration_distribution:    (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours — rations go to a hex you HOLD.`) : ok,
-    rite_of_atonement:      (c) => { if (!atonementCorrupted(c.actor)) return no(`${c.actor?.name || "This faction"} has no failed Final Ritual to atone for.`); if (ATONEMENT.oncePerTurn) { const wl = c.actor?.getFlag?.(MODF, "warLogs") || []; if (wl.some(e => e?.type === "planned" && String(e.activityKey) === ATONEMENT.key)) return no("A Rite of Atonement is already staged this turn."); } return ok; },
+    muster_drill:           (c) => (militiaState(c.actor).rung < 1 ? no("There is no militia to drill — the Muster opens when the Stewards let bandits walk.") : ok),
+    rite_of_atonement:      (c) => { if (!atonementCorrupted(c.actor)) return no(`${c.actor?.name || "This faction"} has no failed Final Ritual to atone for.`); if (ATONEMENT.oncePerTurn && !c.resolving) { const wl = c.actor?.getFlag?.(MODF, "warLogs") || []; if (wl.some(e => e?.type === "planned" && String(e.activityKey) === ATONEMENT.key)) return no("A Rite of Atonement is already staged this turn."); } return ok; },
     great_work_ritual:      (c) => (c.targetFlags?.spark?.key ? ok : no(`${_nm(c.targetFlags)} has no spark seated — nothing to integrate.`)),
     optact_integration_framework: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to integrate.`) : ok,
     optact_consecrated_alignment: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to consecrate.`) : ok,

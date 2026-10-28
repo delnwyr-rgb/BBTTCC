@@ -120,7 +120,7 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     spy_insertion: "Reveal the enemy's marks banks next turn.",
     terraforming_project: "Cleanse 1 Corrupted Hex.",
     alliance_summit: "Both Domains' marks income ×1.15 next turn.",
-    industrial_revolution: "Double Economy output for 2 turns.",
+    industrial_revolution: "Double Economy income for the next 2 turns.",
     psych_ops_broadcast: "-2 Loyalty to enemy Hex.",
     purification_rite: "Reduce Darkness Track −2.",
     great_work_ritual: "Trigger Tikkun Phase C for one Spark.",

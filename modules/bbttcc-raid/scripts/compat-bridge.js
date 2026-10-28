@@ -617,6 +617,16 @@ divine_favor: {
     kind: "strategic",
     label: "Repair Rig",
     cost: { economy: 20 },
+    // Plan-time AND resolution-time gate (strategic review #2, 2026-10-28): an intact or missing rig is refused
+    // before the 20 economy moves — turn-driver consumePlanned re-asks canPlan on the GM before billing.
+    canPlan: async ({ actor, defender, rigId, entry }) => {
+      const id = rigId || entry?.rigId; if (!id) return { ok: true };
+      const owner = defender || actor; if (!owner) return { ok: true };
+      const rig = _getRigs(owner).find(r => r.rigId === id);
+      if (!rig) return { ok: false, reason: "That rig is no longer on the Domain's books." };
+      if (Number(rig.damageStep || 0) <= 0) return { ok: false, reason: `${rig.name} is already intact — nothing to repair.` };
+      return { ok: true };
+    },
     apply: async ({ actor, entry }) => {
       // The planner already chose the rig (entry.defenderId + entry.rigId) — only prompt when
       // the queued row lacks it (legacy rows). Prompting mid-Advance-Turn stalls the pipeline.

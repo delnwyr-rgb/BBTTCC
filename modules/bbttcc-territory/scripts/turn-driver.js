@@ -369,6 +369,51 @@ function ensureConsumePlannedShim(){
     };
   }
 
+  // Strategic review #2 (2026-10-28): canPlan ran only at PLAN time, so an activity whose target changed
+  // before the Advance (hex taken, rig already fixed, two Domains on one wild hex) was billed in full and
+  // logged "executed". Re-ask the row's own canPlan on the GM BEFORE paying; a refusal costs nothing.
+  // Fail-open (like the planner): a canPlan that throws lets the activity through.
+  async function resolutionRefusal({ factionActor, effect, entry }){
+    if (typeof effect?.canPlan !== "function") return null;
+    try {
+      const base = { actor: factionActor, activityKey: String(entry?.activityKey || ""), toHexUuid: entry?.toHexUuid || null, entry, resolving: true };
+      let ctx;
+      if (entry?.targetType === "rig") {
+        const rigId = entry?.rigId || null;
+        ctx = Object.assign(base, { targetType: "rig", defender: game.actors.get(String(entry?.defenderId || "").replace(/^Actor\./, "")) || null, rigId, rigActor: rigId ? (game.actors.get(rigId) || null) : null });
+      } else {
+        if (!entry?.targetUuid) return null;
+        const t = await fromUuid(entry.targetUuid); const d = t?.document ?? t;
+        if (!d) return null;
+        ctx = Object.assign(base, { targetDoc: d, targetFlags: d.getFlag?.(MOD_TERRITORY) || d.flags?.[MOD_TERRITORY] || {} });
+      }
+      const v = await effect.canPlan(ctx);
+      return (v && v.ok === false) ? String(v.reason || "the target no longer qualifies") : null;
+    } catch (e) { warn("resolution canPlan failed (fail-open)", entry?.activityKey, e); return null; }
+  }
+
+  // A resolved activity that did not happen: a handler returned {ok:false}, threw, or was never installed.
+  function effectFailureReason(effectResult){
+    if (!effectResult) return null;
+    if (effectResult.noHandler) return "no handler is installed for it this session";
+    if (effectResult.ok === false) return String(effectResult.reason || effectResult.error?.message || effectResult.error || "its effect failed");
+    const r = effectResult.result;
+    if (r && typeof r === "object" && r.ok === false) return String(r.reason || r.error || "its effect was refused");
+    return null;
+  }
+
+  // Give back exactly what payActivityCost took (fresh bank read — handlers may have moved marks since).
+  async function refundActivityCost({ factionActor, spendResult }){
+    const paid = spendResult?.paid || {};
+    if (!Object.keys(paid).length) return {};
+    const bank = foundry.utils.duplicate(factionActor.getFlag(MOD_FACTIONS, "opBank") || {});
+    for (const [k, v] of Object.entries(paid)) bank[k] = (Number(bank[k]) || 0) + (Number(v) || 0);
+    await factionActor.update({ [`flags.${MOD_FACTIONS}.opBank`]: bank });
+    return paid;
+  }
+  const fmtMarks = (v) => Object.entries(v || {}).map(([k, n]) => `${n} ${k}`).join(", ");
+  const activityLabel = (effect, entry) => effect?.label || entry?.activityKey || "activity";
+
   raid.consumePlanned = async function consumePlanned({ factionId, apply=true } = {}) {
     const factionActor = game.actors.get(factionId);
     if (!factionActor) throw new Error("consumePlanned: faction actor not found.");
@@ -393,6 +438,14 @@ function ensureConsumePlannedShim(){
           finalizedEntries.push(Object.assign(
             finalizeEntry({ entry, factionActor, effect, effectResult: { ok:false, skipped:"refused" }, spendResult: { ok:true, paid:{} } }),
             { summary: refusal }
+          ));
+          continue;
+        }
+        const stale = await resolutionRefusal({ factionActor, effect, entry });
+        if (stale) {
+          finalizedEntries.push(Object.assign(
+            finalizeEntry({ entry, factionActor, effect, effectResult: { ok:false, skipped:"refused-at-resolution", reason: stale }, spendResult: { ok:true, paid:{} } }),
+            { summary: `${factionActor.name} could not ${activityLabel(effect, entry)}${entry.targetName ? ` on ${entry.targetName}` : ""}: ${stale.replace(/[.\s]+$/, "")}. Nothing was charged.` }
           ));
           continue;
         }
@@ -421,7 +474,7 @@ function ensureConsumePlannedShim(){
 
         if (typeof handler === "function") {
           try {
-            await handler({
+            const hr = await handler({
               factionId: factionActor.id,
               attackerId: entry.attackerId || factionActor.id,
               activityKey: entry.activityKey,
@@ -431,7 +484,10 @@ function ensureConsumePlannedShim(){
               notes: entry.note || entry.notes || "",
               entry
             });
-            effectResult = { ok:true, routed:"strategic-throughput" };
+            // A handler that refuses returns {ok:false, reason} (siege counters, muster drill…) — keep it.
+            effectResult = (hr && typeof hr === "object" && hr.ok === false)
+              ? { ok:false, routed:"strategic-throughput", reason: hr.reason || hr.error || null }
+              : { ok:true, routed:"strategic-throughput" };
           } catch (e) {
             console.warn("[bbttcc-turn] strategic throughput handler failed (fallback to legacy):", entry.activityKey, e);
             effectResult = await runEffectBestEffort({ effect, entry, factionActor, apply });
@@ -444,6 +500,19 @@ function ensureConsumePlannedShim(){
       } else {
         // Non-strategic, or Dry preview → legacy handler path
         effectResult = await runEffectBestEffort({ effect, entry, factionActor, apply });
+      }
+
+      // Review #2 (2026-10-28): the activity did not happen → refund, no fuel fx, say so (not "executed").
+      const failed = apply ? effectFailureReason(effectResult) : null;
+      if (failed) {
+        let refunded = {};
+        try { refunded = await refundActivityCost({ factionActor, spendResult }); }
+        catch (eR) { warn("refund failed", entry?.activityKey, eR); }
+        finalizedEntries.push(Object.assign(
+          finalizeEntry({ entry, factionActor, effect, effectResult: Object.assign({}, effectResult, { ok:false, reason: failed }), spendResult: Object.assign({}, spendResult, { paid:{}, refunded }) }),
+          { summary: `${factionActor.name} could not ${activityLabel(effect, entry)}${entry.targetName ? ` on ${entry.targetName}` : ""}: ${failed}.${Object.keys(refunded).length ? ` Refunded ${fmtMarks(refunded)} marks.` : ""}` }
+        ));
+        continue;
       }
 
       // ⚗ Fuel side effects land only when the activity itself resolved (2026-09-12).
@@ -1685,7 +1754,8 @@ async function tickFactionBonuses(){
       let dirty = false; const notes = [];
       if (Array.isArray(b.regenPlan) && b.regenPlan.length) {
         const next = [];
-        for (const e of b.regenPlan) { const t = safeNum(e?.inTurns, 1); if (t <= 1) { notes.push(`${e?.label || "income plan"} ×${e?.mult} applied`); continue; } next.push(Object.assign({}, e, { inTurns: t - 1 })); }
+        // Review #1 (2026-10-28): "applied" only for an entry advanceOPRegen actually multiplied (finite mult ≠ 1).
+        for (const e of b.regenPlan) { const t = safeNum(e?.inTurns, 1); if (t <= 1) { const m = Number(e?.mult); notes.push(Number.isFinite(m) && m !== 1 ? `${e?.label || "income plan"} ×${m} applied to this turn's income` : `${e?.label || "income plan"} expired`); continue; } next.push(Object.assign({}, e, { inTurns: t - 1 })); }
         b.regenPlan = next; dirty = true;
       }
       if (b.capBump && typeof b.capBump === "object") {
