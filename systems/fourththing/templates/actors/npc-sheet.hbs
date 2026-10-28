@@ -397,13 +397,13 @@
     <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="harmony_marshal_initiate" data-tooltip="Tier 1 — Harmony Initiate. +1 Diplomacy, +1 Insight, Soft Power +10% (narrative).">T1 Initiate{{#if harmonyMarshalState.l1GrantsApplied}} ✓{{/if}}</button>
     <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="harmony_marshal_rallying_words" data-tooltip="Rallying Words (bonus action) — target an ally; reroll-lowest banked.">📣 Rallying Words</button>
     {{#if harmonyMarshalState.tierAtLeast2}}
-    <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="harmony_marshal_attrition_easer" data-tooltip="Tier 2 — Attrition Easer. 1/strategic turn: spend 1 Soft Power OP → -1 Attrition.">T2 Attrition{{#if harmonyMarshalState.attritionEaserUsedThisTurn}} (used){{/if}}</button>
+    <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="harmony_marshal_attrition_easer" data-tooltip="Tier 2 — Attrition Easer. 1/strategic turn: spend 10 Soft Power marks → -1 Attrition.">T2 Attrition{{#if harmonyMarshalState.attritionEaserUsedThisTurn}} (used){{/if}}</button>
     {{/if}}
     {{#if harmonyMarshalState.tierAtLeast3}}
     <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="harmony_marshal_loyalty_steward" data-tooltip="Tier 3 — Loyalty Steward. Choose a hex, Loyalty +1.">T3 Loyalty</button>
     {{/if}}
     {{#if harmonyMarshalState.tierAtLeast4}}
-    <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="harmony_marshal_unity_conductor" data-tooltip="Tier 4 — Unity Conductor. Faction +2 Soft Power OP per strategic turn.">T4 Unity</button>
+    <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="harmony_marshal_unity_conductor" data-tooltip="Tier 4 — Unity Conductor. Domain +20 Soft Power marks per strategic turn.">T4 Unity</button>
     {{/if}}
   </section>
   {{/if}}

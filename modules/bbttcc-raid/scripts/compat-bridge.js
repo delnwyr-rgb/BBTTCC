@@ -186,22 +186,22 @@ const OPTION_L2_SPECS = {
 const OPTION_L2_TEXT = {
   doctrine_force_projection:   "Warlord: your next raid gains initiative advantage.",
   consecrated_alignment:       "Hierophant: aligns the target hex to your steward's own sephirah (a hex already aligned keeps its alignment).",
-  administrative_optimization: "Mayor-Administrator: OP income ×1.05 this turn.",
+  administrative_optimization: "Mayor-Administrator: income ×1.05 this turn.",
   arcane_attribution:          "Wizard-Scholar: the target hex is revealed and a full dossier (holder, defense, loyalty, integration, modifiers, alignment) is whispered to you.",
   dynastic_resonance:          "Ancient Blood: the target hex's holder moves one step warmer toward you on the relations ladder.",
   operational_cohesion:        "Squad Leader: your next raid gets one free maneuver.",
   contract_warfare_doctrine:   "Mercenary Band: Violence cap +10 marks this turn.",
   stability_enforcement:       "Peacekeeper Corps: removes Hostile Population, adds Patrolled, Loyalty +1 on the target hex.",
-  deep_cover_network:          "Covert Ops Cell: next turn, the target hex holder's OP pools and plans are whispered to you.",
+  deep_cover_network:          "Covert Ops Cell: next turn, the target hex holder's marks and plans are whispered to you.",
   cultural_diffusion:          "Cultural Ambassadors: +Loyal Population and Loyalty +1 on the target hex.",
   integration_framework:       "Diplomatic Envoys: the target hex you hold gains one Integration step (max 6).",
   never_scattered:             "Survivors' Militia: next turn, infiltration raids against your hexes are refused.",
-  guided_ascent:               "Kabbalist: every steward of your faction washes 1 Darkness.",
+  guided_ascent:               "Kabbalist: every steward of your Domain washes 1 Darkness.",
   philosophic_exchange:        "Alchemist: +10 marks Culture next turn.",
   thread_the_spread:           "Tarot Mage: reveals one fogged hex next to the target and whispers every neighbour's alignment and holder.",
   doctrine_of_clarity:         "Gnostic: faction Darkness −1.",
   ritual_binding:              "Goetic Summoner: integrates the dormant spark seated on the target hex (lights a Lamp; debits your Reach).",
-  silent_brotherhood:          "Rosicrucian: immediate intel on the target hex's holder — OP bank, their standing toward you, and what they have planned."
+  silent_brotherhood:          "Rosicrucian: immediate intel on the target hex's holder — bank of marks, their standing toward you, and what they have planned."
 };
 
 function _prettyTitle(key){
@@ -400,7 +400,7 @@ const EFFECTS = {
     opCosts: { economy: 10, violence: 10 },
     raidTypes: ["assault","siege"],
     defenderAccess: "Yes",
-    text: "On Success: capture supplies; gain +1 Economy OP next round."
+    text: "On Success: capture supplies; gain +10 Economy marks next round."
   },
 
 /* ============================================================

@@ -523,7 +523,7 @@
   };
 
   // --- T2 LEARNED: Industrial Sabotage ---
-  // "Target loses 1 Economy OP per turn for 3 turns."
+  // "Target loses 10 Economy marks per turn for 3 turns."
   THROUGHPUT["industrial_sabotage"] = function (ctx) {
     if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
 

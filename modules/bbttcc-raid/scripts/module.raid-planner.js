@@ -23,11 +23,9 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
  * - IMPORTANT: binds globally (document-level) so multiple apps work together.
  * =================================================================== */
 (function(){
-  if (globalThis.BBTTCC_TooltipManager) {
-    // Ensure we are globally bound even if an older manager was created earlier.
-    try { globalThis.BBTTCC_TooltipManager.bind(document); } catch(e){}
-    return;
-  }
+  // 2026-10-28: the raid console builds its manager first, and this block used to RETURN here — so ACTIVITY_TEXT and
+  // activityText below were never published. Only the manager creation is skipped now.
+  const _managerExists = !!globalThis.BBTTCC_TooltipManager;
 
   const TAG = "[bbttcc-tooltips]";
   const logT = function(){ try { console.log.apply(console, [TAG].concat([].slice.call(arguments))); } catch(e){} };
@@ -149,7 +147,7 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     propaganda_campaign: "Paper the walls: +Propaganda, Loyalty +2 on the target hex.",
     alignment_shift: "Consecrate the hex to the Tree: +Sanctified, +Pilgrimage Site, Loyalty +1 next turn; +10 marks Faith next turn.",
     gather_intel: "Send scouts: the hex is revealed now, a dossier (holder, defense, loyalty, integration, modifiers, alignment) is whispered to you, and it carries the Intel tag next turn.",
-    policy_reforms: "Administrative reform: OP income ×1.05 this turn.",
+    policy_reforms: "Administrative reform: income ×1.05 this turn.",
     rite_of_atonement: "Only after a failed Final Ritual: come back to the Great Work and make repair. At turn end the GM is handed the Rite (a scene) — succeed there and the Final Ritual stain lifts.",
     muster_drill: "Drill the Town Militia at the Muster: first drill = DRILLED (+2 defense DC at home, Violence +5 marks/turn); second = STANDING (absorbs the first strike on a home hex each turn; home roads escorted).",
     mass_mobilization_std: "Call up the militia: your next raid gains initiative advantage and one free maneuver.",
@@ -180,7 +178,11 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
   // ONE authority for fallback prose (2026-09-08): the Raid Console's
   // ui/bbttcc-tooltip-resolver.js used to carry its own copy of this table.
   // It now reads game.bbttcc.api.raid.ACTIVITY_TEXT first.
-  (function publishActivityText(tries){
+  // 2026-10-28: a load-time call finds Foundry's placeholder `game` (replaced by Game.create) — publish again on
+  // init + ready so activityText lands on the real raid API.
+  Hooks.once("init", () => publishActivityText(0));
+  Hooks.once("ready", () => publishActivityText(0));
+  function publishActivityText(tries){
     try {
       const r = game?.bbttcc?.api?.raid;
       // activityText(key, kind): the rules text the planner tooltip shows (text → effects.text → description → fallback).
@@ -188,7 +190,8 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
       if (r) { if (!r.ACTIVITY_TEXT) r.ACTIVITY_TEXT = FALLBACK_TEXT; r.activityText = (key, kind) => { try { return String(_resolve(String(kind || "strategic"), String(key || "").toLowerCase())?.text || ""); } catch (_e) { return ""; } }; return; }
     } catch (_e) {}
     if ((tries || 0) < 80) setTimeout(function(){ publishActivityText((tries || 0) + 1); }, 250);
-  })(0);
+  }
+  publishActivityText(0);
 
   function _resolve(kind, key){
     const EFFECTS = _getEffects();
@@ -442,7 +445,8 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     logT("TooltipManager bound (global)");
   };
 
-  globalThis.BBTTCC_TooltipManager = new TooltipManager();
+  // Ensure we are globally bound even if an older manager was created earlier.
+  if (!_managerExists) globalThis.BBTTCC_TooltipManager = new TooltipManager();
   try { globalThis.BBTTCC_TooltipManager.bind(document); } catch(e){}
 })();
 /* ---------------- Handlebars helpers ---------------- */

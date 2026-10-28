@@ -11,7 +11,7 @@
           "economy": 10
         },
         "effects": {
-          "text": "+20 marks Economy into the bank next turn (10-mark spend; the Standing cap applies)."
+          "text": "+20 marks Economy into the bank next turn (the Standing cap applies)."
         },
         "minFactionTier": 1
       }
@@ -104,7 +104,7 @@
           "softPower": 10
         },
         "effects": {
-          "text": "Faction Darkness −1."
+          "text": "Domain Darkness −1."
         },
         "minFactionTier": 1
       }
@@ -462,7 +462,7 @@
           "softPower": 20
         },
         "effects": {
-          "text": "Faction Darkness −2; every hex you hold loses a darkness pip; your stewards wash 1 Darkness."
+          "text": "Domain Darkness −2; every hex you hold loses a darkness pip; your stewards wash 1 Darkness."
         },
         "minFactionTier": 3
       }
@@ -538,7 +538,7 @@
           "intrigue": 20
         },
         "effects": {
-          "text": "The target hex is revealed and its spark, darkness pips and conditions are whispered to you; Faction Darkness −1."
+          "text": "The target hex is revealed and its spark, darkness pips and conditions are whispered to you; Domain Darkness −1."
         },
         "minFactionTier": 3
       }
@@ -557,7 +557,7 @@
           "economy": 30
         },
         "effects": {
-          "text": "Blessed Ground on a hex you hold: −1 Faction Darkness every turn it stands; +10 marks Faith next turn."
+          "text": "Blessed Ground on a hex you hold: −1 Domain Darkness every turn it stands; +10 marks Faith next turn."
         },
         "minFactionTier": 3
       }
@@ -614,7 +614,7 @@
           "diplomacy": 50
         },
         "effects": {
-          "text": "Every steward of your faction climbs one Enlightenment level."
+          "text": "Every steward of your Domain climbs one Enlightenment level."
         },
         "minFactionTier": 3
       }
@@ -690,7 +690,7 @@
           "faith": 50
         },
         "effects": {
-          "text": "A 2d10 check (DC 14, +1 per lit Lamp). Success: Faction Darkness −3 and your stewards wash 1. Failure: Darkness +1 and the Adversary stirs."
+          "text": "A 2d10 check (DC 14, +1 per lit Lamp). Success: Domain Darkness −3 and your stewards wash 1. Failure: Darkness +1 and the Adversary stirs."
         },
         "minFactionTier": 3
       }
@@ -1135,7 +1135,7 @@
           "economy": 5
         },
         "effects": {
-          "text": "Sell half of the stockpile's most plentiful material at the market for Economy marks — sell price +10% (5-mark spend for the trip)."
+          "text": "Sell half of the stockpile's most plentiful material at the market for Economy marks — sell price +10%."
         },
         "minFactionTier": 1
       }

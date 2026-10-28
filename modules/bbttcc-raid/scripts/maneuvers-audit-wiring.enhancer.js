@@ -49,28 +49,28 @@
       text: "+3 to the attacker's roll this round; your own tokens on the bound battle scene take 1 damage (the constructs strain).",
       throughput: (ctx) => bundle("overclock_the_golems", { roundEffects: [bonus("attacker", 3, "Overclock: +3"), { type: "damageSceneTokens", scope: "allies", factionId: att(ctx), damage: 1, damageType: "strain", note: "Overclock the Golems: strain" }] }) },
     { key: "radiant_retaliation", fireMode: "post-commit",
-      text: "On success: your faction's Darkness −1 and the enemy faction's Darkness +1.",
+      text: "On success: your Domain's Darkness −1 and the enemy Domain's Darkness +1.",
       throughput: (ctx) => bundle("radiant_retaliation", { factionEffects: ok(ctx) ? [{ factionId: att(ctx), darknessDelta: -1, label: "Radiant Retaliation" }, ...(def(ctx) ? [{ factionId: def(ctx), darknessDelta: 1, label: "Radiant Retaliation" }] : [])] : [] }) },
     { key: "siege_breaker_volley", fireMode: "post-commit",
       text: "On success the target hex loses its Fortified modifier (applied at commit).",
       throughput: (ctx) => bundle("siege_breaker_volley", {}) },
     { key: "ego_breaker", fireMode: "post-commit",
-      text: "On success the enemy faction's Violence cap drops 30 marks, permanently (applied at commit).",
+      text: "On success the enemy Domain's Violence cap drops 30 marks, permanently (applied at commit).",
       throughput: (ctx) => bundle("ego_breaker", {}) },
     { key: "temporal_armistice", fireMode: "pre-roll",
       text: "All ENEMY maneuvers this round are nullified (yours resolve); on success your Darkness −2.",   // (enemy Morale +1 retired 2026-10-18, ruling 19)
       throughput: (ctx) => bundle("temporal_armistice", { roundEffects: [{ type: "nullifyAllManeuvers", scope: "enemy", window: "thisRound", note: "Temporal Armistice" }], factionEffects: ok(ctx) ? [{ factionId: att(ctx), darknessDelta: -2, label: "Temporal Armistice" }] : [] }) },
     { key: "crown_of_mercy", fireMode: "post-commit",
-      text: "On success the corrupted Spark seated on the target hex is repaired — or, if it has none, one corrupted spark carried by your faction is purified (applied at commit).",
+      text: "On success the corrupted Spark seated on the target hex is repaired — or, if it has none, one corrupted spark carried by your Domain is purified (applied at commit).",
       throughput: (ctx) => bundle("crown_of_mercy", {}) },
     { key: "engine_of_absolution", fireMode: "post-commit",
       text: "On success the target hex is restored: no longer destroyed, Contaminated / Radiation Zone / Damaged Infrastructure / Hostile Population / Devastated / Scorched Earth removed, Well-Maintained, darkness pips 0, Purified (applied at commit).",
       throughput: (ctx) => bundle("engine_of_absolution", {}) },
     { key: "ego_dragon_echo", fireMode: "pre-roll",
-      text: "+4 to the attacker's roll this round; your faction's Darkness +2 whatever happens.",
+      text: "+4 to the attacker's roll this round; your Domain's Darkness +2 whatever happens.",
       throughput: (ctx) => bundle("ego_dragon_echo", { roundEffects: [bonus("attacker", 4, "Ego-Dragon Echo: +4")], factionEffects: [{ factionId: att(ctx), darknessDelta: 2, label: "Ego-Dragon Echo" }] }) },
     { key: "diplomatic_channel", fireMode: "post-commit",
-      text: "On success: your faction's Loyalty +1.",   // (both Morale +1 riders retired 2026-10-18, ruling 19)
+      text: "On success: your Domain's Loyalty +1.",   // (both Morale +1 riders retired 2026-10-18, ruling 19)
       throughput: (ctx) => bundle("diplomatic_channel", { factionEffects: ok(ctx) ? [{ factionId: att(ctx), loyaltyDelta: 1, label: "Diplomatic Channel" }] : [] }) },
     // Unity-only rows (strategic review #8, 2026-10-28 — Dave: Loyalty, Darkness, or retire): Unity retired with ruling 18.
     { key: "empathic_surge", fireMode: "post-commit",
@@ -81,7 +81,7 @@
       throughput: (ctx) => bundle("moral_high_ground", { factionEffects: ok(ctx) ? [{ factionId: att(ctx), darknessDelta: -1, label: "Moral High Ground" }] : [] }) },
     // Copy-vs-behaviour fixes (owner ruling 3): behaviour fixed, not the copy.
     { key: "prayer_in_the_smoke", fireMode: "pre-roll",
-      text: "Advantage on the attacker's roll this round; on success your faction's Darkness −1.",
+      text: "Advantage on the attacker's roll this round; on success your Domain's Darkness −1.",
       throughput: (ctx) => bundle("prayer_in_the_smoke", { roundEffects: [adv("attacker", "Prayer in the Smoke")], factionEffects: ok(ctx) ? [{ factionId: att(ctx), darknessDelta: -1, label: "Prayer in the Smoke" }] : [] }) },
     { key: "signal_hijack", fireMode: "pre-roll",
       text: "Enemy communications fail: the opposing side rolls with disadvantage this round; in an Infiltration-Alarm raid the alarm also drops 1.",
@@ -95,7 +95,7 @@
   const L1 = {
     shock_command:          { fireMode: "pre-roll", text: "Warlord: +2 to the attacker's roll this round.", t: (c) => ({ roundEffects: [bonus("attacker", 2, "Shock Command")] }) },
     liturgical_rally:       { fireMode: "pre-roll", text: "Hierophant: the attacker rerolls the lowest die this round.", t: (c) => ({ roundEffects: [adv("attacker", "Liturgical Rally")], factionEffects: [] }) },   // (Morale +1 retired 2026-10-18, ruling 19)
-    bureaucratic_override:  { fireMode: "post-commit", text: "Bureaucratic Override: +20 marks Economy next turn (costs 10 now).", t: (c) => ({ factionEffects: [{ factionId: att(c), deferred: { when: "nextTurn", opDeltas: { economy: 20 } }, label: "Bureaucratic Override" }] }) },   // yield doubled 2026-10-06   // WME schedules `deferred` for the next WORLD turn — the copy now says so
+    bureaucratic_override:  { fireMode: "post-commit", text: "Bureaucratic Override: +20 marks Economy next turn.", t: (c) => ({ factionEffects: [{ factionId: att(c), deferred: { when: "nextTurn", opDeltas: { economy: 20 } }, label: "Bureaucratic Override" }] }) },   // yield doubled 2026-10-06   // WME schedules `deferred` for the next WORLD turn — the copy now says so
     prepared_insight:       { fireMode: "pre-roll", text: "Wizard-Scholar: the opposing side rolls 3d10 and keeps the lowest 2 this round.", t: (c) => ({ roundEffects: [dis("enemy", "Prepared Insight")] }) },
     inherited_deference:    { fireMode: "pre-roll", text: "Ancient Blood: +1 to your roll and any enemy Propaganda maneuver this round is cancelled.", t: (c) => ({ roundEffects: [bonus("attacker", 1, "Inherited Deference"), { type: "cancelEnemyManeuver", tags: ["propaganda"], scope: "enemy" }] }) },
     coordinated_advance:    { fireMode: "pre-roll", text: "Squad Leader: +1 to the attacker's roll; friendly tokens on the bound battle scene gain Coordinated for a round.", t: (c) => ({ roundEffects: [bonus("attacker", 1, "Coordinated Advance"), { type: "buffSceneTokens", scope: "allies", factionId: att(c), ae: { name: "Coordinated", icon: "icons/svg/sword.svg", changes: [], duration: { rounds: 1 }, description: "Coordinated Advance" }, durationRounds: 1 }] }) },

@@ -510,7 +510,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     // ═══════════════════════════ T1 ═══════════════════════════
     async harvest_season(ctx){
       const A = game.actors.get(ctx.factionId);
-      // OWNER DIAL (2026-06-05): +20 marks Economy into the bank next turn for a 10-mark spend.
+      // OWNER DIAL (2026-06-05): +20 marks Economy into the bank next turn.
       await scheduleFactionOP(A, { economy: 20 }, 1);
       await pushWarLog(A,"Harvest Season: +20 marks Economy next turn (the Standing cap applies).");
     },
@@ -712,7 +712,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       if (doc && (st === "occupied" || st === "contested")) await patchHex(doc, { [`flags.${MODT}.status`]: "claimed" });
       await pushWarLog(A, "Reconstruction Drive: −Damaged Infrastructure, +Well-Maintained; status → Claimed.");
     },
-    // Spy Insertion — next Advance Turn, the target hex holder's OP pools and plans are whispered to you (turn-driver consumer).
+    // Spy Insertion — next Advance Turn, the target hex holder's marks and plans are whispered to you (turn-driver consumer).
     async spy_insertion(ctx){
       const A = game.actors.get(ctx.factionId);
       const doc = await hexDoc(ctx.targetUuid); const B = doc ? await factionOfHex(doc) : null;
@@ -756,7 +756,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       await scheduleFactionOP(A, { faith: 10 }, 1);
       await pushWarLog(A, "Alignment Shift: +Sanctified, +Pilgrimage Site, Loyalty +1 (lands this turn); +10 marks Faith next turn.");   // #49: the pending sweep runs this Advance
     },
-    // Policy Reforms (std) — OP income ×1.05 this turn (the +5% the copy always promised).
+    // Policy Reforms (std) — income ×1.05 this turn (the +5% the copy always promised).
     async policy_reforms(ctx){
       const A = game.actors.get(ctx.factionId); if (!A) return;
       await addRegenPlan(A, [{ inTurns: 1, mult: 1.05, label: "Policy Reforms" }]);

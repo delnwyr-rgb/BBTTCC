@@ -2180,40 +2180,48 @@ Hooks.once("ready", installDriver);
 Hooks.on("canvasReady", installDriver);
 
 /* ------------------------ console helpers -------------------------------- */
-game.bbttcc ??= { api:{} };
-game.bbttcc.api ??= {};
-game.bbttcc.api.turn ??= game.bbttcc.api.turn || {};
+// 2026-10-28: these used to run at the top level, while Foundry's `game` is still the load-time placeholder that
+// Game.create() replaces — every api.turn helper below (executeOPRegen, enqueueRequest, runAdvance, activityCost…)
+// was silently lost. Publish on init + ready against the real game instead.
+function __bbttccPublishTurnApi() {
+  game.bbttcc ??= { api:{} };
+  game.bbttcc.api ??= {};
+  game.bbttcc.api.turn ??= {};
 
-/**
- * OP regen helper (already used by console / macros)
- */
-game.bbttcc.api.turn.executeOPRegen = advanceOPRegen;
-// Compatibility aliases: some UIs/macros call game.bbttcc.api.turn.advanceTurn()/advanceOPRegen()
-game.bbttcc.api.turn.advanceTurn = game.bbttcc.api.turn.advanceTurn || (async (args={}) => game.bbttcc.api.territory.advanceTurn(args));
-game.bbttcc.api.turn.advanceOPRegen = game.bbttcc.api.turn.advanceOPRegen || (async (args={}) => game.bbttcc.api.territory.advanceOPRegen(args));
+  /**
+   * OP regen helper (already used by console / macros)
+   */
+  game.bbttcc.api.turn.executeOPRegen = advanceOPRegen;
+  // Compatibility aliases: some UIs/macros call game.bbttcc.api.turn.advanceTurn()/advanceOPRegen()
+  game.bbttcc.api.turn.advanceTurn = game.bbttcc.api.turn.advanceTurn || (async (args={}) => game.bbttcc.api.territory.advanceTurn(args));
+  game.bbttcc.api.turn.advanceOPRegen = game.bbttcc.api.turn.advanceOPRegen || (async (args={}) => game.bbttcc.api.territory.advanceOPRegen(args));
 
-/**
- * New: compute logistics pressure now (Apply-style write to flags).
- */
-game.bbttcc.api.turn.computeLogisticsPressure = computeLogisticsPressureForAllFactions;
-game.bbttcc.api.turn.computeLogisticsPressureForFaction = async (factionId) => {
-  const A = game.actors.get(factionId);
-  if (!A) throw new Error("computeLogisticsPressureForFaction: faction actor not found.");
-  const metrics = await computeLogisticsPressureForFaction(A);
-  await A.update({ [`flags.${MOD_FACTIONS}.logistics`]: metrics });
-  return metrics;
-};
+  /**
+   * New: compute logistics pressure now (Apply-style write to flags).
+   */
+  game.bbttcc.api.turn.computeLogisticsPressure = computeLogisticsPressureForAllFactions;
+  game.bbttcc.api.turn.computeLogisticsPressureForFaction = async (factionId) => {
+    const A = game.actors.get(factionId);
+    if (!A) throw new Error("computeLogisticsPressureForFaction: faction actor not found.");
+    const metrics = await computeLogisticsPressureForFaction(A);
+    await A.update({ [`flags.${MOD_FACTIONS}.logistics`]: metrics });
+    return metrics;
+  };
 
-/**
- * New: enqueue a structured turn request that will be consumed by
- * api.turn.processRequests() on the next advanceTurn({ apply:true }).
- *
- * See enqueueTurnRequest() above for payload details.
- */
-game.bbttcc.api.turn.enqueueRequest = enqueueTurnRequest;
-// Review #10 (2026-10-28): the ONE way to Apply a turn — holds the world turn lock across every wrapper.
-game.bbttcc.api.turn.runAdvance = runAdvance;
-game.bbttcc.api.turn.turnLock = () => turnLockHeld();
-// The one planned-activity price (review #3/#4/#5, 2026-10-28): activityCost({entry?, effect?, key?}) → {channel: marks}.
-game.bbttcc.api.turn.activityCost = activityCost;
-game.bbttcc.api.turn.formatActivityCost = fmtActivityCost;
+  /**
+   * New: enqueue a structured turn request that will be consumed by
+   * api.turn.processRequests() on the next advanceTurn({ apply:true }).
+   *
+   * See enqueueTurnRequest() above for payload details.
+   */
+  game.bbttcc.api.turn.enqueueRequest = enqueueTurnRequest;
+  // Review #10 (2026-10-28): the ONE way to Apply a turn — holds the world turn lock across every wrapper.
+  game.bbttcc.api.turn.runAdvance = runAdvance;
+  game.bbttcc.api.turn.turnLock = () => turnLockHeld();
+  // The one planned-activity price (review #3/#4/#5, 2026-10-28): activityCost({entry?, effect?, key?}) → {channel: marks}.
+  game.bbttcc.api.turn.activityCost = activityCost;
+  game.bbttcc.api.turn.formatActivityCost = fmtActivityCost;
+}
+Hooks.once("init", __bbttccPublishTurnApi);
+Hooks.once("ready", __bbttccPublishTurnApi);
+if (game?.ready) __bbttccPublishTurnApi();

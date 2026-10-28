@@ -1625,7 +1625,7 @@ const PASSIVE_BONUS_PRESETS = {
 // Turn effect presets (Add → appends JSON array)
 const TURN_EFFECT_PRESETS = {
   "regen_minor_hp": { key: "regen_minor_hp", amount: 1, notes: "Repairs 1 HP per turn (if not destroyed)." },
-  "supply_cache": { key: "supply_cache", economy: 10, notes: "Adds +1 Economy OP during turn regen." },
+  "supply_cache": { key: "supply_cache", economy: 10, notes: "Adds +10 Economy marks during turn regen." },
   "warding_field": { key: "warding_field", defense: 1, notes: "Adds +1 defense to raid math while active." }
 };
 

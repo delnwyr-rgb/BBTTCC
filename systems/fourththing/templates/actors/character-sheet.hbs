@@ -714,13 +714,13 @@
             <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="harmony_marshal_initiate" data-tooltip="Tier 1 — Harmony Initiate. +1 Diplomacy, +1 Insight, faction Soft Power +10% (narrative).">T1 Initiate{{#if harmonyMarshalState.l1GrantsApplied}} ✓{{/if}}</button>
             <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="harmony_marshal_rallying_words" data-tooltip="Rallying Words (bonus action) — target an ally; bank reroll-lowest on their next roll this scene.">📣 Rallying Words</button>
             {{#if harmonyMarshalState.tierAtLeast2}}
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="harmony_marshal_attrition_easer" data-tooltip="Tier 2 — Attrition Easer. 1/strategic turn: spend 1 Soft Power OP → -1 Attrition faction-wide.">T2 Attrition Easer{{#if harmonyMarshalState.attritionEaserUsedThisTurn}} (used){{/if}}</button>
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="harmony_marshal_attrition_easer" data-tooltip="Tier 2 — Attrition Easer. 1/strategic turn: spend 10 Soft Power marks → -1 Attrition Domain-wide.">T2 Attrition Easer{{#if harmonyMarshalState.attritionEaserUsedThisTurn}} (used){{/if}}</button>
             {{/if}}
             {{#if harmonyMarshalState.tierAtLeast3}}
             <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="harmony_marshal_loyalty_steward" data-tooltip="Tier 3 — Loyalty Steward. After a successful major Diplomacy / Courtly Intrigue resolution: choose a hex, Loyalty +1.">T3 Loyalty Steward</button>
             {{/if}}
             {{#if harmonyMarshalState.tierAtLeast4}}
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="harmony_marshal_unity_conductor" data-tooltip="Tier 4 — Unity Conductor. Faction passive: +2 Soft Power OP per strategic turn. Auto-reminder fires on advance-turn.">T4 Unity Conductor</button>
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="harmony_marshal_unity_conductor" data-tooltip="Tier 4 — Unity Conductor. Domain passive: +20 Soft Power marks per strategic turn. Auto-reminder fires on advance-turn.">T4 Unity Conductor</button>
             {{/if}}
           </div>
         </div>

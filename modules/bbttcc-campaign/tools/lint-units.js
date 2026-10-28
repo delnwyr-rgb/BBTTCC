@@ -20,6 +20,7 @@ const files = [];
 const AUTHORITY = /rfi-pricing\.js$/, MIRROR = /op-engine\.js$/;
 const OK = /per 10 marks|rule unit|unit-ok/i;
 const hits = [];
+const CHANNEL_OP = /(\b\d+|\+\d+|−\d+)\s+(Violence|Nonlethal|Intrigue|Economy|Soft ?[Pp]ower|Diplomacy|Logistics|Culture|Faith)\s+OP\b/;
 for (const f of files) {
   const rel = path.relative(ROOT, f);
   fs.readFileSync(f, "utf8").split("\n").forEach((line, i) => {
@@ -32,6 +33,8 @@ for (const f of files) {
     if (/(\/|\*)\s*10\b/.test(code) && /\b(OP|marks|Marks|opBank|opDeltas|opCost|op[A-Z]\w*)\b/.test(code) && !tagged && !AUTHORITY.test(f) && !MIRROR.test(f)) rec("U3", "÷10/×10 beside an OP/marks term (unit conversion?)");
     if (/\b(formatMarksAsOP(Number)?|opToMarks)\b/.test(code)) rec("U4", "retired op-engine name");
     if (/(\$\{[^}]+\}|\b\d+|\+\d+|−\d+)\s*OP\b(?![_A-Za-z])(?!\s+[A-Z][a-z])/.test(code) && !/OP\s*(=|\()/.test(code) && !tagged) rec("U5", "rendered OP quantity — quantities are marks");
+    // 2026-10-28: "1 Economy OP per turn" / "+1 Faith OP" — a quantity with the channel between it and OP.
+    if (/["'`]/.test(code) && CHANNEL_OP.test(code) && !tagged) rec("U5", "rendered OP quantity (N <Channel> OP) — quantities are marks");
   });
 }
 // U6 (strategic review #50, 2026-10-28): the raid catalogs' player-facing rules text — JSON, so the .js/.hbs sweep
@@ -40,7 +43,7 @@ for (const rel of ["modules/bbttcc-raid/data/bbttcc_activities_v1_4.json", "modu
   let rows = []; try { rows = JSON.parse(fs.readFileSync(path.join(ROOT, rel), "utf8")); } catch (_e) { continue; }
   for (const r of (Array.isArray(rows) ? rows : [])) {
     const t = String(r?.flags?.bbttcc?.effects?.text || "");
-    if (/(\b\d+|\+\d+|−\d+)\s*OP\b(?![_A-Za-z])/.test(t) || /\bOP (income|pools?|bank)\b/.test(t)) hits.push({ rule: "U6", file: rel, line: 0, msg: `catalog text renders OP — "${r.name}"`, text: t.slice(0, 140) });
+    if (/(\b\d+|\+\d+|−\d+)\s*OP\b(?![_A-Za-z])/.test(t) || CHANNEL_OP.test(t) || /\bOP (income|pools?|bank|is refunded)\b/.test(t)) hits.push({ rule: "U6", file: rel, line: 0, msg: `catalog text renders OP — "${r.name}"`, text: t.slice(0, 140) });
   }
 }
 hits.sort((a, b) => a.rule.localeCompare(b.rule) || a.file.localeCompare(b.file) || a.line - b.line);

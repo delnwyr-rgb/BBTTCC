@@ -40,7 +40,7 @@ const FACILITY_PRESETS = {
       turnEffectsRaw: `[
   {
     "key": "facility-op-upkeep",
-    "description": "If the bunker is maintained, gain +0 Economy OP per turn. If neglected, it may degrade.",
+    "description": "If the bunker is maintained, gain +0 Economy marks per turn. If neglected, it may degrade.",
     "opDelta": { "economy": 0, "logistics": 0 }
   }
 ]`,
@@ -89,7 +89,7 @@ const FACILITY_PRESETS = {
       turnEffectsRaw: `[
   {
     "key": "tower-softpower-broadcast",
-    "description": "Broadcasts faction presence from the tower. +1 Soft Power OP per turn while operational.",
+    "description": "Broadcasts faction presence from the tower. +10 Soft Power marks per turn while operational.",
     "opDelta": { "economy": 0, "logistics": 0 }
   }
 ]`,
@@ -142,7 +142,7 @@ const FACILITY_PRESETS = {
       turnEffectsRaw: `[
   {
     "key": "castle-economy-hub",
-    "description": "The castle functions as a trade and logistics hub. +1 Economy and +1 Logistics OP per turn while held.",
+    "description": "The castle functions as a trade and logistics hub. +10 Economy and +10 Logistics marks per turn while held.",
     "opDelta": { "economy": 10, "logistics": 10 }
   }
 ]`,

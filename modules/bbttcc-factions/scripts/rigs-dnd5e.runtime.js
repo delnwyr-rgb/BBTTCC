@@ -212,11 +212,11 @@
   // ── Orders (the Bastion steal, executed on OUR clock) ──────────────────────
   const ORDERS = {
     none:     { label: "— (no order)" },
-    craft:    { label: "Craft",    channel: "economy",   desc: "+1 Economy OP (forges and workshops run)" },
-    trade:    { label: "Trade",    channel: "softpower", desc: "+1 Soft Power OP (markets and favors)" },
-    harvest:  { label: "Harvest",  channel: "logistics", desc: "+1 Logistics OP (fields, scrap, water)" },
-    recruit:  { label: "Recruit",  channel: "violence",  desc: "+1 Violence OP (muster fodder, drill yards)" },
-    research: { label: "Research", channel: "intrigue",  desc: "+1 Intrigue OP (archives, labs, listening posts)" },
+    craft:    { label: "Craft",    channel: "economy",   desc: "+10 Economy marks (forges and workshops run)" },
+    trade:    { label: "Trade",    channel: "softpower", desc: "+10 Soft Power marks (markets and favors)" },
+    harvest:  { label: "Harvest",  channel: "logistics", desc: "+10 Logistics marks (fields, scrap, water)" },
+    recruit:  { label: "Recruit",  channel: "violence",  desc: "+10 Violence marks (muster fodder, drill yards)" },
+    research: { label: "Research", channel: "intrigue",  desc: "+10 Intrigue marks (archives, labs, listening posts)" },
     repair:   { label: "Repair",   channel: null,        desc: "Restore 10% of the rig's max HP (no OP)" },
   };
   // Resolves the rig's order; returns { key, note, deltas? } — OP deltas are
