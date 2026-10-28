@@ -152,6 +152,18 @@
           const facType = String(facRoot.facilityType || "Facility");
           const facLabel = facType ? (facType.charAt(0).toUpperCase() + facType.slice(1)) : "Facility";
 
+          // #64 (2026-10-28): one channel at its cap used to refuse the WHOLE facility (all-or-nothing) and the card blamed
+          // "insufficient". Positive deltas are clamped to each channel's headroom first; what's left over is reported.
+          const capped = {};
+          try {
+            const A = game.actors.get(String(ownerId).replace(/^Actor\./, ""));
+            const caps = game.bbttcc?.facts?.faction?.caps?.(A) || {};
+            const bank = A?.getFlag?.("bbttcc-factions", "opBank") || {};
+            for (const [k, v] of Object.entries(deltas)) {
+              const n = Number(v) || 0, cap = Number(caps[k]) || 0;
+              if (n > 0 && cap > 0) { const room = Math.max(0, cap - (Number(bank[k]) || 0)); if (n > room) { capped[k] = n - room; deltas[k] = room; } }
+            }
+          } catch (_eCap) {}
           // Apply to OP Engine (commit refuses underflow)
           const res = await opApi.commit(ownerId, deltas, {
             source: "facility",
@@ -164,10 +176,11 @@
           const pieces = sumDeltaKeys(deltas);
           const effectsText = appliedKeys.length ? ` (effects: ${appliedKeys.join(", ")})` : "";
 
+          const cappedTxt = Object.keys(capped).length ? ` <span style="opacity:0.85;">(at cap — ${esc(Object.entries(capped).map(([k, v]) => `${v} ${k}`).join(", "))} marks not taken)</span>` : "";
           if (res?.committed) {
             lines.push(
               `• <b>${esc(facLabel)}</b> in <i>${esc(hexName)}</i> → `
-              + `<b>${esc(factionName)}</b>: <code>${esc(pieces)}</code>${esc(effectsText)}`
+              + `<b>${esc(factionName)}</b>: <code>${esc(pieces)}</code>${cappedTxt}${esc(effectsText)}`
             );
 
             console.log(TAG, "Applied per-turn facility OP", {
@@ -180,7 +193,7 @@
             lines.push(
               `• <b>${esc(facLabel)}</b> in <i>${esc(hexName)}</i> → `
               + `<b>${esc(factionName)}</b>: <code>${esc(pieces)}</code> `
-              + `<span style="opacity:0.85;">(NOT APPLIED: a channel is at its cap or the bank is short)</span>${esc(effectsText)}`
+              + `<span style="opacity:0.85;">(NOT APPLIED: ${res?.underflow && Object.keys(res.underflow).length ? `the bank is short — ${esc(Object.keys(res.underflow).join(", "))}` : "the bank refused it (at cap)"})</span>${esc(effectsText)}`
             );
 
             console.log(TAG, "Facility OP commit refused (underflow)", {
@@ -208,8 +221,8 @@
   Hooks.on("bbttcc:advanceTurn:end", async (...args) => {
     try {
       if (!game.user?.isGM) return;   // world-state writes run once, on the GM
-      // Defer one tick so all other end-of-turn enhancers
-      // (garrison upkeep, war logs, etc.) have finished writing.
+      // Defer one tick. (Garrison upkeep may still be running — every bank write goes through op.commit's
+      // per-faction queue now, #11 2026-10-28, so the order no longer loses marks.)
       await new Promise(resolve => setTimeout(resolve, 0));
       await handleAdvanceTurnEnd(...args);
     } catch (e) {

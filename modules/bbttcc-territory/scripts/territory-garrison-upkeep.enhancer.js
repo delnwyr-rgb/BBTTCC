@@ -308,6 +308,7 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
       }
 
       let unpaidBuckets = {};
+      const paidBuckets = {};   // #65: what actually left the bank
       let hasUnpaid = false;
 
       // pay per normalized bucket from opBank
@@ -318,8 +319,10 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
         const have = N(bank[bucket] || 0);
         if (have >= need) {
           bank[bucket] = have - need;
+          paidBuckets[bucket] = need;
         } else {
           bank[bucket] = 0;
+          if (have > 0) paidBuckets[bucket] = have;
           const deficit = need - have;
           unpaidBuckets[bucket] = (unpaidBuckets[bucket] || 0) + deficit;
           hasUnpaid = true;
@@ -339,7 +342,8 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
         }
       } else {
         const unpaidStr = Object.entries(unpaidBuckets).map(([k,v]) => `${k}:${v}`).join(", ");
-        logLines.push(`• ${hexName}: PARTIAL upkeep (${phase}) [paid ${costStr}; unpaid ${unpaidStr}]`);
+        const paidStr = Object.entries(paidBuckets).map(([k,v]) => `${k}:${v}`).join(", ") || "nothing";
+        logLines.push(`• ${hexName}: PARTIAL upkeep (${phase}) [owed ${costStr}; paid ${paidStr}; unpaid ${unpaidStr}]`);
       }
 
       if (hasUnpaid) {

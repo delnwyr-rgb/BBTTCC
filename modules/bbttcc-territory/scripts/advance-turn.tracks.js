@@ -641,7 +641,10 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
           return true;
         } catch (_e) { return false; }
       };
-      if (owned.length > 0 && (L < 30 || lowScore <= -3) && Math.random() < unrestOdds && !(await militiaAbsorb(lowest(), "unrest"))) {
+      // #63 (2026-10-28): the militia only spends its once-per-turn absorb on a strike that would DO something — a hex
+      // that already carries Hostile Population gains nothing, and the absorb used to burn on it.
+      const _alreadyHostile = (h) => { const m = h?.flags?.[MODT]?.modifiers; return Array.isArray(m) && m.includes("Hostile Population"); };
+      if (owned.length > 0 && (L < 30 || lowScore <= -3) && Math.random() < unrestOdds && !_alreadyHostile(lowest()) && !(await militiaAbsorb(lowest(), "unrest"))) {
         const hex = lowest();
         const tf  = foundry.utils.deepClone(hex.flags[MODT] || {});
         tf.modifiers = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];
@@ -663,7 +666,8 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
 
       // Extra bad: infra damage — also the least loyal hex, odds base 25% ±5%/point, 5%–75% (2026-09-12)
       const infraOdds = clamp(0.25 - 0.05 * lowScore, 0.05, 0.75);
-      if (L < 15 && owned.length > 0 && Math.random() < infraOdds && !(await militiaAbsorb(lowest(), "infrastructure"))) {
+      const _alreadyDamaged = (h) => { const m = h?.flags?.[MODT]?.modifiers; return Array.isArray(m) && m.includes("Damaged Infrastructure"); };   // #63
+      if (L < 15 && owned.length > 0 && Math.random() < infraOdds && !_alreadyDamaged(lowest()) && !(await militiaAbsorb(lowest(), "infrastructure"))) {
         const hex = lowest();
         const tf  = foundry.utils.deepClone(hex.flags[MODT] || {});
         tf.modifiers = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];

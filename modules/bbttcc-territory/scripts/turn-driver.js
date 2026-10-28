@@ -470,7 +470,8 @@ function ensureConsumePlannedShim(){
               targetName: entry.targetName || null,
               toHexUuid: entry.toHexUuid || null,     // route/exchange rows (2026-09-09)
               notes: entry.note || entry.notes || "",
-              entry
+              entry,
+              paidCost: (spendResult && spendResult.paid) ? foundry.utils.duplicate(spendResult.paid) : {}   // the ledger records it for ↩ Back out
             });
             // A handler that refuses returns {ok:false, reason} (siege counters, muster drill…) — keep it.
             effectResult = (hr && typeof hr === "object" && hr.ok === false)

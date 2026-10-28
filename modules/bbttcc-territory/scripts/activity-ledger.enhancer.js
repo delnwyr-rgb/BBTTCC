@@ -109,38 +109,55 @@
     log(`recorded “${rec.label}” on ${Object.keys(hexes).length} hex(es)`, rec);
   }
 
+  // One recording window around an activity's code. Nested calls (a wrapper calling another spec, a throughput
+  // handler delegating to a sibling) share the outer window. Calls run one at a time inside consumePlanned.
+  function makeWrapped(inner, key, label, read) {
+    const wrapped = async function ledgerApply(...callArgs) {
+      const { actor, entry, paidCost } = read(callArgs[0] || {});
+      const outer = !!active;
+      if (!outer) {
+        active = {
+          rec: {
+            id: foundry.utils.randomID(10), ts: Date.now(), turn: turnNow(),
+            key, label,
+            factionId: actor?.id || null, factionName: actor?.name || "", targetUuid: entry?.targetUuid || null,
+            paid: (paidCost && typeof paidCost === "object") ? clone(paidCost) : {},   // turn-driver billed this before the effect ran
+            backedOut: null
+          },
+          drawings: new Map(), actors: new Map()
+        };
+      }
+      try { return await inner.apply(this, callArgs); }
+      finally {
+        if (!outer) { const ctx = active; active = null; try { await finish(ctx); } catch (e) { warn("finish failed", e); } }
+      }
+    };
+    wrapped.__bbttccLedger = true;
+    return wrapped;
+  }
+
   function wrapAll() {
-    const E = game.bbttcc?.api?.raid?.EFFECTS;
+    const raid = game.bbttcc?.api?.raid;
+    const E = raid?.EFFECTS;
     if (!E || typeof E !== "object") return 0;
     let n = 0;
+    // Strategic rows only (#62, 2026-10-28): maneuvers fired in the raid console are not "strategic activities" and
+    // were landing in the hex history.
     for (const [key, spec] of Object.entries(E)) {
       if (!spec || typeof spec !== "object" || typeof spec.apply !== "function") continue;
-      if (spec.apply.__bbttccLedger) continue;
-      const inner = spec.apply;
-      const wrapped = async function ledgerApply(args = {}) {
-        const { actor, entry } = args;
-        // Nested applies (a wrapper calling another spec) share the outer window.
-        const outer = !!active;
-        if (!outer) {
-          active = {
-            rec: {
-              id: foundry.utils.randomID(10), ts: Date.now(), turn: turnNow(),
-              key: String(args.key || key), label: String(spec.label || args.spec?.label || key),
-              factionId: actor?.id || null, factionName: actor?.name || "", targetUuid: entry?.targetUuid || null,
-              paid: (args.paidCost && typeof args.paidCost === "object") ? clone(args.paidCost) : {},   // turn-driver billed this before apply()
-              backedOut: null
-            },
-            drawings: new Map(), actors: new Map()
-          };
-        }
-        try { return await inner.call(this, args); }
-        finally {
-          if (!outer) { const ctx = active; active = null; try { await finish(ctx); } catch (e) { warn("finish failed", e); } }
-        }
-      };
-      wrapped.__bbttccLedger = true;
-      spec.apply = wrapped;
+      if (spec.kind !== "strategic" || spec.apply.__bbttccLedger) continue;
+      spec.apply = makeWrapped(spec.apply, key, String(spec.label || key), (args) => ({ actor: args.actor, entry: args.entry, paidCost: args.paidCost }));
       n++;
+    }
+    // #62: ~70 activities resolve through STRATEGIC_THROUGHPUT (Project Eden, Terraforming, Propaganda…) and never
+    // touched the ledger. Their ctx is { factionId, targetUuid, entry, paidCost }.
+    const T = raid?.STRATEGIC_THROUGHPUT;
+    if (T && typeof T === "object") {
+      for (const [key, fn] of Object.entries(T)) {
+        if (typeof fn !== "function" || fn.__bbttccLedger) continue;
+        T[key] = makeWrapped(fn, key, String(E[key]?.label || key), (ctx) => ({ actor: game.actors.get(String(ctx.factionId || ctx.attackerId || "")) || null, entry: ctx.entry || { targetUuid: ctx.targetUuid || null }, paidCost: ctx.paidCost }));
+        n++;
+      }
     }
     if (n) log(`wrapped ${n} effect(s)`);
     return n;
@@ -306,7 +323,7 @@
              <span style="flex:1 1 auto;min-width:0"><b>${esc(r.label)}</b> <span style="opacity:.75">— ${esc(r.factionName)}</span><div style="font-size:.76rem;opacity:.75">${describe(r)}</div></span>
              ${r.backedOut ? `<span style="flex:0 0 auto;font-size:.75rem;color:#4ade80">↩ backed out</span>` : `<button type="button" class="bbttcc-btn bbttcc-btn-xs" data-ledger-backout="${esc(r.id)}" style="flex:0 0 auto;">↩ Back out</button>`}
            </div>`).join("")
-          : `<p class="hint" style="margin:0;opacity:.75">No strategic activities recorded on this hex yet. From now on every activity that writes here (Fortify, Establish Supply Line, Found…, Develop…) lands in this list with what it changed.</p>`;
+          : `<p class="hint" style="margin:0;opacity:.75">No strategic activities recorded on this hex yet. Every planned activity that changes this hex when the Turn runs lands here with what it changed — and ↩ Back out undoes it.</p>`;
         wrap.innerHTML = `<legend style="padding:0 .25rem;opacity:.9;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#ffd28a;">↩ Strategic Activity History</legend>${rows}`;
         host.appendChild(wrap);
         wrap.addEventListener("click", async (ev) => {
@@ -336,6 +353,7 @@
     setTimeout(tick, 1000);
     // Late registrations (loader, content packs) get wrapped when the planner/console opens.
     Hooks.on("renderApplication", () => { try { wrapAll(); } catch (_e) {} });
+    Hooks.on("bbttcc:advanceTurn:begin", () => { try { wrapAll(); } catch (_e) {} });   // late handlers (siege…) before plans resolve
     Hooks.on("renderApplicationV2", () => { try { wrapAll(); } catch (_e) {} });
     Hooks.on("renderApplication", inject);
     Hooks.on("renderApplicationV2", inject);
