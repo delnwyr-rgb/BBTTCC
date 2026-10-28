@@ -622,11 +622,12 @@
                     {{#if it.img}}<img src="{{it.img}}" style="width:22px; height:22px; border-radius:6px; object-fit:cover;"/>{{/if}}
                   </td>
                   <td>
-                    <a href="#" class="bbttcc-doctrine-name" data-doctrine-act="open" data-item-id="{{it.id}}" data-kind="{{it.kind}}" data-key="{{it.key}}" style="font-weight:800; text-decoration:none; color:inherit;">{{it.name}}</a>
+                    <a href="#" class="bbttcc-doctrine-name" data-doctrine-act="open" data-item-id="{{it.id}}" data-kind="{{it.kind}}" data-key="{{it.key}}" style="font-weight:800; text-decoration:none; color:inherit;{{#if it.unavailable}} opacity:.55;{{/if}}">{{it.name}}</a>
+                    {{#if it.statusNote}}<span style="opacity:.7; font-size:.85em;"> · {{it.statusNote}}</span>{{/if}}
                   </td>
                   {{#if ../isGM}}
                   <td class="center" style="width:44px;">
-                    <a class="button" href="#" data-doctrine-act="remove" data-item-id="{{it.id}}" data-tooltip="Remove"><i class="fas fa-trash"></i></a>
+                    {{#if it.id}}<a class="button" href="#" data-doctrine-act="remove" data-item-id="{{it.id}}" data-tooltip="Remove"><i class="fas fa-trash"></i></a>{{/if}}
                   </td>
                   {{/if}}
                 </tr>

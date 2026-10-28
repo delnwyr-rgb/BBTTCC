@@ -183,7 +183,9 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
   (function publishActivityText(tries){
     try {
       const r = game?.bbttcc?.api?.raid;
-      if (r) { if (!r.ACTIVITY_TEXT) r.ACTIVITY_TEXT = FALLBACK_TEXT; return; }
+      // activityText(key, kind): the rules text the planner tooltip shows (text → effects.text → description → fallback).
+      // The faction sheet uses it so a doctrine row with a description-only spec is no longer hidden (2026-10-28).
+      if (r) { if (!r.ACTIVITY_TEXT) r.ACTIVITY_TEXT = FALLBACK_TEXT; r.activityText = (key, kind) => { try { return String(_resolve(String(kind || "strategic"), String(key || "").toLowerCase())?.text || ""); } catch (_e) { return ""; } }; return; }
     } catch (_e) {}
     if ((tries || 0) < 80) setTimeout(function(){ publishActivityText((tries || 0) + 1); }, 250);
   })(0);
@@ -631,6 +633,159 @@ function bbttccIsLockedActivity(a, factionTier, unlockedSet) {
   return tierReq > Number(factionTier || 1);
 }
 
+
+const _bbttccPrettyKey = (k) => String(k || "").replace(/[_-]+/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+// The planner's catalog of strategic rows (retired rows, raid TYPES excluded). Top-level so the availability
+// answer below — and the sheet, planActivity and the lint — read the same list (2026-10-28).
+function bbttccBuildStrategicList(){
+  try {
+    const raid = game.bbttcc?.api?.raid || {};
+    const EFFECTS = raid?.EFFECTS || {};
+    const TYPES   = raid?.TYPES || raid?.getTypes?.() || {};
+    const raidKeys = new Set(Object.keys(TYPES).map(k=>String(k).toLowerCase()));
+    const arr = [];
+
+    // Collapsed pairs (owner ruling 2026-09-09: "keep the better one"). The
+    // spec stays registered so already-planned entries still resolve; the
+    // planner just stops offering it. `retired:true` on a spec does the same.
+    const RETIRED = {
+      training_parade:            "its only effect was +1 raid Morale, retired with Morale (review #6, 2026-10-28)",
+      propaganda_tour:            "same effect as Propaganda Campaign (T1, no tier lock)",
+      reconstruction_drive:       "folded into Reconstruction Drive (std) — repairs + status → Claimed + Integration +1",
+      flaming_pitch:              "identical to Boiling Oil",
+      develop_infrastructure_std: "Infrastructure Expansion is strictly better at the same price (and now carries Integration +1)",
+      mass_mobilization:          "the old ×1.25/×0.75 income swing — Mass Mobilization (std) is the one card (DC2, 2026-10-26)",
+      radiant_rally:              "merged into Rally the Line 2026-05-24 (DC2, 2026-10-26)"
+    };
+    for (const [key, v] of Object.entries(EFFECTS)) {
+      if (!v || v.kind !== "strategic") continue;
+      if (raidKeys.has(String(key).toLowerCase())) continue;
+      if (v.retired === true || RETIRED[String(key)]) continue;
+
+      let label = v.label || _bbttccPrettyKey(key);
+      let primary = v.primaryKey || v.primaryOp || null;
+      const _price = game.bbttcc?.api?.turn?.activityCost;   // the billed price (review #3, 2026-10-28)
+      const opCosts = _price ? _price({ effect: v, key }) : (v.cost || v.opCosts || {});
+
+      if (!primary && opCosts && typeof opCosts === "object") {
+        let bestKey = null;
+        let bestVal = -Infinity;
+        for (const k of Object.keys(opCosts)) {
+          const val = Number(opCosts[k] || 0);
+          if (val > bestVal) { bestVal = val; bestKey = k; }
+        }
+        primary = bestKey || "misc";
+      }
+
+      if (!primary) primary = "misc";
+      // One spelling per category (else a separate "Softpower" filter chip appears).
+      { const pl = String(primary).toLowerCase().replace(/_/g, ""); if (pl === "softpower") primary = "softPower"; else if (pl === "nonlethal") primary = "nonLethal"; }
+
+      // Preserve legacy behavior: if a non-option activity lacks an explicit tier,
+      // we may allow using groupOrder as a legacy stand-in *only when opted in*.
+      const inferredIsOption = (v.source === "character-option") || (v.band === "option") || String(key).toLowerCase().startsWith("optact_");
+      const legacyTierFromGroupOrder = !inferredIsOption && (v.tier == null) && (v.groupOrder != null);
+
+      arr.push({
+        key,
+        label,
+        primaryKey: primary,
+        tier: v.tier ?? null,
+        // NEW: explicit faction-tier gate (preferred over tier)
+        minFactionTier: v.minFactionTier ?? v.minTier ?? null,
+        rarity: v.rarity ?? null,
+        source: v.source ?? null,
+        band: v.band ?? null,
+        optionKey: v.optionKey ?? null,
+        unlockKey: v.unlockKey ?? (v.meta ? v.meta.unlockKey : null) ?? null,
+        groupKey: v.groupKey ?? v.packageKey ?? null,
+        groupLabel: v.groupLabel ?? v.packageLabel ?? null,
+        groupOrder: v.groupOrder ?? v.packageOrder ?? null,
+        legacyTierFromGroupOrder,
+        // Siege tagging (RAID_ABILITY_SURVEY.md §4) — drives the dedicated Siege section.
+        siege: !!v.siege,
+        siegeSide: v.siegeSide ?? null,
+        siegeOrder: v.siegeOrder ?? null,
+        opCosts,
+        text: v.text || ""
+      });
+    }
+
+    if (arr.length) {
+      log(`Loaded ${arr.length} strategic activities from EFFECTS for planner.`);
+      return arr;
+    }
+  } catch (e) {
+    warn("Strategic build failed; using fallback.", e);
+  }
+
+  // Fallback: TYPES only (no costs)
+  try {
+    const raid = game.bbttcc?.api?.raid || {};
+    const types = raid.getTypes?.() || raid.TYPES || {};
+    const list = Object.values(types||{}).map(t=>({
+      key: t.key,
+      label: t.label || _bbttccPrettyKey(t.key),
+      primaryKey: t.primaryKey || "violence",
+      tier: t.tier ?? null,
+      rarity: t.rarity ?? null,
+      opCosts: {},
+      text: ""
+    }));
+    if (list.length) {
+      log(`Loaded ${list.length} activities from TYPES fallback.`);
+      return list;
+    }
+  } catch (e) {
+    warn("TYPES fallback build failed", e);
+  }
+
+  return [
+    { key:"develop_infrastructure", label:"Develop Infrastructure", primaryKey:"economy", opCosts:{}, tier:null, rarity:null, text:"" },
+    { key:"expand_territory",      label:"Expand Territory",      primaryKey:"violence", opCosts:{}, tier:null, rarity:null, text:"" }
+  ];
+}
+
+/* ── ONE availability answer (strategic review + Dave's Sweet Release screenshot, 2026-10-28) ─────────────────
+ * The faction sheet, the planner list, its "Available · Locked" tally and planActivity each decided "what can this
+ * Domain do" their own way (the sheet hid any row without spec.text; the planner hid story unlocks and roster
+ * option rows behind the doctrine gate). Every one of them now reads THIS:
+ *   status "available"   — plannable now
+ *          "tier"        — owned / standard but above the Domain's tier
+ *          "not-owned"   — the Domain holds doctrine items and not this one (GM Show Locked reveals it)
+ *          "hidden"      — never shown: siege rows under the Alpha cut, story unlocks not yet earned,
+ *                          roster options nobody on the roster carries
+ *   via   "doctrine" | "unlock" | "option" | "standard"  (why it is available) */
+function bbttccStrategicAvailability(factionActor){
+  const acts = bbttccBuildStrategicList();
+  const tier = bbttccGetFactionTier(factionActor);
+  const unlocked = bbttccGetUnlockedActivitiesSet(factionActor);
+  const optionCounts = bbttccGetFactionOptionCountsFromRoster(factionActor);
+  const doctrineApi = game.bbttcc?.api?.factions?.doctrine;
+  const owned = doctrineApi ? doctrineApi.ownedKeys(factionActor, "strategic") : new Set();
+  const hasDoctrine = owned.size > 0;
+  const alphaNoSiege = game.bbttcc?.alpha?.hidden?.("siege") === true;   // ALPHA CUT (2026-10-17): sieges hidden until Act 2
+  const EFFECTS = game.bbttcc?.api?.raid?.EFFECTS || {};
+  return acts.map(a => {
+    const key = String(a.key || "").toLowerCase();
+    const row = Object.assign({}, a, { status: "available", via: "standard", requiredTier: bbttccGetActivityRequiredTier(a) });
+    const fx = EFFECTS[key];
+    if (!key) return Object.assign(row, { status: "hidden" });
+    if (alphaNoSiege && fx && (fx.siege || fx.siegeRequiresTarget)) return Object.assign(row, { status: "hidden" });
+    // Story / learned unlocks and roster options stand on their own — the doctrine gate no longer hides them (#41).
+    if (unlocked.has(key)) return Object.assign(row, { via: "unlock" });
+    const unlockKey = a?.unlockKey ?? null;
+    if (unlockKey) return bbttccFactionHasStrategicUnlock(factionActor, unlockKey) ? Object.assign(row, { via: "unlock" }) : Object.assign(row, { status: "hidden" });
+    if (bbttccIsOptionStrategic(a)) {
+      const ok = bbttccNormalizeOptionKey(a?.optionKey);
+      return (ok && optionCounts[ok] > 0) ? Object.assign(row, { via: "option" }) : Object.assign(row, { status: "hidden" });
+    }
+    if (hasDoctrine && !owned.has(key)) return Object.assign(row, { status: "not-owned" });
+    if (!bbttccIsStandardActivity(a, tier)) return Object.assign(row, { status: "tier", via: hasDoctrine ? "doctrine" : "standard" });
+    return Object.assign(row, { via: hasDoctrine ? "doctrine" : "standard" });
+  });
+}
 
 function listSceneHexes(){
   const out=[]; const sc=canvas?.scene; if(!sc) return out;
@@ -1110,114 +1265,7 @@ if (_fid) {
       if (!this.element?.querySelector?.(".window-header")) this._installDrag();   // the core frame drags itself
     }
 
-    _buildStrategicList(){
-      try {
-        const raid = game.bbttcc?.api?.raid || {};
-        const EFFECTS = raid?.EFFECTS || {};
-        const TYPES   = raid?.TYPES || raid?.getTypes?.() || {};
-        const raidKeys = new Set(Object.keys(TYPES).map(k=>String(k).toLowerCase()));
-        const arr = [];
-
-        // Collapsed pairs (owner ruling 2026-09-09: "keep the better one"). The
-        // spec stays registered so already-planned entries still resolve; the
-        // planner just stops offering it. `retired:true` on a spec does the same.
-        const RETIRED = {
-          training_parade:            "its only effect was +1 raid Morale, retired with Morale (review #6, 2026-10-28)",
-          propaganda_tour:            "same effect as Propaganda Campaign (T1, no tier lock)",
-          reconstruction_drive:       "folded into Reconstruction Drive (std) — repairs + status → Claimed + Integration +1",
-          flaming_pitch:              "identical to Boiling Oil",
-          develop_infrastructure_std: "Infrastructure Expansion is strictly better at the same price (and now carries Integration +1)",
-          mass_mobilization:          "the old ×1.25/×0.75 income swing — Mass Mobilization (std) is the one card (DC2, 2026-10-26)",
-          radiant_rally:              "merged into Rally the Line 2026-05-24 (DC2, 2026-10-26)"
-        };
-        for (const [key, v] of Object.entries(EFFECTS)) {
-          if (!v || v.kind !== "strategic") continue;
-          if (raidKeys.has(String(key).toLowerCase())) continue;
-          if (v.retired === true || RETIRED[String(key)]) continue;
-
-          let label = v.label || prettifyKey(key);
-          let primary = v.primaryKey || v.primaryOp || null;
-          const _price = game.bbttcc?.api?.turn?.activityCost;   // the billed price (review #3, 2026-10-28)
-          const opCosts = _price ? _price({ effect: v, key }) : (v.cost || v.opCosts || {});
-
-          if (!primary && opCosts && typeof opCosts === "object") {
-            let bestKey = null;
-            let bestVal = -Infinity;
-            for (const k of Object.keys(opCosts)) {
-              const val = Number(opCosts[k] || 0);
-              if (val > bestVal) { bestVal = val; bestKey = k; }
-            }
-            primary = bestKey || "misc";
-          }
-
-          if (!primary) primary = "misc";
-          // One spelling per category (else a separate "Softpower" filter chip appears).
-          { const pl = String(primary).toLowerCase().replace(/_/g, ""); if (pl === "softpower") primary = "softPower"; else if (pl === "nonlethal") primary = "nonLethal"; }
-
-          // Preserve legacy behavior: if a non-option activity lacks an explicit tier,
-          // we may allow using groupOrder as a legacy stand-in *only when opted in*.
-          const inferredIsOption = (v.source === "character-option") || (v.band === "option") || String(key).toLowerCase().startsWith("optact_");
-          const legacyTierFromGroupOrder = !inferredIsOption && (v.tier == null) && (v.groupOrder != null);
-
-          arr.push({
-            key,
-            label,
-            primaryKey: primary,
-            tier: v.tier ?? null,
-            // NEW: explicit faction-tier gate (preferred over tier)
-            minFactionTier: v.minFactionTier ?? v.minTier ?? null,
-            rarity: v.rarity ?? null,
-            source: v.source ?? null,
-            band: v.band ?? null,
-            optionKey: v.optionKey ?? null,
-            unlockKey: v.unlockKey ?? (v.meta ? v.meta.unlockKey : null) ?? null,
-            groupKey: v.groupKey ?? v.packageKey ?? null,
-            groupLabel: v.groupLabel ?? v.packageLabel ?? null,
-            groupOrder: v.groupOrder ?? v.packageOrder ?? null,
-            legacyTierFromGroupOrder,
-            // Siege tagging (RAID_ABILITY_SURVEY.md §4) — drives the dedicated Siege section.
-            siege: !!v.siege,
-            siegeSide: v.siegeSide ?? null,
-            siegeOrder: v.siegeOrder ?? null,
-            opCosts,
-            text: v.text || ""
-          });
-        }
-
-        if (arr.length) {
-          log(`Loaded ${arr.length} strategic activities from EFFECTS for planner.`);
-          return arr;
-        }
-      } catch (e) {
-        warn("Strategic build failed; using fallback.", e);
-      }
-
-      // Fallback: TYPES only (no costs)
-      try {
-        const raid = game.bbttcc?.api?.raid || {};
-        const types = raid.getTypes?.() || raid.TYPES || {};
-        const list = Object.values(types||{}).map(t=>({
-          key: t.key,
-          label: t.label || prettifyKey(t.key),
-          primaryKey: t.primaryKey || "violence",
-          tier: t.tier ?? null,
-          rarity: t.rarity ?? null,
-          opCosts: {},
-          text: ""
-        }));
-        if (list.length) {
-          log(`Loaded ${list.length} activities from TYPES fallback.`);
-          return list;
-        }
-      } catch (e) {
-        warn("TYPES fallback build failed", e);
-      }
-
-      return [
-        { key:"develop_infrastructure", label:"Develop Infrastructure", primaryKey:"economy", opCosts:{}, tier:null, rarity:null, text:"" },
-        { key:"expand_territory",      label:"Expand Territory",      primaryKey:"violence", opCosts:{}, tier:null, rarity:null, text:"" }
-      ];
-    }
+    _buildStrategicList(){ return bbttccBuildStrategicList(); }
 
     _buildCategories(activities) {
       const cats = new Set();
@@ -1323,70 +1371,14 @@ if (_fid) {
       const factionTier = bbttccGetFactionTier(factionActor);
       const unlocked = bbttccGetUnlockedActivitiesSet(factionActor);
       const optionCounts = bbttccGetFactionOptionCountsFromRoster(factionActor);
-      const actsAll = this._buildStrategicList();
+      // ONE availability answer (2026-10-28) — the same function the faction sheet, planActivity and the campaign
+      // lint read, so the sheet's list, this list and the tally can no longer disagree.
+      const availability = bbttccStrategicAvailability(factionActor);
+      const actsAll = availability;
+      const gmShowAll = !!(game?.user?.isGM && this._plannerState.showLocked);
+      const acts = availability.filter(a => a.status === "available" || (gmShowAll && (a.status === "tier" || a.status === "not-owned")));
 
-// ------------------------------------------------------------
-// DOCTRINE GATING (Faction-owned strategics only)
-// ------------------------------------------------------------
-const doctrineApi = game.bbttcc?.api?.factions?.doctrine;
-const ownedStrategicKeys = doctrineApi
-  ? doctrineApi.ownedKeys(factionActor, "strategic")
-  : new Set();
-
-// Baseline: if a faction has NO doctrine items yet,
-// treat everything as available (backward compatibility safety)
-const hasDoctrineItems = doctrineApi
-  ? doctrineApi.list(factionActor, "strategic").length > 0
-  : false;
-
-
-      // Ensure we always have a factionId in state for deterministic filtering.
-      if (!this._plannerState.factionId && facs[0]?.id) {
-        this._plannerState.factionId = facs[0].id;
-      }
-
-      // Apply gating
-const alphaNoSiege = game.bbttcc?.alpha?.hidden?.("siege") === true;   // ALPHA CUT (2026-10-17): sieges hidden until Act 2
-const acts = actsAll.filter(a => {
-  const key = String(a.key || "").toLowerCase();
-  if (!key) return false;
-  if (alphaNoSiege) { const fx = (game.bbttcc?.api?.raid?.EFFECTS || {})[key]; if (fx && (fx.siege || fx.siegeRequiresTarget)) return false; }
-
-  // If doctrine system is active and faction has doctrine items,
-  // only allow activities the faction actually owns.
-  const gmShowAll = !!(game?.user?.isGM && this._plannerState.showLocked);
-
-  if (hasDoctrineItems && !gmShowAll) {
-    if (!ownedStrategicKeys.has(key)) return false;
-  }
-        // Always show unlocked/learned activities
-        if (unlocked.has(key)) return true;
-
-
-
-        // Narrative unlock gate (Echo Archive / quest rewards)
-        // If an activity declares unlockKey, it is hidden until the faction unlocks it.
-        const unlockKey = a?.unlockKey ?? (a?.meta ? a.meta.unlockKey : null) ?? null;
-        if (unlockKey) {
-          if (bbttccFactionHasStrategicUnlock(factionActor, unlockKey)) return true;
-          // Do not leak locked narrative unlocks.
-          return false;
-        }
-        // Option-driven strategics: roster entitlement (auto-available)
-        if (a?.source === "character-option" || a?.band === "option" || key.startsWith("optact_")) {
-          const ok = bbttccNormalizeOptionKey(a?.optionKey);
-          if (ok && optionCounts[ok] > 0) return true;
-        }
-
-        // Show standard activities for this tier (option strategics are NEVER standard)
-        if (!bbttccIsOptionStrategic(a) && bbttccIsStandardActivity(a, factionTier)) return true;
-
-        // STEP 4: GM-only reveal of locked activities (but not unentitled option strategics)
-        if (!bbttccIsOptionStrategic(a) && game?.user?.isGM && this._plannerState.showLocked) return true;
-
-        return false;
-      });
-const categories = this._buildCategories(acts);
+      const categories = this._buildCategories(acts);
       const currentCat = this._plannerState.category || "all";
       const searchTerm = (this._plannerState.search || "").toLowerCase().trim();
       const filtered = acts.filter(a => {
@@ -1398,38 +1390,15 @@ const categories = this._buildCategories(acts);
         return true;
       });
 
-
-
-
-      
-      // STEP 5.1: telemetry counts for transparency (global totals + filtered view)
+      // Tally (#44): straight from the availability statuses — "hidden" rows are not counted anywhere.
       const counts = (() => {
-        let total = 0, unlockedCount = 0, standardCount = 0, lockedCount = 0;
-
-        // Global totals: actsAll is already the strategic list, so do NOT require a.kind to exist.
-        for (const a of actsAll) {
-          const key = String(a?.key || "").toLowerCase();
-          if (!key) continue;
-
-          total++;
-          const isUnlocked = unlocked.has(key);
-          const isStandard = bbttccIsStandardActivity(a, factionTier);
-          const isLocked = bbttccIsLockedActivity(a, factionTier, unlocked);
-
-          if (isUnlocked) unlockedCount++;
-          else if (isStandard) standardCount++;
-          else if (isLocked) lockedCount++;
-        }
-
-        const available = standardCount + unlockedCount;
-        const showLocked = !!(game?.user?.isGM && this._plannerState.showLocked);
-        const visible = showLocked ? (available + lockedCount) : available;
-
-        // Filtered view count (current UI scope after category/search)
-        const filteredVisible = (filtered?.length ?? 0);
-
-        return { total, available, visible, locked: lockedCount, unlocked: unlockedCount, standard: standardCount, filteredVisible };
+        const available = availability.filter(a => a.status === "available").length;
+        const locked = availability.filter(a => a.status === "tier" || a.status === "not-owned").length;
+        const total = available + locked;
+        return { total, available, visible: gmShowAll ? total : available, locked, filteredVisible: (filtered?.length ?? 0) };
       })();
+      // #12 (2026-10-28): a remembered selection that this Domain can't plan (gated, other Domain, hidden) is dropped.
+      if (this._plannerState.selectedKey && !acts.some(a => String(a.key) === String(this._plannerState.selectedKey))) this._plannerState.selectedKey = "";
       const selectedKey = this._plannerState.selectedKey || filtered[0]?.key || "";
       const wantsRigTarget = isRigActivity(selectedKey);
       // Routes have TWO ends (owner ruling 2026-09-07: "certitude when possible") — Establish
@@ -2317,9 +2286,21 @@ Hooks.once("init",()=>{
   };
 
   // UPDATED: supports both hex targets and rig targets
+  // The ONE "what can this Domain plan" answer — the faction sheet + campaign lint read it (2026-10-28).
+  raidAPI.strategicAvailability = (factionOrId) => bbttccStrategicAvailability(typeof factionOrId === "string" ? bbttccGetFactionActor(factionOrId) : factionOrId);
   raidAPI.planActivity = async function({ attackerId, targetUuid=null, activityKey, note="", targetType="hex", defenderId=null, rigId=null, targetName=null, toHexUuid=null, recipe=null }){
     if(!attackerId || !activityKey) throw new Error("Missing required params.");
     const attacker = game.actors.get(attackerId); if(!attacker) throw new Error("Attacker not found.");
+
+    // #12 / #40 (2026-10-28): a player seat may only file a strategic row the planner would show it. GM seats keep
+    // the Show Locked override. Raid TYPES (not in the strategic list) are not gated here.
+    if (!game.user?.isGM) {
+      const row = bbttccStrategicAvailability(attacker).find(a => String(a.key).toLowerCase() === String(activityKey).toLowerCase());
+      if (row && row.status !== "available") {
+        const why = row.status === "tier" ? `it needs a Tier ${row.requiredTier} Domain` : "your Domain does not have it";
+        const err = new Error(`${row.label || activityKey} can't be planned — ${why}.`); err.bbttccRefused = true; throw err;
+      }
+    }
 
     let resolvedTargetName = "";
     let entry = null;

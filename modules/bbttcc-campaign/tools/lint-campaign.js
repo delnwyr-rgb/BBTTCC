@@ -900,6 +900,48 @@ for (const b of beats) {
   }
 }
 
+// ── K04: the story names an activity no Domain can plan (2026-10-28, Dave's "The First Turn" — it told players to
+//    use Secure Perimeter, which was in no Domain's kit). A beat that names a strategic activity by its label must
+//    name one in the standard starting kit (bbttcc-factions _BBTTCC_STANDARD_START_STRATEGICS) or one some beat
+//    grants (beat.unlocks.strategics). Labels are read from the raid catalog JSON + every `label:"…"` registered in
+//    bbttcc-raid/scripts, so the rule follows the code without a hand-kept list.
+{
+  const ROOT = path.resolve(__dirname, "..", "..", "..");
+  const read = (rel) => { try { return fs.readFileSync(path.join(ROOT, rel), "utf8"); } catch (_e) { return ""; } };
+  const slug = (n) => String(n || "").replace(/\[[^\]]*\]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+  const labelToKey = new Map();
+  try {
+    const rows = JSON.parse(read("modules/bbttcc-raid/data/bbttcc_activities_v1_4.json") || "[]");
+    for (const r of (Array.isArray(rows) ? rows : [])) if (r?.flags?.bbttcc?.kind === "strategic") { const lbl = String(r.name || "").replace(/\s*\[[^\]]*\]\s*$/, "").trim(); if (lbl) labelToKey.set(lbl, slug(lbl)); }
+  } catch (_e) {}
+  const scriptsDir = path.join(ROOT, "modules/bbttcc-raid/scripts");
+  let files = []; try { files = fs.readdirSync(scriptsDir).filter(f => f.endsWith(".js")); } catch (_e) {}
+  const src = files.map(f => fs.readFileSync(path.join(scriptsDir, f), "utf8")).join("\n");
+  // A label counts only when its slug is a key registered as kind "strategic" in the raid scripts (or the JSON) —
+  // so button text ("Not yet") and maneuver names never match.
+  const strategicKey = (k) => new RegExp(`\\b${k}\\b[\\s\\S]{0,400}?kind\\s*:\\s*["']strategic["']`).test(src);
+  const RX = /\blabel\s*:\s*(?:[A-Za-z_.?\[\]"']+\s*\|\|\s*)?"([A-Z][^"]{2,60})"/g;
+  let m; while ((m = RX.exec(src))) { const lbl = m[1].trim(), k = slug(lbl); if (!labelToKey.has(lbl) && strategicKey(k)) labelToKey.set(lbl, k); }
+  const fsrc = read("modules/bbttcc-factions/scripts/module.js");
+  const kitM = fsrc.match(/_BBTTCC_STANDARD_START_STRATEGICS\s*=\s*\[([\s\S]*?)\];/);
+  const kit = new Set(kitM ? [...kitM[1].matchAll(/"([a-z0-9_]+)"/g)].map(x => x[1]) : []);
+  const granted = new Set();
+  for (const b of beats) for (const k of (Array.isArray(b?.unlocks?.strategics) ? b.unlocks.strategics : [])) granted.add(String(k).toLowerCase());
+  if (kit.size && labelToKey.size) {
+    const labels = [...labelToKey.keys()].filter(l => /\s/.test(l)).sort((a, b) => b.length - a.length);   // multi-word labels only — "Fortify" alone is prose
+    for (const b of beats) {
+      const text = [s(b.description), ...(b.choices || []).map(ch => s(ch?.label) + " " + s(ch?.afterText))].join(" \n ").replace(/<[^>]+>/g, "");
+      if (!text) continue;
+      for (const lbl of labels) {
+        if (!text.includes(lbl)) continue;
+        const key = labelToKey.get(lbl);
+        if (kit.has(key) || granted.has(key)) continue;
+        F("K04", "WARN", b.id, `names the activity "${lbl}" (${key}) — it is not in the starting kit and no beat grants it (unlocks.strategics), so no Domain can plan it`);
+      }
+    }
+  }
+}
+
 // ─── report ─────────────────────────────────────────────────────────────────
 const actOf = (id) => id && byId.has(id) ? phaseOf(byId.get(id)) : undefined;
 for (const f of findings) f.act = f.beatId ? actOf(f.beatId) : null;

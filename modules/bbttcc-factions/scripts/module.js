@@ -544,6 +544,7 @@ const _BBTTCC_STANDARD_START_STRATEGICS = [
   "found_site_port",
   "found_site_research",
   "upgrade_outpost_settlement",
+  "secure_perimeter",            // Dave 2026-10-28: Act 1's first Turn ("The First Turn") names it — every Domain starts with it
   // develop_infrastructure_std dropped from the package 2026-10-26 (DC2): the planner retired it 2026-09-09; the EFFECTS spec
   // stays registered so already-planned entries still resolve, but no new Domain is handed a dead entitlement.
   "infrastructure_expansion"      // its replacement (Defense +2, Integration +1), 2026-10-12
@@ -2899,7 +2900,9 @@ const doctrine = await (async () => {
         img: hit?.img || it.img,
         kind: kind0,
         key: k0,
-        registered: !registryLoaded || !!(spec && String(spec.text || "").trim())
+        // Rules text from the planner's resolver (text → effects.text → description → fallback): description-only
+        // specs (Establish Outpost, the Found Site rows, the bridges…) were hidden here while the planner offered them.
+        registered: !registryLoaded || !!(spec && String(game.bbttcc?.api?.raid?.activityText?.(k0, kind0) || spec.text || "").trim())
       };
     })
     .filter(r => r.registered)
@@ -2931,9 +2934,31 @@ const doctrine = await (async () => {
     })
     .sort((a, b) => (b.acquiredAt - a.acquiredAt) || String(a.name || "").localeCompare(String(b.name || "")));
 
+  // Strategic rows carry the planner's availability (2026-10-28 — the sheet and the planner read ONE answer):
+  // owned rows the planner can't offer say why; story unlocks + roster options the planner DOES offer get a row.
+  const strategics = pick("strategic");
+  try {
+    const avail = game.bbttcc?.api?.raid?.strategicAvailability?.(this.actor);
+    if (Array.isArray(avail) && avail.length) {
+      const byKey = new Map(avail.map(a => [String(a.key || "").toLowerCase(), a]));
+      for (const r of strategics) {
+        const a = byKey.get(r.key);
+        if (!a) { r.statusNote = "retired — no longer plannable"; r.unavailable = true; continue; }
+        if (a.status === "tier") { r.statusNote = `needs Tier ${a.requiredTier}`; r.unavailable = true; }
+        else if (a.status === "hidden") { r.statusNote = "not in this part of the story yet"; r.unavailable = true; }
+      }
+      for (const a of avail) {
+        const k = String(a.key || "").toLowerCase();
+        if (a.status !== "available" || (a.via !== "unlock" && a.via !== "option") || strategics.some(r => r.key === k)) continue;
+        strategics.push({ id: null, uuid: null, name: a.label || k, img: null, kind: "strategic", key: k, registered: true, statusNote: a.via === "unlock" ? "story unlock" : "from your roster", virtual: true });
+      }
+      strategics.sort((x, y) => String(x.name || "").localeCompare(String(y.name || "")));
+    }
+  } catch (e) { warn("doctrine availability merge failed", e); }
+
   return {
     maneuvers: pick("maneuver"),
-    strategics: pick("strategic"),
+    strategics,
     secrets: pickSecrets()
   };
 })();
@@ -5175,6 +5200,29 @@ Hooks.on("updateActor", (actor, data) => {
     if (!sheet || !sheet.rendered) return;
     sheet.render(false);
   } catch (e) { warn("faction-sheet auto-refresh hook", e); }
+});
+
+// One-time doctrine top-up (2026-10-28): a Domain founded with the standard kit before secure_perimeter joined it
+// gets it once (war-log receipt). Per-actor flag doctrineMigrations.securePerimeter2026_10_28 → a GM who removes
+// the item later is never overridden. Active GM only (two GM seats would race the grant).
+Hooks.once("ready", () => {
+  if (!game.user?.isGM || (game.users?.activeGM && game.users.activeGM.id !== game.user.id)) return;
+  setTimeout(async () => {
+    const FLAG = "doctrineMigrations.securePerimeter2026_10_28";
+    let granted = 0;
+    for (const a of Array.from(game.actors ?? []).filter(x => isFactionActor(x))) {
+      try {
+        if (foundry.utils.getProperty(a.flags?.[MODULE_ID] || {}, FLAG)) continue;
+        const owned = _bbttccOwnedDoctrineKeys(a, "strategic");
+        if (owned.has("establish_outpost") && !owned.has("secure_perimeter")) {
+          await _bbttccGrantDoctrineEmbeddedItemNow(a, { kind: "strategic", key: "secure_perimeter", silent: false });
+          granted++;
+        }
+        await a.setFlag(MODULE_ID, FLAG, true);
+      } catch (e) { warn("secure_perimeter top-up failed for", a?.name, e); }
+    }
+    if (granted) log(`Doctrine top-up: Secure Perimeter granted to ${granted} Domain(s).`);
+  }, 3500);
 });
 
 // Idempotent backfill: populate system.description.value on existing doctrine
