@@ -986,11 +986,19 @@ export function scriptView(sc, ctx) {
     ...(Array.isArray(sc.steps) ? sc.steps : [])
   ];
   const steps = []; let currentGroup = null, foundCurrent = false;
-  for (const st of list) {
-    const done = isDone(st);
+  // SKIPPED (script-order pass, 2026-10-28): (a) once the quest is CLOSED (an ending that skips the rest — the Forgotten
+  // Cause's Break, Gloomgill's Fight/Leave) no unplayed step is "next"; (b) an `optional` step the table passed by (a
+  // later step is already done) stops pinning the Log. Skipped steps print no So far line.
+  const doneFlags = list.map(isDone);
+  let lastDoneIdx = -1; list.forEach((st, i) => { if (doneFlags[i] && !st.arrival) lastDoneIdx = i; });
+  const questClosed = !!(ctx.questKey && qDone(String(ctx.questKey)));
+  for (const [i, st] of list.entries()) {
+    const done = doneFlags[i];
     let status;
     if (done) status = "done";
     else if (st.act != null && phase > Number(st.act)) status = "sealed";            // an Arrival step after its act
+    else if (questClosed && !st.arrival) status = "skipped";
+    else if (st.optional === true && i < lastDoneIdx) status = "skipped";
     else if (!foundCurrent) { status = "current"; foundCurrent = true; currentGroup = st.group || null; }
     else if (currentGroup && st.group === currentGroup) status = "current";
     else status = "todo";
@@ -1024,7 +1032,7 @@ export function scriptView(sc, ctx) {
     const h = current.find(st => st.handoff || (st.done && (Array.isArray(st.done.chapter) || st.done.quest)));
     if (h) { const handoff = h.handoff || (Array.isArray(h.done.chapter) ? { quest: h.done.chapter[0], chapter: h.done.chapter[1] } : { quest: h.done.quest }); next = { ...mk(h, null, false, []), handoff }; stepOf = h; why = "handoff"; }
   }
-  if (!next && !current.length) why = steps.length && steps.every(s => s.status === "done" || s.status === "sealed") ? "complete" : "empty";
+  if (!next && !current.length) why = steps.length && steps.every(s => s.status === "done" || s.status === "sealed" || s.status === "skipped") ? "complete" : "empty";
   // RUNGS (2026-10-17): a chapter-scoped door may carry `rungs` — the chapter's own ordered steps (same `done` rules as
   // steps). The current rung is the first unfinished one AFTER the last finished one, so a rung the table skipped
   // (Verna's star when they went straight to the tea) never pins the Log to a stale line. Its `line` becomes the
