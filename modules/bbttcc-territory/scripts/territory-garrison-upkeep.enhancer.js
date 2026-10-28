@@ -260,6 +260,7 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
     const A       = factionActor;
     const fFlags  = clone(A.flags?.[MODF] || {});
     let bank      = clone(fFlags.opBank || {});
+    const bankBefore = clone(bank);   // #11: the upkeep is committed as a DELTA through op.commit's queue
     let fTurnPending = clone(fFlags.turn?.pending || {});
     // 2026-09-10 (owner ruling): the faction loyalty delta is APPLIED here,
     // not queued. The old path pushed it into flags.bbttcc-factions.turn.pending
@@ -455,7 +456,17 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
 
     // Apply faction updates — loyalty lands NOW (clamped 0..100).
     const updates = {};
-    updates[`flags.${MODF}.opBank`] = bank;
+    // #11 (2026-10-28): upkeep goes through op.commit's per-faction queue as a delta — writing the cloned bank raced
+    // rig output / facility credits landing on the end hook (one of the two was lost, totals drifted run to run).
+    const upkeepDelta = {};
+    for (const k of new Set([...Object.keys(bankBefore), ...Object.keys(bank)])) { const d = N(bank[k]) - N(bankBefore[k]); if (d) upkeepDelta[k] = d; }
+    const op = game.bbttcc?.api?.op;
+    if (Object.keys(upkeepDelta).length) {
+      if (op && typeof op.commit === "function") {
+        const r = await op.commit(A.id, upkeepDelta, { source: "garrison_upkeep", label: "Garrison upkeep", noDiscount: true, allowOvercap: true });
+        if (r?.ok === false) { console.warn(TAG, `Upkeep commit refused for ${A.name}`, r); logLines.push(`• ⚠ Upkeep could not be taken from the bank (it changed mid-turn) — nothing was paid.`); }
+      } else updates[`flags.${MODF}.opBank`] = bank;
+    }
     const track = (k) => (fFlags[k] === undefined || fFlags[k] === null) ? 50 : N(fFlags[k]);
     const clamp100 = (v) => Math.max(0, Math.min(100, Math.round(v)));
     if (dLoyalty !== 0) {

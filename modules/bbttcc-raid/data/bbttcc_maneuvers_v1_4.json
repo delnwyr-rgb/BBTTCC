@@ -845,7 +845,7 @@
           "softPower": 50
         },
         "effects": {
-          "text": "Next round your faction gains +20 marks in every OP pool."
+          "text": "Next round your faction gains +20 marks in every channel of its bank."
         },
         "raidTypes": [
           "Liberation",

@@ -1,5 +1,5 @@
 // v1.0.0 — Loyalty Program (mechanical)
-// Adds "Loyal Population" to the target hex drawing and queues +3 Loyalty (was +2 Loyalty +1 Morale — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)).
+// Adds "Loyal Population" to the target hex drawing and queues +2 Loyalty (was +2 Loyalty +1 Morale — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)).
 // Safe to load after compat-bridge.js. Extends/creates EFFECTS.loyalty_program.
 
 (() => {
@@ -60,6 +60,6 @@
       }
     });
 
-    console.log(TAG, "installed (Loyal Population tag, +3 Loyalty).");
+    console.log(TAG, "installed (Loyal Population tag, +2 Loyalty).");
   });
 })();

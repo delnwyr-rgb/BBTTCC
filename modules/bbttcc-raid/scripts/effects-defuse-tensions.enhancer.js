@@ -1,5 +1,5 @@
 // v1.0.0 — Defuse Tensions (mechanical):
-// Removes "Hostile Population", adds "Loyal Population", and queues +4 Loyalty on the target hex drawing (was +2 Loyalty +2 Morale — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)).
+// Removes "Hostile Population", adds "Loyal Population", and queues +2 Loyalty on the target hex drawing (was +2 Loyalty +2 Morale — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)).
 // Safe to load after compat-bridge.js. Extends/creates EFFECTS.defuse_tensions.
 
 (() => {
@@ -69,6 +69,6 @@
       }
     });
 
-    console.log(TAG, "installed (-Hostile Population, +Loyal Population, +4 Loyalty).");
+    console.log(TAG, "installed (-Hostile Population, +Loyal Population, +2 Loyalty).");
   });
 })();

@@ -34,6 +34,15 @@ for (const f of files) {
     if (/(\$\{[^}]+\}|\b\d+|\+\d+|−\d+)\s*OP\b(?![_A-Za-z])(?!\s+[A-Z][a-z])/.test(code) && !/OP\s*(=|\()/.test(code) && !tagged) rec("U5", "rendered OP quantity — quantities are marks");
   });
 }
+// U6 (strategic review #50, 2026-10-28): the raid catalogs' player-facing rules text — JSON, so the .js/.hbs sweep
+// above never saw "shaves 15 OP" / "OP income ×1.25". A rendered quantity there is a hit like U5.
+for (const rel of ["modules/bbttcc-raid/data/bbttcc_activities_v1_4.json", "modules/bbttcc-raid/data/bbttcc_maneuvers_v1_4.json"]) {
+  let rows = []; try { rows = JSON.parse(fs.readFileSync(path.join(ROOT, rel), "utf8")); } catch (_e) { continue; }
+  for (const r of (Array.isArray(rows) ? rows : [])) {
+    const t = String(r?.flags?.bbttcc?.effects?.text || "");
+    if (/(\b\d+|\+\d+|−\d+)\s*OP\b(?![_A-Za-z])/.test(t) || /\bOP (income|pools?|bank)\b/.test(t)) hits.push({ rule: "U6", file: rel, line: 0, msg: `catalog text renders OP — "${r.name}"`, text: t.slice(0, 140) });
+  }
+}
 hits.sort((a, b) => a.rule.localeCompare(b.rule) || a.file.localeCompare(b.file) || a.line - b.line);
 const byRule = {}; for (const h of hits) byRule[h.rule] = (byRule[h.rule] || 0) + 1;
 console.log(`lint-units — ${files.length} files · ${hits.length} hit(s) ${JSON.stringify(byRule)}`);

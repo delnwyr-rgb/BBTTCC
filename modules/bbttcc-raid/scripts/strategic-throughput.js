@@ -589,7 +589,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async mass_mobilization(ctx){
       const A = game.actors.get(ctx.factionId); if (!A) return;
       await addRegenPlan(A, [{ inTurns: 1, mult: 1.25, label: "Mass Mobilization" }, { inTurns: 2, mult: 0.75, label: "Mass Mobilization (exhaustion)" }]);
-      await pushWarLog(A, "Mass Mobilization: OP income ×1.25 next turn, ×0.75 the turn after.");
+      await pushWarLog(A, "Mass Mobilization: income ×1.25 next turn, ×0.75 the turn after.");
     },
     // Mass Mobilization (std): next raid gets initiative advantage + one free maneuver (raid-roundflags reads bonuses.nextTurn).
     async mass_mobilization_std(ctx){
@@ -602,7 +602,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       if (!ctx.targetUuid) return _refused("Propaganda: No target hex.");
       await enqueuePendingRepairs(ctx.targetUuid, ["Propaganda"], []);
       await adjustHexTrack(ctx.targetUuid, "loyalty", +2);   // was +2 Morale +1 Loyalty — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)
-      await pushWarLog(A, 'Propaganda: +Propaganda; +3 Loyalty (target hex).');
+      await pushWarLog(A, 'Propaganda: +Propaganda; +2 Loyalty (target hex).');   // #49: the code adds +2
     },
     async propaganda_campaign(ctx){ return STRATEGIC_THROUGHPUT.propaganda_tour(ctx); },
     async psych_ops_broadcast(ctx){
@@ -718,7 +718,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const doc = await hexDoc(ctx.targetUuid); const B = doc ? await factionOfHex(doc) : null;
       if (!B || B.id === A?.id) return _refused("Spy Insertion: target a hex held by a RIVAL faction.");
       await setNextTurnFlag(A, { spyInsertion: { targetFactionId: B.id, targetName: B.name, due: 2 } });   // reports at the NEXT Advance
-      await pushWarLog(A, `Spy Insertion: an agent is inside ${B.name} — their OP pools and plans report next turn.`);
+      await pushWarLog(A, `Spy Insertion: an agent is inside ${B.name} — their bank and plans report next turn.`);
     },
     // Courtly Intrigue Council — immediate intel on the target hex's holder: OP bank, standing, what they have planned.
     async courtly_intrigue_council(ctx){
@@ -729,7 +729,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const planned = (B.getFlag(MODF, "warLogs") || []).filter(e => e?.type === "planned").map(e => `${esc(e.activityKey || e.activity)} → ${esc(e.targetName || "?")}`);
       const rel = relationsApi(); let standing = "";
       try { standing = rel ? `${esc(rel.get(B, A))} toward you` : ""; } catch (_e) {}
-      await whisperFaction(A, `Courtly Intrigue — ${B.name}`, `OP bank (marks): ${OP_KEYS.map(k => `${k} <b>${Number(bank[k] || 0)}</b>`).join(" · ")}<br>${standing ? `Standing: ${standing}<br>` : ""}Planned this turn: ${planned.length ? planned.join("; ") : "nothing"}`);
+      await whisperFaction(A, `Courtly Intrigue — ${B.name}`, `Bank (marks): ${OP_KEYS.map(k => `${k} <b>${Number(bank[k] || 0)}</b>`).join(" · ")}<br>${standing ? `Standing: ${standing}<br>` : ""}Planned this turn: ${planned.length ? planned.join("; ") : "nothing"}`);
       await pushWarLog(A, `Courtly Intrigue Council: ${B.name}'s pools and plans are in your hands (see whisper).`);
     },
     // Gather Intel (std) — +Intel tag next turn, the hex is revealed now, and a dossier is whispered.
@@ -754,14 +754,14 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const doc = await hexDoc(ctx.targetUuid);
       if (doc) { const f = foundry.utils.duplicate(doc.flags?.[MODT] || {}); const pend = foundry.utils.getProperty(f, "turn.pending") || {}; pend.loyaltyDelta = Number(pend.loyaltyDelta || 0) + 1; await patchHex(doc, { [`flags.${MODT}.turn.pending`]: pend }); }
       await scheduleFactionOP(A, { faith: 10 }, 1);
-      await pushWarLog(A, "Alignment Shift: +Sanctified, +Pilgrimage Site, Loyalty +1 (next turn); +10 marks Faith next turn.");
+      await pushWarLog(A, "Alignment Shift: +Sanctified, +Pilgrimage Site, Loyalty +1 (lands this turn); +10 marks Faith next turn.");   // #49: the pending sweep runs this Advance
     },
     // Policy Reforms (std) — OP income ×1.05 this turn (the +5% the copy always promised).
     async policy_reforms(ctx){
       const A = game.actors.get(ctx.factionId); if (!A) return;
       await addRegenPlan(A, [{ inTurns: 1, mult: 1.05, label: "Policy Reforms" }]);
       _queueAttackDC(A, -1);   // next raid DC −1 (was enhancer-only)
-      await pushWarLog(A, "Policy Reforms: OP income ×1.05 next turn; next raid DC −1.");
+      await pushWarLog(A, "Policy Reforms: income ×1.05 next turn; next raid DC −1.");
     },
 
     // ═══════════════════════════ T3 / T4 — THE LEGENDARY BLOCK ═══════════════════════════
@@ -943,7 +943,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const r = typeof align === "function" ? await align(doc, steward.key, { source: "consecrated alignment", overwrite: false, byName: steward.s.name }) : { ok: false, error: "alignHexToSephirot missing" };
       await pushWarLog(A, r?.ok && !r.skipped ? `Consecrated Alignment: ${hexName(doc)} is aligned to ${r.sephirotName || steward.key} by ${steward.s.name}.` : `Consecrated Alignment: ${hexName(doc)} — ${r?.reason || r?.error || "already aligned; kept"}.`);
     },
-    async optact_administrative_optimization(ctx){ const A = game.actors.get(ctx.factionId); await addRegenPlan(A, [{ inTurns: 1, mult: 1.05, label: "Administrative Optimization" }]); await pushWarLog(A, "Administrative Optimization: OP income ×1.05 next turn."); },
+    async optact_administrative_optimization(ctx){ const A = game.actors.get(ctx.factionId); await addRegenPlan(A, [{ inTurns: 1, mult: 1.05, label: "Administrative Optimization" }]); await pushWarLog(A, "Administrative Optimization: income ×1.05 next turn."); },
     async optact_arcane_attribution(ctx){ return STRATEGIC_THROUGHPUT.gather_intel(ctx); },
     async optact_dynastic_resonance(ctx){
       const A = game.actors.get(ctx.factionId);

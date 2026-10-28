@@ -1,5 +1,5 @@
 // v1.0.0 — Supply Cache (mechanical)
-// Adds "Supply Cache" tag to the target hex drawing and queues +1 Logistics, +1 Defense.
+// Adds "Supply Cache" tag to the target hex drawing and queues +1 Defense (the tag itself carries the logistics capacity).
 // Safe to load after compat-bridge.js.  Extends/creates EFFECTS.supply_cache.
 
 (() => {
@@ -60,6 +60,6 @@
       }
     });
 
-    console.log(TAG,"installed (Supply Cache tag, +1 Def/+1 Logistics).");
+    console.log(TAG,"installed (Supply Cache tag, +1 Defense).");
   });
 })();

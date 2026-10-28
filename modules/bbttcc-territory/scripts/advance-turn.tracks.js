@@ -579,7 +579,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
         lines.push(
           `• <b>${foundry.utils.escapeHTML(A.name)}</b>: `
           + `Loyalty ${drift>0?"↑":drift<0?"↓":""} ${before}→${L} `
-          + `(Stability ${bonus>=0?"+":""}${bonus}% OP next turn)`
+          + `(Stability ${bonus>=0?"+":""}${bonus}% income next turn)`
         );
       }
     }
@@ -938,10 +938,15 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
       const cap = Number(game.bbttcc?.facts?.faction?.caps?.(A)?.logistics) || 0;
       const after = cap > 0 ? Math.min(cap, before + bonus * mpo) : before + bonus * mpo;
       if (after === before) continue;
-      bank.logistics = after;
+      // #11 (2026-10-28): through op.commit's queue as a +delta (writing the cloned bank raced the end-hook credits).
+      const op = game.bbttcc?.api?.op;
+      if (op && typeof op.commit === "function") {
+        const r = await op.commit(A.id, { logistics: after - before }, { source: "trade_routes", label: "Trade route logistics", noDiscount: true });
+        if (r?.ok === false) continue;
+      } else { bank.logistics = after; await A.update({ [`flags.${MODF}.opBank`]: bank }); }
       const warLogs = Array.isArray(A.getFlag(MODF, "warLogs")) ? A.getFlag(MODF, "warLogs").slice() : [];
       warLogs.push({ ts: Date.now(), type: "logisticsRoute", summary: `Trade Routes: ${routeCount} → Logistics +${after - before} marks` });
-      await A.update({ [`flags.${MODF}.opBank`]: bank, [`flags.${MODF}.warLogs`]: warLogs });
+      await A.update({ [`flags.${MODF}.warLogs`]: warLogs });
       lines.push(`• <b>${foundry.utils.escapeHTML(A.name)}</b>: Trade Routes ${routeCount} → Logistics ${before}→${after} marks`);
     }
     if (lines.length && gm.length) await ChatMessage.create({ content: `<p><b>Trade Route Logistics Bonus</b></p>${lines.join("<br/>")}`, whisper: tableAudience(), speaker: { alias: "Bad Eden Economy" } }).catch(() => {});

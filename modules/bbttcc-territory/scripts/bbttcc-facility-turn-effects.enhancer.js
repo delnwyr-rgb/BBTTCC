@@ -180,7 +180,7 @@
             lines.push(
               `• <b>${esc(facLabel)}</b> in <i>${esc(hexName)}</i> → `
               + `<b>${esc(factionName)}</b>: <code>${esc(pieces)}</code> `
-              + `<span style="opacity:0.85;">(NOT APPLIED: insufficient OP capacity/bank)</span>${esc(effectsText)}`
+              + `<span style="opacity:0.85;">(NOT APPLIED: a channel is at its cap or the bank is short)</span>${esc(effectsText)}`
             );
 
             console.log(TAG, "Facility OP commit refused (underflow)", {

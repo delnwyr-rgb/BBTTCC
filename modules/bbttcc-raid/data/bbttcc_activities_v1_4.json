@@ -274,7 +274,7 @@
           "diplomacy": 10
         },
         "effects": {
-          "text": "Next turn, the target hex holder's OP pools and planned activities are whispered to you."
+          "text": "Next turn, the target hex holder's bank and planned activities are whispered to you."
         },
         "minFactionTier": 2
       }
@@ -349,7 +349,7 @@
           "diplomacy": 20
         },
         "effects": {
-          "text": "Immediate intel on the target hex's holder: OP bank, their standing toward you, and what they have planned this turn."
+          "text": "Immediate intel on the target hex's holder: bank, their standing toward you, and what they have planned this turn."
         },
         "minFactionTier": 2
       }
@@ -406,7 +406,7 @@
           "softPower": 30
         },
         "effects": {
-          "text": "With a mutual ally (target one of their hexes): both factions' OP income ×1.15 this turn."
+          "text": "With a mutual ally (target one of their hexes): both Domains' income ×1.15 next turn."
         },
         "minFactionTier": 3
       }
@@ -572,8 +572,8 @@
         "tier": 4,
         "rarity": "legendary",
         "opCosts": {
-          "faith": 10,
-          "culture": 5
+          "faith": 100,
+          "culture": 50
         },
         "effects": {
           "text": "Integrates the dormant spark seated on the target hex (lights a Lamp; debits your Reach)."
@@ -595,7 +595,7 @@
           "economy": 60
         },
         "effects": {
-          "text": "OP income ×1.25 this turn, then ×0.75 the turn after."
+          "text": "Income ×1.25 next turn, then ×0.75 the turn after."
         },
         "minFactionTier": 3
       }
@@ -629,8 +629,8 @@
         "tier": 4,
         "rarity": "legendary",
         "opCosts": {
-          "economy": 10,
-          "softPower": 5
+          "economy": 100,
+          "softPower": 50
         },
         "effects": {
           "text": "A hex you hold becomes a Garden City: aligned to Tiferet, Purified, +Well-Maintained, +Loyal Population, darkness pips 0."
@@ -705,8 +705,8 @@
         "tier": 4,
         "rarity": "legendary",
         "opCosts": {
-          "faith": 10,
-          "softPower": 10
+          "faith": 100,
+          "softPower": 100
         },
         "effects": {
           "text": "If the Dragon has risen and the Final Ritual is not underway, begins it with your stewards; otherwise reports the Lamps and sparks still missing."
@@ -768,7 +768,7 @@
           "economy": 10
         },
         "effects": {
-          "text": "Establish a multi-turn siege on a target hex. Layers are drawn from the hex's structureActorIds (or GM override at planning time). Commits an OP-denominated Supply Buffer that ticks down per turn from the derived Siege Cost (terrain + supply-chain length + harassment, less Bulwark discount). Resolves over multiple campaign turns until a layer is breached, defender surrenders, attacker withdraws, or Buffer is exhausted. See bbttcc-raid/SIEGE_RAID_TYPE_SPEC.md."
+          "text": "Establish a multi-turn siege on a target hex. Layers are drawn from the hex's structureActorIds (or GM override at planning time). Commits a Supply Buffer in marks that ticks down per turn from the derived Siege Cost (terrain + supply-chain length + harassment, less Bulwark discount). Resolves over multiple campaign turns until a layer is breached, defender surrenders, attacker withdraws, or Buffer is exhausted. See bbttcc-raid/SIEGE_RAID_TYPE_SPEC.md."
         },
         "minFactionTier": 1,
         "activityKey": "begin_siege",
@@ -877,7 +877,7 @@
           "violence": 20
         },
         "effects": {
-          "text": "Defender sallies out to strike an adjacent attacker supply hex. Severs the 'Supply Line' modifier and shaves 15 OP from the besieger's Buffer. Risk: 1d4 of your own garrison holdings are lost (+2 if the hex is escort-protected). Played by the besieged faction. Target the attacker's supply-road hex."
+          "text": "Defender sallies out to strike an adjacent attacker supply hex. Severs the 'Supply Line' modifier and shaves 15 marks from the besieger's Buffer. Risk: 1d4 of your own garrison holdings are lost (+2 if the hex is escort-protected). Played by the besieged faction. Target the attacker's supply-road hex."
         },
         "minFactionTier": 1,
         "activityKey": "sortie",
@@ -1074,7 +1074,7 @@
           "logistics": 20
         },
         "effects": {
-          "text": "Throw everything at the walls: the next Breach Scene's maneuver budget is doubled, and the Buffer drops 30 OP regardless of outcome. Lights the Convene pip. Target the besieged hex."
+          "text": "Throw everything at the walls: the next Breach Scene's maneuver budget is doubled, and the Buffer drops 30 marks regardless of outcome. Lights the Convene pip. Target the besieged hex."
         },
         "minFactionTier": 1,
         "activityKey": "storm_final_assault",
@@ -1117,7 +1117,7 @@
           "violence": 20
         },
         "effects": {
-          "text": "Drill the Town Militia at the Muster (needs a founded militia): the first drill makes it DRILLED — militia levies join your raids on the home hexes (+1 defense DC) and Violence income ticks up while drilled; the second makes it STANDING — the garrison absorbs the first unrest or infrastructure strike on a home hex each turn, and the home roads are escorted (free passage)."
+          "text": "Drill the Town Militia at the Muster (needs a founded militia): the first drill makes it DRILLED — militia levies join your raids on the home hexes (+2 defense DC) and Violence income ticks up while drilled; the second makes it STANDING — the garrison absorbs the first unrest or infrastructure strike on a home hex each turn, and the home roads are escorted (free passage)."
         },
         "minFactionTier": 1
       }

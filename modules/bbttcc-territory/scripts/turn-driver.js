@@ -124,141 +124,16 @@ async function runAdvance(args = {}){
  *   do not overwrite it.
  * ===================================================================== */
 function __bbttccInstallStrategicThroughputIfMissing(){
+  // #34 (2026-10-28): the old Tier-1 fallback registry installed its OWN handlers when strategic-throughput.js was
+  // missing — and they disagreed with the real ones (Charity Drive wrote NaN over the darkness box, Ration
+  // Distribution a dead tf.loyalty, Harvest Season the wrong price). A missing registry is now said out loud;
+  // consumePlanned routes those rows to the legacy apply()/refund path instead of a second, wrong rulebook.
   try {
-    game.bbttcc ??= { api:{} };
-    game.bbttcc.api ??= {};
-    game.bbttcc.api.raid ??= {};
-
-    const raid = game.bbttcc.api.raid;
-    if (raid.STRATEGIC_THROUGHPUT && Object.keys(raid.STRATEGIC_THROUGHPUT).length) return;
-
-    const MODF = MOD_FACTIONS;
-    const MODT = MOD_TERRITORY;
-
-    const safeDup = (x)=> {
-      try { return foundry.utils.duplicate(x ?? {}); }
-      catch { return JSON.parse(JSON.stringify(x ?? {})); }
-    };
-
-    async function pushWarLog(A, summary){
-      try {
-        const wl = Array.isArray(A.getFlag(MODF,"warLogs")) ? A.getFlag(MODF,"warLogs").slice() : [];
-        const now = Date.now();
-        wl.push({ ts: now, date: (new Date(now)).toLocaleString(), type:"turn", activity:"strategic", summary });
-        await A.update({ [`flags.${MODF}.warLogs`]: wl });
-      } catch (e) {
-        warn("StrategicThroughput pushWarLog failed", e);
-      }
-    }
-
-    async function scheduleDeferredOP(A, opDelta, turnOffset=1){
-      const bonuses = safeDup(A.getFlag(MODF,"bonuses") || {});
-      bonuses.scheduled = Array.isArray(bonuses.scheduled) ? bonuses.scheduled.slice() : [];
-      bonuses.scheduled.push({ turnOffset: Number(turnOffset||1), opDelta: safeDup(opDelta||{}) });
-      await A.update({ [`flags.${MODF}.bonuses`]: bonuses });
-    }
-
-    async function adjustFactionTrack(A, key, delta){
-      const before = Number(A.getFlag(MODF, key) ?? 0);
-      const after  = Math.max(0, Math.min(100, before + Number(delta||0)));
-      await A.update({ [`flags.${MODF}.${key}`]: after });
-      return { before, after };
-    }
-
-    async function adjustHexTrack(hexUuid, track, delta){
-      if (!hexUuid) return false;
-      const ref = await fromUuid(hexUuid).catch(()=>null);
-      const doc = ref?.document ?? ref;
-      if (!doc) return false;
-      const tf = safeDup(doc.flags?.[MODT] || {});
-      tf[track] = Math.max(0, Number(tf[track]||0) + Number(delta||0));
-      await doc.update({ [`flags.${MODT}`]: tf }, { parent: doc.parent });
-      return true;
-    }
-
-    const T = Object.create(null);
-
-    // --- Tier 1 wired (initial tranche) ---
-    T.harvest_season = async (ctx) => {
-      const A = game.actors.get(ctx.factionId);
-      if (!A) return;
-      // Marks: 1 OP = 10 marks.
-      await scheduleDeferredOP(A, { economy: 10 }, 1);
-      await pushWarLog(A, "Harvest Season: +1 Economy next turn.");
-    };
-
-    T.minor_repair = async (ctx) => {
-      const A = game.actors.get(ctx.factionId);
-      if (!A) return;
-      if (!ctx.targetUuid) {
-        await pushWarLog(A, "Minor Repair: no target hex; nothing queued.");
-        return;
-      }
-      if (game.bbttcc?.api?.turn?.enqueueRequest) {
-        await game.bbttcc.api.turn.enqueueRequest({
-          key: "repairs",
-          factionId: A.id,
-          value: { hexUuid: ctx.targetUuid, tag: "Damaged Infrastructure" }
-        });
-        await pushWarLog(A, "Minor Repair: queued Damaged Infrastructure removal.");
-      } else {
-        // Fallback: queue the repair request directly on faction flags (matches api.turn.processRequests schema)
-        try {
-          const flags = safeDup(A.flags?.[MODF] || {});
-          flags.requests = flags.requests || {};
-          flags.requests.repairs = flags.requests.repairs || {};
-          const arr = Array.isArray(flags.requests.repairs.requests) ? flags.requests.repairs.requests.slice() : [];
-          arr.push({
-            target: ctx.targetUuid,
-            tag: "Damaged Infrastructure",
-            source: "strategic-throughput",
-            campaignId: null,
-            beatId: null
-          });
-          flags.requests.repairs.requests = arr;
-          await A.update({ [`flags.${MODF}`]: flags });
-          await pushWarLog(A, "Minor Repair: queued Damaged Infrastructure removal (direct queue).");
-        } catch (e) {
-          await pushWarLog(A, "Minor Repair: failed to queue repair (no enqueueRequest).");
-          warn("Minor Repair direct queue failed", e);
-        }
-      }
-    };
-
-    T.ration_distribution = async (ctx) => {
-      const A = game.actors.get(ctx.factionId);
-      if (!A) return;
-      const ok = await adjustHexTrack(ctx.targetUuid, "loyalty", +1);
-      await pushWarLog(A, ok ? "Ration Distribution: target hex Loyalty +1." : "Ration Distribution: no target hex.");
-    };
-
-    T.charity_drive = async (ctx) => {
-      const A = game.actors.get(ctx.factionId);
-      if (!A) return;
-      const res = await adjustFactionTrack(A, "darkness", -1);
-      await pushWarLog(A, `Charity Drive: Darkness ${res.before} → ${res.after}.`);
-    };
-
-    T.civic_audit = async (ctx) => {
-      const A = game.actors.get(ctx.factionId);
-      if (!A) return;
-      const res = await adjustFactionTrack(A, "loyalty", +1);
-      await pushWarLog(A, `Civic Audit: Loyalty ${res.before} → ${res.after}.`);
-    };
-
-    // Training Drills: its only effect was +1 faction Morale next turn — retired 2026-10-18
-    // (ruling 19). Logs the activity and nothing else.
-    T.training_drills = async (ctx) => {
-      const A = game.actors.get(ctx.factionId);
-      if (!A) return;
-      await pushWarLog(A, "Training Drills held.");
-    };
-
-    raid.STRATEGIC_THROUGHPUT = T;
-    log("Strategic Throughput bootstrap installed (Tier 1).");
-  } catch (e) {
-    warn("Strategic Throughput bootstrap failed (non-fatal).", e);
-  }
+    const raid = game.bbttcc?.api?.raid;
+    if (raid?.STRATEGIC_THROUGHPUT && Object.keys(raid.STRATEGIC_THROUGHPUT).length) return;
+    warn("STRATEGIC_THROUGHPUT is missing — bbttcc-raid/scripts/strategic-throughput.js did not load. Planned strategic activities will refund instead of resolving.");
+    if (game.user?.isGM) ui.notifications?.error?.("Strategic activities engine not loaded (strategic-throughput.js) — planned activities will refund, not resolve.");
+  } catch (_e) {}
 }
 
 // Install on ready so console checks return true without waiting for Advance Turn.
@@ -329,6 +204,16 @@ function ensureConsumePlannedShim(){
     if (Object.keys(short).length) {
       return { ok:false, insufficient: short, cost, paid:{} };
     }
+    // #37 (2026-10-28): through op.commit — the per-faction commit queue, so garrison upkeep / rig output / facility
+    // credits can no longer overwrite (or be overwritten by) this debit. noDiscount keeps the shown price = billed
+    // price (steward discounts on strategic activities are an open ruling); allowOvercap: regen landed unclamped.
+    const op = game.bbttcc?.api?.op;
+    if (op && typeof op.commit === "function") {
+      const neg = {}; for (const [k, v] of Object.entries(cost)) neg[k] = -v;
+      const r = await op.commit(factionActor.id, neg, { source: "strategic", label: `Planned: ${effect?.label || entry?.activityKey}`, noDiscount: true, allowOvercap: true });
+      if (r?.ok === false) return { ok:false, insufficient: (r.underflow && Object.keys(r.underflow).length) ? r.underflow : cost, cost, paid:{} };
+      return { ok:true, paid: cost };
+    }
     for (const [k, need] of Object.entries(cost)) bank[k] = (Number(bank[k]) || 0) - need;
     await factionActor.update({ [`flags.${MOD_FACTIONS}.opBank`]: bank });
     return { ok:true, paid: cost };
@@ -353,7 +238,7 @@ function ensureConsumePlannedShim(){
     }
     if (safeNum(fac.darknessDelta)) {
       const box = (f.darkness && typeof f.darkness === "object" && !Array.isArray(f.darkness)) ? clone(f.darkness) : { global: safeNum(f.darkness) };
-      const before = safeNum(box.global); box.global = Math.max(0, before + safeNum(fac.darknessDelta));
+      const before = safeNum(box.global); box.global = Math.max(0, Math.min(10, before + safeNum(fac.darknessDelta)));   // #35: DARK_CAP 10, as adjustFactionDarkness
       upd[`flags.${MOD_FACTIONS}.darkness`] = box; notes.push(`darkness ${before}→${box.global}`);
     }
     if (Object.keys(upd).length) await factionActor.update(upd);
@@ -405,6 +290,12 @@ function ensureConsumePlannedShim(){
     } catch (e) {
       warn(`Effect handler failed for ${entry?.activityKey} (non-fatal).`, e);
       return { ok:false, error:e };
+    }
+    // #39 (2026-10-28): a storyOnly row is GM-adjudicated by design — whisper the GM, it DID happen.
+    if (effect.storyOnly) {
+      const msg = `${factionActor?.name || "A Domain"} ran <b>${effect.label || entry?.activityKey}</b>${entry?.targetName ? ` on ${entry.targetName}` : ""} — a story activity: <b>GM adjudicates</b> what it does.${entry?.note ? ` <i>${foundry.utils.escapeHTML(String(entry.note))}</i>` : ""}`;
+      try { await ChatMessage.create({ content: `<p>${msg}</p>`, whisper: (game.users ?? []).filter(u => u.isGM).map(u => u.id), speaker: { alias: "Bad Eden Turn Driver" } }); } catch (_e) {}
+      return { ok:true, storyOnly:true, result: "GM adjudicates" };
     }
     // 2026-09-12: a strategic row that reaches here has NO handler — the enhancer that gives it
     // one did not install (load-order race). The faction was still billed. Say so, loudly.
@@ -477,6 +368,11 @@ function ensureConsumePlannedShim(){
   async function refundActivityCost({ factionActor, spendResult }){
     const paid = spendResult?.paid || {};
     if (!Object.keys(paid).length) return {};
+    const op = game.bbttcc?.api?.op;
+    if (op && typeof op.commit === "function") {   // #37: same queue as the debit
+      const r = await op.commit(factionActor.id, paid, { source: "strategic", label: "Refund — planned activity did not happen", noDiscount: true, allowOvercap: true });
+      if (r?.ok !== false) return paid;
+    }
     const bank = foundry.utils.duplicate(factionActor.getFlag(MOD_FACTIONS, "opBank") || {});
     for (const [k, v] of Object.entries(paid)) bank[k] = (Number(bank[k]) || 0) + (Number(v) || 0);
     await factionActor.update({ [`flags.${MOD_FACTIONS}.opBank`]: bank });
@@ -499,10 +395,26 @@ function ensureConsumePlannedShim(){
     }
 
     const finalizedEntries = [];
+    const unresolved = [];
+    // #32 (2026-10-28): each order leaves the queue in the SAME write as its result — a throw or a closed tab
+    // mid-loop no longer leaves paid orders "planned" to bill again next Advance.
+    const sameEntry = (a, b) => a?.type === "planned" && (a.id && b.id ? a.id === b.id : a.ts === b.ts) && String(a.activityKey) === String(b.activityKey);
+    const persist = async (entry, row) => {
+      if (!apply) return;
+      const cur = deepClone(factionActor.getFlag(FCT_ID, "warLogs") || []);
+      const next = cur.filter(e => !sameEntry(e, entry));
+      next.push(row);
+      await factionActor.setFlag(FCT_ID, "warLogs", next);
+    };
+    const record = async (entry, row) => { finalizedEntries.push(row); await persist(entry, row); };
 
     for (const entry of planned.sort((a,b)=>(a.ts||0)-(b.ts||0))) {
       const effect = getEffect(entry.activityKey);
       const primaryKey = inferPrimaryKey(effect);
+
+      // #38 (2026-10-28): no catalog row (option dropped, JSON failed to load, typo) → NOT consumed free and logged
+      // "executed": it stays planned, the GM is told, and it can be cancelled from the Domain tab.
+      if (!effect) { unresolved.push(entry); continue; }
 
       // SIM-BADEDEN fix 2026-06-05 (Bug 2): pay the FULL declared cost vector
       // up front; an activity the faction cannot afford is refused outright
@@ -511,7 +423,7 @@ function ensureConsumePlannedShim(){
       if (apply) {
         const refusal = await raidRefusalFor({ factionActor, effect, entry });
         if (refusal) {
-          finalizedEntries.push(Object.assign(
+          await record(entry, Object.assign(
             finalizeEntry({ entry, factionActor, effect, effectResult: { ok:false, skipped:"refused" }, spendResult: { ok:true, paid:{} } }),
             { summary: refusal }
           ));
@@ -519,7 +431,7 @@ function ensureConsumePlannedShim(){
         }
         const stale = await resolutionRefusal({ factionActor, effect, entry });
         if (stale) {
-          finalizedEntries.push(Object.assign(
+          await record(entry, Object.assign(
             finalizeEntry({ entry, factionActor, effect, effectResult: { ok:false, skipped:"refused-at-resolution", reason: stale }, spendResult: { ok:true, paid:{} } }),
             { summary: `${factionActor.name} could not ${activityLabel(effect, entry)}${entry.targetName ? ` on ${entry.targetName}` : ""}: ${stale.replace(/[.\s]+$/, "")}. Nothing was charged.` }
           ));
@@ -532,7 +444,7 @@ function ensureConsumePlannedShim(){
         : { ok:true, preview:true, paid:{} };
 
       if (apply && spendResult.ok === false) {
-        finalizedEntries.push(Object.assign(
+        await record(entry, Object.assign(
           finalizeEntry({ entry, factionActor, effect, effectResult: { ok:false, skipped:"insufficient-op" }, spendResult }),
           { summary: `${factionActor.name} could NOT afford ${entry.activityKey} (short: ${Object.entries(spendResult.insufficient||{}).map(([k,v])=>`${k}:${v}`).join(", ")}) — activity refused.` }
         ));
@@ -565,8 +477,10 @@ function ensureConsumePlannedShim(){
               ? { ok:false, routed:"strategic-throughput", reason: hr.reason || hr.error || null }
               : { ok:true, routed:"strategic-throughput" };
           } catch (e) {
-            console.warn("[bbttcc-turn] strategic throughput handler failed (fallback to legacy):", entry.activityKey, e);
-            effectResult = await runEffectBestEffort({ effect, entry, factionActor, apply, spendResult });
+            // #33 (2026-10-28): no legacy apply() on top of a handler that already wrote half its effect (Propaganda
+            // landed +4). A throw is a failure: refunded below, the GM sees why.
+            console.warn("[bbttcc-turn] strategic throughput handler failed:", entry.activityKey, e);
+            effectResult = { ok:false, routed:"strategic-throughput", reason: `its handler failed (${e?.message || e})` };
           }
         } else {
           // Not wired yet → fall back to legacy apply/consume/run handler if present
@@ -584,7 +498,7 @@ function ensureConsumePlannedShim(){
         let refunded = {};
         try { refunded = await refundActivityCost({ factionActor, spendResult }); }
         catch (eR) { warn("refund failed", entry?.activityKey, eR); }
-        finalizedEntries.push(Object.assign(
+        await record(entry, Object.assign(
           finalizeEntry({ entry, factionActor, effect, effectResult: Object.assign({}, effectResult, { ok:false, reason: failed }), spendResult: Object.assign({}, spendResult, { paid:{}, refunded }) }),
           { summary: `${factionActor.name} could not ${activityLabel(effect, entry)}${entry.targetName ? ` on ${entry.targetName}` : ""}: ${failed}.${Object.keys(refunded).length ? ` Refunded ${fmtMarks(refunded)} marks.` : ""}` }
         ));
@@ -596,19 +510,20 @@ function ensureConsumePlannedShim(){
         try { const r = await applyRecipeSideEffects({ factionActor, entry }); if (r?.notes?.length) effectResult = Object.assign({}, effectResult, { recipeFx: r.notes }); }
         catch (eFx) { warn("recipe side effects failed", entry?.activityKey, eFx); }
       }
-      finalizedEntries.push(finalizeEntry({ entry, factionActor, effect, effectResult, spendResult }));
+      await record(entry, finalizeEntry({ entry, factionActor, effect, effectResult, spendResult }));
     }
 
-    
-    // Re-fetch warLogs to preserve any Strategic Throughput handler writes
-    const currentLogs = deepClone(factionActor.getFlag(FCT_ID, "warLogs") || []);
-    const plannedTsSet = new Set(planned.map(e => e.ts));
-    const next = currentLogs.filter(e => !(e?.type === "planned" && (plannedTsSet.has(e.ts) || e?.practice === true)));
-    next.push(...finalizedEntries);
-    await factionActor.setFlag(FCT_ID, "warLogs", next);
+    if (apply && practice.length) {
+      const cur = deepClone(factionActor.getFlag(FCT_ID, "warLogs") || []);
+      await factionActor.setFlag(FCT_ID, "warLogs", cur.filter(e => !(e?.type === "planned" && e?.practice === true)));
+    }
+    if (apply && unresolved.length) {
+      const names = unresolved.map(e => String(e.activityKey || "?")).join(", ");
+      warn(`consumePlanned: ${factionActor.name} has planned orders with no catalog row — left planned:`, names);
+      try { await ChatMessage.create({ content: `<p>⚠ <b>${foundry.utils.escapeHTML(factionActor.name)}</b>: ${unresolved.length} planned order(s) have no activity behind them (<code>${foundry.utils.escapeHTML(names)}</code>) — nothing ran, nothing was charged. They stay on the plan; cancel them from the Domain tab or restore the activity.</p>`, whisper: (game.users ?? []).filter(u => u.isGM).map(u => u.id), speaker: { alias: "Bad Eden Turn Driver" } }); } catch (_e) {}
+    }
 
-
-    return { changed:true, count: finalizedEntries.length, rows: finalizedEntries };
+    return { changed: finalizedEntries.length > 0, count: finalizedEntries.length, rows: finalizedEntries, unresolved: unresolved.length };
   };
 
   log("Installed raid.consumePlanned shim (Turn Driver).");
@@ -1789,18 +1704,20 @@ async function raidRefusalFor({ factionActor, effect, entry }){
   } catch (e) { warn("raidRefusalFor failed (fail-open)", e); }
   return null;
 }
+let __plannedSnapshot = null;   // #28: { factionId → { planned[], bank } } taken just before this Advance's plans resolve
 async function spyReport(F, spy){
   try {
     const T = game.actors.get(spy?.targetFactionId); if (!T) return;
-    const bank = T.getFlag(MOD_FACTIONS, "opBank") || {};
-    const planned = (T.getFlag(MOD_FACTIONS, "warLogs") || []).filter(e => e?.type === "planned").map(e => `${foundry.utils.escapeHTML(String(e.activityKey || e.activity || "?"))} → ${foundry.utils.escapeHTML(String(e.targetName || "?"))}`);
+    const snap = __plannedSnapshot?.get?.(String(T.id)) || null;
+    const bank = snap?.bank || T.getFlag(MOD_FACTIONS, "opBank") || {};
+    const planned = (snap?.planned || (T.getFlag(MOD_FACTIONS, "warLogs") || []).filter(e => e?.type === "planned")).map(e => `${foundry.utils.escapeHTML(String(e.activityKey || e.activity || "?"))} → ${foundry.utils.escapeHTML(String(e.targetName || "?"))}`);
     const ids = new Set(ChatMessage.getWhisperRecipients("GM").map(u => u.id));
     for (const u of game.users ?? []) { try { if (F.testUserPermission?.(u, "OWNER")) ids.add(u.id); } catch {} }
     const keys = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
     await ChatMessage.create({ whisper: [...ids], speaker: { alias: "Bad Eden" },
-      content: `<div style="border-left:3px solid #6c8ebf;padding:.35em .6em;background:rgba(108,142,191,.08);"><b>Spy Insertion — ${foundry.utils.escapeHTML(T.name)}</b><div style="font-size:.9em;margin-top:.25em">OP bank (marks): ${keys.map(k => `${k} <b>${safeNum(bank[k])}</b>`).join(" · ")}<br>Planned: ${planned.length ? planned.join("; ") : "nothing"}</div></div>` });
+      content: `<div style="border-left:3px solid #6c8ebf;padding:.35em .6em;background:rgba(108,142,191,.08);"><b>Spy Insertion — ${foundry.utils.escapeHTML(T.name)}</b><div style="font-size:.9em;margin-top:.25em">Bank (marks): ${keys.map(k => `${k} <b>${safeNum(bank[k])}</b>`).join(" · ")}<br>Planned this turn: ${planned.length ? planned.join("; ") : "nothing"}</div></div>` });
     const wl = clone(F.getFlag(MOD_FACTIONS, "warLogs") || []);
-    wl.push({ ts: Date.now(), date: (new Date()).toLocaleString(), type: "turn", activity: "spy_insertion", summary: `Spy Insertion: ${T.name}'s OP pools and plans reported (see whisper).` });
+    wl.push({ ts: Date.now(), date: (new Date()).toLocaleString(), type: "turn", activity: "spy_insertion", summary: `Spy Insertion: ${T.name}'s bank and plans reported (see whisper).` });
     await F.update({ [`flags.${MOD_FACTIONS}.warLogs`]: wl });
   } catch (e) { warn("spyReport failed", e); }
 }
@@ -1886,13 +1803,11 @@ async function applyScheduledOPBonuses(){
         for (const [k, v] of Object.entries(s?.opDelta || {})) {
           const n = safeNum(v);
           if (!n) continue;
-          const cap = safeNum(caps[k]) + (safeNum(caps[k]) > 0 ? capBumpFor(F, k) : 0);
-          const before = safeNum(bank[k]);
-          const next = before + n;
-          bank[k] = cap > 0 ? Math.min(next, cap) : next;
-          const kept = bank[k] - before;
-          gained[k] = safeNum(gained[k]) + kept;
-          if (n > kept) lost[k] = safeNum(lost[k]) + (n - kept);
+          // #36 (2026-10-28): land the payout UNCLAMPED — the post-spend clampBanksToCaps enforces the cap after this
+          // Advance's planned activities have paid, exactly like regen (deferCapClamp). Clamping here lost marks
+          // the same Advance could have spent.
+          bank[k] = safeNum(bank[k]) + n;
+          gained[k] = safeNum(gained[k]) + n;
         }
       }
 
@@ -1905,7 +1820,7 @@ async function applyScheduledOPBonuses(){
         const wl = dup(F.getFlag(MOD_FACTIONS, "warLogs") || []);
         const txt = Object.entries(gained).filter(([,v]) => v).map(([k,v]) => `${k}:+${v}`).join(", ") || "nothing";
         const lostTxt = Object.entries(lost).map(([k,v]) => `${k}:${v}`).join(", ");
-        wl.push({ ts: Date.now(), date: (new Date()).toLocaleString(), type: "turn", activity: "scheduled_op", summary: `Scheduled OP matured: ${txt} (marks).${lostTxt ? ` ⚠ ${lostTxt} marks hit the tier cap and were lost — spend before the payout lands, or raise the tier.` : ""}` });
+        wl.push({ ts: Date.now(), date: (new Date()).toLocaleString(), type: "turn", activity: "scheduled_op", summary: `Scheduled income matured: ${txt} marks.` });
         await F.update({ [`flags.${MOD_FACTIONS}.warLogs`]: wl });
         rows.push({ factionId: F.id, gained });
       }
@@ -2040,6 +1955,9 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     // Still BEFORE tickFactionBonuses: truces / Border Patrol read by raidRefusalFor
     // must hold for this Advance's raids before they expire.
     if (apply) ensureConsumePlannedShim();
+    // #28 (2026-10-28): Spy Insertion reports what a rival had PLANNED — snapshot it (and the bank it planned
+    // against) before plannedRaidsStep consumes every queue; the bonus tick's spyReport reads the snapshot.
+    if (apply) { try { __plannedSnapshot = new Map(allFactions().map(F => [String(F.id), { planned: clone((F.getFlag(MOD_FACTIONS, "warLogs") || []).filter(e => e?.type === "planned" && e?.practice !== true)), bank: clone(F.getFlag(MOD_FACTIONS, "opBank") || {}) }])); } catch (_e) { __plannedSnapshot = null; } }
     const planned = await plannedRaidsStep({ apply });
     if (apply) await clampBanksToCaps();     // caps bite AFTER the spend (2026-09-12) — income funds this turn's plans first
     if (apply) await tickFactionBonuses();   // expire regenPlan / capBump / truce / nextTurn boons (2026-09-09)

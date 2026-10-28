@@ -28,7 +28,7 @@
       band:"standard",
       label:"Policy Reforms (Admin)",
       cost:{ economy:20, softpower:20, diplomacy:10, logistics:10 },
-      storyOnly:true
+      storyOnly:false /* executes via STRATEGIC_THROUGHPUT — #49, 2026-10-28 */
     });
 
     add("loyalty_program", {
@@ -52,7 +52,7 @@
       band:"standard",
       label:"Reconstruction Drive",
       cost:{ economy:20, logistics:20 },
-      storyOnly:true
+      storyOnly:false /* executes via STRATEGIC_THROUGHPUT — #49, 2026-10-28 */
     });
 
     // 🔧 Now mechanized via STRATEGIC_THROUGHPUT
@@ -161,7 +161,7 @@
       band:"standard",
       label:"Mass Mobilization",
       cost:{ violence:40, logistics:20, economy:10 },
-      storyOnly:true
+      storyOnly:false /* executes via STRATEGIC_THROUGHPUT — #49, 2026-10-28 */
     });
 
     console.log(TAG, "registered", Object.keys(E).filter(k => E[k]?.band==="standard"));

@@ -1,5 +1,5 @@
 // v1.0.0 — Propaganda Campaign (mechanical)
-// Adds "Propaganda" tag to the target hex and queues +3 Loyalty (was +2 Morale +1 Loyalty — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)).
+// Adds "Propaganda" tag to the target hex and queues +2 Loyalty (was +2 Morale +1 Loyalty — hex Morale → hex Loyalty 2026-10-18 (ruling 19 ext.)).
 // Safe to load after compat-bridge.js. Extends/creates EFFECTS.propaganda_campaign.
 
 (() => {
@@ -60,6 +60,6 @@
       }
     });
 
-    console.log(TAG, "installed (Propaganda tag, +3 Loyalty).");
+    console.log(TAG, "installed (Propaganda tag, +2 Loyalty).");
   });
 })();
