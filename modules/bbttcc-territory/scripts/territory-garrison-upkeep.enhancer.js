@@ -591,8 +591,9 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
     terr.advanceTurn = async function wrappedGarrisonAdvanceTurn(args = {}) {
       const res = await origAdvanceTurn(args);
 
-      // Only run upkeep on applied turns
-      if (args?.apply) {
+      // Only run upkeep on applied turns — never when the base turn was skipped (turn lock) or threw
+      // (strategic review #9, 2026-10-28: a second Advance click billed every garrison twice).
+      if (args?.apply && !res?.skipped && !res?.error) {
         await runGarrisonUpkeep(args);
       }
 

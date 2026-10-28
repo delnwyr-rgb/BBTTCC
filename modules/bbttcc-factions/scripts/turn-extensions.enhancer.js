@@ -118,6 +118,8 @@
         console.warn(TAG,"base advanceTurn error",e);
         return{changed:false,rows:[],error:true};
       });
+      // Not when the base turn was skipped (turn lock) or threw — the loyalty trend ran twice (review #9, 2026-10-28).
+      if(res?.skipped||res?.error)return res;
       try{await applyPostTurnAdjustments({res,args});}
       catch(e){console.warn(TAG,"post-turn adjustments failed",e);}
       return res;

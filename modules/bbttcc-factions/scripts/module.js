@@ -2781,16 +2781,22 @@ const politicalPressure = {
         const aid = String(e?.attackerId || e?.factionId || "").trim();
         return !aid || aid === String(this.actor.id);
       })
-      .sort((a,b) => (Number(a?.ts||0) - Number(b?.ts||0)))
+      .sort((a,b) => (Number(a?.ts||0) - Number(b?.ts||0)));
+    // Review #4 (2026-10-28): price = the BILLED price (turn-driver activityCost: recipe → cost → opCosts), and
+    // affordability walks a running bank in plan order — Apply pays rows one after another.
+    const _runBank = foundry.utils.duplicate(opBank || {});
+    const _price = game.bbttcc?.api?.turn?.activityCost;
+    const plannedRows = plannedActions
       .map(e => {
         const keyRaw = String(e?.activityKey || e?.activity || "").trim().toLowerCase();
         const spec = EFFECTS[keyRaw] || EFFECTS[String(keyRaw||"").toUpperCase()] || EFFECTS[String(keyRaw||"").toLowerCase()] || null;
         const label = String(spec?.label || e?.label || _plannedHumanize(keyRaw) || "(Unknown)");
-        const cost = spec?.cost || e?.cost || {};
+        const cost = _price ? _price({ entry: e, effect: spec, key: keyRaw }) : ((e?.recipe?.cost && typeof e.recipe.cost === "object") ? e.recipe.cost : (spec?.cost || spec?.opCosts || e?.cost || {}));
         const costLine = _fmtCost(cost);
         const targetName = String(e?.targetName || e?.targetLabel || e?.targetType || "(target)");
         const notes = String(e?.note || e?.notes || "").trim();
-        const canAfford = _canAfford(opBank, cost);
+        const canAfford = _canAfford(_runBank, cost);
+        if (canAfford) for (const k of OP_KEYS_9) _runBank[k] = (Number(_runBank[k]) || 0) - (Number(cost[k]) || 0);
         return {
           ts: Number(e?.ts || 0) || 0,
           date: String(e?.date || ""),
@@ -2975,7 +2981,7 @@ const doctrine = await (async () => {
         bankLine: fmtResLine(turnBank),
         stockpileLine: fmtResLine(stockpile),
         raidPlan,
-        plannedActions,
+        plannedActions: plannedRows,
         doctrine,
         rigs, // <-- primary template source (legacy flag-based, audit-only)
         ownedRigs, // <-- first-class Rig actors whose factionOwnerId is this faction

@@ -36,6 +36,29 @@ const MOD_TERRITORY = "bbttcc-territory";
 // to be hard-whispered to the GM list, so players never saw a Turn go by. World setting
 // bbttcc-territory.tableAnnouncements decides: "public" (default) = whole table, "gm" = whisper.
 const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "tableAnnouncements") === "gm") return (game.users ?? []).filter(u => u.isGM).map(u => u.id); } catch (_e) {} return []; };
+// ONE price for a planned activity (strategic review #3/#4, 2026-10-28). The planner list, ⓘ tooltip, Dry preview,
+// faction-sheet queue, Domain tab and payActivityCost all read THIS: the entry's recipe (chosen fuel + terrain
+// surcharge, baked at plan time) → the row's cost → its opCosts. Keys fold to the bank's lowercase channels.
+const PLAN_COST_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
+function normalizeActivityCost(cost){
+  const out = {};
+  for (const [k, v] of Object.entries(cost || {})) {
+    const key = String(k || "").toLowerCase().replace(/[^a-z]/g, "");
+    if (!PLAN_COST_KEYS.includes(key)) continue;
+    const n = Number(v) || 0;
+    if (n > 0) out[key] = (out[key] || 0) + n;
+  }
+  return out;
+}
+function activityCost({ entry = null, effect = null, key = null } = {}){
+  const k = String(key || entry?.activityKey || entry?.activity || "");
+  const eff = effect || game.bbttcc?.api?.raid?.EFFECTS?.[k] || game.bbttcc?.api?.raid?.EFFECTS?.[k.toLowerCase()] || null;
+  const recipe = entry?.recipe?.cost;
+  const pick = (c) => (c && typeof c === "object" && Object.keys(normalizeActivityCost(c)).length) ? c : null;
+  return normalizeActivityCost(pick(recipe) || pick(eff?.cost) || pick(eff?.opCosts) || {});
+}
+const fmtActivityCost = (c) => PLAN_COST_KEYS.filter(k => (Number(c?.[k]) || 0) > 0).map(k => `${c[k]} ${k === "softpower" ? "soft power" : k === "nonlethal" ? "non-lethal" : k}`).join(" · ");
+
 Hooks.once("init", () => {
   try {
     game.settings.register(MOD_TERRITORY, "tableAnnouncements", {
@@ -45,7 +68,53 @@ Hooks.once("init", () => {
       choices: { public: "Everyone at the table", gm: "GM whisper only" }
     });
   } catch (e) { warn("tableAnnouncements setting register failed", e); }
+  // Turn lock (strategic review #10, 2026-10-28) — WORLD-level, so a second GM seat sees it too.
+  try { game.settings.register(MOD_TERRITORY, "turnInFlight", { scope: "world", config: false, type: Object, default: {} }); }
+  catch (e) { warn("turnInFlight setting register failed", e); }
 });
+
+/* ---------------------- world turn lock (review #10) ----------------------
+ * window._bbttccTurnLock only guarded the clicking browser, and was released before the
+ * wrappers (garrison, tracks, requests, pressure) finished. The lock now lives in a world
+ * setting and api.turn.runAdvance holds it across the WHOLE territory.advanceTurn chain.
+ * The base driver refuses an Apply while another run holds it. A lock older than
+ * TURN_LOCK_STALE_MS is treated as abandoned (crashed tab) so a turn can never jam. */
+const TURN_LOCK_STALE_MS = 10 * 60 * 1000;
+function turnLockHeld(){
+  try {
+    const l = game.settings.get(MOD_TERRITORY, "turnInFlight") || {};
+    if (!l.token || (Date.now() - Number(l.ts || 0)) > TURN_LOCK_STALE_MS) return null;
+    return l;
+  } catch (_e) { return null; }
+}
+async function acquireTurnLock(){
+  if (turnLockHeld()) return null;
+  const token = `${game.user?.id}.${Date.now()}`;
+  await game.settings.set(MOD_TERRITORY, "turnInFlight", { token, userId: game.user?.id, userName: game.user?.name, ts: Date.now() });
+  return token;
+}
+async function releaseTurnLock(token){
+  try { if (token && turnLockHeld()?.token === token) await game.settings.set(MOD_TERRITORY, "turnInFlight", {}); }
+  catch (e) { warn("turn lock release failed", e); }
+}
+const turnLockMessage = (l) => `Advance Turn skipped — a Turn is already running${l?.userName ? ` (started by ${l.userName})` : ""}.`;
+// The outermost Apply: hold the world lock until every advanceTurn wrapper has finished.
+async function runAdvance(args = {}){
+  const terr = game.bbttcc?.api?.territory;
+  if (!args?.apply) return terr.advanceTurn(args);
+  if (window._bbttccTurnOuter) { ui.notifications?.warn?.(turnLockMessage({ userName: game.user?.name })); return { changed:false, skipped:true }; }
+  window._bbttccTurnOuter = "pending";   // synchronous — a double click can't slip in while the lock write is in flight
+  let token = null;
+  try {
+    token = await acquireTurnLock();
+    if (!token) { const l = turnLockHeld(); ui.notifications?.warn?.(turnLockMessage(l)); return { changed:false, skipped:true, lockedBy: l?.userName || null }; }
+    window._bbttccTurnOuter = token;
+    return await terr.advanceTurn(args);
+  } finally {
+    window._bbttccTurnOuter = null;
+    await releaseTurnLock(token);
+  }
+}
 /* =====================================================================
  * Strategic Throughput Registry (Tier 1) — BOOTSTRAP
  * Purpose:
@@ -248,7 +317,7 @@ function ensureConsumePlannedShim(){
     }
     // ⚗ Fuel recipe (2026-09-11): a planned entry may carry its own cost vector (the recipe the
     // faction chose in the planner); it replaces the row's default price outright.
-    const cost = normalizeCostVector((entry?.recipe && typeof entry.recipe.cost === "object") ? entry.recipe.cost : (effect?.cost || effect?.opCosts || {}));
+    const cost = activityCost({ entry, effect });   // the shared price (review #3, 2026-10-28)
     if (!Object.keys(cost).length) return { ok:true, free:true, paid:{} };
 
     const bank = foundry.utils.duplicate(factionActor.getFlag(MOD_FACTIONS, "opBank") || {});
@@ -303,7 +372,7 @@ function ensureConsumePlannedShim(){
     }
     return { notes };
   }
-  async function runEffectBestEffort({ effect, entry, factionActor, apply }){
+  async function runEffectBestEffort({ effect, entry, factionActor, apply, spendResult = null }){
     if (!effect) return { ok:true, skipped:true };
 
     const ctx = {
@@ -322,7 +391,9 @@ function ensureConsumePlannedShim(){
       targetName: entry?.targetName || null,
       defenderId: entry?.defenderId || null,
       rigId: entry?.rigId || null,
-      notes: entry?.note || entry?.notes || ""
+      notes: entry?.note || entry?.notes || "",
+      // What payActivityCost billed — the activity ledger records it so ↩ Back out can refund it (review #17, 2026-10-28).
+      paidCost: (spendResult && spendResult.paid) ? foundry.utils.duplicate(spendResult.paid) : {}
     };
 
     try {
@@ -490,16 +561,16 @@ function ensureConsumePlannedShim(){
               : { ok:true, routed:"strategic-throughput" };
           } catch (e) {
             console.warn("[bbttcc-turn] strategic throughput handler failed (fallback to legacy):", entry.activityKey, e);
-            effectResult = await runEffectBestEffort({ effect, entry, factionActor, apply });
+            effectResult = await runEffectBestEffort({ effect, entry, factionActor, apply, spendResult });
           }
         } else {
           // Not wired yet → fall back to legacy apply/consume/run handler if present
-          effectResult = await runEffectBestEffort({ effect, entry, factionActor, apply });
+          effectResult = await runEffectBestEffort({ effect, entry, factionActor, apply, spendResult });
         }
 
       } else {
         // Non-strategic, or Dry preview → legacy handler path
-        effectResult = await runEffectBestEffort({ effect, entry, factionActor, apply });
+        effectResult = await runEffectBestEffort({ effect, entry, factionActor, apply, spendResult });
       }
 
       // Review #2 (2026-10-28): the activity did not happen → refund, no fuel fx, say so (not "executed").
@@ -1516,31 +1587,23 @@ async function plannedRaidsStep({ apply=false } = {}){
     const planned = logs.filter(e => String(e?.type).toLowerCase() === "planned");
     if (!planned.length) continue;
 
-    for (const e of planned) {
+    // Apply pays rows one after another in plan order — preview against a RUNNING bank (review #4, 2026-10-28).
+    for (const e of planned.slice().sort((a, b) => (a.ts || 0) - (b.ts || 0))) {
       const key = String(e.activity || e.activityKey || "").toLowerCase();
       const spec = EFFECTS[key];
       const label = spec?.label || (key ? key.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase()) : "(unknown)");
-      const cost = (e?.recipe && typeof e.recipe.cost === "object") ? e.recipe.cost : (spec?.cost || {});   // recipe price wins (2026-09-11)
+      const cost = activityCost({ entry: e, effect: spec, key });
       const afford = canAfford(bank, cost);
-      rows.push({ faction: F.name, factionId: F.id, activity: key, label, cost, canAfford: afford, days: ledgerDayCostFor(key) });
+      if (afford) for (const k of OP_KEYS) bank[k] = safeNum(bank[k]) - safeNum(cost[k]);
+      rows.push({ faction: F.name, factionId: F.id, activity: key, label, cost, canAfford: afford });
       any = true;
-    }
-  }
-
-  // Turn Ledger: simulate the funding pass so the preview shows what would hold.
-  const previewBudget = ledgerRemainingDays();
-  if (previewBudget != null) {
-    let sim = previewBudget;
-    for (const r of rows) {
-      r.fundable = r.days <= sim;
-      if (r.fundable) sim = Math.round((sim - r.days) * 100) / 100;
     }
   }
 
   const fmt = (c)=>OP_KEYS.filter(k=>safeNum(c[k])>0).map(k=>`${c[k]} ${k}`).join(", ")||"—";
   await ChatMessage.create({
     content: any
-      ? `<p><i>Planned Activities (Dry Preview)</i>${previewBudget != null ? ` — <i class="fas fa-hourglass-half"></i> ${previewBudget} day(s) available to fund them` : ""}</p><ul>${rows.map(r => `<li><b>${foundry.utils.escapeHTML(r.faction)}</b>: ${foundry.utils.escapeHTML(r.label)} — ${fmt(r.cost)}${r.days ? ` · ${r.days}d` : ""} ${r.canAfford?"":"<em>(cannot afford, even after this turn\u2019s income)</em>"}${r.fundable === false ? " <em>(would HOLD — out of days)</em>" : ""}</li>`).join("")}</ul>`
+      ? `<p><i>Planned Activities (Dry Preview)</i> — paid in plan order after this turn\u2019s income</p><ul>${rows.map(r => `<li><b>${foundry.utils.escapeHTML(r.faction)}</b>: ${foundry.utils.escapeHTML(r.label)} — ${fmt(r.cost)} ${r.canAfford?"":"<em>(cannot afford after the orders before it, even with this turn\u2019s income)</em>"}</li>`).join("")}</ul>`
       : `<p><i>Planned Activities (Dry Preview)</i>: none queued.</p>`,
     whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
     speaker: { alias: "Bad Eden Turn Driver" }
@@ -1905,6 +1968,21 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     try { ui.notifications?.warn?.("Advance Turn skipped — another Turn is already running."); } catch {}
     return { changed:false, skipped:true };
   }
+  // World lock (review #10): an Apply runs only under runAdvance's token, or takes the lock itself
+  // (macro / console callers) — never on top of another seat's turn.
+  let ownToken = null;
+  if (apply) {
+    const held = turnLockHeld();
+    if (held && held.token !== window._bbttccTurnOuter) {
+      console.warn("[bbttcc-turn]", turnLockMessage(held));
+      try { ui.notifications?.warn?.(turnLockMessage(held)); } catch {}
+      return { changed:false, skipped:true, lockedBy: held.userName || null };
+    }
+    if (!held) {
+      try { ownToken = await acquireTurnLock(); } catch (e) { warn("turn lock acquire failed", e); }
+      if (!ownToken && turnLockHeld()) { const l = turnLockHeld(); try { ui.notifications?.warn?.(turnLockMessage(l)); } catch {} return { changed:false, skipped:true, lockedBy: l?.userName || null }; }
+    }
+  }
   window._bbttccTurnLock = true;
   Hooks.callAll("bbttcc:advanceTurn:begin", { apply });
   if (apply) { try { await _bbttccTurnFxPlay("turn_start", { label:"Advance Turn" }, { phase:"invoke", broadcast:true }); } catch(_eFxStart) {} }
@@ -2009,6 +2087,7 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     };
   } finally {
     window._bbttccTurnLock = false;
+    if (ownToken) await releaseTurnLock(ownToken);
     // HARVEST NODES REGROW (owner ruling 2026-09-20: harvest once, regrow after a turn advance). Every scene's nodes
     // refill to their ceiling at the end of an APPLIED turn. GM-only, never on a dry run.
     if (apply && game.user?.isGM) {
@@ -2200,3 +2279,9 @@ game.bbttcc.api.turn.computeLogisticsPressureForFaction = async (factionId) => {
  * See enqueueTurnRequest() above for payload details.
  */
 game.bbttcc.api.turn.enqueueRequest = enqueueTurnRequest;
+// Review #10 (2026-10-28): the ONE way to Apply a turn — holds the world turn lock across every wrapper.
+game.bbttcc.api.turn.runAdvance = runAdvance;
+game.bbttcc.api.turn.turnLock = () => turnLockHeld();
+// The one planned-activity price (review #3/#4/#5, 2026-10-28): activityCost({entry?, effect?, key?}) → {channel: marks}.
+game.bbttcc.api.turn.activityCost = activityCost;
+game.bbttcc.api.turn.formatActivityCost = fmtActivityCost;

@@ -13,9 +13,14 @@
 //     { routes: {before, after}, integration: {...}, … } } },
 //     actors: { [id]: { name, keys: { opBank: {...}, buildUnits: {...} } } },
 //     backedOut: ts|null }
-// BACK OUT restores exactly those keys on exactly those documents (a key that
-// did not exist before is unset), refunds the faction keys, and stamps the
-// entry. Nothing else on the hex is touched — newer activities' work stays.
+// BACK OUT inverts exactly what the activity did (strategic review #16/#17, 2026-10-28):
+//   arrays (modifiers, routes, conditions…) → remove what it added, put back what it removed;
+//   objects (mods, integration, resources…) → per sub-key, restored only where the hex still
+//     holds the value this activity wrote; scalars (status, size, owner…) likewise;
+//   anything a later activity changed since is KEPT and reported as a conflict;
+//   `turn` (the pending queue) is never restored — queued effects land through the sweep;
+//   faction banks get the INVERSE delta plus the marks the turn driver billed (rec.paid),
+//     never a stale snapshot. Then the entry is stamped.
 //
 // UI: "Strategic Activity History" card in the Hex Config → GM Overrides tab.
 // Caveat: recording happens on the client that runs the activity (pre-hooks
@@ -40,7 +45,7 @@
     hexNode: "resource node", mods: "GM overrides", radiation: "radiation", darkness: "local darkness", quests: "quest links",
     kind: "kind", isHex: "hex marker", sephirot: "alignment", terrain: "terrain"
   };
-  const ACTOR_KEY_LABELS = { opBank: "OP bank", buildUnits: "build units", opCaps: "OP caps", victory: "victory", warLogs: "war log", unlocks: "unlocks", quests: "quest track" };
+  const ACTOR_KEY_LABELS = { opBank: "bank", buildUnits: "build units", opCaps: "caps", victory: "victory", warLogs: "war log", unlocks: "unlocks", quests: "quest track" };
   const turnNow = () => { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch (_e) { return 0; } };
 
   // ── recorder ─────────────────────────────────────────────────────────────
@@ -122,6 +127,7 @@
               id: foundry.utils.randomID(10), ts: Date.now(), turn: turnNow(),
               key: String(args.key || key), label: String(spec.label || args.spec?.label || key),
               factionId: actor?.id || null, factionName: actor?.name || "", targetUuid: entry?.targetUuid || null,
+              paid: (args.paidCost && typeof args.paidCost === "object") ? clone(args.paidCost) : {},   // turn-driver billed this before apply()
               backedOut: null
             },
             drawings: new Map(), actors: new Map()
@@ -142,35 +148,103 @@
 
   // ── back out ─────────────────────────────────────────────────────────────
   const isPlainObj = (v) => !!v && typeof v === "object" && !Array.isArray(v);
+  const NEVER_RESTORE = new Set(["turn"]);   // the pending queue — its effects already landed via the sweep
+  const key = (v) => { try { return JSON.stringify(v); } catch (_e) { return String(v); } };
+
+  // Invert one recorded hex key against the CURRENT value. → { set?:value, unset?:true, conflicts:[] } or null (no-op).
+  function invertKey(d, cur) {
+    const before = d.hadBefore ? d.before : undefined, after = d.after;
+    if (Array.isArray(before) || Array.isArray(after)) {
+      const b = Array.isArray(before) ? before : [], a = Array.isArray(after) ? after : [];
+      const bk = new Set(b.map(key)), ak = new Set(a.map(key));
+      const added = new Set(a.map(key).filter(k => !bk.has(k)));
+      const removed = b.filter(x => !ak.has(key(x)));
+      const c = Array.isArray(cur) ? cur : [];
+      const next = c.filter(x => !added.has(key(x)));
+      const ck = new Set(next.map(key));
+      for (const x of removed) if (!ck.has(key(x))) next.push(clone(x));
+      return same(next, c) ? null : { set: next, conflicts: [] };
+    }
+    if (isPlainObj(before) || isPlainObj(after)) {
+      const b = isPlainObj(before) ? before : {}, a = isPlainObj(after) ? after : {};
+      const c = isPlainObj(cur) ? clone(cur) : {};
+      const conflicts = []; let changed = false;
+      for (const sk of new Set([...Object.keys(b), ...Object.keys(a)])) {
+        if (same(b[sk], a[sk])) continue;
+        if (!same(c[sk], a[sk])) { conflicts.push(sk); continue; }   // a later activity moved it — keep theirs
+        if (sk in b) c[sk] = clone(b[sk]); else delete c[sk];
+        changed = true;
+      }
+      return changed ? { set: c, replace: true, conflicts } : (conflicts.length ? { conflicts } : null);
+    }
+    if (!same(cur, after)) return { conflicts: ["(changed since)"] };
+    return d.hadBefore ? { set: clone(before), conflicts: [] } : { unset: true, conflicts: [] };
+  }
+
+  // Numeric channel inverse: current − (after − before), per channel.
+  function invertNumeric(d, cur) {
+    if (typeof d.after === "number" || typeof d.before === "number" || typeof cur === "number") {
+      return (Number(cur) || 0) - ((Number(d.after) || 0) - (Number(d.before) || 0));
+    }
+    const out = isPlainObj(cur) ? clone(cur) : {};
+    const b = isPlainObj(d.before) ? d.before : {}, a = isPlainObj(d.after) ? d.after : {};
+    for (const k of new Set([...Object.keys(b), ...Object.keys(a)])) {
+      const delta = (Number(a[k]) || 0) - (Number(b[k]) || 0);
+      if (delta) out[k] = (Number(out[k]) || 0) - delta;
+    }
+    return out;
+  }
+
   async function backOut(rec) {
     if (!game.user?.isGM) return { ok: false, reason: "GM only" };
     const report = [];
     for (const [uuid, h] of Object.entries(rec.hexes || {})) {
       let doc = null; try { doc = fromUuidSync(uuid); } catch (_e) {}
       if (!doc) { report.push(`✗ ${h.name}: hex no longer exists`); continue; }
-      const upd = {};
-      const unset = [];
-      const replace = [];   // object-valued keys: unset first so keys the activity ADDED go too (update merges)
+      const curFlags = doc.flags?.[MOD_T] || {};
+      const upd = {}, unset = [], replace = [], done = [], kept = [], skipped = [];
       for (const [k, d] of Object.entries(h.keys || {})) {
-        if (d.hadBefore) { upd[`flags.${MOD_T}.${k}`] = clone(d.before); if (isPlainObj(d.before)) replace.push(k); }
-        else unset.push(k);
+        if (NEVER_RESTORE.has(k)) { skipped.push(HEX_KEY_LABELS[k] || k); continue; }
+        const inv = invertKey(d, curFlags[k]);
+        if (!inv) continue;
+        if (inv.conflicts?.length) kept.push(`${HEX_KEY_LABELS[k] || k}${inv.conflicts[0] === "(changed since)" ? "" : ` (${inv.conflicts.join(", ")})`}`);
+        if (inv.unset) { unset.push(k); done.push(HEX_KEY_LABELS[k] || k); }
+        else if ("set" in inv) { upd[`flags.${MOD_T}.${k}`] = inv.set; if (inv.replace) replace.push(k); done.push(HEX_KEY_LABELS[k] || k); }
       }
       try {
         for (const k of replace) await doc.unsetFlag(MOD_T, k);
         if (Object.keys(upd).length) await doc.update(upd);
         for (const k of unset) { try { await doc.unsetFlag(MOD_T, k); } catch (_e) {} }
-        report.push(`✓ ${h.name}: ${Object.keys(h.keys).map(k => HEX_KEY_LABELS[k] || k).join(", ")}`);
+        const bits = [];
+        if (done.length) bits.push(`restored ${done.join(", ")}`);
+        if (kept.length) bits.push(`kept later changes to ${kept.join("; ")}`);
+        if (skipped.length) bits.push(`not undone: ${skipped.join(", ")} (already applied by the turn)`);
+        report.push(`${done.length ? "✓" : "•"} ${h.name}: ${bits.join(" · ") || "nothing left to undo"}`);
       } catch (e) { warn("hex restore failed", uuid, e); report.push(`✗ ${h.name}: ${e?.message || e}`); }
     }
-    for (const [id, a] of Object.entries(rec.actors || {})) {
+    // Faction side: inverse deltas on refundable keys + the billed price — never a stale snapshot.
+    const actorIds = new Set(Object.keys(rec.actors || {}));
+    const paid = isPlainObj(rec.paid) ? rec.paid : {};
+    const hasPaid = Object.values(paid).some(v => Number(v) > 0);
+    if (hasPaid && rec.factionId) actorIds.add(String(rec.factionId));
+    for (const id of actorIds) {
       const actor = game.actors.get(id);
+      const a = (rec.actors || {})[id] || { name: actor?.name || rec.factionName || id, keys: {} };
       if (!actor) { report.push(`✗ ${a.name}: faction no longer exists`); continue; }
-      const upd = {};
-      const replace = [];
-      for (const [k, d] of Object.entries(a.keys || {})) if (d.hadBefore) { upd[`flags.${MOD_F}.${k}`] = clone(d.before); if (isPlainObj(d.before)) replace.push(k); }
-      try {
-        for (const k of replace) await actor.unsetFlag(MOD_F, k);
-        if (Object.keys(upd).length) await actor.update(upd); report.push(`✓ ${a.name}: ${Object.keys(a.keys).map(k => ACTOR_KEY_LABELS[k] || k).join(", ")} refunded`); }
+      const cur = actor.flags?.[MOD_F] || {};
+      const upd = {}, bits = [];
+      for (const [k, d] of Object.entries(a.keys || {})) {
+        upd[`flags.${MOD_F}.${k}`] = invertNumeric(d, cur[k]);
+        bits.push(ACTOR_KEY_LABELS[k] || k);
+      }
+      if (hasPaid && String(id) === String(rec.factionId)) {
+        const bank = clone(upd[`flags.${MOD_F}.opBank`] ?? (isPlainObj(cur.opBank) ? cur.opBank : {}));
+        for (const [ch, v] of Object.entries(paid)) bank[ch] = (Number(bank[ch]) || 0) + (Number(v) || 0);
+        upd[`flags.${MOD_F}.opBank`] = bank;
+        bits.push(`price refunded (${Object.entries(paid).filter(([, v]) => Number(v) > 0).map(([ch, v]) => `${v} ${ch}`).join(", ")} marks)`);
+      }
+      if (!Object.keys(upd).length) continue;
+      try { await actor.update(upd); report.push(`✓ ${a.name}: ${bits.join(", ")}`); }
       catch (e) { warn("faction restore failed", id, e); report.push(`✗ ${a.name}: ${e?.message || e}`); }
     }
     // stamp every copy of the entry
@@ -243,7 +317,7 @@
           if (!rec) return;
           const ok = await foundry.applications.api.DialogV2.confirm({
             window: { title: `Back out “${rec.label}”?` },
-            content: `<p>Restore what this activity changed, on every hex and faction it touched:</p><p style="font-size:.9em">${describe(rec) || "(nothing recorded)"}</p><p class="hint">Only the recorded keys are restored — anything later activities did to this hex stays. OP and build units spent are refunded.</p>`
+            content: `<p>Restore what this activity changed, on every hex and faction it touched:</p><p style="font-size:.9em">${describe(rec) || "(nothing recorded)"}</p><p class="hint">Only what this activity did is undone — anything a later activity changed stays (and is listed). Effects it queued for the turn have already landed and are not undone. ${Object.values(rec.paid || {}).some(v => Number(v) > 0) ? "The marks it cost are refunded." : "No price was recorded for it (activities logged before 2026-10-28), so no marks come back."}</p>`
           });
           if (!ok) return;
           btn.disabled = true;

@@ -25844,7 +25844,16 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     } catch (_e) {}
     const hx = _ftDomainHexes(faction);
     const warLogs = Array.isArray(F.warLogs) ? F.warLogs : [];
-    const planned = warLogs.filter(e => String(e?.type || "").toLowerCase() === "planned").map(e => ({ label: String(e.label || e.activity || e.name || "Planned action"), costLine: String(e.costLine || ""), targetName: String(e.targetName || "") }));
+    // Review #5 (2026-10-28): planActivity writes activityKey (never label/costLine) — name the order from the catalog
+    // and price it with the turn driver's billed price (recipe → cost → opCosts).
+    const _EFF = game.bbttcc?.api?.raid?.EFFECTS || {}; const _turn = game.bbttcc?.api?.turn || {};
+    const planned = warLogs.filter(e => String(e?.type || "").toLowerCase() === "planned").sort((a, b) => (Number(a?.ts) || 0) - (Number(b?.ts) || 0)).map(e => {
+      const key = String(e.activityKey || e.activity || "");
+      const label = String(_EFF[key]?.label || _EFF[key.toLowerCase()]?.label || e.label || (key ? key.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()) : "") || "Planned action");
+      let costLine = String(e.costLine || "");
+      try { if (!costLine && _turn.activityCost) costLine = _turn.formatActivityCost?.(_turn.activityCost({ entry: e })) || ""; } catch (_e) {}
+      return { label, costLine, targetName: String(e.targetName || "") };
+    });
     // ruling 17 (2026-10-18): Convictions = the steward's sworn philosophy + the Domain's drift from it (bbttcc-aae)
     let convictions = "—"; let convictionsMeter = null;
     try {

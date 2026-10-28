@@ -211,7 +211,11 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     if (!text) text = FALLBACK_TEXT[_lc(key)] || "";
 
     // Costs
-    const cost = (eff && (eff.opCosts || eff.cost)) ? (eff.opCosts || eff.cost) : {};
+    // The billed price (review #3, 2026-10-28) — turn-driver's shared resolver; fallback = billing order cost → opCosts.
+    const _price = game.bbttcc?.api?.turn?.activityCost;
+    // Maneuvers keep their own order — the raid console bills them from opCosts.
+    const cost = String(kind) === "maneuver" ? ((eff && (eff.opCosts || eff.cost)) || {})
+      : (_price ? _price({ effect: eff, key }) : ((eff && (eff.cost || eff.opCosts)) || {}));
     const costStr = _costLine(cost);
 
     // Maneuver metadata
@@ -1132,7 +1136,8 @@ if (_fid) {
 
           let label = v.label || prettifyKey(key);
           let primary = v.primaryKey || v.primaryOp || null;
-          const opCosts = v.opCosts || v.cost || {};
+          const _price = game.bbttcc?.api?.turn?.activityCost;   // the billed price (review #3, 2026-10-28)
+          const opCosts = _price ? _price({ effect: v, key }) : (v.cost || v.opCosts || {});
 
           if (!primary && opCosts && typeof opCosts === "object") {
             let bestKey = null;
@@ -2392,7 +2397,7 @@ Hooks.once("init",()=>{
           if (!entry.recipe) {
             const r0 = Array.isArray(eff.recipes) ? eff.recipes[0] : null;   // what the planner preselects
             entry.recipe = r0 ? { label: r0.label, cost: foundry.utils.duplicate(r0.cost || {}), note: r0.note || "", days: Number(r0.days) || 0, fx: r0.fx ? foundry.utils.duplicate(r0.fx) : null }
-                              : { label: "standard", cost: foundry.utils.duplicate(eff.cost || eff.opCosts || {}), note: "", days: 0, fx: null };
+                              : { label: "standard", cost: foundry.utils.duplicate(game.bbttcc?.api?.turn?.activityCost?.({ effect: eff, key: String(activityKey) }) || eff.cost || eff.opCosts || {}), note: "", days: 0, fx: null };
           }
           for (const [k, v] of Object.entries(sur.cost)) entry.recipe.cost[k] = (Number(entry.recipe.cost[k]) || 0) + (Number(v) || 0);
           entry.terrainSurcharge = foundry.utils.duplicate(sur);

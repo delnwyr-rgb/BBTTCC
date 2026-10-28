@@ -140,7 +140,9 @@
               if (!ok) return;
 
               if (typeof terrApi.advanceTurn === "function") {
-                const result = await terrApi.advanceTurn({ apply: true, sceneId });
+                // runAdvance holds the WORLD turn lock across every wrapper (strategic review #10, 2026-10-28).
+                const run = game.bbttcc?.api?.turn?.runAdvance || ((a) => terrApi.advanceTurn(a));
+                const result = await run({ apply: true, sceneId });
                 console.log("[bbttcc-ui] Turn advanced via toolbar:", result);
               } else {
                 console.warn("[bbttcc-ui] Turn Driver: advanceTurn API not available.");

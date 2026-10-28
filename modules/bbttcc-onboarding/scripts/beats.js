@@ -601,7 +601,7 @@ const stewardshipTurn = {
               if (v && v.ok === false) continue;
             }
           } catch (_) {}
-          const costs = def.opCosts || def.cost || {};
+          const costs = game.bbttcc?.api?.turn?.activityCost?.({ effect: def, key: c.key }) || def.cost || def.opCosts || {};   // billed price (review #3, 2026-10-28)
           const price = Object.entries(costs).filter(([, n]) => Number(n) > 0).map(([k, n]) => `${k} ${Math.round(Number(n))}`).join(" · ");
           options.push({ ...c, catalogLabel: def.label || c.key, price });
         }

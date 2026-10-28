@@ -458,11 +458,11 @@
           if (!doc) return "Target is not a valid hex Drawing/Tile.";
 
           // Belt and braces for entries planned before the canPlan gate existed.
-          // OP was paid at resolution — the Strategic Activity Ledger's ↩ Back out refunds it.
+          // {ok:false} → turn-driver consumePlanned refunds the price and logs "could not" (strategic review #2/#17, 2026-10-28).
           const blockWhy = foundSiteBlock(doc.flags?.[MOD_T] || {}, spec, entry.targetName);
           if (blockWhy) {
             console.warn(TAG, effKey, "refused:", blockWhy);
-            return `${spec.label} REFUSED — ${blockWhy} (OP already paid this turn: use ↩ Back out in Hex Config → Strategic Activity History to refund.)`;
+            return { ok: false, reason: blockWhy };
           }
 
           await queueHexUpdate(doc, (f)=>{
@@ -543,7 +543,7 @@
           if (!doc) return "Target is not a valid hex Drawing/Tile.";
           const f = doc.flags?.[MOD_T] || {};
           const why = districtBlock(doc, f, type, actor);
-          if (why) return `${DISTRICT_LABELS[type]} REFUSED — ${why}`;
+          if (why) return { ok: false, reason: why };   // refused at resolution — nothing billed in BU (review #2, 2026-10-28)
           const name = String(entry?.note || "").trim().slice(0, 60) || "";   // the planner's GM note doubles as the district's name
           const res = await tb().foundDistrict({ hexDoc: doc, type, name });
           if (!res?.ok) return `${DISTRICT_LABELS[type]} failed — ${res?.error || "Townbuilder refused"}`;
