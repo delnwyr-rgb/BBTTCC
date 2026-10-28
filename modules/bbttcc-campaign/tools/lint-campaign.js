@@ -916,6 +916,15 @@ for (const b of beats) {
     if (r.clock != null && !(Number(r.clock) >= 1)) F("E19", "WARN", b.id, `hexMenace[${i}].clock '${r.clock}' — turns, ≥ 1`);
     if (r.reward != null && typeof r.reward !== "object") F("E19", "WARN", b.id, `hexMenace[${i}].reward must be {hexLoyalty?, darkness?}`);
   }
+  // ── E22: HEX DARKNESS (2026-10-28) — worldEffects.hexDarkness {set?|delta?, floor?, unless?, hexName?|targetHexUuid?} ──
+  for (const [i, r] of (Array.isArray(we.hexDarkness) ? we.hexDarkness : (we.hexDarkness ? [we.hexDarkness] : [])).entries()) {
+    if (!r || typeof r !== "object" || (r.set == null && r.delta == null && r.floor == null)) { F("E22", "WARN", b.id, `hexDarkness[${i}] needs set, delta or floor — WME writes nothing`); continue; }
+    for (const k of ["set", "floor"]) if (r[k] != null && !(Number.isInteger(Number(r[k])) && Number(r[k]) >= 0 && Number(r[k]) <= 6)) F("E22", "WARN", b.id, `hexDarkness[${i}].${k} '${r[k]}' — whole number 0–6`);
+    if (r.delta != null && !Number.isInteger(Number(r.delta))) F("E22", "WARN", b.id, `hexDarkness[${i}].delta '${r.delta}' — whole number`);
+    for (const u of (Array.isArray(r.unless) ? r.unless : (r.unless ? [r.unless] : []))) if (!byId.has(String(u))) F("E22", "WARN", b.id, `hexDarkness[${i}].unless names beat '${u}' which is not in the campaign — the row never skips`);
+    if (!s(r.hexName) && !s(r.targetHexUuid) && !s(b.targetHexUuid))
+      F("E22", "INFO", b.id, `hexDarkness[${i}] names no hex — uses the hex the ride entered; does nothing if the beat fires off-map`);
+  }
   // ── E21: RADIATION (2026-10-22) — worldEffects.hexRadiation {level 0–3, hexName?|targetHexUuid?}; radiation is ONLY this ──
   for (const [i, r] of (Array.isArray(we.hexRadiation) ? we.hexRadiation : (we.hexRadiation ? [we.hexRadiation] : [])).entries()) {
     const lv = Number(r?.level);

@@ -803,9 +803,11 @@
 
     // Cinematic dive: stash a one-shot dive request so this beat's scene launch
     // becomes a GM-solo zoom-dive into the hex's scene (executeBeat consumes it).
+    // opts.noDive (2026-10-28): an "arrival" where the party already stands (a ride beat whose destination is here) —
+    // the zoom-dive pulled the table out to the map and back into the town it was already in.
     try {
       const txn = game.bbttcc && game.bbttcc.api && game.bbttcc.api.transition;
-      if (txn && typeof txn.requestDive === "function") {
+      if (txn && typeof txn.requestDive === "function" && !(opts && opts.noDive)) {
         const place = (to && to.object) ? to.object : to;
         const center = place && place.center;
         const tdoc = (to && to.document) ? to.document : to;
@@ -1426,7 +1428,7 @@
     // opts.deferred (2026-10-02): go through the same idle-wait a ridden leg's arrival uses, so a road-fired
     // chain still unwinding from the previous leg finishes before the town opens (refused-leg stop hex).
     if (opts.deferred) await maybeRunHexEnterBeatDeferred(result, { factionId });
-    else await runHexEnterBeatNow(result, { factionId });
+    else await runHexEnterBeatNow(result, { factionId, noDive: !!opts.noDive });
     return { ok: true, hexUuid: doc.uuid };
   }
   async function rideSave(factionId, session) {

@@ -159,7 +159,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     if (!doc) return { before: 0, after: 0 };
     const mods = foundry.utils.duplicate(tfOf(doc).mods || {});
     const before = Number(mods.darkness || 0) || 0;
-    const after = Math.max(0, set != null ? Number(set) : before + Number(delta || 0));
+    const floor = Math.max(0, Number(tfOf(doc).darknessFloor || 0) || 0);   // a story floor holds (campaign hexDarkness, 2026-10-28)
+    const after = Math.max(floor, set != null ? Number(set) : before + Number(delta || 0));
     if (after !== before) { mods.darkness = after; await doc.update({ [`flags.${MODT}.mods`]: mods }, { parent: doc.parent }); }
     return { before, after };
   }

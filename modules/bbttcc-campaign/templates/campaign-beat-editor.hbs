@@ -738,6 +738,20 @@
         </div>
       </div>
 
+      {{!-- HEX DARKNESS (2026-10-28): worldEffects.hexDarkness — pips on a hex + the floor no cleansing gets under. --}}
+      <div class="form-group" data-tour="beats.hexDarkness">
+        <label data-tooltip="{{bbttccTip 'beats' 'hexDarkness'}}">🌑 Hex darkness</label>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center; flex:1;">
+          <select name="world-hexdark-mode" style="width:auto;">
+            {{#each hexDarkness.options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+          </select>
+          <input type="number" name="world-hexdark-amount" value="{{hexDarkness.amount}}" placeholder="pips" step="1" style="width:70px;" />
+          <input type="number" name="world-hexdark-floor" value="{{hexDarkness.floor}}" placeholder="floor" min="0" max="6" step="1" style="width:70px;" data-tooltip="Floor — the lowest this hex's darkness can go until a beat lowers it (blank = keep, 0 = lift)" />
+          <input type="text" name="world-hexdark-hex" list="bbttcc-raid-hexes" value="{{hexDarkness.hexName}}" placeholder="hex name (blank = the hex the ride entered)" style="flex:1; min-width:160px;" />
+          <input type="text" name="world-hexdark-unless" value="{{hexDarkness.unless}}" placeholder="skip once played: beat ids, comma-separated" style="flex-basis:100%;" />
+        </div>
+      </div>
+
       {{!-- ALPHA CUT ruling 22 (2026-10-18): the STORY offers every Battle / Heist / Parley — worldEffects.raid. --}}
       <div class="form-group" data-tour="beats.raidOffer">
         <label data-tooltip="{{bbttccTip 'beats' 'raidOffer'}}">⚔ Offer a fight</label>

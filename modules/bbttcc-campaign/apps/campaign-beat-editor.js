@@ -155,6 +155,7 @@ const BEATS_HELP = {
   hexMenace: "Menace state — MENACES (2026-10-21). ADD records a menace on a hex (name it, or leave blank on a road beat to use the hex the ride entered) with a clock in turns; CLEAR lifts it and PAYS the reward (hex Loyalty +2 by default; darkness relief if you set one). Put CLEAR on the winning / parley endings of a menace beat — with no hex and no key it finds the menace this very encounter recorded.",
   menace: "Menace — MENACES (2026-10-21). When ON, this beat is prefaced on the road by the locals' warning card: Help (go in on foot — the beat runs; tags protection + mutual_aid) or Not now (ride on — the hex gets the Menace state with this clock, loses the decline loyalty at once, the steward's Convictions weigh `abandonment`; when the clock runs out the bill lands: hex loyalty + faction darkness). A party in a medium/heavy rig is told the ground is too tight for it. Blank fields = engine defaults (clock 3, −1 / −2 loyalty, +1 darkness).",
   stageCue: "Stage Cue — plays a recorded before/after scene state (🎬 Stage Cues panel on the Lighting controls: darkness, lights, walls, tiles, animated on every seat) when the beat resolves. Scene defaults to this beat's own Scene, then the viewed scene. Direction 'before' plays the cue backwards (undo). Stored at worldEffects.stageCue = {key, sceneId?, direction?}.",
+  hexDarkness: "Hex darkness — the darkness pips ON THIS HEX (0–6; 3+ is dark ground and adds +1 to the holding Domain's Darkness every turn), separate from the faction Darkness above (2026-10-28). SET or CHANGE BY moves the pips; FLOOR is the lowest they can go — no rite, raid or cleansing gets under it (blank keeps the hex's floor, 0 lifts it). Name the hex, or leave it blank on a road / hex-enter beat to use the hex the ride entered.",
   hexRadiation: "Radiation level — RAISES a hex to this Radiation level (the one radiation switch, 2026-10-22; never lowers it — 0 cleans it): 0 Clean · 1 Radiated · 2 Contaminated (−50% production) · 3 Radiation Zone (−75%). Stewards who travel in take that many RP (gear reduces it), its battlemaps go green, and it stays until cleaned. Name the hex, or leave it blank on a road / hex-enter beat to use the hex the ride entered.",
   sparkLink: "Spark Link — Tikkun progression. On beat resolution the tikkun listener routes into the spark API: Identify marks the spark known, Acquire gains it, Integrate absorbs it personally, Deposit banks it to the faction. Leave Action blank to disable.",
   sparkLinkSpark: "Spark — which authored spark (bbttcc-tikkun.sparks pack) this beat advances. Both Spark and Action are required or the link saves as disabled.",
@@ -1200,6 +1201,17 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       options: [["", "— none —"], ["0", "0 — Clean (cleans it)"], ["1", "1 — Radiated"], ["2", "2 — Contaminated (−50%)"], ["3", "3 — Radiation Zone (−75%)"]]
         .map(([value, label]) => ({ value, label, selected: value === hrLevel }))
     };
+    // HEX DARKNESS (2026-10-28): worldEffects.hexDarkness row (first row when a list) — pips on the hex + its floor.
+    const hdRaw = Array.isArray(worldEffects.hexDarkness) ? worldEffects.hexDarkness[0] : worldEffects.hexDarkness;
+    const hdMode = (hdRaw && typeof hdRaw === "object") ? (hdRaw.set != null && hdRaw.set !== "" ? "set" : (hdRaw.delta != null && hdRaw.delta !== "" ? "delta" : (hdRaw.floor != null ? "floor" : ""))) : "";
+    const hexDarkness = {
+      hexName: String(hdRaw?.hexName || ""),
+      amount: hdMode === "set" ? String(hdRaw.set) : (hdMode === "delta" ? String(hdRaw.delta) : ""),
+      floor: (hdRaw && hdRaw.floor != null && hdRaw.floor !== "") ? String(hdRaw.floor) : "",
+      unless: Array.isArray(hdRaw?.unless) ? hdRaw.unless.join(", ") : String(hdRaw?.unless || ""),
+      options: [["", "— none —"], ["set", "Set to"], ["delta", "Change by (±)"], ["floor", "Floor only"]]
+        .map(([value, label]) => ({ value, label, selected: value === hdMode }))
+    };
     // ALPHA CUT ruling 22 (2026-10-18): the story offers every fight — worldEffects.raid row.
     const raidRaw = (worldEffects.raid && typeof worldEffects.raid === "object") ? worldEffects.raid : {};
     const _tNorm = { violence: "battle", intrigue: "heist", presence: "parley", courtly: "parley" };
@@ -1220,7 +1232,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
     return {
       stageCue,
       stageCueCatalog,
-      hexMenace, menace, hexRadiation,
+      hexMenace, menace, hexRadiation, hexDarkness,
       raidOffer, raidHexCatalog, raidCourtCatalog, raidStyleCatalog,
       ...data,
       campaignId: this.campaignId,
@@ -3576,6 +3588,27 @@ _syncCoreFromForm() {
         if (hexName) row.hexName = hexName; else if (prev.targetHexUuid) row.targetHexUuid = prev.targetHexUuid;
         we.hexRadiation = prevList.length > 1 ? [row].concat(prevList.slice(1)) : row;
       } else delete we.hexRadiation;
+    }
+    // HEX DARKNESS (2026-10-28): worldEffects.hexDarkness row — { set | delta, floor?, unless?, note?, hexName? | targetHexUuid? }
+    const hdMd = fd.get("world-hexdark-mode");
+    if (hdMd != null) {
+      const prevList = Array.isArray(we.hexDarkness) ? we.hexDarkness : (we.hexDarkness ? [we.hexDarkness] : []);
+      const prev = (prevList[0] && typeof prevList[0] === "object") ? prevList[0] : {};
+      const mode = String(hdMd).trim();
+      if (mode) {
+        const row = {};
+        const hexName = String(fd.get("world-hexdark-hex") || "").trim();
+        if (hexName) row.hexName = hexName; else if (prev.targetHexUuid) row.targetHexUuid = prev.targetHexUuid;
+        const amt = String(fd.get("world-hexdark-amount") ?? "").trim();
+        if (mode === "set") row.set = Math.max(0, Math.min(6, Math.round(_safeNum(amt, 0))));
+        else if (mode === "delta") row.delta = Math.round(_safeNum(amt, 0));
+        const fl = String(fd.get("world-hexdark-floor") ?? "").trim();
+        if (fl !== "") row.floor = Math.max(0, Math.min(6, Math.round(_safeNum(fl, 0))));
+        const unless = String(fd.get("world-hexdark-unless") || "").split(/[\s,]+/).map(x => x.trim()).filter(Boolean);
+        if (unless.length) row.unless = unless;
+        if (prev.note) row.note = prev.note;
+        we.hexDarkness = prevList.length > 1 ? [row].concat(prevList.slice(1)) : [row];
+      } else delete we.hexDarkness;
     }
     const mnOn = fd.get("menace-on");
     if (fd.has("menace-on") || fd.get("menace-label") != null) {

@@ -1136,7 +1136,8 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       if (m.removed.length) parts.push("removed " + m.removed.join(", "));
       if (m.added.length) parts.push("+" + m.added.join(", "));
       const mods = clone((doc.flags && doc.flags[MOD_T] && doc.flags[MOD_T].mods) || {});
-      if (Number(mods.darkness || 0) !== 0) { mods.darkness = 0; await doc.update({ ["flags." + MOD_T + ".mods"]: mods }, { parent: doc.parent }); parts.push("darkness pips 0"); }
+      const dFloor = Math.max(0, Number(tf.darknessFloor || 0) || 0);   // a story floor holds (hexDarkness, 2026-10-28)
+      if (Number(mods.darkness || 0) !== dFloor) { mods.darkness = dFloor; await doc.update({ ["flags." + MOD_T + ".mods"]: mods }, { parent: doc.parent }); parts.push("darkness pips " + dFloor + (dFloor ? " (floor)" : "")); }
       try { const sc = get(game, "bbttcc.api.territory.setCondition", null); if (typeof sc === "function") await sc(doc.uuid, "Purified", true); } catch (_eC) {}
       const note = `${name} restored${parts.length ? " — " + parts.join("; ") : " (nothing to restore)"}, Purified`;
       await _typedWarLog(_logA, `Engine of Absolution: ${note}.`);
@@ -1683,6 +1684,57 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       console.warn(TAG, "hexMenace apply failed", eHM);
     }
 
+    // 2g-dark) HEX DARKNESS (Dave 2026-10-28: "darkness should be sitting pretty heavy on KT until this round of cleansing —
+    // but it's not gone until the 100 are redeemed and the energy they hold reintegrated into the KT mine").
+    // worldEffects.hexDarkness = { hexName?|targetHexUuid?, set?, delta?, floor?, unless?:[beatId…], note? } (or a LIST).
+    // Writes the hex's darkness pips (flags.bbttcc-territory.mods.darkness, 0–6). `floor` is stored on the hex
+    // (flags.bbttcc-territory.darknessFloor; 0 clears it) and every automatic writer (rites, raids, restoreHex, turn
+    // requests) stops there — only a beat that lowers the floor lets the hex go clean. `unless` skips the row once any of
+    // those beats has played (so an arrival can lay the weight down without undoing a cleansing).
+    try {
+      const hdList = Array.isArray(we.hexDarkness) ? we.hexDarkness : (we.hexDarkness && typeof we.hexDarkness === "object" ? [we.hexDarkness] : []);
+      if (hdList.length && game.user?.isGM) {
+        const MODT = "bbttcc-territory";
+        const norm = (x) => String(x || "").replace(/[\s ]+/g, " ").trim().replace(/^[^\p{L}\p{N}]+/u, "").trim().toLowerCase();
+        let played = {};
+        try { played = get(game, "bbttcc.api.campaign.story", null)?.state?.((ctx && ctx.campaignId) || null)?.played || {}; } catch (_eP) {}
+        for (const hd of hdList) {
+          if (!hd || typeof hd !== "object") continue;
+          const unless = Array.isArray(hd.unless) ? hd.unless : (hd.unless ? [hd.unless] : []);
+          if (unless.some(id => played[String(id)])) { notes.push("hexDarkness:skipped(unless)"); continue; }
+          let doc = null;
+          if (hd.hexName) {
+            const want = norm(hd.hexName);
+            for (const sc of (game.scenes || [])) { for (const d of (sc.drawings || [])) { const tf = d.flags && d.flags[MODT]; if (tf && (tf.isHex === true || tf.kind === "territory-hex") && norm(tf.name || d.text) === want) { doc = d; break; } } if (doc) break; }
+          } else {
+            const u = String(hd.targetHexUuid || (ctx && ctx.hexUuid) || (beat && beat.targetHexUuid) || "").trim();
+            if (u) doc = await resolveHexDoc(u);
+          }
+          if (!doc || !doc.update) { console.warn(TAG, "hexDarkness: hex not found", hd); continue; }
+          const tf = (doc.flags && doc.flags[MODT]) || {};
+          const mods = clone(tf.mods || {});
+          const before = Math.max(0, Number(mods.darkness || 0) || 0);
+          const upd = {};
+          let floor = Math.max(0, Number(tf.darknessFloor || 0) || 0);
+          if (hd.floor != null && Number.isFinite(Number(hd.floor))) {
+            floor = Math.max(0, Math.min(6, Math.round(Number(hd.floor))));
+            if (floor > 0) { upd[`flags.${MODT}.darknessFloor`] = floor; if (hd.note) upd[`flags.${MODT}.darknessFloorNote`] = String(hd.note); }
+            else { upd[`flags.${MODT}.-=darknessFloor`] = null; upd[`flags.${MODT}.-=darknessFloorNote`] = null; }
+          }
+          let after = before;
+          if (hd.set != null && Number.isFinite(Number(hd.set))) after = Number(hd.set);
+          else if (hd.delta != null && Number.isFinite(Number(hd.delta))) after = before + Number(hd.delta);
+          after = Math.max(floor, Math.min(6, Math.max(0, Math.round(after))));
+          if (after !== before) { mods.darkness = after; upd[`flags.${MODT}.mods`] = mods; }
+          if (!Object.keys(upd).length) continue;
+          await doc.update(upd, { parent: doc.parent });
+          changed = true; notes.push(`hexDarkness:${tf.name || doc.text || "hex"} ${before}→${after}${floor ? ` (floor ${floor})` : ""}`);
+        }
+      }
+    } catch (eHD) {
+      console.warn(TAG, "hexDarkness apply failed", eHD);
+    }
+
     // 2g') STAGE CUES (2026-10-15): worldEffects.stageCue = { key, sceneId?, direction? } (or a LIST).
     // Plays a recorded before/after scene state (bbttcc-campaign/scripts/stage-cues.js) — darkness,
     // lights, walls, tiles — animated, on every seat (document updates). Scene resolves sceneId →
@@ -2184,7 +2236,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           const here = (dest && fid && typeof trav?.whereIs === "function") ? trav.whereIs(fid) : null;
           if (here && _normHexName(here.name) === _normHexName(dest)) {
             alreadyHere = true;
-            if (typeof trav.arriveAt === "function") await trav.arriveAt(here.hexUuid, { factionId: fid });
+            if (typeof trav.arriveAt === "function") await trav.arriveAt(here.hexUuid, { factionId: fid, noDive: true });   // no map→town dive: nobody rode anywhere (Dave 2026-10-28)
             changed = true; notes.push(`openTravel:alreadyHere:${dest}`);
           }
         } catch (eH) { console.warn(TAG, "already-here check failed (opening travel as usual)", eH); }

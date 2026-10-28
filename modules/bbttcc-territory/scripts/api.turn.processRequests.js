@@ -144,7 +144,7 @@
 
         // --- Cleanse Corruption ---------------------------------------------
         if (requests.cleanseCorruption) {
-          mods.darkness = Math.max(0, Number(mods.darkness||0) - 2);
+          mods.darkness = Math.max(Number(await doc.getFlag(MOD_TERRITORY, "darknessFloor") || 0) || 0, Number(mods.darkness||0) - 2);   // a story floor holds (campaign hexDarkness, 2026-10-28)
           mods.loyalty  = Number(mods.loyalty||0) + 1;
           delete requests.cleanseCorruption;
           consumed.push("cleanseCorruption");

@@ -1556,7 +1556,7 @@ function _buildPlayerFacingDialogHtml(payload) {
       parts.push('<div class="bbttcc-campaign-dialog-choices">');
       for (var i = 0; i < choices.length; i++) {
         var ch = choices[i] || {};
-        var label = _escapeHtml(ch.label || ("Choice " + (i + 1)));
+        var label = _escapeHtml(_choiceShownLabel(ch, i));
         var cdesc = _stripGmNotes(_expandStoryTokens(String(ch.description || "").trim(), undefined, { raw: true }));   // escaped once below (review P3, 2026-10-27); round 2 E2 (2026-10-20): GM asides never reach the player card; story tokens expand (10-20 {{#at}})
         var checkLabel = String(ch.checkLabel || "").trim();
         var checkDC = _num(ch.checkDC, 0);
@@ -2438,8 +2438,15 @@ function _chainCtxFrom(ctx) {
 // still pay their 1 OP per try; closing the dialog is the GM's "the failure
 // stands" exit. Awaiting it here means the outer runBeat does not return until
 // every retry has resolved — chain completion stays a plain fact.
-async function _offerRetryInChain(campaign, beat, ctx) {
+async function _offerRetryInChain(campaign, beat, ctx, opts = {}) {
   try {
+    // The failure chain came back through this beat on its own (Dave 2026-10-28: a missed read on the Valhaulan Seal →
+    // "Center yourself" → the Seal again → Restore → the hub … and 30 minutes later, closing the hub re-offered the Seal
+    // he had already restored). A replay inside the chain already WAS the retry — don't offer a second one.
+    if (opts.sinceTs != null) {
+      let replayed = 0; try { replayed = Number(_storyStateFor(campaign?.id)?.played?.[String(beat?.id)]?.ts) || 0; } catch (_eSt) {}
+      if (replayed >= Number(opts.sinceTs)) return;
+    }
     // Share the beat-effects once-memo with the original ctx: a pick in the retry marks the
     // beat applied for the outer executeBeat tail, and an earlier pick stops a second application.
     const rctx = { ..._chainCtxFrom(ctx), retryOffer: true };
@@ -2573,6 +2580,15 @@ function _expandStoryTokens(text, campaign, { raw = false } = {}) {   // raw: pl
     if (reAt.test(out)) { reAt.lastIndex = 0; out = out.replace(reAt, (m, name, yes, no) => (_partyIsAt(name) ? yes : (no || ""))); }
   }
   return out.replace(/\{\{\s*([A-Za-z.]+)\s*\}\}/g, (m, k) => (Object.prototype.hasOwnProperty.call(map, k.toLowerCase()) ? (raw ? map[k.toLowerCase()] : _escapeHtml(map[k.toLowerCase()])) : m));
+}
+
+// A ride choice when the ride is already over (Dave 2026-10-28: turn advanced IN Khezek-Tor, the director rightly offered
+// Khezek-Tor's thread, and "🐎 Saddle up — ride for Khezek-Tor" still read like a ride). Display only — the stored label,
+// the choice log and the pick are unchanged; the openTravel op itself arrives without a ride (world-mutation-engine).
+function _choiceShownLabel(ch, i) {
+  const base = (ch && ch.label) || ("Choice " + (i + 1));
+  const dest = String(ch?.openTravel?.hexName || "").trim();
+  return (dest && _partyIsAt(dest)) ? `▶ You're in ${dest} already — go on in` : base;
 }
 
 function _partyIsAt(name) {
@@ -2762,7 +2778,7 @@ ${
         choices.length
           ? `<div class="bbttcc-campaign-dialog-choices">
                ${choices.map((ch, i) => {
-                 const label = _escapeHtml(ch.label || `Choice ${i + 1}`);
+                 const label = _escapeHtml(_choiceShownLabel(ch, i));
                  const cdesc = _expandStoryTokens(String(ch.description || "").trim());   // story tokens in the GM dialog too (2026-10-20)
                  const meta = _choiceHasCheck(ch)
                    ? (() => {
@@ -2855,7 +2871,7 @@ ${
         // the GM's button names the check it carries (2026-09-18, owner: three "Inspect the set up" buttons told the GM
         // nothing) — players already see CHECK / DIFFICULTY on their mirror
         const checkTag = _choiceHasCheck(ch) ? ` · ${_choiceCheckLabel(String(ch.checkStat || "").trim()) || String(ch.checkStat || "").trim()}${_num(ch.checkDC, 0) ? ` DC ${_num(ch.checkDC, 0)}` : ""}` : "";
-        const label = (ch.label || `Choice ${i + 1}`) + checkTag;
+        const label = _choiceShownLabel(ch, i) + checkTag;
 
         buttons[`c${i}`] = {
           label,
@@ -2908,8 +2924,9 @@ ${
 
                   const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
                   try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
+                  const chainTs = Date.now();
                   if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
-                  if (!ok && ch.secret !== true) await _offerRetryInChain(campaign, beat, ctx);   // a secret miss stands quietly (review P2, 2026-10-27)
+                  if (!ok && ch.secret !== true) await _offerRetryInChain(campaign, beat, ctx, { sinceTs: chainTs });   // a secret miss stands quietly (review P2, 2026-10-27)
 
                   finish({
                     acted: true,
@@ -2951,8 +2968,9 @@ ${
 
                   const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
                   try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
+                  const chainTs = Date.now();
                   if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
-                  if (!ok && ch.secret !== true) await _offerRetryInChain(campaign, beat, ctx);   // a secret miss stands quietly (review P2, 2026-10-27)
+                  if (!ok && ch.secret !== true) await _offerRetryInChain(campaign, beat, ctx, { sinceTs: chainTs });   // a secret miss stands quietly (review P2, 2026-10-27)
 
                   finish({
                     acted: true,
@@ -3051,8 +3069,9 @@ ${
 
                 try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
                 if (res.ok) { try { await _choiceOpenTravel(campaign, beat, ch, ctx); } catch (_eOT) {} }
+                const chainTs = Date.now();
                 if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
-                if (!res.ok && ch.secret !== true) await _offerRetryInChain(campaign, beat, ctx);   // a secret miss stands quietly
+                if (!res.ok && ch.secret !== true) await _offerRetryInChain(campaign, beat, ctx, { sinceTs: chainTs });   // a secret miss stands quietly
 
                 finish({
                   acted: true,
