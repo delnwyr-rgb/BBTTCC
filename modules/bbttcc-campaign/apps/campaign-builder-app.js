@@ -72,11 +72,81 @@ function _restorePortalPop(pop) {
     const owner = ownerId
       ? document.querySelector(`details.bbttcc-actions-menu[data-bbttcc-portal-id="${ownerId}"]`)
       : null;
-    if (owner) owner.appendChild(pop);
+    // review P3 (2026-10-27): a re-render replaced the owner (fresh random portal id) — drop the
+    // orphan instead of leaving it unstyled in the z-999999 layer until reload.
+    if (!owner) { pop.remove(); return; }
+    owner.appendChild(pop);
     pop.removeAttribute("data-bbttcc-portaled");
     pop.removeAttribute("data-bbttcc-owner");
     for (const prop of PORTAL_POP_STYLE_PROPS) pop.style[prop] = "";
   } catch (_e) {}
+}
+
+// review P2/P3 (2026-10-27): every place a beat names a beat id — mirrors lint-campaign.js
+// routeTargets + G02 + beatMark gates. Returns [{ where, route, set(v) }] for refs === id;
+// route:false = a gate/mark key (rewritten on rename, reported but never nulled on delete).
+function _beatIdRefs(b, id) {
+  const out = [];
+  const n = v => String(v ?? "").trim();
+  const want = n(id);
+  if (!want || !b || typeof b !== "object") return out;
+  const at = (obj, key, where, route = true) => {
+    if (obj && typeof obj === "object" && typeof obj[key] === "string" && n(obj[key]) === want)
+      out.push({ where, route, set: v => { obj[key] = v; } });
+  };
+  const gates = (req, where) => {
+    const list = Array.isArray(req) ? req : (req && typeof req === "object" ? [req] : []);
+    for (const c of list) {
+      if (!c || typeof c !== "object") continue;
+      if (Array.isArray(c.anyOf)) gates(c.anyOf, where);
+      at(c, "beatMark", `${where} (beatMark)`, false);
+    }
+  };
+  at(b, "next", "next");
+  at(b.outcomes, "success", "outcomes.success");
+  at(b.outcomes, "failure", "outcomes.failure");
+  (Array.isArray(b.choices) ? b.choices : []).forEach((ch, i) => {
+    at(ch, "next", `choice ${i + 1} → next`);
+    at(ch, "failNext", `choice ${i + 1} → failNext`);
+    gates(ch?.requires, `choice ${i + 1} gate`);
+  });
+  at(b.phaseEntry, "to", "phaseEntry.to");
+  at(b.handoff, "beatId", "handoff.beatId");
+  at(b.offerQuest, "acceptBeatId", "offerQuest.acceptBeatId");
+  const chase = (b.chase && typeof b.chase === "object") ? b.chase : null;
+  if (chase) for (const k of ["onCaught", "onEscaped"]) {
+    const v = chase[k];
+    if (typeof v === "string") { at(chase, k, `chase.${k}`); continue; }
+    if (!v || typeof v !== "object") continue;
+    at(v, "beatId", `chase.${k}`);
+    if (typeof v.followUp === "string") at(v, "followUp", `chase.${k}.followUp`);
+    else at(v.followUp, "beatId", `chase.${k}.followUp`);
+  }
+  (Array.isArray(b.worldEffects?.questEffects) ? b.worldEffects.questEffects : [])
+    .forEach((row, i) => at(row, "beatId", `questEffects ${i + 1} mark`, false));
+  gates(b.inject?.requires, "gate");
+  return out;
+}
+
+// Campaign-level refs (outside campaign.beats): opener, hex overrides, NPC placement gates.
+function _campaignBeatIdRefs(campaign, id) {
+  const out = [];
+  const n = v => String(v ?? "").trim();
+  const want = n(id);
+  if (!want || !campaign || typeof campaign !== "object") return out;
+  if (n(campaign.openingBeatId) === want) out.push({ where: "campaign opening beat", route: true, set: v => { campaign.openingBeatId = v; } });
+  for (const [uuid, ov] of Object.entries(campaign.hexOverrides || {})) {
+    if (ov && typeof ov === "object" && n(ov.onEnterBeatId) === want)
+      out.push({ where: `hex override ${uuid} on-enter`, route: true, set: v => { ov.onEnterBeatId = v; } });
+  }
+  const pls = Array.isArray(campaign.npcPlacements) ? campaign.npcPlacements : Object.values(campaign.npcPlacements || {});
+  for (const pl of pls) for (const [ri, rule] of (Array.isArray(pl?.rules) ? pl.rules : []).entries()) {
+    for (const c of (Array.isArray(rule?.when) ? rule.when : [])) {
+      if (c && typeof c === "object" && n(c.beatMark) === want)
+        out.push({ where: `NPC placement ${pl?.actorId || "?"} rule ${ri + 1} (beatMark)`, route: false, set: v => { c.beatMark = v; } });
+    }
+  }
+  return out;
 }
 
 // --- Travel table id helpers (shared by New/Duplicate/Repair) ---------------
@@ -110,7 +180,9 @@ function _composeTravelTableId(terrain, tier) {
   const hit = keys.find(k => k.toLowerCase() === t.toLowerCase());
   if (hit) t = hit;
   const n = Math.max(1, Math.floor(Number(tier) || 1));
-  return `travel_${t}_t${n}`;
+  // Lowercase: the travel resolvers lowercase the terrain and look up exact-case ids, so a camelCase
+  // "travel_ashWastes_t2" was never found (review P1, 2026-10-27). The dropdown keeps the camelCase key.
+  return `travel_${t.toLowerCase()}_t${n}`;
 }
 
 // Parse terrain + tier out of an existing travel id (tolerant of junk like _EFyI).
@@ -733,45 +805,38 @@ export async function persistBeatUpdate(payload) {
 
     const beats = Array.isArray(campaign.beats) ? foundry.utils.deepClone(campaign.beats) : [];
 
+    // review P2 (2026-10-27): every beat-id field (routes, handoff, phaseEntry, offerQuest, chase,
+    // questEffects marks, beatMark gates) — was outcomes + choices next/failNext only.
     const rewriteRefs = (b) => {
       if (!prevId || !nextId || prevId === nextId) return;
-      if (!b || typeof b !== "object") return;
-
-      if (b.outcomes) {
-        if (norm(b.outcomes.success) === prevId) b.outcomes.success = nextId;
-        if (norm(b.outcomes.failure) === prevId) b.outcomes.failure = nextId;
-      }
-
-      if (Array.isArray(b.choices)) {
-        for (const ch of b.choices) {
-          if (!ch) continue;
-          if (norm(ch.next) === prevId) ch.next = nextId;
-          if (norm(ch.failNext) === prevId) ch.failNext = nextId;
-        }
-      }
+      for (const r of _beatIdRefs(b, prevId)) r.set(nextId);
     };
 
+    const incoming = foundry.utils.deepClone(beat);
     let applied = false;
     if (prevId && prevId !== nextId) {
       const prevIdx = beats.findIndex(b => norm(b?.id) === prevId);
       const nextIdx = beats.findIndex(b => norm(b?.id) === nextId);
 
-      for (const b of beats) rewriteRefs(b);
+      // review P2 (2026-10-27): renaming onto another beat's id used to overwrite that beat silently.
+      if (nextIdx >= 0 && nextIdx !== prevIdx) {
+        ui.notifications?.warn?.(`Beat id "${nextId}" is already used by another beat — rename refused, nothing saved.`);
+        return false;
+      }
 
-      if (nextIdx >= 0 && prevIdx >= 0 && nextIdx !== prevIdx) {
-        beats[nextIdx] = foundry.utils.deepClone(beat);
-        beats.splice(prevIdx, 1);
-        applied = true;
-      } else if (prevIdx >= 0) {
-        beats[prevIdx] = foundry.utils.deepClone(beat);
+      for (const b of beats) rewriteRefs(b);
+      rewriteRefs(incoming);   // the renamed beat's own self-routes ("Back" etc.)
+
+      if (prevIdx >= 0) {
+        beats[prevIdx] = incoming;
         applied = true;
       }
     }
 
     if (!applied) {
       const idx = beats.findIndex(b => norm(b?.id) === nextId);
-      if (idx >= 0) beats[idx] = foundry.utils.deepClone(beat);
-      else beats.push(foundry.utils.deepClone(beat));
+      if (idx >= 0) beats[idx] = incoming;
+      else beats.push(incoming);
     }
 
     // Dedupe by id (preserve order)
@@ -789,7 +854,7 @@ export async function persistBeatUpdate(payload) {
 
     // Rename reconciliation beyond beat routing: opening beat + data-layer story scripts.
     if (prevId && nextId && prevId !== nextId) {
-      if (norm(campaign.openingBeatId) === prevId) campaign.openingBeatId = nextId;
+      for (const r of _campaignBeatIdRefs(campaign, prevId)) r.set(nextId);   // opener + hex overrides + NPC placement gates
       const swap = (v) => {
         if (Array.isArray(v)) return v.map(x => (typeof x === "string" && norm(x) === prevId) ? nextId : swap(x));
         if (v && typeof v === "object") { for (const k of Object.keys(v)) v[k] = (typeof v[k] === "string" && norm(v[k]) === prevId) ? nextId : swap(v[k]); }
@@ -3162,6 +3227,7 @@ async _ioScanKeysDialog() {
 
 activateListeners(html) {
     super.activateListeners(html);
+    this._cleanupPortalLayer();   // review P3 (2026-10-27): popovers whose <details> this render replaced
 
     // Main panel tabs (Campaign / Travel / Beats / Flow)
     html.find("[data-action='main-tab']").on("click", ev => {
@@ -4449,19 +4515,19 @@ try {
         const fromId = norm(b.id);
         if (!fromId || fromId === target) continue;
 
-        const where = [];
-        if (norm(b.next) === target) where.push("next");
-        if (norm(b.outcomes?.success) === target) where.push("outcomes.success");
-        if (norm(b.outcomes?.failure) === target) where.push("outcomes.failure");
-        const choices = Array.isArray(b.choices) ? b.choices : [];
-        choices.forEach((ch, i) => {
-          if (!ch) return;
-          if (norm(ch.next) === target) where.push(`choice ${i + 1} → next`);
-          if (norm(ch.failNext) === target) where.push(`choice ${i + 1} → failNext`);
-        });
+        // review P3 (2026-10-27): the same field list the rename path rewrites (_beatIdRefs).
+        const where = _beatIdRefs(b, target).map(r => r.where);
 
         if (where.length) beatRefs.push({ fromId, fromLabel: String(b.label || fromId), where });
       }
+      for (const r of _campaignBeatIdRefs(campaign, target)) beatRefs.push({ fromId: "campaign", fromLabel: "Campaign", where: [r.where] });
+      try {   // story scripts (data layer) + live hex on-enter flags: reported, never auto-cleared
+        if (campaign?.story && JSON.stringify(campaign.story).includes(JSON.stringify(target))) beatRefs.push({ fromId: "campaign.story", fromLabel: "Story scripts", where: ["names this beat"] });
+        for (const sc of (game.scenes || [])) for (const d of (sc.drawings || [])) {
+          const tf = d.flags?.["bbttcc-territory"];
+          if (norm(tf?.campaign?.onEnterBeatId) === target) beatRefs.push({ fromId: d.id, fromLabel: `Hex ${tf?.name || d.id} (${sc.name})`, where: ["on-enter beat"] });
+        }
+      } catch (_eExt) {}
 
       const tableRefs = []; // { tableId, label, count }
       try {
@@ -4488,7 +4554,7 @@ try {
         refsHtml = `
           <p><b>⚠ Other content links to this beat:</b></p>
           <ul style="margin:.25rem 0 .5rem 1.1rem;max-height:30vh;overflow:auto;">${beatRows}${tableRows}</ul>
-          <p class="bbttcc-muted"><b>Delete + Clear Links</b> also nulls those routes and removes the table entries. <b>Delete Only</b> leaves them dangling (dead routes, silent no-op table rolls).</p>`;
+          <p class="bbttcc-muted"><b>Delete + Clear Links</b> also nulls those routes and removes the table entries (gates, quest marks, story scripts and live hex flags are left for you to fix). <b>Delete Only</b> leaves them dangling (dead routes, silent no-op table rolls).</p>`;
       }
 
       let choice;
@@ -4524,19 +4590,10 @@ try {
       // Remove the beat; optionally clear every dangling link found above.
       campaign.beats = beats.filter(b => norm(b?.id) !== target);
       if (choice === "cascade") {
-        for (const b of campaign.beats) {
-          if (!b || typeof b !== "object") continue;
-          if (norm(b.next) === target) b.next = null;
-          if (b.outcomes) {
-            if (norm(b.outcomes.success) === target) b.outcomes.success = null;
-            if (norm(b.outcomes.failure) === target) b.outcomes.failure = null;
-          }
-          for (const ch of (Array.isArray(b.choices) ? b.choices : [])) {
-            if (!ch) continue;
-            if (norm(ch.next) === target) ch.next = null;
-            if (norm(ch.failNext) === target) ch.failNext = null;
-          }
-        }
+        // review P3 (2026-10-27): null every ROUTE (incl. handoff/phaseEntry/offerQuest/chase, opener,
+        // hex overrides); gates + quest marks + story scripts stay — nulling a gate would change its meaning.
+        for (const b of campaign.beats) for (const r of _beatIdRefs(b, target)) if (r.route) r.set(null);
+        for (const r of _campaignBeatIdRefs(campaign, target)) if (r.route) r.set(null);
       }
 
       await api.saveCampaign(campaignId, campaign);

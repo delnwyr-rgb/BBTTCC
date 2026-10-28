@@ -192,7 +192,9 @@ async function play(sceneRef, key, options = {}) {
     const tileShow = d.tiles.update.filter(t => t.hidden === false && scene.tiles.get(t._id)?.hidden === true);
     const tileHide = d.tiles.update.filter(t => t.hidden === true && scene.tiles.get(t._id)?.hidden === false);
     if (d.tiles.create.length) {
-      const seed = d.tiles.create.map(t => ({ ...foundry.utils.deepClone(t), alpha: 0, hidden: false }));
+      // review P3 (2026-10-27): a tile hidden in the target is created hidden at its final alpha (no fade) — seeding it
+      // hidden:false showed it to players for the whole fade; only visible creates fade in
+      const seed = d.tiles.create.map(t => t.hidden ? foundry.utils.deepClone(t) : ({ ...foundry.utils.deepClone(t), alpha: 0, hidden: false }));
       await scene.createEmbeddedDocuments("Tile", seed, { keepId: true });
     }
     if (tileShow.length) await scene.updateEmbeddedDocuments("Tile", tileShow.map(t => ({ _id: t._id, hidden: false, alpha: 0 })));
@@ -208,7 +210,7 @@ async function play(sceneRef, key, options = {}) {
       for (const tl of [...d.tiles.update, ...d.tiles.create]) {
         const start = tileStart[tl._id] || {};
         const hiding = tileHide.some(h => h._id === tl._id);
-        const showing = tileShow.some(h => h._id === tl._id) || d.tiles.create.some(c => c._id === tl._id);
+        const showing = tileShow.some(h => h._id === tl._id) || d.tiles.create.some(c => c._id === tl._id && !c.hidden);
         const a0 = showing ? 0 : Number(start.alpha ?? 1);
         const a1 = hiding ? 0 : Number(tl.alpha ?? 1);
         if (t < 1) { if (a0 !== a1) tu.push({ _id: tl._id, alpha: _lerp(a0, a1, t) }); }

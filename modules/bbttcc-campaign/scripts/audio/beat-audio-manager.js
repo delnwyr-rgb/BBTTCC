@@ -567,6 +567,9 @@ class BeatAudioManager {
     opts = opts || {};
     const caller = opts.caller || "unknown";
     const doPush = opts.push === true;
+    // review P2 (2026-10-27): a Stop also drops the one-shot parked behind this seat's gesture lock — otherwise the
+    // stopped narration plays out of context on the player's next click
+    this._lockedLatest = null;
     _audioDebug("manager:stopAll:enter", {
       caller, push: doPush,
       hadCurrent: !!this.currentSound,

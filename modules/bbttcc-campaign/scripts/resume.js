@@ -42,7 +42,9 @@ async function data() {
 
   let played = {}; try { played = A.story?.state?.(cid)?.played || {}; } catch (_e) {}
   let choices = []; try { const ds = game.settings.get(MOD_ID, "directorState"); const d = typeof ds === "string" ? JSON.parse(ds) : ds; choices = Array.isArray(d?.choices) ? d.choices.filter(c => !c.campaignId || c.campaignId === cid) : []; } catch (_e) {}
-  const lastChoiceFor = (beatId, ts) => { let hit = null; for (const c of choices) if (String(c.beatId) === beatId && Number(c.ts) >= Number(ts) - 1000) hit = c; return hit; };
+  // review P3 (2026-10-27): the EARLIEST choice logged since the latest visit — the log is written after the chain settles,
+  // so a hub revisited inside its own chain logs the inner (latest) visit's choice first and the outer visit's last
+  const lastChoiceFor = (beatId, ts) => { let hit = null; for (const c of choices) if (String(c.beatId) === beatId && Number(c.ts) >= Number(ts) - 1000 && (!hit || Number(c.ts) < Number(hit.ts))) hit = c; return hit; };
 
   const recent = Object.entries(played)
     .map(([id, v]) => ({ id, ts: Number(v?.ts) || 0 }))
@@ -99,15 +101,15 @@ async function open() {
       .bbttcc-resume .chose{opacity:.8;font-style:italic}
     </style>`;
 
-  const run = async (beatId) => {
+  const run = async (beatId, source = "resume") => {   // "resume" = pick up a started beat (no re-record); "resume-next" = a fresh beat
     const A = api(); if (!A?.runBeat) return;
-    try { await A.runBeat(d.cid, beatId, { force: true, source: "resume" }); }
+    try { await A.runBeat(d.cid, beatId, { force: true, source }); }
     catch (e) { console.warn(TAG, "resume run failed", e); ui.notifications?.error?.("Couldn't start that beat — see the console."); }
   };
   const buttons = {};
   if (d.open) buttons.pick = { icon: '<i class="fas fa-play"></i>', label: `Pick up: ${d.open.label}`, callback: () => { run(d.open.beatId); } };
   else if (d.unfinished) buttons.pick = { icon: '<i class="fas fa-play"></i>', label: `Pick up: ${d.unfinished.label}`, callback: () => { run(d.unfinished.beatId); } };
-  else if (d.next?.ready) buttons.next = { icon: '<i class="fas fa-play"></i>', label: `Run next: ${d.next.label}`, callback: () => { run(d.next.id); } };
+  else if (d.next?.ready) buttons.next = { icon: '<i class="fas fa-play"></i>', label: `Run next: ${d.next.label}`, callback: () => { run(d.next.id, "resume-next"); } };
   buttons.close = { icon: '<i class="fas fa-times"></i>', label: "Not now" };
 
   _dlg = new Dialog({ title: "⏯ The last time we saw Lucky…", content, buttons, default: Object.keys(buttons)[0] }, { left: 80, top: 10, width: 460 });

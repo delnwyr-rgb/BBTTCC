@@ -113,7 +113,7 @@ export class BBTTCCCampaignScriptEditorApp extends Application {
   }
   _stepRows(steps, path) {
     const chapters = Object.keys(this.state.quest.chapters || {});
-    return steps.map((st, i) => { const dv = this._doneView(st.done); return {
+    return steps.map((st, i) => { const dv = st.done ? this._doneView(st.done) : { kind: st._doneKind || "any", value: "" }; return {
       i, path: `${path}.${i}`, id: st.id, label: st.label, line: st.line, beats: (st.beats || []).join(", "), group: st.group || "", chapter: st.chapter || "", hereLine: st.hereLine || "",
       borrow: !!st.borrow, doneKind: dv.kind, doneValue: dv.value, chapters, first: i === 0, last: i === steps.length - 1
     }; });
@@ -157,6 +157,9 @@ export class BBTTCCCampaignScriptEditorApp extends Application {
       const d = this._doneFromView(kind, value);
       const st = foundry.utils.getProperty(this.state, path); if (!st) return;
       if (d) st.done = d; else delete st.done;
+      // review P2 (2026-10-27): remember the picked kind until a value arrives, else the re-render snaps back to "any".
+      // Non-enumerable, so JSON view / deepClone on save never carry it.
+      Object.defineProperty(st, "_doneKind", { value: kind, writable: true, configurable: true, enumerable: false });
       if (ev.currentTarget.hasAttribute("data-done-kind")) this.render(false);
     });
     // chapter rows (quest.chapters + script.chapters share the key)

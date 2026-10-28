@@ -1062,6 +1062,19 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     } catch (_eMsg) {}
     return { added, removed };
   }
+  // review P3 (2026-10-27): a lifted chip takes off only the states it added (row.ownedModifiers, stamped at add time) —
+  // never a state the hex already had (raid damage), one another chip still holds, or a radiation tag (fromNames would zero the hex).
+  // Legacy rows without ownedModifiers fall back to the names they carry.
+  function _chipOwnedNames(row) {
+    const radApi = get(game, "bbttcc.api.territory.radiation", null);
+    const src = row && Array.isArray(row.ownedModifiers) ? row.ownedModifiers : (row && Array.isArray(row.modifiers) ? row.modifiers : _registryModifiers(row && row.key));
+    return (Array.isArray(src) ? src : []).filter(n => n && !(radApi && radApi.isRadTag(n)));
+  }
+  function _chipLiftNames(gone, keep) {
+    const held = new Set(); for (const r of (keep || [])) for (const n of _chipOwnedNames(r)) held.add(_normName(n));
+    const out = []; for (const r of (gone || [])) for (const n of _chipOwnedNames(r)) if (!held.has(_normName(n))) out.push(n);
+    return out;
+  }
   // Duration: World Modifier rows carry expiresTurn; at every applied Advance, expired rows come off
   // the hex together with the named states they brought (the old rows never expired — 2026-09-13).
   async function sweepExpiredWorldModifiers({ turn = null } = {}) {
@@ -1077,8 +1090,8 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         for (const row of tf.worldModifiers) { const exp = Number(row && row.expiresTurn || 0); if (exp > 0 && now >= exp) gone.push(row); else keep.push(row); }
         if (!gone.length) continue;
         await d.update({ ["flags." + MOD_T + ".worldModifiers"]: keep }, { parent: d.parent });
-        const names = []; for (const row of gone) for (const n of (Array.isArray(row.modifiers) ? row.modifiers : _registryModifiers(row.key))) names.push(n);
-        await _applyNamedModifiers(d, [], names, { via: "expired (turn " + now + ")" });
+        const names = _chipLiftNames(gone, keep);
+        if (names.length) await _applyNamedModifiers(d, [], names, { via: "expired (turn " + now + ")" });
         out.expired += gone.length;
       }
     } catch (e) { console.warn(TAG, "sweepExpiredWorldModifiers failed", e); }
@@ -1226,9 +1239,9 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       source        : (ctx.source !== undefined ? ctx.source : "bbttcc-campaign"),
       campaignId    : (ctx.campaignId !== undefined ? ctx.campaignId : null),
       campaignTitle : (ctx.campaignTitle !== undefined ? ctx.campaignTitle : null),
-      beatId        : beat.id,
-      beatType      : beat.type,
-      beatLabel     : (beat.label || beat.id || "(unnamed)")
+      beatId        : (beat.id || ctx.beatId),   // review P3 (2026-10-27): raid typed rows arrive as { worldEffects } with the name on ctx
+      beatType      : (beat.type || ctx.beatType),
+      beatLabel     : (beat.label || ctx.beatLabel || beat.id || ctx.beatId || "(unnamed)")
     };
 
     // 1) Territory outcome
@@ -1397,6 +1410,8 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       if (fx[i] && fx[i].factionId) { warFactionId = fx[i].factionId; break; }
     }
     if (!warFactionId && defaultFactionId) warFactionId = defaultFactionId;
+    // review P2 (2026-10-27): a beat with no faction rows still logs — the campaign's Domain, like militia/charter (local fallback only)
+    if (!warFactionId) { try { const capi = get(game, "bbttcc.api.campaign", null); const cid = (ctx && ctx.campaignId) || (capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null); const camp = (cid && capi && typeof capi.getCampaign === "function") ? capi.getCampaign(cid) : null; warFactionId = String((camp && camp.factionId) || ((camp && camp.factionIds) || [])[0] || "").replace(/^Actor\./, "") || null; } catch (_eW) {} }
 
     // 2b) Unlock rewards
     try {
@@ -1465,8 +1480,10 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
 
           if (op === "remove") {   // lift the chip and the named states it brought
             const rest = arr.filter(cur => !(cur && String(cur.key || "") === key));
+            const lifted = arr.filter(cur => cur && String(cur.key || "") === key);
             if (rest.length !== arr.length) { tf.worldModifiers = rest; await doc.update({ ["flags." + MOD_T]: tf }, { parent: doc.parent }); }
-            await _applyNamedModifiers(doc, [], names, { beat, beatId: beatCtx.beatId || beat.id });
+            const liftNames = lifted.length ? _chipLiftNames(lifted, rest) : names;   // no chip on the hex → the row's names, as authored
+            if (liftNames.length) await _applyNamedModifiers(doc, [], liftNames, { beat, beatId: beatCtx.beatId || beat.id });
             appliedCount++;
             continue;
           }
@@ -1489,12 +1506,13 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
             modifiers: names
           };
 
-          let replaced = false;
+          let replaced = false, prevOwned = [];
           for (let j = 0; j < arr.length; j++) {
             const cur = arr[j];
             if (!cur || typeof cur !== "object") continue;
             if (String(cur.key || "") !== key) continue;
             if (cur.createdTurn && !row.createdTurn) row.createdTurn = cur.createdTurn;
+            prevOwned = Array.isArray(cur.ownedModifiers) ? cur.ownedModifiers : null;   // null = legacy row, ownership unknown
             arr[j] = row;
             replaced = true;
             break;
@@ -1503,7 +1521,12 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
 
           tf.worldModifiers = arr;
           await doc.update({ ["flags." + MOD_T]: tf }, { parent: doc.parent });
-          await _applyNamedModifiers(doc, names, [], { beat, beatId: beatCtx.beatId || beat.id });   // the chip's teeth (2026-09-13)
+          const resN = await _applyNamedModifiers(doc, names, [], { beat, beatId: beatCtx.beatId || beat.id });   // the chip's teeth (2026-09-13)
+          if (prevOwned) {   // review P3 (2026-10-27): remember which states this chip actually brought
+            const own = prevOwned.slice(); for (const n of ((resN && resN.added) || [])) if (!own.some(o => _normName(o) === _normName(n))) own.push(n);
+            row.ownedModifiers = own;
+            await doc.update({ ["flags." + MOD_T + ".worldModifiers"]: arr }, { parent: doc.parent });
+          }
           appliedCount++;
         }
 
@@ -1547,7 +1570,9 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         const beatHex = String((beat && beat.targetHexUuid) ? beat.targetHexUuid : "").trim();
         // Endings don't inherit the arrival's hex (_chainCtxFrom), so a blank hex falls back to where the party
         // stands: the faction's recorded arrival (flags.bbttcc-factions.travel.atHexUuid, written on every hex enter).
-        const fid = String((ctx && ctx.factionId) || "").replace(/^Actor\./, "");
+        // No ctx faction on a beat's own effects → the campaign's Domain, like militia/charter/creature (review P1, 2026-10-27).
+        let camp = null; try { const capi = get(game, "bbttcc.api.campaign", null); const cid = (ctx && ctx.campaignId) || (capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null); camp = (cid && capi && typeof capi.getCampaign === "function") ? capi.getCampaign(cid) : null; } catch (_eC) {}
+        const fid = String((ctx && ctx.factionId) || (camp && camp.factionId) || ((camp && camp.factionIds) || [])[0] || "").replace(/^Actor\./, "");
         const atHex = fid ? String(get(game.actors.get(fid) || {}, "flags.bbttcc-factions.travel.atHexUuid", "") || "") : "";
         const ref = ctxHex || beatHex || atHex;
         const doc = hr.hexName ? _findHexByName(hr.hexName) : (hr.targetHexUuid ? await resolveHexDoc(hr.targetHexUuid) : (ref ? await resolveHexDoc(ref) : null));
@@ -1574,6 +1599,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       const hexApi = get(game, "bbttcc.api.tikkun.hex", null);
       if (hsList.length && !hexApi) console.warn(TAG, "hexSpark: bbttcc-tikkun hex API not available — nothing applied", { beatId: beatCtx.beatId });
       const sparkLines = [];
+      const escS = (v) => foundry.utils.escapeHTML(String(v ?? ""));   // review P3 (2026-10-27): GM card text is HTML
       for (const hs of hsList) {
         if (!hexApi || !hs || typeof hs !== "object") continue;
         const action = String(hs.action || "").trim().toLowerCase();
@@ -1602,8 +1628,8 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         const ok = !!(r && r.ok);
         const keyTxt = String((r && r.key) || hs.key || "").replace(/^spark_/, "").replace(/_/g, " ");
         sparkLines.push(ok
-          ? `${action === "integrate" ? "✦ lit" : action === "corrupt" ? "🜏 corrupted" : action === "repair" ? "⚒ repaired" : action === "seat" ? "◈ seated" : "○ unseated"} — ${keyTxt} at ${hexLabel}${r && r.already ? " (already)" : ""}`
-          : `⚠ ${action} refused at ${hexLabel}: ${(r && r.error) || "unknown"}`);
+          ? `${action === "integrate" ? "✦ lit" : action === "corrupt" ? "🜏 corrupted" : action === "repair" ? "⚒ repaired" : action === "seat" ? "◈ seated" : "○ unseated"} — ${escS(keyTxt)} at ${escS(hexLabel)}${r && r.already ? " (already)" : ""}`
+          : `⚠ ${escS(action)} refused at ${escS(hexLabel)}: ${escS((r && r.error) || "unknown")}`);
         if (ok && !(r && r.already)) { changed = true; notes.push(`hexSpark:${action}`); }
       }
       if (sparkLines.length) {
@@ -2395,7 +2421,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
   // ── Market staging (2026-10-17, Dave: "when the Trade Caravan beat hits, the Caravan becomes available") ──
   // openMarket.activate flips a vendor's `active` switch on; closeOnTurnEnd records it in the world setting
   // `bbttcc-campaign.marketStaging` { [vendorId]: { closeOnTurnEnd, openedTurn, beatId } } and the
-  // bbttcc:advanceTurn:end sweep (primary GM) flips it off again. closeMarket flips it off now.
+  // bbttcc:advanceTurn:end sweep (the advancing GM) flips it off again. closeMarket flips it off now.
   const MOD_MARKET = "bbttcc-market", SETTING_MARKET_STAGING = "marketStaging";
   function _registerMarketStaging() {
     try {
@@ -2435,12 +2461,11 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     console.log(TAG, `vendor "${v.name}" → ${on ? "ACTIVE" : "inactive"}${on && stage ? " (staged: closes at turn end)" : ""}`);
     return true;
   }
-  /** Turn-end: every staged vendor goes inactive again (primary GM only). Returns { closed }. */
+  /** Turn-end: every staged vendor goes inactive again (the advancing GM). Returns { closed }. */
   async function sweepStagedMarkets() {
     const out = { closed: 0, vendors: [] };
     try {
-      if (!game.user?.isGM) return out;
-      const gms = game.users.filter(u => u.isGM && u.active).sort((a, b) => a.id.localeCompare(b.id)); if (gms.length && gms[0].id !== game.user.id) return out;
+      if (!game.user?.isGM) return out;   // review P2 (2026-10-27): advanceTurn:end is a local callAll on the advancing GM — no primary-GM gate
       _registerMarketStaging();
       const st = game.settings.get("bbttcc-campaign", SETTING_MARKET_STAGING) || {};
       for (const [vid, row] of Object.entries(st)) {
@@ -2561,13 +2586,12 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     } catch (e) { console.warn(TAG, "_coalitionStewards failed", e); }
     return out;
   }
-  /** Turn-scoped party effects fall off when the world turn advances past their expiresTurn (primary GM only). */
+  /** Turn-scoped party effects fall off when the world turn advances past their expiresTurn (the advancing GM). */
   function installPartyEffectExpiryHook() {
     if (globalThis.__bbttccPartyEffectExpiryInstalled) return; globalThis.__bbttccPartyEffectExpiryInstalled = true;
     Hooks.on("bbttcc:advanceTurn:end", async () => {
       try {
-        if (!game.user?.isGM) return;
-        const gms = game.users.filter(u => u.isGM && u.active).sort((a, b) => a.id.localeCompare(b.id)); if (gms.length && gms[0].id !== game.user.id) return;
+        if (!game.user?.isGM) return;   // review P2 (2026-10-27): local hook on the advancing GM only — a primary-GM gate dropped it with two GMs
         const turn = _worldTurn();
         for (const a of game.actors.contents) {
           if (!a || a.type !== "character") continue;

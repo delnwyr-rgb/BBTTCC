@@ -670,11 +670,26 @@ export function deriveSituation(ctx) {
   }
   const uniq = arr => [...new Set(arr || [])];
   const reqsOf = (b) => { const r = b?.inject?.requires; return Array.isArray(r) ? r.filter(Boolean) : (r && typeof r === "object" ? [r] : []); };
+  // review P2 (2026-10-27): the engine's readiness carries no reasons (only the Visualizer passes gate reports), so the
+  // gate-door and Day's-End fallbacks below never fired on the slate/resume. When a not-ready record has none, read the
+  // two kinds those fallbacks parse straight from the declaration: an unplayed store beatMark and an unmet `turn` gate.
+  const turnMet = (c) => !((c.gte != null && !(turn >= Number(c.gte))) || (c.lte != null && !(turn <= Number(c.lte))) || (c.eq != null && !(turn === Number(c.eq))));
+  const declaredReasons = (b) => {
+    const out = [];
+    const one = (c) => {
+      if (!c || typeof c !== "object") return;
+      if (c.beatMark != null) { const id = String(c.beatMark); if (c.not === true) return; if (!c.quest && fired.has(id)) return; out.push({ text: `beat “${id}” (played)`, met: false, kind: "beatMark", declared: true }); return; }
+      if (String(c.flag || "") === "turn" && !turnMet(c)) out.push({ text: `turn ${c.gte != null ? `≥ ${c.gte}` : c.lte != null ? `≤ ${c.lte}` : `= ${c.eq}`}`, met: false, kind: "flag", current: turn, declared: true });
+    };
+    for (const c of reqsOf(b)) { if (Array.isArray(c?.anyOf)) c.anyOf.forEach(one); else one(c); }
+    return out;
+  };
   const readiness = (b) => {
     const r = b ? readyOf(String(b.id)) : null;
-    if (r && typeof r.ready === "boolean") return r;
+    if (r && typeof r.ready === "boolean") return (!r.ready && !(r.reasons || []).length) ? { ...r, reasons: declaredReasons(b) } : r;
     // unknown readiness: optimistic (ctx.optimistic — the slate's evaluation rounds) or "ready iff ungated"
-    return { ready: ctx.optimistic ? true : reqsOf(b).length === 0, reasons: [], unknown: true };
+    const ready = ctx.optimistic ? true : reqsOf(b).length === 0;
+    return { ready, reasons: ready ? [] : declaredReasons(b), unknown: true };
   };
   const unmet = (b) => (readiness(b).reasons || []).filter(r => r && r.met === false);
   const questGatesOf = (b) => {
@@ -876,7 +891,7 @@ export function deriveSituation(ctx) {
   let nowOut = now;
   if (!nowOut || !nowOut.next || ["turn", "complete", "empty", "done-no-closer"].includes(String(nowOut.why || ""))) {
     const inDoors = (b) => Object.values(QUEST_SCRIPTS).some(sc => (sc.doors || []).some(d => (d.beats || []).map(String).includes(String(b.id))));
-    const readyNow = (b) => { const r = readyOf(String(b.id)); return !!(r && r.ready) && !(sealOfDecl(b, store || undefined, phase)?.sealed); };
+    const readyNow = (b) => !!readiness(b).ready && !(sealOfDecl(b, store || undefined, phase)?.sealed);   // review P2 (2026-10-27): readiness() — unknown counts the same as everywhere else (optimistic rounds / ungated)
     const entryFor = (x) => { const ins = beats.filter(p => p && p.id !== x.id && (p.choices || []).some(c => String(c?.next || "") === String(x.id) || String(c?.failNext || "") === String(x.id)) && String(p.story?.quest || "") === String(x.story?.quest || "") && (!fired.has(String(p.id)) || p.inject?.repeatable === true) && readyNow(p)); return ins.find(inDoors) || ins.find(p => p.inject?.repeatable === true) || ins.find(p => !fired.has(String(p.id))) || null; };
     outer: for (const q of inPlay) {
       for (const r of (q.next?.reasons || [])) {
@@ -893,7 +908,7 @@ export function deriveSituation(ctx) {
   try {
     const nx = nowOut && nowOut.next; const reasons = nx && !nx.ready ? (nx.reasons || []) : [];
     if (nx && reasons.some(r => /\bturn\b/i.test(String(r?.text || "")))) {
-      const term = beats.find(b => /\bterminal\b/.test(String(b.tags || "")) && String(b.id) !== "ag_days_end" && (readyOf(String(b.id))?.ready)) || (phase <= 1 ? byId.get("ag_days_end") : null);
+      const term = beats.find(b => /\bterminal\b/.test(String(b.tags || "")) && String(b.id) !== "ag_days_end" && readiness(b).ready) || (phase <= 1 ? byId.get("ag_days_end") : null);
       if (term && !(nowOut.roads || []).some(r => r?.beat?.id === term.id)) {
         const def = QUEST_MAP.quests[String(term.story?.quest || "")] || null;
         nowOut = { ...nowOut, roads: [{ quest: nowOut.quest, chapter: null, beat: term, ready: true, here: hereOf(term, def), viaTurn: true, line: "The day is spent. Lock the turn, then the story moves." }, ...(nowOut.roads || [])] };
@@ -1096,7 +1111,9 @@ export function applyRecord(state, beat, meta = {}) {
   // playing any beat of a quest means the quest is in play (a town walk starts the town)
   startQuest(d.quest, d.role === "start" ? "start" : "played");
   if (d.chapter) startChapter(d.quest, d.chapter, d.role === "start" ? "start" : "played");
-  if (d.role === "ending" && d.chapter) {
+  // review P3 (2026-10-27): the first ending/closing stands (same rule as endChapter/closeQuest) — a forced or resumed re-run
+  // of an ending or closer must not rewrite the recorded ending or fire the change (whisper, quest_closed FX) again
+  if (d.role === "ending" && d.chapter && !st.chapters[d.quest][d.chapter].ending) {
     st.chapters[d.quest][d.chapter].ending = { name: String(d.ending || id.split("_").slice(-1)[0]), ...stamp };
     changes.push({ kind: "chapter-ended", quest: d.quest, chapter: d.chapter, ending: st.chapters[d.quest][d.chapter].ending.name });
   }
@@ -1105,8 +1122,10 @@ export function applyRecord(state, beat, meta = {}) {
       st.chapters[d.quest][d.chapter].ending = { name: String(d.ending || id.split("_").slice(-1)[0]), ...stamp };
       changes.push({ kind: "chapter-ended", quest: d.quest, chapter: d.chapter, ending: st.chapters[d.quest][d.chapter].ending.name });
     }
-    st.closed[d.quest] = { name: String(d.ending || id.split("_").slice(-1)[0]), ...stamp };
-    changes.push({ kind: "quest-closed", quest: d.quest, ending: st.closed[d.quest].name });
+    if (!st.closed[d.quest]) {
+      st.closed[d.quest] = { name: String(d.ending || id.split("_").slice(-1)[0]), ...stamp };
+      changes.push({ kind: "quest-closed", quest: d.quest, ending: st.closed[d.quest].name });
+    }
   }
   for (const a of (Array.isArray(d.alsoStarts) ? d.alsoStarts : [])) {
     if (!a || !a.quest || !QUEST_MAP.quests[a.quest]) continue;

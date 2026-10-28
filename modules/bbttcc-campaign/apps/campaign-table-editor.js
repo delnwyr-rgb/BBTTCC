@@ -148,7 +148,9 @@ function _composeTravelTableId(terrain, tier) {
   const hit = keys.find(k => k.toLowerCase() === t.toLowerCase());
   if (hit) t = hit;
   const n = Math.max(1, Math.floor(Number(tier) || 1));
-  return `travel_${t}_t${n}`;
+  // Lowercase: the travel resolvers lowercase the terrain and look up exact-case ids, so a camelCase
+  // "travel_ashWastes_t2" was never found (review P1, 2026-10-27). The dropdown keeps the camelCase key.
+  return `travel_${t.toLowerCase()}_t${n}`;
 }
 
 // Parse terrain + tier out of an existing id (tolerant of junk suffixes like _EFyI).
@@ -622,7 +624,7 @@ export class BBTTCCCampaignTableEditorApp extends Application {
   /**
    * Form entry rows -> entry objects, each overlaid onto the entry rendered in
    * that row (fields the grid does not show survive). keepBlank keeps
-   * incomplete / zero-weight rows so draft indexes stay aligned with the grid.
+   * incomplete / negative-weight rows so draft indexes stay aligned with the grid.
    */
   _entriesFromForm(fd, { keepBlank = false } = {}) {
     const entryCampaignIds = fd.getAll("entry-campaign-id").map(v => String(v || "").trim());
@@ -649,7 +651,8 @@ export class BBTTCCCampaignTableEditorApp extends Application {
       const weight = Number(entryWeights[i] != null ? entryWeights[i] : 0) || 0;
 
       if (!keepBlank && (!campaignId || !beatId)) continue;
-      if (!keepBlank && weight <= 0) continue;
+      // review P2 (2026-10-27): weight 0 = parked (seeded placeholders); _weightedPick never rolls it, so keep it on Save.
+      if (!keepBlank && weight < 0) continue;
 
       // Start from the stored entry behind this row; overlay only the columns
       // the grid edits.

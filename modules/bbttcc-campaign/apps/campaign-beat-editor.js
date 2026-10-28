@@ -223,7 +223,7 @@ const BEATS_HELP = {
   footer: "Save commits the whole form to the Campaign Builder; Cancel discards everything since the last save.",
 
   // Footer
-  saveBeat: "Save — harvests the whole form (all tabs + injected panels) and hands the beat to the Campaign Builder via the updateBeat hook; id changes ride along as renames. Unsaved panels are lost on Cancel.",
+  saveBeat: "Save — harvests the whole form (all tabs + injected panels) and writes the beat into the campaign; id changes ride along as renames. Unsaved panels are lost on Cancel.",
   cancel: "Cancel — close without saving; everything since the last Save is discarded."
 };
 
@@ -1791,12 +1791,20 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
 
       const _factionOptions = (selectedId) => {
         const sel = String(selectedId || "");
-        return factions.map(a => {
+        const opts = factions.map(a => {
           const id = String(a.id);
           const nm = foundry.utils.escapeHTML(a.name || a.id);
           const isSel = sel && id === sel;
           return `<option value="${id}" ${isSel ? "selected" : ""}>${nm}</option>`;
         }).join("");
+        // "@coalition" (the whole roster) is always offered, and any other stored side that is not a
+        // listed faction stays selected — a blank select here dropped the row on Save (review P1, 2026-10-27).
+        const coal = `<option value="@coalition" ${sel === "@coalition" ? "selected" : ""}>@coalition — whole roster</option>`;
+        if (sel && sel !== "@coalition" && !factions.some(a => String(a.id) === sel)) {
+          const v = foundry.utils.escapeHTML(sel);
+          return `<option value="${v}" selected>${v} (stored)</option>` + coal + opts;
+        }
+        return coal + opts;
       };
 
       // OP keys (canonical)
@@ -1846,6 +1854,11 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
         if (warlog && warlog.length) $insertBefore = warlog.closest?.(".form-group, .bbttcc-card, .bbttcc-panel") || null;
       } catch (_eA) {}
 
+      // Row fields this panel does not show (deferred, recurring, label, maneuverKey…) ride in a hidden
+      // input and are merged back on Save, so an edit never strips them (review P1, 2026-10-27).
+      const FX_SHOWN = new Set(["factionId","moraleDelta","loyaltyDelta","unityDelta","darknessDelta","vpDelta","opDeltas","allowOvercap"]);
+      const _fxExtra = (fx) => { const o = {}; for (const [k, v] of Object.entries(fx || {})) if (!FX_SHOWN.has(k)) o[k] = v; return o; };
+
       const rowHtml = (fx, idx) => {
         const fId = String(fx?.factionId || "");
         const l = _safeNum(fx?.loyaltyDelta, 0);
@@ -1873,6 +1886,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
                   <option value="" ${fId ? "" : "selected"}>—</option>
                   ${_factionOptions(fId)}
                 </select>
+                <input type="hidden" name="world-faction-extra" value="${foundry.utils.escapeHTML(JSON.stringify(_fxExtra(fx)))}"/>
               </label>
 
               <div class="bbttcc-fxgm-actions">
@@ -3464,7 +3478,9 @@ _syncCoreFromForm() {
         const checkStat = chCheckStats[i] || "";
         const checkDC = chCheckDCs[i] ?? 0;
         const failNext = chFailNexts[i] || "";
-        if (!label && !next && !description && !checkStat && !failNext) continue;
+        // review P3 (2026-10-27): keep blank rows here so this.beat.choices stays index-aligned with the
+        // form rows Remove / ▲▼ address; _saveFromForm still compacts them.
+        if (!label && !next && !description && !checkStat && !failNext) { choices.push({ ...this._renderedChoiceAt(i), label: "", next: "", description: "", checkStat: "", checkDC, failNext: "" }); continue; }
         // Start from the choice as rendered so fields the form does not show
         // (requires, cooldownTurns, checkMode, politicalTags…) round-trip.
         choices.push({ ...this._renderedChoiceAt(i), label: label || `Choice ${i + 1}`, next, description, checkStat, checkDC, failNext });
@@ -3617,12 +3633,14 @@ _syncCoreFromForm() {
     const fxLoyalty = fd.getAll("world-faction-loyalty").map(v => _safeNum(v, 0));
     const fxUnity = fd.getAll("world-faction-unity").map(v => _safeNum(v, 0));
     const fxDark = fd.getAll("world-faction-darkness").map(v => _safeNum(v, 0));
+    const fxExtra = fd.getAll("world-faction-extra").map(v => { try { const o = JSON.parse(String(v || "{}")); return (o && typeof o === "object" && !Array.isArray(o)) ? o : {}; } catch (_eX) { return {}; } });
 
     const factionEffects = [];
     const fxN = Math.max(fxFaction.length, fxLoyalty.length, fxUnity.length, fxDark.length);
     for (let i = 0; i < fxN; i++) {
       if (forSave && !fxFaction[i]) continue;
       factionEffects.push({
+        ...(fxExtra.length === fxFaction.length ? (fxExtra[i] || {}) : {}),
         factionId: fxFaction[i] || "",
         moraleDelta: 0,   // retired 2026-10-18 (ruling 19): the editor no longer offers a Morale Δ; stale values are zeroed on save
         loyaltyDelta: fxLoyalty[i] ?? 0,
@@ -3787,7 +3805,7 @@ _syncCoreFromForm() {
     }
   }
 
-  _saveFromForm(clickedEl) {
+  async _saveFromForm(clickedEl) {
     let form = clickedEl?.closest?.("form");
     if (!form) form = this.element?.find?.("form.bbttcc-beat-editor-form")?.[0];
     if (!form) form = this.element?.find?.("form")?.[0];
@@ -4014,11 +4032,19 @@ _syncCoreFromForm() {
 
     console.log(TAG, "Saving beat via hook:", { campaignId: this.campaignId, beat: this.beat });
 
-    Hooks.call("bbttcc-campaign:updateBeat", {
-      campaignId: this.campaignId,
-      prevBeatId: this._originalBeatId,
-      beat: foundry.utils.deepClone(this.beat)
-    });
+    // review P2 (2026-10-27): the updateBeat listener lives in the lazily-loaded Builder module, so a
+    // save from a fresh page (tour opens the editor directly) hit no listener and was lost behind a
+    // success toast. Persist directly, then refresh any open Builder the way the hook listener does.
+    const payload = { campaignId: this.campaignId, prevBeatId: this._originalBeatId, beat: foundry.utils.deepClone(this.beat) };
+    let ok = false;
+    try {
+      const mod = await import("./campaign-builder-app.js");
+      ok = await mod.persistBeatUpdate(payload);
+      if (ok) for (const w of Object.values(ui.windows || {})) {
+        try { if (w instanceof mod.BBTTCCCampaignBuilderApp) w._afterBeatPersisted(payload); } catch (_e) {}
+      }
+    } catch (e) { console.error(TAG, "Beat save failed:", e); }
+    if (!ok) { ui.notifications?.error?.("Beat NOT saved — see console. The editor stays open."); return; }
 
     ui.notifications?.info?.("Beat updated.");
     this.close();

@@ -528,6 +528,7 @@ function _extractTurnNumber(beat) {
 
 function _syncWorldTurnBeatsForCampaign(campaignId) {
   try {
+    if (!game.user?.isGM) return false;   // world setting — player clients can't write it (review P3, 2026-10-27)
     var w = _getWorldAPI();
     if (!w) return false;
 
@@ -561,14 +562,14 @@ function _syncWorldTurnBeatsForCampaign(campaignId) {
     });
 
     if (typeof w.setTurnBeatsMap === "function") {
-      w.setTurnBeatsMap(map);
+      Promise.resolve(w.setTurnBeatsMap(map)).catch(function (eS) { warn("setTurnBeatsMap failed:", eS); });
       return true;
     }
 
     // Fallback: write hidden setting directly (api.world.js ensures it's registered).
     try {
       if (game && game.settings && typeof game.settings.set === "function") {
-        game.settings.set("bbttcc-world", "turnBeats", map);
+        Promise.resolve(game.settings.set("bbttcc-world", "turnBeats", map)).catch(function (eS) { warn("turnBeats write failed:", eS); });
         return true;
       }
     } catch (_e2) {}
@@ -711,7 +712,7 @@ async function deleteCampaign(id) {
   // If we deleted the active campaign, clear the world turn-beats map.
   try {
     var active = getActiveCampaignId();
-    if (String(active || "") === String(id)) {
+    if (String(active || "") === String(id) && game.user?.isGM) {
       var w = _getWorldAPI();
       if (w && typeof w.setTurnBeatsMap === "function") w.setTurnBeatsMap({});
       else if (game && game.settings && typeof game.settings.set === "function") game.settings.set("bbttcc-world", "turnBeats", {});
@@ -980,9 +981,14 @@ function _tagArray(tagStr) {
   return String(tagStr || "").split(/[\s,]+/g).map(s => _canonicalizeCampaignTag(s.trim())).filter(Boolean);
 }
 
-function _passesEntryConditions(entry, { hexUuid = null, tags = "", factionId = null } = {}) {
+function _passesEntryConditions(entry, { hexUuid = null, tags = "", factionId = null, terrain = null, tier = null } = {}) {
   const c = entry?.conditions || {};
   const tagList = _tagArray(tags);
+
+  // Table Editor columns (review P2, 2026-10-27): Required Tag always gates; Terrain / Tier gate only when the roll knows them.
+  if (c.requiredTag && !tagList.includes(_canonicalizeCampaignTag(c.requiredTag))) return false;
+  if (c.terrain && terrain && String(c.terrain).trim().toLowerCase() !== String(terrain).trim().toLowerCase()) return false;
+  if (c.tier != null && c.tier !== "" && tier != null && tier !== "" && Number(c.tier) !== Number(tier)) return false;
 
   // MENACES (2026-10-21): conditions.scale = foot | rig | any — judged against the drawing faction's party scale
   // (boarded rig → owned mobile rigs → foot; bbttcc-travel menace.js). No faction in ctx = no scale filter.
@@ -1025,8 +1031,9 @@ function _passesEntryConditions(entry, { hexUuid = null, tags = "", factionId = 
 }
 
 function _weightedPick(entries) {
+  // review P3 (2026-10-27): match the travel roller — a missing/invalid weight counts as 1; only an explicit ≤ 0 is parked.
   const pool = entries
-    .map(e => ({ e, w: Number(e?.weight ?? 0) }))
+    .map(e => { const w = Number(e?.weight); return { e, w: Number.isFinite(w) && e?.weight !== "" && e?.weight != null ? w : 1 }; })
     .filter(x => x.w > 0);
 
   const total = pool.reduce((s, x) => s + x.w, 0);
@@ -1058,7 +1065,7 @@ async function runRandomTable({ tableId, hexUuid = null, tags = "", ctx = {}, dr
   }
 
   const entries = Array.isArray(table.entries) ? table.entries : [];
-  const prefiltered = entries.filter(ent => _passesEntryConditions(ent, { hexUuid, tags, factionId: ctx?.factionId || null }));
+  const prefiltered = entries.filter(ent => _passesEntryConditions(ent, { hexUuid, tags, factionId: ctx?.factionId || null, terrain: ctx?.terrain ?? null, tier: ctx?.tier ?? null }));
   // (2026-09-14) a drawn beat must also pass its OWN gates and seals, and an entry marked `once`
   // is spent once the story store has the beat as played — a rung of a ladder is drawn once, in its act.
   const filtered = [];
@@ -1550,7 +1557,7 @@ function _buildPlayerFacingDialogHtml(payload) {
       for (var i = 0; i < choices.length; i++) {
         var ch = choices[i] || {};
         var label = _escapeHtml(ch.label || ("Choice " + (i + 1)));
-        var cdesc = _stripGmNotes(_expandStoryTokens(String(ch.description || "").trim()));   // round 2 E2 (2026-10-20): GM asides never reach the player card; story tokens expand (10-20 {{#at}})
+        var cdesc = _stripGmNotes(_expandStoryTokens(String(ch.description || "").trim(), undefined, { raw: true }));   // escaped once below (review P3, 2026-10-27); round 2 E2 (2026-10-20): GM asides never reach the player card; story tokens expand (10-20 {{#at}})
         var checkLabel = String(ch.checkLabel || "").trim();
         var checkDC = _num(ch.checkDC, 0);
 
@@ -1802,7 +1809,8 @@ function _choiceCheckLabel(key) {
     "op.softpower": "Soft Power",
     "op.diplomacy": "Diplomacy",
     "op.logistics": "Logistics",
-    "op.cult": "Culture",
+    "op.culture": "Culture",
+    "op.cult": "Culture",   // legacy key
     "op.faith": "Faith"
   };
   return map[k] || key;
@@ -2027,7 +2035,10 @@ async function _computeFactionOpRollBonusMap(faction) {
       // Mirror _rollChoiceCheck exactly: bank contributes whole OPs (marks/10
       // floor), roster contributions are already authored in OP units. The
       // chips previously showed raw marks (+45 for 4.5 OP) — display-only bug.
-      const baseOp = Math.floor(_num(bank[key], 0) / _mpo());
+      // review P3 (2026-10-27): the auto roll reads the bank AFTER the attempt's own mpo spend — show that (desperation = 0
+      // either way). Tabletop (gmAll) adjudicates OP checks without that spend, so it keeps the full bank.
+      const attemptMarks = (() => { try { return facilitation().rolls === "gmAll" ? 0 : _mpo(); } catch (_eF) { return _mpo(); } })();
+      const baseOp = Math.floor(Math.max(0, _num(bank[key], 0) - attemptMarks) / _mpo());
       const rosterSum = Array.isArray(roster) ? roster.reduce((s, a) => s + _readActorOp(a, key), 0) : 0;
       out[key] = baseOp + rosterSum;
     }
@@ -2322,7 +2333,8 @@ async function _rollChoiceCheck(choice, ctx={}) {
     const faction = await _resolveFaction(factionId);
     if (!faction) {
       const roll = await _evalRoll(new Roll(_ftCanonDie()));
-      return { kind:"op", stat, dc, total:roll.total, ok:roll.total>=dc, roll };
+      const totalNF = (roll.total ?? 0) + supportBonus;   // backing was paid — it counts on every path (review P3, 2026-10-27)
+      return { kind:"op", stat, dc, bonus:supportBonus, total:totalNF, ok:totalNF>=dc, roll, support:{ opKey:supportKey, spend:supportSpend, bonus:supportBonus } };
     }
     // OP-check roll bonus: faction bank contributes whole OPs only (marks/10 floor).
     // Roster contributions stay as-is (already authored in OP units).
@@ -2330,7 +2342,7 @@ async function _rollChoiceCheck(choice, ctx={}) {
     const baseOp = Math.floor(baseMarks / _mpo());
     const roster = await _getFactionRoster(faction);
     const rosterSum = roster.reduce((s,a)=>s+_readActorOp(a,key),0);
-    const bonus = baseOp + rosterSum;
+    const bonus = baseOp + rosterSum + supportBonus;
     const roll = await _evalRoll(new Roll(`${_ftCanonDie()} + @b`, { b: bonus }));
     const total = roll.total ?? 0;
     // RFI strategic layer (mirrors the faction sheet's OP roll): every exploded d10
@@ -2347,7 +2359,7 @@ async function _rollChoiceCheck(choice, ctx={}) {
         await faction.setFlag("bbttcc-factions", "momentum", cur + explosions);
       }
     } catch (_eMom) {}
-    return { kind:"op", stat, opKey:key, dc, bonus, breakdown:{ base: baseOp, baseMarks, roster:rosterSum }, total, ok:total>=dc, roll, explosions, momentumBanked: explosions, doubleTen };
+    return { kind:"op", stat, opKey:key, dc, bonus, breakdown:{ base: baseOp, baseMarks, roster:rosterSum, support:supportBonus }, total, ok:total>=dc, roll, explosions, momentumBanked: explosions, doubleTen };
   }
 
   let actor = null;
@@ -2399,7 +2411,8 @@ async function _rollChoiceCheck(choice, ctx={}) {
   }
 
   const roll = await _evalRoll(new Roll(_ftCanonDie()));
-  return { kind:"basic", stat, dc, total:roll.total, ok:roll.total>=dc, roll };
+  const totalB = (roll.total ?? 0) + supportBonus;
+  return { kind:"basic", stat, dc, total:totalB, ok:totalB>=dc, roll, support:{ opKey:supportKey, spend:supportSpend, bonus:supportBonus } };
 }
 
 // Settlement Refactor (2026-08-28): the chain's identity travels through every
@@ -2531,7 +2544,7 @@ function _storyTokenFacts(campaign) {
   } catch (_e) {}
   return out;
 }
-function _expandStoryTokens(text, campaign) {
+function _expandStoryTokens(text, campaign, { raw = false } = {}) {   // raw: plain-text values for payloads the renderer escapes once (review P3, 2026-10-27)
   const s = String(text || "");
   if (s.indexOf("{{") < 0) return s;
   const f = _storyTokenFacts(campaign);
@@ -2559,7 +2572,7 @@ function _expandStoryTokens(text, campaign) {
     const reAt = /\{\{#at\s+([^}]+?)\s*\}\}([\s\S]*?)(?:\{\{else\}\}([\s\S]*?))?\{\{\/at\}\}/g;
     if (reAt.test(out)) { reAt.lastIndex = 0; out = out.replace(reAt, (m, name, yes, no) => (_partyIsAt(name) ? yes : (no || ""))); }
   }
-  return out.replace(/\{\{\s*([A-Za-z.]+)\s*\}\}/g, (m, k) => (Object.prototype.hasOwnProperty.call(map, k.toLowerCase()) ? _escapeHtml(map[k.toLowerCase()]) : m));
+  return out.replace(/\{\{\s*([A-Za-z.]+)\s*\}\}/g, (m, k) => (Object.prototype.hasOwnProperty.call(map, k.toLowerCase()) ? (raw ? map[k.toLowerCase()] : _escapeHtml(map[k.toLowerCase()])) : m));
 }
 
 function _partyIsAt(name) {
@@ -2633,7 +2646,7 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
         choices: facChoicesHidden ? [] : choices.map(function (ch, i) {
           return {
             label: ch && ch.label ? ch.label : ('Choice ' + (i + 1)),
-            description: _stripGmNotes(_expandStoryTokens(String(ch && ch.description ? ch.description : '').trim())),   // round 2 E2 + story tokens
+            description: _stripGmNotes(_expandStoryTokens(String(ch && ch.description ? ch.description : '').trim(), undefined, { raw: true })),   // round 2 E2 + story tokens (plain text: the mirror escapes it)
             checkLabel: _choiceHasCheck(ch) ? _choiceCheckLabel(ch.checkStat) : '',
             checkDC: _choiceHasCheck(ch) ? _num(ch.checkDC, 0) : 0
           };
@@ -3558,7 +3571,7 @@ async function _applyQuestEffects(campaign, beat, ctx) {
       // If any row's quest is not where we just put it, rewrite the whole box
       // once (unset + set), then shout if it still is not there.
       try {
-        const expect = []; for (const row of rows) { if (beat?.story && beat.story.quest) continue;   /* declared beats: the STORE owns the bucket (2026-09-14) */ const q = String(row?.questId || "").trim(); if (!q) continue; const a = String(row.action || "accept").toLowerCase(); expect.push([q, a === "complete" || a === "completed" ? "completed" : (a === "archive" || a === "archived") ? "archived" : "active"]); }
+        const expect = []; for (const row of rows) { if (beat?.story && beat.story.quest) continue;   /* declared beats: the STORE owns the bucket (2026-09-14) */ const q = String(row?.questId || "").trim(); if (!q) continue; const b = ["active", "completed", "archived"].find(k => next?.[k]?.[q]); if (b) expect.push([q, b]); }   // review P3 (2026-10-27): expect where `next` put it (a beat row leaves a completed quest completed)
         const has = (t) => expect.every(([q, b]) => !!(t?.[b]?.[q]));
         let t = faction.getFlag(MOD, "quests");
         if (!has(t)) { await faction.unsetFlag(MOD, "quests"); await faction.setFlag(MOD, "quests", next); t = faction.getFlag(MOD, "quests"); }
@@ -3808,7 +3821,10 @@ async function executeBeat(campaign, beat, ctx = {}) {
   // and _readDirectorState overlays it onto firedStoryBeats/dialogueFired for every legacy reader.
   // Phase 2 (2026-09-13): THE story store records the play — starts, chapter endings, closers —
   // and projects the coalition buckets. One writer.
-  try { if (game.user?.isGM && beat?.id) await _storyRecord(campaign, beat, ctx); } catch (e) { warn("story record failed:", e); }
+  // review P2 (2026-10-27): resume "Pick up" re-opens a beat that already STARTED — recording it again bumped
+  // played[id].n and re-paid its creature bounty under a fresh key. "Run next" sends source "resume-next" and records.
+  const _resumed = ctx?.source === "resume";
+  try { if (game.user?.isGM && beat?.id && !_resumed) await _storyRecord(campaign, beat, ctx); } catch (e) { warn("story record failed:", e); }
 
   // Phase Charter closers apply AT ENTRY (2026-08-30) — same lesson as the
   // fire-mark above: a closer whose choice routes into a long awaited chain
@@ -3819,7 +3835,7 @@ async function executeBeat(campaign, beat, ctx = {}) {
   // _storyPhaseAdvance is monotonic + idempotent, so the act opens the moment
   // its closer FIRES; nested beat resolutions then see the advanced phase.
   try {
-    await _applyPhaseAdvance(campaign, beat);
+    if (!_resumed) await _applyPhaseAdvance(campaign, beat);
   } catch (ePhaseEntry) { warn("Phase advance (entry) failed:", ePhaseEntry); }
 
   // Cinematic dive: a travel trigger (hex-entry beat / travel encounter) may have
@@ -5457,6 +5473,7 @@ const STORY_AWARDS_API = { settle: async (campaignId) => { const c = campaignId 
 
 async function _storyRecord(campaign, beat, ctx = {}) {
   if (!game.user?.isGM || !campaign?.id || !beat?.id) return { changes: [] };
+  try { _applyCampaignStory(campaign); } catch (eSD) { warn("story data apply failed:", eSD); }   // review P3 (2026-10-27): this campaign's declarations, not the last one's
   const turn = _getTurnNumberSafe();
   const changes = await _storyMutate(campaign.id, (st) => applyRecord(st, beat, { ts: Date.now(), turn }));
   try { await _awardForChanges(campaign, ctx, changes); } catch (eAw) { warn("[awards] quest/chapter award failed", eAw); }
@@ -6448,8 +6465,8 @@ async function _postLevelUpCard(actor, fromLevel, floor, milestone) {
   const gap = floor - fromLevel;
   const content = `
     <div style="border:1px solid #7a5c2e;border-radius:6px;padding:8px 10px">
-      <p style="margin:0 0 4px 0">🎉 <b>${actor.name}</b> — <b>Level Up!</b></p>
-      ${milestone ? `<p style="margin:0 0 4px 0;opacity:.8">Milestone: <i>${milestone}</i></p>` : ""}
+      <p style="margin:0 0 4px 0">🎉 <b>${_escapeHtml(actor.name)}</b> — <b>Level Up!</b></p>
+      ${milestone ? `<p style="margin:0 0 4px 0;opacity:.8">Milestone: <i>${_escapeHtml(milestone)}</i></p>` : ""}
       <p style="margin:0 0 6px 0">Level ${fromLevel} → <b>${floor}</b>${gap > 1 ? ` (${gap} level-ups banked — click once per level)` : ""}</p>
       <button type="button" class="bbttcc-director-levelup" data-actor-id="${actor.id}" data-floor="${floor}">
         <i class="fas fa-angles-up"></i> Level Up
@@ -6461,7 +6478,7 @@ async function _postLevelUpCard(actor, fromLevel, floor, milestone) {
 async function _postFactionTierCard(lines, tierFloor, milestone) {
   const content = `
     <div style="border:1px solid #7a5c2e;border-radius:6px;padding:8px 10px">
-      <p style="margin:0 0 4px 0">🏰 <b>Coalition grows in stature</b>${milestone ? ` — <i>${milestone}</i>` : ""}</p>
+      <p style="margin:0 0 4px 0">🏰 <b>Coalition grows in stature</b>${milestone ? ` — <i>${_escapeHtml(milestone)}</i>` : ""}</p>
       <p style="margin:0">${lines.join("<br>")}</p>
       <p style="margin:4px 0 0 0;opacity:.8;font-size:.9em">OP pool ceilings raised to the Standing ${tierFloor} band.</p>
     </div>`;
@@ -6509,7 +6526,7 @@ async function directorReconcileLevels(opts = {}) {
         if (cur >= tierFloor) continue;
         await f.update({ "flags.bbttcc-factions.tier": tierFloor });
         await _directorRaiseFactionOpCaps(f, tierFloor);
-        lines.push(`<b>${f.name}</b>: Standing ${cur} → <b>Standing ${tierFloor}</b>`);
+        lines.push(`<b>${_escapeHtml(f.name)}</b>: Standing ${cur} → <b>Standing ${tierFloor}</b>`);
         out.factionsRaised.push(`${f.name} T${cur}→T${tierFloor}`);
         log(`[director] faction '${f.name}' tier ${cur} → ${tierFloor} (cadence floor).`);
       }
@@ -6846,17 +6863,18 @@ async function dialogueEnact(opts = {}) {
     // Play it: post it player-facing as narration, and hand its text to the
     // NPC's model so the in-window continuation mirrors the authored scene
     // instead of inventing its own ending.
-    // Outcome stinger (intro-on-open doctrine): the routed beat's recording
-    // plays AT the curtain call — the enact is its moment on the dialogue path.
-    if (routedBeat) { try { await _maybePlayBeatAudio(routedBeat); } catch (_eA) {} }
-    if (routedBeat && String(routedBeat.description || "").trim()) {
+    // review P3 (2026-10-27): no _maybePlayBeatAudio here — _chainCtxFrom drops `source`, so the routed
+    // runBeat already played the outcome stinger; a second call replayed it late when the outcome chained on.
+    // review P2 (2026-10-27): strip GM asides + expand story tokens — this card is public and feeds the NPC model.
+    const routedDesc = routedBeat ? String(_stripGmNotes(_expandStoryTokens(routedBeat.description, campaign)) || "") : "";
+    if (routedBeat && routedDesc.trim()) {
       try {
         await ChatMessage.create({
           speaker: { alias: "Bad Eden" },
-          content: `<div class="bbttcc-narration" style="border-left:3px solid #b8974d;padding:.45em .6em;background:rgba(184,151,77,.08);">${routedBeat.description}</div>`
+          content: `<div class="bbttcc-narration" style="border-left:3px solid #b8974d;padding:.45em .6em;background:rgba(184,151,77,.08);">${routedDesc}</div>`
         });
       } catch (_eN) {}
-      const plain = String(routedBeat.description).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+      const plain = String(routedDesc).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
       if (plain) summary += ` THE SCENE PLAYS OUT AS AUTHORED (deliver its substance in your own voice, then let the scene close): ${plain}`;
     }
 
@@ -7076,10 +7094,10 @@ function _npcDisplayName(actor) {
 // those beats resolves, the primary GM seat grants the items once (keepId, duplicates skipped), applies the patch and
 // stamps revealKitGranted — the same moment the alias engine above lets the true name out. Idempotent: a second resolve
 // of the beat, or a rerun, grants nothing.
-async function _grantRevealKits(beatId) {
+async function _grantRevealKits(beatId, opts = {}) {
   const bid = String(beatId || "").trim(); if (!bid) return 0;
   if (!game.user?.isGM) return 0;
-  try { const gx = game.bbttcc?.api?.gmExec; const primary = (typeof gx?.primaryGmId === "function") ? gx.primaryGmId() : game.users?.activeGM?.id; if (primary && primary !== game.user.id) return 0; } catch (_e) {}
+  if (!opts.local) try { const gx = game.bbttcc?.api?.gmExec; const primary = (typeof gx?.primaryGmId === "function") ? gx.primaryGmId() : game.users?.activeGM?.id; if (primary && primary !== game.user.id) return 0; } catch (_e) {}
   let n = 0;
   for (const a of (game.actors?.contents || [])) {
     const kit = a.flags?.[MOD_ID]?.revealKit; if (!kit || typeof kit !== "object") continue;
@@ -7098,7 +7116,8 @@ async function _grantRevealKits(beatId) {
   }
   return n;
 }
-Hooks.on("bbttcc:beat:resolved", (payload) => { try { const id = payload?.beat?.id; if (id) _grantRevealKits(id); } catch (_e) {} });
+// review P2 (2026-10-27): beat:resolved is local to the GM that ran the beat — a primary-GM gate never granted on a second GM.
+Hooks.on("bbttcc:beat:resolved", (payload) => { try { const id = payload?.beat?.id; if (id) _grantRevealKits(id, { local: true }); } catch (_e) {} });
 function _inviteNameMatch(a, b) {   // "caulder" ≈ "calder", "sable" = "sable"; short words must match exactly
   if (a === b) return true;
   if (a.length < 4 || b.length < 4) return false;
@@ -7349,16 +7368,63 @@ function _registerChoicePickGmExec() {
       if (facilitation().choices !== "playerPick") throw new Error("players do not pick in this facilitation mode");
       const h = __bbttccCurrentBeatDialogPick;
       const beatId = String(payload?.beatId || "");
-      if (!h || !h.beat || String(h.beat.id || "") !== beatId) throw new Error("that beat is no longer open");
-      if (payload?.pickToken && h.token && String(payload.pickToken) !== String(h.token)) throw new Error("that mirror is stale — the GM re-opened the beat");
-      const i = Number(payload?.choiceIndex);
-      if (!Number.isInteger(i) || i < 0) throw new Error("bad choice index");
-      const caller = game.users?.get(String(meta?.fromUserId || "")) || null;
-      const r = await h.pick(i, caller);
-      log(`[facilitation] choice ${i} on '${beatId}' picked by ${meta?.fromUserName || caller?.name || "a player"}.`);
-      return r;
+      // review P2 (2026-10-27): gmExec relays to the PRIMARY GM, but the dialog may be open on another GM's seat —
+      // when it is not open here, forward the pick to the other GMs and return the holder's answer.
+      if ((!h || !h.beat || String(h.beat.id || "") !== beatId) && !meta?.local && !meta?.__forwarded) return await _forwardChoicePickToOtherGms(payload, meta);
+      return await _choicePickLocal(payload, meta);
     });
+    _installChoicePickRelaySocket();
   } catch (e) { warn("[facilitation] gmExec register failed:", e); }
+}
+async function _choicePickLocal(payload = {}, meta = {}) {
+  const h = __bbttccCurrentBeatDialogPick;
+  const beatId = String(payload?.beatId || "");
+  if (!h || !h.beat || String(h.beat.id || "") !== beatId) throw new Error("that beat is no longer open");
+  if (payload?.pickToken && h.token && String(payload.pickToken) !== String(h.token)) throw new Error("that mirror is stale — the GM re-opened the beat");
+  const i = Number(payload?.choiceIndex);
+  if (!Number.isInteger(i) || i < 0) throw new Error("bad choice index");
+  const caller = game.users?.get(String(meta?.fromUserId || "")) || null;
+  const r = await h.pick(i, caller);
+  log(`[facilitation] choice ${i} on '${beatId}' picked by ${meta?.fromUserName || caller?.name || "a player"}.`);
+  return r;
+}
+// Primary GM → the GM seat that actually holds the beat dialog (module socket; only the holder answers).
+const __choicePickRelayPending = new Map();
+let __choicePickRelayArmed = false;
+function _forwardChoicePickToOtherGms(payload = {}, meta = {}) {
+  const others = (game.users?.contents || []).filter(u => u.active && u.isGM && u.id !== game.user?.id);
+  if (!others.length) return Promise.reject(new Error("that beat is no longer open"));
+  const id = `${game.user?.id || "gm"}:${Date.now()}:${Math.random().toString(36).slice(2, 8)}`;
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => { __choicePickRelayPending.delete(id); reject(new Error("that beat is no longer open")); }, 10000);
+    __choicePickRelayPending.set(id, { resolve, reject, timer });
+    try { game.socket.emit(`module.${MOD_ID}`, { type: "bbttccChoicePickRelay", id, payload, fromUserId: meta?.fromUserId || null, fromUserName: meta?.fromUserName || null }); }
+    catch (e) { clearTimeout(timer); __choicePickRelayPending.delete(id); reject(e); }
+  });
+}
+function _installChoicePickRelaySocket() {
+  if (__choicePickRelayArmed) return;
+  try {
+    const sock = game?.socket; if (!sock || typeof sock.on !== "function") return;
+    __choicePickRelayArmed = true;
+    sock.on(`module.${MOD_ID}`, async (msg) => {
+      try {
+        if (!msg || !game.user?.isGM) return;
+        if (msg.type === "bbttccChoicePickRelay") {
+          const h = __bbttccCurrentBeatDialogPick;
+          if (!h || !h.beat || String(h.beat.id || "") !== String(msg.payload?.beatId || "")) return;   // not the holder — stay silent
+          let ack;
+          try { ack = { type: "bbttccChoicePickRelayAck", id: msg.id, ok: true, result: await _choicePickLocal(msg.payload || {}, { fromUserId: msg.fromUserId, fromUserName: msg.fromUserName, __forwarded: true }) }; }
+          catch (e) { ack = { type: "bbttccChoicePickRelayAck", id: msg.id, ok: false, error: String(e?.message || e) }; }
+          try { sock.emit(`module.${MOD_ID}`, ack); } catch (_eA) {}
+        } else if (msg.type === "bbttccChoicePickRelayAck") {
+          const p = __choicePickRelayPending.get(msg.id); if (!p) return;
+          __choicePickRelayPending.delete(msg.id); clearTimeout(p.timer);
+          if (msg.ok) p.resolve(msg.result); else p.reject(new Error(msg.error || "that choice was not taken"));
+        }
+      } catch (e) { warn("[facilitation] choice-pick relay failed:", e); }
+    });
+  } catch (_e) {}
 }
 function _registerInviteGmExec() {
   try {
@@ -7656,7 +7722,14 @@ async function _placementRuleMatches(rule, campaign) {
   catch (_e) { return false; }
 }
 
-async function reconcileNpcPlacements({ sceneId = null, reason = "manual" } = {}) {
+// review P3 (2026-10-27): canvasReady + beat:resolved passes overlapped (both saw no token, both created one) — one at a time.
+let __placementChain = Promise.resolve();
+function reconcileNpcPlacements(opts = {}) {
+  const run = __placementChain.then(() => _reconcileNpcPlacementsOnce(opts));
+  __placementChain = run.catch(() => {});
+  return run;
+}
+async function _reconcileNpcPlacementsOnce({ sceneId = null, reason = "manual" } = {}) {
   try {
     if (!game.user?.isGM) return { ok: false, reason: "not_gm" };
     if (game.users?.activeGM && !game.users.activeGM.isSelf) return { ok: false, reason: "not_primary_gm" };
@@ -7702,11 +7775,13 @@ async function reconcileNpcPlacements({ sceneId = null, reason = "manual" } = {}
 Hooks.on("canvasReady", () => {
   try { reconcileNpcPlacements({ reason: "canvasReady" }).catch(() => {}); } catch (_e) {}
 });
+let __placementTimer = null;
 Hooks.on("bbttcc:beat:resolved", () => {
-  // Quest state may have moved people. Chain after the consumption writes.
+  // Quest state may have moved people. Chain after the consumption writes (debounced: a chain resolves many beats).
   try {
     if (!game.user?.isGM) return;
-    setTimeout(() => reconcileNpcPlacements({ reason: "beat:resolved" }).catch(() => {}), 500);
+    if (__placementTimer) clearTimeout(__placementTimer);
+    __placementTimer = setTimeout(() => { __placementTimer = null; reconcileNpcPlacements({ reason: "beat:resolved" }).catch(() => {}); }, 500);
   } catch (_e) {}
 });
 
@@ -7810,6 +7885,9 @@ async function _storySituation(campaign, { full = false } = {}) {
         for (const b of q.starts) if (await evalReady(b)) fresh++;
       }
       if (pass.now?.roads) for (const r of pass.now.roads) if (r.beat && await evalReady(r.beat)) fresh++;
+      // review P2 (2026-10-27): the gate-door / named fallbacks need their beat evaluated too, or slate + resume never see them
+      if (pass.now?.next?.beat && await evalReady(pass.now.next.beat)) fresh++;
+      if (pass.now?.next?.named && await evalReady(byId.get(String(pass.now.next.named)))) fresh++;
       if (!fresh) break;
     }
   }
@@ -8059,7 +8137,10 @@ async function setActiveCampaignId(id) {
   try {
     var cid = String(id || "").trim();
     if (cid) _syncWorldTurnBeatsForCampaign(cid);
+    else if (game.user?.isGM) { const w = _getWorldAPI(); if (typeof w?.setTurnBeatsMap === "function") Promise.resolve(w.setTurnBeatsMap({})).catch(() => {}); }   // review P3 (2026-10-27): no campaign → no turn beats
   } catch (_e) {}
+  // review P3 (2026-10-27): lay the NEW campaign's story data (quests/scripts) now — the first record after a switch read the old one
+  try { _storyAppliedSig = null; _applyCampaignStory(getCampaign(getActiveCampaignId())); } catch (eSD) { warn("story data apply failed:", eSD); }
   return getActiveCampaignId();
 }
 
@@ -8410,11 +8491,26 @@ async function importCampaignBundleFromCompendium(opts) {
   }
 
   // Merge tables/quests into this world (optional)
+  // review P2 (2026-10-27): a DUPLICATE never overwrites the world's existing tables/quests (a test copy rolled every
+  // edited table back) — only missing keys are added, unless opts.overwrite === true; merge keeps overwriting unless
+  // opts.overwrite === false. Tables a duplicate adds point their entries at the copy, not the source campaign.
+  var overwrite = (opts.overwrite != null) ? !!opts.overwrite : (mode !== "duplicate");
+  var srcCampaignId = String(payload.campaignId || (payload.campaign && payload.campaign.id) || "").trim();
+  var skippedTables = [], skippedQuests = [];
   if (payload.tables && typeof payload.tables === "object") {
     var curT = getAllTables();
     curT = curT && typeof curT === "object" ? curT : {};
     var incT = payload.tables;
-    for (var k in incT) if (Object.prototype.hasOwnProperty.call(incT, k)) curT[k] = incT[k];
+    for (var k in incT) {
+      if (!Object.prototype.hasOwnProperty.call(incT, k)) continue;
+      if (!overwrite && Object.prototype.hasOwnProperty.call(curT, k)) { skippedTables.push(k); continue; }
+      var tIn = incT[k];
+      if (mode === "duplicate" && srcCampaignId && tIn && Array.isArray(tIn.entries)) {
+        tIn = _bbttccClone(tIn);
+        tIn.entries.forEach(function (en) { if (en && String(en.campaignId || "") === srcCampaignId) en.campaignId = targetCampaignId; });
+      }
+      curT[k] = tIn;
+    }
     await setAllTables(curT);
   }
 
@@ -8422,7 +8518,11 @@ async function importCampaignBundleFromCompendium(opts) {
     var curQ = getAllQuests();
     curQ = curQ && typeof curQ === "object" ? curQ : {};
     var incQ = payload.quests;
-    for (var qk in incQ) if (Object.prototype.hasOwnProperty.call(incQ, qk)) curQ[qk] = incQ[qk];
+    for (var qk in incQ) {
+      if (!Object.prototype.hasOwnProperty.call(incQ, qk)) continue;
+      if (!overwrite && Object.prototype.hasOwnProperty.call(curQ, qk)) { skippedQuests.push(qk); continue; }
+      curQ[qk] = incQ[qk];
+    }
     await setAllQuests(curQ);
   }
 
@@ -8439,7 +8539,9 @@ async function importCampaignBundleFromCompendium(opts) {
     ok: true,
     campaignId: targetCampaignId,
     label: String(c.label || c.title || targetCampaignId),
-    remap: remapRes
+    remap: remapRes,
+    skippedTables: skippedTables,
+    skippedQuests: skippedQuests
   };
 }
 
@@ -8516,8 +8618,8 @@ async function remapCampaignReferences(campaignId, opts) {
     // Actors
     if (Array.isArray(refs.actorKeys) && refs.actorKeys.length) {
       // If any actor uuids fail to resolve, we rebuild the list from keys.
-      var okAll = true;
       var au = Array.isArray(b.actors) ? b.actors : [];
+      var okAll = au.length > 0;   // review P2 (2026-10-27): a scrubbed export ships actors:[] — empty must rebuild from keys
       for (var j = 0; j < au.length; j++) {
         var exA = await _bbttccResolveDoc(au[j], "Actor");
         if (!exA) { okAll = false; break; }
@@ -9064,7 +9166,10 @@ async function _onBeatResolvedBanditLedger({ beat, campaign } = {}) {
     // arms-down variant (Dougan-pointer pattern; repeatable, GM veto is the
     // beat dialog itself).
     if (BANDIT_ENC_RE.test(id) && !BANDIT_MERCY_RE.test(id) && !BANDIT_FEAR_RE.test(id)) {
-      if (_banditRungFor(mercy) >= 3) {
+      // review P2 (2026-10-27): only the ambush's ENTRY offers it — aftermath beats (_win/_run/_lose/_bandits_run/
+      // _parley_fail) re-offered a surrender for a fight already won by force.
+      const isOutcome = /_(win|lose|run|bandits_run|parley|parley_fail|fail|flee|escape)(_|$)/i.test(id);
+      if (!isOutcome && _banditRungFor(mercy) >= 3) {
         const campaignId = campaign?.id || getActiveCampaignId();
         if (campaignId) {
           log("[bandit-ledger] ambush at rung ≥ 3 → arms-down variant.");
@@ -9705,7 +9810,7 @@ Hooks.once("ready", () => {
           pickToken: (pick && pick.beat === beat) ? pick.token : null,
           choices: (pol.choices === "hidden" ? [] : shown).map((ch, i) => ({
             label: (ch && ch.label) || ("Choice " + (i + 1)),
-            description: _stripGmNotes(_expandStoryTokens(String((ch && ch.description) || "").trim())),   // round 2 E2 + story tokens
+            description: _stripGmNotes(_expandStoryTokens(String((ch && ch.description) || "").trim(), undefined, { raw: true })),   // round 2 E2 + story tokens (raw: the mirror escapes once)
             checkLabel: _choiceHasCheck(ch) ? _choiceCheckLabel(ch.checkStat) : "",
             checkDC: _choiceHasCheck(ch) ? _num(ch.checkDC, 0) : 0
           }))
