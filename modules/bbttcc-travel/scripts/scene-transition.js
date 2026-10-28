@@ -187,14 +187,19 @@
         // CAN broadcast our campaign-socket pull — every client just views.
         // Both paths also emit the explicit pull: activation alone has left
         // explicitly-view()'d clients behind (Weather Front, 2026-08-26).
-        if (game.user.isGM) await scene.activate();
-        else await scene.view();
+        // _lastDive is set BEFORE the swap: view()/activate() fire canvasReady inside their await,
+        // and onCanvasReady reads it there. Restored if the swap throws.
+        const prevDive = _lastDive; _lastDive = null;
+        try {
+          if (game.user.isGM) await scene.activate();
+          else await scene.view();
+        } catch (eSwap) { _lastDive = prevDive; throw eSwap; }
         try { await game.bbttcc?.api?.worldMutation?.pullTableToScene?.(scene.id); } catch (_ePull) {}
-        _lastDive = null;
       } else {
-        await scene.view();
         // Remember this solo dive so the far side gets back/pull-table affordances.
+        const prevDive = _lastDive;
         _lastDive = { targetId: scene.id, originUuid, label: label || scene.name };
+        try { await scene.view(); } catch (eSwap) { _lastDive = prevDive; throw eSwap; }
       }
       await wait(120);
       // 6) settle the camera on the requested landing point (diver's client only —

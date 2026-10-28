@@ -21,23 +21,27 @@
   const MOD_TERR = "bbttcc-territory"; // hex flags (factionId / radiation / conditions)
   const MOD_FAC  = "bbttcc-factions";  // faction actor flags (bannerColor)
 
-  // ---------- hit-test (mirrors hex-travel.js getHexAtPoint: scene-space bounds first) ----------
+  // ---------- hit-test (scene space; bounds only REJECT — a polygon region's box is not the region) ----------
+  // Scene point → the drawing's shape space (origin = doc.x/y, rotation undone about the
+  // shape centre). Pure document math — no placeable transforms, no screen-space mixups.
+  function sceneToShape(doc, gx, gy) {
+    const shape = doc.shape || {};
+    const w = Number(shape.width ?? doc.width ?? 0), h = Number(shape.height ?? doc.height ?? 0);
+    const cx = Number(doc.x || 0) + w / 2, cy = Number(doc.y || 0) + h / 2;
+    const r = -((Number(doc.rotation) || 0) * Math.PI) / 180;
+    const dx = gx - cx, dy = gy - cy;
+    return { x: dx * Math.cos(r) - dy * Math.sin(r) + w / 2, y: dx * Math.sin(r) + dy * Math.cos(r) + h / 2, w, h };
+  }
   function drawingContainsGlobal(d, gx, gy) {
     try {
-      // Primary: placeable bounds are in scene coords — perfect for rectangles.
-      if (d.bounds?.contains?.(gx, gy)) return true;
-      if (d.containsPoint?.(new PIXI.Point(gx, gy))) return true;
-      // Precise fallback for polygons: test in the drawing's local space.
-      const local = d.toLocal(new PIXI.Point(gx, gy));
+      if (d.bounds?.contains && !d.bounds.contains(gx, gy)) return false;
       const shape = d.document.shape || {};
       const t = (shape.type || "").toLowerCase();
+      const local = sceneToShape(d.document, gx, gy);
       if (t === "p" || (Array.isArray(shape.points) && shape.points.length >= 6)) {
-        const poly = new PIXI.Polygon(shape.points);
-        return poly.contains(local.x, local.y);
+        return new PIXI.Polygon(shape.points).contains(local.x, local.y);
       }
-      const w = Number(shape.width  ?? d.document.width  ?? d.width  ?? 0);
-      const h = Number(shape.height ?? d.document.height ?? d.height ?? 0);
-      return local.x >= 0 && local.y >= 0 && local.x <= w && local.y <= h;
+      return local.x >= 0 && local.y >= 0 && local.x <= local.w && local.y <= local.h;
     } catch (e) { return false; }
   }
 

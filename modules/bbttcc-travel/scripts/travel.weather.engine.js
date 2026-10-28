@@ -95,6 +95,13 @@ export async function writeWeatherToHex(hexDoc, weatherKey) {
   // state — not informational metadata — so relay the write to the GM rather
   // than dropping it, and let it persist for everyone.
   if (!game.user?.isGM) {
+    // Awaitable relay first: the console rolls weather then rides the leg straight away, and the mitigation
+    // bridge reads this hex's weather flag in beforeTravel — a fire-and-forget emit left this seat reading none.
+    const gx = game.bbttcc?.api?.gmExec;
+    if (gx?.call && gx.types?.().includes?.("travel.weather.write") !== false && gx.primaryGmId?.()) {
+      try { return await gx.call("travel.weather.write", { hexUuid: hexDoc.uuid, weatherKey, duration: dur }); }
+      catch (e) { console.warn("[bbttcc-travel.weather] gmExec relay failed — falling back to the socket emit", e); }
+    }
     try {
       if (!game.users?.some?.(u => u.isGM && u.active)) return;  // nobody to write it
       game.socket?.emit?.("module.bbttcc-travel", {
@@ -125,6 +132,25 @@ export async function writeWeatherToHex(hexDoc, weatherKey) {
 /* GM side of the weather relay: apply a player's rolled weather to the hex.
  * Single-GM guard mirrors the encounter-arbitration relay (lowest-id active GM). */
 Hooks.once("ready", () => {
+  // Awaitable lane (gmExec): the player seat waits for the write before it rides the leg.
+  try {
+    game.bbttcc?.api?.gmExec?.register?.("travel.weather.write", async (payload) => {
+      const weather = WEATHER_ARCHETYPES[payload?.weatherKey];
+      if (!weather) return { ok: false, error: "unknown weather" };
+      const hexDoc = await fromUuid(String(payload?.hexUuid || ""));
+      if (!hexDoc?.update) return { ok: false, error: "hex not found" };
+      await hexDoc.update({
+        "flags.bbttcc-territory.weather": {
+          key: payload.weatherKey,
+          label: weather.label || payload.weatherKey,
+          remainingTurns: Number(payload.duration) || 1,
+          ts: Date.now()
+        }
+      });
+      return { ok: true };
+    });
+  } catch (e) { console.warn("[bbttcc-travel.weather] gmExec register failed", e); }
+
   if (!game.socket || globalThis.__bbttccTravelWeatherRelayBound) return;
   globalThis.__bbttccTravelWeatherRelayBound = true;
 

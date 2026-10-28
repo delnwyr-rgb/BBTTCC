@@ -577,6 +577,11 @@
 
     async _onRender(context, options) {
       await super._onRender(context, options);
+      // A re-render rebuilds the UI with pickMode off — drop the old render's canvas pick listener
+      // (its closure would keep swallowing canvas clicks) and any hover ring it left behind.
+      try { this._removeCanvasClickListener?.(); } catch (_e) {}
+      this._removeCanvasClickListener = null;
+      setHoverHex(null).catch(() => {});
       // The PARTS template renders <div class="bbttcc-travel-shell"></div> inside
       // .window-content. We treat that shell as the content container and inject
       // the same UI we used in the V1 path — keeps the rewrite minimal.
@@ -1153,6 +1158,7 @@
       };
       const _applyDetectedFaction = () => {
         if (_facManuallyChanged) return;
+        if (this._execBusy) return;   // mid-ride: a token click must not swap the lead + passenger stack the loop is reading
         const fid = _detectFactionIdFromCanvas();
         if (fid && $fac.value !== fid) {
           $fac.value = fid;
@@ -1691,6 +1697,7 @@
       }
 
       function render() {
+        setHoverHex(null).catch(() => {});   // rows are replaced under the cursor — mouseleave never fires
         // Phase C+E1: compute vanguard bonuses across the full stack (lead +
         // joining passengers) once per render so the leg row can surface
         // mitigation badges drawn from every member's roster.
@@ -2976,6 +2983,7 @@ if (game.bbttcc?.runVisuals) {
         }
         this._removeCanvasClickListener?.();
         this._removeKeyDownListener?.();
+        setHoverHex(null).catch(() => {});
       } catch (_e) {}
       this._opBankHookId = null;
       this._tokenSelectHookId = null;

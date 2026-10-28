@@ -563,8 +563,9 @@
   }
   function _rideNoteDraw(factionId, beatId) {
     const k = _rideDrawKey(factionId); if (!k || !beatId) return;
+    // The hour runs from the FIRST draw (ts kept) — a sliding window never expired while the party kept moving.
     const rec = _rideDraws.get(k); const fresh = rec && (Date.now() - rec.ts) <= 3600000;
-    const set = fresh ? rec.set : new Set(); set.add(String(beatId)); _rideDraws.set(k, { set, ts: Date.now() });
+    if (fresh) rec.set.add(String(beatId)); else _rideDraws.set(k, { set: new Set([String(beatId)]), ts: Date.now() });
   }
 
   function pickEncounterWithFallback({ campaignId, terrainKey, tier, scale = null, factionId = null }) {
@@ -573,8 +574,10 @@
     const exclude = factionId ? _rideDrawn(factionId) : null;
     // MENACES (2026-10-21): resolve the party's scale once per pick (boarded rig → owned rigs → foot)
     if (!scale && factionId) { try { scale = game.bbttcc?.api?.travel?.menace?.partyScale?.(factionId)?.scale || null; } catch (_eS) { scale = null; } }
+    // Two passes: one-of-each first; if this ride has already drawn everything eligible, repeat rather than go silent.
+    for (const excl of (exclude && exclude.size ? [exclude, null] : [exclude])) {
     for (let cur = startTier; cur >= 1; cur--) {
-      const pick = pickEncounterFromCampaignTables({ campaignId, terrainKey, tier: cur, scale, exclude });
+      const pick = pickEncounterFromCampaignTables({ campaignId, terrainKey, tier: cur, scale, exclude: excl });
       trail.push({
         tier: cur,
         ok: !!(pick && pick.ok),
@@ -589,9 +592,11 @@
           requestedTier: startTier,
           resolvedTier: cur,
           cascaded: cur < startTier,
+          repeated: excl !== exclude,
           trail
         };
       }
+    }
     }
     return { ok: false, pick: null, requestedTier: startTier, resolvedTier: null, cascaded: false, trail };
   }
@@ -933,15 +938,25 @@
       // the Ambush still on screen). Read the stamp on every pass, not once.
       const injectedNow = () => { try { const c = game.bbttcc && game.bbttcc._injectedChain; return !!(c && !c.settledTs && (Date.now() - Number(c.startTs || 0)) < 2700000); } catch (_e) { return false; } };
       const injectedSince = () => { try { const c = game.bbttcc && game.bbttcc._injectedChain; return Number((c && c.startTs) || 0) >= deferT0 - 5000; } catch (_e) { return false; } };
+      // The leg's TABLE encounter (if it triggered) must also be done — a leg can carry both a road beat and a table
+      // encounter, and the injected lane alone would arrive mid-encounter. Same rules as the encounter lane below.
+      const tableEncounter = !!(result && result.encounter && result.encounter.triggered);
+      const tableDone = (started) => {
+        if (!tableEncounter) return true;
+        if (Number((game.bbttcc && game.bbttcc._encounterChainSettledTs) || 0) > deferT0) return true;
+        if (Number((game.bbttcc && game.bbttcc._encounterChainLaunchedTs) || 0) > deferT0) return false;
+        const el = Date.now() - started;
+        return el > 300000 || (el > 120000 && !hasBBTTCCModalOpen() && !isCombatActive());
+      };
       const waitForSettlement = async () => {
         const started = Date.now();
         let quietSince = 0;
         while (true) {
           if (injectedInFlight || lateInjected || injectedNow() || injectedSince()) {
-            // the injected lane: the chain's promise unwound, then 3 s of genuine quiet (no Bad Eden modal, no combat —
-            // the Obstructor's fight and a GM-fired tally both hold the arrival); hard stop 45 min
+            // the injected lane: the chain's promise unwound (and the table encounter, if any, done), then 3 s of genuine
+            // quiet (no Bad Eden modal, no combat — the Obstructor's fight and a GM-fired tally both hold the arrival); hard stop 45 min
             const c = game.bbttcc && game.bbttcc._injectedChain; const unwound = !!(c && c.settledTs);
-            const quiet = unwound && !hasBBTTCCModalOpen() && !isCombatActive();
+            const quiet = unwound && tableDone(started) && !hasBBTTCCModalOpen() && !isCombatActive();
             if (quiet) { quietSince = quietSince || Date.now(); if ((Date.now() - quietSince) >= 3000) return { ok: true, via: "injected-chain" }; } else quietSince = 0;
             if ((Date.now() - started) > 2700000) return { ok: false, why: "hard-stop" };
             await new Promise(r => setTimeout(r, 500)); continue;

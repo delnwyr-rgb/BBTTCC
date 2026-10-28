@@ -64,11 +64,18 @@
     return isNaN(c) ? 0 : Math.max(0, Math.min(1, c));
   }
   // The engine rolls 2d10 + mod vs DC (hex-travel.js) — exact 2d10 odds, not d20 math.
-  function successChance(dc, mod) {
+  function successChance(dc, mod, advantage = false) {
     const need = Number(dc) - Number(mod || 0);
     let hits = 0;
-    for (let a = 1; a <= 10; a++) for (let b = 1; b <= 10; b++) if (a + b >= need) hits++;
-    return hits / 100;
+    if (!advantage) {
+      for (let a = 1; a <= 10; a++) for (let b = 1; b <= 10; b++) if (a + b >= need) hits++;
+      return hits / 100;
+    }
+    // 3d10kh2 (travelHex with ctx.travelAdvantage): best two of three.
+    for (let a = 1; a <= 10; a++) for (let b = 1; b <= 10; b++) for (let c = 1; c <= 10; c++) {
+      if (a + b + c - Math.min(a, b, c) >= need) hits++;
+    }
+    return hits / 1000;
   }
   function labelOP(k) {
     const L = { economy:"Economy", logistics:"Logistics", intrigue:"Intrigue",
@@ -311,8 +318,12 @@
     const terrKey = curr.spec?.key || "";
     // Marks units (1 OP = 10 marks); fallback floor of 1 OP = 10 marks.
     const terrainSpec = TT()[terrKey] || curr.spec?.spec || { cost:{ economy:10 }, tier:1 };
-    const baseCost = foundry.utils.duplicate(terrainSpec.cost || { economy:10 });
-    const tier = Number(terrainSpec.tier || 1);
+    // Same pricing + tier resolution travelHex uses (price policy ×, hex-danger tier + Alpha cap).
+    const _ht = game.bbttcc?.api?._hexTravel || {};
+    const rawCost = foundry.utils.duplicate(terrainSpec.cost || { economy:10 });
+    const baseCost = (typeof _ht._applyPricePolicy === "function") ? _ht._applyPricePolicy(rawCost) : rawCost;
+    let tier = Number(terrainSpec.tier || 1);
+    try { if (typeof _ht._resolveTravelTier === "function") tier = Number(_ht._resolveTravelTier(terrKey, tier, curr.hex, actor.id)) || tier; } catch (_eT) {}
 
     const ctx = {
       factionId: actor.id, actor, from: prev.hex, to: curr.hex,
@@ -338,8 +349,8 @@
 
     const intel = intelConfidence(curr.hex);
     const dcSpread = Math.round((1 - intel) * 3);
-    const pLo = successChance(dc + dcSpread, mod);
-    const pHi = successChance(dc - dcSpread, mod);
+    const pLo = successChance(dc + dcSpread, mod, !!ctx.travelAdvantage);
+    const pHi = successChance(dc - dcSpread, mod, !!ctx.travelAdvantage);
 
     curr.forecast = { cost: ctx.cost, dc, mod, pBand:[Math.min(pLo,pHi), Math.max(pLo,pHi)], intel };
     curr.ctx = ctx;
@@ -364,6 +375,12 @@
   async function executeRoute() {
     const { actor, token, path } = ACTIVE;
     if (!path || path.length < 2) return;
+    // In-flight guard: a second click while legs are riding would start the route again.
+    if (ACTIVE._executing) { ui.notifications?.info?.("The route is already executing."); return; }
+    ACTIVE._executing = true;
+    const execBtn = ACTIVE.div?.querySelector?.("#bbttcc-travel-exec");
+    if (execBtn) execBtn.disabled = true;
+    try {
 
     const hexes = path.map(p=>p.hex.id);
     for (let i=0;i<hexes.length-1;i++) {
@@ -387,6 +404,10 @@
     }
     ui.notifications?.info?.("Travel complete.");
     closePanel();
+    } finally {
+      if (ACTIVE) ACTIVE._executing = false;   // closePanel() may already have cleared ACTIVE
+      if (execBtn) execBtn.disabled = false;
+    }
   }
 
   // ---------- HUD button & API ----------

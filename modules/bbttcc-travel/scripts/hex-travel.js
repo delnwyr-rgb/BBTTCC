@@ -920,7 +920,7 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
   }
 
   function drawTrail(a, b, color = "#33AAFF") {
-    if (!VISUALS.trail) return;
+    if (!VISUALS.trail || !a || !b) return;
     const g = new PIXI.Graphics();
     g.lineStyle(4, PIXI.utils.string2hex(color), 0.9);
     g.moveTo(a.x, a.y);
@@ -931,7 +931,7 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
   }
 
   function popupText(pos, text) {
-    if (!VISUALS.popups) return;
+    if (!VISUALS.popups || !pos) return;
     const style = new PIXI.TextStyle({
       fontFamily: "Helvetica", fontSize: 18, fill: 0xFFFFFF, stroke: 0x000000, strokeThickness: 4
     });
@@ -984,7 +984,8 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
 
   let _encounterSymbols = new Map();
   function placeEncounterIcon(hexDrawing, label="Encounter") {
-    if (!VISUALS.encounterMarker || !hexDrawing) return;
+    if (!VISUALS.encounterMarker || !hexDrawing?.center) return;   // off-canvas hex (bare document): no marker
+    removeEncounterIcon(hexDrawing.id);   // replace, don't orphan, an earlier marker on this hex
     const center = hexDrawing.center;
     const style = new PIXI.TextStyle({ fontFamily:"Helvetica", fontSize:22, fill:0xFFD166, stroke:0x000000, strokeThickness:4 });
     const icon = new PIXI.Text("⚔️", style);
@@ -1001,8 +1002,10 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
       icon.scale.set(grow ? 1.15 : 1.0);
       grow = !grow;
     }, 400);
-    _encounterSymbols.set(hexDrawing.id, { icon, id });
-    setTimeout(() => removeEncounterIcon(hexDrawing.id), 15000);
+    const rec = { icon, id };
+    _encounterSymbols.set(hexDrawing.id, rec);
+    // Only reap THIS marker — a newer one on the same hex keeps its own 15s.
+    setTimeout(() => { if (_encounterSymbols.get(hexDrawing.id) === rec) removeEncounterIcon(hexDrawing.id); }, 15000);
   }
   function removeEncounterIcon(hexId) {
     const rec = _encounterSymbols.get(hexId);
@@ -1408,8 +1411,10 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     ctx.armedMitigation = (opts.armedMitigation !== undefined) ? opts.armedMitigation : null;
     Hooks.callAll("bbttcc:beforeTravel", ctx);
 
-    const a = from?.center || ctx.token?.center || { x: to.center.x - 20, y: to.center.y - 20 };
-    const b = to.center;
+    // `to` can be a bare DrawingDocument when the hex isn't on the viewed canvas (mid-interlude resume):
+    // the leg still resolves, its visuals just stand down (b = null → trail/popups/marker skip).
+    const b = to?.center || null;
+    const a = from?.center || ctx.token?.center || (b ? { x: b.x - 20, y: b.y - 20 } : null);
     drawTrail(a, b, getFactionColor(actor));
 
     // Bridge toll (2026-09-25): the crossing's marks ride on this leg's Economy cost, then the
@@ -1483,9 +1488,24 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     const roll = await (new Roll(rollFormula, { int: intrigueMod, scout: scoutRollMod })).evaluate();
     let total = roll.total;
     let success = total >= dc;
+    // A scripted (pinned) leg is the leg's event — no random encounter on top of it (2026-10-27).
+    // Asked BEFORE the mitigation reroll: a scripted leg has no random encounter to save, so the reroll's charge is kept.
+    let scriptedLeg = null;
+    if (!success && !ctx.preventHazard) {
+      try {
+        const tfTo = to?.document?.flags?.[MOD_TERR] || to?.flags?.[MOD_TERR] || {};
+        const tfFrom = from?.document?.flags?.[MOD_TERR] || from?.flags?.[MOD_TERR] || {};
+        scriptedLeg = await CampaignBeatInjector.pinnedFor({
+          hexName: String(tfTo.name || to?.document?.text || "").trim() || null,
+          fromHexName: String(tfFrom.name || from?.document?.text || "").trim() || null,
+          hexUuid: to?.document?.uuid || to?.uuid || null, factionId: ctx.factionId || actor?.id || null
+        });
+      } catch (_ePin) { scriptedLeg = null; }
+      if (scriptedLeg) console.log("[bbttcc-travel/hex-travel]", `scripted leg (${scriptedLeg}) — the random encounter stands down`);
+    }
     // Encounter-mitigation reroll (Wheel of Fortune T4 "Force the Reroll", mitigates:["encounter"]):
     // on a missed travel check, a covering roster ability rerolls once and keeps the better result.
-    if (!success && !ctx.preventHazard && ctx.encounterMitigation?.covered) {
+    if (!success && !ctx.preventHazard && !scriptedLeg && ctx.encounterMitigation?.covered) {
       const r2 = await (new Roll(rollFormula, { int: intrigueMod, scout: scoutRollMod })).evaluate();
       ctx.encounterReroll = { first: total, second: r2.total, by: ctx.encounterMitigation.abilities || [] };
       if (r2.total > total) { total = r2.total; success = total >= dc; }
@@ -1503,7 +1523,7 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
       distanceMiles: ctx.distanceMiles,
       distanceMilesUnits: ctx.distanceMilesUnits,
       crewUsed: ctx.crew,
-      result: success ? "safe" : (ctx.preventHazard ? "safe" : "encounter"),
+      result: success ? "safe" : (ctx.preventHazard ? "safe" : (scriptedLeg ? "scripted" : "encounter")),
       encounterTier: ctx.terrainTier
     };
     // Travel-stub flag is informational metadata that lets GMs see "last travel
@@ -1512,25 +1532,11 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     // but Foundry still logged a noisy red error. Just gate by GM — the flag
     // will be written on the GM client's mirror render, or skipped harmlessly.
     if (game.user?.isGM) {
-      await to.document.setFlag(MOD_TERR, "travel", travelStub).catch(()=>{});
+      await (to.document ?? to).setFlag(MOD_TERR, "travel", travelStub).catch(()=>{});
     }
 
     let encounterLabel = "";
     let encounter = { triggered: false };
-    // A scripted (pinned) leg is the leg's event — no random encounter on top of it (2026-10-27).
-    let scriptedLeg = null;
-    if (!success && !ctx.preventHazard) {
-      try {
-        const tfTo = to?.document?.flags?.[MOD_TERR] || to?.flags?.[MOD_TERR] || {};
-        const tfFrom = from?.document?.flags?.[MOD_TERR] || from?.flags?.[MOD_TERR] || {};
-        scriptedLeg = await CampaignBeatInjector.pinnedFor({
-          hexName: String(tfTo.name || to?.document?.text || "").trim() || null,
-          fromHexName: String(tfFrom.name || from?.document?.text || "").trim() || null,
-          hexUuid: to?.document?.uuid || to?.uuid || null, factionId: ctx.factionId || actor?.id || null
-        });
-      } catch (_ePin) { scriptedLeg = null; }
-      if (scriptedLeg) console.log("[bbttcc-travel/hex-travel]", `scripted leg (${scriptedLeg}) — the random encounter stands down`);
-    }
     if (!success && !ctx.preventHazard && !scriptedLeg) {
       const raid = getRaidAPI();
       if (raid?.scheduleEvent) {
@@ -1548,8 +1554,8 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
       opSpent: ctx.cost,
       roll: total,
       dc,
-      result: success ? "safe" : (ctx.preventHazard ? "safe-prevented" : "encounter"),
-      note: encounterLabel
+      result: success ? "safe" : (ctx.preventHazard ? "safe-prevented" : (scriptedLeg ? "scripted" : "encounter")),
+      note: encounterLabel || (scriptedLeg && !success && !ctx.preventHazard ? `Scripted leg (${scriptedLeg})` : "")
     });
 
     Hooks.callAll("bbttcc:afterTravel", { ...ctx, success, rollTotal: total, dc });
@@ -2217,6 +2223,9 @@ const CampaignBeatInjector = {
   // asks BEFORE it rolls its random encounter: a scripted leg is the leg's event (2026-10-27, Dave: the Ambush leg also
   // rolled a second Weather Front).
   pinnedFor: async (ctx) => {
+    // Same preconditions as maybeInject — a pin that can't fire must not stand the random encounter down.
+    if (_combatActive()) return null;
+    if (!game.user?.isGM) { const gx = game.bbttcc?.api?.gmExec; if (!gx?.call || !gx.primaryGmId?.()) return null; }
     try {
       const campaignId = _getActiveCampaignId(); if (!campaignId) return null;
       const { map } = _getCampaignStore(); const campaign = map[campaignId];
@@ -2389,7 +2398,9 @@ function registerTravelAPI() {
     getHexAtPoint,
     getHexTerrainSpec,
     _encounterDc,
-    passageFor
+    passageFor,
+    _applyPricePolicy,     // planner forecast prices legs the way travelHex charges them
+    _resolveTravelTier     // …and rolls them at the same tier
   };
   // Public: does `factionId` ride free onto this hex? (dev-6 + owner/ally rule)
   api.travel.passageFor = passageFor;

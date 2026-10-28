@@ -299,7 +299,8 @@
     let alive = true;
     function tick() {
       if (!alive || cont.destroyed) return;
-      const sprite = token._object ?? token.object ?? null;
+      // runVisuals gets a Token PLACEABLE (has .document); a TokenDocument carries .object.
+      const sprite = token?.document ? token : (token?._object ?? token?.object ?? null);
       if (sprite && sprite.position) {
         const dims = tokenDimsPx(token);
         // Top-right of the token sprite.
@@ -459,6 +460,8 @@
     } catch (err) {
       console.error(TAG, err);
       ui.notifications?.error?.(`Travel Visuals error: ${err.message}`);
+      // A leg that throws must not strand the route overlay (the +N badge lives inside it; its tick stops once destroyed).
+      try { (canvas.foreground ?? canvas.stage)?.getChildByName?.("bbttcc-route-overlay")?.destroy({ children: true }); } catch (_eC) {}
     }
   }
 

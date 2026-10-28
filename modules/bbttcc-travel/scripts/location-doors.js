@@ -69,6 +69,16 @@
   }
 
   // ---------- hit-test (same recipe as world-overview.js) ----------
+  // Scene point → the drawing's shape space (origin = doc.x/y, rotation undone about the
+  // shape centre). Pure document math — no placeable transforms, no screen-space mixups.
+  function sceneToShape(doc, gx, gy) {
+    const shape = doc.shape || {};
+    const w = Number(shape.width ?? doc.width ?? 0), h = Number(shape.height ?? doc.height ?? 0);
+    const cx = Number(doc.x || 0) + w / 2, cy = Number(doc.y || 0) + h / 2;
+    const r = -((Number(doc.rotation) || 0) * Math.PI) / 180;
+    const dx = gx - cx, dy = gy - cy;
+    return { x: dx * Math.cos(r) - dy * Math.sin(r) + w / 2, y: dx * Math.sin(r) + dy * Math.cos(r) + h / 2, w, h };
+  }
   function drawingContainsGlobal(d, gx, gy) {
     try {
       const shape = d.document.shape || {};
@@ -77,7 +87,7 @@
       const h = Number(shape.height ?? d.document.height ?? 0);
       const c = centerOf(d);                       // scene space — pivot-independent
       if (t === "p" || (Array.isArray(shape.points) && shape.points.length >= 6)) {
-        const local = d.toLocal(new PIXI.Point(gx, gy));
+        const local = sceneToShape(d.document, gx, gy);   // gx/gy are scene coords (localPos)
         return new PIXI.Polygon(shape.points).contains(local.x, local.y);
       }
       const rx = w / 2, ry = h / 2; if (rx <= 0 || ry <= 0) return false;
@@ -259,7 +269,8 @@
     pin.addChild(glow, stem, body);
     return pin;
   }
-  function clearLabels() { for (const L of _labels) safeDestroy(L.c); _labels = []; }
+  // NOW pins live on the fx layer, not inside L.c — destroy them too or every rebuild strands one.
+  function clearLabels() { for (const L of _labels) { safeDestroy(L.c); if (L.pin) safeDestroy(L.pin); } _labels = []; }
   function _buildLabels() {
     clearLabels();
     const layer = fxLayer();
