@@ -117,23 +117,50 @@
       const api = game.bbttcc?.api?.campaign; if (!api?.director?.situation || !api?.story?.registryOf) return () => null;
       const story = await api.director.situation({ full: false }); if (!story?.byKey) return () => null;
       const esc = foundry.utils.escapeHTML;
+      // QUEST LOG PASS (Dave 2026-10-28): "So far" = the past-tense `logged` lines of the steps this table finished
+      // (scriptView.soFar); "Where" = the next beat's own place (stamp → next.place / next.here), so the writer only
+      // writes what to DO and the Log says where and how to get there.
+      const soFarHtml = (ls) => (Array.isArray(ls) && ls.length) ? `<p><b>So far:</b></p><ul>${ls.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` : "";
+      const hk = (x) => String(x || "").replace(/[\s\u00a0]+/g, " ").trim().replace(/^[^\p{L}\p{N}]+/u, "").toLowerCase();
+      let partyHex = null; try { partyHex = (api.story?.where?.() || api.where?.())?.hex || null; } catch (_e) {}
+      const whereHtml = (n) => {
+        if (!n) return "";
+        // a step's authored `where` names the destination of an "anywhere" beat (a letter, a ride)
+        let place = String(n.place || "").trim(), here = n.here;
+        if ((!place || /^anywhere$/i.test(place)) && n.where) { place = String(n.where); here = partyHex ? hk(partyHex) === hk(place) : null; }
+        if (!place || /^anywhere$/i.test(place)) return "";
+        const how = here === true ? "you are here" : (here === false ? "ride there on the Travel Console" : "");
+        return `<p class="bbttcc-muted"><b>Where:</b> ${esc(place)}${how ? ` — ${how}` : ""}</p>`;
+      };
+      // a Next whose beat cannot open yet (its gates wait on the story's clock or a later choice) is not an instruction —
+      // the Log says so instead of describing a scene that has not happened (Bandit Accord / the Tent, 2026-10-28)
+      const notYet = (n, why) => !!n && n.beat && n.ready === false && /^(waiting|closer-waiting)$/.test(String(why || ""));
+      const NOT_YET = "Nothing to chase here yet. This thread picks up later in the story.";
       return (qid) => {
         const m = api.story.registryOf(qid); const q = m ? story.byKey[m.quest] : null; const sc = q?.script; if (!sc) return null;
         if (m.chapter) {
           const ch = sc.chapters?.[m.chapter] || {}; const cq = (q.chapters || []).find(c => c.key === m.chapter) || null;
           // the current rung's line first (scriptView.chapterLines, 2026-10-17), then the chapter's fixed line — the words advance by themselves
           const line = sc.chapterLines?.[m.chapter]?.line || ch.line || (cq?.next?.line || ""); const giver = ch.giver || "";
-          return { giver, description: ch.description || "", stepLabel: cq ? (cq.state === "done" ? "done" : cq.state) : "", lines: line ? [line] : [], doors: [] };
+          const chSoFar = sc.soFar?.chapters?.[m.chapter] || [];
+          const chNext = cq?.state === "done" ? null : (cq?.next || null);
+          // regDesc: a chapter with no authored description keeps the registry row's own text (the old fallback)
+          const renderCh = (ls, regDesc = "") => `${giver ? `<p class="bbttcc-muted"><b>From:</b> ${esc(giver)}</p>` : ""}${ch.description ? `<p>${esc(ch.description)}</p>` : (regDesc && !/^\s*</.test(regDesc) ? `<p>${esc(regDesc)}</p>` : regDesc)}` + soFarHtml(chSoFar) +
+            (ls.length ? `<p><b>Next:</b></p><ul>${ls.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` + whereHtml(chNext) : "");
+          return { giver, description: ch.description || "", stepLabel: cq ? (cq.state === "done" ? "done" : cq.state) : "", lines: line ? [line] : [], doors: [], renderHtml: renderCh, html: renderCh(line ? [line] : []), regDesc: !ch.description };
         }
         const cur = (sc.steps || []).filter(st => st.status === "current");
-        const lines = cur.map(st => st.line).filter(Boolean); if (!lines.length && q.next?.line) lines.push(q.next.line);
+        const waitingOnly = notYet(q.next, q.why);
+        // the engine's next line wins for its own step — it carries the hereLine swap ("you're already here, go and look")
+        const lines = waitingOnly ? [NOT_YET] : cur.map(st => (q.next && q.next.step === st.id && q.next.line) ? q.next.line : st.line).filter(Boolean); if (!lines.length && q.next?.line) lines.push(q.next.line);
         const stepLabel = cur.map(st => st.label).filter(Boolean).join(" · ") || (q.state === "completed" ? "complete" : "");
         // "Also open" = doors that ARE open: none during the Arrival, and a door with beats only once its next beat's gates
         // are met (Tamsin / Etta / the Muster are Act-2 doors; the Muster also waits for the militia) — 2026-10-26
         const doors = sc.inArrival ? [] : (sc.doors || []).filter(d => d.line && (d.ready || !d.beat)).map(d => ({ label: d.label, line: d.line, ready: d.ready }));
         // renderHtml(lines) — the Log rebuilds this with a table-edited next line when one is stored (2026-09-21).
         const renderHtml = (ls) => `${sc.giver ? `<p class="bbttcc-muted"><b>From:</b> ${esc(sc.giver)}</p>` : ""}${sc.description ? `<p>${esc(sc.description)}</p>` : ""}` +
-            (ls.length ? `<p><b>Next:</b></p><ul>${ls.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` : "") +
+            soFarHtml(sc.inArrival ? [] : sc.soFar?.main) +
+            (ls.length ? `<p><b>Next:</b></p><ul>${ls.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` + (q.state === "completed" || waitingOnly ? "" : whereHtml(q.next)) : "") +
             (doors.length ? `<p><b>Also open:</b></p><ul>${doors.map(d => `<li>${esc(d.line)}</li>`).join("")}</ul>` : "");
         return { giver: sc.giver || "", description: sc.description || "", stepLabel, lines, doors, renderHtml, html: renderHtml(lines) };
       };
@@ -159,7 +186,7 @@
       const ovActive = !!(ov?.text && String(ov.stepKey ?? "") === authoredKey);
       const effLines = ovActive ? [String(ov.text)] : authoredLines;
       const si = si0
-        ? { ...si0, lines: effLines, html: si0.renderHtml ? si0.renderHtml(effLines) : si0.html }
+        ? { ...si0, lines: effLines, html: si0.renderHtml ? si0.renderHtml(effLines, si0.regDesc ? qDesc(reg, qid) : "") : si0.html }
         : (effLines.length ? { giver: "", description: "", stepLabel: "", lines: effLines, doors: [] } : null);
       const { seenCount, completedCount } = beatProgress(tr);
       const acceptedTs = tr.acceptedTs || tr.accepted || null;

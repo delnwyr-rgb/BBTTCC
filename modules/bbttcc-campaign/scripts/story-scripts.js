@@ -183,14 +183,18 @@ export const STORY_SCRIPTS = {
   // overture (dead once Khezek-Tor is active) and the REALIZATION is offered when its evidence is in.
   valhaulan_spine: {
     giver: "the night itself; then whoever signed the seal",
-    description: "That One Night the mountain didn't cough — it leaned. Since then every thread on the frontier bends the same way: new handwriting on a sealed shaft, a sigil in Etta's hand, a bunker that isn't a vault, a chapel on the coast that turns to look. The spine is the shape the threads make when you hold them up together.",
+    // Quest Log pilot (Dave 2026-10-28): the description says only what the players know when it opens — the threads it
+    // used to list (Etta's sigil, the bunker, the chapel) arrive as `logged` lines once the table has actually found them.
+    description: "Everyone in Bad Eden woke at the same hour That One Night, feeling watched. Since then, strange things keep turning up across the frontier.",
     steps: [
-      { id: "word", label: "Someone Else's Handwriting", line: "Word from the mountain: the sealed shaft has new handwriting. Khezek Tor is the first thread.",
-        beats: ["vs_overture"], borrow: true, done: { anyOf: ["vs_overture", "khezek_word_ride", "khezek_tor_quest_scene"] } },
-      { id: "signature", label: "The Seal Was a Signature", line: "Decide the Seal, hear Etta out at the Long Market — then the threads tie themselves.",
+      { id: "word", label: "Someone Else's Handwriting", line: "Follow the first thread at Khezek Tor: the old sealed shaft has fresh carvings.", where: "Khezek-Tor",
+        logged: "Khezek Tor's old sealed shaft turned up with fresh carvings in someone else's handwriting.",
+        beats: ["vs_overture", "khezek_word_ride"], borrow: true, done: { anyOf: ["vs_overture", "khezek_word_ride", "khezek_tor_quest_scene"] } },   // + the ride (2026-10-28): the Log points at the open road, not "picks up later"
+      { id: "signature", label: "The Seal Was a Signature", line: "Decide what to do about the Valhaulan Seal at Khezek Tor, then hear Etta out at the Long Market in Allesh-Gilliam.",
+        logged: "You settled the Seal and heard Etta out at the Long Market. The threads are connected.",
         beats: ["vs_bridge_seal"], done: { mark: "vs_bridge_seal" } },
-      { id: "act3", label: "Act Three", line: "Three towns settled, the gate mended, the cult named — the heading opens.", beats: ["a3_title_card"], done: { mark: "a3_title_card" } },   // the Act 3 door (2026-09-19): waits on Act 2's critical marks; turn 6 is the calendar's safety valve
-      { id: "triangle", label: "Three Points Make a Heading", line: "The coast, the statues, the chapel: three points, one heading.", beats: ["vs_bridge_triangle"], done: { mark: "vs_bridge_triangle" } },
+      { id: "act3", label: "Act Three", line: "Settle the three towns, mend the gate and name the cult. The heading opens after that.", beats: ["a3_title_card"], done: { mark: "a3_title_card" } },   // the Act 3 door (2026-09-19): waits on Act 2's critical marks; turn 6 is the calendar's safety valve
+      { id: "triangle", label: "Three Points Make a Heading", line: "Follow the three points (the coast, the statues and the chapel) to one heading.", beats: ["vs_bridge_triangle"], done: { mark: "vs_bridge_triangle" } },
       { id: "corroboration", label: "Everyone Saw Something", line: "Corroborate what the towns saw that night.", beats: ["vs_bridge_corroboration"], done: { mark: "vs_bridge_corroboration" } },
       { id: "muster", label: "The Sky Is Waiting", line: "Muster.", beats: ["vs_bridge_muster"], done: { mark: "vs_bridge_muster" } }
     ],

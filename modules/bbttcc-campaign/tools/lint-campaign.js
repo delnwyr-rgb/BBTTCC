@@ -595,6 +595,110 @@ for (const b of beats) {
   }
 }
 
+// ── QUEST LOG LINE LINT (SC08–SC10, 2026-10-28) — helpers used inside the scripts pass ─────────────────────────
+// SC08 no way there: a step nothing can finish (no beats, no done rule, no handoff) is an ERROR; a step whose beats wait
+//      for a LATER act than the step before is INFO (the Log prints "picks up later" meanwhile, so its line is unseen);
+//      a step that says to travel while every beat plays "anywhere" and no `where` is set is a WARN (no Where: line).
+// SC09 may spoil: a capitalised name in a line the players see before they could have met it — the description vs the
+//      quest's start, a step's `line` vs the beats BEFORE the step, its `logged` vs the beats up to and including it.
+//      "Known" = any beat of an earlier act (storyPhase gate) + this script's beats so far + its giver + hex/quest names.
+// SC10 no instruction: a step `line` with no imperative verb opening a sentence is clever noise, not a next step.
+function _qlText(b) {
+  if (!b) return "";
+  const bits = [b.label, b.description, b.memoryText, b.inviteText];
+  for (const k of ["playerFacingContent", "playerFacingDialog", "dialogPlayerFacing", "playerFacing", "outcomes"]) { const v = b[k]; if (v) bits.push(typeof v === "string" ? v : JSON.stringify(v)); }
+  for (const c of (Array.isArray(b.choices) ? b.choices : [])) bits.push(c?.label, c?.text, c?.afterText, c?.description);
+  for (const a of (Array.isArray(b.actors) ? b.actors : [])) bits.push(typeof a === "string" ? a : (a?.name || ""));
+  return bits.filter(Boolean).join(" \n ").replace(/<[^>]+>/g, " ").replace(/\\[nrt]/g, " ");
+}
+const _qlPhase = (b) => { let p = 0; for (const r of (Array.isArray(b?.inject?.requires) ? b.inject.requires : [])) if (r && r.flag === "storyPhase" && isNum(r.gte)) p = Math.max(p, Number(r.gte)); return p; };
+const _QL_STOP = new Set("the a an and or but if then when while once after before since until you your we our they their he she it its his her them this that these those there here what who where why how not no nobody somebody someone something anything everything every each both all any some one two three four five six seven eight nine ten first second third last next new old good bad just only also even still now then again ask go see come take bring hear meet ride head walk find tell say talk call keep let make get give leave look read stand sit wait follow answer decide choose open count check help return report visit speak watch pick set put run do don't word act turn day night morning evening dawn steward stewards domain domains gm table log quest chapter".split(" "));
+let _qlKnownCache = null;
+function _qlKnownBefore(phase) {
+  _qlKnownCache = _qlKnownCache || beats.map(b => ({ p: _qlPhase(b), t: _qlText(b).toLowerCase() }));
+  return _qlKnownCache.filter(x => x.p < Math.max(Number(phase) || 0, 1)).map(x => x.t).join(" \n ");   // Act 0 is always known
+}
+function _qlNames(line) {
+  const out = []; const txt = String(line || "");
+  const re = /(^|[^A-Za-z'’])([A-Z][A-Za-z'’\-]+(?:\s+(?:of\s+the\s+|of\s+|the\s+)?[A-Z][A-Za-z'’\-]+)*)/g; let m;
+  while ((m = re.exec(txt))) {
+    const before = txt.slice(0, m.index + m[1].length).trimEnd();
+    const sentenceStart = !before || /[.!?:;—"“(]$/.test(before);
+    const words = m[2].split(/\s+/).filter(w => !/^(of|the)$/i.test(w));
+    if (!words.length) continue;
+    const first = words[0].toLowerCase().replace(/['’]s$/, "");
+    if (sentenceStart && words.length === 1 && _QL_STOP.has(first)) continue;
+    const keep = words.filter((w, i) => !(i === 0 && sentenceStart && _QL_STOP.has(w.toLowerCase())));
+    for (const w of keep) { const k = w.toLowerCase().replace(/['’](s|ve|re|ll|d|t)$/, ""); if (k.length > 2 && !_QL_STOP.has(k) && !_QL_NONVERB.has(k)) out.push(w.replace(/['’]s$/, "")); }
+  }
+  return [...new Set(out)];
+}
+// An imperative sentence opens with a verb. Rather than a verb dictionary: a sentence is NOT an instruction when it opens
+// with an article / pronoun / determiner / number / preposition / conjunction, or with a proper noun (a word the campaign
+// capitalises mid-sentence). Everything else is taken as a verb ("Grieve with them", "Ring the bell", "Ride for …").
+const _QL_NONVERB = new Set("the a an and or but so if when while once after before since until because as at in on by to from of for with into onto over under near behind beyond across through past up down out off you your yours we our us they their them he she it its his her him i me my this that these those there here what who whom whose where why how which nobody somebody someone something anything everything nothing everyone everybody no not one two three four five six seven eight nine ten every each both all any some another other more most few many much half word words news meanwhile somewhere".split(" "));
+let _qlProper = null;
+function _qlProperNouns() {
+  if (_qlProper) return _qlProper;
+  _qlProper = new Set();
+  const lower = new Set();
+  for (const b of beats) {
+    const t = _qlText(b); const re = /[a-z,;]\s+([A-Z][a-z'’\-]+)/g; let m; while ((m = re.exec(t))) _qlProper.add(m[1].toLowerCase().replace(/['’]s$/, ""));
+    for (const w of t.match(/\b[a-z][a-z'’\-]+\b/g) || []) lower.add(w.replace(/['’]s$/, ""));
+  }
+  for (const w of [..._qlProper]) if (lower.has(w)) _qlProper.delete(w);   // a word the campaign also writes lowercase is a word, not a name
+  return _qlProper;
+}
+function _qlHasInstruction(line) {
+  const proper = _qlProperNouns();
+  const sentences = String(line || "").split(/(?<=[.!?;:,])\s+|\s+—\s+|\bthen\s+/i);   // a clause after a comma counts ("At the cookline, ask Brennig")
+  return sentences.some(x => {
+    const w = (x.trim().replace(/^[^A-Za-z]+/, "").split(/[\s,]+/)[0] || "");
+    const k = w.toLowerCase().replace(/['’]s$/, "");
+    if (!k || _QL_NONVERB.has(k)) return false;
+    if (/^[A-Z]/.test(w) && proper.has(k)) return false;   // "Calder wants you below" — a name, not a verb
+    if (/ed$/.test(k) && k.length > 4 && !/(need|feed|heed|speed|seed|shed|wed)$/.test(k)) return false;   // "Leaned", "Settled" — past tense, not the bare imperative
+    return true;
+  });
+}
+function qlLint(qk, qdef, sc, stepsAll, SM, QM) {
+  const hexNames = new Set(); try { for (const b of beats) { const p = SM.placeOf(b, null); if (p && p !== "anywhere") for (const w of String(p).split(/[\s\-]+/)) hexNames.add(w.toLowerCase()); } } catch (_e) {}
+  const qNames = Object.values(QM.quests || {}).map(q => String(q?.name || "").toLowerCase()).join(" ");
+  const giver = String(sc.giver || "").toLowerCase();
+  const isKnown = (name, corpus) => { const n = name.toLowerCase(); return hexNames.has(n) || qNames.includes(n) || giver.includes(n) || corpus.includes(n); };
+  const beatsOf = (st) => [...(Array.isArray(st.beats) ? st.beats : []), ...(st.done?.anyOf || []), ...(st.done?.allOf || []), ...(st.done?.mark ? [st.done.mark] : [])].map(s).map(id => byId.get(id)).filter(Boolean);
+  const steps = stepsAll.filter(st => st && st.id);
+  const startPhase = Math.min(...steps.filter(x => !x.arrival).map(st => Math.min(...beatsOf(st).map(_qlPhase).concat([99]))).concat([99]));
+  let ownSoFar = steps.filter(x => x.arrival).flatMap(beatsOf).map(_qlText).join(" \n ").toLowerCase();
+  // the description: known at acceptance = earlier acts + the arrival + the quest's first step (its start plays when it opens)
+  { const first = steps.find(x => !x.arrival); const corpus = _qlKnownBefore(startPhase === 99 ? 0 : startPhase) + " " + ownSoFar + " " + (first ? beatsOf(first).map(_qlText).join(" ").toLowerCase() : "");
+    const bad = _qlNames(sc.description).filter(n => !isKnown(n, corpus));
+    if (bad.length) F("SC09", "WARN", null, `script ${qdef.name} · description names ${bad.slice(0, 6).join(", ")} before the players could have met ${bad.length > 1 ? "them" : "it"} — the description shows from acceptance; move later facts to a step's \`logged\` line`, { quest: qk }); }
+  let prevPhase = null;
+  for (const st of steps) {
+    const bs = beatsOf(st);
+    const phase = bs.length ? Math.min(...bs.map(_qlPhase)) : null;
+    // SC08 — no way there
+    if (!bs.length && !st.done && !st.handoff) F("SC08", "ERROR", null, `script ${qdef.name} · step '${st.id}': no beats, no done rule, no handoff — nothing can finish it, so the Log's Next never moves`, { quest: qk });
+    if (!st.arrival && prevPhase != null && phase != null && phase > prevPhase) F("SC08", "INFO", null, `script ${qdef.name} · step '${st.id}': its beats wait for story phase ${phase} (the step before plays at ${prevPhase}) — the Log says "picks up later" until then`, { quest: qk });
+    if (!st.arrival && bs.length && !st.where && /\b(ride|head (?:to|for|into|out)|travel(?! on)|go to|make for)\b/i.test(String(st.line || "")) && !/\bas you travel\b/i.test(String(st.line || ""))) {
+      let places = []; try { places = bs.map(b => SM.placeOf(b, qdef)).filter(Boolean); } catch (_e) {}
+      if (places.length && places.every(p => p === "anywhere")) F("SC08", "WARN", null, `script ${qdef.name} · step '${st.id}': the line says to travel but every beat plays "anywhere" — set \`where\` (the destination hex) so the Log can say where`, { quest: qk });
+    }
+    // SC09 — the line (seen before the step's beats play) and the logged line (seen after)
+    if (!st.arrival) {
+      const corpus = _qlKnownBefore(phase ?? 0) + " " + ownSoFar;
+      const badLine = _qlNames(st.line).filter(n => !isKnown(n, corpus));
+      if (badLine.length) F("SC09", "INFO", null, `script ${qdef.name} · step '${st.id}': the Next line names ${badLine.slice(0, 5).join(", ")} before the players have met ${badLine.length > 1 ? "them" : "it"} (fine if the step's own beat introduces them — check it reads as an instruction, not a reveal)`, { quest: qk });
+    }
+    ownSoFar += " \n " + bs.map(_qlText).join(" \n ").toLowerCase();
+    if (st.logged) { const badLog = _qlNames(st.logged).filter(n => !isKnown(n, _qlKnownBefore(phase ?? 0) + " " + ownSoFar)); if (badLog.length) F("SC09", "WARN", null, `script ${qdef.name} · step '${st.id}': the logged line names ${badLog.slice(0, 5).join(", ")}, which none of the step's beats so far show`, { quest: qk }); }
+    // SC10 — an instruction, not noise
+    if (s(st.line) && !_qlHasInstruction(st.line)) F("SC10", "WARN", null, `script ${qdef.name} · step '${st.id}': the Next line has no instruction ("${s(st.line).slice(0, 80)}") — say what to do: who, where, the verb`, { quest: qk });
+    if (!st.arrival && phase != null) prevPhase = phase;
+  }
+}
+
 // ── declarations: D01–D05 (Phase 2/4, 2026-09-13) — quest · chapter · ending ──────────────────
 // Mirrors scripts/story-model.js: every quest-bearing beat declares {quest, chapter?, role, ending?};
 // the store derives state from those declarations. The lint checks INTENT, not shapes.
@@ -732,6 +836,10 @@ for (const b of beats) {
       for (const d of (Array.isArray(sc.doors) ? sc.doors : [])) for (const id of (Array.isArray(d.beats) ? d.beats : []).map(s)) if (!byId.has(id)) F("SC01", "ERROR", null, `script ${qdef.name} · door '${d.id}': beat '${id}' is not in the campaign`, { quest: qk });
       for (const id of (Array.isArray(sc.after) ? sc.after : []).map(s)) if (!byId.has(id)) F("SC01", "ERROR", null, `script ${qdef.name} · after: beat '${id}' is not in the campaign`, { quest: qk });
       for (const ch of Object.keys(sc.chapters || {})) if (!qdef.chapters?.[ch]) F("SC04", "ERROR", null, `script ${qdef.name} · chapters: '${ch}' is not a chapter of the quest`, { quest: qk });
+      // ── SC08–SC10 QUEST LOG LINES (Dave 2026-10-28: "next lines that talk about things that haven't happened yet … point
+      // to a next with no way to get there … allude to things off camera … so esoteric they are just clever noise").
+      // The Log shows `description` from acceptance, a step's `line` while it is current, its `logged` once it is done.
+      qlLint(qk, qdef, sc, stepsAll, SM, QM);
     }
   }
 }

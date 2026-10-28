@@ -1,0 +1,513 @@
+{
+ "about": "Quest Log pilot 2026-10-28 (Dave): the Errata Society's active quests — description = what the players know at acceptance; each step gets a past-tense `logged` line (So far:) and a plain-instruction `line` (Next:); `where` names the destination of letter/ride steps. old must match live or the row is skipped.",
+ "scripts": {
+  "allesh_gilliam": {
+   "steps": {
+    "daysend": {
+     "logged": {
+      "old": "",
+      "new": "You arrived in Allesh-Gilliam, met the town, and rode out to see your land."
+     }
+    },
+    "that_night": {
+     "logged": {
+      "old": "",
+      "new": "That One Night, everyone in Bad Eden woke at the same hour feeling watched. By morning the East Wall leaned worse."
+     }
+    },
+    "trouble": {
+     "line": {
+      "old": "Pike is waiting at the HQ. Hear the errands.",
+      "new": "Go to the HQ and hear Marshal Pike's errands."
+     },
+     "logged": {
+      "old": "",
+      "new": "Pike gave you two errands: find out why the East Wall won't hold a patch, and get the Leygate working again."
+     }
+    },
+    "wall": {
+     "line": {
+      "old": "Walk the East Wall. Survey it, crew it, read it — three swings, any order — then tell Pike what we're doing wrong.",
+      "new": "Walk the East Wall. Survey it, crew it and read it, in any order. Then tell Pike what you found."
+     },
+     "logged": {
+      "old": "",
+      "new": "You worked the East Wall and reported back to Pike."
+     }
+    },
+    "gate": {
+     "line": {
+      "old": "Go and see the Leygate. Garren knows what it needs, and he has something for you to carry.",
+      "new": "Visit the Leygate and talk to Garren, the engineer. He'll tell you what it needs."
+     },
+     "logged": {
+      "old": "",
+      "new": "Garren showed you the Leygate. It needs a new stabilizer, and the only one is at Furrier's Fixit Farm."
+     }
+    },
+    "fixit": {
+     "line": {
+      "old": "Ride for Furrier's Fixit Farm with the spanner and bring back the stabilizer.",
+      "new": "Ride to Furrier's Fixit Farm with Garren's spanner and bring back the stabilizer."
+     },
+     "where": {
+      "old": "",
+      "new": "Furrier's Fixit-Farm"
+     },
+     "logged": {
+      "old": "",
+      "new": "You brought the stabilizer back from Furrier's Fixit Farm."
+     }
+    },
+    "install": {
+     "line": {
+      "old": "Bring the crate to Garren at the Leygate and let him work.",
+      "new": "Bring the stabilizer crate to Garren at the Leygate."
+     },
+     "logged": {
+      "old": "",
+      "new": "Garren installed the stabilizer. The Leygate works again."
+     }
+    },
+    "close": {
+     "line": {
+      "old": "Pike is updating the map. Go and see your names on it.",
+      "new": "Go back to Pike at the HQ. He's updating the map."
+     },
+     "logged": {
+      "old": "",
+      "new": "Pike put your names on the map."
+     }
+    }
+   },
+   "chapters": {
+    "the_town_militia": {
+     "line": {
+      "old": "Freed bandits plus a nervous town equals a militia. The Muster is open; see what Brakk is building.",
+      "new": "Go to the Muster by the North Gate and see what Captain Brakk is building with the bandits you let go."
+     }
+    }
+   },
+   "description": {
+    "old": "Pike gave you two errands and in a vaguely threatening, grandfatherly way. The Leygate is remembering wrong, and the only replacement stabilizer he knows of sits in the Arc Bay at Furrier's Fixit. The East Wall is bowing, and the Architect, Plumb, calls it cosmetic. Keep one promise and the town might stop measuring you for a box.",
+    "new": "Allesh-Gilliam is the coalition's home town: Marshal Pike's HQ, the Long Market, the Leygate and the East Wall. The town has met you. Now it has work for you."
+   }
+  },
+  "khezek_tor": {
+   "steps": {
+    "cookline": {
+     "logged": {
+      "old": "",
+      "new": "You ate at the cookline and met Foreman Calder and Sable Nine."
+     }
+    },
+    "word": {
+     "line": {
+      "old": "Word from Khezek Tor came up with the ore tallies. The old shaft has new handwriting. Ride Thatwards-by-North.",
+      "new": "Word came with the ore tallies: the old sealed shaft has fresh carvings. Ride to Khezek Tor and see them."
+     },
+     "hereLine": {
+      "old": "Word from Khezek Tor came up with the ore tallies. You're already on the mountain. Go and see.",
+      "new": "Word came with the ore tallies: the old sealed shaft has fresh carvings. You're at Khezek Tor already, so go and look."
+     },
+     "where": {
+      "old": "",
+      "new": "Khezek-Tor"
+     },
+     "logged": {
+      "old": "",
+      "new": "Word came with the ore tallies: the old sealed shaft has fresh carvings, and Calder's crews won't work beside it."
+     }
+    },
+    "switchback": {
+     "line": {
+      "old": "Calder doesn't spook, and his crews won't work the gallery. Take the mountain's measure from the switchback.",
+      "new": "Meet Calder at the switchback and take the mountain's measure."
+     },
+     "logged": {
+      "old": "",
+      "new": "You took the mountain's measure from the switchback: the Maw, the Lift Hall and the Brace."
+     }
+    },
+    "mine": {
+     "line": {
+      "old": "Calder wants you below. The new shaft broke into something he won't call a cavern.",
+      "new": "Go below with Calder. The new shaft on Level Four broke into something he won't call a cavern."
+     },
+     "logged": {
+      "old": "",
+      "new": "You went below Level Four, where the new shaft broke into something, and decided what to do about it."
+     }
+    },
+    "seal": {
+     "line": {
+      "old": "The sealed shaft. Fresh sigils, pointed somewhere. Read it properly before you touch it.",
+      "new": "Go with Sable Nine to the sealed shaft. Read the carvings before anyone touches them."
+     },
+     "logged": {
+      "old": "",
+      "new": "Sable Nine took you to the sealed shaft and its fresh carvings."
+     }
+    },
+    "nobody": {
+     "line": {
+      "old": "Nobody from the outfit has said a word since the Cough. You are the outfit. Calder will talk while he works; do not sit down.",
+      "new": "Talk to Calder while he works (don't sit down). Ask what the crews need to hear."
+     },
+     "logged": {
+      "old": "",
+      "new": "Calder told you nobody from the outfit has said a word since the Cough. You are the outfit now."
+     }
+    },
+    "desk": {
+     "line": {
+      "old": "Two pallets and a door. Count the crates with him. Ask about the middle brother once, and only once.",
+      "new": "Visit Brennig at his desk and count the crates with him."
+     },
+     "logged": {
+      "old": "",
+      "new": "You counted crates with Brennig at his desk."
+     }
+    },
+    "shaft": {
+     "line": {
+      "old": "The manifest is in the cage shaft where the middle brother left it. Sable has rope. Bring your own chair.",
+      "new": "Go down the cage shaft below Level Four with Sable Nine and find the dropped manifest."
+     },
+     "logged": {
+      "old": "",
+      "new": "You found the dropped manifest in the cage shaft below Level Four."
+     }
+    },
+    "room": {
+     "line": {
+      "old": "Doc Greeley's back room has been shut since the Cough. Ask what it's FOR. Don't joke in there.",
+      "new": "Ask Doc Greeley what the back room at the Waiting Room is for."
+     },
+     "logged": {
+      "old": "",
+      "new": "You saw Doc Greeley's back room at the Waiting Room."
+     }
+    },
+    "place": {
+     "line": {
+      "old": "There are more plates at the cookline than brothers. Ask Brennig whose. Then put the manifest on it.",
+      "new": "At the cookline, ask Brennig whose place is set on the bench."
+     },
+     "logged": {
+      "old": "",
+      "new": "You learned whose place is set at the cookline."
+     }
+    },
+    "oword": {
+     "line": {
+      "old": "Say it out loud at the cookline, with the receipts in your hands. The mountain gets to hear it too.",
+      "new": "Give the Official Word at the cookline, with whatever proof you've gathered."
+     },
+     "logged": {
+      "old": "",
+      "new": "You gave the Official Word at the cookline."
+     }
+    },
+    "squares": {
+     "line": {
+      "old": "STEWARDS, SEE ME, in chalk, underlined once. Go and see Calder.",
+      "new": "Go and see Calder. He's chalked STEWARDS, SEE ME."
+     },
+     "logged": {
+      "old": "",
+      "new": "Khezek Tor settled."
+     }
+    }
+   },
+   "chapters": {},
+   "description": {
+    "old": "Word came up with the evening ore tallies: the old sealed shaft has new handwriting, and Calder's crews won't work the gallery beside it. Khezek Tor is the coalition's Yesodium, the mountain that feeds everyone and asks for more than it admits. The last crew opened a chamber wrong and the mountain coughed; half the town thinks it did it on purpose. If Lyrenn teaches patience, Khezek Tor teaches limits. Somebody has to decide what the mountain says next.",
+    "new": "Khezek Tor is the coalition's mine and the source of its Yesodium. It feeds everyone, and asks for more than it admits."
+   }
+  },
+  "lyrenn": {
+   "steps": {
+    "rows": {
+     "logged": {
+      "old": "",
+      "new": "You walked the rows and met Elsin Quade and Rowan of the Loam."
+     }
+    },
+    "word": {
+     "line": {
+      "old": "Word from Lyrenn. Elsin and Rowan both wrote. Ride Thatwards-by-Green.",
+      "new": "Elsin and Rowan have both written asking for you. Ride to Lyrenn."
+     },
+     "hereLine": {
+      "old": "Word from Lyrenn. Elsin and Rowan both wrote. You're already here. Go and see.",
+      "new": "Elsin and Rowan have both written asking for you. You're in Lyrenn already, so go and find them."
+     },
+     "where": {
+      "old": "",
+      "new": "Lyrenn"
+     },
+     "logged": {
+      "old": "",
+      "new": "Elsin and Rowan both wrote: something is tearing up the east channels, and the treeline is moving toward town."
+     }
+    },
+    "second": {
+     "line": {
+      "old": "Lyrenn is expecting you. Take the rows' measure from the co-op steps.",
+      "new": "Go to the co-op steps and hear what's wrong in Lyrenn."
+     },
+     "logged": {
+      "old": "",
+      "new": "You heard Lyrenn's troubles from the co-op steps."
+     }
+    },
+    "choir": {
+     "line": {
+      "old": "The Water Choir is tuning to you. Stand in it, listen, and let the children grade you. Ask which basin is flat. Not why.",
+      "new": "Stand in the Water Choir and let the children grade you. Ask which basin is flat."
+     },
+     "logged": {
+      "old": "",
+      "new": "The Water Choir tuned to you. One basin has been flat since That One Night."
+     }
+    },
+    "field": {
+     "line": {
+      "old": "The low field, the one nobody harvests. Bring nothing sharp.",
+      "new": "Walk the low field, the one nobody harvests. Bring nothing sharp."
+     },
+     "logged": {
+      "old": "",
+      "new": "You walked the low field that nobody harvests and decided what to do about it."
+     }
+    },
+    "vault": {
+     "line": {
+      "old": "Elsin will open the vault now. Not by her mother, not by hers. Stand next to her when she finds out what's down there.",
+      "new": "Ask Elsin to open the seed vault, and stay beside her when she does."
+     },
+     "logged": {
+      "old": "",
+      "new": "Elsin opened the seed vault, and you planted the red-thread seeds."
+     }
+    },
+    "label": {
+     "line": {
+      "old": "The red-thread jar has a label in Lyrenn's own hand. It says where the stones went quiet. Take it.",
+      "new": "Take the label off the red-thread jar in the seed vault."
+     },
+     "logged": {
+      "old": "",
+      "new": "You kept the red-thread jar's label. It says where the standing stones went quiet."
+     }
+    },
+    "whisper": {
+     "line": {
+      "old": "After the planting the flat basin has words. Stand in the Choir and hear what the land was told.",
+      "new": "Go back to the Water Choir and listen to the flat basin."
+     },
+     "logged": {
+      "old": "",
+      "new": "The flat basin said what the land was told that night: you were lied to."
+     }
+    },
+    "aligns": {
+     "line": {
+      "old": "Lyrenn is deciding whether you can stay. Let it.",
+      "new": "Wait for Lyrenn's answer. It's deciding whether you can stay."
+     },
+     "logged": {
+      "old": "",
+      "new": "Lyrenn decided you can stay."
+     }
+    }
+   },
+   "chapters": {},
+   "description": {
+    "old": "Two letters came from Lyrenn the morning after that one night. Elsin Quade's says something is tearing up the east channels, bring patience, never the shovel. Rowan's says the trees are moving, toward you. The farm feeds the coalition, the land is reading you, and Lyrenn does not punish violence. It remembers it.",
+    "new": "Lyrenn is the coalition's farm. Elsin Quade keeps the ledgers; Rowan of the Loam listens to the land. Lyrenn doesn't punish violence. It remembers it."
+   }
+  },
+  "bandit_accord": {
+   "steps": {
+    "count": {
+     "line": {
+      "old": "You let them walk. The reeds are listening. What you do next gets counted.",
+      "new": "Keep sparing bandits when you can. Word travels in the Drowned South."
+     },
+     "logged": {
+      "old": "",
+      "new": "Word spread through the Drowned South: you let bandits walk."
+     }
+    },
+    "alive": {
+     "line": {
+      "old": "Two spared bandits are orbiting the Muster. One left a cleaned fish on a waypost. That's a formal document.",
+      "new": "Keep an eye on the Muster in Allesh-Gilliam. Spared bandits are hanging around it."
+     },
+     "logged": {
+      "old": "",
+      "new": "Spared bandits started hanging around the Muster in Allesh-Gilliam."
+     }
+    },
+    "queue": {
+     "line": {
+      "old": "There's a queue outside the Muster at dawn. Brakk made a sign. Go and see the REFORMED column.",
+      "new": "Go to the Muster at dawn and see who's queuing."
+     },
+     "logged": {
+      "old": "",
+      "new": "Former bandits queued at the Muster to join. Captain Brakk opened a REFORMED column."
+     },
+     "where": {
+      "old": "",
+      "new": "Allesh-Gilliam"
+     }
+    },
+    "arms": {
+     "line": {
+      "old": "An ambush just surrendered before the roll. The program is open, or it isn't. Decide with their hands up.",
+      "new": "If bandits surrender before a fight in the reeds, decide whether to take them in."
+     },
+     "logged": {
+      "old": "",
+      "new": "An ambush in the reeds surrendered before the fight, and you decided whether to take them in."
+     }
+    },
+    "envoy": {
+     "line": {
+      "old": "A punt under a white rag. Lady Ralph Maccio requests a summit. Answer the lieutenant. Refuse the jerky politely; it earns more than eating it.",
+      "new": "Meet the envoy from the Drowned South and hear his letter."
+     },
+     "logged": {
+      "old": "",
+      "new": "An envoy from the Drowned South brought a letter asking for a summit."
+     }
+    },
+    "summit": {
+     "line": {
+      "old": "The stilt-hall where three channels argue. She has BOOKS. Ask to see them before you decide anything.",
+      "new": "Go to the summit at the stilt-hall. Ask to see the books before you decide anything."
+     },
+     "logged": {
+      "old": "",
+      "new": "You went to the summit at the stilt-hall."
+     }
+    },
+    "books": {
+     "line": {
+      "old": "A column titled THE EXIT, every bowl of soup a line item. Audit it out loud if you dare. Then sign, absorb, humiliate, or refuse.",
+      "new": "Read the books, then sign, absorb, humiliate or refuse."
+     },
+     "logged": {
+      "old": "",
+      "new": "Ralph Maccio showed you her books, and you decided the Drowned South's future."
+     }
+    }
+   },
+   "chapters": {},
+   "description": {
+    "old": "You let bandits walk, and the Drowned South is counting. Word travels through the reeds: surrender to the Stewards and you get a warning, maybe pointers, occasionally soup. Keep it up and the spared start orbiting the Muster, ambushes surrender before the roll, and somewhere out past the stilt-camps a Bandit Lord with BOOKS starts drafting a letter.",
+    "new": "You let bandits walk, and the Drowned South noticed. The bandits there are telling stories about you."
+   }
+  },
+  "sarmoung_hum": {
+   "steps": {
+    "same": {
+     "line": {
+      "old": "Bit and Coll again, under a low tin roof. Coll says there are two kinds of tent now. Ask what the two kinds are.",
+      "new": "Look out for Bit and Coll on the road. Ask Coll what the two kinds of tent are."
+     },
+     "logged": {
+      "old": "",
+      "new": "Bit and Coll turned up again. Coll says there are two kinds of tent on the roads now: quiet ones and loud ones."
+     }
+    },
+    "quiet": {
+     "line": {
+      "old": "The immaculate pair want to take something heavy off your hands. Their gift is real. Take it, or thank them for the meal.",
+      "new": "Find the quiet pair under the tin roof. Take their offer, or thank them for the meal."
+     },
+     "logged": {
+      "old": "",
+      "new": "A quiet, immaculate pair offered to take something heavy off your hands, and you answered."
+     }
+    },
+    "loud": {
+     "line": {
+      "old": "The Song Leader has willing hands for any hex you name. Their gift is real too. Take it, or stay for the singing.",
+      "new": "Find the singing tent. Take the Song Leader's offer, or stay for the singing."
+     },
+     "logged": {
+      "old": "",
+      "new": "The Song Leader offered willing hands for your land, and you answered."
+     }
+    },
+    "roofs": {
+     "line": {
+      "old": "Low, corrugated, pitched a little wrong. Keep your eyes open on the road. Someone is going to say it.",
+      "new": "Watch the roofs as you travel. Someone will notice the pattern."
+     },
+     "logged": {
+      "old": "",
+      "new": "You noticed the low, crooked roofs: always the same, always empty."
+     }
+    },
+    "post": {
+     "line": {
+      "old": "The roofs all lean one way. Follow the lean, ridiculous as it is, and read the waypost from BOTH sides.",
+      "new": "Follow the way the roofs lean, and read the waypost from both sides."
+     },
+     "logged": {
+      "old": "",
+      "new": "You followed the lean of the roofs to a waypost that counts down on one face and up on the other."
+     }
+    },
+    "bees": {
+     "line": {
+      "old": "Down the old track, six hives older than the house. She won't read your rubbing. Answer her question instead.",
+      "new": "Take the old track to the house with the hives. Answer the beekeeper's question."
+     },
+     "logged": {
+      "old": "",
+      "new": "Down an old track, a beekeeper asked whether anyone of yours had died."
+     }
+    },
+    "masks": {
+     "line": {
+      "old": "Behind the hives, a stack of masks. Count the wood. Count the gaps. Count the space on top.",
+      "new": "Look in the cave behind the hives and count the masks."
+     },
+     "logged": {
+      "old": "",
+      "new": "In a cave behind the hives you counted a stack of carved masks, with one missing."
+     }
+    },
+    "took": {
+     "line": {
+      "old": "Back at the crossroads. Let it hum, show the rubbing to both of them, or go back and tell the bees.",
+      "new": "Go back to the crossroads. Let it hum, show the rubbing to both groups, or go back and tell the bees."
+     },
+     "logged": {
+      "old": "",
+      "new": "Back at the crossroads, you decided what to do with what you'd found."
+     }
+    }
+   },
+   "chapters": {},
+   "description": {
+    "old": "There are two kinds of tent on the roads now: quiet ones that pay you and loud ones that feed you, never in the same week, and neither ever asks you to leave. Both have gifts, and the gifts are real. Somewhere between them stands a waypost that counts one town twice, and down an old track behind it somebody keeps bees and will not explain anything at all.",
+    "new": "Bit and Coll, the two travelers from the tent at the edge of town, keep turning up on the roads."
+   }
+  }
+ },
+ "beats": {
+  "allesh_gilliam_introduction_to_hq": {
+   "inviteText": {
+    "old": "Marshal Pike is at the map table, and wants the new variable to look at the board.",
+    "new": "Marshal Pike has sent a runner: come to the HQ. He has trouble to show you."
+   }
+  }
+ }
+}

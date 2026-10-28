@@ -641,7 +641,15 @@ export function deriveSituation(ctx) {
   const where = ctx.where ? hexKey(ctx.where) : null;
   const known = ctx.knownHexes instanceof Set ? ctx.knownHexes : null;
   const hereOf = (beat, def) => { if (!where || !beat) return null; const p = placeOf(beat, def); if (!p || p === "anywhere") return null; const k = hexKey(p); if (known && !known.has(k)) return null; return k === where; };
-  const stamp = (n, def) => { if (n && n.beat) { n.place = placeOf(n.beat, def); n.here = hereOf(n.beat, def); } return n; };
+  // a step's authored `where` (Quest Log pass 2026-10-28) stands in for an "anywhere" beat (a letter, a ride), so the
+  // here-test — and with it the step's hereLine — follows the destination ("You're at Khezek Tor already, so go and look")
+  const stamp = (n, def) => {
+    if (n && n.beat) {
+      n.place = placeOf(n.beat, def); n.here = hereOf(n.beat, def);
+      if ((!n.place || n.place === "anywhere") && n.where) { const k = hexKey(n.where); n.place = String(n.where); n.here = (!where || (known && !known.has(k))) ? null : k === where; }
+    }
+    return n;
+  };
   // routes in (for orphan detection and hub finding)
   const routesIn = new Map();
   for (const b of beats) for (const c of (b?.choices || [])) for (const t of [c?.next, c?.failNext]) { const id = String(t || "").trim(); if (id) routesIn.set(id, (routesIn.get(id) || 0) + 1); }
@@ -1006,7 +1014,9 @@ export function scriptView(sc, ctx) {
     }
     return out;
   };
-  const mk = (st, b, ready, reasons) => ({ beat: b, ready, reasons, line: st.line || "", hereLine: st.hereLine || null, step: st.id, stepLabel: st.label || "", scripted: true });
+  // st.where (Quest Log pass 2026-10-28): the hex the step is ABOUT when its beat plays "anywhere" (a letter, a ride) —
+  // the Log's Where: line names the destination instead of nothing
+  const mk = (st, b, ready, reasons) => ({ beat: b, ready, reasons, line: st.line || "", hereLine: st.hereLine || null, step: st.id, stepLabel: st.label || "", where: st.where || null, scripted: true });
   let next = null, why = "next", stepOf = null;
   for (const st of current) { const b = cand(st).find(x => readiness(x).ready); if (b) { next = mk(st, b, true, []); stepOf = st; break; } }
   if (!next) for (const st of current) { const bs = cand(st); if (bs.length) { const r = readiness(bs[0]); next = mk(st, bs[0], false, (r.reasons || []).filter(x => x && x.met === false)); stepOf = st; why = "waiting"; break; } }
@@ -1024,7 +1034,7 @@ export function scriptView(sc, ctx) {
     if (!rs.length) return { rungs: [], currentRung: null };
     const done = rs.map(isDone); const lastDone = done.lastIndexOf(true);
     const curIdx = done.findIndex((x, i) => !x && i > lastDone);
-    const rungs = rs.map((r, i) => ({ id: r.id, label: r.label || "", line: r.line || "", status: done[i] ? "done" : (i === curIdx ? "current" : (i < lastDone ? "skipped" : "todo")) }));
+    const rungs = rs.map((r, i) => ({ id: r.id, label: r.label || "", line: r.line || "", logged: r.logged || "", status: done[i] ? "done" : (i === curIdx ? "current" : (i < lastDone ? "skipped" : "todo")) }));
     return { rungs, currentRung: curIdx >= 0 ? rungs[curIdx] : null };
   };
   const doors = (Array.isArray(sc.doors) ? sc.doors : []).map(d => {
@@ -1045,9 +1055,23 @@ export function scriptView(sc, ctx) {
   // the Act-2 doors on the Jackalope's first stop) — the arrival's own giver + description speak, and the Log hides doors.
   const inArrival = current.some(s => s.arrival);
   const arr = (inArrival && sc.arrival && typeof sc.arrival === "object") ? sc.arrival : null;
+  // SO FAR (Quest Log pass, Dave 2026-10-28: "the quest description would accumulate brief descriptions of what the
+  // players have already learned/done … then give explicit instructions on the next step"): every finished step / rung
+  // carries a past-tense `logged` line; the Log lists the ones this table actually played, in script order — no
+  // permutations to author. Main row = steps without a chapter; a chapter row = its steps + its doors' rungs.
+  const soFar = { main: [], chapters: {} };
+  for (const st of steps) {
+    if (st.status !== "done" || !st.logged) continue;
+    if (st.chapter) (soFar.chapters[st.chapter] ||= []).push(String(st.logged)); else soFar.main.push(String(st.logged));
+  }
+  for (const d of doors) for (const r of d.rungs || []) {
+    if (r.status !== "done" || !r.logged) continue;
+    if (d.chapter) (soFar.chapters[d.chapter] ||= []).push(String(r.logged)); else soFar.main.push(String(r.logged));
+  }
   return {
     giver: String(arr?.giver || sc.giver || ""), description: String(arr?.description || sc.description || ""), inArrival,
-    steps: steps.map(s => ({ id: s.id, label: s.label || "", line: s.line || "", status: s.status, group: s.group || null, arrival: !!s.arrival, chapter: s.chapter || null })),
+    steps: steps.map(s => ({ id: s.id, label: s.label || "", line: s.line || "", logged: s.logged || "", status: s.status, group: s.group || null, arrival: !!s.arrival, chapter: s.chapter || null })),
+    soFar,
     current: current.map(s => s.id), doors, after: Array.isArray(sc.after) ? sc.after.slice() : [], chapters, chapterLines,
     next, why, chapter: stepOf?.chapter || null
   };
