@@ -1,0 +1,549 @@
+{
+ "about": "Quest Log 'Also open' door lines, 2026-10-28 (Dave: yes to a second pass on doors). 74 lines → plain instructions; notes per door in doors-out (scratch). old must match live.",
+ "scripts": {
+  "chuckle_creek": {
+   "doors": {
+    "diner": {
+     "line": {
+      "old": "Pearl will feed you whether or not you're hungry. Ask who the corner table is for.",
+      "new": "Stop in at Pearl's Diner in Chuckle Creek and talk to the owner."
+     }
+    },
+    "creek": {
+     "line": {
+      "old": "The creek actually chuckles. Stand in it and see if it's laughing with you.",
+      "new": "Go down to the creek in Chuckle Creek and stand in it a while."
+     }
+    },
+    "hollis": {
+     "line": {
+      "old": "Hollis will take an anvil for you. He will not take a question.",
+      "new": "Find Hollis Bandy in Chuckle Creek and talk to him."
+     }
+    }
+   }
+  },
+  "soft_landing": {
+   "doors": {
+    "checkpoint": {
+     "line": {
+      "old": "Captain Falk will take your edges. He will give you a receipt. The receipt is foam.",
+      "new": "Go through the checkpoint at Soft Landing and talk to Captain Falk."
+     }
+    },
+    "cake": {
+     "line": {
+      "old": "Seven candles, still lit. Make a wish and watch where it goes.",
+      "new": "Find the cake in Soft Landing and make a wish."
+     }
+    },
+    "blower": {
+     "line": {
+      "old": "The hum under everything. Put your hand on it. Don't turn it off. Somebody will.",
+      "new": "Go under the streets of Soft Landing and find the blower."
+     }
+    },
+    "houses": {
+     "line": {
+      "old": "Foam mantelpieces and no photographs. Ask for the oldest thing in the house.",
+      "new": "Accept an invitation into one of the houses in Soft Landing."
+     }
+    }
+   }
+  },
+  "stillwater": {
+   "doors": {
+    "lemonade": {
+     "line": {
+      "old": "Five cents. He takes marks. He gives change in buttons.",
+      "new": "Buy a lemonade at the stand in Stillwater."
+     }
+    },
+    "platform": {
+     "line": {
+      "old": "One bench, one clock, one board that says ARRIVING. Check your own watch.",
+      "new": "Visit the train platform in Stillwater."
+     }
+    },
+    "waving": {
+     "line": {
+      "old": "Everybody waves. Wave back. See what the third wave does.",
+      "new": "Walk through Stillwater and wave back at the townsfolk."
+     }
+    }
+   }
+  },
+  "allesh_gilliam": {
+   "doors": {
+    "tamsin": {
+     "line": {
+      "old": "Father Tamsin has a night story and a kettle. Sit with him a while. Don't ask him for a metaphor.",
+      "new": "Visit Father Tamsin in Allesh-Gilliam and sit with him a while."
+     }
+    },
+    "etta": {
+     "line": {
+      "old": "Etta said questions keep. They've kept. Bring money for preserves; the answer comes after the jar.",
+      "new": "Visit the Long Market in Allesh-Gilliam and talk to Etta Bloom."
+     }
+    },
+    "muster": {
+     "line": {
+      "old": "Captain Brakk is drilling farmers by the North Gate. Compliments will be issued as citations.",
+      "new": "Go to the Muster at the old fire station by the North Gate in Allesh-Gilliam and meet Captain Brakk."
+     }
+    },
+    "river_heart": {
+     "line": {
+      "old": "The River Heart lies open to the south — collapsed, so the whole of it shows on the map. Its towns are not quests you accept; they are places you go. Ride there and they will meet you.",
+      "new": "Ride south into the River Heart and visit its towns."
+     }
+    }
+   }
+  },
+  "khezek_tor": {
+   "doors": {
+    "calder": {
+     "line": {
+      "old": "Calder talks while he works. Ask how deep it goes. If you sit down he stops, so don't.",
+      "new": "Go to the Brace in Khezek-Tor and talk to Foreman Drax Calder."
+     }
+    },
+    "sable": {
+     "line": {
+      "old": "Sable Nine has a point on the map that won't hold still. Bring your own chair.",
+      "new": "Go to the Maw in Khezek-Tor and talk to Sable Nine."
+     }
+    },
+    "lift": {
+     "line": {
+      "old": "Brennig runs the crates from a desk built out of two pallets and a door. Count the places at the cookline on your way in.",
+      "new": "Visit the Lift Hall in Khezek-Tor."
+     }
+    },
+    "galleries": {
+     "line": {
+      "old": "Only once you know what you're looking at. Then the courier's route, at a respectful distance.",
+      "new": "Follow the courier's route up to the Upper Galleries of Khezek-Tor. Keep your distance."
+     }
+    }
+   }
+  },
+  "fixit_farm": {
+   "doors": {
+    "gullywasher": {
+     "line": {
+      "old": "There's a Chupacabra behind the bar. Oh shit. He's the bartender. Order something before you interrogate him.",
+      "new": "Go into the Gullywasher at the Fixit Farm and order a drink from the bartender."
+     }
+    },
+    "counter": {
+     "line": {
+      "old": "The Counter quotes weight, not price. Ask Mara what her biggest headache is.",
+      "new": "Go to the Counter at the Fixit Farm and talk to Mara."
+     }
+    },
+    "pip": {
+     "line": {
+      "old": "Pip and Patter move in synch with everything that moves. Ask what's moving near Allesh. Both will answer, at once.",
+      "new": "Find Pip and Patter at the Fixit Farm and ask what's moving near Allesh-Gilliam."
+     }
+    },
+    "backstairs": {
+     "line": {
+      "old": "OFF LIMITS. SCRAM. Except Stewards, once the Jackalopes call you allies.",
+      "new": "Climb the back stairs at the Fixit Farm. As allies of the Jackalopes, you're welcome up."
+     }
+    },
+    "generator": {
+     "line": {
+      "old": "Escort only. It's not personal. Allies get the tour.",
+      "new": "Take Patter's tour of the Generator Hall at the Fixit Farm."
+     }
+    },
+    "bin": {
+     "line": {
+      "old": "AS IS. NO REFUNDS. STOP ASKING. Pat it first.",
+      "new": "Try the MYSTERY Bin by the Counter at the Fixit Farm."
+     }
+    }
+   }
+  },
+  "lyrenn": {
+   "doors": {
+    "choir": {
+     "line": {
+      "old": "The Water Choir is tuning to you. Stand in it and listen. The children will grade you.",
+      "new": "Visit the Water Choir in the channels at Lyrenn and listen."
+     }
+    },
+    "elsin": {
+     "line": {
+      "old": "Elsin will answer what you ask. She'd rather answer it once. Ask about the vault and watch her not ask back.",
+      "new": "Talk to Elsin Quade in Lyrenn."
+     }
+    },
+    "rowan": {
+     "line": {
+      "old": "Rowan is listening to the ground. Ask what's loud. Then ask what's quiet.",
+      "new": "Find Rowan of the Loam in the fields at Lyrenn and ask what's loud."
+     }
+    },
+    "ring": {
+     "line": {
+      "old": "The Green Ring listens. Walk it. Mind the plinth.",
+      "new": "Walk the Green Ring around the old grain elevator in Lyrenn."
+     }
+    }
+   }
+  },
+  "gloomgill": {
+   "doors": {
+    "applause": {
+     "line": {
+      "old": "The marsh applauds everything. Bow three times and see what the third bow does.",
+      "new": "Step out into the marsh at Gloomgill and take a bow."
+     }
+    },
+    "scoreboard": {
+     "line": {
+      "old": "He knows the answers before he asks them. The GM is holding the ledger.",
+      "new": "Look at the scoreboard at Gloomgill."
+     }
+    }
+   }
+  },
+  "crown_mall": {
+   "doors": {
+    "bev": {
+     "line": {
+      "old": "Bev has terms. Ask before you assume.",
+      "new": "Visit Chairperson Laser Bev in her office at the Crown Mall."
+     }
+    },
+    "kickflip": {
+     "line": {
+      "old": "He's been watching you skate. Run it back.",
+      "new": "Find Kickflip Lazarus by the skate rails at the Crown Mall and talk to him."
+     }
+    },
+    "june": {
+     "line": {
+      "old": "She sells context. Ask what's in rare inventory.",
+      "new": "Visit Miss June of the Endcap at the Crown Mall and ask what she sells."
+     }
+    },
+    "video": {
+     "line": {
+      "old": "Late fees are still accruing. Bring the slip.",
+      "new": "Go to Crown Mall Video with Kickflip. Bring the rental slip if you have it."
+     }
+    },
+    "routeboard": {
+     "line": {
+      "old": "Visit the Founders' Garden. One hundred figures in living stone. The exit may not exist.",
+      "new": "Read the Route Board at the Crown Mall."
+     }
+    }
+   }
+  },
+  "widening_trail": {
+   "doors": {
+    "keeper": {
+     "line": {
+      "old": "A man with a broom is losing an argument with a floor plan. Ask him which way it faced that night.",
+      "new": "Visit the Rotating Chapel and talk to the keeper."
+     }
+    },
+    "saloon": {
+     "line": {
+      "old": "The harbourmaster keeps a ledger of everything that leaves. Ask what never comes back full.",
+      "new": "Go to Fewer Dead Fish Smell, the saloon at Port Kudzu, and talk to Harbourmaster Dot Pellew."
+     }
+    },
+    "wagon": {
+     "line": {
+      "old": "If you know when the wagon leaves, be on it. You are salt. Be convincing salt.",
+      "new": "Be at Port Kudzu when the supply wagon leaves, and ride it."
+     }
+    },
+    "camp": {
+     "line": {
+      "old": "Where the wagon goes. Wick will be on time. Say the kettle.",
+      "new": "Go to the camp where the wagon unloads, on the Khezek-Tor switchbacks."
+     }
+    },
+    "hearing": {
+     "line": {
+      "old": "Files are never closed. Bring receipts to Legansus and ask to be reclassified.",
+      "new": "Bring your receipts to the Circuit Riders at the Legansus Waystation for a second hearing."
+     }
+    },
+    "korl": {
+     "line": {
+      "old": "A freighter across the road, rigged in one colour. Ask about the other one.",
+      "new": "Find Korl's freighter where it came down on the road and talk to the crew."
+     }
+    }
+   }
+  },
+  "hidden_vault": {
+   "doors": {
+    "family": {
+     "line": {
+      "old": "Silly hats, vests, and a vigil for a number. Sox will shush you and then help.",
+      "new": "Approach the camp of locals near the Door in the Hill."
+     }
+    }
+   }
+  },
+  "maneuver_vault": {
+   "doors": {
+    "runner": {
+     "line": {
+      "old": "Runners are never late, never lost, never off the check-in. One of them is all three. Mara has one sentence about it.",
+      "new": "Hear Mara out at the Fixit Farm. One of the runners is missing."
+     }
+    }
+   }
+  },
+  "circuit_riders": {
+   "doors": {
+    "robot": {
+     "line": {
+      "old": "Captain Robot has a crew, and each of them has a question for you. Ask them theirs.",
+      "new": "Talk to Captain Robot at the Circuit Riders' camp."
+     }
+    },
+    "crew": {
+     "line": {
+      "old": "Simone checks whether you lag. Arvind hears patterns. Howard recovers things. Dennis is the regrettable hypothesis.",
+      "new": "Meet Captain Robot's crew: Simone, Arvind, Howard and Dennis."
+     }
+    },
+    "see": {
+     "line": {
+      "old": "You do not get to witness their burden casually. You will be told when you may look. Then stay for the whole pattern.",
+      "new": "Ask Captain Robot to show you what the Riders see. Stay until they're done."
+     }
+    },
+    "file": {
+     "line": {
+      "old": "Verified coordinates, verified need, no theatrics. Every receipt you hold is a filing. File it.",
+      "new": "Bring your receipts to Captain Robot and file them the way a Rider would."
+     }
+    },
+    "colossus": {
+     "line": {
+      "old": "It is the size of a skyscraper and it is nervous. Wave. It will be so relieved.",
+      "new": "Go see the Colossus at the Circuit Riders' camp."
+     }
+    }
+   }
+  },
+  "forgotten_cause": {
+   "doors": {
+    "gully": {
+     "line": {
+      "old": "Dougan pours before he answers. Order something. Ask who kept staging it.",
+      "new": "Go to the Gullywasher and talk to Dougan."
+     }
+    },
+    "road": {
+     "line": {
+      "old": "They will hand you back something you never dropped. Say thank you. They're being thorough.",
+      "new": "When the Road Wendigo meet you on the road, stop and talk with them."
+     }
+    }
+   }
+  },
+  "flooded_towns": {
+   "doors": {
+    "sign": {
+     "line": {
+      "old": "It's under four feet of lit water and nobody has read it. Wade out. Settle nothing.",
+      "new": "Wade out to the town sign in Probably Beaumont."
+     }
+    },
+    "booth": {
+     "line": {
+      "old": "Rerouting is now mandatory. Thank it for its patience. Ask it what it's trying to finish.",
+      "new": "Go to the Dispatcher's Booth in Maybe Beaumont and talk to the dispatcher."
+     }
+    }
+   }
+  },
+  "lost_statues": {
+   "doors": {
+    "book": {
+     "line": {
+      "old": "Sign the book after, not before. Before is bragging.",
+      "new": "Visit the sexton in the Northreach Expanse."
+     }
+    },
+    "chart": {
+     "line": {
+      "old": "Six points that never moved. Two of them circled in a hand that shook.",
+      "new": "Meet Sable Nine on the mountain road and look at their chart."
+     }
+    }
+   }
+  },
+  "balcones": {
+   "doors": {
+    "chair": {
+     "line": {
+      "old": "Level chair, unlevel ground, forty re-levellings, one thermos. He'll offer you coffee.",
+      "new": "Talk to the man in the lawn chair on the Balcones fault line."
+     }
+    },
+    "creek": {
+     "line": {
+      "old": "It insists it was always over there. Check the survey. Believe the creek.",
+      "new": "Check the creek on the Balcones against the geologist's survey."
+     }
+    }
+   }
+  },
+  "fifteen_year_siege": {
+   "doors": {
+    "bell": {
+     "line": {
+      "old": "The counterweight tower has a school in it and the school has a bell and the bell has never been late. Ask the girl what would happen if it were.",
+      "new": "Visit the school in the counterweight tower and talk to the girl on bell duty."
+     }
+    }
+   }
+  },
+  "bandit_accord": {
+   "doors": {
+    "hall": {
+     "line": {
+      "old": "Sal Tench counts the moorings before answering anything. Count them yourself: who ties up next to whom is this month's map.",
+      "new": "Go to the Stilt-Hall and talk to Sal Tench."
+     }
+    }
+   }
+  },
+  "trojan_gift": {
+   "doors": {
+    "book": {
+     "line": {
+      "old": "Wick has a slate and odds. EMPTY is forty to one and has one bet on it. Ask whose.",
+      "new": "Go to the Vacancy and look at the betting slate on the gift."
+     }
+    }
+   }
+  },
+  "cadence": {
+   "doors": {
+    "collection": {
+     "line": {
+      "old": "There is a cigar box under the manifests that nobody discusses. Every card is in one hand.",
+      "new": "Look in the Cadence's stores and talk to the quartermaster."
+     }
+    },
+    "drum": {
+     "line": {
+      "old": "After the floor there are refreshments. Ask the Maestra, with no angle at all, what the drum was for. Her crew will watch you like incoming fire.",
+      "new": "Stay for refreshments after the floor and talk to the Maestra."
+     }
+    },
+    "cameo": {
+     "line": {
+      "old": "The Cadence owes you a Battle. Name the target when you need morale like a weather system.",
+      "new": "Call in the Battle the Cadence owes you. Name the target before the fight."
+     }
+    }
+   }
+  },
+  "tifaret": {
+   "doors": {
+    "tree_person": {
+     "line": {
+      "old": "It holds up signs the way other people hold up hands. Say thank you and see what it holds up next.",
+      "new": "Find the Tree Person in the Forest of Early Tifaret."
+     }
+    },
+    "ring": {
+     "line": {
+      "old": "Walk it once, saying nothing. A branch will let go of a leaf it has been holding for some time.",
+      "new": "Walk the Ring in the Forest of Early Tifaret once, saying nothing."
+     }
+    }
+   }
+  },
+  "ninth_guest": {
+   "doors": {
+    "sign": {
+     "line": {
+      "old": "FAMILY PRICING. The screws are new this century. Somebody comes here.",
+      "new": "Read the sign at the mouth of the Founders' Garden."
+     }
+    },
+    "hand": {
+     "line": {
+      "old": "Say what the gesture is. There is no right answer and the garden has waited two hundred years for the wrong ones.",
+      "new": "Find the statue with the half-raised hand in the Founders' Garden and say what the gesture is."
+     }
+    },
+    "room": {
+     "line": {
+      "old": "At the Vacancy, THE ONE WE DON'T ASK ABOUT is made up every night now. Ask Verna why, not for whom.",
+      "new": "Go to the Vacancy and ask Verna about the room she keeps made up."
+     }
+    },
+    "dates": {
+     "line": {
+      "old": "Every plinth has a date scratched at its foot. Count them. None of them is the night itself. Except one.",
+      "new": "Count the plinths in the Founders' Garden and read the dates at their feet."
+     }
+    },
+    "name": {
+     "line": {
+      "old": "The smooth line on the hill is a name. The Tamsins' paperwork from the night might hold it still long enough to read.",
+      "new": "Bring the Service Manifest to the smooth line on the low hill in the Founders' Garden."
+     }
+    }
+   }
+  },
+  "finale": {
+   "doors": {
+    "leygate": {
+     "line": {
+      "old": "The Legansus fold was a gate order with a heading, and the heading was theirs. Arrive early. Nobody is early.",
+      "new": "Use the Legansus gate order and step through the Leygate on its heading."
+     }
+    },
+    "muster": {
+     "line": {
+      "old": "The bell works. Stand under the arch and count.",
+      "new": "Before you commit, go to the Muster at the fire station and count who came."
+     }
+    }
+   }
+  },
+  "sarmoung_hum": {
+   "doors": {
+    "walker": {
+     "line": {
+      "old": "Someone keeps the same distance behind you, leg after leg. Wave. See what happens. See what doesn't.",
+      "new": "Deal with the walker who keeps forty paces behind you on the road."
+     }
+    },
+    "tell": {
+     "line": {
+      "old": "When one of yours dies, the bees have to be told. Full sentences, the name, the date.",
+      "new": "If one of your people dies, visit the house with the six hives behind it."
+     }
+    },
+    "roof": {
+     "line": {
+      "old": "Poor, clean, swept, nobody home. Noted.",
+      "new": "Look at the low house beside the road."
+     }
+    }
+   }
+  }
+ }
+}

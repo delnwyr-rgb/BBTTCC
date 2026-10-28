@@ -135,7 +135,8 @@
       // a Next whose beat cannot open yet (its gates wait on the story's clock or a later choice) is not an instruction —
       // the Log says so instead of describing a scene that has not happened (Bandit Accord / the Tent, 2026-10-28)
       const notYet = (n, why) => !!n && n.beat && n.ready === false && /^(waiting|closer-waiting)$/.test(String(why || ""));
-      const NOT_YET = "Nothing to chase here yet. This thread picks up later in the story.";
+      // Dave 2026-10-28 (writer sheet): such a quest "can appear, but should have no next beat. The next beat should appear
+      // when it is narratively revealed" — so no Next line at all until its scene can open.
       return (qid) => {
         const m = api.story.registryOf(qid); const q = m ? story.byKey[m.quest] : null; const sc = q?.script; if (!sc) return null;
         if (m.chapter) {
@@ -152,7 +153,7 @@
         const cur = (sc.steps || []).filter(st => st.status === "current");
         const waitingOnly = notYet(q.next, q.why);
         // the engine's next line wins for its own step — it carries the hereLine swap ("you're already here, go and look")
-        const lines = waitingOnly ? [NOT_YET] : cur.map(st => (q.next && q.next.step === st.id && q.next.line) ? q.next.line : st.line).filter(Boolean); if (!lines.length && q.next?.line) lines.push(q.next.line);
+        const lines = waitingOnly ? [] : cur.map(st => (q.next && q.next.step === st.id && q.next.line) ? q.next.line : st.line).filter(Boolean); if (!lines.length && q.next?.line && !waitingOnly) lines.push(q.next.line);
         const stepLabel = cur.map(st => st.label).filter(Boolean).join(" · ") || (q.state === "completed" ? "complete" : "");
         // "Also open" = doors that ARE open: none during the Arrival, and a door with beats only once its next beat's gates
         // are met (Tamsin / Etta / the Muster are Act-2 doors; the Muster also waits for the militia) — 2026-10-26
@@ -162,7 +163,7 @@
             soFarHtml(sc.inArrival ? [] : sc.soFar?.main) +
             (ls.length ? `<p><b>Next:</b></p><ul>${ls.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` + (q.state === "completed" || waitingOnly ? "" : whereHtml(q.next)) : "") +
             (doors.length ? `<p><b>Also open:</b></p><ul>${doors.map(d => `<li>${esc(d.line)}</li>`).join("")}</ul>` : "");
-        return { giver: sc.giver || "", description: sc.description || "", stepLabel, lines, doors, renderHtml, html: renderHtml(lines) };
+        return { giver: sc.giver || "", description: sc.description || "", stepLabel, lines, doors, renderHtml, html: renderHtml(lines), waitingOnly };
       };
     } catch (_e) { return () => null; }
   }
@@ -180,7 +181,7 @@
       // Precedence (Layer 1, 2026-09-21): GM ✎ override → shipped story-script line → the last played
       // beat's own `nextLine` (beatNext, authored in the Beat Editor) → nothing.
       const beatNextLine = String(tr.beatNext?.text || "").trim();
-      const authoredLines = (Array.isArray(si0?.lines) && si0.lines.length) ? si0.lines : (beatNextLine ? [beatNextLine] : []);
+      const authoredLines = (Array.isArray(si0?.lines) && si0.lines.length) ? si0.lines : ((beatNextLine && !si0?.waitingOnly) ? [beatNextLine] : []);
       const authoredKey = authoredLines.join(" | ");
       const ov = (tr.nextLine && typeof tr.nextLine === "object") ? tr.nextLine : null;
       const ovActive = !!(ov?.text && String(ov.stepKey ?? "") === authoredKey);
