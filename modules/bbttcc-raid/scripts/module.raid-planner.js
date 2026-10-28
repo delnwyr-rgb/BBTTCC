@@ -770,6 +770,8 @@ function bbttccStrategicAvailability(factionActor){
   return acts.map(a => {
     const key = String(a.key || "").toLowerCase();
     const row = Object.assign({}, a, { status: "available", via: "standard", requiredTier: bbttccGetActivityRequiredTier(a) });
+    // The list shows this Domain's price — steward discounts included (Dave 2026-10-28), exactly what the turn bills.
+    try { const p = game.bbttcc?.api?.turn?.activityCost; if (p && factionActor) row.opCosts = p({ effect: EFFECTS[key], key, faction: factionActor }); } catch (_e) {}
     const fx = EFFECTS[key];
     if (!key) return Object.assign(row, { status: "hidden" });
     if (alphaNoSiege && fx && (fx.siege || fx.siegeRequiresTarget)) return Object.assign(row, { status: "hidden" });
@@ -2201,7 +2203,10 @@ wrap.appendChild(top);
                 targetName
               });
             } else {
-              const targetUuid = hexSel.value;
+              // #21 (2026-10-28): siege counter rows target the besieged hex the siege enhancer auto-picked into
+              // _plannerState — often not an option in the select (owned/adjacent on this scene only).
+              const effSg = game.bbttcc?.api?.raid?.EFFECTS?.[String(activityKey)];
+              const targetUuid = (effSg?.siege && !effSg?.siegeRequiresTarget && !effSg?.siegeOwnTarget && this._plannerState.selectedHexUuid) ? String(this._plannerState.selectedHexUuid) : hexSel.value;
               if (!targetUuid) {
                 ui.notifications?.warn?.("Select a target hex first.");
                 return;

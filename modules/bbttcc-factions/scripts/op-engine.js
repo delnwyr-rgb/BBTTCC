@@ -636,6 +636,19 @@ function _attach() {
     apiRoot.fmt = formatMarks;                 // marks → "N marks"
     apiRoot.fmtNum = formatMarksNumber;        // marks → "N"
     apiRoot.runMarksMigration = _runMarksMigration;
+    // discounted(faction, cost{channel: marks}) → the same cost after CO21 steward spend discounts, synchronously,
+    // against the faction's current bank/caps (Dave 2026-10-28: strategic activities get steward discounts — the planner,
+    // Domain tab and previews show what the turn will bill).
+    apiRoot.discounted = (factionOrId, cost) => {
+      try {
+        const f = (typeof factionOrId === "string") ? game.actors.get(String(factionOrId).replace(/^Actor\./, "")) : factionOrId;
+        if (!f) return { ...(cost || {}) };
+        const neg = {}; for (const [k, v] of Object.entries(cost || {})) neg[k] = -(Number(v) || 0);
+        const out = _applySpendDiscounts(f, _normalizeBank(f.getFlag(MOD_ID, "opBank") || {}), _normalizeDeltas(neg), _readCaps(f)).deltas;
+        const res = {}; for (const [k, v] of Object.entries(out)) if (Number(v) < 0) res[k] = -Number(v);
+        return res;
+      } catch (_e) { return { ...(cost || {}) }; }
+    };
     // Facts layer (2026-09-12): one home per faction fact.
     game.bbttcc.facts ??= {};
     game.bbttcc.facts.faction = { tier: factionTier, caps: factionCaps, baseCaps: factionBaseCaps, siegeBonus: factionSiegeBonusMarks, capBand: tierCapBand, logisticsCapMarks: factionLogisticsCapMarks, memberIncome: factionMemberIncomeMarks, spendDiscounts: factionSpendDiscounts, CAP_BAND: TIER_CAP_BAND_MARKS.slice(), LOGI_CAP_FLOOR: LOGISTICS_CAPACITY_FLOOR_MARKS.slice() };

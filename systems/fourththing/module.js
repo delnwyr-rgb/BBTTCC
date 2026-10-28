@@ -25851,7 +25851,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const key = String(e.activityKey || e.activity || "");
       const label = String(_EFF[key]?.label || _EFF[key.toLowerCase()]?.label || e.label || (key ? key.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()) : "") || "Planned action");
       let costLine = String(e.costLine || "");
-      try { if (!costLine && _turn.activityCost) costLine = _turn.formatActivityCost?.(_turn.activityCost({ entry: e })) || ""; } catch (_e) {}
+      try { if (!costLine && _turn.activityCost) costLine = _turn.formatActivityCost?.(_turn.activityCost({ entry: e, faction })) || ""; } catch (_e) {}
       return { label, costLine, targetName: String(e.targetName || ""), ref: String(e.id || e.ts || "") };
     });
     // ruling 17 (2026-10-18): Convictions = the steward's sworn philosophy + the Domain's drift from it (bbttcc-aae)

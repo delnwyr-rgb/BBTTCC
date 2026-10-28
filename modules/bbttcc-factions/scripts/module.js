@@ -2798,7 +2798,7 @@ const politicalPressure = {
         const keyRaw = String(e?.activityKey || e?.activity || "").trim().toLowerCase();
         const spec = EFFECTS[keyRaw] || EFFECTS[String(keyRaw||"").toUpperCase()] || EFFECTS[String(keyRaw||"").toLowerCase()] || null;
         const label = String(spec?.label || e?.label || _plannedHumanize(keyRaw) || "(Unknown)");
-        const cost = _price ? _price({ entry: e, effect: spec, key: keyRaw }) : ((e?.recipe?.cost && typeof e.recipe.cost === "object") ? e.recipe.cost : (spec?.cost || spec?.opCosts || e?.cost || {}));
+        const cost = _price ? _price({ entry: e, effect: spec, key: keyRaw, faction: this.actor }) : ((e?.recipe?.cost && typeof e.recipe.cost === "object") ? e.recipe.cost : (spec?.cost || spec?.opCosts || e?.cost || {}));
         const costLine = _fmtCost(cost);
         const targetName = String(e?.targetName || e?.targetLabel || e?.targetType || "(target)");
         const notes = String(e?.note || e?.notes || "").trim();

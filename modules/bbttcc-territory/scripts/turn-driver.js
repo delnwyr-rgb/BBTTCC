@@ -50,12 +50,16 @@ function normalizeActivityCost(cost){
   }
   return out;
 }
-function activityCost({ entry = null, effect = null, key = null } = {}){
+// faction (optional): apply the steward spend discounts (CO21 — Dave 2026-10-28: strategic activities get them) so a
+// screen shows what the turn will bill. Planned entries store the BASE price; the discount is taken once, at billing.
+function activityCost({ entry = null, effect = null, key = null, faction = null } = {}){
   const k = String(key || entry?.activityKey || entry?.activity || "");
   const eff = effect || game.bbttcc?.api?.raid?.EFFECTS?.[k] || game.bbttcc?.api?.raid?.EFFECTS?.[k.toLowerCase()] || null;
   const recipe = entry?.recipe?.cost;
   const pick = (c) => (c && typeof c === "object" && Object.keys(normalizeActivityCost(c)).length) ? c : null;
-  return normalizeActivityCost(pick(recipe) || pick(eff?.cost) || pick(eff?.opCosts) || {});
+  const base = normalizeActivityCost(pick(recipe) || pick(eff?.cost) || pick(eff?.opCosts) || {});
+  if (!faction) return base;
+  try { const d = game.bbttcc?.api?.op?.discounted; return d ? normalizeActivityCost(d(faction, base)) : base; } catch (_e) { return base; }
 }
 const fmtActivityCost = (c) => PLAN_COST_KEYS.filter(k => (Number(c?.[k]) || 0) > 0).map(k => `${c[k]} ${k === "softpower" ? "soft power" : k === "nonlethal" ? "non-lethal" : k}`).join(" · ");
 
@@ -192,8 +196,10 @@ function ensureConsumePlannedShim(){
     }
     // ⚗ Fuel recipe (2026-09-11): a planned entry may carry its own cost vector (the recipe the
     // faction chose in the planner); it replaces the row's default price outright.
-    const cost = activityCost({ entry, effect });   // the shared price (review #3, 2026-10-28)
-    if (!Object.keys(cost).length) return { ok:true, free:true, paid:{} };
+    const base = activityCost({ entry, effect });   // the shared price (review #3, 2026-10-28)
+    if (!Object.keys(base).length) return { ok:true, free:true, paid:{} };
+    // Steward discounts (Dave 2026-10-28): afford + bill the discounted price; op.commit applies the same discount.
+    const cost = activityCost({ entry, effect, faction: factionActor });
 
     const bank = foundry.utils.duplicate(factionActor.getFlag(MOD_FACTIONS, "opBank") || {});
     const short = {};
@@ -209,10 +215,12 @@ function ensureConsumePlannedShim(){
     // price (steward discounts on strategic activities are an open ruling); allowOvercap: regen landed unclamped.
     const op = game.bbttcc?.api?.op;
     if (op && typeof op.commit === "function") {
-      const neg = {}; for (const [k, v] of Object.entries(cost)) neg[k] = -v;
-      const r = await op.commit(factionActor.id, neg, { source: "strategic", label: `Planned: ${effect?.label || entry?.activityKey}`, noDiscount: true, allowOvercap: true });
+      const neg = {}; for (const [k, v] of Object.entries(base)) neg[k] = -v;
+      const r = await op.commit(factionActor.id, neg, { source: "strategic", label: `Planned: ${effect?.label || entry?.activityKey}`, allowOvercap: true });
       if (r?.ok === false) return { ok:false, insufficient: (r.underflow && Object.keys(r.underflow).length) ? r.underflow : cost, cost, paid:{} };
-      return { ok:true, paid: cost };
+      // paid = what actually left the bank after the discount — the refund and ↩ Back out give back exactly this
+      const paid = {}; for (const [k, v] of Object.entries(r?.finalCost || {})) if (Number(v) < 0) paid[k] = -Number(v);
+      return { ok:true, paid: Object.keys(paid).length ? paid : cost, discounts: r?.discounts || null };
     }
     for (const [k, need] of Object.entries(cost)) bank[k] = (Number(bank[k]) || 0) - need;
     await factionActor.update({ [`flags.${MOD_FACTIONS}.opBank`]: bank });
@@ -1513,7 +1521,7 @@ async function plannedRaidsStep({ apply=false } = {}){
       const key = String(e.activity || e.activityKey || "").toLowerCase();
       const spec = EFFECTS[key];
       const label = spec?.label || (key ? key.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase()) : "(unknown)");
-      const cost = activityCost({ entry: e, effect: spec, key });
+      const cost = activityCost({ entry: e, effect: spec, key, faction: F });   // steward discounts as billed
       const afford = canAfford(bank, cost);
       if (afford) for (const k of OP_KEYS) bank[k] = safeNum(bank[k]) - safeNum(cost[k]);
       rows.push({ faction: F.name, factionId: F.id, activity: key, label, cost, canAfford: afford });
