@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Build Bridge</b></p><p>Bridge an open-water hex you can reach — a river, a lake, a strait: free crossing for you and your allies, a 5-mark toll for the neutral, closed to the hostile. A cut bridge is rebuilt here. Cannot be planned on a hex held by a Domain hostile to you.</p><p><b>Cost:</b> Economy 20 · Logistics 14 marks</p>",
+      "value": "<p><b>Build Bridge</b></p><p>Bridge an open-water hex you can reach — a river, a lake, a strait: free crossing for you and your allies, a 5-mark toll for the neutral, closed to the hostile. A cut bridge is rebuilt here. Cannot be planned on a hex held by a Domain hostile to you.</p><p><b>Cost:</b> Economy 15 · Logistics 11 marks</p>",
       "chat": ""
     },
     "activities": {},

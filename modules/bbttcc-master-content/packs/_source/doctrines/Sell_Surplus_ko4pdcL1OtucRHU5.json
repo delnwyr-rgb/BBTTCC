@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Sell Surplus</b></p><p>Take half of your stockpile's most plentiful material to market: it sells into its home channel at the surplus price (sell ×1.1); the bank's cap holds back what will not fit.</p><p><b>Cost:</b> Economy 5 marks</p>",
+      "value": "<p><b>Sell Surplus</b></p><p>Sell half of the stockpile's most plentiful material at the market for Economy marks — sell price +10%.</p><p><b>Cost:</b> Economy 4 marks</p>",
       "chat": ""
     },
     "activities": {},

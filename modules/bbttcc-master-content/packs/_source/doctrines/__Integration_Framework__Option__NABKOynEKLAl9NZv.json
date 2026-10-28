@@ -7,7 +7,7 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<p><strong>Integration Framework</strong></p><p>Diplomatic Envoys. Target a hex you hold: its Integration advances one step (max 6).</p><p><em>Cost: Diplomacy 10 · Soft Power 10 marks.</em></p>",
+      "value": "<p><strong>Integration Framework</strong></p><p>Diplomatic Envoys. Target a hex you hold: its Integration advances one step (max 6).</p><p><em>Cost: Diplomacy 8 · Soft Power 8 marks.</em></p>",
       "chat": ""
     }
   },

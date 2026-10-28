@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Establish Outpost</b></p><p>Plant a flag and found a new outpost in an unclaimed hex.</p><p><b>Cost:</b> Economy 20 · Logistics 10 marks</p>",
+      "value": "<p><b>Establish Outpost</b></p><p>Plant a flag and found a new outpost in an unclaimed hex.</p><p><b>Cost:</b> Economy 15 · Logistics 8 marks</p>",
       "chat": ""
     },
     "activities": {},

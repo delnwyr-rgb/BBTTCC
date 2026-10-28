@@ -1,0 +1,2089 @@
+{
+"about": "Doctrine pack text refresh 2026-10-28 (strategic review): rules text + billed marks from the runtime catalog. Applied by refresh-doctrines-pack-text-2026-10-28.macro.js — old must match live or the row is skipped.",
+"packs": {
+"bbttcc-master-content.doctrines": [
+{
+"id": "txw9CK90RDdXlWsO",
+"key": "alignment_shift",
+"kind": "strategic",
+"name": "Alignment Shift",
+"old": "<p><strong>Alignment Shift (Sephirot)</strong></p><p>Consecrate a hex you hold to the Tree. At the turn it gains Sanctified and Pilgrimage Site, Loyalty +1 and Loyalty +1; your Domain banks +10 marks Faith next turn.</p><p><em>Cost: Faith 30 · Culture 20 · Soft Power 20 marks.</em></p>",
+"new": "<p><strong>Alignment Shift (Sephirot)</strong></p><p>Consecrate a hex you hold to the Tree. At the turn it gains Sanctified and Pilgrimage Site, Loyalty +1 and Loyalty +1; your Domain banks +10 marks Faith next turn.</p><p><em>Cost: Faith 23 · Culture 15 · Soft Power 15 marks.</em></p>"
+},
+{
+"id": "3HdE9BZH4VuLDSYQ",
+"key": "alliance_summit",
+"kind": "strategic",
+"name": "Alliance Summit",
+"old": "<p><b>Alliance Summit</b></p><p>Sit down with a mutual ally (target one of their hexes): both Domains' marks income ×1.15 next turn.</p><p><b>Cost:</b> Diplomacy 30 · Soft Power 30 marks</p>",
+"new": "<p><b>Alliance Summit</b></p><p>Sit down with a mutual ally (target one of their hexes): both Domains' marks income ×1.15 next turn.</p><p><b>Cost:</b> Diplomacy 23 · Soft Power 23 marks</p>"
+},
+{
+"id": "5GGV9Y9H6XHbEuyX",
+"key": "apocalyptic_weapon_test",
+"kind": "strategic",
+"name": "Apocalyptic Weapon Test",
+"old": "<p><b>Apocalyptic Weapon Test</b></p><p>Destroy enemy Hex; Darkness +3.</p><p><b>Cost:</b> Violence 80 · Intrigue 40 marks</p>",
+"new": "<p><b>Apocalyptic Weapon Test</b></p><p>The target hex is blasted: Contaminated + Radiation Zone, darkness pips +3, Loyalty −3, integration reset, contested. Your Darkness +3, its holder's +1, your stewards +1 each.</p><p><b>Cost:</b> Violence 60 · Intrigue 30 marks</p>"
+},
+{
+"id": "HjF8Nct4GyPMa1KO",
+"key": "auto_recon_sweep",
+"kind": "strategic",
+"name": "Auto-Recon Sweep",
+"old": "<p><b>Auto-Recon Sweep</b></p><p>Deploy drones/recorders to sweep nearby territory; gain intel and reduce risk on the next leg/turn (GM adjudicates).</p><p><b>Cost:</b> Intrigue 10 marks</p>",
+"new": "<p><b>Auto-Recon Sweep</b></p><p>Deploy drones/recorders to sweep nearby territory; gain intel and reduce risk on the next leg/turn (GM adjudicates).</p><p><b>Cost:</b> Intrigue 8 marks</p>"
+},
+{
+"id": "vNo10kWlshFbdWXM",
+"key": "begin_siege",
+"kind": "strategic",
+"name": "Begin Siege",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Begin Siege</h3><p>Establish a multi-turn siege on a target hex. Layers are drawn from the hex's structureActorIds (or GM override at planning time). Commits an OP-denominated Supply Buffer that ticks down per turn from the derived Siege Cost (terrain + supply-chain length + harassment, less Bulwark discount). Resolves over multiple campaign turns until a layer is breached, defender surrenders, attacker withdraws, or Buffer is exhausted. See bbttcc-raid/SIEGE_RAID_TYPE_SPEC.md.</p><p><strong>Cost:</strong> Violence 30 · Logistics 20 · Economy 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Begin Siege</h3><p>Establish a multi-turn siege on a target hex. Layers are drawn from the hex's structureActorIds (or GM override at planning time). Commits a Supply Buffer in marks that ticks down per turn from the derived Siege Cost (terrain + supply-chain length + harassment, less Bulwark discount). Resolves over multiple campaign turns until a layer is breached, defender surrenders, attacker withdraws, or Buffer is exhausted. See bbttcc-raid/SIEGE_RAID_TYPE_SPEC.md.</p><p><strong>Cost:</strong> Violence 23 · Logistics 15 · Economy 8 marks</p></div>"
+},
+{
+"id": "vFfRdyUYZGfL0ZMj",
+"key": "border_patrol",
+"kind": "strategic",
+"name": "Border Patrol",
+"old": "<p><b>Border Patrol</b></p><p>Prevent Infiltration attempts next turn.</p><p><b>Cost:</b> Violence 10 · Nonlethal 10 marks</p>",
+"new": "<p><b>Border Patrol</b></p><p>Patrols on the roads — Domain Loyalty +2.</p><p><b>Cost:</b> Violence 8 · Nonlethal 8 marks</p>"
+},
+{
+"id": "bqfAY0QMub9XGPv0",
+"key": "build_bridge",
+"kind": "strategic",
+"name": "Build Bridge",
+"old": "<p><b>Build Bridge</b></p><p>Bridge an open-water hex you can reach — a river, a lake, a strait: free crossing for you and your allies, a 5-mark toll for the neutral, closed to the hostile. A cut bridge is rebuilt here. Cannot be planned on a hex held by a Domain hostile to you.</p><p><b>Cost:</b> Economy 20 · Logistics 14 marks</p>",
+"new": "<p><b>Build Bridge</b></p><p>Bridge an open-water hex you can reach — a river, a lake, a strait: free crossing for you and your allies, a 5-mark toll for the neutral, closed to the hostile. A cut bridge is rebuilt here. Cannot be planned on a hex held by a Domain hostile to you.</p><p><b>Cost:</b> Economy 15 · Logistics 11 marks</p>"
+},
+{
+"id": "X2wOEwpbvaxxepoM",
+"key": "call_relief",
+"kind": "strategic",
+"name": "Call Relief",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Call Relief</h3><p>Summon an allied relief force. Pushes a wave onto the siege that arrives in 2 turns; on arrival the GM convenes the Relief Scene (Phase E.3). Requires a willing ally. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 20 · Soft Power 20 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Call Relief</h3><p>Summon an allied relief force. Pushes a wave onto the siege that arrives in 2 turns; on arrival the GM convenes the Relief Scene (Phase E.3). Requires a willing ally. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 15 · Soft Power 15 marks</p></div>"
+},
+{
+"id": "1ezB5oogAxBdq0tb",
+"key": "champion_defends_wall",
+"kind": "strategic",
+"name": "Champion Defends Wall",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Defends Wall</h3><p>A named defender Champion takes the wall: locked Active for 2 turns and +1 Anytime budget. Optional note {\"championId\":\"...\"} picks the champion; otherwise the first eligible. Target the besieged hex.</p><p><strong>Cost:</strong> Violence 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Defends Wall</h3><p>A named defender Champion takes the wall: locked Active for 2 turns and +1 Anytime budget. Optional note {\"championId\":\"...\"} picks the champion; otherwise the first eligible. Target the besieged hex.</p><p><strong>Cost:</strong> Violence 8 marks</p></div>"
+},
+{
+"id": "8X72g0rb36RYrt8Z",
+"key": "champion_returns",
+"kind": "strategic",
+"name": "Champion Returns",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Returns</h3><p>Coax an Absent attacker Champion back to the line (status Active). Optional note {\"championId\":\"...\"}; otherwise the first absent. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 20 · Soft Power 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Returns</h3><p>Coax an Absent attacker Champion back to the line (status Active). Optional note {\"championId\":\"...\"}; otherwise the first absent. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 15 · Soft Power 8 marks</p></div>"
+},
+{
+"id": "ngbaj2Ye8Ap70sh3",
+"key": "champion_withdraws",
+"kind": "strategic",
+"name": "Champion Withdraws",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Withdraws</h3><p>A named attacker Champion withdraws from the siege (status Absent) — the Achilles-in-his-tent lever. Optional note {\"championId\":\"...\"}; otherwise the first active. Target the besieged hex.</p><p><strong>Cost:</strong> Soft Power 15 · Diplomacy 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Withdraws</h3><p>A named attacker Champion withdraws from the siege (status Absent) — the Achilles-in-his-tent lever. Optional note {\"championId\":\"...\"}; otherwise the first active. Target the besieged hex.</p><p><strong>Cost:</strong> Soft Power 11 · Diplomacy 8 marks</p></div>"
+},
+{
+"id": "IhmqVJN1LKmd0OV2",
+"key": "charity_drive",
+"kind": "strategic",
+"name": "Charity Drive",
+"old": "<p><b>Charity Drive</b></p><p>Reduce regional Darkness −1.</p><p><b>Cost:</b> Faith 10 · Soft Power 10 marks</p>",
+"new": "<p><b>Charity Drive</b></p><p>Reduce regional Darkness −1.</p><p><b>Cost:</b> Faith 8 · Soft Power 8 marks</p>"
+},
+{
+"id": "oeaLu6STD8QrzB9F",
+"key": "charter_passage",
+"kind": "strategic",
+"name": "Charter Passage",
+"old": "<p><b>Charter Passage</b></p><p>Charter another Domain's boats, flyers or subs (they must rate you neutral or better; pick their rig): it carries your people through those domains for 3 turns, and the carrier pockets 8 marks Economy.</p><p><b>Cost:</b> Diplomacy 20 · Economy 10 marks</p>",
+"new": "<p><b>Charter Passage</b></p><p>Charter another Domain's boats, flyers or subs (they must rate you neutral or better; pick their rig): it carries your people through those domains for 3 turns, and the carrier pockets 8 marks Economy.</p><p><b>Cost:</b> Diplomacy 15 · Economy 8 marks</p>"
+},
+{
+"id": "XaN7N4WQX3Nq9sjn",
+"key": "civic_audit",
+"kind": "strategic",
+"name": "Civic Audit",
+"old": "<p><b>Civic Audit</b></p><p>Detect corruption; restore Loyalty +1.</p><p><b>Cost:</b> Intrigue 10 · Economy 10 marks</p>",
+"new": "<p><b>Civic Audit</b></p><p>Detect corruption; restore Loyalty +1.</p><p><b>Cost:</b> Intrigue 8 · Economy 8 marks</p>"
+},
+{
+"id": "wbDvp6QmKo320UbO",
+"key": "counter_interdict",
+"kind": "strategic",
+"name": "Counter-Interdict",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Counter-Interdict</h3><p>Clear an enemy interdiction from one of your siege's supply-path hexes. Restores the stripped 'Supply Line' modifier and lowers this turn's harassment. Played by the besieger or a supporter. Target the interdicted supply-road hex.</p><p><strong>Cost:</strong> Violence 10 · Intrigue 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Counter-Interdict</h3><p>Clear an enemy interdiction from one of your siege's supply-path hexes. Restores the stripped 'Supply Line' modifier and lowers this turn's harassment. Played by the besieger or a supporter. Target the interdicted supply-road hex.</p><p><strong>Cost:</strong> Violence 8 · Intrigue 8 marks</p></div>"
+},
+{
+"id": "WM0W0FBZ1h8vFFFi",
+"key": "courtly_intrigue_council",
+"kind": "strategic",
+"name": "Parley Council",
+"old": "<p><b>Parley Council</b></p><p>Open a Parley with the target hex's holder; gain intel on their plans.</p><p><b>Cost:</b> Intrigue 30 · Diplomacy 20 marks</p>",
+"new": "<p><b>Parley Council</b></p><p>Open a Parley with the target hex's holder; gain intel on their plans.</p><p><b>Cost:</b> Intrigue 23 · Diplomacy 15 marks</p>"
+},
+{
+"id": "U6cuUBKwK5c0HEJB",
+"key": "crisis_summit",
+"kind": "strategic",
+"name": "Crisis Summit",
+"old": "<p><b>Crisis Summit</b></p><p>Convene every Domain for a turn of cooler heads: a GM note goes to every war log that no hostile offer should land on anyone for 1 turn. A note, not a veto — the story still offers every fight.</p><p><b>Cost:</b> Diplomacy 30 · Faith 20 marks</p>",
+"new": "<p><b>Crisis Summit</b></p><p>Convene every Domain for a turn of cooler heads: a GM note goes to every war log that no hostile offer should land on anyone for 1 turn. A note, not a veto — the story still offers every fight.</p><p><b>Cost:</b> Diplomacy 23 · Faith 15 marks</p>"
+},
+{
+"id": "n0e6Ifhd4MZquqqN",
+"key": "crown_of_mercy",
+"kind": "maneuver",
+"name": "Crown of Mercy",
+"old": "<p>A scattered piece of the light, called home from the dark. ...I do NOT get choked up. I'm a janky interface. Anyway.</p><p><b>Instantly purify a Corrupted Spark (requires a Victory context).</b></p>",
+"new": "<p>A scattered piece of the light, called home from the dark. ...I do NOT get choked up. I'm a janky interface. Anyway.</p><p><b>On success the corrupted Spark seated on the target hex is repaired — or, if it has none, one corrupted spark carried by your Domain is purified (applied at commit).</b></p>"
+},
+{
+"id": "VqqdmYNLJ90wIqu2",
+"key": "cultural_exchange",
+"kind": "strategic",
+"name": "Cultural Exchange",
+"old": "<p><b>Cultural Exchange</b></p><p>Share Alignment bonus between Hexes.</p><p><b>Cost:</b> Diplomacy 20 · Soft Power 20 marks</p>",
+"new": "<p><b>Cultural Exchange</b></p><p>Share Alignment bonus between Hexes.</p><p><b>Cost:</b> Diplomacy 15 · Soft Power 15 marks</p>"
+},
+{
+"id": "e3kfivltteQK1MgT",
+"key": "cultural_festival_std",
+"kind": "strategic",
+"name": "Cultural Festival",
+"old": "<p><strong>Cultural Festival</strong></p><p>Target a hex you hold. At the turn: it gains the Cultural Festival tag and Loyalty +2.</p><p><em>Cost: Culture 20 · Faith 10 · Soft Power 10 marks.</em></p>",
+"new": "<p><strong>Cultural Festival</strong></p><p>Target a hex you hold. At the turn: it gains the Cultural Festival tag and Loyalty +2.</p><p><em>Cost: Culture 15 · Faith 8 · Soft Power 8 marks.</em></p>"
+},
+{
+"id": "G2Q27gzZnXPYkYSd",
+"key": "cut_bridge",
+"kind": "strategic",
+"name": "Cut the Bridge",
+"old": "<p><b>Cut the Bridge</b></p><p>Bring down a standing bridge: nobody crosses there until its holder plans Build Bridge again. Cutting your own bridge closes it to everyone, you included.</p><p><b>Cost:</b> Violence 10 · Intrigue 10 marks</p>",
+"new": "<p><b>Cut the Bridge</b></p><p>Bring down a standing bridge: nobody crosses there until its holder plans Build Bridge again. Cutting your own bridge closes it to everyone, you included.</p><p><b>Cost:</b> Violence 8 · Intrigue 8 marks</p>"
+},
+{
+"id": "LWjCmsF4P28Qoh6X",
+"key": "dark_harvest",
+"kind": "strategic",
+"name": "Dark Harvest",
+"old": "<p><strong>Dark Harvest</strong></p><p>Convert Darkness to +2 Economy; Loyalty −1.</p><p><strong>Cost:</strong> Economy 40 · Faith 20 marks</p>",
+"new": "<p><strong>Dark Harvest</strong></p><p>Burns 1 Domain Darkness for +20 marks Economy now.</p><p><strong>Cost:</strong> Economy 30 · Faith 15 marks</p>"
+},
+{
+"id": "yiBHLDkHHaU6cQEe",
+"key": "defuse_tensions",
+"kind": "strategic",
+"name": "Defuse Tensions",
+"old": "<p><strong>Defuse Tensions</strong></p><p>Target a restive hex. At the turn: Hostile Population is removed, it gains Loyal Population, Loyalty +2 and Loyalty +2.</p><p><em>Cost: Diplomacy 20 · Soft Power 20 · Culture 10 marks.</em></p>",
+"new": "<p><strong>Defuse Tensions</strong></p><p>Target a restive hex. At the turn: Hostile Population is removed, it gains Loyal Population, Loyalty +2 and Loyalty +2.</p><p><em>Cost: Diplomacy 15 · Soft Power 15 · Culture 8 marks.</em></p>"
+},
+{
+"id": "shRInx672Xa9jGgx",
+"key": "demand_surrender",
+"kind": "strategic",
+"name": "Demand Surrender",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Demand Surrender</h3><p>Attacker issues an ultimatum. The defender responds: yield (won_surrender) · parley (besieger Buffer +10) · refuse (Loyalty −1 on the besieged hex) — via siege.resolveSurrender. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 20 · Violence 10 · Soft Power 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Demand Surrender</h3><p>Attacker issues an ultimatum. The defender responds: yield (won_surrender) · parley (besieger Buffer +10) · refuse (Loyalty −1 on the besieged hex) — via siege.resolveSurrender. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 15 · Violence 8 · Soft Power 8 marks</p></div>"
+},
+{
+"id": "mHx4ipWqDOlTBb2N",
+"key": "develop_outpost_stability",
+"kind": "strategic",
+"name": "Develop Outpost",
+"old": "<p><b>Develop Outpost (Stability)</b></p><p>Stabilize a young outpost: clear hazards, patrol, and build trust.</p><p><b>Cost:</b> Diplomacy 20 · Economy 10 marks</p>",
+"new": "<p><b>Develop Outpost (Stability)</b></p><p>Stabilize a young outpost: clear hazards, patrol, and build trust.</p><p><b>Cost:</b> Diplomacy 15 · Economy 8 marks</p>"
+},
+{
+"id": "7NC1KDuJC2rxe0eI",
+"key": "diplomatic_channel",
+"kind": "maneuver",
+"name": "Diplomatic Channel",
+"old": "<p>A sealed envelope, a quiet room, the frankly radical suggestion that maybe nobody bleeds today. Maybe.</p><p><b>Defender may opt into a negotiated outcome (GM adjudicates).</b></p>",
+"new": "<p>A sealed envelope, a quiet room, the frankly radical suggestion that maybe nobody bleeds today. Maybe.</p><p><b>On success: your Domain's Loyalty +1.</b></p>"
+},
+{
+"id": "pORmTcQMWsMCwoby",
+"key": "diplomatic_mission_std",
+"kind": "strategic",
+"name": "Diplomatic Mission",
+"old": "<p><strong>Diplomatic Mission</strong></p><p>Target a hex. At the turn: it gains the Diplomatic Ties tag and Loyalty +1.</p><p><em>Cost: Diplomacy 30 · Soft Power 10 marks.</em></p>",
+"new": "<p><strong>Diplomatic Mission</strong></p><p>Target a hex. At the turn: it gains the Diplomatic Ties tag and Loyalty +1.</p><p><em>Cost: Diplomacy 23 · Soft Power 8 marks.</em></p>"
+},
+{
+"id": "VBuP56rCqy8swu7S",
+"key": "dragon_s_parley",
+"kind": "strategic",
+"name": "Dragon's Parley",
+"old": "<p><b>Dragon’s Parley</b></p><p>Negotiate with Ego-Dragon fragment; if successful, Darkness −3.</p><p><b>Cost:</b> Diplomacy 80 · Faith 50 marks</p>",
+"new": "<p><b>Dragon’s Parley</b></p><p>A 2d10 check (DC 14, +1 per lit Lamp). Success: Domain Darkness −3 and your stewards wash 1. Failure: Darkness +1 and the Adversary stirs.</p><p><b>Cost:</b> Diplomacy 60 · Faith 38 marks</p>"
+},
+{
+"id": "4zTz2vniGlT85LcH",
+"key": "echo_strike_protocol",
+"kind": "maneuver",
+"name": "Echo Strike Protocol",
+"old": "<p>One swing, two regrets. The blow echoes off the architecture and goes looking for a second name.</p><p><b>Apply the attack effect twice, against different targets.</b></p>",
+"new": "<p>One swing, two regrets. The blow echoes off the architecture and goes looking for a second name.</p><p><b>+2 to the attacker's roll this round; on success, enemy tokens on the bound battle scene take 7 damage.</b></p>"
+},
+{
+"id": "UD9hlQ9TSWdO765H",
+"key": "ego_breaker",
+"kind": "maneuver",
+"name": "Ego Breaker",
+"old": "<p>You don't kill the boss. You make them SMALLER. Permanently. That's so much meaner than killing, and I respect it.</p><p><b>Reduce the enemy leader's marks cap by 3, permanently.</b></p>",
+"new": "<p>You don't kill the boss. You make them SMALLER. Permanently. That's so much meaner than killing, and I respect it.</p><p><b>On success the enemy Domain's Violence cap drops 30 marks, permanently (applied at commit).</b></p>"
+},
+{
+"id": "xas5cy4lQu2qFsUp",
+"key": "ego_dragon_echo",
+"kind": "maneuver",
+"name": "Ego-Dragon Echo",
+"old": "<p>You called the dragon. The dragon is a shard of somebody's worst self, wearing teeth. This was YOUR idea. Remember that part.</p><p><b>Summon an Ego-Dragon fragment: +4 attack, double the Darkness risk.</b></p>",
+"new": "<p>You called the dragon. The dragon is a shard of somebody's worst self, wearing teeth. This was YOUR idea. Remember that part.</p><p><b>+4 to the attacker's roll this round; your Domain's Darkness +2 whatever happens.</b></p>"
+},
+{
+"id": "2oRtMvcH7v77vxWy",
+"key": "empathic_surge",
+"kind": "maneuver",
+"name": "Empathic Surge",
+"old": "<p>Turns out feeling things together is a genuine force multiplier. Who knew. ...Me. I knew.</p><p><b>+10 Soft Power marks after the round; Loyalty +1 on the target hex.</b></p>",
+"new": "<p>Turns out feeling things together is a genuine force multiplier. Who knew. ...Me. I knew.</p><p><b>On success: your Domain's Loyalty +2.</b></p>"
+},
+{
+"id": "co1bzTvcXExaRFpr",
+"key": "engine_of_absolution",
+"kind": "maneuver",
+"name": "Engine of Absolution",
+"old": "<p>A dead place, quietly told it's allowed to be alive again. The land weeps a little. The good kind, I think.</p><p><b>Restore one destroyed Hex to GenPop status.</b></p>",
+"new": "<p>A dead place, quietly told it's allowed to be alive again. The land weeps a little. The good kind, I think.</p><p><b>On success the target hex is restored: no longer destroyed, Contaminated / Radiation Zone / Damaged Infrastructure / Hostile Population / Devastated / Scorched Earth removed, Well-Maintained, darkness pips 0, Purified (applied at commit).</b></p>"
+},
+{
+"id": "OgHdU8TnBIMJ0OAZ",
+"key": "enlightenment_congress",
+"kind": "strategic",
+"name": "Enlightenment Congress",
+"old": "<p><b>Enlightenment Congress</b></p><p>Raise Enlightenment for all PCs by 1.</p><p><b>Cost:</b> Faith 50 · Diplomacy 50 marks</p>",
+"new": "<p><b>Enlightenment Congress</b></p><p>Raise Enlightenment for all PCs by 1.</p><p><b>Cost:</b> Faith 38 · Diplomacy 38 marks</p>"
+},
+{
+"id": "zUeUSBt86WzZ4fRB",
+"key": "escort_supply_line",
+"kind": "strategic",
+"name": "Escort Supply Line",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Escort Supply Line</h3><p>Screen your own siege's supply convoy. Adds one escort pip; each pip cancels one enemy interdiction at the next strategic tick and deters defender sorties (escort-protected hexes inflict heavier sortie casualties on the defender). Played by the besieger or a supporter. Target the siege's supply-road hex or the besieged hex.</p><p><strong>Cost:</strong> Violence 10 · Logistics 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Escort Supply Line</h3><p>Screen your own siege's supply convoy. Adds one escort pip; each pip cancels one enemy interdiction at the next strategic tick and deters defender sorties (escort-protected hexes inflict heavier sortie casualties on the defender). Played by the besieger or a supporter. Target the siege's supply-road hex or the besieged hex.</p><p><strong>Cost:</strong> Violence 8 · Logistics 8 marks</p></div>"
+},
+{
+"id": "qRdKi2GNVk9Wd1mw",
+"key": "establish_outpost",
+"kind": "strategic",
+"name": "Establish Outpost",
+"old": "<p><b>Establish Outpost</b></p><p>Plant a flag and found a new outpost in an unclaimed hex.</p><p><b>Cost:</b> Economy 20 · Logistics 10 marks</p>",
+"new": "<p><b>Establish Outpost</b></p><p>Plant a flag and found a new outpost in an unclaimed hex.</p><p><b>Cost:</b> Economy 15 · Logistics 8 marks</p>"
+},
+{
+"id": "bQPBtT0t7Qk9fhxQ",
+"key": "establish_siege_camp",
+"kind": "strategic",
+"name": "Establish Siege Camp",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Siege Camp</h3><p>Stamp the 'Beached Camp' modifier on a target hex (must be owned, neutral, or claimable by the attacker). Hex qualifies as a temporary siege depot for the duration of the attacker's active siege; auto-clears on siege resolution. Used for naval/wilderness sieges where no permanent depot is in range.</p><p><strong>Cost:</strong> Violence 10 · Logistics 20 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Siege Camp</h3><p>Stamp the 'Beached Camp' modifier on a target hex (must be owned, neutral, or claimable by the attacker). Hex qualifies as a temporary siege depot for the duration of the attacker's active siege; auto-clears on siege resolution. Used for naval/wilderness sieges where no permanent depot is in range.</p><p><strong>Cost:</strong> Violence 8 · Logistics 15 marks</p></div>"
+},
+{
+"id": "FWGbMigtAmo06ulh",
+"key": "establish_supply_line",
+"kind": "strategic",
+"name": "Establish Supply Line",
+"old": "<p><strong>Establish Supply Line</strong></p><p>Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Supply Line tag and the route is stored on both; sieges draw on it.</p><p><em>Cost: Logistics 30 · Economy 10 marks.</em></p>",
+"new": "<p><strong>Establish Supply Line</strong></p><p>Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Supply Line tag and the route is stored on both; sieges draw on it.</p><p><em>Cost: Logistics 23 · Economy 8 marks.</em></p>"
+},
+{
+"id": "i7AuUFfPHpC9auoq",
+"key": "establish_trade_route",
+"kind": "strategic",
+"name": "Establish Trade Route",
+"old": "<p><strong>Establish Trade Route</strong></p><p>Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Trade Hub tag (+50% trade output) and the route is stored on both hexes.</p><p><em>Cost: Economy 30 · Diplomacy 10 · Logistics 10 marks.</em></p>",
+"new": "<p><strong>Establish Trade Route</strong></p><p>Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Trade Hub tag (+50% trade output) and the route is stored on both hexes.</p><p><em>Cost: Economy 23 · Diplomacy 8 · Logistics 8 marks.</em></p>"
+},
+{
+"id": "xPC1NIkG1F6cMFA7",
+"key": "faultline_tuning",
+"kind": "strategic",
+"name": "Faultline Tuning",
+"old": "<p><b>Faultline Tuning</b></p><p>Tune resonant faultlines and leylines; stabilize a region or reveal hidden pathways (GM adjudicates).</p><p><b>Cost:</b> Faith 10 marks</p>",
+"new": "<p><b>Faultline Tuning</b></p><p>Tune resonant faultlines and leylines; stabilize a region or reveal hidden pathways (GM adjudicates).</p><p><b>Cost:</b> Faith 8 marks</p>"
+},
+{
+"id": "898J5bzlpgWAt32h",
+"key": "flash_bargain",
+"kind": "maneuver",
+"name": "Flash Bargain",
+"old": "<p>A handshake so fast the other guy doesn't clock that his wallet got lighter. Classic frontier diplomacy.</p><p><b>Borrow +10 enemy marks for this round.</b></p>",
+"new": "<p>A handshake so fast the other guy doesn't clock that his wallet got lighter. Classic frontier diplomacy.</p><p><b>+1 to your roll and −1 to the opponent's this round.</b></p>"
+},
+{
+"id": "R0K51XKxvkUgkU95",
+"key": "fortify_hex",
+"kind": "strategic",
+"name": "Fortify Hex",
+"old": "<p><strong>Fortify Hex</strong></p><p>Target one hex. At the turn: it gains the Fortified tag and Defense +2.</p><p><em>Cost: Economy 20 · Logistics 20 · Violence 10 marks.</em></p>",
+"new": "<p><strong>Fortify Hex</strong></p><p>Target one hex. At the turn: it gains the Fortified tag and Defense +2.</p><p><em>Cost: Economy 15 · Logistics 15 · Violence 8 marks.</em></p>"
+},
+{
+"id": "KkL2NK8We6IXRCRV",
+"key": "found_site_farm",
+"kind": "strategic",
+"name": "Found Farm",
+"old": "<p><b>Found Farm</b></p><p>Found a new farm site at a developed settlement.</p><p><b>Cost:</b> Economy 20 · Logistics 10 marks</p>",
+"new": "<p><b>Found Farm</b></p><p>Found a new farm site at a developed settlement.</p><p><b>Cost:</b> Economy 15 · Logistics 8 marks</p>"
+},
+{
+"id": "ZS9aaNoPVENJc1eD",
+"key": "found_site_fortress",
+"kind": "strategic",
+"name": "Found Fortress",
+"old": "<p><b>Found Fortress</b></p><p>Found a new fortress site at a developed settlement.</p><p><b>Cost:</b> Violence 20 · Logistics 20 · Economy 10 marks</p>",
+"new": "<p><b>Found Fortress</b></p><p>Found a new fortress site at a developed settlement.</p><p><b>Cost:</b> Violence 15 · Logistics 15 · Economy 8 marks</p>"
+},
+{
+"id": "2bFtBigoTFUEsKlw",
+"key": "found_site_mine",
+"kind": "strategic",
+"name": "Found Mine",
+"old": "<p><b>Found Mine</b></p><p>Found a new mine site at a developed settlement.</p><p><b>Cost:</b> Economy 30 · Nonlethal 10 · Logistics 10 marks</p>",
+"new": "<p><b>Found Mine</b></p><p>Found a new mine site at a developed settlement.</p><p><b>Cost:</b> Economy 23 · Nonlethal 8 · Logistics 8 marks</p>"
+},
+{
+"id": "hRmIPnpKHuXyV6ZE",
+"key": "found_site_port",
+"kind": "strategic",
+"name": "Found Port",
+"old": "<p><b>Found Port</b></p><p>Found a new port site at a developed settlement.</p><p><b>Cost:</b> Economy 30 · Logistics 10 · Diplomacy 10 marks</p>",
+"new": "<p><b>Found Port</b></p><p>Found a new port site at a developed settlement.</p><p><b>Cost:</b> Economy 23 · Logistics 8 · Diplomacy 8 marks</p>"
+},
+{
+"id": "AKGKftRHv8oxV5pX",
+"key": "found_site_research",
+"kind": "strategic",
+"name": "Found Research Site",
+"old": "<p><b>Found Research Site</b></p><p>Found a new research site at a developed settlement.</p><p><b>Cost:</b> Intrigue 20 · Soft Power 20 · Economy 10 marks</p>",
+"new": "<p><b>Found Research Site</b></p><p>Found a new research site at a developed settlement.</p><p><b>Cost:</b> Intrigue 15 · Soft Power 15 · Economy 8 marks</p>"
+},
+{
+"id": "F1JoKxK8U5XwHEQV",
+"key": "found_site_temple",
+"kind": "strategic",
+"name": "Found Temple",
+"old": "<p><b>Found Temple</b></p><p>Found a new temple site at a developed settlement.</p><p><b>Cost:</b> Faith 20 · Soft Power 20 · Culture 10 marks</p>",
+"new": "<p><b>Found Temple</b></p><p>Found a new temple site at a developed settlement.</p><p><b>Cost:</b> Faith 15 · Soft Power 15 · Culture 8 marks</p>"
+},
+{
+"id": "HNj7ZHA3iHZhSLQt",
+"key": "gather_intel",
+"kind": "strategic",
+"name": "Gather Intel",
+"old": "<p><strong>Gather Intel</strong></p><p>Target any hex. It is revealed now, a dossier (holder, defense, loyalty, integration, modifiers, alignment) is whispered to your Domain, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower.</p><p><em>Cost: Intrigue 20 marks.</em></p>",
+"new": "<p><strong>Gather Intel</strong></p><p>Target any hex. It is revealed now, a dossier (holder, defense, loyalty, integration, modifiers, alignment) is whispered to your Domain, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower.</p><p><em>Cost: Intrigue 15 marks.</em></p>"
+},
+{
+"id": "7xnpQAe6mpHOl05h",
+"key": "ghost_slip_infiltration",
+"kind": "maneuver",
+"name": "Ghost-Slip Infiltration",
+"old": "<p>Be where the wall isn't. Be quiet about it now. Be smug about it later, with me, over a drink.</p><p><b>Ignore one defensive circumstance this round (GM adjudicates).</b></p>",
+"new": "<p>Be where the wall isn't. Be quiet about it now. Be smug about it later, with me, over a drink.</p><p><b>+2 to the attacker's roll this round; in an Infiltration-Alarm raid the alarm also drops 1.</b></p>"
+},
+{
+"id": "yir2mvvbFjJgWHi8",
+"key": "gradient_surge",
+"kind": "maneuver",
+"name": "Gradient Surge",
+"old": "<p>Money is just potential energy with much better PR. Roll it downhill and watch it turn into a result.</p><p><b>Before rolling, convert 1 staged Economy into a tactical edge.</b></p>",
+"new": "<p>Money is just potential energy with much better PR. Roll it downhill and watch it turn into a result.</p><p><b>Converts 10 marks Economy into 10 marks Logistics on the spot.</b></p>"
+},
+{
+"id": "qG2yoA3VEN4zHqxD",
+"key": "great_work_ritual",
+"kind": "strategic",
+"name": "Great Work Ritual",
+"old": "<p><b>Great Work Ritual</b></p><p>Trigger Tikkun Phase C for one Spark.</p><p><b>Cost:</b> Faith 10 · Culture 5 marks</p>",
+"new": "<p><b>Great Work Ritual</b></p><p>Trigger Tikkun Phase C for one Spark.</p><p><b>Cost:</b> Faith 75 · Culture 38 marks</p>"
+},
+{
+"id": "Moo0JAWM4UdjYgoy",
+"key": "harvest_season",
+"kind": "strategic",
+"name": "Harvest Season",
+"old": "<p><b>Harvest Season</b></p><p>+1 Economy regen next turn.</p><p><b>Cost:</b> Economy 10 marks</p>",
+"new": "<p><b>Harvest Season</b></p><p>+20 marks Economy into the bank next turn (the Standing cap applies).</p><p><b>Cost:</b> Economy 8 marks</p>"
+},
+{
+"id": "fJSGCArGvDYOsK9Z",
+"key": "industrial_revolution",
+"kind": "strategic",
+"name": "Industrial Revolution",
+"old": "<p><b>Industrial Revolution</b></p><p>Double Economy output for 2 turns.</p><p><b>Cost:</b> Economy 40 marks</p>",
+"new": "<p><b>Industrial Revolution</b></p><p>Economy income ×2 for 2 turns; the target hex's Loyalty −1.</p><p><b>Cost:</b> Economy 30 marks</p>"
+},
+{
+"id": "PaQud8zARjfIM3RS",
+"key": "opt_infernal_bargain",
+"kind": "maneuver",
+"name": "Infernal Bargain",
+"old": "<p>A deal with a faint sulfur smell to it. Sign right here. Don't read the small print. Nobody ever reads the small print.</p><p><b>Defender accepts (+2 to their next roll; attacker gains 1 Darkness) or refuses (the defender's hex Loyalty −1).</b></p>",
+"new": "<p>A deal with a faint sulfur smell to it. Sign right here. Don't read the small print. Nobody ever reads the small print.</p><p><b>Goetic Summoner: +3 to the attacker's roll this round; your Darkness +1 whatever happens.</b></p>"
+},
+{
+"id": "IR7UWNR3VMjooXOU",
+"key": "infrastructure_expansion",
+"kind": "strategic",
+"name": "Infrastructure Expansion",
+"old": "<p><strong>Infrastructure Expansion</strong></p><p>Target a hex you hold. At the turn: it gains the Expanded Infrastructure tag, Defense +2 and Integration +1 (max 6).</p><p><em>Cost: Economy 40 · Logistics 20 marks.</em></p>",
+"new": "<p><strong>Infrastructure Expansion</strong></p><p>Target a hex you hold. At the turn: it gains the Expanded Infrastructure tag, Defense +2 and Integration +1 (max 6).</p><p><em>Cost: Economy 30 · Logistics 15 marks.</em></p>"
+},
+{
+"id": "R5WmQDRnvQkPZQlt",
+"key": "inquisition_mandate",
+"kind": "strategic",
+"name": "Inquisition Mandate",
+"old": "<p><b>Inquisition Mandate</b></p><p>Expose Qliphothic assets; Darkness −1.</p><p><b>Cost:</b> Faith 40 · Intrigue 20 marks</p>",
+"new": "<p><b>Inquisition Mandate</b></p><p>Expose Qliphothic assets; Darkness −1.</p><p><b>Cost:</b> Faith 30 · Intrigue 15 marks</p>"
+},
+{
+"id": "iETXwNE66hCiCr9a",
+"key": "interdict_supply_line",
+"kind": "strategic",
+"name": "Interdict Supply Line",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Interdict Supply Line</h3><p>Cut a supply-path hex feeding an enemy siege. Strips the hex's 'Supply Line' modifier (severs the route until restored) and lands an immediate harassment pulse: the besieger's Supply Buffer is shaved and per-turn attrition rises. Any Domain except the besieger may interdict. Target the supply-road hex, not the besieged hex.</p><p><strong>Cost:</strong> Intrigue 15 · Violence 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Interdict Supply Line</h3><p>Cut a supply-path hex feeding an enemy siege. Strips the hex's 'Supply Line' modifier (severs the route until restored) and lands an immediate harassment pulse: the besieger's Supply Buffer is shaved and per-turn attrition rises. Any Domain except the besieger may interdict. Target the supply-road hex, not the besieged hex.</p><p><strong>Cost:</strong> Intrigue 11 · Violence 8 marks</p></div>"
+},
+{
+"id": "XfkxMschLlm1tx96",
+"key": "judgment_of_light",
+"kind": "strategic",
+"name": "Judgment of Light",
+"old": "<p><b>Judgment of Light</b></p><p>Purify enemy Hex without destruction.</p><p><b>Cost:</b> Faith 60 · Violence 60 marks</p>",
+"new": "<p><b>Judgment of Light</b></p><p>A rival's hex is purified without being taken: taints and hostile tags removed, darkness pips 0, Purified.</p><p><b>Cost:</b> Faith 45 · Violence 45 marks</p>"
+},
+{
+"id": "sk3HBZKqZwY4LOH8",
+"key": "justice_tribunal",
+"kind": "strategic",
+"name": "Justice Tribunal",
+"old": "<p><strong>Justice Tribunal</strong></p><p>Remove 1 Darkness; Loyalty +1.</p><p><strong>Cost:</strong> Soft Power 20 · Faith 10 marks</p>",
+"new": "<p><strong>Justice Tribunal</strong></p><p>Remove 1 Darkness; Loyalty +1.</p><p><strong>Cost:</strong> Soft Power 15 · Faith 8 marks</p>"
+},
+{
+"id": "Iso4ZtFEsNLH9tjP",
+"key": "local_festival",
+"kind": "strategic",
+"name": "Local Festival",
+"old": "<p><b>Local Festival</b></p><p>+1 Empathy Meter.</p><p><b>Cost:</b> Culture 10 · Faith 10 marks</p>",
+"new": "<p><b>Local Festival</b></p><p>Domain Loyalty +2.</p><p><b>Cost:</b> Culture 8 · Faith 8 marks</p>"
+},
+{
+"id": "LYWDZahccLGVgMu0",
+"key": "loyalty_program",
+"kind": "strategic",
+"name": "Loyalty Program",
+"old": "<p><strong>Loyalty Program</strong></p><p>Target a hex you hold. At the turn: it gains the Loyal Population tag, Loyalty +2 and Loyalty +1.</p><p><em>Cost: Soft Power 30 · Culture 10 · Faith 10 marks.</em></p>",
+"new": "<p><strong>Loyalty Program</strong></p><p>Target a hex you hold. At the turn: it gains the Loyal Population tag, Loyalty +2 and Loyalty +1.</p><p><em>Cost: Soft Power 23 · Culture 8 · Faith 8 marks.</em></p>"
+},
+{
+"id": "TUvQN40aO4gfJYrW",
+"key": "mass_mobilization_std",
+"kind": "strategic",
+"name": "Mass Mobilization",
+"old": "<p><strong>Mass Mobilization</strong></p><p>Domain-wide. Your your next Battle or Heist rolls initiative rerolling the lowest die and gets one free maneuver.</p><p><em>Cost: Violence 40 · Logistics 20 · Economy 10 marks.</em></p>",
+"new": "<p><strong>Mass Mobilization</strong></p><p>Domain-wide. Your your next Battle or Heist rolls initiative rerolling the lowest die and gets one free maneuver.</p><p><em>Cost: Violence 30 · Logistics 15 · Economy 8 marks.</em></p>"
+},
+{
+"id": "mn39pu41rJgOJhDp",
+"key": "minor_repair",
+"kind": "strategic",
+"name": "Minor Repair",
+"old": "<p><b>Minor Repair</b></p><p>Remove 'Damaged Infrastructure'.</p><p><b>Cost:</b> Economy 10 · Materials 10 marks</p>",
+"new": "<p><b>Minor Repair</b></p><p>Remove 'Damaged Infrastructure'.</p><p><b>Cost:</b> Economy 8 marks</p>"
+},
+{
+"id": "4eRDhlPDsfCHIusU",
+"key": "moral_high_ground",
+"kind": "maneuver",
+"name": "Moral High Ground",
+"old": "<p>Winning is fine. Winning while visibly, insufferably RIGHT? That's the good stuff. People remember that kind.</p><p><b>+20 Soft Power marks after victory.</b></p>",
+"new": "<p>Winning is fine. Winning while visibly, insufferably RIGHT? That's the good stuff. People remember that kind.</p><p><b>On success: your Domain's Darkness −1.</b></p>"
+},
+{
+"id": "Y7MCqKqaqkk3M8Mr",
+"key": "oblivion_protocol",
+"kind": "strategic",
+"name": "Oblivion Protocol",
+"old": "<p><b>Oblivion Protocol</b></p><p>Collapse Qliphothic gate; resets Darkness Track to 0.</p><p><b>Cost:</b> Intrigue 80 · Faith 80 marks</p>",
+"new": "<p><b>Oblivion Protocol</b></p><p>Collapse Qliphothic gate; resets Darkness Track to 0.</p><p><b>Cost:</b> Intrigue 60 · Faith 60 marks</p>"
+},
+{
+"id": "BDin3hURgzafi7OL",
+"key": "patrol_routes",
+"kind": "strategic",
+"name": "Patrol Routes",
+"old": "<p><strong>Patrol Routes</strong></p><p>Target one hex you hold. At the turn: it gains the Patrolled tag, Defense +1 and Loyalty +1; if it is already Fortified there is a 40% chance it also becomes Well-Maintained.</p><p><em>Cost: Logistics 20 · Violence 10 marks.</em></p>",
+"new": "<p><strong>Patrol Routes</strong></p><p>Target one hex you hold. At the turn: it gains the Patrolled tag, Defense +1 and Loyalty +1; if it is already Fortified there is a 40% chance it also becomes Well-Maintained.</p><p><em>Cost: Logistics 15 · Violence 8 marks.</em></p>"
+},
+{
+"id": "CKTTHQvl4Us8CIvZ",
+"key": "peace_accords",
+"kind": "strategic",
+"name": "Peace Accords",
+"old": "<p><b>Peace Accords</b></p><p>Make terms with the holder of the target hex: that hex's Loyalty +1, and a GM note goes to both sides that no hostile offer should land on either of you for 2 turns. The story still decides who fights; nothing here forbids a beat.</p><p><b>Cost:</b> Diplomacy 30 marks</p>",
+"new": "<p><b>Peace Accords</b></p><p>Make terms with the holder of the target hex: that hex's Loyalty +1, and a GM note goes to both sides that no hostile offer should land on either of you for 2 turns. The story still decides who fights; nothing here forbids a beat.</p><p><b>Cost:</b> Diplomacy 23 marks</p>"
+},
+{
+"id": "C6ibR4RGWONCib5C",
+"key": "pilgrimage_route",
+"kind": "strategic",
+"name": "Pilgrimage Route",
+"old": "<p><b>Pilgrimage Route</b></p><p>+1 Faith regen; Loyalty +1 to Hex.</p><p><b>Cost:</b> Faith 10 · Diplomacy 10 marks</p>",
+"new": "<p><b>Pilgrimage Route</b></p><p>+10 marks Faith next turn; Loyalty +1 on the target hex.</p><p><b>Cost:</b> Faith 8 · Diplomacy 8 marks</p>"
+},
+{
+"id": "PKCTMp2NUvrqOhEf",
+"key": "policy_reforms",
+"kind": "strategic",
+"name": "Policy Reforms",
+"old": "<p><strong>Policy Reforms (Admin)</strong></p><p>Domain-wide. marks income ×1.05 this turn, and your next Battle or Heist DC is 1 lower.</p><p><em>Cost: Economy 20 · Soft Power 20 · Diplomacy 10 · Logistics 10 marks.</em></p>",
+"new": "<p><strong>Policy Reforms (Admin)</strong></p><p>Domain-wide. marks income ×1.05 this turn, and your next Battle or Heist DC is 1 lower.</p><p><em>Cost: Economy 15 · Soft Power 15 · Diplomacy 8 · Logistics 8 marks.</em></p>"
+},
+{
+"id": "kROykDTHnUvPJRCp",
+"key": "pray_for_omen",
+"kind": "strategic",
+"name": "Pray for Omen",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Pray for Omen</h3><p>Beseech the powers: the next Event Deck draw re-rolls in the defender's favour (consumed when the deck fires, Phase F). Target the besieged hex.</p><p><strong>Cost:</strong> Faith 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Pray for Omen</h3><p>Beseech the powers: the next Event Deck draw re-rolls in the defender's favour (consumed when the deck fires, Phase F). Target the besieged hex.</p><p><strong>Cost:</strong> Faith 8 marks</p></div>"
+},
+{
+"id": "EYk9papUTn6mSJCb",
+"key": "project_eden",
+"kind": "strategic",
+"name": "Project Eden",
+"old": "<p><b>Project Eden</b></p><p>Create 'Garden City' Hex aligned to Tiferet.</p><p><b>Cost:</b> Economy 10 · Soft Power 5 marks</p>",
+"new": "<p><b>Project Eden</b></p><p>A hex you hold becomes a Garden City: aligned to Tiferet, Purified, +Well-Maintained, +Loyal Population, darkness pips 0.</p><p><b>Cost:</b> Economy 75 · Soft Power 38 marks</p>"
+},
+{
+"id": "TFxo3os2qsKf5NdJ",
+"key": "propaganda_campaign",
+"kind": "strategic",
+"name": "Propaganda Campaign",
+"old": "<p><strong>Propaganda Campaign</strong></p><p>Target a hex. It gains the Propaganda tag; Loyalty +2 and Loyalty +1 on that hex.</p><p><em>Cost: Soft Power 30 · Diplomacy 10 marks.</em></p>",
+"new": "<p><strong>Propaganda Campaign</strong></p><p>Target a hex. It gains the Propaganda tag; Loyalty +2 and Loyalty +1 on that hex.</p><p><em>Cost: Soft Power 23 · Diplomacy 8 marks.</em></p>"
+},
+{
+"id": "sm6Wa0Sb88TtoO5C",
+"key": "psych_ops_broadcast",
+"kind": "strategic",
+"name": "Psych-Ops Broadcast",
+"old": "<p><b>Psych-Ops Broadcast</b></p><p>−2 Loyalty to enemy Hex.</p><p><b>Cost:</b> Soft Power 30 · Intrigue 30 marks</p>",
+"new": "<p><b>Psych-Ops Broadcast</b></p><p>−2 Loyalty to enemy Hex.</p><p><b>Cost:</b> Soft Power 23 · Intrigue 23 marks</p>"
+},
+{
+"id": "gjJN8lZGEneIxW6n",
+"key": "purification_rite",
+"kind": "strategic",
+"name": "Purification Rite",
+"old": "<p><b>Purification Rite</b></p><p>Reduce Darkness Track −2.</p><p><b>Cost:</b> Faith 30 · Soft Power 20 marks</p>",
+"new": "<p><b>Purification Rite</b></p><p>Domain Darkness −2; every hex you hold loses a darkness pip; your stewards wash 1 Darkness.</p><p><b>Cost:</b> Faith 23 · Soft Power 15 marks</p>"
+},
+{
+"id": "mjdNkATRiZy24C4M",
+"key": "ration_distribution",
+"kind": "strategic",
+"name": "Ration Distribution",
+"old": "<p><b>Ration Distribution</b></p><p>+1 Loyalty to one controlled Hex.</p><p><b>Cost:</b> Soft Power 10 marks</p>",
+"new": "<p><b>Ration Distribution</b></p><p>+1 Loyalty to one controlled Hex.</p><p><b>Cost:</b> Soft Power 8 marks</p>"
+},
+{
+"id": "1nMD5kyFr3kvDEs2",
+"key": "recon_sweep",
+"kind": "strategic",
+"name": "Recon Sweep",
+"old": "<p><b>Recon Sweep</b></p><p>Reveal alignment of 1 adjacent Hex.</p><p><b>Cost:</b> Intrigue 10 marks</p>",
+"new": "<p><b>Recon Sweep</b></p><p>Reveal alignment of 1 adjacent Hex.</p><p><b>Cost:</b> Intrigue 8 marks</p>"
+},
+{
+"id": "KHW4teMsgi7I3KsP",
+"key": "reconstruction_drive_std",
+"kind": "strategic",
+"name": "Reconstruction Drive",
+"old": "<p><strong>Reconstruction Drive</strong></p><p>Target a damaged hex you hold. At the turn: Damaged Infrastructure is removed, it gains Well-Maintained, Defense +2 and Integration +1; an Occupied or Contested hex settles to Claimed at once.</p><p><em>Cost: Economy 20 · Logistics 20 marks.</em></p>",
+"new": "<p><strong>Reconstruction Drive</strong></p><p>Target a damaged hex you hold. At the turn: Damaged Infrastructure is removed, it gains Well-Maintained, Defense +2 and Integration +1; an Occupied or Contested hex settles to Claimed at once.</p><p><em>Cost: Economy 15 · Logistics 15 marks.</em></p>"
+},
+{
+"id": "5UrdrKe8ulfpztOQ",
+"key": "reinforce_garrison",
+"kind": "strategic",
+"name": "Reinforce Garrison",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Reinforce Garrison</h3><p>Defender stiffens the defence: +1 Anytime budget per round AND +1 Renewal pool for the duration. Played by the besieged Domain; target the besieged hex.</p><p><strong>Cost:</strong> Violence 15 · Logistics 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Reinforce Garrison</h3><p>Defender stiffens the defence: +1 Anytime budget per round AND +1 Renewal pool for the duration. Played by the besieged Domain; target the besieged hex.</p><p><strong>Cost:</strong> Violence 11 · Logistics 8 marks</p></div>"
+},
+{
+"id": "sTyUD3Ap5S5QHfEb",
+"key": "repair_fortifications",
+"kind": "strategic",
+"name": "Repair Fortifications",
+"old": "<p><strong>Repair Fortifications</strong></p><p>Target a hex you hold whose primary facility is damaged: it recovers one damage step at once. Does nothing on an intact facility.</p><p><em>Cost: Economy 20 marks.</em></p>",
+"new": "<p><strong>Repair Fortifications</strong></p><p>Target a hex you hold whose primary facility is damaged: it recovers one damage step at once. Does nothing on an intact facility.</p><p><em>Cost: Economy 15 marks.</em></p>"
+},
+{
+"id": "mpx8Kuks7QEtKAWn",
+"key": "repair_rig",
+"kind": "strategic",
+"name": "Repair Rig",
+"old": "<p><strong>Repair Rig</strong></p><p>Pick one of your rigs (the planner targets a rig, not a hex): it recovers one damage step at once. Does nothing on an intact rig.</p><p><em>Cost: Economy 20 marks.</em></p>",
+"new": "<p><strong>Repair Rig</strong></p><p>Pick one of your rigs (the planner targets a rig, not a hex): it recovers one damage step at once. Does nothing on an intact rig.</p><p><em>Cost: Economy 15 marks.</em></p>"
+},
+{
+"id": "GpM8ureaRtqCUdCu",
+"key": "resource_expropriation",
+"kind": "strategic",
+"name": "Resource Expropriation",
+"old": "<p><b>Resource Expropriation</b></p><p>Steal +2 Economy from enemy; Darkness +1.</p><p><b>Cost:</b> Economy 30 · Violence 20 marks</p>",
+"new": "<p><b>Resource Expropriation</b></p><p>Takes up to 20 marks Economy from the target hex's holder into your bank; hex Loyalty −1; your Darkness +1.</p><p><b>Cost:</b> Economy 23 · Violence 15 marks</p>"
+},
+{
+"id": "ou58qxef29SyUrEv",
+"key": "saboteur_s_edge",
+"kind": "maneuver",
+"name": "Saboteur's Edge",
+"old": "<p>Every fortress has the one flaw. Usually it's the bolt nobody tightened. Find that bolt. Be the loose bolt's reckoning.</p><p><b>Ignore one Fortified modifier this turn.</b></p>",
+"new": "<p>Every fortress has the one flaw. Usually it's the bolt nobody tightened. Find that bolt. Be the loose bolt's reckoning.</p><p><b>If the target hex is Fortified, the defender's bonus is cut by 2 this round.</b></p>"
+},
+{
+"id": "kRLx6Uttsrin5H58",
+"key": "sanctum_expansion",
+"kind": "strategic",
+"name": "Sanctum Expansion",
+"old": "<p><b>Sanctum Expansion</b></p><p>Create permanent 'Blessed Ground' in Hex (−1 Darkness regen).</p><p><b>Cost:</b> Faith 30 · Economy 30 marks</p>",
+"new": "<p><b>Sanctum Expansion</b></p><p>Blessed Ground on a hex you hold: −1 Domain Darkness every turn it stands; +10 marks Faith next turn.</p><p><b>Cost:</b> Faith 23 · Economy 23 marks</p>"
+},
+{
+"id": "oLrGyfPUBjAmzbSo",
+"key": "secure_perimeter",
+"kind": "strategic",
+"name": "Secure Perimeter",
+"old": "<p><strong>Secure Perimeter</strong></p><p>Target one hex. At the turn: it gains the Strategic Position tag and Defense +1.</p><p><em>Cost: Logistics 20 · Violence 10 marks.</em></p>",
+"new": "<p><strong>Secure Perimeter</strong></p><p>Target one hex. At the turn: it gains the Strategic Position tag and Defense +1.</p><p><em>Cost: Logistics 15 · Violence 8 marks.</em></p>"
+},
+{
+"id": "ko4pdcL1OtucRHU5",
+"key": "sell_surplus",
+"kind": "strategic",
+"name": "Sell Surplus",
+"old": "<p><b>Sell Surplus</b></p><p>Take half of your stockpile's most plentiful material to market: it sells into its home channel at the surplus price (sell ×1.1); the bank's cap holds back what will not fit.</p><p><b>Cost:</b> Economy 5 marks</p>",
+"new": "<p><b>Sell Surplus</b></p><p>Sell half of the stockpile's most plentiful material at the market for Economy marks — sell price +10%.</p><p><b>Cost:</b> Economy 4 marks</p>"
+},
+{
+"id": "LMOFf1bpADMFeX94",
+"key": "siege_logistics_overhaul",
+"kind": "strategic",
+"name": "Siege Logistics Overhaul",
+"old": "<p><b>Siege Logistics Overhaul</b></p><p>Reduce Siege costs by 25%.</p><p><b>Cost:</b> Economy 30 · Violence 20 marks</p>",
+"new": "<p><b>Siege Logistics Overhaul</b></p><p>Reduce Siege costs by 25%.</p><p><b>Cost:</b> Economy 23 · Violence 15 marks</p>"
+},
+{
+"id": "Z4YMfhs9EiziT3pz",
+"key": "signal_hijack",
+"kind": "maneuver",
+"name": "Signal Hijack",
+"old": "<p>Take over their radio. Order a retreat, order pizza, order pure confusion. Dealer's choice, really.</p><p><b>Enemy communications fail; their Alarm +2.</b></p>",
+"new": "<p>Take over their radio. Order a retreat, order pizza, order pure confusion. Dealer's choice, really.</p><p><b>Enemy communications fail: the opposing side rolls with disadvantage this round; in an Infiltration-Alarm raid the alarm also drops 1.</b></p>"
+},
+{
+"id": "BaPWdZX2QCXnRMSS",
+"key": "smuggling_network",
+"kind": "strategic",
+"name": "Smuggling Network",
+"old": "<p><b>Smuggling Network</b></p><p>Establish 1 Trade Route (+1 Diplomacy regen).</p><p><b>Cost:</b> Intrigue 30 marks</p>",
+"new": "<p><b>Smuggling Network</b></p><p>A trade route from the target hex to a TO hex you hold (the planner asks for it); +10 marks Diplomacy next turn; Darkness +1.</p><p><b>Cost:</b> Intrigue 23 marks</p>"
+},
+{
+"id": "UZLBBX2RxyepzLF8",
+"key": "sortie",
+"kind": "strategic",
+"name": "Sortie",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Sortie</h3><p>Defender sallies out to strike an adjacent attacker supply hex. Severs the 'Supply Line' modifier and shaves 15 marks from the besieger's Buffer. Risk: 1d4 of your own garrison holdings are lost (+2 if the hex is escort-protected). Played by the besieged Domain. Target the attacker's supply-road hex.</p><p><strong>Cost:</strong> Violence 20 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Sortie</h3><p>Defender sallies out to strike an adjacent attacker supply hex. Severs the 'Supply Line' modifier and shaves 15 marks from the besieger's Buffer. Risk: 1d4 of your own garrison holdings are lost (+2 if the hex is escort-protected). Played by the besieged Domain. Target the attacker's supply-road hex.</p><p><strong>Cost:</strong> Violence 15 marks</p></div>"
+},
+{
+"id": "5KRH4alWwnCAkPSA",
+"key": "spy_insertion",
+"kind": "strategic",
+"name": "Spy Insertion",
+"old": "<p><b>Spy Insertion</b></p><p>Reveal enemy marks banks next turn.</p><p><b>Cost:</b> Intrigue 20 · Diplomacy 10 marks</p>",
+"new": "<p><b>Spy Insertion</b></p><p>Reveal enemy marks banks next turn.</p><p><b>Cost:</b> Intrigue 15 · Diplomacy 8 marks</p>"
+},
+{
+"id": "6ycYBHtViBNDTXh9",
+"key": "storm_final_assault",
+"kind": "strategic",
+"name": "Storm Final Assault",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Storm Final Assault</h3><p>Throw everything at the walls: the next Breach Scene's maneuver budget is doubled, and the Buffer drops 30 marks regardless of outcome. Lights the Convene pip. Target the besieged hex.</p><p><strong>Cost:</strong> Violence 40 · Logistics 20 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Storm Final Assault</h3><p>Throw everything at the walls: the next Breach Scene's maneuver budget is doubled, and the Buffer drops 30 marks regardless of outcome. Lights the Convene pip. Target the besieged hex.</p><p><strong>Cost:</strong> Violence 30 · Logistics 15 marks</p></div>"
+},
+{
+"id": "Ac2Xhsfs7APvBC10",
+"key": "sue_for_terms",
+"kind": "strategic",
+"name": "Sue for Terms",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Sue for Terms</h3><p>Defender offers a negotiated surrender. The attacker may accept (won_sack) or refuse at next resolution (siege.resolveTerms). Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 20 · Soft Power 15 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Sue for Terms</h3><p>Defender offers a negotiated surrender. The attacker may accept (won_sack) or refuse at next resolution (siege.resolveTerms). Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 15 · Soft Power 11 marks</p></div>"
+},
+{
+"id": "wLVQIbQkikiaSr4g",
+"key": "supply_cache",
+"kind": "strategic",
+"name": "Supply Cache",
+"old": "<p><strong>Supply Cache</strong></p><p>Target one hex you hold. At the turn: it gains the Supply Cache tag (which carries its own logistics capacity) and Defense +1.</p><p><em>Cost: Logistics 20 · Economy 10 marks.</em></p>",
+"new": "<p><strong>Supply Cache</strong></p><p>Target one hex you hold. At the turn: it gains the Supply Cache tag (which carries its own logistics capacity) and Defense +1.</p><p><em>Cost: Logistics 15 · Economy 8 marks.</em></p>"
+},
+{
+"id": "el7woSJ4jnJfrxyo",
+"key": "supply_depot",
+"kind": "strategic",
+"name": "Supply Depot",
+"old": "<p><strong>Supply Depot</strong></p><p>Target one hex you hold. At the turn: it gains the Logistics Hub tag and Defense +1.</p><p><em>Cost: Logistics 30 · Economy 20 marks.</em></p>",
+"new": "<p><strong>Supply Depot</strong></p><p>Target one hex you hold. At the turn: it gains the Logistics Hub tag and Defense +1.</p><p><em>Cost: Logistics 23 · Economy 15 marks.</em></p>"
+},
+{
+"id": "1OfKlN7D0qj35nvQ",
+"key": "supply_surge",
+"kind": "maneuver",
+"name": "Supply Surge",
+"old": "<p>A supply wagon rolls up at exactly the right moment. I did not arrange that. ...mostly. Onwards.</p><p><b>Gain a small tactical supply edge this round (GM adjudicates).</b></p>",
+"new": "<p>A supply wagon rolls up at exactly the right moment. I did not arrange that. ...mostly. Onwards.</p><p><b>Retired — duplicate of Logistical Surge. (+1 to the roll if already selected.)</b></p>"
+},
+{
+"id": "engiJTCo26z3g6uw",
+"key": "terraforming_project",
+"kind": "strategic",
+"name": "Terraforming Project",
+"old": "<p><b>Terraforming Project</b></p><p>Cleanse 1 Corrupted Hex.</p><p><b>Cost:</b> Economy 40 · Faith 40 marks</p>",
+"new": "<p><b>Terraforming Project</b></p><p>Cleanses a hex you hold: Contaminated / Radiation Zone / Damaged Infrastructure / Hostile Population removed, darkness pips 0, Purified, a corrupted spark repaired.</p><p><b>Cost:</b> Economy 30 · Faith 30 marks</p>"
+},
+{
+"id": "egzZeG8se0srgo5Y",
+"key": "terrain_calibration",
+"kind": "strategic",
+"name": "Terrain Calibration",
+"old": "<p><b>Terrain Calibration</b></p><p>Calibrate local terrain geometry; improve route certainty and reduce surprises (GM adjudicates).</p><p><b>Cost:</b> Logistics 10 marks</p>",
+"new": "<p><b>Terrain Calibration</b></p><p>Calibrate local terrain geometry; improve route certainty and reduce surprises (GM adjudicates).</p><p><b>Cost:</b> Logistics 8 marks</p>"
+},
+{
+"id": "dfP54fzRtwJPSQFn",
+"key": "the_final_weave",
+"kind": "strategic",
+"name": "The Final Weave",
+"old": "<p><b>The Final Weave</b></p><p>Merge five purified Sparks into Final Ritual.</p><p><b>Cost:</b> Faith 10 · Soft Power 10 marks</p>",
+"new": "<p><b>The Final Weave</b></p><p>Merge five purified Sparks into Final Ritual.</p><p><b>Cost:</b> Faith 75 · Soft Power 75 marks</p>"
+},
+{
+"id": "GEv7wCEx2FMVjsFt",
+"key": "total_mobilization",
+"kind": "maneuver",
+"name": "Total Mobilization",
+"old": "<p>Everybody in. Every hand, every cart, every reserve you swore you'd keep back. The whole Domain leans on the door at once.</p><p><b>+1 to all friendly rolls this round; friendly tokens gain +1 square movement for 1 round.</b></p>",
+"new": "<p>Everybody in. Every hand, every cart, every reserve you swore you'd keep back. The whole Domain leans on the door at once.</p><p><b>Everyone in: +1 to all friendly rolls this round; friendly tokens gain +5 ft movement for 1 round.</b></p>"
+},
+{
+"id": "K490u6h3YJi0HJ9d",
+"key": "training_drills",
+"kind": "strategic",
+"name": "Training Drills",
+"old": "<p><b>Training Drills</b></p><p>Increase Violence cap +1 for 2 turns.</p><p><b>Cost:</b> Violence 30 · Nonlethal 20 marks</p>",
+"new": "<p><b>Training Drills</b></p><p>Violence cap +10 marks for 2 turns.</p><p><b>Cost:</b> Violence 23 marks</p>"
+},
+{
+"id": "Y70eyXfpvsTqc8RZ",
+"key": "training_parade",
+"kind": "strategic",
+"name": "Training Parade",
+"old": "<p><b>Training Parade</b></p><p>+1 Loyalty for next Raid.</p><p><b>Cost:</b> Soft Power 10 · Violence 10 marks</p>",
+"new": "<p><b>Training Parade</b></p><p>Retired (2026-10-28) — its +1 raid Morale went with Morale.</p><p><b>Cost:</b> Soft Power 8 · Violence 8 marks</p>"
+},
+{
+"id": "HlPV5qSfD1wkdktk",
+"key": "trojan_horse",
+"kind": "strategic",
+"name": "Trojan Horse",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Trojan Horse</h3><p>A T4 Intrigue gambit: a 3-roll gate (sneak/sabotage/breach) that can end a siege from within. Sinon Mode sacrifices a Champion for a force multiplier.</p><p><strong>Cost:</strong> Intrigue 40 · Diplomacy 20 · Soft Power 20 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Trojan Horse</h3><p>A T4 Intrigue gambit: a 3-roll gate (sneak/sabotage/breach) that can end a siege from within. Sinon Mode sacrifices a Champion for a force multiplier.</p><p><strong>Cost:</strong> Intrigue 30 · Diplomacy 15 · Soft Power 15 marks</p></div>"
+},
+{
+"id": "zqwQlp6JztGcOzzo",
+"key": "unity_surge",
+"kind": "maneuver",
+"name": "Accord Surge",
+"old": "<p>Everyone pulls the exact same direction for ONE round and, frankly, it's a little terrifying what y'all can do together.</p><p><b>All allies gain +2 to every roll next round.</b></p>",
+"new": "<p>Everyone pulls the exact same direction for ONE round and, frankly, it's a little terrifying what y'all can do together.</p><p><b>Next round your Domain gains +20 marks in every channel of its bank.</b></p>"
+},
+{
+"id": "MFE1RqDUmGiftSSX",
+"key": "upgrade_outpost_settlement",
+"kind": "strategic",
+"name": "Upgrade Outpost to Settlement",
+"old": "<p><b>Upgrade Outpost → Settlement</b></p><p>Invest heavily to turn an outpost into a village-scale settlement.</p><p><b>Cost:</b> Economy 20 · Logistics 10 marks</p>",
+"new": "<p><b>Upgrade Outpost → Settlement</b></p><p>Invest heavily to turn an outpost into a village-scale settlement.</p><p><b>Cost:</b> Economy 23 · Soft Power 15 · Logistics 15 marks</p>"
+},
+{
+"id": "clHsFeGizC7CuUrK",
+"key": "world_reformation_council",
+"kind": "strategic",
+"name": "World Reformation Council",
+"old": "<p><b>World Reformation Council</b></p><p>Permanently raise global Empathy Meter +2.</p><p><b>Cost:</b> Diplomacy 80 · Economy 60 marks</p>",
+"new": "<p><b>World Reformation Council</b></p><p>Your Darkness −2; every other Domain's Darkness −1.</p><p><b>Cost:</b> Diplomacy 60 · Economy 45 marks</p>"
+},
+{
+"id": "1Os1C2JYyga5zZ34",
+"key": "optact_administrative_optimization",
+"kind": "strategic",
+"name": "Administrative Optimization",
+"old": "<p><strong>Administrative Optimization</strong></p><p>The Emperor (Administrator). Domain-wide: marks income ×1.05 this turn.</p><p><em>Cost: Economy 10 · Soft Power 10 marks.</em></p>",
+"new": "<p><strong>Administrative Optimization</strong></p><p>The Emperor (Administrator). Domain-wide: marks income ×1.05 this turn.</p><p><em>Cost: Economy 8 · Soft Power 8 marks.</em></p>"
+},
+{
+"id": "INPfQGLpmEvlErgA",
+"key": "optact_arcane_attribution",
+"kind": "strategic",
+"name": "Arcane Attribution",
+"old": "<p><strong>Arcane Attribution</strong></p><p>The Magician (Scholar). Target any hex: it is revealed, a full dossier is whispered to you, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower.</p><p><em>Cost: Intrigue 10 · Soft Power 10 marks.</em></p>",
+"new": "<p><strong>Arcane Attribution</strong></p><p>The Magician (Scholar). Target any hex: it is revealed, a full dossier is whispered to you, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower.</p><p><em>Cost: Intrigue 8 · Soft Power 8 marks.</em></p>"
+},
+{
+"id": "8rbjxAAZwnMIphf7",
+"key": "opt_bureaucratic_override",
+"kind": "maneuver",
+"name": "Bureaucratic Override",
+"old": "<p><strong>Bureaucratic Override</strong></p><p>The Emperor (Administrator), post-commit. Your Domain banks +20 marks Economy next turn.</p><p><em>Cost: Economy 10 marks.</em></p>",
+"new": "<p><strong>Bureaucratic Override</strong></p><p>The Emperor (Administrator), post-commit. Your Domain banks +20 marks Economy next turn.</p><p><em>Cost: Economy 8 marks.</em></p>"
+},
+{
+"id": "JhLIRA4BMxyjhWlG",
+"key": "optact_deep_cover_network",
+"kind": "strategic",
+"name": "Deep Cover Network",
+"old": "<p><strong>Deep Cover Network</strong></p><p>Covert Ops Cell. Target a hex held by a rival: an agent goes in, and at the next turn that Domain's marks banks and planned activities are whispered to you.</p><p><em>Cost: Intrigue 20 marks.</em></p>",
+"new": "<p><strong>Deep Cover Network</strong></p><p>Covert Ops Cell. Target a hex held by a rival: an agent goes in, and at the next turn that Domain's marks banks and planned activities are whispered to you.</p><p><em>Cost: Intrigue 15 marks.</em></p>"
+},
+{
+"id": "GUMqYFWoZRDjeA1H",
+"key": "optact_doctrine_force_projection",
+"kind": "strategic",
+"name": "Doctrine Force Projection",
+"old": "<p><strong>Doctrine Force Projection</strong></p><p>Strength (Warlord). Domain-wide: your next Battle or Heist rolls initiative rerolling the lowest die.</p><p><em>Cost: Violence 10 · Logistics 10 marks.</em></p>",
+"new": "<p><strong>Doctrine Force Projection</strong></p><p>Strength (Warlord). Domain-wide: your next Battle or Heist rolls initiative rerolling the lowest die.</p><p><em>Cost: Violence 8 · Logistics 8 marks.</em></p>"
+},
+{
+"id": "cWWwruYMSVgSOwjY",
+"key": "optact_dynastic_resonance",
+"kind": "strategic",
+"name": "Dynastic Resonance",
+"old": "<p><strong>Dynastic Resonance</strong></p><p>The Moon (Ancient Blood). Target a hex held by another Domain: that Domain's standing toward you moves one step warmer on the relations ladder (at war → hostile → unfriendly → neutral → friendly → allied).</p><p><em>Cost: Soft Power 10 · Diplomacy 10 marks.</em></p>",
+"new": "<p><strong>Dynastic Resonance</strong></p><p>The Moon (Ancient Blood). Target a hex held by another Domain: that Domain's standing toward you moves one step warmer on the relations ladder (at war → hostile → unfriendly → neutral → friendly → allied).</p><p><em>Cost: Soft Power 8 · Diplomacy 8 marks.</em></p>"
+},
+{
+"id": "qcNnt8IRyLywNLtk",
+"key": "opt_formal_parley",
+"kind": "maneuver",
+"name": "Formal Parley",
+"old": "<p><strong>Formal Parley</strong></p><p>Diplomatic Envoys, post-commit. On success your Domain's Loyalty +1 and the other side's Loyalty +1; in a Parley Suspicion falls 1.</p><p><em>Cost: Diplomacy 10 marks.</em></p>",
+"new": "<p><strong>Formal Parley</strong></p><p>Diplomatic Envoys, post-commit. On success your Domain's Loyalty +1 and the other side's Loyalty +1; in a Parley Suspicion falls 1.</p><p><em>Cost: Diplomacy 8 marks.</em></p>"
+},
+{
+"id": "dZc8avzClSQg1fmz",
+"key": "optact_guided_ascent",
+"kind": "strategic",
+"name": "Guided Ascent",
+"old": "<p><strong>Guided Ascent</strong></p><p>Kabbalist. Every steward on your Domain's roster washes 1 Darkness.</p><p><em>Cost: Faith 20 marks.</em></p>",
+"new": "<p><strong>Guided Ascent</strong></p><p>Kabbalist. Every steward on your Domain's roster washes 1 Darkness.</p><p><em>Cost: Faith 15 marks.</em></p>"
+},
+{
+"id": "zRoVaLZm3KPLOB0C",
+"key": "opt_inherited_deference",
+"kind": "maneuver",
+"name": "Inherited Deference",
+"old": "<p><strong>Inherited Deference</strong></p><p>The Moon (Ancient Blood), pre-roll. +1 to your roll this round, and any enemy Propaganda maneuver this round is cancelled.</p><p><em>Cost: Soft Power 10 marks.</em></p>",
+"new": "<p><strong>Inherited Deference</strong></p><p>The Moon (Ancient Blood), pre-roll. +1 to your roll this round, and any enemy Propaganda maneuver this round is cancelled.</p><p><em>Cost: Soft Power 8 marks.</em></p>"
+},
+{
+"id": "NABKOynEKLAl9NZv",
+"key": "optact_integration_framework",
+"kind": "strategic",
+"name": "Integration Framework",
+"old": "<p><strong>Integration Framework</strong></p><p>Diplomatic Envoys. Target a hex you hold: its Integration advances one step (max 6).</p><p><em>Cost: Diplomacy 10 · Soft Power 10 marks.</em></p>",
+"new": "<p><strong>Integration Framework</strong></p><p>Diplomatic Envoys. Target a hex you hold: its Integration advances one step (max 6).</p><p><em>Cost: Diplomacy 8 · Soft Power 8 marks.</em></p>"
+},
+{
+"id": "c7yVN241zyCbla14",
+"key": "opt_make_do_and_hold",
+"kind": "maneuver",
+"name": "Make Do And Hold",
+"old": "<p><strong>Make Do And Hold</strong></p><p>Survivors' Militia, pre-roll. The defenders ignore the first Structure loss this round and roll +1.</p><p><em>Cost: Logistics 10 marks.</em></p>",
+"new": "<p><strong>Make Do And Hold</strong></p><p>Survivors' Militia, pre-roll. The defenders ignore the first Structure loss this round and roll +1.</p><p><em>Cost: Logistics 8 marks.</em></p>"
+},
+{
+"id": "zeV5bNPELSNJRP3I",
+"key": "optact_never_scattered",
+"kind": "strategic",
+"name": "Never Scattered",
+"old": "<p><strong>Never Scattered</strong></p><p>Survivors' Militia. Domain-wide: next turn, infiltration (Intrigue) raids against your hexes are refused.</p><p><em>Cost: Logistics 10 marks.</em></p>",
+"new": "<p><strong>Never Scattered</strong></p><p>Survivors' Militia. Domain-wide: next turn, infiltration (Intrigue) raids against your hexes are refused.</p><p><em>Cost: Logistics 8 marks.</em></p>"
+},
+{
+"id": "QKmgocAzwSzt6CUq",
+"key": "optact_operational_cohesion",
+"kind": "strategic",
+"name": "Operational Cohesion",
+"old": "<p><strong>Operational Cohesion</strong></p><p>The Chariot (Squad Leader). Domain-wide: your next Battle or Heist gets one free maneuver.</p><p><em>Cost: Violence 10 · Logistics 10 marks.</em></p>",
+"new": "<p><strong>Operational Cohesion</strong></p><p>The Chariot (Squad Leader). Domain-wide: your next Battle or Heist gets one free maneuver.</p><p><em>Cost: Violence 8 · Logistics 8 marks.</em></p>"
+},
+{
+"id": "hH5aM95eP4vT4PNC",
+"key": "optact_philosophic_exchange",
+"kind": "strategic",
+"name": "Philosophic Exchange",
+"old": "<p><strong>Philosophic Exchange</strong></p><p>Alchemist. Domain-wide: Loyalty (Empathy) +1 now and +10 marks Culture next turn.</p><p><em>Cost: Culture 10 · Faith 10 marks.</em></p>",
+"new": "<p><strong>Philosophic Exchange</strong></p><p>Alchemist: +10 marks Culture next turn.</p><p><em>Cost: Culture 8 · Faith 8 marks.</em></p>"
+},
+{
+"id": "GNjmoEDW9KgZbKGK",
+"key": "opt_prepared_insight",
+"kind": "maneuver",
+"name": "Prepared Insight",
+"old": "<p><strong>Prepared Insight</strong></p><p>The Magician (Scholar), pre-roll. The opposing side rolls rolling 3d10 and keeping the lowest 2 this round.</p><p><em>Cost: Intrigue 10 marks.</em></p>",
+"new": "<p><strong>Prepared Insight</strong></p><p>The Magician (Scholar), pre-roll. The opposing side rolls rolling 3d10 and keeping the lowest 2 this round.</p><p><em>Cost: Intrigue 8 marks.</em></p>"
+},
+{
+"id": "WzzpvmKVympNbWsI",
+"key": "opt_rapid_transmutation",
+"kind": "maneuver",
+"name": "Rapid Transmutation",
+"old": "<p><strong>Rapid Transmutation</strong></p><p>Alchemist, post-commit. The 10 marks Economy you spend become 20 marks Faith.</p><p><em>Cost: Economy 10 marks.</em></p>",
+"new": "<p><strong>Rapid Transmutation</strong></p><p>Alchemist, post-commit. The 10 marks Economy you spend become 20 marks Faith.</p><p><em>Cost: Economy 8 marks.</em></p>"
+},
+{
+"id": "OYS3jgSuQAQcr5Dq",
+"key": "optact_ritual_binding",
+"kind": "strategic",
+"name": "Ritual Binding",
+"old": "<p><strong>Ritual Binding</strong></p><p>Goetic Summoner. Target a hex with a dormant spark seated on it: the spark is integrated (a Lamp for the Threshold) and your Reach is debited. Needs a GM seat.</p><p><em>Cost: Intrigue 20 · Faith 10 marks.</em></p>",
+"new": "<p><strong>Ritual Binding</strong></p><p>Goetic Summoner. Target a hex with a dormant spark seated on it: the spark is integrated (a Lamp for the Threshold) and your Reach is debited. Needs a GM seat.</p><p><em>Cost: Intrigue 15 · Faith 8 marks.</em></p>"
+},
+{
+"id": "r545xleRHayUtiMS",
+"key": "opt_shock_command",
+"kind": "maneuver",
+"name": "Shock Command",
+"old": "<p><strong>Shock Command</strong></p><p>Strength (Warlord), pre-roll. +2 to the attacker's roll this round.</p><p><em>Cost: Violence 10 marks.</em></p>",
+"new": "<p><strong>Shock Command</strong></p><p>Strength (Warlord), pre-roll. +2 to the attacker's roll this round.</p><p><em>Cost: Violence 8 marks.</em></p>"
+},
+{
+"id": "iNLybbJVsEZhMjKj",
+"key": "opt_sight_of_the_tree",
+"kind": "maneuver",
+"name": "Sight Of The Tree",
+"old": "<p><strong>Sight Of The Tree</strong></p><p>Kabbalist, pre-roll. Reroll the lowest die on the attacker's roll this round; on success your Domain's Darkness −1.</p><p><em>Cost: Faith 10 marks.</em></p>",
+"new": "<p><strong>Sight Of The Tree</strong></p><p>Kabbalist, pre-roll. Reroll the lowest die on the attacker's roll this round; on success your Domain's Darkness −1.</p><p><em>Cost: Faith 8 marks.</em></p>"
+},
+{
+"id": "SPFKik3qZeACooh4",
+"key": "optact_silent_brotherhood",
+"kind": "strategic",
+"name": "Silent Brotherhood",
+"old": "<p><strong>Silent Brotherhood</strong></p><p>Rosicrucian. Target a hex held by a rival: their marks bank, their standing toward you and what they have planned this turn are whispered to you at once.</p><p><em>Cost: Intrigue 10 · Soft Power 10 marks.</em></p>",
+"new": "<p><strong>Silent Brotherhood</strong></p><p>Rosicrucian. Target a hex held by a rival: their marks bank, their standing toward you and what they have planned this turn are whispered to you at once.</p><p><em>Cost: Intrigue 8 · Soft Power 8 marks.</em></p>"
+},
+{
+"id": "9SQxxdO8U2xLwBpL",
+"key": "opt_silent_entry",
+"kind": "maneuver",
+"name": "Silent Entry",
+"old": "<p><strong>Silent Entry</strong></p><p>Covert Ops Cell, pre-roll. +1 to your roll this round; in a Heist the Alarm also drops 1.</p><p><em>Cost: Intrigue 10 marks.</em></p>",
+"new": "<p><strong>Silent Entry</strong></p><p>Covert Ops Cell, pre-roll. +1 to your roll this round; in a Heist the Alarm also drops 1.</p><p><em>Cost: Intrigue 8 marks.</em></p>"
+},
+{
+"id": "11uyVSLDV5jKFgh2",
+"key": "optact_thread_the_spread",
+"kind": "strategic",
+"name": "Thread The Spread",
+"old": "<p><strong>Thread The Spread</strong></p><p>Tarot Mage. Target a hex: one fogged hex adjacent to it is revealed, and every neighbour's alignment and holder is whispered to your Domain.</p><p><em>Cost: Intrigue 10 marks.</em></p>",
+"new": "<p><strong>Thread The Spread</strong></p><p>Tarot Mage. Target a hex: one fogged hex adjacent to it is revealed, and every neighbour's alignment and holder is whispered to your Domain.</p><p><em>Cost: Intrigue 8 marks.</em></p>"
+},
+{
+"id": "nxt3vVVz8wZVUzRW",
+"key": "opt_turn_the_card",
+"kind": "maneuver",
+"name": "Turn The Card",
+"old": "<p><strong>Turn The Card</strong></p><p>Tarot Mage, pre-roll. Reroll the lowest die on your roll this round.</p><p><em>Cost: Intrigue 10 marks.</em></p>",
+"new": "<p><strong>Turn The Card</strong></p><p>Tarot Mage, pre-roll. Reroll the lowest die on your roll this round.</p><p><em>Cost: Intrigue 8 marks.</em></p>"
+},
+{
+"id": "ZxsbbZzoIKKj1MXa",
+"key": "opt_veiled_access",
+"kind": "maneuver",
+"name": "Veiled Access",
+"old": "<p><strong>Veiled Access</strong></p><p>Rosicrucian, pre-roll. +1 to your roll; in a Heist progress +1, in a Parley you draw one Secret.</p><p><em>Cost: Intrigue 10 marks.</em></p>",
+"new": "<p><strong>Veiled Access</strong></p><p>Rosicrucian, pre-roll. +1 to your roll; in a Heist progress +1, in a Parley you draw one Secret.</p><p><em>Cost: Intrigue 8 marks.</em></p>"
+}
+],
+"bad-eden-5e.doctrines": [
+{
+"key": "unity_surge",
+"kind": "maneuver",
+"name": "Accord Surge",
+"old": "<p>Everyone pulls the exact same direction for ONE round and, frankly, it's a little terrifying what y'all can do together.</p><p><b>All allies gain +2 to every roll next round.</b></p>",
+"new": "<p>Everyone pulls the exact same direction for ONE round and, frankly, it's a little terrifying what y'all can do together.</p><p><b>Next round your Domain gains +20 marks in every channel of its bank.</b></p>",
+"rfiHash": "1f8d3c5cbc08"
+},
+{
+"key": "optact_administrative_optimization",
+"kind": "strategic",
+"name": "Administrative Optimization",
+"old": "<p><strong>Administrative Optimization</strong></p><p>The Emperor (Administrator). Domain-wide: marks income ×1.05 this turn.</p><p><em>Cost: Economy 10 · Soft Power 10 marks.</em></p>",
+"new": "<p><strong>Administrative Optimization</strong></p><p>The Emperor (Administrator). Domain-wide: marks income ×1.05 this turn.</p><p><em>Cost: Economy 8 · Soft Power 8 marks.</em></p>",
+"rfiHash": "21a861917cd8"
+},
+{
+"key": "alignment_shift",
+"kind": "strategic",
+"name": "Alignment Shift",
+"old": "<p><strong>Alignment Shift (Sephirot)</strong></p><p>Consecrate a hex you hold to the Tree. At the turn it gains Sanctified and Pilgrimage Site, Loyalty +1 and Loyalty +1; your Domain banks +10 marks Faith next turn.</p><p><em>Cost: Faith 30 · Culture 20 · Soft Power 20 marks.</em></p>",
+"new": "<p><strong>Alignment Shift (Sephirot)</strong></p><p>Consecrate a hex you hold to the Tree. At the turn it gains Sanctified and Pilgrimage Site, Loyalty +1 and Loyalty +1; your Domain banks +10 marks Faith next turn.</p><p><em>Cost: Faith 23 · Culture 15 · Soft Power 15 marks.</em></p>",
+"rfiHash": "00a716d37493"
+},
+{
+"key": "alliance_summit",
+"kind": "strategic",
+"name": "Alliance Summit",
+"old": "<p><b>Alliance Summit</b></p><p>Sit down with a mutual ally (target one of their hexes): both Domains' marks income ×1.15 next turn.</p><p><b>Cost:</b> Diplomacy 30 · Soft Power 30 marks</p>",
+"new": "<p><b>Alliance Summit</b></p><p>Sit down with a mutual ally (target one of their hexes): both Domains' marks income ×1.15 next turn.</p><p><b>Cost:</b> Diplomacy 23 · Soft Power 23 marks</p>",
+"rfiHash": "63c2c025e41a"
+},
+{
+"key": "apocalyptic_weapon_test",
+"kind": "strategic",
+"name": "Apocalyptic Weapon Test",
+"old": "<p><b>Apocalyptic Weapon Test</b></p><p>Destroy enemy Hex; Darkness +3.</p><p><b>Cost:</b> Strength 80 · Dexterity 40 marks</p>",
+"new": "<p><b>Apocalyptic Weapon Test</b></p><p>The target hex is blasted: Contaminated + Radiation Zone, darkness pips +3, Loyalty −3, integration reset, contested. Your Darkness +3, its holder's +1, your stewards +1 each.</p><p><b>Cost:</b> Strength 60 · Dexterity 30 marks</p>",
+"rfiHash": "ed85535ebc0f"
+},
+{
+"key": "optact_arcane_attribution",
+"kind": "strategic",
+"name": "Arcane Attribution",
+"old": "<p><strong>Arcane Attribution</strong></p><p>The Magician (Scholar). Target any hex: it is revealed, a full dossier is whispered to you, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower.</p><p><em>Cost: Dexterity 10 · Soft Power 10 marks.</em></p>",
+"new": "<p><strong>Arcane Attribution</strong></p><p>The Magician (Scholar). Target any hex: it is revealed, a full dossier is whispered to you, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower.</p><p><em>Cost: Dexterity 8 · Soft Power 8 marks.</em></p>",
+"rfiHash": "74a2d8098086"
+},
+{
+"key": "auto_recon_sweep",
+"kind": "strategic",
+"name": "Auto-Recon Sweep",
+"old": "<p><b>Auto-Recon Sweep</b></p><p>Deploy drones/recorders to sweep nearby territory; gain intel and reduce risk on the next leg/turn (GM adjudicates).</p><p><b>Cost:</b> Dexterity 10 marks</p>",
+"new": "<p><b>Auto-Recon Sweep</b></p><p>Deploy drones/recorders to sweep nearby territory; gain intel and reduce risk on the next leg/turn (GM adjudicates).</p><p><b>Cost:</b> Dexterity 8 marks</p>",
+"rfiHash": "c4674f8f0d90"
+},
+{
+"key": "begin_siege",
+"kind": "strategic",
+"name": "Begin Siege",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Begin Siege</h3><p>Establish a multi-turn siege on a target hex. Layers are drawn from the hex's structureActorIds (or GM override at planning time). Commits an OP-denominated Supply Buffer that ticks down per turn from the derived Siege Cost (terrain + supply-chain length + harassment, less Bulwark discount). Resolves over multiple campaign turns until a layer is breached, defender surrenders, attacker withdraws, or Buffer is exhausted. See bbttcc-raid/SIEGE_RAID_TYPE_SPEC.md.</p><p><strong>Cost:</strong> Strength 30 · Logistics 20 · Economy 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Begin Siege</h3><p>Establish a multi-turn siege on a target hex. Layers are drawn from the hex's structureActorIds (or GM override at planning time). Commits a Supply Buffer in marks that ticks down per turn from the derived Siege Cost (terrain + supply-chain length + harassment, less Bulwark discount). Resolves over multiple campaign turns until a layer is breached, defender surrenders, attacker withdraws, or Buffer is exhausted. See bbttcc-raid/SIEGE_RAID_TYPE_SPEC.md.</p><p><strong>Cost:</strong> Strength 23 · Logistics 15 · Economy 8 marks</p></div>",
+"rfiHash": "844230c729c4"
+},
+{
+"key": "border_patrol",
+"kind": "strategic",
+"name": "Border Patrol",
+"old": "<p><b>Border Patrol</b></p><p>Prevent Infiltration attempts next turn.</p><p><b>Cost:</b> Strength 10 · Nonlethal 10 marks</p>",
+"new": "<p><b>Border Patrol</b></p><p>Patrols on the roads — Domain Loyalty +2.</p><p><b>Cost:</b> Strength 8 · Nonlethal 8 marks</p>",
+"rfiHash": "6d96e0fafde8"
+},
+{
+"key": "build_bridge",
+"kind": "strategic",
+"name": "Build Bridge",
+"old": "<p><b>Build Bridge</b></p><p>Bridge an open-water hex you can reach — a river, a lake, a strait: free crossing for you and your allies, a 5-mark toll for the neutral, closed to the hostile. A cut bridge is rebuilt here. Cannot be planned on a hex held by a Domain hostile to you.</p><p><b>Cost:</b> Economy 20 · Logistics 14 marks</p>",
+"new": "<p><b>Build Bridge</b></p><p>Bridge an open-water hex you can reach — a river, a lake, a strait: free crossing for you and your allies, a 5-mark toll for the neutral, closed to the hostile. A cut bridge is rebuilt here. Cannot be planned on a hex held by a Domain hostile to you.</p><p><b>Cost:</b> Economy 15 · Logistics 11 marks</p>",
+"rfiHash": "37dc81ef066f"
+},
+{
+"key": "opt_bureaucratic_override",
+"kind": "maneuver",
+"name": "Bureaucratic Override",
+"old": "<p><strong>Bureaucratic Override</strong></p><p>The Emperor (Administrator), post-commit. Your Domain banks +20 marks Economy next turn.</p><p><em>Cost: Economy 10 marks.</em></p>",
+"new": "<p><strong>Bureaucratic Override</strong></p><p>The Emperor (Administrator), post-commit. Your Domain banks +20 marks Economy next turn.</p><p><em>Cost: Economy 8 marks.</em></p>",
+"rfiHash": "7362b58ab5f2"
+},
+{
+"key": "call_relief",
+"kind": "strategic",
+"name": "Call Relief",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Call Relief</h3><p>Summon an allied relief force. Pushes a wave onto the siege that arrives in 2 turns; on arrival the GM convenes the Relief Scene (Phase E.3). Requires a willing ally. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 20 · Soft Power 20 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Call Relief</h3><p>Summon an allied relief force. Pushes a wave onto the siege that arrives in 2 turns; on arrival the GM convenes the Relief Scene (Phase E.3). Requires a willing ally. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 15 · Soft Power 15 marks</p></div>",
+"rfiHash": "ff91ac415e6e"
+},
+{
+"key": "champion_defends_wall",
+"kind": "strategic",
+"name": "Champion Defends Wall",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Defends Wall</h3><p>A named defender Champion takes the wall: locked Active for 2 turns and +1 Anytime budget. Optional note {\"championId\":\"...\"} picks the champion; otherwise the first eligible. Target the besieged hex.</p><p><strong>Cost:</strong> Strength 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Defends Wall</h3><p>A named defender Champion takes the wall: locked Active for 2 turns and +1 Anytime budget. Optional note {\"championId\":\"...\"} picks the champion; otherwise the first eligible. Target the besieged hex.</p><p><strong>Cost:</strong> Strength 8 marks</p></div>",
+"rfiHash": "6a1b6a072811"
+},
+{
+"key": "champion_returns",
+"kind": "strategic",
+"name": "Champion Returns",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Returns</h3><p>Coax an Absent attacker Champion back to the line (status Active). Optional note {\"championId\":\"...\"}; otherwise the first absent. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 20 · Soft Power 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Returns</h3><p>Coax an Absent attacker Champion back to the line (status Active). Optional note {\"championId\":\"...\"}; otherwise the first absent. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 15 · Soft Power 8 marks</p></div>",
+"rfiHash": "d878d2dd230d"
+},
+{
+"key": "champion_withdraws",
+"kind": "strategic",
+"name": "Champion Withdraws",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Withdraws</h3><p>A named attacker Champion withdraws from the siege (status Absent) — the Achilles-in-his-tent lever. Optional note {\"championId\":\"...\"}; otherwise the first active. Target the besieged hex.</p><p><strong>Cost:</strong> Soft Power 15 · Diplomacy 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Withdraws</h3><p>A named attacker Champion withdraws from the siege (status Absent) — the Achilles-in-his-tent lever. Optional note {\"championId\":\"...\"}; otherwise the first active. Target the besieged hex.</p><p><strong>Cost:</strong> Soft Power 11 · Diplomacy 8 marks</p></div>",
+"rfiHash": "c0cee1651b35"
+},
+{
+"key": "charity_drive",
+"kind": "strategic",
+"name": "Charity Drive",
+"old": "<p><b>Charity Drive</b></p><p>Reduce regional Darkness −1.</p><p><b>Cost:</b> Faith 10 · Soft Power 10 marks</p>",
+"new": "<p><b>Charity Drive</b></p><p>Reduce regional Darkness −1.</p><p><b>Cost:</b> Faith 8 · Soft Power 8 marks</p>",
+"rfiHash": "66cb97ccecd9"
+},
+{
+"key": "charter_passage",
+"kind": "strategic",
+"name": "Charter Passage",
+"old": "<p><b>Charter Passage</b></p><p>Charter another Domain's boats, flyers or subs (they must rate you neutral or better; pick their rig): it carries your people through those domains for 3 turns, and the carrier pockets 8 marks Economy.</p><p><b>Cost:</b> Diplomacy 20 · Economy 10 marks</p>",
+"new": "<p><b>Charter Passage</b></p><p>Charter another Domain's boats, flyers or subs (they must rate you neutral or better; pick their rig): it carries your people through those domains for 3 turns, and the carrier pockets 8 marks Economy.</p><p><b>Cost:</b> Diplomacy 15 · Economy 8 marks</p>",
+"rfiHash": "74d94bfecdeb"
+},
+{
+"key": "civic_audit",
+"kind": "strategic",
+"name": "Civic Audit",
+"old": "<p><b>Civic Audit</b></p><p>Detect corruption; restore Loyalty +1.</p><p><b>Cost:</b> Dexterity 10 · Economy 10 marks</p>",
+"new": "<p><b>Civic Audit</b></p><p>Detect corruption; restore Loyalty +1.</p><p><b>Cost:</b> Dexterity 8 · Economy 8 marks</p>",
+"rfiHash": "de96b9e67b0e"
+},
+{
+"key": "counter_interdict",
+"kind": "strategic",
+"name": "Counter-Interdict",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Counter-Interdict</h3><p>Clear an enemy interdiction from one of your siege's supply-path hexes. Restores the stripped 'Supply Line' modifier and lowers this turn's harassment. Played by the besieger or a supporter. Target the interdicted supply-road hex.</p><p><strong>Cost:</strong> Strength 10 · Dexterity 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Counter-Interdict</h3><p>Clear an enemy interdiction from one of your siege's supply-path hexes. Restores the stripped 'Supply Line' modifier and lowers this turn's harassment. Played by the besieger or a supporter. Target the interdicted supply-road hex.</p><p><strong>Cost:</strong> Strength 8 · Dexterity 8 marks</p></div>",
+"rfiHash": "22212f0efe6f"
+},
+{
+"key": "crisis_summit",
+"kind": "strategic",
+"name": "Crisis Summit",
+"old": "<p><b>Crisis Summit</b></p><p>Convene every Domain for a turn of cooler heads: a GM note goes to every war log that no hostile offer should land on anyone for 1 turn. A note, not a veto — the story still offers every fight.</p><p><b>Cost:</b> Diplomacy 30 · Faith 20 marks</p>",
+"new": "<p><b>Crisis Summit</b></p><p>Convene every Domain for a turn of cooler heads: a GM note goes to every war log that no hostile offer should land on anyone for 1 turn. A note, not a veto — the story still offers every fight.</p><p><b>Cost:</b> Diplomacy 23 · Faith 15 marks</p>",
+"rfiHash": "6bc8c737b1a3"
+},
+{
+"key": "crown_of_mercy",
+"kind": "maneuver",
+"name": "Crown of Mercy",
+"old": "<p>A scattered piece of the light, called home from the dark. ...I do NOT get choked up. I'm a janky interface. Anyway.</p><p><b>Instantly purify a Corrupted Spark (requires a Victory context).</b></p>",
+"new": "<p>A scattered piece of the light, called home from the dark. ...I do NOT get choked up. I'm a janky interface. Anyway.</p><p><b>On success the corrupted Spark seated on the target hex is repaired — or, if it has none, one corrupted spark carried by your Domain is purified (applied at commit).</b></p>",
+"rfiHash": "152c38e98dee"
+},
+{
+"key": "cultural_exchange",
+"kind": "strategic",
+"name": "Cultural Exchange",
+"old": "<p><b>Cultural Exchange</b></p><p>Share Alignment bonus between Hexes.</p><p><b>Cost:</b> Diplomacy 20 · Soft Power 20 marks</p>",
+"new": "<p><b>Cultural Exchange</b></p><p>Share Alignment bonus between Hexes.</p><p><b>Cost:</b> Diplomacy 15 · Soft Power 15 marks</p>",
+"rfiHash": "c66deb33ec68"
+},
+{
+"key": "cultural_festival_std",
+"kind": "strategic",
+"name": "Cultural Festival",
+"old": "<p><strong>Cultural Festival</strong></p><p>Target a hex you hold. At the turn: it gains the Cultural Festival tag and Loyalty +2.</p><p><em>Cost: Culture 20 · Faith 10 · Soft Power 10 marks.</em></p>",
+"new": "<p><strong>Cultural Festival</strong></p><p>Target a hex you hold. At the turn: it gains the Cultural Festival tag and Loyalty +2.</p><p><em>Cost: Culture 15 · Faith 8 · Soft Power 8 marks.</em></p>",
+"rfiHash": "61c9cc42e6ae"
+},
+{
+"key": "cut_bridge",
+"kind": "strategic",
+"name": "Cut the Bridge",
+"old": "<p><b>Cut the Bridge</b></p><p>Bring down a standing bridge: nobody crosses there until its holder plans Build Bridge again. Cutting your own bridge closes it to everyone, you included.</p><p><b>Cost:</b> Strength 10 · Dexterity 10 marks</p>",
+"new": "<p><b>Cut the Bridge</b></p><p>Bring down a standing bridge: nobody crosses there until its holder plans Build Bridge again. Cutting your own bridge closes it to everyone, you included.</p><p><b>Cost:</b> Strength 8 · Dexterity 8 marks</p>",
+"rfiHash": "4f6009639ed6"
+},
+{
+"key": "dark_harvest",
+"kind": "strategic",
+"name": "Dark Harvest",
+"old": "<p><strong>Dark Harvest</strong></p><p>Convert Darkness to +2 Economy; Loyalty −1.</p><p><strong>Cost:</strong> Economy 40 · Faith 20 marks</p>",
+"new": "<p><strong>Dark Harvest</strong></p><p>Burns 1 Domain Darkness for +20 marks Economy now.</p><p><strong>Cost:</strong> Economy 30 · Faith 15 marks</p>",
+"rfiHash": "789c9a051719"
+},
+{
+"key": "optact_deep_cover_network",
+"kind": "strategic",
+"name": "Deep Cover Network",
+"old": "<p><strong>Deep Cover Network</strong></p><p>Covert Ops Cell. Target a hex held by a rival: an agent goes in, and at the next turn that Domain's marks banks and planned activities are whispered to you.</p><p><em>Cost: Dexterity 20 marks.</em></p>",
+"new": "<p><strong>Deep Cover Network</strong></p><p>Covert Ops Cell. Target a hex held by a rival: an agent goes in, and at the next turn that Domain's marks banks and planned activities are whispered to you.</p><p><em>Cost: Dexterity 15 marks.</em></p>",
+"rfiHash": "2faa89cfc17c"
+},
+{
+"key": "defuse_tensions",
+"kind": "strategic",
+"name": "Defuse Tensions",
+"old": "<p><strong>Defuse Tensions</strong></p><p>Target a restive hex. At the turn: Hostile Population is removed, it gains Loyal Population, Loyalty +2 and Loyalty +2.</p><p><em>Cost: Diplomacy 20 · Soft Power 20 · Culture 10 marks.</em></p>",
+"new": "<p><strong>Defuse Tensions</strong></p><p>Target a restive hex. At the turn: Hostile Population is removed, it gains Loyal Population, Loyalty +2 and Loyalty +2.</p><p><em>Cost: Diplomacy 15 · Soft Power 15 · Culture 8 marks.</em></p>",
+"rfiHash": "2f86c78de5ec"
+},
+{
+"key": "demand_surrender",
+"kind": "strategic",
+"name": "Demand Surrender",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Demand Surrender</h3><p>Attacker issues an ultimatum. The defender responds: yield (won_surrender) · parley (besieger Buffer +10) · refuse (Loyalty −1 on the besieged hex) — via siege.resolveSurrender. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 20 · Strength 10 · Soft Power 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Demand Surrender</h3><p>Attacker issues an ultimatum. The defender responds: yield (won_surrender) · parley (besieger Buffer +10) · refuse (Loyalty −1 on the besieged hex) — via siege.resolveSurrender. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 15 · Strength 8 · Soft Power 8 marks</p></div>",
+"rfiHash": "8bf0be34c7f3"
+},
+{
+"key": "develop_outpost_stability",
+"kind": "strategic",
+"name": "Develop Outpost",
+"old": "<p><b>Develop Outpost (Stability)</b></p><p>Stabilize a young outpost: clear hazards, patrol, and build trust.</p><p><b>Cost:</b> Diplomacy 20 · Economy 10 marks</p>",
+"new": "<p><b>Develop Outpost (Stability)</b></p><p>Stabilize a young outpost: clear hazards, patrol, and build trust.</p><p><b>Cost:</b> Diplomacy 15 · Economy 8 marks</p>",
+"rfiHash": "82c75646a96c"
+},
+{
+"key": "diplomatic_channel",
+"kind": "maneuver",
+"name": "Diplomatic Channel",
+"old": "<p>A sealed envelope, a quiet room, the frankly radical suggestion that maybe nobody bleeds today. Maybe.</p><p><b>Defender may opt into a negotiated outcome (GM adjudicates).</b></p>",
+"new": "<p>A sealed envelope, a quiet room, the frankly radical suggestion that maybe nobody bleeds today. Maybe.</p><p><b>On success: your Domain's Loyalty +1.</b></p>",
+"rfiHash": "f429f89590e5"
+},
+{
+"key": "diplomatic_mission_std",
+"kind": "strategic",
+"name": "Diplomatic Mission",
+"old": "<p><strong>Diplomatic Mission</strong></p><p>Target a hex. At the turn: it gains the Diplomatic Ties tag and Loyalty +1.</p><p><em>Cost: Diplomacy 30 · Soft Power 10 marks.</em></p>",
+"new": "<p><strong>Diplomatic Mission</strong></p><p>Target a hex. At the turn: it gains the Diplomatic Ties tag and Loyalty +1.</p><p><em>Cost: Diplomacy 23 · Soft Power 8 marks.</em></p>",
+"rfiHash": "cc8f1cca69a9"
+},
+{
+"key": "optact_doctrine_force_projection",
+"kind": "strategic",
+"name": "Doctrine Force Projection",
+"old": "<p><strong>Doctrine Force Projection</strong></p><p>Strength (Warlord). Domain-wide: your next Battle or Heist rolls initiative rerolling the lowest die.</p><p><em>Cost: Strength 10 · Logistics 10 marks.</em></p>",
+"new": "<p><strong>Doctrine Force Projection</strong></p><p>Strength (Warlord). Domain-wide: your next Battle or Heist rolls initiative rerolling the lowest die.</p><p><em>Cost: Strength 8 · Logistics 8 marks.</em></p>",
+"rfiHash": "d36b0914c9f4"
+},
+{
+"key": "dragon_s_parley",
+"kind": "strategic",
+"name": "Dragon's Parley",
+"old": "<p><b>Dragon’s Parley</b></p><p>Negotiate with Ego-Dragon fragment; if successful, Darkness −3.</p><p><b>Cost:</b> Diplomacy 80 · Faith 50 marks</p>",
+"new": "<p><b>Dragon’s Parley</b></p><p>A 2d10 check (DC 14, +1 per lit Lamp). Success: Domain Darkness −3 and your stewards wash 1. Failure: Darkness +1 and the Adversary stirs.</p><p><b>Cost:</b> Diplomacy 60 · Faith 38 marks</p>",
+"rfiHash": "4a1d322daf42"
+},
+{
+"key": "optact_dynastic_resonance",
+"kind": "strategic",
+"name": "Dynastic Resonance",
+"old": "<p><strong>Dynastic Resonance</strong></p><p>The Moon (Ancient Blood). Target a hex held by another Domain: that Domain's standing toward you moves one step warmer on the relations ladder (at war → hostile → unfriendly → neutral → friendly → allied).</p><p><em>Cost: Soft Power 10 · Diplomacy 10 marks.</em></p>",
+"new": "<p><strong>Dynastic Resonance</strong></p><p>The Moon (Ancient Blood). Target a hex held by another Domain: that Domain's standing toward you moves one step warmer on the relations ladder (at war → hostile → unfriendly → neutral → friendly → allied).</p><p><em>Cost: Soft Power 8 · Diplomacy 8 marks.</em></p>",
+"rfiHash": "5265253d832b"
+},
+{
+"key": "echo_strike_protocol",
+"kind": "maneuver",
+"name": "Echo Strike Protocol",
+"old": "<p>One swing, two regrets. The blow echoes off the architecture and goes looking for a second name.</p><p><b>Apply the attack effect twice, against different targets.</b></p>",
+"new": "<p>One swing, two regrets. The blow echoes off the architecture and goes looking for a second name.</p><p><b>+2 to the attacker's roll this round; on success, enemy tokens on the bound battle scene take 7 damage.</b></p>",
+"rfiHash": "2076b992fa70"
+},
+{
+"key": "ego_breaker",
+"kind": "maneuver",
+"name": "Ego Breaker",
+"old": "<p>You don't kill the boss. You make them SMALLER. Permanently. That's so much meaner than killing, and I respect it.</p><p><b>Reduce the enemy leader's marks cap by 3, permanently.</b></p>",
+"new": "<p>You don't kill the boss. You make them SMALLER. Permanently. That's so much meaner than killing, and I respect it.</p><p><b>On success the enemy Domain's Strength cap drops 30 marks, permanently (applied at commit).</b></p>",
+"rfiHash": "cd936e011600"
+},
+{
+"key": "ego_dragon_echo",
+"kind": "maneuver",
+"name": "Ego-Dragon Echo",
+"old": "<p>You called the dragon. The dragon is a shard of somebody's worst self, wearing teeth. This was YOUR idea. Remember that part.</p><p><b>Summon an Ego-Dragon fragment: +4 attack, double the Darkness risk.</b></p>",
+"new": "<p>You called the dragon. The dragon is a shard of somebody's worst self, wearing teeth. This was YOUR idea. Remember that part.</p><p><b>+4 to the attacker's roll this round; your Domain's Darkness +2 whatever happens.</b></p>",
+"rfiHash": "b3bb688381c4"
+},
+{
+"key": "empathic_surge",
+"kind": "maneuver",
+"name": "Empathic Surge",
+"old": "<p>Turns out feeling things together is a genuine force multiplier. Who knew. ...Me. I knew.</p><p><b>+10 Soft Power marks after the round; Loyalty +1 on the target hex.</b></p>",
+"new": "<p>Turns out feeling things together is a genuine force multiplier. Who knew. ...Me. I knew.</p><p><b>On success: your Domain's Loyalty +2.</b></p>",
+"rfiHash": "ba30766e11f9"
+},
+{
+"key": "engine_of_absolution",
+"kind": "maneuver",
+"name": "Engine of Absolution",
+"old": "<p>A dead place, quietly told it's allowed to be alive again. The land weeps a little. The good kind, I think.</p><p><b>Restore one destroyed Hex to GenPop status.</b></p>",
+"new": "<p>A dead place, quietly told it's allowed to be alive again. The land weeps a little. The good kind, I think.</p><p><b>On success the target hex is restored: no longer destroyed, Contaminated / Radiation Zone / Damaged Infrastructure / Hostile Population / Devastated / Scorched Earth removed, Well-Maintained, darkness pips 0, Purified (applied at commit).</b></p>",
+"rfiHash": "8d1921751062"
+},
+{
+"key": "enlightenment_congress",
+"kind": "strategic",
+"name": "Enlightenment Congress",
+"old": "<p><b>Enlightenment Congress</b></p><p>Raise Enlightenment for all PCs by 1.</p><p><b>Cost:</b> Faith 50 · Diplomacy 50 marks</p>",
+"new": "<p><b>Enlightenment Congress</b></p><p>Raise Enlightenment for all PCs by 1.</p><p><b>Cost:</b> Faith 38 · Diplomacy 38 marks</p>",
+"rfiHash": "70018913c08b"
+},
+{
+"key": "escort_supply_line",
+"kind": "strategic",
+"name": "Escort Supply Line",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Escort Supply Line</h3><p>Screen your own siege's supply convoy. Adds one escort pip; each pip cancels one enemy interdiction at the next strategic tick and deters defender sorties (escort-protected hexes inflict heavier sortie casualties on the defender). Played by the besieger or a supporter. Target the siege's supply-road hex or the besieged hex.</p><p><strong>Cost:</strong> Strength 10 · Logistics 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Escort Supply Line</h3><p>Screen your own siege's supply convoy. Adds one escort pip; each pip cancels one enemy interdiction at the next strategic tick and deters defender sorties (escort-protected hexes inflict heavier sortie casualties on the defender). Played by the besieger or a supporter. Target the siege's supply-road hex or the besieged hex.</p><p><strong>Cost:</strong> Strength 8 · Logistics 8 marks</p></div>",
+"rfiHash": "e346df3b940e"
+},
+{
+"key": "establish_outpost",
+"kind": "strategic",
+"name": "Establish Outpost",
+"old": "<p><b>Establish Outpost</b></p><p>Plant a flag and found a new outpost in an unclaimed hex.</p><p><b>Cost:</b> Economy 20 · Logistics 10 marks</p>",
+"new": "<p><b>Establish Outpost</b></p><p>Plant a flag and found a new outpost in an unclaimed hex.</p><p><b>Cost:</b> Economy 15 · Logistics 8 marks</p>",
+"rfiHash": "531445998d93"
+},
+{
+"key": "establish_siege_camp",
+"kind": "strategic",
+"name": "Establish Siege Camp",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Siege Camp</h3><p>Stamp the 'Beached Camp' modifier on a target hex (must be owned, neutral, or claimable by the attacker). Hex qualifies as a temporary siege depot for the duration of the attacker's active siege; auto-clears on siege resolution. Used for naval/wilderness sieges where no permanent depot is in range.</p><p><strong>Cost:</strong> Strength 10 · Logistics 20 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Siege Camp</h3><p>Stamp the 'Beached Camp' modifier on a target hex (must be owned, neutral, or claimable by the attacker). Hex qualifies as a temporary siege depot for the duration of the attacker's active siege; auto-clears on siege resolution. Used for naval/wilderness sieges where no permanent depot is in range.</p><p><strong>Cost:</strong> Strength 8 · Logistics 15 marks</p></div>",
+"rfiHash": "54021ec76e81"
+},
+{
+"key": "establish_supply_line",
+"kind": "strategic",
+"name": "Establish Supply Line",
+"old": "<p><strong>Establish Supply Line</strong></p><p>Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Supply Line tag and the route is stored on both; sieges draw on it.</p><p><em>Cost: Logistics 30 · Economy 10 marks.</em></p>",
+"new": "<p><strong>Establish Supply Line</strong></p><p>Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Supply Line tag and the route is stored on both; sieges draw on it.</p><p><em>Cost: Logistics 23 · Economy 8 marks.</em></p>",
+"rfiHash": "9b78f208d796"
+},
+{
+"key": "establish_trade_route",
+"kind": "strategic",
+"name": "Establish Trade Route",
+"old": "<p><strong>Establish Trade Route</strong></p><p>Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Trade Hub tag (+50% trade output) and the route is stored on both hexes.</p><p><em>Cost: Economy 30 · Diplomacy 10 · Logistics 10 marks.</em></p>",
+"new": "<p><strong>Establish Trade Route</strong></p><p>Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Trade Hub tag (+50% trade output) and the route is stored on both hexes.</p><p><em>Cost: Economy 23 · Diplomacy 8 · Logistics 8 marks.</em></p>",
+"rfiHash": "acd11fd2c59c"
+},
+{
+"key": "faultline_tuning",
+"kind": "strategic",
+"name": "Faultline Tuning",
+"old": "<p><b>Faultline Tuning</b></p><p>Tune resonant faultlines and leylines; stabilize a region or reveal hidden pathways (GM adjudicates).</p><p><b>Cost:</b> Faith 10 marks</p>",
+"new": "<p><b>Faultline Tuning</b></p><p>Tune resonant faultlines and leylines; stabilize a region or reveal hidden pathways (GM adjudicates).</p><p><b>Cost:</b> Faith 8 marks</p>",
+"rfiHash": "56968b55a594"
+},
+{
+"key": "flash_bargain",
+"kind": "maneuver",
+"name": "Flash Bargain",
+"old": "<p>A handshake so fast the other guy doesn't clock that his wallet got lighter. Classic frontier diplomacy.</p><p><b>Borrow +10 enemy marks for this round.</b></p>",
+"new": "<p>A handshake so fast the other guy doesn't clock that his wallet got lighter. Classic frontier diplomacy.</p><p><b>+1 to your roll and −1 to the opponent's this round.</b></p>",
+"rfiHash": "41ecd29a5764"
+},
+{
+"key": "opt_formal_parley",
+"kind": "maneuver",
+"name": "Formal Parley",
+"old": "<p><strong>Formal Parley</strong></p><p>Diplomatic Envoys, post-commit. On success your Domain's Loyalty +1 and the other side's Loyalty +1; in a Parley Suspicion falls 1.</p><p><em>Cost: Diplomacy 10 marks.</em></p>",
+"new": "<p><strong>Formal Parley</strong></p><p>Diplomatic Envoys, post-commit. On success your Domain's Loyalty +1 and the other side's Loyalty +1; in a Parley Suspicion falls 1.</p><p><em>Cost: Diplomacy 8 marks.</em></p>",
+"rfiHash": "f01d1248ea03"
+},
+{
+"key": "fortify_hex",
+"kind": "strategic",
+"name": "Fortify Hex",
+"old": "<p><strong>Fortify Hex</strong></p><p>Target one hex. At the turn: it gains the Fortified tag and Defense +2.</p><p><em>Cost: Economy 20 · Logistics 20 · Strength 10 marks.</em></p>",
+"new": "<p><strong>Fortify Hex</strong></p><p>Target one hex. At the turn: it gains the Fortified tag and Defense +2.</p><p><em>Cost: Economy 15 · Logistics 15 · Strength 8 marks.</em></p>",
+"rfiHash": "d4ac5bac5d64"
+},
+{
+"key": "found_site_farm",
+"kind": "strategic",
+"name": "Found Farm",
+"old": "<p><b>Found Farm</b></p><p>Found a new farm site at a developed settlement.</p><p><b>Cost:</b> Economy 20 · Logistics 10 marks</p>",
+"new": "<p><b>Found Farm</b></p><p>Found a new farm site at a developed settlement.</p><p><b>Cost:</b> Economy 15 · Logistics 8 marks</p>",
+"rfiHash": "3ed191f5edfb"
+},
+{
+"key": "found_site_fortress",
+"kind": "strategic",
+"name": "Found Fortress",
+"old": "<p><b>Found Fortress</b></p><p>Found a new fortress site at a developed settlement.</p><p><b>Cost:</b> Strength 20 · Logistics 20 · Economy 10 marks</p>",
+"new": "<p><b>Found Fortress</b></p><p>Found a new fortress site at a developed settlement.</p><p><b>Cost:</b> Strength 15 · Logistics 15 · Economy 8 marks</p>",
+"rfiHash": "a25bb7d223e9"
+},
+{
+"key": "found_site_mine",
+"kind": "strategic",
+"name": "Found Mine",
+"old": "<p><b>Found Mine</b></p><p>Found a new mine site at a developed settlement.</p><p><b>Cost:</b> Economy 30 · Nonlethal 10 · Logistics 10 marks</p>",
+"new": "<p><b>Found Mine</b></p><p>Found a new mine site at a developed settlement.</p><p><b>Cost:</b> Economy 23 · Nonlethal 8 · Logistics 8 marks</p>",
+"rfiHash": "d075683fcdce"
+},
+{
+"key": "found_site_port",
+"kind": "strategic",
+"name": "Found Port",
+"old": "<p><b>Found Port</b></p><p>Found a new port site at a developed settlement.</p><p><b>Cost:</b> Economy 30 · Logistics 10 · Diplomacy 10 marks</p>",
+"new": "<p><b>Found Port</b></p><p>Found a new port site at a developed settlement.</p><p><b>Cost:</b> Economy 23 · Logistics 8 · Diplomacy 8 marks</p>",
+"rfiHash": "17065883f7f2"
+},
+{
+"key": "found_site_research",
+"kind": "strategic",
+"name": "Found Research Site",
+"old": "<p><b>Found Research Site</b></p><p>Found a new research site at a developed settlement.</p><p><b>Cost:</b> Dexterity 20 · Soft Power 20 · Economy 10 marks</p>",
+"new": "<p><b>Found Research Site</b></p><p>Found a new research site at a developed settlement.</p><p><b>Cost:</b> Dexterity 15 · Soft Power 15 · Economy 8 marks</p>",
+"rfiHash": "294014f3d253"
+},
+{
+"key": "found_site_temple",
+"kind": "strategic",
+"name": "Found Temple",
+"old": "<p><b>Found Temple</b></p><p>Found a new temple site at a developed settlement.</p><p><b>Cost:</b> Faith 20 · Soft Power 20 · Culture 10 marks</p>",
+"new": "<p><b>Found Temple</b></p><p>Found a new temple site at a developed settlement.</p><p><b>Cost:</b> Faith 15 · Soft Power 15 · Culture 8 marks</p>",
+"rfiHash": "dceb0842ad83"
+},
+{
+"key": "gather_intel",
+"kind": "strategic",
+"name": "Gather Intel",
+"old": "<p><strong>Gather Intel</strong></p><p>Target any hex. It is revealed now, a dossier (holder, defense, loyalty, integration, modifiers, alignment) is whispered to your Domain, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower.</p><p><em>Cost: Dexterity 20 marks.</em></p>",
+"new": "<p><strong>Gather Intel</strong></p><p>Target any hex. It is revealed now, a dossier (holder, defense, loyalty, integration, modifiers, alignment) is whispered to your Domain, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower.</p><p><em>Cost: Dexterity 15 marks.</em></p>",
+"rfiHash": "1135f89ae314"
+},
+{
+"key": "ghost_slip_infiltration",
+"kind": "maneuver",
+"name": "Ghost-Slip Infiltration",
+"old": "<p>Be where the wall isn't. Be quiet about it now. Be smug about it later, with me, over a drink.</p><p><b>Ignore one defensive circumstance this round (GM adjudicates).</b></p>",
+"new": "<p>Be where the wall isn't. Be quiet about it now. Be smug about it later, with me, over a drink.</p><p><b>+2 to the attacker's roll this round; in an Infiltration-Alarm raid the alarm also drops 1.</b></p>",
+"rfiHash": "8120f2e62e9a"
+},
+{
+"key": "gradient_surge",
+"kind": "maneuver",
+"name": "Gradient Surge",
+"old": "<p>Money is just potential energy with much better PR. Roll it downhill and watch it turn into a result.</p><p><b>Before rolling, convert 1 staged Economy into a tactical edge.</b></p>",
+"new": "<p>Money is just potential energy with much better PR. Roll it downhill and watch it turn into a result.</p><p><b>Converts 10 marks Economy into 10 marks Logistics on the spot.</b></p>",
+"rfiHash": "0b03e9888389"
+},
+{
+"key": "great_work_ritual",
+"kind": "strategic",
+"name": "Great Work Ritual",
+"old": "<p><b>Great Work Ritual</b></p><p>Trigger Tikkun Phase C for one Spark.</p><p><b>Cost:</b> Faith 10 · Culture 5 marks</p>",
+"new": "<p><b>Great Work Ritual</b></p><p>Trigger Tikkun Phase C for one Spark.</p><p><b>Cost:</b> Faith 75 · Culture 38 marks</p>",
+"rfiHash": "d7127c2f6e15"
+},
+{
+"key": "optact_guided_ascent",
+"kind": "strategic",
+"name": "Guided Ascent",
+"old": "<p><strong>Guided Ascent</strong></p><p>Kabbalist. Every steward on your Domain's roster washes 1 Darkness.</p><p><em>Cost: Faith 20 marks.</em></p>",
+"new": "<p><strong>Guided Ascent</strong></p><p>Kabbalist. Every steward on your Domain's roster washes 1 Darkness.</p><p><em>Cost: Faith 15 marks.</em></p>",
+"rfiHash": "40ed2a7c3746"
+},
+{
+"key": "harvest_season",
+"kind": "strategic",
+"name": "Harvest Season",
+"old": "<p><b>Harvest Season</b></p><p>+1 Economy regen next turn.</p><p><b>Cost:</b> Economy 10 marks</p>",
+"new": "<p><b>Harvest Season</b></p><p>+20 marks Economy into the bank next turn (the Standing cap applies).</p><p><b>Cost:</b> Economy 8 marks</p>",
+"rfiHash": "a05a99e57ee2"
+},
+{
+"key": "industrial_revolution",
+"kind": "strategic",
+"name": "Industrial Revolution",
+"old": "<p><b>Industrial Revolution</b></p><p>Double Economy output for 2 turns.</p><p><b>Cost:</b> Economy 40 marks</p>",
+"new": "<p><b>Industrial Revolution</b></p><p>Economy income ×2 for 2 turns; the target hex's Loyalty −1.</p><p><b>Cost:</b> Economy 30 marks</p>",
+"rfiHash": "a52bc39fa53f"
+},
+{
+"key": "opt_infernal_bargain",
+"kind": "maneuver",
+"name": "Infernal Bargain",
+"old": "<p>A deal with a faint sulfur smell to it. Sign right here. Don't read the small print. Nobody ever reads the small print.</p><p><b>Defender accepts (+2 to their next roll; attacker gains 1 Darkness) or refuses (the defender's hex Loyalty −1).</b></p>",
+"new": "<p>A deal with a faint sulfur smell to it. Sign right here. Don't read the small print. Nobody ever reads the small print.</p><p><b>Goetic Summoner: +3 to the attacker's roll this round; your Darkness +1 whatever happens.</b></p>",
+"rfiHash": "55d2fcf31701"
+},
+{
+"key": "infrastructure_expansion",
+"kind": "strategic",
+"name": "Infrastructure Expansion",
+"old": "<p><strong>Infrastructure Expansion</strong></p><p>Target a hex you hold. At the turn: it gains the Expanded Infrastructure tag, Defense +2 and Integration +1 (max 6).</p><p><em>Cost: Economy 40 · Logistics 20 marks.</em></p>",
+"new": "<p><strong>Infrastructure Expansion</strong></p><p>Target a hex you hold. At the turn: it gains the Expanded Infrastructure tag, Defense +2 and Integration +1 (max 6).</p><p><em>Cost: Economy 30 · Logistics 15 marks.</em></p>",
+"rfiHash": "2b2f4952f684"
+},
+{
+"key": "opt_inherited_deference",
+"kind": "maneuver",
+"name": "Inherited Deference",
+"old": "<p><strong>Inherited Deference</strong></p><p>The Moon (Ancient Blood), pre-roll. +1 to your roll this round, and any enemy Propaganda maneuver this round is cancelled.</p><p><em>Cost: Soft Power 10 marks.</em></p>",
+"new": "<p><strong>Inherited Deference</strong></p><p>The Moon (Ancient Blood), pre-roll. +1 to your roll this round, and any enemy Propaganda maneuver this round is cancelled.</p><p><em>Cost: Soft Power 8 marks.</em></p>",
+"rfiHash": "968708c34b29"
+},
+{
+"key": "inquisition_mandate",
+"kind": "strategic",
+"name": "Inquisition Mandate",
+"old": "<p><b>Inquisition Mandate</b></p><p>Expose Qliphothic assets; Darkness −1.</p><p><b>Cost:</b> Faith 40 · Dexterity 20 marks</p>",
+"new": "<p><b>Inquisition Mandate</b></p><p>Expose Qliphothic assets; Darkness −1.</p><p><b>Cost:</b> Faith 30 · Dexterity 15 marks</p>",
+"rfiHash": "2e70fbf69bf9"
+},
+{
+"key": "optact_integration_framework",
+"kind": "strategic",
+"name": "Integration Framework",
+"old": "<p><strong>Integration Framework</strong></p><p>Diplomatic Envoys. Target a hex you hold: its Integration advances one step (max 6).</p><p><em>Cost: Diplomacy 10 · Soft Power 10 marks.</em></p>",
+"new": "<p><strong>Integration Framework</strong></p><p>Diplomatic Envoys. Target a hex you hold: its Integration advances one step (max 6).</p><p><em>Cost: Diplomacy 8 · Soft Power 8 marks.</em></p>",
+"rfiHash": "096153449247"
+},
+{
+"key": "interdict_supply_line",
+"kind": "strategic",
+"name": "Interdict Supply Line",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Interdict Supply Line</h3><p>Cut a supply-path hex feeding an enemy siege. Strips the hex's 'Supply Line' modifier (severs the route until restored) and lands an immediate harassment pulse: the besieger's Supply Buffer is shaved and per-turn attrition rises. Any Domain except the besieger may interdict. Target the supply-road hex, not the besieged hex.</p><p><strong>Cost:</strong> Dexterity 15 · Strength 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Interdict Supply Line</h3><p>Cut a supply-path hex feeding an enemy siege. Strips the hex's 'Supply Line' modifier (severs the route until restored) and lands an immediate harassment pulse: the besieger's Supply Buffer is shaved and per-turn attrition rises. Any Domain except the besieger may interdict. Target the supply-road hex, not the besieged hex.</p><p><strong>Cost:</strong> Dexterity 11 · Strength 8 marks</p></div>",
+"rfiHash": "306230d2366b"
+},
+{
+"key": "judgment_of_light",
+"kind": "strategic",
+"name": "Judgment of Light",
+"old": "<p><b>Judgment of Light</b></p><p>Purify enemy Hex without destruction.</p><p><b>Cost:</b> Faith 60 · Strength 60 marks</p>",
+"new": "<p><b>Judgment of Light</b></p><p>A rival's hex is purified without being taken: taints and hostile tags removed, darkness pips 0, Purified.</p><p><b>Cost:</b> Faith 45 · Strength 45 marks</p>",
+"rfiHash": "e9d55846c978"
+},
+{
+"key": "justice_tribunal",
+"kind": "strategic",
+"name": "Justice Tribunal",
+"old": "<p><strong>Justice Tribunal</strong></p><p>Remove 1 Darkness; Loyalty +1.</p><p><strong>Cost:</strong> Soft Power 20 · Faith 10 marks</p>",
+"new": "<p><strong>Justice Tribunal</strong></p><p>Remove 1 Darkness; Loyalty +1.</p><p><strong>Cost:</strong> Soft Power 15 · Faith 8 marks</p>",
+"rfiHash": "d4488ea98547"
+},
+{
+"key": "local_festival",
+"kind": "strategic",
+"name": "Local Festival",
+"old": "<p><b>Local Festival</b></p><p>+1 Empathy Meter.</p><p><b>Cost:</b> Culture 10 · Faith 10 marks</p>",
+"new": "<p><b>Local Festival</b></p><p>Domain Loyalty +2.</p><p><b>Cost:</b> Culture 8 · Faith 8 marks</p>",
+"rfiHash": "e7dd47b253ec"
+},
+{
+"key": "loyalty_program",
+"kind": "strategic",
+"name": "Loyalty Program",
+"old": "<p><strong>Loyalty Program</strong></p><p>Target a hex you hold. At the turn: it gains the Loyal Population tag, Loyalty +2 and Loyalty +1.</p><p><em>Cost: Soft Power 30 · Culture 10 · Faith 10 marks.</em></p>",
+"new": "<p><strong>Loyalty Program</strong></p><p>Target a hex you hold. At the turn: it gains the Loyal Population tag, Loyalty +2 and Loyalty +1.</p><p><em>Cost: Soft Power 23 · Culture 8 · Faith 8 marks.</em></p>",
+"rfiHash": "650920080600"
+},
+{
+"key": "opt_make_do_and_hold",
+"kind": "maneuver",
+"name": "Make Do And Hold",
+"old": "<p><strong>Make Do And Hold</strong></p><p>Survivors' Militia, pre-roll. The defenders ignore the first Structure loss this round and roll +1.</p><p><em>Cost: Logistics 10 marks.</em></p>",
+"new": "<p><strong>Make Do And Hold</strong></p><p>Survivors' Militia, pre-roll. The defenders ignore the first Structure loss this round and roll +1.</p><p><em>Cost: Logistics 8 marks.</em></p>",
+"rfiHash": "c6246cb8b89d"
+},
+{
+"key": "mass_mobilization_std",
+"kind": "strategic",
+"name": "Mass Mobilization",
+"old": "<p><strong>Mass Mobilization</strong></p><p>Domain-wide. Your your next Battle or Heist rolls initiative rerolling the lowest die and gets one free maneuver.</p><p><em>Cost: Strength 40 · Logistics 20 · Economy 10 marks.</em></p>",
+"new": "<p><strong>Mass Mobilization</strong></p><p>Domain-wide. Your your next Battle or Heist rolls initiative rerolling the lowest die and gets one free maneuver.</p><p><em>Cost: Strength 30 · Logistics 15 · Economy 8 marks.</em></p>",
+"rfiHash": "5ebab1a065c3"
+},
+{
+"key": "minor_repair",
+"kind": "strategic",
+"name": "Minor Repair",
+"old": "<p><b>Minor Repair</b></p><p>Remove 'Damaged Infrastructure'.</p><p><b>Cost:</b> Economy 10 · Materials 10 marks</p>",
+"new": "<p><b>Minor Repair</b></p><p>Remove 'Damaged Infrastructure'.</p><p><b>Cost:</b> Economy 8 marks</p>",
+"rfiHash": "815e22227b29"
+},
+{
+"key": "moral_high_ground",
+"kind": "maneuver",
+"name": "Moral High Ground",
+"old": "<p>Winning is fine. Winning while visibly, insufferably RIGHT? That's the good stuff. People remember that kind.</p><p><b>+20 Soft Power marks after victory.</b></p>",
+"new": "<p>Winning is fine. Winning while visibly, insufferably RIGHT? That's the good stuff. People remember that kind.</p><p><b>On success: your Domain's Darkness −1.</b></p>",
+"rfiHash": "bc2b0233c11e"
+},
+{
+"key": "optact_never_scattered",
+"kind": "strategic",
+"name": "Never Scattered",
+"old": "<p><strong>Never Scattered</strong></p><p>Survivors' Militia. Domain-wide: next turn, infiltration (Dexterity) raids against your hexes are refused.</p><p><em>Cost: Logistics 10 marks.</em></p>",
+"new": "<p><strong>Never Scattered</strong></p><p>Survivors' Militia. Domain-wide: next turn, infiltration (Dexterity) raids against your hexes are refused.</p><p><em>Cost: Logistics 8 marks.</em></p>",
+"rfiHash": "6c2c312fc809"
+},
+{
+"key": "oblivion_protocol",
+"kind": "strategic",
+"name": "Oblivion Protocol",
+"old": "<p><b>Oblivion Protocol</b></p><p>Collapse Qliphothic gate; resets Darkness Track to 0.</p><p><b>Cost:</b> Dexterity 80 · Faith 80 marks</p>",
+"new": "<p><b>Oblivion Protocol</b></p><p>Collapse Qliphothic gate; resets Darkness Track to 0.</p><p><b>Cost:</b> Dexterity 60 · Faith 60 marks</p>",
+"rfiHash": "040c91fd899f"
+},
+{
+"key": "optact_operational_cohesion",
+"kind": "strategic",
+"name": "Operational Cohesion",
+"old": "<p><strong>Operational Cohesion</strong></p><p>The Chariot (Squad Leader). Domain-wide: your next Battle or Heist gets one free maneuver.</p><p><em>Cost: Strength 10 · Logistics 10 marks.</em></p>",
+"new": "<p><strong>Operational Cohesion</strong></p><p>The Chariot (Squad Leader). Domain-wide: your next Battle or Heist gets one free maneuver.</p><p><em>Cost: Strength 8 · Logistics 8 marks.</em></p>",
+"rfiHash": "d026fa785a2f"
+},
+{
+"key": "courtly_intrigue_council",
+"kind": "strategic",
+"name": "Parley Council",
+"old": "<p><b>Parley Council</b></p><p>Open a Parley with the target hex's holder; gain intel on their plans.</p><p><b>Cost:</b> Dexterity 30 · Diplomacy 20 marks</p>",
+"new": "<p><b>Parley Council</b></p><p>Open a Parley with the target hex's holder; gain intel on their plans.</p><p><b>Cost:</b> Dexterity 23 · Diplomacy 15 marks</p>",
+"rfiHash": "540f16af451b"
+},
+{
+"key": "patrol_routes",
+"kind": "strategic",
+"name": "Patrol Routes",
+"old": "<p><strong>Patrol Routes</strong></p><p>Target one hex you hold. At the turn: it gains the Patrolled tag, Defense +1 and Loyalty +1; if it is already Fortified there is a 40% chance it also becomes Well-Maintained.</p><p><em>Cost: Logistics 20 · Strength 10 marks.</em></p>",
+"new": "<p><strong>Patrol Routes</strong></p><p>Target one hex you hold. At the turn: it gains the Patrolled tag, Defense +1 and Loyalty +1; if it is already Fortified there is a 40% chance it also becomes Well-Maintained.</p><p><em>Cost: Logistics 15 · Strength 8 marks.</em></p>",
+"rfiHash": "3b23b832fb9b"
+},
+{
+"key": "peace_accords",
+"kind": "strategic",
+"name": "Peace Accords",
+"old": "<p><b>Peace Accords</b></p><p>Make terms with the holder of the target hex: that hex's Loyalty +1, and a GM note goes to both sides that no hostile offer should land on either of you for 2 turns. The story still decides who fights; nothing here forbids a beat.</p><p><b>Cost:</b> Diplomacy 30 marks</p>",
+"new": "<p><b>Peace Accords</b></p><p>Make terms with the holder of the target hex: that hex's Loyalty +1, and a GM note goes to both sides that no hostile offer should land on either of you for 2 turns. The story still decides who fights; nothing here forbids a beat.</p><p><b>Cost:</b> Diplomacy 23 marks</p>",
+"rfiHash": "582dbbc00fa3"
+},
+{
+"key": "optact_philosophic_exchange",
+"kind": "strategic",
+"name": "Philosophic Exchange",
+"old": "<p><strong>Philosophic Exchange</strong></p><p>Alchemist. Domain-wide: Loyalty (Empathy) +1 now and +10 marks Culture next turn.</p><p><em>Cost: Culture 10 · Faith 10 marks.</em></p>",
+"new": "<p><strong>Philosophic Exchange</strong></p><p>Alchemist: +10 marks Culture next turn.</p><p><em>Cost: Culture 8 · Faith 8 marks.</em></p>",
+"rfiHash": "b3822d30ece9"
+},
+{
+"key": "pilgrimage_route",
+"kind": "strategic",
+"name": "Pilgrimage Route",
+"old": "<p><b>Pilgrimage Route</b></p><p>+1 Faith regen; Loyalty +1 to Hex.</p><p><b>Cost:</b> Faith 10 · Diplomacy 10 marks</p>",
+"new": "<p><b>Pilgrimage Route</b></p><p>+10 marks Faith next turn; Loyalty +1 on the target hex.</p><p><b>Cost:</b> Faith 8 · Diplomacy 8 marks</p>",
+"rfiHash": "b97245495e19"
+},
+{
+"key": "policy_reforms",
+"kind": "strategic",
+"name": "Policy Reforms",
+"old": "<p><strong>Policy Reforms (Admin)</strong></p><p>Domain-wide. marks income ×1.05 this turn, and your next Battle or Heist DC is 1 lower.</p><p><em>Cost: Economy 20 · Soft Power 20 · Diplomacy 10 · Logistics 10 marks.</em></p>",
+"new": "<p><strong>Policy Reforms (Admin)</strong></p><p>Domain-wide. marks income ×1.05 this turn, and your next Battle or Heist DC is 1 lower.</p><p><em>Cost: Economy 15 · Soft Power 15 · Diplomacy 8 · Logistics 8 marks.</em></p>",
+"rfiHash": "da3d06035b05"
+},
+{
+"key": "pray_for_omen",
+"kind": "strategic",
+"name": "Pray for Omen",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Pray for Omen</h3><p>Beseech the powers: the next Event Deck draw re-rolls in the defender's favour (consumed when the deck fires, Phase F). Target the besieged hex.</p><p><strong>Cost:</strong> Faith 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Pray for Omen</h3><p>Beseech the powers: the next Event Deck draw re-rolls in the defender's favour (consumed when the deck fires, Phase F). Target the besieged hex.</p><p><strong>Cost:</strong> Faith 8 marks</p></div>",
+"rfiHash": "07d20b0c2782"
+},
+{
+"key": "opt_prepared_insight",
+"kind": "maneuver",
+"name": "Prepared Insight",
+"old": "<p><strong>Prepared Insight</strong></p><p>The Magician (Scholar), pre-roll. The opposing side rolls rolling 3d10 and keeping the lowest 2 this round.</p><p><em>Cost: Dexterity 10 marks.</em></p>",
+"new": "<p><strong>Prepared Insight</strong></p><p>The Magician (Scholar), pre-roll. The opposing side rolls rolling 3d10 and keeping the lowest 2 this round.</p><p><em>Cost: Dexterity 8 marks.</em></p>",
+"rfiHash": "9d778433e527"
+},
+{
+"key": "project_eden",
+"kind": "strategic",
+"name": "Project Eden",
+"old": "<p><b>Project Eden</b></p><p>Create 'Garden City' Hex aligned to Tiferet.</p><p><b>Cost:</b> Economy 10 · Soft Power 5 marks</p>",
+"new": "<p><b>Project Eden</b></p><p>A hex you hold becomes a Garden City: aligned to Tiferet, Purified, +Well-Maintained, +Loyal Population, darkness pips 0.</p><p><b>Cost:</b> Economy 75 · Soft Power 38 marks</p>",
+"rfiHash": "2393c6677ae7"
+},
+{
+"key": "propaganda_campaign",
+"kind": "strategic",
+"name": "Propaganda Campaign",
+"old": "<p><strong>Propaganda Campaign</strong></p><p>Target a hex. It gains the Propaganda tag; Loyalty +2 and Loyalty +1 on that hex.</p><p><em>Cost: Soft Power 30 · Diplomacy 10 marks.</em></p>",
+"new": "<p><strong>Propaganda Campaign</strong></p><p>Target a hex. It gains the Propaganda tag; Loyalty +2 and Loyalty +1 on that hex.</p><p><em>Cost: Soft Power 23 · Diplomacy 8 marks.</em></p>",
+"rfiHash": "c91fa9a6f2c5"
+},
+{
+"key": "psych_ops_broadcast",
+"kind": "strategic",
+"name": "Psych-Ops Broadcast",
+"old": "<p><b>Psych-Ops Broadcast</b></p><p>−2 Loyalty to enemy Hex.</p><p><b>Cost:</b> Soft Power 30 · Dexterity 30 marks</p>",
+"new": "<p><b>Psych-Ops Broadcast</b></p><p>−2 Loyalty to enemy Hex.</p><p><b>Cost:</b> Soft Power 23 · Dexterity 23 marks</p>",
+"rfiHash": "013ca30a06c6"
+},
+{
+"key": "purification_rite",
+"kind": "strategic",
+"name": "Purification Rite",
+"old": "<p><b>Purification Rite</b></p><p>Reduce Darkness Track −2.</p><p><b>Cost:</b> Faith 30 · Soft Power 20 marks</p>",
+"new": "<p><b>Purification Rite</b></p><p>Domain Darkness −2; every hex you hold loses a darkness pip; your stewards wash 1 Darkness.</p><p><b>Cost:</b> Faith 23 · Soft Power 15 marks</p>",
+"rfiHash": "924f01bdcce2"
+},
+{
+"key": "opt_rapid_transmutation",
+"kind": "maneuver",
+"name": "Rapid Transmutation",
+"old": "<p><strong>Rapid Transmutation</strong></p><p>Alchemist, post-commit. The 10 marks Economy you spend become 20 marks Faith.</p><p><em>Cost: Economy 10 marks.</em></p>",
+"new": "<p><strong>Rapid Transmutation</strong></p><p>Alchemist, post-commit. The 10 marks Economy you spend become 20 marks Faith.</p><p><em>Cost: Economy 8 marks.</em></p>",
+"rfiHash": "8fc9212f9cec"
+},
+{
+"key": "ration_distribution",
+"kind": "strategic",
+"name": "Ration Distribution",
+"old": "<p><b>Ration Distribution</b></p><p>+1 Loyalty to one controlled Hex.</p><p><b>Cost:</b> Soft Power 10 marks</p>",
+"new": "<p><b>Ration Distribution</b></p><p>+1 Loyalty to one controlled Hex.</p><p><b>Cost:</b> Soft Power 8 marks</p>",
+"rfiHash": "cee7d6bf50f3"
+},
+{
+"key": "recon_sweep",
+"kind": "strategic",
+"name": "Recon Sweep",
+"old": "<p><b>Recon Sweep</b></p><p>Reveal alignment of 1 adjacent Hex.</p><p><b>Cost:</b> Dexterity 10 marks</p>",
+"new": "<p><b>Recon Sweep</b></p><p>Reveal alignment of 1 adjacent Hex.</p><p><b>Cost:</b> Dexterity 8 marks</p>",
+"rfiHash": "1701b55fdc8a"
+},
+{
+"key": "reconstruction_drive_std",
+"kind": "strategic",
+"name": "Reconstruction Drive",
+"old": "<p><strong>Reconstruction Drive</strong></p><p>Target a damaged hex you hold. At the turn: Damaged Infrastructure is removed, it gains Well-Maintained, Defense +2 and Integration +1; an Occupied or Contested hex settles to Claimed at once.</p><p><em>Cost: Economy 20 · Logistics 20 marks.</em></p>",
+"new": "<p><strong>Reconstruction Drive</strong></p><p>Target a damaged hex you hold. At the turn: Damaged Infrastructure is removed, it gains Well-Maintained, Defense +2 and Integration +1; an Occupied or Contested hex settles to Claimed at once.</p><p><em>Cost: Economy 15 · Logistics 15 marks.</em></p>",
+"rfiHash": "523dec14b1ae"
+},
+{
+"key": "reinforce_garrison",
+"kind": "strategic",
+"name": "Reinforce Garrison",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Reinforce Garrison</h3><p>Defender stiffens the defence: +1 Anytime budget per round AND +1 Renewal pool for the duration. Played by the besieged Domain; target the besieged hex.</p><p><strong>Cost:</strong> Strength 15 · Logistics 10 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Reinforce Garrison</h3><p>Defender stiffens the defence: +1 Anytime budget per round AND +1 Renewal pool for the duration. Played by the besieged Domain; target the besieged hex.</p><p><strong>Cost:</strong> Strength 11 · Logistics 8 marks</p></div>",
+"rfiHash": "41686eac9f99"
+},
+{
+"key": "repair_fortifications",
+"kind": "strategic",
+"name": "Repair Fortifications",
+"old": "<p><strong>Repair Fortifications</strong></p><p>Target a hex you hold whose primary facility is damaged: it recovers one damage step at once. Does nothing on an intact facility.</p><p><em>Cost: Economy 20 marks.</em></p>",
+"new": "<p><strong>Repair Fortifications</strong></p><p>Target a hex you hold whose primary facility is damaged: it recovers one damage step at once. Does nothing on an intact facility.</p><p><em>Cost: Economy 15 marks.</em></p>",
+"rfiHash": "da1ea301bfd2"
+},
+{
+"key": "repair_rig",
+"kind": "strategic",
+"name": "Repair Rig",
+"old": "<p><strong>Repair Rig</strong></p><p>Pick one of your rigs (the planner targets a rig, not a hex): it recovers one damage step at once. Does nothing on an intact rig.</p><p><em>Cost: Economy 20 marks.</em></p>",
+"new": "<p><strong>Repair Rig</strong></p><p>Pick one of your rigs (the planner targets a rig, not a hex): it recovers one damage step at once. Does nothing on an intact rig.</p><p><em>Cost: Economy 15 marks.</em></p>",
+"rfiHash": "f327f31eb8ec"
+},
+{
+"key": "resource_expropriation",
+"kind": "strategic",
+"name": "Resource Expropriation",
+"old": "<p><b>Resource Expropriation</b></p><p>Steal +2 Economy from enemy; Darkness +1.</p><p><b>Cost:</b> Economy 30 · Strength 20 marks</p>",
+"new": "<p><b>Resource Expropriation</b></p><p>Takes up to 20 marks Economy from the target hex's holder into your bank; hex Loyalty −1; your Darkness +1.</p><p><b>Cost:</b> Economy 23 · Strength 15 marks</p>",
+"rfiHash": "23498092574a"
+},
+{
+"key": "optact_ritual_binding",
+"kind": "strategic",
+"name": "Ritual Binding",
+"old": "<p><strong>Ritual Binding</strong></p><p>Goetic Summoner. Target a hex with a dormant spark seated on it: the spark is integrated (a Lamp for the Threshold) and your Reach is debited. Needs a GM seat.</p><p><em>Cost: Dexterity 20 · Faith 10 marks.</em></p>",
+"new": "<p><strong>Ritual Binding</strong></p><p>Goetic Summoner. Target a hex with a dormant spark seated on it: the spark is integrated (a Lamp for the Threshold) and your Reach is debited. Needs a GM seat.</p><p><em>Cost: Dexterity 15 · Faith 8 marks.</em></p>",
+"rfiHash": "04fafe897994"
+},
+{
+"key": "saboteur_s_edge",
+"kind": "maneuver",
+"name": "Saboteur's Edge",
+"old": "<p>Every fortress has the one flaw. Usually it's the bolt nobody tightened. Find that bolt. Be the loose bolt's reckoning.</p><p><b>Ignore one Fortified modifier this turn.</b></p>",
+"new": "<p>Every fortress has the one flaw. Usually it's the bolt nobody tightened. Find that bolt. Be the loose bolt's reckoning.</p><p><b>If the target hex is Fortified, the defender's bonus is cut by 2 this round.</b></p>",
+"rfiHash": "767c3fd4cc85"
+},
+{
+"key": "sanctum_expansion",
+"kind": "strategic",
+"name": "Sanctum Expansion",
+"old": "<p><b>Sanctum Expansion</b></p><p>Create permanent 'Blessed Ground' in Hex (−1 Darkness regen).</p><p><b>Cost:</b> Faith 30 · Economy 30 marks</p>",
+"new": "<p><b>Sanctum Expansion</b></p><p>Blessed Ground on a hex you hold: −1 Domain Darkness every turn it stands; +10 marks Faith next turn.</p><p><b>Cost:</b> Faith 23 · Economy 23 marks</p>",
+"rfiHash": "c5b853d2df60"
+},
+{
+"key": "secure_perimeter",
+"kind": "strategic",
+"name": "Secure Perimeter",
+"old": "<p><strong>Secure Perimeter</strong></p><p>Target one hex. At the turn: it gains the Strategic Position tag and Defense +1.</p><p><em>Cost: Logistics 20 · Strength 10 marks.</em></p>",
+"new": "<p><strong>Secure Perimeter</strong></p><p>Target one hex. At the turn: it gains the Strategic Position tag and Defense +1.</p><p><em>Cost: Logistics 15 · Strength 8 marks.</em></p>",
+"rfiHash": "0d7d92df4252"
+},
+{
+"key": "sell_surplus",
+"kind": "strategic",
+"name": "Sell Surplus",
+"old": "<p><b>Sell Surplus</b></p><p>Take half of your stockpile's most plentiful material to market: it sells into its home channel at the surplus price (sell ×1.1); the bank's cap holds back what will not fit.</p><p><b>Cost:</b> Economy 5 marks</p>",
+"new": "<p><b>Sell Surplus</b></p><p>Sell half of the stockpile's most plentiful material at the market for Economy marks — sell price +10%.</p><p><b>Cost:</b> Economy 4 marks</p>",
+"rfiHash": "232d65c03ff2"
+},
+{
+"key": "opt_shock_command",
+"kind": "maneuver",
+"name": "Shock Command",
+"old": "<p><strong>Shock Command</strong></p><p>Strength (Warlord), pre-roll. +2 to the attacker's roll this round.</p><p><em>Cost: Strength 10 marks.</em></p>",
+"new": "<p><strong>Shock Command</strong></p><p>Strength (Warlord), pre-roll. +2 to the attacker's roll this round.</p><p><em>Cost: Strength 8 marks.</em></p>",
+"rfiHash": "48154c23370e"
+},
+{
+"key": "siege_logistics_overhaul",
+"kind": "strategic",
+"name": "Siege Logistics Overhaul",
+"old": "<p><b>Siege Logistics Overhaul</b></p><p>Reduce Siege costs by 25%.</p><p><b>Cost:</b> Economy 30 · Strength 20 marks</p>",
+"new": "<p><b>Siege Logistics Overhaul</b></p><p>Reduce Siege costs by 25%.</p><p><b>Cost:</b> Economy 23 · Strength 15 marks</p>",
+"rfiHash": "39e23934ef8c"
+},
+{
+"key": "opt_sight_of_the_tree",
+"kind": "maneuver",
+"name": "Sight Of The Tree",
+"old": "<p><strong>Sight Of The Tree</strong></p><p>Kabbalist, pre-roll. Gain advantage on the attacker's roll this round; on success your Domain's Darkness −1.</p><p><em>Cost: Faith 10 marks.</em></p>",
+"new": "<p><strong>Sight Of The Tree</strong></p><p>Kabbalist, pre-roll. Gain advantage on the attacker's roll this round; on success your Domain's Darkness −1.</p><p><em>Cost: Faith 8 marks.</em></p>",
+"rfiHash": "40602bd54cfa"
+},
+{
+"key": "signal_hijack",
+"kind": "maneuver",
+"name": "Signal Hijack",
+"old": "<p>Take over their radio. Order a retreat, order pizza, order pure confusion. Dealer's choice, really.</p><p><b>Enemy communications fail; their Alarm +2.</b></p>",
+"new": "<p>Take over their radio. Order a retreat, order pizza, order pure confusion. Dealer's choice, really.</p><p><b>Enemy communications fail: the opposing side rolls with disadvantage this round; in an Infiltration-Alarm raid the alarm also drops 1.</b></p>",
+"rfiHash": "bea062ec3526"
+},
+{
+"key": "optact_silent_brotherhood",
+"kind": "strategic",
+"name": "Silent Brotherhood",
+"old": "<p><strong>Silent Brotherhood</strong></p><p>Rosicrucian. Target a hex held by a rival: their marks bank, their standing toward you and what they have planned this turn are whispered to you at once.</p><p><em>Cost: Dexterity 10 · Soft Power 10 marks.</em></p>",
+"new": "<p><strong>Silent Brotherhood</strong></p><p>Rosicrucian. Target a hex held by a rival: their marks bank, their standing toward you and what they have planned this turn are whispered to you at once.</p><p><em>Cost: Dexterity 8 · Soft Power 8 marks.</em></p>",
+"rfiHash": "f14bd5536c83"
+},
+{
+"key": "opt_silent_entry",
+"kind": "maneuver",
+"name": "Silent Entry",
+"old": "<p><strong>Silent Entry</strong></p><p>Covert Ops Cell, pre-roll. +1 to your roll this round; in a Heist the Alarm also drops 1.</p><p><em>Cost: Dexterity 10 marks.</em></p>",
+"new": "<p><strong>Silent Entry</strong></p><p>Covert Ops Cell, pre-roll. +1 to your roll this round; in a Heist the Alarm also drops 1.</p><p><em>Cost: Dexterity 8 marks.</em></p>",
+"rfiHash": "593134f2d0e6"
+},
+{
+"key": "smuggling_network",
+"kind": "strategic",
+"name": "Smuggling Network",
+"old": "<p><b>Smuggling Network</b></p><p>Establish 1 Trade Route (+1 Diplomacy regen).</p><p><b>Cost:</b> Dexterity 30 marks</p>",
+"new": "<p><b>Smuggling Network</b></p><p>A trade route from the target hex to a TO hex you hold (the planner asks for it); +10 marks Diplomacy next turn; Darkness +1.</p><p><b>Cost:</b> Dexterity 23 marks</p>",
+"rfiHash": "1940bf0d301f"
+},
+{
+"key": "sortie",
+"kind": "strategic",
+"name": "Sortie",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Sortie</h3><p>Defender sallies out to strike an adjacent attacker supply hex. Severs the 'Supply Line' modifier and shaves 15 marks from the besieger's Buffer. Risk: 1d4 of your own garrison holdings are lost (+2 if the hex is escort-protected). Played by the besieged Domain. Target the attacker's supply-road hex.</p><p><strong>Cost:</strong> Strength 20 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Sortie</h3><p>Defender sallies out to strike an adjacent attacker supply hex. Severs the 'Supply Line' modifier and shaves 15 marks from the besieger's Buffer. Risk: 1d4 of your own garrison holdings are lost (+2 if the hex is escort-protected). Played by the besieged Domain. Target the attacker's supply-road hex.</p><p><strong>Cost:</strong> Strength 15 marks</p></div>",
+"rfiHash": "fd63d2daf8c4"
+},
+{
+"key": "spy_insertion",
+"kind": "strategic",
+"name": "Spy Insertion",
+"old": "<p><b>Spy Insertion</b></p><p>Reveal enemy marks banks next turn.</p><p><b>Cost:</b> Dexterity 20 · Diplomacy 10 marks</p>",
+"new": "<p><b>Spy Insertion</b></p><p>Reveal enemy marks banks next turn.</p><p><b>Cost:</b> Dexterity 15 · Diplomacy 8 marks</p>",
+"rfiHash": "ddf54688d5b3"
+},
+{
+"key": "storm_final_assault",
+"kind": "strategic",
+"name": "Storm Final Assault",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Storm Final Assault</h3><p>Throw everything at the walls: the next Breach Scene's maneuver budget is doubled, and the Buffer drops 30 marks regardless of outcome. Lights the Convene pip. Target the besieged hex.</p><p><strong>Cost:</strong> Strength 40 · Logistics 20 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Storm Final Assault</h3><p>Throw everything at the walls: the next Breach Scene's maneuver budget is doubled, and the Buffer drops 30 marks regardless of outcome. Lights the Convene pip. Target the besieged hex.</p><p><strong>Cost:</strong> Strength 30 · Logistics 15 marks</p></div>",
+"rfiHash": "220a0d75d81a"
+},
+{
+"key": "sue_for_terms",
+"kind": "strategic",
+"name": "Sue for Terms",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Sue for Terms</h3><p>Defender offers a negotiated surrender. The attacker may accept (won_sack) or refuse at next resolution (siege.resolveTerms). Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 20 · Soft Power 15 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Sue for Terms</h3><p>Defender offers a negotiated surrender. The attacker may accept (won_sack) or refuse at next resolution (siege.resolveTerms). Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 15 · Soft Power 11 marks</p></div>",
+"rfiHash": "2756485da649"
+},
+{
+"key": "supply_cache",
+"kind": "strategic",
+"name": "Supply Cache",
+"old": "<p><strong>Supply Cache</strong></p><p>Target one hex you hold. At the turn: it gains the Supply Cache tag (which carries its own logistics capacity) and Defense +1.</p><p><em>Cost: Logistics 20 · Economy 10 marks.</em></p>",
+"new": "<p><strong>Supply Cache</strong></p><p>Target one hex you hold. At the turn: it gains the Supply Cache tag (which carries its own logistics capacity) and Defense +1.</p><p><em>Cost: Logistics 15 · Economy 8 marks.</em></p>",
+"rfiHash": "9cad5d29c799"
+},
+{
+"key": "supply_depot",
+"kind": "strategic",
+"name": "Supply Depot",
+"old": "<p><strong>Supply Depot</strong></p><p>Target one hex you hold. At the turn: it gains the Logistics Hub tag and Defense +1.</p><p><em>Cost: Logistics 30 · Economy 20 marks.</em></p>",
+"new": "<p><strong>Supply Depot</strong></p><p>Target one hex you hold. At the turn: it gains the Logistics Hub tag and Defense +1.</p><p><em>Cost: Logistics 23 · Economy 15 marks.</em></p>",
+"rfiHash": "763e3c1fe869"
+},
+{
+"key": "supply_surge",
+"kind": "maneuver",
+"name": "Supply Surge",
+"old": "<p>A supply wagon rolls up at exactly the right moment. I did not arrange that. ...mostly. Onwards.</p><p><b>Gain a small tactical supply edge this round (GM adjudicates).</b></p>",
+"new": "<p>A supply wagon rolls up at exactly the right moment. I did not arrange that. ...mostly. Onwards.</p><p><b>Retired — duplicate of Logistical Surge. (+1 to the roll if already selected.)</b></p>",
+"rfiHash": "e00a97bd66dc"
+},
+{
+"key": "terraforming_project",
+"kind": "strategic",
+"name": "Terraforming Project",
+"old": "<p><b>Terraforming Project</b></p><p>Cleanse 1 Corrupted Hex.</p><p><b>Cost:</b> Economy 40 · Faith 40 marks</p>",
+"new": "<p><b>Terraforming Project</b></p><p>Cleanses a hex you hold: Contaminated / Radiation Zone / Damaged Infrastructure / Hostile Population removed, darkness pips 0, Purified, a corrupted spark repaired.</p><p><b>Cost:</b> Economy 30 · Faith 30 marks</p>",
+"rfiHash": "a5e78a77ab9b"
+},
+{
+"key": "terrain_calibration",
+"kind": "strategic",
+"name": "Terrain Calibration",
+"old": "<p><b>Terrain Calibration</b></p><p>Calibrate local terrain geometry; improve route certainty and reduce surprises (GM adjudicates).</p><p><b>Cost:</b> Logistics 10 marks</p>",
+"new": "<p><b>Terrain Calibration</b></p><p>Calibrate local terrain geometry; improve route certainty and reduce surprises (GM adjudicates).</p><p><b>Cost:</b> Logistics 8 marks</p>",
+"rfiHash": "48eba97c57aa"
+},
+{
+"key": "the_final_weave",
+"kind": "strategic",
+"name": "The Final Weave",
+"old": "<p><b>The Final Weave</b></p><p>Merge five purified Sparks into Final Ritual.</p><p><b>Cost:</b> Faith 10 · Soft Power 10 marks</p>",
+"new": "<p><b>The Final Weave</b></p><p>Merge five purified Sparks into Final Ritual.</p><p><b>Cost:</b> Faith 75 · Soft Power 75 marks</p>",
+"rfiHash": "af5a7c03f3aa"
+},
+{
+"key": "optact_thread_the_spread",
+"kind": "strategic",
+"name": "Thread The Spread",
+"old": "<p><strong>Thread The Spread</strong></p><p>Tarot Mage. Target a hex: one fogged hex adjacent to it is revealed, and every neighbour's alignment and holder is whispered to your Domain.</p><p><em>Cost: Dexterity 10 marks.</em></p>",
+"new": "<p><strong>Thread The Spread</strong></p><p>Tarot Mage. Target a hex: one fogged hex adjacent to it is revealed, and every neighbour's alignment and holder is whispered to your Domain.</p><p><em>Cost: Dexterity 8 marks.</em></p>",
+"rfiHash": "d795c773dcaa"
+},
+{
+"key": "total_mobilization",
+"kind": "maneuver",
+"name": "Total Mobilization",
+"old": "<p>Everybody in. Every hand, every cart, every reserve you swore you'd keep back. The whole Domain leans on the door at once.</p><p><b>+1 to all friendly rolls this round; friendly tokens gain +5 feet movement for 1 round.</b></p>",
+"new": "<p>Everybody in. Every hand, every cart, every reserve you swore you'd keep back. The whole Domain leans on the door at once.</p><p><b>Everyone in: +1 to all friendly rolls this round; friendly tokens gain +5 ft movement for 1 round.</b></p>",
+"rfiHash": "0054a358036f"
+},
+{
+"key": "training_drills",
+"kind": "strategic",
+"name": "Training Drills",
+"old": "<p><b>Training Drills</b></p><p>Increase Strength cap +1 for 2 turns.</p><p><b>Cost:</b> Strength 30 · Nonlethal 20 marks</p>",
+"new": "<p><b>Training Drills</b></p><p>Strength cap +10 marks for 2 turns.</p><p><b>Cost:</b> Strength 23 marks</p>",
+"rfiHash": "3e4a9cb05e3c"
+},
+{
+"key": "training_parade",
+"kind": "strategic",
+"name": "Training Parade",
+"old": "<p><b>Training Parade</b></p><p>+1 Loyalty for next Raid.</p><p><b>Cost:</b> Soft Power 10 · Strength 10 marks</p>",
+"new": "<p><b>Training Parade</b></p><p>Retired (2026-10-28) — its +1 raid Morale went with Morale.</p><p><b>Cost:</b> Soft Power 8 · Strength 8 marks</p>",
+"rfiHash": "03aac7f5b714"
+},
+{
+"key": "trojan_horse",
+"kind": "strategic",
+"name": "Trojan Horse",
+"old": "<div class=\"bbttcc-doctrine-desc\"><h3>Trojan Horse</h3><p>A T4 Dexterity gambit: a 3-roll gate (sneak/sabotage/breach) that can end a siege from within. Sinon Mode sacrifices a Champion for a force multiplier.</p><p><strong>Cost:</strong> Dexterity 40 · Diplomacy 20 · Soft Power 20 marks</p></div>",
+"new": "<div class=\"bbttcc-doctrine-desc\"><h3>Trojan Horse</h3><p>A T4 Dexterity gambit: a 3-roll gate (sneak/sabotage/breach) that can end a siege from within. Sinon Mode sacrifices a Champion for a force multiplier.</p><p><strong>Cost:</strong> Dexterity 30 · Diplomacy 15 · Soft Power 15 marks</p></div>",
+"rfiHash": "c300573b6c46"
+},
+{
+"key": "opt_turn_the_card",
+"kind": "maneuver",
+"name": "Turn The Card",
+"old": "<p><strong>Turn The Card</strong></p><p>Tarot Mage, pre-roll. Gain advantage on your roll this round.</p><p><em>Cost: Dexterity 10 marks.</em></p>",
+"new": "<p><strong>Turn The Card</strong></p><p>Tarot Mage, pre-roll. Gain advantage on your roll this round.</p><p><em>Cost: Dexterity 8 marks.</em></p>",
+"rfiHash": "f3799728515b"
+},
+{
+"key": "upgrade_outpost_settlement",
+"kind": "strategic",
+"name": "Upgrade Outpost to Settlement",
+"old": "<p><b>Upgrade Outpost → Settlement</b></p><p>Invest heavily to turn an outpost into a village-scale settlement.</p><p><b>Cost:</b> Economy 20 · Logistics 10 marks</p>",
+"new": "<p><b>Upgrade Outpost → Settlement</b></p><p>Invest heavily to turn an outpost into a village-scale settlement.</p><p><b>Cost:</b> Economy 23 · Soft Power 15 · Logistics 15 marks</p>",
+"rfiHash": "df6211a37089"
+},
+{
+"key": "opt_veiled_access",
+"kind": "maneuver",
+"name": "Veiled Access",
+"old": "<p><strong>Veiled Access</strong></p><p>Rosicrucian, pre-roll. +1 to your roll; in a Heist progress +1, in a Parley you draw one Secret.</p><p><em>Cost: Dexterity 10 marks.</em></p>",
+"new": "<p><strong>Veiled Access</strong></p><p>Rosicrucian, pre-roll. +1 to your roll; in a Heist progress +1, in a Parley you draw one Secret.</p><p><em>Cost: Dexterity 8 marks.</em></p>",
+"rfiHash": "d56820b47ef0"
+},
+{
+"key": "world_reformation_council",
+"kind": "strategic",
+"name": "World Reformation Council",
+"old": "<p><b>World Reformation Council</b></p><p>Permanently raise global Empathy Meter +2.</p><p><b>Cost:</b> Diplomacy 80 · Economy 60 marks</p>",
+"new": "<p><b>World Reformation Council</b></p><p>Your Darkness −2; every other Domain's Darkness −1.</p><p><b>Cost:</b> Diplomacy 60 · Economy 45 marks</p>",
+"rfiHash": "a7243c4c6bad"
+}
+]
+}
+}

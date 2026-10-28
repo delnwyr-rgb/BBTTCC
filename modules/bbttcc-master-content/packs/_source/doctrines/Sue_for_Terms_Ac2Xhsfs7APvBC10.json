@@ -7,7 +7,7 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Sue for Terms</h3><p>Defender offers a negotiated surrender. The attacker may accept (won_sack) or refuse at next resolution (siege.resolveTerms). Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 20 · Soft Power 15 marks</p></div>",
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Sue for Terms</h3><p>Defender offers a negotiated surrender. The attacker may accept (won_sack) or refuse at next resolution (siege.resolveTerms). Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 15 · Soft Power 11 marks</p></div>",
       "chat": ""
     }
   },

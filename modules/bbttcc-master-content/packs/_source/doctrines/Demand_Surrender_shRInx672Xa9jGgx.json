@@ -7,7 +7,7 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Demand Surrender</h3><p>Attacker issues an ultimatum. The defender responds: yield (won_surrender) · parley (besieger Buffer +10) · refuse (Loyalty −1 on the besieged hex) — via siege.resolveSurrender. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 20 · Violence 10 · Soft Power 10 marks</p></div>",
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Demand Surrender</h3><p>Attacker issues an ultimatum. The defender responds: yield (won_surrender) · parley (besieger Buffer +10) · refuse (Loyalty −1 on the besieged hex) — via siege.resolveSurrender. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 15 · Violence 8 · Soft Power 8 marks</p></div>",
       "chat": ""
     }
   },

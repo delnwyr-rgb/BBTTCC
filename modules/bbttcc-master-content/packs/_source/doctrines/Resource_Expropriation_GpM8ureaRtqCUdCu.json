@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Resource Expropriation</b></p><p>Steal +2 Economy from enemy; Darkness +1.</p><p><b>Cost:</b> Economy 30 · Violence 20 marks</p>",
+      "value": "<p><b>Resource Expropriation</b></p><p>Takes up to 20 marks Economy from the target hex's holder into your bank; hex Loyalty −1; your Darkness +1.</p><p><b>Cost:</b> Economy 23 · Violence 15 marks</p>",
       "chat": ""
     },
     "activities": {},

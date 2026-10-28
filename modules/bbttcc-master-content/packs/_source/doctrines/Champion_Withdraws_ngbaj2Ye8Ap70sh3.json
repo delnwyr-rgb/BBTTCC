@@ -7,7 +7,7 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Withdraws</h3><p>A named attacker Champion withdraws from the siege (status Absent) — the Achilles-in-his-tent lever. Optional note {\"championId\":\"...\"}; otherwise the first active. Target the besieged hex.</p><p><strong>Cost:</strong> Soft Power 15 · Diplomacy 10 marks</p></div>",
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Withdraws</h3><p>A named attacker Champion withdraws from the siege (status Absent) — the Achilles-in-his-tent lever. Optional note {\"championId\":\"...\"}; otherwise the first active. Target the besieged hex.</p><p><strong>Cost:</strong> Soft Power 11 · Diplomacy 8 marks</p></div>",
       "chat": ""
     }
   },

@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p>A dead place, quietly told it's allowed to be alive again. The land weeps a little. The good kind, I think.</p><p><b>Restore one destroyed Hex to GenPop status.</b></p>",
+      "value": "<p>A dead place, quietly told it's allowed to be alive again. The land weeps a little. The good kind, I think.</p><p><b>On success the target hex is restored: no longer destroyed, Contaminated / Radiation Zone / Damaged Infrastructure / Hostile Population / Devastated / Scorched Earth removed, Well-Maintained, darkness pips 0, Purified (applied at commit).</b></p>",
       "chat": ""
     },
     "activities": {},

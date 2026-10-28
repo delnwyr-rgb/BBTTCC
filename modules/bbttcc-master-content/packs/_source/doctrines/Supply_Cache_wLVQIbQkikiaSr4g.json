@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Supply Cache</strong></p><p>Target one hex you hold. At the turn: it gains the Supply Cache tag (which carries its own logistics capacity) and Defense +1.</p><p><em>Cost: Logistics 20 · Economy 10 marks.</em></p>",
+      "value": "<p><strong>Supply Cache</strong></p><p>Target one hex you hold. At the turn: it gains the Supply Cache tag (which carries its own logistics capacity) and Defense +1.</p><p><em>Cost: Logistics 15 · Economy 8 marks.</em></p>",
       "chat": ""
     },
     "activities": {},

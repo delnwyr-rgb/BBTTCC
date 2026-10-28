@@ -7,7 +7,7 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Interdict Supply Line</h3><p>Cut a supply-path hex feeding an enemy siege. Strips the hex's 'Supply Line' modifier (severs the route until restored) and lands an immediate harassment pulse: the besieger's Supply Buffer is shaved and per-turn attrition rises. Any Domain except the besieger may interdict. Target the supply-road hex, not the besieged hex.</p><p><strong>Cost:</strong> Intrigue 15 · Violence 10 marks</p></div>",
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Interdict Supply Line</h3><p>Cut a supply-path hex feeding an enemy siege. Strips the hex's 'Supply Line' modifier (severs the route until restored) and lands an immediate harassment pulse: the besieger's Supply Buffer is shaved and per-turn attrition rises. Any Domain except the besieger may interdict. Target the supply-road hex, not the besieged hex.</p><p><strong>Cost:</strong> Intrigue 11 · Violence 8 marks</p></div>",
       "chat": ""
     }
   },

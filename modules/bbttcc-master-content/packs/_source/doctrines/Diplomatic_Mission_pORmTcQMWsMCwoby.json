@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Diplomatic Mission</strong></p><p>Target a hex. At the turn: it gains the Diplomatic Ties tag and Loyalty +1.</p><p><em>Cost: Diplomacy 30 · Soft Power 10 marks.</em></p>",
+      "value": "<p><strong>Diplomatic Mission</strong></p><p>Target a hex. At the turn: it gains the Diplomatic Ties tag and Loyalty +1.</p><p><em>Cost: Diplomacy 23 · Soft Power 8 marks.</em></p>",
       "chat": ""
     },
     "activities": {},

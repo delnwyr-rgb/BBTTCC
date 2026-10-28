@@ -7,7 +7,7 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Sortie</h3><p>Defender sallies out to strike an adjacent attacker supply hex. Severs the 'Supply Line' modifier and shaves 15 marks from the besieger's Buffer. Risk: 1d4 of your own garrison holdings are lost (+2 if the hex is escort-protected). Played by the besieged Domain. Target the attacker's supply-road hex.</p><p><strong>Cost:</strong> Violence 20 marks</p></div>",
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Sortie</h3><p>Defender sallies out to strike an adjacent attacker supply hex. Severs the 'Supply Line' modifier and shaves 15 marks from the besieger's Buffer. Risk: 1d4 of your own garrison holdings are lost (+2 if the hex is escort-protected). Played by the besieged Domain. Target the attacker's supply-road hex.</p><p><strong>Cost:</strong> Violence 15 marks</p></div>",
       "chat": ""
     }
   },

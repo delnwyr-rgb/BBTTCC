@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p>You don't kill the boss. You make them SMALLER. Permanently. That's so much meaner than killing, and I respect it.</p><p><b>Reduce the enemy leader's marks cap by 3, permanently.</b></p>",
+      "value": "<p>You don't kill the boss. You make them SMALLER. Permanently. That's so much meaner than killing, and I respect it.</p><p><b>On success the enemy Domain's Violence cap drops 30 marks, permanently (applied at commit).</b></p>",
       "chat": ""
     },
     "activities": {},

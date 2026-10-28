@@ -7,7 +7,7 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Defends Wall</h3><p>A named defender Champion takes the wall: locked Active for 2 turns and +1 Anytime budget. Optional note {\"championId\":\"...\"} picks the champion; otherwise the first eligible. Target the besieged hex.</p><p><strong>Cost:</strong> Violence 10 marks</p></div>",
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Defends Wall</h3><p>A named defender Champion takes the wall: locked Active for 2 turns and +1 Anytime budget. Optional note {\"championId\":\"...\"} picks the champion; otherwise the first eligible. Target the besieged hex.</p><p><strong>Cost:</strong> Violence 8 marks</p></div>",
       "chat": ""
     }
   },

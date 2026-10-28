@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Gather Intel</strong></p><p>Target any hex. It is revealed now, a dossier (holder, defense, loyalty, integration, modifiers, alignment) is whispered to your Domain, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower.</p><p><em>Cost: Intrigue 20 marks.</em></p>",
+      "value": "<p><strong>Gather Intel</strong></p><p>Target any hex. It is revealed now, a dossier (holder, defense, loyalty, integration, modifiers, alignment) is whispered to your Domain, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower.</p><p><em>Cost: Intrigue 15 marks.</em></p>",
       "chat": ""
     },
     "activities": {},

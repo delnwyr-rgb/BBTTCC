@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Terraforming Project</b></p><p>Cleanse 1 Corrupted Hex.</p><p><b>Cost:</b> Economy 40 · Faith 40 marks</p>",
+      "value": "<p><b>Terraforming Project</b></p><p>Cleanses a hex you hold: Contaminated / Radiation Zone / Damaged Infrastructure / Hostile Population removed, darkness pips 0, Purified, a corrupted spark repaired.</p><p><b>Cost:</b> Economy 30 · Faith 30 marks</p>",
       "chat": ""
     },
     "activities": {},

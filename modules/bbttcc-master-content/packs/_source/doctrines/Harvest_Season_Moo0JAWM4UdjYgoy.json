@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Harvest Season</b></p><p>+1 Economy regen next turn.</p><p><b>Cost:</b> Economy 10 marks</p>",
+      "value": "<p><b>Harvest Season</b></p><p>+20 marks Economy into the bank next turn (the Standing cap applies).</p><p><b>Cost:</b> Economy 8 marks</p>",
       "chat": ""
     },
     "activities": {},

@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Apocalyptic Weapon Test</b></p><p>Destroy enemy Hex; Darkness +3.</p><p><b>Cost:</b> Violence 80 · Intrigue 40 marks</p>",
+      "value": "<p><b>Apocalyptic Weapon Test</b></p><p>The target hex is blasted: Contaminated + Radiation Zone, darkness pips +3, Loyalty −3, integration reset, contested. Your Darkness +3, its holder's +1, your stewards +1 each.</p><p><b>Cost:</b> Violence 60 · Intrigue 30 marks</p>",
       "chat": ""
     },
     "activities": {},

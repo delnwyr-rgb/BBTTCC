@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Establish Supply Line</strong></p><p>Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Supply Line tag and the route is stored on both; sieges draw on it.</p><p><em>Cost: Logistics 30 · Economy 10 marks.</em></p>",
+      "value": "<p><strong>Establish Supply Line</strong></p><p>Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Supply Line tag and the route is stored on both; sieges draw on it.</p><p><em>Cost: Logistics 23 · Economy 8 marks.</em></p>",
       "chat": ""
     },
     "activities": {},

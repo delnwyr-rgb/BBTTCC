@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Repair Fortifications</strong></p><p>Target a hex you hold whose primary facility is damaged: it recovers one damage step at once. Does nothing on an intact facility.</p><p><em>Cost: Economy 20 marks.</em></p>",
+      "value": "<p><strong>Repair Fortifications</strong></p><p>Target a hex you hold whose primary facility is damaged: it recovers one damage step at once. Does nothing on an intact facility.</p><p><em>Cost: Economy 15 marks.</em></p>",
       "chat": ""
     },
     "activities": {},

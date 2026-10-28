@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Purification Rite</b></p><p>Reduce Darkness Track −2.</p><p><b>Cost:</b> Faith 30 · Soft Power 20 marks</p>",
+      "value": "<p><b>Purification Rite</b></p><p>Domain Darkness −2; every hex you hold loses a darkness pip; your stewards wash 1 Darkness.</p><p><b>Cost:</b> Faith 23 · Soft Power 15 marks</p>",
       "chat": ""
     },
     "activities": {},

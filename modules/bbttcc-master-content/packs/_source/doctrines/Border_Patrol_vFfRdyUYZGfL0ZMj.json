@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Border Patrol</b></p><p>Prevent Infiltration attempts next turn.</p><p><b>Cost:</b> Violence 10 · Nonlethal 10 marks</p>",
+      "value": "<p><b>Border Patrol</b></p><p>Patrols on the roads — Domain Loyalty +2.</p><p><b>Cost:</b> Violence 8 · Nonlethal 8 marks</p>",
       "chat": ""
     },
     "activities": {},

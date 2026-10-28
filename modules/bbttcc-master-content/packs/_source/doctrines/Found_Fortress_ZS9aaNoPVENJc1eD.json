@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Found Fortress</b></p><p>Found a new fortress site at a developed settlement.</p><p><b>Cost:</b> Violence 20 · Logistics 20 · Economy 10 marks</p>",
+      "value": "<p><b>Found Fortress</b></p><p>Found a new fortress site at a developed settlement.</p><p><b>Cost:</b> Violence 15 · Logistics 15 · Economy 8 marks</p>",
       "chat": ""
     },
     "activities": {},

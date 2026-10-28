@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Sanctum Expansion</b></p><p>Create permanent 'Blessed Ground' in Hex (−1 Darkness regen).</p><p><b>Cost:</b> Faith 30 · Economy 30 marks</p>",
+      "value": "<p><b>Sanctum Expansion</b></p><p>Blessed Ground on a hex you hold: −1 Domain Darkness every turn it stands; +10 marks Faith next turn.</p><p><b>Cost:</b> Faith 23 · Economy 23 marks</p>",
       "chat": ""
     },
     "activities": {},

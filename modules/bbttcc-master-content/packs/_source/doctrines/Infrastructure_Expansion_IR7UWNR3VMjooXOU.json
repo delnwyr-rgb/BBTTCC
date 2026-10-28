@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Infrastructure Expansion</strong></p><p>Target a hex you hold. At the turn: it gains the Expanded Infrastructure tag, Defense +2 and Integration +1 (max 6).</p><p><em>Cost: Economy 40 · Logistics 20 marks.</em></p>",
+      "value": "<p><strong>Infrastructure Expansion</strong></p><p>Target a hex you hold. At the turn: it gains the Expanded Infrastructure tag, Defense +2 and Integration +1 (max 6).</p><p><em>Cost: Economy 30 · Logistics 15 marks.</em></p>",
       "chat": ""
     },
     "activities": {},

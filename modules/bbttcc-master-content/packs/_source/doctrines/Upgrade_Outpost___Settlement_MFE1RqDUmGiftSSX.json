@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Upgrade Outpost → Settlement</b></p><p>Invest heavily to turn an outpost into a village-scale settlement.</p><p><b>Cost:</b> Economy 20 · Logistics 10 marks</p>",
+      "value": "<p><b>Upgrade Outpost → Settlement</b></p><p>Invest heavily to turn an outpost into a village-scale settlement.</p><p><b>Cost:</b> Economy 23 · Soft Power 15 · Logistics 15 marks</p>",
       "chat": ""
     },
     "activities": {},

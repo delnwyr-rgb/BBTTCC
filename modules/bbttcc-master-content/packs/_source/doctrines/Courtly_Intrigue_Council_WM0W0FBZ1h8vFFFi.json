@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Parley Council</b></p><p>Open a Parley with the target hex's holder; gain intel on their plans.</p><p><b>Cost:</b> Intrigue 30 · Diplomacy 20 marks</p>",
+      "value": "<p><b>Parley Council</b></p><p>Open a Parley with the target hex's holder; gain intel on their plans.</p><p><b>Cost:</b> Intrigue 23 · Diplomacy 15 marks</p>",
       "chat": ""
     },
     "activities": {},

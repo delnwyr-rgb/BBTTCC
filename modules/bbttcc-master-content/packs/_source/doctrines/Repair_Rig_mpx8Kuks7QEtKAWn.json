@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Repair Rig</strong></p><p>Pick one of your rigs (the planner targets a rig, not a hex): it recovers one damage step at once. Does nothing on an intact rig.</p><p><em>Cost: Economy 20 marks.</em></p>",
+      "value": "<p><strong>Repair Rig</strong></p><p>Pick one of your rigs (the planner targets a rig, not a hex): it recovers one damage step at once. Does nothing on an intact rig.</p><p><em>Cost: Economy 15 marks.</em></p>",
       "chat": ""
     },
     "activities": {},

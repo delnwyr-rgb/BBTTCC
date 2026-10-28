@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Judgment of Light</b></p><p>Purify enemy Hex without destruction.</p><p><b>Cost:</b> Faith 60 · Violence 60 marks</p>",
+      "value": "<p><b>Judgment of Light</b></p><p>A rival's hex is purified without being taken: taints and hostile tags removed, darkness pips 0, Purified.</p><p><b>Cost:</b> Faith 45 · Violence 45 marks</p>",
       "chat": ""
     },
     "activities": {},

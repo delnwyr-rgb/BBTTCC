@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Smuggling Network</b></p><p>Establish 1 Trade Route (+1 Diplomacy regen).</p><p><b>Cost:</b> Intrigue 30 marks</p>",
+      "value": "<p><b>Smuggling Network</b></p><p>A trade route from the target hex to a TO hex you hold (the planner asks for it); +10 marks Diplomacy next turn; Darkness +1.</p><p><b>Cost:</b> Intrigue 23 marks</p>",
       "chat": ""
     },
     "activities": {},

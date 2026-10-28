@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><b>Industrial Revolution</b></p><p>Double Economy output for 2 turns.</p><p><b>Cost:</b> Economy 40 marks</p>",
+      "value": "<p><b>Industrial Revolution</b></p><p>Economy income ×2 for 2 turns; the target hex's Loyalty −1.</p><p><b>Cost:</b> Economy 30 marks</p>",
       "chat": ""
     },
     "activities": {},

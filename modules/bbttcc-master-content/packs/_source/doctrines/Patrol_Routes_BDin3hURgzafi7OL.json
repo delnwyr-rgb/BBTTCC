@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Patrol Routes</strong></p><p>Target one hex you hold. At the turn: it gains the Patrolled tag, Defense +1 and Loyalty +1; if it is already Fortified there is a 40% chance it also becomes Well-Maintained.</p><p><em>Cost: Logistics 20 · Violence 10 marks.</em></p>",
+      "value": "<p><strong>Patrol Routes</strong></p><p>Target one hex you hold. At the turn: it gains the Patrolled tag, Defense +1 and Loyalty +1; if it is already Fortified there is a 40% chance it also becomes Well-Maintained.</p><p><em>Cost: Logistics 15 · Violence 8 marks.</em></p>",
       "chat": ""
     },
     "activities": {},

@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p>A scattered piece of the light, called home from the dark. ...I do NOT get choked up. I'm a janky interface. Anyway.</p><p><b>Instantly purify a Corrupted Spark (requires a Victory context).</b></p>",
+      "value": "<p>A scattered piece of the light, called home from the dark. ...I do NOT get choked up. I'm a janky interface. Anyway.</p><p><b>On success the corrupted Spark seated on the target hex is repaired — or, if it has none, one corrupted spark carried by your Domain is purified (applied at commit).</b></p>",
       "chat": ""
     },
     "activities": {},

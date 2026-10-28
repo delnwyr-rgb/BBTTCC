@@ -7,7 +7,7 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<p><strong>Formal Parley</strong></p><p>Diplomatic Envoys, post-commit. On success your Domain's Loyalty +1 and the other side's Loyalty +1; in a Parley Suspicion falls 1.</p><p><em>Cost: Diplomacy 10 marks.</em></p>",
+      "value": "<p><strong>Formal Parley</strong></p><p>Diplomatic Envoys, post-commit. On success your Domain's Loyalty +1 and the other side's Loyalty +1; in a Parley Suspicion falls 1.</p><p><em>Cost: Diplomacy 8 marks.</em></p>",
       "chat": ""
     }
   },

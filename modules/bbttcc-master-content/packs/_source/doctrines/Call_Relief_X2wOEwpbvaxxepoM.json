@@ -7,7 +7,7 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Call Relief</h3><p>Summon an allied relief force. Pushes a wave onto the siege that arrives in 2 turns; on arrival the GM convenes the Relief Scene (Phase E.3). Requires a willing ally. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 20 · Soft Power 20 marks</p></div>",
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Call Relief</h3><p>Summon an allied relief force. Pushes a wave onto the siege that arrives in 2 turns; on arrival the GM convenes the Relief Scene (Phase E.3). Requires a willing ally. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 15 · Soft Power 15 marks</p></div>",
       "chat": ""
     }
   },

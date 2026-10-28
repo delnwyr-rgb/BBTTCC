@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Supply Depot</strong></p><p>Target one hex you hold. At the turn: it gains the Logistics Hub tag and Defense +1.</p><p><em>Cost: Logistics 30 · Economy 20 marks.</em></p>",
+      "value": "<p><strong>Supply Depot</strong></p><p>Target one hex you hold. At the turn: it gains the Logistics Hub tag and Defense +1.</p><p><em>Cost: Logistics 23 · Economy 15 marks.</em></p>",
       "chat": ""
     },
     "activities": {},

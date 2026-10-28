@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Establish Trade Route</strong></p><p>Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Trade Hub tag (+50% trade output) and the route is stored on both hexes.</p><p><em>Cost: Economy 30 · Diplomacy 10 · Logistics 10 marks.</em></p>",
+      "value": "<p><strong>Establish Trade Route</strong></p><p>Target a hex you hold and pick a second hex of yours as the far end. At the turn both gain the Trade Hub tag (+50% trade output) and the route is stored on both hexes.</p><p><em>Cost: Economy 23 · Diplomacy 8 · Logistics 8 marks.</em></p>",
       "chat": ""
     },
     "activities": {},

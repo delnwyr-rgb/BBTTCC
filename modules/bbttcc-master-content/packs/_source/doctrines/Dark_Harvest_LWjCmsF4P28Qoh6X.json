@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Dark Harvest</strong></p><p>Convert Darkness to +2 Economy; Loyalty −1.</p><p><strong>Cost:</strong> Economy 40 · Faith 20 marks</p>",
+      "value": "<p><strong>Dark Harvest</strong></p><p>Burns 1 Domain Darkness for +20 marks Economy now.</p><p><strong>Cost:</strong> Economy 30 · Faith 15 marks</p>",
       "chat": ""
     },
     "activities": {},

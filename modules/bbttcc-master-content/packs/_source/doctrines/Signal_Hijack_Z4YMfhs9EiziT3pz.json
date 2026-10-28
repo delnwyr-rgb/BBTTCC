@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p>Take over their radio. Order a retreat, order pizza, order pure confusion. Dealer's choice, really.</p><p><b>Enemy communications fail; their Alarm +2.</b></p>",
+      "value": "<p>Take over their radio. Order a retreat, order pizza, order pure confusion. Dealer's choice, really.</p><p><b>Enemy communications fail: the opposing side rolls with disadvantage this round; in an Infiltration-Alarm raid the alarm also drops 1.</b></p>",
       "chat": ""
     },
     "activities": {},

@@ -7,7 +7,7 @@
     "source": "Bad Eden Doctrine",
     "tags": [],
     "description": {
-      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Begin Siege</h3><p>Establish a multi-turn siege on a target hex. Layers are drawn from the hex's structureActorIds (or GM override at planning time). Commits an OP-denominated Supply Buffer that ticks down per turn from the derived Siege Cost (terrain + supply-chain length + harassment, less Bulwark discount). Resolves over multiple campaign turns until a layer is breached, defender surrenders, attacker withdraws, or Buffer is exhausted. See bbttcc-raid/SIEGE_RAID_TYPE_SPEC.md.</p><p><strong>Cost:</strong> Violence 30 · Logistics 20 · Economy 10 marks</p></div>",
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Begin Siege</h3><p>Establish a multi-turn siege on a target hex. Layers are drawn from the hex's structureActorIds (or GM override at planning time). Commits a Supply Buffer in marks that ticks down per turn from the derived Siege Cost (terrain + supply-chain length + harassment, less Bulwark discount). Resolves over multiple campaign turns until a layer is breached, defender surrenders, attacker withdraws, or Buffer is exhausted. See bbttcc-raid/SIEGE_RAID_TYPE_SPEC.md.</p><p><strong>Cost:</strong> Violence 23 · Logistics 15 · Economy 8 marks</p></div>",
       "chat": ""
     }
   },

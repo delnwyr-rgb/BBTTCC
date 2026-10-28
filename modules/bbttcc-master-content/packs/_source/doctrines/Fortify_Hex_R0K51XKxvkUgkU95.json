@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Fortify Hex</strong></p><p>Target one hex. At the turn: it gains the Fortified tag and Defense +2.</p><p><em>Cost: Economy 20 · Logistics 20 · Violence 10 marks.</em></p>",
+      "value": "<p><strong>Fortify Hex</strong></p><p>Target one hex. At the turn: it gains the Fortified tag and Defense +2.</p><p><em>Cost: Economy 15 · Logistics 15 · Violence 8 marks.</em></p>",
       "chat": ""
     },
     "activities": {},

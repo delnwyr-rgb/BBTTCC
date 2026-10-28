@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p>Every fortress has the one flaw. Usually it's the bolt nobody tightened. Find that bolt. Be the loose bolt's reckoning.</p><p><b>Ignore one Fortified modifier this turn.</b></p>",
+      "value": "<p>Every fortress has the one flaw. Usually it's the bolt nobody tightened. Find that bolt. Be the loose bolt's reckoning.</p><p><b>If the target hex is Fortified, the defender's bonus is cut by 2 this round.</b></p>",
       "chat": ""
     },
     "activities": {},
