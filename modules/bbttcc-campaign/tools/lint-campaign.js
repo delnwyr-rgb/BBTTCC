@@ -629,7 +629,7 @@ function _qlNames(line) {
     const first = words[0].toLowerCase().replace(/['’]s$/, "");
     if (sentenceStart && words.length === 1 && _QL_STOP.has(first)) continue;
     const keep = words.filter((w, i) => !(i === 0 && sentenceStart && _QL_STOP.has(w.toLowerCase())));
-    for (const w of keep) { const k = w.toLowerCase().replace(/['’](s|ve|re|ll|d|t)$/, ""); if (k.length > 2 && !_QL_STOP.has(k) && !_QL_NONVERB.has(k)) out.push(w.replace(/['’]s$/, "")); }
+    for (const w of keep) { const k = w.toLowerCase().replace(/['’](s|ve|re|ll|d|t)?$/, ""); if (k.length > 2 && !_QL_STOP.has(k) && !_QL_NONVERB.has(k)) out.push(w.replace(/['’]s?$/, "")); }
   }
   return [...new Set(out)];
 }

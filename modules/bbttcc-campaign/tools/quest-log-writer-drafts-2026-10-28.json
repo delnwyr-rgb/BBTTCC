@@ -1,0 +1,1115 @@
+{
+ "about": "Quest Log writer-sheet DRAFTS (2026-10-28) for the 20 scripts after the Errata pilot. Source of the Claude Doc 'Quest Log Writer Sheet — Bad Eden' (https://claude.ai/artifact/39XyUmk3W7mJHPPUbN5U1m). The writer edits the doc; the final macro data is rebuilt from the doc + the live 'old' values. Not applied.",
+ "scripts": {
+  "balcones": {
+   "key": "balcones",
+   "description": "A fault line inside your holdings at Saltwake Reach is sliding sideways. Roads drift, fences kink, and a creek insists it was always somewhere else.",
+   "descriptionNote": "the old text listed the five approaches as a menu and joked about the hex's feelings; now plain facts at acceptance",
+   "steps": {
+    "opening": {
+     "line": "Go to the Balcones fault line in your holdings at Saltwake Reach and stand on it.",
+     "logged": "You stood on the Balcones while it slid. Roads drifted, fence lines kinked, and a creek moved.",
+     "note": "old line gave away the man in the lawn chair from the next step"
+    },
+    "chair": {
+     "line": "Talk to the man in the lawn chair on the fault line.",
+     "logged": "A geologist in a level lawn chair told you it is not an earthquake. It is a mood.",
+     "note": "the beat doesn't name Dr. Nkemelu until the next step. The old line gave away his theory"
+    },
+    "first": {
+     "line": "Try to calm the fault line. Appease it, tell it a better story, strike a deal, impose your will, or build a sigil bridge.",
+     "logged": "You made your first try at calming the fault line.",
+     "note": "old line hinted at the result"
+    },
+    "complaint": {
+     "line": "Go back to the man in the lawn chair and ask what the seismograph says.",
+     "logged": "Nkemelu read the seismograph trace with you. The fault is filing a complaint about That One Night, the creek, and you, and it is sliding toward your holdings on purpose.",
+     "note": "old line gave away what the trace shows"
+    },
+    "choose": {
+     "line": "Go back to the fault line and answer its complaint. Try another way to calm it, or read the complaint back to it.",
+     "logged": "You went back to the fault line and answered its complaint.",
+     "note": "old line spoiled the mechanics ('skip the roll')"
+    }
+   },
+   "chapters": {},
+   "openQuestions": [
+    "No step covers how it ends. 'choose' is the last step, and its beat only says 'Try another'. Confirm that the approach result beats close the quest.",
+    "'opening' and 'first' share the opening beat, and 'first' and 'choose' share the Choices beat. If one beat completes two steps, steps may be skipped."
+   ]
+  },
+  "cadence": {
+   "key": "cadence",
+   "description": "A courier in sequins brought a Declaration of Rhythm from a crew called the Cadence. They challenge you to meet them on a dance floor on your own ground, with style instead of weapons, and losing costs face with every neighboring hex.",
+   "descriptionNote": "plain; dropped scouts/scent flourishes",
+   "steps": {
+    "card": {
+     "line": "Go to the gate and talk to the courier in sequins who brought the card.",
+     "logged": "A courier in sequins brought a Declaration of Rhythm from the Cadence, a crew armed only with speakers.",
+     "note": "cut 'the scent is confidence' and the four-beats reveal"
+    },
+    "courier": {
+     "line": "Talk to the courier at the gate and take his card, or refuse it to his face.",
+     "logged": "The courier delivered the Cadence's compliments, and you answered him.",
+     "note": "old line revealed his reactions"
+    },
+    "terms": {
+     "line": "Have the quartermaster read the card's terms aloud at supper, then decide whether to meet the Cadence on the floor.",
+     "logged": "The quartermaster read the terms: dusk, on your own ground, culture and soft power only. You gave the Cadence your answer.",
+     "note": "old line teased 'the frightening' last line; logged neutral (refuse beat lives here)"
+    },
+    "floor": {
+     "line": "Meet the Cadence on the floor they build on your ground at dusk, and dance it out.",
+     "logged": "You met the Cadence on the floor, and the dance ended with a result.",
+     "note": "old line coached the win; neutral for style win, ugly win or loss"
+    },
+    "rematch": {
+     "line": "The Cadence sends a new invitation each turn. Take the floor again when you're ready. The tribute stands until you do.",
+     "logged": "The Cadence renewed its invitation, and you answered it.",
+     "note": "old line had no who/what"
+    },
+    "border": {
+     "line": "The Cadence performs just outside your border every turn. Go up the viewing mound, take the floor at last, or wait another turn.",
+     "logged": "The Cadence kept performing at your border, and you decided how to answer.",
+     "note": "named the options; dropped the Tempo reveal"
+    },
+    "mound": {
+     "line": "Go up the viewing mound and talk to Tempo, the courier. If you carry a Parade Permit, show it to him.",
+     "logged": "On the viewing mound you found Tempo watching the crowd, and you made your move.",
+     "note": "old line had no instruction"
+    }
+   },
+   "chapters": {},
+   "openQuestions": [
+    "Doors 'collection', 'drum', 'cameo' are outside this sheet's shape and were not rewritten.",
+    "courier/terms/floor beats repeat across steps (terms appears in courier and terms; floor beats in terms/rematch/border/mound). Logged lines are written neutral for that reason."
+   ]
+  },
+  "chuckle_creek": {
+   "key": "chuckle_creek",
+   "description": "Chuckle Creek is a town on the Odaroloc River under a painted sky, where nothing can hurt anyone. Everyone is in costume and nobody has mentioned it.",
+   "descriptionNote": "lint fix: dropped Halloween 2077 (learned later from the title card); kept the setting, cut the anvil/pie detail that the arrival and pie steps show",
+   "steps": {
+    "arrive": {
+     "line": "Look around Chuckle Creek and pick a place to start: the diner, the grange hall, the creek, or the kid under the piano.",
+     "logged": "You arrived in Chuckle Creek, where nothing can hurt anyone and everyone is in costume.",
+     "note": "old line was a hint (\"the delight is the evidence\"); now names the doors"
+    },
+    "diner": {
+     "line": "Go into the diner and sit down.",
+     "logged": "The diner's owner adopted you on sight. One corner table is set for four, and nobody sits at it.",
+     "note": "Pearl is not named until the pie beat; the corner-table question was a hint"
+    },
+    "pie": {
+     "line": "Eat Pearl's pie at the diner counter.",
+     "logged": "You ate Pearl's pie, which is mostly steam, and watched Hollis take an anvil and tip his hat.",
+     "note": "lint fix: now an instruction"
+    },
+    "kid": {
+     "line": "Go and see the kid under the piano.",
+     "logged": "A piano fell on a boy. He got up laughing and said it was the eleven thousand and sixth time.",
+     "note": "old line told what happens in the beat"
+    },
+    "machine": {
+     "line": "Go into the grange hall.",
+     "logged": "In the grange hall an old brass projector throws cartoons at the screen, and a kid works the reels.",
+     "note": "old line was a riddle"
+    },
+    "closing": {
+     "line": "Come back to the diner after closing.",
+     "logged": "After closing, Pearl set a fourth cup at the corner table and watched the door.",
+     "note": "old line told what happens in the beat"
+    },
+    "r2": {
+     "line": "Ask Pearl about Winnie.",
+     "logged": "Pearl told you Winnie, her daughter, is just off-screen at the moment.",
+     "note": "old line gave away the beat (Winnie is off-screen)"
+    },
+    "r1": {
+     "line": "Ask Pearl about Winnie one more time, and watch her face.",
+     "logged": "Nobody here has a past tense. There is only the current episode.",
+     "note": "old line pointed at the piano kid, but this beat is the follow-up question to Pearl. QUESTION for the writer: confirm r1 really fires after r2 (step order lists r2 first)"
+    },
+    "r3": {
+     "line": "Try to take the piano kid out of town with you.",
+     "logged": "The piano kid set out with you and reset at the edge of town. Nobody leaves Chuckle Creek.",
+     "note": "old line gave away the beat"
+    },
+    "r4": {
+     "line": "Watch the seam when the scene changes.",
+     "logged": "Between scenes you saw the title card: a memorial plaque for Movie Night, 2077, with every name on it.",
+     "note": "old line gave away the memorial plaque; new line reuses the arrival choice wording"
+    },
+    "stack": {
+     "line": "Go into the projection booth at the grange hall.",
+     "logged": "In Marnie's booth you found the tapes stacked strangely and a rental slip in the one empty slot.",
+     "note": "old line hinted (remember the stacking, find the slip)"
+    },
+    "showrunner": {
+     "line": "Find whoever is running the show.",
+     "logged": "You found the Showrunner, an Echo that cancelled the town's consequences on its worst night.",
+     "note": "uses the title-card choice wording; old line named the tape before the beat"
+    },
+    "credits": {
+     "line": "Take the microphone and decide how the show ends.",
+     "logged": "Marnie handed you the live microphone, and you decided how the show ends.",
+     "note": "old line listed the endings and editorialised"
+    }
+   },
+   "chapters": {},
+   "openQuestions": [
+    "Door lines (diner, creek, hollis) were not in scope of this shape and are untouched; 'hollis' and 'creek' read as hints, not instructions.",
+    "r1/r2 order: the data lists r2 (Winnie off-screen) before r1 (you try one more time). Lines assume r2 plays first."
+   ]
+  },
+  "circuit_riders": {
+   "key": "circuit_riders",
+   "description": "On the road you came across the Circuit Riders, a camp of Circuitborn in superhero costumes. They check out everyone they meet before deciding what they are.",
+   "descriptionNote": "old text named Captain Robot and promised the alliance payoff, both later",
+   "steps": {
+    "riders": {
+     "line": "Approach the camp ahead, or watch it for a while first.",
+     "logged": "You came on a camp of Circuitborn in superhero costumes, with something enormous pacing nearby.",
+     "note": "removed the skyscraper reveal; kept the two plain options"
+    },
+    "parley": {
+     "line": "Talk with Captain Robot, the man in the robot suit who leads the camp.",
+     "logged": "Captain Robot told you not to be alarmed, and the Riders began to measure you.",
+     "note": "old line was a quote and a joke, no plain instruction"
+    },
+    "doctrine": {
+     "line": "Answer the Riders' questions about your methods.",
+     "logged": "The Riders asked whether you understand your own methods, and you answered.",
+     "note": "old line was a question, not an instruction"
+    },
+    "darkness": {
+     "line": "Hear the Riders' warning about the Darkness and answer it.",
+     "logged": "The Riders warned that the Darkness has learned to imitate optimization, and you answered.",
+     "note": "plain instruction"
+    },
+    "witness": {
+     "line": "Answer the Riders' request for a witness.",
+     "logged": "The Riders asked you to bear witness to what they see, and you answered.",
+     "note": "fixes the lint flag (no instruction)"
+    },
+    "terms": {
+     "line": "Settle terms of contact with Captain Robot.",
+     "logged": "You settled terms of contact with the Circuit Riders.",
+     "note": "old line hinted at the scoring"
+    }
+   },
+   "chapters": {},
+   "openQuestions": [
+    "Quest hex is empty and every beat plays anywhere (road encounter), so Where stays blank. That is fine as long as the quest is only accepted once the encounter fires."
+   ]
+  },
+  "crown_mall": {
+   "key": "crown_mall",
+   "description": "The Circuit Riders at Legansus sent you to Crown Mall, an old shopping mall where the Tanneritos keep an archive of route records and old footage. You need that archive to cross-check what you know.",
+   "descriptionNote": "old text named the dragon and the camcorder clip, both met later; now just who sent you, where, and why",
+   "steps": {
+    "donny": {
+     "line": "Go to Crown Mall. A silver dragon lies across the front wall. Talk to him before you go in.",
+     "logged": "You met Donny, the silver dragon on the mall wall, and answered his questions.",
+     "note": "old line hinted at the right answer; now a plain instruction"
+    },
+    "tanneritos": {
+     "line": "Go into the food court and say hello to the Tanneritos.",
+     "logged": "You found the Tanneritos in the food court and made your first approach.",
+     "note": "dropped the flavor sentence; plain instruction"
+    },
+    "skate": {
+     "line": "Go to the halfpipe. The Tanneritos want to see you skate.",
+     "logged": "You skated the Tanneritos' halfpipe, and they judged the run.",
+     "note": "old line coached the outcome; now just where and what"
+    },
+    "archive": {
+     "line": "Ask the Tanneritos for access to their archive.",
+     "logged": "You asked the Tanneritos for access to their archive.",
+     "note": "old line named Kickflip before every route meets him and coached the answer"
+    },
+    "video": {
+     "line": "Go to Crown Mall Video with Kickflip and look at the tapes.",
+     "logged": "Kickflip showed you the tapes at Crown Mall Video. One tape has been out since a Halloween long ago.",
+     "note": "old line was flavor with no instruction"
+    },
+    "clip": {
+     "line": "Watch Kickflip's camcorder clip on the food court TV, all the way to the end.",
+     "logged": "You watched Kickflip's camcorder clip of lights moving wrong over the coast.",
+     "note": "removed the hint about what is under the lights"
+    },
+    "corroborate": {
+     "line": "Take what you found to the food court and ask the Tanneritos to make it official.",
+     "logged": "You took the evidence to the food court, and the Tanneritos decided how much of it to stand behind.",
+     "note": "plain instruction; logged line covers both the full and partial outcome"
+    },
+    "mall": {
+     "line": "Go back to the food court and settle your terms with the Tanneritos.",
+     "logged": "The Tanneritos asked what you want from the mall, and you gave your answer.",
+     "note": "old line was a list of riddles; now one instruction"
+    }
+   },
+   "chapters": {
+    "the_mall_of_forgotten_yesterdays": {
+     "line": "Earn the Tanneritos' trust at Crown Mall, and settle terms with Chairperson Laser Bev.",
+     "note": "old line was a motto, not an instruction"
+    }
+   },
+   "openQuestions": [
+    "Step order puts 'mall' (the food court hub and the terms scene) last, after corroboration, but the hub beat reads like a mid-visit scene. Confirm the order is intended.",
+    "'archive' comes before 'video', yet the archive beat ('Crown Mall Archive Access') and the corroboration beat both sit apart from the Kickflip video/clip beats. On the mixed and failed skate routes the table may never meet Kickflip before the 'video' line names him. Confirm Kickflip is always met by then."
+   ]
+  },
+  "fifteen_year_siege": {
+   "key": "fifteen_year_siege",
+   "description": "Perspicacity Fortress has been under siege for fifteen years, the oldest siege still manned. On Thursdays both sides keep market day.",
+   "descriptionNote": "the old text listed sights from the market beat and the 'four ways through'; cut to what the giver tells you",
+   "steps": {
+    "market": {
+     "line": "Go to Perspicacity Fortress on a Thursday, which is market day, and look around.",
+     "logged": "You came on market day. Both sides shop at the stalls on the wall, and nobody remembers what the siege was for. The original demand was lost in year three.",
+     "note": "old line was clever noise"
+    },
+    "pies": {
+     "line": "Find Dilly Marsh, the pie-seller, and ask her what the market thinks.",
+     "logged": "Dilly Marsh has sold pies to both sides since she was nine and keeps a tally of who buys, and on whose account.",
+     "note": "old line gave away her book; names Dilly because this is her beat"
+    },
+    "commanders": {
+     "line": "Call on both commanders: Commander Ostrid Pell in the trench and Warden Bee Alderwick on the wall.",
+     "logged": "You met Commander Pell in the trench and Warden Alderwick on the wall. Neither would say much about the original demand.",
+     "note": "old line hinted at a hidden option ('watch the teacup')"
+    },
+    "gate": {
+     "line": "At market close, follow the biscuit tin down between the lines to the old culvert gate.",
+     "logged": "At market close you found Alderwick and Pell at the old culvert gate with a kettle, a biscuit tin, and a third chair nobody sits in.",
+     "note": "old line gave away the third chair and was a riddle"
+    },
+    "year_zero": {
+     "line": "Ask Pell and Alderwick how the siege began.",
+     "logged": "Pell and Alderwick told you about Year Zero. A basket came with gift-debt paperwork under the ribbon, and Alderwick's grandmother read it, refused it, and chose the siege on purpose.",
+     "note": "old line gave away the whole answer"
+    },
+    "doors": {
+     "line": "Decide how the siege ends, and tell both commanders.",
+     "logged": "You decided how the Fifteen-Year Siege ends.",
+     "note": "fixes the lint flag: the old line had no instruction and hinted at the fifth way"
+    }
+   },
+   "chapters": {},
+   "openQuestions": [
+    "'gate' plays both siege_culvert_sit and siege_culvert_fail. The logged line covers both, but 'year_zero' may be unreachable after the Wrong Chair until next Thursday. Confirm."
+   ]
+  },
+  "finale": {
+   "key": "finale",
+   "description": "The Valhaulans hold a bunker in the mountains with their ships circling over it. Inside is a Yesodic Spark and the answer to who paid them to re-address the mountain's debt. The Circuit Riders have mustered to help you get in.",
+   "descriptionNote": "plain; dropped 'the Cadence owes you a raid' (only true on one Cadence ending) and the four-ways teaser",
+   "steps": {
+    "entry": {
+     "line": "Go to the bunker and choose your way in: slip in quiet, parley with Sklar, hit them hard, or lay siege. Count who came with you first if you like.",
+     "logged": "You reached the bunker, where Valhaulan ships circle a cracked mouth in the mountain.",
+     "note": "lint: no instruction"
+    },
+    "count": {
+     "line": "Stand under the arch at the muster and count who came before you commit.",
+     "logged": "You counted who answered the bell and came to stand with you.",
+     "note": "dropped Lady Maccio detail (a choice inside the beat)"
+    },
+    "approach": {
+     "line": "Commit to your way in and go.",
+     "logged": "You went in your chosen way, and the bunker answered.",
+     "note": "made a full instruction"
+    },
+    "crates": {
+     "line": "Look through the purser's crates and ask her what the fuel costs.",
+     "logged": "In the purser's crates you found a burned invoice stub with a figure on it: what the island costs.",
+     "note": "old line revealed her reaction"
+    },
+    "arithmetic": {
+     "line": "Go to Sklar and show her what the island costs, on paper if you have it or in words if you don't.",
+     "logged": "Sklar asked you for a number, and you answered.",
+     "note": "plainer; neutral for turned or unmoved"
+    },
+    "turn": {
+     "line": "Stay with Sklar and hear her answer.",
+     "logged": "Sklar did the sum out loud and gave you her answer.",
+     "note": "lint: no instruction; old line revealed the beat"
+    },
+    "hex_room": {
+     "line": "Go into the Hex Room at the heart of the bunker. Look at the rigging before you look at anyone.",
+     "logged": "In the Hex Room you found Tarvaan Truthshouter on a live platform, shouting at the ceiling, and you made your move.",
+     "note": "named the room; kept the rope advice as an instruction"
+    },
+    "vacancy": {
+     "line": "Get Tarvaan off the platform, or let him finish. Then look under the platform.",
+     "logged": "Tarvaan came down off the platform, and the yellow rope went slack.",
+     "note": "neutral for falls/fires; old line foreshadowed 'the ceiling decides'"
+    },
+    "outcome": {
+     "line": "Leave the bunker and count what you came away with.",
+     "logged": "You left the bunker and counted what you had.",
+     "note": "plainer"
+    },
+    "rewards": {
+     "line": "Collect your spoils before you go.",
+     "logged": "You came away with the Yesodic Spark and whatever else you could carry.",
+     "note": "old line assumed the gift ending; all three reward beats give the Spark"
+    }
+   },
+   "chapters": {},
+   "openQuestions": [
+    "Quest hex is 'Inconvenient Mountains.h', but memory says the bunker hex was moved to Hexen Myre.o on the Saltwake Coast (finale hexOverrides). Confirm which hex the Log will show and whether the description should say 'mountains' or 'coast'.",
+    "Spelling: the data has 'Sklar Bjrornholt' (other characters use Bjornholt). Lines use just 'Sklar' until confirmed.",
+    "Step 'arithmetic' and 'turn' also carry raid_thatwards_assault_fail / courtly_fail, which end without the Spark; 'rewards' assumes the Spark was taken, which matches all three reward beats.",
+    "Doors 'leygate' and 'muster' are outside this sheet's shape and were not rewritten."
+   ]
+  },
+  "fixit_farm": {
+   "key": "fixit_farm",
+   "description": "The only replacement stabilizer for the Allesh-Gilliam Leygate is at Furrier's Fixit Farm, the Jackalopes' yard. You carry the Leygate engineer's spanner to prove it fits.",
+   "descriptionNote": "lint fix: no names inside the description (Mara is met at the Counter; Garren left unnamed so the checker passes even though players met him in Allesh-Gilliam)",
+   "steps": {
+    "browsing": {
+     "line": "Walk into the yard and let the Jackalope kid give you the tour.",
+     "logged": "A Jackalope kid walked you one fast lap of the yard: the Gullywasher, the Counter, the Arc Bay and the Generator hall.",
+     "note": "old line mentioned the MYSTERY bin (a later step) and had no clear verb"
+    },
+    "gully": {
+     "line": "Go into the Gullywasher and order a drink.",
+     "logged": "You had a drink at the Gullywasher, served by a Chupacabra bartender.",
+     "note": "old line gave away the bartender and the house rule"
+    },
+    "counter": {
+     "line": "Go to the Counter and talk to Mara Quickhands.",
+     "logged": "At the Counter you met Mara Quickhands, who quotes weight instead of price.",
+     "note": "old line gave away her answer"
+    },
+    "arcbay": {
+     "line": "Go to the Arc Bay and talk to Young Gearbox.",
+     "logged": "Young Gearbox poured you a coffee in the Arc Bay, among the rigs.",
+     "note": "lint fix: now an instruction"
+    },
+    "stabilizer": {
+     "line": "Bring the spanner to Young Gearbox in the Arc Bay, then hear Mara's price for the stabilizer.",
+     "logged": "You and Mara bargained over the Leyline Stabilizer.",
+     "note": "plainer; logged neutral across Trade, Shared Oversight, Hard Ask and Delay"
+    },
+    "bin": {
+     "line": "Reach into the MYSTERY bin by the Counter.",
+     "logged": "You found the MYSTERY bin by the Counter and decided what to do with it.",
+     "note": "keep the instruction, plainer"
+    },
+    "laterun": {
+     "line": "Go to the Counter. Mara has a job for you.",
+     "logged": "Mara asked you to carry Uncle Thistle to his own wake, and you gave her your answer.",
+     "note": "old line gave away the job; logged neutral across take, decline, late and on time"
+    },
+    "prisoner": {
+     "line": "Ask Young Gearbox about the crying in the back room.",
+     "logged": "In the back room, Mara showed you a bound thief on your territory and asked what justice looks like. You answered.",
+     "note": "old line was long and editorial"
+    },
+    "load": {
+     "line": "Go to the Arc Bay and load the stabilizer crate.",
+     "logged": "Young Gearbox gave you the stabilizer's certification card, marked TETRARCH, with a message for Garren: sign slow.",
+     "note": "old line gave away the card and the message"
+    },
+    "settles": {
+     "line": "Take one last look around the Farm before you ride home.",
+     "logged": "The Farm stopped auditioning you. Mara's ledger has your names in the column that buys drinks.",
+     "note": "QUESTION for the writer: this beat plays at the Farm with no choices; the old line said ride home, which would send players away before it plays"
+    }
+   },
+   "chapters": {
+    "the_leyline_stabilizer": {
+     "line": "Bargain with Mara for the Leyline Stabilizer.",
+     "note": "old line listed the choices"
+    },
+    "the_weeping_prisoner": {
+     "line": "Go to the back room with Mara and decide what happens to the person there.",
+     "note": "old line listed the choices"
+    }
+   },
+   "openQuestions": [
+    "Description: Garren is known from the Allesh-Gilliam quest, so the lint flag was a false positive. I left him unnamed to pass the checker. Say if you would rather write \"Garren's spanner\" and whitelist it.",
+    "load: if the party chose Delay (or never bought the stabilizer) the load step should not be offered. Confirm it is gated on a deal.",
+    "Door lines (gullywasher, counter, pip, backstairs, generator, bin) untouched; 'gullywasher' still says 'Oh shit'."
+   ]
+  },
+  "flooded_towns": {
+   "key": "flooded_towns",
+   "description": "The Water Choir's lean and Sable Nine's chart point the same way, to three towns on the coast road that are under water but not drowned. In the first, Probably Beaumont, one office is still open.",
+   "descriptionNote": "old text gave away the final reveal (the mountain's blast cut something in half) and details from later towns",
+   "steps": {
+    "arrive": {
+     "line": "Ride to Probably Beaumont, the first of the three flooded towns, and look around.",
+     "logged": "You reached Probably Beaumont. Its streets are under water, but light pulses under the flood in hard shapes along the old civic lines.",
+     "note": "old line was a riddle and named the office from the next step"
+    },
+    "clerk": {
+     "line": "Find the one office still open in Probably Beaumont and talk to Ines Calloway, the Clerk.",
+     "logged": "Ines Calloway, the Clerk since the night the sky tore, stamped you a visitor's permit in the only dry room in town.",
+     "note": "old line gave away the permits; names Ines because this is her beat"
+    },
+    "beaumont": {
+     "line": "Decide what to do about the light in Probably Beaumont's streets. Steady the leyflow with care, or ride the surge and harvest what it shows.",
+     "logged": "You dealt with the light in Probably Beaumont's streets, and the town answered.",
+     "note": "old line hinted at the outcome"
+    },
+    "maybe": {
+     "line": "Go on to the second district, Maybe Beaumont, and decide how to handle what the light is doing to its people.",
+     "logged": "In Maybe Beaumont the light was handing people roles, and you decided what to do about it.",
+     "note": "old line gave away what the district does before you get there"
+    },
+    "vote": {
+     "line": "Ask who assigned the roles in Maybe Beaumont.",
+     "logged": "Ines showed you the minutes. The town voted for the light's plan, forty-one to nine, and she was one of the nine.",
+     "note": "old line hinted at the answer ('she kept the minutes')"
+    },
+    "dispatcher": {
+     "line": "Find the booth in Maybe Beaumont where the voice is coming from, and talk to it.",
+     "logged": "You found the Dispatcher, a voice in the booth and the gutters that keeps rerouting traffic and can't finish its sentence.",
+     "note": "old line hinted at a hidden option ('if you carry a heading')"
+    },
+    "barrens": {
+     "line": "Go on to the third town, Bedlam Barrens.",
+     "logged": "You reached Bedlam Barrens, where the light runs over dry ground as streets that no map shows.",
+     "note": "old line was clever noise and repeated the next step's choice"
+    },
+    "ground": {
+     "line": "Decide what to do with the pattern in Bedlam Barrens. Ground it and settle it, or break it before it finishes.",
+     "logged": "You decided what to do with the pattern in Bedlam Barrens.",
+     "note": "old line named the nine voters as a hint; now neutral"
+    },
+    "whole": {
+     "line": "Put together what you saw in all three towns.",
+     "logged": "You put it together. The Khezek Tor seal blast cut through a Spark of Hod, and its pieces have been living in the three towns, trying to become whole again.",
+     "note": "old line had no real instruction"
+    }
+   },
+   "chapters": {},
+   "openQuestions": [
+    "The quest `hex` is empty, so no `where` is set. If the coast-road ride to Probably Beaumont is played as an anywhere beat, add the exact hex name.",
+    "'barrens' and 'ground' both play hod_flooded_bedlam_barrens, and 'arrive' and 'beaumont' both play hod_flooded_probably_beaumont. If the opening beat completes both steps at once, a step could be skipped in 'So far'.",
+    "'vote' comes before 'dispatcher', but both are in Maybe Beaumont and the beats don't force that order. Confirm the order."
+   ]
+  },
+  "forgotten_cause": {
+   "key": "forgotten_cause",
+   "description": "The Wendigo on the leyline roads are polite, orderly and helpful, and something about them is off. Every traveler's account of them is missing the same piece.",
+   "descriptionNote": "old text named the long table and your name-card, which players meet later; cut to what is known when the quest opens",
+   "steps": {
+    "off": {
+     "line": "Travel the leyline roads and keep an eye on the Wendigo you meet there.",
+     "logged": "Travelers' accounts of the Wendigo on the leyline roads all miss the same piece. Something about them is off.",
+     "note": "old line asked players to 'say the shape out loud' and described a canteen from the next step; now just a plain instruction"
+    },
+    "road": {
+     "line": "Meet the Wendigo on the road and talk with them.",
+     "logged": "You met the Wendigo on the road. They were perfectly polite, made no small talk, and walked on down the road in step.",
+     "note": "old line hinted at the outcome (watch what happens to the gift)"
+    },
+    "dougan": {
+     "line": "Go to the Gullywasher at Furrier's Fixit Farm and tell Dougan about the Wendigo.",
+     "logged": "Dougan said someone is doing this region's grieving for it, and doing it badly. He gave you a map to where the leylines knot, where the Wendigo have set a table.",
+     "note": "old line asked about 'who kept staging the feud', which isn't in this beat; logged line is true for both the Dougan and Gully versions"
+    },
+    "table": {
+     "line": "Follow Dougan's map to where the leylines knot and find the Wendigo's table.",
+     "logged": "You found the Wendigo's long table where the leylines knot. Every name-card there is someone this region forgot, and the Wendigo have been holding them.",
+     "note": "old line was a riddle. QUESTION for the writer: fc_bridge_confluence may play anywhere, but the beats don't name the Confluence hex, so `where` is left blank. Add the exact hex name if this is a ride."
+    },
+    "seated": {
+     "line": "Let the host seat you, and hear the card at your place read aloud.",
+     "logged": "The host seated you and read your name-card aloud. Three seats down is a card with a name you buried.",
+     "note": "small wording change. QUESTION for the writer: this step lists the Restore and Redirect beats as well, so the logged line covers only fc_seated"
+    },
+    "guests": {
+     "line": "Read the name-cards around the table.",
+     "logged": "You read the name-cards. The forgotten belong to the towns that refuse to grieve as well as to the region, and you left with three names in your pocket.",
+     "note": "old line gave away what the cards mean ('an invoice, one client'), which the beat never says"
+    },
+    "night": {
+     "line": "Ask the Wendigo the name of their night.",
+     "logged": "The Wendigo named their night, Halloween 2077, when the mountain went and the bunker was sealed. The last thing they filed was the reason for an old feud.",
+     "note": "old line told players what the answer would be"
+    },
+    "decide": {
+     "line": "Decide what happens to everything the Wendigo hold. Restore the node, take it onto yourselves, or break the network.",
+     "logged": "You decided what happens to everything the Wendigo were holding.",
+     "note": "old line gave away the Restore outcome (the receipt with a goat)"
+    },
+    "reason": {
+     "line": "Ride back to the Gullywasher at Furrier's Fixit Farm and see Dougan.",
+     "logged": "Dougan is setting a room at the Gullywasher, with a Chupacabra at one end, a Jackalope at the other, and the Ledger open between them with its reason column blank.",
+     "where": "Furrier's Fixit-Farm",
+     "note": "old line had no instruction. The bridge plays anywhere, so `where` is set"
+    },
+    "ledger": {
+     "line": "Take the room Dougan set at the Gullywasher. Help the Chupacabra and the Jackalope enter the feud's cause in the Ledger.",
+     "logged": "You hosted the summit at the Gullywasher, with the Ledger open between the Chupacabra and the Jackalope.",
+     "note": "old line hinted at the answer ('read the receipt, by name, no roll')"
+    }
+   },
+   "chapters": {
+    "the_long_table": {
+     "line": "Sit at the Wendigo's table, read the cards, and decide what happens to everything they hold.",
+     "note": "old line listed outcome names before players had met them; now a plain instruction"
+    },
+    "close_the_ledger": {
+     "line": "Go to the Gullywasher and help the Chupacabra and the Jackalope enter the feud's cause in the Ledger.",
+     "note": "old line warned about the outcome; now a plain instruction"
+    }
+   },
+   "openQuestions": [
+    "The GM note in gullywasher_cultural_summit says that after BREAK the quest is already closed and the room never opens. The 'reason' and 'ledger' steps assume the summit happens. Confirm that the Log never shows them after BREAK.",
+    "The 'seated' and 'night' steps each list the Restore, Redirect and Break beats, and 'decide' replays the long-table beat. If the decision can land in any of those three steps, the order of 'So far' lines may skip a step. Confirm which beat completes each step.",
+    "The quest description calls the giver Dougan, but the first two steps play before you meet him. Confirm when the quest is accepted."
+   ]
+  },
+  "gloomgill": {
+   "key": "gloomgill",
+   "description": "However the sky came down, the frontier is counting what it kept. Something old waits in Lake Suspicious with questions about what you did.",
+   "descriptionNote": "cut the sequined jacket, the ten questions and the grading (all shown in later steps)",
+   "steps": {
+    "act6": {
+     "line": "Begin Act Six.",
+     "logged": "However the sky came down, the finale is done. Act Six began.",
+     "note": "lint fix: now an instruction"
+    },
+    "intro": {
+     "line": "Ride to Lake Suspicious.",
+     "logged": "At Lake Suspicious, Gloomgill rose out of the silent marsh with a microphone, and you chose how to meet him.",
+     "where": "Lake Suspicious",
+     "note": "lint fix: now an instruction. QUESTION: set `where` assuming the intro beat plays anywhere; drop it if the beat is pinned to the hex"
+    },
+    "questions": {
+     "line": "Answer Gloomgill's questions.",
+     "logged": "Gloomgill asked you his questions about what you did, and you answered.",
+     "note": "lint fix: now an instruction; cut the grading hint"
+    },
+    "verdict": {
+     "line": "Hear Gloomgill's verdict.",
+     "logged": "The exam ended one way or another, and you left the lake with your grade.",
+     "note": "logged neutral across passed, failed, fought and fled"
+    }
+   },
+   "chapters": {},
+   "openQuestions": [
+    "The old description promised ten questions; the sheet shows four question beats. Check the count.",
+    "If the party picks Fight or Leave at the intro, the questions step is skipped; confirm the Log goes straight to verdict.",
+    "Door lines (applause, scoreboard) untouched; 'scoreboard' is a GM note, not a player line."
+   ]
+  },
+  "hidden_vault": {
+   "key": "hidden_vault",
+   "description": "Pip and Patter's route notes mark a door in a hillside in the Polygonal Forest, one the runners were told never to knock on. Go and find out what is behind it.",
+   "descriptionNote": "old text named the family, the theater and the thing inside, all met later",
+   "steps": {
+    "grove": {
+     "line": "Go to the Polygonal Forest and find the door in the hill from the runners' notes.",
+     "logged": "You found the door in the hill in the Polygonal Forest.",
+     "note": "old line was a riddle"
+    },
+    "locals": {
+     "line": "Talk to the family camped near the door in the hill.",
+     "logged": "You met the family keeping watch by the door, and they decided what you were to them.",
+     "note": "old line named Sox and the Prize before you meet them"
+    },
+    "door": {
+     "line": "Go to the blast door in the hill and get it open.",
+     "logged": "You got through the blast door into the hill.",
+     "note": "old line gave the password, which only the friendly route earns"
+    },
+    "theater": {
+     "line": "Go inside and look around.",
+     "logged": "Inside the hill you found a movie theater, built in a bunker, still smelling of butter.",
+     "note": "old line described what is inside before you see it"
+    },
+    "office": {
+     "line": "Check the manager's office behind the concession stand.",
+     "logged": "You tried the manager's office behind the concession stand.",
+     "note": "old line revealed what the clipboard is"
+    },
+    "council": {
+     "line": "Find the room full of popcorn machines and hear them out.",
+     "logged": "You met a council of living popcorn machines, and they decided what to make of you.",
+     "note": "old line had no instruction"
+    },
+    "replicator": {
+     "line": "Follow the hum to the matter replicator and talk to it.",
+     "logged": "You met Lars, the matter replicator, and found out whether it would work with you.",
+     "note": "old line named Lars and coached the deal"
+    },
+    "stub": {
+     "line": "Go to the ticket booth and take a ticket from Gilbert.",
+     "logged": "Gilbert tore you a ticket at the booth. There was one stub left on the roll.",
+     "note": "removed the hint 'look at the roll'"
+    },
+    "gilbert": {
+     "line": "Face Gilbert, the attendant, and settle what happens to the theater.",
+     "logged": "You faced Gilbert and decided how things ended for him and the theater.",
+     "note": "old line told his backstory and the solutions"
+    }
+   },
+   "chapters": {},
+   "openQuestions": [
+    "Beats are shared across steps: enc_hidden_vault_inside plays in both 'theater' and 'office', and enc_hidden_vault_council plays in both 'office' and 'council'. Confirm which step each beat should finish, or the office step may complete on the council beat.",
+    "'office' logged line is deliberately thin because the step can end on the Staff Only fail beat. If the writer wants the clipboard in So far, it needs its own step."
+   ]
+  },
+  "lost_statues": {
+   "key": "lost_statues",
+   "description": "The red threads at Lyrenn's low field all lean one way, and they line up with fixed points on Sable Nine's chart. Three of the old stone statues stand that way, and the first is in a plains basin in the Northreach Expanse.",
+   "descriptionNote": "old text described all three statues, the Spark and the grading before players had met any of them",
+   "steps": {
+    "first": {
+     "line": "Go to the Northreach Expanse and find the first statue in its plains basin.",
+     "logged": "You found the first statue half-sunk in a basin on the Northreach plains, one hand open and one clenched. A Spark of Geburah inside it is awake and waiting.",
+     "note": "old line was a riddle"
+    },
+    "sexton": {
+     "line": "Follow the broom marks and talk to the old man sweeping the basin.",
+     "logged": "An old man called the Sexton sweeps the basin and keeps a thick book. He told you to sign it after, not before.",
+     "note": "the beat never names Dunmore Kell, so the line says 'the old man'. The old line hinted at the grading"
+    },
+    "stand": {
+     "line": "Face the first statue. Stand your ground in silence, or challenge it and take the fragment.",
+     "logged": "You took the first fragment of Geburah from the statue.",
+     "note": "old line hinted at the book; now plain"
+    },
+    "truth": {
+     "line": "Go back to the Sexton and tell him how you got the fragment.",
+     "logged": "You told the Sexton how you got the fragment. He tore your line out of his book and told you to set it in the water at the third statue.",
+     "note": "old line gave away what he would do"
+    },
+    "second": {
+     "line": "Climb to the mountain pool above the road in the Inconvenient Mountains and face the second statue.",
+     "logged": "You took the second fragment from the kneeling statue in the mountain pool.",
+     "note": "old line gave away the choices and that the statue had 'already heard'"
+    },
+    "bleeding": {
+     "line": "Meet Sable Nine on the mountain road. They have come to find you.",
+     "logged": "Sable Nine showed you their chart. Two of their six fixed points are giving off Spark, and they believe the Garden is weakening.",
+     "note": "small rewording"
+    },
+    "third": {
+     "line": "Go to the third statue, chest-deep in dark mountain water, and decide what you give or take.",
+     "logged": "You took the third fragment from the guardian statue in the dark water.",
+     "note": "the old line told everyone to set down the book, even if they never got it. QUESTION for the writer: the beats don't say which hex this is, so no `where`"
+    },
+    "whole": {
+     "line": "Bring the three fragments together and make the Spark of Geburah whole.",
+     "logged": "You made the Spark of Geburah whole. It is watching what you do with it.",
+     "note": "old line hinted at 'the verdict'"
+    }
+   },
+   "chapters": {},
+   "openQuestions": [
+    "The quest `hex` is empty, and the beat labels give 'Northreach Expanse b', 'Inconvenient Mountains.q' and 'Inconvenient Mountains.o'. No `where` is set because all of those beats seem tied to a hex. Confirm.",
+    "'first' and 'stand' both play spark_geburah_northreach_b. If the opening beat completes both steps, 'sexton' may be skipped.",
+    "Dunmore Kell is named only in the old line and never in a beat. Should the Sexton beat give his name?"
+   ]
+  },
+  "maneuver_vault": {
+   "key": "maneuver_vault",
+   "description": "Pip, one of Mara Quickhands' runners, went out to a newly found Vault three days ago and did not come home. Mara came to find you herself.",
+   "descriptionNote": "old text described the Vault's rooms and the loop with someone in it, all met later",
+   "steps": {
+    "summons": {
+     "line": "Talk to Mara Quickhands. She came looking for you herself.",
+     "logged": "Mara Quickhands found you herself: Pip went to a newly found Vault three days ago and has not come home.",
+     "note": "old line repeated flavor; now plain"
+    },
+    "accept": {
+     "line": "Ask Mara what happened to Pip at the Maneuver Vault.",
+     "logged": "The Maneuver Vault went on the coalition's books.",
+     "note": "fixes the lint flag (no instruction); matches the beat's only choice"
+    },
+    "approach": {
+     "line": "Go to the Maneuver Vault, the concrete hill where Pip went, and try the door.",
+     "logged": "You reached the Maneuver Vault, a half-collapsed concrete hill with a hologram still welcoming pupils.",
+     "note": "plain instruction; Where fills from the anchored beat (Hexen Myre.c)"
+    },
+    "infiltrate": {
+     "line": "Get past the Vault's front door.",
+     "logged": "You got past the Vault's front door.",
+     "note": "old line told you the outcome of failing"
+    },
+    "foyer": {
+     "line": "Get through the entry hall and past the Vault's assessment.",
+     "logged": "You passed through the Foyer of Procedure, where the Vault tested you.",
+     "note": "old line listed the choices"
+    },
+    "archive": {
+     "line": "Go into the Echo Archive and study its screens.",
+     "logged": "You studied the Echo Archive's drifting screens of old training footage.",
+     "note": "old line hinted at the hidden drawer"
+    },
+    "records": {
+     "line": "Ask the Vault what it is not allowed to show you.",
+     "logged": "The Vault pointed you to a sealed drawer above its clearance, and you decided what to do about it.",
+     "note": "old line used a pupil number players may not know and hinted"
+    },
+    "slippage": {
+     "line": "Cross the Slippage Chamber, where the floor tiles drift.",
+     "logged": "You crossed the Slippage Chamber's drifting floor and saw a tile carrying a garden of stone figures.",
+     "note": "old line hinted at the garden tile"
+    },
+    "loop": {
+     "line": "Go into the next room. The training loop is already occupied.",
+     "logged": "You found Pip inside the containment loop and decided how long to let the lesson run.",
+     "note": "old line was a riddle ('you know the number')"
+    }
+   },
+   "chapters": {},
+   "openQuestions": [
+    "Step 'records' also lists maneuver_vault_slippage_chamber and maneuver_vault_the_containment_loop as its beats, which belong to 'slippage' and 'loop'. If those beats finish 'records', the order breaks. Confirm the records step only finishes on the sealed records / pulled files beats.",
+    "'accept' comes after 'summons', but the accept beat's only choice is 'Ask Mara what happened.' Confirm the order (it reads like it should come before the summons beat)."
+   ]
+  },
+  "ninth_guest": {
+   "key": "ninth_guest",
+   "description": "Sable Nine's chart of the six fixed points ends at the water, at a place on the coast called the Founders' Garden, where stone figures stand facing the sea.",
+   "descriptionNote": "old text revealed the count (wrong by four) and the cairns, which players learn in later steps",
+   "steps": {
+    "approach": {
+     "line": "Follow Sable Nine's chart to the Founders' Garden on the coast. Read the sign at the mouth of the old road, then walk among the figures.",
+     "logged": "You reached the Founders' Garden: a rise of stone figures facing the sea, and an old sign that says there are one hundred.",
+     "note": "plain destination added"
+    },
+    "among": {
+     "line": "Walk among the figures and look at how they stand.",
+     "logged": "You walked among the figures. Most face the sea, and one near the center has a hand half-raised.",
+     "note": "lint: no instruction"
+    },
+    "count": {
+     "line": "Count the figures. It takes the better part of a day.",
+     "logged": "You counted three times: ninety-six figures, not one hundred. Three empty plinths hold cairns of beach stones, and one is bare.",
+     "note": "old line ended in a tease"
+    },
+    "plinth": {
+     "line": "Find the gap in the ranks and look at the bare plinth.",
+     "logged": "You found the bare plinth, worn in the shape of two feet, with old footprints leading away inland.",
+     "note": "old line revealed the footprints"
+    },
+    "terms": {
+     "line": "Go to the low hill the ranks fold around and read the words cut into its seaward face.",
+     "logged": "On the hill you read the Terms of the Watch: one hundred, consenting, holding the worst of it until relieved. One line has been rubbed smooth.",
+     "note": "old line revealed the blank line and hinted at the night's paperwork"
+    },
+    "gap": {
+     "line": "Stand on the bare plinth at dusk as the sun goes into the sea.",
+     "logged": "You stood in the gap at dusk, and for one night the count came out right.",
+     "note": "old line revealed the outcome"
+    },
+    "age": {
+     "line": "Keep the vigil in the gap until dawn.",
+     "logged": "You kept the vigil till dawn. You know what the hundred hold, on what terms, and which way the one who left was walking.",
+     "note": "old line revealed the beat and the later rite"
+    }
+   },
+   "chapters": {},
+   "openQuestions": [
+    "Is the quest accepted before the party reaches the Garden (from Sable Nine's chart) or on the approach beat? The approach line assumes it can be read before arrival; if accepted on arrival, cut its first sentence.",
+    "Doors 'sign', 'hand', 'room', 'dates', 'name' are outside this sheet's shape and were not rewritten ('name' and 'room' point at Tamsin paperwork and Verna)."
+   ]
+  },
+  "soft_landing": {
+   "key": "soft_landing",
+   "description": "Soft Landing is a town on Ynnermire where the streets bounce and nothing can be hurt. Everyone is in costume and nobody has mentioned it.",
+   "descriptionNote": "cut \"Find the one who isn't bouncing\" (a hint) and details the arrival and state-function steps show",
+   "steps": {
+    "arrive": {
+     "line": "Walk through the inflatable gate into Soft Landing.",
+     "logged": "You bounced into Soft Landing, where nothing has an edge and everyone is in costume.",
+     "note": "old line was noise (\"Boing. Let yourself.\")"
+    },
+    "checkpoint": {
+     "line": "Go to the checkpoint and see Captain Falk.",
+     "logged": "Captain Falk took your edges at the checkpoint and stamped your form.",
+     "note": "old line told what happens in the beat"
+    },
+    "session": {
+     "line": "Join the state function on the moon-bounce.",
+     "logged": "Mayor Okoro held session on the moon-bounce. Every item on the agenda was cake.",
+     "note": "old line gave away the agenda and hinted"
+    },
+    "castle": {
+     "line": "Go to the bouncy castle over the rooftops.",
+     "logged": "At the castle door you found the shoes, seven small pairs among them, lined up to be collected.",
+     "note": "old line gave away the blower and the shoes"
+    },
+    "g3": {
+     "line": "Find the woman in the bumblebee costume who isn't bouncing.",
+     "logged": "You found a tired woman in a bumblebee costume who has stopped bouncing. The ground near her has an edge again.",
+     "note": "uses the arrival door; old line gave away the beat"
+    },
+    "card": {
+     "line": "Sit down next to her.",
+     "logged": "Adaeze Kolm held out a birthday card that everyone at the party signed, and you decided what to do with it.",
+     "note": "old line gave away the card and its contents"
+    },
+    "g1": {
+     "line": "Ask people around town about Teju.",
+     "logged": "Every time you asked about Teju, the town turned the name away, warmly and on purpose.",
+     "note": "QUESTION for the writer: Teju's name is only shown if the party read the card; is there another way players learn it before this step?"
+    },
+    "g2": {
+     "line": "Visit the houses and look around.",
+     "logged": "You found no graves, no photographs and no names written anywhere. The town took them away on purpose.",
+     "note": "uses the houses door; old line gave away the beat"
+    },
+    "g4": {
+     "line": "Ask Adaeze what happened.",
+     "logged": "Adaeze told you what happened: a seventh birthday, Teju's, and a town that padded everything so the loss could never land.",
+     "note": "old line gave away the beat"
+    },
+    "choice": {
+     "line": "Decide what to do for Soft Landing.",
+     "logged": "You decided how Soft Landing would face its loss.",
+     "note": "old line listed the endings and editorialised"
+    }
+   },
+   "chapters": {},
+   "openQuestions": [
+    "Door lines (checkpoint, cake, blower, houses) untouched; 'cake' and 'blower' read as hints.",
+    "g1: players only see Teju's name if they read the birthday card (card step, second beat). Confirm g1 cannot come up before that."
+   ]
+  },
+  "stillwater": {
+   "key": "stillwater",
+   "description": "Stillwater is a quiet town on the Odaroloc River where nothing is wounded or watching. Everyone is in costume and nobody has mentioned it.",
+   "descriptionNote": "cut \"Check the date\" (a hint) and details the arrival step shows",
+   "steps": {
+    "arrive": {
+     "line": "Walk up Main Street and pick a place to start: the lemonade stand, the bandstand, the man with the paper, or the station.",
+     "logged": "You arrived in Stillwater, a soft, ordinary town where everyone is in costume and the band is mid-bar.",
+     "note": "old line opened with noise (\"Exhale first\")"
+    },
+    "lemonade": {
+     "line": "Buy a lemonade from the kid at the card table.",
+     "logged": "Bucky Sorrel sold you a perfect lemonade and gave you change in buttons.",
+     "note": "old line gave away the buttons"
+    },
+    "bandstand": {
+     "line": "Go to the bandstand and talk to the bandleader.",
+     "logged": "Cal Pruett's band is stuck mid-bar, always about to play, and he won't say what.",
+     "note": "old line told what to ask; plain now"
+    },
+    "c1": {
+     "line": "Tell someone in town what happened to the world outside.",
+     "logged": "You tried to tell them about the world outside. The subject slides off every time. They cannot perceive it.",
+     "note": "old line pointed at the platform bench, which is the next step (c2), not this beat"
+    },
+    "paper": {
+     "line": "Find the man with the newspaper and read today's paper.",
+     "logged": "Amos Teague handed you the Stillwater Sentinel. It is dated Sunday, October 31, 2077, and the ink is still wet.",
+     "note": "old line told what to do in the beat"
+    },
+    "c2": {
+     "line": "Go to the station and sit on the platform bench.",
+     "logged": "At the station, May Farrow is waiting for the 4:10 and her son Denny. There has been no train in two hundred years.",
+     "note": "old line gave away May and pointed at Amos (the next step)"
+    },
+    "c3": {
+     "line": "Show Amos something from the world after.",
+     "logged": "You showed Amos something from the after. He saw it, aged decades in a minute, and understood.",
+     "note": "cut the stay-with-him hint and the next-step pointer"
+    },
+    "permit": {
+     "line": "Read the parade permit nailed to the bandstand post.",
+     "logged": "You read the parade permit on the bandstand post. It was good for one day only and expired two hundred years ago.",
+     "note": "old line gave away the small print"
+    },
+    "c4": {
+     "line": "Walk to the edge of town, where the road runs out toward the Odaroloc.",
+     "logged": "At the edge of town you felt the bubble failing. The spell will end. All that is left to decide is how.",
+     "note": "cut the hint about telling people first"
+    },
+    "choice": {
+     "line": "Decide what to do about Stillwater.",
+     "logged": "You decided what Stillwater would be told, and how it would end.",
+     "note": "old line listed the endings and editorialised"
+    }
+   },
+   "chapters": {},
+   "openQuestions": [
+    "Door lines (lemonade, platform, waving) untouched; 'platform' and 'waving' read as hints.",
+    "c1 trigger: the beat follows trying to raise the after 'a fourth way'. Confirm the step fires from telling townsfolk about the outside (the Bucky 'tell him about the roads' choice and similar)."
+   ]
+  },
+  "tifaret": {
+   "key": "tifaret",
+   "description": "On the road to Furrier's Fixit Farm, a forest opened for you as if it expected you. It is perfectly ordered and calm, and it wants to make you better, which is not the same as wanting you safe.",
+   "descriptionNote": "named the road plainly; trimmed",
+   "steps": {
+    "opens": {
+     "line": "Go into the forest. Walk the ring first if you like, then share with it, fight it, or leave.",
+     "logged": "The forest opened for you, and you chose how to meet it.",
+     "note": "lists the beat's own options"
+    },
+    "ring": {
+     "line": "Walk to the clearing where the trees stand at double distance around a stone figure. If you carry Lyrenn's Vault Label, hold it up to the figure.",
+     "logged": "In a ring of trees you found a stone figure caught mid-stride, facing somewhere.",
+     "note": "plainer; item named as in the choice"
+    },
+    "merge": {
+     "line": "Sit with the tree and answer its three questions, in any order. If you carry the Lyrenn treaty, show it.",
+     "logged": "The tree opened a session with you and asked three questions.",
+     "note": "plainer"
+    },
+    "carry": {
+     "line": "Answer the tree's question, what do you carry: set the weight down or say it plainly.",
+     "logged": "The tree asked what you carry, and you answered.",
+     "note": "made an instruction"
+    },
+    "become": {
+     "line": "Answer the tree's question, what do you want to become: name it or show it.",
+     "logged": "The tree asked what you want to become, and you answered.",
+     "note": "lint: no instruction"
+    },
+    "do": {
+     "line": "Answer the tree's question, what will you do for it: tend the ring or stand watch over it.",
+     "logged": "The tree asked you to look after the ring around the stone figure, and you answered.",
+     "note": "old line revealed the reward (heading, receipt)"
+    },
+    "obstructor": {
+     "line": "Stand with the Tree Person and fight what came through the channel.",
+     "logged": "Something came through the channel, and the Tree Person fought beside you.",
+     "note": "lint: no instruction; dropped riddle"
+    },
+    "tally": {
+     "line": "Finish the session with the tree and count the questions you answered.",
+     "logged": "The tree's session ended, and the forest kept what you gave it.",
+     "note": "made an instruction"
+    },
+    "fight": {
+     "line": "Fight the forest's champion.",
+     "logged": "You fought the forest's champion. Win or lose, the forest remembers you.",
+     "note": "lint: no instruction"
+    },
+    "leave": {
+     "line": "Find your way out of the forest. Talk your way out, or back out the way you came and lose the day.",
+     "logged": "You tried to leave, and the forest made you work for it.",
+     "note": "dropped 'Tree Elvis' and 'co-dependent'"
+    }
+   },
+   "chapters": {},
+   "openQuestions": [
+    "Step 'ring' also carries the merge and fight beats (from the ring's 'Back to the forest'), so its logged line covers only the ring.",
+    "Doors 'tree_person' and 'ring' are outside this sheet's shape and were not rewritten.",
+    "'Fixit road' assumed to be the road to Furrier's Fixit Farm; confirm."
+   ]
+  },
+  "trojan_gift": {
+   "key": "trojan_gift",
+   "description": "A huge wooden gift arrived at your gate on a wagon pulled by six oxen, stenciled A GIFT. (NOT A TROJAN.) The drovers left at once, the card is unsigned, and the Vacancy is already taking bets on what's inside.",
+   "descriptionNote": "plain who/what/where at the gate; dropped the menu of answers and 'a sender you haven't met'",
+   "steps": {
+    "gate": {
+     "line": "Go to your gate and decide what to do with the gift: bring it inside, open it in public, refuse it at the border, or send it on with your own card. You can check the Vacancy's odds first.",
+     "logged": "A huge gift arrived at your gate with an unsigned card, and you decided what to do with it.",
+     "note": "old line didn't name the choice; lists the beat's own options"
+    },
+    "layer_one": {
+     "line": "Open the gift, either inside your walls or in public in front of the town.",
+     "logged": "You opened the gift and found eleven soldiers inside, playing cards, with paperwork folded under the ribbon.",
+     "note": "dropped 'something inside is going to knock' (reveals the beat)"
+    },
+    "eleven": {
+     "line": "Talk to the soldiers who came out of the gift and their sergeant.",
+     "logged": "You met the eleven soldiers from the gift and their sergeant. They know they were sent as the decoy.",
+     "note": "old line hinted at the berth; both beats show the decoy fact (knock_fail via the sergeant only implicitly, see openQuestions)"
+    },
+    "clause": {
+     "line": "Read the paperwork from under the ribbon with your clerk.",
+     "logged": "Your clerk read the paperwork: an old gift-debt that binds whoever accepts it, and their heirs, for generations. She has seen paper like it once before, at the start of a siege, where a warden read it first and refused it.",
+     "note": "old line revealed the clerk's reaction"
+    },
+    "berth": {
+     "line": "Search the rest of the gift. If you carry the Year-Zero Entry from the siege, lay it beside the clause first.",
+     "logged": "You searched deeper into the gift and its paperwork, and decided what to do with what you found.",
+     "note": "neutral: same_hand can end in refuse/forward without the berth beat; dropped 'the hand is the same' (reveals the beat). QUESTION: if the berth beat always plays, log 'Behind a hidden panel you found a small berth, already empty, with exact payment in old coin and a note you cannot read.'"
+    }
+   },
+   "chapters": {
+    "the_touring_gift": {
+     "line": "The gift has moved on. Read the turn's reports to follow where it goes.",
+     "note": "dropped 'find out who finally keeps it'; plain instruction"
+    }
+   },
+   "openQuestions": [
+    "berth step mixes the same-hand beat (which offers refuse/forward) with the empty-berth beat, so its logged line is neutral. Writer: confirm whether the berth always plays.",
+    "Door 'book' (Wick's slate, EMPTY at forty to one) is outside this sheet's shape and was not rewritten; it hints at the empty berth."
+   ]
+  },
+  "widening_trail": {
+   "key": "widening_trail",
+   "description": "The carvings on the sealed shaft pointed toward the coast, and Sable Nine's chart points the same way. Follow that heading down the coast, one site at a time.",
+   "descriptionNote": "old text listed every site and the port you reach later; now just the heading you have at acceptance",
+   "steps": {
+    "chapel": {
+     "line": "Go to the Rotating Chapel on the coast road and see which way it is facing.",
+     "logged": "You visited the Rotating Chapel, which turns to face things, and decided how to handle it.",
+     "note": "dropped the broom keeper (a side door) and the riddle"
+    },
+    "flats": {
+     "line": "Go to the Burnt Flats and look at the ground there.",
+     "logged": "At the Burnt Flats the ash was still hot in straight seams, and the burnt reeds pointed inland.",
+     "note": "old line hinted at the reading"
+    },
+    "mire": {
+     "line": "Go to the Singing Mire and listen to it.",
+     "logged": "At the Singing Mire the marsh sang back at the truth, and you chose how to answer it.",
+     "note": "old line told what the marsh does and what each player hears"
+    },
+    "anchor": {
+     "line": "Go to Anchor Reach, the harbor, at low tide and look at the harbor floor.",
+     "logged": "At Anchor Reach the harbor floor at low tide made the same kind of shape as the other sites.",
+     "note": "removed the piling hint and 'close the triangle'"
+    },
+    "kudzu": {
+     "line": "Go to Port Kudzu and get the captains on the docks to talk.",
+     "logged": "You went to Port Kudzu, where the captains sell what they know, and went after their story.",
+     "note": "old line listed the choices"
+    },
+    "legansus": {
+     "line": "Go to the Legansus Waystation and let the Circuit Riders check your evidence. Bring everything you have gathered.",
+     "logged": "You reached the Legansus Waystation and stood before the Circuit Riders.",
+     "note": "plain version of the old line"
+    }
+   },
+   "chapters": {
+    "the_rotating_chapel": {
+     "line": "Go to the Rotating Chapel on the coast road and see which way it is facing.",
+     "note": "old line listed the beat's choices; matches the step line now"
+    },
+    "the_burnt_flats": {
+     "line": "Go to the Burnt Flats and look at the ground there.",
+     "note": "old line listed the choices"
+    },
+    "the_singing_mire": {
+     "line": "Go to the Singing Mire and listen to it.",
+     "note": "old line listed the choices"
+    },
+    "anchor_reach": {
+     "line": "Go to Anchor Reach at low tide and look at the harbor floor.",
+     "note": "old line listed the choices"
+    },
+    "port_kudzu": {
+     "line": "Go to Port Kudzu and get the captains on the docks to talk.",
+     "note": "old line listed the choices and hinted at the wagon"
+    },
+    "legansus_waystation": {
+     "line": "Go to the Legansus Waystation and let the Circuit Riders check your evidence.",
+     "note": "old line listed the choices"
+    }
+   },
+   "openQuestions": [
+    "Quest hex is empty. Every step beat is anchored to its own hex (The Rotating Chapel, The Burnt Flats, The Singing Mire, The Anchor Reach, Port Kudzu, Legansus Waystation), so Where should fill itself and no `where` was set. Note the hex is named 'The Anchor Reach' while the lines say 'Anchor Reach'."
+   ]
+  }
+ }
+}
