@@ -74,6 +74,14 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     await A.update({ [`flags.${MODF}.darkness`]: box });
     return { before, after };
   }
+  // Domain Loyalty 0..100 (default 50, as turn-driver's fuel fx reads it) — review #6 (2026-10-28).
+  async function adjustFactionLoyalty(A, delta){
+    if (!A) return { before: 0, after: 0 };
+    const before = Number(A.getFlag(MODF, "loyalty") ?? 50) || 0;
+    const after = Math.max(0, Math.min(100, before + Number(delta || 0)));
+    await A.update({ [`flags.${MODF}.loyalty`]: after });
+    return { before, after };
+  }
   async function zeroFactionDarkness(A){
     if (!A) return { before: 0, after: 0 };
     const raw = A.getFlag(MODF, "darkness");
@@ -553,14 +561,17 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     // Border Patrol — next turn, Intrigue-type raids against this faction's hexes are refused (turn-driver consumer).
     async border_patrol(ctx){
       const A = game.actors.get(ctx.factionId);
-      await setNextTurnFlag(A, { borderPatrol: 2 });   // ticks down at the end of each Advance: covers the NEXT turn's raids
-      await pushWarLog(A,"Border Patrol: Heists against your hexes are refused next turn.");
+      // Review #7 (2026-10-28): the "Heists refused" flag had no reader once the story offers every raid (ruling 22) →
+      // Dave: Loyalty / Darkness / retire. Patrols on the roads = people sleep easier: Domain Loyalty +2.
+      const l = await adjustFactionLoyalty(A, +2);
+      await pushWarLog(A, `Border Patrol: the roads are watched — Domain Loyalty ${l.before} → ${l.after}.`);
     },
     // Local Festival / Training Parade: their only effect was faction Morale (+1 now / +1 next
     // turn) — retired 2026-10-18 (ruling 19). They log the activity and nothing else.
     async local_festival(ctx){
       const A = game.actors.get(ctx.factionId);
-      await pushWarLog(A,`Local Festival held.`);
+      const l = await adjustFactionLoyalty(A, +2);   // review #6 (2026-10-28): was "Morale +1" (retired) — now Loyalty
+      await pushWarLog(A, `Local Festival: the town turns out — Domain Loyalty ${l.before} → ${l.after}.`);
     },
     async training_parade(ctx){
       const A = game.actors.get(ctx.factionId);
@@ -672,7 +683,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async crisis_summit(ctx){
       const A = game.actors.get(ctx.factionId);
       const facs = (game.actors?.contents ?? []).filter(a => a?.getFlag?.(MODF, "isFaction") === true || a?.flags?.[MODF]?.opBank);
-      await pushWarLog(A, `Crisis Summit convened (${facs.length} Domains attended). GM note — tempers held: no hostile offer against any Domain for 1 turn.`);
+      const d = await adjustFactionDarkness(A, -1);   // review #6 (2026-10-28): the note alone cost 50 marks — the convener's Darkness −1
+      await pushWarLog(A, `Crisis Summit convened (${facs.length} Domains attended): Darkness ${d.before} → ${d.after}. GM note — tempers held: no hostile offer against any Domain for 1 turn.`);
       for (const F of facs) { if (F.id === A?.id) continue; try { await pushWarLog(F, `Crisis Summit (${A?.name || "a Domain"} convened it): tempers held — GM note, no hostile offer against any Domain for 1 turn.`); } catch (_e) {} }
     },
     // Cultural Exchange — copies the target hex's sephirot alignment onto the TO hex (if it has none).
@@ -758,8 +770,10 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async world_reformation_council(ctx){
       const A = game.actors.get(ctx.factionId);
       const facs = (game.actors?.contents ?? []).filter(a => a?.getFlag?.(MODF, "isFaction") === true || a?.flags?.[MODF]?.opBank);
-      const d = await adjustFactionDarkness(A, -1);
-      await pushWarLog(A, `World Reformation Council convened (${facs.length} faction(s)); Darkness ${d.before} → ${d.after}.`);
+      const d = await adjustFactionDarkness(A, -2);
+      // Review #6 (2026-10-28): the world-wide Morale half was retired — now every OTHER Domain's Darkness −1 too.
+      let others = 0; for (const F of facs) { if (F.id === A?.id) continue; try { await adjustFactionDarkness(F, -1); others++; await pushWarLog(F, `World Reformation Council (${A?.name || "a Domain"} convened it): Darkness −1.`); } catch (_e) {} }
+      await pushWarLog(A, `World Reformation Council convened (${facs.length} Domains): your Darkness ${d.before} → ${d.after}; ${others} other Domain(s) Darkness −1.`);
     },
     // Enlightenment Congress — every steward of this faction climbs one Enlightenment level (real level Items from the pack).
     async enlightenment_congress(ctx){
@@ -965,7 +979,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       await patchHex(doc, { [`flags.${MODT}.integration`]: integ });
       await pushWarLog(A, `Integration Framework: ${hexName(doc)} integration ${before} → ${integ.progress}/6.`);
     },
-    async optact_never_scattered(ctx){ const A = game.actors.get(ctx.factionId); await setNextTurnFlag(A, { borderPatrol: 2 }); await pushWarLog(A, "Never Scattered: infiltration raids against your hexes are refused next turn."); },
+    async optact_never_scattered(ctx){ const A = game.actors.get(ctx.factionId); const l = await adjustFactionLoyalty(A, +2); await pushWarLog(A, `Never Scattered: the cells hold together — Domain Loyalty ${l.before} → ${l.after}.`); },   // review #7 (2026-10-28): refusal flag had no reader,
     // occult
     async optact_guided_ascent(ctx){
       const A = game.actors.get(ctx.factionId); const wash = game.fourththing?.darkness?.wash; let n = 0;

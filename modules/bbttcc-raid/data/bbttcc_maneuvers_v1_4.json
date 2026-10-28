@@ -453,7 +453,7 @@
           "faith": 10
         },
         "effects": {
-          "text": "Empathy Meter +1 after round; heal morale."
+          "text": "On success: your Domain's Loyalty +2."
         },
         "raidTypes": [
           "Liberation",
@@ -529,7 +529,7 @@
           "softPower": 30
         },
         "effects": {
-          "text": "On success: Unity (Empathy) +2."
+          "text": "On success: your Domain's Darkness −1."
         },
         "raidTypes": [
           "Liberation",

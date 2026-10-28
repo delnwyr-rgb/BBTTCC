@@ -85,7 +85,7 @@
           "faith": 10
         },
         "effects": {
-          "text": "Faction Morale (Empathy) +1."
+          "text": "Domain Loyalty +2."
         },
         "minFactionTier": 1
       }
@@ -123,7 +123,7 @@
           "nonLethal": 10
         },
         "effects": {
-          "text": "Next turn, Heists against your hexes are refused — the raider spends nothing and gains nothing."
+          "text": "Patrols on the roads — Domain Loyalty +2."
         },
         "minFactionTier": 1
       }
@@ -161,7 +161,7 @@
           "violence": 10
         },
         "effects": {
-          "text": "+1 Morale for next Raid."
+          "text": "Retired (2026-10-28) — its +1 raid Morale went with Morale."
         },
         "minFactionTier": 1
       }
@@ -293,7 +293,7 @@
           "faith": 10
         },
         "effects": {
-          "text": "Faction Darkness −1; Morale (Empathy) +1."
+          "text": "Domain Darkness −1."
         },
         "minFactionTier": 2
       }
@@ -311,7 +311,7 @@
           "diplomacy": 30
         },
         "effects": {
-          "text": "A 2-turn truce with the target hex's holder: raids either way are refused and cost nothing."
+          "text": "Target a hex another Domain holds: its Loyalty +1. GM note — no hostile offer against either side for 2 turns."
         },
         "minFactionTier": 2
       }
@@ -481,7 +481,7 @@
           "faith": 20
         },
         "effects": {
-          "text": "No faction loses Morale to Darkness this turn."
+          "text": "Your Darkness −1. GM note — tempers hold: no hostile offer against any Domain for 1 turn."
         },
         "minFactionTier": 3
       }
@@ -500,7 +500,7 @@
           "faith": 20
         },
         "effects": {
-          "text": "Burns 1 Faction Darkness for +20 marks Economy now; Morale (Empathy) −1."
+          "text": "Burns 1 Domain Darkness for +20 marks Economy now."
         },
         "minFactionTier": 3
       }
@@ -652,7 +652,7 @@
           "intrigue": 40
         },
         "effects": {
-          "text": "The target hex is blasted: Contaminated + Radiation Zone, darkness pips +3, Morale/Loyalty −3, integration reset, contested. Your Darkness +3, its holder's +1, your stewards +1 each."
+          "text": "The target hex is blasted: Contaminated + Radiation Zone, darkness pips +3, Loyalty −3, integration reset, contested. Your Darkness +3, its holder's +1, your stewards +1 each."
         },
         "minFactionTier": 3
       }
@@ -728,7 +728,7 @@
           "economy": 60
         },
         "effects": {
-          "text": "Every faction's Morale (Empathy) +2 now and its resting Morale +2 for good; your Darkness −1."
+          "text": "Your Darkness −2; every other Domain's Darkness −1."
         },
         "minFactionTier": 3
       }

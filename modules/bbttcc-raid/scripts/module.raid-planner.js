@@ -96,7 +96,7 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     command_overdrive: "Gain initiative for next round.",
     psychic_disruption: "Opponents roll at Disadvantage this round.",
     echo_strike_protocol: "Apply attack effect twice vs different targets.",
-    moral_high_ground: "+2 to Empathy Meter after victory.",
+    moral_high_ground: "On success: your Domain's Darkness −1.",
     quantum_shield: "Reduce incoming damage by half for one round.",
     overclock_the_golems: "+3 attack for one construct unit; loses 1 HP.",
     counter_propaganda_wave: "Cancel enemy Soft Power effect this round.",
@@ -112,7 +112,7 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     recon_sweep: "Reveal alignment of 1 adjacent Hex.",
     ration_distribution: "+1 Loyalty to one controlled Hex.",
     minor_repair: "Remove 'Damaged Infrastructure.'",
-    local_festival: "+1 Empathy Meter.",
+    local_festival: "Domain Loyalty +2.",
     smuggling_network: "Establish 1 Trade Route (+1 Diplomacy regen).",
     training_drills: "Increase Violence cap +1 for 2 turns.",
     reconstruction_drive: "Upgrade Hex status to 'Claimed'.",
@@ -127,7 +127,7 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     mass_mobilization: "Marks income ×1.25 next turn, then ×0.75 (retired — see Mass Mobilization std).",
     enlightenment_congress: "Raise Enlightenment for all PCs by 1.",
     project_eden: "Create 'Garden City' Hex aligned to Tiferet.",
-    apocalyptic_weapon_test: "Destroy enemy Hex; Darkness +3.",
+    apocalyptic_weapon_test: "Blast a hex: Contaminated + Radiation Zone, Loyalty −3; your Darkness +3.",
 
     // ── Rows that had NO prose anywhere (audit 2026-09-08) ─────────────────
     // Written from what apply() actually does — every line below is a real
@@ -1122,6 +1122,7 @@ if (_fid) {
         // spec stays registered so already-planned entries still resolve; the
         // planner just stops offering it. `retired:true` on a spec does the same.
         const RETIRED = {
+          training_parade:            "its only effect was +1 raid Morale, retired with Morale (review #6, 2026-10-28)",
           propaganda_tour:            "same effect as Propaganda Campaign (T1, no tier lock)",
           reconstruction_drive:       "folded into Reconstruction Drive (std) — repairs + status → Claimed + Integration +1",
           flaming_pitch:              "identical to Boiling Oil",

@@ -72,6 +72,13 @@
     { key: "diplomatic_channel", fireMode: "post-commit",
       text: "On success: your faction's Loyalty +1.",   // (both Morale +1 riders retired 2026-10-18, ruling 19)
       throughput: (ctx) => bundle("diplomatic_channel", { factionEffects: ok(ctx) ? [{ factionId: att(ctx), loyaltyDelta: 1, label: "Diplomatic Channel" }] : [] }) },
+    // Unity-only rows (strategic review #8, 2026-10-28 — Dave: Loyalty, Darkness, or retire): Unity retired with ruling 18.
+    { key: "empathic_surge", fireMode: "post-commit",
+      text: "On success: your Domain's Loyalty +2.",
+      throughput: (ctx) => bundle("empathic_surge", { factionEffects: ok(ctx) ? [{ factionId: att(ctx), loyaltyDelta: 2, label: "Empathic Surge" }] : [] }) },
+    { key: "moral_high_ground", fireMode: "post-commit",
+      text: "On success: your Domain's Darkness −1.",
+      throughput: (ctx) => bundle("moral_high_ground", { factionEffects: ok(ctx) ? [{ factionId: att(ctx), darknessDelta: -1, label: "Moral High Ground" }] : [] }) },
     // Copy-vs-behaviour fixes (owner ruling 3): behaviour fixed, not the copy.
     { key: "prayer_in_the_smoke", fireMode: "pre-roll",
       text: "Advantage on the attacker's roll this round; on success your faction's Darkness −1.",
