@@ -985,8 +985,8 @@ function _passesEntryConditions(entry, { hexUuid = null, tags = "", factionId = 
   const c = entry?.conditions || {};
   const tagList = _tagArray(tags);
 
-  // Table Editor columns (review P2, 2026-10-27): Required Tag always gates; Terrain / Tier gate only when the roll knows them.
-  if (c.requiredTag && !tagList.includes(_canonicalizeCampaignTag(c.requiredTag))) return false;
+  // Table Editor columns (review P2, 2026-10-27): Terrain / Tier gate only when the roll knows them. Required Tag was retired
+  // the same day (owner): no roll ever supplied those tags, so a stored conditions.requiredTag is ignored everywhere.
   if (c.terrain && terrain && String(c.terrain).trim().toLowerCase() !== String(terrain).trim().toLowerCase()) return false;
   if (c.tier != null && c.tier !== "" && tier != null && tier !== "" && Number(c.tier) !== Number(tier)) return false;
 
@@ -5475,7 +5475,7 @@ async function _storyRecord(campaign, beat, ctx = {}) {
   if (!game.user?.isGM || !campaign?.id || !beat?.id) return { changes: [] };
   try { _applyCampaignStory(campaign); } catch (eSD) { warn("story data apply failed:", eSD); }   // review P3 (2026-10-27): this campaign's declarations, not the last one's
   const turn = _getTurnNumberSafe();
-  const changes = await _storyMutate(campaign.id, (st) => applyRecord(st, beat, { ts: Date.now(), turn }));
+  const changes = await _storyMutate(campaign.id, (st) => applyRecord(st, beat, { ts: Date.now(), turn, replace: ctx?.force === true && ctx?.source !== "resume" }));   // forced run may replace a recorded ending (owner 2026-10-27)
   try { await _awardForChanges(campaign, ctx, changes); } catch (eAw) { warn("[awards] quest/chapter award failed", eAw); }
   try { await _awardCreature(campaign, ctx, beat); } catch (eAc) { warn("[awards] creature award failed", eAc); }
   if (changes.length) {

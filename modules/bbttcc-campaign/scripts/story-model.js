@@ -1111,20 +1111,27 @@ export function applyRecord(state, beat, meta = {}) {
   // playing any beat of a quest means the quest is in play (a town walk starts the town)
   startQuest(d.quest, d.role === "start" ? "start" : "played");
   if (d.chapter) startChapter(d.quest, d.chapter, d.role === "start" ? "start" : "played");
-  // review P3 (2026-10-27): the first ending/closing stands (same rule as endChapter/closeQuest) — a forced or resumed re-run
-  // of an ending or closer must not rewrite the recorded ending or fire the change (whisper, quest_closed FX) again
-  if (d.role === "ending" && d.chapter && !st.chapters[d.quest][d.chapter].ending) {
-    st.chapters[d.quest][d.chapter].ending = { name: String(d.ending || id.split("_").slice(-1)[0]), ...stamp };
-    changes.push({ kind: "chapter-ended", quest: d.quest, chapter: d.chapter, ending: st.chapters[d.quest][d.chapter].ending.name });
+  // review P3 (2026-10-27): the first ending/closing stands (same rule as endChapter/closeQuest) — a resumed re-run of an
+  // ending or closer must not rewrite the recorded ending or fire the change again. Owner ruling 2026-10-27: a FORCED run
+  // (meta.replace) of a DIFFERENT ending beat replaces the recorded one; re-forcing the same beat is still no change.
+  // Rewards stay keyed per quest/chapter, so a replacement never pays twice.
+  const _endName = String(d.ending || id.split("_").slice(-1)[0]);
+  const _takes = (rec) => !rec || (meta.replace === true && String(rec.beatId || "") !== id);
+  if (d.role === "ending" && d.chapter && _takes(st.chapters[d.quest][d.chapter].ending)) {
+    const was = st.chapters[d.quest][d.chapter].ending;
+    st.chapters[d.quest][d.chapter].ending = { name: _endName, ...stamp };
+    changes.push({ kind: "chapter-ended", quest: d.quest, chapter: d.chapter, ending: _endName, ...(was ? { replaced: was.name } : {}) });
   }
   if (d.role === "closer") {
-    if (d.chapter && !st.chapters[d.quest][d.chapter].ending) {   // closing the quest closes the chapter it stands in
-      st.chapters[d.quest][d.chapter].ending = { name: String(d.ending || id.split("_").slice(-1)[0]), ...stamp };
-      changes.push({ kind: "chapter-ended", quest: d.quest, chapter: d.chapter, ending: st.chapters[d.quest][d.chapter].ending.name });
+    if (d.chapter && _takes(st.chapters[d.quest][d.chapter].ending)) {   // closing the quest closes the chapter it stands in
+      const was = st.chapters[d.quest][d.chapter].ending;
+      st.chapters[d.quest][d.chapter].ending = { name: _endName, ...stamp };
+      changes.push({ kind: "chapter-ended", quest: d.quest, chapter: d.chapter, ending: _endName, ...(was ? { replaced: was.name } : {}) });
     }
-    if (!st.closed[d.quest]) {
-      st.closed[d.quest] = { name: String(d.ending || id.split("_").slice(-1)[0]), ...stamp };
-      changes.push({ kind: "quest-closed", quest: d.quest, ending: st.closed[d.quest].name });
+    if (_takes(st.closed[d.quest])) {
+      const was = st.closed[d.quest];
+      st.closed[d.quest] = { name: _endName, ...stamp };
+      changes.push({ kind: "quest-closed", quest: d.quest, ending: _endName, ...(was ? { replaced: was.name } : {}) });
     }
   }
   for (const a of (Array.isArray(d.alsoStarts) ? d.alsoStarts : [])) {

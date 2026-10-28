@@ -101,7 +101,6 @@
               <th>Weight</th>
               <th>Terrain</th>
               <th>Tier</th>
-              <th>Required Tag</th>
               <th title="MENACES (2026-10-21): foot = on-foot fight (a party in a medium/heavy rig never draws it unless the beat is a menace); rig = rig-scale trouble (never for a foot party); any = both">Scale</th>
               <th>Actions</th>
             </tr>
@@ -144,10 +143,6 @@
                 </td>
 
                 <td>
-                  <select name="entry-required-tag" data-current="{{e.requiredTag}}"></select>
-                </td>
-
-                <td>
                   <select name="entry-scale">
                     <option value="" {{#unless e.scale}}selected{{/unless}}>any</option>
                     <option value="foot" {{#if (eq e.scale "foot")}}selected{{/if}}>foot</option>
@@ -174,7 +169,7 @@
 
       <hr class="bbttcc-divider" />
       <p class="bbttcc-muted">
-        Entry filters are now structured. Use Terrain, Tier, and Required Tag to control when a row is eligible.
+        Entry filters are now structured. Use Terrain, Tier, and Scale to control when a row is eligible.
       </p>
     </section>
   </section>

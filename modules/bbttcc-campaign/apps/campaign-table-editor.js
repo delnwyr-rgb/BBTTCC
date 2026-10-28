@@ -632,7 +632,6 @@ export class BBTTCCCampaignTableEditorApp extends Application {
     const entryWeights = fd.getAll("entry-weight").map(v => _safeNum(v, 0));
     const entryTerrains = fd.getAll("entry-terrain").map(v => String(v || "").trim());
     const entryTiers = fd.getAll("entry-tier").map(v => String(v || "").trim());
-    const entryRequiredTags = fd.getAll("entry-required-tag").map(v => String(v || "").trim());
     const entryScales = fd.getAll("entry-scale").map(v => String(v || "").trim().toLowerCase());   // MENACES (2026-10-21)
 
     const entries = [];
@@ -641,8 +640,7 @@ export class BBTTCCCampaignTableEditorApp extends Application {
       entryBeatIds.length,
       entryWeights.length,
       entryTerrains.length,
-      entryTiers.length,
-      entryRequiredTags.length
+      entryTiers.length
     );
 
     for (let i = 0; i < n; i++) {
@@ -663,7 +661,7 @@ export class BBTTCCCampaignTableEditorApp extends Application {
       const setCond = (key, val) => { if (val) conditions[key] = val; else delete conditions[key]; };
       setCond("terrain", entryTerrains[i]);
       setCond("tier", entryTiers[i]);
-      setCond("requiredTag", entryRequiredTags[i]);
+      delete conditions.requiredTag;   // Required Tag retired 2026-10-27 (owner): nothing ever supplied the tags; Save clears stale values
       setCond("scale", ["foot", "rig"].includes(entryScales[i]) ? entryScales[i] : "");
 
       entries.push(Object.assign(prev, {
