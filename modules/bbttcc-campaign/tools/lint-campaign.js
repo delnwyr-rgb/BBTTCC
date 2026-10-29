@@ -916,6 +916,9 @@ for (const b of beats) {
     if (r.clock != null && !(Number(r.clock) >= 1)) F("E19", "WARN", b.id, `hexMenace[${i}].clock '${r.clock}' — turns, ≥ 1`);
     if (r.reward != null && typeof r.reward !== "object") F("E19", "WARN", b.id, `hexMenace[${i}].reward must be {hexLoyalty?, darkness?}`);
   }
+  // ── E23: choice.gate is NOT a field (2026-10-28) — the engine reads choice.requires; a `gate` hides nothing ──
+  for (const ch of (Array.isArray(b.choices) ? b.choices : [])) if (ch && "gate" in ch)
+    F("E23", (ch.requires == null ? "ERROR" : "WARN"), b.id, `choice "${ch.label || "?"}" carries \`gate\` — the engine reads \`requires\`; ${ch.requires == null ? "its conditions are NOT enforced (the choice always shows)" : "the gate is ignored (requires decides)"}`);
   // ── E22: HEX DARKNESS (2026-10-28) — worldEffects.hexDarkness {set?|delta?, floor?, unless?, hexName?|targetHexUuid?} ──
   for (const [i, r] of (Array.isArray(we.hexDarkness) ? we.hexDarkness : (we.hexDarkness ? [we.hexDarkness] : [])).entries()) {
     if (!r || typeof r !== "object" || (r.set == null && r.delta == null && r.floor == null)) { F("E22", "WARN", b.id, `hexDarkness[${i}] needs set, delta or floor — WME writes nothing`); continue; }
