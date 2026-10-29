@@ -242,7 +242,7 @@ try {
 
         <div class="form-group">
           <label>Development Stage</label>
-          <input type="number" min="0" max="6" step="1" name="gm.development.stage" value="${htmlEscape(numOrBlank(dev.stage != null ? dev.stage : integ.progress))}">
+          <input type="number" min="0" max="6" step="1" name="gm.development.stage" value="${htmlEscape(numOrBlank(integ.progress != null ? integ.progress : dev.stage))}" data-orig="${htmlEscape(numOrBlank(integ.progress != null ? integ.progress : dev.stage))}">
           <p class="hint">Writes development.stage and integration.progress (0–6).</p>
         </div>
 
@@ -337,7 +337,9 @@ try {
 
           const st = val("gm.development.stage").trim();
           patch.development = patch.development || {};
-          if (st !== "") patch.development.stage = Number(st);
+          // 10-29: send the stage only when the GM changed it (an alarm-only Apply rolled progress back).
+          const stOrig = String(q('[name="gm.development.stage"]')?.dataset?.orig ?? "");
+          if (st !== "" && st !== stOrig) patch.development.stage = Number(st);
           patch.development.locked = checked("gm.development.locked");
 
           const av = val("gm.alarm.value").trim();

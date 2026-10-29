@@ -767,7 +767,8 @@ function approxGridDistSteps(docA, docB){
   const a = docCenter(docA);
   const b = docCenter(docB);
   const px = Math.hypot(a.x - b.x, a.y - b.y);
-  const grid = safeNum(canvas?.grid?.size, 100);
+  // 10-29 (#35): the hexes' own scene grid — canvas.grid is whatever scene the advancing GM is viewing (a battlemap).
+  const grid = safeNum(docA?.parent?.grid?.size ?? docB?.parent?.grid?.size ?? canvas?.grid?.size, 100);
   const steps = px / (grid > 0 ? grid : 100);
   return steps;
 }
@@ -2107,8 +2108,15 @@ async function enqueueTurnRequest({
         break;
       }
       case "statusSet": {
-        // requests.statusSet is a string newStatus
-        requests.statusSet = v.status || v.value || value || "secured";
+        // requests.statusSet is a string newStatus. 10-29 (#18): never the value object itself — a Beat Editor row
+        // ({mode,target,amount,note}) queued the object and processRequests wrote it into the hex's status flag.
+        let s = (typeof value === "string") ? value
+          : (typeof v.status === "string") ? v.status
+          : (typeof v.value === "string") ? v.value
+          : (value == null) ? "secured" : "";
+        if (s === value && !s.trim()) s = "secured";   // old default for an empty string value
+        if (!s.trim()) return { ok: false, error: "statusSet needs a status string (value.status)" };
+        requests.statusSet = s.trim();
         break;
       }
       default: {

@@ -269,7 +269,7 @@ function computeHexNextSteps(dr) {
     // ------ Integration progress ------
     if (progress < 6) {
       const target = progress < 3 ? 3 : progress < 5 ? 5 : 6;
-      const targetLabel = target === 3 ? "Developing (×1.05)" : target === 5 ? "Settled (×1.10)" : "Integrated (×1.20)";
+      const targetLabel = target === 3 ? "Developing" : target === 5 ? "Settled" : "Integrated";   // 10-29 (ruling b): no production multiplier — income never paid one
       const stepsLeft = target - progress;
       // Strategic activities that move integration: outpost establishment when
       // wild, then development / reconstruction at higher stages.
@@ -281,11 +281,11 @@ function computeHexNextSteps(dr) {
       out.integration.push({
         priority: 1,
         label: `${stepsLeft} more +1 outcome${stepsLeft === 1 ? "" : "s"} → ${targetLabel}`,
-        detail: `Currently ${stageKey} (${progress}/6). Each Justice/Reformation, Liberation, or Retribution outcome = +1. Best Friends Integration jumps straight to Settled (5).`,
+        detail: `Currently ${stageKey} (${progress}/6). Each Justice/Reformation, Liberation, or Retribution outcome = +1. Best Friends Integration jumps straight to Settled (5). Integration doesn't raise production: below 4 the hex costs your Domain logistics (double at 0); at 4+ it adds logistics capacity instead.`,
         activityKeys: integActivities
       });
     } else {
-      out.integration.push({ priority: 5, label: "Fully integrated (6/6).", detail: "Production multiplier maxed at ×1.20.", activityKeys: [] });
+      out.integration.push({ priority: 5, label: "Fully integrated (6/6).", detail: "Integration doesn't raise production — a fully integrated hex adds logistics capacity instead of costing it.", activityKeys: [] });
     }
 
     // ------ Type / size / sephirot ------
@@ -374,14 +374,13 @@ function computeHexNextSteps(dr) {
 
 /**
  * Render a per-resource production trace for the dossier "What's here" panel.
- * Mirrors the math in bbttcc-factions/scripts/module.js effHexWithAll without
- * importing it (single-source-of-truth lives there; this is a read-only echo).
+ * final = facts.hex.resources, the one source income reads.
  */
 function traceHexProduction(dr) {
   try {
     // Built from the facts (2026-10-01): base = the real Type ladder, sized = facts.hex.baseVector
     // (manual base or Type × Size), final = facts.hex.resources (sephirah + modifiers — what income
-    // reads) × the integration stage multiplier.
+    // reads). 10-29 (owner ruling b): no integration multiplier — the turn never applied one.
     const f = dr?.flags?.[MOD] ?? {};
     const type = hexType(f);
     const size = hexSize(f);
@@ -389,11 +388,9 @@ function traceHexProduction(dr) {
     const zero = { food:0, materials:0, trade:0, military:0, knowledge:0 };
     const base = Object.assign({}, zero, TYPE_BASE[type] || TYPE_BASE.settlement);
     const sized = Object.assign({}, zero, hexBaseVector(f));
-    const effective = Object.assign({}, zero, hexResources(f));
-    const progress = Math.max(0, Math.min(6, Math.round(Number(f.integration?.progress ?? 0) || 0)));
-    const integMult = progress >= 6 ? 1.20 : progress === 5 ? 1.10 : progress >= 3 ? 1.05 : 1.00;
-    const final = {};
-    for (const k of Object.keys(zero)) final[k] = Math.round(Number(effective[k] || 0) * integMult);
+    const effective = Object.assign({}, zero, hexResources(dr));   // the doc, so Hidden Resources can find its id
+    const integMult = 1.0;   // kept on the trace for old readers; always 1
+    const final = Object.assign({}, effective);
     return {
       type, size, sizeMult,
       base,
@@ -1791,7 +1788,24 @@ export function hexResources(tfLike) {
   const tf = _tfOf(tfLike);
   const manual = !!tf.manualOverride && Object.values(tf.calc?.base || tf.resources || {}).some(n => Number(n) > 0);
   if (manual) return Object.assign({ food:0, materials:0, trade:0, military:0, knowledge:0 }, tf.resources || {});
-  return computeEffectiveResources(hexBaseVector(tf), String(tf.sephirotName || ""), Array.isArray(tf.modifiers) ? tf.modifiers : []).effective;
+  const mods = Array.isArray(tf.modifiers) ? tf.modifiers : [];
+  const eff = computeEffectiveResources(hexBaseVector(tf), String(tf.sephirotName || ""), mods).effective;
+  // 10-29: Hidden Resources = +1 to one resource, picked by drawing id — the same pick the faction sheet + Campaign Overview use
+  if (mods.some(m => String(m || "").trim().toLowerCase() === "hidden resources")) { const id = _hexDocIdOf(tfLike, tf); if (id) eff[hiddenResourcePick(id)] += 1; }
+  return eff;
+}
+/** Deterministic resource for the Hidden Resources modifier (mirror of factions/overview stablePickResourceForHiddenResources). */
+export function hiddenResourcePick(drawId) {
+  const keys = ["food","materials","trade","military","knowledge"], s = String(drawId || ""); let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h + s.charCodeAt(i)) % 9973;
+  return keys[h % keys.length];
+}
+// Income callers pass the bare flag block (no id) — find its drawing by identity of d.flags[MOD].
+function _hexDocIdOf(tfLike, tf) {
+  const direct = tfLike?.flags ? tfLike.id : (tfLike?.document?.flags ? tfLike.document.id : "");
+  if (direct) return String(direct);
+  try { for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) if (d.flags?.[MOD] === tf) return String(d.id); } catch (_e) {}
+  return "";
 }
 /** Trade routes from stored edges: distinct owned↔owned pairs recorded on at least one end. The only counter. */
 export function factionTradeRoutes(factionId) {
@@ -1830,13 +1844,25 @@ Hooks.once("ready", _publishHexFacts);
 export const ADJ_MIN_DEV = 2;
 export function adjacencyRuleActive() { try { return game.bbttcc?.alpha?.enabled?.() === true; } catch (_e) { return false; } }
 function _adjHexDocs(sc) { return (sc?.drawings?.contents ?? []).filter(d => { const tf = d.flags?.[MOD]; return !!tf && (tf.isHex === true || tf.kind === "territory-hex"); }); }
-function _adjCenter(doc) { const w = Number(doc?.shape?.width || 0), h = Number(doc?.shape?.height || 0); return { x: Number(doc?.x || 0) + w / 2, y: Number(doc?.y || 0) + h / 2 }; }
+// 10-29: hex drawings are POLYGONS (shape.width/height null) — take center + size from the shape.points bounds
+// (relative to x,y); width/height only as a fallback. Null width made the limit Infinity → two-step "neighbours".
+function _adjBox(doc) {
+  const x0 = Number(doc?.x || 0), y0 = Number(doc?.y || 0), pts = Array.isArray(doc?.shape?.points) ? doc.shape.points.map(Number) : [];
+  if (pts.length >= 6) {
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (let i = 0; i + 1 < pts.length; i += 2) { minX = Math.min(minX, pts[i]); maxX = Math.max(maxX, pts[i]); minY = Math.min(minY, pts[i + 1]); maxY = Math.max(maxY, pts[i + 1]); }
+    if (Number.isFinite(minX) && Number.isFinite(minY)) return { x: x0 + (minX + maxX) / 2, y: y0 + (minY + maxY) / 2, size: Math.max(maxX - minX, maxY - minY) };
+  }
+  const w = Number(doc?.shape?.width || 0), h = Number(doc?.shape?.height || 0);
+  return { x: x0 + w / 2, y: y0 + h / 2, size: Math.max(w, h) };
+}
+function _adjCenter(doc) { const b = _adjBox(doc); return { x: b.x, y: b.y }; }
 function _adjOwner(tf) { return String(tf?.factionId || tf?.ownerId || "").replace(/^Actor\./, ""); }
 /** The hexes touching `doc` on its scene (nearest six within 1.1 × size). */
 export function hexNeighbors(doc) {
   const d = doc?.document ?? doc; const sc = d?.parent; if (!sc) return [];
   const c = _adjCenter(d);
-  const size = Math.max(Number(d?.shape?.width || 0), Number(d?.shape?.height || 0));
+  const size = _adjBox(d).size;
   const limit = size > 0 ? size * 1.1 : Infinity;
   return _adjHexDocs(sc).filter(o => o.id !== d.id)
     .map(o => { const oc = _adjCenter(o); return { o, dist: Math.hypot(oc.x - c.x, oc.y - c.y) }; })
@@ -2056,7 +2082,10 @@ async function bbttccRefreshHexConfigFromFlags(wrap, form, dr){
   const setChk = (name, v) => { const el = wrap.querySelector(`[name="${name}"]`); if (el) el.checked = !!v; };
 
   setVal("gm.travel.unitsOverride", bbttccNumOrBlank(travel.unitsOverride));
-  setVal("gm.development.stage", bbttccNumOrBlank((dev.stage != null) ? dev.stage : integ.progress));
+  // 10-29: integration.progress is the live engine field (dev.stage is GM-only and goes stale)
+  const _stageNow = bbttccNumOrBlank((integ.progress != null) ? integ.progress : dev.stage);
+  setVal("gm.development.stage", _stageNow);
+  { const el = wrap.querySelector(`[name="gm.development.stage"]`); if (el) el.dataset.orig = String(_stageNow); }
   setChk("gm.development.locked", dev.locked === true || integ.locked === true);
   setVal("gm.alarm.value", bbttccNumOrBlank(alarm.value));
   setChk("gm.alarm.locked", alarm.locked === true);
@@ -2168,7 +2197,7 @@ function bbttccInjectGMPanelIntoHexConfigDialog(dlg, dr){
 
           <div class="form-group">
             <label>Development Stage</label>
-            <input type="number" min="0" max="6" step="1" name="gm.development.stage" value="${bbttccHtmlEscape(bbttccNumOrBlank((dev.stage != null) ? dev.stage : integ.progress))}">
+            <input type="number" min="0" max="6" step="1" name="gm.development.stage" value="${bbttccHtmlEscape(bbttccNumOrBlank((integ.progress != null) ? integ.progress : dev.stage))}" data-orig="${bbttccHtmlEscape(bbttccNumOrBlank((integ.progress != null) ? integ.progress : dev.stage))}">
             <p class="hint">Writes development.stage + integration.progress (0–6).</p>
           </div>
 
@@ -2309,7 +2338,11 @@ function bbttccInjectGMPanelIntoHexConfigDialog(dlg, dr){
 
             const st = String(val("gm.development.stage") || "").trim();
             patch.development = patch.development || {};
-            if (st !== "") patch.development.stage = Number(st);
+            // 10-29: only send the stage when the GM changed it — an untouched box re-sent the
+            // opened value over a newer integration.progress (alarm-only Apply rolled stages back).
+            const _stEl = wrap.querySelector('[name="gm.development.stage"]');
+            const _stOrig = String(_stEl?.dataset?.orig ?? "").trim();
+            if (st !== "" && st !== _stOrig) patch.development.stage = Number(st);
             patch.development.locked = checked("gm.development.locked");
 
             const av = String(val("gm.alarm.value") || "").trim();
@@ -2568,7 +2601,7 @@ async function openHexEditorByUuid(uuid){
               const nm = String(data.name || f.name || "Hex").trim();
               await dr.setFlag(MOD, "name", nm);
               await dr.setFlag(MOD, "notes", data.notes ?? "");
-              if (data.status && data.status !== f.status) await dr.setFlag(MOD, "status", data.status);
+              if (game.user?.isGM && data.status && data.status !== f.status) await dr.setFlag(MOD, "status", data.status); // 10-29: GM-only
               if (data.type && data.type !== f.type) await dr.setFlag(MOD, "type", data.type);
               await dr.update({ text: nm }).catch(()=>{});
               return;
@@ -2809,6 +2842,15 @@ async function openHexEditorByUuid(uuid){
               modifiers: mods,
               notes: data.notes ?? ""
             };
+
+            // 10-29: owner/status/capital/size/resources/override are GM-only — a player seat
+            // that owns the Drawing keeps the stored values (claim adjacency + economy bypass).
+            if (!game.user?.isGM) {
+              for (const k of ["factionId", "status", "capital", "size", "resources", "manualOverride"]) {
+                if (f[k] === undefined) delete flagsPatch[k]; else flagsPatch[k] = f[k];
+              }
+              for (const k of ["calc", "sephirotBonus", "effectiveCached", "effectiveAt"]) delete flagsPatch[k];
+            }
 
             // Write per-key to avoid any scene/permission quirk
             for (const [k,v] of Object.entries(flagsPatch)) {
@@ -3056,6 +3098,8 @@ function buildHexData({ x,y }){
   };
 }
 async function _createHexAt(x,y){
+  // 10-29: GM-only — a Trusted seat could author an owned hex with any owner/resources
+  if (!game.user?.isGM) { ui.notifications?.warn?.("Only the GM can create hexes."); return null; }
   const c=snapCenter(x,y);
   const data=buildHexData(c);
   const [doc] = await canvas.scene.createEmbeddedDocuments("Drawing",[data]);
@@ -3132,7 +3176,7 @@ function ensureToolbar(){
     };
 
     row.appendChild(mk("territory-dashboard", "th-large", "Dashboard"));
-    row.appendChild(mk("create-hex", "draw-polygon", "Create Hex"));
+    if (game.user?.isGM) row.appendChild(mk("create-hex", "draw-polygon", "Create Hex")); // 10-29: GM-only
     row.appendChild(mk("campaign-overview", "list", "Overview"));
   }
 
@@ -3220,6 +3264,7 @@ async function onAction(action){
   }
 
   if (action==="create-hex") {
+    if (!game.user?.isGM) return ui.notifications?.warn?.("Only the GM can create hexes."); // 10-29
     if (typeof api.createHexAt!=="function") return ui.notifications?.warn?.("createHexAt API unavailable.");
     beginPlaceHex();
   }
@@ -3305,7 +3350,8 @@ async function gmSetHex(args){
   // 2) development.stage / development.locked (alias integration.progress/locked)
   if (patch.development && Object.prototype.hasOwnProperty.call(patch.development, "stage")) {
     const v = patch.development.stage;
-    const beforeStage = Number(((f.development && f.development.stage != null) ? f.development.stage : (f.integration && f.integration.progress)) ?? 0) || 0;
+    // 10-29: progress first (live engine field); dev.stage only as a fallback
+    const beforeStage = Number(((f.integration && f.integration.progress != null) ? f.integration.progress : (f.development && f.development.stage)) ?? 0) || 0;
     if (v === null) {
     await dr.unsetFlag(MOD, "development");
       if (beforeStage > 0) _ledgerBatch.push({ kind:"owner_action", label:"Development cleared", description:`Development stage reset (was ${beforeStage}).`, before:{stage:beforeStage}, after:{stage:0} });
@@ -3367,7 +3413,8 @@ async function gmSetHex(args){
       if (beforeAlarm != null) _ledgerBatch.push({ kind:"owner_action", label:"Alarm cleared", description:`Alarm reset (was ${beforeAlarm}).`, before:{alarm:beforeAlarm}, after:{alarm:null} });
     } else {
       const av = _bbttccClamp(v, 0, 99);
-      await dr.setFlag(MOD, "alarm", mergeObj(f.alarm, { value: av }));
+      // 10-29: merge from CURRENT flags, not the stale snapshot (lock write below re-merges too)
+      await dr.setFlag(MOD, "alarm", mergeObj((await dr.getFlag(MOD, "alarm")) || {}, { value: av }));
       if (beforeAlarm !== av) _ledgerBatch.push({ kind:"owner_action", label:`Alarm → ${av}`, description:`Alarm level set to ${av}${beforeAlarm!=null?` (was ${beforeAlarm})`:""}.`, before:{alarm:beforeAlarm}, after:{alarm:av} });
     }
   }
@@ -3379,7 +3426,8 @@ async function gmSetHex(args){
       if (beforeAlarmLocked) _ledgerBatch.push({ kind:"owner_action", label:"Alarm unlocked (cleared)", before:{alarmLocked:true}, after:{alarmLocked:false} });
     } else {
       const locked = !!v;
-      await dr.setFlag(MOD, "alarm", mergeObj(f.alarm, { locked: locked }));
+      // 10-29: re-read — merging onto f.alarm put the old value back over the value write above
+      await dr.setFlag(MOD, "alarm", mergeObj((await dr.getFlag(MOD, "alarm")) || {}, { locked: locked }));
       if (beforeAlarmLocked !== locked) _ledgerBatch.push({ kind:"owner_action", label: locked ? "Alarm locked" : "Alarm unlocked", before:{alarmLocked:beforeAlarmLocked}, after:{alarmLocked:locked} });
     }
   }
@@ -3675,7 +3723,9 @@ Hooks.on("deleteDrawing", (doc) => {
     static PARTS = { body: { template: TPL_HEX_SHEET } };
 
     constructor({ hexUuid }, options = {}) {
-      super(options);
+      // 10-29: one AppV2 id per hex — the fixed id made a second hex's sheet replace the first's DOM
+      const _slug = String(hexUuid || "").trim().split(".").pop().replace(/[^A-Za-z0-9_-]/g, "_").slice(0, 48) || "{id}";
+      super(Object.assign({ id: "bbttcc-hex-sheet-" + _slug }, options));
       this.hexUuid = String(hexUuid || "").trim();
       this.__activeDossierTab = "overview";
       this.__hexImprovementHookId = null;

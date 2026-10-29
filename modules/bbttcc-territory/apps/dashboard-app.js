@@ -227,6 +227,9 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
     if (partId !== "body") return context;
 
     const scene = canvas?.scene;
+    // 10-29: remember which scene the rows came from — edits/deletes/focus resolve against it, not
+    // whatever canvas.scene is at click time.
+    this._bbttccSceneId = scene?.id ?? null;
     const ownerList = buildOwnerList();
     const rows = [];
     const terrainMap = new Map(); // key -> label, distinct terrains in use (for the filter)
@@ -258,10 +261,12 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
         name: f.name ?? dr.text ?? "",
         ownerId: f.factionId ?? "",
         status,
-        type: f.type ?? "wilderness",
+        // 10-29: missing type/size read through the engine's own facts (settlement / none ×0), so the row
+        // shows what the hex actually pays.
+        type: game.bbttcc?.facts?.hex?.type?.(f) ?? (f.type || "settlement"),
         terrainKey,
         terrainLabel,
-        size: f.size ?? "outpost",
+        size: game.bbttcc?.facts?.hex?.size?.(f) ?? (f.size || "none"),
         population: f.population ?? "uninhabited",
         capital: !!f.capital,
         resources: {
@@ -285,6 +290,11 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
       .map(([key, label]) => ({ key, label }))
       .sort((a,b)=> a.label.localeCompare(b.label));
     return { sceneName: scene?.name ?? "—", ownerList, terrainList, rows, adoptionCount };
+  }
+
+  /** 10-29: the scene the rows were rendered from (falls back to the canvas before the first render). */
+  _bbttccScene() {
+    return (this._bbttccSceneId && game.scenes?.get(this._bbttccSceneId)) || canvas?.scene || null;
   }
 
   _rememberScroll(root) {
@@ -354,7 +364,7 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
 
       this._rememberScroll(root);
 
-      const scene = canvas?.scene;
+      const scene = this._bbttccScene();
       const updates = [];
       for (const dr of scene?.drawings?.contents ?? []) {
         if (isHexDrawing(dr)) continue;
@@ -382,10 +392,25 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
       if (!btn) return;
       ev.preventDefault(); ev.stopPropagation();
       try {
-        const dr = btn.dataset.uuid ? await fromUuid(btn.dataset.uuid) : canvas?.scene?.drawings?.get(btn.dataset.id);
+        const dr = btn.dataset.uuid ? await fromUuid(btn.dataset.uuid) : this._bbttccScene()?.drawings?.get(btn.dataset.id);
         if (!dr) return;
-        const { x, y, width, height } = dr;
-        await canvas.animatePan({ x: x + Math.max(width,1)/2, y: y + Math.max(height,1)/2, scale: 1.25 });
+        // 10-29: the row's hex lives on another scene (canvas switched) — say so instead of panning blind.
+        if (dr.parent?.id && dr.parent.id !== canvas?.scene?.id) {
+          ui.notifications?.warn?.("That hex is on another scene — refresh the dashboard.");
+          return;
+        }
+        // 10-29: hexes are polygons (width/height null) — center from the points bounds.
+        const pts = dr.shape?.points ?? [];
+        let cx = dr.x, cy = dr.y;
+        if (pts.length >= 4) {
+          const xs = pts.filter((_, i) => i % 2 === 0), ys = pts.filter((_, i) => i % 2 === 1);
+          cx = dr.x + (Math.min(...xs) + Math.max(...xs)) / 2;
+          cy = dr.y + (Math.min(...ys) + Math.max(...ys)) / 2;
+        } else {
+          cx = dr.x + Math.max(Number(dr.shape?.width) || 1, 1) / 2;
+          cy = dr.y + Math.max(Number(dr.shape?.height) || 1, 1) / 2;
+        }
+        await canvas.animatePan({ x: cx, y: cy, scale: 1.25 });
       } catch (e) { warn("Focus failed", e); }
     }, { capture:true, signal:sig });
 
@@ -431,7 +456,7 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
       this._rememberScroll(root);
       try {
         const uuid = btn.dataset.uuid;
-        const dr = uuid ? await fromUuid(uuid) : canvas?.scene?.drawings?.get(btn.dataset.id);
+        const dr = uuid ? await fromUuid(uuid) : this._bbttccScene()?.drawings?.get(btn.dataset.id);
         if (!dr) return;
         await dr.delete();
         this.render({ force:true, focus:false });
@@ -446,8 +471,15 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
       const id = el.dataset.id;
       if (!path || !id) return;
 
-      const scene = canvas?.scene;
+      const scene = this._bbttccScene();
       const dr = scene?.drawings?.get(id);
+      // 10-29: the row's hex is gone (deleted, or the canvas moved on) — say so, don't fail silently.
+      if (!dr) {
+        ui.notifications?.warn?.("That hex is no longer on this scene — refreshing the dashboard.");
+        this._rememberScroll(root);
+        this.render({ force: false, focus: false });
+        return;
+      }
       const f = dr?.flags?.[MOD] ?? {};
 
       let value;
@@ -461,6 +493,8 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
         const newOwner = String(value ?? "");
         const curStatus = f.status === "claimed" ? "occupied" : (f.status ?? "unclaimed");
         if (newOwner && curStatus === "unclaimed") update[`flags.${MOD}.status`] = "occupied";
+        // 10-29: clearing the owner clears the claim too — no hex 'occupied' by nobody.
+        else if (!newOwner && curStatus !== "unclaimed") update[`flags.${MOD}.status`] = "unclaimed";
       } else if (path === "status") {
         const newStatus = String(value ?? "unclaimed");
         const curOwner = f.factionId ?? "";
@@ -486,13 +520,18 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
       try {
         await scene.updateEmbeddedDocuments("Drawing", [update]);
         // Type / size / resource edits change the yield — recompute so the row and income agree.
-        if (/^(type|size|resources\.)/.test(path)) {
+        const yieldEdit = /^(type|size|resources\.)/.test(path);
+        if (yieldEdit) {
           try { await game.bbttcc?.api?.territory?.recomputeHexResources?.(scene.drawings.get(id), { source: "dashboard-inline" }); } catch (eR) { warn("recompute failed", eR); }
+        }
+        // 10-29: owner/status edits also write the paired field — re-render so the other select and the
+        // row's filter attributes aren't stale.
+        if (yieldEdit || path === "factionId" || path === "status") {
           this._rememberScroll(root);
           this.render({ force: false, focus: false });
         }
         this._showSavedToast(root);
-      } catch (e) { warn("Inline edit failed", e); }
+      } catch (e) { warn("Inline edit failed", e); ui.notifications?.error?.("Hex edit failed — see console."); }
     }, { capture:true, signal:sig });
 
     // Filter bar — input (live text) + change (selects) both update state and re-apply
@@ -561,6 +600,14 @@ Hooks.once("ready", () => {
       const app = game?.bbttcc?.apps?.territoryDashboard;
       // Only refresh an OPEN dashboard (2026-10-01) — force-rendering the cached closed
       // instance popped it back open on every hex update.
+      if (app?.rendered && typeof app.render === "function") app.render({ force: false, focus: false });
+    } catch (e) {}
+  });
+
+  // 10-29: scene switched — re-render an OPEN dashboard so its rows (and edits) follow the new canvas.
+  Hooks.on("canvasReady", () => {
+    try {
+      const app = game?.bbttcc?.apps?.territoryDashboard;
       if (app?.rendered && typeof app.render === "function") app.render({ force: false, focus: false });
     } catch (e) {}
   });

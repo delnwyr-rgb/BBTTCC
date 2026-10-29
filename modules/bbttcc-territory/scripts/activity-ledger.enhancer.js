@@ -127,9 +127,16 @@
           drawings: new Map(), actors: new Map()
         };
       }
-      try { return await inner.apply(this, callArgs); }
+      // 10-29 (#8): a throw or {ok:false} is a failed activity — turn-driver refunds its price itself
+      // (refundActivityCost), so the entry keeps the hex diff for Back out but no price to refund twice.
+      let failed = true;
+      try { const r = await inner.apply(this, callArgs); failed = !!(r && typeof r === "object" && r.ok === false); return r; }
       finally {
-        if (!outer) { const ctx = active; active = null; try { await finish(ctx); } catch (e) { warn("finish failed", e); } }
+        if (!outer) {
+          const ctx = active; active = null;
+          if (failed && ctx?.rec) { ctx.rec.paid = {}; ctx.rec.failed = true; }
+          try { await finish(ctx); } catch (e) { warn("finish failed", e); }
+        }
       }
     };
     wrapped.__bbttccLedger = true;
@@ -212,8 +219,22 @@
     return out;
   }
 
+  const backingOut = new Set();   // 10-29 (#8): rec ids mid-back-out on this client (double click)
   async function backOut(rec) {
     if (!game.user?.isGM) return { ok: false, reason: "GM only" };
+    if (!rec?.id) return { ok: false, reason: "no ledger entry" };
+    // 10-29 (#8): a stale rec (another open Hex Config, a second GM, a direct API call) must not refund again —
+    // re-read every stored copy and bail if any is already stamped.
+    if (rec.backedOut || backingOut.has(rec.id)) return { ok: false, reason: "already backed out" };
+    for (const uuid of Object.keys(rec.hexes || {})) {
+      let doc = null; try { doc = fromUuidSync(uuid); } catch (_e) {}
+      const stored = Array.isArray(doc?.flags?.[MOD_T]?.activityLog) ? doc.flags[MOD_T].activityLog : [];
+      if (stored.some(r => r?.id === rec.id && r.backedOut)) return { ok: false, reason: "already backed out" };
+    }
+    backingOut.add(rec.id);
+    try { return await backOutOnce(rec); } finally { backingOut.delete(rec.id); }
+  }
+  async function backOutOnce(rec) {
     const report = [];
     for (const [uuid, h] of Object.entries(rec.hexes || {})) {
       let doc = null; try { doc = fromUuidSync(uuid); } catch (_e) {}
@@ -334,12 +355,13 @@
           if (!rec) return;
           const ok = await foundry.applications.api.DialogV2.confirm({
             window: { title: `Back out “${rec.label}”?` },
-            content: `<p>Restore what this activity changed, on every hex and faction it touched:</p><p style="font-size:.9em">${describe(rec) || "(nothing recorded)"}</p><p class="hint">Only what this activity did is undone — anything a later activity changed stays (and is listed). Effects it queued for the turn have already landed and are not undone. ${Object.values(rec.paid || {}).some(v => Number(v) > 0) ? "The marks it cost are refunded." : "No price was recorded for it (activities logged before 2026-10-28), so no marks come back."}</p>`
+            content: `<p>Restore what this activity changed, on every hex and faction it touched:</p><p style="font-size:.9em">${describe(rec) || "(nothing recorded)"}</p><p class="hint">Only what this activity did is undone — anything a later activity changed stays (and is listed). Effects it queued for the turn have already landed and are not undone. ${Object.values(rec.paid || {}).some(v => Number(v) > 0) ? "The marks it cost are refunded." : rec.failed ? "It failed, and the turn already refunded its price, so no marks come back." : "No price was recorded for it (activities logged before 2026-10-28), so no marks come back."}</p>`
           });
           if (!ok) return;
           btn.disabled = true;
           const res = await backOut(rec);
-          ui.notifications?.[res.ok ? "info" : "warn"]?.(`${res.ok ? "Backed out" : "Backed out with problems"}: ${rec.label} — see chat.`);
+          if (res.reason) ui.notifications?.warn?.(`Not backed out: ${rec.label} — ${res.reason}.`);   // 10-29 (#8): refused, nothing ran
+          else ui.notifications?.[res.ok ? "info" : "warn"]?.(`${res.ok ? "Backed out" : "Backed out with problems"}: ${rec.label} — see chat.`);
           try { app.render(false); } catch (_e) {}
         });
       });

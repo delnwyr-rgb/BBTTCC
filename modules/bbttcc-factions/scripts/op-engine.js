@@ -418,6 +418,7 @@ async function preview(factionId, deltas, context) {
  *  - (optionally) exceed the faction max OP cap (if found)
  *
  * Set context.allowOvercap=true to bypass the cap refusal (GM tooling).
+ * Set context.clampToCap=true to trim positive deltas to headroom instead (trims reported in result.clamped).
  */
 // Per-faction commit queue (2026-10-01): a commit is a read-modify-write of the whole
 // opBank, and several turn-end listeners commit to one faction without awaiting each
@@ -474,8 +475,33 @@ async function _commitNow(factionId, deltas, context) {
   const disc = ctx?.noDiscount
     ? { deltas: _normalizeDeltas(deltas), applied: [] }
     : _applySpendDiscounts(faction, before, _normalizeDeltas(deltas), caps);   // steward identity discounts (CO21)
+  // 10-29: ctx.clampToCap trims positive deltas to the headroom of the bank read HERE (inside the
+  // queue) instead of refusing the whole commit — callers pre-clamping from getFlag raced other credits.
+  const clamped = {};
+  if (ctx?.clampToCap && !ctx?.allowOvercap) {
+    const d = disc.deltas;
+    for (const k of OP_KEYS) {
+      const n = Number(d[k] || 0), capK = _safeNum(caps?.[k], 0);
+      if (n > 0 && capK > 0) {
+        const room = Math.max(0, capK - Number(before[k] || 0));
+        if (n > room) { clamped[k] = n - room; d[k] = room; }
+      }
+    }
+    const totalCap = _sumCaps(caps);
+    if (totalCap > 0) {
+      const tBefore = _sumBank(before), tAfter = tBefore + OP_KEYS.reduce((s, k) => s + Number(d[k] || 0), 0);
+      let over = Math.min(tAfter - totalCap, tAfter - tBefore);   // only an over-cap INCREASE is refused
+      for (const k of OP_KEYS) {
+        if (over <= 0) break;
+        const n = Number(d[k] || 0); if (n <= 0) continue;
+        const cut = Math.min(n, over);
+        d[k] = n - cut; clamped[k] = (clamped[k] || 0) + cut; over -= cut;
+      }
+    }
+  }
   const result = _computePreview(before, disc.deltas, ctx, caps);
   if (disc.applied.length) result.discounts = disc.applied;
+  if (Object.keys(clamped).length) result.clamped = clamped;
   result.factionId = faction.id;
   result.factionName = faction.name;
 

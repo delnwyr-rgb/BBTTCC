@@ -62,6 +62,13 @@
   }
 
   const PILLARS = ["keter","chokmah","binah","chesed","geburah","tiferet","netzach","hod","yesod","malkuth"];
+  // 10-29: alignment writers store keyFromName("Chokhmah") = "chokhmah" etc. — fold to PILLARS spellings.
+  const SEPH_ALIASES = {
+    kether:"keter", chokhmah:"chokmah", chochmah:"chokmah", hokhmah:"chokmah",
+    chessed:"chesed", hesed:"chesed", gevurah:"geburah", gevura:"geburah",
+    tifaret:"tiferet", tipharet:"tiferet", tiphereth:"tiferet", tifereth:"tiferet",
+    netzah:"netzach", malchut:"malkuth", malkhut:"malkuth"
+  };
 
   function zeroOps() {
     return { violence:0, nonlethal:0, intrigue:0, economy:0, softpower:0, diplomacy:0, logistics:0, culture:0, faith:0 };
@@ -84,11 +91,14 @@
         const tf = obj.flags?.[MOD_TERR]; if (!tf) continue;
         const owner = tf.factionId || tf.ownerId || "";
         if (String(owner) !== String(factionId)) continue;
-        const fromKey = String(tf.sephirahKey || tf.sephirah || "").toLowerCase();
-        const fromUuid = String(tf.sephirotUuid||"").toLowerCase().match(/keter|chokmah|binah|chesed|geburah|gevurah|tiferet|netzach|hod|yesod|malkuth/);
+        // 10-29: the alignment writers store sephirotKey/sephirotName (main.js) — read those first;
+        // sephirahKey/sephirah + the uuid regex stay as legacy fallbacks.
+        const fromName = String(tf.sephirotName || "").toLowerCase().trim().replace(/[^\p{L}]+/gu, "");
+        const fromKey = String(tf.sephirotKey || fromName || tf.sephirahKey || tf.sephirah || "").toLowerCase().trim();
+        const fromUuid = String(tf.sephirotUuid||"").toLowerCase().match(/keter|kether|chokhmah|chokmah|chochmah|hokhmah|binah|chesed|chessed|hesed|geburah|gevurah|gevura|tiferet|tifaret|tipharet|tiphereth|tifereth|netzach|netzah|hod|yesod|malkuth|malchut|malkhut/);
         let key = fromKey || (fromUuid ? fromUuid[0] : "");
-        if (key === "gevurah" || key === "gevura") key = "geburah";   // legacy spelling (2026-10-26)
-        if (!key) continue;
+        key = SEPH_ALIASES[key] || key;   // canonical spellings = PILLARS / spark keys (tikkun-hex aliases)
+        if (!key || !PILLARS.includes(key)) continue;
         counts[key] = (counts[key]||0) + 1;
       }
     }

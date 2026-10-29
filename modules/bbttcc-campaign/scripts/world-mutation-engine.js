@@ -1231,7 +1231,6 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     const notes = [];
     let changed = false;
 
-    const resolution = get(game, "bbttcc.api.resolution", null);
     const territory  = get(game, "bbttcc.api.territory", null);
     const turnAPI    = get(game, "bbttcc.api.turn", null);
     const factions   = get(game, "bbttcc.api.factions", null);
@@ -1250,15 +1249,30 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       const key = String(we.territoryOutcome).trim();
       if (key) {
         try {
+          // 10-29: applyOutcome needs { factionId, hexUuid } — it threw "Missing factionId" on every beat.
+          // Faction = ctx → active campaign's faction; hex = ctx hex → beat target → the party's current hex.
+          // (runResolution was defined nowhere — dead fallback removed.)
           if (territory && typeof territory.applyOutcome === "function") {
-            await territory.applyOutcome({ outcomeKey: key, beat: beat, ctx: beatCtx });
-          } else if (resolution && typeof resolution.runResolution === "function") {
-            await resolution.runResolution(key, beatCtx);
+            const capi = get(game, "bbttcc.api.campaign", null);
+            const cid = ctx.campaignId || (capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null);
+            const camp = (cid && capi && typeof capi.getCampaign === "function") ? capi.getCampaign(cid) : null;
+            const fid = String((ctx && ctx.factionId) || (camp && camp.factionId) || ((camp && camp.factionIds) || [])[0] || "").replace(/^Actor\./, "");
+            let hexUuid = String((ctx && ctx.hexUuid) || (beat && beat.targetHexUuid) || "").trim();
+            if (!hexUuid && fid) {
+              try { const trav = get(game, "bbttcc.api.travel", null); const here = (trav && typeof trav.whereIs === "function") ? trav.whereIs(fid) : null; hexUuid = String((here && here.hexUuid) || ""); } catch (_eW) {}
+            }
+            if (!fid || !hexUuid) {
+              console.warn(TAG, "territoryOutcome: faction or hex not resolved", { key, fid, hexUuid, beatId: beatCtx.beatId });
+              if (game.user && game.user.isGM) ui.notifications?.warn?.(`Territory Outcome "${key}" skipped — no ${!fid ? "faction" : "hex"} to apply it to (beat ${beatCtx.beatLabel}).`);
+            } else {
+              await territory.applyOutcome({ factionId: fid, hexUuid, outcomeKey: key, context: beatCtx });
+              changed = true;
+              notes.push("territoryOutcome:" + key);
+            }
           }
-          changed = true;
-          notes.push("territoryOutcome:" + key);
         } catch (e) {
           console.warn(TAG, "territory/Resolution outcome failed", key, e);
+          if (game.user && game.user.isGM) ui.notifications?.warn?.(`Territory Outcome "${key}" failed — ${e?.message || e}`);   // 10-29: was console-only
         }
       }
     }

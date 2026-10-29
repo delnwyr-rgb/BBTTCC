@@ -224,6 +224,7 @@
     const isGM = !!game.user?.isGM;
     for (const d of canvas.scene.drawings ?? []) {
       const tf = d.flags?.[MOD]; const cr = tf?.crossing; if (!tf || !cr || typeof cr !== "object") continue;
+      if (!isGM && d.hidden !== false) continue;   // 10-29: bridges follow hex fog for players (no name/holder/toll leak on unrevealed hexes)
       const c = centerOf(d); if (!c) continue;
       const cut = Number(cr.integrity ?? 1) <= 0;
       const holder = game.actors.get(String(cr.factionId || ""))?.name || "unknown";

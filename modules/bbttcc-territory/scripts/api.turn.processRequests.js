@@ -225,14 +225,15 @@
 
         // --- statusSet -------------------------------------------------------
         if (requests.statusSet) {
-          const newStatus = requests.statusSet;
+          // 10-29: older queues stored the whole value object here — only a string is a status.
+          const newStatus = typeof requests.statusSet === "string" ? requests.statusSet : String(requests.statusSet?.status ?? requests.statusSet?.value ?? "");
           const oldStatus = String(tf.status || "unclaimed");
           delete requests.statusSet;
           consumed.push("statusSet");
           didSomething = true;
 
           // Already in the requested state → consume quietly (no write, no war log).
-          const statusChanged = oldStatus !== String(newStatus);
+          const statusChanged = !!newStatus && oldStatus !== String(newStatus);
           if (statusChanged) await doc.setFlag(MOD_TERRITORY, "status", newStatus);
 
           log("HEX REQUESTS: applied statusSet", {

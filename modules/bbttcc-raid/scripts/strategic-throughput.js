@@ -118,12 +118,33 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) if (isHexDoc(d) && hexOwnerId(d) === String(fid)) out.push(d);
     return out;
   }
-  const center = (d) => ({ x: Number(d.x || 0) + Number(d.shape?.width || 0) / 2, y: Number(d.y || 0) + Number(d.shape?.height || 0) / 2 });
+  // 10-29: hex drawings are POLYGONS (shape.width/height null) — bounds from shape.points (relative to d.x/y).
+  const bounds = (d) => {
+    const pts = Array.isArray(d?.shape?.points) ? d.shape.points.map(Number) : [];
+    if (pts.length >= 4) {
+      let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+      for (let i = 0; i + 1 < pts.length; i += 2) {
+        const px = pts[i], py = pts[i + 1];
+        if (!Number.isFinite(px) || !Number.isFinite(py)) continue;
+        if (px < x0) x0 = px; if (px > x1) x1 = px; if (py < y0) y0 = py; if (py > y1) y1 = py;
+      }
+      if (x1 >= x0 && y1 >= y0) return { x0, y0, w: x1 - x0, h: y1 - y0 };
+    }
+    return { x0: 0, y0: 0, w: Number(d?.shape?.width || 0), h: Number(d?.shape?.height || 0) };
+  };
+  const center = (d) => { const b = bounds(d); return { x: Number(d.x || 0) + b.x0 + b.w / 2, y: Number(d.y || 0) + b.y0 + b.h / 2 }; };
   function nearestNeighbors(doc, n = 6){   // the turn engine's own trust model: 6 nearest centroids on the same scene
     const sc = doc?.parent; if (!sc) return [];
     const c0 = center(doc);
+    // 10-29: adjacent only — within ~1.1 × the hex's bounding size (ring 2 is ≥ 1.5×), else the nearest six
+    // on a map edge reached two hexes out. No size → scene grid size; none at all → no neighbours.
+    const b0 = bounds(doc);
+    const size = Math.max(b0.w, b0.h) || Number(sc.grid?.size || 0);
+    if (!(size > 0)) return [];
+    const limit = size * 1.1;
     return (sc.drawings?.contents ?? sc.drawings ?? []).filter(d => d.id !== doc.id && isHexDoc(d))
       .map(d => { const c = center(d); return { d, dist: Math.hypot(c.x - c0.x, c.y - c0.y) }; })
+      .filter(x => x.dist <= limit)
       .sort((a, b) => a.dist - b.dist).slice(0, n).map(x => x.d);
   }
   // Immediate modifier write + ledger (the pending sweep is for next-turn effects).

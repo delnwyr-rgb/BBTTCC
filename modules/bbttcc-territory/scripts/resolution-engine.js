@@ -46,9 +46,14 @@
       hexUuid,
       outcomeKey,
       tier = "owner_action",
-      context = {}
+      context = {},
+      ctx = null
     } = {}) {
 
+      // 10-29: callers that pass { ctx } (older campaign shape) — read the ids off the context before refusing.
+      if (ctx && typeof ctx === "object" && (!context || !Object.keys(context).length)) context = ctx;
+      factionId = String(factionId || context?.factionId || "").replace(/^Actor\./, "");
+      hexUuid = String(hexUuid || context?.hexUuid || "");
       if (!factionId) throw new Error(`${TAG} Missing factionId.`);
       if (!hexUuid)  throw new Error(`${TAG} Missing hexUuid.`);
       if (!outcomeKey) throw new Error(`${TAG} Missing outcomeKey.`);
@@ -201,7 +206,7 @@
       // (T.moraleDelta is accepted and ignored — faction Morale retired 2026-10-18, ruling 19.)
 
       if (T.loyaltyDelta !== undefined) {
-        F.loyalty = clamp((F.loyalty || 0) + T.loyaltyDelta, 0, 100);
+        F.loyalty = clamp(Number(F.loyalty ?? 50) + T.loyaltyDelta, 0, 100);   // 10-29: unset loyalty = 50, as every other reader
       }
 
       if (T.darknessDelta !== undefined) {

@@ -154,7 +154,7 @@
 
     // ---- Tracks & State ----
     tracks:      "Tracks & State — the hex's live gauges: Integration (how developed it is), Radiation, local Darkness, and any active weather.",
-    integration: "Integration (0–6) — how thoroughly the owner has absorbed this hex. 0 wild, 1–2 outpost, 3–4 developing, 5 settled, 6 integrated heartland. Higher integration multiplies all production: ×1.05 at 3+, ×1.10 at 5, ×1.20 at 6.",
+    integration: "Integration (0–6) — how thoroughly the owner has absorbed this hex. 0 wild, 1–2 outpost, 3–4 developing, 5 settled, 6 integrated heartland. Integration doesn't raise production: below 4 the hex costs your Domain logistics (double at 0); at 4+ it adds logistics capacity instead.",
     radiation:   "Radiation — this hex's level, 0–3 (Clean · Radiated · Contaminated · Radiation Zone). Each Steward who travels in takes that many RP (gear reduces it). It stays until cleaned (Purify, cleanup maneuvers, the GM). At 3 it can spread each turn (25% chance per neighbor to make it Radiated). While a hex is Radiated, its owning faction's global Darkness climbs 1 per turn. Purify the hex to zero it out.",
     darkness:    "Hex Darkness — taint pooled in this hex (0–6). At 3 or more it feeds its holder: the Domain's Darkness rises 1 a turn while it holds any hex this dark (and 1 more for any Radiated hex). Cleansing, Purification and Judgment of Light bring it down.",
     weather:     "Weather — active weather on this hex and how many turns it has left. Hover the chip for the full effect breakdown; weather is written by the Travel engine and ticks down each turn.",
@@ -190,7 +190,7 @@
     // ---- Dossier pane ----
     whatsHere:  "What's Here — the hex's current identity: integration stage, sephirothic alignment if set, and the production trace showing how base pips become final output.",
     sephirot:   "Sephirot — the sephirah this hex is aligned to. Alignment adds flat bonuses to the hex's effective output (e.g. Keter +1 to all resources, Geburah +3 Military, Chokhmah +3 Knowledge, Malkuth +3 Materials) and matters to campaign goals that want aligned territory. In play: integrate a matching Spark on the hex (Tikkun).",
-    production: "Production trace — how output is computed: base pips from the hex type, × size multiplier (outpost 0.5 … megalopolis 3.0), then sephirot bonuses and modifiers (the same effective yield the income engine reads), × integration multiplier (×1.05 at 3+, ×1.10 at 5, ×1.20 at 6).",
+    production: "Production trace — how output is computed: base pips from the hex type, × size multiplier (outpost 0.5 … megalopolis 3.0), then sephirot bonuses and modifiers — Final is the same yield the income engine pays (integration doesn't multiply it).",
     prodManual: "Manual override — the pips stored on this hex override the auto-calculated production.",
     modifiers:  "Active Modifiers — named effects stamped on this hex (Fortified +3 defense, Trade Hub +50% trade, Damaged Infrastructure −25% production, Radiation Zone −75%…). They scale the hex's production and defense every turn; each entry records when and how it arrived.",
     timeline:   "How We Got Here — the hex's append-only improvement ledger: builds, modifier changes, size/type/sephirot changes, integration steps, raid outcomes. Newest first; the last 60 entries are shown.",
@@ -541,11 +541,13 @@
     };
 
     constructor(hexUuid, options) {
-      super(options || {});
+      // 10-29: the id must go in through super() — AppV2 freezes options and fixes #id in its
+      // constructor, so the later this.options.id write threw (swallowed) and every hex shared
+      // "bbttcc-hex-sheet-base" (a second hex's sheet replaced the first's window).
+      super(Object.assign({}, options || {}, { id: _safeHexSheetId(hexUuid) }));
       this.hexUuid = String(hexUuid || "");
       try {
         // Ensure this window never collides with Territory Dashboard or other apps.
-        this.options.id = _safeHexSheetId(this.hexUuid);
         if (this.options.window && this.options.window.title) {
           // keep existing title
         } else {
@@ -742,7 +744,7 @@
           productionRows,
           productionShown: !!trace && productionRows.some(r => Number(r.final || 0) !== 0 || Number(r.base || 0) !== 0),
           manualOverride: !!(trace && trace.manualOverride),
-          integMult: (trace && trace.integMult != null) ? trace.integMult : 1.0,
+          integMult: 1.0,   // 10-29 (ruling b): integration never multiplies production
           sizeMult: (trace && trace.sizeMult != null) ? trace.sizeMult : 0,
           sephirotKey: String(tf.sephirotKey || "").toLowerCase() || null,
           sephirotName: tf.sephirotName || null,
@@ -876,7 +878,7 @@
 
       return Object.assign({}, context, {
         name: tf.name || doc.text || doc.name || "(unnamed hex)",
-        size: tf.size || "outpost",
+        size: game.bbttcc?.facts?.hex?.size?.(tf) ?? (tf.size || "none"),   // 10-29: same default as the yield engine
         type: tf.type || "wilderness",
         status: tf.status || "unclaimed",
         ownerName: (owner && owner.name) ? owner.name : "Unclaimed",
@@ -1493,7 +1495,8 @@
           const delta = Number(btn.getAttribute("data-delta") || 0) || 0;
           const radApi = game.bbttcc?.api?.territory?.radiation;
           if (!radApi) { ui.notifications?.warn("Radiation API not ready."); return; }
-          try { await radApi.set(doc, radApi.level(tf) + delta, { source: "hex_sheet" }); this.render({ force: false }); }
+          // 10-29: step from the level the sheet SHOWS (readRadiation keeps the legacy fallback) — radApi.level reads mods only.
+          try { await radApi.set(doc, Math.min(3, readRadiation(tf)) + delta, { source: "hex_sheet" }); this.render({ force: false }); }
           catch (eR) { warn("radiation set failed", eR); ui.notifications?.error("Radiation update failed — see console."); }
           return;
         } else if (action === "hex-dark") {
@@ -1782,8 +1785,12 @@
           if (gmNotes) scroller.insertBefore(cardC, gmNotes); else scroller.appendChild(cardC);
           if (isGMc && cr) cardC.addEventListener("click", async (ev) => {
             const t = ev.target; if (!(t instanceof HTMLElement)) return;
-            if (t.closest("[data-crossing-save]")) { ev.preventDefault(); const v = Math.max(0, Math.round(Number(cardC.querySelector("[data-crossing-toll]")?.value || 0))); await doc.update({ [`flags.${MOD_T}.crossing`]: Object.assign({}, cr, { toll: v }) }); ui.notifications?.info?.(`Toll set to ${v} marks.`); }
-            else if (t.closest("[data-crossing-restore]")) { ev.preventDefault(); await doc.update({ [`flags.${MOD_T}.crossing`]: Object.assign({}, cr, { integrity: 1, cutBy: null, cutTurn: null }) }); ui.notifications?.info?.("Bridge restored."); }
+            // 10-29: re-read the crossing at click time — the render-time `cr` can be stale (a Cut Bridge mid-sheet would be undone).
+            const isSave = !!t.closest("[data-crossing-save]"), isRestore = !!t.closest("[data-crossing-restore]");
+            const live = doc.flags?.[MOD_T]?.crossing;
+            if ((isSave || isRestore) && !(live && typeof live === "object")) { ev.preventDefault(); ui.notifications?.warn?.("This hex no longer has a bridge."); try { this.render(false); } catch (_e) {} return; }
+            if (isSave) { ev.preventDefault(); const v = Math.max(0, Math.round(Number(cardC.querySelector("[data-crossing-toll]")?.value || 0))); await doc.update({ [`flags.${MOD_T}.crossing.toll`]: v }); ui.notifications?.info?.(`Toll set to ${v} marks.`); }
+            else if (isRestore) { ev.preventDefault(); await doc.update({ [`flags.${MOD_T}.crossing`]: Object.assign({}, live, { integrity: 1, cutBy: null, cutTurn: null }) }); ui.notifications?.info?.("Bridge restored."); }
             else if (t.closest("[data-crossing-remove]")) { ev.preventDefault(); await doc.unsetFlag(MOD_T, "crossing"); ui.notifications?.info?.("Bridge removed."); }
             else return;
             try { Hooks.callAll("bbttcc:crossing:changed", { hexUuid: doc.uuid, hexName: tf.name, action: "gm-edit" }); } catch (_e) {}

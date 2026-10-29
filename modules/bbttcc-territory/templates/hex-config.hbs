@@ -185,9 +185,12 @@
         <label>Status</label>
         <select name="{{#if statusPath}}{{statusPath}}{{else}}status{{/if}}">
           <option value="unclaimed" {{#if (bbttcc_eq status "unclaimed")}}selected{{/if}}>Unclaimed</option>
+          {{!-- 10-29: "claimed" is the main owned-hex status — without it a Save reset owned hexes to unclaimed --}}
+          <option value="claimed" {{#if (bbttcc_eq status "claimed")}}selected{{/if}}>Claimed</option>
           <option value="contested" {{#if (bbttcc_eq status "contested")}}selected{{/if}}>Contested</option>
           <option value="occupied" {{#if (bbttcc_eq status "occupied")}}selected{{/if}}>Occupied</option>
           <option value="liberated" {{#if (bbttcc_eq status "liberated")}}selected{{/if}}>Liberated</option>
+          <option value="scorched" {{#if (bbttcc_eq status "scorched")}}selected{{/if}}>Scorched</option>
         </select>
       </div>
 

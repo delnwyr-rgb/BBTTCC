@@ -99,6 +99,29 @@
     try { return await gx.call(BU_RELAY, { factionId, hexUuid, action, costOverride, note }); }
     catch (e) { ui.notifications?.error?.(`Build Units: ${e?.message ?? e}`); return { ok: false, reason: "relay-failed", error: String(e?.message ?? e) }; }
   }
+  // 10-29: relayed "asset" spends leave a short-lived receipt on the GM seat; the
+  // Townbuilder settlement relay consumes one before it records a new building or
+  // district, so a player seat cannot write a building it never paid for.
+  const RECEIPT_TTL_MS = 120000;
+  const _receipts = new Map(); // `${hexUuid}|${userId}` → [{ cost, ts }]
+  function _addReceipt(hexUuid, userId, cost) {
+    const k = `${hexUuid}|${userId}`;
+    const now = Date.now();
+    const list = (_receipts.get(k) || []).filter(r => now - r.ts < RECEIPT_TTL_MS);
+    list.push({ cost: Number(cost) || 0, ts: now });
+    _receipts.set(k, list);
+  }
+  function takeReceipt({ hexUuid, userId, minCost = 0 } = {}) {
+    const k = `${hexUuid}|${userId}`;
+    const now = Date.now();
+    const list = (_receipts.get(k) || []).filter(r => now - r.ts < RECEIPT_TTL_MS);
+    const i = list.findIndex(r => r.cost >= Number(minCost || 0));
+    if (i < 0) { _receipts.set(k, list); return null; }
+    const [r] = list.splice(i, 1);
+    _receipts.set(k, list);
+    return r;
+  }
+
   function _registerBuRelay() {
     const gx = game.bbttcc?.api?.gmExec;
     if (!gx?.register) return;
@@ -106,11 +129,20 @@
       const hexDoc = await resolveHexDoc(p?.hexUuid);
       if (!hexDoc) throw new Error("hex not found");
       const tf = hexDoc.flags?.[MODT] || {};
-      const A = asActor(p?.factionId || tf.factionId || tf.ownerId || null);
+      // 10-29: the payer is the hex's holder — a payload factionId may only name that same faction.
+      const A = asActor(tf.factionId || tf.ownerId || null);
       if (!A) throw new Error("no owning faction");
+      if (p?.factionId && asActor(p.factionId)?.id !== A.id) throw new Error(`${A.name} holds this hex — spend from that faction`);
       const caller = game.users?.get(String(meta?.fromUserId || ""));
       if (!meta?.local && !(caller && A.testUserPermission?.(caller, "OWNER"))) throw new Error(`${caller?.name || "caller"} does not own ${A.name}`);
-      const res = await _spendForActionLocal({ factionId: A.id, hexUuid: p?.hexUuid, action: p?.action, costOverride: p?.costOverride, note: `${p?.note || ""}${meta?.fromUserName ? ` (via ${meta.fromUserName})` : ""}`.trim() });
+      const actionKey = String(p?.action || "fortify").toLowerCase();
+      if (!["fortify", "repair", "asset"].includes(actionKey)) throw new Error(`unknown build action: ${actionKey}`);
+      // 10-29: fortify/repair always cost the world setting; an asset price is rounded up to whole BU, at least 1.
+      const costOverride = actionKey === "asset" && p?.costOverride != null
+        ? Math.max(1, Math.ceil(Number(p.costOverride) || 0))
+        : null;
+      const res = await _spendForActionLocal({ factionId: A.id, hexUuid: hexDoc.uuid, action: actionKey, costOverride, note: `${p?.note || ""}${meta?.fromUserName ? ` (via ${meta.fromUserName})` : ""}`.trim() });
+      if (res?.ok && actionKey === "asset" && !meta?.local) _addReceipt(hexDoc.uuid, String(meta?.fromUserId || ""), res.cost);
       return res;
     });
   }
@@ -283,7 +315,8 @@
         if (!A) return false;
         return buOf(A) >= Number(cost || 0);
       },
-      spendForAction
+      spendForAction,
+      takeReceipt // 10-29: GM-seat only — the Townbuilder settlement relay checks a relayed asset spend happened
     };
 
     console.log(TAG, "Published API at game.bbttcc.api.territory.buildUnits");

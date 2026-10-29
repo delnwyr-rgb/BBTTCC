@@ -154,23 +154,22 @@
 
           // #64 (2026-10-28): one channel at its cap used to refuse the WHOLE facility (all-or-nothing) and the card blamed
           // "insufficient". Positive deltas are clamped to each channel's headroom first; what's left over is reported.
-          const capped = {};
-          try {
-            const A = game.actors.get(String(ownerId).replace(/^Actor\./, ""));
-            const caps = game.bbttcc?.facts?.faction?.caps?.(A) || {};
-            const bank = A?.getFlag?.("bbttcc-factions", "opBank") || {};
-            for (const [k, v] of Object.entries(deltas)) {
-              const n = Number(v) || 0, cap = Number(caps[k]) || 0;
-              if (n > 0 && cap > 0) { const room = Math.max(0, cap - (Number(bank[k]) || 0)); if (n > room) { capped[k] = n - room; deltas[k] = room; } }
-            }
-          } catch (_eCap) {}
+          // 10-29: the clamp runs INSIDE the engine's commit queue (clampToCap) against the bank it reads there —
+          // a getFlag read here raced same-turn rig/spark credits and the whole delta was refused.
           // Apply to OP Engine (commit refuses underflow)
           const res = await opApi.commit(ownerId, deltas, {
             source: "facility",
             hexUuid: dr.uuid,
             label: facType,
-            note: "Per-turn facility effects"
+            note: "Per-turn facility effects",
+            clampToCap: true
           });
+          const capped = {};
+          for (const [k, v] of Object.entries(res?.clamped || {})) {
+            const n = Number(v) || 0; if (n <= 0) continue;
+            capped[k] = n;
+            if (k in deltas) deltas[k] = Math.max(0, (Number(deltas[k]) || 0) - n);
+          }
 
           const factionName = resolveFactionName(ownerId);
           const pieces = sumDeltaKeys(deltas);

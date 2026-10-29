@@ -1004,30 +1004,8 @@ const SEPHIROT = {
   malkuth:  { addPer:{ trade:+4 } }
 };
 
-const INTEGRATION_STAGE_MULT = {
-  wild:       1.00,
-  outpost:    1.00,
-  developing: 1.05,
-  settled:    1.10,
-  integrated: 1.20
-};
-
-function integrationStageKeyFromProgress(progressRaw) {
-  let p = Math.round(Number(progressRaw ?? 0) || 0);
-  if (p < 0) p = 0;
-  if (p >= 6) return "integrated";
-  if (p === 5) return "settled";
-  if (p >= 3) return "developing";
-  if (p >= 1) return "outpost";
-  return "wild";
-}
-
-function integrationMultFromFlags(integrationFlags) {
-  const progress = integrationFlags?.progress ?? 0;
-  const stageKey = integrationStageKeyFromProgress(progress);
-  const mult = INTEGRATION_STAGE_MULT[stageKey] ?? 1.0;
-  return { mult, stageKey };
-}
+// 10-29 (owner ruling b): integration does NOT multiply production — the turn never paid the old
+// ×1.05/1.10/1.20 stage multiplier, so it is gone from this display too (integration = logistics).
 
 function normalizeSizeKey(sizeRaw) {
   if (!sizeRaw) return "town";
@@ -1069,7 +1047,7 @@ async function resolveSephirotKeyFromFlags(f) {
   catch { return ""; }
 }
 
-/** Apply size + modifiers + sephirot + integration; return effective outputs & side-effects. */
+/** Apply size + modifiers + sephirot; return effective outputs & side-effects. */
 async function effHexWithAll(dr) {
   const f = dr.flags?.[TER_MOD] ?? {};
 
@@ -1143,13 +1121,6 @@ async function effHexWithAll(dr) {
     }
   }
   if (se && typeof se.defense === "number") defense += Number(se.defense || 0);
-
-  const { mult: integMult } = integrationMultFromFlags(f.integration ?? {});
-  if (integMult !== 1) {
-    for (const k of Object.keys(eff)) {
-      eff[k] = Number(eff[k] ?? 0) * integMult;
-    }
-  }
 
   for (const k of Object.keys(eff)) eff[k] = Math.round(eff[k]);
 
@@ -4733,6 +4704,8 @@ function __bbttccAvailabilityTier(dr) {
   const tf = dr?.flags?.[TER_MOD] ?? {};
   const status = String(tf.status ?? "").trim().toLowerCase();
   const factionId = String(tf.factionId ?? "").trim();
+  // 10-29: an owned hex is never available, whatever its status says (a stray "unclaimed" on a held hex)
+  if (factionId && factionId !== "(none)") return 99;
   if (status === "unclaimed") return 1;               // prefer true unclaimed
   if (!factionId || factionId === "(none)") return 2; // fallback: ownerless
   return 99;

@@ -868,6 +868,9 @@
   function renderTray(host) {
     const steward = getSteward();
     let tray = document.getElementById(TRAY_ID);
+    // 10-29: carry the scroll over the rebuild — the tray is its own scroll box,
+    // so a Surge spend / HP tick no longer snaps it back to the top.
+    const keepScroll = tray ? tray.scrollTop : 0;
     if (tray) tray.remove();
 
     tray = document.createElement("div");
@@ -901,8 +904,9 @@
         const lg = game.bbttcc?.api?.campaign?.ledger?.get?.();
         if (!lg || !(lg.budget > 0)) return "";
         const month = Math.max(1, Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 1);
+        // 10-29: ruling R7 — no debt carry; the day count resets at the turn's end.
         const debtBadge = lg.debt > 0
-          ? ` <span class="bbttcc-hud-ledger-debt" title="The month is overdrawn — the debt carries into the new month" style="color:var(--cb-warn, #e0a34e)">+${lg.debt} owed</span>`
+          ? ` <span class="bbttcc-hud-ledger-debt" title="The Stewards have run ${lg.debt} day${lg.debt === 1 ? "" : "s"} past the month's end. Nothing carries over — the day count resets at the turn's end." style="color:var(--cb-warn, #e0a34e)">(${lg.debt} past month's end)</span>`
           : "";
         return `<div class="bbttcc-hud-ledger" style="padding:2px 8px;font-size:.85em;opacity:.85"
           title="Month ${month}, Day ${lg.spent}: the days the Stewards have spent on the road this month. The rest of the month passes at the turn's end, while the Domain's orders play out.">
@@ -995,6 +999,7 @@
     });
 
     host.appendChild(tray);
+    if (keepScroll) tray.scrollTop = keepScroll;
     // (Tray is a child of the draggable HUD root, so it moves with the bar — no
     // separate draggable wiring, which would detach it via its own position.)
   }
@@ -1103,13 +1108,18 @@
     log("Player HUD mounted.");
   }
 
-  function refreshTrayIfOpen() {
+  // 10-29: re-classify only when the item set changes (create/delete), not on
+  // every HP/Surge/effect tick, and debounce so a burst of hooks renders once.
+  const _refreshTrayNow = foundry.utils.debounce(() => {
     const tray = document.getElementById(TRAY_ID);
     if (!tray) return;
     const host = document.getElementById(HUD_ID);
     if (!host) return;
-    _groupCache.actorId = null; // data changed — re-classify on next render
     renderTray(host);
+  }, 50);
+  function refreshTrayIfOpen({ reclassify = false } = {}) {
+    if (reclassify) _groupCache.actorId = null; // item set changed — re-classify on next render
+    _refreshTrayNow();
   }
 
   // ── Hooks ───────────────────────────────────────────────────────────────
@@ -1164,9 +1174,9 @@
       if (foundry.utils.hasProperty(changes || {}, "flags.bbttcc-factions.travelingWith")) refreshTravelStackPill();
     } catch (_e) {}
   });
-  Hooks.on("createItem", (it) => { if (affectsSteward(it?.parent)) refreshTrayIfOpen(); });
+  Hooks.on("createItem", (it) => { if (affectsSteward(it?.parent)) refreshTrayIfOpen({ reclassify: true }); });
   Hooks.on("updateItem", (it) => { if (affectsSteward(it?.parent)) refreshTrayIfOpen(); });
-  Hooks.on("deleteItem", (it) => { if (affectsSteward(it?.parent)) refreshTrayIfOpen(); });
+  Hooks.on("deleteItem", (it) => { if (affectsSteward(it?.parent)) refreshTrayIfOpen({ reclassify: true }); });
   Hooks.on("createActiveEffect", (eff) => { if (affectsSteward(eff?.parent)) refreshTrayIfOpen(); });
   Hooks.on("updateActiveEffect", (eff) => { if (affectsSteward(eff?.parent)) refreshTrayIfOpen(); });
   Hooks.on("deleteActiveEffect", (eff) => { if (affectsSteward(eff?.parent)) refreshTrayIfOpen(); });

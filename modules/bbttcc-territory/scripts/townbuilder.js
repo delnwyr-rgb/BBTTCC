@@ -94,10 +94,13 @@
   // primary GM via bbttcc-core gmExec (same pattern as the Build Units spend),
   // whose handler checks the caller OWNS the hex's faction.
   const TB_RELAY = "territory.townbuilder.writeSettlement";
+  // 10-29: returns true when this seat wrote it — a relayed write also gets its
+  // dossier ledger entry + journal refresh on the GM (a player seat can do neither).
   async function writeSettlement(hexDoc, settlement) {
     const gx = game.bbttcc?.api?.gmExec;
-    if (game.user?.isGM || !gx?.call) return _writeSettlementLocal(hexDoc, settlement);
+    if (game.user?.isGM || !gx?.call) { await _writeSettlementLocal(hexDoc, settlement); return true; }
     await gx.call(TB_RELAY, { hexUuid: hexDoc.uuid, settlement });
+    return false;
   }
   async function _writeSettlementLocal(hexDoc, settlement) {
     // Arrays replace wholesale on update; we only add/modify keys, so a plain
@@ -126,10 +129,128 @@
       const cur = getSettlement(doc);
       const keeps = (list, next) => (list || []).every(x => next.some(y => y?.id === x.id));
       if (cur && !(keeps(cur.assets, s.assets) && keeps(cur.districts, s.districts))) throw new Error("a player seat cannot remove buildings or districts");
-      await _writeSettlementLocal(doc, s);
+      if (meta?.local) { await _writeSettlementLocal(doc, s); return { ok: true }; }
+      // 10-29 (#10): rebuild the record GM-side — recorded rows keep everything but
+      // name/assignment, and at most ONE new building or district, re-checked + paid.
+      let v;
+      try { v = await _vetPlayerSettlement(doc, cur, s, A, String(meta?.fromUserId || "")); }
+      catch (e) { // the caller refunds its spend on a refusal — drop any receipt it left so it can't be reused
+        try { while (buApi()?.takeReceipt?.({ hexUuid: doc.uuid, userId: String(meta?.fromUserId || "") })) {} } catch (_e) {}
+        throw e;
+      }
+      await _writeSettlementLocal(doc, v.settlement);
+      // 10-29 (#26): the dossier ledger, actor folder and journal need GM rights — do them here.
+      try {
+        const rec = game.bbttcc?.api?.territory?.recordHexImprovement;
+        if (v.newAsset) await rec?.(doc, _ledgerForBuild(doc, v.settlement, v.newAsset, v.recipe, A));
+        if (v.newDistrict) await rec?.(doc, _ledgerForDistrict(doc, v.settlement, v.newDistrict, A));
+      } catch (e) { warn("relayed dossier ledger write failed:", e); }
+      if (v.newAsset) {
+        try {
+          const folder = await ensureActorFolder(v.settlement.name);
+          const actor = await fromUuid(v.newAsset.actorUuid);
+          if (folder && actor && actor.folder?.id !== folder.id) await actor.update({ folder: folder.id });
+        } catch (_e) {}
+      }
+      await upsertJournal(doc, v.settlement);
       log(`settlement written on ${hexName(doc)} (for ${meta?.fromUserName || "?"})`);
       return { ok: true };
     });
+  }
+
+  // 10-29 (#10): GM-side check of a player seat's settlement write. Throws on anything the
+  // Townbuilder UI could not have produced; returns the record to write.
+  async function _vetPlayerSettlement(doc, cur, s, faction, userId) {
+    const str = (v) => String(v ?? "").replace(/\s+/g, " ").trim().slice(0, 60);
+    const { tier } = ladderFor(doc);
+    if (!tier) throw new Error("hex size does not unlock the Townbuilder");
+    const curAssets = cur?.assets || [], curDists = cur?.districts || [];
+
+    // Recorded districts: only the name may change.
+    const districts = curDists.map(d => {
+      const y = s.districts.find(x => x?.id === d.id);
+      return { ...d, name: str(y?.name) || d.name };
+    });
+    const addD = s.districts.filter(x => x?.id && !curDists.some(d => d.id === x.id));
+    const addA = s.assets.filter(x => x?.id && !curAssets.some(a => a.id === x.id));
+    if (addD.length + addA.length > 1) throw new Error("one new building or district per write");
+
+    let newDistrict = null;
+    if (addD.length) {
+      const t = String(addD[0].type || "").toLowerCase();
+      const hexType = String(doc.flags?.[MOD_T]?.type || "").toLowerCase();
+      if (!tier.districts || districts.length >= tier.districts) throw new Error("no free district slot at this size");
+      if (!DISTRICT_TYPES.includes(t) || t === hexType) throw new Error(`not a valid district type here: ${t}`);
+      if (districts.some(d => String(d.type).toLowerCase() === t)) throw new Error(`a ${t} district already exists here`);
+      const cost = districtBuCost();
+      if (cost > 0 && !buApi()?.takeReceipt?.({ hexUuid: doc.uuid, userId, minCost: cost })) throw new Error(`no ${cost} BU district spend on record`);
+      newDistrict = { id: String(addD[0].id).slice(0, 32), type: t, name: str(addD[0].name) || `${t[0].toUpperCase()}${t.slice(1)} District`, addedTs: game.time.worldTime };
+      districts.push(newDistrict);
+    }
+
+    // Recorded buildings: only the name + district assignment may change.
+    const dIds = new Set(districts.map(d => d.id));
+    const assets = curAssets.map(a => {
+      const y = s.assets.find(x => x?.id === a.id);
+      const dist = y ? (y.district ?? null) : a.district;
+      return { ...a, customName: str(y?.customName) || a.customName, district: dist && dIds.has(dist) ? dist : null };
+    });
+
+    let newAsset = null, recipe = null;
+    if (addA.length) {
+      const x = addA[0];
+      recipe = recipesApi()?.byId?.(x.recipeId) ?? null;
+      if (!recipe) throw new Error(`unknown recipe: ${x.recipeId}`);
+      if (Number(recipe.tierGate || 1) > tier.maxTier) throw new Error(`${recipe.name} unlocks at a larger settlement size`);
+      if (assets.length >= tier.slots) throw new Error(`all ${tier.slots} building slots are used`);
+      if (!(menuFor(doc) || []).some(r => r?.id === recipe.id)) throw new Error(`${recipe.name} is not on this settlement's menu`);
+      let actor = null;
+      try { actor = await fromUuid(String(x.actorUuid || "")); } catch (_e) {}
+      if (!(actor instanceof Actor)) throw new Error("the building's actor was not found");
+      if (curAssets.some(a => a.actorUuid === actor.uuid)) throw new Error("that actor is already a building here");
+      const cost = buCostForRecipe(recipe);
+      if (cost > 0 && !buApi()?.takeReceipt?.({ hexUuid: doc.uuid, userId, minCost: cost })) throw new Error(`no ${cost} BU build spend on record`);
+      newAsset = {
+        id: String(x.id).slice(0, 32), recipeId: recipe.id, customName: str(x.customName) || recipe.name,
+        actorUuid: actor.uuid, district: null, builtTs: game.time.worldTime,
+        paidMaterials: chargesMaterials(recipe) // salvage follows the world rule, not the payload
+      };
+      assets.push(newAsset);
+    }
+
+    // Founding fields never come from the payload once a town exists.
+    const settlement = {
+      name: cur?.name || str(s.name) || hexName(doc),
+      foundedByActorId: cur ? cur.foundedByActorId : str(s.foundedByActorId),
+      foundedFactionId: cur ? cur.foundedFactionId : faction.id,
+      foundedTs: cur ? cur.foundedTs : game.time.worldTime,
+      sceneId: cur ? cur.sceneId : "",
+      assets, districts
+    };
+    return { settlement, newAsset, newDistrict, recipe };
+  }
+
+  // Dossier ledger rows — shared by the GM seat and the relay handler.
+  function _ledgerForBuild(hexDoc, settlement, asset, recipe, faction) {
+    return {
+      kind: "build",
+      label: `Townbuilder: built "${asset.customName}" (${recipe?.name || asset.recipeId})`,
+      description: `${faction?.name || "A faction"} raised ${asset.customName} — a ${recipe?.name || asset.recipeId} — in ${settlement.name}.`,
+      source: { activity: "townbuilder:build", factionId: faction?.id || "" },
+      reversible: false,
+      dedupeKey: `townbuilder:${hexDoc.id}:${settlement.assets.length}:${asset.customName}`
+    };
+  }
+  function _ledgerForDistrict(hexDoc, settlement, district, faction) {
+    const t = district.type;
+    return {
+      kind: "district",
+      label: `Townbuilder: founded "${district.name}" (${t} district)`,
+      description: `${settlement.name} grew a ${t} district — ${districtYieldPreview(t)} at ${Math.round(districtShare() * 100)}% share, and the ${t} building menu unlocks here.`,
+      source: { activity: "townbuilder:district", factionId: faction?.id || "" },
+      reversible: false,
+      dedupeKey: `townbuilder:district:${hexDoc.id}:${t}`
+    };
   }
 
   function ladderFor(hexDoc) {
@@ -233,25 +354,21 @@
       if (!res?.ok) return { ok: false, error: `Build Unit spend failed (${res?.reason || "insufficient BU?"}) — districts cost ${cost} BU.` };
     }
 
-    settlement.districts.push({ id: foundry.utils.randomID(16), type: t, name: districtName, addedTs: game.time.worldTime });
-    try { await writeSettlement(hexDoc, settlement); }
+    const district = { id: foundry.utils.randomID(16), type: t, name: districtName, addedTs: game.time.worldTime };
+    settlement.districts.push(district);
+    let local = false;
+    try { local = await writeSettlement(hexDoc, settlement); }
     catch (e) { // refund — the BU left the ledger but the district was never recorded
       warn("district write failed:", e);
       if (cost > 0) { try { await faction.setFlag(MOD_F, "buildUnits", buBalance(faction) + cost); } catch (_e) {} }
       return { ok: false, error: `Could not record the district (${e?.message ?? e})${cost > 0 ? " — Build Units refunded" : ""}.` };
     }
 
-    try {
-      await game.bbttcc?.api?.territory?.recordHexImprovement?.(hexDoc, {
-        kind: "district",
-        label: `Townbuilder: founded "${districtName}" (${t} district)`,
-        description: `${settlement.name} grew a ${t} district — ${districtYieldPreview(t)} at ${Math.round(districtShare() * 100)}% share, and the ${t} building menu unlocks here.`,
-        source: { activity: "townbuilder:district", factionId: faction.id },
-        reversible: false,
-        dedupeKey: `townbuilder:district:${hexDoc.id}:${t}`
-      });
-    } catch (_e) {}
-    await upsertJournal(hexDoc, settlement);
+    // 10-29 (#26): a relayed write already got its ledger row + journal on the GM.
+    if (local) {
+      try { await game.bbttcc?.api?.territory?.recordHexImprovement?.(hexDoc, _ledgerForDistrict(hexDoc, settlement, district, faction)); } catch (_e) {}
+      await upsertJournal(hexDoc, settlement);
+    }
     log(`Founded district "${districtName}" (${t}) in ${settlement.name} — ${cost} BU.`);
     return { ok: true, settlement };
   }
@@ -271,7 +388,7 @@
         kind: "district",
         label: `Townbuilder: dissolved "${district.name}" (${district.type} district)`,
         description: `${district.name} was dissolved; its buildings fold back into ${settlement.name} proper.`,
-        source: { activity: "townbuilder:district-dissolve", factionId: settlement.foundedFactionId || "" },
+        source: { activity: "townbuilder:district-dissolve", factionId: factionOf(hexDoc)?.id || settlement.foundedFactionId || "" },
         reversible: false,
         dedupeKey: `townbuilder:district-dissolve:${hexDoc.id}:${districtId}`
       });
@@ -288,8 +405,7 @@
       return { ok: false, error: "District not found." };
     }
     asset.district = districtId || null;
-    await writeSettlement(hexDoc, settlement);
-    await upsertJournal(hexDoc, settlement);
+    if (await writeSettlement(hexDoc, settlement)) await upsertJournal(hexDoc, settlement); // relayed → GM refreshes it
     return { ok: true, settlement };
   }
 
@@ -398,7 +514,8 @@
     const asset = settlement?.assets?.find(a => a.id === assetId);
     if (!asset) return { ok: false, error: "Asset not found." };
 
-    const faction = game.actors.get(settlement.foundedFactionId) || factionOf(hexDoc);
+    // 10-29 (#27): salvage goes to the CURRENT holder (same rule as foundDistrict's #24 fix).
+    const faction = factionOf(hexDoc) || game.actors.get(settlement.foundedFactionId);
     const rApi = recipesApi();
     const recipe = rApi?.byId?.(asset.recipeId);
 
@@ -486,7 +603,7 @@
         await entry.update({ name: title });
       }
 
-      const faction = game.actors.get(settlement.foundedFactionId) || factionOf(hexDoc);
+      const faction = factionOf(hexDoc) || game.actors.get(settlement.foundedFactionId); // 10-29 (#27): current holder
       const rApi = recipesApi();
       const dName = (a) => settlement.districts.find(d => d.id === a.district)?.name || "";
       const sortedAssets = settlement.assets.slice().sort((a, b) =>
@@ -624,7 +741,8 @@
       builtTs: game.time.worldTime,
       paidMaterials: payMats // demolish salvages half ONLY when materials were drawn
     });
-    try { await writeSettlement(hexDoc, settlement); }
+    let local = false;
+    try { local = await writeSettlement(hexDoc, settlement); }
     catch (e) { // unwind — no orphan actor, no lost BU, when the hex record cannot be written
       warn("settlement write failed:", e);
       try { await built.actor.delete(); } catch (_e) {}
@@ -640,20 +758,12 @@
       catch (e) { warn("auto token placement failed:", e); }
     }
 
-    // 5) Dossier ledger (spendForAction only writes one on modifier changes).
-    try {
-      await game.bbttcc?.api?.territory?.recordHexImprovement?.(hexDoc, {
-        kind: "build",
-        label: `Townbuilder: built "${name}" (${recipe.name})`,
-        description: `${faction.name} raised ${name} — a ${recipe.name} — in ${settlement.name}.`,
-        source: { activity: "townbuilder:build", factionId: faction.id },
-        reversible: false,
-        dedupeKey: `townbuilder:${hexDoc.id}:${settlement.assets.length}:${name}`
-      });
-    } catch (_e) {}
-
-    // 6) Journal.
-    await upsertJournal(hexDoc, settlement);
+    // 5) Dossier ledger (spendForAction only writes one on modifier changes) + 6) journal.
+    //    10-29 (#26): a relayed write already got both on the GM.
+    if (local) {
+      try { await game.bbttcc?.api?.territory?.recordHexImprovement?.(hexDoc, _ledgerForBuild(hexDoc, settlement, settlement.assets.at(-1), recipe, faction)); } catch (_e) {}
+      await upsertJournal(hexDoc, settlement);
+    }
 
     log(`Built "${name}" (${recipe.name}) at`, hexName(hexDoc), `— ${buCost} BU${payMats ? " + materials" : ""}`);
     return { ok: true, actor: built.actor, settlement, buCost };
@@ -669,12 +779,12 @@
     if (!name) return { ok: false, error: "Name cannot be empty." };
 
     asset.customName = name;
-    await writeSettlement(hexDoc, settlement);
+    const local = await writeSettlement(hexDoc, settlement);
     try {
       const actor = fromUuidSync(asset.actorUuid, { strict: false });
       if (actor) await actor.update({ name, "prototypeToken.name": name });
     } catch (_e) {}
-    await upsertJournal(hexDoc, settlement);
+    if (local) await upsertJournal(hexDoc, settlement); // relayed → GM refreshes it
     return { ok: true, settlement };
   }
 

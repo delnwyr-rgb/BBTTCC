@@ -178,7 +178,10 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
   function computeHexUpkeep(tf, integ) {
     // tf = hex.flags[MODT], integ = tf.integration
     const type   = tf.type || tf.kind || "settlement";
-    const size   = String(tf.size || "town").toLowerCase();
+    // 10-29: a missing / 'none' size bills as an outpost (it was billed as a town; the yield side pays 'none' 0 —
+    // same truthy-'none' trap the founding path fixed 2026-09-12). UPKEEP.SIZE_MULT has no 'none' key.
+    const sizeRaw = String(tf.size || "").toLowerCase();
+    const size   = (!sizeRaw || sizeRaw === "none") ? "outpost" : sizeRaw;
     const status = String(tf.status || "claimed").toLowerCase();
     const mods   = arr(tf.modifiers);
     const conds  = arr(tf.conditions);
@@ -274,7 +277,6 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
       console.warn(TAG, `Faction ${A.name} has unexpected opBank shape; upkeep normalization may be incomplete.`, bank);
     }
 
-    const warLogs = fFlags.warLogs ?? [];
     const logLines = [];
     let anyUnpaidGlobal = false;
 
@@ -350,7 +352,6 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
         anyUnpaidGlobal = true;
 
         // Hex-level penalties → queue into turn.pending
-        const hexPendBase = clone(tf.turn?.pending || {});
         // Plain deltas — mergePending adds them to the base (folding the base in here
         // double-counted anything already queued; 2026-10-01).
         const hexPendDelta = { loyaltyDelta: -1 };
@@ -360,14 +361,13 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
           hexPendDelta.darknessDelta = 1;
         }
 
-        const newHexPend = mergePending(hexPendBase, hexPendDelta);
-        const newTf = clone(tfAll);
-        newTf.turn = newTf.turn || {};
-        newTf.turn.pending = newHexPend;
-
+        // 10-29: carry only the DELTA; it merges onto a FRESH turn.pending at write time and lands
+        // on that one dot-path. Writing back the whole cloned flags.bbttcc-territory block reverted
+        // end-hook hex writes made meanwhile (Menace loyalty bill / overdue rows, facility effects…).
         hexUpdates.push({
           id:   d.id,
-          data: { [`flags.${MODT}`]: newTf }
+          data: {},
+          pendDelta: hexPendDelta
         });
 
         // (Faction-level Morale penalty −1 retired 2026-10-18, ruling 19.)
@@ -426,22 +426,12 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
         }
 
         if (neglectPatch || holdingsPatch) {
-          // Merge strategy: if a penalty-branch entry already exists for
-          // this hex it carries `data["flags.${MODT}"] = newTf` (whole
-          // namespace). Mutate newTf directly so the document.update sees
-          // one coherent block. Otherwise add a fresh entry using targeted
-          // dot-paths so we don't stomp other Phase A/B keys.
+          // Targeted dot-paths only (10-29: the penalty entry no longer carries the whole namespace),
+          // so we don't stomp other Phase A/B keys.
           let entry = hexUpdates.find(u => u.id === d.id);
-          const wholeKey = `flags.${MODT}`;
-          if (entry && entry.data && entry.data[wholeKey] && typeof entry.data[wholeKey] === "object") {
-            const nt = entry.data[wholeKey];
-            if (neglectPatch)  nt.holdingsNeglect = Object.assign({}, nt.holdingsNeglect || neglectFlag || {}, neglectPatch);
-            if (holdingsPatch) nt.holdings        = holdingsPatch;
-          } else {
-            if (!entry) { entry = { id: d.id, data: {} }; hexUpdates.push(entry); }
-            if (neglectPatch)  entry.data[`flags.${MODT}.holdingsNeglect`] = Object.assign({}, neglectFlag || {}, neglectPatch);
-            if (holdingsPatch) entry.data[`flags.${MODT}.holdings`]        = holdingsPatch;
-          }
+          if (!entry) { entry = { id: d.id, data: {} }; hexUpdates.push(entry); }
+          if (neglectPatch)  entry.data[`flags.${MODT}.holdingsNeglect`] = Object.assign({}, neglectFlag || {}, neglectPatch);
+          if (holdingsPatch) entry.data[`flags.${MODT}.holdings`]        = holdingsPatch;
         }
       } catch (eHD) { console.warn(TAG, "Holdings Phase D pass failed for hex", hexName, eHD); }
     }
@@ -453,18 +443,6 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
     // Loyalty 50 (+6 a turn with no ceiling walked every 3-hex Domain to 100 on autopilot).
     const LOYALTY_BONUS_CEILING = 50;
     const loyaltyBonusRaw = (loyaltyShortCount * 1) + (loyaltyFullCount * 2);
-    const loyaltyNow = (fFlags.loyalty === undefined || fFlags.loyalty === null) ? 50 : N(fFlags.loyalty);
-    const loyaltyBonus = Math.min(loyaltyBonusRaw, Math.max(0, LOYALTY_BONUS_CEILING - (loyaltyNow + dLoyalty)));
-    if (loyaltyBonus > 0) {
-      dLoyalty += loyaltyBonus;
-      logLines.push(
-        `• Integration loyalty bonus: +${loyaltyBonus} Loyalty ` +
-        `(${loyaltyShortCount} short-integration, ${loyaltyFullCount} full-integration hexes with paid upkeep` +
-        `${loyaltyBonus < loyaltyBonusRaw ? `; stops at ${LOYALTY_BONUS_CEILING}` : ""})`
-      );
-    } else if (loyaltyBonusRaw > 0) {
-      logLines.push(`• Integration loyalty bonus: none — Loyalty is already at ${LOYALTY_BONUS_CEILING} or above (the bonus only restores a Domain to steady)`);
-    }
 
     // Apply faction updates — loyalty lands NOW (clamped 0..100).
     const updates = {};
@@ -479,10 +457,26 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
         if (r?.ok === false) { console.warn(TAG, `Upkeep commit refused for ${A.name}`, r); logLines.push(`• ⚠ Upkeep could not be taken from the bank (it changed mid-turn) — nothing was paid.`); }
       } else updates[`flags.${MODF}.opBank`] = bank;
     }
-    const track = (k) => (fFlags[k] === undefined || fFlags[k] === null) ? 50 : N(fFlags[k]);
+
+    // 10-29: Loyalty is read FRESH here (after the commit round trip), not from the fFlags snapshot taken at the
+    // start of the pass — Convictions' sweep writes Loyalty on the same end hook and its loss was being overwritten.
+    const fLoyNow = A.flags?.[MODF]?.loyalty;
+    const loyaltyNow = (fLoyNow === undefined || fLoyNow === null) ? 50 : N(fLoyNow);
+    const loyaltyBonus = Math.min(loyaltyBonusRaw, Math.max(0, LOYALTY_BONUS_CEILING - (loyaltyNow + dLoyalty)));
+    if (loyaltyBonus > 0) {
+      dLoyalty += loyaltyBonus;
+      logLines.push(
+        `• Integration loyalty bonus: +${loyaltyBonus} Loyalty ` +
+        `(${loyaltyShortCount} short-integration, ${loyaltyFullCount} full-integration hexes with paid upkeep` +
+        `${loyaltyBonus < loyaltyBonusRaw ? `; stops at ${LOYALTY_BONUS_CEILING}` : ""})`
+      );
+    } else if (loyaltyBonusRaw > 0) {
+      logLines.push(`• Integration loyalty bonus: none — Loyalty is already at ${LOYALTY_BONUS_CEILING} or above (the bonus only restores a Domain to steady)`);
+    }
+
     const clamp100 = (v) => Math.max(0, Math.min(100, Math.round(v)));
     if (dLoyalty !== 0) {
-      const before = track("loyalty"), after = clamp100(before + dLoyalty);
+      const before = loyaltyNow, after = clamp100(before + dLoyalty);   // 10-29: fresh value, not the snapshot
       updates[`flags.${MODF}.loyalty`] = after;
       logLines.push(`• Loyalty ${before} → ${after} (${dLoyalty > 0 ? "+" : ""}${dLoyalty} from upkeep)`);
     }
@@ -502,8 +496,12 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
     if (hexUpdates.length) {
       const byScene = new Map();
       for (const u of hexUpdates) {
-        const sc = hexes.find(h => h.id === u.id)?.parent;
+        const hd = hexes.find(h => h.id === u.id);
+        const sc = hd?.parent;
         if (!sc) continue;
+        // 10-29: merge the penalty onto the hex's CURRENT turn.pending, read now (after the awaits above).
+        if (u.pendDelta) u.data[`flags.${MODT}.turn.pending`] = mergePending(clone(hd.flags?.[MODT]?.turn?.pending || {}), u.pendDelta);
+        if (!Object.keys(u.data).length) continue;
         if (!byScene.has(sc)) byScene.set(sc, []);
         byScene.get(sc).push({ _id: u.id, ...u.data });
       }
@@ -527,8 +525,10 @@ import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
         holdingsAbandonedHexes: abandonedHexCount,
         holdingsAbandonedUnits: abandonedUnitsTotal
       };
-      warLogs.push(entry);
-      await A.setFlag(MODF, "warLogs", warLogs);
+      // 10-29: append to the CURRENT warLogs (the start-of-pass snapshot dropped a Convictions line written meanwhile).
+      const warLogsNow = Array.isArray(A.getFlag(MODF, "warLogs")) ? clone(A.getFlag(MODF, "warLogs")) : [];
+      warLogsNow.push(entry);
+      await A.setFlag(MODF, "warLogs", warLogsNow);
 
       const gm = gmIds();
       if (gm.length) {

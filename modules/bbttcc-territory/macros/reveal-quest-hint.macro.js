@@ -46,8 +46,15 @@
           const isHex = (f.isHex === true) || (f.kind === "territory-hex")
             || (d.shape?.type === "p" && Array.isArray(d.shape?.points) && d.shape.points.length === 12);
           if (!isHex) continue;
-          const b = { minX: d.x, minY: d.y, maxX: d.x + (d.shape?.width || 0), maxY: d.y + (d.shape?.height || 0) };
-          if (local.x >= b.minX && local.x <= b.maxX && local.y >= b.minY && local.y <= b.maxY) { pick = p; break; }
+          // 10-29: test the hex polygon itself (points are relative to d.x/d.y) — bounding boxes of
+          // neighbouring hexes overlap, and polygon shape.width/height are null.
+          const pts = Array.isArray(d.shape?.points) ? d.shape.points : [];
+          if (pts.length >= 6) {
+            if (new PIXI.Polygon(pts).contains(local.x - d.x, local.y - d.y)) { pick = p; break; }
+          } else {
+            const w = Number(d.shape?.width) || 0, h = Number(d.shape?.height) || 0;
+            if (local.x >= d.x && local.x <= d.x + w && local.y >= d.y && local.y <= d.y + h) { pick = p; break; }
+          }
         }
       }
       if (!pick?.document) { ui.notifications.warn("Not a hex — cancelled."); return; }

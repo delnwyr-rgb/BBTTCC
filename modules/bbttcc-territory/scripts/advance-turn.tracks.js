@@ -120,6 +120,9 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
   const RAD_SPREAD_THRESHOLD = 3;
   const RAD_SPREAD_CHANCE    = 0.25;
   const RAD_MAX_NEIGHBORS    = 6;
+  // 10-29 (#7): hexes Calamity / unrest made Hostile this pass — the integration pass leaves them be,
+  // so the strike lands for a turn instead of being stripped a few steps later. Cleared per pass.
+  const _hostileThisPass = new Set();
 
   // World-wide, document-based (2026-10-01): these tracks used canvas placeables, so they only
   // ran on whatever scene the advancing GM was viewing. Hex docs + geometry from the document.
@@ -127,15 +130,33 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
     const tf = doc?.flags?.[MODT];
     return !!tf && (tf.isHex === true || tf.kind === "territory-hex");
   }
+  // 10-29: hex drawings are POLYGONS (shape.width/height null) — bounds come from shape.points
+  // (relative to doc.x/y); width/height kept as a fallback for any rect-shaped hex.
+  function docBounds(doc) {
+    const pts = Array.isArray(doc?.shape?.points) ? doc.shape.points.map(Number) : [];
+    if (pts.length >= 4) {
+      let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+      for (let i = 0; i + 1 < pts.length; i += 2) {
+        const px = pts[i], py = pts[i + 1];
+        if (!Number.isFinite(px) || !Number.isFinite(py)) continue;
+        if (px < x0) x0 = px; if (px > x1) x1 = px; if (py < y0) y0 = py; if (py > y1) y1 = py;
+      }
+      if (x1 >= x0 && y1 >= y0) return { x0, y0, w: x1 - x0, h: y1 - y0 };
+    }
+    return { x0: 0, y0: 0, w: Number(doc?.shape?.width || 0), h: Number(doc?.shape?.height || 0) };
+  }
   function docCenter(doc) {
-    const w = Number(doc?.shape?.width || 0), h = Number(doc?.shape?.height || 0);
-    return { x: Number(doc?.x || 0) + w / 2, y: Number(doc?.y || 0) + h / 2 };
+    const b = docBounds(doc);
+    return { x: Number(doc?.x || 0) + b.x0 + b.w / 2, y: Number(doc?.y || 0) + b.y0 + b.h / 2 };
   }
   // Adjacent hexes only: nearest six within ~1.1 × the hex's bounding size (ring 2 is ≥ 1.5×).
+  // 10-29: never an unlimited range — no size from the shape → the scene grid size; none at all → no neighbours.
   function hexNeighborsOf(doc, all) {
     const c = docCenter(doc);
-    const size = Math.max(Number(doc?.shape?.width || 0), Number(doc?.shape?.height || 0));
-    const limit = size > 0 ? size * 1.1 : Infinity;
+    const b = docBounds(doc);
+    const size = Math.max(b.w, b.h) || Number(doc?.parent?.grid?.size || 0);
+    if (!(size > 0)) return [];
+    const limit = size * 1.1;
     return all
       .filter(o => o.id !== doc.id)
       .map(o => { const oc = docCenter(o); return { o, dist: Math.hypot(oc.x - c.x, oc.y - c.y) }; })
@@ -556,6 +577,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
           if (tf.integrationProgress !== undefined) patch[`flags.${MODT}.integrationProgress`] = integ.progress;
           await hex.update(patch, { parent: hex.parent });
           if (addHostile) {
+            _hostileThisPass.add(hex.uuid);
             try { const rec = game?.bbttcc?.api?.territory?.recordHexModifierTransition; if (typeof rec === "function") await rec(hex, "Hostile Population", "added", { activity: "darkness_calamity", factionId: A.id }, `calamity:${hex.id}:${Date.now()}`); } catch (_e) {}
           }
           const hexName = tf.name || hex.text || hex.name || hex.id;
@@ -744,7 +766,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
           const hn = String(hex?.flags?.[MODT]?.name || hex?.text || "").replace(/[\s\u00a0]+/g, " ").trim().toLowerCase();
           if (!ms.hexes.some(h => String(h).toLowerCase() === hn)) return false;
           await api.set(A, { absorbedTurn: nowTurn });
-          lines.push(`• ${A.name}: the Town Militia (standing) absorbed the ${what} strike on ${hex.text || hex.name} this turn`);
+          lines.push(`• ${foundry.utils.escapeHTML(A.name)}: the Town Militia (standing) absorbed the ${what} strike on ${foundry.utils.escapeHTML(String(hex.text || hex.name || ""))} this turn`);
           return true;
         } catch (_e) { return false; }
       };
@@ -759,9 +781,10 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
         tf.modifiers = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];
         if (!tf.modifiers.includes("Hostile Population")) {
           tf.modifiers.push("Hostile Population");
+          _hostileThisPass.add(hex.uuid);
           updates.push(hex.update({ [`flags.${MODT}`]: tf }, { parent: hex.parent }));
           lines.push(
-            `• ${A.name}: <b>Unrest</b> — ${hex.text||hex.name} gained <i>Hostile Population</i> (faction Loyalty ${L}${darkUnrest ? `, Darkness ${factionDarkness(A)}` : ""}; hex score ${lowScore}, odds ${Math.round(unrestOdds * 100)}%)`
+            `• ${foundry.utils.escapeHTML(A.name)}: <b>Unrest</b> — ${foundry.utils.escapeHTML(String(hex.text||hex.name||""))} gained <i>Hostile Population</i> (faction Loyalty ${L}${darkUnrest ? `, Darkness ${factionDarkness(A)}` : ""}; hex score ${lowScore}, odds ${Math.round(unrestOdds * 100)}%)`
           );
           // Hex Dossier — record loyalty-driven unrest event.
           try {
@@ -784,7 +807,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
           tf.modifiers.push("Damaged Infrastructure");
           updates.push(hex.update({ [`flags.${MODT}`]: tf }, { parent: hex.parent }));
           lines.push(
-            `• ${A.name}: <b>Infrastructure</b> — ${hex.text||hex.name} gained <i>Damaged Infrastructure</i> (faction Loyalty ${L}; hex score ${lowScore}, odds ${Math.round(infraOdds * 100)}%)`
+            `• ${foundry.utils.escapeHTML(A.name)}: <b>Infrastructure</b> — ${foundry.utils.escapeHTML(String(hex.text||hex.name||""))} gained <i>Damaged Infrastructure</i> (faction Loyalty ${L}; hex score ${lowScore}, odds ${Math.round(infraOdds * 100)}%)`
           );
           // Hex Dossier — record loyalty-driven infra damage.
           try {
@@ -808,7 +831,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
           [`flags.${MODF}.bonuses.nextTurn.defenseDC`]: dcBonus   // SET, never add (2026-09-21) — see opGainPct
         }));
         lines.push(
-          `• ${A.name}: Defense DC ${dcBonus>0?"+":""}${dcBonus} next raid (Loyalty ${L})`
+          `• ${foundry.utils.escapeHTML(A.name)}: Defense DC ${dcBonus>0?"+":""}${dcBonus} next raid (Loyalty ${L})`
         );
       }
     }
@@ -850,6 +873,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
     for (const sc of game.scenes ?? []) {
       for (const d of sc.drawings ?? []) {
         const tf = d.flags?.[MODT]; if (!tf) continue;
+        if (_hostileThisPass.has(d.uuid)) continue;   // 10-29 (#7): struck this Advance — keep the Hostile
         const integ = tf.integration;
         const prog = Number(integ?.progress ?? 0);
         if (!prog || prog <= 0) continue;
@@ -1143,6 +1167,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
       if (!args?.apply || res?.skipped || res?.error) return res;
 
       try {
+        _hostileThisPass.clear();
         // Canonicalize any legacy nested track flags before applying track logic.
         for (const A of facActors()) { try { await normalizeFactionFlags(A); } catch {} }
 

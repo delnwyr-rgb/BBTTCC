@@ -307,7 +307,13 @@ function surveyCheck({ hexDoc, factionId } = {}) {
   const fid = String(factionId || "").replace(/^Actor\./, "");
   const visited = visitedHas(doc, fid || null);
   const st = _hexStory(doc);
-  const questIds = Object.keys(_hexQuestsMap(doc));
+  // 10-29: only OPEN linked quests count as hidden story — a completed/archived link (links are never
+  // removed on completion) no longer blocks the outpost or gets re-hinted by surveyWord.
+  const qapi = _campaignApi();
+  const questIds = Object.keys(_hexQuestsMap(doc)).filter(qid => {
+    const s = String(qapi?.getQuest?.(qid)?.status || "active").toLowerCase();
+    return s !== "completed" && s !== "archived";
+  });
   const hasStory = !!(st && ((st.beats?.length || 0) > 0 || (st.questKeys?.length || 0) > 0)) || questIds.length > 0;
   const survey = doc.flags?.[MOD]?.survey || null;
   const wordSent = !!survey?.wordSent;
@@ -350,7 +356,9 @@ function questMarkersFor(scene = null) {
     const f = d?.flags?.[MOD] || {};
     if (!(f.isHex === true || String(f.kind || "").toLowerCase() === "territory-hex")) continue;
     const map = _hexQuestsMap(d);
-    const linked = Object.entries(map).map(([qid, rec]) => ({ id: qid, name: String(qapi?.getQuest?.(qid)?.name || qid), hinted: !!rec?.hinted }));
+    let linked = Object.entries(map).map(([qid, rec]) => ({ id: qid, name: String(qapi?.getQuest?.(qid)?.name || qid), hinted: !!rec?.hinted }));
+    // 10-29: a player on a fogged hex sees only the hinted links (same rule as visibleQuestsForHex) — no un-hinted names/count.
+    if (!isGM && d.hidden !== false) linked = linked.filter(l => l.hinted);
     const st = isGM ? _hexStory(d) : null;
     const unplayed = st?.beats?.length || 0;
     const storyNames = (st?.questNames || []).filter(n => !linked.some(l => l.name === n));

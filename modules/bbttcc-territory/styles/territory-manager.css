@@ -861,7 +861,7 @@
 ========================================= */
 
 #bbttcc-hex-config .window-content,
-#bbttcc-hex-sheet .window-content,
+.application.bbttcc-hex-sheet .window-content,   /* 10-29: per-hex ids (bbttcc-hex-sheet-<id>) */
 #bbttcc-territory-dashboard .window-content {
   background:
     radial-gradient(circle at top, rgba(40, 83, 124, 0.12), transparent 38%),
@@ -878,7 +878,7 @@
 }
 
 #bbttcc-hex-config legend,
-#bbttcc-hex-sheet .window-title,
+.application.bbttcc-hex-sheet .window-title,
 #bbttcc-territory-dashboard .window-title {
   color: #f7e39a;
   text-shadow: 0 0 10px rgba(255, 215, 120, 0.12);
