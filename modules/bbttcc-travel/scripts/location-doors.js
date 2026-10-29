@@ -52,13 +52,17 @@
   const isTownHub = (scene = canvas?.scene) => !!scene?.flags?.[SCOPE]?.isTownHub;
   const townLabel = (scene = canvas?.scene) => String(scene?.flags?.[SCOPE]?.townLabel || scene?.name || "town");
 
-  function doorDrawings(scene = canvas?.scene) {
+  function allDoorDrawings(scene = canvas?.scene) {
     if (!scene) return [];
     if (scene === canvas?.scene && canvas?.drawings?.placeables) {
       return canvas.drawings.placeables.filter(d => !!linkOf(d));
     }
     return (scene.drawings?.contents || []).filter(doc => !!linkOf(doc));
   }
+  // A door whose opener beat belongs to a LATER ACT isn't on the map yet (Dave 2026-10-28: the Yard showed Brennig in front
+  // of the Shipment, which waits for Act 3) — no label, no click, no Quest Log pill. A GM editing drawings still sees it.
+  const _doorOpen = (d) => { const l = linkOf(d); return !(l?.beatId && _laterAct(l.beatId)); };
+  function doorDrawings(scene = canvas?.scene) { return allDoorDrawings(scene).filter(_doorOpen); }
 
   function centerOf(d) {
     const doc = d?.document ?? d;
@@ -167,7 +171,7 @@
     const out = [];
     for (const sc of game.scenes?.contents || []) {
       if (!isTownHub(sc)) continue;
-      for (const doc of (sc.drawings?.contents || []).filter(x => !!linkOf(x))) {   // documents, never placeables
+      for (const doc of (sc.drawings?.contents || []).filter(x => !!linkOf(x) && _doorOpen(x))) {   // documents, never placeables
         const l = linkOf(doc); const c = centerOf(doc);
         out.push({ key: String(l.key || doc.id), label: String(l.label || l.key || "door"), targetSceneUuid: l.targetSceneUuid,
           sceneUuids: linkScenes(l), beatId: l.beatId || null,
@@ -239,7 +243,7 @@
   /** Hide the Drawing's own ring + text (one graphics object holds both) unless a GM is editing drawings. */
   function _syncDrawingVisibility() {
     const editing = !!(game.user?.isGM && canvas?.drawings?.active);
-    for (const d of doorDrawings()) { try { if (d.shape) d.shape.visible = editing; } catch (_e) {} }
+    for (const d of allDoorDrawings()) { try { if (d.shape) d.shape.visible = editing; } catch (_e) {} }
     if (_fx) _fx.visible = !editing;
   }
   // the Circuit face has no ⇩⇧⇦⇨ — the fallback drew them as hairlines
