@@ -130,7 +130,7 @@
   if (!WALLI) conflicts.push("East Wall intro not found");
   else {
     const NAME_THE_ENERGY = "It isn't rage. Rage is only the weather on it. Underneath, where your hand is still flat on the plate, you can feel what it was made from: <b>Yesod</b> — the Foundation, the moon-sphere, the part of the world that holds the shape of dreams and seeds and promises — turned over, gone dark, and furious about being turned. It came from the east. It came up out of the ground, and the ground it came out of runs all the way back to the mountain.";
-    addBeat(fight("ag_east_wall_tor_wrath", WALLI, "The East Wall — The Thing in the Plate", 1,
+    addBeat(fight("ag_east_wall_tor_wrath", { ...WALLI, sceneId: "3uuTDbAt9NgbqK6S" /* East Wall battlemap (Dave 10-29) */ }, "The East Wall — The Thing in the Plate", 1,
       "You set the last brace and the bow in the plate stands up.\n\nNot the wall — the bow. The bulge you've been measuring all day peels off the steel like a shadow coming off a sheet, and it keeps its shape when it's off. Ore-grit and old dark packed into the rough outline of something with fists. The bus parts the wall has been throwing at everyone's heads come from somewhere, and now you know where. The scouts on the walkway stop pretending this is a structural issue.\n\nIt doesn't want the town. It wants the wall to stop holding, and you are the latest thing holding it.\n\n⚙ GM: a fight on the wall. The Tor-Wrath (one) comes out of the plate; the Stewards are placed. Call it when it's done.",
       [ch("It's down — it comes apart against the plate", "ag_east_wall_tor_wrath_won"), ch("It tears loose and goes into the ground, east", "ag_east_wall_tor_wrath_lost")]));
     addBeat(base("ag_east_wall_tor_wrath_won", WALLI, { label: "The East Wall — What Leaned on It", tags: "story tor_wrath east_wall",
@@ -151,7 +151,7 @@
   const CINE = byId("khezek_tor_valhaulan_seal_cinematic");
   if (!SEAL || !CINE) conflicts.push("Old Seal / its cinematic not found");
   else {
-    addBeat(fight("kt_seal_tor_wrath", SEAL, "Khezek-Tor — The Gallery Is Not Empty", 3,
+    addBeat(fight("kt_seal_tor_wrath", { ...SEAL, sceneId: "ewhnzejDEXX69yOl" /* valhaulan seal hexchrome battlemap (Dave 10-29) */ }, "Khezek-Tor — The Gallery Is Not Empty", 3,
       "The gallery Calder's crews won't work is not empty. That's the reason; it was always the reason; nobody wanted to be the one to say it out loud in front of the foreman.\n\nThe walls move first. Three shapes shoulder out of the rock between you and the seal — ore-grit and old dark, fists like slag, standing up out of the stone the way a man stands up out of a chair he's been sitting in too long. The miners have a name for these. Sable says it under their breath, like a correction: <b>Tor-Wrath</b>.\n\nThey are not guarding the seal. They are leaking out of it.\n\n⚙ GM: a fight in the gallery — three Tor-Wrath; the Stewards are placed. Call it when it's done.",
       [ch("They're down — they come apart into the rock", "kt_seal_tor_wrath_won"), ch("Too many — back up the cage", "kt_seal_tor_wrath_lost")]));
     addBeat(base("kt_seal_tor_wrath_won", SEAL, { label: "Khezek-Tor — The Gallery, Quiet", tags: "story tor_wrath seal",

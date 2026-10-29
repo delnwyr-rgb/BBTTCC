@@ -49,7 +49,13 @@ const registry = settings["bbttcc-campaign.quests"] || {};
 const story = camp.story || { quests: {}, scripts: {} };
 const scripts = story.scripts || {}; const squests = story.quests || {};
 const actors = opt.actors ? JSON.parse(fs.readFileSync(opt.actors, "utf8")) : {};
-const keyOf = (b) => String(b?.story?.quest || "").trim();
+const rawKeyOf = (b) => String(b?.story?.quest || "").trim();
+// 2026-10-29: most beats seeded since 10-21 (ans_* answer beats, the Tor-Wrath fights, Wick's lines) carry no
+// story.quest, so they all fell into "Encounters and strays". A beat with no story.quest now takes its script from
+// (1) a script step/door/arrival/after that lists it, else (2) the beats that route into it — only when every keyed
+// parent agrees (a beat reached from two towns stays a stray). Propagates down chains (answer of an answer).
+const inferredKey = new Map();
+const keyOf = (b) => rawKeyOf(b) || inferredKey.get(b?.id) || "";
 const questName = (qid) => registry[qid]?.name || squests[qid]?.name || qid || "(no quest)";
 const scriptName = (key) => squests[key]?.name || key;
 const targetsOf = (b) => {
@@ -61,6 +67,23 @@ const targetsOf = (b) => {
 };
 const incoming = new Map();
 for (const b of beats) for (const t of targetsOf(b)) incoming.set(t, (incoming.get(t) || 0) + 1);
+{
+  const listed = new Map();   // beat id → Set(script keys whose records list it)
+  for (const [k, sc] of Object.entries(scripts)) {
+    const lists = [...(sc?.arrival?.steps || []), ...(sc?.steps || []), ...(sc?.doors || [])].map(s => s?.beats || []).concat([sc?.after || []]);
+    for (const l of lists) for (const id of l) (listed.get(id) || listed.set(id, new Set()).get(id)).add(k);
+  }
+  for (const b of beats) if (!rawKeyOf(b) && listed.get(b.id)?.size === 1) inferredKey.set(b.id, [...listed.get(b.id)][0]);
+  const parents = new Map(); for (const b of beats) for (const t of targetsOf(b)) (parents.get(t) || parents.set(t, []).get(t)).push(b.id);
+  for (let changed = true, pass = 0; changed && pass < 20; pass++) {
+    changed = false;
+    for (const b of beats) {
+      if (rawKeyOf(b) || inferredKey.has(b.id) || /^evt_/.test(b.id)) continue;
+      const ks = new Set((parents.get(b.id) || []).map(p => keyOf(byId.get(p))).filter(Boolean));
+      if (ks.size === 1) { inferredKey.set(b.id, [...ks][0]); changed = true; }
+    }
+  }
+}
 
 /* ── markdown parsing (the export format) ──────────────────────────────────── */
 const HEAD = /^#### (.*?) \(([^)]*`[^`]+`[^)]*)\)(.*)$/;   // label (`id`[, `id`…]) — meta; the ×8 "Filed" heading lists eight ids

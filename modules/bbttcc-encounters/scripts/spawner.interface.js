@@ -342,11 +342,18 @@
     }
     if (!factions.length) return [];
 
-    // Stewards ONLY — every steward belonging to any participating faction
-    // takes the field; crew/association members never get tokens here.
+    // Stewards ONLY — every PLAYED steward belonging to any participating
+    // faction takes the field; crew/association members never get tokens here
+    // (bringing them out is an in-combat call). A faction's member roster can
+    // be all type:"character" (The Errata Society has 15), so "played" = some
+    // user's assigned character or owned by a non-GM player (Dave, 10-29).
+    const assigned = new Set((game.users?.contents || []).map(u => u.character?.id).filter(Boolean));
+    const OWNER = CONST.DOCUMENT_OWNERSHIP_LEVELS?.OWNER ?? 3;
+    const isPlayed = (a) => assigned.has(a.id) || Object.entries(a.ownership || {}).some(([uid, lvl]) =>
+      uid !== "default" && Number(lvl) >= OWNER && game.users?.get(uid) && !game.users.get(uid).isGM);
     const pcs = [];
     for (const a of (game.actors?.contents || [])) {
-      if (!_isSteward(a)) continue;
+      if (!_isSteward(a) || !isPlayed(a)) continue;
       if (!factions.some(f => _pcBelongsToFaction(a, f))) continue;
       if (!pcs.includes(a)) pcs.push(a);
     }
