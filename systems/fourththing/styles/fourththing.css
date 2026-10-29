@@ -2214,9 +2214,12 @@
   transition: all 0.1s;
 }
 .ft-burn-pip.lit { opacity: 1; }
-.ft-burn-pip.lit.Controlled { color: #4fc3ff; }   /* CVD-safe ladder: blue → gold → magenta (owner is red-green colour-blind, 2026-09-22) */
-.ft-burn-pip.lit.Engaged    { color: #ffd54f; }
-.ft-burn-pip.lit.Overheated { color: #ff5ac8; }
+/* Surge heat bands (2026-10-29: Burn folded into Surge) — keys cool/stoked/overheated.
+   CVD-safe ladder: blue → gold → magenta (owner is red-green colour-blind, 2026-09-22) */
+.ft-burn-pip.lit.cool       { color: #4fc3ff; }
+.ft-burn-pip.lit.stoked     { color: #ffd54f; }
+.ft-burn-pip.lit.overheated { color: #ff5ac8; }
+.ft-surge-heat .ft-burn-track { flex-wrap: wrap; }
 
 /* ── Aura display ───────────────────────────────────────────────────────── */
 

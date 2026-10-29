@@ -3,6 +3,7 @@
 
 import { isMonster } from "./actor-kind.js";
 import { MARKS_PER_OP } from "./rfi-pricing.js";   // the one OP↔marks authority
+import { ftBurnBandFor } from "./ft-class-automation.js";   // Surge heat band (2026-10-29)
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -2882,14 +2883,14 @@ export async function clampSkillRanksToCap(actor, cap = 5) {
 }
 
 // ─── Aurablade conditional AE management ─────────────────────────────────────
-// Aura-state and Burn-band changes both reshape which AEs the steward carries.
-// The canon (Aurablade Phase 1.5 doc) defines THREE layers:
+// Aura-state and heat-band changes both reshape which AEs the steward carries.
+// Heat = banked Surge (2026-10-29, Burn folded in). THREE layers:
 //   1. Passive — always on while the aura is active
-//   2. Engaged — adds on at Burn 2–3
-//   3. Overheated — adds on at Burn 4+
+//   2. Engaged — adds on while Stoked or hotter (layer id kept: "engaged")
+//   3. Overheated — adds on while Overheated (the Surge bank is full)
 // We materialize each as its own AE with `flags.fourththing.auraEffect: true`
 // and `flags.fourththing.aurablade.layer: passive|engaged|overheated`. Sync
-// runs on every aura change AND every Burn change so the table sees real
+// runs on every aura change AND every Surge band change so the table sees real
 // numbers move when the player commits.
 //
 // Statlines below are canonical *proxies* — the canon mostly speaks in narrative
@@ -2960,56 +2961,53 @@ const AURA_EFFECT_PREFIX = "ft-aura-";
 // Sync ALL aurablade AE layers based on the actor's current aura + burn state.
 // Optional `overrideAura` is used by callers that have JUST set a new aura
 // state but want to be defensive about read-after-write ordering.
-export async function syncAurabladeEffects(actor, overrideAura = null) {
+export async function syncAurabladeEffects(actor, overrideAura = null, bandKey = null) {
   if (!actor) return;
 
   const rawSys = actor.system?.system ?? actor.system ?? {};
   const aura = overrideAura ?? rawSys?.resources?.aura?.state ?? "none";
-  const burn = Number(rawSys?.resources?.burn?.current ?? 0) || 0;
+  const band = bandKey ?? ftBurnBandFor(actor).key;   // cool | stoked | overheated
+
+  // The layer set the actor SHOULD carry right now.
+  const want = [];
+  if (aura !== "none" && AURA_EFFECTS[aura]) {
+    want.push("passive");
+    if ((band === "stoked" || band === "overheated") && ENGAGED_EFFECTS[aura]) want.push("engaged");
+    if (band === "overheated" && OVERHEATED_EFFECTS[aura]) want.push("overheated");
+  }
+
+  const current = Array.from(actor.effects ?? [])
+    .filter(e => e.name?.startsWith(AURA_EFFECT_PREFIX) || e.flags?.fourththing?.auraEffect);
+  // Surge moves on every explosion — only rebuild when the layer cake changes.
+  const have = current.map(e => e.name).sort().join("|");
+  const need = want.map(l => `${AURA_EFFECT_PREFIX}${l}-${aura}`).sort().join("|");
+  if (have === need) return;
 
   // Wipe ALL aura-managed AEs and rebuild from the current state. This keeps
   // the layer cake consistent even after schema edits or hand-tinkering.
-  const toDelete = Array.from(actor.effects ?? [])
-    .filter(e => e.name?.startsWith(AURA_EFFECT_PREFIX) || e.flags?.fourththing?.auraEffect)
-    .map(e => e.id);
+  const toDelete = current.map(e => e.id);
   if (toDelete.length) {
     try { await actor.deleteEmbeddedDocuments("ActiveEffect", toDelete); }
     catch (_e) {}
   }
+  if (!want.length) return;
 
-  if (aura === "none" || !AURA_EFFECTS[aura]) return;
-
-  const creates = [];
-  const makeAE = (layer, changes, label) => ({
+  const layerFx = { passive: AURA_EFFECTS, engaged: ENGAGED_EFFECTS, overheated: OVERHEATED_EFFECTS };
+  const creates = want.map(layer => ({
     name: `${AURA_EFFECT_PREFIX}${layer}-${aura}`,
     icon: layer === "overheated"
       ? "icons/magic/fire/explosion-fireball-medium-orange.webp"
       : layer === "engaged"
         ? "icons/magic/fire/flame-burning-fence.webp"
         : "icons/magic/light/beam-rays-orange-small.webp",
-    changes,
+    changes: layerFx[layer][aura],
     disabled: false,
     flags: { fourththing: { auraEffect: true, aura, aurablade: { layer } } },
     duration: {},
-  });
+  }));
 
-  // Layer 1 — always on while aura is active.
-  creates.push(makeAE("passive", AURA_EFFECTS[aura], "Passive"));
-
-  // Layer 2 — Engaged (Burn 2-3+).
-  if (burn >= 2 && ENGAGED_EFFECTS[aura]) {
-    creates.push(makeAE("engaged", ENGAGED_EFFECTS[aura], "Engaged"));
-  }
-
-  // Layer 3 — Overheated (Burn 4+).
-  if (burn >= 4 && OVERHEATED_EFFECTS[aura]) {
-    creates.push(makeAE("overheated", OVERHEATED_EFFECTS[aura], "Overheated"));
-  }
-
-  if (creates.length) {
-    try { await actor.createEmbeddedDocuments("ActiveEffect", creates); }
-    catch (e) { console.warn("[fourththing] aurablade AE sync create failed", e); }
-  }
+  try { await actor.createEmbeddedDocuments("ActiveEffect", creates); }
+  catch (e) { console.warn("[fourththing] aurablade AE sync create failed", e); }
 }
 
 // Back-compat shim — existing callers pass (actor, newAura) when changing aura.

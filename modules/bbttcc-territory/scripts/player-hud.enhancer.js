@@ -365,16 +365,14 @@
   // openSpendDialog). The old per-class pools (Bulwark Frame Dice / Ruin Charges,
   // Shadow Courier Pace, Cosmic Linguist Authority, Pactkeeper Jurisdiction) were
   // FOLDED INTO SURGE during the Phase-4 redesign, so they're no longer shown
-  // here. Clarity + Surge are universal; Burn (Aurablade / forge heat) survives.
-  const CLASS_POOL_KEYS = {
-    aurablade: ["burn"]
-  };
+  // here. Clarity + Surge are universal. Burn is folded into Surge too (2026-10-29):
+  // the Surge chip carries the heat band (Cool / Stoked / Overheated) for everyone.
+  const CLASS_POOL_KEYS = {};
   const POOL_DEFS = {
     clarity: { label:"Clarity", icon:"brain",             path:"system.magic.clarity",      open:null },
-    surge:   { label:"Surge",   icon:"bolt-lightning",    path:"system.resources.surge",    open:"__surge" },
-    burn:    { label:"Burn",    icon:"fire-flame-curved", path:"system.resources.burn",     open:"openStabilizeBurn" }
+    surge:   { label:"Surge",   icon:"bolt-lightning",    path:"system.resources.surge",    open:"__surge" }
   };
-  const POOL_ORDER = ["clarity","surge","burn"];
+  const POOL_ORDER = ["clarity","surge"];
 
   function getStewardClassKeys(steward) {
     return (steward.items?.contents ?? [])
@@ -391,8 +389,14 @@
     const obj = foundry.utils.getProperty(steward, def.path);
     if (!obj || typeof obj !== "object") return null;
     const cur = Number(obj.current ?? obj.value ?? 0);
-    const max = (obj.max != null) ? Number(obj.max) : null;
-    return { cur, max };
+    let max = (obj.max != null) ? Number(obj.max) : null;
+    // Surge: the real cap + heat band come from the system (tier-scaled).
+    let heat = null;
+    if (key === "surge") {
+      try { heat = game.fourththing?.surgeHeat?.(steward) ?? null; } catch (_e) { heat = null; }
+      if (heat) max = heat.cap;
+    }
+    return { cur, max, heat };
   }
   // Radiation tier chip — surfaces the steward's current Radiation Sickness tier
   // and its active bite right on the HUD. Hidden when Clean at 0 RP.
@@ -440,11 +444,15 @@
         ? !!game.fourththing?.surge?.openSpendDialog
         : !!(def.open && def.open !== "__surge" && game.fourththing?._classAutomation?.[def.open]);
       const empty = (v.cur <= 0);
+      const band = v.heat?.band;
+      const bandTip = band ? ` · ${band.label} — ${band.desc}` : "";
       return `<button type="button" class="bbttcc-res-chip ${clickable?'is-clickable':''} ${empty?'is-empty':''}"
         ${clickable ? `data-fire="pool" data-key="${key}"` : 'disabled'}
-        title="${esc(def.label)}${clickable ? (key === "surge" ? ' — click to spend' : ' — click to use') : ''}">
+        title="${esc(def.label + bandTip)}${clickable ? (key === "surge" ? ' — click to spend' : ' — click to use') : ''}"
+        ${band ? `style="border-color:${band.color}88"` : ""}>
         <i class="fas fa-${def.icon}"></i><span>${esc(def.label)}</span>
         <span class="bbttcc-res-val">${valTxt}</span>
+        ${band ? `<span class="bbttcc-res-val" style="color:${band.color}">${esc(band.label)}</span>` : ""}
       </button>`;
     }).join("");
     const radChip = radChipHTML(steward);
@@ -473,7 +481,9 @@
     }
     const obj = foundry.utils.getProperty(steward, "system.resources.surge") ?? {};
     const cur = Number(obj.value ?? 0);
-    const max = Number(obj.max ?? 0);
+    let heat = null;
+    try { heat = game.fourththing?.surgeHeat?.(steward) ?? null; } catch (_e) { heat = null; }
+    const max = heat ? heat.cap : Number(obj.max ?? 0);
     const hasApi = !!game.fourththing?.surge?.openSpendDialog;
     const disabled = !hasApi || cur <= 0;
     const reason = !hasApi ? "Surge engine not ready"

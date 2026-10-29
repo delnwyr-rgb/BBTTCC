@@ -94,8 +94,8 @@ const SEED = [
   entry("system.resources.frameDice.current", "Frame Dice — Current", "Resources", { desc: "Bulwark / Path-of-Frame defensive dice pool." }),
   entry("system.resources.frameDice.max",     "Frame Dice — Max",     "Resources", { desc: "Frame Dice ceiling." }),
   entry("system.resources.stress.current",    "Stress (resource) — Current", "Resources", { desc: "Stress as a resource pool (separate from derived.stress in some paths)." }),
-  entry("system.resources.burn.current",      "Burn — Current",       "Resources", { desc: "Aurablade Burn pool. 0–8." }),
-  entry("system.resources.burn.max",          "Burn — Max",           "Resources", { desc: "Burn ceiling (8 default)." }),
+  entry("system.resources.burn.current",      "Burn — Current",       "Resources", { desc: "LEGACY — Burn is folded into Surge (2026-10-29); nothing reads this. Target system.resources.surge.value." }),
+  entry("system.resources.burn.max",          "Burn — Max",           "Resources", { desc: "LEGACY — unused since Burn folded into Surge (2026-10-29)." }),
   entry("system.resources.aura.state",        "Aura — State",         "Resources", { desc: "Aurablade aura state (off / kindled / blazing).", valueHint: "string" }),
   entry("system.resources.accessDice.current","Access Dice — Current","Resources", { desc: "Shadow Courier access pool." }),
   entry("system.resources.accessDice.max",    "Access Dice — Max",    "Resources", { desc: "Access Dice ceiling." }),
@@ -165,8 +165,8 @@ const SEED = [
   entry("system.details.skillPoints", "Details — Skill Points", "Details", { desc: "Unspent skill points pool." }),
 
   // ── Manifestation (item-level fields — AE on the manifestation item) ───
-  entry("system.manifestation.costValue",      "Manifestation — Cost Value",  "Manifestation Item", { desc: "Numeric cost (Clarity / Noise / Burn). 0–10.", valueHint: "integer" }),
-  entry("system.manifestation.costType",       "Manifestation — Cost Type",   "Manifestation Item", { desc: "Cost frame key (clarity / noise / burn / mixed / …).", valueHint: "string" }),
+  entry("system.manifestation.costValue",      "Manifestation — Cost Value",  "Manifestation Item", { desc: "Numeric cost (Clarity / Noise / Surge). 0–10.", valueHint: "integer" }),
+  entry("system.manifestation.costType",       "Manifestation — Cost Type",   "Manifestation Item", { desc: "Cost frame key (clarity / noise / burn = pays Surge / mixed / …).", valueHint: "string" }),
   entry("system.manifestation.stability",      "Manifestation — Stability",   "Manifestation Item", { desc: "Stability tier (anchored / steady / volatile / …). Drives upkeep cadence.", valueHint: "string" }),
   entry("system.manifestation.duration",       "Manifestation — Duration",    "Manifestation Item", { desc: "Duration key (instant / scene / soma-break / persistent / …).", valueHint: "string" }),
   entry("system.manifestation.scale",          "Manifestation — Scale",       "Manifestation Item", { desc: "Scale key (self / room / hex / faction / …).", valueHint: "string" }),

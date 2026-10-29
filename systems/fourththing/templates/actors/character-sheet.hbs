@@ -510,8 +510,27 @@
           </div>
           <div class="ft-resource-controls ft-view-only">
             <button type="button" class="ft-res-btn" data-action="ftSurgeSpend" data-tooltip="Spend banked Surge — universal options + your class abilities (Forge-Weld, Rallying Words, etc.)">Spend</button>
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="aurablade_stabilize" data-tooltip="Vent — let Surge go without spending it (the way out of Overheated when nothing on the menu fits).">Vent</button>
           </div>
         </div>
+        {{!-- Surge heat (2026-10-29 — Burn folded into Surge): how full the bank is IS
+              the intensity. Cool / Stoked (half the cap) / Overheated (full). --}}
+        <div class="ft-resource-row ft-surge-heat" data-tooltip="{{surgeHeat.tooltip}}">
+          <div class="ft-burn-track">
+            {{#each surgeHeat.pips as |p|}}<span class="ft-burn-pip {{#if p.lit}}lit {{../surgeHeat.band.key}}{{/if}}">▰</span>{{/each}}
+          </div>
+          <span class="ft-resource-count" style="color:{{surgeHeat.band.color}}">{{surgeHeat.band.label}}</span>
+        </div>
+        <div class="ft-aura-row" style="margin-top:0.1rem">
+          <span class="ft-aura-desc" style="color:{{surgeHeat.band.color}}">{{surgeHeat.band.desc}}</span>
+        </div>
+        {{#if burnTimer.show}}
+        <div class="ft-burn-timer-row">
+          {{#if burnTimer.lockLabel}}<span class="ft-burn-timer-chip lock">🔒 {{burnTimer.lockLabel}}</span>{{/if}}
+          {{#each burnTimer.timers as |t|}}<span class="ft-burn-timer-chip" data-tooltip="{{t.note}}">⏱ {{t.label}}</span>{{/each}}
+          {{#if burnTimer.gm}}<button type="button" class="ft-res-btn ft-res-btn-sm" data-action="ftBurnTimer" data-tooltip="Heat timer (GM): hold Surge from rising for N turns, change it in N rounds, or set it when this turn ends (combat only).">⏱ Timer</button>{{/if}}
+        </div>
+        {{/if}}
         {{#if bankedRerolls.count}}
         <div class="ft-banked-reroll-pip" data-tooltip="{{bankedRerolls.tooltip}}" style="display:inline-flex;align-items:center;gap:.3rem;margin-top:.35rem;padding:.1rem .45rem;font-size:0.74rem;background:rgba(160,212,255,0.12);border:1px solid rgba(160,212,255,0.4);border-radius:10px;color:#a0d4ff">
           ↑ {{bankedRerolls.count}} banked reroll{{#if (gte bankedRerolls.count 2)}}s{{/if}} <span style="opacity:0.65">— auto-fires next roll</span>
@@ -537,7 +556,7 @@
         </div>
         {{/if}}
         <p class="ft-hint" style="margin:0.2rem 0 0;font-size:0.7rem;opacity:0.55">
-          Banked by rolling 10s. Resets to 0 on Soma Break.
+          Banked by rolling 10s. The fuller it is, the hotter you run. Resets to 0 on Soma Break.
         </p>
       </div>
 
@@ -546,38 +565,17 @@
            Bulwark, whose Frame/Ruin pools are now Surge spends). --}}
 
       {{#if activePools.aurablade}}
+      {{!-- Burn track folded into the Surge heat track above (2026-10-29). --}}
       <div class="ft-combat-section ft-resource-panel">
-        <h3>🔥 Burn <span class="ft-resource-tag">{{burnClass.tag}}</span></h3>
-        <div class="ft-resource-row">
-          <div class="ft-burn-track">
-            {{#each (times 8) as |n|}}
-            <span class="ft-burn-pip {{#if (lte (add n 1) (ftOr ../resources.burn.current 0))}}lit {{../burnBand.label}}{{/if}}">▰</span>
-            {{/each}}
-          </div>
-          <span class="ft-resource-count" style="color:{{burnBand.color}}">{{resources.burn.current}}/8 {{burnBand.label}}</span>
-          {{!-- Edit mode: directly set Burn charges (canon is 0–8). --}}
-          <div class="ft-edit-only ft-resource-edit">
-            <input type="number" name="system.resources.burn.current" value="{{resources.burn.current}}" min="0" max="8" style="width:40px" data-tooltip="Burn charges"/>
-            <span style="opacity:0.4">/ 8</span>
-          </div>
-        </div>
+        <h3>🔥 Aura <span class="ft-resource-tag">{{burnClass.tag}}</span></h3>
         <div class="ft-aura-row">
           <span class="ft-aura-badge" style="background:{{auraData.color}}22;border:1px solid {{auraData.color}}88;color:{{auraData.color}}">{{auraData.label}}</span>
           <span class="ft-aura-desc">{{auraData.desc}}</span>
           <div class="ft-resource-controls">
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="aurablade_action">Action</button>
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="aurablade_change_aura">Aura</button>
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="aurablade_stabilize">Stabilize</button>
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="aurablade_action" data-tooltip="Aura action — gated by your Surge band; raises Surge.">Action</button>
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="aurablade_change_aura" data-tooltip="Switch Aura (+1 Surge).">Aura</button>
           </div>
         </div>
-        {{!-- Burn timer (2026-10-02): lock / scheduled change / end-of-turn set, ticked by the GM on the combat clock. --}}
-        {{#if burnTimer.show}}
-        <div class="ft-burn-timer-row">
-          {{#if burnTimer.lockLabel}}<span class="ft-burn-timer-chip lock">🔒 {{burnTimer.lockLabel}}</span>{{/if}}
-          {{#each burnTimer.timers as |t|}}<span class="ft-burn-timer-chip" data-tooltip="{{t.note}}">⏱ {{t.label}}</span>{{/each}}
-          {{#if burnTimer.canEdit}}<button type="button" class="ft-res-btn ft-res-btn-sm" data-action="ftBurnTimer" data-tooltip="Burn timer: lock Burn for N turns, change it in N rounds, or set it when this turn ends (combat only).">⏱ Timer</button>{{/if}}
-        </div>
-        {{/if}}
       </div>
       {{/if}}
 
@@ -669,31 +667,11 @@
             <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="soul_smith_forge" data-tooltip="Forge Works (campaign / out-of-combat): tier-appropriate narrative crafting — hex repair (T1), purify a Corrupted Spark (T2), region restoration (T4). Your COMBAT abilities are the four Surge spends — use 'Forge ▸ Spend Surge'.">⚒ Forge Works</button>
           </div>
         </div>
-        {{!-- Forge heat (Burn 0–8) — fuel + overheat readout. Spend banked Surge on
-              Forge-Weld etc. via the Surge "Spend" button. --}}
-        <div class="ft-resource-row" style="margin-top:0.35rem" data-tooltip="Forge heat: rises +1 when you or a nearby ally takes damage. Cool 0–1 / Stoked 2–3 (repairs ×1.5) / Overheated 4+ (repairs ×2, but the furnace bites). Vent via Stabilize.">
-          <div class="ft-burn-track" style="display:inline-flex;gap:1px;letter-spacing:-0.05em">
-            {{#each (times 8) as |n|}}<span style="color:{{#if (lte (add n 1) (ftOr ../resources.burn.current 0))}}{{../burnBand.color}}{{else}}rgba(255,255,255,0.15){{/if}}">▰</span>{{/each}}
-          </div>
-          <span class="ft-resource-count" style="color:{{burnBand.color}}">🔥 {{ftOr resources.burn.current 0}}/8 · {{burnBand.label}}</span>
-          <div class="ft-resource-controls">
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="aurablade_stabilize" data-tooltip="Vent the forge (cool Burn).">Vent</button>
-            {{#if burnTimer.canEdit}}<button type="button" class="ft-res-btn ft-res-btn-sm" data-action="ftBurnTimer" data-tooltip="Burn timer: lock forge heat for N turns, change it in N rounds, or set it when this turn ends (combat only).">⏱</button>{{/if}}
-          </div>
-          <div class="ft-edit-only ft-resource-edit">
-            <input type="number" name="system.resources.burn.current" value="{{ftOr resources.burn.current 0}}" min="0" max="8" style="width:40px" data-tooltip="Forge heat (Burn 0–8)"/>
-          </div>
+        {{!-- Forge heat = the Surge heat band (2026-10-29). Cool ×1 / Stoked ×1.5 /
+              Overheated ×2 (the furnace bites). --}}
+        <div class="ft-aura-row" style="margin-top:0.2rem" data-tooltip="Forge heat is your Surge: it rises +1 when you or a nearby ally takes damage. Repairs scale with the band you're in when you spend.">
+          <span class="ft-aura-desc" style="color:{{surgeHeat.band.color}}"><b>🔥 {{surgeHeat.band.label}}:</b> {{surgeHeat.band.desc}}</span>
         </div>
-        {{!-- Band readout: what the current forge heat is doing right now. --}}
-        <div class="ft-aura-row" style="margin-top:0.2rem">
-          <span class="ft-aura-desc" style="color:{{burnBand.color}}"><b>{{burnBand.label}}:</b> {{burnBand.desc}}</span>
-        </div>
-        {{#if burnTimer.active}}
-        <div class="ft-burn-timer-row">
-          {{#if burnTimer.lockLabel}}<span class="ft-burn-timer-chip lock">🔒 {{burnTimer.lockLabel}}</span>{{/if}}
-          {{#each burnTimer.timers as |t|}}<span class="ft-burn-timer-chip" data-tooltip="{{t.note}}">⏱ {{t.label}}</span>{{/each}}
-        </div>
-        {{/if}}
         {{#if soulSmithState.forge}}
         {{!-- Subclass Spark economy (Forge of Victory / Spark Reclaimer / Bound Light). --}}
         <div class="ft-aura-row" style="margin-top:0.2rem" data-tooltip="Sparks — your forge's subclass resource. Earned when foes fall / things are destroyed / allies are hurt near you (per forge). Spend on your forge abilities via the Surge menu.">

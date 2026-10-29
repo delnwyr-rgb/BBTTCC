@@ -2,7 +2,7 @@
 // Sprint D: Class Automation — resource pools, dialogs, feature click router
 //
 // Covers all 9 classes:
-//   Active pools:  Titanbound (Frame Dice + Stress), Aurablade (Burn + Aura), Shadowjack (Access Dice)
+//   Active pools:  Titanbound (Frame Dice + Stress), Aurablade (Aura; heat = Surge band), Shadowjack (Access Dice)
 
 import { MARKS_PER_OP } from "./rfi-pricing.js";   // the one OP↔marks authority
 import {
@@ -24,58 +24,85 @@ export const AURA_STATES = {
   dread:   { label: "Dread",   color: "#9b59b6", desc: "Psychic — fear, shadow, displacement" }
 };
 
-export const BURN_BANDS = [
-  { min: 0, max: 1, label: "Controlled", color: "#4fc3ff", desc: "Stable. Full options available." },
-  { min: 2, max: 3, label: "Engaged",    color: "#ffd54f", desc: "Aura riders unlock. Fury: +tier melee damage. Stabilize costs more." },
-  { min: 4, max: 99, label: "Overheated", color: "#ff5ac8", desc: "Overheated riders unlock. Fury's +tier damage holds. Backlash risk at end of turn." }
-];
+// ─── Surge heat (ruling 2026-10-29, Dave: "C") ───────────────────────────────
+// Burn is folded into Surge. There is ONE number — banked Surge — and how full it
+// is IS the intensity of the steward's burning god power. Every class reads the
+// same three bands, scaled to its own Surge cap (T1 4 / T2 6 / T3 8 / T4 10):
+//   Cool        below half the cap
+//   Stoked      half the cap or more
+//   Overheated  the bank is full — reality pushes back (module.js _ftBankSurge)
+// T1 (cap 4) reads Cool 0–1 / Stoked 2–3 / Overheated 4 — the old Burn ladder.
+// The legacy names (getBurnBand, ftGetBurn, ftAddBurn, BURN_CLASSES…) are kept so
+// the class handlers read unchanged; they now read and write Surge.
+// `key` is the stable id (cool|stoked|overheated); `label` is what players see.
+export const HEAT_BAND_STYLE = {
+  cool:       { label: "Cool",       color: "#4fc3ff", desc: "Steady. Spend freely." },
+  stoked:     { label: "Stoked",     color: "#ffd54f", desc: "Running hot — Stoked riders unlock." },
+  overheated: { label: "Overheated", color: "#ff5ac8", desc: "Full. Every surge you can't hold costs 1 Stress — spend or vent." },
+};
+
+// Surge cap resolver. module.js registers its _ftSurgeCap (tier cap + Elite
+// override + Both Things At Once) at load; the fallback is the plain tier ladder.
+let _ftSurgeCapResolver = null;
+export function ftRegisterSurgeCap(fn) { if (typeof fn === "function") _ftSurgeCapResolver = fn; }
+export function ftSurgeCapOf(actor) {
+  try { if (_ftSurgeCapResolver) return Math.max(1, Number(_ftSurgeCapResolver(actor)) || 1); } catch (_e) {}
+  const t = Number((actor?.system?.system ?? actor?.system)?.details?.tier) || 1;
+  return ({ 1: 4, 2: 6, 3: 8, 4: 10 })[t] ?? 10;
+}
+
+// The three bands for a given cap, with class flavor (`bandDesc`) laid over.
+export function ftHeatBands(cap, bandDesc = null) {
+  const c = Math.max(1, Math.floor(Number(cap) || 1));
+  const half = Math.ceil(c / 2);
+  const mk = (key, min, max) => ({ key, min, max, ...HEAT_BAND_STYLE[key], ...(bandDesc?.[key] ? { desc: bandDesc[key] } : {}) });
+  return [mk("cool", 0, half - 1), mk("stoked", half, c - 1), mk("overheated", c, 999)];
+}
+// Default bands (T1 cap) for callers that pass no bands.
+export const BURN_BANDS = ftHeatBands(4);
 
 export function getBurnBand(burn, bands = BURN_BANDS) {
   return bands.find(b => burn >= b.min && burn <= b.max) ?? bands[bands.length - 1];
 }
 
-// ─── Burn archetype registry ─────────────────────────────────────────────────
-// Burn is a shared "escalation track" substrate: a 0→max heat clock that is at
-// once fuel (good) and risk (bad). The TRACK, BANDS, VENT options, and HUD
-// presentation are generic and declared per class here; the PAYLOADS (what each
-// band/action actually DOES, and what raises Burn) stay in each class's own
-// handlers. Phase 1 (2026-05-26): extracted from Aurablade with IDENTICAL values
-// so Aurablade behavior is unchanged. New burn classes (e.g. soul-smith) register
-// here with their own track shape, vent flavor, and HUD tag.
+// ─── Heat-native classes ─────────────────────────────────────────────────────
+// Every class runs hot now; these two are BUILT to live there. They keep a tag,
+// band flavor and vent wording; their payloads (what Stoked/Overheated DO, and
+// what feeds the heat) stay in each class's own handlers.
 export const BURN_CLASSES = {
   aurablade: {
     tag:   "Aurablade",
     icon:  "🔥",
-    max:   8,
-    bands: BURN_BANDS,
-    // Vent options for the Stabilize dialog. reduce:"all" clears the track to 0;
-    // req:"overheated" only offers the option in the Overheated band; a
-    // backlashStress formula is rolled and subtracted from Stress when chosen.
+    bandDesc: {
+      cool:       "Controlled. Full options; Fury +1 melee damage.",
+      stoked:     "Engaged — Stoked Aura actions unlock. Fury: +tier melee damage.",
+      overheated: "Overheated — every Aura action open. Each surge you can't hold costs 1 Stress.",
+    },
     vent: [
-      { id: "meditate", label: "Meditate (action)",  reduce: 2,     req: "any",        desc: "Spend your action to reduce Burn by 2" },
-      { id: "rest",     label: "Catch your breath (5 min)", reduce: "all", req: "any",        desc: "Clear all Burn after a five-minute breather" },
-      { id: "accept",   label: "Accept backlash",    reduce: 3,     req: "overheated", backlashStress: "1d6", desc: "Take 1d6 Stress to reduce Burn by 3" },
+      { id: "meditate", label: "Meditate (action)",         reduce: 2,     desc: "Spend your action to let 2 Surge go" },
+      { id: "rest",     label: "Catch your breath (5 min)", reduce: "all", desc: "Out of the fight: let it all go" },
     ],
   },
-  // Soul-Smith — constructive-register Burn (Phase 2, 2026-05-26). Same 0→8 track +
-  // vent substrate as Aurablade, its OWN bands/flavor. Stoked amplifies repairs;
-  // Overheated bites back. Generation = "damage stokes the forge" (see module.js).
+  // Soul-Smith — constructive register. Stoked amplifies repairs; Overheated bites.
   "soul-smith": {
     tag:   "Soul-Smith",
     icon:  "⚒",
-    max:   8,
-    bands: [
-      { min: 0, max: 1,  label: "Cool",       color: "#5dade2", desc: "Forge banked. Steady — no bonus." },
-      { min: 2, max: 3,  label: "Stoked",     color: "#f2994a", desc: "Forge roaring. Repairs ×1.5." },
-      { min: 4, max: 99, label: "Overheated", color: "#ff5ac8", desc: "Furnace bites. Repairs ×2, but drawing on it costs you Stress." },
-    ],
+    bandDesc: {
+      cool:       "Forge banked. Repairs ×1.",
+      stoked:     "Forge roaring. Repairs ×1.5.",
+      overheated: "Furnace bites. Repairs ×2, but drawing on it costs you Stress.",
+    },
     vent: [
-      { id: "quench",   label: "Quench (action)",       reduce: 2,     req: "any",        desc: "Spend your action to cool the forge by 2" },
-      { id: "bank",     label: "Bank the coals (rest)", reduce: "all", req: "any",        desc: "Let the forge go cold on a brief rest" },
-      { id: "overdraw", label: "Overdraw",              reduce: 3,     req: "overheated", backlashStress: "1d6", desc: "Take 1d6 Stress to cool the furnace by 3" },
+      { id: "quench", label: "Quench (action)",       reduce: 2,     desc: "Spend your action to cool the forge by 2" },
+      { id: "bank",   label: "Bank the coals (rest)", reduce: "all", desc: "Let the forge go cold on a brief rest" },
     ],
   },
 };
+// Vent for everyone else.
+export const FT_DEFAULT_VENT = [
+  { id: "steady", label: "Steady yourself (action)",  reduce: 2,     desc: "Spend your action to let 2 Surge go" },
+  { id: "rest",   label: "Catch your breath (5 min)", reduce: "all", desc: "Out of the fight: let it all go" },
+];
 
 // Identifier match shared with detectActivePools' hasClass(): a class/feat item
 // whose system.identifier equals the slug or is `<slug>_*` prefixed (normalized).
@@ -89,8 +116,7 @@ function _ftBurnClassIdMatch(actor, slug) {
   });
 }
 
-// Burn descriptor for the actor's burn class ({ slug, ...config }), or null when
-// the actor is not a burn-archetype class.
+// Heat-native descriptor ({ slug, ...config }) or null for every other class.
 export function ftBurnClassFor(actor) {
   for (const [slug, cfg] of Object.entries(BURN_CLASSES)) {
     if (_ftBurnClassIdMatch(actor, slug)) return { slug, ...cfg };
@@ -102,24 +128,33 @@ export function ftIsBurnClass(actor) {
   return ftBurnClassFor(actor) !== null;
 }
 
+// Heat ceiling = the Surge cap.
 export function ftBurnMax(actor) {
-  return ftBurnClassFor(actor)?.max ?? 8;
+  return ftSurgeCapOf(actor);
 }
 
+// Heat = banked Surge.
 export function ftGetBurn(actor) {
-  return Number(getResources(actor)?.burn?.current ?? 0) || 0;
+  return Number(getResources(actor)?.surge?.value ?? 0) || 0;
 }
 
-// Band for the actor computed against its own class bands (defaults to BURN_BANDS).
-export function ftBurnBandFor(actor) {
-  const desc = ftBurnClassFor(actor);
-  return getBurnBand(ftGetBurn(actor), desc?.bands ?? BURN_BANDS);
+// The actor's bands (its cap + its class flavor).
+export function ftHeatBandsFor(actor) {
+  return ftHeatBands(ftSurgeCapOf(actor), ftBurnClassFor(actor)?.bandDesc ?? null);
 }
+
+// Band for the actor; pass `surge` to read a value other than the current bank
+// (e.g. the bank BEFORE a spend was paid).
+export function ftBurnBandFor(actor, surge = null) {
+  return getBurnBand(surge ?? ftGetBurn(actor), ftHeatBandsFor(actor));
+}
+export const ftHeatBandFor = ftBurnBandFor;
 
 // ─── Burn timer / lock (ported from the retired auto-link sheet layer, 2026-10-02)
 // flags.fourththing.burnTimer = { combatId, lock: { untilRound, untilTurn } | null,
 //   timers: [{ id, kind: "delta"|"set", value, atRound, atTurn, note }] }
-// A lock freezes Burn until the combat reaches (untilRound, untilTurn); timers are
+// A lock holds Surge from RISING until the combat reaches (untilRound, untilTurn)
+// (Burn folded into Surge 2026-10-29 — spending/venting still work); timers are
 // applied by the active GM on combat turn/round change (module.js). Writers that
 // carry the `ftBurnTimer` update option bypass the lock.
 export function ftCombatPos(round, turn) {
@@ -148,14 +183,17 @@ export function ftBurnLockInfo(actor) {
   return { locked, untilRound: Number(lock.untilRound) || 0, untilTurn: Number(lock.untilTurn) || 0, combat };
 }
 
-// Add (or subtract) Burn, clamped to [0, class max]. Returns the new value.
-// A Burn lock makes this a no-op (auto-gens like burn-on-hit stay frozen too).
+// Add (or subtract) heat = Surge, clamped to [0, cap]. Returns the new value.
+// Commitment heat (Aura actions, on-hit, the forge) — NOT an explosion, so no
+// Harmony harvest and no overheat Stress. A heat lock (the timer's lock) holds
+// rises only; letting Surge go is always allowed.
 export async function ftAddBurn(actor, delta) {
   const max  = ftBurnMax(actor);
   const cur  = ftGetBurn(actor);
-  if (ftBurnLockInfo(actor).locked) return cur;
-  const next = Math.max(0, Math.min(max, cur + (Number(delta) || 0)));
-  if (next !== cur) await actor.update({ "system.resources.burn.current": next });
+  const d    = Number(delta) || 0;
+  if (d > 0 && ftBurnLockInfo(actor).locked) return cur;
+  const next = Math.max(0, Math.min(max, cur + d));
+  if (next !== cur) await actor.update({ "system.resources.surge.value": next });
   return next;
 }
 
@@ -507,9 +545,11 @@ export const NAME_ROUTER = [
   ["Structural Stress",          "bulwark_frame_pool"],
   // Aurablade
   ["Aurablade Action",           "aurablade_action"],
-  ["Burn State",                 "aurablade_burn"],
+  ["Burn State",                 "aurablade_burn"],   // legacy name → Surge & Aura dialog
+  ["Surge & Aura",               "aurablade_burn"],
   ["Change Aura",                "aurablade_change_aura"],
-  ["Stabilize Burn",             "aurablade_stabilize"],
+  ["Stabilize Burn",             "aurablade_stabilize"],   // legacy name → Vent
+  ["Vent Surge",                 "aurablade_stabilize"],
   // Shadowjack → dispatches to Shadow Courier handlers
   // 2026-05-20: legacy aliases for any actor whose item still has the old
   // name; new content authoring should use "Spend Pace" / "Pace Pool".
@@ -888,17 +928,18 @@ export async function openSpendFrameDie(actor) {
 
 export async function openBurnState(actor) {
   const res  = getResources(actor);
-  const burn = res.burn?.current ?? 0;
+  const burn = ftGetBurn(actor);
+  const cap  = ftBurnMax(actor);
   const aura = res.aura?.state   ?? "none";
-  const band = getBurnBand(burn);
+  const band = ftBurnBandFor(actor);
 
   new Dialog({
-    title: "Aurablade — Burn & Aura",
+    title: "Aurablade — Surge & Aura",
     content: `<div class="ft-cast-dialog">
       <div class="ft-preview-stats" style="margin-bottom:0.75rem">
         <span class="ft-prev-stat">
-          <span class="ft-prev-label">Burn</span>
-          <span class="ft-prev-val" style="color:${band.color}">${burn}/8</span>
+          <span class="ft-prev-label">Surge</span>
+          <span class="ft-prev-val" style="color:${band.color}">${burn}/${cap}</span>
         </span>
         <span class="ft-prev-stat">
           <span class="ft-prev-label">Band</span>
@@ -910,8 +951,8 @@ export async function openBurnState(actor) {
         </span>
       </div>
       <div class="ft-cast-grid">
-        <div class="ft-cast-field"><label>Burn (0–8)</label>
-          <input type="number" name="burn" value="${burn}" min="0" max="8"/></div>
+        <div class="ft-cast-field"><label>Surge (0–${cap})</label>
+          <input type="number" name="burn" value="${burn}" min="0" max="${cap}"/></div>
         <div class="ft-cast-field"><label>Aura State</label>
           <select name="aura">
             ${Object.entries(AURA_STATES).map(([k,v]) =>
@@ -927,8 +968,8 @@ export async function openBurnState(actor) {
         const newBurn = parseInt(html.find("[name='burn']").val()) || 0;
         const newAura = html.find("[name='aura']").val();
         await actor.update({
-          "system.resources.burn.current": Math.min(8, Math.max(0, newBurn)),
-          "system.resources.aura.state":   newAura,
+          "system.resources.surge.value": Math.min(cap, Math.max(0, newBurn)),
+          "system.resources.aura.state":  newAura,
         });
       }},
       close: { label: "Close" }
@@ -940,13 +981,14 @@ export async function openBurnState(actor) {
 export async function openChangeAura(actor) {
   const res  = getResources(actor);
   const aura = res.aura?.state   ?? "none";
-  const burn = res.burn?.current ?? 0;
+  const burn = ftGetBurn(actor);
+  const cap  = ftBurnMax(actor);
 
   new Dialog({
     title: "Change Aura",
     content: `<div class="ft-cast-dialog">
       <p style="font-size:0.8rem;opacity:0.7;margin:0 0 0.6rem">
-        Changing aura costs <b>+1 Burn</b> (current: ${burn}/8).
+        Committing to a new aura raises your Surge <b>+1</b> (now ${burn}/${cap}).
       </p>
       <div class="ft-conditions-grid" style="grid-template-columns:1fr 1fr">
         ${Object.entries(AURA_STATES).filter(([k]) => k !== "none").map(([k,v]) => `
@@ -962,18 +1004,17 @@ export async function openChangeAura(actor) {
     </div>`,
     buttons: {
       change: {
-        label: "Switch Aura (+1 Burn)",
+        label: "Switch Aura (+1 Surge)",
         callback: async (html) => {
           const newAura = html.find("[name='aura']:checked").val() ?? aura;
-          const newBurn = ftBurnLockInfo(actor).locked ? burn : Math.min(8, burn + (newAura !== aura ? 1 : 0));
+          // Commitment heat: +1 Surge on a real switch (held by a heat lock).
+          const newBurn = (ftBurnLockInfo(actor).locked || newAura === aura) ? burn : Math.min(cap, burn + 1);
           await actor.update({
-            "system.resources.aura.state":   newAura,
-            "system.resources.burn.current": newBurn,
+            "system.resources.aura.state":  newAura,
+            "system.resources.surge.value": newBurn,
           });
-          // Committing to the aura sheds spendable Surge (flavor gen, capped/round).
-          if (newBurn > burn) { try { await game.fourththing?.aurabladeFlavorSurge?.(actor); } catch (e) { /* silent */ } }
           // AE sync runs automatically via the updateActor hook in module.js
-          // (aurablade burn-band auto-sync). No explicit call needed; keeping
+          // (aurablade heat-band auto-sync). No explicit call needed; keeping
           // one would race the hook and double-create the AE pack.
           const av = AURA_STATES[newAura];
           ChatMessage.create({
@@ -981,7 +1022,7 @@ export async function openChangeAura(actor) {
             content: `<div class="fourththing-roll">
               <div class="ft-roll-header">
                 <span class="ft-roll-name">Aura: ${av?.label}</span>
-                <span class="ft-seph-pill" style="background:${av?.color}22;border-color:${av?.color}88;color:${av?.color}">Burn ${newBurn}/8</span>
+                <span class="ft-seph-pill" style="background:${av?.color}22;border-color:${av?.color}88;color:${av?.color}">Surge ${newBurn}/${cap}</span>
               </div>
               <p style="margin:0.2rem 0;font-size:0.8rem;opacity:0.7">${av?.desc}</p>
             </div>`
@@ -1082,7 +1123,7 @@ const AURABLADE_ACTIONS = {
   ],
   dread: [
     { id: "dread_shake",       label: "Inflict Shaken",             band: "any",         burnCost: 1, target: true,
-      desc: "On hit: target saves vs Resolve or becomes Shaken until end of its next turn (canon: Engaged+; usable at low Burn as the entry-level effect)." },
+      desc: "On hit: target saves vs Resolve or becomes Shaken until end of its next turn (canon: Stoked+; usable while Cool as the entry-level effect)." },
     { id: "dread_suppress",    label: "Suppress One Buff / Inspiration", band: "engaged", burnCost: 1, target: true,
       desc: "Suppress one beneficial morale, inspiration, or buff effect on the target (GM adjudicated)." },
     { id: "dread_dis_saves",   label: "Keep-Lowest on All Saves",  band: "overheated",  burnCost: 1, target: true,
@@ -1094,16 +1135,18 @@ const AURABLADE_ACTIONS = {
 
 export async function openAurabladeAction(actor) {
   const res  = getResources(actor);
-  const burn = res.burn?.current ?? 0;
+  const burn = ftGetBurn(actor);
+  const cap  = ftBurnMax(actor);
   const aura = res.aura?.state   ?? "fury";
-  const band = getBurnBand(burn);
+  const band = ftBurnBandFor(actor);
   const av   = AURA_STATES[aura] ?? AURA_STATES.fury;
 
-  // Band gate: "any" always; "engaged" = Engaged or Overheated; "overheated" = Overheated only.
+  // Band gate: "any" always; "engaged" = Stoked or Overheated; "overheated" = Overheated only.
+  // (Action ids keep the old "engaged" gate name; the band players see is Stoked.)
   const bandMatches = (gate) => {
     if (gate === "any") return true;
-    if (gate === "engaged")    return band.label === "Engaged" || band.label === "Overheated";
-    if (gate === "overheated") return band.label === "Overheated";
+    if (gate === "engaged")    return band.key === "stoked" || band.key === "overheated";
+    if (gate === "overheated") return band.key === "overheated";
     return false;
   };
   const available = (AURABLADE_ACTIONS[aura] ?? []).filter(a => bandMatches(a.band));
@@ -1116,7 +1159,7 @@ export async function openAurabladeAction(actor) {
       subset.map(a => `<option value="${a.id}" data-cost="${a.burnCost}">${a.label} — ${a.desc}</option>`).join("") +
       `</optgroup>`;
   };
-  const opts = renderGroup("Any band", "any") + renderGroup("Engaged / Overheated", "engaged") + renderGroup("Overheated only", "overheated");
+  const opts = renderGroup("Any band", "any") + renderGroup("Stoked / Overheated", "engaged") + renderGroup("Overheated only", "overheated");
 
   const passiveByAura = {
     fury:    "+1 melee weapon damage.",
@@ -1134,8 +1177,8 @@ export async function openAurabladeAction(actor) {
           <span class="ft-prev-val" style="color:${av.color}">${av.label}</span>
         </span>
         <span class="ft-prev-stat">
-          <span class="ft-prev-label">Burn</span>
-          <span class="ft-prev-val" style="color:${band.color}">${burn} (${band.label})</span>
+          <span class="ft-prev-label">Surge</span>
+          <span class="ft-prev-val" style="color:${band.color}">${burn}/${cap} (${band.label})</span>
         </span>
       </div>
       <p style="font-size:0.74rem;opacity:0.75;margin:0 0 0.4rem;border-left:2px solid ${av.color}55;padding-left:0.4rem">
@@ -1145,7 +1188,7 @@ export async function openAurabladeAction(actor) {
         <label>Available actions (band-gated)</label>
         <select name="action">${opts}</select>
       </div>
-      <p style="font-size:0.7rem;opacity:0.55;margin:0.4rem 0 0">Using an action raises your Burn by its listed cost (canon: Burn is gained from commitment, not spent from a pool).</p>
+      <p style="font-size:0.7rem;opacity:0.55;margin:0.4rem 0 0">Using an action raises your Surge by its listed amount — commitment feeds the heat.</p>
     </div>`,
     buttons: {
       act: {
@@ -1155,12 +1198,9 @@ export async function openAurabladeAction(actor) {
           const sel       = html.find("[name='action'] option:selected");
           const actionId  = html.find("[name='action']").val();
           const burnCost  = parseInt(sel.data("cost")) || 1;
-          // A Burn lock holds the track; the action still resolves (retired-layer rule).
-          // Aura Unbound (Surge, ruling AB1): Aura actions cost no Burn for the round it was spent.
-          const unb = actor.flags?.fourththing?.aurablade?.unbound;
-          const unboundNow = !!unb && ((game.combat?.id ?? null) === (unb.combatId ?? null)) && Number(game.combat?.round ?? 0) === Number(unb.round ?? -1);
-          const newBurn   = (ftBurnLockInfo(actor).locked || unboundNow) ? burn : Math.min(8, burn + burnCost);
-          const newBand   = getBurnBand(newBurn);
+          // A heat lock holds the rise; the action still resolves (retired-layer rule).
+          const newBurn   = ftBurnLockInfo(actor).locked ? burn : Math.min(cap, burn + burnCost);
+          const newBand   = ftBurnBandFor(actor, newBurn);
           const action    = available.find(a => a.id === actionId);
           if (!action) return;
 
@@ -1365,13 +1405,11 @@ export async function openAurabladeAction(actor) {
             }
           }
 
-          await actor.update({ "system.resources.burn.current": newBurn });
-          // Committing a Burn action sheds spendable Surge (flavor gen, capped/round).
-          try { await game.fourththing?.aurabladeFlavorSurge?.(actor); } catch (e) { /* silent */ }
+          if (newBurn !== burn) await actor.update({ "system.resources.surge.value": newBurn });
 
           let backlashNote = "";
-          if (newBand.label === "Overheated" && band.label !== "Overheated") {
-            backlashNote = `<p style="color:#eb5757;font-size:0.75rem;margin:0.2rem 0 0">⚠ Now Overheated — risk backlash at end of turn.</p>`;
+          if (newBand.key === "overheated" && band.key !== "overheated") {
+            backlashNote = `<p style="color:#eb5757;font-size:0.75rem;margin:0.2rem 0 0">⚠ Now Overheated — every surge you can't hold costs 1 Stress. Spend or vent.</p>`;
           }
 
           ChatMessage.create({
@@ -1383,7 +1421,7 @@ export async function openAurabladeAction(actor) {
               </div>
               <p style="margin:0.2rem 0;font-size:0.8rem;opacity:0.85">${action.desc}</p>
               ${appliedNote ? `<p style="margin:0.2rem 0;font-size:0.78rem;color:${av.color}">${appliedNote}</p>` : ""}
-              <p style="margin:0;font-size:0.74rem;color:${newBand.color}">Burn: ${burn} → ${newBurn} (${newBand.label})</p>
+              <p style="margin:0;font-size:0.74rem;color:${newBand.color}">Surge: ${burn} → ${newBurn}/${cap} (${newBand.label})</p>
               ${backlashNote}
             </div>`
           });
@@ -1395,67 +1433,46 @@ export async function openAurabladeAction(actor) {
   }).render(true);
 }
 
+// Vent — let Surge go without spending it on anything (every class; the heat-
+// native classes word it their own way). The way out of Overheated when nothing
+// on the menu fits.
 export async function openStabilizeBurn(actor) {
   const desc = ftBurnClassFor(actor);
-  const res  = getResources(actor);
-  const burn = res.burn?.current ?? 0;
-  const band = getBurnBand(burn, desc?.bands ?? BURN_BANDS);
+  const burn = ftGetBurn(actor);
+  const cap  = ftBurnMax(actor);
+  const band = ftBurnBandFor(actor);
 
   if (burn <= 0) {
-    return ui.notifications.info(`${actor.name}: Burn is already at 0.`);
-  }
-  // A Burn lock (Burn timer) freezes the track — don't spend the action / Stress.
-  const _lk = ftBurnLockInfo(actor);
-  if (_lk.locked) {
-    return ui.notifications.warn(`${actor.name}: Burn is locked until round ${_lk.untilRound}, turn ${_lk.untilTurn + 1} — it can't be vented yet.`);
+    return ui.notifications.info(`${actor.name}: no Surge banked — nothing to vent.`);
   }
 
-  // Vent options come from the burn descriptor; fall back to the Aurablade set so
-  // any non-registered caller keeps the original behavior.
-  const ventDefs = desc?.vent ?? [
-    { id: "meditate", label: "Meditate (action)",  reduce: 2,     req: "any",        desc: "Spend your action to reduce Burn by 2" },
-    { id: "rest",     label: "Catch your breath (5 min)", reduce: "all", req: "any",        desc: "Clear all Burn after a five-minute breather" },
-    { id: "accept",   label: "Accept backlash",    reduce: 3,     req: "overheated", backlashStress: "1d6", desc: "Take 1d6 Stress to reduce Burn by 3" },
-  ];
+  const ventDefs = desc?.vent ?? FT_DEFAULT_VENT;
   const reduceOf = (o) => (o.reduce === "all" ? burn : (Number(o.reduce) || 1));
-  const options  = ventDefs.filter(o => o.req === "any" || (o.req === "overheated" && band.label === "Overheated"));
-
-  const opts = options.map(o =>
-    `<option value="${o.id}" data-reduce="${reduceOf(o)}">${o.label} (−${Math.min(reduceOf(o), burn)} Burn) — ${o.desc}</option>`
+  const opts = ventDefs.map(o =>
+    `<option value="${o.id}" data-reduce="${reduceOf(o)}">${o.label} (−${Math.min(reduceOf(o), burn)} Surge) — ${o.desc}</option>`
   ).join("");
 
   new Dialog({
-    title: "Stabilize Burn",
+    title: "Vent Surge",
     content: `<div class="ft-cast-dialog">
       <div class="ft-preview-stats" style="margin-bottom:0.6rem">
-        <span class="ft-prev-stat"><span class="ft-prev-label">Current Burn</span>
-          <span class="ft-prev-val" style="color:${band.color}">${burn} (${band.label})</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Surge</span>
+          <span class="ft-prev-val" style="color:${band.color}">${burn}/${cap} (${band.label})</span></span>
       </div>
       <div class="ft-cast-field">
-        <label>Stabilization method</label>
+        <label>How you let it go</label>
         <select name="method">${opts}</select>
       </div>
+      <p style="font-size:0.7rem;opacity:0.55;margin:0.4rem 0 0">Vented Surge buys nothing — spending it is usually better.</p>
     </div>`,
     buttons: {
       stabilize: {
-        label: "Stabilize",
+        label: "Vent",
         callback: async (html) => {
-          const sel    = html.find("[name='method'] option:selected");
-          const reduce = parseInt(sel.data("reduce")) || 1;
-          const method = html.find("[name='method']").val();
-          const chosen = ventDefs.find(o => o.id === method);
+          const reduce = parseInt(html.find("[name='method'] option:selected").data("reduce")) || 1;
           const newBurn = Math.max(0, burn - reduce);
-          const updates = { "system.resources.burn.current": newBurn };
-          // Backlash (if the chosen vent option carries one) costs Stress.
-          if (chosen?.backlashStress) {
-            const rawSys = actor.system?.system ?? actor.system;
-            const curStr = rawSys?.derived?.stress?.value ?? 10;
-            const roll = new Roll(String(chosen.backlashStress));
-            await roll.evaluate();
-            updates["system.derived.stress.value"] = Math.max(0, curStr - roll.total);
-          }
-          await actor.update(updates);
-          ui.notifications.info(`${actor.name}: Burn reduced to ${newBurn}.`);
+          await actor.update({ "system.resources.surge.value": newBurn });
+          ui.notifications.info(`${actor.name}: Surge vented to ${newBurn}.`);
         }
       },
       cancel: { label: "Cancel" }
@@ -6189,7 +6206,7 @@ export const CHAR_OPT_ABILITIES = {
   "bloodhymn_final_crescendo": {
     type: "soma-break", level: 18,
     label: "Blood Hymn: Final Crescendo (1/Soma Break, L18)",
-    body: "Bonus action — immediately enter Burn 4. For the rest of the turn: all attacks deal maximum damage; you may cleave through every creature in reach."
+    body: "Bonus action — your Surge fills to its cap (Overheated). For the rest of the turn: all attacks deal maximum damage; you may cleave through every creature in reach."
   },
   "waking-dreamfield": {
     type: "soma-break",
@@ -6254,7 +6271,7 @@ export const CHAR_OPT_ABILITIES = {
   "stillheart_emotional_lock": {
     type: "soma-break", level: 14,
     label: "Stillheart: Emotional Lock (1/Soma Break, L14)",
-    body: "Bonus action — freeze your current Burn level. It cannot increase or decrease until the end of your next turn. Your Aura cannot be forcibly changed during this period."
+    body: "Bonus action — until the end of your next turn the overheat can't touch you (no Stress from a full Surge bank) and your Aura cannot be forcibly changed."
   },
   "coordinated-advance": {
     type: "soma-break",
@@ -7676,10 +7693,11 @@ export async function openFtUnbrokenLine(actor) {
 // Blood Hymn: Final Crescendo (Aurablade capstone) — 1/Soma-Break bonus: max-damage turn.
 export async function openBloodHymnFinalCrescendo(actor) {
   return _openSomaBreakAbility(actor, "bhFinalCrescendo", "Final Crescendo",
-    "Bonus action: enter <b>Burn 4</b>. For the rest of this turn all your attacks deal <b>maximum damage</b> and you may cleave freely. Aftermath: Burn → 0, 3d10 keep lowest 2 on attacks/saves, and speed 0 until the end of your next turn.",
+    "Bonus action: your Surge fills to its cap (<b>Overheated</b>). For the rest of this turn all your attacks deal <b>maximum damage</b> and you may cleave freely. Aftermath: Surge → 0, 3d10 keep lowest 2 on attacks/saves, and speed 0 until the end of your next turn.",
     async (actor) => {
+      try { await ftAddBurn(actor, ftBurnMax(actor)); } catch (e) {}
       try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Final Crescendo (max damage)", img: "icons/magic/fire/explosion-fireball-large-red.webp", origin: actor.uuid, duration: { rounds: 1, seconds: 6 }, changes: [], flags: { fourththing: { finalCrescendo: true } } }]); } catch (e) {}
-      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#ff5544">⟁ The hymn burns to its peak — <b>Burn 4</b>, all attacks <b>max damage</b>, free cleave this turn. Then silence: Burn 0, disadvantage on attacks/saves, speed 0 next turn.</p>`;
+      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#ff5544">⟁ The hymn burns to its peak — <b>Overheated</b>, all attacks <b>max damage</b>, free cleave this turn. Then silence: Surge 0, disadvantage on attacks/saves, speed 0 next turn.</p>`;
     });
 }
 
@@ -7725,14 +7743,15 @@ export async function openArchivistAkashicAccess(actor) {
   }).render(true);
 }
 
-// Stillheart: Emotional Lock (Aurablade) — bonus action: freeze your Aura/Burn until next turn.
+// Stillheart: Emotional Lock (Aurablade) — bonus action: Aura can't be forced + no overheat Stress
+// until next turn (the emotionalLock AE is read by module.js _ftOverheatShielded).
 // Once per Soma Break (ruling AB4) — the card promised it, the handler never guarded it.
 export async function openStillheartEmotionalLock(actor) {
   return _openSomaBreakAbility(actor, "shEmotionalLock", "Emotional Lock",
-    "Bonus action: your Aura cannot be forcibly changed and your Burn is <b>frozen</b> until the start of your next turn. At Burn 3+ you may ignore one backlash trigger.",
+    "Bonus action: until the start of your next turn your Aura cannot be forcibly changed and the overheat can't touch you — no Stress from a full Surge bank.",
     async (actor) => {
       try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Emotional Lock", img: "icons/magic/control/buff-flight-wings-blue.webp", origin: actor.uuid, duration: { rounds: 1, seconds: 6 }, changes: [], flags: { fourththing: { emotionalLock: true } } }]); } catch (e) {}
-      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#7db8ff">🔒 The heart goes still — Aura and Burn locked until your next turn.</p>`;
+      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#7db8ff">🔒 The heart goes still — Aura locked and the overheat held off until your next turn.</p>`;
     });
 }
 

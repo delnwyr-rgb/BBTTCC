@@ -177,7 +177,11 @@ import {
   ftBurnLockInfo,
   ftCombatPos,
   ftAdvanceCombatPos,
-  ftBurnMax
+  ftBurnMax,
+  // Surge heat (2026-10-29 — Burn folded into Surge)
+  ftRegisterSurgeCap,
+  ftHeatBandsFor,
+  ftBurnBandFor
 } from "./ft-class-automation.js";
 
 import RfiItems    from "./rfi-items.js";
@@ -369,7 +373,7 @@ const FT = {
     clarity: { label: "Clarity" },
     noise:   { label: "Noise" },
     stress:  { label: "Stress" },
-    burn:    { label: "Burn" },
+    burn:    { label: "Surge (was Burn)" },   // key kept; pays banked Surge (2026-10-29)
     custom:  { label: "Custom" }
   },
   // Phase F2 — Maintenance cost (ongoing upkeep). Authored as a structured
@@ -385,7 +389,7 @@ const FT = {
     "1-stress-scene":   { label: "1 Stress per scene" },
     "1-stress-round":   { label: "1 Stress per round" },
     "1-noise-scene":    { label: "+1 Noise per scene" },
-    "1-burn-scene":     { label: "1 Burn per scene" },
+    "1-burn-scene":     { label: "1 Surge per scene" },   // key kept; drains Surge (2026-10-29)
     custom:             { label: "Custom (see notes below)" }
   },
   MANIFESTATION_SCALES: {
@@ -630,7 +634,7 @@ const FT_MANIFESTATION_PATH_LENSES = [
     prompts: [
       "Emotion should choose the edge: fury, mercy, resolve, or dread.",
       "Good manifestations feel hot, immediate, and a little dangerous.",
-      "Burn should matter in the fiction, not just on the track."
+      "Running hot should matter in the fiction, not just on the Surge track."
     ]
   },
   {
@@ -3680,7 +3684,7 @@ function ftManifestationCostLabel(kind, system = {}) {
   if (costType === "clarity") return `Clarity ${costValue || system.clarityRequired || 1}`;
   if (costType === "noise")   return `Noise +${costValue || system.noiseGain || 1}`;
   if (costType === "stress")  return `Stress ${costValue || 1}`;
-  if (costType === "burn")    return `Burn ${costValue || 1}`;
+  if (costType === "burn")    return `Surge ${costValue || 1}`;
   if (costType === "custom")  return mf.costText || legacy.join(" · ") || "Custom";
   return `${ftCap(costType)} ${costValue || 1}`;
 }
@@ -3962,17 +3966,18 @@ function ftAssessManifestationCost(actor, item, kind = "power") {
       }
       break;
     }
+    // "burn" = the old Burn cost; Burn is folded into Surge (2026-10-29), so it
+    // PAYS banked Surge (the heat you spend to make it happen).
     case "burn": {
-      const current = rawSys?.resources?.burn?.current;
-      const max = rawSys?.resources?.burn?.max;
-      if (Number.isFinite(current) && Number.isFinite(max)) {
+      const current = Number(rawSys?.resources?.surge?.value ?? 0);
+      if (Number.isFinite(current)) {
         assessment.autoSupported = true;
         assessment.current = current;
-        assessment.projected = Math.min(max, current + normalizedValue);
-        assessment.max = max;
-        assessment.canPay = current + normalizedValue <= max;
-        assessment.resourceLabel = "Burn";
-        assessment.path = "system.resources.burn.current";
+        assessment.projected = Math.max(0, current - normalizedValue);
+        assessment.max = _ftSurgeCap(actor);
+        assessment.canPay = current >= normalizedValue;
+        assessment.resourceLabel = "Surge";
+        assessment.path = "system.resources.surge.value";
       } else {
         assessment.manualOnly = true;
       }
@@ -4030,11 +4035,10 @@ async function ftApplyManifestationCost(actor, assessment) {
       canPay = current >= assessment.value;
       break;
     }
-    case "burn": {
-      const max = rawSys?.resources?.burn?.max ?? 0;
-      current = rawSys?.resources?.burn?.current ?? 0;
-      projected = Math.min(max, current + assessment.value);
-      canPay = current + assessment.value <= max;
+    case "burn": {   // pays Surge (see the assessment above)
+      current = Number(rawSys?.resources?.surge?.value ?? 0) || 0;
+      projected = Math.max(0, current - assessment.value);
+      canPay = current >= assessment.value;
       break;
     }
     default:
@@ -4190,6 +4194,24 @@ function _ftSurgeCap(actor) {
   const bothThings = Array.from(actor.items ?? []).some(i => String(i.system?.identifier ?? "") === "bulwark_cataclyst_l17_both_things_at_once");
   return base + (bothThings ? 2 : 0);
 }
+// The heat bands (ft-class-automation) scale to this same cap.
+ftRegisterSurgeCap(_ftSurgeCap);
+
+// Sheet shape for the Surge heat track (every class, 2026-10-29): one pip per
+// point of cap, lit in the current band's colour, plus the band readout.
+function _ftSurgeHeatContext(actor) {
+  const cap   = _ftSurgeCap(actor);
+  const value = Math.max(0, Number((actor?.system?.system ?? actor?.system)?.resources?.surge?.value) || 0);
+  const band  = ftBurnBandFor(actor, value);
+  const cls   = ftBurnClassFor(actor);
+  return {
+    cap, value, band,
+    tag:  cls?.tag ?? "",
+    pips: Array.from({ length: cap }, (_, i) => ({ lit: i < value })),
+    overheated: band.key === "overheated",
+    tooltip: `Surge heat — Cool below ${Math.ceil(cap / 2)}, Stoked ${Math.ceil(cap / 2)}+, Overheated at ${cap} (full: every surge you can't hold costs 1 Stress).`
+  };
+}
 
 // ─── Bulwark spend discounts (ruling BW1, 2026-10-25) ────────────────────────
 // Effective Surge cost of a menu entry for this actor. Stacks, floor 1:
@@ -4238,7 +4260,7 @@ async function _ftBulwarkPolarityCataclyst(actor, entry) {
 // banked (post-clamp) so callers can render overflow notes. Excess explosions
 // already benefited the triggering roll (Foundry's x10 modifier added them to
 // the total before this is called), so clamping the bank wastes nothing.
-async function _ftBankSurge(actor, n, { fromHarvest = false } = {}) {
+async function _ftBankSurge(actor, n, { fromHarvest = false, bite = true } = {}) {
   if (!actor || !Number.isFinite(n) || n <= 0) return 0;
   // 2026-05-26 — Foes only bank Surge when the GM has enabled it for them.
   if (!_ftSurgeAllowed(actor)) return 0;
@@ -4251,12 +4273,38 @@ async function _ftBankSurge(actor, n, { fromHarvest = false } = {}) {
   const sys = actor.system?.system ?? actor.system ?? {};
   const cur  = Number(sys?.resources?.surge?.value) || 0;
   const cap  = _ftSurgeCap(actor);
+  // Overheated (ruling 2026-10-29): already full and more Surge arrives → reality
+  // pushes back, 1 Stress per bank. Filling up never bites; only pushing past full.
+  if (cur >= cap && !fromHarvest) { if (bite) await _ftOverheatBite(actor); return 0; }
+  // A heat lock holds the rise (Burn timer lock, now on Surge).
+  if (ftBurnLockInfo(actor).locked) return 0;
   const next = Math.min(cap, cur + n);
   if (next === cur) return 0;
   try { await actor.update({ "system.resources.surge.value": next }); }
   catch (e) { return 0; }   // not writable / no surge resource — nothing banked
   _ftEmitSurgeBanked(actor, next - cur, next, cap, { fromHarvest });
   return next - cur;
+}
+
+// Overheat shields: Aura Unbound (this round), Emotional Lock / Storm's Heart AE.
+function _ftOverheatShielded(actor) {
+  const unb = actor?.flags?.fourththing?.aurablade?.unbound;
+  if (unb && (game.combat?.id ?? null) === (unb.combatId ?? null) && Number(game.combat?.round ?? 0) === Number(unb.round ?? -1)) return true;
+  return Array.from(actor?.effects ?? []).some(e => !e.disabled && e.flags?.fourththing?.emotionalLock);
+}
+// The overheat bite: 1 Stress (the pool drains toward 0) + a short chat line.
+async function _ftOverheatBite(actor) {
+  try {
+    if (_ftOverheatShielded(actor)) return;
+    const s = actor.system?.system ?? actor.system ?? {};
+    const cur = Number(s?.derived?.stress?.value);
+    if (!Number.isFinite(cur) || cur <= 0) return;
+    await actor.update({ "system.derived.stress.value": cur - 1 });
+    ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content: `<div class="fourththing-roll"><p style="margin:0.15rem 0;font-size:0.78rem;color:#ff5ac8">🔥 <b>Overheated</b> — ${ftEscapeHtml(actor.name)} can't hold more Surge. Reality pushes back: <b>1 Stress</b>. Spend or vent.</p></div>`
+    });
+  } catch (e) { console.warn("[ft] overheat bite failed", e); }
 }
 
 // Hook for presentation (bbttcc-fx-integration MOMENTS: "+N SURGE" by the token,
@@ -4271,11 +4319,10 @@ function _ftEmitSurgeBanked(actor, amount, value, cap, { fromHarvest = false } =
   } catch (_e) {}
 }
 
-// Aurablade flavor Surge gen (playtest fix 2026-05-27): committing to the aura —
-// using a Burn action or changing aura — sheds spendable Surge. +1 per Burn-gaining
-// commitment, capped +2/round (round-keyed flag). Foe-gating + Surge cap honored by
-// _ftBankSurge. Called from ft-class-automation (openAurabladeAction / openChangeAura)
-// via game.fourththing.aurabladeFlavorSurge.
+// Aurablade flavor Surge gen (playtest fix 2026-05-27). RETIRED 2026-10-29: Burn
+// is folded into Surge, so the Aura action / aura switch raise Surge directly (one
+// number). Nothing in the system calls this any more; kept on game.fourththing so
+// an old macro calling it still resolves.
 async function _ftAurabladeFlavorSurge(actor) {
   if (!actor) return 0;
   const inCombat = !!game.combat?.started; // round caps only apply in combat (playtest #9)
@@ -4581,7 +4628,7 @@ const _FT_SURGE_MENU = [
     fiction: "Remember what you were before the wound. Be that now.",
     wired: true },
 
-  // ─── Soul-Smith class-exclusive entries (Burn archetype, Phase 2) ──────────
+  // ─── Soul-Smith class-exclusive entries (heat-native, Phase 2) ─────────────
   // Shown only to Soul-Smiths (classFilter). All four are wired in _ftSoulSmithSurge
   // (2026-10-24: the old "three are flag-and-card" note was stale).
   { cost: 1, key: "forge-weld", tier: 1, bucket: "heal", classFilter: ["soul-smith"],
@@ -4993,21 +5040,20 @@ const _FT_SURGE_MENU = [
     label: "Erasure — a foe is Staggered, cannot take reactions, and rolls saves keeping the lowest 2 of 3d10",
     fiction: "Struck from the sentence. The room forgets it was ever a threat.", wired: true },
 
-  // ─── Aurablade class-exclusive entries (Burn archetype — ruling AB1, 2026-10-25) ──
-  // The original Burn template finally gets its own spends. Generation stays as
-  // built (Aura switch / Aura action → +1 Surge, landed hit → +1 Burn); the spends
-  // trade Surge for heat control and blade riders. All wired in _ftAurabladeSurge.
+  // ─── Aurablade class-exclusive entries (ruling AB1, 2026-10-25; heat 2026-10-29) ──
+  // Burn is folded into Surge: Aura actions / an aura switch / a landed hit raise
+  // Surge, and paying for these cools you. All wired in _ftAurabladeSurge.
   { cost: 1, key: "ab-stoke", tier: 1, bucket: "off", classFilter: ["aurablade"],
-    label: "Stoke the Blade — your next Strike +tier d6; you take +1 Burn",
+    label: "Stoke the Blade — your next Strike +tier d6",
     fiction: "You feed the aura and it feeds the edge.", wired: true },
   { cost: 2, key: "ab-shift", tier: 2, bucket: "def", classFilter: ["aurablade"],
-    label: "Aura Shift — change your Aura at no Burn cost + DR equal to Tier this round",
+    label: "Aura Shift — change your Aura (no Surge gained) + DR equal to Tier this round",
     fiction: "The colour of you changes between one breath and the next.", wired: true },
   { cost: 3, key: "ab-vent", tier: 3, bucket: "off", classFilter: ["aurablade"],
-    label: "Vent Through the Blade — Burn −2; your next Strike +tier d6 and ignores resistances",
+    label: "Vent Through the Blade — your next Strike +tier d6 and ignores resistances",
     fiction: "All that heat has to go somewhere. It goes through them.", wired: true },
   { cost: 5, key: "ab-unbound", tier: 4, bucket: "def", classFilter: ["aurablade"],
-    label: "Aura Unbound — enter Overheated (Burn 4); your Aura actions cost no Burn this round; allies within 2 squares gain DR equal to Tier",
+    label: "Aura Unbound — after paying, your Surge fills to its cap (Overheated) and the overheat can't touch you this round; allies within 2 squares gain DR equal to Tier",
     fiction: "You stop holding it in. Everyone nearby feels the warmth.", wired: true },
 
   // ─── Aurablade BLOOD HYMN (doctrine) — wound = prayer; gated by `auraDoctrine` ──
@@ -5015,21 +5061,21 @@ const _FT_SURGE_MENU = [
     label: "Crimson Tithe — pay Integrity equal to Tier; your next Strike lands as a max-die crit",
     fiction: "The hymn wants blood first. Yours will do.", wired: true },
   { cost: 2, key: "bh-hymn", tier: 3, bucket: "heal", auraDoctrine: "blood-hymn",
-    label: "Hymn of the Open Wound — heal an ally 1d8+tier (Overheated: ×2); you take +1 Burn",
+    label: "Hymn of the Open Wound — heal an ally 1d8+tier (×2 if you were Overheated)",
     fiction: "You sing the wound shut and keep the ache yourself.", wired: true },
   { cost: 4, key: "bh-terror", tier: 4, bucket: "off", auraDoctrine: "blood-hymn",
-    label: "Scarlet Terror — a foe is Shaken and rolls its next attack keeping the lowest 2 of 3d10; you take +1 Burn",
+    label: "Scarlet Terror — a foe is Shaken and rolls its next attack keeping the lowest 2 of 3d10",
     fiction: "They see what the hymn has made of you.", wired: true },
 
   // ─── Aurablade STILLHEART (doctrine) — calm = discipline ─────────────────────
   { cost: 1, key: "sh-breath", tier: 2, bucket: "def", auraDoctrine: "stillheart",
-    label: "Settled Breath — Burn −1 and DR equal to Tier this round",
+    label: "Settled Breath — let 1 more Surge go and gain DR equal to Tier this round",
     fiction: "In. Hold. The fire waits for you.", wired: true },
   { cost: 2, key: "sh-still", tier: 3, bucket: "def", auraDoctrine: "stillheart",
     label: "Still Point — auto-pass your next save; a targeted ally within 2 squares gains DR equal to Tier",
     fiction: "Nothing moves you. Nothing moves them while you stand there.", wired: true },
   { cost: 4, key: "sh-storm", tier: 4, bucket: "def", auraDoctrine: "stillheart",
-    label: "Storm's Heart — your Aura and Burn are locked till your next turn; foes within 2 squares are Calmed for 1 round",
+    label: "Storm's Heart — your Aura is locked and the overheat can't touch you till your next turn; foes within 2 squares are Calmed for 1 round",
     fiction: "The eye is the quietest place in the storm.", wired: true },
 
   // ─── Aurablade VOID EDGE (doctrine) — absence = authority ────────────────────
@@ -5250,6 +5296,11 @@ async function _ftSurgeItemFor(key) {
 
 // Execute a chosen Surge spend. Heals are wired (write to system.integrity.value);
 // every other option sets a one-shot flag and posts a chat card for GM enforcement.
+// Surge banked when the current spend was chosen (set in _ftSurgeExecute).
+let _ftPreSpendSurge = null;
+// Heat band the spender was in before paying (falls back to the live bank).
+function _ftSpendBand(actor) { return ftBurnBandFor(actor, _ftPreSpendSurge); }
+
 async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   const entry = _FT_SURGE_MENU.find(e => e.key === effectKey);
   if (!entry) {
@@ -5426,6 +5477,9 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     if (!chosenType) return; // cancelled
   }
 
+  // Heat band BEFORE paying — band-scaled spends (Forge-Weld, Hymn, Rebirth Ward)
+  // read how hot you were when you reached for it, not what's left after.
+  _ftPreSpendSurge = Number(curSurge) || 0;
   // Pay the cost.
   await actor.update({ "system.resources.surge.value": Math.max(0, curSurge - cost) });
   let _bwNote = _discounted ? `<p style="margin:0.25rem 0;font-size:0.72rem;opacity:0.75">◆ Cost reduced ${_baseCost} → ${cost}${actor.flags?.fourththing?.bulwark?.exchangeNext ? " (The Exchange)" : ""}.</p>` : "";
@@ -5773,9 +5827,9 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
   return "";
 }
 
-// ─── Soul-Smith Surge spends (Burn archetype) ────────────────────────────────
-// Forge-Weld is fully wired and scales with the Smith's Burn band (Stoked ×1.5,
-// Overheated ×2 + a Stress backlash — the furnace bites). Atonement / Share the
+// ─── Soul-Smith Surge spends (heat-native) ───────────────────────────────────
+// Forge-Weld is fully wired and scales with the Smith's Surge heat band, read
+// BEFORE the spend is paid (Stoked ×1.5, Overheated ×2 + a Stress backlash). Atonement / Share the
 // Furnace / Relic of Rebirth stamp a one-shot flag + post a chat card the GM
 // enforces (deeper wiring is a Phase 2.1 pass).
 // ─── Soul-Smith forge (subclass) Spark economy ───────────────────────────────
@@ -5845,11 +5899,9 @@ async function _ftTempCondition(target, key, rounds = 1) {
 }
 
 async function _ftAurabladeSurge(actor, effectKey, tier) {
-  const burn = ftGetBurn(actor);
   if (effectKey === "ab-stoke") {
     await _ftAbOneShot(actor, "doomstrike", tier);
-    const nb = await ftAddBurn(actor, 1);
-    return _ftAbP("#dc5050", `🔥 Stoke the Blade — your next Strike blazes (+${tier}d6). Burn ${burn} → ${nb}.`);
+    return _ftAbP("#dc5050", `🔥 Stoke the Blade — your next Strike blazes (+${tier}d6).`);
   }
   if (effectKey === "ab-shift") {
     const res = (actor.system?.system ?? actor.system)?.resources ?? {};
@@ -5860,28 +5912,28 @@ async function _ftAurabladeSurge(actor, effectKey, tier) {
         const av = AURA_STATES[k];
         btns[k] = { label: (k === cur ? "● " : "") + (av?.label ?? k), callback: () => resolve(k) };
       }
-      new Dialog({ title: "Aura Shift — which Aura?", content: `<p style="font-size:0.8rem;margin:0 0 0.3rem">Change your Aura at no Burn cost. Current: <b>${AURA_STATES[cur]?.label ?? cur}</b>.</p>`, buttons: btns, default: cur, close: () => resolve(null) }).render(true);
+      new Dialog({ title: "Aura Shift — which Aura?", content: `<p style="font-size:0.8rem;margin:0 0 0.3rem">Change your Aura (no Surge gained). Current: <b>${AURA_STATES[cur]?.label ?? cur}</b>.</p>`, buttons: btns, default: cur, close: () => resolve(null) }).render(true);
     });
     const next = pick ?? cur;
     if (next !== cur) { try { await actor.update({ "system.resources.aura.state": next }); } catch (e) {} }
     try { await actor.createEmbeddedDocuments("ActiveEffect", [_ftAbDrAE(actor, `Aura Shift (DR ${tier})`, tier)]); } catch (e) {}
     const lbl = (k) => AURA_STATES[k]?.label ?? k;
-    return _ftAbP("#78a0dc", `🔄 Aura Shift — ${next === cur ? `you hold <b>${lbl(cur)}</b>` : `<b>${lbl(cur)}</b> → <b>${lbl(next)}</b>`} (no Burn) and gain DR ${tier} this round.`);
+    return _ftAbP("#78a0dc", `🔄 Aura Shift — ${next === cur ? `you hold <b>${lbl(cur)}</b>` : `<b>${lbl(cur)}</b> → <b>${lbl(next)}</b>`} and gain DR ${tier} this round.`);
   }
   if (effectKey === "ab-vent") {
-    const nb = await ftAddBurn(actor, -2);
     await _ftAbOneShot(actor, "doomstrike", tier);
     await _ftAbOneShot(actor, "sundering-blow", tier);
-    return _ftAbP("#dc5050", `♨ Vent Through the Blade — Burn ${burn} → ${nb}; your next Strike +${tier}d6 and ignores resistances.`);
+    return _ftAbP("#dc5050", `♨ Vent Through the Blade — all that heat goes through them: your next Strike +${tier}d6 and ignores resistances.`);
   }
   if (effectKey === "ab-unbound") {
-    const nb = burn < 4 ? await ftAddBurn(actor, 4 - burn) : burn;
     const combat = game.combat;
+    // Stamp the shield BEFORE filling, so the fill can't bite.
     try { await actor.setFlag("fourththing", "aurablade.unbound", { round: Number(combat?.round ?? 0), combatId: combat?.id ?? null, at: Date.now() }); } catch (e) {}
+    const nb = await ftAddBurn(actor, ftBurnMax(actor));
     const allies = _ftAbTokensWithin(actor, 10) ?? [];
     const names = [];
     for (const t of allies) { if (await _ftCreateAllyAE(t.actor, _ftAbDrAE(actor, `Aura Unbound (DR ${tier})`, tier))) names.push(t.actor.name); }
-    return _ftAbP("#ff5ac8", `☀ Aura Unbound — Burn ${burn} → ${nb} (Overheated); your Aura actions cost no Burn this round${names.length ? `; DR ${tier} to <b>${names.join(", ")}</b>` : ""}.`);
+    return _ftAbP("#ff5ac8", `☀ Aura Unbound — Surge ${nb}/${ftBurnMax(actor)} (Overheated); the overheat can't touch you this round${names.length ? `; DR ${tier} to <b>${names.join(", ")}</b>` : ""}.`);
   }
   return "";
 }
@@ -5889,7 +5941,7 @@ async function _ftAurabladeSurge(actor, effectKey, tier) {
 async function _ftAuraDoctrineSurge(actor, effectKey, tier) {
   const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
   const tname  = target?.name ?? "the target";
-  const burn   = ftGetBurn(actor);
+  const band   = _ftSpendBand(actor);
   const setCond = async (a, k) => {
     const s = a.system?.system ?? a.system ?? {};
     if (s?.conditions?.[k] === true) return true;
@@ -5909,23 +5961,21 @@ async function _ftAuraDoctrineSurge(actor, effectKey, tier) {
     case "bh-hymn": {
       if (!target) return _ftAbWarn("Hymn of the Open Wound");
       const r = new Roll(`1d8 + ${tier}`); await r.evaluate(); _ftSurgeRoll(r);
-      const mult = burn >= 4 ? 2 : 1;
+      const mult = band.key === "overheated" ? 2 : 1;
       const h = await _ftHealTarget(target, Math.max(0, Math.round((Number(r.total) || 0) * mult)));
-      const nb = await ftAddBurn(actor, 1);
-      return _ftAbP("#78c88c", `🎶 Hymn of the Open Wound — <b>${tname}</b> +${h.healed} Integrity (1d8+${tier}${mult > 1 ? " ×2 Overheated" : ""}) → ${h.next}.${h.tag} Burn ${burn} → ${nb}.`);
+      return _ftAbP("#78c88c", `🎶 Hymn of the Open Wound — <b>${tname}</b> +${h.healed} Integrity (1d8+${tier}${mult > 1 ? " ×2 Overheated" : ""}) → ${h.next}.${h.tag}`);
     }
     case "bh-terror": {
       if (!target) return _ftAbWarn("Scarlet Terror");
       await setCond(target, "shaken");
       await keepLowest(target);
-      const nb = await ftAddBurn(actor, 1);
-      return _ftAbP("#9b59b6", `😱 Scarlet Terror — <b>${tname}</b> is Shaken and rolls its next attack keeping the lowest 2 of 3d10. Burn ${burn} → ${nb}.`);
+      return _ftAbP("#9b59b6", `😱 Scarlet Terror — <b>${tname}</b> is Shaken and rolls its next attack keeping the lowest 2 of 3d10.`);
     }
     // ── Stillheart ──
     case "sh-breath": {
       const nb = await ftAddBurn(actor, -1);
       try { await actor.createEmbeddedDocuments("ActiveEffect", [_ftAbDrAE(actor, `Settled Breath (DR ${tier})`, tier)]); } catch (e) {}
-      return _ftAbP("#4a90d9", `🫁 Settled Breath — Burn ${burn} → ${nb}; DR ${tier} this round.`);
+      return _ftAbP("#4a90d9", `🫁 Settled Breath — one more Surge let go (now ${nb}); DR ${tier} this round.`);
     }
     case "sh-still": {
       await _ftAbOneShot(actor, "iron-word", tier);
@@ -5938,7 +5988,7 @@ async function _ftAuraDoctrineSurge(actor, effectKey, tier) {
       const foes = _ftAbTokensWithin(actor, 10, true) ?? [];
       const names = [];
       for (const t of foes) { if (await _ftTempCondition(t.actor, "calmed", 1)) names.push(t.actor.name); }
-      return _ftAbP("#4a90d9", `🌀 Storm's Heart — your Aura and Burn are locked till your next turn${names.length ? `; <b>${names.join(", ")}</b> Calmed for 1 round` : "; no foes within 2 squares"}.`);
+      return _ftAbP("#4a90d9", `🌀 Storm's Heart — your Aura is locked and the overheat held off till your next turn${names.length ? `; <b>${names.join(", ")}</b> Calmed for 1 round` : "; no foes within 2 squares"}.`);
     }
     // ── Void Edge ──
     case "ve-null": {
@@ -6363,9 +6413,9 @@ async function _ftForgeSurge(actor, effectKey, tier) {
 async function _ftSoulSmithSurge(actor, effectKey, tier) {
   const tok        = Array.from(game.user?.targets ?? [])[0];
   const target     = tok?.actor ?? null;
-  const burn       = Number((actor.system?.system ?? actor.system)?.resources?.burn?.current ?? 0) || 0;
-  const overheated = burn >= 4;
-  const stoked     = burn >= 2 && !overheated;
+  const heat       = _ftSpendBand(actor);   // the band BEFORE this spend was paid
+  const overheated = heat.key === "overheated";
+  const stoked     = heat.key === "stoked";
   const mult       = overheated ? 2 : (stoked ? 1.5 : 1);
   const heatTag    = overheated ? "Overheated ×2" : (stoked ? "Stoked ×1.5" : "Cool ×1");
 
@@ -6476,9 +6526,9 @@ async function _ftSoulSmithSurge(actor, effectKey, tier) {
 }
 
 // "Damage stokes the forge": when the Soul-Smith OR a friendly within 30 ft takes
-// integrity damage, a nearby Smith banks +1 Surge and +1 Burn (capped +2 each per
-// combat round). Surge routes through _ftBankSurge (foe-gating + cap honored); Burn
-// rises on the shared 0→8 track via ftAddBurn. Explosions stay pure Surge.
+// integrity damage, a nearby Smith banks +1 Surge (capped +2 per combat round).
+// Routes through _ftBankSurge (foe-gating + cap + overheat honored). Burn is
+// folded into Surge (2026-10-29), so the forge heat IS this Surge.
 async function _ftSoulSmithForgeOnDamage(damagedActor, dmg) {
   if (!damagedActor || !(Number(dmg) > 0)) return;
   const isSoulSmith = (a) => !!a?.items?.find?.(it => it.type === "class" &&
@@ -6511,42 +6561,44 @@ async function _ftSoulSmithForgeOnDamage(damagedActor, dmg) {
     try {
       const f = smith.flags?.fourththing?.soulSmith?.forge ?? {};
       const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
-      if (inCombat && count >= 2) continue; // +2 Surge / +2 Burn per round from the forge hook
+      if (inCombat && count >= 2) continue; // +2 Surge per round from the forge hook
       await _ftBankSurge(smith, 1);
-      try { await ftAddBurn(smith, 1); } catch (e) { /* burn helper unavailable */ }
       await smith.setFlag("fourththing", "soulSmith.forge", { round, count: count + 1 });
     } catch (e) { console.warn("[ft] soul-smith forge stoke failed for", smith?.name, e); }
   }
 }
 
-// Burn-on-hit (playtest #8). A Burn-class actor (Aurablade / Soul-Smith) banks
-// +1 Burn whenever an attack lands — the commitment of the strike feeds the edge,
-// a second auto-Burn hook alongside aura-switching. Capped +2/round in combat
+// Heat-on-hit (playtest #8). A heat-native actor (Aurablade / Soul-Smith) banks
+// +1 Surge whenever an attack lands — the commitment of the strike feeds the edge,
+// alongside aura-switching. Commitment heat (ftAddBurn): no harvest, no overheat
+// Stress — at full it simply doesn't rise. Capped +2/round in combat
 // (lifted out of combat, like the other gens), foe-gated, never breaks the strike.
 async function _ftBurnOnHitGen(actor) {
   try {
-    if (!actor || !ftBurnClassFor(actor)) return; // Burn classes only
+    if (!actor || !ftBurnClassFor(actor)) return; // heat-native classes only
     if (!_ftSurgeAllowed(actor)) return;          // suppress on foes unless GM-enabled
     const inCombat = !!game.combat?.started;
     const round = Number(game.combat?.round ?? 0);
-    if (ftBurnLockInfo(actor).locked) return;     // Burn timer lock: don't spend the round cap on a frozen track
+    if (ftBurnLockInfo(actor).locked) return;     // heat lock: don't spend the round cap on a held track
     const f = actor.flags?.fourththing?.burnOnHit ?? {};
     const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
-    if (inCombat && count >= 2) return; // +2 Burn/round cap from the on-hit hook
+    if (inCombat && count >= 2) return; // +2 Surge/round cap from the on-hit hook
     await ftAddBurn(actor, 1);
     await actor.setFlag("fourththing", "burnOnHit", { round, count: count + 1 });
   } catch (e) { console.warn("[ft] burn-on-hit gen failed", e); }
 }
 
-// ─── Burn timer (2026-10-02) ─────────────────────────────────────────────────
+// ─── Burn timer (2026-10-02) → heat timer on Surge (2026-10-29) ───────────────
 // Port of the retired auto-link sheet layer's Burn lock / delayed-delta /
 // set-at-end-of-turn (it hooked V1 renderActorSheet, dead since the AppV2 sheet).
 // State: flags.fourththing.burnTimer (shape in ft-class-automation.js). The
 // active GM applies due timers + expires the lock on combat turn/round change and
-// clears the flag when the combat is deleted. Lock enforcement lives in a
-// preUpdateActor guard so every writer (Stabilize, Aura switch, edit-mode input,
-// upkeep accrual, forge/on-hit gens) is held; timer writes pass { ftBurnTimer: true }.
-const _FT_BURN_PATH = "system.resources.burn.current";
+// clears the flag when the combat is deleted. Burn is folded into Surge, so the
+// timer drives Surge and a lock HOLDS RISES ONLY — spending and venting still
+// work. Lock enforcement lives in a preUpdateActor guard so every writer (aura
+// switches, edit-mode input, forge/on-hit gens) is held; timer writes pass
+// { ftBurnTimer: true }.
+const _FT_BURN_PATH = "system.resources.surge.value";
 
 Hooks.on("preUpdateActor", (actor, changes, options) => {
   if (options?.ftBurnTimer) return;
@@ -6555,12 +6607,12 @@ Hooks.on("preUpdateActor", (actor, changes, options) => {
   if (!flat && !nested) return;
   const info = ftBurnLockInfo(actor);
   if (!info.locked) return;
-  const cur  = Number(ftSourceSystem(actor)?.resources?.burn?.current ?? 0) || 0;
+  const cur  = Number(ftSourceSystem(actor)?.resources?.surge?.value ?? 0) || 0;
   const next = Number(flat ? changes[_FT_BURN_PATH] : foundry.utils.getProperty(changes, _FT_BURN_PATH));
-  if (next === cur) return;
+  if (!(next > cur)) return;   // letting Surge go is always allowed
   if (flat) delete changes[_FT_BURN_PATH];
-  if (nested) delete changes.system.resources.burn.current;
-  ui.notifications?.info?.(`${actor.name}: Burn is locked until round ${info.untilRound}, turn ${info.untilTurn + 1} — change held.`);
+  if (nested) delete changes.system.resources.surge.value;
+  ui.notifications?.info?.(`${actor.name}: Surge is held until round ${info.untilRound}, turn ${info.untilTurn + 1} — it can't rise yet.`);
 });
 
 // One summary row per timer for the sheet + dialog (escaped at the call site).
@@ -6571,11 +6623,11 @@ function _ftBurnTimerSummary(actor) {
   const info = ftBurnLockInfo(actor);
   const timers = (Array.isArray(bt.timers) ? bt.timers : []).map(t => ({
     label: t.kind === "set"
-      ? `Burn → ${Number(t.value) || 0} at round ${t.atRound}, turn ${(Number(t.atTurn) || 0) + 1}`
-      : `Burn ${Number(t.value) > 0 ? "+" : ""}${Number(t.value) || 0} at round ${t.atRound}, turn ${(Number(t.atTurn) || 0) + 1}`,
+      ? `Surge → ${Number(t.value) || 0} at round ${t.atRound}, turn ${(Number(t.atTurn) || 0) + 1}`
+      : `Surge ${Number(t.value) > 0 ? "+" : ""}${Number(t.value) || 0} at round ${t.atRound}, turn ${(Number(t.atTurn) || 0) + 1}`,
     note: String(t.note ?? "")
   }));
-  const lockLabel = info.locked ? `Locked until round ${info.untilRound}, turn ${info.untilTurn + 1}` : "";
+  const lockLabel = info.locked ? `Surge held until round ${info.untilRound}, turn ${info.untilTurn + 1}` : "";
   return { active: !!(lockLabel || timers.length), lockLabel, timers };
 }
 
@@ -6590,7 +6642,7 @@ async function _ftBurnTimerTick(actor, bt, now) {
 
   if (due.length) {
     const max  = ftBurnMax(actor);
-    const from = Number(ftSourceSystem(actor)?.resources?.burn?.current ?? 0) || 0;
+    const from = Number(ftSourceSystem(actor)?.resources?.surge?.value ?? 0) || 0;
     let burn = from;
     for (const t of due) burn = t.kind === "set" ? (Number(t.value) || 0) : burn + (Number(t.value) || 0);
     burn = Math.max(0, Math.min(max, burn));
@@ -6600,8 +6652,8 @@ async function _ftBurnTimerTick(actor, bt, now) {
       const notes = due.map(t => String(t.note ?? "").trim()).filter(Boolean);
       await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor }),
-        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name">🔥 Burn timer — ${esc(actor.name)}</span></div>
-          <p style="margin:0.2rem 0;font-size:0.8rem">Burn ${from} → <b>${burn}</b>${notes.length ? ` · ${esc(notes.join("; "))}` : ""}</p></div>`
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name">🔥 Heat timer — ${esc(actor.name)}</span></div>
+          <p style="margin:0.2rem 0;font-size:0.8rem">Surge ${from} → <b>${burn}</b>${notes.length ? ` · ${esc(notes.join("; "))}` : ""}</p></div>`
       });
     }
   }
@@ -6634,7 +6686,7 @@ Hooks.on("updateCombat", async (combat, change) => {
     const bt = a.flags?.fourththing?.burnTimer;
     if (!bt || bt.combatId !== combat.id) continue;
     try { await _ftBurnTimerTick(a, bt, now); }
-    catch (e) { console.warn("[fourththing] Burn timer tick failed", a?.name, e); }
+    catch (e) { console.warn("[fourththing] heat timer tick failed", a?.name, e); }
   }
 });
 
@@ -6648,33 +6700,33 @@ Hooks.on("deleteCombat", async (combat) => {
     seen.add(a.uuid);
     if (a.flags?.fourththing?.burnTimer?.combatId !== combat.id) continue;
     try { await a.unsetFlag("fourththing", "burnTimer"); }
-    catch (e) { console.warn("[fourththing] Burn timer cleanup failed", a?.name, e); }
+    catch (e) { console.warn("[fourththing] heat timer cleanup failed", a?.name, e); }
   }
 });
 
-// Sheet control: lock Burn for N turns and/or schedule a delta / end-of-turn set.
+// Sheet control (GM): hold Surge from rising for N turns and/or schedule a delta / end-of-turn set.
 // GM or the actor's owner (the retired layer let the owner's own item use do this).
 async function _ftOpenBurnTimerDialog(actor) {
   if (!actor) return;
-  if (!(game.user?.isGM || actor.isOwner)) return ui.notifications?.warn("Only the GM or this steward's owner can set Burn timers.");
+  if (!(game.user?.isGM || actor.isOwner)) return ui.notifications?.warn("Only the GM or this steward's owner can set heat timers.");
   const combat = game.combat;
-  if (!combat?.started) return ui.notifications?.warn("Burn timers run on the combat clock — start combat first.");
+  if (!combat?.started) return ui.notifications?.warn("Heat timers run on the combat clock — start combat first.");
   const esc  = foundry.utils.escapeHTML;
   const sum  = _ftBurnTimerSummary(actor);
-  const cur  = Number(ftSourceSystem(actor)?.resources?.burn?.current ?? 0) || 0;
+  const cur  = Number(ftSourceSystem(actor)?.resources?.surge?.value ?? 0) || 0;
   const max  = ftBurnMax(actor);
   const status = sum.active
     ? `<ul style="margin:0.2rem 0 0.5rem;padding-left:1.1rem;font-size:0.8rem">${sum.lockLabel ? `<li>🔒 ${esc(sum.lockLabel)}</li>` : ""}${sum.timers.map(t => `<li>⏱ ${esc(t.label)}${t.note ? ` — <i>${esc(t.note)}</i>` : ""}</li>`).join("")}</ul>`
-    : `<p style="margin:0.2rem 0 0.5rem;font-size:0.8rem;opacity:0.7">No Burn timers running.</p>`;
+    : `<p style="margin:0.2rem 0 0.5rem;font-size:0.8rem;opacity:0.7">No heat timers running.</p>`;
   const content = `<div class="ft-cast-dialog">
-    <p style="margin:0 0 0.3rem;font-size:0.82rem">Burn <b>${cur}/${max}</b> · round ${combat.round}, turn ${(Number(combat.turn) || 0) + 1}</p>
+    <p style="margin:0 0 0.3rem;font-size:0.82rem">Surge <b>${cur}/${max}</b> · round ${combat.round}, turn ${(Number(combat.turn) || 0) + 1}</p>
     ${status}
-    <div class="form-group"><label>Lock Burn for (turns)</label><input type="number" name="lockTurns" value="0" min="0" step="1" style="width:4rem"/></div>
-    <div class="form-group"><label>Change Burn by (±)</label><input type="number" name="delta" value="0" step="1" style="width:4rem"/>
+    <div class="form-group"><label>Hold Surge from rising for (turns)</label><input type="number" name="lockTurns" value="0" min="0" step="1" style="width:4rem"/></div>
+    <div class="form-group"><label>Change Surge by (±)</label><input type="number" name="delta" value="0" step="1" style="width:4rem"/>
       <label style="margin-left:0.5rem">in rounds</label><input type="number" name="rounds" value="1" min="1" step="1" style="width:4rem"/></div>
-    <div class="form-group"><label><input type="checkbox" name="setOn"/> Set Burn to</label><input type="number" name="setValue" value="0" min="0" max="${max}" step="1" style="width:4rem"/><span style="font-size:0.75rem;opacity:0.7;margin-left:0.4rem">when this turn ends</span></div>
+    <div class="form-group"><label><input type="checkbox" name="setOn"/> Set Surge to</label><input type="number" name="setValue" value="0" min="0" max="${max}" step="1" style="width:4rem"/><span style="font-size:0.75rem;opacity:0.7;margin-left:0.4rem">when this turn ends</span></div>
     <div class="form-group"><label>Note</label><input type="text" name="note" placeholder="e.g. Emotional Lock"/></div>
-    <p style="margin:0.3rem 0 0;font-size:0.72rem;opacity:0.65">A lock holds Burn against every change (Stabilize, aura switches, on-hit gains); scheduled changes still land. Everything clears when the combat ends.</p>
+    <p style="margin:0.3rem 0 0;font-size:0.72rem;opacity:0.65">A hold stops Surge rising (explosions, aura switches, on-hit gains) — spending and venting still work; scheduled changes still land. Everything clears when the combat ends.</p>
   </div>`;
   const buttons = [{ action: "apply", label: "Schedule", default: true,
     callback: (ev, btn, dialog) => {
@@ -6687,12 +6739,12 @@ async function _ftOpenBurnTimerDialog(actor) {
   if (sum.active && game.user.isGM) buttons.push({ action: "clear", label: "Clear all", callback: () => ({ action: "clear" }) });
   buttons.push({ action: "cancel", label: "Cancel" });
   let res = null;
-  try { res = await foundry.applications.api.DialogV2.wait({ window: { title: `Burn Timer — ${actor.name}` }, content, buttons, rejectClose: false }); }
+  try { res = await foundry.applications.api.DialogV2.wait({ window: { title: `Heat Timer — ${actor.name}` }, content, buttons, rejectClose: false }); }
   catch { res = null; }
   if (!res || typeof res !== "object") return;
   if (res.action === "clear") {
     await actor.unsetFlag("fourththing", "burnTimer");
-    return ui.notifications?.info(`${actor.name}: Burn timers cleared.`);
+    return ui.notifications?.info(`${actor.name}: heat timers cleared.`);
   }
   const prev = actor.flags?.fourththing?.burnTimer;
   const same = prev?.combatId === combat.id;
@@ -6712,7 +6764,7 @@ async function _ftOpenBurnTimerDialog(actor) {
   // Replace wholesale (combat switch drops stale entries); unset first so setFlag can't merge old keys.
   if (prev && !same) await actor.unsetFlag("fourththing", "burnTimer");
   await actor.setFlag("fourththing", "burnTimer", { combatId: combat.id, lock, timers });
-  ui.notifications?.info(`${actor.name}: Burn timer set.`);
+  ui.notifications?.info(`${actor.name}: heat timer set.`);
 }
 
 // GM Blood Debt control: add (±) with a source + note, or clear (archived by the API).
@@ -9073,7 +9125,7 @@ async function ftDropActiveManifestation(actor, instanceId) {
 // billable spec. Keys are "<amount>-<resource>-<cadence>" (e.g. 1-clarity-round).
 // Returns null for none / custom / unset / unparseable → caller uses the flat
 // tier-Clarity baseline. Clarity is a SPEND (deduct, drop-if-insufficient);
-// stress / noise / burn ACCRUE (add toward max, never drop the form).
+// stress / noise ACCRUE (add toward max, never drop the form); burn drains Surge.
 function _ftParseMaintenanceKey(key) {
   const k = String(key ?? "").toLowerCase().trim();
   if (!k || k === "none" || k === "custom") return null;
@@ -9149,7 +9201,9 @@ async function ftChargeUpkeep(actor, { cadence = "scene" } = {}) {
       const tspec = FT_TRACK_PATHS[resource];
       if (!tspec) continue;
       const cur = Number(accrual[tspec.path] ?? foundry.utils.getProperty(actor, tspec.path) ?? 0);
-      let next = cur + amount;
+      // Burn upkeep is folded into Surge (2026-10-29): it DRAINS banked Surge
+      // (floor 0, never drops the form) instead of accruing heat.
+      let next = resource === "burn" ? cur - amount : cur + amount;
       const max = tspec.max ? Number(foundry.utils.getProperty(actor, tspec.max) ?? 0) : null;
       if (max !== null && max > 0) next = Math.min(max, next);
       if (Number.isFinite(tspec.floor)) next = Math.max(tspec.floor, next);
@@ -9314,7 +9368,7 @@ function buildManifestationWizardHTML(actor, { kind = "power", starter = "" } = 
 
     <div class="ft-cast-field"><label>Cost Type</label><select name="costType">${mkOpts(FT.MANIFESTATION_COSTS, defaults.costType)}</select></div>
     <div class="ft-cast-field"><label>Cost Value</label><input type="number" name="costValue" value="${defaults.costValue ?? 0}" min="0"/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Cost</label><input type="text" name="costText" placeholder="1 Burn, 1 Stress per scene, Clarity 2 and the blade remembers your shame..."/></div>
+    <div class="ft-cast-field ft-cast-span-2"><label>Cost</label><input type="text" name="costText" placeholder="1 Surge, 1 Stress per scene, Clarity 2 and the blade remembers your shame..."/></div>
     <div class="ft-cast-field ft-cast-span-2"><label>Maintenance Cost</label><input type="text" name="maintenanceCost" value="${ftEscapeHtml(defaults.maintenanceCost ?? "")}" placeholder="Leave blank if it does not keep costing anything."/></div>
     <div class="ft-cast-field ft-cast-span-2"><label>Risk / Fallout</label><input type="text" name="riskText" placeholder="What can go wrong, fray, attract notice, or scar the caster?"/></div>
 
@@ -9391,7 +9445,7 @@ function buildManifestationWizardHTML(actor, { kind = "power", starter = "" } = 
 
     <div class="ft-cast-field"><label>Cost Type</label><select name="costType">${mkOpts(FT.MANIFESTATION_COSTS, defaults.costType)}</select></div>
     <div class="ft-cast-field"><label>Cost Value</label><input type="number" name="costValue" value="${defaults.costValue ?? 1}" min="0"/></div>
-    <div class="ft-cast-field ft-cast-span-2"><label>Cost</label><input type="text" name="costText" placeholder="1 Clarity, 2 Noise, 1 Burn and the room remembers you..."/></div>
+    <div class="ft-cast-field ft-cast-span-2"><label>Cost</label><input type="text" name="costText" placeholder="1 Clarity, 2 Noise, 1 Surge and the room remembers you..."/></div>
     <div class="ft-cast-field ft-cast-span-2"><label>Maintenance Cost</label><input type="text" name="maintenanceCost" value="${ftEscapeHtml(defaults.maintenanceCost ?? "")}" placeholder="Leave blank if it does not keep costing anything."/></div>
     <div class="ft-cast-field ft-cast-span-2"><label>Risk / Fallout</label><input type="text" name="riskText" placeholder="What can go wrong, fray, attract notice, or scar the caster?"/></div>
 
@@ -10302,14 +10356,14 @@ function _ftWizV2RenderCost(state) {
   const hasLegacyText = !state.maintenanceKey && state.maintenanceCost;
   const showCustom = mKey === "custom" || hasLegacyText;
   const customRow = showCustom
-    ? `<div class="ft-cast-field ft-cast-span-2"><label>Custom maintenance note</label>${_ftWizV2Txt("maintenanceCost", state.maintenanceCost, "e.g. 1 Burn the first scene, then 1 Clarity each scene after...")}</div>`
+    ? `<div class="ft-cast-field ft-cast-span-2"><label>Custom maintenance note</label>${_ftWizV2Txt("maintenanceCost", state.maintenanceCost, "e.g. 1 Surge the first scene, then 1 Clarity each scene after...")}</div>`
     : "";
   return `
     <p class="ft-wiz-v2-coach">What does it cost, when do you spend that, and how long does it run?</p>
     <div class="ft-cast-grid">
       <div class="ft-cast-field"><label>Cost type</label>${_ftWizV2Sel("costType", FT.MANIFESTATION_COSTS, state.costType)}</div>
       <div class="ft-cast-field"><label>Cost value</label>${_ftWizV2Num("costValue", state.costValue, { min: 0, max: 99 })}</div>
-      <div class="ft-cast-field ft-cast-span-2"><label>Cost (free text)</label>${_ftWizV2Txt("costText", state.costText, "1 Burn, 1 Stress per scene, Clarity 2 and the blade remembers your shame...")}</div>
+      <div class="ft-cast-field ft-cast-span-2"><label>Cost (free text)</label>${_ftWizV2Txt("costText", state.costText, "1 Surge, 1 Stress per scene, Clarity 2 and the blade remembers your shame...")}</div>
       <div class="ft-cast-field"><label>Activation</label>${_ftWizV2Sel("activation_block.type", { action: "Action", bonus: "Bonus action", reaction: "Reaction", none: "Free / passive" }, a.type ?? "action")}</div>
       <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("activation_block.consumePool", a.consumePool !== false)}<span>Consume pool on cast</span></label></div>
       <div class="ft-cast-field"><label>Duration baseline</label>${_ftWizV2Sel("duration", FT.MANIFESTATION_DURATIONS, state.duration)}</div>
@@ -12241,7 +12295,7 @@ const FT_TRACK_PATHS = {
   clarity:    { path: "system.magic.clarity.value",          max: "system.magic.clarity.max",      floor: 0 },
   noise:      { path: "system.magic.noise.value",            max: "system.magic.noise.max",        floor: 0 },
   radiation:  { path: "system.radiation.rp",                 max: null,                            floor: 0 },
-  burn:       { path: "system.resources.burn.current",       max: "system.resources.burn.max",     floor: 0 },
+  burn:       { path: "system.resources.surge.value",        max: null,                            floor: 0 },   // Burn folded into Surge (2026-10-29)
   bloodDebt:  { path: "system.bloodDebt.value",              max: null,                            floor: 0 },
   frameDice:  { path: "system.resources.frameDice.current",  max: "system.resources.frameDice.max", floor: 0 },
   accessDice: { path: "system.resources.accessDice.current", max: "system.resources.accessDice.max", floor: 0 },
@@ -16871,7 +16925,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const tags = [skill, defense, intent, damageType].filter(Boolean);
       await fireTriggers(actor, "on-attack-hit", { tags, maxDie, scope: "self", target: target?.actor ?? target ?? null });
 
-      // Burn-on-hit auto-gen for Burn classes (playtest #8).
+      // Heat-on-hit auto-gen for the heat-native classes (playtest #8) — +1 Surge.
       await _ftBurnOnHitGen(actor);
 
       // NPC automation (2026-10-06): the attacker's "on a hit" rules (DoT, +Radiation, no reactions, conditions, …)
@@ -17418,7 +17472,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       }
     }
     // Soul-Smith forge: integrity damage to self or a nearby ally stokes a Smith's
-    // forge (Surge + Burn). Awaited in try/catch so it can never break damage apply.
+    // forge (Surge). Awaited in try/catch so it can never break damage apply.
     if (track === "integrity" && dmg > 0) {
       try { await _ftSoulSmithForgeOnDamage(actor, dmg); }
       catch (e) { console.warn("[ft] soul-smith forge hook failed", e); }
@@ -17749,8 +17803,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // Breaker dialog's Armor Sunder on foes the player doesn't own).
   game.fourththing.applyEffectsToTarget = _ftApplyEffectsToTarget;
   game.fourththing.classifyStewardItems = ftBuildStewardItemGroups;
-  // Aurablade flavor Surge gen — called by ft-class-automation when Burn is gained.
+  // Aurablade flavor Surge gen — RETIRED 2026-10-29 (Burn folded into Surge); kept for old macros.
   game.fourththing.aurabladeFlavorSurge = _ftAurabladeFlavorSurge;
+  // Surge heat readout (2026-10-29): { cap, value, band:{key,label,color,desc}, … }
+  // for HUDs outside the sheet (bbttcc-territory player HUD).
+  game.fourththing.surgeHeat = _ftSurgeHeatContext;
 
   // createManifestationItemData — exposed 2026-05-17 so the Bad Eden actor
   // builders (bbttcc-auto-link) can synthesize template-appropriate
@@ -17803,7 +17860,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       "system.resources.dreamCache.name":       "",
       "system.resources.dreamCache.tier":       0,
       "system.resources.dreamCache.itemId":     "",
-      "system.resources.burn.current":         0,
+      "system.resources.burn.current":         0,   // legacy field (Burn folded into Surge 2026-10-29)
       "system.resources.forgeCharge.relicUsed": false,
       "system.resources.surge.value":          0,
       "system.derived.integrity.value":        sys.derived?.integrity?.max        ?? 16,
@@ -20461,7 +20518,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
   });
 
-  // Aurablade Burn-band auto-sync. When Burn or Aura changes, re-derive the
+  // Aurablade heat-band auto-sync. When Surge or Aura changes, re-derive the
   // managed AE pack (passive / engaged / overheated layers) so the steward
   // doesn't have to manually re-cast the aura. Mirrors the change-aura dialog
   // sync but covers the openAurabladeAction / direct-edit / class-feature paths.
@@ -20472,14 +20529,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // write rights, and this guarantees the sync runs exactly once.
     if (userId !== game.user.id) return;
     if (actor.type !== "character") return;
-    const burnChanged = foundry.utils.getProperty(changes, "system.resources.burn.current");
-    const auraChanged = foundry.utils.getProperty(changes, "system.resources.aura.state");
-    if (burnChanged === undefined && auraChanged === undefined) return;
-    // Only sync if the actor actually has the Aurablade pool surface.
-    const sys = actor.system?.system ?? actor.system;
-    const hasBurn = sys?.resources?.burn !== undefined;
-    if (!hasBurn) return;
-    try { await syncAurabladeEffects(actor); }
+    // Heat = Surge (2026-10-29): the layers follow the Surge band.
+    const surgeChanged = foundry.utils.getProperty(changes, "system.resources.surge.value");
+    const auraChanged  = foundry.utils.getProperty(changes, "system.resources.aura.state");
+    if (surgeChanged === undefined && auraChanged === undefined) return;
+    // Only Aurablades carry aura layers (syncAurabladeEffects no-ops on an
+    // unchanged layer set, so a plain Surge bank costs nothing).
+    if (!ftBurnClassFor(actor) || ftBurnClassFor(actor).slug !== "aurablade") return;
+    try { await syncAurabladeEffects(actor, null, ftBurnBandFor(actor).key); }
     catch (e) { console.warn("Roll for Initiation | aurablade auto-sync failed", e); }
   });
 
@@ -21011,15 +21068,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // Sprint D: class resource pools
       let resources   = {};
       let activePools = {};
-      let burnBand    = { label: "Controlled", color: "#27ae60", desc: "Stable." };
+      let burnBand    = { key: "cool", label: "Cool", color: "#4fc3ff", desc: "Steady." };
       let burnClass   = null;
       let auraState   = "none";
       try {
         resources   = sysData.resources ?? {};
         activePools = detectActivePools ? detectActivePools(actor) : {};
         burnClass   = ftBurnClassFor ? ftBurnClassFor(actor) : null;
-        const burn  = resources.burn?.current ?? 0;
-        burnBand    = getBurnBand ? getBurnBand(burn, burnClass?.bands) : burnBand;
+        burnBand    = ftBurnBandFor(actor);   // heat = Surge band (2026-10-29)
         auraState   = resources.aura?.state ?? "none";
       } catch(poolErr) {
         console.error("Roll for Initiation | Resource pool context failed:", poolErr);
@@ -21581,7 +21637,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         burnTimer:     (() => {
           const s = _ftBurnTimerSummary(actor);
           const canEdit = !!(game.user?.isGM || actor.isOwner);
-          return { ...s, canEdit, show: s.active || canEdit };
+          // The timer is a GM tool on the universal Surge panel; owners see chips only.
+          return { ...s, canEdit, gm: !!game.user?.isGM, show: s.active || !!game.user?.isGM };
         })(),
         // Affiliation OP breakdown (bbttcc-raid engine), read-only.
         affiliationOP: _ftAffiliationOPContext(actor),
@@ -21660,6 +21717,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         ftFlags:       actor.flags?.fourththing ?? {},
         ftFoeSurge:    _ftFoeSurgeContext(actor),
         ftSurgeCap:    _ftSurgeCap(actor),
+        surgeHeat:     _ftSurgeHeatContext(actor),
         bankedRerolls: _ftBankedRerollContext(actor),
         restraintDie:  _ftRestraintContext(actor),
         resources,
@@ -21913,7 +21971,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         return { actor, system: {}, attributes: {}, skills: {}, derived: {},
                  magic: { clarity: { value: 3, max: 5 }, noise: { value: 0, max: 10 }, sephirah: "tiferet", clarityPips: [], noisePercent: 0 },
                  conditions: [], activeConditions: [], actions: {}, resources: {}, activePools: {},
-                 burnBand: { label: "Controlled", color: "#27ae60" },
+                 burnBand: { key: "cool", label: "Cool", color: "#4fc3ff" },
                  auraState: "none", auraData: { label: "None", color: "#78909c", desc: "" },
                  powers: [], weapons: [], manifestPowers: [], manifestForms: [],
                  manifestationGuide: ftManifestationGuide("tiferet"), manifestationCoachHtml: "",
@@ -23513,7 +23571,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
               // Fold: delivery banks Surge to full (the road paid off) instead of
               // refilling the retired Pace pool. _ftBankSurge clamps to the cap.
               const surgeCap = _ftSurgeCap(actor);
-              const banked   = await _ftBankSurge(actor, surgeCap);
+              const banked   = await _ftBankSurge(actor, surgeCap, { bite: false });
 
               // Build per-route effect bullets for the chat card.
               const lines = [];
@@ -24029,12 +24087,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
       // NPC Parity Sprint B (2026-05-14) — Aurablade class panel state.
       // No state object — character sheet uses `activePools.aurablade` as the
-      // gate and consumes raw `resources.burn` + derived `burnBand/auraData`.
+      // gate and consumes `surgeHeat` + derived `burnBand/auraData` (heat = Surge, 2026-10-29).
       // Mirror that exactly. `getBurnBand` and `AURA_STATES` are module-level
       // imports already in scope.
-      const _abBurn     = Number(resources.burn?.current ?? 0);
       const _abBurnClass = (typeof ftBurnClassFor === "function") ? ftBurnClassFor(actor) : null;
-      const _abBurnBand = (typeof getBurnBand === "function") ? getBurnBand(_abBurn, _abBurnClass?.bands) : { label: "Controlled", color: "#27ae60", desc: "Stable." };
+      const _abBurnBand  = ftBurnBandFor(actor);   // heat = Surge band (2026-10-29)
       const _abAuraState = resources.aura?.state ?? "none";
       const _abAuraData  = (AURA_STATES ?? {})[_abAuraState] ?? { label: "None", color: "#78909c", desc: "" };
 
@@ -24243,6 +24300,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         harmonyMarshalState,
         burnBand:  _abBurnBand,
         burnClass: _abBurnClass,
+        surgeHeat: _ftSurgeHeatContext(actor),
         auraState: _abAuraState,
         auraData:  _abAuraData,
         // 2026-05-13 — surface active pools so the NPC sheet can render the
