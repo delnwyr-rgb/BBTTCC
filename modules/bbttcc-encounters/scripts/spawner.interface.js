@@ -604,9 +604,14 @@
       if (String(beat.id) === "enc_bandit_ambush" && banditAccordUnderway()) await setBanditAmbushCrew(scene, "accord");
       const want = String(beat.encounter?.actorName || "").trim();
       if (want) {
-        const present = iterTokenDocs(scene).some(t =>
-          Number(t?.disposition) === HOSTILE() && (String(t?.actor?.name || "") === want || String(t?.name || "") === want));
-        if (!present) await spawnByName(scene, want, { count: 1, spawnedBy: `enc:${beat.id}` });
+        // encounter.count (2026-10-28, Tor-Wrath at the Old Seal): a story fight may field several of the same foe —
+        // top the scene up to `count` hostiles of that name. encounter.party: true also drops the Stewards (story
+        // scenes have no travel stash, so the engine's own party drop never runs there).
+        const want_n = Math.max(1, Math.min(8, Math.floor(Number(beat.encounter?.count) || 1)));
+        const present = iterTokenDocs(scene).filter(t =>
+          Number(t?.disposition) === HOSTILE() && (String(t?.actor?.name || "") === want || String(t?.name || "") === want)).length;
+        if (beat.encounter?.party === true) await spawnFactionPCs(scene, {}, { spawnedBy: `pc_party:${beat.id}` });
+        if (present < want_n) await spawnByName(scene, want, { count: want_n - present, spawnedBy: `enc:${beat.id}` });
       }
     })().catch(e => warn("stageReady handler failed", beat?.id, e));
   }

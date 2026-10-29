@@ -184,6 +184,14 @@
             <label data-tooltip="{{bbttccTip 'beats' 'encounterActorName'}}">Actor Name</label>
             <input type="text" name="encounter-actor-name" value="{{beat.encounter.actorName}}" placeholder="e.g. Gloomgill the Accountable" />
           </div>
+          <div class="form-group">
+            <label data-tooltip="{{bbttccTip 'beats' 'encounterCount'}}">How many</label>
+            <input type="number" name="encounter-count" value="{{beat.encounter.count}}" min="1" max="8" step="1" placeholder="1" />
+          </div>
+          <div class="form-group">
+            <label data-tooltip="{{bbttccTip 'beats' 'encounterParty'}}">Drop the Stewards</label>
+            <input type="checkbox" name="encounter-party" {{#if beat.encounter.party}}checked{{/if}} />
+          </div>
         </div>
         <p class="bbttcc-muted">
           Stored on <code>beat.encounter</code>. Runtime can use <code>key</code> + <code>tier</code> for encounter routing / scaling.

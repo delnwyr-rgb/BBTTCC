@@ -88,7 +88,9 @@ const BEATS_HELP = {
   encounter: "Encounter routing — stored on beat.encounter; when this beat runs, the runtime launches an Encounter-Engine scenario by Key.",
   encounterKey: "Encounter Key — the scenario id the Encounter Engine runs when this beat fires. Without a key the beat falls back to plain description + choices.",
   encounterTier: "Tier — forwarded as scenario metadata to the Encounter Engine; the beat runner itself ignores it. Whether it scales anything depends on the encounter engine.",
-  encounterActorName: "Actor Name — stored with the encounter payload as a hint for the scenario; the beat runner only routes by Key and does not spawn from this by itself.",
+  encounterActorName: "Actor Name — the foe for a story fight. When the beat's scene comes up, bbttcc-encounters drops a hostile token of this actor (world actor first, then the NPC Pack) unless one is already there.",
+  encounterCount: "How many — tops the scene up to this many hostiles of the named actor (1–8). Leave blank for one.",
+  encounterParty: "Drop the Stewards — also place the coalition's Stewards on the beat's scene (story scenes don't get the travel party drop).",
 
   // Audio (injected panel, Core tab)
   audio: "Beat Audio — one narration track per beat: a Playlist Sound (preferred) or a raw file. Plays GM-side when the beat runs. Intro-on-open rule: when the beat fires from a dialogue conversation, the run skips this — the track already played as the NPC's opener when the conversation window opened; a routed outcome beat's track plays at the curtain call instead.",
@@ -3405,6 +3407,11 @@ _syncCoreFromForm() {
       this.beat.encounter.tier = (encTier === "" || encTier == null) ? null : Math.max(0, Math.floor(_safeNum(encTier, 0)));
       const encActor = _val("input[name='encounter-actor-name']");
       if (encActor != null) this.beat.encounter.actorName = String(encActor || "").trim() || null;
+      const encCount = _val("input[name='encounter-count']");
+      if (encCount != null) { const n = Math.floor(_safeNum(encCount, 0)); if (n > 1) this.beat.encounter.count = Math.min(8, n); else delete this.beat.encounter.count; }
+      if ($el.find("input[name='encounter-party']").length) {
+        if (_checked("input[name='encounter-party']")) this.beat.encounter.party = true; else delete this.beat.encounter.party;
+      }
     }
 
     // Journal switches (entryId itself is maintained live by the picker)
@@ -3938,10 +3945,13 @@ _syncCoreFromForm() {
       const encTierRaw = fd.get("encounter-tier");
       const encTier = (encTierRaw === "" || encTierRaw == null) ? null : Math.max(0, Math.floor(_safeNum(encTierRaw, 0)));
       const encActorName = String(fd.get("encounter-actor-name") || "").trim();
+      const encCount = Math.floor(_safeNum(fd.get("encounter-count"), 0));
       this.beat.encounter = {
         key: encKey || null,
         tier: encTier,
-        actorName: encActorName || null
+        actorName: encActorName || null,
+        ...(encCount > 1 ? { count: Math.min(8, encCount) } : {}),
+        ...(fd.get("encounter-party") ? { party: true } : {})
       };
     } else {
       // Preserve encounter payload if author temporarily switches type.
