@@ -122,7 +122,9 @@
                 const lg = game.bbttcc?.api?.campaign?.ledger?.get?.();
                 if (lg && lg.budget > 0) {
                   // Phase 4 (2026-09-13): the turn is a chapter break; days are a prompt, not a budget.
-                  ledgerLine = `<p><i class="fas fa-hourglass-half"></i> <b>Day ${lg.spent} of ${lg.budget}</b> — the chapter turns; the day count resets.</p>`;
+                  // Month framing (Dave 2026-10-28): the Advance IS the rest of the month — the Domain's orders.
+                  const month = Math.max(1, Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 1);
+                  ledgerLine = `<p><i class="fas fa-hourglass-half"></i> <b>Month ${month}, Day ${lg.spent}</b> — the rest of Month ${month} passes: the weeks the Stewards weren't watching, when the Domain's orders, builds, contracts and rigs do their work. Month ${month + 1} begins.</p>`;
                 }
               } catch (_eLg) {}
 

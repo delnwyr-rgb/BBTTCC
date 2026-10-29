@@ -4943,13 +4943,25 @@ async function _onAdvanceTurnEndLedger(tctx) {
 
   // Owner rulings R1/R7 (2026-09-13): the turn is a chapter break; days are a prompt, not a budget.
   // No banking, no debt — the whisper only says where the chapter's days went.
-  const verdict = `<p>The chapter turns. Day count resets.</p>`;
+  // Month framing (Dave 2026-10-28): a World Turn is a month. The played days are the Stewards' (travel); the rest of
+  // the month is the Domain's — the turn's orders. This runs at advanceTurn:end, after world.turn was bumped, so the
+  // month that just ended is turn − 1.
+  const newMonth = Math.max(1, Number(w.getState?.()?.turn) || 1);
+  const endedMonth = Math.max(1, newMonth - 1);
+  const restDays = Math.max(0, Math.round((Number(before.budget) || 30) - (Number(before.spent) || 0)));
+  const verdict = `<p>The other ${restDays} days of Month ${endedMonth} went to the Domain: its orders, builds, contracts and rigs. Month ${newMonth} begins; the day count resets.</p>`;
+  try {
+    await ChatMessage.create({
+      content: `<div class="bbttcc-turn-month"><p><i class="fas fa-hourglass-half"></i> <b>Month ${endedMonth} ends.</b> The Stewards spent ${Number(before.spent) || 0} day${Number(before.spent) === 1 ? "" : "s"} on the road; the rest of the month went to the Domain's work. <b>Month ${newMonth} begins.</b></p></div>`,
+      speaker: { alias: "The Month" }
+    });
+  } catch (_eMonth) {}
 
   try {
     await ChatMessage.create({
       content: `
         <div class="bbttcc-turn-ledger-summary">
-          <h3>Turn Ledger — where the month went</h3>
+          <h3>Turn Ledger — where Month ${endedMonth} went</h3>
           <p>Spent <b>${before.spent}</b> of <b>${before.budget}</b> days.</p>
           ${srcRows ? `<table style="width:100%"><tbody>${srcRows}</tbody></table>` : `<p style="opacity:.7">No time debits recorded this turn.</p>`}
           ${verdict}
@@ -4979,7 +4991,8 @@ function _ledgerOfferPriceLine(beat) {
     const tp = _timePointsForBeat(beat);
     if (!tp) return "";
     const lg = _ledgerGet();
-    const context = lg.budget > 0 ? ` — Day ${lg.spent} of ${lg.budget}${lg.debt > 0 ? `, ${lg.debt} owed` : ""}` : "";
+    const month = Math.max(1, Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 1);
+    const context = lg.budget > 0 ? ` — Month ${month}, Day ${lg.spent}${lg.debt > 0 ? `, ${lg.debt} owed` : ""}` : "";
     return `<p style="opacity:.75;font-size:.9em"><i class="fas fa-hourglass-half"></i> Time: ≈ ${tp} day(s)${context}.</p>`;
   } catch (_e) { return ""; }
 }

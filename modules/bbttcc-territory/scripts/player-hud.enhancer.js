@@ -881,18 +881,20 @@
       ? `<span class="bbttcc-hud-badge" title="Acting from ${esc(rig.name)} — abilities emanate from the rig"><i class="fas fa-truck-monster"></i>${esc(rig.name)}</span>`
       : "";
 
-    // Turn Ledger chip (2026-07-08): where the month stands. Days spent are the
-    // party's shared clock — what remains banks into development at turn end.
+    // Turn Ledger chip (2026-07-08): where the month stands. Month framing (Dave 2026-10-28): a World Turn is a
+    // month; the chip counts the days the Stewards have played, and the Advance covers the rest of the month —
+    // the weeks the Domain's orders play out. Month N = world turn N.
     const ledgerChip = (() => {
       try {
         const lg = game.bbttcc?.api?.campaign?.ledger?.get?.();
         if (!lg || !(lg.budget > 0)) return "";
+        const month = Math.max(1, Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 1);
         const debtBadge = lg.debt > 0
           ? ` <span class="bbttcc-hud-ledger-debt" title="The month is overdrawn — the debt carries into the new month" style="color:var(--cb-warn, #e0a34e)">+${lg.debt} owed</span>`
           : "";
         return `<div class="bbttcc-hud-ledger" style="padding:2px 8px;font-size:.85em;opacity:.85"
-          title="Turn Ledger — time spent this World Turn. Unspent days bank into development.">
-          <i class="fas fa-hourglass-half"></i> Day ${lg.spent} of ${lg.budget}${debtBadge}
+          title="Month ${month}, Day ${lg.spent}: the days the Stewards have spent on the road this month. The rest of the month passes at the turn's end, while the Domain's orders play out.">
+          <i class="fas fa-hourglass-half"></i> Month ${month} · Day ${lg.spent}${debtBadge}
         </div>`;
       } catch (_e) { return ""; }
     })();
