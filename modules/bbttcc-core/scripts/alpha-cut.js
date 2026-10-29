@@ -72,6 +72,15 @@ function hidden(key) {
 
 function shown(key) { return !hidden(key); }
 
+// cut(key) (2026-10-28): the CONTENT rule, not the screen — true whenever the Alpha Cut is on and the key isn't
+// overridden, on EVERY seat, the GM's included. hidden() spares the GM screen on purpose (it's for surfaces); what a
+// character is BUILT from must not depend on who sat at the wizard (a GM-built Bulwark got a crew + association the
+// Alpha sheet then never showed, with their aptitudes and rerolls still live).
+function cut(key) {
+  if (!enabled()) return false;
+  return !overrides().has(String(key));
+}
+
 function _applyBodyClass() {
   try { document.body.classList.toggle("bbttcc-alpha", active()); } catch (_e) {}
 }
@@ -142,7 +151,7 @@ Hooks.once("init", () => {
   } catch (e) { console.warn(TAG, "settings registration failed", e); }
 
   game.bbttcc = game.bbttcc || {};
-  game.bbttcc.alpha = { enabled, active, hidden, shown, overrides, refresh, keys: ALPHA_KEYS };
+  game.bbttcc.alpha = { enabled, active, hidden, shown, cut, overrides, refresh, keys: ALPHA_KEYS };
 });
 
 Hooks.once("ready", () => {

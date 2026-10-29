@@ -19316,6 +19316,20 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         if (_seph) sys.magic.sephirah = _seph;
       }
 
+      // Armor proficiency cascades DOWN (owner rule of thumb, 2026-10-28): you're proficient with every armor up to the
+      // heaviest you're proficient with — Plating (heavy) ⇒ Bracing (medium) ⇒ Fitting (light). A Bulwark's Path grants
+      // Plating only, so light/medium armor delivered nothing and read "not proficient". Derived only (like the sephira
+      // above): stored ranks are untouched, and every reader — armor bonus scaling, the resistance gate, the inventory
+      // proficiency banner, the Aptitudes tab — sees the floor.
+      if (this.type === "character" && sys?.skills) {
+        const _rk = (k) => Number(sys.skills?.[k]?.value ?? 0) || 0;
+        const _plating = _rk("plating");
+        const _bracing = Math.max(_rk("bracing"), _plating);
+        const _fitting = Math.max(_rk("fitting"), _bracing);
+        if (sys.skills.bracing && _rk("bracing") < _bracing) sys.skills.bracing.value = _bracing;
+        if (sys.skills.fitting && _rk("fitting") < _fitting) sys.skills.fitting.value = _fitting;
+      }
+
       // Rig defense derive (B11.A — 2026-05-12). Rigs don't carry attributes,
       // so the standard 10+attr+attr formula doesn't apply. Guard/Evasion come
       // from frame bracket; Resolve is flat. All three +tier on top. Live here

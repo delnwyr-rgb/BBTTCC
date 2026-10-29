@@ -898,8 +898,9 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
 
     const dnd = isDnd();
     // ALPHA CUT (ruling 1, 2026-10-17): crew + occult rows leave the player build (finalize already copes with null).
-    const alphaCrew   = game.bbttcc?.alpha?.hidden?.("crew") === true;
-    const alphaOccult = game.bbttcc?.alpha?.hidden?.("associations") === true;
+    // cut() not hidden(): a build rule applies on the GM seat too (2026-10-28).
+    const alphaCrew   = (game.bbttcc?.alpha?.cut ?? game.bbttcc?.alpha?.hidden)?.("crew") === true;
+    const alphaOccult = (game.bbttcc?.alpha?.cut ?? game.bbttcc?.alpha?.hidden)?.("associations") === true;
     const buildRows = [
       this._buildRow("archetype",  "Archetype",            sug.build.archetype,  sug.rankings.archetype),
       this._buildRow("ancestry",   "Ancestry",             sug.build.ancestry,   sug.rankings.ancestry),
@@ -1295,6 +1296,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
   }
 
   _effective(category) {
+    if (_alphaCutCategory(category)) return null;   // Alpha Cut: no crew / association in the build, any seat (2026-10-28)
     const v = this._overrides[category] || this._suggestion?.build?.[category]?.name || null;
     // A Doctrine only counts while it belongs to the effective Path. After a
     // Path change the old pick/suggestion is UNPICKED (row shows "— choose —",
@@ -1696,8 +1698,8 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       path: "Path", doctrine: "Doctrine", philosophy: "Philosophy", occult: "Occult Association",
       alignment: "Alignment", ...(isDnd() ? { class: "Class" } : {}) };
     // ALPHA CUT: hidden rows are never required.
-    if (game.bbttcc?.alpha?.hidden?.("crew"))         delete CAT_LABELS.crew;
-    if (game.bbttcc?.alpha?.hidden?.("associations")) delete CAT_LABELS.occult;
+    if ((game.bbttcc?.alpha?.cut ?? game.bbttcc?.alpha?.hidden)?.("crew"))         delete CAT_LABELS.crew;
+    if ((game.bbttcc?.alpha?.cut ?? game.bbttcc?.alpha?.hidden)?.("associations")) delete CAT_LABELS.occult;
     const missingCats = Object.keys(CAT_LABELS).filter(c => !this._effective(c));
     const buildOk = missingCats.length === 0;
 
@@ -2304,6 +2306,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
   _buildConfirmedBuild() {
     const sug = this._suggestion.build;
     const eff = (cat) => {
+      if (_alphaCutCategory(cat)) return null;   // the hidden rows' SUGGESTIONS used to ride into finalize (2026-10-28)
       const overrideName = this._overrides[cat];
       if (overrideName) return { name: overrideName, _overridden: true };
       return sug[cat];
@@ -2327,6 +2330,17 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
 // ============================================================================
 // Helpers
 // ============================================================================
+
+// Alpha Cut build rule (2026-10-28): crew + occult association are contracts at the Muster, not creation picks. Uses
+// alpha.cut() — seat-independent — so a GM-seat build matches a player's (hidden() spares the GM screen).
+function _alphaCutCategory(cat) {
+  const A = game.bbttcc?.alpha;
+  const test = A?.cut ?? A?.hidden;
+  if (typeof test !== "function") return false;
+  if (cat === "crew") return test("crew") === true;
+  if (cat === "occult") return test("associations") === true;
+  return false;
+}
 
 /** Engine scores are z-scores (decimals) since spec 2.1.0; whole numbers on an older raw spec. */
 function _fmtScore(n) {
