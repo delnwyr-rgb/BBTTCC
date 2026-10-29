@@ -886,7 +886,8 @@ const FT_MANIFESTATION_STARTERS = {
       scale: "scene",
       costType: "stress",
       costValue: 1,
-      maintenanceCost: "1 Stress per scene maintained"
+      // A structured key the upkeep engine bills — free text here was shown but never charged (2026-10-29).
+      maintenanceKey: "1-stress-scene"
     }
   },
   working: {
@@ -1439,12 +1440,13 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
   // Damage button surfaces on the chat card. Playtest 2026-05-18: "This
   // Gun I Stole" rolled the attack fine but had no apply button because
   // dmgF was empty.
-  if (!dmgF && item?.system?.damageRoll?.op === "damage") {
-    const dr = item.system.damageRoll;
+  const _legacyDr = (!dmgF && (item?.system?.damageRoll || typeof item?.system?.damage === "string")) ? ftNormalizeDamageRoll(item.system) : null;
+  if (_legacyDr?.op === "damage") {
+    const dr = _legacyDr;
     const n = Math.max(0, Number(dr.number) || 0);
     const d = String(dr.die || "");
     if (n > 0 && d) {
-      dmgF = `${n}${d}`;
+      dmgF = `${n}${d}${Number(dr.bonus) ? ` ${dr.bonus > 0 ? "+" : "-"} ${Math.abs(dr.bonus)}` : ""}`;
       if (dr.type)   dmgT   = String(dr.type);
       if (dr.flavor) dmgFlv = String(dr.flavor);
     }
@@ -2414,7 +2416,7 @@ async function _ftFireManifestationChain(caster, primary, item, mf, dr, { castDc
   // applied on secondaries, so the cast resolver doesn't try to re-resolve
   // them (no second attack roll, no second save).
   const carryMf = {};
-  if (chain.carryConditions && mf?.appliedStates?.states?.length) carryMf.appliedStates = mf.appliedStates;
+  if (chain.carryConditions && ftAppliedStatesToArray(mf?.appliedStates)?.states?.length) carryMf.appliedStates = ftAppliedStatesToArray(mf.appliedStates);
   if (chain.carryEffects && mf?.appliedEffects && (mf.appliedEffects.modifiers?.length || mf.appliedEffects.resists?.length || mf.appliedEffects.immunes?.length)) {
     carryMf.appliedEffects = mf.appliedEffects;
   } else if (carryMf.appliedStates) {
@@ -3500,21 +3502,71 @@ function ftItemStatStrip(item, systemOverride = null) {
   if (mf.costType && mf.costType !== "none") add("✦", [mf.costValue, ftCap(mf.costType)].filter(v => v !== "" && v != null && v !== 0).join(" "), "Cost to use");
   else if (Number(sys.clarityRequired) > 0) add("✦", `${sys.clarityRequired} Clarity`, "Cost to use");
   if (Number(sys.noiseGain) > 0) add("〰", `+${sys.noiseGain} Noise`, "Noise gain");
-  const ongoing = mf.maintenanceCost || (mf.maintenanceKey && mf.maintenanceKey !== "none" ? mf.maintenanceKey : "");
+  const mk = mf.maintenanceKey;
+  const ongoing = (mk && mk !== "none" && mk !== "custom")
+    ? (FT.MAINTENANCE_COSTS?.[mk]?.label ?? mk)
+    : (mf.maintenanceCost || "");
   add("↻", ongoing, "Ongoing / maintenance cost");
   return chips;
 }
 
+const FT_DAMAGE_DICE = ["d4", "d6", "d8", "d10", "d12", "d20", "d10x10"];
+
+// 2026-10-29 — "2d6", "d8", "1d10 + 2", "heal 2d6", "D8", 8 → { op, number, die, bonus } (null when no dice).
+function ftParseDiceText(text) {
+  const s = String(text ?? "").trim().toLowerCase();
+  const m = s.match(/(\d*)\s*d\s*(\d+)(x10)?\s*(?:([+-])\s*(\d+))?/);
+  if (!m) return null;
+  const die = `d${m[2]}${m[3] && m[2] === "10" ? "x10" : ""}`;
+  if (!FT_DAMAGE_DICE.includes(die)) return null;
+  return {
+    op:     /\bheal|\bmend|\brestor/.test(s) ? "heal" : "damage",
+    number: Math.max(1, Math.min(20, Number(m[1]) || 1)),
+    die,
+    bonus:  m[5] ? (m[4] === "-" ? -1 : 1) * Number(m[5]) : 0
+  };
+}
+
+// appliedStates.states as an array of condition keys, whatever shape it arrived in
+// (wizard checkbox map {restrained:true}, array, or absent). Returns a copy; null/undefined pass through.
+function ftAppliedStatesToArray(ap) {
+  if (!ap || typeof ap !== "object") return ap;
+  const st = ap.states;
+  const states = Array.isArray(st) ? st.filter(Boolean)
+    : (st && typeof st === "object" ? Object.entries(st).filter(([, v]) => v === true).map(([k]) => k) : []);
+  return { ...ap, states };
+}
+
 function ftNormalizeDamageRoll(system = {}) {
+  const raw = system?.damageRoll ?? {};
   const dr = foundry.utils.mergeObject(
     ftDamageRollDefaults(),
-    foundry.utils.deepClone(system?.damageRoll ?? {}),
+    foundry.utils.deepClone(raw),
     { inplace: false }
   );
+  // 2026-10-29 — Legacy powers (starter seeder, pre-Phase-B sheets) carry their dice only in the flat
+  // `system.damage` string ("2d6") + `system.damageType`, so the structured roll read as op:"none" —
+  // the sheet hid the Dice/Die pickers, the Engine showed no dice and the cast rolled nothing. Lift the
+  // string into the structured roll while the structured one is still untouched (no op, or none × 0).
+  const untouched = !raw.op || (raw.op === "none" && !(Number(raw.number) > 0));
+  if (untouched && typeof system?.damage === "string") {
+    const p = ftParseDiceText(system.damage);
+    if (p) {
+      Object.assign(dr, { op: p.op, number: p.number, die: p.die });
+      if (p.bonus && !Number(dr.bonus)) dr.bonus = p.bonus;
+      if (!raw.type && system.damageType)     dr.type   = String(system.damageType);
+      if (!raw.flavor && system.damageFlavor) dr.flavor = String(system.damageFlavor);
+    }
+  }
+  // A die stored as "1d8" / "D8" / 8 used to coerce silently to d6 — read the face count instead.
+  if (!FT_DAMAGE_DICE.includes(dr.die)) {
+    const p = ftParseDiceText(typeof dr.die === "number" ? `d${dr.die}` : dr.die);
+    if (p) dr.die = p.die;
+  }
   // Coerce types so handlebars renders cleanly.
   dr.op        = ["damage", "heal", "none"].includes(dr.op) ? dr.op : "none";
   dr.number    = Math.max(0, Math.min(20, Number(dr.number) || 0));
-  dr.die       = ["d4", "d6", "d8", "d10", "d12", "d10x10"].includes(dr.die) ? dr.die : "d6";
+  dr.die       = FT_DAMAGE_DICE.includes(dr.die) ? dr.die : "d6";
   dr.attribute = String(dr.attribute ?? "");
   dr.type      = String(dr.type ?? "kinetic");
   dr.flavor    = String(dr.flavor ?? "");
@@ -8814,7 +8866,8 @@ async function castManifestation(actor, item, {
       const attrVal = dr.attribute ? Number(sys?.attributes?.[dr.attribute]?.value) || 0 : 0;
       const trackKey = dr.op === "heal" ? (dr.track || "integrity") : (FT.DAMAGE_TYPES?.[dr.type]?.track ?? dr.track ?? "integrity");
       if (dr.op !== "none" && dr.number > 0) {
-        const baseFormula = `${dr.number}${dr.die}`;
+        const flat = Number(dr.bonus) || 0;
+        const baseFormula = `${dr.number}${dr.die}${flat ? (flat > 0 ? ` + ${flat}` : ` - ${Math.abs(flat)}`) : ""}`;
         const finalFormula = attrVal !== 0 ? `${baseFormula} + ${attrVal}` : baseFormula;
         const roll = new Roll(finalFormula);
         await roll.evaluate();
@@ -9139,7 +9192,7 @@ function _ftParseMaintenanceKey(key) {
 // maintenanceKey bills exactly that resource/amount on its own cadence; a form
 // with none/custom/legacy bills the canon flat tier-Clarity at its stability
 // cadence (sustained→scene, bound/enduring→soma). Clarity drains the caster pool
-// (drop the form if it can't pay); stress/noise/burn accrue toward their max.
+// (drop the form if it can't pay); stress and burn (Surge) drain, floor 0; noise accrues toward max.
 async function ftChargeUpkeep(actor, { cadence = "scene" } = {}) {
   if (!actor) return { billed: [], dropped: [] };
   const active = actor.getFlag("fourththing", "activeManifestations") ?? [];
@@ -9197,13 +9250,16 @@ async function ftChargeUpkeep(actor, { cadence = "scene" } = {}) {
         if (idx >= 0) surviving.splice(idx, 1);
       }
     } else {
-      // Accrual (stress / noise / burn) — add toward max, never drop.
+      // Noise accrues toward max; Stress and Surge (burn key) are pools that DRAIN, floor 0. Never drops the form.
       const tspec = FT_TRACK_PATHS[resource];
       if (!tspec) continue;
       const cur = Number(accrual[tspec.path] ?? foundry.utils.getProperty(actor, tspec.path) ?? 0);
       // Burn upkeep is folded into Surge (2026-10-29): it DRAINS banked Surge
       // (floor 0, never drops the form) instead of accruing heat.
-      let next = resource === "burn" ? cur - amount : cur + amount;
+      // Stress drains too — the pool falls toward 0 (soma break refills it); it used to accrue, so
+      // Stress upkeep healed the caster (2026-10-29).
+      const drains = resource === "burn" || resource === "stress";
+      let next = drains ? Math.max(0, cur - amount) : cur + amount;
       const max = tspec.max ? Number(foundry.utils.getProperty(actor, tspec.max) ?? 0) : null;
       if (max !== null && max > 0) next = Math.min(max, next);
       if (Number.isFinite(tspec.floor)) next = Math.max(tspec.floor, next);
@@ -9573,6 +9629,8 @@ function _ftCleanItemForCompendium(item) {
   delete src.ownership;
   delete src.folder;
   delete src.sort;
+  // A library copy is not anyone's Signature — it would land on the next actor filling a slot (2026-10-29).
+  if (src.system?.manifestation) src.system.manifestation.isSignature = false;
   const ft = src.flags?.fourththing;
   if (ft && typeof ft === "object") {
     delete ft.equipped;
@@ -9684,7 +9742,9 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       scale: values.scale,
       targetText: values.targetText,
       rangeAreaText: values.rangeAreaText,
-      maintenanceCost: values.maintenanceCost,
+      // Free text only rides with the "custom" key (or a legacy item with no key) — otherwise the chip
+      // showed text the upkeep engine never billed (2026-10-29).
+      maintenanceCost: (!values.maintenanceKey || String(values.maintenanceKey).toLowerCase() === "custom") ? values.maintenanceCost : "",
       // Phase F2 — Structured maintenance key. Falls back to "none" when the
       // wizard didn't surface the field (legacy callers / pre-F2 items).
       maintenanceKey:  FT.MAINTENANCE_COSTS?.[String(values.maintenanceKey ?? "").toLowerCase()]
@@ -9706,7 +9766,9 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       area:          values.area,
       activation:    values.activation_block,
       resolution:    values.resolution,
-      appliedStates: values.appliedStates,
+      // Stored as the canonical array — the weapon Strike and chain-carry gates read
+      // `states.length`, which a {key:true} map never has (2026-10-29).
+      appliedStates: ftAppliedStatesToArray(values.appliedStates),
       // Phase C — Buffs & Wards. Wizard harvests object-map shapes (checkbox
       // grids on resists/immunes, indexed slots on modifiers); normalize to
       // canonical arrays here so downstream consumers get a single shape.
@@ -10033,10 +10095,18 @@ function _ftWizV2Steps(kind) {
 
 // ── Helper builders ────────────────────────────────────────────────────────
 function _ftWizV2Sel(name, map, current, { tooltip = "" } = {}) {
-  const opts = Object.entries(map).map(([k, v]) => {
+  let opts = Object.entries(map).map(([k, v]) => {
     const label = (typeof v === "string") ? v : (v?.label ?? k);
     return `<option value="${k}"${k === current ? " selected" : ""}>${label}</option>`;
   }).join("");
+  // An item value the list doesn't offer (edit mode: "ephemeral", "directed", Instant on a non-TCC…)
+  // stays selectable as itself — before, the browser showed option 1 and harvest saved it as a user
+  // change, which also fired cascades (2026-10-29).
+  const cur = current == null ? "" : String(current);
+  if (cur !== "" && !Object.prototype.hasOwnProperty.call(map, cur)) {
+    const e = ftEscapeHtml(cur);
+    opts = `<option value="${e}" selected>${e} (current)</option>` + opts;
+  }
   return `<select name="${name}"${tooltip ? ` data-tooltip="${tooltip}"` : ""}>${opts}</select>`;
 }
 function _ftWizV2Txt(name, value, placeholder = "") {
@@ -10087,7 +10157,8 @@ function _ftWizV2RenderConcept(state) {
 }
 
 function _ftWizV2RenderForm(state, { actor }) {
-  const stabilityMap = ftStabilityOptionsForActor(actor);
+  // No actor = GM library / compendium authoring — offer every stability (2026-10-29).
+  const stabilityMap = actor ? ftStabilityOptionsForActor(actor) : FT.MANIFESTATION_STABILITIES;
   return `
     <p class="ft-wiz-v2-coach">How does it act on the world, and how long does it stay?</p>
     <div class="ft-cast-grid">
@@ -10153,15 +10224,16 @@ function _ftWizV2RenderEffectPower(state) {
   ` : "";
   return `
     <p class="ft-wiz-v2-coach">Does the working harm, heal, or transform without measurable damage? Configure the structured damage/heal roll the cast path will roll on success — and which conditions land alongside it.</p>
-    <div class="ft-wiz-v2-subhead">Casting Channel</div>
+    <div class="ft-wiz-v2-subhead">Intent &amp; Channel</div>
     <div class="ft-cast-grid">
+      <div class="ft-cast-field"><label data-tooltip="What the working is FOR — Violence, Intrigue, or Presence. The cast rolls Intent + Channel, and the pair sets your Sephirah alignment bonus. Before this field every Engine-made power cast with Presence (2026-10-29).">Intent <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("intent", FT.INTENTS, state.intent ?? "presence")}</div>
       <div class="ft-cast-field"><label data-tooltip="Which faculty powers this working — Body, Mind, or Soul. Drives the caster's alignment bonus and the contested-cast attribute. Always editable later on the item sheet.">Channel <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("channel", FT.CHANNELS, state.channel ?? "soul")}</div>
     </div>
     <div class="ft-wiz-v2-subhead">Damage / Heal Roll</div>
     <div class="ft-cast-grid">
       <div class="ft-cast-field"><label>Operation</label>${_ftWizV2Sel("damageRoll.op", { none: "None (no roll)", damage: "Damage", heal: "Heal" }, dr.op ?? "none")}</div>
       <div class="ft-cast-field"><label>Number of dice</label>${_ftWizV2Num("damageRoll.number", dr.number, { min: 0, max: 20 })}</div>
-      <div class="ft-cast-field"><label>Die</label>${_ftWizV2Sel("damageRoll.die", { d4: "d4", d6: "d6", d8: "d8", d10: "d10", d12: "d12", d10x10: "d10 (exploding)" }, dr.die ?? "d6")}</div>
+      <div class="ft-cast-field"><label>Die</label>${_ftWizV2Sel("damageRoll.die", { d4: "d4", d6: "d6", d8: "d8", d10: "d10", d12: "d12", d20: "d20", d10x10: "d10 (exploding)" }, dr.die ?? "d6")}</div>
       <div class="ft-cast-field"><label>Faculty bonus</label>${_ftWizV2Sel("damageRoll.attribute", { "": "— none —", ..._ftWizV2FacultiesMap() }, dr.attribute ?? "")}</div>
       <div class="ft-cast-field"><label>Damage type</label>${_ftWizV2Sel("damageRoll.type", FT.DAMAGE_TYPES, dr.type ?? "kinetic")}</div>
       <div class="ft-cast-field"><label>Track</label>${_ftWizV2Sel("damageRoll.track", { integrity: "Integrity", stress: "Stress", clarity: "Clarity", noise: "Noise" }, dr.track ?? "integrity")}</div>
@@ -10287,7 +10359,7 @@ function _ftWizV2RenderConditionalDamageBlock(state) {
 // 2026-05-29 — Additional Damage Dice. Up to 3 rows of { formula, type, track,
 // flavor } rolled on EVERY hit in addition to the primary damage, each its own
 // type/track for per-type resist/immune math. Authored here (in the engine) so
-// the dice count toward the suggested Tier via _ftWizV2DamagePartsBudgetTier.
+// the dice count toward the suggested Tier (summed into _ftWizV2DamageBudgetTier).
 // Harvested generically into state.damageParts (p0/p1/p2); ftNormalizeDamageParts
 // converts back to a clean array on save. Mirrors the conditional-damage block.
 function _ftWizV2RenderDamagePartsBlock(state) {
@@ -10316,7 +10388,10 @@ function _ftWizV2RenderResolution(state) {
   const r = state.resolution ?? {};
   const shape = r.shape ?? "auto";
   const dr = state.damageRoll ?? {};
-  const dmgWarning = (shape !== "auto" && (dr.op === "none" || !Number(dr.number)))
+  const noDamage = state._kind === "weapon"
+    ? !String(state.damageFormula ?? "").trim()
+    : (dr.op === "none" || !Number(dr.number));
+  const dmgWarning = (shape !== "auto" && noDamage)
     ? `<p class="ft-wiz-v2-warn" style="color:#e8c84a;font-size:0.78rem;margin:0.4rem 0">⚠ Step 4 has no damage roll configured — Resolution gates damage, so an attack/save/contested shape currently has nothing to gate. Consider Auto or revisit Step 4.</p>`
     : "";
   const subAttack = shape === "attack" ? `
@@ -10352,9 +10427,9 @@ function _ftWizV2RenderCost(state) {
   // overlay — only visible when the key is "custom" (or when legacy items
   // have text but no key set). That preserves authoring intent for the rare
   // bespoke upkeep without breaking back-compat.
-  const mKey = state.maintenanceKey ?? "none";
-  const hasLegacyText = !state.maintenanceKey && state.maintenanceCost;
-  const showCustom = mKey === "custom" || hasLegacyText;
+  // Legacy text with no key reads as "custom"; the note row shows whenever there is text so it can be cleared.
+  const mKey = state.maintenanceKey || (state.maintenanceCost ? "custom" : "none");
+  const showCustom = mKey === "custom" || !!state.maintenanceCost;
   const customRow = showCustom
     ? `<div class="ft-cast-field ft-cast-span-2"><label>Custom maintenance note</label>${_ftWizV2Txt("maintenanceCost", state.maintenanceCost, "e.g. 1 Surge the first scene, then 1 Clarity each scene after...")}</div>`
     : "";
@@ -10381,34 +10456,97 @@ function _ftWizV2RenderCost(state) {
 // budget. The suggester scores each input independently and returns the
 // HIGHEST tier required (any single factor pushes the whole working up).
 // Used by Step 7 to surface "Suggested tier: T2" with a one-click apply.
-const _FT_WIZ_V2_DIE_AVG = { d4: 2.5, d6: 3.5, d8: 4.5, d10: 5.5, d12: 6.5, d10x10: 6.1 };
+const _FT_WIZ_V2_DIE_AVG = { d4: 2.5, d6: 3.5, d8: 4.5, d10: 5.5, d12: 6.5, d20: 10.5, d10x10: 6.1 };
+
+// 2026-10-29 — one average-of-formula reader for every magnitude factor. Sums each
+// `NdM` term (count defaults to 1; the system's exploding `x10` scores its own average)
+// plus signed flat terms, so "2d6+3", "d8", "2d10x10" and "4" all score what they roll.
+// null when nothing in the string parses.
+function _ftWizV2FormulaAvg(formula) {
+  const f = String(formula ?? "").toLowerCase().replace(/\s+/g, "");
+  if (!f) return null;
+  let total = 0, hit = false;
+  const rest = f.replace(/([+-]?)(\d*)d(\d+)(x10)?/g, (_m, sign, n, faces, x) => {
+    const key = `d${faces}${x && faces === "10" ? "x10" : ""}`;
+    const avg = _FT_WIZ_V2_DIE_AVG[key] ?? (Number(faces) + 1) / 2;
+    total += (sign === "-" ? -1 : 1) * (Number(n) || 1) * avg;
+    hit = true;
+    return "";
+  });
+  for (const m of rest.matchAll(/([+-]?)(\d+(?:\.\d+)?)/g)) {
+    total += (m[1] === "-" ? -1 : 1) * Number(m[2]);
+    hit = true;
+  }
+  return hit ? total : null;
+}
+function _ftWizV2DamageBand(total) {
+  if (total <= 4)  return 1;
+  if (total <= 8)  return 2;
+  if (total <= 12) return 3;
+  return 4;
+}
 
 // Damage Major anchors: T1 1d6 (~3.5), T2 2d6 (~7), T3 3d6 (~10.5), T4 5d6 (~17.5).
 // Snap to the highest tier whose anchor we don't exceed; flag overshoot at T4.
-function _ftWizV2DamageBudgetTier(dr) {
-  if (!dr || (dr.op !== "damage" && dr.op !== "heal") || !(Number(dr.number) > 0)) return { tier: 0, note: null };
-  const avg = _FT_WIZ_V2_DIE_AVG[dr.die] ?? 3.5;
-  const total = Number(dr.number) * avg;
-  let tier;
-  if      (total <= 4)  tier = 1;
-  else if (total <= 8)  tier = 2;
-  else if (total <= 12) tier = 3;
-  else                  tier = 4;
+// 2026-10-29 — one factor for everything that lands on every hit: the primary roll
+// (a weapon's damageFormula, a power's structured damageRoll + flat bonus) PLUS the
+// Additional Damage Dice rows — summed, then banded, so extra dice add to the primary
+// instead of being tiered on their own and lost to a max().
+function _ftWizV2DamageBudgetTier(state) {
+  const isWeapon = state?._kind === "weapon";
+  const bits = [];
+  let total = 0, opLabel = "Damage";
+  if (isWeapon) {
+    const avg = _ftWizV2FormulaAvg(state.damageFormula);
+    if (avg && avg > 0) { total += avg; bits.push(String(state.damageFormula).trim()); }
+  } else {
+    const dr = state?.damageRoll;
+    if (dr && (dr.op === "damage" || dr.op === "heal") && Number(dr.number) > 0) {
+      const avg = Number(dr.number) * (_FT_WIZ_V2_DIE_AVG[dr.die] ?? 3.5) + (Number(dr.bonus) || 0);
+      total += avg;
+      if (dr.op === "heal") opLabel = "Healing";
+      bits.push(`${dr.number}${dr.die}${Number(dr.bonus) ? (dr.bonus > 0 ? `+${dr.bonus}` : dr.bonus) : ""}`);
+    }
+  }
+  const parts = state?.damageParts;
+  const src = Array.isArray(parts) ? parts : (parts && typeof parts === "object" ? Object.values(parts) : []);
+  let n = 0;
+  for (const p of src) {
+    const avg = _ftWizV2FormulaAvg(p?.formula);
+    if (avg == null) continue;
+    n++; total += avg;
+  }
+  if (n) bits.push(`${n} extra die row${n > 1 ? "s" : ""}`);
+  if (!(total > 0)) return { tier: 0, note: null };
+  const tier = _ftWizV2DamageBand(total);
   const overshoot = total > 18 ? " (above T4 anchor)" : "";
-  const opLabel = dr.op === "heal" ? "Healing" : "Damage";
-  return { tier, note: `${opLabel} ${dr.number}${dr.die} (avg ${total.toFixed(1)})${overshoot} → T${tier}` };
+  return { tier, note: `${opLabel} ${bits.join(" + ")} (avg ${total.toFixed(1)})${overshoot} → T${tier}` };
 }
 
-// Range/area anchors: T1 self/touch, T2 ≤30ft, T3 ≤60ft, T4 district / >60ft.
+// Area anchors (Magnitude v1.1): T1 no AoE; T2 10-ft burst / 15-ft cone; T3 20-ft burst /
+// 30-ft cone; T4 beyond. Bursts (sphere/cylinder/cube/burst) and lines/cones band apart.
 function _ftWizV2AreaBudgetTier(area) {
   if (!area || area.shape === "none" || !(Number(area.size) > 0)) return { tier: 0, note: null };
   const sz = Number(area.size);
-  let tier;
-  if      (sz <= 5)  tier = 1;
-  else if (sz <= 30) tier = 2;
-  else if (sz <= 60) tier = 3;
-  else               tier = 4;
+  const longShape = ["cone", "line"].includes(String(area.shape));
+  const [t2, t3] = longShape ? [15, 30] : [10, 20];
+  const tier = sz <= t2 ? 2 : sz <= t3 ? 3 : 4;
   return { tier, note: `${area.shape} ${sz}ft → T${tier}` };
+}
+
+// Range anchors (Magnitude v1.1): T1 5 ft / touch, T2 ≤30 ft, T3 ≤60 ft, T4 beyond.
+function _ftWizV2RangeBudgetTier(rangeFt) {
+  const r = Number(rangeFt) || 0;
+  if (r <= 0) return { tier: 0, note: null };
+  const tier = r <= 5 ? 1 : r <= 30 ? 2 : r <= 60 ? 3 : 4;
+  return { tier, note: `range ${r}ft → T${tier}` };
+}
+
+// Footprint (Magnitude v1.1: "Tier = footprint") — Personal T1 · Scene T2 · Faction T3 · Hex T4.
+function _ftWizV2ScaleBudgetTier(scale) {
+  const tier = FT_MANIFESTATION_SCALE_TO_TIER[String(scale ?? "")] ?? 0;
+  if (tier <= 1) return { tier: 0, note: null };
+  return { tier, note: `scale ${FT.MANIFESTATION_SCALES?.[scale]?.label ?? scale} → T${tier}` };
 }
 
 // Applied-states weight: 1 short-duration state = T1; longer or multi-state
@@ -10436,9 +10574,9 @@ function _ftWizV2StatesBudgetTier(ap) {
   return { tier, note: `${tag} → T${tier}` };
 }
 
-// Fixed DC overrides: default = 8 + tier + faculty (~12-14 at T1). Author
-// pushing DC up implies a higher tier intent. Reads both resolution.save and
-// appliedStates.save fixed-DC fields; takes the max.
+// Fixed DC overrides: standard = 11 + tier×2 + channel faculty (ftFormulaSaveDC; ~15 at
+// T1 for a faculty-2 caster). Bands sit on that ladder: ≤15 T1, ≤17 T2, ≤19 T3, else T4.
+// Reads both resolution.save and appliedStates.save fixed-DC fields; takes the max.
 function _ftWizV2DcBudgetTier(state) {
   const r  = state.resolution ?? {};
   const ap = state.appliedStates ?? {};
@@ -10448,17 +10586,16 @@ function _ftWizV2DcBudgetTier(state) {
   if (!dcs.length) return { tier: 0, note: null };
   const dc = Math.max(...dcs);
   let tier;
-  if      (dc <= 14) tier = 1;
+  if      (dc <= 15) tier = 1;
   else if (dc <= 17) tier = 2;
-  else if (dc <= 20) tier = 3;
+  else if (dc <= 19) tier = 3;
   else               tier = 4;
   return { tier, note: `fixed DC ${dc} → T${tier}` };
 }
 
-// Phase C — Buffs & Wards budget. Per-modifier weight scales with value
-// (+2 to Guard counts more than +1); each resist adds 1, each immune adds 2.
-// Brackets are roughly: 1 unit = T1, 2-3 = T2, 4-5 = T3, 6+ = T4. Sits
-// alongside damage / area / states / DC factors in the magnitude calc.
+// Phase C — Buffs & Wards budget, on the Magnitude v1.1 armor ladder (2026-10-29):
+// total stat points across mods, T1 ≤2 points · T2 ≤4 points + ≤1 resist ·
+// T3 ≤6 points + ≤2 resists + ≤1 immune · T4 beyond.
 function _ftWizV2EffectsBudgetTier(eff) {
   if (!eff) return { tier: 0, note: null };
   const modsSrc = (eff.modifiers && typeof eff.modifiers === "object" && !Array.isArray(eff.modifiers))
@@ -10472,34 +10609,28 @@ function _ftWizV2EffectsBudgetTier(eff) {
   };
   const resistN = countTrue(eff.resists);
   const immuneN = countTrue(eff.immunes);
-  const modWeight = mods.reduce((s, m) => s + Math.max(1, Math.ceil((Number(m.value) || 0) / 2)), 0);
-  const weight = modWeight + resistN + (immuneN * 2);
-  if (weight === 0) return { tier: 0, note: null };
+  const points  = mods.reduce((s, m) => s + (Number(m.value) || 0), 0);
+  if (!points && !resistN && !immuneN) return { tier: 0, note: null };
   let tier;
-  if      (weight <= 1) tier = 1;
-  else if (weight <= 3) tier = 2;
-  else if (weight <= 5) tier = 3;
-  else                  tier = 4;
+  if      (points <= 2 && !resistN && !immuneN)    tier = 1;
+  else if (points <= 4 && resistN <= 1 && !immuneN) tier = 2;
+  else if (points <= 6 && resistN <= 2 && immuneN <= 1) tier = 3;
+  else                                              tier = 4;
   const parts = [];
-  if (mods.length)  parts.push(`${mods.length} stat mod${mods.length>1?"s":""}`);
+  if (mods.length)  parts.push(`${points} point${points === 1 ? "" : "s"} over ${mods.length} stat${mods.length > 1 ? "s" : ""}`);
   if (resistN)      parts.push(`${resistN} resist`);
   if (immuneN)      parts.push(`${immuneN} immune`);
-  return { tier, note: `${parts.join(", ")} (weight ${weight}) → T${tier}` };
+  return { tier, note: `${parts.join(", ")} → T${tier}` };
 }
 
 // Phase D — Chain magnitude. Approximates expected total chain damage as
-// count × avg(formula). XdY parses literally; un-parseable falls back to a
-// flat number, then ~3 if neither matches. Brackets: ≤5→T1, ≤12→T2, ≤22→T3,
-// else T4 — enough headroom for "3 × 1d6" (≈10.5, T2) up through "5 × 2d8"
-// (≈45, T4).
+// count × avg(formula). Brackets: ≤5→T1, ≤12→T2, ≤22→T3, else T4 — enough
+// headroom for "3 × 1d6" (≈10.5, T2) up through "5 × 2d8" (≈45, T4).
 function _ftWizV2ChainBudgetTier(chain) {
   if (!chain?.enabled) return { tier: 0, note: null };
   const count = Math.max(1, Math.floor(Number(chain.count) || 3));
   const formula = String(chain.damageFormula ?? "1d6");
-  const m = formula.match(/^\s*(\d+)\s*d\s*(\d+)\s*$/i);
-  const avgPerHit = m
-    ? Math.floor(Number(m[1])) * ((Number(m[2]) + 1) / 2)
-    : (Number(formula) || 3);
+  const avgPerHit = _ftWizV2FormulaAvg(formula) ?? 3;
   const total = count * avgPerHit;
   let tier;
   if      (total <= 5)  tier = 1;
@@ -10524,9 +10655,7 @@ function _ftWizV2ConditionalDamageBudgetTier(rows) {
     const f = String(r.bonusFormula ?? "").trim();
     if (!f) continue;
     n++;
-    const m = f.match(/^\s*(\d+)\s*d\s*(\d+)\s*$/i);
-    const avg = m ? Math.floor(Number(m[1])) * ((Number(m[2]) + 1) / 2) : (Number(f) || 3);
-    total += avg * 0.5;  // conditional → half-weight vs primary
+    total += (_ftWizV2FormulaAvg(f) ?? 3) * 0.5;  // conditional → half-weight vs primary
   }
   if (!n) return { tier: 0, note: null };
   let tier;
@@ -10537,38 +10666,16 @@ function _ftWizV2ConditionalDamageBudgetTier(rows) {
   return { tier, note: `${n} conditional row${n>1?"s":""} (weight ${total.toFixed(1)}) → T${tier}` };
 }
 
-// 2026-05-29 — Additional Damage Dice magnitude. Unconditional extra damage, so
-// FULL weight (vs conditional's half) — sums each row's average and brackets on
-// the same anchors as the primary damage budget (≤4→T1, ≤8→T2, ≤12→T3, else T4).
-// This is what makes "build the extra dice in so they count toward Tier" real.
-function _ftWizV2DamagePartsBudgetTier(parts) {
-  const src = Array.isArray(parts) ? parts : (parts && typeof parts === "object" ? Object.values(parts) : []);
-  let total = 0, n = 0;
-  for (const p of src) {
-    const f = String(p?.formula ?? "").trim();
-    if (!f) continue;
-    n++;
-    const m = f.match(/^\s*(\d+)\s*d\s*(\d+)\s*$/i);
-    total += m ? Math.floor(Number(m[1])) * ((Number(m[2]) + 1) / 2) : (Number(f) || 3);
-  }
-  if (!n) return { tier: 0, note: null };
-  let tier;
-  if      (total <= 4)  tier = 1;
-  else if (total <= 8)  tier = 2;
-  else if (total <= 12) tier = 3;
-  else                  tier = 4;
-  return { tier, note: `${n} extra die row${n>1?"s":""} (avg ${total.toFixed(1)}) → T${tier}` };
-}
-
 function _ftWizV2SuggestTier(state) {
   const factors = [
-    _ftWizV2DamageBudgetTier(state.damageRoll),
+    _ftWizV2DamageBudgetTier(state),
     _ftWizV2AreaBudgetTier(state.area),
+    _ftWizV2RangeBudgetTier(state.rangeFt),
+    _ftWizV2ScaleBudgetTier(state.scale),
     _ftWizV2StatesBudgetTier(state.appliedStates),
     _ftWizV2EffectsBudgetTier(state.appliedEffects),
     _ftWizV2ChainBudgetTier(state.chain),
     _ftWizV2ConditionalDamageBudgetTier(state.conditionalDamage),
-    _ftWizV2DamagePartsBudgetTier(state.damageParts),
     _ftWizV2DcBudgetTier(state)
   ].filter(f => f.tier > 0);
   const tier = factors.length ? Math.max(...factors.map(f => f.tier)) : 1;
@@ -10584,15 +10691,22 @@ function _ftWizV2RenderSoulAndReview(state, { actor }) {
   const dr = state.damageRoll ?? {};
   const summary = [
     state.name ? `<b>${ftEscapeHtml(state.name)}</b>` : `<i>Unnamed</i>`,
-    state.form ? FT.MANIFESTATION_FORMS?.[state.form]?.label ?? state.form : null,
-    state.function ? FT.MANIFESTATION_FUNCTIONS?.[state.function]?.label ?? state.function : null,
-    state.stability ? FT.MANIFESTATION_STABILITIES?.[state.stability]?.label ?? state.stability : null,
-    state.scale ? FT.MANIFESTATION_SCALES?.[state.scale]?.label ?? state.scale : null
+    // Item-sourced values in edit mode — escaped (2026-10-29).
+    state.form ? ftEscapeHtml(String(FT.MANIFESTATION_FORMS?.[state.form]?.label ?? state.form)) : null,
+    state.function ? ftEscapeHtml(String(FT.MANIFESTATION_FUNCTIONS?.[state.function]?.label ?? state.function)) : null,
+    state.stability ? ftEscapeHtml(String(FT.MANIFESTATION_STABILITIES?.[state.stability]?.label ?? state.stability)) : null,
+    state.scale ? ftEscapeHtml(String(FT.MANIFESTATION_SCALES?.[state.scale]?.label ?? state.scale)) : null
   ].filter(Boolean).join(" · ");
-  const fxBits = (dr.op && dr.op !== "none" && dr.number > 0)
-    ? `${dr.number}${dr.die ?? "d6"}${dr.attribute ? ` + ${ftCap(dr.attribute)}` : ""} ${dr.type ?? "kinetic"} → ${dr.track ?? "integrity"}`
-    : "no roll";
-  const resBits = (r.shape && r.shape !== "auto") ? r.shape : "auto-apply";
+  // A weapon's damage lives in damageFormula, not the power-only damageRoll (2026-10-29).
+  const fxRaw = state._kind === "weapon"
+    ? (String(state.damageFormula ?? "").trim()
+        ? `${state.damageFormula} ${state.damageType ?? "kinetic"} → ${state.damageTrack ?? "integrity"}`
+        : "no roll")
+    : ((dr.op && dr.op !== "none" && dr.number > 0)
+        ? `${dr.op === "heal" ? "heal " : ""}${dr.number}${dr.die ?? "d6"}${Number(dr.bonus) ? (dr.bonus > 0 ? ` + ${dr.bonus}` : ` - ${Math.abs(dr.bonus)}`) : ""}${dr.attribute ? ` + ${ftCap(dr.attribute)}` : ""} ${dr.type ?? "kinetic"} → ${dr.track ?? "integrity"}`
+        : "no roll");
+  const fxBits = ftEscapeHtml(fxRaw);
+  const resBits = ftEscapeHtml(String((r.shape && r.shape !== "auto") ? r.shape : "auto-apply"));
   const upkeep = (state.maintenanceKey && state.maintenanceKey !== "none" && state.maintenanceKey !== "custom")
     ? (FT.MAINTENANCE_COSTS?.[state.maintenanceKey]?.label ?? state.maintenanceKey)
     : String(state.maintenanceCost ?? "").trim();
@@ -10603,6 +10717,15 @@ function _ftWizV2RenderSoulAndReview(state, { actor }) {
   // Magnitude v1.1 suggestion banner. Highlights only when the configured
   // tier diverges from what the inputs warrant, otherwise shows a green ✓.
   const sug = _ftWizV2SuggestTier(state);
+  // A Signature can't sit above its steward's tier — the finish clamps it, so the banner says so
+  // instead of offering a tier that silently comes back lower (2026-10-29).
+  if (state._signatureLock && actor) {
+    const cap = ftStewardTier(actor);
+    if (sug.tier > cap) {
+      sug.breakdown.push({ tier: cap, note: `Signature capped at your tier (${_ftWizV2TierLabel(cap)}) — it rises as you do` });
+      sug.tier = cap;
+    }
+  }
   const cur = Number(state.tier ?? 1) || 1;
   const matches = sug.tier === cur;
   const bColor = matches ? "rgba(120,200,140,0.55)" : "rgba(232,200,74,0.6)";
@@ -10624,7 +10747,9 @@ function _ftWizV2RenderSoulAndReview(state, { actor }) {
   // only when there's an actor (a no-actor wizard already saves straight to a
   // pack). Harvested generically as state.saveToLibrary; the finish handler
   // runs ftExportItemToCompendium on the created item when checked.
-  const libToggle = actor
+  // Hidden in edit mode — the edit save never ran the export (2026-10-29). Export an existing
+  // item from its sheet's library button instead.
+  const libToggle = (actor && !state._editing)
     ? `<label class="ft-cast-field ft-cast-span-2" style="display:flex;align-items:center;gap:0.5rem;margin-top:0.6rem;cursor:pointer">${_ftWizV2Chk("saveToLibrary", state.saveToLibrary)}<span>Also save a copy to my library <small style="opacity:0.6">(opens a pack picker after creating; the copy on this character is untouched)</small></span></label>`
     : "";
   return `
@@ -10721,7 +10846,10 @@ function _ftWizV2Harvest(root, state) {
     else if (el.type === "number") v = el.value === "" ? 0 : Number(el.value);
     else                            v = el.value;
     const old = foundry.utils.getProperty(state, path);
-    if (old !== v) {
+    // An unchecked box over an unset value is not a change — before, leaving the Effect step marked
+    // every condition touched, so Command/Bind could no longer add theirs (2026-10-29).
+    const same = el.type === "checkbox" ? ((old === true) === v) : (old === v);
+    if (!same) {
       // User-driven change → mark touched so cascades can't overwrite later.
       state._touched.add(path);
       changed.push(path);
@@ -10739,6 +10867,7 @@ function _ftWizV2Harvest(root, state) {
 const _FT_WIZ_V2_CASCADES = {
   function: {
     harm: {
+      "intent":                "violence",
       "damageRoll.op":         "damage",
       "damageRoll.number":     2,
       "damageRoll.die":        "d6",
@@ -10835,7 +10964,8 @@ const _FT_WIZ_V2_CASCADES = {
   },
   stability: {
     instant:   { duration: "instant" },
-    sustained: { duration: "scene", maintenanceCost: "1 Clarity per scene" },
+    // No maintenance text: key "none" + Sustained = the engine's tier×Clarity baseline (2026-10-29).
+    sustained: { duration: "scene" },
     bound:     { duration: "persistent" },
     enduring:  { duration: "persistent" }
   }
@@ -10852,7 +10982,22 @@ const _FT_WIZ_V2_RANKED_FIELDS = new Set(["resolution.saveAttribute"]);
 function _ftWizV2ApplyCascade(state, changedPaths) {
   state._touched ??= new Set();
   state._cascadeBy ??= {};
+  state._cascadePrev ??= {};
   const writes = [];
+  // 2026-10-29 — a trigger that changed first takes back what its OLD value wrote (untouched
+  // fields only): Command → Harm used to leave Compelled, until-saved and the Soul save behind,
+  // and the stale Function rank kept blocking Interaction Model's save attribute.
+  for (const path of changedPaths) {
+    const rules = _FT_WIZ_V2_CASCADES[path];
+    if (!rules) continue;
+    const next = rules[foundry.utils.getProperty(state, path)] ?? {};
+    for (const [targetPath, by] of Object.entries(state._cascadeBy)) {
+      if (by !== path || targetPath in next || state._touched.has(targetPath)) continue;
+      foundry.utils.setProperty(state, targetPath, state._cascadePrev[targetPath]);
+      delete state._cascadeBy[targetPath];
+      delete state._cascadePrev[targetPath];
+    }
+  }
   for (const path of changedPaths) {
     const rules = _FT_WIZ_V2_CASCADES[path];
     if (!rules) continue;
@@ -10864,6 +11009,7 @@ function _ftWizV2ApplyCascade(state, changedPaths) {
       if (state._touched.has(targetPath)) continue;
       const by = state._cascadeBy[targetPath];
       if (_FT_WIZ_V2_RANKED_FIELDS.has(targetPath) && by && by !== path && (_FT_WIZ_V2_CASCADE_RANK[by] ?? 1) > rank) continue;
+      if (!(targetPath in state._cascadePrev)) state._cascadePrev[targetPath] = foundry.utils.getProperty(state, targetPath);
       foundry.utils.setProperty(state, targetPath, targetVal);
       state._cascadeBy[targetPath] = path;
       writes.push({ from: `${path}=${triggerVal}`, to: `${targetPath}=${targetVal}` });
@@ -10883,15 +11029,18 @@ function _ftWizV2BuildPreview(state) {
     bits.push(FT.MANIFESTATION_STABILITIES[state.stability].label.toLowerCase());
   }
   const dr = state.damageRoll ?? {};
-  if (dr.op === "damage" && dr.number > 0) {
-    bits.push(`${dr.number}${dr.die ?? "d6"} ${dr.type ?? "kinetic"}`);
+  const esc = (v) => ftEscapeHtml(String(v ?? ""));
+  if (state._kind === "weapon") {
+    if (String(state.damageFormula ?? "").trim()) bits.push(`${esc(state.damageFormula)} ${esc(state.damageType ?? "kinetic")}`);
+  } else if (dr.op === "damage" && dr.number > 0) {
+    bits.push(`${esc(dr.number)}${esc(dr.die ?? "d6")} ${esc(dr.type ?? "kinetic")}`);
   } else if (dr.op === "heal" && dr.number > 0) {
-    bits.push(`heal ${dr.number}${dr.die ?? "d8"}`);
+    bits.push(`heal ${esc(dr.number)}${esc(dr.die ?? "d8")}`);
   }
   const r = state.resolution ?? {};
-  if (r.shape === "attack")         bits.push(`attack vs ${ftCap(r.attackVs ?? "evasion")}`);
-  else if (r.shape === "save")      bits.push(`save: ${ftCap(r.saveAttribute ?? "body")}`);
-  else if (r.shape === "contested") bits.push(`contest vs ${ftCap(r.contestTargetAttribute ?? "body")}`);
+  if (r.shape === "attack")         bits.push(`attack vs ${esc(ftCap(r.attackVs ?? "evasion"))}`);
+  else if (r.shape === "save")      bits.push(`save: ${esc(ftCap(r.saveAttribute ?? "body"))}`);
+  else if (r.shape === "contested") bits.push(`contest vs ${esc(ftCap(r.contestTargetAttribute ?? "body"))}`);
   // Applied states — pull selected condition keys from the wizard's object
   // map (or array if pre-stamped). Show up to 3 + count overflow.
   const ap = state.appliedStates ?? {};
@@ -10902,13 +11051,13 @@ function _ftWizV2BuildPreview(state) {
   }
   if (stateKeys.length) {
     const durTag = { "1-round": "1r", "2-rounds": "2r", "3-rounds": "3r", scene: "scene", "until-saved": "save-ends" }[ap.duration] ?? "";
-    const labels = stateKeys.slice(0, 3).map(k => FT.CONDITIONS?.[k]?.label?.toLowerCase() ?? k);
+    const labels = stateKeys.slice(0, 3).map(k => esc(FT.CONDITIONS?.[k]?.label?.toLowerCase() ?? k));
     const more   = stateKeys.length > 3 ? ` +${stateKeys.length - 3}` : "";
     const saveTag = ap.saveEachRound ? ` <span style="color:#a0d4ff">↻</span>` : "";
     bits.push(`${labels.join(", ")}${more}${durTag ? ` (${durTag})` : ""}${saveTag}`);
   }
   if (state.costType && state.costType !== "none" && Number(state.costValue) > 0) {
-    bits.push(`${state.costValue} ${state.costType}`);
+    bits.push(`${esc(state.costValue)} ${esc(state.costType)}`);
   }
   if (!bits.length) return `<span style="opacity:0.5;font-style:italic">your manifestation will sketch itself here as you go…</span>`;
   return bits.join(` <span style="opacity:0.4">·</span> `);
@@ -10984,9 +11133,15 @@ function _ftWizV2OverlayFromItem(state, item, kind) {
     state.target     = sys.target ?? state.target;
     state.range      = sys.range ?? state.range;
     state.damage     = sys.damage ?? "";
-    state.damageRoll  = foundry.utils.mergeObject(ftDamageRollDefaults(), foundry.utils.deepClone(sys.damageRoll ?? {}), { inplace: false });
-    if (Number(sys.clarityRequired) > 0)   { state.costType = "clarity"; state.costValue = Number(sys.clarityRequired); }
-    else if (Number(sys.noiseGain) > 0)    { state.costType = "noise";   state.costValue = Number(sys.noiseGain); }
+    // ftNormalizeDamageRoll also lifts legacy `system.damage` dice ("2d6") into the structured roll (2026-10-29).
+    state.damageRoll  = ftNormalizeDamageRoll(sys);
+    // Legacy string activation ("ritual", "bonus") — the save path writes it back as-is (2026-10-29).
+    if (typeof sys.activation === "string" && sys.activation) state.activation = sys.activation;
+    // Legacy clarityRequired/noiseGain only stand in when the manifestation has no cost of its own —
+    // the sheet edits costType/costValue independently, so they win (2026-10-29).
+    const hasMfCost = mf.costType && mf.costType !== "none";
+    if (!hasMfCost && Number(sys.clarityRequired) > 0)   { state.costType = "clarity"; state.costValue = Number(sys.clarityRequired); }
+    else if (!hasMfCost && Number(sys.noiseGain) > 0)    { state.costType = "noise";   state.costValue = Number(sys.noiseGain); }
   }
 }
 
@@ -11098,12 +11253,14 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
 
   // Edit mode — overlay the existing item's current values onto the fresh state.
   if (existingItem) {
+    state._editing = true;
     try { _ftWizV2OverlayFromItem(state, existingItem, wizardKind); }
     catch (e) { console.warn("Roll for Initiation | wizard edit-overlay failed", e); }
   }
   if (sigLock) { state.isSignature = true; state._signatureLock = true; }
 
   let STEPS = _ftWizV2Steps(wizardKind);
+  state._kind = wizardKind;   // the magnitude / review readers branch on it (2026-10-29)
 
   // The starter only picks the opening posture — the item TYPE follows what the
   // author actually builds. A "weapon" item is a strikable Form; anything else
@@ -11116,6 +11273,7 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
     const k = state.interactionModel === "weapon" ? "weapon" : "power";
     if (k === wizardKind) return;
     wizardKind = k;
+    state._kind = k;
     STEPS = _ftWizV2Steps(k);
     if (!state._touched?.has?.("img") && ["icons/svg/sword.svg", "icons/svg/aura.svg"].includes(state.img)) {
       state.img = k === "weapon" ? "icons/svg/sword.svg" : "icons/svg/aura.svg";
@@ -11124,6 +11282,7 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
 
   return new Promise((resolve) => {
     let resolved = false;
+    let finishing = false;   // Manifest in flight — a second click must not create a second item (2026-10-29)
     // Cancel button is rendered inside the shell HTML (own sub-row under Back/Next),
     // not in the dialog footer — see _ftWizV2RenderShell. We keep a stub `cancel`
     // button in the Dialog config so Foundry's Dialog plumbing has something to
@@ -11243,6 +11402,11 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
           }
           if (state._currentStep < STEPS.length - 1) state._currentStep++;
         } else if (action === "finish") {
+          if (finishing || resolved) return;
+          finishing = true;
+          const finishBtn = wizRoot.querySelector('[data-wiz-action="finish"]');
+          if (finishBtn) finishBtn.disabled = true;
+          const unlock = () => { finishing = false; if (finishBtn) finishBtn.disabled = false; };
           // Final validation pass on every step.
           for (let i = 0; i < STEPS.length; i++) {
             if (STEPS[i].validate) {
@@ -11252,11 +11416,19 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
                 wizRoot.innerHTML = _ftWizV2RenderShell(actor, state, STEPS).match(/<div class="ft-wiz-v2"[^>]*>([\s\S]*)<\/div>/)?.[1] ?? "";
                 const eb = wizRoot.querySelector(".ft-wiz-v2-errors");
                 if (eb) eb.textContent = r.errors.join(" · ");
+                unlock();
                 return;
               }
             }
           }
           try {
+            // The open-time slot check can be stale — another wizard on the same slot may have
+            // finished first (2026-10-29).
+            if (sigLock && actor && !existingItem && ftSignatureSlots(actor).free <= 0) {
+              ui.notifications?.warn(`${actor.name} has no open Signature slot left — nothing was created.`);
+              unlock();
+              return;
+            }
             if (sigLock && actor) {
               // A Signature is always a Signature, and never outruns its steward's tier (ruling 14).
               state.isSignature = true;
@@ -11317,6 +11489,7 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
           } catch (e) {
             console.warn("Roll for Initiation | wizard V2 finish failed", e);
             ui.notifications?.error(`Manifestation Wizard V2: create failed (see console).`);
+            unlock();
           }
           return;
         } else {
@@ -17663,7 +17836,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       if (isWeapon && sourceMf && sourceItem.parent) {
         const caster = sourceItem.parent;
         try {
-          const hasStates  = sourceMf.appliedStates?.states?.length;
+          const hasStates  = ftAppliedStatesToArray(sourceMf.appliedStates)?.states?.length;
           const hasEffects = sourceMf.appliedEffects && (
             sourceMf.appliedEffects.modifiers?.length ||
             sourceMf.appliedEffects.resists?.length ||
@@ -25370,6 +25543,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       return {
         item:       this.item,
         system,
+        isGM:       game.user?.isGM === true,
         SEPHIROTH:  FT.SEPHIROTH,
         INTENTS:    FT.INTENTS,
         CHANNELS:   FT.CHANNELS,
@@ -25387,7 +25561,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         MANIFESTATION_COSTS: FT.MANIFESTATION_COSTS,
         MANIFESTATION_SCALES: FT.MANIFESTATION_SCALES,
         // Phase A option lists for the Phase B editor dropdowns.
-        DAMAGE_DICE:        ["d4", "d6", "d8", "d10", "d12", "d10x10"],
+        DAMAGE_DICE:        FT_DAMAGE_DICE,
         DAMAGE_OPS:         { damage: "Damage", heal: "Heal", none: "None" },
         AREA_SHAPES:        { none: "None", cone: "Cone", sphere: "Sphere", line: "Line", cube: "Cube", cylinder: "Cylinder" },
         ACTIVATION_TYPES:   { action: "Action", bonus: "Bonus action", reaction: "Reaction", none: "Free / passive" },

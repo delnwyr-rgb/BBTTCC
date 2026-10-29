@@ -631,7 +631,9 @@
       : (sys.range?.short ? `${sys.range.short} sq` : ""));
     if (rng) bits.push(`→ ${rng}`);
     if (mf.costType && mf.costType !== "none") bits.push(`✦ ${[mf.costValue, mf.costType].filter(Boolean).join(" ")}`);
-    if (mf.maintenanceCost) bits.push(`↻ ${mf.maintenanceCost}`);
+    { const mk = mf.maintenanceKey;
+      const up = (mk && mk !== "none" && mk !== "custom") ? mk.replace(/^(\d+)-(\w+)-(\w+)$/, (_m, n, r, per) => `${r === "noise" ? "+" : ""}${n} ${r === "burn" ? "Surge" : r[0].toUpperCase() + r.slice(1)} per ${per}`) : mf.maintenanceCost;
+      if (up) bits.push(`↻ ${up}`); }
     const act = mf.activation?.type ?? sys.activation?.type;
     if (act) bits.push(`⏱ ${act}`);
     let desc = String(sys.description?.value ?? sys.effect ?? sys.body ?? sys.flavor ?? "")

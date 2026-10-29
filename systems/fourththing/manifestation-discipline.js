@@ -78,13 +78,25 @@ export function getDisciplineShifts(actor) {
     }
   }
 
+  // The two feats the baseline above already encodes also carry the same flags (tag macros) —
+  // counting both doubled Pactkeeper concurrency and quartered Sealed Pact upkeep, and put the
+  // copies in the any-entry pass bucket (2026-10-29).
+  const BASELINE_COVERED = new Set(["pk_init1_the_bargain", "pk_mode_sealed_pact"]);
   for (const it of actor.items) {
     const disc = it?.flags?.fourththing?.discipline;
     if (!disc) continue;
+    if (hasPactkeeper && BASELINE_COVERED.has(it?.system?.identifier)) continue;
     if (disc.passive) _add(out, disc.passive);
     if (disc.mode && isModeActive(actor, disc.mode.key) && disc.mode.grants) {
       _add(out, disc.mode.grants);
     }
+  }
+  // Active Effects built from the AE-key picker (ae-keys-registry "Manifestation Discipline")
+  // write onto the ACTOR's flags, which nothing read — so those effects did nothing (2026-10-29).
+  const actorDisc = actor.flags?.fourththing?.discipline;
+  if (actorDisc) {
+    if (actorDisc.passive) _add(out, actorDisc.passive);
+    if (actorDisc.mode && isModeActive(actor, actorDisc.mode.key) && actorDisc.mode.grants) _add(out, actorDisc.mode.grants);
   }
   return out;
 }

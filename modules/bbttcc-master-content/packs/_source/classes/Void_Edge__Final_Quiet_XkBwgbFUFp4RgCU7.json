@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Level 18 — <strong>Final Quiet</strong></h2><p>You end escalation itself.</p><h3>Once per Soma Break</h3><p>Create a 6 squares zone for 1 minute:</p><ul><li><p>Nerve cannot rise</p></li><li><p>Inspiration fails</p></li><li><p>Buffs tied to hope or courage do not apply</p></li><li><p>Enemies roll 3d10 keep lowest 2 on checks vs fear</p></li></ul><p>Afterward:</p><ul><li><p>Your Burn drops to <strong>0</strong></p></li><li><p>You gain <strong>2 Burn at the end of the next round</strong> (delayed backlash)</p></li></ul><p>Victories here feel hollow.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Level 18 — <strong>Final Quiet</strong></h2><p>You end escalation itself.</p><h3>Once per Soma Break</h3><p>Create a 6 squares zone for 1 minute:</p><ul><li><p>Nerve cannot rise</p></li><li><p>Inspiration fails</p></li><li><p>Buffs tied to hope or courage do not apply</p></li><li><p>Enemies roll 3d10 keep lowest 2 on checks vs fear</p></li></ul><p>Afterward:</p><ul><li><p>Your Surge drops to <strong>0</strong></p></li><li><p>You <strong>can't bank Surge until the end of the next round</strong> (delayed backlash)</p></li></ul><p>Victories here feel hollow.</p>",
       "chat": ""
     },
     "identifier": "voidedge_final_quiet",

@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Level 3 — <strong>Centered Breath</strong></h2><p>You regulate your Burn.</p><h3>Mechanical Effects</h3><ul><li><p>Reduce Burn gained by <strong>1 per encounter</strong> (minimum 0)</p></li><li><p>Once per round, when you would gain Burn:</p><ul><li><p>You may choose <strong>not to</strong></p></li></ul></li></ul><p>Additionally:</p><ul><li><p>Allies within 2 squares reroll the lowest die on their<strong>first check vs fear or charm each round</strong></p></li></ul><p>Calm spreads.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Level 3 — <strong>Centered Breath</strong></h2><p>You regulate your heat.</p><h3>Mechanical Effects</h3><ul><li><p>Once per encounter, the overheat <strong>cannot bite you</strong> (no Stress from a full Surge bank)</p></li><li><p>Once per round, when you would gain Surge:</p><ul><li><p>You may <strong>let it go</strong> instead</p></li></ul></li></ul><p>Additionally:</p><ul><li><p>Allies within 2 squares reroll the lowest die on their<strong>first check vs fear or charm each round</strong></p></li></ul><p>Calm spreads.</p>",
       "chat": ""
     },
     "identifier": "stillheart_centered_breath",

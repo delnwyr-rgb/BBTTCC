@@ -33,8 +33,8 @@ A manifestation may carry **one Major effect** at its tier's budget *or* **two M
 ### Defense / armor manifestation (anchor: T1/T2 baseline armor sprint)
 | Tier | Total G+E+R bonus budget | Bound-Form upkeep | Examples in line |
 |---|---|---|---|
-| T1 | **2** points across G/E/R | 1 Clarity / Soma Break | matches *Drifter's Weave* (G+1/E+1/R+0), *Bulwark Hauberk* (G+2/E+0/R+1) |
-| T2 | **3–4** points + 1 resistance type *or* 1 once/scene rider | 2 Clarity / SB | matches *Steelweave Hauberk* (G+3/E+0/R+1, kinetic resist, reactive lacing) |
+| T1 | **2** points across G/E/R | 1 Clarity / Soma Break | matches *Drifter's Weave* (G+1/E+1/R+0) |
+| T2 | **3–4** points + 1 resistance type *or* 1 once/scene rider | 2 Clarity / SB | matches *Bulwark Hauberk* (G+2/E+0/R+1 = 3 points; moved from T1 2026-10-29) and *Steelweave Hauberk* (G+3/E+0/R+1, kinetic resist, reactive lacing) |
 | T3 | **5–6** points + 2 resistances + 1 condition immunity | 3 Clarity / SB | crafted/signature plate territory |
 | T4 | **7–9** points + 3 resistances + 1 immunity + scene-trigger | 4 Clarity / SB + faction OP | boss/quest signature only |
 

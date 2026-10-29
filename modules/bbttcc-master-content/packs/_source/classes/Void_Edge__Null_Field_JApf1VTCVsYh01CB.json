@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Level 3 — <strong>Null Field</strong></h2><p>Your blade suppresses their banked rerolls.</p><h3>Mechanical Effects</h3><p>When you hit a creature while at <strong>Burn 1+</strong>:</p><ul><li><p>Suppress one of the following until the end of its next turn:</p><ul><li><p>reroll the lowest die on attacks</p></li><li><p>Bonus damage</p></li><li><p>Fear or inspiration effects</p></li></ul></li></ul><p>At <strong>Burn 3+</strong>:</p><ul><li><p>The target also loses <strong>reactions</strong></p></li></ul><p>Hope falters where you cut.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Level 3 — <strong>Null Field</strong></h2><p>Your blade suppresses their banked rerolls.</p><h3>Mechanical Effects</h3><p>When you hit a creature while holding any <strong>Surge</strong>:</p><ul><li><p>Suppress one of the following until the end of its next turn:</p><ul><li><p>reroll the lowest die on attacks</p></li><li><p>Bonus damage</p></li><li><p>Fear or inspiration effects</p></li></ul></li></ul><p>While <strong>Stoked</strong> or hotter:</p><ul><li><p>The target also loses <strong>reactions</strong></p></li></ul><p>Hope falters where you cut.</p>",
       "chat": ""
     },
     "identifier": "voidedge_null_field",

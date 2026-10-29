@@ -1,5 +1,5 @@
 {
-  "name": "Aurablade: Burn State",
+  "name": "Aurablade: Surge & Aura",
   "type": "feat",
   "img": "icons/magic/fire/flame-burning-embers-yellow.webp",
   "system": {
@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Burn</strong> is a state track, not a die pool. This is your display item for current Burn, current Aura, and current band on the Features tab.</p><p><strong>Bands:</strong> 0–1 Controlled, 2–3 Engaged, 4+ Overheated.</p>",
+      "value": "<p>Your heat is your <strong>Surge</strong>. This opens the raw Surge &amp; Aura dialog — current Surge, current Aura and current band.</p><p><strong>Bands</strong> (scaled to your Surge cap): Cool below half · Stoked at half or more · Overheated when full.</p>",
       "chat": ""
     },
     "identifier": "aurablade_burn_state",

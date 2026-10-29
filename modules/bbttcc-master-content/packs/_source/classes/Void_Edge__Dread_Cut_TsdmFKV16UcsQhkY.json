@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<h2>Level 10 — <strong>Dread Cut</strong></h2><p>Fear propagates.</p><h3>Mechanical Effects</h3><p>When you hit at <strong>Burn 2+</strong>:</p><ul><li><p>Target must make a defense check or be <strong>Shaken</strong></p></li><li><p>Nearby enemies must make a defense check or suffer <strong>hesitation</strong> (lose movement or reactions)</p></li></ul><p>At <strong>Burn 4+</strong>:</p><ul><li><p>Fear spreads automatically to one additional creature</p></li></ul><p>Dread is contagious.</p>",
+      "value": "<h2>Level 10 — <strong>Dread Cut</strong></h2><p>Fear propagates.</p><h3>Mechanical Effects</h3><p>When you hit while <strong>Stoked</strong> or hotter:</p><ul><li><p>Target must make a defense check or be <strong>Shaken</strong></p></li><li><p>Nearby enemies must make a defense check or suffer <strong>hesitation</strong> (lose movement or reactions)</p></li></ul><p>While <strong>Overheated</strong>:</p><ul><li><p>Fear spreads automatically to one additional creature</p></li></ul><p>Dread is contagious.</p>",
       "chat": ""
     },
     "identifier": "voidedge_dread_cut",

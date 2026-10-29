@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p>Open the Aurablade action dialog. Available options depend on your current <strong>Aura</strong> and <strong>Burn</strong> band.</p><p> for Fury, Resolve, Mercy, or Dread.</p>",
+      "value": "<p>Open the Aurablade action dialog. Available options depend on your current <strong>Aura</strong> and <strong>Surge</strong> band (Cool / Stoked / Overheated). Each action raises your Surge.</p><p> for Fury, Resolve, Mercy, or Dread.</p>",
       "chat": ""
     },
     "identifier": "aurablade_action",

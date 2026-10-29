@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Level 6 — <strong>Lifetithe</strong></h2><p>You convert flesh into certainty.</p><h3>How This Works</h3><p>As part of an attack or Aura effect, you may:</p><ul><li><p>Take <strong>self-damage equal to your tier</strong></p></li><li><p>Choose <strong>one</strong>:</p><ul><li><p>Add <strong>+1 Burn</strong> without using an action</p></li><li><p>Reroll one damage die</p></li><li><p>Reclaim a previously expended Aura effect this turn</p></li></ul></li></ul><p>This damage <strong>cannot be reduced or redirected</strong>.</p><p>The blade accepts sacrifice.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Level 6 — <strong>Lifetithe</strong></h2><p>You convert flesh into certainty.</p><h3>How This Works</h3><p>As part of an attack or Aura effect, you may:</p><ul><li><p>Take <strong>self-damage equal to your tier</strong></p></li><li><p>Choose <strong>one</strong>:</p><ul><li><p>Add <strong>+1 Surge</strong> without using an action</p></li><li><p>Reroll one damage die</p></li><li><p>Reclaim a previously expended Aura effect this turn</p></li></ul></li></ul><p>This damage <strong>cannot be reduced or redirected</strong>.</p><p>The blade accepts sacrifice.</p>",
       "chat": ""
     },
     "identifier": "bloodhymn_lifetithe",

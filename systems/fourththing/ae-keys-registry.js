@@ -67,6 +67,7 @@ const SEED = [
   entry("system.magic.sephirah",        "Sephirothic Lock",    "Magic / Manifestation", { desc: "Sephirah key (string). Tunes manifestations to a single sefirah.", valueHint: "string" }),
 
   // ── Manifestation Discipline Shifts (set on feature items, aggregated) ──
+  // Read off the actor (Active Effects) as well as off each item's own flags — getDisciplineShifts sums both (2026-10-29).
   entry("flags.fourththing.discipline.passive.reachDiscount",     "Discipline — Reach Discount (passive)",     "Manifestation Discipline", { desc: "Subtracts from Blood-Debt cost when extending Reach. Always-on.", valueHint: "integer" }),
   entry("flags.fourththing.discipline.passive.misfireBandShift",  "Discipline — Misfire Band Shift (passive)", "Manifestation Discipline", { desc: "Adds to d10 misfire bias. Negative values = better outcomes.", valueHint: "integer (negative=safer)" }),
   entry("flags.fourththing.discipline.passive.clarityMaxBonus",   "Discipline — Clarity Max Bonus (passive)",  "Manifestation Discipline", { desc: "Raises Clarity ceiling at data-prep time." }),

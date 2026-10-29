@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<h2>Level 14 — <strong>Emotional Lock</strong></h2><p>You refuse disruption.</p><h3>Mechanical Effects</h3><ul><li><p>Your Aura <strong>cannot be forcibly changed</strong></p></li><li><p>As a bonus action, you may <strong>freeze your current Burn level</strong></p><ul><li><p>It cannot increase or decrease until the start of your next turn</p></li></ul></li></ul><p>At <strong>Burn 3+</strong>:</p><ul><li><p>You may ignore one backlash trigger entirely</p></li></ul><p>You choose who you are — and remain so.</p>",
+      "value": "<h2>Level 14 — <strong>Emotional Lock</strong></h2><p>You refuse disruption.</p><h3>Mechanical Effects</h3><ul><li><p>Your Aura <strong>cannot be forcibly changed</strong></p></li><li><p>As a bonus action, you may <strong>hold off the overheat</strong></p><ul><li><p>Until the start of your next turn, a full Surge bank costs you no Stress</p></li></ul></li></ul><p>While <strong>Stoked</strong> or hotter:</p><ul><li><p>You may ignore one backlash trigger entirely</p></li></ul><p>You choose who you are — and remain so.</p>",
       "chat": ""
     },
     "identifier": "stillheart_emotional_lock",

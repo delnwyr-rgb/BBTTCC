@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<h2>Level 10 — <strong>Crimson Arc</strong></h2><p>Your violence spills outward.</p><h3>Mechanical Effects</h3><p>Once per turn, when you hit a creature while at <strong>Burn 2+</strong>:</p><ul><li><p>Choose another creature within reach</p></li><li><p>Deal <strong>half the original attack’s damage</strong> to that creature</p></li></ul><p>At <strong>Burn 4+</strong>:</p><ul><li><p>The secondary target takes <strong>full damage</strong></p></li><li><p>Both targets must make a defense check or be <strong>Shaken</strong> until the end of their next turn</p></li></ul><p>Momentum becomes violence.</p>",
+      "value": "<h2>Level 10 — <strong>Crimson Arc</strong></h2><p>Your violence spills outward.</p><h3>Mechanical Effects</h3><p>Once per turn, when you hit a creature while <strong>Stoked</strong> or hotter:</p><ul><li><p>Choose another creature within reach</p></li><li><p>Deal <strong>half the original attack’s damage</strong> to that creature</p></li></ul><p>While <strong>Overheated</strong>:</p><ul><li><p>The secondary target takes <strong>full damage</strong></p></li><li><p>Both targets must make a defense check or be <strong>Shaken</strong> until the end of their next turn</p></li></ul><p>Momentum becomes violence.</p>",
       "chat": ""
     },
     "identifier": "bloodhymn_crimson_arc",

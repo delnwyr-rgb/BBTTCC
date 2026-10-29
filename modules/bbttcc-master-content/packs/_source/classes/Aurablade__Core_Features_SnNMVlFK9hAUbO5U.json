@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>“Emotion sharpens faster than steel.”</em></p><p><strong>Aura States</strong> (Fury, Resolve, Mercy, Dread) shape a luminous blade. Spending power builds <strong>Burn</strong>; at high Burn you gain potency and risk backlash.</p>",
+      "value": "<p><em>“Emotion sharpens faster than steel.”</em></p><p><strong>Aura States</strong> (Fury, Resolve, Mercy, Dread) shape a luminous blade. Committing to it builds <strong>Surge</strong>; the hotter you run, the more you unlock — and the closer the backlash.</p>",
       "chat": ""
     },
     "identifier": "aurablade_core_features",

@@ -1,5 +1,5 @@
 {
-  "name": "Aurablade: Stabilize Burn",
+  "name": "Aurablade: Vent Surge",
   "type": "feat",
   "img": "icons/skills/movement/feet-bladed-boots-fire.webp",
   "system": {
@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p>Open the <strong>Stabilize Burn</strong> dialog and reduce, clear, or safely manage Burn according to class/subclass rules.</p>",
+      "value": "<p><strong>Vent</strong> — let Surge go without spending it: Meditate (action, −2) or catch your breath out of the fight (clear it all). The way out of Overheated when nothing on the menu fits.</p>",
       "chat": ""
     },
     "identifier": "aurablade_stabilize_burn",
@@ -19,7 +19,7 @@
     "activities": {
       "primary": {
         "type": "utility",
-        "name": "Aurablade: Stabilize Burn",
+        "name": "Aurablade: Vent Surge",
         "activation": {
           "type": "bonus",
           "condition": "",

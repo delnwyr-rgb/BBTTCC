@@ -841,19 +841,6 @@
           <h3>Manifestations</h3>
           {{#unless alpha.wizard}}<button type="button" data-action="ftManifestCreate" class="ft-add-btn" data-tooltip="Open the Manifestation Engine.">✦ New Manifestation</button>{{/unless}}
         </div>
-        {{#if signatureSlots}}
-        {{!-- SIGNATURES (ruling 14, 2026-10-17): one slot per tier reached; a Signature grows with its steward. --}}
-        <div class="ft-signatures" data-tooltip="Your Signatures — the effects only you could have made. One per tier you have reached; they rise in tier with you.">
-          <span class="ft-signatures-label">✦ Signatures <small>{{signatureSlots.used}}/{{signatureSlots.max}}</small></span>
-          {{#each signatureSlots.slots as |s|}}
-            {{#if s.item}}
-            <button type="button" class="ft-sig-slot filled" data-action="ftSignatureEdit" data-item-id="{{s.item.id}}" data-tooltip="Signature {{s.roman}} — open it in the Manifestation Engine to grow it."><img src="{{s.item.img}}" alt=""/><span class="ft-sig-name">{{s.item.name}}</span><small class="ft-sig-tier">{{s.item.tierLabel}}</small></button>
-            {{else}}
-            <button type="button" class="ft-sig-slot empty" data-action="ftSignatureMake" data-tooltip="Slot {{s.roman}} is open — author your Signature in the Manifestation Engine.">✦ Make your Signature <small>{{s.roman}}</small></button>
-            {{/if}}
-          {{/each}}
-        </div>
-        {{/if}}
         {{#if manifestEngage.length}}
         <small class="ft-loadout-hint" data-tooltip="Choose your loadout: mark manifestations ⚔ Ready on the Manifestations tab and they are the ones shown here.">{{#if engageFilter.manifest}}⚔ ready only{{else}}showing all — mark ⚔ Ready on the Manifestations tab to choose{{/if}}</small>
         <div class="ft-item-list">
@@ -1236,6 +1223,20 @@
           </details>
         </div>{{/unless}}
       </div>
+
+      {{#if signatureSlots}}
+      {{!-- SIGNATURES (ruling 14, 2026-10-17; moved off Conflict onto Manifestations 2026-10-29): one slot per tier reached; a Signature grows with its steward. --}}
+      <div class="ft-signatures" data-tooltip="Your Signatures — the effects only you could have made. One per tier you have reached; they rise in tier with you.">
+        <span class="ft-signatures-label">✦ Signatures <small>{{signatureSlots.used}}/{{signatureSlots.max}}</small></span>
+        {{#each signatureSlots.slots as |s|}}
+          {{#if s.item}}
+          <button type="button" class="ft-sig-slot filled" data-action="ftSignatureEdit" data-item-id="{{s.item.id}}" data-tooltip="Signature {{s.roman}} — open it in the Manifestation Engine to grow it."><img src="{{s.item.img}}" alt=""/><span class="ft-sig-name">{{s.item.name}}</span><small class="ft-sig-tier">{{s.item.tierLabel}}</small></button>
+          {{else}}
+          <button type="button" class="ft-sig-slot empty" data-action="ftSignatureMake" data-tooltip="Slot {{s.roman}} is open — author your Signature in the Manifestation Engine.">✦ Make your Signature <small>{{s.roman}}</small></button>
+          {{/if}}
+        {{/each}}
+      </div>
+      {{/if}}
 
       {{#if activeManifestations.length}}
       <div class="ft-manifest-active-strip">

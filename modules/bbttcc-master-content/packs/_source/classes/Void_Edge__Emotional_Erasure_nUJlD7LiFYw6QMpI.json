@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<h2>Level 14 — <strong>Emotional Erasure</strong></h2><p>You delete states.</p><h3>Mechanical Effects</h3><p>Once per round, when you hit:</p><ul><li><p>Remove one beneficial emotional, nerve, or inspiration effect</p></li><li><p>This bypasses resistance or mitigation tied to hope or courage</p></li></ul><p>At <strong>Burn 4+</strong>:</p><ul><li><p>The effect cannot be reapplied for 1 round</p></li></ul><p>Some things do not get to come back.</p>",
+      "value": "<h2>Level 14 — <strong>Emotional Erasure</strong></h2><p>You delete states.</p><h3>Mechanical Effects</h3><p>Once per round, when you hit:</p><ul><li><p>Remove one beneficial emotional, nerve, or inspiration effect</p></li><li><p>This bypasses resistance or mitigation tied to hope or courage</p></li></ul><p>While <strong>Overheated</strong>:</p><ul><li><p>The effect cannot be reapplied for 1 round</p></li></ul><p>Some things do not get to come back.</p>",
       "chat": ""
     },
     "identifier": "voidedge_emotional_erasure",

@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Level 10 — <strong>Quiet Mind</strong></h2><p>You deny panic.</p><h3>Mechanical Effects</h3><p>You and allies within 2 squares:</p><ul><li><p>Are immune to being <strong>Shaken</strong></p></li><li><p>reroll the lowest die on checks vs charm, confusion, or fear effects</p></li></ul><p>At <strong>Burn 3+</strong>:</p><ul><li><p>You may spend your reaction to cancel one fear or charm effect affecting an ally</p></li></ul><p>Escalation dies here.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Level 10 — <strong>Quiet Mind</strong></h2><p>You deny panic.</p><h3>Mechanical Effects</h3><p>You and allies within 2 squares:</p><ul><li><p>Are immune to being <strong>Shaken</strong></p></li><li><p>reroll the lowest die on checks vs charm, confusion, or fear effects</p></li></ul><p>While <strong>Stoked</strong> or hotter:</p><ul><li><p>You may spend your reaction to cancel one fear or charm effect affecting an ally</p></li></ul><p>Escalation dies here.</p>",
       "chat": ""
     },
     "identifier": "stillheart_quiet_mind",

@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<h2>Level 18 — <strong>Eye of the Storm</strong></h2><p>You become the still point.</p><h3>Once per Soma Break</h3><p>For 1 minute, in a 4 squares radius:</p><ul><li><p>Burn does not increase for you or allies</p></li><li><p>Fear, charm, and fear effects are suppressed</p></li><li><p>Ongoing emotional effects are paused</p></li></ul><p>After the effect ends:</p><ul><li><p>You gain <strong>1 Burn</strong></p></li></ul><p>Violence happens around you.<br />It does not take you.</p>",
+      "value": "<h2>Level 18 — <strong>Eye of the Storm</strong></h2><p>You become the still point.</p><h3>Once per Soma Break</h3><p>For 1 minute, in a 4 squares radius:</p><ul><li><p>Surge does not rise for you or allies</p></li><li><p>Fear, charm, and fear effects are suppressed</p></li><li><p>Ongoing emotional effects are paused</p></li></ul><p>After the effect ends:</p><ul><li><p>You gain <strong>1 Surge</strong></p></li></ul><p>Violence happens around you.<br />It does not take you.</p>",
       "chat": ""
     },
     "identifier": "stillheart_eye_of_the_storm",

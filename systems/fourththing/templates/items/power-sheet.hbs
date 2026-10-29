@@ -227,8 +227,10 @@
 
       <div class="ft-field-full">
         <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer">
-          <input type="checkbox" name="system.manifestation.isSignature" {{#if system.manifestation.isSignature}}checked{{/if}}/>
-          <span>Signature manifestation <small style="opacity:0.6">— auto-levels its tier in tandem with you when you tier up</small></span>
+          {{!-- GM-only (2026-10-29): players make Signatures through a slot, which checks the count. --}}
+          {{#if isGM}}<input type="checkbox" name="system.manifestation.isSignature" {{#if system.manifestation.isSignature}}checked{{/if}}/>
+          {{else}}<input type="checkbox" {{#if system.manifestation.isSignature}}checked{{/if}} disabled/>{{/if}}
+          <span>Signature manifestation <small style="opacity:0.6">— auto-levels its tier in tandem with you when you tier up{{#unless isGM}} · players fill Signature slots from the Manifestations tab{{/unless}}</small></span>
         </label>
       </div>
 
@@ -271,7 +273,7 @@
           <label>+ Faculty</label>
           <select name="system.damageRoll.attribute" data-tooltip="Faculty bonus added to the rolled total. Empty = no faculty add.">
             <option value="">— none —</option>
-            {{#each INTENTS as |attr key|}}
+            {{#each FACULTIES as |attr key|}}
             <option value="{{key}}" {{#if (eq ../system.damageRoll.attribute key)}}selected{{/if}}>{{attr.label}}</option>
             {{/each}}
           </select>
