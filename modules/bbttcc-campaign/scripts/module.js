@@ -2565,13 +2565,14 @@ function _expandStoryTokens(text, campaign, { raw = false } = {}) {   // raw: pl
   // Conditional spans (Story Review Ledger, road row 5, 2026-10-19): the text knows what the table has done.
   //   {{#played beatId}}…{{else}}…{{/played}}   — the beat has fired for this campaign (story state `played`)
   //   {{#mark beatId}}…{{else}}…{{/mark}}       — same test; alias for authors who think in marks
+  //   {{#played a|b|c}}…{{/played}}           — ANY of them has fired (2026-10-28: "the Seal is decided" = one of three endings)
   // Unknown ids read as "not played"; a broken span is left as written. Nesting one level deep is enough.
   let out = s;
   if (out.indexOf("{{#") >= 0) {
     let played = {};
     try { const cid = campaign?.id || (typeof getActiveCampaignId === "function" ? getActiveCampaignId() : null); played = _storyStateFor(cid)?.played || {}; } catch (_eP) { played = {}; }
-    const re = /\{\{#(played|mark)\s+([A-Za-z0-9_.-]+)\s*\}\}([\s\S]*?)(?:\{\{else\}\}([\s\S]*?))?\{\{\/\1\}\}/g;
-    for (let pass = 0; pass < 2 && re.test(out); pass++) { re.lastIndex = 0; out = out.replace(re, (m, kind, id, yes, no) => (played[String(id)] ? yes : (no || ""))); }
+    const re = /\{\{#(played|mark)\s+([A-Za-z0-9_.|-]+)\s*\}\}([\s\S]*?)(?:\{\{else\}\}([\s\S]*?))?\{\{\/\1\}\}/g;
+    for (let pass = 0; pass < 2 && re.test(out); pass++) { re.lastIndex = 0; out = out.replace(re, (m, kind, id, yes, no) => (String(id).split("|").some(x => x && played[x]) ? yes : (no || ""))); }
     // {{#at Allesh-Gilliam}}…{{else}}…{{/at}} — WHERE the table is (Dave, 2026-10-20: "There is no guarantee that the
     // players will be away from Allesh Gilliam. The text should know where the stewards are"). True when the ACTIVE
     // scene belongs to that town: its name, its folder, or a hex whose travel hub it is, matches the name (case,

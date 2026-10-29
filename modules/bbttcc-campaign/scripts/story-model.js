@@ -110,7 +110,7 @@ export const QUEST_MAP = {
    }
   },
   "valhaulan_seal": {
-   "name": "The Valhaulan Seal",
+   "name": "The Sealed Shaft",
    "act": 2,
    "keystone": true,
    "hex": "Khezek-Tor",

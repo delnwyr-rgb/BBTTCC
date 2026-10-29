@@ -146,7 +146,7 @@ export const STORY_SCRIPTS = {
         beats: ["khezek_tor_mine_that_answered_back_quest_acceptance", "khezek_tor_mine_that_answered_back"], done: { chapter: ["khezek_tor", "the_mine_that_answered_back"] } },
       { id: "shipment", label: "The Shipment of Utter Darkness Sometimes", group: "shafts", chapter: "the_shipment_of_utter_darkness_sometimes", line: "Brennig has a crate on the bench that won't stop humming. Go and notice the stone.",
         beats: ["khezek_tor_darkness_shipment_quest_acceptance", "khezek_tor_darkness_shipment"], done: { chapter: ["khezek_tor", "the_shipment_of_utter_darkness_sometimes"] } },
-      { id: "seal", label: "The Valhaulan Seal", line: "The sealed shaft. Fresh sigils, pointed somewhere. Read it properly before you touch it.",
+      { id: "seal", label: "The Sealed Shaft", line: "The sealed shaft. Fresh sigils, pointed somewhere. Read it properly before you touch it.",
         beats: [], handoff: { quest: "valhaulan_seal" }, done: { quest: "valhaulan_seal" } },   // the Seal is its own quest; this step hands off to it
       { id: "squares", label: "The Mountain Squares Up", line: "STEWARDS, SEE ME, in chalk, underlined once. Go and see Calder.", beats: ["khezek_hex_settles"] }
     ],
@@ -168,7 +168,7 @@ export const STORY_SCRIPTS = {
 
   valhaulan_seal: {
     giver: "Foreman Calder's crews, who won't work the gallery",
-    description: "A sealed shaft bears Valhaulan sigils. Recent. Precise. Directional. The seal doesn't bind inward. It points outward, like a pipe, like a siphon. Three tools are on the table: mend it, aim it, or open it, and the mountain is listening to the discussion.",
+    description: "A sealed shaft bears fresh sigils in a hand nobody at Khezek Tor writes. Recent. Precise. Directional. The seal doesn't bind inward. It points outward, like a pipe, like a siphon. Three tools are on the table: mend it, aim it, or open it, and the mountain is listening to the discussion.",
     steps: [
       { id: "curious", label: "Formally Curious", line: "The markings are fresh and somebody has been maintaining them. Go and look.", beats: ["khezek_tor_valhaulan_seal_quest_acceptance"] },
       { id: "cinematic", label: "The Seal", line: "It doesn't bind inward. Watch where it points.", beats: ["khezek_tor_valhaulan_seal_cinematic"] },
@@ -190,7 +190,7 @@ export const STORY_SCRIPTS = {
       { id: "word", label: "Someone Else's Handwriting", line: "Follow the first thread at Khezek Tor: the old sealed shaft has fresh carvings.", where: "Khezek-Tor",
         logged: "Khezek Tor's old sealed shaft turned up with fresh carvings in someone else's handwriting.",
         beats: ["vs_overture", "khezek_word_ride"], borrow: true, done: { anyOf: ["vs_overture", "khezek_word_ride", "khezek_tor_quest_scene"] } },   // + the ride (2026-10-28): the Log points at the open road, not "picks up later"
-      { id: "signature", label: "The Seal Was a Signature", line: "Decide what to do about the Valhaulan Seal at Khezek Tor, then hear Etta out at the Long Market in Allesh-Gilliam.",
+      { id: "signature", label: "The Seal Was a Signature", line: "Decide what to do about the sealed shaft at Khezek Tor, and hear Etta Bloom out at the Long Market in Allesh-Gilliam.",   // no "Valhaulan" before Etta says it (Dave 2026-10-28)
         logged: "You settled the Seal and heard Etta out at the Long Market. The threads are connected.",
         beats: ["vs_bridge_seal"], done: { mark: "vs_bridge_seal" } },
       { id: "act3", label: "Act Three", line: "Settle the three towns, mend the gate and name the cult. The heading opens after that.", beats: ["a3_title_card"], done: { mark: "a3_title_card" } },   // the Act 3 door (2026-09-19): waits on Act 2's critical marks; turn 6 is the calendar's safety valve
