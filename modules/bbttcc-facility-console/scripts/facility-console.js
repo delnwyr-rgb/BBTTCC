@@ -90,7 +90,7 @@ const FACILITY_PRESETS = {
   {
     "key": "tower-softpower-broadcast",
     "description": "Broadcasts faction presence from the tower. +10 Soft Power marks per turn while operational.",
-    "opDelta": { "economy": 0, "logistics": 0 }
+    "opDelta": { "softpower": 10 }
   }
 ]`,
       resolutionHooksRaw: `{

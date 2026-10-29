@@ -494,6 +494,7 @@ async function _rcBattleGroundFlip(r, attacker, defender, hexDoc, opts = {}) {
     const f = foundry.utils.deepClone(d.flags?.["bbttcc-territory"] || {});
     const prev = String(f.factionId || f.ownerId || "");
     f.factionId = String(attacker.id); if ("ownerId" in f) delete f.ownerId;
+    f.builtBy = String(attacker.id);   // fix 4 (2026-10-28): won ground is the Domain's own work — counts for tier integration/Settled
     f.status = "occupied";
     const cur = Number(f.integration?.progress ?? f.development?.stage ?? 0) || 0;
     f.integration = Object.assign({}, f.integration || {}, { progress: Math.max(1, cur) });

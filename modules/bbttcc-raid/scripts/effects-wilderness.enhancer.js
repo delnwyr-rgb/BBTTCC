@@ -250,6 +250,7 @@
         f.conditions = Array.isArray(f.conditions) ? f.conditions.slice() : [];
         f.population = f.population || "small";
         f.factionId  = String(A.id);
+        f.builtBy    = String(A.id);   // fix 4 (2026-10-28): ground the Domain built itself — tier integration/Settled bars count only this
 
         seedFoundation(f);
         bumpIntegrationProgress(f, 1);

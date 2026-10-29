@@ -115,6 +115,19 @@
     return Number.isFinite(p) ? p : 0;
   }
 
+  // Fix 4 (2026-10-28, the economy sim): the towns the story hands a Domain count as ground it HOLDS (minHexes), but
+  // the integration / Settled bars (minAvgIntegration, minHexesAtOrAbove) count only ground it BUILT — founded
+  // outposts and open ground won in a Battle (`builtBy`). Legacy hexes: a wilderness foundation or a battle
+  // occupation by this faction counts too. Without this, the Act 2 towns (already integration 6) handed out
+  // Tier 2 at turn 3 and Tier 3 at turn 4.
+  function builtByFaction(tf, factionId) {
+    const fid = String(factionId || "");
+    if (tf?.builtBy) return String(tf.builtBy) === fid;
+    if (String(tf?.integration?.outcomeKey || "") === "wilderness_foundation") return true;   // founded (owner checked by the caller)
+    const lo = tf?.lastOutcome;
+    return !!(lo && lo.by === "battle" && String(lo.attackerId || "") === fid);
+  }
+
   function scanTerritoryReach(factionActor) {
     const fid = factionActor.id;
     const fname = factionActor.name;
@@ -122,6 +135,9 @@
     let total = 0;
     let sumProg = 0;
     const progressCounts = { 0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0 };
+    let builtTotal = 0;
+    let builtSum = 0;
+    const builtCounts = { 0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0 };
 
     for (const sc of (game.scenes?.contents ?? [])) {
       for (const dr of (sc.drawings?.contents ?? [])) {
@@ -133,22 +149,27 @@
         const prog = Math.max(0, Math.min(6, Math.round(integrationProgress(tf))));
         sumProg += prog;
         progressCounts[prog] = (progressCounts[prog] || 0) + 1;
+        if (builtByFaction(tf, fid)) { builtTotal++; builtSum += prog; builtCounts[prog] = (builtCounts[prog] || 0) + 1; }
       }
     }
 
     const avg = total ? (sumProg / total) : 0;
 
+    // The integration bars read BUILT ground only (fix 4) — see builtByFaction.
     const countAtOrAbove = (n) => {
       let c = 0;
-      for (let i=n; i<=6; i++) c += (progressCounts[i] || 0);
+      for (let i=n; i<=6; i++) c += (builtCounts[i] || 0);
       return c;
     };
 
     return {
       totalHexes: total,
-      avgIntegration: Number(avg.toFixed(2)),
+      avgIntegration: builtTotal ? Number((builtSum / builtTotal).toFixed(2)) : 0,
       progressCounts,
-      countAtOrAbove
+      countAtOrAbove,
+      builtHexes: builtTotal,
+      builtProgressCounts: builtCounts,
+      allAvgIntegration: Number(avg.toFixed(2))
     };
   }
 
@@ -180,6 +201,7 @@
     return {
       stableTurns: Number(s.stableTurns ?? 0) || 0,
       maxOverextDuringSpan: Number(s.maxOverextDuringSpan ?? 0) || 0,
+      streakByBand: (Array.isArray(s.streakByBand) && s.streakByBand.length === 5) ? s.streakByBand.map(n => Number(n) || 0) : null,
       lastApplyTs: s.lastApplyTs ?? null,
       lastUnpaidTs: s.lastUnpaidTs ?? null
     };
@@ -196,7 +218,7 @@
 
     if (req.minAvgIntegration != null && reach.avgIntegration < req.minAvgIntegration) {
       ok = false;
-      reasons.push(`Need avg integration ≥${req.minAvgIntegration} (have ${reach.avgIntegration}).`);
+      reasons.push(`Need average integration ≥${req.minAvgIntegration} across hexes you built (have ${reach.avgIntegration} over ${reach.builtHexes ?? 0}).`);
     }
 
     if (req.minHexesAtOrAbove) {
@@ -205,7 +227,7 @@
       const haveCnt  = reach.countAtOrAbove(needProg);
       if (haveCnt < needCnt) {
         ok = false;
-        reasons.push(`Need ≥${needCnt} hexes at integration ${needProg}+ (have ${haveCnt}).`);
+        reasons.push(`Need ≥${needCnt} hexes you built at integration ${needProg}+ (have ${haveCnt}).`);
       }
     }
 
@@ -223,13 +245,26 @@
     }
 
     const needTurns = Number(req.minStableTurns ?? 0) || 0;
+    const allowedMax = Number(req.maxOverextDuringSpan ?? 999) || 999;
+    // 2026-10-28: the streak that counts is consecutive paid turns at or under the allowed band (streakByBand) — one
+    // bad month restarts it rather than blocking the tier until an unpaid turn. Older flags fall back to the span.
+    if (Array.isArray(stabilityProg.streakByBand)) {
+      const BAND = ["stable", "stretched", "strained", "overextended", "critical"];
+      const b = Math.max(0, Math.min(4, allowedMax));
+      const haveBand = Number(stabilityProg.streakByBand[b]) || 0;
+      if (needTurns > 0 && haveBand < needTurns) {
+        ok = false;
+        reasons.push(`Need ${needTurns} consecutive paid turns at ${BAND[b]} or better (have ${haveBand}).`);
+      }
+      return { ok, reasons };
+    }
+
     const haveTurns = Number(stabilityProg.stableTurns ?? 0) || 0;
     if (needTurns > 0 && haveTurns < needTurns) {
       ok = false;
       reasons.push(`Need ${needTurns} consecutive paid turns (have ${haveTurns}).`);
     }
 
-    const allowedMax = Number(req.maxOverextDuringSpan ?? 999) || 999;
     const haveMax = Number(stabilityProg.maxOverextDuringSpan ?? 0) || 0;
     if (haveMax > allowedMax) {
       ok = false;

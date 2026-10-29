@@ -1192,6 +1192,37 @@ async function deliverHexAsset(hexUuid, asset) {
  *
  * Resolves with `{ ok, payFromPool }` — ok=false means user cancelled.
  */
+/**
+ * SPREAD PAYMENT (2026-10-28, Dave — the economy sim): a pool can never hold more than its tier cap (50–130 marks), but
+ * Tier II gear lists at a median 105, Tier III at 540, Tier IV at 1350+ — single-pool payment made most of the upper
+ * catalog unbuyable. "Spread" pays the native pool first (everything it holds, up to the price), then covers the rest
+ * from the other pools, fullest first, at the usual ×1.5 cross-pool friction. Pure plan — no writes.
+ * Returns { ok, deltas: {pool: -marks}, lines: [{pool, marks, cross}], total, short } (short = native-equivalent marks
+ * still uncovered when !ok).
+ */
+function _spreadPayPlan(faction, nativePool, nativeMarks) {
+  const friction = game.fourththing?.pricing?.CROSS_POOL_FRICTION ?? 1.5;
+  const bank = (faction?.getFlag?.("bbttcc-factions", "opBank")) || {};
+  const have = Object.fromEntries(OP_POOLS.map(k => [k, Math.max(0, Math.floor(Number(bank[k]) || 0))]));
+  const native = _normPool(nativePool);
+  const lines = [];
+  let need = Math.max(0, Math.round(Number(nativeMarks) || 0));   // native-equivalent marks still owed
+  const fromNative = Math.min(have[native] || 0, need);
+  if (fromNative > 0) { lines.push({ pool: native, marks: fromNative, cross: false }); need -= fromNative; }
+  const others = OP_POOLS.filter(k => k !== native).sort((a, b) => have[b] - have[a]);
+  for (const k of others) {
+    if (need <= 0) break;
+    const canCover = Math.floor(have[k] / friction);              // native-equivalent this pool can cover
+    const cover = Math.min(canCover, need);
+    if (cover <= 0) continue;
+    lines.push({ pool: k, marks: Math.ceil(cover * friction), cross: true });
+    need -= cover;
+  }
+  const deltas = {};
+  for (const l of lines) deltas[l.pool] = (deltas[l.pool] || 0) - l.marks;
+  return { ok: need <= 0, deltas, lines, total: lines.reduce((a, l) => a + l.marks, 0), short: need };
+}
+
 async function openBuyConfirmDialog({ entry, factionId, faction, hexUuid = "" }) {
   const flagPrice = await resolveItemFlagPrice(entry);
   // Freight line for hex-delivered kinds (2026-10-12).
@@ -1204,15 +1235,27 @@ async function openBuyConfirmDialog({ entry, factionId, faction, hexUuid = "" })
     } catch (_e) {}
   }
   if (!flagPrice) {
-    if (!deliveryLine) return { ok: true, payFromPool: null };   // legacy path
+    // Catalog-priced (economy-native) entries — facilities, contracts. Spread (2026-10-28): when Economy alone can't
+    // cover the list price, the confirmation shows the spread plan and confirming pays it that way.
+    const listMarks = Number(entry?.cost?.economy ?? 0) || 0;
+    const econHave = Number(faction?.getFlag?.("bbttcc-factions", "opBank")?.economy) || 0;
+    const needSpread = listMarks > 0 && econHave < listMarks;
+    if (!deliveryLine && !needSpread) return { ok: true, payFromPool: null };   // legacy path
     const DialogV2 = foundry.applications.api?.DialogV2;
     if (!DialogV2) return { ok: true, payFromPool: null };
+    let spreadLine = "";
+    if (needSpread) {
+      const plan = _spreadPayPlan(faction, "economy", listMarks);
+      spreadLine = plan.ok
+        ? `<p${_tipAttr("payFromPool")}>Your Economy pool holds ${econHave}. Paid spread: ${plan.lines.map(l => `${esc(POOL_SHORT_LABEL[l.pool] ?? l.pool)} ${l.marks}${l.cross ? " (×1.5)" : ""}`).join(" + ")} = <b>${plan.total} marks</b>.</p>`
+        : `<p style="color:var(--cb-warn,#e0a34e)">Even spread across every pool you're short about ${Math.ceil(plan.short)} marks.</p>`;
+    }
     const confirmed = await DialogV2.confirm({
       window: { title: `Buy — ${entry.name}` },
-      content: `<p><b>${esc(entry.name)}</b> — ${esc(costLabel(entry?.cost))}</p>${deliveryLine}`,
+      content: `<p><b>${esc(entry.name)}</b> — ${esc(costLabel(entry?.cost))}</p>${spreadLine}${deliveryLine}`,
       defaultYes: true, rejectClose: false
     }).catch(() => false);
-    return { ok: !!confirmed, payFromPool: null };
+    return { ok: !!confirmed, payFromPool: (confirmed && needSpread) ? "spread" : null };
   }
 
   // Horizon-scaled cost — MUST mirror purchase()'s math exactly, or the dialog
@@ -1274,6 +1317,14 @@ async function openBuyConfirmDialog({ entry, factionId, faction, hexUuid = "" })
     const note = isNative ? "native" : `× 1.5 cross-pool`;
     return `<option value="${p}"${isNative ? " selected" : ""} data-cost="${cost}">${POOL_SHORT_LABEL[p] ?? p} (${note}) — ${cost} marks · have ${have}${enough ? "" : " ⚠"}</option>`;
   }).join("");
+  // Spread (2026-10-28): native first, the rest from the fullest pools at ×1.5 — offered whenever the native pool alone
+  // can't cover it, and pre-selected then.
+  const spread = _spreadPayPlan(faction, nativePool, nativeMarks);
+  const nativeShort = balances[nativePool] < nativeMarks;
+  const spreadLabel = spread.ok
+    ? `Spread across pools — ${spread.lines.map(l => `${POOL_SHORT_LABEL[l.pool] ?? l.pool} ${l.marks}${l.cross ? "×" : ""}`).join(" + ")} = ${spread.total} marks`
+    : `Spread across pools — short by about ${Math.ceil(spread.short)} marks ⚠`;
+  const optsAll = (nativeShort ? opts.replace(" selected", "") : opts) + `<option value="spread"${nativeShort ? " selected" : ""}>${esc(spreadLabel)}</option>`;
 
   const DialogV2 = foundry.applications.api?.DialogV2;
   if (!DialogV2) return { ok: true, payFromPool: null };
@@ -1286,10 +1337,10 @@ async function openBuyConfirmDialog({ entry, factionId, faction, hexUuid = "" })
         <p><b>${esc(entry.name)}</b> — native pool: <strong>${POOL_SHORT_LABEL[nativePool] ?? nativePool}</strong> (${nativeMarks} marks)${scaleNote}</p>${deliveryLine}
         <div style="margin:0.6rem 0;"${_tipAttr("payFromPool")} data-tour="market.payFromPool">
           <label style="font-weight:600;display:block;margin-bottom:0.3rem;">Pay from:</label>
-          <select name="payFromPool" style="width:100%;">${opts}</select>
+          <select name="payFromPool" style="width:100%;">${optsAll}</select>
         </div>
         <p style="font-size:0.78rem;opacity:0.6;font-style:italic;">
-          Non-native pools cost × 1.5 (cross-pool friction). Pool balances shown reflect current opBank.
+          Non-native pools cost × 1.5 (cross-pool friction). Spread pays your native pool first, then the fullest others (× marks are cross-pool). Pool balances shown reflect current opBank.
         </p>
       </form>`,
     buttons: [
@@ -1395,7 +1446,22 @@ async function _purchaseCore({ entryId, factionId, characterId, hexUuid, note, p
     if (!(await fromUuid(entry.uuid).catch(() => null))) _abortPurchase(`Could not resolve gear UUID for "${entry.name}".`);
   } else if (kind === "facility" || kind === "hex_asset" || kind === "facility_upgrade") {
     if (!String(hexUuid || "").trim()) _abortPurchase(`Set a Delivery Hex UUID before buying "${entry.name}" (${kindLabel(kind)}).`);
-    if (!(await fromUuid(hexUuid).catch(() => null))) _abortPurchase("Delivery Hex UUID could not be resolved.");
+    const destHex = await fromUuid(hexUuid).catch(() => null);
+    if (!destHex) _abortPurchase("Delivery Hex UUID could not be resolved.");
+    // Facilities (2026-10-28): built on YOUR ground, Settled where the entry asks it (minIntegration), one per hex —
+    // delivery merges into facilities.primary, so a different facility would have silently overwritten the old one.
+    if (kind === "facility") {
+      const tfd = destHex.flags?.[MOD_TERR] ?? {};
+      const owner = String(tfd.factionId || tfd.ownerId || "").replace(/^Actor\./, "");
+      if (owner !== String(factionId || "")) _abortPurchase(`"${entry.name}" can only be built on a hex your Domain holds.`);
+      const need = Number(entry.minIntegration || 0) || 0;
+      const prog = Number(tfd.integration?.progress ?? 0) || 0;
+      if (need > 0 && prog < need) _abortPurchase(`"${entry.name}" needs a Settled hex (integration ${need}+); ${_hexName(destHex)} is at ${prog}.`);
+      const cur = tfd.facilities?.primary;
+      const curType = String(cur?.facilityType || "").toLowerCase();
+      const newType = String(entry.facilityPatch?.facilityType || "").toLowerCase();
+      if (curType && newType && curType !== newType) _abortPurchase(`${_hexName(destHex)} already has a ${curType}; one facility per hex.`);
+    }
   } else if (kind === "actor") {
     const src = String(entry.uuid || "").trim() ? await fromUuid(entry.uuid).catch(() => null) : null;
     if (!src) _abortPurchase(`Actor UUID on "${entry.name}" is missing or could not be resolved.`);
@@ -1435,20 +1501,33 @@ async function _purchaseCore({ entryId, factionId, characterId, hexUuid, note, p
     const nativePool = (!flagPrice.currency || flagPrice.currency === "auto")
       ? (pricing?.defaultCurrencyForFrame?.(flagPrice.docFrame) ?? "economy")
       : flagPrice.currency;
-    // Cross-pool override (Phase 5.5): if payFromPool was explicitly chosen
-    // and differs from native, apply × 1.5 friction (rubric §1.5).
-    const chosenPool = _normPool(payFromPool || nativePool);
-    const isCross = (chosenPool !== _normPool(nativePool));
-    const friction = isCross ? (pricing?.CROSS_POOL_FRICTION ?? 1.5) : 1.0;
-    const adjustedMarks = Math.round(totalMarks * friction);
-    payDeltas = { [chosenPool]: -adjustedMarks };
+    // Spread (2026-10-28): native pool first, the rest from the fullest pools at ×1.5 (see _spreadPayPlan).
+    if (String(payFromPool || "") === "spread") {
+      const plan = _spreadPayPlan(faction, nativePool, totalMarks);
+      if (!plan.ok) _abortPurchase(`"${entry.name}" — your pools can't cover ${totalMarks} marks even spread (short about ${Math.ceil(plan.short)}).`);
+      payDeltas = plan.deltas;
+    } else {
+      // Cross-pool override (Phase 5.5): if payFromPool was explicitly chosen
+      // and differs from native, apply × 1.5 friction (rubric §1.5).
+      const chosenPool = _normPool(payFromPool || nativePool);
+      const isCross = (chosenPool !== _normPool(nativePool));
+      const friction = isCross ? (pricing?.CROSS_POOL_FRICTION ?? 1.5) : 1.0;
+      const adjustedMarks = Math.round(totalMarks * friction);
+      payDeltas = { [chosenPool]: -adjustedMarks };
+    }
   } else {
     // Legacy (catalog-priced) entries are economy-native; an explicit payFromPool still works, with the same ×1.5
     // cross-pool friction as flag-priced gear (2026-10-18 — contracts are catalog-priced).
-    const chosenPool = _normPool(payFromPool || "economy");
-    const isCross = chosenPool !== "economy";
-    const friction = isCross ? (game.fourththing?.pricing?.CROSS_POOL_FRICTION ?? 1.5) : 1.0;
-    payDeltas = { [chosenPool]: -Math.round(totalMarks * friction) };
+    if (String(payFromPool || "") === "spread") {   // 2026-10-28 — see _spreadPayPlan
+      const plan = _spreadPayPlan(faction, "economy", totalMarks);
+      if (!plan.ok) _abortPurchase(`"${entry.name}" — your pools can't cover ${totalMarks} marks even spread (short about ${Math.ceil(plan.short)}).`);
+      payDeltas = plan.deltas;
+    } else {
+      const chosenPool = _normPool(payFromPool || "economy");
+      const isCross = chosenPool !== "economy";
+      const friction = isCross ? (game.fourththing?.pricing?.CROSS_POOL_FRICTION ?? 1.5) : 1.0;
+      payDeltas = { [chosenPool]: -Math.round(totalMarks * friction) };
+    }
   }
 
   // Every pay key must be one of the nine OP pools: the OP engine silently drops an

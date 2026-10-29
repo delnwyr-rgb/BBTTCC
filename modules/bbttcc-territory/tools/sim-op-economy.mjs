@@ -69,6 +69,19 @@ const KNOBS = {
   rewardEvery:      num("reward-every", 2),
   gearEvery:        num("gear-every", 3),            // gear policy: buy every N turns
   gearMarks:        num("gear-marks", null),         // default = tier-1 weapon + fee from rfi-pricing
+  tierDoors:        flag("tier-doors", null),
+  earnTiers:        !!flag("earn-tiers", false),     // 2026-10-28: advance tier when bbttcc-factions TIER_REQ (reach + stability) is met
+  gearByTier:       !!flag("gear-by-tier", false),   // gear policy buys gear priced at the faction's CURRENT tier (rfi-pricing TIER_BASE_MARKS + fee)
+  rigEvery:         num("rig-every", 0),             // 2026-10-28: buy a medium rig at the current tier every N turns (0 = never)
+  rigFit:           num("rig-fit", 2.5),             // fitted rig = chassis × this (weapons / system / output modules)
+  rigDeployed:      num("rig-deployed", 0.5),        // share of turns a rig is out with the Stewards (deployed earns 50%)
+  facilityEvery:    num("facility-every", 0),        // 2026-10-28: build a facility on a Settled hex every N turns (0 = never)
+  facilityCost:     num("facility-cost", 25),        // marks per facility (Facility Console preset upgrades cost ~20–30)
+  facilityOutput:   num("facility-output", 0),
+  facilityCatalog:  !!flag("facility-catalog", false),  // 2026-10-28: the Long Market five (60/75/90/100/120 → +5 soft/+6 faith/+8 econ/+6 dipl/+10 logi), paid spread
+  spread:           !!flag("spread", false),         // 2026-10-28: market spread payment (native first, the rest ×1.5 from the fullest pools)
+  stabilityByBand:  !flag("old-stability", false),
+  builtOnly:        String(flag("built-only", "quality")),   // 2026-10-28 fix 4: "all" = story-given (starting) hexes never count for tier · "quality" = they count as hexes, not for integration/Settled · "off"   // 2026-10-28 engine: per-band streaks (--old-stability = the worst-band-sticks span)       // marks/turn each facility earns (presets author 0; the Tower's text says 10)        // "turn:tier,…" — the act ladder's faction floors (see openDoor)
   tierFloorTurn:    num("tier-floor-turn", 2),       // calendar hard door: WORLD turn at which the Director lifts the coalition to T1 (campaign PHASE_CALENDAR_DOORS [2,2])
   startTurn:        num("start-turn", 1),            // world turn the sim starts on (the Act 2 golden save is turn 1); advance #t makes world turn startTurn + t
   doorOrder:        String(flag("door-order", "pre")),   // pre = the door opens against the UPCOMING turn before regen (engine 2026-09-12); post = at advanceTurn:end (the old order — turn-1 income clamped at T0 caps)
@@ -315,9 +328,21 @@ function foundedHex(type = "wilderness") { return mkHex(type, "outpost", 1, [], 
 function mkFaction(name) {   // Errata-shaped start (Beginning of Act 2 Mark 5): 3 towns, 50 marks everywhere, T0, morale/loyalty 25
   return { name, tier:0, bank: Object.fromEntries(OPK.map(k => [k, 50])), morale:25, loyalty:25, routes:0, supplyLines:0, distSteps:0,
     hexes: [ mkHex("port","town",6,["Loyal Population"]), mkHex("mine","town",6,["Loyal Population"]), mkHex("farm","town",6,["Loyal Population"]) ],
-    pendingPct:0, unpaidTurns:0, spentChannels:new Set(), log:[] };
+    pendingPct:0, unpaidTurns:0, spentChannels:new Set(), log:[], _startHexes: 3 };   // the 3 towns = story-given (fix 4)
 }
 const caps = F => M.CAP_BAND[Math.max(0, Math.min(4, F.tier))];
+// market.js _spreadPayPlan mirror (2026-10-28): native pool first, the rest from the fullest pools at ×1.5.
+function spreadPay(F, native, marks, commit = true) {
+  let need = marks; const take = {};
+  const n0 = Math.min(F.bank[native] || 0, need); if (n0 > 0) { take[native] = n0; need -= n0; }
+  for (const k of OPK.filter(k => k !== native).sort((a, b) => (F.bank[b] || 0) - (F.bank[a] || 0))) {
+    if (need <= 0) break; const cover = Math.min(Math.floor((F.bank[k] || 0) / 1.5), need); if (cover <= 0) continue;
+    take[k] = Math.ceil(cover * 1.5); need -= cover;
+  }
+  if (need > 0) return false;
+  if (commit) for (const [k, v] of Object.entries(take)) { F.bank[k] -= v; F.spentChannels.add(k); }
+  return true;
+}
 function canPay(F, cost) { return Object.entries(cost).every(([k, v]) => (F.bank[k] || 0) >= v); }
 function pay(F, cost, label) { for (const [k, v] of Object.entries(cost)) { F.bank[k] -= v; if (v > 0) F.spentChannels.add(k); } F.log.push(label); }
 function affordableRecipe(F, key) {   // prefer the recipe that leaves the most headroom in its scarcest channel
@@ -378,7 +403,10 @@ function runTurn(F, policy, t, rand) {
   // Calendar hard door (campaign _storyPhaseAdvance → PHASE_FLOORS → directorReconcileLevels → opCaps to the tier band).
   // "pre": the turn driver opens the door against the turn this Advance produces, BEFORE income lands (2026-09-12).
   const worldTurnNext = KNOBS.startTurn + t;
-  const openDoor = (when) => { if (worldTurnNext >= KNOBS.tierFloorTurn && F.tier < 1) { F.tier = 1; row.notes.push(`door → T1 (${when})`); } };
+  // --tier-doors "2:1,6:2,10:3,14:4" (2026-10-28): the WHOLE act ladder — campaign PHASE_CALENDAR_DOORS [[2,2],[6,3],[10,4],[14,5]]
+  // × PHASE_FLOORS faction {2:1,3:2,4:3,5:4}. Default = the old single T1 door at --tier-floor-turn.
+  const DOORS = KNOBS.tierDoors ? String(KNOBS.tierDoors).split(",").map(x => x.split(":").map(Number)).filter(([a, b]) => a > 0 && b >= 0) : [[KNOBS.tierFloorTurn, 1]];
+  const openDoor = (when) => { for (const [turnGte, tier] of DOORS) if (worldTurnNext >= turnGte && F.tier < tier) { F.tier = tier; row.notes.push(`door → T${tier} (${when})`); } };
   if (KNOBS.doorOrder === "pre") openDoor("pre-regen");
   if (KNOBS.spendOrder === "before") applyPlans();
   // regen (turn-driver advanceOPRegen): matrix income × loyalty pct (2026-09-10) × overextension logistics mult, clamp to caps
@@ -426,10 +454,59 @@ function runTurn(F, policy, t, rand) {
   }
   // gear policy: a Steward buys from the faction bank (economy first, then any pool at cross-pool friction)
   if (policy.gear && t % KNOBS.gearEvery === 0) {
-    if (F.bank.economy >= GEAR_MARKS) { F.bank.economy -= GEAR_MARKS; F.spentChannels.add("economy"); row.notes.push(`gear −${GEAR_MARKS} economy`); F.gearBought = (F.gearBought || 0) + 1; }
-    else row.notes.push(`gear UNAFFORDABLE (${GEAR_MARKS})`);
+    const GEAR_NOW = KNOBS.gearByTier ? Math.round(E.TIER_BASE_MARKS[Math.max(1, F.tier)] * (E.CATEGORY_MULT.weapon ?? 1) + (E.TIER_FEE_MARKS[["I", "I", "II", "III", "IV"][F.tier]] ?? 10)) : GEAR_MARKS;
+    if (KNOBS.spread ? spreadPay(F, "economy", GEAR_NOW) : (F.bank.economy >= GEAR_NOW && (F.bank.economy -= GEAR_NOW, true))) { F.gearSpend = (F.gearSpend || 0) + GEAR_NOW; F.spentChannels.add("economy"); row.notes.push(`gear −${GEAR_NOW} economy (T${F.tier})`); F.gearBought = (F.gearBought || 0) + 1; }
+    else row.notes.push(`gear UNAFFORDABLE (${GEAR_NOW} at T${F.tier})`);
   }
-  Object.assign(row, { acted: plans.length > 0 && !row.notes.some(n => /HELD/.test(n)), held: row.notes.filter(n => /HELD/.test(n)).length, plans: plans.length, hexes: F.hexes.length, routes: F.routes, band: lg.band, ratio: lg.ratio, morale: F.morale, loyalty: F.loyalty, unpaid, bank: { ...F.bank }, income: inc });
+  // rigs (2026-10-28): rig-builder RIG_COST_CHASSIS (economy marks) · output economy.constants RIG_BASE_OUTPUT_OP × MARKS_PER_OP
+  // × state mult (parked 1 / deployed 0.5), paid into logistics each turn.
+  if (KNOBS.rigEvery > 0) {
+    const RIG_CHASSIS_MEDIUM = { 1: 18, 2: 26, 3: 39, 4: 56 };
+    const outMarks = 2 * 10 * ((1 - KNOBS.rigDeployed) * 1 + KNOBS.rigDeployed * 0.5);
+    const owned = (F.rigs || 0);
+    if (owned) { F.bank.logistics = Math.min(caps(F), (F.bank.logistics || 0) + outMarks * owned); }
+    if (t % KNOBS.rigEvery === 0) {
+      const cost = Math.round((RIG_CHASSIS_MEDIUM[Math.max(1, F.tier)] || 18) * KNOBS.rigFit);
+      if (F.bank.economy >= cost) { F.bank.economy -= cost; F.spentChannels.add("economy"); F.rigs = owned + 1; F.rigSpend = (F.rigSpend || 0) + cost; row.notes.push(`rig −${cost} economy (T${F.tier}, now ${F.rigs})`); }
+      else row.notes.push(`rig UNAFFORDABLE (${cost})`);
+    }
+  }
+  // facilities (2026-10-28): one on a Settled hex every N turns; cost/output are knobs (the presets earn 0 today).
+  if (KNOBS.facilityEvery > 0 && KNOBS.facilityCatalog) {
+    const CAT = [{ c: 60, k: "softpower", o: 5 }, { c: 75, k: "faith", o: 6 }, { c: 90, k: "economy", o: 8 }, { c: 100, k: "diplomacy", o: 6 }, { c: 120, k: "logistics", o: 10 }];
+    F.facList ||= [];
+    for (const f of F.facList) F.bank[f.k] = Math.min(caps(F), (F.bank[f.k] || 0) + f.o);
+    const room = F.hexes.filter(h => h.progress >= 5).length > F.facList.length;
+    if (t % KNOBS.facilityEvery === 0 && room) {
+      const pick = CAT[F.facList.length % CAT.length];
+      if (KNOBS.spread ? spreadPay(F, "economy", pick.c) : (F.bank.economy >= pick.c && (F.bank.economy -= pick.c, true))) { F.facList.push(pick); F.facilities = F.facList.length; F.facilitySpend = (F.facilitySpend || 0) + pick.c; row.notes.push(`facility −${pick.c} (+${pick.o} ${pick.k}/mo, now ${F.facilities})`); }
+      else row.notes.push(`facility UNAFFORDABLE (${pick.c})`);
+    }
+  } else if (KNOBS.facilityEvery > 0) {
+    const fac = F.facilities || 0;
+    if (fac && KNOBS.facilityOutput) F.bank.economy = Math.min(caps(F), F.bank.economy + KNOBS.facilityOutput * fac);
+    const room = F.hexes.filter(h => h.progress >= 5).length > fac;
+    if (t % KNOBS.facilityEvery === 0 && room) {
+      const c = Math.round(KNOBS.facilityCost * 0.6), l = KNOBS.facilityCost - c;
+      if (F.bank.economy >= c && F.bank.logistics >= l) { F.bank.economy -= c; F.bank.logistics -= l; F.facilities = fac + 1; F.facilitySpend = (F.facilitySpend || 0) + KNOBS.facilityCost; row.notes.push(`facility −${KNOBS.facilityCost} (now ${F.facilities})`); }
+      else row.notes.push("facility UNAFFORDABLE");
+    }
+  }
+  // earned tier (2026-10-28): bbttcc-factions faction-tier-advancement-api TIER_REQ + faction-tier-stability semantics —
+  // the streak counts consecutive PAID turns; the worst band in the streak sticks until an unpaid turn resets it.
+  {
+    const BI = { stable: 0, stretched: 1, strained: 2, overextended: 3, critical: 4 };
+    if (unpaid) { F.stable = 0; F.stableMax = 0; F.byBand = [0, 0, 0, 0, 0]; } else { F.stable = (F.stable || 0) + 1; F.stableMax = Math.max(F.stableMax || 0, BI[lg.band] ?? 0); F.byBand = (F.byBand || [0, 0, 0, 0, 0]).map((n, b) => ((BI[lg.band] ?? 0) <= b ? n + 1 : 0)); }
+    if (KNOBS.earnTiers && F.tier < 4) {
+      const REQ = { 0: { h: 2, at: [3, 1], s: 2, m: 1 }, 1: { h: 4, avg: 3, s: 3, m: 1 }, 2: { h: 7, at: [5, 2], s: 4, m: 1 }, 3: { h: 10, at: [6, 1], s: 5, m: 2 } }[F.tier];
+      const built = F.hexes.slice(F._startHexes || 0).map(h => h.progress);
+      const P = KNOBS.builtOnly === "all" ? built : F.hexes.map(h => h.progress);
+      const Q = KNOBS.builtOnly === "off" ? P : built;   // the integration / Settled tests
+      const ok = P.length >= REQ.h && (!REQ.avg || (Q.length && Q.reduce((a, b) => a + b, 0) / Q.length >= REQ.avg)) && (!REQ.at || Q.filter(x => x >= REQ.at[0]).length >= REQ.at[1]) && (KNOBS.stabilityByBand ? F.byBand[REQ.m] >= REQ.s : (F.stable >= REQ.s && F.stableMax <= REQ.m));
+      if (ok) { F.tier += 1; F.earned = [...(F.earned || []), `T${F.tier}@${t}`]; row.notes.push(`EARNED → T${F.tier}`); }
+    }
+  }
+  Object.assign(row, { acted: plans.length > 0 && !row.notes.some(n => /HELD/.test(n)), held: row.notes.filter(n => /HELD/.test(n)).length, plans: plans.length, hexes: F.hexes.length, routes: F.routes, band: lg.band, ratio: lg.ratio, morale: F.morale, loyalty: F.loyalty, unpaid, bank: { ...F.bank }, income: inc, hexProgress: F.hexes.map(h => h.progress), tier: F.tier, rigs: F.rigs || 0, facilities: F.facilities || 0, spend: { gear: F.gearSpend || 0, rigs: F.rigSpend || 0, facilities: F.facilitySpend || 0 }, earned: (F.earned || []).slice() });   // 2026-10-28: per-hex integration (turns-to-Settled)
   return row;
 }
 

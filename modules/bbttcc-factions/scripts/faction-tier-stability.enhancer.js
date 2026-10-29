@@ -54,21 +54,32 @@
     let stableTurns = prevStable;
     let maxOverextDuringSpan = prevMaxOver;
     let lastUnpaidTs = cur.lastUnpaidTs ?? null;
+    // streakByBand[b] (2026-10-28, the economy sim): consecutive PAID turns with the overextension band at or under b.
+    // The old span kept its worst band until an UNPAID turn reset it, so one strained month blocked a tier forever.
+    // A turn over band b now restarts only streakByBand[b] (and the bands below it); tier advancement reads the
+    // streak for the band its requirement allows. stableTurns / maxOverextDuringSpan stay for reports.
+    const prevByBand = Array.isArray(cur.streakByBand) && cur.streakByBand.length === 5
+      ? cur.streakByBand.map(n => clampInt(n, 0, 9999))
+      : [0, 0, 0, 0, 0].map((_, b) => (prevMaxOver <= b ? prevStable : 0));   // first run: seed from the old span
+    let streakByBand = prevByBand;
 
     if (pressure.unpaidUpkeep) {
       // Failure resets the streak.
       stableTurns = 0;
       maxOverextDuringSpan = 0;
+      streakByBand = [0, 0, 0, 0, 0];
       lastUnpaidTs = now;
     } else {
       // Paid this turn: extend streak and track worst band during the streak.
       stableTurns = prevStable + 1;
       maxOverextDuringSpan = Math.max(prevMaxOver, pressure.overextensionBand);
+      streakByBand = prevByBand.map((n, b) => (pressure.overextensionBand <= b ? n + 1 : 0));
     }
 
     const patch = {
       stableTurns,
       maxOverextDuringSpan,
+      streakByBand,
       lastApplyTs: now,
       lastUnpaidTs
     };
