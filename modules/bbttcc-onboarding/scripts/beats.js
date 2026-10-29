@@ -185,6 +185,12 @@ const incarnation = {
 // saw what the click did). The gate is now the player's own "seen enough"
 // button; ability-use hooks just earn an Operator nod; exit SOMA BREAKS the
 // Steward so everything spent exploring comes back — the sim picks up the tab.
+// 10-29 (owner ruling): that free Soma Break is paid ONCE PER STEWARD — a replay
+// is still free practice, but it never hands out another real rest.
+const SOMA_BREAK_FLAG = "somaBreakGiven";
+function _somaBreakOwed(ctx) {
+  try { return !!ctx.steward && !ctx.steward.getFlag?.(MODULE_ID, SOMA_BREAK_FLAG); } catch (_) { return false; }
+}
 const meatsuit = {
   id: "meatsuit",
   title: "Test the Meatsuit",
@@ -219,7 +225,9 @@ const meatsuit = {
     }
     await _pause(500);
     try { ctx.steward?.sheet?.render(true, { focus: true }); } catch (_) {}
-    await ctx.speak("Those are your ABILITIES — the entries with a play button, Principles tab and the rest. Click through them. See what each one does. Nothing out here counts: spend freely, swing at the straw fellow if the mood takes you. When you've seen enough, hit my button and we roll on.");
+    await ctx.speak(_somaBreakOwed(ctx)
+      ? "Those are your ABILITIES — the entries with a play button, Principles tab and the rest. Click through them. See what each one does. Nothing out here counts: spend freely, swing at the straw fellow if the mood takes you. When you've seen enough, hit my button and we roll on."
+      : "Those are your ABILITIES — the entries with a play button, Principles tab and the rest. Click through them. See what each one does. You've had the sim's free Soma Break already, so what you spend this time stays spent — read freely, fire carefully. When you've seen enough, hit my button and we roll on.");
     ctx.riff({ beat: "meatsuit", line: "Player is browsing their real abilities for the first time, no pressure, nothing counts.", intent: "Invite them to poke everything. Dry, glitchy, one line." });
   },
 
@@ -244,7 +252,9 @@ const meatsuit = {
     ctx.prompt({
       title: GATE_TITLE,
       content:
-        `<p>Browse your <b>abilities</b> — anything on the sheet with a play button. Click them, read them, fire them; <i>nothing here counts</i> and everything you spend comes back when we move on.</p>` +
+        (_somaBreakOwed(ctx)
+          ? `<p>Browse your <b>abilities</b> — anything on the sheet with a play button. Click them, read them, fire them; <i>nothing here counts</i> and everything you spend comes back when we move on.</p>`
+          : `<p>Browse your <b>abilities</b> — anything on the sheet with a play button. Click them and read them. <i>Your free Soma Break is spent</i>, so anything you fire this time stays spent.</p>`) +
         `<p><i>Take your time. The straw fellow isn't going anywhere. Well — it is, but not until you press this.</i></p>`,
       label: "Seen enough — move on"
     }).then(() => done());
@@ -262,9 +272,25 @@ const meatsuit = {
     // confirmed:true skips the repeat-press GM confirm: the Operator IS the
     // fiction justifying it (sim reset), and the beat must never wedge on a
     // dialog the player can't see coming.
-    try { await globalThis.game?.fourththing?.actions?.somaBreak?.(ctx.steward, { confirmed: true }); }
-    catch (e) { console.warn(TAG, "meatsuit exit soma break failed", e); }
-    await ctx.speak("Reflexes intact, soul bolted in. SOMA BREAK — everything you just spent is restored; the sim picks up the tab. The straw adversary sends its regards— *bzzt* —dismissing it now.");
+    // 10-29: once per Steward (owner ruling) — stamp the Steward first, so a failed
+    // or interrupted rest can't be retried into a second free one. The player owns
+    // their Steward, so this seat writes the flag itself; a seat that can't write
+    // gets no free rest (never an unstamped one).
+    let rested = false;
+    if (_somaBreakOwed(ctx)) {
+      let stamped = false;
+      try {
+        if (ctx.steward?.isOwner) { await ctx.steward.setFlag(MODULE_ID, SOMA_BREAK_FLAG, Date.now()); stamped = true; }
+        else console.warn(TAG, "meatsuit exit: this seat can't stamp the Steward — skipping the free Soma Break");
+      } catch (e) { console.warn(TAG, "meatsuit exit soma-break stamp failed", e); }
+      if (stamped) {
+        try { await globalThis.game?.fourththing?.actions?.somaBreak?.(ctx.steward, { confirmed: true }); rested = true; }
+        catch (e) { console.warn(TAG, "meatsuit exit soma break failed", e); }
+      }
+    }
+    await ctx.speak(rested
+      ? "Reflexes intact, soul bolted in. SOMA BREAK — everything you just spent is restored; the sim picks up the tab. The straw adversary sends its regards— *bzzt* —dismissing it now."
+      : "Reflexes intact, soul bolted in. The sim already picked up your tab once, One — what you spent this time is yours to rest off. The straw adversary sends its regards— *bzzt* —dismissing it now.");
     ctx._spawned = await _cleanupKeepPlayer(ctx);
   }
 };
@@ -509,6 +535,17 @@ const TUTORIAL_ORDER_OUTCOMES = {
   ration_distribution:       (h) => `Bread before blood. Unrest in ${h} eases and Loyalty rises — the cheapest peace there is.`,
   establish_supply_line:     (h) => `A line from ${h} to your stores. When the road closes, the hold stays fed and supplied.`
 };
+/** 10-29: this run's Tutelary Hold, found WITHOUT resetting it (ensureSandboxHex resets to unclaimed). Keyed the same
+ *  way the GM op stamps it: the run's user id, "solo" when there is none. */
+function _findSandboxHex(ctx) {
+  try {
+    const sc = ctx.scene?.("sandbox-hex");
+    if (!sc) return null;
+    const want = ctx.user?.id || "solo";
+    const dr = (sc.drawings?.contents ?? Array.from(sc.drawings ?? [])).find(d => d.getFlag?.(MODULE_ID, "sandboxHex") === want);
+    return dr ? { hexUuid: dr.uuid, drawingId: dr.id, sceneId: sc.id } : null;
+  } catch (_) { return null; }
+}
 function _hexCenter(ctx) {
   try {
     const d = canvas?.scene?.drawings?.get?.(ctx._sandboxHex?.drawingId);
@@ -528,7 +565,17 @@ async function _fx(key, ctx, opts) { try { return await globalThis.game?.bbttcc?
  *  the claim beat covers them. Closes every app window on this seat except the Operator's own prompts and the
  *  onboarding consoles, then gives the close animation a beat. */
 async function _clearTheStage() {
+  // 10-29: foundry.applications.instances also holds Foundry's own HUD (sidebar, chat log, hotbar, players, scene
+  // nav/controls, notifications) — closing those removed them until a refresh. Only framed popout WINDOWS go.
+  const core = new Set();
+  // ui.activeWindow is just the last-focused window (often the Steward sheet) and ui.windows is the V1 popout
+  // registry — neither is core HUD, so they stay sweepable.
+  try { for (const [k, v] of Object.entries(globalThis.ui ?? {})) if (k !== "activeWindow" && k !== "windows" && v && typeof v === "object") core.add(v); } catch (_) {}
+  try { for (const v of Object.values(globalThis.ui?.sidebar?.tabs ?? {})) if (v && typeof v === "object") core.add(v); } catch (_) {}
   const keep = (a) => {
+    if (!a || core.has(a)) return true;
+    if (a.hasFrame === false || a.options?.window?.frame === false) return true;   // AppV2 unframed (HUD parts)
+    if (a.options?.popOut === false) return true;                                  // AppV1 non-popout
     const id = String(a?.id ?? a?.options?.id ?? "");
     const cls = [].concat(a?.options?.classes ?? []).join(" ");
     const t = (typeof a?.title === "string" ? a.title : "") || String(a?.options?.window?.title ?? a?.options?.title ?? "");
@@ -566,7 +613,7 @@ async function _dropPracticeOrders(faction){
 
 const stewardshipTurn = {
   id: "stewardship_turn",
-  title: "Stewardship — OP & Turn",
+  title: "Stewardship — treasury & Turn",
   scope: "shared",
 
   // Rewritten 2026-10-19 (Dave: "the speed of the operator goes super fast again… slow that down and truncate;
@@ -575,6 +622,9 @@ const stewardshipTurn = {
   // exit), then ONE quiet practice Turn — the driver's ledgers and previews are muted on this seat.
   enter: async (ctx) => {
     ctx._tutorialPlan = null;
+    // 10-29: a resume skips stewardship_claim (done), so this fresh ctx has no hold handle — the planner shelf went
+    // bare and exit never unclaimed Tutelary Hold (left owned by the REAL Domain). Re-find this run's hold, no reset.
+    if (!ctx._sandboxHex) ctx._sandboxHex = _findSandboxHex(ctx);
     await _dropPracticeOrders(ctx.faction);   // #15: a reload mid-beat orphaned the last one — sweep before filing again
     let total = null;
     try {
@@ -724,6 +774,7 @@ const stewardshipTurn = {
     // Domain's log before the hold goes back. consumePlanned also skips them (#15, 2026-10-28).
     await _dropPracticeOrders(ctx.faction);
     ctx._tutorialPlan = null;
+    if (!ctx._sandboxHex) ctx._sandboxHex = _findSandboxHex(ctx);   // 10-29: resumed run — still give the hold back
     try { if (ctx._sandboxHex?.hexUuid) await _stage()?.unclaimHex?.(ctx._sandboxHex.hexUuid); } catch (_) {}
     try { await _stage()?.cleanup?.(ctx._spawned || []); } catch (_) {}
     ctx._spawned = [];
@@ -757,7 +808,7 @@ const outfitting = {
     if (ctx.faction) {
       const g = await _stage()?.grantOp?.(ctx.faction.id, {
         economy: 130, violence: 130, intrigue: 130, diplomacy: 130, nonlethal: 60, softpower: 60
-      });
+      }, { stewardId: ctx.steward?.id || "" });   // 10-29: stamp THIS run's Steward (once-per-Steward stipend)
       // Tops up toward the tier cap, so a replay on full banks credits nothing —
       // don't announce a stipend that didn't land. Name the faction and the amount:
       // several playtest runs each found their OWN faction, and "nothing changed"
@@ -766,6 +817,11 @@ const outfitting = {
       if (g?.ok && Object.keys(granted).length) {
         const econMarks = Math.round(Number(granted.economy) || 0);
         await ctx.speak(`A training stipend just topped up ${ctx.faction.name} — up to what your tier can hold, not a mark more (Economy +${econMarks} marks). Check that banner's sheet, not an older one.`);
+        await _pause(600);
+      } else if (g?.alreadyPaid) {
+        // 10-29 (owner ruling): the stipend is paid ONCE PER STEWARD (stamped by stage.js grantOp) — replays practise
+        // on whatever the Domain holds now.
+        await ctx.speak(`${ctx.faction.name} already drew its training stipend, One — once per Steward. You shop on what the Domain holds now.`);
         await _pause(600);
       } else if (g?.alreadyFull) {
         await ctx.speak(`${ctx.faction.name}'s banks are already full to the tier cap — nothing to top up. Spend freely.`);
@@ -791,7 +847,7 @@ const outfitting = {
     await _pause(600);
     await ctx.speak(`This is the LONG MARKET. I've already set the buyer to ${ctx.faction?.name || "your Domain"} and the receiver to ${ctx.steward?.name || "you"} — if either box reads "(Select)", pick them yourself or the till refuses you.`);
     await _pause(700);
-    await ctx.speak("Buy what you can afford and can actually USE — your sheet warns you when a weapon or armor sits beyond your training. Watch the price line: it's in MARKS, and ten marks is one OP. And gear does nothing in a duffel bag: EQUIP it from your sheet once it arrives.");
+    await ctx.speak("Buy what you can afford and can actually USE — your sheet warns you when a weapon or armor sits beyond your training. Watch the price line: it's in MARKS, the same marks in your Domain's banks. And gear does nothing in a duffel bag: EQUIP it from your sheet once it arrives.");
     ctx.riff({ beat: "outfitting", line: "Player is gearing up at the Market before the finale.", intent: "Quartermaster energy — dry, practical. One line." });
   },
 
@@ -1072,6 +1128,8 @@ const surgeBeat = {
     const max = Number(globalThis.game?.fourththing?.surge?.cap?.(ctx.steward)) || Number(sys?.resources?.surge?.max) || 10;
 
     await ctx.handoff("Last lesson: Surge — the currency nobody explains until it's too late. Conflict tab, ✦ Surge panel. Learn where the shop is.");
+    // 10-29: the reach/manifestations beat is cut under the Alpha arc — don't promise it as "next".
+    const reachNext = !_alphaWorld();
 
     await ctx.deck({
       title: "◇ OPERATOR — Surge",
@@ -1080,7 +1138,7 @@ const surgeBeat = {
         {
           title: "What Surge is",
           speak: "You've been earning this since your first roll. Nobody told you. That's on me.",
-          body: `<p><b>Surge</b> is a separate bank sitting beside your health and your Clarity. It never modifies a roll by itself — it <b>buys</b> things.</p>
+          body: `<p><b>Surge</b> is a separate bank sitting beside your health and your Clarity. It never modifies a roll by itself — it <b>buys</b> things, and how full it sits is how hot your class powers run.</p>
             <p>Right now you're holding <b>${cur} / ${max}</b>.</p>
             <span class="bbttcc-deck-key">It is the only resource in the game you earn by <em>succeeding</em>, rather than by spending something else.</span>`
         },
@@ -1088,13 +1146,15 @@ const surgeBeat = {
           title: "How you bank it",
           body: `<p>Dice in this system <b>explode</b>: roll a ten, roll again and add. Every explosion banks you <b>+1 Surge</b>.</p>
             <p>That means Surge accrues from playing well and rolling hot — attacks, checks, saves, all of it. You've almost certainly banked some already without noticing.</p>
-            <p>The bank has a ceiling, so it's use-it-or-waste-it once you're full.</p>`
+            <p>How full the bank sits is your <b>heat</b>: <b>Cool</b>, <b>Stoked</b>, <b>Overheated</b>. A full bank is Overheated, and every Surge you bank past full costs <b>1 Stress</b> — so spend it, or <b>Vent</b> from the Surge panel.</p>`
         },
         {
           title: "How you spend it",
           body: `<p>Your sheet's <b>Conflict</b> tab has a <b>✦ Surge</b> panel with a <b>Spend</b> button.</p>
             <p>It offers universal options plus whatever your class brings — Forge-Weld, Rallying Words, Brace, and the rest. Costs run from cheap tricks to the ones that end an argument.</p>
-            <span class="bbttcc-deck-key">And one more use, which the next beat is entirely about: Surge is how you cast <b>above your tier</b>.</span>`
+            ${reachNext
+              ? `<span class="bbttcc-deck-key">And one more use, which the next beat is entirely about: Surge is how you cast <b>above your tier</b>.</span>`
+              : `<span class="bbttcc-deck-key">Spend before the bank tops out — a full bank bites.</span>`}`
         }
       ]
     });
@@ -1133,14 +1193,16 @@ const surgeBeat = {
       title: FALLBACK_TITLE,
       content:
         `<p>Sheet → <b>Conflict</b> tab → the <b>✦ Surge</b> panel. Press <b>Spend</b> and read the menu.</p>` +
-        `<p>Banked by exploding dice (+1 per explosion). Spent on class powers — and on reaching above your tier, which is next.</p>`,
+        (_alphaWorld()
+          ? `<p>Banked by exploding dice (+1 per explosion). Spent on class powers. Full bank = Overheated: each further bank costs 1 Stress — spend or Vent.</p>`
+          : `<p>Banked by exploding dice (+1 per explosion). Spent on class powers — and on reaching above your tier, which is next. Full bank = Overheated: each further bank costs 1 Stress — spend or Vent.</p>`),
       label: "I know where it lives"
     }).then(() => done());
     return () => { Hooks.off("updateActor", onUpd); closeFallback(); };
   },
 
   exit: async (ctx) => {
-    await ctx.speak("Surge banked is a decision you haven't made yet. Try not to die holding ten of them.");
+    await ctx.speak("Surge banked is a decision you haven't made yet. Just don't sit on a full bank — it bites.");
   }
 };
 
@@ -2231,7 +2293,15 @@ const provingTrials = {
         await _pause(500);
         await ctx.speak?.("And it's in your PACK now, One — a real bottle. One swallow, 2d6 Integrity, whenever the moment comes. I told you you'd want it later.");
       }
-      try { await stage.cleanup?.([marker].filter(Boolean)); } catch (_) {}
+      // 10-29: solo — the marker entry holds ids, not docs, so rebuild the
+      // { token, actor } shape cleanup reads (a class already reaped it above).
+      if (!co && marker) {
+        try {
+          const tok = marker.tokenId ? sim.scene?.tokens?.get?.(marker.tokenId) : null;
+          const act = marker.actorId ? globalThis.game?.actors?.get?.(marker.actorId) : null;
+          if (tok || act) await stage.cleanup?.([{ token: tok, actor: act }]);
+        } catch (_) {}
+      }
 
       if (n >= PG_TRIALS.length) {
         await _pause(700);
@@ -2348,13 +2418,13 @@ const provingTrials = {
       }
     };
 
-    /** Surface again once the shard is in hand. */
-    const surface = async () => {
-      const r = sim.reef;
-      if (!r) return;
-      sim.reef = null;
+    /** Put the Steward (and this client's view) back on the surface — no line,
+     *  no claim. 10-29: shared by surface() and every way out of the beat that
+     *  doesn't swim back (skip hatch, director skip, exit) — the next beat's
+     *  ensureToken moves x/y only, so a Steward left at depth on the reef level
+     *  walked into the showdown underwater. */
+    const restoreSurface = async (r) => {
       try { await stage.cleanup?.([r.marker].filter(Boolean)); } catch (_) {}
-      await ctx.speak?.("Got it. Up — kick for the light.");
       if (r.surfaceAt === null) {
         await _enterScene(sim.scene, "Proving Ground", ctx.lane);   // separate-scene path
       } else {
@@ -2365,8 +2435,29 @@ const provingTrials = {
           }
         } catch (e) { console.warn(TAG, "surface: level view switch failed", e); }
       }
-      await _pause(800);
       sim.diving = false;
+    };
+    /** Quiet surface for the exits; idempotent, and a call while one is in
+     *  flight gets the same promise (exit() awaits the disposer's). */
+    sim.surfaceQuietly = () => {
+      if (sim._surfacing) return sim._surfacing;
+      const r = sim.reef;
+      if (!r) return Promise.resolve();
+      sim.reef = null;
+      sim._surfacing = restoreSurface(r)
+        .catch(e => console.warn(TAG, "quiet surface failed", e))
+        .finally(() => { sim._surfacing = null; });
+      return sim._surfacing;
+    };
+
+    /** Surface again once the shard is in hand. */
+    const surface = async () => {
+      const r = sim.reef;
+      if (!r) return;
+      sim.reef = null;
+      await ctx.speak?.("Got it. Up — kick for the light.");
+      await restoreSurface(r);
+      await _pause(800);
       await claim(r.trial);
     };
 
@@ -2461,6 +2552,7 @@ const provingTrials = {
               const r = await _cohortApi()?.classRelic?.(co.id, t.key);
               if (!r || r.ok) await _pgTakeRelic(ctx.steward, t.key, { flag: !r });
             }
+            await sim.surfaceQuietly?.();   // 10-29: skipped mid-dive → back up first
             finish();
             return;
           }
@@ -2471,10 +2563,14 @@ const provingTrials = {
     };
     offerSkip();
 
-    return () => { disposed = true; if (skipTimer) clearTimeout(skipTimer); Hooks.off("updateToken", onMove); if (co) Hooks.off("updateActor", onClassRelic); closeFallback(); };
+    return () => {
+      disposed = true; if (skipTimer) clearTimeout(skipTimer); Hooks.off("updateToken", onMove); if (co) Hooks.off("updateActor", onClassRelic); closeFallback();
+      sim.surfaceQuietly?.();   // 10-29: a director skip mid-dive never strands the Steward at depth
+    };
   },
 
   exit: async (ctx) => {
+    try { await ctx._pg?.surfaceQuietly?.(); } catch (_) {}   // 10-29: wait for (or run) the quiet surface
     const n = _pgRelics(ctx.steward).length;
     await ctx.speak(`${n} of ${PG_TRIALS.length} anchors in hand. The pull's still there — I can feel it in the tick rate — but the ground will hold long enough for what comes next.`);
     ctx._spawned = await _cleanupKeepPlayer(ctx);
@@ -2762,7 +2858,16 @@ const finalShowdown = {
       // carries none, and stamps them EARNED (stolen would cost suspicion).
       const fid = ctx.faction?.id;
       const granted = [];
+      // 10-29: replay/resume-safe — a Receipt the Domain already holds by this
+      // name is never minted again (fs.parleyed resets on every enter(), and a
+      // second pair would push enforceCap into deleting earned Receipts).
+      let heldNames = new Set();
+      try {
+        const rc = globalThis.game?.bbttcc?.api?.raid?.courtlySecrets;
+        heldNames = new Set((rc?.getSecrets?.(fid) || []).map(i => String(i?.name || "")));
+      } catch (_) {}
       for (const spec of PG_PARLEY_SECRETS) {
+        if ([...heldNames].some(n => n === spec.name || n.startsWith(`${spec.name} — `))) { granted.push(spec.name); continue; }
         const r = await stage.grantSecret?.(fid, spec);
         if (r?.ok) granted.push(r.name || spec.name);
       }
@@ -2845,7 +2950,7 @@ const finalShowdown = {
       title: FALLBACK_TITLE,
       content:
         `<p>Fight what's in the circle. When it starts losing, a <b>messenger</b> arrives with two <b>Receipts</b> and an offer.</p>` +
-        `<p><b>Finish it</b> — kill the thing on the lever — or <b>take the parley</b>, which your GM runs from the Domain Conflict console on <b>presence</b>.</p>` +
+        `<p><b>Finish it</b> — kill the thing on the lever — or <b>take the parley</b>, which your GM runs from the Domain Conflict console as a <b>Parley</b>.</p>` +
         `<p><i>Either ending is real. Conclude when the table has settled it.</i></p>`,
       label: "This is settled"
     }).then(() => finish());
@@ -3045,7 +3150,7 @@ function makeRaidBeat({ id, title, activityKey, intro, instruct, after, courtKey
         await _pause(500);
       }
 
-      ctx.riff({ beat: id, line: `Player is about to run a ${activityKey} raid against the tutorial hostile hold.`, intent: "Coach them through this one approach. One line." });
+      ctx.riff({ beat: id, line: `Player is about to run a ${({ violence: "Battle", intrigue: "Heist", diplomacy: "Parley", presence: "Parley" })[activityKey] || "Battle"} against the tutorial hostile hold.`, intent: "Coach them through this one approach. One line." });
     },
 
     detect: (ctx, done) => {
@@ -3063,7 +3168,7 @@ function makeRaidBeat({ id, title, activityKey, intro, instruct, after, courtKey
         if (done_.length < seen) { seen = done_.length; return; }   // session reset/cleared
         for (const r of done_.slice(seen)) {
           rounds++;
-          ctx.riff?.({ beat: id, line: `Player committed round ${rounds} of the ${activityKey} raid (outcome: ${r?.outcome || "?"}).`, intent: "React to the round outcome. One short line." });
+          ctx.riff?.({ beat: id, line: `Player committed round ${rounds} of the ${({ violence: "Battle", intrigue: "Heist", diplomacy: "Parley", presence: "Parley" })[activityKey] || "Battle"} (outcome: ${r?.outcome || "?"}).`, intent: "React to the round outcome. One short line." });
         }
         seen = done_.length;
       };
@@ -3176,10 +3281,27 @@ const graduation = {
     // their own run). Solo graduations keep the original table-pull behaviour.
     let othersLive = 0;
     try { othersLive = Number((await _stage()?.runList?.(ctx.user?.id))?.count) || 0; } catch (_) {}
-    const audience = othersLive > 0 ? "view" : "activate";
-    if (othersLive > 0) console.log(TAG, `graduation: ${othersLive} other run(s) live — diving solo (audience:"view").`);
-
     const main = ns?.resolve?.mainMap?.();
+    // 10-29: a PLAYER's graduation may only pull the table on their Steward's first graduation, and only when no other
+    // connected seat (GM included) is off on a live scene — a refresher or late join mid-session must not yank the
+    // whole table to the kickoff map. A GM keeps the table-pull. Tutorial scenes don't count as "live play".
+    const me = globalThis.game?.user;
+    let mayPull = othersLive === 0;
+    if (mayPull && !me?.isGM) {
+      let graduatedBefore = false;
+      try { graduatedBefore = !!ctx.steward?.getFlag?.(MODULE_ID, "graduatedAt"); } catch (_) {}
+      const busyElsewhere = (globalThis.game?.users?.contents ?? []).some(u => {
+        if (!u?.active || u.id === me?.id) return false;
+        const vs = u.viewedScene;
+        if (!vs || vs === main?.id) return false;
+        return !globalThis.game?.scenes?.get?.(vs)?.getFlag?.(MODULE_ID, "tutorialScene");
+      });
+      mayPull = !graduatedBefore && !busyElsewhere;
+    }
+    const audience = mayPull ? "activate" : "view";
+    if (!mayPull) console.log(TAG, `graduation: ${othersLive} other run(s) live / refresher / table in play — diving solo (audience:"view").`);
+    try { if (ctx.steward?.isOwner && !ctx.steward.getFlag?.(MODULE_ID, "graduatedAt")) await ctx.steward.setFlag(MODULE_ID, "graduatedAt", Date.now()); } catch (_) {}
+
     const tx = _tx();
     if (main && tx?.dive) {
       try { await tx.dive(main.uuid, { focus: _graduationFocus(main, ctx), audience, label: "Bad Eden" }); }
@@ -3376,19 +3498,21 @@ stewardshipTurn.party = {
     }
     for (const { faction, userIds } of byFaction.values()) {
       if (ctx.released()) return;
-      let line = "Operations Points — OP — fund every order you give. They refill each Turn, capped by your tier.";
+      // 10-29: ONE treasury in marks (ruling 16 + marks-everywhere) — matches the solo beat.
+      let line = `${faction.name} has a treasury now, in marks. Every order you give spends from it; it refills each Turn, capped by your tier.`;
       if (op?.preview) {
         try {
           const b = (await op.preview(faction.id, {}, {}))?.before || {};
-          line = `${faction.name} — your treasury, OPERATIONS POINTS. Economy ${fmt(b.economy)}, Violence ${fmt(b.violence)}, Diplomacy ${fmt(b.diplomacy)}. Every order spends from these buckets; they refill each Turn, capped by your tier.`;
+          const sum = Object.values(b).reduce((n, v) => n + (Number(v) || 0), 0);
+          if (sum > 0) line = `${faction.name} — your treasury: ${fmt(sum)}. Every order you give spends from it; it refills each Turn, capped by your tier.`;
         } catch (_) {}
       }
       await ctx.speakTo(userIds, line);
     }
     await _pause(800);
     // WORDSMITH (Dave): class version.
-    await ctx.speakAll("Now the heartbeat that refills them: the TURN. Advancing one regens your OP toward its caps, resolves every queued order, and ticks the clock. One PREVIEW, for all of you at once — all rhythm, zero consequences.");
-    ctx.riff({ beat: "stewardship_turn", line: "Explaining OP and the Turn cycle to a whole class; about to run one shared dry-run preview.", intent: "Clinical, a touch grand. One line." });
+    await ctx.speakAll("Now the heartbeat that refills them: the TURN. Advancing one refills your treasury toward its cap, resolves every queued order, and ticks the clock. One PREVIEW, for all of you at once — all rhythm, zero consequences.");
+    ctx.riff({ beat: "stewardship_turn", line: "Explaining the marks treasury and the Turn cycle to a whole class; about to run one shared dry-run preview.", intent: "Clinical, a touch grand. One line." });
   },
   detect: (ctx, done) => {
     ctx.askAll({
@@ -3400,7 +3524,7 @@ stewardshipTurn.party = {
         const turn = globalThis.game?.bbttcc?.api?.turn;
         try { if (turn?.advanceTurn) await turn.advanceTurn({ apply: false }); }
         catch (e) { console.warn(TAG, "class dry-run turn failed", e); }
-        await ctx.speakAll("That's a Turn — previewed, once, for every banner in the room. In the living world it'd refill your OP and resolve every queued order. Nothing was committed. You've got the rhythm.");
+        await ctx.speakAll("That's a Turn — previewed, once, for every banner in the room. In the living world it'd refill your treasury and resolve every queued order. Nothing was committed. You've got the rhythm.");
       }
       done();
     });
@@ -3408,10 +3532,14 @@ stewardshipTurn.party = {
   },
   exit: async (ctx) => {
     // Each member's sandbox hold goes back to unclaimed (the claim was personal).
+    // 10-29: every seat on the class record, not just the present ones — a member who claimed and then went away kept
+    // the hold claimed by their REAL Domain.
     const sc = ctx.scene("sandbox-hex");
-    for (const m of ctx.members) {
+    const uids = new Set(ctx.members.map(m => m.userId));
+    try { for (const uid of Object.keys(globalThis.game?.bbttcc?.onboarding?.cohort?.get?.(ctx.cohort?.id)?.members || {})) uids.add(uid); } catch (_) {}
+    for (const uid of uids) {
       try {
-        const dr = (sc?.drawings?.contents ?? Array.from(sc?.drawings ?? [])).find(d => d.getFlag?.(MODULE_ID, "sandboxHex") === m.userId);
+        const dr = (sc?.drawings?.contents ?? Array.from(sc?.drawings ?? [])).find(d => d.getFlag?.(MODULE_ID, "sandboxHex") === uid);
         if (dr?.uuid) await _stage()?.unclaimHex?.(dr.uuid);
       } catch (_) {}
     }
@@ -3673,7 +3801,7 @@ finalShowdown.party = {
     await _pause(700);
     await ctx.speakAll("Whatever's been pulling at us is going to have to come through in person to finish the job. Good. In person, it can be HIT. *bzzt*");
     // WORDSMITH (Dave): class version.
-    await ctx.speakAll("You've all run the consoles — violence, intrigue, presence. How does the CLASS go in? Vote. Majority wins; a tie goes to your GM.");
+    await ctx.speakAll("You've all run the consoles — Battle, Heist, Parley. How does the CLASS go in? Vote. Majority wins; a tie goes to your GM.");
     const v = await ctx.vote({
       title: "◇ OPERATOR — How do we do this?",
       content:
@@ -3819,7 +3947,7 @@ finalShowdown.party = {
       if (disposed || fs.resolved) return;
       _firstThenConfirm(ctx, {
         title: "◇ OPERATOR — Final Show Down", tag: "settle", label: "This is settled",
-        content: `<p>Fight what's in the circle. When it starts losing, a <b>messenger</b> arrives with an offer.</p><p><b>Finish it</b>, or <b>take the parley</b> (your GM runs it on <b>presence</b>). Any of you can call it settled once the table has — you'll confirm.</p>`,
+        content: `<p>Fight what's in the circle. When it starts losing, a <b>messenger</b> arrives with an offer.</p><p><b>Finish it</b>, or <b>take the parley</b> (your GM runs it as a <b>Parley</b>). Any of you can call it settled once the table has — you'll confirm.</p>`,
         confirm: "<p>Call the showdown settled for the <b>whole class</b>?</p>"
       }).then(who => {
         if (disposed || fs.resolved) return;

@@ -547,6 +547,7 @@ API `game.bbttcc.onboarding.*`: `settings/user/resolve/wireScene/sceneWiring/set
 Emits `bbttcc:tour:started/ended`. Settings: `completed/offerOnReady(log-only)/activeRuns/campaignWakeBeatId/campaignResumeBeatId`. Tools: `onboarding-setup.macro.js` (authors tutorial scenes — owner-run), `wire-tutorial-scenes.macro.js` (GUI re-pointer), `tour-menu`, `repair-op-overcap` (report-first).
 
 ---
+- **Onboarding review fixes (2026-10-29):** 40 fixes. `_clearTheStage` spares Foundry core UI (`ui.*` singletons, unframed apps) — it only closes framed popouts. Stipend + meatsuit free Soma Break paid ONCE PER STEWARD (`flags.bbttcc-onboarding.stipendPaid` / `somaBreakGiven`; `stage.grantOp` returns `{alreadyPaid:true}` on replay). Relay: sender = the socket's real user id (onboarding `relay.js` and bbttcc-core `gmExec` now take Foundry's 2nd socket arg and refuse a payload id mismatch); ensureOwned/mintRig scoped to the sender's own Steward/Domain; one Domain per seat; ensureHex/ensureSandboxHex scoped to sandbox scenes; Found-a-Domain has an in-flight guard. Graduation no longer wipes a story-offered raidSession (`setRaidSession` declines with `storyOffer:true`) and only pulls the table when nobody else is mid-scene. Reload resumes solo runs and re-finds the sandbox hex; Alpha runs stamp `completedAt`. Surge beat teaches the 10-29 heat bands; no OP/raid-key text left (OPERATOR_SCRIPT.md regenerated).
 
 ## 16. bbttcc-master-content
 

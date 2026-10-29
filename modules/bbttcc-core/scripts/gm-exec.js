@@ -96,7 +96,9 @@
   Hooks.once("ready", () => {
     publish();   // re-assert in case a later module replaced game.bbttcc.api
     try {
-      game.socket?.on?.(CHANNEL, async (msg) => {
+      // 10-29: Foundry's server stamps the real sender's user id as the 2nd arg of a
+      // custom socket emit (sockets.mjs handleCustomSocket) — trust that, never the payload.
+      game.socket?.on?.(CHANNEL, async (msg, senderId) => {
         try {
           if (!msg || typeof msg !== "object") return;
 
@@ -105,9 +107,11 @@
             if (primaryGmId() !== game.user.id) return;   // exactly one GM answers
             let ack;
             try {
-              const fromUser = game.users?.get?.(msg.fromUserId) || null;
+              const realId = senderId || msg.fromUserId || null;
+              if (senderId && msg.fromUserId && msg.fromUserId !== senderId) throw new Error("gmExec: sender id mismatch");
+              const fromUser = game.users?.get?.(realId) || null;
               const result = await _runLocal(msg.type, msg.payload || {}, {
-                fromUserId: msg.fromUserId || null,
+                fromUserId: realId,
                 fromUserName: fromUser?.name || "unknown",
                 local: false
               });

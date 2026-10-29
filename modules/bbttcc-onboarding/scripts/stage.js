@@ -14,9 +14,30 @@
 const MODULE_ID = "bbttcc-onboarding";
 const TAG = "[onboarding/stage]";
 const FOLDER_NAME = "Onboarding (tutorial)";
+// 10-29: once-per-Steward training stipend stamp (flags.bbttcc-onboarding.stipendPaid)
+const STIPEND_FLAG = "stipendPaid";
 
 const _ns = () => globalThis.game?.bbttcc?.onboarding;
 const _runAsGM = (op, payload, opts) => _ns()?.runAsGM?.(op, payload, opts);
+
+/* 10-29: bbttcc-raid.raidSession is shared — the story's offered fight (ruling 22,
+ * by:"story" + routes), a live console session, or onboarding's pre-seed. */
+function _isStoryRaidSession(s) {
+  return !!s && typeof s === "object" && (s.by === "story" || !!s.offeredBy || !!s.routes);
+}
+/** Onboarding's own session: tagged by setRaidSession, or aimed at a tutorial-spawned
+ *  defender / sandbox hex (pre-tag sessions). A story offer is never tutorial. */
+function _isTutorialRaidSession(s) {
+  if (!s || typeof s !== "object" || _isStoryRaidSession(s)) return false;
+  if (s.onboarding === true) return true;
+  try {
+    const d = s.defenderId ? game.actors?.get?.(String(s.defenderId)) : null;
+    if (d?.getFlag?.(MODULE_ID, "spawned")) return true;
+    const h = s.targetUuid && typeof fromUuidSync === "function" ? fromUuidSync(String(s.targetUuid)) : null;
+    if (h?.getFlag?.(MODULE_ID, "sandboxHex") || h?.getFlag?.(MODULE_ID, "tutorialHex")) return true;
+  } catch (_) {}
+  return false;
+}
 
 async function _folder() {
   let f = game.folders?.find(x => x.type === "Actor" && x.name === FOLDER_NAME);
@@ -1046,9 +1067,22 @@ function _registerOps() {
   // Now: credit at most `marks[pool]`, and never past the faction's own per-bucket
   // cap — so it fills an empty bank, tops up a spent one, and is a no-op on a full
   // one. Replay-safe by construction, and it can't invent OP the tier can't hold.
-  reg("grantOp", async ({ factionId, marks = {} }) => {
+  //
+  // 10-29 (owner ruling): "top up to cap" still refilled whatever a player had
+  // SPENT in live play on every replay (Reset & run again = a marks faucet). The
+  // stipend is now paid ONCE PER STEWARD: stamped on the Steward actor here, on
+  // the GM side (the relay pins stewardId to the sender's own Steward). A replay
+  // is still free practice — it just never refills the real treasury again.
+  reg("grantOp", async ({ factionId, marks = {}, stewardId = "" }) => {
     const op = globalThis.game?.bbttcc?.api?.op;
     if (!op?.commit || !op?.preview || !factionId) return { ok: false, granted: {} };
+    const steward = stewardId ? game.actors?.get?.(String(stewardId)) : null;
+    // no real Steward to stamp = no stipend (never an unstamped one)
+    if (!steward || steward.type !== "character" || steward.getFlag?.(MODULE_ID, "spawned")) {
+      console.warn(TAG, "grantOp: no real Steward to stamp — stipend skipped");
+      return { ok: false, granted: {}, noSteward: true };
+    }
+    if (steward.getFlag?.(MODULE_ID, STIPEND_FLAG)) return { ok: true, granted: {}, alreadyPaid: true };
     try {
       const state = await op.preview(factionId, {}, {});   // read current banks + caps
       const before = state?.before || {};
@@ -1061,6 +1095,9 @@ function _registerOps() {
         const give = Math.max(0, Math.min(Number(want) || 0, room));
         if (give > 0) deltas[pool] = give;
       }
+      // Stamp BEFORE crediting, so a crash/retry mid-commit can't pay twice.
+      // Full banks still use up the stipend (it was offered; nothing was owed).
+      await steward.setFlag(MODULE_ID, STIPEND_FLAG, { at: Date.now(), factionId: String(factionId) });
       if (!Object.keys(deltas).length) return { ok: true, granted: {}, alreadyFull: true };
       const r = await op.commit(factionId, deltas, { context: "onboarding-stipend" });
       return { ok: r?.ok !== false, granted: deltas };
@@ -1354,10 +1391,18 @@ function _registerOps() {
   // Pre-seed the Raid Console's persisted session on the player's REAL faction so the
   // console opens already pointed at a target + raid type (the console reads this flag on
   // first render via _applySessionIfNewer). This is the same flag the console itself writes.
+  //
+  // 10-29: since ruling 22 the same flag also holds the STORY's offered Battle/Heist/Parley
+  // (world-mutation-engine writes it with by:"story" + routes). Onboarding's own sessions
+  // are now tagged `onboarding: true`, and nothing here overwrites or clears a story offer.
   reg("setRaidSession", async ({ factionId, session }) => {
     const f = game.actors?.get?.(factionId);
     if (!f || !session) return { ok: false };
-    try { await f.setFlag("bbttcc-raid", "raidSession", session); return { ok: true }; }
+    if (_isStoryRaidSession(f.getFlag?.("bbttcc-raid", "raidSession"))) {
+      console.warn(TAG, "setRaidSession: the Domain holds a story-offered fight — left alone");
+      return { ok: false, storyOffer: true };
+    }
+    try { await f.setFlag("bbttcc-raid", "raidSession", { ...session, onboarding: true }); return { ok: true }; }
     catch (e) { console.warn(TAG, "setRaidSession failed", e); return { ok: false }; }
   });
 
@@ -1399,7 +1444,10 @@ function _registerOps() {
   reg("clearRaidSession", async ({ factionId }) => {
     const f = game.actors?.get?.(factionId);
     if (!f) return { ok: false };
-    try { await f.unsetFlag("bbttcc-raid", "raidSession"); } catch (_) {}
+    // 10-29: only ever clear a session the tutorial wrote (never a story offer or a live fight)
+    if (_isTutorialRaidSession(f.getFlag?.("bbttcc-raid", "raidSession"))) {
+      try { await f.unsetFlag("bbttcc-raid", "raidSession"); } catch (_) {}
+    }
     return { ok: true };
   });
 
@@ -1409,7 +1457,15 @@ function _registerOps() {
   // reap untagged/legacy props when no other run is live (which keeps the
   // solo experience self-cleaning as before).
   reg("teardownFinale", async ({ factionId = "", sceneId = "", ownerUserId = "" } = {}) => {
-    if (factionId) { try { await game.actors?.get?.(factionId)?.unsetFlag?.("bbttcc-raid", "raidSession"); } catch (_) {} }
+    // 10-29: graduation / class abort used to unset raidSession unconditionally — on the
+    // member's REAL Domain, every run (Alpha never even sets a tutorial session), which
+    // deleted a story-offered Battle/Heist/Parley and stranded its routes. Tutorial only.
+    if (factionId) {
+      try {
+        const fa = game.actors?.get?.(factionId);
+        if (fa && _isTutorialRaidSession(fa.getFlag?.("bbttcc-raid", "raidSession"))) await fa.unsetFlag("bbttcc-raid", "raidSession");
+      } catch (_) {}
+    }
     const othersLive = Object.keys(_readRuns()).filter(u => u !== ownerUserId).length > 0;
     const isMine = (doc) => {
       if (_liveCohortKey(_docOwnerKey(doc))) return false;   // a live class's props: the conductor reaps those
@@ -1589,10 +1645,18 @@ async function ensureOwned(actorIds = [], userId = "") {
 
 /** Top up the faction's OP banks toward cap (training stipend). marks = per-pool ceiling
  *  to credit, e.g. { economy: 130, ... }. Never exceeds the faction's per-bucket cap.
- *  Returns { ok, granted:{pool:marks}, alreadyFull? }. */
-async function grantOp(factionId, marks = {}) {
+ *  Returns { ok, granted:{pool:marks}, alreadyFull?, alreadyPaid?, noSteward? }.
+ *  10-29: paid ONCE PER STEWARD — `opts.stewardId` names whose stipend this is;
+ *  omitted, it is this seat's own Steward (the relay pins it to the sender anyway). */
+async function grantOp(factionId, marks = {}, { stewardId = "" } = {}) {
   if (!factionId) return { ok: false, granted: {} };
-  return (await _runAsGM("grantOp", { factionId, marks })) ?? { ok: false, granted: {} };
+  if (!stewardId) {
+    try {
+      const u = game.users?.get?.(_run.userId) ?? game.user;
+      stewardId = _ns()?.resolve?.steward?.(u)?.id || "";
+    } catch (_) {}
+  }
+  return (await _runAsGM("grantOp", { factionId, marks, stewardId })) ?? { ok: false, granted: {} };
 }
 
 /** Spawn an inert relic marker + token on `scene`. Returns { actor, token } or null. */

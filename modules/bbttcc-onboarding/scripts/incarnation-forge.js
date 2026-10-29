@@ -132,6 +132,11 @@ async function _forgeSteward(user) {
 
 /* ───────────────────── 2 · FACTION FOUNDING ───────────────────── */
 
+// 10-29: Stewards whose founding is running on this (GM) client. The one-Domain check reads the
+// Steward's factionId flag, which lands only after create + starting package + rig — a retry after a
+// client timeout (landing page re-enables its button at 30 s) slipped past it and founded a twin.
+const _foundingNow = new Set();
+
 // GM-side op: create the faction actor + bind the steward. Registered on all
 // clients; executed on the (primary) GM via the relay.
 function _registerFoundingOp() {
@@ -142,45 +147,52 @@ function _registerFoundingOp() {
     if (!name) throw new Error("faction name required");
     const steward = game.actors.get(String(stewardId || ""));
     if (!steward) throw new Error("steward not found");
-
-    const ownership = { default: 0 };
-    if (userId) ownership[userId] = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
-
-    // ONE FOUNDING PIPELINE (fix-the-boat item 6, 2026-09-12): the faction is born the way the wizard
-    // births one — api.factions.applyStartingPackage("standard") right after create (caps, bank seed,
-    // tracks, stockpile, doctrine, starter rig). Onboarding beats still claim the home hex.
-
-    // Born wearing the founder's art (owner call 2026-10-09: a fresh banner sat on
-    // the mystery-man through the faction tour). Swap in a real crest anytime.
-    const founderImg = steward.img && !String(steward.img).includes("mystery-man") ? steward.img : null;
-    const founderTok = steward.prototypeToken?.texture?.src || founderImg;
-    const faction = await Actor.create({
-      name,
-      type: "npc",
-      ...(founderImg ? { img: founderImg, prototypeToken: { texture: { src: founderTok } } } : {}),
-      ownership,
-      flags: {
-        [FMOD]: {
-          isFaction: true,
-          roster: [steward.uuid],
-          foundedBy: steward.name,
-          creed: String(creed || "").trim(),
-          tier: 0
-        },
-        [MODULE_ID]: { foundedViaOnboarding: true, foundedTs: Date.now() }
-      }
-    });
-    if (!faction) throw new Error("faction creation failed");
+    // 10-29: one Domain per Steward on EVERY path (the relay op was unguarded, so a seat could loop it
+    // for unlimited funded Domains + starter rigs), and never two foundings in flight for one Steward.
+    const cur = String(steward.getFlag?.(FMOD, "factionId") || "");
+    if (cur && game.actors?.get?.(cur)) throw new Error(`${steward.name} already has a Domain`);
+    if (_foundingNow.has(steward.id)) throw new Error(`${steward.name}'s Domain is already being founded`);
+    _foundingNow.add(steward.id);
     try {
-      const apply = game.bbttcc?.api?.factions?.applyStartingPackage;
-      // The player's founding-dialog pick IS the starter rig (the client's
-      // follow-up mintRig only names/dresses it — mintRig never mints a twin).
-      const starterRig = ["hexmobile", "space_marine"].includes(String(rigChassis)) ? String(rigChassis) : "hexmobile";
-      if (typeof apply === "function") await apply({ actor: faction, packageKey: "standard", starterRig });
-      else console.warn(TAG, "applyStartingPackage missing — faction founded without the standard package (run repair-onboarded-faction-parity)");
-    } catch (e) { console.warn(TAG, "standard package apply failed", e); }
-    await steward.setFlag(FMOD, "factionId", faction.id);
-    return { factionId: faction.id };
+      const ownership = { default: 0 };
+      if (userId) ownership[userId] = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
+
+      // ONE FOUNDING PIPELINE (fix-the-boat item 6, 2026-09-12): the faction is born the way the wizard
+      // births one — api.factions.applyStartingPackage("standard") right after create (caps, bank seed,
+      // tracks, stockpile, doctrine, starter rig). Onboarding beats still claim the home hex.
+
+      // Born wearing the founder's art (owner call 2026-10-09: a fresh banner sat on
+      // the mystery-man through the faction tour). Swap in a real crest anytime.
+      const founderImg = steward.img && !String(steward.img).includes("mystery-man") ? steward.img : null;
+      const founderTok = steward.prototypeToken?.texture?.src || founderImg;
+      const faction = await Actor.create({
+        name,
+        type: "npc",
+        ...(founderImg ? { img: founderImg, prototypeToken: { texture: { src: founderTok } } } : {}),
+        ownership,
+        flags: {
+          [FMOD]: {
+            isFaction: true,
+            roster: [steward.uuid],
+            foundedBy: steward.name,
+            creed: String(creed || "").trim(),
+            tier: 0
+          },
+          [MODULE_ID]: { foundedViaOnboarding: true, foundedTs: Date.now() }
+        }
+      });
+      if (!faction) throw new Error("faction creation failed");
+      try {
+        const apply = game.bbttcc?.api?.factions?.applyStartingPackage;
+        // The player's founding-dialog pick IS the starter rig (the client's
+        // follow-up mintRig only names/dresses it — mintRig never mints a twin).
+        const starterRig = ["hexmobile", "space_marine"].includes(String(rigChassis)) ? String(rigChassis) : "hexmobile";
+        if (typeof apply === "function") await apply({ actor: faction, packageKey: "standard", starterRig });
+        else console.warn(TAG, "applyStartingPackage missing — faction founded without the standard package (run repair-onboarded-faction-parity)");
+      } catch (e) { console.warn(TAG, "standard package apply failed", e); }
+      await steward.setFlag(FMOD, "factionId", faction.id);
+      return { factionId: faction.id };
+    } finally { _foundingNow.delete(steward.id); }
   });
 }
 
@@ -193,11 +205,17 @@ function _registerLandingFoundingOp() {
   gx.register("onboarding.foundDomain", async ({ name, creed, stewardId, rigChassis, rigName } = {}, meta = {}) => {
     const user = game.users?.get?.(String(meta.fromUserId || ""));
     if (!user) throw new Error("unknown sender");
+    // 10-29: gmExec now takes fromUserId from the socket's real sender (bbttcc-core gm-exec.js), so
+    // the id can't be forged. Belt and braces: a real GM seat never arrives over the socket
+    // (gmExec.call runs locally on any GM), so a remote "GM" sender is refused.
+    if (user.isGM && !meta.local) throw new Error("refused: a GM founds from their own seat");
+    if (!user.isGM && !user.active) throw new Error("unknown sender");
     const steward = game.actors?.get?.(String(stewardId || ""));
     if (!steward) throw new Error("Steward not found");
     if (!user.isGM && !steward.testUserPermission?.(user, "OWNER")) throw new Error("that Steward isn't yours");
     const cur = String(steward.getFlag?.(FMOD, "factionId") || "");
     if (cur && game.actors?.get?.(cur)) throw new Error(`${steward.name} already has a Domain`);
+    if (_foundingNow.has(steward.id)) throw new Error(`${steward.name}'s Domain is still being founded — give it a moment`);
     const ns = _ns();
     const userId = user.isGM ? "" : user.id;
     const chassis = ["hexmobile", "space_marine"].includes(String(rigChassis)) ? String(rigChassis) : "hexmobile";

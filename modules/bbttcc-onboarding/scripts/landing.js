@@ -30,10 +30,26 @@ const LOGO_OUT_MS = 900;
 const RUN_FRESH_MS = 15 * 60 * 1000;   // stage.js treats an activeRuns entry older than this as stale
 
 const _ns = () => globalThis.game?.bbttcc?.onboarding;
+/** 10-29: has this seat's Steward finished training? completedAt, or every beat
+ *  of the arc done (Alpha graduates from before the director fix never got
+ *  completedAt stamped). Drives the "run it again" label and the Solo replay. */
+function _trainingDone() {
+  try {
+    const p = _ns()?.status?.()?.progress;
+    if (!p) return false;
+    if (p.completedAt) return true;
+    const arc = _ns()?.beats?.list?.() ?? [];
+    return arc.length > 0 && arc.every(b => p.steps?.[b.id]?.done);
+  } catch (_) { return false; }
+}
 const _esc = (s) => { try { return foundry.utils.escapeHTML(String(s ?? "")); } catch (_) { return String(s ?? ""); } };
 const _AH = () => foundry.audio?.AudioHelper ?? globalThis.AudioHelper;
 
 let _root = null;
+// 10-29: the Training Video's caption loop stopper. Esc / close() went back
+// without it and left a requestAnimationFrame loop on a detached video.
+let _stopCaptions = () => {};
+function _endCaptions() { const f = _stopCaptions; _stopCaptions = () => {}; try { f(); } catch (_) {} }
 let _mode = null;          // "logo" | "film" | "landing" | "video"
 let _theme = null;         // the Section D Sound while it plays
 let _themeOn = false;
@@ -133,6 +149,7 @@ function _mount() {
 
 function close({ keepTheme = true } = {}) {
   clearTimeout(_logoTimer);
+  _endCaptions();
   window.removeEventListener("keydown", _onKeyCapture, true);
   const r = _root; _root = null; _mode = null;
   if (!keepTheme) _stopTheme();
@@ -196,7 +213,8 @@ function _playVideo(which) {
   const v = root.querySelector("video");
   const playBtn = root.querySelector(".bl-play");
   v.volume = _vol();
-  const stopCaptions = _mode === "video" ? _runCaptions(v, root.querySelector(".bl-op")) : () => {};
+  _endCaptions();
+  const stopCaptions = _stopCaptions = _mode === "video" ? _runCaptions(v, root.querySelector(".bl-op")) : () => {};
   const done = () => { stopCaptions(); return _mode === "film" ? _afterFilm() : _showLanding({ theme: false }); };
   v.addEventListener("ended", done, { once: true });
   v.addEventListener("error", () => { console.warn(TAG, "video failed to load:", src); done(); }, { once: true });
@@ -260,7 +278,7 @@ function _runCaptions(video, box) {
   });
   let lastKey = "";
   const frame = () => {
-    if (stopped) return;
+    if (stopped || !video.isConnected) return;   // 10-29: never outlive the video
     raf = requestAnimationFrame(frame);
     if (!sentences) return;
     const t = video.currentTime;
@@ -394,6 +412,7 @@ function _cardHtml(st, dom, rigs) {
 }
 
 function _showLanding({ theme = false } = {}) {
+  _endCaptions();
   const root = _mount();
   _mode = "landing";
   const gm = !!game.user?.isGM;
@@ -402,7 +421,7 @@ function _showLanding({ theme = false } = {}) {
   const rigs = _rigsOf(dom);
   const owned = _ownedStewards();
   let doneBefore = false;
-  try { doneBefore = !!_ns()?.status?.()?.progress?.completedAt; } catch (_) {}
+  try { doneBefore = _trainingDone(); } catch (_) {}
 
   const play = [
     ...(gm ? [_tile("resume", "⏯", "The Last Time We Saw Lucky…", "The beat still open when you logged off, the last moves, the next beat.", "gold")] : []),
@@ -486,7 +505,7 @@ function _foundHtml(st) {
       `<label>Banner name<input type="text" name="name" maxlength="80" placeholder="The ${_esc(String(st.name).split(/\s+/)[0])} Concern" required></label>` +
       `<label>Creed <span>(optional — one line your people would say)</span><input type="text" name="creed" maxlength="160"></label>` +
       `<fieldset><legend>Starter rig (free)</legend>` +
-        `<label class="bl-radio"><input type="radio" name="rigChassis" value="hexmobile" checked> Hexmobile — a road rig for the whole crew</label>` +
+        `<label class="bl-radio"><input type="radio" name="rigChassis" value="hexmobile" checked> Hexmobile — scout-and-skirmish land ride, two riders</label>` +
         `<label class="bl-radio"><input type="radio" name="rigChassis" value="space_marine"> Space Marine — power armour for one</label>` +
       `</fieldset>` +
       `<label>Rig name <span>(optional)</span><input type="text" name="rigName" maxlength="60"></label>` +
@@ -674,9 +693,13 @@ function _bindLanding(root) {
       case "modal-back": btn.closest(".bl-modal").hidden = true; return;
       case "solo": {
         btn.disabled = true;
-        await _enroll();
+        // 10-29: a graduate's plain start() skipped every done beat and ended
+        // with nothing on screen — replay from the top instead.
+        const replay = _trainingDone();
+        // 10-29: a refresher run doesn't re-enroll (graduation would hand the table back / ping the GM again).
+        if (!replay) await _enroll();
         close();
-        _ns()?.start?.()?.catch?.(e => console.warn(TAG, "onboarding start failed", e));
+        _ns()?.start?.(replay ? { fromStart: true } : undefined)?.catch?.(e => console.warn(TAG, "onboarding start failed", e));
         return;
       }
       case "cohort": {
@@ -726,8 +749,24 @@ function _midTraining() {
   try {
     const ns = _ns();
     if (ns?.cohort?.memberOf?.(game.user.id)) return true;
+    // 10-29: a solo run is mid-training only while THIS client is running it —
+    // a fresh activeRuns entry outlives an F5 (runEnd never fires on unload),
+    // and that dead entry used to lock Switch Steward for 15 minutes.
+    if (ns?.isRunning?.()) return true;
+    return false;
+  } catch (_) { return false; }
+}
+/** 10-29: a solo run this seat left mid-way (a reload / reconnect): its
+ *  activeRuns entry is still fresh but no director is running here. */
+function _soloRunInterrupted() {
+  try {
+    const ns = _ns();
+    if (ns?.cohort?.memberOf?.(game.user.id) || ns?.isRunning?.()) return false;
     const e = ns?.stage?.readRuns?.()?.[game.user.id];
-    return !!e && Date.now() - (Number(e.ts) || 0) < RUN_FRESH_MS;
+    // A class-owned lane (cohortId) belongs to the conductor, and a graduate's
+    // leftover entry has nothing to resume (start() would skip every beat).
+    if (!e || e.cohortId || _trainingDone()) return false;
+    return Date.now() - (Number(e.ts) || 0) < RUN_FRESH_MS;
   } catch (_) { return false; }
 }
 
@@ -742,6 +781,13 @@ Hooks.once("ready", () => {
   // a seat mid-training (a reload, a reconnecting cohort member) goes straight back in.
   setTimeout(() => {
     try { (game.bbttcc.onboarding ??= {}).landing ??= ns.landing; } catch (_) {}
+    // 10-29: only the cohort heartbeat re-cues a class member; nothing restarted a
+    // SOLO run after F5, so the seat sat on a bare canvas. Resume it here — start()
+    // keeps the Steward's progress and skips the beats already done.
+    if (_soloRunInterrupted()) {
+      _ns()?.start?.()?.catch?.(e => console.warn(TAG, "onboarding resume failed", e));
+      return;
+    }
     if (_midTraining()) return;
     if (game.user?.getFlag?.(MODULE_ID, "openingSeen")) open();
     else film();

@@ -168,7 +168,8 @@ Hooks.once("ready", () => {
   catch (_) {}
   // Any completed tour counts, however it was launched — the flow's offer,
   // the founding ceremony, the tours menu, or the hotbar macro.
-  Hooks.on("bbttcc:tour:ended", (payload) => _markTourTaken(payload?.id));
+  // 10-29: COMPLETED only — an Esc/✕, a failed open() or an idle shelve must leave the skipIfTaken safety net armed.
+  Hooks.on("bbttcc:tour:ended", (payload) => { if (payload?.completed) _markTourTaken(payload?.id); });
 });
 
 /** Offer + (if accepted) run the tour to completion before continuing. Resolves true if a tour ran. */
@@ -186,6 +187,7 @@ async function _offerTour(spec) {
     return false;
   }
   if (!(await _askForTour(spec))) return false;
+  let completed = false;
   await new Promise((resolve) => {
     let done = false, idle = null;
     const finish = () => {
@@ -195,7 +197,7 @@ async function _offerTour(spec) {
       Hooks.off("bbttcc:tour:step", onStep);
       resolve();
     };
-    const onEnd = (payload) => { if (payload?.id === spec.tour) finish(); };
+    const onEnd = (payload) => { if (payload?.id === spec.tour) { completed = !!payload?.completed; finish(); } };
     // Idle ceiling: re-armed on every step the tour shows.
     const onIdle = async () => {
       if (done) return;
@@ -211,7 +213,7 @@ async function _offerTour(spec) {
     arm();
     Promise.resolve(tours.start(spec.tour)).catch((e) => { console.warn(TAG, "tour start failed", e); finish(); });
   });
-  _markTourTaken(spec.tour);
+  if (completed) _markTourTaken(spec.tour);   // 10-29: was unconditional — aborted/shelved tours read as taken
   return true;
 }
 
@@ -263,7 +265,9 @@ function _installFirstOpenOffers() {
       if (orig.__firstOpenTour) continue;
       const wrapped = function (...args) {
         const result = orig.apply(this, args);
-        _maybeFirstOpenOffer(spec);                               // fire-and-forget, never blocks the open
+        // 10-29: wait for the open — a refused one (ruling 22 returns null on a player seat) must not spend the
+        // one-time flag or offer a tour whose open() would push the console past the gate (fromBeat).
+        Promise.resolve(result).then((app) => { if (app !== null) _maybeFirstOpenOffer(spec); }, () => {});   // fire-and-forget
         return result;
       };
       wrapped.__firstOpenTour = true;

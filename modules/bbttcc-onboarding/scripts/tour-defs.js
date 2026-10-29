@@ -43,17 +43,20 @@ const stewardSheetTour = {
     },
     {
       id: "faculties", title: "Faculties — the six dials",
+      pre: '.ft-tabs a[data-tab="core"]',   // 10-29: the sheet keeps its last tab — replays/Back landed elsewhere
       selector: ".ft-attr-grid",
       text: "The six Faculties are your raw capabilities. Every check in the game reads one of them.\nThe ⚀ button rolls a bare Faculty test (2d10, tens explode, + the Faculty) — used for contests and anything without a trained Aptitude.",
       speak: "Six dials. The factory settings were better, but these are yours."
     },
     {
       id: "pools", title: "Integrity & Stress",
+      pre: '.ft-tabs a[data-tab="core"]',
       selector: ".ft-derived",
       text: "Integrity is the meat's hit points — run out and the body stops cooperating.\nStress is psychic load: manifestation strain, horror, overreach. It recovers with rest and scene breaks; maxing it out breaks something you'd rather keep."
     },
     {
       id: "defenses", title: "Guard · Evasion · Resolve",
+      pre: '.ft-tabs a[data-tab="core"]',
       selector: ".ft-defenses",
       text: "Your three defenses. Guard turns hits aside, Evasion keeps you from being hit at all, Resolve holds the mind together against fear, coercion and the uncanny.\nEach has its own ⚀ roll (2d10 explode + defense) when the world tests you directly. The small labels underneath list immunities ⦿, resistances ◑ and vulnerabilities ▲."
     },
@@ -111,7 +114,12 @@ const stewardSheetTour = {
     {
       id: "faction", title: "Your Domain — the bigger body",
       selector: ".ft-id-faction",
-      text: "You aren't just a body — you're a stake in a faction. The → button opens its sheet: OP banks, territory, politics, the strategic layer.\nThat interface has its own tour when you're ready.",
+      // 10-29: Alpha (ruling 16) — the → button flips THIS sheet to its Domain tab; there is no faction window for players.
+      get text() {
+        return _alphaDomainTab()
+          ? "You aren't just a body — you're a stake in a Domain. The → button flips this sheet to its Domain tab: treasury, land, crews, the next Turn.\nThat tab has its own tour when you're ready."
+          : "You aren't just a body — you're a stake in a faction. The → button opens its sheet: the treasury in marks, territory, the strategic layer.\nThat interface has its own tour when you're ready.";
+      },
       speak: "Meatsuit: toured. Next size up is the faction — a body made of people. Different manual— *bzzt* —same principle."
     }
   ]
@@ -194,9 +202,18 @@ async function _openFactionSheet(ctx) {
     try { sheet._applyActiveTab?.(); } catch (_) {}
     return sheet;
   }
-  await faction.sheet?.render(true);
-  if (faction.sheet && faction.sheet.rendered === false) return false;   // a redirect ate the window — don't tour nothing
-  return faction.sheet;
+  const sheet = faction.sheet;
+  await sheet?.render(true);
+  // 10-29: V1 render() returns before _render finishes, so `rendered` is still false here even on a good open —
+  // the old check aborted every faction-window tour. Wait out RENDERING; only a sheet that never got there (a
+  // redirect ate the window) aborts.
+  if (sheet) {
+    const S = foundry.appv1?.api?.Application?.RENDER_STATES ?? globalThis.Application?.RENDER_STATES ?? { RENDERING: 1, RENDERED: 2 };
+    const t0 = Date.now();
+    while (sheet._state === S.RENDERING && Date.now() - t0 < 4000) await new Promise(r => setTimeout(r, 50));
+    if (!sheet.rendered) return false;   // a redirect ate the window — don't tour nothing
+  }
+  return sheet;
 }
 
 /* The Domain tab, step by step (Alpha). Anchors = systems/fourththing/templates/partials/domain-panel.hbs. */
@@ -209,7 +226,7 @@ const DOMAIN_TAB_STEPS = [
   {
     id: "treasury", title: "Treasury — one purse",
     selector: ".ft-domain-treasury",
-    text: "Marks are what the land yields to you — one treasury for everything you buy, build, hire or wage. The labels beneath are the pools it is sorted into: Violence, Intrigue, Economy and the rest, each with its cap.\nNothing here is spent in a Battle or a Heist; a Parley can sweeten a deal.",
+    text: "Marks are what the land yields to you — one treasury for everything you buy, build, hire or wage. The labels beneath are the pools it is sorted into: Violence, Intrigue, Economy and the rest, each with its cap.\nEvery Battle, Heist and Parley costs marks from this purse; a Parley can also sweeten the deal.",   // 10-29: 10-28 ruling — conflicts cost marks
     speak: "One purse. Nine pockets. Your enemies only ever count one of them."
   },
   {
@@ -270,7 +287,7 @@ const factionSheetTour = {
     {
       id: "opbank", title: "The OP Bank — nine kinds of power",
       selector: "fieldset.bbttcc-header-card-opbank",
-      text: "Banked Operation Points across nine tracks — Violence, Nonlethal, Intrigue, Economy, Soft Power, Diplomacy, Logistics, Culture, Faith.\nThe bank persists across Turns and pays for everything: raids, markets, backing, builds. Bank math: 1 OP = 10 marks. Hover any column header for what that track buys.",
+      text: "Banked marks across nine tracks — Violence, Nonlethal, Intrigue, Economy, Soft Power, Diplomacy, Logistics, Culture, Faith.\nThe bank persists across Turns and pays for everything: Battles, Heists, Parleys, markets, backing, builds — all counted in marks. Hover any column header for what that track buys.",
       speak: "Nine currencies. Your enemies only ever count one of them. That's how you beat them."
     },
     {
@@ -683,7 +700,9 @@ const raidConsoleTour = {
     try {
       const existing = faction.getFlag("bbttcc-raid", "raidSession");
       // A previous tour's leftover practice session is not a live raid.
-      const live = existing && !existing.tourStaged && (existing.targetUuid || (existing.rounds || []).length);
+      // 10-29: never stage over a non-tour session — a story offer against a rig has no targetUuid and no rounds,
+      // and the merge + close-time unset used to wipe it (routes and all).
+      const live = existing && !existing.tourStaged;
       if (!live) {
         const targetUuid = _findHexUuidForTour({ faction: null }); // any hex — practice dummy
         if (targetUuid) {
@@ -817,7 +836,8 @@ const rigSheetTour = {
     },
     {
       id: "stats", title: "The four tiles",
-      selector: ".ft-rig-stat-grid",
+      pre: 'nav.ft-tabs a.item[data-tab="identity"]',   // 10-29: the grid also sits in combat; the first copy hides off-tab
+      selector: '.tab[data-tab="identity"] .ft-rig-stat-grid',
       text: "Integrity is the rig's health — zero means destroyed. Tier and bracket gate what it can mount; Crew shows seated versus capacity; Output is how much its output modules yield this Turn — parked 100%, deployed 50%, destroyed nothing.\nMobile rigs get Deploy / Recall buttons right on the Integrity tile."
     },
     {

@@ -88,6 +88,15 @@ const PROMPT_POSITION = { top: 96, left: 120, width: 440 };
 const PROMPT_ID_PREFIX = "bbttcc-ob-prompt-";
 const promptIdFor = (title) =>
   PROMPT_ID_PREFIX + String(title).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+// 10-29: every OPEN gets its own id (base + "--N"). DialogV2 resolves on submit
+// and only then runs close(); a same-id dialog opened in that ~1s window took
+// over the registry slot, and the old close's unconditional
+// instances.delete(id) then unregistered the NEW one — deck slide 2+ and
+// back-to-back "Operator" prompts vanished from the sweep and cohort Skip.
+// promptIdFor never emits "--" (runs collapse), so base+"--" is unambiguous.
+let _promptSeq = 0;
+const _openIdFor = (title) => `${promptIdFor(title)}--${++_promptSeq}`;
+const _idMatches = (id, base) => id === base || String(id ?? "").startsWith(base + "--");
 
 function _v2Apps() {
   try {
@@ -101,12 +110,13 @@ function _findAppByTitle(title) {
     const byId = foundry?.applications?.instances?.get?.(id);
     if (byId) return byId;
   } catch (_) {}
-  const v2 = _v2Apps().find(a =>
-    a?.id === id || a?.title === title || (a?.window?.title ?? a?.options?.window?.title) === title);
+  // 10-29: per-open ids (base--N) — the NEWEST match wins (Map keeps insertion order).
+  const v2 = _v2Apps().filter(a =>
+    _idMatches(a?.id, id) || a?.title === title || (a?.window?.title ?? a?.options?.window?.title) === title).pop();
   if (v2) return v2;
   try {
-    return Object.values(ui.windows ?? {}).find(a =>
-      a?.options?.id === id || a?.title === title || a?.data?.title === title) || null;
+    return Object.values(ui.windows ?? {}).filter(a =>
+      _idMatches(a?.options?.id, id) || a?.title === title || a?.data?.title === title).pop() || null;
   } catch (_) { return null; }
 }
 
@@ -156,7 +166,7 @@ async function prompt({ title = "Operator", content = "", label = "Continue" } =
       // anything destructive can now tell a click from an X (the trials skip
       // hatch granted all four relics off a dismissed window, 2026-08-24).
       const picked = await DV2.wait({
-        id: promptIdFor(title),
+        id: _openIdFor(title),
         window: { title }, content: body,
         position: { ...PROMPT_POSITION },
         buttons: [{ action: "ok", label, default: true }],
@@ -170,7 +180,7 @@ async function prompt({ title = "Operator", content = "", label = "Continue" } =
       title, content: body,
       buttons: { ok: { label, callback: () => res("ok") } },
       default: "ok", close: () => res(null)
-    }, { id: promptIdFor(title), ...PROMPT_POSITION }).render(true);
+    }, { id: _openIdFor(title), ...PROMPT_POSITION }).render(true);
   });
 }
 
@@ -180,9 +190,10 @@ async function prompt({ title = "Operator", content = "", label = "Continue" } =
  *  element to point a tour ring at, and a wall of Operator chat lines scrolls
  *  away unread. A deck holds still and lets the player go back a step.
  *
- *  Implemented as one dialog PER SLIDE sharing a single id: DialogV2.wait
- *  resolves on button press, so re-opening under the same id swaps the content
- *  and keeps the prefix sweep (closeAllOnboardingPrompts) able to find it.
+ *  Implemented as one dialog PER SLIDE: DialogV2.wait resolves on button
+ *  press and the next slide opens. Each slide gets its own prefixed id
+ *  (_openIdFor, 10-29 — a shared id let the old slide's close unregister the
+ *  new one), so the prefix sweep (closeAllOnboardingPrompts) still finds it.
  *  Slides: { title, body, speak? }. Resolves "done" when finished, or null if
  *  the player closed the deck (a closed deck must never wedge a beat — callers
  *  treat null as "they've seen enough").
@@ -213,7 +224,7 @@ async function deck({ title = "Operator", slides = [], label = "Got it", speak =
     if (DV2?.wait) {
       try {
         action = await DV2.wait({
-          id: promptIdFor(title),
+          id: _openIdFor(title),
           window: { title: heading },
           content,
           position: { ...PROMPT_POSITION, width: 520 },
@@ -226,7 +237,7 @@ async function deck({ title = "Operator", slides = [], label = "Got it", speak =
         if (!first) btns.back = { label: "← Back", callback: () => res("back") };
         btns.next = { label: last ? label : "Next →", callback: () => res("next") };
         new Dialog({ title: heading, content, buttons: btns, default: "next", close: () => res(null) },
-          { id: promptIdFor(title), ...PROMPT_POSITION, width: 520 }).render(true);
+          { id: _openIdFor(title), ...PROMPT_POSITION, width: 520 }).render(true);
       });
     }
     if (action === null) return null;          // closed — don't wedge the beat
@@ -248,7 +259,7 @@ async function choose({ title = "Operator", content = "", options = [], fallback
   if (DV2?.wait) {
     try {
       const picked = await DV2.wait({
-        id: promptIdFor(title),
+        id: _openIdFor(title),
         window: { title }, content: body,
         position: { ...PROMPT_POSITION, width: 500 },
         buttons: opts.map((o, i) => ({ action: o.action, label: o.label, default: i === 0 })),
@@ -261,7 +272,7 @@ async function choose({ title = "Operator", content = "", options = [], fallback
     const buttons = {};
     for (const o of opts) buttons[o.action] = { label: o.label, callback: () => res(o.action) };
     new Dialog({ title, content: body, buttons, default: opts[0].action, close: () => res(fallback) },
-      { id: promptIdFor(title), ...PROMPT_POSITION, width: 500 }).render(true);
+      { id: _openIdFor(title), ...PROMPT_POSITION, width: 500 }).render(true);
   });
 }
 
@@ -345,6 +356,10 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
     let p = _progress(steward);
     if (fromStart || !p.startedAt) {
       p = { currentStep: null, steps: {}, startedAt: Date.now(), completedAt: null };
+      // 10-29: setFlag MERGES — `steps: {}` left every old steps[id].done in
+      // place, so an interrupted fromStart replay resumed past beats it never
+      // replayed. Unset first so the wipe is real (reset() already does this).
+      if (steward) { try { await steward.unsetFlag(MODULE_ID, PROGRESS_FLAG); } catch (_) {} }
       await _setProgress(steward, p);
     }
 
@@ -500,7 +515,9 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
     // Stamp completion once every beat in the arc is done (status() read
     // completedAt: null after a full graduation — trailer shoot 2026-10-09).
     // Class members never stamp here; the conductor graduates the class.
-    if (!co && !_abortRun && !p.completedAt && _beats.every(b => p.steps?.[b.id]?.done)) p.completedAt = Date.now();
+    // 10-29: the ARC (arcBeats), not every registered beat — under the Alpha
+    // Cut the ALPHA_CUT_BEATS never run, so _beats.every never stamped.
+    if (!co && !_abortRun && !p.completedAt && _arcBeats().every(b => p.steps?.[b.id]?.done)) p.completedAt = Date.now();
     await _setProgress(steward, p);
     console.log(TAG, "Run finished. Completed beats:", Object.keys(p.steps || {}));
     if (co) return { ok: true, ran, aborted: _abortRun };

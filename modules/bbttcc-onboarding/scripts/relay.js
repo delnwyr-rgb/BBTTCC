@@ -85,8 +85,11 @@ async function runAsGM(op, payload = {}, { timeoutMs = 15000 } = {}) {
  * also needs a live tutorial run for the sender. Identity fields in the payload are forced to the sender. */
 const RUN_OPS = new Set(["runBegin", "runPing", "runEnd", "runList"]);
 const ACTOR_OPS = { hurt: ["actorId"], mend: ["actorId"], raiseDarkness: ["actorId"], billKill: ["foeActorId", "fallbackActorId"], foeSurrender: ["actorId"], setElevation: ["actorId"], shoveOffPerch: ["actorId"], ensureToken: ["actorId"], disembark: ["stewardId", "rigId"], foundPlayerFaction: ["stewardId"] };
-const FACTION_OPS = { grantOp: "factionId", grantSecret: "factionId", setRaidSession: "factionId", clearRaidSession: "factionId", teardownFinale: "factionId", mintRig: "factionId", openRaidConsoleForGM: "factionId", claimHex: "factionId" };
+const FACTION_OPS = { grantOp: "factionId", grantSecret: "factionId", setRaidSession: "factionId", clearRaidSession: "factionId", teardownFinale: "factionId", mintRig: "factionId", openRaidConsoleForGM: "factionId", claimHex: "factionId", ensureHex: "factionId" };
 const HEX_OPS = new Set(["claimHex", "unclaimHex"]);
+// 10-29: ops that AUTHOR hexes or spawn props take any sceneId — a player seat could plant claimed
+// territory (or pack monsters) on the live campaign map. Player senders are held to tutorial scenes.
+const TUTORIAL_SCENE_OPS = new Set(["ensureHex", "ensureSandboxHex", "spawnFoe", "spawnFromPack", "spawnCourtier", "spawnObstacle", "spawnMarker"]);
 // Group induction Phase 1 (2026-10-02). A member seat may only join, report
 // arrival and heartbeat — identity forced to the sender, no live run needed to
 // JOIN (that is how a seat gets one). Every class control is GM-only. The two
@@ -106,11 +109,22 @@ function _cohortMember(cohortId, userId) {
   } catch (_) { return false; }
 }
 
-const _spawned = (doc) => { try { return doc?.getFlag?.(MODULE_ID, "spawned") === true || doc?.getFlag?.(MODULE_ID, "foundedViaOnboarding") === true; } catch (_) { return false; } };
+// 10-29: `foundedViaOnboarding` is NOT scaffolding — it rides every player's REAL Domain for good, so
+// counting it here made every onboarding-founded Domain (and its rig) "yours" for every seat (ensureOwned
+// handed out OWNER on other players' treasuries). A founded Domain is the sender's through the roster below.
+const _spawned = (doc) => { try { return doc?.getFlag?.(MODULE_ID, "spawned") === true; } catch (_) { return false; } };
 const _owns = (user, doc) => { try { return !!doc?.testUserPermission?.(user, "OWNER"); } catch (_) { return false; } };
-function _actorMine(user, actor) {
+function _actorMine(user, actor, _depth = 0) {
   if (!actor) return false;
   if (_spawned(actor) || _owns(user, actor) || user?.character?.id === actor.id) return true;
+  // 10-29: the faction the sender's own Steward is bound to
+  if (user?.character && user.character.getFlag?.("bbttcc-factions", "factionId") === actor.id) return true;
+  // 10-29: a rig is the sender's when its owning faction is (ensureOwned re-grants a lost rig grant)
+  if (actor.type === "rig" && _depth === 0) {
+    const fid = actor.getFlag?.("fourththing", "factionOwnerId") || actor.system?.identity?.factionOwnerId;
+    const f = fid ? game.actors?.get?.(String(fid)) : null;
+    if (f && !_spawned(f) && _actorMine(user, f, 1)) return true;
+  }
   // a faction is the sender's when its roster holds a character they own
   const roster = actor.getFlag?.("bbttcc-factions", "roster");
   if (Array.isArray(roster)) for (const u of roster) {
@@ -149,15 +163,29 @@ async function _authorize(op, payload, fromUserId) {
   }
   const fk = FACTION_OPS[op];
   if (fk && payload[fk] && !_actorMine(user, game.actors?.get?.(String(payload[fk])))) return "faction is not yours";
+  if (TUTORIAL_SCENE_OPS.has(op)) {
+    const sc = game.scenes?.get?.(String(payload.sceneId || ""));
+    if (!sc?.getFlag?.(MODULE_ID, "tutorialScene")) return "not a tutorial scene";
+  }
   if (HEX_OPS.has(op)) {
     const hex = payload.hexUuid ? await fromUuid(payload.hexUuid).catch(() => null) : null;
     if (!hex?.getFlag?.(MODULE_ID, "sandboxHex")) return "not a sandbox hex";
   }
+  if (op === "grantOp") {
+    // 10-29: the stipend is stamped once per Steward — the stamp must land on the SENDER's real
+    // Steward (their assigned character, or a character they own), never a tutorial-spawned stand-in
+    // a seat could name to dodge the stamp, and never another player's Steward.
+    const s = game.actors?.get?.(String(payload.stewardId || ""));
+    const real = s && s.type === "character" && !_spawned(s) && (user.character?.id === s.id || _owns(user, s));
+    if (!real) return "stipend needs your own Steward";
+  }
   if (op === "ensureOwned") {
-    // only grant OWNER on the sender's own tutorial actors: their character, spawned props, the faction they founded
+    // only grant OWNER on the sender's own actors: their character, the faction their Steward is on
+    // (roster / bound flag) and that faction's rig. 10-29: spawned scaffolding is no longer kept here —
+    // every spawn is born with its run's ownership already, so OWNER on one is only ever another run's.
     payload.actorIds = (payload.actorIds || []).filter(id => {
       const a = game.actors?.get?.(String(id || ""));
-      return a && (_spawned(a) || user.character?.id === a.id || _actorMine(user, a));
+      return a && !_spawned(a) && _actorMine(user, a);
     });
   }
   if (op === "cleanup") {

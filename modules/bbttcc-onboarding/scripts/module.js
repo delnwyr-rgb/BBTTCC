@@ -146,10 +146,13 @@ Hooks.once("ready", () => {
     const root = html?.[0] ?? html;
     // Steward pre-check shared by both buttons: say what's wrong in plain words
     // instead of letting start() fail quietly on a player's screen.
+    // 10-29: a PLAYER with no Steward passes — the wrapped start()
+    // (incarnation-forge.js) opens the forge for exactly that seat; only a GM
+    // seat, which the forge doesn't serve, still gets told to pick one.
     const _stewardOrExplain = () => {
       const s = game.bbttcc?.onboarding?.resolve?.steward?.(game.user);
-      if (s) return s;
-      ui.notifications?.error?.(`${game.user.name}: no Steward assigned to you. Player config → Select Character, then click again.`);
+      if (s || !game.user?.isGM) return s || true;
+      ui.notifications?.error?.(`${game.user.name}: no Steward assigned to this seat. Player config → Select Character, then click again.`);
       return null;
     };
     const _enroll = async () => {
@@ -195,11 +198,13 @@ Hooks.once("ready", () => {
     });
     root?.querySelectorAll?.(".bbttcc-onb-reset")?.forEach(btn => {
       btn.addEventListener("click", async () => {
-        if (!_stewardOrExplain()) return;
+        const s = _stewardOrExplain();
+        if (!s) return;
         btn.disabled = true;
         await _enroll();
         // Reset & run again = the Reset macro, then a from-the-top run.
-        try { await game.bbttcc?.onboarding?.reset?.(); } catch (e) { warn("onboarding reset failed", e); }
+        // 10-29: no Steward yet → nothing to reset; the run forges one.
+        if (s !== true) { try { await game.bbttcc?.onboarding?.reset?.(); } catch (e) { warn("onboarding reset failed", e); } }
         game.bbttcc?.onboarding?.start?.({ fromStart: true })
           ?.catch?.(e => { warn("onboarding restart failed", e); btn.disabled = false; });
       });
