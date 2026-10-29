@@ -368,7 +368,12 @@ export const RfiCrafting = {
           if (need <= 0) break; if (canonKey(k0) !== key) continue;
           const have = Number(v?.qty || 0); const take = Math.min(have, need); if (take <= 0) continue;
           // only count what the stockpile (or its GM relay) actually took
-          const res = await stock.adjust(F, k0, -take, {}); if (res?.ok) need -= take;
+          // 10-29: adjust clamps at 0 and still says ok — subtract what it really removed (before − after)
+          const res = await stock.adjust(F, k0, -take, {});
+          if (res?.ok) {
+            const b = Number(res.before), a = Number(res.after);
+            need -= (Number.isFinite(b) && Number.isFinite(a)) ? Math.max(0, Math.min(take, b - a)) : take;
+          }
         }
         remaining[key] = need;
       }

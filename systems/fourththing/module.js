@@ -1197,20 +1197,22 @@ const FT_LEGACY_SKILL_ALIASES = {
   blade: "melee", blades: "melee", sword: "melee", swords: "melee"
 };
 
-// Resolve the weapon's skill key to one that exists on the actor. Preference
-// chain: exact match → alias map → category-based fallback (`ranged`→firearms,
-// `melee`→melee) → first available skill on the actor.
+// Resolve the weapon's skill key. Preference chain: exact match → alias map →
+// category-based fallback (`ranged`→firearms, `melee`→melee) → melee.
+// 10-29: a canonical (FT_SKILL_MASTER) key counts even when the actor hasn't
+// ranked it — unranked reads as 0. NPCs start with `skills: {}`, and the old
+// "first skill on the actor" fallback had a firearm roll +4 Stealth.
 function ftResolveWeaponSkill(actor, weaponSkillKey, weaponCategory = "") {
   const sysData = actor?.system?.system ?? actor?.system ?? {};
   const skills  = sysData?.skills ?? {};
+  const known = (k) => !!k && (!!skills[k] || FT_SKILL_MASTER.some(s => s.key === k));
   const key = String(weaponSkillKey ?? "").toLowerCase().trim();
-  if (key && skills[key]) return key;
+  if (known(key)) return key;
   const aliased = FT_LEGACY_SKILL_ALIASES[key];
-  if (aliased && skills[aliased]) return aliased;
+  if (known(aliased)) return aliased;
   const cat = String(weaponCategory ?? "").toLowerCase().trim();
-  if (cat === "ranged" && skills.firearms) return "firearms";
-  if (cat === "melee"  && skills.melee)    return "melee";
-  return Object.keys(skills)[0] ?? "melee";
+  if (cat === "ranged") return "firearms";
+  return "melee";
 }
 
 // Which target defense a weapon naturally swings at. Ranged → evasion (dodge);
@@ -1325,7 +1327,7 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
     try {
       const placed = await ftPlaceAreaTemplate(actor, _engageArea);
       if (placed) {
-        const toks = _ftTokensInTemplate(placed, { excludeActorIds: new Set([actor.id]) });
+        const toks = _ftTokensInTemplate(placed, { excludeActorUuids: new Set([actor.uuid]) });
         if (toks.length) {
           ftSetUserTargets(toks);
           ui.notifications?.info(`${item.name}: ${toks.length} target${toks.length === 1 ? "" : "s"} caught in the area — Apply Damage will hit all of them.`);
@@ -1343,13 +1345,25 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
   // for monsters); no faculty add (the authored DC already carries the creature's edge). Recharge/uses gates still apply
   // upstream (npc-automation). Animation plays once, on the caster.
   // NPC automation recharge gate (2026-10-06): "(Recharge 5–6)" / "1/Day" weapons are spent on use and roll back at turn start
-  if (item?.flags?.fourththing?.npcAuto?.recharge && !options.skipRecharge) {
-    try { if (!(await game.fourththing.npcAuto?.useRecharge?.(actor, item) ?? true)) return; } catch (_e) {}
+  // 10-29: check here, SPEND at the moment the strike resolves (save cards post /
+  // the Engage roll fires) — a no-target warning, a later gate or a dialog Cancel
+  // used to burn the recharge with nothing rolled. useRecharge on a spent item
+  // only warns (no write), so the up-front call is read-only.
+  const _ftRecharge = !!item?.flags?.fourththing?.npcAuto?.recharge && !options.skipRecharge;
+  if (_ftRecharge && item.flags.fourththing.npcAuto.spent) {
+    let ok = true;
+    try { ok = (await game.fourththing.npcAuto?.useRecharge?.(actor, item)) ?? true; } catch (_e) {}
+    if (!ok) return;
   }
+  const _ftSpendRecharge = async () => {
+    if (!_ftRecharge) return true;
+    try { return (await game.fourththing.npcAuto?.useRecharge?.(actor, item)) ?? true; } catch (_e) { return true; }
+  };
   const _saveFirst = item?.system?.manifestation?.resolution;
   if (item?.type === "weapon" && _saveFirst?.mode === "save" && _saveFirst?.saveAttribute && !options.skipSaveFirst) {
     const targets = Array.from(game.user?.targets ?? []).map(t => t.actor).filter(Boolean);
     if (!targets.length) { ui.notifications?.warn(`${item.name}: target the creatures in the area first (or place the template).`); return; }
+    if (!(await _ftSpendRecharge())) return;
     const f = String(item.system?.damage?.formula || "").replace(/\s+/g, "");
     const m = f.match(/^(\d+)(d\d+)([+-]\d+)?$/);
     const threatDmg = Number(actor.system?.derived?.threat?.damage) || 0;
@@ -1503,6 +1517,7 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
           const aimedShotActive = rig && !!actor?.flags?.fourththing?.combat?.aimedShot;
           const aimedShotBonus  = aimedShotActive ? 2 : 0;
 
+          if (!(await _ftSpendRecharge())) return false;   // 10-29: spent on the roll, not on open
           const result = await game.fourththing.rolls.attackTest(actor, {
             intent: selIntent, skill: selSkill,
             defense, defenseValue: defVal,
@@ -2713,7 +2728,9 @@ async function ftPlaceAreaTemplate(actor, area) {
 // shape populated yet (canvas draw is async after createEmbeddedDocuments
 // resolves). Compute from the doc directly if `_computeShape` is available;
 // fall back to an empty list rather than silently dropping AoE targets.
-function _ftTokensInTemplate(templateDoc, { excludeActorIds = new Set() } = {}) {
+// 10-29: exclude by actor UUID — unlinked tokens share their base actor's id, so an id
+// exclusion dropped every same-stat-block ally of an unlinked caster.
+function _ftTokensInTemplate(templateDoc, { excludeActorIds = new Set(), excludeActorUuids = new Set() } = {}) {
   if (!templateDoc) return [];
   // Template origin + shape type come from the DOCUMENT (always populated),
   // NOT the canvas placeable (whose PIXI shape may not be drawn yet — the old
@@ -2740,7 +2757,7 @@ function _ftTokensInTemplate(templateDoc, { excludeActorIds = new Set() } = {}) 
   const out = [];
   for (const tok of tokens) {
     const a = tok.actor;
-    if (!a || excludeActorIds.has(a.id)) continue;
+    if (!a || excludeActorIds.has(a.id) || excludeActorUuids.has(a.uuid)) continue;
     const cx = tok.center?.x ?? (tok.x + (tok.w ?? 0) / 2);
     const cy = tok.center?.y ?? (tok.y + (tok.h ?? 0) / 2);
     let inside;
@@ -2791,8 +2808,9 @@ function _ftFilterByDisposition(caster, tokens, mode = "all") {
 async function _ftPickAoeTargets(caster, tokens, { beneficial = false, label = "Manifestation" } = {}) {
   if (!tokens?.length) return [];
   const cd = _ftActorDisposition(caster);
+  // 10-29: key rows by actor UUID (unique per unlinked token), not the shared base-actor id.
   const entries = tokens.map(t => ({
-    id: t.actor.id, name: t.actor.name, actor: t.actor,
+    id: t.actor.uuid, name: t.actor.name, actor: t.actor,
     rel: _ftAoeRelation(cd, t.document?.disposition ?? t.disposition ?? 0)
   }));
   const defaultMode = beneficial ? "allies" : "foes";
@@ -2804,7 +2822,7 @@ async function _ftPickAoeTargets(caster, tokens, { beneficial = false, label = "
   };
   const rows = entries.map(e => `
     <label style="display:flex;align-items:center;gap:0.5rem;padding:0.25rem 0.1rem;font-size:0.85rem;cursor:pointer">
-      <input type="checkbox" class="ft-aoe-tgt" data-id="${e.id}" data-rel="${e.rel}" ${checkedFor(e.rel) ? "checked" : ""}/>
+      <input type="checkbox" class="ft-aoe-tgt" data-id="${ftEscapeHtml(e.id)}" data-rel="${e.rel}" ${checkedFor(e.rel) ? "checked" : ""}/>
       <span style="flex:1">${ftEscapeHtml(e.name)}</span>${badge[e.rel] ?? ""}
     </label>`).join("");
   const content = `
@@ -3292,7 +3310,8 @@ async function _ftHandleSavePromptClick(btn, message) {
     // for the chat card + Apply button (same as singular non-prompt path).
     const dr = ctx.damageRoll;
     if (dr?.op !== "none" && Number(dr?.number) > 0 && mult > 0) {
-      await ftRollManifestationDamage(caster, item, dr, { multiplier: mult });
+      // 10-29: bake the prompted target — Apply hits THIS target, not the clicker's targets.
+      await ftRollManifestationDamage(caster, item, dr, { multiplier: mult, targetUuid: ctx.targetUuid });
     }
     // Apply states AND Buffs & Wards with the same gate. Two latent bugs here
     // (2026-08-21, the first stuck [sic] applied nothing):
@@ -3416,7 +3435,7 @@ async function _ftHandleLegendaryStrikeInvoke(btn, message) {
 // card with an Apply button. Bakes the rolled total into data-formula so
 // the apply path applies the same number rather than re-rolling. Heal flows
 // through the same apply button via data-op="heal" (extended in applyDamage).
-async function ftRollManifestationDamage(actor, item, dr, { multiplier = 1 } = {}) {
+async function ftRollManifestationDamage(actor, item, dr, { multiplier = 1, targetUuid = null } = {}) {
   if (!actor || !item || !dr || dr.op === "none") return null;
   if (!Number.isFinite(dr.number) || dr.number <= 0) return null;
   const sys = actor.system?.system ?? actor.system;
@@ -3451,14 +3470,14 @@ async function ftRollManifestationDamage(actor, item, dr, { multiplier = 1 } = {
     <div class="ft-dmg-row">
       <span class="ft-dmg-label">${opLabel}</span>
       <span class="ft-dmg-formula">${finalFormula} = <b>${rawTotal}</b>${safeMult !== 1 ? ` → <b>${finalTotal}</b>` : ""}${facultyTag}</span>
-      <span class="ft-dmg-type ${dr.type}">${ftCap(dr.type)}</span>
+      <span class="ft-dmg-type ${ftEscapeHtml(dr.type ?? "")}">${ftCap(dr.type)}</span>
       <button class="ft-apply-dmg-btn"
               data-formula="${finalTotal}"
-              data-damage-type="${dr.type}"
-              data-damage-flavor="${dr.flavor ?? ""}"
+              data-damage-type="${ftEscapeHtml(dr.type ?? "")}"
+              data-damage-flavor="${ftEscapeHtml(dr.flavor ?? "")}"
               data-track="${trackKey}"
               data-op="${dr.op}"
-              data-item-uuid="${ftEscapeHtml(item?.uuid ?? "")}">
+              data-item-uuid="${ftEscapeHtml(item?.uuid ?? "")}"${targetUuid ? ` data-target-uuid="${ftEscapeHtml(targetUuid)}" data-target-first="1"` : ""}>
         ${isHeal ? "Heal target" : "Apply to target"}
       </button>
     </div>
@@ -4272,12 +4291,15 @@ function _ftSurgeHeatContext(actor) {
 //   • Cataclyst L17 Both Things At Once — every path spend (cl-/av-/mt-) costs 1 less.
 //   • Cataclyst L5 Stance Dance, Advance stance — offensive path spends cost 1 less
 //     this round (flags.fourththing.bulwark.stanceDance = {round, combatId, stance}).
+//   • Shadow Courier Package Mastery, Black Stair (10-29, replaces SC7's +1 Surge) —
+//     flags.fourththing.courier.masteryNext: the next spend after a delivery costs 1 less.
 function _ftSurgeEffectiveCost(actor, entry) {
   const base = Number(entry?.cost) || 0;
   if (!actor || base <= 0) return base;
   const ff = actor.flags?.fourththing?.bulwark ?? {};
   let d = 0;
   if (ff.exchangeNext) d += 1;
+  if (actor.flags?.fourththing?.courier?.masteryNext) d += 1;
   const isPath = _FT_BULWARK_PATH_KEYS.has(entry.key);
   if (isPath) {
     const has = (id) => Array.from(actor.items ?? []).some(i => String(i.system?.identifier ?? "") === id);
@@ -4339,10 +4361,19 @@ async function _ftBankSurge(actor, n, { fromHarvest = false, bite = true } = {})
 }
 
 // Overheat shields: Aura Unbound (this round), Emotional Lock / Storm's Heart AE.
+// 10-29: "this round" = same combat + round when stamped in combat; out of combat a
+// round is ~6 s from the stamp (a null===null match used to shield forever).
+function _ftShieldStampLive(st) {
+  if (!st) return false;
+  if (st.combatId) return game.combat?.id === st.combatId && Number(game.combat?.round ?? 0) === Number(st.round ?? -1);
+  return !game.combat?.started && Number.isFinite(Number(st.at)) && (Date.now() - Number(st.at)) <= 6000;
+}
 function _ftOverheatShielded(actor) {
-  const unb = actor?.flags?.fourththing?.aurablade?.unbound;
-  if (unb && (game.combat?.id ?? null) === (unb.combatId ?? null) && Number(game.combat?.round ?? 0) === Number(unb.round ?? -1)) return true;
-  return Array.from(actor?.effects ?? []).some(e => !e.disabled && e.flags?.fourththing?.emotionalLock);
+  if (_ftShieldStampLive(actor?.flags?.fourththing?.aurablade?.unbound)) return true;
+  // Emotional Lock AE (Storm's Heart) carries the same stamp; the cull never drops
+  // its seconds-typed duration, so the stamp is what ends it. Unstamped (legacy) = spent.
+  return Array.from(actor?.effects ?? []).some(e => !e.disabled && e.flags?.fourththing?.emotionalLock
+    && _ftShieldStampLive(e.flags?.fourththing?.lockStamp));
 }
 // The overheat bite: 1 Stress (the pool drains toward 0) + a short chat line.
 async function _ftOverheatBite(actor) {
@@ -5288,7 +5319,7 @@ const _FT_CL_DOCTRINE_SELF_KEYS = new Set(["an-revision", "mp-apotheosis"]);
 // An entry is a CLASS ability if it carries any class/subclass gating tag;
 // otherwise it is a universal (GENERAL) ability available to every steward.
 const _FT_SURGE_CLASS_TAGS = ["classFilter", "forge", "mandate", "trance",
-  "bulwarkPath", "courierRoute", "pactDoctrine", "wlRefraction", "clDoctrine"];
+  "bulwarkPath", "courierRoute", "pactDoctrine", "wlRefraction", "clDoctrine", "auraDoctrine"];
 function _ftSurgeEntryKind(entry) {
   return _FT_SURGE_CLASS_TAGS.some(t => entry?.[t] != null) ? "class" : "general";
 }
@@ -5309,6 +5340,7 @@ function _ftSurgeEntryClassLabel(entry) {
   if (entry.pactDoctrine)  return `Doctrine ▸ ${_ftPrettySlug(entry.pactDoctrine)}`;
   if (entry.wlRefraction)  return `Refraction ▸ ${_ftPrettySlug(entry.wlRefraction)}`;
   if (entry.clDoctrine)    return `Doctrine ▸ ${_ftPrettySlug(entry.clDoctrine)}`;
+  if (entry.auraDoctrine)  return `Aurablade ▸ ${_ftPrettySlug(entry.auraDoctrine)}`;
   return "";
 }
 
@@ -5368,7 +5400,10 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   // Special-case: reposition-init has its own wired handler from the original
   // menu — keep using it. It pays cost itself.
   if (effectKey === "reposition-init") {
-    await _ftRepositionInitiative(actor, cost);
+    const _paid = await _ftRepositionInitiative(actor, cost);
+    // 10-29: a paid Reposition spends The Exchange too (it returns before the clear below).
+    if (_paid === true && actor.flags?.fourththing?.bulwark?.exchangeNext) { try { await actor.unsetFlag("fourththing", "bulwark.exchangeNext"); } catch (e) {} }
+    if (_paid === true && actor.flags?.fourththing?.courier?.masteryNext) { try { await actor.unsetFlag("fourththing", "courier.masteryNext"); } catch (e) {} }
     return;
   }
 
@@ -5527,6 +5562,18 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   if (effectKey === "steel-veil" || effectKey === "sanctum") {
     chosenType = await _ftSurgePickDamageType(effectKey === "steel-veil" ? "Steel Veil — resist which type?" : "Sanctum — immune to which type?");
     if (!chosenType) return; // cancelled
+    // 10-29: the picker can sit open — re-read the bank so the pay doesn't clobber
+    // a harvest/spend that landed meanwhile, and re-check affordability.
+    const _rs = actor.system?.system ?? actor.system ?? {};
+    curSurge = Number(_rs?.resources?.surge?.value) || 0;
+    if (curSurge < cost) { ui.notifications?.warn(`${actor.name}: needs ${cost} Surge (has ${curSurge}).`); return; }
+  }
+  // 10-29: Crimson Tithe is paid in Integrity — refuse at 1 or less (the floor of 1
+  // made it free at 1 and a 0 → 1 heal out of Last Stand when downed). Nothing charged.
+  if (effectKey === "bh-tithe") {
+    const _ts = actor.system?.system ?? actor.system ?? {};
+    const _ti = Number(_ts?.derived?.integrity?.value ?? 0);
+    if (!(_ti > 1)) { ui.notifications?.warn(`${actor.name}: Crimson Tithe needs Integrity to pay (has ${_ti}).`); return; }
   }
 
   // Heat band BEFORE paying — band-scaled spends (Forge-Weld, Hymn, Rebirth Ward)
@@ -5534,8 +5581,9 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   _ftPreSpendSurge = Number(curSurge) || 0;
   // Pay the cost.
   await actor.update({ "system.resources.surge.value": Math.max(0, curSurge - cost) });
-  let _bwNote = _discounted ? `<p style="margin:0.25rem 0;font-size:0.72rem;opacity:0.75">◆ Cost reduced ${_baseCost} → ${cost}${actor.flags?.fourththing?.bulwark?.exchangeNext ? " (The Exchange)" : ""}.</p>` : "";
+  let _bwNote = _discounted ? `<p style="margin:0.25rem 0;font-size:0.72rem;opacity:0.75">◆ Cost reduced ${_baseCost} → ${cost}${actor.flags?.fourththing?.bulwark?.exchangeNext ? " (The Exchange)" : ""}${actor.flags?.fourththing?.courier?.masteryNext ? " (Package Mastery)" : ""}.</p>` : "";
   if (actor.flags?.fourththing?.bulwark?.exchangeNext) { try { await actor.unsetFlag("fourththing", "bulwark.exchangeNext"); } catch (e) {} }
+  if (actor.flags?.fourththing?.courier?.masteryNext) { try { await actor.unsetFlag("fourththing", "courier.masteryNext"); } catch (e) {} }
   _bwNote += await _ftBulwarkPolarityCataclyst(actor, entry);
 
   // Spend-time AEs: brace / mythic-stand / steel-veil / sanctum apply
@@ -5651,7 +5699,7 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     ...(_surgeRolls.length ? { rolls: _surgeRolls, sound: CONFIG.sounds?.dice } : {}),
     content: `<div class="fourththing-roll">
       <div class="ft-roll-header">
-        <span class="ft-roll-name">✦ ${actor.name} spends ${cost} Surge</span>
+        <span class="ft-roll-name">✦ ${ftEscapeHtml(actor.name)} spends ${cost} Surge</span>
       </div>
       <div style="font-size:0.74rem;margin:0.15rem 0 0.35rem;opacity:0.85">
         ${bucketBadge} · <b>${entry.label.split(" — ")[0]}</b>
@@ -5738,11 +5786,12 @@ Hooks.on("updateActor", (actor, changed) => {
 async function _ftRepositionInitiative(actor, cost) {
   const rawSys = actor.system?.system ?? actor.system ?? {};
   const cur = Number(rawSys?.resources?.surge?.value) || 0;
-  if (cur < cost) return ui.notifications?.warn(`${actor.name}: Reposition needs ${cost} Surge (has ${cur}).`);
+  if (cur < cost) { ui.notifications?.warn(`${actor.name}: Reposition needs ${cost} Surge (has ${cur}).`); return false; }
   const combat = game.combat;
   const combatant = combat?.combatants?.find?.(c => c.actor?.id === actor.id);
   if (!combat?.started || !combatant) {
-    return ui.notifications?.warn(`${actor.name}: Reposition needs an active combat with them in the tracker.`);
+    ui.notifications?.warn(`${actor.name}: Reposition needs an active combat with them in the tracker.`);
+    return false;
   }
   const suggested = Math.ceil((combat.combatants.contents?.[0]?.initiative ?? 20) + 1);
   const newInit = await new Promise((resolve) => {
@@ -5761,7 +5810,7 @@ async function _ftRepositionInitiative(actor, cost) {
       close: () => resolve(null)
     }).render(true);
   });
-  if (newInit === null || !Number.isFinite(newInit)) return;
+  if (newInit === null || !Number.isFinite(newInit)) return false;
   await actor.update({ "system.resources.surge.value": cur - cost });
   await combat.setInitiative(combatant.id, newInit);
   ChatMessage.create({
@@ -5771,6 +5820,7 @@ async function _ftRepositionInitiative(actor, cost) {
       <p style="margin:0.3rem 0;font-size:0.8rem">Re-enters at initiative <b>${newInit}</b>. <span style="opacity:0.6">Surge ${cur} → ${cur - cost}.</span></p>
     </div>`
   });
+  return true;
 }
 
 // Heal dispatch — writes to canonical system.integrity.value (never the
@@ -5796,7 +5846,7 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
       speaker: ChatMessage.getSpeaker({ actor }),
       rolls: [roll],
       content: `<div class="fourththing-roll">
-        <div class="ft-roll-header"><span class="ft-roll-name">✚ ${label} — Healing</span></div>
+        <div class="ft-roll-header"><span class="ft-roll-name">✚ ${ftEscapeHtml(label)} — Healing</span></div>
         <div class="ft-dmg-row">
           <span class="ft-dmg-label">Healing</span>
           <span class="ft-dmg-formula">${formula} = <b>${total}</b></span>
@@ -5819,7 +5869,7 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
       return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Field Patch needs a target (target one ally token first). Surge was still spent — GM may refund.</p>`;
     }
     const total = await postHealCard(`2d6 + ${tier}`, `Field Patch → ${tok.actor.name}`, tok.actor.uuid);
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">✚ Field Patch — rolled <b>${total}</b> for <b>${tok.actor.name}</b>; click <b>Apply Healing</b>.</p>`;
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">✚ Field Patch — rolled <b>${total}</b> for <b>${ftEscapeHtml(tok.actor.name)}</b>; click <b>Apply Healing</b>.</p>`;
   }
 
   if (effectKey === "rallying-cry") {
@@ -5930,6 +5980,16 @@ function _ftAbTokensWithin(actor, ft, foes = false) {
 const _ftAbP = (c, s) => `<p style="margin:0.25rem 0;font-size:0.78rem;color:${c}">${s}</p>`;
 const _ftAbWarn = (label) => `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ ${label} needs a target. Surge spent — GM may refund.</p>`;
 
+// 10-29: SET a condition to `want` (default on) — never flip it. toggleCondition
+// flips, so a spend applying Staggered/Prone to a foe that already had it cleared
+// it. Returns true only when the end state is `want` (an immune foe → false).
+async function _ftSetCondition(a, c, want = true) {
+  if (!a) return false;
+  const s = a.system?.system ?? a.system ?? {};
+  if ((s?.conditions?.[c] === true) === want) return true;
+  try { return (await game.fourththing?.toggleCondition?.(a, c)) === want; } catch (e) { return false; }
+}
+
 // Timed condition (2026-10-25): set a condition now and clear it when the combat
 // round reaches `until`. Stamp = flags.fourththing.tempConditions.<key> =
 // { until, combatId }; the active GM's updateCombat sweep (below the Burn timer
@@ -5994,11 +6054,7 @@ async function _ftAuraDoctrineSurge(actor, effectKey, tier) {
   const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
   const tname  = target?.name ?? "the target";
   const band   = _ftSpendBand(actor);
-  const setCond = async (a, k) => {
-    const s = a.system?.system ?? a.system ?? {};
-    if (s?.conditions?.[k] === true) return true;
-    try { await game.fourththing?.toggleCondition?.(a, k); return true; } catch (e) { return false; }
-  };
+  const setCond = (a, k) => _ftSetCondition(a, k, true);   // 10-29: immune → false
   const keepLowest = async (a) => { try { await _ftSetFlagSeatSafe(a, "aurablade.disAttackOnce", true); } catch (e) {} };
   switch (effectKey) {
     // ── Blood Hymn ──
@@ -6036,7 +6092,7 @@ async function _ftAuraDoctrineSurge(actor, effectKey, tier) {
       return _ftAbP("#4a90d9", `◎ Still Point — you auto-pass your next save.${extra}`);
     }
     case "sh-storm": {
-      try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Emotional Lock", img: "icons/magic/control/buff-flight-wings-blue.webp", origin: actor.uuid, duration: { rounds: 1, seconds: 6 }, changes: [], flags: { fourththing: { emotionalLock: true } } }]); } catch (e) {}
+      try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Emotional Lock", img: "icons/magic/control/buff-flight-wings-blue.webp", origin: actor.uuid, duration: { rounds: 1, seconds: 6 }, changes: [], flags: { fourththing: { emotionalLock: true, lockStamp: { round: Number(game.combat?.round ?? 0), combatId: game.combat?.id ?? null, at: Date.now() } } } }]); } catch (e) {}
       const foes = _ftAbTokensWithin(actor, 10, true) ?? [];
       const names = [];
       for (const t of foes) { if (await _ftTempCondition(t.actor, "calmed", 1)) names.push(t.actor.name); }
@@ -6095,8 +6151,9 @@ async function _ftDreamwalkerCastGen(actor) {
   const f = actor.flags?.fourththing?.dreamwalker?.castGen ?? {};
   const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
   if (inCombat && count >= 2) return;
-  const got = await _ftBankSurge(actor, 1);
-  if (got > 0) await actor.setFlag("fourththing", "dreamwalker.castGen", { round, count: count + 1 });
+  // 10-29: count every attempt — at full Surge the bank bites, and the cap must bound the bites.
+  await actor.setFlag("fourththing", "dreamwalker.castGen", { round, count: count + 1 });
+  await _ftBankSurge(actor, 1);
 }
 // Which Trance (subclass) is this actor? Flexible match on subclass id OR name.
 function _ftDreamwalkerTrance(actor) {
@@ -6331,7 +6388,9 @@ async function _ftMandateSurge(actor, effectKey, tier) {
     case "res-nonelost": {
       if (!target) return needTarget;
       const combatId = String(game.combat?.id ?? "none");
-      if (actor.flags?.fourththing?.harmonyMarshal?.noneLostCombat === combatId) {
+      // 10-29: 1/fight only IN a fight (mirrors the Relic of Rebirth fix) — out of
+      // combat the "none" key locked every later use for good.
+      if (game.combat?.id && actor.flags?.fourththing?.harmonyMarshal?.noneLostCombat === combatId) {
         return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ None Lost already invoked this fight.</p>`;
       }
       const ts = target.system?.system ?? target.system ?? {};
@@ -6417,7 +6476,7 @@ async function _ftForgeSurge(actor, effectKey, tier) {
     }
     case "fov-sunder": {
       await oneShot("sundering-blow");
-      if (target) { try { await game.fourththing?.toggleCondition?.(target, "staggered"); } catch (e) {} }
+      if (target) await _ftSetCondition(target, "staggered");   // 10-29: set, not toggle
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">⚔ Sundering Stroke — your next Strike ignores resistances; <b>${tname}</b> is Staggered.${tail}</p>`;
     }
     // ── Forge of the Spark Reclaimer ──
@@ -6907,8 +6966,10 @@ async function _ftBulwarkOnDamage(damagedActor, dmg) {
     && (damagedActor.items?.some?.(i => i.type === "subclass" && /mountain/i.test(`${i.name} ${i.system?.identifier ?? ""}`)));
   const _genCap = _polarityMountain ? 3 : 2;
   if (inCombat && count >= _genCap) return; // eat-the-blow per-round cap
-  const got = await _ftBankSurge(damagedActor, 1);
-  if (got > 0) await damagedActor.setFlag("fourththing", "bulwark.surgeGen", { round, count: count + 1 });
+  // 10-29: count every attempt (as the Soul-Smith forge does) — at full Surge the bank
+  // bites and returns 0, and the cap must still stop the bites at +2/round.
+  await damagedActor.setFlag("fourththing", "bulwark.surgeGen", { round, count: count + 1 });
+  await _ftBankSurge(damagedActor, 1);
 }
 
 // Bulwark base class-exclusive Surge spend. Only Brace Wall (the wired T1 opener)
@@ -7022,7 +7083,7 @@ async function _ftBulwarkPathSurge(actor, effectKey, tier) {
   const oneShot = async (k) => { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} };
   const drAE = (name) => ({ name, img: "icons/svg/shield.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
   const anchorAE = (name) => ({ name, img: "icons/svg/anchor.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "anchor", ccImmune: true, forcedMoveImmune: true } } } });
-  const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
+  const setCond = (a, c, want = true) => _ftSetCondition(a, c, want);   // 10-29: set, not toggle
   const selfAE = async (ae) => { try { await actor.createEmbeddedDocuments("ActiveEffect", [ae]); return true; } catch (e) { return false; } };
   const dist = (a, b) => {
     const ax = a.x + (a.document?.width || 1) * grid / 2, ay = a.y + (a.document?.height || 1) * grid / 2;
@@ -7112,9 +7173,10 @@ async function _ftCourierMoveGen(actor, cumulativeFt) {
   // Out of combat the +2/round cap is lifted; in combat keep it. Surge cap still bounds total.
   const earned = inCombat ? Math.min(2, Math.floor(Number(cumulativeFt) / 30)) : Math.floor(Number(cumulativeFt) / 30);
   if (earned <= had) return;
-  let banked = 0;
-  for (let i = had; i < earned; i++) banked += await _ftBankSurge(actor, 1);
-  if (banked > 0) await actor.setFlag("fourththing", "courier.moveGen", { round, count: earned });
+  // 10-29: record the count BEFORE banking, whatever banks — at full Surge the bank
+  // bites and returns 0, and an unwritten count re-bit on every later square.
+  await actor.setFlag("fourththing", "courier.moveGen", { round, count: earned });
+  for (let i = had; i < earned; i++) await _ftBankSurge(actor, 1);
 }
 
 // Which route (subclass) is this Courier? Flexible match on subclass id OR name.
@@ -7188,7 +7250,7 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
   const bankReroll   = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "courier-route" }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
   const freeReaction = async (a) => { try { await _ftSetFlagSeatSafe(a, "bonusActionAvailable", true); } catch (e) {} };
   const disAdv  = async (foe) => { try { await _ftSetFlagSeatSafe(foe, "aurablade.disAttackOnce", true); } catch (e) {} };
-  const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
+  const setCond = (a, c, want = true) => _ftSetCondition(a, c, want);   // 10-29: set, not toggle
   const healAlly = async (a, formula) => {
     const r = new Roll(formula); await r.evaluate(); _ftSurgeRoll(r);
     const h = await _ftHealTarget(a, Math.max(0, Number(r.total) || 0));   // owner-or-GM-relay
@@ -7253,7 +7315,7 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
       const _h = await _ftHealTarget(target, Math.max(0, half - cur));   // owner-or-GM-relay
       const next = _h.next;
       let cl = ""; const k = NEG.find(x => tsys?.conditions?.[x] === true);
-      if (k && await setCond(target, k)) cl = ` and cleared <b>${FT?.CONDITIONS?.[k]?.label ?? k}</b>`;
+      if (k && await setCond(target, k, false)) cl = ` and cleared <b>${FT?.CONDITIONS?.[k]?.label ?? k}</b>`;
       return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">📦 Delivered — the unbearable thing arrives: restored <b>${tname}</b> to ${next}/${max} integrity${cl}.${_h.tag}</p>`;
     }
   }
@@ -7306,7 +7368,7 @@ async function _ftPactkeeperSurge(actor, effectKey, tier) {
   const target  = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
   const tname   = target?.name ?? "the target";
   const drAE    = (name) => ({ name, img: "icons/svg/shield.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
-  const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
+  const setCond = (a, c, want = true) => _ftSetCondition(a, c, want);   // 10-29: set, not toggle
 
   if (effectKey === "pk-clause") {
     if (target) await _ftPactDisAttack(target);
@@ -7340,7 +7402,7 @@ async function _ftPactDoctrineSurge(actor, effectKey, tier) {
   const oneShot = async (k) => { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} };
   const bankReroll   = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "pactkeeper" }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
   const freeReaction = async (a) => { try { await _ftSetFlagSeatSafe(a, "bonusActionAvailable", true); } catch (e) {} };
-  const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
+  const setCond = (a, c, want = true) => _ftSetCondition(a, c, want);   // 10-29: set, not toggle
   const healAlly = async (a, formula) => {
     const r = new Roll(formula); await r.evaluate(); _ftSurgeRoll(r);
     return (await _ftHealTarget(a, Math.max(0, Number(r.total) || 0))).healed;   // owner-or-GM-relay
@@ -7420,9 +7482,10 @@ async function _ftClAlignedCastGen(actor, { sephirah, intent, channel } = {}) {
   const f = actor.flags?.fourththing?.cosmicLinguist?.alignedGen ?? {};
   const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
   if (inCombat && count >= 2) return 0;
+  // 10-29: count every attempt — at full Surge the bank bites, and the cap must bound the bites.
+  await actor.setFlag("fourththing", "cosmicLinguist.alignedGen", { round, count: count + 1 });
   const got = await _ftBankSurge(actor, 1);
   if (got > 0) {
-    await actor.setFlag("fourththing", "cosmicLinguist.alignedGen", { round, count: count + 1 });
     try { ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p style="font-size:0.78rem;color:#9ad0ff">✎ Aligned casting (${feats[0].name.replace(/^.*?: /, "")}) — <b>+1 Surge</b> banked.</p>` }); } catch (e) {}
   }
   return got;
@@ -7436,8 +7499,9 @@ async function _ftWyrdlensCastGen(actor) {
   const f = actor.flags?.fourththing?.wyrdlens?.castGen ?? {};
   const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
   if (inCombat && count >= 2) return;
-  const got = await _ftBankSurge(actor, 1);
-  if (got > 0) await actor.setFlag("fourththing", "wyrdlens.castGen", { round, count: count + 1 });
+  // 10-29: count every attempt — at full Surge the bank bites, and the cap must bound the bites.
+  await actor.setFlag("fourththing", "wyrdlens.castGen", { round, count: count + 1 });
+  await _ftBankSurge(actor, 1);
 }
 
 // Which Refraction (subclass) is this Adept? Flexible match on subclass id OR name.
@@ -7497,7 +7561,7 @@ async function _ftWlRefractionSurge(actor, effectKey, tier) {
   const drAE   = (name) => ({ name, img: "icons/svg/eye.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
   const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "wyrdlens-refraction" }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
   const freeReaction = async (a) => { try { await _ftSetFlagSeatSafe(a, "bonusActionAvailable", true); } catch (e) {} };
-  const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
+  const setCond = (a, c, want = true) => _ftSetCondition(a, c, want);   // 10-29: set, not toggle
 
   switch (effectKey) {
     // ── Refraction of Foresight — anticipation / temporal ──
@@ -7530,7 +7594,7 @@ async function _ftWlRefractionSurge(actor, effectKey, tier) {
         const NEG = ["staggered","scarred","calmed","blinded","prone","shaken","burning","restrained","charmed","compelled"];
         const ts = target.system?.system ?? target.system ?? {};
         const k = NEG.find(x => ts?.conditions?.[x] === true);
-        if (k) await setCond(target, k);
+        if (k) await setCond(target, k, false);
       }
       return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">🕊 The Open Hand — healed <b>${tname}</b> and offered a clean exit (cleared a condition).</p>`;
     }
@@ -7612,7 +7676,7 @@ async function _ftClDoctrineSurge(actor, effectKey, tier) {
   const grid   = canvas.grid?.size ?? 100;
   const drAE   = (name) => ({ name, img: "icons/svg/book.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
   const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "cl-doctrine" }); try { await _ftSetFlagSeatSafe(a, "aidBanked", b); } catch (e) {} };
-  const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
+  const setCond = (a, c, want = true) => _ftSetCondition(a, c, want);   // 10-29: set, not toggle
   const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
   const dist  = (a, b) => { const ax = a.x + (a.document?.width || 1) * grid / 2, ay = a.y + (a.document?.height || 1) * grid / 2, bx = b.x + (b.document?.width || 1) * grid / 2, by = b.y + (b.document?.height || 1) * grid / 2; return Math.hypot(ax - bx, ay - by); };
   const aura = () => myTok ? (canvas.tokens?.placeables ?? []).filter(t => t?.actor && (t.document?.disposition ?? 0) >= 0 && dist(t, myTok) <= 30 / (canvas.scene?.grid?.distance ?? 5) * grid + grid / 2) : [];
@@ -7648,7 +7712,7 @@ async function _ftClDoctrineSurge(actor, effectKey, tier) {
     // ── Redactor — omission / strip / deny ──
     case "rd-redact": {
       let cleared = "";
-      if (target) { const ts = target.system?.system ?? target.system ?? {}; const k = NEG.find(x => ts?.conditions?.[x] === true); if (k && await setCond(target, k)) cleared = FT?.CONDITIONS?.[k]?.label ?? k; }
+      if (target) { const ts = target.system?.system ?? target.system ?? {}; const k = NEG.find(x => ts?.conditions?.[x] === true); if (k && await setCond(target, k, false)) cleared = FT?.CONDITIONS?.[k]?.label ?? k; }
       return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">⌫ Redact — struck <b>${cleared || "an affliction"}</b> from <b>${tname}</b> (clean edges where it used to be).</p>`;
     }
     case "rd-silence": {
@@ -8362,8 +8426,9 @@ async function castManifestation(actor, item, {
     if (!_wk.host) { ui.notifications?.warn(`${item.name}: its host item is gone — this bound Working is inert.`); return false; }
     if (_wk.value <= 0) { ui.notifications?.warn(`${item.name}: ${_wk.host.name} has no charges left (recovers on a Soma Break).`); return false; }
     freeClarity = true;
-    await spendWorkingCharge(actor, item);
   }
+  // 10-29: the host charge is spent only once every refusing gate has passed (below) — a refused cast costs nothing.
+  const _wkSpend = !!(_wk && !miracle);
   const stewardTier = _ftCasterTier(actor);
   const mf = item ? ftNormalizeManifestationData(item.system ?? {}, item.type === "weapon" ? "weapon" : "power") : null;
   const manTier = mf ? Math.max(1, Math.min(4, Number(mf.tier) || 1)) : stewardTier;
@@ -8456,11 +8521,15 @@ async function castManifestation(actor, item, {
       ui.notifications?.warn(`${actor.name}: Dream-Cache already holds "${rawSys.resources.dreamCache.name || "(unnamed)"}". Deploy or empty it first.`);
       return false;
     }
+    if (_wkSpend) await spendWorkingCharge(actor, item); // banking a bound Working still costs its charge
     await actor.update({
       "system.resources.dreamCache.banked": true,
       "system.resources.dreamCache.name":   item.name,
       "system.resources.dreamCache.tier":   manTier,
-      "system.resources.dreamCache.itemId": item.id
+      "system.resources.dreamCache.itemId": item.id,
+      // 10-29: the deploy re-casts through the reach gate — carry the chosen path + mode.
+      "system.resources.dreamCache.reachPath": reachPath || "",
+      "system.resources.dreamCache.mode":      mode || "hermetic"
     });
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor }),
@@ -8567,6 +8636,8 @@ async function castManifestation(actor, item, {
     ui.notifications?.warn(`${actor.name}: Ascendant mode is T3+ only.`);
     return false;
   }
+  // 10-29: last refusing gate passed — now the bound Working's host charge is spent.
+  if (_wkSpend) await spendWorkingCharge(actor, item);
 
   // Resolve Clarity cost (mode adjusts; ascendant skips Clarity entirely;
   // TCCs get a -1 cast discount that floors at 0 for safety).
@@ -8754,18 +8825,19 @@ async function castManifestation(actor, item, {
 
     // Candidate token list: those inside the template, or — when the template
     // caught nobody — a 2+ manual-target selection. Caster excluded, deduped by actor.
+    // 10-29: by actor UUID — unlinked tokens of one stat block share an actor id.
     let aoeTokenList = (placedTemplate
-      ? _ftTokensInTemplate(placedTemplate, { excludeActorIds: new Set([actor.id]) })
-      : []).filter(t => t?.actor && t.actor.id !== actor.id);
+      ? _ftTokensInTemplate(placedTemplate, { excludeActorUuids: new Set([actor.uuid]) })
+      : []).filter(t => t?.actor && t.actor.uuid !== actor.uuid);
     if (aoeTokenList.length === 0 && wasAreaCast) {
       // Manual-target fallback. Used to demand 2+ picks, so an area cast whose
       // template caught nobody + a SINGLE targeted token resolved to zero
       // targets and silently did nothing — no damage card, no Apply button
       // (playtest 2026-06-06: Screams of Terror, 10ft cone). One pick counts.
-      const picked = Array.from(game.user?.targets ?? []).filter(t => t?.actor && t.actor.id !== actor.id);
+      const picked = Array.from(game.user?.targets ?? []).filter(t => t?.actor && t.actor.uuid !== actor.uuid);
       if (picked.length >= 1) aoeTokenList = picked;
     }
-    { const seen = new Set(); aoeTokenList = aoeTokenList.filter(t => seen.has(t.actor.id) ? false : (seen.add(t.actor.id), true)); }
+    { const seen = new Set(); aoeTokenList = aoeTokenList.filter(t => seen.has(t.actor.uuid) ? false : (seen.add(t.actor.uuid), true)); }
 
     const dr = ftNormalizeDamageRoll(item.system ?? {});
     // Resonance Channel: extra damage dice stack onto the rolled total.
@@ -12289,6 +12361,8 @@ function ftComputeDefenses(actor, sys) {
     return Array.isArray(sys) ? sys : [];
   };
   if (actor?.items) {
+    let _monsterWearer = false;
+    try { _monsterWearer = actorKind(actor) === "monster"; } catch (_e) {}
     for (const item of actor.items) {
       const grants     = item.flags?.fourththing?.grants;
       const armorRes   = (item.type === "armor") ? item.system?.resistances : null;
@@ -12320,7 +12394,8 @@ function ftComputeDefenses(actor, sys) {
       // medium→bracing, heavy→plating). Falls back to system.armorSkill if no
       // weight tag is present. Untrained armor delivers the material but not
       // the practice; resistance grants are dormant.
-      if (item.type === "armor") {
+      // 10-29: monsters skip the gate, matching ftComputeArmorBonus (ruling 2026-09-04).
+      if (item.type === "armor" && !_monsterWearer) {
         const skillKey = _ftArmorGateSkill(item);
         const rank = sys?.skills?.[skillKey]?.value ?? 0;
         if (rank < 1) continue;
@@ -12545,7 +12620,7 @@ async function _ftApplyConsumeToRecipient(recipient, item, consume) {
   for (const eff of (consume.effects ?? [])) {
     if (eff.kind === "track") {
       const spec = FT_TRACK_PATHS[eff.track];
-      if (!spec) { summary.push(`<li>unknown track: ${eff.track}</li>`); continue; }
+      if (!spec) { summary.push(`<li>unknown track: ${ftEscapeHtml(eff.track)}</li>`); continue; }
       const cur  = Number(foundry.utils.getProperty(recipient, spec.path) ?? 0);
       let max    = spec.max ? Number(foundry.utils.getProperty(recipient, spec.max) ?? 0) : null;
       const { amount, rolled } = await _ftResolveAmount(recipient, eff);
@@ -12554,16 +12629,25 @@ async function _ftApplyConsumeToRecipient(recipient, item, consume) {
       else if (eff.op === "subtract") next = cur - amount;
       else if (eff.op === "set")   next = amount;
       else if (eff.op === "setMax" && max !== null) next = max;
+      // 10-29: "burn" is Surge now — hold it to the Surge cap and honor the heat lock +
+      // overheat bite like _ftBankSurge (an add at full = 1 Stress, no rise).
+      if (eff.track === "burn") {
+        max = _ftSurgeCap(recipient);
+        if (eff.op === "add" && amount > 0) {
+          if (ftBurnLockInfo(recipient).locked) next = cur;
+          else if (cur >= max && (game.user?.isGM || recipient.isOwner)) await _ftOverheatBite(recipient);
+        }
+      }
       // Clamp.
       if (Number.isFinite(spec.floor)) next = Math.max(spec.floor, next);
       if (max !== null) next = Math.min(max, next);
       updates[spec.path] = next;
       const arrow = next === cur ? "·" : (next > cur ? "↑" : "↓");
-      const formulaTag = rolled ? ` (${eff.formula} → ${rolled.total})` : "";
-      summary.push(`<li><b>${eff.track}</b>${formulaTag}: ${cur} ${arrow} ${next}</li>`);
+      const formulaTag = rolled ? ` (${ftEscapeHtml(eff.formula)} → ${rolled.total})` : "";
+      summary.push(`<li><b>${ftEscapeHtml(eff.track)}</b>${formulaTag}: ${cur} ${arrow} ${next}</li>`);
     } else if (eff.kind === "condition") {
       const key = String(eff.condition || "").toLowerCase();
-      if (!key || !FT.CONDITIONS?.[key]) { summary.push(`<li>unknown condition: ${key}</li>`); continue; }
+      if (!key || !FT.CONDITIONS?.[key]) { summary.push(`<li>unknown condition: ${ftEscapeHtml(key)}</li>`); continue; }
       // op "add"/"apply" => set on; "remove" => set off. Applied below via the
       // canonical toggle so it lands as a native status AE (token icon + States
       // tab + immunity-aware), not a bare boolean.
@@ -12620,7 +12704,7 @@ async function _ftApplyConsumeToRecipient(recipient, item, consume) {
     for (const e of onUseAEs) {
       const d = e.duration ?? {};
       const dtag = d.rounds ? ` (${d.rounds} rd)` : d.seconds ? ` (${Math.round(d.seconds / 60)} min)` : "";
-      summary.push(`<li>effect applied: <b>${e.name}</b>${dtag}</li>`);
+      summary.push(`<li>effect applied: <b>${ftEscapeHtml(e.name)}</b>${dtag}</li>`);
     }
   }
 
@@ -12654,7 +12738,11 @@ async function runConsumeEffects(actor, item, consume, { targets = null } = {}) 
   const lim = consume.limit;
   if (lim && Number(lim.uses) > 0) {
     const win = String(lim.window || "session");
-    const key = win === "scene" ? `scene:${game.scenes?.current?.id ?? "none"}` : win === "soma-break" ? "soma-break" : `session:${new Date().toISOString().slice(0, 10)}`;
+    // 10-29: "session" = the LOCAL evening — local date with a 6 am rollover, so neither the UTC
+    // date change (8 pm EDT) nor midnight splits one night's play into two sessions.
+    const _sd = new Date(Date.now() - 6 * 3600 * 1000);
+    const _sessionDay = `${_sd.getFullYear()}-${String(_sd.getMonth() + 1).padStart(2, "0")}-${String(_sd.getDate()).padStart(2, "0")}`;
+    const key = win === "scene" ? `scene:${game.scenes?.current?.id ?? "none"}` : win === "soma-break" ? "soma-break" : `session:${_sessionDay}`;
     const led = item.getFlag("fourththing", "rfi.item.useLedger") ?? {};
     const used = led.key === key ? (Number(led.count) || 0) : 0;
     if (used >= Number(lim.uses)) { ui.notifications?.warn(`${item.name}: already used ${used}/${lim.uses} this ${win === "soma-break" ? "Soma Break" : win}.`); return; }
@@ -12698,14 +12786,14 @@ async function runConsumeEffects(actor, item, consume, { targets = null } = {}) 
   const listHtml = isSelf
     ? perRec[0].summary.join("")
     : perRec.map(({ rec, summary }) =>
-        `<li style="list-style:none;margin:0.25rem 0 0"><b>→ ${rec.name}</b><ul style="margin:0.1rem 0 0 1rem;padding:0">${summary.join("")}</ul></li>`
+        `<li style="list-style:none;margin:0.25rem 0 0"><b>→ ${ftEscapeHtml(rec.name)}</b><ul style="margin:0.1rem 0 0 1rem;padding:0">${summary.join("")}</ul></li>`
       ).join("");
 
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="fourththing-roll ft-magic-roll">
                 <div class="ft-misfire-box standalone" style="border-color:#5fb35f">
-                  <span class="ft-misfire-label">🧪 ${item.name}${chargeNote}${targetTag}</span>
+                  <span class="ft-misfire-label">🧪 ${ftEscapeHtml(item.name)}${chargeNote}${targetTag}</span>
                   <ul class="ft-consume-list" style="margin:0.2rem 0 0 1.2rem;padding:0">${listHtml}</ul>
                 </div></div>`
   });
@@ -13338,8 +13426,8 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
       <span class="ft-dmg-type ${damageType ?? ""}">${ftCap(damageType ?? "")}</span>${partsDisplay}
       <button class="ft-apply-dmg-btn"
               data-formula="${applyFormula}"
-              data-damage-type="${damageType ?? ""}"
-              data-damage-flavor="${damageFlavor ?? ""}"
+              data-damage-type="${ftEscapeHtml(damageType ?? "")}"
+              data-damage-flavor="${ftEscapeHtml(damageFlavor ?? "")}"
               data-track="${FT.DAMAGE_TYPES[damageType]?.track ?? "integrity"}"${partsData}
               data-item-uuid="${ftEscapeHtml(itemUuid ?? "")}"
               data-ignore-resists="${ignoreResists ? "1" : "0"}"
@@ -14033,9 +14121,11 @@ async function openEchoAssetsManager(actor, sheetApp = null) {
           const crewSlots   = Number.isFinite(crewSlotsRaw)   && crewSlotsRaw   > 0 ? Math.max(1, Math.floor(crewSlotsRaw))   : (echoAssets.defaultCrewSlots   ?? 2);
           const occultSlots = Number.isFinite(occultSlotsRaw) && occultSlotsRaw > 0 ? Math.max(1, Math.floor(occultSlotsRaw)) : (echoAssets.defaultOccultSlots ?? 2);
 
+          // 10-29: store a slot count only when it differs from the tier default —
+          // null keeps the pool growing with tier (an untouched Save used to pin it).
           const payload = {
-            crewSlots,
-            occultSlots,
+            crewSlots:   crewSlots   !== (echoAssets.defaultCrewSlots   ?? 2) ? crewSlots   : null,
+            occultSlots: occultSlots !== (echoAssets.defaultOccultSlots ?? 2) ? occultSlots : null,
             activeCrew,
             reserveCrew,
             activeOccult,
@@ -14590,8 +14680,9 @@ async function ftSpotlightConsume(actor, mode = "bonus") {
   if (!cur) { ui.notifications?.warn("No active spotlight to spend."); return null; }
   if (cur.consumed) { ui.notifications?.info("Spotlight already spent this scene."); return null; }
   const consumedAs = (mode === "reroll") ? "reroll" : "bonus";
+  // 10-29: no "Spent" card when the write fails (non-owner click) — the spend didn't land.
   try { await actor.setFlag("fourththing", _FT_SPOTLIGHT_FLAG, { ...cur, consumed: true, consumedAs }); }
-  catch (e) { console.warn("Echo Spotlight | consume setFlag failed:", e); }
+  catch (e) { console.warn("Echo Spotlight | consume setFlag failed:", e); ui.notifications?.warn("Couldn't spend the spotlight."); return null; }
 
   // Post a follow-up confirmation card so the whole table sees the spend land.
   try {
@@ -16887,9 +16978,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           const pg = actor.flags?.fourththing?.bulwark?.polarityGen ?? {};
           const usedThisRound = Number(pg.round) === round && pg.used === true;
           if (!inCombat || !usedThisRound) {
+            // 10-29: spend the 1/round on the attempt — a full bank bites, and must bite once.
+            await actor.setFlag("fourththing", "bulwark.polarityGen", { round, used: true });
             const got = await _ftBankSurge(actor, 1);
             if (got > 0) {
-              await actor.setFlag("fourththing", "bulwark.polarityGen", { round, used: true });
               ChatMessage.create({
                 speaker: ChatMessage.getSpeaker({ actor }),
                 content: `<div style="font-size:0.78rem">⛰ <b>Polarity Mastery</b> — the strike lands heavy (base die ≥ 8): <span style="color:#e8c84a;font-weight:600">+1 Surge banked</span>.</div>`
@@ -17329,10 +17421,17 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // Qliphothic corruption (bbttcc enlightenment) — healing received is halved.
       const qliphHalved = actor.getFlag?.("bbttcc-character-options", "enlightenment")?.level === "qliphothic";
       const healAmt = qliphHalved ? Math.floor(scaled / 2) : scaled;
-      const cur = rawSys?.derived?.[track]?.value ?? 0;
-      const max = rawSys?.derived?.[track]?.max   ?? cur + healAmt;
+      // 10-29: a rig's canonical integrity is system.integrity (derived is a
+      // mirror rebuilt every prepare) — healing the mirror was lost on the spot.
+      const _rigInt = actor.type === "rig" && track === "integrity";
+      const _store  = _rigInt ? rawSys?.integrity : rawSys?.derived?.[track];
+      const cur = Number(_store?.value ?? 0) || 0;
+      const max = Number(_store?.max   ?? cur + healAmt);
       const newVal = Math.min(max, cur + healAmt);
-      await actor.update({ [`system.derived.${track}.value`]: newVal });
+      const _healUpd = { [_rigInt ? "system.integrity.value" : `system.derived.${track}.value`]: newVal };
+      // A wreck brought back above 0 is no longer destroyed (parked, not re-deployed).
+      if (_rigInt && newVal > 0 && rawSys?.identity?.state === "destroyed") _healUpd["system.identity.state"] = "parked";
+      await actor.update(_healUpd);
       return `${actor.name}: ${track} ${cur} → ${newVal} (+${newVal - cur})${qliphHalved && scaled ? " ·½ qliphothic" : ""}`;
     }
 
@@ -17734,7 +17833,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // data-target-uuid so the Apply button resolves a specific actor when nothing is
     // live-targeted — no need to target yourself to drink your own heal.
     let bakedTargets = null;
-    if (!targets.size && btn.dataset.targetUuid) {
+    // 10-29: data-target-first (save-prompt damage) — the baked target wins over live targets.
+    if ((!targets.size || btn.dataset.targetFirst === "1") && btn.dataset.targetUuid) {
       const a = await (foundry.utils?.fromUuid ?? fromUuid)?.(btn.dataset.targetUuid).catch(() => null);
       const tok = a?.getActiveTokens?.()?.[0];
       if (tok) bakedTargets = [tok];
@@ -19197,6 +19297,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       </div>`
     });
     Hooks.callAll("fourththing.thresholdCrossed", actor, { tier });
+    // 10-29: the ledger + Redeem card listener is GM-only and hooks are local —
+    // a crossing on the owner's seat (own-PC damage) relays to the active GM.
+    if (!game.user?.isGM && game.users?.activeGM) {
+      _ftRelayEmit({ t: "ft-thresholdCrossed", targetUuid: actor.uuid });
+    }
   };
 
   game.fourththing.deathMech.rollLastStand = async function (actor) {
@@ -19296,6 +19401,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
 
     const sys  = actor.system?.system ?? actor.system;
+    // 10-29: only a steward still across the Threshold can be redeemed — an old
+    // card clicked again (F5 / second GM) charged the bank and reset Integrity twice.
+    if (!sys?.conditions?.dying || (Number(sys?.lastStand?.failures) || 0) < 3) {
+      ui.notifications?.warn(`${actor.name} is not awaiting Redemption.`);
+      return { ok: false, reason: "not-crossed" };
+    }
     const tier = Number(sys?.details?.tier ?? 1);
     const cost = Number(costOverride ?? (tier * 50));   // MARKS: 5 OP per tier = 50 marks (owner ruling 2026-09-06; was committed raw as 5/tier)
 
@@ -19379,6 +19490,15 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       return { ok: false, reason: "not-gm" };
     }
     const sys  = actor.system?.system ?? actor.system;
+    // 10-29: same Threshold guard as redeem(); an already-pending flag isn't re-posted.
+    if (!sys?.conditions?.dying || (Number(sys?.lastStand?.failures) || 0) < 3) {
+      ui.notifications?.warn(`${actor.name} is not awaiting resolution at the Threshold.`);
+      return { ok: false, reason: "not-crossed" };
+    }
+    if (actor.getFlag?.("fourththing", "awaitingReincarnation")) {
+      ui.notifications?.warn(`${actor.name} is already pending Reincarnation.`);
+      return { ok: false, reason: "already-pending" };
+    }
     const tier = Number(sys?.details?.tier ?? 1);
     await actor.setFlag("fourththing", "awaitingReincarnation", {
       reason,
@@ -20157,7 +20277,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   let _ftLastTurnKey = null;
   async function _ftHandleTurnStart(source, combat, current) {
     if (!combat) return;
-    const key = `${combat.id}:${combat.round}:${combat.turn}`;
+    // 10-29: keyed on the combatant id, not the turn index — core silently re-pins
+    // `turn` when a combatant above is added/removed (turnEvents:false).
+    const key = `${combat.id}:${combat.round}:${combat.combatant?.id ?? combat.turn}`;
     if (key === _ftLastTurnKey) return;
     _ftLastTurnKey = key;
 
@@ -20229,6 +20351,20 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       "system.actions.movementUsedFt":  0,
       "system.actions.movementBudgetFt": moveFt
     });
+    // 10-29: Dodge / Disengage / Hold end at the start of your next turn (the
+    // round-advance clear leaves them for this).
+    try {
+      const _cf = actor.flags?.fourththing?.combat;
+      if (_cf && _FT_TURN_COMBAT_KEYS.some(k => _cf[k])) {
+        const FD = foundry?.data?.operators?.ForcedDeletion;
+        const _patch = {};
+        for (const k of _FT_TURN_COMBAT_KEYS) {
+          if (FD) _patch[`flags.fourththing.combat.${k}`] = new FD();
+          else    _patch[`flags.fourththing.combat.-=${k}`] = null;
+        }
+        await actor.update(_patch);
+      }
+    } catch (e) { console.warn("[fourththing] turn-start Dodge/Hold clear failed", e); }
 
     // ── Radiation Sickness — per-turn bite (action tax + Integrity tick) ──────
     // Poisoned taxes your Reaction; Terminal taxes your Action too, and both
@@ -20443,7 +20579,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         const sys  = actor.system?.system ?? actor.system ?? {};
         const attrKey = meta.saveAttribute || "body";
         const dc      = Number(meta.dc) || 15;
-        const attrVal = Number(sys?.attributes?.[attrKey]?.value) || 0;
+        // 10-29: base from the SOURCE — actor.system is already AE-applied, so the
+        // sweep below was counting every AE add twice (same fix as attributeTest).
+        const attrVal = Number(ftSourceSystem(actor)?.attributes?.[attrKey]?.value) || 0;
         // Walk AEs for the save-attribute add (target rolls with their own
         // appliedEffects honoured — same pattern as resolveManifestationSave).
         let aeAttr = 0;
@@ -20491,7 +20629,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
   }
 
-  Hooks.on("combatTurn",       (combat, prior, current) => _ftHandleTurnStart("combatTurn", combat, current));
+  // 10-29: no `combatTurn` registration — it fires BEFORE the update (combat,
+  // updateData, updateOptions), so it ran turn-start on the OUTGOING combatant
+  // whenever the key was stale (e.g. the first Next Turn after a GM F5).
   Hooks.on("combatTurnChange", (combat, prior, current) => _ftHandleTurnStart("combatTurnChange", combat, current));
   Hooks.on("updateCombat", async (combat, changes) => {
     if (changes.turn === undefined && changes.round === undefined) return;
@@ -20504,7 +20644,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // only, so a form cast mid-round first pays at the next round (no double-dip
   // with its cast cost).
   Hooks.on("updateCombat", async (combat, changes) => {
-    if (!game.user?.isGM) return;
+    // 10-29: active GM only — two GM seats each billed the round (2 Clarity, two cards).
+    if (!game.user?.isGM || (game.users?.activeGM && game.users.activeGM !== game.user)) return;
     if (changes?.round === undefined) return;
     if (!(Number(combat.round) > Number(combat.previous?.round ?? 0))) return;
     const seen = new Set();
@@ -21424,7 +21565,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           stabilityLabel: FT.MANIFESTATION_STABILITIES?.[e.stability]?.label ?? ftCap(e.stability ?? ""),
           upkeepHint: e.stability === "sustained" ? `${e.tier} Clarity / scene`
                     : e.stability === "bound"     ? `${e.tier} Clarity / Soma Break`
-                    : e.stability === "enduring"  ? `${e.tier} Clarity / Soma Break + OP tick`
+                    : e.stability === "enduring"  ? `${e.tier} Clarity / Soma Break`   // 10-29: enduring bills like bound (no OP tick exists; marks ruling)
                     : ""
         };
       });
@@ -22073,7 +22214,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
               };
               const resourceLabel = (r) => {
                 if (typeof r !== "string") return String(r);
-                if (r.endsWith("-op")) return r.replace(/-op$/, "").replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()) + " OP";
+                // 10-29: marks everywhere — "*-op" grants pay marks (× the ratio), so say marks
+                if (r.endsWith("-op")) return r.replace(/-op$/, "").replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()) + " marks";
                 return r.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
               };
               const rows = [];
@@ -22085,7 +22227,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
                   itemName: item.name,
                   itemImg:  item.img ?? "icons/svg/aura.svg",
                   badges: grants.map(g => ({
-                    text: `${g.amount === "refill" ? "↻" : `+${g.amount}`} ${resourceLabel(g.resource)}`,
+                    text: `${g.amount === "refill" ? "↻"
+                          : (typeof g.resource === "string" && g.resource.endsWith("-op"))
+                            ? `+${Math.round((Number(g.amount) || 0) * (game.bbttcc?.api?.op?.OP_TO_MARKS ?? MARKS_PER_OP))}`
+                            : `+${g.amount}`} ${resourceLabel(g.resource)}`,
                     cadence: cadenceLabel[g.cadence] ?? g.cadence,
                     target:  g.target ?? null,
                     note:    g.note ?? null
@@ -22424,7 +22569,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       if (!item) return;
       return Dialog.confirm({
         title:   "Delete Item",
-        content: `<p>Remove <b>${item.name}</b>? This cannot be undone.</p>`,
+        content: `<p>Remove <b>${foundry.utils.escapeHTML(item.name ?? "")}</b>? This cannot be undone.</p>`,   // 10-29: names are player-set — escape
         yes:     () => this.actor.deleteEmbeddedDocuments("Item", [id])
       });
     }
@@ -22805,11 +22950,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // at a glance (the ask). Bucket background tints (off/def/heal/narr) stay.
       const cell = (e) => {
         const tierLocked = tier < e.tier;
-        const tooBroke   = surge < e.cost;
+        // 10-29: affordability + label use the Bulwark-discounted cost (ruling BW1);
+        // data-cost stays the base so _ftSurgeExecute can show "Cost reduced".
+        const effCost    = _ftSurgeEffectiveCost(actor, e);
+        const tooBroke   = surge < effCost;
         const disabled   = tierLocked || tooBroke;
         const why = tierLocked ? `Requires Tier ${e.tier}+`
-                  : tooBroke   ? `Needs ${e.cost} Surge (you have ${surge})`
-                  : `Click to spend ${e.cost} Surge`;
+                  : tooBroke   ? `Needs ${effCost} Surge (you have ${surge})`
+                  : `Click to spend ${effCost} Surge${effCost < e.cost ? ` (reduced from ${e.cost})` : ""}`;
         const kind      = _ftSurgeEntryKind(e);
         const isClass   = kind === "class";
         const classLbl  = isClass ? _ftSurgeEntryClassLabel(e) : "";
@@ -22953,7 +23101,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
               const effect = String(b.dataset.effect || "");
               const cur    = actor.system?.system?.resources?.surge?.value
                           ?? actor.system?.resources?.surge?.value ?? 0;
-              if (cur < cost) return;
+              const _entry = _FT_SURGE_MENU.find(x => x.key === effect);
+              if (cur < (_entry ? _ftSurgeEffectiveCost(actor, _entry) : cost)) return;
               dialog.close();
               await _ftSurgeExecute(actor, effect, cost, cur, tier);
             });
@@ -23757,9 +23906,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
               } else if (route === "blackstair") {
                 lines.push(`<li>Base Black Stair delivery resolves narratively (no on-actor mechanical effect).</li>`);
                 if (hasMastery) {
-                  // Ruling SC7 (2026-10-25): Package Mastery, Black Stair — delivering banks +1 Surge.
-                  let _bsBanked = 0; try { _bsBanked = await _ftBankSurge(actor, 1); } catch (e) {}
-                  lines.push(`<li><em>Package Mastery:</em> ${_bsBanked > 0 ? "banked <b>+1 Surge</b>" : "Surge already at cap — no bank"}.</li>`);
+                  // Package Mastery, Black Stair (Dave 10-29, replaces SC7's +1 Surge — the
+                  // delivery already fills the bank, so the +1 never landed): the next Surge
+                  // spend costs 1 less (floor 1). Doesn't stack; spent in _ftSurgeExecute.
+                  try { await actor.setFlag("fourththing", "courier.masteryNext", true); } catch (e) {}
+                  lines.push(`<li><em>Package Mastery:</em> the blade's already drawn — your <b>next Surge spend costs 1 less</b>.</li>`);
                 }
               } else if (route === "lastmile") {
                 lines.push(`<li>${recv} gains <b>+10 Loyalty marks</b> (apply on the Domain tab).</li>`);
@@ -24239,7 +24390,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           stabilityLabel: FT.MANIFESTATION_STABILITIES?.[e.stability]?.label ?? ftCap(e.stability ?? ""),
           upkeepHint: e.stability === "sustained" ? `${e.tier} Clarity / scene`
                     : e.stability === "bound"     ? `${e.tier} Clarity / Soma Break`
-                    : e.stability === "enduring"  ? `${e.tier} Clarity / Soma Break + OP tick`
+                    : e.stability === "enduring"  ? `${e.tier} Clarity / Soma Break`   // 10-29: enduring bills like bound (no OP tick exists; marks ruling)
                     : ""
         };
       }) : [];
@@ -24564,8 +24715,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // Manifestation sheet has Edit and Display modes, persisted per-user on the
   // item. Default mode resolves from role (GM=edit, player=display) when no
   // user override is set. Toggle button lives in the sheet header.
+  // 10-29: observers / locked-compendium viewers can't write the flag — their
+  // choice lives client-side for the session (item uuid → mode).
+  const _ftLocalManifestMode = new Map();
   function _ftReadManifestMode(item) {
     const uid = game.user?.id;
+    const local = item?.uuid ? _ftLocalManifestMode.get(item.uuid) : null;
+    if (local) return local;
     const stored = item?.getFlag?.("fourththing", "manifestSheetMode") ?? null;
     if (uid && stored && typeof stored === "object" && stored[uid]) return stored[uid] === "edit" ? "edit" : "display";
     return game.user?.isGM ? "edit" : "display";
@@ -24578,7 +24734,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const next = cur === "edit" ? "display" : "edit";
     const stored = foundry.utils.deepClone(item.getFlag("fourththing", "manifestSheetMode") ?? {});
     stored[uid] = next;
-    await item.setFlag("fourththing", "manifestSheetMode", stored);
+    const canWrite = item.isOwner && !(item.pack && game.packs?.get(item.pack)?.locked);
+    if (canWrite) {
+      try { await item.setFlag("fourththing", "manifestSheetMode", stored); _ftLocalManifestMode.delete(item.uuid); }
+      catch (_e) { _ftLocalManifestMode.set(item.uuid, next); }
+    } else {
+      _ftLocalManifestMode.set(item.uuid, next);
+    }
     this.render();
   }
 
@@ -25078,6 +25240,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     async _applyRigTemplate(tplItem) {
       const cfg = tplItem.getFlag?.("fourththing", "rigTemplate")?.config;
       if (!cfg) { ui.notifications?.warn("Template has no config payload."); return; }
+      // 10-29: RG6 for templates — fit only a bare rig (one frame), never past the frame's slot caps.
+      const _fitted = this.actor.items.filter(i => ["rig-frame", "rig-weapon", "rig-system", "output-module"].includes(i.getFlag?.("fourththing", "rigGear")?.subtype));
+      if (_fitted.length) {
+        ui.notifications?.warn(`${this.actor.name} already carries ${_fitted.length} frame/gear item(s) — unequip them before applying ${tplItem.name}.`);
+        return;
+      }
 
       // Lookup helper — find item by name across all Item packs (master-content first)
       const findItem = async (name) => {
@@ -25115,6 +25283,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const frameItem = await findItem(cfg.frame);
       if (frameItem) {
         const f = frameItem.getFlag("fourththing", "rigFrame") ?? {};
+        // 10-29: the same caps RG6 uses on single drops (weapon slots + the pilot mount).
+        const _caps = { weapons: (Number(f.slots?.weapon ?? 0) || 0) + (f.pilotMount ? 1 : 0),
+                        systems: Number(f.slots?.system ?? 0) || 0, outputs: Number(f.slots?.output ?? 0) || 0 };
+        const _over = Object.entries(_caps).filter(([k, cap]) => (cfg.gear?.[k]?.length ?? 0) > cap);
+        if (_over.length) {
+          ui.notifications?.warn(`${tplItem.name} lists more gear than ${frameItem.name} has slots for (${_over.map(([k, cap]) => `${k} ${cfg.gear[k].length}/${cap}`).join(", ")}) — not applied.`);
+          return;
+        }
         if (f.bracket)        update["system.integrity.bracket"] = f.bracket;
         if (f.baseIntegrity != null) {
           // 2026-10-21: frame base + tierStep × (tier − 1), tier floored at 1 — the same rule minted rigs use now.
@@ -25544,7 +25720,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         item:       this.item,
         system,
         isGM:       game.user?.isGM === true,
-        SEPHIROTH:  FT.SEPHIROTH,
+        SEPHIROTH:  ftSephirothFor(this.item.system?.sephirah),   // 10-29: players never see a locked sefirah (Yesod)
         INTENTS:    FT.INTENTS,
         CHANNELS:   FT.CHANNELS,
         MODES:      FT.MODES,
@@ -25797,9 +25973,20 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const path = "flags.fourththing.rfi.item.consume.effects";
       const raw  = foundry.utils.getProperty(data, path);
       if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+        // 10-29: merge each posted row over the stored one, and leave rows whose
+        // kind the editor can't show (gene-cleanse kind:"mutation") untouched —
+        // the selects fell back to track/add and wiped the cure on any submit.
+        const stored = _ftReadConsumeEffectsRaw(this.item);
         const arr = Object.keys(raw)
           .sort((a, b) => Number(a) - Number(b))
-          .map(k => raw[k]);
+          .map(k => {
+            const prev = stored[Number(k)];
+            if (prev && typeof prev === "object") {
+              if (prev.kind && !(prev.kind in FT_ONUSE_KINDS)) return prev;
+              return { ...prev, ...raw[k] };
+            }
+            return raw[k];
+          });
         foundry.utils.setProperty(data, path, arr);
       }
       const eff = foundry.utils.getProperty(data, path);
@@ -26480,7 +26667,13 @@ Hooks.on(_chatHook, (message, html) => {
         const actor = game.actors?.get(actorId);
         if (!actor) { ui.notifications?.warn("Spotlight actor not found."); btn.disabled = false; return; }
         if (typeof ftSpotlightConsume !== "function") { ui.notifications?.warn("Spotlight consume unavailable — reload."); btn.disabled = false; return; }
-        await ftSpotlightConsume(actor, mode);
+        // 10-29: only the owner spends, and only from the card of the CURRENT spotlight.
+        if (!actor.isOwner) { ui.notifications?.warn("Only that Steward's player can spend their spotlight."); btn.disabled = false; return; }
+        const _curSpot = _ftGetEchoSpotlight(actor);
+        const _cardTs = btn.dataset.spotlightTs;
+        if (_cardTs && _curSpot && String(_curSpot.ts) !== String(_cardTs)) { ui.notifications?.warn("That spotlight card is from an earlier scene."); btn.disabled = false; return; }
+        const _res = await ftSpotlightConsume(actor, mode);
+        if (!_res) { btn.disabled = false; return; }
         // Disable both buttons on this card so the UI reflects the spend immediately.
         const card = btn.closest(".ft-echo-spotlight-card");
         if (card) card.querySelectorAll(".ft-echo-spotlight-btn").forEach(b => { b.disabled = true; b.style.opacity = "0.4"; });
@@ -26509,6 +26702,19 @@ Hooks.on(_chatHook, (message, html) => {
     }
   };
 
+  // 10-29: the resolution is persisted on the message (flags.fourththing.redemptionCard.resolvedBy)
+  // so an F5 / chat re-render / second GM seat renders the card spent, not live again.
+  const _stampRedemption = async (label, color) => {
+    if (!message?.isOwner) return;
+    try { await message.setFlag("fourththing", "redemptionCard.resolvedBy", { user: game.user.id, at: Date.now(), label: String(label ?? ""), color }); }
+    catch (e) { console.warn("[fourththing] redemption card stamp failed", e); }
+  };
+  {
+    const done = message?.getFlag?.("fourththing", "redemptionCard")?.resolvedBy;
+    const anyBtn = root.querySelector(".ft-redeem-btn, .ft-reincarnate-btn");
+    if (done && anyBtn) disableCard(anyBtn, done.label || "Resolved.", done.color || "#4a90d9");
+  }
+
   root.querySelectorAll(".ft-redeem-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
       if (btn.disabled) return;
@@ -26518,7 +26724,11 @@ Hooks.on(_chatHook, (message, html) => {
       const costOverride = Number(btn.dataset.cost) || null;
       const category     = btn.dataset.category ?? "violence";
       const result = await game.fourththing.deathMech.redeem(actor, { category, costOverride });
-      if (result?.ok) disableCard(btn, `Resolved: Redeemed (−${result.cost} ${result.category} marks from ${result.faction?.name ?? "the Domain"}).`, "#4a90d9");
+      if (result?.ok) {
+        const _txt = `Resolved: Redeemed (−${result.cost} ${result.category} marks from ${result.faction?.name ?? "the Domain"}).`;
+        disableCard(btn, _txt, "#4a90d9");
+        await _stampRedemption(_txt, "#4a90d9");
+      }
       else            disableCard(btn, `Redemption failed: ${result?.reason ?? "unknown"} — falling back to GM discretion.`, "#ff8a8a");
     });
   });
@@ -26535,7 +26745,11 @@ Hooks.on(_chatHook, (message, html) => {
       });
       if (!ok) return;
       const result = await game.fourththing.deathMech.forceReincarnation(actor, { reason: "gm-declined-redemption" });
-      if (result?.ok) disableCard(btn, `Resolved: Reincarnation pending (Tier ${result.tier}). Manual regen flow required.`, "#ff7373");
+      if (result?.ok) {
+        const _txt = `Resolved: Reincarnation pending (Tier ${result.tier}). Manual regen flow required.`;
+        disableCard(btn, _txt, "#ff7373");
+        await _stampRedemption(_txt, "#ff7373");
+      }
       else            disableCard(btn, `Reincarnation flag failed: ${result?.reason ?? "unknown"}.`, "#ff8a8a");
     });
   });
@@ -27417,6 +27631,15 @@ async function _ftSetRigHeat(rig, next) {
   if (!rig) return;
   const max = _ftRigHeatMax(rig);
   const clamped = Math.max(0, Math.min(max, Math.floor(Number(next) || 0)));
+  // 10-29: a player gunner on a GM-owned rig can't write the flag — the update
+  // was refused and heat never rose (no overheat lock). Relay the CHANGE to the
+  // active GM (a delta, so two gunners' shots both land on a stale read).
+  if (!game.user?.isGM && !rig.isOwner) {
+    if (!game.users?.activeGM) throw new Error("no GM online — rig heat not changed");
+    const delta = clamped - _ftRigHeatValue(rig);
+    if (delta) _ftRelayEmit({ t: "ft-rigHeat", rigUuid: rig.uuid, delta });
+    return;
+  }
   await rig.update({ "flags.fourththing.combat.heat": clamped });
   if (clamped >= max) await _ftEnsureRigStateAE(rig, "overheat", { extraDesc: `Heat ${clamped}/${max}. Cannot fire weapons until vented.` });
   else                await _ftClearRigStateAE(rig, "overheat");
@@ -29176,14 +29399,15 @@ Hooks.on("canvasReady", () => _ftRenderCrewHud());
 // REGIMEN step 3 (2026-10-06): `per-scene-start` resource grants fire once per scene per actor (actor flag remembers the scene).
 Hooks.on("canvasReady", async () => {
   try {
-    if (!game.user?.isGM || !canvas?.scene) return;
+    // 10-29: active GM only — two GM seats both fired the grants before either flag landed.
+    if (!game.user?.isGM || game.users?.activeGM?.id !== game.user.id || !canvas?.scene) return;
     const sid = canvas.scene.id;
     for (const tok of canvas.tokens?.placeables ?? []) {
       const a = tok.actor; if (!a || !["character", "npc"].includes(a.type)) continue;
       if (!a.items.some(i => Array.isArray(i.flags?.fourththing?.resourceGrants) && i.flags.fourththing.resourceGrants.some(g => g?.cadence === "per-scene-start"))) continue;
       if (a.flags?.fourththing?.resourceGrantsScene === sid) continue;
+      await a.update({ "flags.fourththing.resourceGrantsScene": sid });   // mark first, then pay
       const r = await fireResourceGrants(a, "per-scene-start");
-      await a.update({ "flags.fourththing.resourceGrantsScene": sid });
       if (r?.fired?.length) console.log(`[fourththing] scene-start grants → ${a.name}`, r.fired.map(f => f.summary ?? f));
     }
   } catch (e) { console.warn("[fourththing] per-scene-start grants failed", e); }
@@ -29570,11 +29794,15 @@ Hooks.once("ready", () => {
 // Foundry combat tracker's updateCombat round advance. Force-deletes
 // flag keys via the `-=` syntax (setFlag merges, so plain deletes are
 // silent no-ops — playtest 2026-05-18 burn).
-async function _ftClearPerRoundCombatFlags(actor) {
+// 10-29: { keepTurnKeys } leaves Dodge / Disengage / Hold alone — they last
+// "until the start of your next turn", so a combatant's own turn-start clears
+// them (_ftHandleTurnStart), not the round advance.
+const _FT_TURN_COMBAT_KEYS = ["dodging", "disengaged", "holding"];
+async function _ftClearPerRoundCombatFlags(actor, { keepTurnKeys = false } = {}) {
   if (!actor) return;
   const c = actor.flags?.fourththing?.combat;
   if (!c) return;
-  const hasAny = c.dodging || c.disengaged || c.holding ||
+  const hasAny = (!keepTurnKeys && (c.dodging || c.disengaged || c.holding)) ||
                  c.rigWeaponFiredThisRound || c.rigWeaponsFiredThisRound ||
                  c.lastFiredRigId || c.lastFiredWeaponId ||
                  c.pilotActionUsedThisRound || c.engineerRepairedThisRound ||
@@ -29589,7 +29817,7 @@ async function _ftClearPerRoundCombatFlags(actor) {
     // (2026-08-21 playtest console flood). Use the operator when the runtime
     // has it; fall back to legacy syntax on older cores.
     const CLEAR_KEYS = [
-      "dodging", "disengaged", "holding",
+      ...(keepTurnKeys ? [] : _FT_TURN_COMBAT_KEYS),
       "rigWeaponFiredThisRound", "rigWeaponsFiredThisRound",
       "lastFiredRigId", "lastFiredWeaponId",
       "pilotActionUsedThisRound", "engineerRepairedThisRound",
@@ -29724,7 +29952,8 @@ Hooks.on("updateCombat", async (combat, change) => {
     }
     if (a.type === "character" || a.type === "npc") {
       if (clearedStewardIds.has(a.id)) continue;
-      await _ftClearPerRoundCombatFlags(a);
+      // 10-29: own combatants keep Dodge/Hold until their own turn-start.
+      await _ftClearPerRoundCombatFlags(a, { keepTurnKeys: true });
       clearedStewardIds.add(a.id);
     }
   }
@@ -30799,6 +31028,16 @@ function _ftRelayHandlerExtra(msg) {
     if (_ftRelaySeenRecently(`imposeClear:${msg.targetUuid}`)) return;
     _ftRelayActor(msg.targetUuid).then(a => a && game.fourththing.impose.clear(a, String(msg.why ?? "").slice(0, 40)))
       .catch(err => console.warn("[fourththing] GM-relay impose clear failed", err));
+  } else if (msg?.t === "ft-thresholdCrossed") {
+    // A player seat crossed the Threshold (see deathMech.crossThreshold): run the
+    // GM listener here (Blood Debt +tier + the Redeem/Reincarnate card). Tier is
+    // read from the actor, and only a steward actually across is accepted.
+    if (_ftRelaySeenRecently(`thresholdCrossed:${msg.targetUuid}`, 10000)) return;
+    _ftRelayActor(msg.targetUuid).then(a => {
+      const s = a?.system?.system ?? a?.system;
+      if (!a || a.type !== "character" || !s?.conditions?.dying || (Number(s?.lastStand?.failures) || 0) < 3) return;
+      Hooks.callAll("fourththing.thresholdCrossed", a, { tier: s?.details?.tier ?? 1 });
+    }).catch(err => console.warn("[fourththing] GM-relay thresholdCrossed failed", err));
   } else if (msg?.t === "ft-setCondition") {
     // Set a condition to `want` on behalf of a non-owner (toggleCondition).
     if (!FT.CONDITIONS?.[msg.condKey]) return;
@@ -30966,6 +31205,16 @@ function _ftRelayHandler(msg) {
         const amt  = Math.max(0, Number(msg.amount) || 0);
         if (max > cur && amt > 0) await ally.update({ "system.magic.clarity.value": Math.min(max, cur + amt) });
       })().catch(e => console.warn("[fourththing] GM-relay Clarity grant failed", e));
+    } else if (msg?.t === "ft-rigHeat") {
+      // 10-29 — rig-weapon heat from a non-owner player gunner (see _ftSetRigHeat).
+      if (_ftRelaySeenRecently(`rigHeat:${msg.rigUuid}:${msg.delta}`)) return;
+      const delta = Math.trunc(Number(msg.delta) || 0);
+      if (!delta || typeof msg.rigUuid !== "string") return;
+      fromUuid(msg.rigUuid).then(doc => {
+        const rig = doc?.actor ?? doc;
+        if (rig?.type !== "rig") return;
+        return _ftSetRigHeat(rig, _ftRigHeatValue(rig) + delta);
+      }).catch(e => console.warn("[fourththing] GM-relay rig heat failed", e));
     } else if (msg?.t === "ft-rigBleed") {
       // 2026-10-01 — crew bleed-through for a hit a rig-owning player applied
       // directly (the damaged hook only fired on their seat).
@@ -31136,6 +31385,8 @@ Hooks.once("ready", async () => {
     // monster type:"npc" actors are intentionally NOT auto-linked —
     // they're allowed to hold per-instance state across multiple tokens.
     const _ftLinkableTypes = new Set(["rig"]);
+    // 10-29: one writer — only the active GM links (players got permission toasts, GMs wrote twice).
+    const _ftIsLinkWriter = () => !!game.user?.isGM && game.users?.activeGM?.id === game.user.id;
 
     function _ftIsPCActor(actor) {
       if (actor?.type !== "character") return false;
@@ -31198,6 +31449,7 @@ Hooks.once("ready", async () => {
     // canvas before the prototype-token auto-link sweep can take effect.
     Hooks.on("createToken", async (tokenDoc) => {
       try {
+        if (!_ftIsLinkWriter()) return;
         if (!_ftShouldAutoLink(tokenDoc?.actor)) return;
         if (tokenDoc.actorLink) return;
         await tokenDoc.update({ actorLink: true });
@@ -31205,9 +31457,11 @@ Hooks.once("ready", async () => {
       } catch (e) { console.warn("[fourththing] createToken auto-link failed", e); }
     });
 
-    _ftEnsureRigsLinked();
-    _ftEnsurePCsLinked();
-    _ftLinkExistingTokens();
+    if (_ftIsLinkWriter()) {
+      _ftEnsureRigsLinked();
+      _ftEnsurePCsLinked();
+      _ftLinkExistingTokens();
+    }
   } catch (e) {
     console.warn("[fourththing] auto-link bridge init failed", e);
   }
@@ -31321,10 +31575,11 @@ Hooks.once("ready", async () => {
             }
           }, { parent: hexDoc.parent ?? null });
         }
-        ChatMessage.create({
+        // 10-29: ruling-21 wording (the console's Battle card decides the ground), escaped, active GM only — twin of raid-battle-scenes.enhancer.js.
+        if (game.user?.isGM && game.users?.activeGM?.id === game.user.id) ChatMessage.create({
           content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#a6e22e">⚑ Raid Victory — Hex Outcome: Occupation</span></div>
-            <p style="margin:.2rem 0;font-size:0.82rem">Final battle scene resolved. Hex flips to <b>${attacker?.name || "attacker"}</b>'s control.</p>
-            <p style="margin:.2rem 0;font-size:0.74rem;opacity:0.75">GM may apply liberation outcome instead if appropriate to the campaign state.</p></div>`
+            <p style="margin:.2rem 0;font-size:0.82rem">Final battle scene resolved for <b>${ftEscapeHtml(attacker?.name || "the attacker")}</b>. Who holds the ground is on the Battle card: open ground changes hands, built ground takes a Siege (ruling 21).</p>
+            <p style="margin:.2rem 0;font-size:0.74rem;opacity:0.75">The GM may apply a liberation outcome instead if the campaign calls for it.</p></div>`
         });
       }
     } catch (e) { console.warn("[fourththing] Phase 5 orchestrator wrap failed", e); }
@@ -31441,6 +31696,9 @@ Hooks.on("renderApplicationV2", (app) => {
     if (!game.user?.isGM) return;
     if (!app?.constructor?.name?.toLowerCase?.().includes("raid")) return;
     if (!app?.vm?.rounds) return;
+    // 10-29: the console owns the call under the Alpha Cut (ruling 21 battlemap call → ground flip) and on story offers
+    // (ruling 22 routes) — this second door skipped both, so it stays hidden there. Beta-only legacy path.
+    if (game.bbttcc?.alpha?.enabled?.() === true || app.vm.routes) return;
     const root = app.element instanceof HTMLElement ? app.element : (app.element?.[0]);
     if (!root) return;
 
@@ -31477,6 +31735,11 @@ Hooks.on("renderApplicationV2", (app) => {
           ev.preventDefault();
           ev.stopPropagation();
           const kind = btn.dataset.ftTactical;
+          // 10-29: planning mode disables the console's Commit — honour it here too.
+          if (commitBtn.disabled || root.querySelector("[data-bbttcc-planning-banner]")) {
+            ui.notifications?.warn?.("Disabled in planning mode.");
+            return;
+          }
           await _ftCommitRoundTactical(app, idx, kind);
         });
       });

@@ -6,6 +6,7 @@
 
 import { MARKS_PER_OP as FT_MARKS_PER_OP } from "./rfi-pricing.js";   // the one OP↔marks authority
 import { actorKind } from "./actor-kind.js";
+import { resolveSubclassFeatureFolderId } from "./ft-progression.js";   // 10-29: Pactkeeper subclass feature folders
 
 // ─── Guard ───────────────────────────────────────────────────────────────────
 
@@ -514,21 +515,63 @@ async function _ftPayCampaignStartOnce(actor, item, paid) {
   return paid[key];
 }
 
-async function _ftFireCampaignStartFor(actor, createdItems) {
+// 10-29 (#34): starting grants pay ONCE PER SLOT (heritage / ancestry / class /
+// subclass). The name-keyed ledger only stopped A→B→A; cycling the sheet
+// dropdowns paid every new pick's marks into the faction bank. The first pick
+// that pays claims the slot (`__slot_<slot>` — the leading "__" can't collide
+// with a name key); later picks pay nothing, only the claiming pick's own
+// still-owed grants can land. Stewards paid before the slot ledger existed get
+// their slot seeded from the paid items they hold when the swap starts.
+function _ftSlotLedgerKey(slot) { return `__slot_${slot}`; }
+
+async function _ftSeedStartingGrantSlot(actor, paid, slot, belongs) {
+  const k = _ftSlotLedgerKey(slot);
+  if (!slot || paid[k]) return;
+  const keys = [];
+  for (const it of actor.items ?? []) {
+    if (!belongs(it)) continue;
+    const nk = _ftGrantNameKey(it.name);
+    if (nk && paid[nk] && !keys.includes(nk)) keys.push(nk);
+  }
+  if (!keys.length) return;
+  paid[k] = { keys, paidAt: Date.now(), seeded: true };
+  try { await actor.setFlag("fourththing", FT_STARTING_GRANTS_PAID_FLAG, { [k]: paid[k] }); } catch (_e) {}
+}
+
+// Slot-gated pay loop shared by the atomic swap and the heritage swap.
+// Returns { firedIds, paidNew } (paidNew includes the slot claim when made).
+async function _ftPayStartingGrantsForSlot(actor, items, paid, slot) {
+  const slotKey = slot ? _ftSlotLedgerKey(slot) : null;
+  const claim = slotKey ? paid[slotKey] : null;
+  const paidNew = {};
+  const firedIds = [];
+  const attempted = [];
+  for (const item of items) {
+    const grants = item?.flags?.fourththing?.resourceGrants;
+    if (!Array.isArray(grants)) continue;
+    if (!grants.some(g => g?.cadence === "per-campaign-start")) continue;
+    const nk = _ftGrantNameKey(item.name);
+    if (claim && !(claim.keys ?? []).includes(nk)) { firedIds.push(item); continue; }   // slot already paid by an earlier pick
+    attempted.push(nk);
+    const entry = await _ftPayCampaignStartOnce(actor, item, paid);
+    if (entry) paidNew[nk] = entry;
+    if (item.__ftGrantFailed) continue;   // still owed — never stamp a grant that didn't land
+    firedIds.push(item);
+  }
+  if (slotKey && !claim && Object.keys(paidNew).length) {
+    paid[slotKey] = paidNew[slotKey] = { keys: attempted, paidAt: Date.now() };
+  }
+  return { firedIds, paidNew };
+}
+
+async function _ftFireCampaignStartFor(actor, createdItems, slot = null) {
   // Mirrors the apply-starting-grants macro, scoped to specific items.
   const fired = actor.getFlag("fourththing", "startingGrantsFiredItems") ?? {};
   const firedClean = { ...fired };
   let dirty = false;
   const paid = await _ftLoadPaidStartingGrants(actor);
-  const paidNew = {};
-  for (const item of createdItems) {
-    const grants = item.flags?.fourththing?.resourceGrants;
-    if (!Array.isArray(grants)) continue;
-    const starts = grants.filter(g => g.cadence === "per-campaign-start");
-    if (!starts.length) continue;
-    const entry = await _ftPayCampaignStartOnce(actor, item, paid);
-    if (entry) paidNew[_ftGrantNameKey(item.name)] = entry;
-    if (item.__ftGrantFailed) continue;   // still owed — never stamp a grant that didn't land
+  const { firedIds, paidNew } = await _ftPayStartingGrantsForSlot(actor, createdItems, paid, slot);
+  for (const item of firedIds) {
     firedClean[item.id] = { firedAt: Date.now(), itemName: item.name, viaSwap: true };
     dirty = true;
   }
@@ -560,10 +603,18 @@ async function _ftAtomicSwap(actor, cfg, newKey) {
 
   // Fold the legacy per-item-id grant ledger into the stable one while the old
   // items still exist (names resolve), so this swap can't re-pay them.
-  await _ftLoadPaidStartingGrants(actor);
+  const paid0 = await _ftLoadPaidStartingGrants(actor);
+  await _ftSeedStartingGrantSlot(actor, paid0, label, it => typeSet.has(it.type) || !!it?.flags?.fourththing?.[lineageFlag]);
 
   // Aggressive cleanup — delete by type, lineage-mismatch, name-prefix-mismatch
   const toDeleteIds = new Set();
+  // 10-29 (#33): + the OLD class/subclass's level-up features (untagged, "Class: Feature").
+  if (cfg.pathSweep) {
+    const oldItem = actor.items?.find?.(i => i.type === cfg.pathSweep);
+    if (oldItem && String(oldItem.name ?? "").toLowerCase() !== newLower) {
+      for (const id of await _ftOldPathFeatIds(actor, packKey, oldItem, cfg.pathSweep, lineageFlag, newLower)) toDeleteIds.add(id);
+    }
+  }
   for (const it of actor.items ?? []) {
     if (typeSet.has(it.type)) { toDeleteIds.add(it.id); continue; }
     const lineage = String(it?.flags?.fourththing?.[lineageFlag] ?? "").toLowerCase();
@@ -627,7 +678,7 @@ async function _ftAtomicSwap(actor, cfg, newKey) {
   const created = cleaned.length ? await actor.createEmbeddedDocuments("Item", cleaned) : [];
 
   // Fire per-campaign-start grants on newly-imported items
-  const fireResult = await _ftFireCampaignStartFor(actor, created);
+  const fireResult = await _ftFireCampaignStartFor(actor, created, label);
   for (const [id, payload] of Object.entries(fireResult.firedClean)) {
     firedClean[id] = payload;
   }
@@ -653,6 +704,51 @@ async function _ftAtomicSwap(actor, cfg, newKey) {
   return doc;
 }
 
+// 10-29 (#33): features imported by applyPathFeatures on level-up carried no
+// lineage tag (stamped from 10-29 on) and most are named "Class: Feature", so a
+// class/subclass swap left every old path feature on the steward. Collect the
+// steward's feats that sit in the OLD item's pack folder tree (matched by name)
+// or are named "<Old>: …". The folder pass only runs when that folder holds this
+// one class/subclass (Pactkeeper's subclasses share a "Subclasses" folder).
+async function _ftOldPathFeatIds(actor, packKey, oldItem, type, lineageFlag, newLower) {
+  const ids = new Set();
+  const oldName = String(oldItem?.name ?? "").trim();
+  if (!oldName) return ids;
+  const base = oldName.replace(/\s*\([^)]*\)\s*$/, "").trim().toLowerCase();
+  const names = new Set();
+  try {
+    const pack = game.packs?.get(packKey);
+    const idx = pack ? await pack.getIndex({ fields: ["folder", "type", "name"] }) : null;
+    const list = idx ? [...idx] : [];
+    const hit = list.find(e => e.type === type && String(e.name ?? "").trim() === oldName);
+    let root = hit?.folder ?? null;
+    // Pactkeeper: subclasses share "Subclasses", features live in "Subclasses/<Name>".
+    if (root && type === "subclass") root = await resolveSubclassFeatureFolderId(pack, root, oldName);
+    const shared = root && list.filter(e => e.type === type && e.folder === root).length > 1;
+    if (root && !shared) {
+      const folders = pack.folders?.contents ?? [...(pack.folders ?? [])];
+      const inTree = (fid) => {
+        for (let f = fid, n = 0; f && n < 12; n++) {
+          if (f === root) return true;
+          const fd = folders.find(x => x.id === f);
+          f = fd?.folder?.id ?? fd?.folder ?? null;
+        }
+        return false;
+      };
+      for (const e of list) if (e.type === "feat" && inTree(e.folder)) names.add(String(e.name ?? "").trim());
+    }
+  } catch (e) { console.warn("RFI | old path feature lookup failed", e); }
+  for (const it of actor.items ?? []) {
+    if (it.type !== "feat") continue;
+    const ff = it.flags?.fourththing ?? {};
+    if (ff.grantedByHeritage || ff.grantedByAncestry) continue;               // another family's lineage
+    if (newLower && String(ff[lineageFlag] ?? "").toLowerCase() === newLower) continue;
+    const nm = String(it.name ?? "").trim();
+    if (names.has(nm) || (base && nm.toLowerCase().startsWith(base + ":"))) ids.add(it.id);
+  }
+  return ids;
+}
+
 export async function applyActorClassChange(actor, newKey) {
   // Cascade: clear subclass first (subclasses are class-specific)
   await applyActorSubclassChange(actor, "");
@@ -665,6 +761,7 @@ export async function applyActorClassChange(actor, newKey) {
     lineageFlag: "grantedByClass",
     // Class-feature names look like "Bulwark — Tier 1: ..." — match prefix
     namePrefixMatch: /^([A-Z][a-zA-Z'\- ]+?)\s+—\s+Tier/,
+    pathSweep: "class",
     label: "class"
   }, newKey);
 
@@ -753,6 +850,7 @@ export async function applyActorSubclassChange(actor, newKey) {
     lineageFlag: "grantedBySubclass",
     // Subclass-feature names look like "Avalanche L1: ...", "Wayfarer Tongue L17: ..."
     namePrefixMatch: /^([A-Z][a-zA-Z'\- ]+?)\s+L\d+:/,
+    pathSweep: "subclass",
     label: "subclass"
   }, newKey);
 }
@@ -816,7 +914,11 @@ export async function applyActorHeritageChange(actor, newKey) {
   // Stable paid-grant ledger (see _ftLoadPaidStartingGrants) — loaded before the
   // cleanup so legacy per-item-id entries are folded in while the items exist.
   const paidGrants = await _ftLoadPaidStartingGrants(actor);
-  const paidNew = {};
+  await _ftSeedStartingGrantSlot(actor, paidGrants, "heritage", it => {
+    const kind = String(it?.flags?.bbttcc?.kind ?? "").toLowerCase();
+    const ident = String(it?.system?.identifier ?? "").toLowerCase();
+    return kind === "heritage" || ident.endsWith("_heritage") || !!it?.flags?.fourththing?.grantedByHeritage;
+  });
 
   // ── Aggressive cleanup ── delete ALL heritage residue that doesn't match
   //   the NEW heritage. Three signals:
@@ -916,20 +1018,13 @@ export async function applyActorHeritageChange(actor, newKey) {
   // ── Fire per-campaign-start resource grants on the new items only ─────────
   // Walks `created` (the documents we just made) so we don't re-fire grants
   // from items the user already had.
-  const newItemIds = (created ?? []).map(d => d.id);
-  for (const newId of newItemIds) {
-    const item = actor.items.get(newId);
-    if (!item) continue;
-    const grants = item.flags?.fourththing?.resourceGrants;
-    if (!Array.isArray(grants)) continue;
-    const startingGrants = grants.filter(g => g.cadence === "per-campaign-start");
-    if (startingGrants.length === 0) continue;
-    // Pay each OP grant at most once per steward — the paid ledger is keyed by
-    // source name, so Empyrean → None → Empyrean does not mint OP again.
-    const entry = await _ftPayCampaignStartOnce(actor, item, paidGrants);
-    if (entry) paidNew[_ftGrantNameKey(item.name)] = entry;
-    if (item.__ftGrantFailed) continue;   // still owed — never stamp a grant that didn't land
-    firedClean[newId] = { firedAt: Date.now(), itemName: item.name, viaSwap: true };
+  // Pay each OP grant at most once per steward (name ledger: Empyrean → None →
+  // Empyrean mints nothing) AND once per heritage slot (10-29 #34: Empyrean →
+  // Stormborn pays nothing new).
+  const newItems = (created ?? []).map(d => actor.items.get(d.id)).filter(Boolean);
+  const { firedIds, paidNew } = await _ftPayStartingGrantsForSlot(actor, newItems, paidGrants, "heritage");
+  for (const item of firedIds) {
+    firedClean[item.id] = { firedAt: Date.now(), itemName: item.name, viaSwap: true };
     firedDirty = true;
   }
 

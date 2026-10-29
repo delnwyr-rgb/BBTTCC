@@ -360,6 +360,31 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
     return m ? { op: "damage", number: Number(m[1]), die: m[2], bonus: Number(m[3]) || 0, type: dmg.type || "kinetic", flavor: dmg.flavor || "" } : { op: "none" };
   }
 
+  // ── 10-29: struck / saveFail fire on a PLAYER seat (attacker / save roller) — limits, DoTs, dispositions and NPC
+  //    flags need the GM, so a player seat hands them to the active GM over the system socket (no GM online → run here)
+  const NPC_RELAY = "ft-npcAuto";
+  function relayToGM(kind, uuids) {
+    if (game.user?.isGM || !game.users?.activeGM || !game.socket) return false;
+    try { game.socket.emit("system.fourththing", { t: NPC_RELAY, kind, ...uuids, nonce: foundry.utils.randomID() }); return true; }
+    catch (e) { console.warn("[npc-automation] relay emit failed", e); return false; }
+  }
+  const _relaySeen = new Set();
+  async function onRelay(msg) {
+    if (msg?.t !== NPC_RELAY || !isPrimaryGM()) return;
+    if (msg.nonce) { if (_relaySeen.has(msg.nonce)) return; _relaySeen.add(msg.nonce); if (_relaySeen.size > 200) _relaySeen.clear(); }
+    const get = async (u) => (typeof u === "string" && u) ? await fromUuid(u).catch(() => null) : null;
+    try {
+      if (msg.kind === "struck") {
+        const target = await get(msg.targetUuid), attacker = await get(msg.attackerUuid);
+        if (target && attacker) await api.onStruck(target, attacker, await get(msg.itemUuid));
+      } else if (msg.kind === "saveFail") {
+        const caster = await get(msg.casterUuid), target = await get(msg.targetUuid);
+        if (caster && target) await api.onSaveFail(caster, await get(msg.itemUuid), target);
+      }
+    } catch (e) { console.warn("[npc-automation] relay", msg.kind, e); }
+  }
+  Hooks.once("ready", () => { try { game.socket?.on?.("system.fourththing", onRelay); } catch (e) { console.warn("[npc-automation] socket", e); } });
+
   // ── PUBLIC: called from attackTest ───────────────────────────────────────────────────────────────
   const api = {
     /** reroll grants for this Strike (fed into attackTest's rerollGrants) + damage-formula transform */
@@ -371,6 +396,8 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
         const r = rule.do?.reroll;
         if (r === "attack") out.rerolls.push({ sourceItemName: src.name, mode: "reroll-lowest" });
         if (r === "damage" || r === "damage-highest") out.damage = { mode: r, source: src.name };
+        // 10-29: a limited attack rule is used up once it grants (same fire-and-forget as defenseMods)
+        if ((r === "attack" || r === "damage" || r === "damage-highest") && rule.limit) limitSpend(src, rule).catch(() => {});
       }
       return out;
     },
@@ -414,6 +441,7 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
     /** the DEFENDER's "struck" rules (retaliation): `do` runs against the attacker */
     async onStruck(target, attacker, item) {
       if (!on() || !target || !attacker) return;
+      if (relayToGM("struck", { targetUuid: target.uuid, attackerUuid: attacker.uuid, itemUuid: item?.uuid ?? null })) return;
       const lines = [];
       for (const { item: src, rule } of rulesOf(target, "struck")) {
         if (!predicateOk(rule.if, { actor: target, target: attacker, item, damageType: item?.system?.damage?.type }) || !limitOk(src, rule)) continue;
@@ -432,6 +460,7 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
     /** a target failed this item's save card → secondary effects on that target */
     async onSaveFail(caster, item, target) {
       if (!on() || !caster || !target) return;
+      if (relayToGM("saveFail", { casterUuid: caster.uuid, targetUuid: target.uuid, itemUuid: item?.uuid ?? null })) return;
       const lines = [];
       for (const { item: src, rule } of rulesOf(caster, "saveFail")) {
         if (!predicateOk(rule.if, { actor: caster, target, item }) || !limitOk(src, rule)) continue;

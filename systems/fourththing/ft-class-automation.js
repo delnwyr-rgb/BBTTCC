@@ -1800,22 +1800,36 @@ export async function openDreamwalkerDeployCache(actor) {
   const channel = sys.channel  ?? "soul";
   const seph    = sys.sephirah ?? rawSys?.magic?.sephirah ?? "tiferet";
 
-  // Empty the cache atomically before the cast so a failed re-cast doesn't
-  // leave a phantom "deployed but still banked" state.
+  // Re-fire the cast. castManifestation lives on game.fourththing — the
+  // Dreamwalker class always carries the function via the system load.
+  const cast = game.fourththing?.castManifestation;
+  if (typeof cast !== "function") return ui.notifications?.warn(`${actor.name}: cast pipeline unavailable — manifestation deploy aborted.`);
+
+  // Empty the cache before the cast (no double deploy mid-cast); 10-29: put it
+  // back when the cast is refused (reach / lockout / action gates) — never lose it.
+  const snap = {
+    "system.resources.dreamCache.banked": true,
+    "system.resources.dreamCache.name":   cache.name ?? item.name,
+    "system.resources.dreamCache.tier":   Number(cache.tier) || 0,
+    "system.resources.dreamCache.itemId": cache.itemId
+  };
   await actor.update({
     "system.resources.dreamCache.banked": false,
     "system.resources.dreamCache.name":   "",
     "system.resources.dreamCache.tier":   0,
     "system.resources.dreamCache.itemId": ""
   });
-
-  // Re-fire the cast. castManifestation lives on game.fourththing — the
-  // Dreamwalker class always carries the function via the system load.
-  const cast = game.fourththing?.castManifestation;
-  if (typeof cast === "function") {
-    return cast(actor, item, { intent, channel, sephirah: seph, label: item.name, freeClarity: true });
+  // castManifestation returns false on a refusal and undefined on a cast that went off.
+  let ok = false;
+  try {
+    ok = await cast(actor, item, { intent, channel, sephirah: seph, label: item.name, freeClarity: true,
+      reachPath: cache.reachPath || "", mode: cache.mode || "hermetic" });
+  } catch (e) { console.warn("[fourththing] Dream-Cache deploy cast failed", e); }
+  if (ok === false) {
+    await actor.update(snap);
+    ui.notifications?.info(`${actor.name}: the cast didn't go off — "${snap["system.resources.dreamCache.name"]}" stays in the Dream-Cache.`);
   }
-  ui.notifications?.warn(`${actor.name}: cast pipeline unavailable — manifestation deploy aborted.`);
+  return ok;
 }
 
 // Dreamwalker — Generic per-Soma-Break feat activator. Each of the 8
@@ -2324,13 +2338,14 @@ export async function openHarmonyMarshalAttritionEaser(actor) {
           }
         }
       } : {}),
-      reset: {
+      // 10-29: GM-only — the advanceTurn:end rollover refreshes it; a player Reset re-spent at will.
+      ...(game.user?.isGM ? { reset: {
         label: "Reset (new strategic turn)",
         callback: async () => {
           await actor.update({ "flags.fourththing.harmonyMarshal.attritionEaserUsedThisTurn": false });
           ui.notifications?.info(`${actor.name}: Attrition Easer refreshed.`);
         }
-      },
+      } } : {}),
       close: { label: "Close" }
     },
     default: faction && canAfford && !used ? "spend" : "close"
@@ -2377,6 +2392,10 @@ export async function openHarmonyMarshalLoyaltySteward(actor) {
           const note  = String(html.find("[name='hexNote']").val() || "").trim();
           let hexName = note || "(unspecified hex)";
           let bumped = false;
+          // 10-29: once per strategic turn (checked again in the hexLoyalty op).
+          if (hexUuid && actor.flags?.fourththing?.harmonyMarshal?.loyaltyStewardUsedThisTurn) {
+            return ui.notifications?.warn(`${actor.name}: Loyalty Steward already raised a hex this strategic turn — refreshes at the next turn.`);
+          }
           if (hexUuid) {
             const hex = hexes.find(h => h.uuid === hexUuid);
             const doc = await fromUuid(hexUuid);
@@ -2393,6 +2412,13 @@ export async function openHarmonyMarshalLoyaltySteward(actor) {
           });
         }
       },
+      ...(game.user?.isGM ? { reset: {
+        label: "Reset (new strategic turn)",
+        callback: async () => {
+          await actor.update({ "flags.fourththing.harmonyMarshal.loyaltyStewardUsedThisTurn": false });
+          ui.notifications?.info(`${actor.name}: Loyalty Steward refreshed.`);
+        }
+      } } : {}),
       close: { label: "Close" }
     },
     default: "apply"
@@ -2453,13 +2479,14 @@ export async function openHarmonyMarshalUnityConductor(actor) {
   }).render(true);
 }
 
-// Unity Conductor's once-per-turn mark clears on a REAL (applied) strategic
-// turn, on exactly one client (the active GM).
+// Unity Conductor's (and, 10-29, Loyalty Steward's) once-per-turn mark clears on
+// a REAL (applied) strategic turn, on exactly one client (the active GM).
 Hooks.on("bbttcc:advanceTurn:end", async ({ apply } = {}) => {
   if (!apply || !game.user?.isGM || (game.users?.activeGM && game.users.activeGM !== game.user)) return;
   for (const a of game.actors?.contents ?? []) {
-    if (!a.flags?.fourththing?.harmonyMarshal?.unityConductorGrantedThisTurn) continue;
-    try { await a.unsetFlag("fourththing", "harmonyMarshal.unityConductorGrantedThisTurn"); } catch (_e) {}
+    const hm = a.flags?.fourththing?.harmonyMarshal;
+    if (hm?.unityConductorGrantedThisTurn) { try { await a.unsetFlag("fourththing", "harmonyMarshal.unityConductorGrantedThisTurn"); } catch (_e) {} }
+    if (hm?.loyaltyStewardUsedThisTurn)    { try { await a.unsetFlag("fourththing", "harmonyMarshal.loyaltyStewardUsedThisTurn"); } catch (_e) {} }
   }
 });
 
@@ -2668,6 +2695,8 @@ export async function openBulwarkStance(actor) {
 const _FCA_RELAY = "fourththing.class.foreignWrite";
 const _FCA_FLAG_PATHS = new Set(["aurablade.disAttackOnce", "oceanJudge"]);
 const _FCA_MAX_TEMP = 40;
+// 10-29: refreshable bonus AEs — re-applying replaces the old copy instead of stacking.
+const _FCA_REFRESH_AE_FLAGS = new Set(["calmPush", "standardOfWill", "bannerFinalPush", "solarStillpoint"]);
 
 async function _fcaApplyOp(target, op, p = {}, source = null) {
   switch (op) {
@@ -2720,11 +2749,23 @@ async function _fcaApplyOp(target, op, p = {}, source = null) {
       await target.update({ "flags.fourththing.annotationPending": cur + 1 });
       return { ok: true, pending: cur + 1 };
     }
+    case "clearFlaggedAE": {   // 10-29: drop an earlier copy of a refreshable bonus AE before re-applying
+      const flag = String(p.flag ?? "");
+      if (!_FCA_REFRESH_AE_FLAGS.has(flag)) throw new Error(`AE flag not allowed: ${flag}`);
+      const ids = Array.from(target.effects ?? []).filter(e => e.flags?.fourththing?.[flag] === true).map(e => e.id);   // === true: ally bonus AEs, not a caster's aura marker
+      if (ids.length) await target.deleteEmbeddedDocuments("ActiveEffect", ids);
+      return { ok: true, removed: ids.length };
+    }
     case "hexLoyalty": {   // Loyalty Steward — +1 on a territory hex Drawing (tf.mods.loyalty, the one authority)
       if (target.documentName !== "Drawing" || !target.flags?.["bbttcc-territory"]) throw new Error("not a territory hex");
+      // 10-29: once per strategic turn per steward, enforced on the writing seat.
+      if (!source) throw new Error("no source steward");
+      if (source.flags?.fourththing?.harmonyMarshal?.loyaltyStewardUsedThisTurn) return { ok: false, reason: "already used this strategic turn" };
       const mods = foundry.utils.duplicate(target.flags["bbttcc-territory"].mods ?? {});
       mods.loyalty = Number(mods.loyalty || 0) + 1;
       await target.update({ "flags.bbttcc-territory.mods": mods });
+      // Spent only once the bump landed (a failed hex write keeps the use).
+      try { await source.update({ "flags.fourththing.harmonyMarshal.loyaltyStewardUsedThisTurn": true }); } catch (_e) {}
       return { ok: true };
     }
     default: throw new Error(`unknown op ${op}`);
@@ -3861,11 +3902,10 @@ export async function openCounterManifestation(actor) {
           // Surge banking on explosions (caster is the active roller).
           const dieResults = roll.dice?.[0]?.results ?? [];
           const explosions = Math.max(0, dieResults.length - 2);
+          // 10-29: through the one banking path (cap, overheat Stress, foe gate, harvest).
+          let banked = 0;
           if (explosions > 0) {
-            try {
-              const cur = Number(rawSys?.resources?.surge?.value) || 0;
-              await actor.update({ "system.resources.surge.value": cur + explosions });
-            } catch (_) {}
+            try { banked = Number(await game.fourththing?.bankSurge?.(actor, explosions)) || 0; } catch (_) {}
           }
 
           // On success — remove the entry from the target's flag, re-read at
@@ -3878,7 +3918,7 @@ export async function openCounterManifestation(actor) {
             if (!r.ok) ui.notifications?.warn(`Counter: couldn't drop ${entry.itemName} on ${target.name} (${r.reason || "no GM online"}) — GM removes it by hand.`);
           }
 
-          const surgeNote = explosions > 0 ? ` <span style="color:#e8c84a;font-weight:600">+${explosions} Surge banked</span>` : "";
+          const surgeNote = banked > 0 ? ` <span style="color:#e8c84a;font-weight:600">+${banked} Surge banked</span>` : "";
           await roll.toMessage({
             speaker: ChatMessage.getSpeaker({ actor }),
             flavor: `<div class="fourththing-roll" style="border-color:${success ? "#5fb35f" : "#c45f5f"}">
@@ -4807,11 +4847,18 @@ async function _ftSelfMarker(actor, name, img, flag, durationRounds = 10) {
 
 // Canonical damage apply-button row (GM/owner clicks → applyDamageFromButton →
 // _applyDamageToActor). targetUuid baked = single target; omitted = current targets.
+// 10-29: the handler reads data-damage-type/-flavor (not data-type), and the type must
+// be canonical — fire = thermal:hot; psychic lands on the stress track (FT.DAMAGE_TYPES).
+const _FT_ANC_DMG = {
+  fire:    { type: "thermal", flavor: "hot", track: "integrity" },
+  psychic: { type: "psychic", flavor: "",    track: "stress" }
+};
 function _ftAncDamageRow(total, dtype, targetUuid) {
+  const d = _FT_ANC_DMG[dtype] ?? { type: dtype, flavor: "", track: "integrity" };
   return `<div class="ft-dmg-row" style="margin-top:0.3rem">
     <span class="ft-dmg-label">⚔ ${dtype}</span>
     <span class="ft-dmg-formula"><b>${total}</b></span>
-    <button class="ft-apply-dmg-btn" data-formula="${total}" data-op="damage" data-track="integrity" data-type="${dtype}"${targetUuid ? ` data-target-uuid="${targetUuid}"` : ""}>Apply ${total} ${dtype}${targetUuid ? "" : " (to targets)"}</button>
+    <button class="ft-apply-dmg-btn" data-formula="${total}" data-op="damage" data-track="${d.track}" data-damage-type="${d.type}"${d.flavor ? ` data-damage-flavor="${d.flavor}"` : ""}${targetUuid ? ` data-target-uuid="${targetUuid}"` : ""}>Apply ${total} ${dtype}${targetUuid ? "" : " (to targets)"}</button>
   </div>`;
 }
 
@@ -5034,7 +5081,8 @@ export async function openCircuitbornAttentionResonance(actor) {
       use: {
         label: "Use",
         callback: async (html) => {
-          if (used) return ui.notifications?.warn("Attention Resonance: already spent — reset on Soma Break.");
+          // 10-29: re-read at click time — the open-time value goes stale across dialogs.
+          if (actor.getFlag("fourththing", "disciplineUsed.circuitbornAttentionResonance")) return ui.notifications?.warn("Attention Resonance: already spent — reset on Soma Break.");
           const mode = html.find("[name='mode']").val();
           let note = "";
           if (mode === "hp") {
@@ -5059,10 +5107,11 @@ export async function openCircuitbornAttentionResonance(actor) {
           });
         }
       },
-      reset: {
+      // 10-29: GM-only — the Soma Break rest clears it; a player Reset was a marks faucet.
+      ...(game.user?.isGM ? { reset: {
         label: "Reset (Soma Break)",
         callback: () => actor.setFlag("fourththing", "disciplineUsed.circuitbornAttentionResonance", false)
-      },
+      } } : {}),
       close: { label: "Close" }
     },
     default: "use"
@@ -6663,7 +6712,7 @@ export async function openDreamwalkerSharedDream(actor) {
           const max  = Number(asys?.magic?.clarity?.max) || cur; // no track → no grant
           if (max > cur) { await ally.update({ "system.magic.clarity.value": Math.min(max, cur + amount) }); granted.push(ally.name); }
         } else if (hasGM) {
-          game.socket?.emit?.("system.fourththing", { t: "ft-grantClarity", actorId: ally.id, amount });
+          game.socket?.emit?.("system.fourththing", { t: "ft-grantClarity", actorId: ally.id, targetUuid: ally.uuid, amount });   // 10-29: uuid → the token's actor, not the base
           granted.push(`${ally.name} (relayed)`);
         }
       }
@@ -7098,6 +7147,7 @@ export async function openHarmonyMarshalMeasuredCommand(actor) {
 export async function openHarmonyMarshalCalmPush(actor) {
   const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
   if (!ally) return ui.notifications?.warn("Calm Push: target an ally token within 30 ft first.");
+  await _ftForeignWrite(actor, ally, "clearFlaggedAE", { flag: "calmPush" });   // 10-29: refresh, never stack
   const okCP = await _ftAEOn(ally, {
     name: "Calm Push — +1 Guard", img: "icons/magic/movement/trail-streak-impact-blue.webp", origin: actor.uuid,
     duration: { rounds: 1, seconds: 6 },
@@ -7196,6 +7246,8 @@ async function _ftAuraApply(actor, { radiusFt, markerName, markerImg, markerFlag
   const allyNames = [];
   for (const t of allies) {
     const okAid = (await _ftBankAidOn(actor, t.actor, aidSource)).ok;
+    // 10-29: a re-cast refreshes the ally's bonus AE instead of stacking another +N.
+    if (allyChanges?.length && _FCA_REFRESH_AE_FLAGS.has(markerFlag)) await _ftForeignWrite(actor, t.actor, "clearFlaggedAE", { flag: markerFlag });
     const okAE = allyChanges?.length ? await _ftAEOn(t.actor, { name: markerName, img: markerImg, origin: actor.uuid, duration: dur, changes: allyChanges, flags: { fourththing: { [markerFlag]: true } } }) : true;
     if (okAid && okAE) allyNames.push(t.actor.name);
   }
@@ -7649,7 +7701,8 @@ export async function openFtSharedBurdenHarness(actor) {
       // The pull only costs you once the ally's side has landed (or gone to the GM).
       const hr = await _ftHealOn(ally, tier);
       if (!hr.ok) { ui.notifications?.warn(`Shared Burden Harness: couldn't reach ${ally.name} (no GM online) — nothing pulled.`); return false; }
-      try { const cur = Number(sys?.derived?.integrity?.value ?? sys?.integrity?.value ?? 0); await actor.update({ "system.derived.integrity.value": Math.max(0, cur - tier) }); } catch (e) {}
+      // 10-29: through the damage pipeline — temp Integrity first, drop-to-1 wards, 0-Integrity handling.
+      try { await game.fourththing.rolls._applyDamageToActor(actor, tier, { track: "integrity", ignoreResists: true }); } catch (e) {}
       ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#9ad0ff">⛓ Shared Burden Harness → ${_ftEscape(ally.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">You pull <b>${tier}</b> damage off ${_ftEscape(ally.name)} onto yourself.</p></div>` });
       return true;
     });

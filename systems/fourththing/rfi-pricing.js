@@ -460,6 +460,8 @@ function _injectPricingHeaderButton(app, html) {
   try {
     if (!app?.document) return;
     if (app.document.documentName !== "Item") return;
+    // 10-29 (GR17): pricing is a GM authoring tool — no coin button on player seats
+    if (!game.user?.isGM) return;
     const item = app.document;
     if (!_isPriceableItem(item)) {
       console.debug("[rfi-pricing] skip: not priceable", item.type, item.name);
@@ -505,6 +507,7 @@ function _injectPricingHeaderButton(app, html) {
 // ─── Pricing main dialog ─────────────────────────────────────────────────────
 
 export async function openPricingDialog(item) {
+  if (!game.user?.isGM) return null; // 10-29 (GR17): GM-only
   const stored = await _readPrice(item);
   const price = stored ?? defaultPriceFor(item);
   const rfi = RfiItems.get(item) ?? {};
@@ -798,6 +801,7 @@ function _bindPricingStripHandlers(item, root) {
  * the saved split object, or null if the user cancelled.
  */
 export async function openSplitDialog(item) {
+  if (!game.user?.isGM) return null; // 10-29 (GR17): GM-only
   const cur = (await _readPrice(item)) ?? defaultPriceFor(item);
   const split = cur.split ?? {};
   const totalMarks = Number(cur.marks) || 0;

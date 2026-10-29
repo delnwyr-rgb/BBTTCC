@@ -96,7 +96,9 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
   const srcRoot  = (typeof actor.toObject === "function" ? actor.toObject() : actor)?.system;
   const srcSys   = srcRoot?.system ?? srcRoot ?? {};
   const attrVal  = srcSys?.attributes?.[attribute]?.value ?? 2;
-  const rank     = srcSys?.skills?.[skill]?.value ?? 0;
+  // 10-29: + item rank grants (passives.ranks), same as attributeTest — the
+  // grant also picks the rank tier (reroll-low / floor 4 / 3d10).
+  const rank     = (Number(srcSys?.skills?.[skill]?.value) || 0) + (rankGrantsOf(actor)[skill] || 0);
   // Monsters have no aptitude requirements (owner ruling 2026-09-04): a wolf
   // is never "untrained" with its own teeth. A bestiary creature with no stored
   // rank rolls with Trained-tier mechanics (no fumble) and the label "Innate";
@@ -124,7 +126,11 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
                    + (game.fourththing?.strainBite?.(actor)?.rollPenalty ?? 0);   // Strain (techniques R1, 2026-09-21)
   // Use raw rank for the additive numeric bonus so chat-card math still
   // reflects the stored value; rankData.bonus reflects the clamped table.
-  const totalBonus = attrVal + Number(rank) + aeBonus - radPenalty;
+  // 10-29: flat check bonuses (own passives.checkBonus, auras, banked bonuses)
+  // — same sum attributeTest adds; banked entries are consumed after the roll.
+  const checkBonuses = collectCheckBonuses(actor, { context: "check", skill, attribute });
+  const checkBonus   = checkBonuses.reduce((n, b) => n + (Number(b.bonus) || 0), 0);
+  const totalBonus = attrVal + Number(rank) + aeBonus - radPenalty + checkBonus;
 
   // Master (rank 4) and Legendary (rank 5+) roll 3d10 keep best 2. Everyone else rolls 2d10.
   const poolSize = rankClamped >= 4 ? 3 : 2;
@@ -157,6 +163,9 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
   // Doesn't stack with rank mechanics: if rank already triggers reroll-low,
   // the rank reroll wins and AE grants are noted but don't fire a second time.
   const aeRerollGrants = collectRerolls(actor, { context: "check", skill, attribute });
+  // 10-29: one-shot grants (Aid, Annotation, Pace, ancestry) are consumed when
+  // they fire, exactly as attributeTest does — they used to work forever here.
+  const rerollApplied = [];
   const aeRerollLowSource  = aeRerollGrants.find(g => g.mode === "reroll-lowest")?.sourceItemName;
   const aeRerollHighSource = aeRerollGrants.find(g => g.mode === "reroll-highest")?.sourceItemName;
 
@@ -173,24 +182,38 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
       adjusted[minIdx]        = rerollVal;
       explodeTriggers[minIdx] = rerollVal;   // reroll can explode
       rerollNote = `↑ rerolled ${minVal} → ${rerollVal} (${srcTag})`;
+      if (rankData.mechanic !== "reroll_low") rerollApplied.push({ mode: "reroll-lowest", source: aeRerollLowSource });
     } else {
       rerollNote = `↑ rerolled ${minVal} → ${rerollVal} kept original (${srcTag})`;
     }
-  } else if (aeRerollHighSource) {
+  }
+  // 10-29: its own block (was `else if`) — a reroll-lowest no longer silently
+  // cancels an imposed reroll-highest; both apply, as in applyRerollGrants.
+  if (aeRerollHighSource) {
     // Reroll-highest from a passive (e.g. enemy aura imposes disadvantage).
     const maxVal = Math.max(...adjusted);
     const maxIdx = adjusted.indexOf(maxVal);
     const reroll = new Roll("1d10");
     await reroll.evaluate();
     const rerollVal = reroll.total;
+    let highNote;
     if (rerollVal < maxVal) {
       adjusted[maxIdx]        = rerollVal;
       explodeTriggers[maxIdx] = rerollVal;
-      rerollNote = `↓ rerolled ${maxVal} → ${rerollVal} (${aeRerollHighSource})`;
+      highNote = `↓ rerolled ${maxVal} → ${rerollVal} (${aeRerollHighSource})`;
+      rerollApplied.push({ mode: "reroll-highest", source: aeRerollHighSource });
     } else {
-      rerollNote = `↓ rerolled ${maxVal} → ${rerollVal} kept original (${aeRerollHighSource})`;
+      highNote = `↓ rerolled ${maxVal} → ${rerollVal} kept original (${aeRerollHighSource})`;
     }
+    rerollNote = rerollNote ? `${rerollNote} · ${highNote}` : highNote;
   }
+  // Banked bonuses FIRST: they splice aidBanked by snapshot index, and the Aid
+  // reroll consume shifts those indices (wrong/no entry dropped otherwise).
+  await consumeBankedBonus(actor, checkBonuses);
+  await consumeAnnotationReroll(actor, rerollApplied);
+  await consumeAidReroll(actor, rerollApplied);
+  await consumePaceReroll(actor, rerollApplied);
+  await consumeAncestryReroll(actor, rerollApplied);
 
   // Chain explosions per die. Master/Legendary: even dropped dice explode and bank Surge.
   const dieResults = [];
@@ -236,9 +259,14 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
     const floorAdd = adjusted.reduce((s, v, i) => s + (v - baseDice[i]), 0);
     if (floorAdd > 0) mechNote = `floor 4 (+${floorAdd})`;
   }
+  // 10-29: name the flat check bonuses on the card (both cards print mechNote).
+  if (checkBonuses.length) {
+    const cbNote = checkBonuses.map(b => `${b.bonus > 0 ? "+" : ""}${b.bonus} ${b.source}`).join(", ");
+    mechNote = mechNote ? `${mechNote} · ${cbNote}` : cbNote;
+  }
 
   return { total, roll, rank, rankData, attrVal, aeBonus, totalBonus, radPenalty,
-           aeSkillBonus, aeAttrBonus, aeAttrContribs,
+           aeSkillBonus, aeAttrBonus, aeAttrContribs, checkBonus, checkBonuses,
            isFumble, mechNote, rerollNote, formula, label, skill, attribute,
            surgeBanked, doubleTen, dieResults, kept };
 }
@@ -1697,6 +1725,25 @@ export function deriveItemUnlockLevel(item) {
   return { tier, level };
 }
 
+// 10-29: a subclass's FEATURE folder. Usually the subclass item's own folder,
+// but Pactkeeper files its three subclasses together in "Subclasses" and each
+// one's features in a child folder named after it ("Subclasses/Auditor"). When
+// the folder holds several subclasses, use the child whose name matches this
+// subclass (parenthetical like "(Bad Eden)" ignored). Shared by applyPathFeatures
+// and the class-swap sweep in bbttcc-bridge.js.
+export async function resolveSubclassFeatureFolderId(pack, folderId, subclassName) {
+  if (!pack || !folderId) return folderId ?? null;
+  try {
+    const idx = await pack.getIndex({ fields: ["type", "folder"] });
+    const subs = [...idx].filter(e => e.type === "subclass" && e.folder === folderId).length;
+    if (subs <= 1) return folderId;
+    const base = String(subclassName ?? "").replace(/\s*\([^)]*\)\s*$/, "").trim().toLowerCase();
+    const folders = pack.folders?.contents ?? [...(pack.folders ?? [])];
+    const child = folders.find(f => (f.folder?.id ?? f.folder ?? null) === folderId && String(f.name ?? "").trim().toLowerCase() === base);
+    return child?.id ?? folderId;
+  } catch (_e) { return folderId; }
+}
+
 export async function applyPathFeatures(actor, opts = {}) {
   if (!actor) return { imported: [], skipped: [], error: "No actor" };
 
@@ -1723,6 +1770,7 @@ export async function applyPathFeatures(actor, opts = {}) {
   if (classFeatFolder) targetFolderIds.add(classFeatFolder.id);
 
   let subclassFolderName = null;
+  let subclassFolderId = null;
   const subclassItem = actor.items.find(i => i.type === "subclass");
   if (subclassItem) {
     const sSrc = await _resolveCompendiumSource(subclassItem)
@@ -1751,8 +1799,10 @@ export async function applyPathFeatures(actor, opts = {}) {
           sFolder = hit?.folder ?? null;
         } catch (_e) {}
       }
+      if (sFolder) sFolder = await resolveSubclassFeatureFolderId(pack, sFolder, subclassItem.name);
       if (sFolder) {
         targetFolderIds.add(sFolder);
+        subclassFolderId = sFolder;
         subclassFolderName = sDoc?.folder?.name ?? null;
       }
     }
@@ -1796,10 +1846,13 @@ export async function applyPathFeatures(actor, opts = {}) {
   // Level provenance (2026-09-08): stamp what a level-up imports so the
   // minus button can find it again. Precedent: flags.fourththing.grantedByHeritage.
   const stampLevel = Number(opts?.stampLevel);
-  const data = toImport.map(({ doc }) => {
+  const data = toImport.map(({ entry, doc }) => {
     const obj = doc.toObject();
     delete obj._id;
     if (Number.isFinite(stampLevel) && stampLevel > 0) foundry.utils.setProperty(obj, "flags.fourththing.grantedAtLevel", stampLevel);
+    // 10-29: lineage tag so a class/subclass swap's cleanup removes these (they were left behind).
+    if (subclassItem && subclassFolderId && entry.folder === subclassFolderId) foundry.utils.setProperty(obj, "flags.fourththing.grantedBySubclass", subclassItem.name);
+    else foundry.utils.setProperty(obj, "flags.fourththing.grantedByClass", classItem.name);
     return obj;
   });
   const created = await actor.createEmbeddedDocuments("Item", data);
@@ -1946,7 +1999,21 @@ export async function levelSignatureManifestations(actor, newTier) {
   return bumped;
 }
 
+// 10-29: one Advance dialog per actor — two open dialogs both applied (double faculty/aptitude/technique).
+const _ftLevelUpInFlight = new Set();
+
 export async function levelUp(actor) {
+  const _lockKey = actor?.uuid ?? actor?.id;
+  if (_ftLevelUpInFlight.has(_lockKey)) {
+    ui.notifications?.info?.(`${actor.name}: an Advance is already open.`);
+    return null;
+  }
+  _ftLevelUpInFlight.add(_lockKey);
+  try { return await _ftLevelUpDialog(actor); }
+  finally { _ftLevelUpInFlight.delete(_lockKey); }
+}
+
+async function _ftLevelUpDialog(actor) {
   const rawSys  = actor.system?.system ?? actor.system;
   // ⚠ SOURCE reads (never derived) for anything written back: derived faculty =
   // source + live AEs, so writing derived+1 folded the AE into the stored value
@@ -2011,12 +2078,18 @@ export async function levelUp(actor) {
 
   const attrNames = ["Violence", "Intrigue", "Presence", "Body", "Mind", "Soul"];
   const attrKeys  = ["violence", "intrigue", "presence", "body", "mind", "soul"];
+  // 10-29: capped faculties are disabled + the first uncapped one is pre-selected (the point was silently lost).
+  const _firstOpen = attrKeys.find(k => Number(src?.attributes?.[k]?.value ?? 2) < 10) ?? null;
   const attrOpts  = attrKeys.map((k, i) => {
     const cur = src?.attributes?.[k]?.value ?? 2;
-    return `<option value="${k}">${attrNames[i]} (currently ${cur}${cur >= 10 ? " — at cap" : ""})</option>`;
+    const capped = Number(cur) >= 10;
+    const dis = capped && _firstOpen ? " disabled" : "";
+    const sel = k === _firstOpen ? " selected" : "";
+    return `<option value="${k}"${dis}${sel}>${attrNames[i]} (currently ${cur}${capped ? " — at cap" : ""})</option>`;
   }).join("");
 
   return new Promise((resolve) => {
+    let _submitted = false;   // the async Advance callback is still running when close() fires
     new Dialog({
       title: `Advance Initiation — Depth ${newLevel}`,
       content: `<div class="ft-cast-dialog">
@@ -2042,12 +2115,23 @@ export async function levelUp(actor) {
         levelUp: {
           icon: "<i class='fas fa-arrow-up'></i>",
           label: `Advance to ${newLevel}`,
-          callback: async (html) => {
+          callback: (html) => { _submitted = true; return (async () => {
             const attrKey = html.find("[name='attrChoice']").val();
             // Re-read source NOW — the dialog may have sat open while the sheet changed.
             const srcNow  = readSrc();
+            // 10-29: the level moved while this dialog sat open — never apply a stale Advance.
+            const levelNow = Number(srcNow?.details?.level) || 1;
+            if (levelNow !== current) {
+              ui.notifications.warn(`${actor.name}: Initiation is already ${levelNow} — Advance cancelled.`);
+              return resolve(null);
+            }
             const cur     = Number(srcNow?.attributes?.[attrKey]?.value ?? 2);
             const newVal  = Math.min(10, cur + 1);
+            // 10-29: capped pick while a faculty is still open → refuse (dialog closes; reopen and pick again).
+            if (newVal === cur && attrKeys.some(k => Number(srcNow?.attributes?.[k]?.value ?? 2) < 10)) {
+              ui.notifications.warn(`${actor.name}: ${attrKey} is at cap — Advance cancelled; pick a faculty below 10.`);
+              return resolve(null);
+            }
 
             // Snapshot Integrity max BEFORE the level/attr update so we can
             // grant the delta as a level-up boon (preserves existing damage).
@@ -2168,7 +2252,7 @@ export async function levelUp(actor) {
                   <span class="ft-defense-pill">Depth ${newLevel}${tierUp ? ` · Tier ${newTier}` : ""}</span>
                 </div>
                 <p style="margin:0.2rem 0;font-size:0.82rem;opacity:0.8">
-                  ${attrKey.charAt(0).toUpperCase() + attrKey.slice(1)} increased to ${newVal}.
+                  ${newVal > cur ? `${attrKey.charAt(0).toUpperCase() + attrKey.slice(1)} increased to ${newVal}.` : `Every faculty is at cap — no faculty point this level.`}
                   ${integrityGain > 0 ? `<br/>✦ <b>+${integrityGain} Integrity max</b> (${oldIntegrityMax} → ${newIntegrityMax}).` : ""}
                   ${gainSkillPts ? `<br/>+${gainSkillPts} aptitude points gained.` : ""}
                   ${grantedTechName ? `<br/>Technique gained: <b>${grantedTechName}</b>.` : ""}
@@ -2181,11 +2265,13 @@ export async function levelUp(actor) {
             });
 
             resolve({ attrKey, newVal, newLevel, newTier, tierUp, gainSkillPts, grantedTechName, autoGranted, signatureLeveled });
-          }
+          })().catch(e => { console.error("ft-progression: levelUp failed", e); resolve(null); }); }
         },
         cancel: { label: "Cancel", callback: () => resolve(null) }
       },
-      default: "levelUp"
+      default: "levelUp",
+      // 10-29: closing with the X resolves too (else the in-flight lock never clears).
+      close: () => { if (!_submitted) resolve(null); }
     }).render(true);
   });
 }
