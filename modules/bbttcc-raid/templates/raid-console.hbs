@@ -181,7 +181,7 @@
     <!-- Turn Bank panel (GM sees both) -->
     <section class="bbttcc-bank grid" style="grid-template-columns: 1fr 1fr; gap:.5rem;">
       <div class="card" style="padding:.5rem;">
-        <h4 style="margin:0 0 .25rem 0;">Attacker Bank (OP) — {{default currentBank.attackerName "(none)"}}</h4>
+        <h4 style="margin:0 0 .25rem 0;">Attacker Bank (marks) — {{default currentBank.attackerName "(none)"}}</h4>
         {{#if currentBank.attacker}}
         <table class="bbttcc-table" style="width:100%;">
           <thead><tr>
@@ -203,7 +203,7 @@
       </div>
 
       <div class="card" style="padding:.5rem;">
-        <h4 style="margin:0 0 .25rem 0;">Defender Bank (OP) — {{default currentBank.defenderName "(none)"}}</h4>
+        <h4 style="margin:0 0 .25rem 0;">Defender Bank (marks) — {{default currentBank.defenderName "(none)"}}</h4>
         {{#if currentBank.hasDef}}
         <table class="bbttcc-table" style="width:100%;">
           <thead><tr>
@@ -228,7 +228,7 @@
     <!-- Player view bank panel (only your bank) -->
     <section class="bbttcc-bank" style="margin-top:.25rem;">
       <div class="card" style="padding:.5rem;">
-        <h4 style="margin:0 0 .25rem 0;">Your Bank (OP) — {{default currentBank.attackerName "(none)"}}</h4>
+        <h4 style="margin:0 0 .25rem 0;">Your Bank (marks) — {{default currentBank.attackerName "(none)"}}</h4>
         {{#if currentBank.attacker}}
         <table class="bbttcc-table" style="width:100%;">
           <thead><tr>

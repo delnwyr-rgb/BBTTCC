@@ -393,12 +393,12 @@
         const atkParts = [`${atkDiceSum} <small style="opacity:.7;">(2d10)</small>`];
         if (atkSpendBonus > 0) atkParts.push(`+ ${atkSpendBonus} <small style="opacity:.7;">(Intrigue ×${atkSpend} per 10 marks)</small>`);
         if (stewBonus     > 0) atkParts.push(`+ ${stewBonus} <small style="opacity:.7;">(stewards × ${stewBonus})</small>`);
-        if (atkCoalition  > 0) atkParts.push(`+ ${atkCoalition} <small style="opacity:.7;">(coalition Intrigue OP)</small>`);
+        if (atkCoalition  > 0) atkParts.push(`+ ${atkCoalition} <small style="opacity:.7;">(coalition Intrigue marks)</small>`);
 
         const defParts = [`${defDiceSum} <small style="opacity:.7;">(2d10)</small>`];
-        if (defSpendBonus > 0) defParts.push(`+ ${defSpendBonus} <small style="opacity:.7;">(Nonlethal OP × ${defSpend})</small>`);
+        if (defSpendBonus > 0) defParts.push(`+ ${defSpendBonus} <small style="opacity:.7;">(Nonlethal marks × ${defSpend})</small>`);
         if (Number(state.difficulty) > 0) defParts.push(`+ ${state.difficulty} <small style="opacity:.7;">(difficulty)</small>`);
-        if (defCoalition  > 0) defParts.push(`+ ${defCoalition} <small style="opacity:.7;">(coalition Nonlethal OP)</small>`);
+        if (defCoalition  > 0) defParts.push(`+ ${defCoalition} <small style="opacity:.7;">(coalition Nonlethal marks)</small>`);
 
         const lines = [
           `Round ${state.round}: <b>${foundry.utils.escapeHTML(A.name)}</b> vs <b>${foundry.utils.escapeHTML(D.name)}</b>`,
@@ -461,7 +461,7 @@
         await playAlarmFX({ before, after: state.alarm, band: bandFromAlarm(state.alarm) });
 
         const lines = [
-          `<b>Flashback:</b> ${foundry.utils.escapeHTML(A.name)} spends ${spend} Intrigue OP to reduce Alarm ${before} → ${state.alarm}.`,
+          `<b>Flashback:</b> ${foundry.utils.escapeHTML(A.name)} spends ${spend} Intrigue marks to reduce Alarm ${before} → ${state.alarm}.`,
         ];
         if (note) lines.push(foundry.utils.escapeHTML(note));
         await sendChat(lines, { title: `${label}: Flashback` });

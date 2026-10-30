@@ -1436,7 +1436,7 @@ async function openBuyConfirmDialog({ entry, factionId, faction, hexUuid = "" })
           <select name="payFromPool" style="width:100%;">${optsAll}</select>
         </div>
         <p style="font-size:0.78rem;opacity:0.6;font-style:italic;">
-          Non-native pools cost × 1.5 (cross-pool friction). Spread pays your native pool first, then the fullest others (× marks are cross-pool). Pool balances shown reflect current opBank.
+          Non-native pools cost × 1.5 (cross-pool friction). Spread pays your native pool first, then the fullest others (× marks are cross-pool). Pool balances shown are your current treasury.
         </p>
       </form>`,
     buttons: [

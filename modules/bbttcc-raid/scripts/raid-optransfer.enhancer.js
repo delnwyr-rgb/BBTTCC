@@ -25,7 +25,7 @@
     poolsT[k]= clamp0((poolsT[k]||0) + delta);
     await fromActor.update({[`flags.${FCT}.opBank`]:bankF,[`flags.${FCT}.pools`]:poolsF});
     await toActor.update({[`flags.${FCT}.opBank`]:bankT,[`flags.${FCT}.pools`]:poolsT});
-    try { await ChatMessage.create({ speaker:{alias:"Bad Eden Raid"}, content:`<p>OP Transfer — ${delta} marks ${k.toUpperCase()} from ${foundry.utils.escapeHTML(String(fromActor.name))} to ${foundry.utils.escapeHTML(String(toActor.name))}</p>` }); } catch {}
+    try { await ChatMessage.create({ speaker:{alias:"Bad Eden Raid"}, content:`<p>Marks Transfer — ${delta} marks ${k.toUpperCase()} from ${foundry.utils.escapeHTML(String(fromActor.name))} to ${foundry.utils.escapeHTML(String(toActor.name))}</p>` }); } catch {}
     return true;
   }
 

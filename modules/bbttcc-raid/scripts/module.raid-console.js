@@ -729,7 +729,7 @@ function _rcSyncManeuverSelectionsFromDOM(app, idx, round){
   return false;
 }
 
-// Projected spend readouts are labelled "Projected OP Spend" — sum is in marks.
+// Projected spend readouts are labelled "Projected Spend" — sum is in marks.
 function textForSpend(sum){ return Object.keys(sum).length ? Object.entries(sum).map(([k,v])=>`${k}:${_rcOP(v)}`).join(", ") : "—"; }
 
 // ------------------------------------------------------------
@@ -3684,7 +3684,7 @@ _renderScenarioHUD(host, round){
           const {op} = lcKeysCost(cost);
           // Stored in marks, chip says OP — convert (owner report 2026-08-17).
           const parts=[]; for (const [ck,cv] of Object.entries(op||{})){ if(!cv) continue; parts.push(`${ck}:${_rcOP(cv)}`); }
-          return parts.length? ` <small style="opacity:.8;">(OP ${parts.join(", ")})</small>` : "";
+          return parts.length? ` <small style="opacity:.8;">(marks: ${parts.join(", ")})</small>` : "";
         };
 
         for (const k of keys){
@@ -3734,13 +3734,13 @@ _renderScenarioHUD(host, round){
       projBox.style.marginTop=".35rem";
       projBox.style.gridColumn="1 / span 2";
       projBox.innerHTML = isGMView ? `
-        <small><i>Projected OP Spend (Att):</i> <b><span data-proj-att></span></b></small>
-        <br/><small style="opacity:.85;"><i>Defender OP Spend:</i> <b><span data-proj-def></span></b></small>
+        <small><i>Projected Spend (Att):</i> <b><span data-proj-att></span></b></small>
+        <br/><small style="opacity:.85;"><i>Defender Spend:</i> <b><span data-proj-def></span></b></small>
         <br/><small style="opacity:.85;"><i>Attacker Bank After (Preview):</i> <b><span data-op-after-att></span></b></small>
         <br/><small style="opacity:.85;"><i>Defender Bank After (Preview):</i> <b><span data-op-after-def></span></b></small>
         <br/><small style="opacity:.85; color:#f97373;" data-op-error-att></small>
         <br/><small style="opacity:.85; color:#f97373;" data-op-error-def></small>` : `
-        <small><i>Projected OP Spend (Att):</i> <b><span data-proj-att></span></b></small>
+        <small><i>Projected Spend (Att):</i> <b><span data-proj-att></span></b></small>
         <br/><small style="opacity:.85;"><i>Attacker Bank After (Preview):</i> <b><span data-op-after-att></span></b></small>
         <br/><small style="opacity:.85; color:#f97373;" data-op-error-att></small>`;
       host.appendChild(wrap);
@@ -3782,7 +3782,7 @@ _renderScenarioHUD(host, round){
               const {op} = lcKeysCost(cost);
               // Marks → OP, same as mkCost above.
               const parts=[]; for (const [ck,cv] of Object.entries(op||{})){ if(!cv) continue; parts.push(`${ck}:${_rcOP(cv)}`); }
-              return parts.length? ` <small style="opacity:.8;">(OP ${parts.join(", ")})</small>` : "";
+              return parts.length? ` <small style="opacity:.8;">(marks: ${parts.join(", ")})</small>` : "";
             };
 
             for (const sf of supportActors) {
@@ -3829,7 +3829,7 @@ _renderScenarioHUD(host, round){
               const proj = document.createElement("div");
               proj.style.fontSize = "11px";
               proj.style.opacity = ".85";
-              proj.innerHTML = `<i>Projected OP Spend:</i> <b><span data-proj-support="${sf.id}"></span></b>`;
+              proj.innerHTML = `<i>Projected Spend:</i> <b><span data-proj-support="${sf.id}"></span></b>`;
               row.appendChild(proj);
 
               // --- Support maneuver picker (parity with the attacker lane) ---
@@ -4019,8 +4019,8 @@ _renderScenarioHUD(host, round){
         const inline = document.createElement("div");
         inline.style.marginTop=".25rem";
         inline.innerHTML = `
-          <small><i>Projected OP Spend (Att):</i> <b><span data-proj-inline></span></b></small>
-          <br/><small style="opacity:.85;"><i>Defender OP Spend:</i> <b><span data-proj-inline-def></span></b></small>
+          <small><i>Projected Spend (Att):</i> <b><span data-proj-inline></span></b></small>
+          <br/><small style="opacity:.85;"><i>Defender Spend:</i> <b><span data-proj-inline-def></span></b></small>
           <br/><small style="opacity:.75;"><i>Attacker Bank After (Preview):</i> <b><span data-op-after-inline></span></b></small>
           <br/><small style="opacity:.75;"><i>Defender Bank After (Preview):</i> <b><span data-op-after-inline-def></span></b></small>
           <br/><small style="opacity:.78; color:#f97373;" data-op-error-inline></small>

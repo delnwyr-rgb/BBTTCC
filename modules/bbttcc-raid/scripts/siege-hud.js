@@ -217,7 +217,7 @@
     new Dialog({
       title: `⚒ Raise Troops — ${fac.name}`,
       content: `<div style="font-size:0.85rem;">
-          <p style="margin:.2rem 0 .4rem;">The host stands at <b>${p.size}</b>/${p.cap}${p.effectiveCap < p.cap ? ` <span style="color:#e0c080;">(${esc(p.band)} — fields at most ${p.effectiveCap})</span>` : ""}. Recruits are paid in OP${surch}.</p>
+          <p style="margin:.2rem 0 .4rem;">The host stands at <b>${p.size}</b>/${p.cap}${p.effectiveCap < p.cap ? ` <span style="color:#e0c080;">(${esc(p.band)} — fields at most ${p.effectiveCap})</span>` : ""}. Recruits are paid in marks${surch}.</p>
           <div style="display:flex;align-items:center;gap:6px;margin:.25rem 0;">
             <label style="flex:1;">Troops to raise</label>
             <input type="number" name="troops" min="1" max="${probe.room ?? 999}" step="1" value="${defTroops}" style="width:5.5rem;text-align:right;"/>
@@ -284,7 +284,7 @@
     new Dialog({
       title: `⚔ Join the Siege — ${fac.name}`,
       content: `<div style="font-size:0.85rem;">
-          <p style="margin:.2rem 0 .5rem;">${esc(fac.name)} commits its <b>own</b> OP into the shared siege buffer — spent now, fights for the coalition.</p>
+          <p style="margin:.2rem 0 .5rem;">${esc(fac.name)} commits its <b>own</b> marks into the shared siege buffer — spent now, fights for the coalition.</p>
           ${rows}
         </div>`,
       buttons: {
