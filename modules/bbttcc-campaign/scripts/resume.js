@@ -64,7 +64,9 @@ async function data() {
   try {
     const sit = await A.director?.situation?.({ full: false });
     const n = sit?.now?.next;
-    if (n?.beat) next = { id: n.beat.id, label: n.beat.label || n.beat.id, ready: !!n.ready, line: n.line || "" };
+    // here/place (Dave 2026-10-29: "Run next" fired Pike's HQ summons while the Stewards stood at Khezek-Tor) — a next beat
+    // in another town is a RIDE, not a button; the card names the ride instead
+    if (n?.beat) next = { id: n.beat.id, label: n.beat.label || n.beat.id, ready: !!n.ready, line: n.line || "", here: n.here ?? null, place: n.place || null, where: sit?.where || null };
   } catch (_e) {}
   return { cid, open, unfinished, recent, lastTs, next, openSince: open?.since || null };
 }
@@ -84,7 +86,7 @@ async function open() {
         ? `<div class="open"><div class="k">Still open when you left</div><div class="v">${esc(d.open.label)}</div><div class="s">opened ${esc(_when(d.openSince))}</div></div>`
         : d.unfinished
         ? `<div class="open"><div class="k">Looks unfinished</div><div class="v">${esc(d.unfinished.label)}</div><div class="s">the last beat played (${esc(_when(d.unfinished.since))}) — no choice was ever made in it</div></div>`
-        : (d.next ? `<div class="open"><div class="k">Next in the story</div><div class="v">${esc(d.next.label)}</div>${d.next.line ? `<div class="s">${esc(d.next.line)}</div>` : ""}${d.next.ready ? "" : `<div class="s">(not ready yet — its conditions aren't met)</div>`}</div>`
+        : (d.next ? `<div class="open"><div class="k">Next in the story</div><div class="v">${esc(d.next.label)}</div>${d.next.line ? `<div class="s">${esc(d.next.line)}</div>` : ""}${d.next.ready ? "" : `<div class="s">(not ready yet — its conditions aren't met)</div>`}${d.next.ready && d.next.here === false ? `<div class="s">🐎 It's at <b>${esc(d.next.place || "another hex")}</b>; the party is at <b>${esc(d.next.where || "?")}</b>. Plot the ride on the Travel Console. Arriving opens the town, and the beat is waiting there.</div>` : ""}</div>`
                  : `<p class="s">Nothing was left open, and the story has no ready next beat.</p>`)) +
       (rows ? `<div class="k prev">Previously…</div><ol class="recent">${rows}</ol>` : "") +
     `</div>` +
@@ -103,13 +105,15 @@ async function open() {
 
   const run = async (beatId, source = "resume") => {   // "resume" = pick up a started beat (no re-record); "resume-next" = a fresh beat
     const A = api(); if (!A?.runBeat) return;
-    try { await A.runBeat(d.cid, beatId, { force: true, source }); }
+    // force only to PICK UP a beat that was legitimately on screen; a fresh next beat goes through every gate and the
+    // location guard like any other run (Dave 2026-10-29)
+    try { await A.runBeat(d.cid, beatId, source === "resume-next" ? { source } : { force: true, source }); }
     catch (e) { console.warn(TAG, "resume run failed", e); ui.notifications?.error?.("Couldn't start that beat — see the console."); }
   };
   const buttons = {};
   if (d.open) buttons.pick = { icon: '<i class="fas fa-play"></i>', label: `Pick up: ${d.open.label}`, callback: () => { run(d.open.beatId); } };
   else if (d.unfinished) buttons.pick = { icon: '<i class="fas fa-play"></i>', label: `Pick up: ${d.unfinished.label}`, callback: () => { run(d.unfinished.beatId); } };
-  else if (d.next?.ready) buttons.next = { icon: '<i class="fas fa-play"></i>', label: `Run next: ${d.next.label}`, callback: () => { run(d.next.id, "resume-next"); } };
+  else if (d.next?.ready && d.next.here !== false) buttons.next = { icon: '<i class="fas fa-play"></i>', label: `Run next: ${d.next.label}`, callback: () => { run(d.next.id, "resume-next"); } };
   buttons.close = { icon: '<i class="fas fa-times"></i>', label: "Not now" };
 
   _dlg = new Dialog({ title: "⏯ The last time we saw Lucky…", content, buttons, default: Object.keys(buttons)[0] }, { left: 80, top: 10, width: 460 });
