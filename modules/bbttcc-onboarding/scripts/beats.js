@@ -209,7 +209,8 @@ const meatsuit = {
     // markers and old sigils haunting a fresh run's combat sim).
     try { if (scene) await _stage()?.sweepScene?.(scene); } catch (_) {}
 
-    // Contain the steward + dummy to the range (never the live map).
+    // Contain the steward to the range (never the live map). 10-29 (owner): the Straw
+    // Adversary moved to its own beat AFTER outfitting, so the player swings with real gear.
     const stage = _stage();
     if (stage && scene) {
       // Placement tuned to the owner's Proving Ground art (2026-08-17): the old
@@ -220,14 +221,12 @@ const meatsuit = {
       // the doors stay locked; the circle is earned later, not walked into.
       const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, 0.432, 0.513, ctx.lane));
       if (st.created) ctx._spawned.push({ token: st.doc });
-      const dummy = await stage.spawnDummy(scene, { ..._scenePoint(scene, 0.455, 0.513, ctx.lane), name: "Straw Adversary" });
-      if (dummy) ctx._spawned.push(dummy);
     }
     await _pause(500);
     try { ctx.steward?.sheet?.render(true, { focus: true }); } catch (_) {}
     await ctx.speak(_somaBreakOwed(ctx)
-      ? "Those are your ABILITIES — the entries with a play button, Principles tab and the rest. Click through them. See what each one does. Nothing out here counts: spend freely, swing at the straw fellow if the mood takes you. When you've seen enough, hit my button and we roll on."
-      : "Those are your ABILITIES — the entries with a play button, Principles tab and the rest. Click through them. See what each one does. You've had the sim's free Soma Break already, so what you spend this time stays spent — read freely, fire carefully. When you've seen enough, hit my button and we roll on.");
+      ? "Those are your ABILITIES — the entries with a play button, Principles tab and the rest. Click through them. See what each one does. Nothing out here counts: spend freely. When you've seen enough, hit my button — we'll get you dressed before anything gets hit."
+      : "Those are your ABILITIES — the entries with a play button, Principles tab and the rest. Click through them. See what each one does. You've had the sim's free Soma Break already, so what you spend this time stays spent — read freely, fire carefully. When you've seen enough, hit my button and we'll get you geared.");
     ctx.riff({ beat: "meatsuit", line: "Player is browsing their real abilities for the first time, no pressure, nothing counts.", intent: "Invite them to poke everything. Dry, glitchy, one line." });
   },
 
@@ -255,8 +254,78 @@ const meatsuit = {
         (_somaBreakOwed(ctx)
           ? `<p>Browse your <b>abilities</b> — anything on the sheet with a play button. Click them, read them, fire them; <i>nothing here counts</i> and everything you spend comes back when we move on.</p>`
           : `<p>Browse your <b>abilities</b> — anything on the sheet with a play button. Click them and read them. <i>Your free Soma Break is spent</i>, so anything you fire this time stays spent.</p>`) +
-        `<p><i>Take your time. The straw fellow isn't going anywhere. Well — it is, but not until you press this.</i></p>`,
+        `<p><i>Take your time. Next stop is the Market, then something to swing at.</i></p>`,
       label: "Seen enough — move on"
+    }).then(() => done());
+    return () => {
+      Hooks.off("fourththing:itemAnimated", onAnim);
+      Hooks.off("fourththing.manifestationCast", onCast);
+      Hooks.off("fourththing.featureDispatched", onFeature);
+      globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(GATE_TITLE);
+    };
+  },
+
+  exit: async (ctx) => {
+    await ctx.speak("Sheet's read, body's checked. Now the part every recruit skips — getting dressed. *bzzt* Market's loading.");
+    ctx._spawned = await _cleanupKeepPlayer(ctx);
+  }
+};
+
+/* ───────────────────────── PROVING RANGE ───────────────────────── */
+// 10-29 (owner): the Straw Adversary used to share the meatsuit beat, so recruits
+// swung at it empty-handed. It now comes right AFTER outfitting — they walk back
+// onto the range with the gear they just bought and equipped. The once-per-Steward
+// free Soma Break moved here with it (it pays back what the range spent).
+const provingRange = {
+  id: "proving_range",
+  title: "The Proving Range",
+  scope: "personal",
+
+  enter: async (ctx) => {
+    ctx._spawned = [];
+    await ctx.handoff("Dressed and dangerous. Back to the range — the straw fellow's been waiting.");
+    // Put the Market away so the range is visible (AppV2 instance id "bbttcc-market").
+    try { await foundry.applications.instances.get("bbttcc-market")?.close?.(); } catch (_) {}
+    const scene = await _requireScene(ctx, "meatsuit-range", "Proving Range");
+    if (scene) { await _enterScene(scene, "Proving Range", ctx.lane); await _pause(800); }
+    try { if (scene) await _stage()?.sweepScene?.(scene); } catch (_) {}
+    const stage = _stage();
+    if (stage && scene) {
+      const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, 0.432, 0.513, ctx.lane));
+      if (st.created) ctx._spawned.push({ token: st.doc });
+      const dummy = await stage.spawnDummy(scene, { ..._scenePoint(scene, 0.455, 0.513, ctx.lane), name: "Straw Adversary" });
+      if (dummy) ctx._spawned.push(dummy);
+    }
+    await _pause(500);
+    try { ctx.steward?.sheet?.render(true, { focus: true }); } catch (_) {}
+    await ctx.speak(_somaBreakOwed(ctx)
+      ? "That's a STRAW ADVERSARY. Target it and fire your new kit from the sheet — equipped weapons, abilities, whatever you bought. Nothing out here counts; everything you spend comes back when we move on."
+      : "That's a STRAW ADVERSARY. Target it and fire your new kit from the sheet. Your free Soma Break is spent, so what you burn this time stays burned — swing smart.");
+    ctx.riff({ beat: "proving_range", line: "Player is trying out freshly bought gear on a straw dummy.", intent: "Range-officer energy, dry. One line." });
+  },
+
+  detect: (ctx, done) => {
+    const GATE_TITLE = "◇ OPERATOR — The Proving Range";
+    let nodded = false;
+    const nod = (a) => {
+      if (nodded || a?.id !== ctx.steward?.id) return;
+      nodded = true;
+      ctx.speak("*bzzt* Contact. That's what the marks were for, One.");
+    };
+    const onAnim = (data = {}) => nod(data.actor || data.sourceToken?.actor);
+    const onCast = (actor) => nod(actor);
+    const onFeature = (actor) => nod(actor);
+    Hooks.on("fourththing:itemAnimated", onAnim);
+    Hooks.on("fourththing.manifestationCast", onCast);
+    Hooks.on("fourththing.featureDispatched", onFeature);
+    ctx.prompt({
+      title: GATE_TITLE,
+      content:
+        `<p>Target the <b>Straw Adversary</b> and try your new gear — weapons you <b>equipped</b>, abilities, anything with a play button.</p>` +
+        (_somaBreakOwed(ctx)
+          ? `<p><i>Nothing here counts: everything you spend comes back when we move on.</i></p>`
+          : `<p><i>Your free Soma Break is spent — what you fire this time stays spent.</i></p>`),
+      label: "Done swinging — move on"
     }).then(() => done());
     return () => {
       Hooks.off("fourththing:itemAnimated", onAnim);
@@ -281,11 +350,11 @@ const meatsuit = {
       let stamped = false;
       try {
         if (ctx.steward?.isOwner) { await ctx.steward.setFlag(MODULE_ID, SOMA_BREAK_FLAG, Date.now()); stamped = true; }
-        else console.warn(TAG, "meatsuit exit: this seat can't stamp the Steward — skipping the free Soma Break");
-      } catch (e) { console.warn(TAG, "meatsuit exit soma-break stamp failed", e); }
+        else console.warn(TAG, "range exit: this seat can't stamp the Steward — skipping the free Soma Break");
+      } catch (e) { console.warn(TAG, "range exit soma-break stamp failed", e); }
       if (stamped) {
         try { await globalThis.game?.fourththing?.actions?.somaBreak?.(ctx.steward, { confirmed: true }); rested = true; }
-        catch (e) { console.warn(TAG, "meatsuit exit soma break failed", e); }
+        catch (e) { console.warn(TAG, "range exit soma break failed", e); }
       }
     }
     await ctx.speak(rested
@@ -795,7 +864,7 @@ const outfitting = {
   scope: "personal",
 
   enter: async (ctx) => {
-    await ctx.handoff("Hostile ground ahead, and you're broke and under-dressed. Fixing both: a stipend, then the Long Market.");
+    await ctx.handoff("You're broke and under-dressed, and there's something on the range that wants hitting. Fixing both: a stipend, then the Long Market.");
 
     // Training stipend — a fresh faction's banks are empty, and the Market, Travel
     // and raid maneuvers ahead all bill real OP. 130 marks/pool = the cost-band
@@ -848,7 +917,7 @@ const outfitting = {
     await ctx.speak(`This is the LONG MARKET. I've already set the buyer to ${ctx.faction?.name || "your Domain"} and the receiver to ${ctx.steward?.name || "you"} — if either box reads "(Select)", pick them yourself or the till refuses you.`);
     await _pause(700);
     await ctx.speak("Buy what you can afford and can actually USE — your sheet warns you when a weapon or armor sits beyond your training. Watch the price line: it's in MARKS, the same marks in your Domain's banks. And gear does nothing in a duffel bag: EQUIP it from your sheet once it arrives.");
-    ctx.riff({ beat: "outfitting", line: "Player is gearing up at the Market before the finale.", intent: "Quartermaster energy — dry, practical. One line." });
+    ctx.riff({ beat: "outfitting", line: "Player is gearing up at the Market before their first swing on the proving range.", intent: "Quartermaster energy — dry, practical. One line." });
   },
 
   detect: (ctx, done) => {
@@ -869,7 +938,7 @@ const outfitting = {
   },
 
   exit: async (ctx) => {
-    await ctx.speak("Look at you — dressed for the apocalypse you're about to drive into. The Syndicate won't know what pulled up.");
+    await ctx.speak("Look at you — dressed for the apocalypse. Let's see if any of it actually works. *bzzt* Range is hot.");
   }
 };
 
@@ -3982,9 +4051,8 @@ Hooks.once("ready", () => {
     return;
   }
   const ordered = [
-    incarnation, meatsuit, driving,
+    incarnation, meatsuit, outfitting, provingRange, driving,   // 10-29 (owner): gear up between the sheet and the straw dummy
     stewardshipClaim, stewardshipTurn,
-    outfitting,
     crewOccult, surgeBeat, manifestations,
     combatSim,
     travel, raidViolence, raidIntrigue, raidPresence,

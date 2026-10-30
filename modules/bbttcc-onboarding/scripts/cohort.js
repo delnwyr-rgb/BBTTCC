@@ -80,12 +80,12 @@ const LINES = {
  * silently drop out of class mode. */
 const SEGMENT_PLAN = [
   { key: "incarnation", kind: "party",      label: "Incarnation",                 beats: ["incarnation"] },
-  { key: "stretch-a",   kind: "personal",   label: "Meatsuit + Test Track",       beats: ["meatsuit", "driving"] },
+  { key: "stretch-a",   kind: "personal",   label: "Meatsuit → Outfitting → Range → Test Track", beats: ["meatsuit", "outfitting", "proving_range", "driving"] },   // 10-29 (owner): gear before the straw dummy
   // Phase 2: the claim stays personal (founding + each faction's own hex); the
   // practice Turn is ONE preview for the class, conducted on the GM.
   { key: "stewardship-claim", kind: "personal", label: "Stewardship — claim",   beats: ["stewardship_claim"] },
   { key: "stewardship-turn",  kind: "party",    label: "Stewardship — the Turn", beats: ["stewardship_turn"] },
-  { key: "stretch-b",   kind: "personal",   label: "Outfitting → Manifestations", beats: ["outfitting", "crew_occult", "surge", "manifestations"] },
+  { key: "stretch-b",   kind: "personal",   label: "Crew → Manifestations",       beats: ["crew_occult", "surge", "manifestations"] },
   { key: "combat-sim",  kind: "party",      label: "Combat Sim",                  beats: ["combat_sim"] },
   { key: "travel",      kind: "party",      label: "Crossing",                    beats: ["travel"] },
   { key: "raids",       kind: "party",      label: "Three Raids",                 beats: ["raid_violence", "raid_intrigue", "raid_presence"] },

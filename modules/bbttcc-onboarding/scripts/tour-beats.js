@@ -33,7 +33,7 @@ const TOUR_OFFERS = {
     tour: "steward-sheet",
     prompt: "That sheet is your body's control surface for the whole run. Want the guided walkthrough before you swing? Sixty seconds, every dial explained.",
     label: "Walk me through the meatsuit",
-    resume: "Walkthrough's done. Keep poking — fire anything with a play button, nothing out here counts — and press SEEN ENOUGH when you're ready to move on. The straw adversary will wait. It's very patient. It's straw."
+    resume: "Walkthrough's done. Keep poking — fire anything with a play button, nothing out here counts — and press SEEN ENOUGH when you're ready. Next: the Market, then something made of straw."
   },
   driving: {
     tour: "rig-sheet",
