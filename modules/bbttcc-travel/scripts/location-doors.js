@@ -605,41 +605,109 @@
     if (audience === "activate" && game.user.isGM) await scene.activate(); else await scene.view();
     return true;
   }
+  // The party's token covers most of its hex (owner 10-30: "the token is getting in the way"), so the place gets a
+  // door-style plate — "▼ Enter <place>" — floating just above the hex. Like door labels it is hit-tested in scene
+  // space BEFORE the token check, so it always answers; the bare hex still dives where no token sits on it.
+  let _mapPlates = [];    // [{doc, c, w, h}]
+  let _mapPlateKey = "";
+  function _hexBox(doc) {
+    const b = doc.object?.bounds;
+    if (b && Number(b.width) > 0) return { cx: b.x + b.width / 2, top: b.y };
+    const f = centerOf(doc); return { cx: f.x, top: f.y - 50 };
+  }
+  function clearMapPlates() { for (const P of _mapPlates) safeDestroy(P.c); _mapPlates = []; _mapPlateKey = ""; }
+  function refreshMapPlates() {
+    if (!canvas?.ready || !hexMapHere()) return clearMapPlates();
+    const docs = [...partyHexes({ fresh: true })].map(u => { try { return fromUuidSync(u); } catch (_e) { return null; } })
+      .filter(d => d && d.parent?.id === canvas.scene.id && hexDiveTarget(d));
+    const key = docs.map(d => d.uuid).sort().join("|");
+    if (key === _mapPlateKey && _mapPlates.every(P => !P.c.destroyed)) return;
+    clearMapPlates(); _mapPlateKey = key;
+    const layer = fxLayer();
+    for (const doc of docs) {
+      const c = new PIXI.Container(); c.eventMode = "none";
+      const glow = new PIXI.Graphics(); try { glow.filters = [new PIXI.BlurFilter(5)]; } catch (_e) {}
+      const plate = new PIXI.Graphics();
+      const text = new PIXI.Text(`▼ Enter ${hexName(doc)}`, {
+        fontFamily: '"BBTTCC Display Circuit", "BBTTCC Display", Signika, sans-serif', fontSize: LABEL_PX * 2, fill: GOLD, letterSpacing: 1,
+        dropShadow: true, dropShadowColor: GOLD_GLOW, dropShadowBlur: 10, dropShadowDistance: 0, dropShadowAlpha: 0.9, align: "center"
+      });
+      text.scale.set(0.5); text.anchor.set(0.5);
+      const w = text.width + LABEL_PX * 1.8, h = LABEL_PX * 1.9;
+      plate.lineStyle(2, GOLD, 0.95); plate.beginFill(PANEL, 0.85); _hexPath(plate, 0, 0, w, h); plate.endFill();
+      glow.lineStyle(8, GOLD_GLOW, 0.5); _hexPath(glow, 0, 0, w, h);
+      c.addChild(glow, plate, text); layer.addChild(c);
+      _mapPlates.push({ doc, c, w, h });
+    }
+    _mapTick();
+  }
+  const _plateAt = (P) => { const s = 1 / zoom(); const b = _hexBox(P.doc); return { x: b.cx, y: b.top - (P.h / 2 + 8) * s, s }; };
+  function _mapTick() {
+    for (const P of _mapPlates) {
+      if (!P.c || P.c.destroyed) continue;
+      const q = _plateAt(P); const bob = Math.sin(performance.now() / 1000 * 2.4) * 2 * q.s;
+      P.c.position.set(q.x, q.y + bob); P.c.scale.set(q.s);
+    }
+  }
+  function mapPlateHitAt(x, y) {
+    for (const P of _mapPlates) {
+      const q = _plateAt(P); const hw = (P.w * q.s) / 2, hh = (P.h * q.s) / 2;
+      if (Math.abs(x - q.x) <= hw && Math.abs(y - q.y) <= hh + 3 * q.s) return P.doc;
+    }
+    return null;
+  }
+  async function _relayOrDive(doc) {
+    if (game.user.isGM) return mapDive(doc.uuid, { audience: "activate" });
+    const gx = game.bbttcc?.api?.gmExec;
+    if (playerActivateAllowed() && gx?.call && gx.primaryGmId?.()) {
+      try { const r = await gx.call("travel.map.dive", { hexUuid: doc.uuid }, { timeoutMs: 8000 }); if (r?.ok) return; } catch (e) { warn("map dive relay failed", e); }
+    }
+    return mapDive(doc.uuid, { audience: "view" });
+  }
   async function onMapPointerDown(event) {
     try {
       const btn = event.button ?? event.data?.originalEvent?.button ?? 0; if (btn !== 0) return;
       const oe = event.data?.originalEvent ?? event.originalEvent ?? event;
       if (oe?.shiftKey || oe?.ctrlKey || oe?.metaKey || oe?.altKey) return;
       const p = localPos(event);
+      const plateDoc = mapPlateHitAt(p.x, p.y);
+      if (plateDoc) { event.stopPropagation?.(); return _relayOrDive(plateDoc); }
       if (tokenAt(p.x, p.y)) return;
       const hit = hexAt(p.x, p.y); if (!hit || !hexDiveTarget(hit.document)) return;
       if (!partyIsOn(hit.document, { fresh: true })) { ui.notifications?.info?.(`${hexName(hit.document)}: ride there first — the party isn't there.`); return; }
       event.stopPropagation?.();
-      if (game.user.isGM) return mapDive(hit.document.uuid, { audience: "activate" });
-      const gx = game.bbttcc?.api?.gmExec;
-      if (playerActivateAllowed() && gx?.call && gx.primaryGmId?.()) {
-        try { const r = await gx.call("travel.map.dive", { hexUuid: hit.document.uuid }, { timeoutMs: 8000 }); if (r?.ok) return; } catch (e) { warn("map dive relay failed", e); }
-      }
-      return mapDive(hit.document.uuid, { audience: "view" });
+      return _relayOrDive(hit.document);
     } catch (err) { console.error(TAG, "map pointerdown error:", err); }
   }
   let _mapHover = null;
   function onMapPointerMove(event) {
     try {
-      const p = localPos(event); const hit = hexAt(p.x, p.y);
-      const live = !!hit && !!hexDiveTarget(hit.document) && !tokenAt(p.x, p.y) && partyIsOn(hit.document);
-      if (live && _mapHover !== hit.id) { _mapHover = hit.id; document.body.style.cursor = "pointer"; }
+      const p = localPos(event);
+      const plate = mapPlateHitAt(p.x, p.y);
+      const hit = plate ? null : hexAt(p.x, p.y);
+      const id = plate ? plate.id : hit?.id;
+      const live = !!plate || (!!hit && !!hexDiveTarget(hit.document) && !tokenAt(p.x, p.y) && partyIsOn(hit.document));
+      if (live && _mapHover !== id) { _mapHover = id; document.body.style.cursor = "pointer"; }
       else if (!live && _mapHover) { _mapHover = null; if (document.body.style.cursor === "pointer") document.body.style.cursor = ""; }
     } catch (_e) {}
   }
+  let _mapRefresh = null, _mapTickBound = false;
   function bindMapStage() {
     unbindStage(); _stage.down = onMapPointerDown; _stage.move = onMapPointerMove;
     canvas.stage.on("pointerdown", _stage.down); canvas.stage.on("pointermove", _stage.move);
+    refreshMapPlates();
+    if (!_mapTickBound) { canvas.app.ticker.add(_mapTick); _mapTickBound = true; }
+    if (!_mapRefresh) _mapRefresh = setInterval(() => { try { refreshMapPlates(); } catch (_e) {} }, 3000);   // the party rides on
+  }
+  function unbindMap() {
+    clearMapPlates();
+    try { canvas?.app?.ticker?.remove(_mapTick); } catch (_e) {} _mapTickBound = false;
+    if (_mapRefresh) { clearInterval(_mapRefresh); _mapRefresh = null; }
   }
 
   // ---------- wire-up ----------
   function onCanvasReady() {
-    forgetVisuals(); unbindStage();
+    forgetVisuals(); unbindStage(); unbindMap();
     if (hexMapHere()) return bindMapStage();
     if (!isTownHub()) return;
     bindStage(); refreshLit();
