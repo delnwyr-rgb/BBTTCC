@@ -5891,6 +5891,8 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
   // → canonical _applyDamageToActor → system.derived.integrity.value. Single-target
   // heals bake the recipient UUID (data-target-uuid) so the button needs no live
   // target (you don't have to target yourself to drink your own Stitch). Returns total.
+  // 10-30: data-target-first — the baked recipient WINS over a live target (Boaz's Stitch healed the Marauder he
+  // had targeted for his axe: the baked uuid was only a no-target fallback).
   const postHealCard = async (formula, label, targetUuid, { extraTracks = [] } = {}) => {
     const roll = new Roll(formula);
     await roll.evaluate();
@@ -5909,7 +5911,7 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
         <div class="ft-dmg-row">
           <span class="ft-dmg-label">Healing</span>
           <span class="ft-dmg-formula">${formula} = <b>${total}</b></span>
-          <button class="ft-apply-dmg-btn" data-formula="${total}" data-op="heal" data-track="integrity"${partsAttr}${targetUuid ? ` data-target-uuid="${targetUuid}"` : ""}>✚ Apply Healing${trackNote}${targetUuid ? "" : " to target"}</button>
+          <button class="ft-apply-dmg-btn" data-formula="${total}" data-op="heal" data-track="integrity"${partsAttr}${targetUuid ? ` data-target-uuid="${targetUuid}" data-target-first="1"` : ""}>✚ Apply Healing${trackNote}${targetUuid ? "" : " to target"}</button>
         </div>
       </div>`
     });

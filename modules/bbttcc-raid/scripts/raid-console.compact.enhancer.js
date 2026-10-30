@@ -380,7 +380,7 @@
 
   function render() {
     _timer = null;
-    if (game.user?.isGM) return teardown();
+    if (game.user?.isGM && !globalThis.__bbttccConflictBarOnGM) return teardown();   // debug: set the global to preview the bar on a GM seat
     const app = liveConsole();
     if (!app) return teardown();
     injectStyle();
@@ -460,7 +460,8 @@
     place(bar);
   }
 
-  function schedule(ms = 80) { if (_timer) clearTimeout(_timer); _timer = setTimeout(() => { try { render(); } catch (e) { console.warn(TAG, "render failed", e); } }, ms); }
+  function schedule(ms = 80) { if (_timer) clearTimeout(_timer); _timer = setTimeout(() => { try { render(); globalThis.__bbttccConflictBarErr = null; } catch (e) { globalThis.__bbttccConflictBarErr = String(e?.stack || e); console.warn(TAG, "render failed", e); } }, ms); }
+  globalThis.__bbttccConflictBarRender = () => schedule(0);
 
   document.addEventListener("click", (ev) => {
     const t = ev.target.closest?.(`#${BAR_ID} [data-cb]`); if (!t) return;
