@@ -60,6 +60,16 @@ body.bbttcc-dock-hidebars #hotbar { display: none; }
 .cd-move-bar { width: 70px; height: 6px; border-radius: 3px; background: rgba(106, 176, 214, 0.2); overflow: hidden; }
 .cd-move-bar span { display: block; height: 100%; background: var(--cd-blue); transition: width 0.25s; }
 .cd-surge { padding: 2px 8px; border-radius: 4px; background: var(--cd-panel); border: 1px solid var(--cd-line); }
+/* Heat meter — Surge segments coloured by band */
+.cd-heat { display: flex; align-items: center; gap: 5px; padding: 2px 8px; height: 24px; border-radius: 4px; background: var(--cd-panel); border: 1px solid var(--heat, var(--cd-line)); }
+.cd-heat i { color: var(--heat); }
+.cd-heat-bar { display: flex; gap: 2px; }
+.cd-heat-seg { width: 9px; height: 10px; border-radius: 2px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); }
+.cd-heat-seg.is-lit { background: var(--heat); border-color: var(--heat); box-shadow: 0 0 4px var(--heat); }
+.cd-heat-val { font-variant-numeric: tabular-nums; }
+.cd-heat-band { color: var(--heat); font-weight: 700; }
+.cd-heat.is-overheated { animation: cd-heat-pulse 1.2s ease-in-out infinite; }
+@keyframes cd-heat-pulse { 50% { box-shadow: 0 0 10px var(--heat); } }
 
 /* Abilities */
 .cd-abilities { display: flex; gap: 4px 12px; flex-wrap: wrap; max-height: 58px; overflow-y: auto; padding: 3px 8px 5px; border-top: 1px solid rgba(214, 178, 106, 0.15); }
@@ -76,6 +86,8 @@ body.bbttcc-dock-hidebars #hotbar { display: none; }
 .cd-cost-action { background: rgba(214, 178, 106, 0.25); color: var(--cd-gold); }
 .cd-cost-bonus { background: rgba(106, 176, 214, 0.25); color: var(--cd-blue); }
 .cd-cost-reaction { background: rgba(200, 120, 220, 0.25); color: #d49ae6; }
+.cd-cost-mixed { background: rgba(255, 255, 255, 0.12); color: var(--cd-text); }
+.cd-econ-off { font-size: 10px; padding: 0 5px; border-radius: 3px; color: var(--cd-warn); border: 1px solid rgba(224, 163, 78, 0.5); cursor: help; }
 .cd-empty { color: var(--cd-dim); padding: 4px; }
 
 /* Target line + Queued + End Turn */

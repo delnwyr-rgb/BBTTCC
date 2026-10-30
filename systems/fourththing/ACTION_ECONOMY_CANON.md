@@ -47,6 +47,15 @@ legendary action for Stewards."*
 - **Reactions are unchanged:** still triggered, still one per round, still refresh at the start of your turn.
 - **Rigs:** `requireBonus` in the rig action gate reads the same slot; the wording says "this round".
 
+## 1b. Where an ability's cost comes from (2026-10-29)
+
+`game.fourththing.actionCostOf(item)` answers "what does this cost?" exactly as the fire paths gate it — powers and
+form-weapons by `manifestation.activation.type` (Action by default); class/ancestry features by an item
+`flags.fourththing.actionCost` override, else the CHAR_OPT spec's `actionCost` / body text ("Bonus action —",
+"as a reaction" …), else the technique/generic path's text rule, else `LEGACY_ACTION_COST`. The Combat Dock reads it for
+its A / B / R tags and the off-turn list. **Every one of these gates is OFF unless the world setting "Steward sheet
+tracks action economy" (`fourththing.actionEconomy`) is on** — the dock shows "⚠ not enforced" while it's off.
+
 ## 2. What 1 Action Buys
 
 > **1 Action = 1 Strike OR 1 Invocation.** Not both.

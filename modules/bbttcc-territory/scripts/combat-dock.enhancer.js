@@ -90,6 +90,17 @@
     return null;
   };
 
+  // What the ENGINE charges for an item (game.fourththing.actionCostOf, 10-29) — the same
+  // resolution the fire paths gate on. Older system: fall back to the item's own fields.
+  const engineCost = (it, fallback = null) => {
+    try {
+      const fn = game.fourththing?.actionCostOf;
+      if (typeof fn === "function") { const c = fn(it); return c === "mixed" ? "mixed" : (normCost(c) ?? (c === "free" ? "free" : null)); }
+    } catch (_e) {}
+    return fallback;
+  };
+  const economyOn = () => { try { return game.settings.get("fourththing", "actionEconomy") === true; } catch (_e) { return false; } };
+
   // ── Entries: everything the dock can fire, with cost + aim + range ─────
   // aim: foe | ally | any (pick or "No target") | self | area (engine template) | none
   const RANGE_BASE = { self: 0, touch: 5, near: 30, far: 60, sight: 120, hex: 300 };
@@ -100,7 +111,7 @@
     const sq = Math.max(Number(sys.range?.short) || 0, Number(sys.range?.long) || 0) || 1;
     const area = mf.area?.shape && mf.area.shape !== "none";
     return { kind, item: it, label: it.name, icon: hud()?.abilityIcon?.(it) ?? "khanda",
-      cost: normCost(mf.activation?.type) ?? "action", aim: area ? "area" : "foe", rangeFt: sq * gridFt() };
+      cost: engineCost(it, normCost(mf.activation?.type) ?? "action"), aim: area ? "area" : "foe", rangeFt: sq * gridFt() };
   }
   function powerEntry(it) {
     const sys = it.system ?? {}, mf = sys.manifestation ?? {};
@@ -116,11 +127,11 @@
     const rangeFt = Number(mf.rangeFt) || RANGE_BASE[sys.range] || 30;
     const act = String(sys.activation ?? mf.activation?.type ?? "action");
     return { kind: "mani", item: it, label: it.name, icon: "wand-magic-sparkles",
-      cost: normCost(act), ritual: act === "ritual", aim, rangeFt };
+      cost: engineCost(it, normCost(act)), ritual: act === "ritual", aim, rangeFt };
   }
   function featureEntry(it) {
     return { kind: "ability", item: it, label: it.name, icon: hud()?.abilityIcon?.(it) ?? "bolt",
-      cost: normCost(it.system?.activation?.type ?? it.system?.activation), aim: "any", rangeFt: 0 };
+      cost: engineCost(it, normCost(it.system?.activation?.type ?? it.system?.activation)), aim: "any", rangeFt: 0 };
   }
   function entry5e(it, kind) {
     let cost = null, aim = "any", rangeFt = 0;
@@ -462,11 +473,25 @@
     const left = Math.max(0, budget - used), pct = budget ? Math.round(left / budget * 100) : 0;
     let surge = "";
     try {
-      const v = hud()?.surgeHeatFor?.(s.actor);
+      // Heat meter (Burn folded into Surge, 10-29): one segment per point of the Surge cap,
+      // lit = banked, coloured by the heat band (Cool / Stoked / Overheated). Click = spend.
+      const H = game.fourththing?.surgeHeat?.(s.actor);
+      if (H && H.cap > 0) {
+        const col = H.band?.color ?? "#d6b26a";
+        const segs = Array.from({ length: H.cap }, (_, i) => `<span class="cd-heat-seg ${i < H.value ? "is-lit" : ""}"></span>`).join("");
+        surge = `<button type="button" class="cd-heat ${H.overheated ? "is-overheated" : ""}" data-dock="surge" style="--heat:${col}"
+          data-tooltip="${esc(`Surge ${H.value}/${H.cap} — ${H.band?.label ?? ""}${H.band?.desc ? `: ${H.band.desc}` : ""}<br>${H.tooltip ?? ""}<br>Click to spend.`)}">
+          <i class="fas fa-fire"></i><span class="cd-heat-bar">${segs}</span><span class="cd-heat-val">${H.value}/${H.cap}</span><span class="cd-heat-band">${esc(H.band?.label ?? "")}</span></button>`;
+      }
+      const v = H ? null : hud()?.surgeHeatFor?.(s.actor);   // older system: the plain chip
       if (v) surge = `<button type="button" class="cd-surge" data-dock="surge" style="${v.heat?.band ? `border-color:${v.heat.band.color}` : ""}" data-tooltip="Surge — click to spend">
         <i class="fas fa-bolt-lightning"></i> ${v.cur}${v.max != null ? `/${v.max}` : ""}${v.heat?.band ? ` <span style="color:${v.heat.band.color}">${esc(v.heat.band.label)}</span>` : ""}</button>`;
     } catch (_e) {}
-    return `<div class="cd-slots">${pip("action", "Action", a.actionUsed)}${pip("bonus", "Bonus", a.bonusUsed)}${pip("reaction", "Reaction", a.reactionUsed)}
+    const off = !economyOn();
+    const offNote = off ? `<span class="cd-econ-off" data-tooltip="${esc(game.user.isGM
+      ? "The engine isn't enforcing Bonus Actions / Reactions on abilities yet. Turn on Game Settings → System Settings → “Steward sheet tracks action economy” to make every A / B / R cost real."
+      : "Bonus Action / Reaction costs aren't enforced in this world yet — the GM can switch them on.")}">⚠ not enforced</span>` : "";
+    return `<div class="cd-slots ${off ? "is-econ-off" : ""}">${pip("action", "Action", a.actionUsed)}${pip("bonus", "Bonus", a.bonusUsed)}${pip("reaction", "Reaction", a.reactionUsed)}${offNote}
       <span class="cd-move" data-tooltip="Movement left this turn — ${used} ft used of ${budget}"><i class="fas fa-shoe-prints"></i><span class="cd-move-bar"><span style="width:${pct}%"></span></span>${left} of ${budget} ft left</span>${surge}</div>`;
   }
   function abilitiesHTML(s, myTurn) {
@@ -475,13 +500,15 @@
     const offTurn = !myTurn && !game.user.isGM;
     const out = [];
     for (const g of groups) {
-      const shown = g.entries.filter(e => !offTurn || e.cost === "bonus" || e.cost === "reaction" || (e.cost == null && g.id === "ability"));
+      // Off your turn: what the engine lets you take then — Bonus (any time, ruling U4) and Reaction.
+      const shown = g.entries.filter(e => !offTurn || e.cost === "bonus" || e.cost === "reaction" || e.cost === "mixed");
       if (!shown.length) continue;
       out.push(`<div class="cd-group"><span class="cd-group-label">${esc(g.label)}</span>` + shown.map(e => {
         const spent = e.cost && slotSpent(s.actor, e.cost);
         let hk = "";
         if (!spent && !e.ritual && _hotkeys.length < 10) { _hotkeys.push({ entry: e, s }); hk = String(_hotkeys.length % 10); }
-        const costTag = e.cost ? `<span class="cd-cost cd-cost-${e.cost}">${e.cost === "action" ? "A" : e.cost === "bonus" ? "B" : "R"}</span>` : "";
+        const costTag = { action: "A", bonus: "B", reaction: "R", mixed: "±" }[e.cost]
+          ? `<span class="cd-cost cd-cost-${e.cost}" ${e.cost === "mixed" ? `data-tooltip="Cost depends on which ability you pick"` : ""}>${{ action: "A", bonus: "B", reaction: "R", mixed: "±" }[e.cost]}</span>` : "";
         const tip = e.item ? (hud()?.synopsisFor?.(e.item) ?? esc(e.label)) : `<b>${esc(e.label)}</b><br>${esc(e.tip ?? "")}`;
         const aimTag = { area: "◎", self: "", none: "" }[e.aim] ?? "🎯";
         return `<button type="button" class="cd-ab ${spent ? "is-spent" : ""} ${_aim?.entry === e ? "is-aiming" : ""}" ${spent || e.ritual ? "disabled" : ""}

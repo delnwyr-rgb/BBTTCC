@@ -753,6 +753,9 @@
     ui.notifications?.warn?.("Roll engine not ready.");
   }
   async function fireDefense(steward, which) {
+    // 10-29: the system's defense check (rerolls, Imposed, Strain, Surge banking) — the local roll is the fallback.
+    const sysCheck = game.fourththing?.rolls?.defenseCheck;
+    if (typeof sysCheck === "function") return sysCheck(steward, which);
     const v = Number(foundry.utils.getProperty(steward, `system.derived.${which}.value`) ?? 10);
     const roll = await new Roll(`2d10x10 + ${v}`).roll();
     await roll.toMessage({

@@ -2839,6 +2839,13 @@ Hooks.once("ready", () => {
 // Posts the ability card to chat. Faithful gate without hand-authoring a
 // bespoke dialog per feat — bespoke automation can still supersede later by
 // re-routing the id.
+// The generic / technique path's cost rule, read from the item's own text. Shared with
+// actionCostOf (10-29) so the Combat Dock tags exactly what this path will charge.
+function _genericCostFromDesc(desc) {
+  return /\breaction\b/i.test(desc) ? "reaction"
+       : /\bbonus action\b/i.test(desc) ? "bonus"
+       : /\bas an action\b|\baction\s*[:—－-]/i.test(desc) ? "action" : null;
+}
 export async function openGenericPerUse(actor, item, { effect = null } = {}) {
   if (!actor || !item) return;
   const rawDesc = String(item.system?.description?.value ?? item.system?.body ?? "");
@@ -2879,9 +2886,7 @@ export async function openGenericPerUse(actor, item, { effect = null } = {}) {
     return ui.notifications?.warn(`${actor.name}: ${name} is spent (${nUses > 1 ? `${nUses}/${when}` : when}).`);
   }
 
-  const cost = /\breaction\b/i.test(desc) ? "reaction"
-             : /\bbonus action\b/i.test(desc) ? "bonus"
-             : /\bas an action\b|\baction\s*[:—－-]/i.test(desc) ? "action" : null;
+  const cost = _genericCostFromDesc(desc);
   if (cost) {
     // Check only — the slot is debited after the effect lands (a "target the
     // ally first" refusal or a failed write must not spend the action).
@@ -7938,6 +7943,35 @@ export async function openShadowCourierFerrymansRight(actor) {
 }
 
 // ─── Main dispatch function ───────────────────────────────────────────────────
+
+// What firing this feature costs on the action economy — the same resolution each
+// dispatch path applies (10-29, for the Combat Dock's A/B/R tags + off-turn filter):
+// an item actionCost flag → the CHAR_OPT spec (actionCost, else its body text) → the
+// technique / generic path's text rule → LEGACY_ACTION_COST. A multi-ability picker
+// with different costs reports "mixed". Returns "action" | "bonus" | "reaction" |
+// "free" | "mixed" | null (no cost / not a routed feature).
+export function actionCostOf(item) {
+  if (!item) return null;
+  const flag = item.flags?.fourththing?.actionCost;
+  if (flag) return flag;
+  const handler = routeFeature(item);
+  if (!handler) return null;
+  if (handler === "char_opt_lookup") {
+    const spec = CHAR_OPT_ABILITIES[item.system?.identifier ?? ""];
+    if (!spec) return null;
+    const costOf = (ab) => ab?.actionCost ?? _inferActionCostFromBody(ab?.body) ?? null;
+    if (Array.isArray(spec.abilities) && spec.abilities.length) {
+      const costs = new Set(spec.abilities.map(costOf).filter(c => c && c !== "free" && c !== "none"));
+      return costs.size === 1 ? [...costs][0] : (costs.size ? "mixed" : null);
+    }
+    return costOf(spec);
+  }
+  if (handler === "technique_use" || handler === "generic_per_use") {
+    const desc = String(item.system?.description?.value ?? item.system?.body ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+    return _genericCostFromDesc(desc);
+  }
+  return LEGACY_ACTION_COST[handler] ?? null;
+}
 
 export async function dispatchFeatureAction(actor, item) {
   const handler = routeFeature(item);

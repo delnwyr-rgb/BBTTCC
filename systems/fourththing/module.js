@@ -181,7 +181,8 @@ import {
   // Surge heat (2026-10-29 — Burn folded into Surge)
   ftRegisterSurgeCap,
   ftHeatBandsFor,
-  ftBurnBandFor
+  ftBurnBandFor,
+  actionCostOf
 } from "./ft-class-automation.js";
 
 import RfiItems    from "./rfi-items.js";
@@ -2256,6 +2257,15 @@ async function _ftRollDefenseCheck(actor, which = "guard") {
     } catch (_e) { console.warn("Roll for Initiation | defense reroll grants failed", _e); }
   }
   if (pen) notes.push(`<span style="color:#c47a3a">Strain −${pen}</span>`);
+  // 10-29 (owner): a defense check banks Surge like every other check — each
+  // exploded 10 is +1 (the save-prompt path already did; this one never banked).
+  if (!imposed) {
+    const explosions = Math.max(0, (roll.dice?.[0]?.results?.length ?? 0) - 2);
+    if (explosions > 0) {
+      const banked = await _ftBankSurge(actor, explosions);
+      notes.push(`<span style="color:#e8c84a;font-weight:600">+${explosions} Surge${banked < explosions ? ` (${banked} banked — Surge full)` : " banked"}</span>`);
+    }
+  }
   await roll.toMessage({
     speaker: ChatMessage.getSpeaker({ actor }),
     flavor:  `${ftEscapeHtml(actor.name)} — ${ftCap(which)} check (DC ${v})${notes.length ? " · " + notes.join(" · ") : ""}`
@@ -15425,6 +15435,7 @@ Hooks.once("init", function () {
     },
     _classAutomation: {
       dispatchFeatureAction,
+      actionCostOf,
       isActionableFeature,
       isRetiredFoldedFeature,
       openSpendFrameDie, openFrameDiePool,
@@ -18095,6 +18106,18 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // moves (Dash / Disengage / Hold / Aid / Hide / Dodge) and sets targets the cross-version way.
   game.fourththing.combatActions = { defs: FT.COMBAT_ACTIONS, perform: ftPerformCombatAction };
   game.fourththing.actAgain = ftActAgain;
+  // 10-29: what an item costs to use — "action" | "bonus" | "reaction" | "free" | "mixed" | null.
+  // Powers / form-weapons: the manifestation activation castManifestation gates on (Action by default);
+  // plain weapons: the Engage strike's Action; features: the dispatch paths' own rule (actionCostOf).
+  game.fourththing.actionCostOf = (item) => {
+    if (!item) return null;
+    if (item.type === "power" || item.type === "weapon") {
+      const t = String(item.system?.manifestation?.activation?.type ?? "").toLowerCase();
+      return ["bonus", "reaction", "free"].includes(t) ? t : "action";
+    }
+    return actionCostOf(item);
+  };
+  game.fourththing.rolls.defenseCheck = _ftRollDefenseCheck;   // 10-29: the HUD's Defenses buttons use the sheet's path
   game.fourththing.setUserTargets = ftSetUserTargets;
   // The manifestation glossary + knob tooltips, exposed 2026-08-17 so the
   // onboarding teaching slides quote the ENGINE's own definitions instead of

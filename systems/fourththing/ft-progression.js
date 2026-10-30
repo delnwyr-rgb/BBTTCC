@@ -1527,6 +1527,13 @@ export async function fireTriggers(actor, event, payload = {}) {
       skipped.push({ source: m.sourceItemName, reason: limitCheck.reason });
       continue;
     }
+    // 10-29: don't offer to spend a counter that's empty (Menhirkin Heat Memory offered on every hit,
+    // then "heat is empty" on accept) — the offer appears only once something is banked.
+    if (m.trigger.effect?.kind === "spend-counter") {
+      const ctr = m.trigger.effect.args?.counter;
+      const have = Number(actor.items?.get?.(m.sourceItemId)?.flags?.fourththing?.counters?.[ctr]) || 0;
+      if (!(have > 0)) { skipped.push({ source: m.sourceItemName, reason: `${ctr} is empty` }); continue; }
+    }
     // Offers: post the card and move on — nothing fires until the player accepts.
     if (m.trigger.offer === true || OFFER_ONLY_KINDS.has(m.trigger.effect?.kind)) {
       try { await _postOfferCard(actor, m, payload, event, fireId); offered.push({ source: m.sourceItemName }); }
