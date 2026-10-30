@@ -15547,12 +15547,12 @@ Hooks.once("init", function () {
   // Keep mechanics-first, one short fiction beat. Used by ftFacultyTip /
   // ftPoolTip / ftDefenseTip / ftAptColTip helpers below.
   globalThis.FT_FACULTY_TIPS = {
-    violence:  "Violence — raw force, pressure, willingness to harm. Drives Brawl, Aim, melee aptitudes; feeds Guard (10 + Violence + Body + armor).",
-    intrigue:  "Intrigue — guile, finesse, working the angle. Drives Stealth, Sleight, Weave armor; feeds Evasion (10 + Intrigue + Body + armor).",
-    presence:  "Presence — bearing, voice, weight in a room. Drives Diplomacy, Intimidation, Performance; feeds Resolve (10 + Presence + Soul + armor).",
-    body:      "Body — stamina and structure. Drives Athletics, Plating armor. Feeds Integrity max (10 + 3·Body + per-level bracket) AND contributes to both Guard and Evasion.",
-    mind:      "Mind — memory, reason, pattern-finding. Drives Lore, Insight, Tech. Feeds Stress max (10 + 2·Mind + Soul).",
-    soul:      "Soul — conviction, attunement, the shape of your faith. Drives Occult, Faith, Warding armor. Feeds Stress max and Resolve."
+    violence:  "Violence — raw force, pressure, willingness to harm. Drives Brawl, Melee, Firearms, Athletics; feeds Guard (10 + Violence + Body + armor).",
+    intrigue:  "Intrigue — guile, finesse, working the angle. Drives Stealth, Hacking, Tinkering, Piloting, Streetwise, Fitting (light armor); feeds Evasion (10 + Intrigue + Body + armor).",
+    presence:  "Presence — bearing, voice, weight in a room. Drives Diplomacy, Intimidation, Empathy, Performance; feeds Resolve (10 + Presence + Soul + armor).",
+    body:      "Body — stamina and structure. Drives Plating (heavy armor). Feeds Integrity max (10 + 3·Body + per-level bracket) AND contributes to both Guard and Evasion.",
+    mind:      "Mind — memory, reason, pattern-finding. Drives Perception, Investigation, Lore, Occult. Feeds Stress max (10 + 2·Mind + Soul).",
+    soul:      "Soul — conviction, attunement, the shape of your faith. Drives Faith, Meditation, Ritual, Insight, Bracing (medium armor, shields). Feeds Stress max and Resolve."
   };
   globalThis.FT_POOL_TIPS = {
     integrity: "Integrity — your physical track. Reduced by kinetic, energy, poison, and sephirotic damage. Max = 10 + 3·Body + per-level bracket (vanguard 4 / mid 3 / caster 2 + ⌊Body/2⌋). Refills on Soma Break. Temporary Integrity (the small box) absorbs damage first and clears on Soma Break; Strain 4+ halves the max.",

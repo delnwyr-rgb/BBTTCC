@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "credit": "Lineage tokens by Aslı for Bad Eden. Each token is the portrait AND the map token (owner ruling 2026-10-17).",
+  "credit": "Lineage tokens by Aslı for Bad Eden. Each one is your portrait and your token on the map.",
   "base": "art/bbttcc/asli-trailer/tokens/",
   "lineages": {
     "circuitborn":      { "label": "Circuitborn",      "keys": ["circuitborn", "exo-knight", "exo knight", "parallax", "salvage", "synapse"] },
