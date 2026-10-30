@@ -1407,7 +1407,8 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
   const _ftEnforceActionGate = !options.skipActionGate && _ftIsActionEconomyActive(actor);
   if (_ftEnforceActionGate) {
     const sysActs = (actor?.system?.system ?? actor?.system ?? {})?.actions;
-    if (sysActs && sysActs.actionUsed) {
+    // 10-30: a primed Echo Strike is a FREE strike — it swings even after the Action is spent.
+    if (sysActs && sysActs.actionUsed && !actor?.flags?.fourththing?.surge?.oneShot?.["echo-strike"]) {
       ui.notifications?.warn(`${actor.name}: action already used this turn.`);
       return;
     }
@@ -1519,6 +1520,8 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
           const aimedShotBonus  = aimedShotActive ? 2 : 0;
 
           if (!(await _ftSpendRecharge())) return false;   // 10-29: spent on the roll, not on open
+          // 10-30: read before the roll (attackTest consumes it) — an Echo Strike costs no Action and no strike count.
+          const _echoFree = !rig && !!actor?.flags?.fourththing?.surge?.oneShot?.["echo-strike"];
           const result = await game.fourththing.rolls.attackTest(actor, {
             intent: selIntent, skill: selSkill,
             defense, defenseValue: defVal,
@@ -1547,7 +1550,7 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
           // AoO/reaction (caller already burned reactionUsed) and for actors
           // without a `system.actions` slot (bosses pre-Phase B). Rig-weapon
           // path additionally maintains its per-gunner-per-weapon flag below.
-          if (!options.skipActionGate && result) {
+          if (!options.skipActionGate && result && !_echoFree) {
             const sysActs = (actor?.system?.system ?? actor?.system ?? {})?.actions;
             if (sysActs && !sysActs.actionUsed) {
               // Striker paths make Tier strikes per round — only the last one spends the Action.
@@ -5710,13 +5713,8 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     // Surface a visible "primed" Active Effect on the steward sheet so the
     // banked boost (or pending narrative beat) is tracked, not invisible.
     await _ftSurgeMarkerAE(actor, entry);
-    // Echo Strike also grants a free action so the bonus Strike costs nothing.
-    if (effectKey === "echo-strike") {
-      try {
-        await _ftSetFlagSeatSafe(actor, "bonusActionAvailable", true);
-        await actor.update({ "system.actions.bonusUsed": false });
-      } catch (e) { /* non-owner — GM grants manually */ }
-    }
+    // Echo Strike: the primed strike is itself free (the Engage gate + strike count skip it, 10-30) —
+    // it no longer hands out a Bonus Action, which no weapon Strike could spend.
   }
 
   const bucketBadge = entry.bucket === "off"  ? '<span style="color:#dc5050">⚔ Offense</span>'

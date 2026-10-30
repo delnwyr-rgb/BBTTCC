@@ -110,8 +110,10 @@
     const sys = it.system ?? {}, mf = sys.manifestation ?? {};
     const sq = Math.max(Number(sys.range?.short) || 0, Number(sys.range?.long) || 0) || 1;
     const area = mf.area?.shape && mf.area.shape !== "none";
+    // 10-30: a primed Echo Strike (Surge) is a free Strike — the weapon stays live after the Action is spent.
+    const echo = it.type === "weapon" && !!it.parent?.flags?.fourththing?.surge?.oneShot?.["echo-strike"];
     return { kind, item: it, label: it.name, icon: hud()?.abilityIcon?.(it) ?? "khanda",
-      cost: engineCost(it, normCost(mf.activation?.type) ?? "action"), aim: area ? "area" : "foe", rangeFt: sq * gridFt() };
+      cost: echo ? null : engineCost(it, normCost(mf.activation?.type) ?? "action"), aim: area ? "area" : "foe", rangeFt: sq * gridFt() };
   }
   function powerEntry(it) {
     const sys = it.system ?? {}, mf = sys.manifestation ?? {};
