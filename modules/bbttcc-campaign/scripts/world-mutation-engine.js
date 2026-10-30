@@ -2345,6 +2345,26 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
             // A Parley runs on ANY scene (owner ruling 2026-10-22) — no longer switches tableau visuals on (that
             // forced perspective + 6×6 auto-sizing would wreck a battlemap). Courtiers = api.raid.tableau.courtiers.
             try { await cs.activate(); } catch (_e) { try { await cs.view(); } catch (_e2) {} }
+            // COURTIERS (Dave 2026-10-30: "the standard interface for parleys, with courtiers etc., isn't showing up"):
+            // a court scene with no people runs the plain contested fallback. `raid.courtiers = [actor names]` puts each
+            // named NPC on the court scene (once — an existing token of that actor is reused), so the courtly board opens.
+            const names = Array.isArray(R.courtiers) ? R.courtiers.map(n => String(n || "").trim()).filter(Boolean) : [];
+            if (names.length) {
+              try {
+                const dims = cs.dimensions || {}; const W = Number(dims.sceneWidth || dims.width || 2000), H = Number(dims.sceneHeight || dims.height || 1400);
+                const X0 = Number(dims.sceneX || 0), Y0 = Number(dims.sceneY || 0);
+                const make = [];
+                names.forEach((n, i) => {
+                  const actor = game.actors.getName(n);
+                  if (!actor) { console.warn(TAG, `raid: courtier "${n}" not found`); return; }
+                  if (cs.tokens.some(t => t.actorId === actor.id)) return;
+                  const x = Math.round(X0 + W * (0.35 + 0.3 * (names.length > 1 ? i / (names.length - 1) : 0.5)));
+                  const y = Math.round(Y0 + H * 0.4);
+                  make.push({ ...actor.prototypeToken.toObject(), actorId: actor.id, x, y, hidden: false });
+                });
+                if (make.length) { await cs.createEmbeddedDocuments("Token", make); notes.push(`raid:courtiers:${make.length}`); }
+              } catch (eC) { console.warn(TAG, "raid: placing courtiers failed", eC); }
+            }
           }
           else console.warn(TAG, "raid: a Parley with no courtScene — it runs on whatever scene is viewed (courtiers = its NPCs or 🎭-marked tokens)", R);
         }
