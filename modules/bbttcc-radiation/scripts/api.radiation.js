@@ -184,6 +184,29 @@
       String(a.flags?.["bbttcc-factions"]?.factionId || "") === fid);
   }
 
+  // THE RIDE (Dave 2026-10-29: "Toblerone and Brexit the Terrible should have both taken it as they were riding with the
+  // ER"). A ride is the lead faction + every faction stamped `flags.bbttcc-factions.travelingWith.leadId` = that lead (the
+  // Travel Console's stack). Either end works: a passenger's id resolves to its lead's whole ride.
+  function partyFactionIds(factionOrId) {
+    const fid = String(factionOrId?.id ?? factionOrId ?? "").replace(/^Actor\./, "");
+    if (!fid) return [];
+    const tw = game.actors?.get(fid)?.getFlag?.("bbttcc-factions", "travelingWith");
+    const lead = String(tw?.leadId || fid).replace(/^Actor\./, "");
+    const out = [lead];
+    for (const a of (game.actors?.contents ?? [])) {
+      if (!a?.getFlag?.("bbttcc-factions", "isFaction")) continue;
+      const t = a.getFlag("bbttcc-factions", "travelingWith");
+      if (t?.leadId && String(t.leadId).replace(/^Actor\./, "") === lead && !out.includes(a.id)) out.push(a.id);
+    }
+    return out;
+  }
+  // Every Steward on the ride (each faction's stewardsOf, de-duplicated).
+  function partyStewardsOf(factionOrId) {
+    const seen = new Set(); const out = [];
+    for (const id of partyFactionIds(factionOrId)) for (const S of stewardsOf(id)) if (!seen.has(S.id)) { seen.add(S.id); out.push(S); }
+    return out;
+  }
+
   function install() {
     try {
       // Attach namespace
@@ -199,6 +222,8 @@
       api.protectionFor = protectionFor;
       api.exposureFor   = exposureFor;
       api.stewardsOf    = stewardsOf;
+      api.partyFactionIds = partyFactionIds;
+      api.partyStewardsOf = partyStewardsOf;
       api.hexBase       = hexBase;
       _registerRelay();
 
@@ -226,12 +251,13 @@
     if (!fid) return false;
     // Only a Steward of that faction can be hit through the faction path.
     if (!stewardsOf(fid).some(s => s.id === A.id)) return false;
-    const F = game.actors?.get(fid);
-    if (F && F.testUserPermission?.(caller, "OWNER")) return true;
-    // Member: the sender owns (or plays) a character on the same faction.
+    // Same ride (2026-10-29): the leg's seat may be any faction riding with this Steward's — the lead or a passenger.
+    const ride = partyFactionIds(fid);
+    if (ride.some(id => game.actors?.get(id)?.testUserPermission?.(caller, "OWNER"))) return true;
+    // Member: the sender owns (or plays) a character on a faction in the same ride.
     const mine = [caller.character, ...(game.actors?.contents ?? []).filter(a =>
       a?.type === "character" && a.testUserPermission?.(caller, "OWNER"))].filter(Boolean);
-    return mine.some(a => String(a.flags?.["bbttcc-factions"]?.factionId || "") === fid);
+    return mine.some(a => ride.includes(String(a.flags?.["bbttcc-factions"]?.factionId || "")));
   }
   function _registerRelay() {
     try {

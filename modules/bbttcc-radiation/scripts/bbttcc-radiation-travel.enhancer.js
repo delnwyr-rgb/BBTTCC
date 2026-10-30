@@ -1,6 +1,6 @@
 // ============================================================================
 // Bad Eden — Radiation-on-Travel Enhancer
-// A travel leg into a hot hex exposes the travelling faction's STEWARDS.
+// A travel leg into a hot hex exposes the STEWARDS of everyone on the ride (lead + stacked passengers).
 //
 // One switch (owner rulings 2026-10-22):
 //   • the destination hex's Radiation level (0–3, api.territory.radiation) + its active
@@ -37,7 +37,8 @@
     if (base <= 0) return;
 
     const faction = ctx.actor;
-    const stewards = radApi.stewardsOf(faction ?? ctx.factionId);
+    // the whole ride, not just the lead (Dave 2026-10-29) — passengers stacked on this faction take the leg too
+    const stewards = radApi.partyStewardsOf ? radApi.partyStewardsOf(faction ?? ctx.factionId) : radApi.stewardsOf(faction ?? ctx.factionId);
     if (!stewards.length) { console.log(TAG, "hot hex but no stewards on", faction?.name); return; }
 
     const rows = [];
