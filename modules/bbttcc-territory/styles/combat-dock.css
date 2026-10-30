@@ -98,6 +98,13 @@ body.bbttcc-dock-hidebars #hotbar { display: none; }
 .cd-tgt.is-ally, .cd-tgt.is-neutral { color: var(--cd-ally); }
 .cd-tgt.is-self { color: var(--cd-warn); }
 .cd-queued { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+/* 10-30 (owner, Acid Bog shoot): long queued chips pushed End Turn / ☰ / collapse off the dock's right edge — every
+   row child was flex:none. The info areas now give way (ellipsis); the buttons never do. */
+.cd-row > .cd-queued { flex: 0 1 auto; min-width: 0; overflow: hidden; }
+.cd-row > .cd-target { flex: 0 1 auto; min-width: 0; }
+.cd-row > .cd-wait, .cd-row > .cd-hint { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.cd-queued .cd-q { flex: 0 1 auto; min-width: 3.5em; }
+.cd-row > .cd-end, .cd-row > .cd-icon { flex: none; }
 .cd-queued:empty { display: none; }
 .cd-q-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--cd-dim); }
 .cd-q { max-width: 190px; overflow: hidden; text-overflow: ellipsis; padding: 1px 7px; border-radius: 10px; background: rgba(106, 176, 214, 0.14); border: 1px solid rgba(106, 176, 214, 0.35); }
