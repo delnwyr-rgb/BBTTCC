@@ -2351,7 +2351,9 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         const prev = A.getFlag("bbttcc-raid", "raidSession") || {};
         const session = {
           rev: Number(prev.rev || 0) + 1, ts: Date.now(), by: "story", offeredBy: String(beatCtx.beatId || ""),
-          attackerId: A.id, supportFactionIds: [], activityKey: TYPE, difficulty: String(R.difficulty || "normal"),
+          // THE RIDE (Dave 2026-10-30 — these offers are the players' TRAINING for the console): everyone riding with the
+          // lead joins as a supporter, so each player's console opens on their own Domain and routes into this raid
+          attackerId: A.id, supportFactionIds: (() => { try { return (game.bbttcc?.api?.radiation?.partyFactionIds?.(A.id) || []).filter(id => id !== A.id); } catch (_e) { return []; } })(), activityKey: TYPE, difficulty: String(R.difficulty || "normal"),
           targetType, targetName: targetName || "—", targetUuid, defenderId, rigId, creatureId: "", actorUuid: "", sceneUuid: "", tokenUuid: "",
           rounds: [], logWar: true, includeDefender: true,
           parley: TYPE === "presence" ? { goal: String(R.goal || "persuade").toLowerCase(), style: String(R.style || "show") } : null,
@@ -2362,7 +2364,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           routeFired: "", campaignId: String(ctx.campaignId || "")
         };
         await A.setFlag("bbttcc-raid", "raidSession", session);
-        const payload = { factionId: A.id, type: TYPE, targetName: session.targetName, courtSceneId, stake: session.stake };
+        const payload = { factionId: A.id, supportFactionIds: session.supportFactionIds, type: TYPE, targetName: session.targetName, courtSceneId, stake: session.stake };
         try { game.socket?.emit?.("module.bbttcc-campaign", { type: "bbttccOpenRaid", payload }); } catch (_e) {}
         await _openRaidOnThisClient(payload); // sockets don't echo to the sender
         changed = true; notes.push(`raid:${TYPE}:${session.targetName}`);
@@ -2444,15 +2446,29 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
   // ── openMarket client-side plumbing (2026-10-17) ───────────────────────────
   // Point this client's Market context at the vendor (lastContext is client-scoped), then open it.
   // Ruling 22 — every seat that owns the offered Domain (and the GM) opens the console aimed at the story's target.
-  async function _openRaidOnThisClient({ factionId = "", type = "", targetName = "", courtSceneId = "", stake = "" } = {}) {
+  async function _openRaidOnThisClient({ factionId = "", supportFactionIds = [], type = "", targetName = "", courtSceneId = "", stake = "" } = {}) {
     try {
-      const fid = String(factionId || ""); if (!fid) return;
-      if (!game.user?.isGM) { const mine = (game.actors?.contents || []).some(a => a.id === fid && a.isOwner); if (!mine) return; }
+      let fid = String(factionId || ""); if (!fid) return;
+      // a player opens it on THEIR Domain: the lead's, or a supporter's (the console routes a supporter into the lead's raid)
+      if (!game.user?.isGM) {
+        const owns = (id) => !!game.actors?.get?.(String(id))?.isOwner;
+        if (!owns(fid)) { const sup = (Array.isArray(supportFactionIds) ? supportFactionIds : []).find(owns); if (!sup) return; fid = String(sup); }
+      }
       if (game.user?.isGM && courtSceneId && canvas?.scene?.id !== courtSceneId) { try { await game.scenes.get(courtSceneId)?.view(); } catch (_e) {} }
       const open = game.bbttcc?.api?.raid?.openConsole; if (typeof open !== "function") return;
       await open({ factionId: fid, fromBeat: true });
       const lbl = game.bbttcc?.api?.raid?.typeLabel?.(type) || type;
       ui.notifications?.info?.(`${lbl}${targetName ? ` — ${targetName}` : ""}: the story opens the table.${stake ? ` ${stake}` : ""}`);
+      // TRAINING (Dave 2026-10-30: "these are supposed to be training beats, for the players to learn about the interface"):
+      // a player's first story-offered console runs the raid-console tour on the real session (the tour's own open step
+      // reuses a live raid). Once completed it's marked taken per user (bbttcc-onboarding toursTaken) and never repeats.
+      if (!game.user?.isGM) {
+        try {
+          const taken = game.user?.getFlag?.("bbttcc-onboarding", "toursTaken") || [];
+          const tours = game.bbttcc?.onboarding?.tours;
+          if (tours?.start && !(Array.isArray(taken) && taken.includes("raid-console")) && !tours.active?.()) setTimeout(() => { try { tours.start("raid-console"); } catch (_eT) {} }, 1500);
+        } catch (_eTour) {}
+      }
     } catch (e) { console.warn(TAG, "open raid on this client failed", e); }
   }
   async function _openMarketOnThisClient({ vendorId = "", vendorName = "", note = "" } = {}) {
