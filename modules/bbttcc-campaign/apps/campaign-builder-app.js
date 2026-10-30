@@ -1505,6 +1505,11 @@ const activeCampaignId = _getActiveCampaignId();
         `every open door has been walked and the rest waits on the world moving. Set each faction's plans, then run the <b>Turn Driver</b> (toolbar). The slate arrives on the other side.${story.inPlay.length ? ` In play: ${story.inPlay.map(x => esc(x.name)).join(" · ")}.` : ""}`);
       c.quest = q.name; return c;
     }
+    if (!n.next && n.why === "parked") {   // a step the table has seen but can't act on yet (story-model PARKED, 2026-10-29)
+      const c = card(`⏸ ${esc(q.name)} — parked`, "", null, [],
+        `the table has seen this one and can't act on it yet; it comes back as Next by itself when its gates land.${story.inPlay.length ? ` Meanwhile, in play: ${story.inPlay.map(x => esc(x.name)).join(" · ")}.` : ""}`);
+      c.quest = q.name; return c;
+    }
     if (!n.next) {
       const c = card(`🧭 ${esc(q.name)} — in the table's hands`, "", null, [],
         `no unfired beat is left in ${ch ? "this chapter" : "this quest"}${q.closers.length ? "" : ", and it has no closing beat"}.${endingsTxt}`);
@@ -1929,7 +1934,7 @@ const activeCampaignId = _getActiveCampaignId();
           return `<div class="bbttcc-now-chain${rec ? " rec" : ""}" data-tooltip="${rec ? "Where the story stands. " : ""}Started, not finished. Any order is fine.">` +
             `<div class="hd"><span class="nm">${rec ? "★ " : "◇ "}${q.keystone ? "★" : ""}${esc(q.name)}${q.currentChapter ? ` <em>· ${esc(q.currentChapter.name)}</em>` : ""}</span><span class="ct">${q.progress.fired}/${q.progress.total}${q.hex ? ` · ${esc(q.hex)}` : ""}</span></div>` +
             `<div class="bar"><i style="width:${pct}%"></i></div>` +
-            (q.next ? nextBtn(q.next) + (q.next.line ? `<div class="done" style="opacity:.85">“${esc(q.next.line)}”</div>` : "") : `<div class="done">${esc(q.why === "complete" ? "complete" : "no unfired step")}</div>`) + `</div>`;
+            (q.next ? nextBtn(q.next) + (q.next.line ? `<div class="done" style="opacity:.85">“${esc(q.next.line)}”</div>` : "") : `<div class="done">${esc(q.why === "complete" ? "complete" : q.why === "parked" ? "⏸ parked — seen, nothing to do yet" : "no unfired step")}</div>`) + `</div>`;
         };
         inPlayHtml = list.map(q => row(q, q.key === recKey)).join("") || `<div class="bbttcc-now-empty">no quests in play</div>`;
         let invited = {};

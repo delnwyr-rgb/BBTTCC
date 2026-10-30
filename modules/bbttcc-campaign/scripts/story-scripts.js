@@ -14,6 +14,12 @@
 // not listed).
 // ─────────────────────────────────────────────────────────────────────────────
 
+// The Seal's gates (Dave 2026-10-28/29) — the same three every seal tool's `requires` carries: Etta read the script ·
+// the East Wall named the energy (its Tor-Wrath fight, won or lost) · the Field That Remembers showed the cost.
+const SEAL_GATES = [["allesh_gilliam_etta_bloom_conversation", "ag_etta_bought_in"], ["ag_east_wall_tor_wrath_won", "ag_east_wall_tor_wrath_lost"], ["lyrenn_field_remembers_forward"]];
+const SEAL_SEEN = ["khezek_tor_valhaulan_seal_cinematic", "kt_seal_tor_wrath", "kt_seal_tor_wrath_won", "kt_seal_tor_wrath_lost", "khezek_tor_the_vaulhaulan_seal", "ans_kt_seal_study", "khezek_tor_seal_fail"];
+const SEAL_DECIDED = ["khezek_tor_the_vaulhaulan_seal_restore", "khezek_tor_the_vaulhaulan_seal_redirect", "khezek_tor_the_vaulhaulan_seal_break"];
+
 export const STORY_SCRIPTS = {
 
   // ═══ ACT 0 ══════════════════════════════════════════════════════════════════
@@ -173,7 +179,12 @@ export const STORY_SCRIPTS = {
       { id: "curious", label: "Formally Curious", line: "The markings are fresh and somebody has been maintaining them. Go and look.", beats: ["khezek_tor_valhaulan_seal_quest_acceptance"] },
       { id: "cinematic", label: "The Seal", line: "It doesn't bind inward. Watch where it points.", beats: ["khezek_tor_valhaulan_seal_cinematic"] },
       { id: "decide", label: "Mend, Aim, or Open", line: "Restore the seal, redirect its energies, or break it. Read it properly before you touch it.",
-        beats: ["khezek_tor_the_vaulhaulan_seal", "khezek_tor_seal_fail"], done: { anyOf: ["khezek_tor_the_vaulhaulan_seal_restore", "khezek_tor_the_vaulhaulan_seal_redirect", "khezek_tor_the_vaulhaulan_seal_break"] } }
+        beats: ["khezek_tor_the_vaulhaulan_seal", "khezek_tor_seal_fail"], done: { anyOf: ["khezek_tor_the_vaulhaulan_seal_restore", "khezek_tor_the_vaulhaulan_seal_redirect", "khezek_tor_the_vaulhaulan_seal_break"] },
+        // Dave 2026-10-29: once the table has stood in front of it, the seal is a dead end until Etta + the East Wall + the
+        // Field (the same gates as the three tools). Parked = no Next anywhere, so the Log and the Visualizer move on; the
+        // tools come back as Next by themselves when the last gate lands. Etta is never named here — she's found by talking.
+        park: { after: SEAL_SEEN, until: SEAL_GATES,
+          logged: "You saw the seal up close. Nobody at Khezek Tor can read the carving, and it won't take anything you try on it yet." } }
     ],
     doors: [], after: [], chapters: {}
   },
@@ -190,9 +201,13 @@ export const STORY_SCRIPTS = {
       { id: "word", label: "Someone Else's Handwriting", line: "Follow the first thread at Khezek Tor: the old sealed shaft has fresh carvings.", where: "Khezek-Tor",
         logged: "Khezek Tor's old sealed shaft turned up with fresh carvings in someone else's handwriting.",
         beats: ["vs_overture", "khezek_word_ride"], borrow: true, done: { anyOf: ["vs_overture", "khezek_word_ride", "khezek_tor_quest_scene"] } },   // + the ride (2026-10-28): the Log points at the open road, not "picks up later"
-      { id: "signature", label: "The Seal Was a Signature", line: "Decide what to do about the sealed shaft at Khezek Tor, and hear Etta Bloom out at the Long Market in Allesh-Gilliam.",   // no "Valhaulan" before Etta says it (Dave 2026-10-28)
+      // Dave 2026-10-29: three quests all said "go to the seal". The Sealed Shaft owns that instruction now; the spine is a
+      // reader quest, so this rung is PARKED (no Next, rungs after it held) until vs_bridge_seal's own gates are in — the seal
+      // decided and Etta heard out — and never names Etta (the table meets her by talking to her, not by a Log errand).
+      { id: "signature", label: "The Seal Was a Signature", line: "Put what the seal told you next to everything else you've heard.",
         logged: "You settled the Seal and heard Etta out at the Long Market. The threads are connected.",
-        beats: ["vs_bridge_seal"], done: { mark: "vs_bridge_seal" } },
+        beats: ["vs_bridge_seal"], done: { mark: "vs_bridge_seal" },
+        park: { until: [SEAL_DECIDED, ["allesh_gilliam_etta_bloom_convo_exit"]], hold: true } },
       { id: "act3", label: "Act Three", line: "Settle the three towns, mend the gate and name the cult. The heading opens after that.", beats: ["a3_title_card"], done: { mark: "a3_title_card" } },   // the Act 3 door (2026-09-19): waits on Act 2's critical marks; turn 6 is the calendar's safety valve
       { id: "triangle", label: "Three Points Make a Heading", line: "Follow the three points (the coast, the statues and the chapel) to one heading.", beats: ["vs_bridge_triangle"], done: { mark: "vs_bridge_triangle" } },
       { id: "corroboration", label: "Everyone Saw Something", line: "Corroborate what the towns saw that night.", beats: ["vs_bridge_corroboration"], done: { mark: "vs_bridge_corroboration" } },

@@ -896,7 +896,13 @@ export function deriveSituation(ctx) {
   // and NOW said "quest complete"). When NOW has nothing fresh to offer but a quest IN PLAY waits on a beat the party can
   // open right now, that beat IS what happens next — and if the named beat is only reached through an unplayed entry
   // (Etta's EXIT is reached through Etta's conversation), the entry is offered.
-  let nowOut = now;
+  // NO QUEST UNDER THE ANCHOR (Dave 2026-10-29: Day's End is the last beat played and belongs to no quest, so NOW had
+  // nothing — the gate-door used to cover it by pointing back at the seal). Offer a quest in play with something fresh,
+  // reachable-from-here first (inPlay is already sorted here-first).
+  let nowOut = now || (() => {
+    const q = inPlay.find(x => fg(x) && reachable(x)) || inPlay.find(x => fg(x) && fresh(x)) || inPlay.find(x => bgOK(x) && fresh(x)) || null;
+    return q ? { quest: q, chapter: q.currentChapter, next: q.next, why: q.next.here === true ? "here" : "elsewhere", roads: [] } : null;
+  })();
   if (!nowOut || !nowOut.next || ["turn", "complete", "empty", "done-no-closer"].includes(String(nowOut.why || ""))) {
     const inDoors = (b) => Object.values(QUEST_SCRIPTS).some(sc => (sc.doors || []).some(d => (d.beats || []).map(String).includes(String(b.id))));
     const readyNow = (b) => !!readiness(b).ready && !(sealOfDecl(b, store || undefined, phase)?.sealed);   // review P2 (2026-10-27): readiness() — unknown counts the same as everywhere else (optimistic rounds / ungated)
@@ -949,7 +955,8 @@ export function deriveSituation(ctx) {
 // inference byte-for-byte. Scripts are code (versioned, lint-able): Phase B fills QUEST_SCRIPTS.
 //   script = { giver, description, steps:[step], doors:[door], after:[beatId], arrival:{act:1, steps:[step]},
 //              chapters:{ chKey:{ giver?, line? } } }
-//   step   = { id, label, beats:[beatId], line, hereLine?, group?, chapter?, done?, handoff?:{quest, chapter?}, borrow?:true (a beat declared to another quest, used here on purpose) }
+//   step   = { id, label, beats:[beatId], line, hereLine?, group?, chapter?, done?, handoff?:{quest, chapter?}, borrow?:true (a beat declared to another quest, used here on purpose),
+//              park?:{ after?:[beatId], until:[[beatId…]…], logged?, hold? } (seen, can't act yet — never Next until every until-group has a played beat) }
 //   done   = undefined (any beat played) | {anyOf:[ids]} | {allOf:[ids]} | {mark:id} | {chapter:[quest,ch]} | {quest:key}
 //   group  = steps sharing a group are ANY ORDER: every unfinished one is current at once
 // ═════════════════════════════════════════════════════════════════════════════
@@ -989,9 +996,17 @@ export function scriptView(sc, ctx) {
   // SKIPPED (script-order pass, 2026-10-28): (a) once the quest is CLOSED (an ending that skips the rest — the Forgotten
   // Cause's Break, Gloomgill's Fight/Leave) no unplayed step is "next"; (b) an `optional` step the table passed by (a
   // later step is already done) stops pinning the Log. Skipped steps print no So far line.
+  // PARKED (Dave 2026-10-29, the Seal): a step the table has SEEN but can't act on yet — its gates are other quests' work
+  // (Etta, the East Wall, the Field). `park = { after?:[beatId], until:[[beatId…]…], logged?, hold? }`: once any `after`
+  // beat has played (no `after` = always), the step is parked until EVERY `until` group has one played beat. A parked step
+  // is never Next (the Log and the Visualizer move on to other work), adds its `park.logged` to So far, and — with
+  // `hold:true` — keeps the steps after it waiting too (the spine's later rungs).
+  const parkMet = (u) => (Array.isArray(u) ? u : []).every(g => (Array.isArray(g) ? g : [g]).some(played));
+  const isParked = (st) => { const p = st.park; if (!p || typeof p !== "object") return false; if (Array.isArray(p.after) && p.after.length && !p.after.some(played)) return false; return !parkMet(p.until); };
   const doneFlags = list.map(isDone);
   let lastDoneIdx = -1; list.forEach((st, i) => { if (doneFlags[i] && !st.arrival) lastDoneIdx = i; });
   const questClosed = !!(ctx.questKey && qDone(String(ctx.questKey)));
+  let held = false;
   for (const [i, st] of list.entries()) {
     const done = doneFlags[i];
     let status;
@@ -999,6 +1014,8 @@ export function scriptView(sc, ctx) {
     else if (st.act != null && phase > Number(st.act)) status = "sealed";            // an Arrival step after its act
     else if (questClosed && !st.arrival) status = "skipped";
     else if (st.optional === true && i < lastDoneIdx) status = "skipped";
+    else if (isParked(st)) { status = "parked"; if (st.park.hold === true && !foundCurrent) held = true; }
+    else if (held) status = "todo";
     else if (!foundCurrent) { status = "current"; foundCurrent = true; currentGroup = st.group || null; }
     else if (currentGroup && st.group === currentGroup) status = "current";
     else status = "todo";
@@ -1032,7 +1049,7 @@ export function scriptView(sc, ctx) {
     const h = current.find(st => st.handoff || (st.done && (Array.isArray(st.done.chapter) || st.done.quest)));
     if (h) { const handoff = h.handoff || (Array.isArray(h.done.chapter) ? { quest: h.done.chapter[0], chapter: h.done.chapter[1] } : { quest: h.done.quest }); next = { ...mk(h, null, false, []), handoff }; stepOf = h; why = "handoff"; }
   }
-  if (!next && !current.length) why = steps.length && steps.every(s => s.status === "done" || s.status === "sealed" || s.status === "skipped") ? "complete" : "empty";
+  if (!next && !current.length) why = steps.some(s => s.status === "parked") ? "parked" : (steps.length && steps.every(s => s.status === "done" || s.status === "sealed" || s.status === "skipped") ? "complete" : "empty");
   // RUNGS (2026-10-17): a chapter-scoped door may carry `rungs` — the chapter's own ordered steps (same `done` rules as
   // steps). The current rung is the first unfinished one AFTER the last finished one, so a rung the table skipped
   // (Verna's star when they went straight to the tea) never pins the Log to a stale line. Its `line` becomes the
@@ -1069,6 +1086,7 @@ export function scriptView(sc, ctx) {
   // permutations to author. Main row = steps without a chapter; a chapter row = its steps + its doors' rungs.
   const soFar = { main: [], chapters: {} };
   for (const st of steps) {
+    if (st.status === "parked" && st.park?.logged) { if (st.chapter) (soFar.chapters[st.chapter] ||= []).push(String(st.park.logged)); else soFar.main.push(String(st.park.logged)); continue; }
     if (st.status !== "done" || !st.logged) continue;
     if (st.chapter) (soFar.chapters[st.chapter] ||= []).push(String(st.logged)); else soFar.main.push(String(st.logged));
   }
