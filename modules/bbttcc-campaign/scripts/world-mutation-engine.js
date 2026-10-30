@@ -2260,6 +2260,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         // so the world-hub overview is a dead end for route planning. Fallback:
         // the flagged world hub.
         const target = _sceneWithHexNamed(dest)
+          || game.scenes?.find?.(s => /the whole map/i.test(String(s.name || "")))   // one map (Dave 2026-10-30: the regional maps are gone)
           || game.scenes?.find?.(s => s.getFlag?.("bbttcc-travel", "isWorldHub"))
           || null;
         // Activate, not just view: activation pulls every connected client to
