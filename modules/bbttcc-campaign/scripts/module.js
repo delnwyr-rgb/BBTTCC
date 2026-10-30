@@ -2429,7 +2429,12 @@ async function _rollChoiceCheck(choice, ctx={}) {
     const roster = await _getFactionRoster(faction);
     const rosterSum = roster.reduce((s,a)=>s+_readActorOp(a,key),0);
     const bonus = baseOp + rosterSum + supportBonus;
-    const roll = await _evalRoll(new Roll(`${_ftCanonDie()} + @b`, { b: bonus }));
+    // MOMENTUM (Dave 2026-10-30): an armed "+1d10 exploding to the next OP check" (flags.bbttcc-factions.nextRollBonusDie,
+    // from the Momentum spend) rides THIS check too — it was only ever read by the faction sheet's own roll. Consumed here.
+    let momentumDie = false;
+    try { if (faction?.getFlag?.("bbttcc-factions", "nextRollBonusDie")) { momentumDie = true; await faction.unsetFlag("bbttcc-factions", "nextRollBonusDie"); } } catch (_eMD) {}
+    const roll = await _evalRoll(new Roll(`${_ftCanonDie()}${momentumDie ? " + 1d10x" : ""} + @b`, { b: bonus }));
+    if (momentumDie) { try { ui.notifications?.info?.(`${faction.name}: Momentum +1d10 rides this check.`); } catch (_eN) {} }
     const total = roll.total ?? 0;
     // RFI strategic layer (mirrors the faction sheet's OP roll): every exploded d10
     // banks +1 Momentum on the paying faction — owner ruling 2026-09-06, "give them

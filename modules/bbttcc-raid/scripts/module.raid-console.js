@@ -6118,8 +6118,25 @@ try { __b3ThisRound.notes.push(...__b3Gen.notes); if (__b3Boons.initiativeAdv) _
 // Defensive Entrenchment: defender gets +3 (contested) / +3 DC (non-contested).
 const __b3DefExtra2 = Number(__b3ThisRound?.defenderBonusDelta || 0) || 0;
 // Flash Bargain (and similar): add this-round roll bonus deltas onto the pending nextRoll bonuses.
-const __b3AttExtraFinal = Number(__b3AttExtra || 0) + Number(__b3ThisRound?.attackerRollBonusDelta || 0) + Number(__b3Gen.attBonus || 0);
-const __b3DefExtraFinal = Number(__b3DefExtra || 0) + Number(__b3ThisRound?.defenderRollBonusDelta || 0) + Number(__b3Gen.defBonus || 0);
+// MOMENTUM (Dave 2026-10-30: "Momentum is surge for Domains" — a Domain's armed "+1d10 exploding to the next OP check"
+// (flags.bbttcc-factions.nextRollBonusDie, set by the Momentum spend) never reached a raid roll; only the faction sheet's
+// own OP roll read it). Consumed here at commit: the attacking side (lead + supporters) and the defender each roll 1d10x
+// per armed Domain, added to that side's roll bonus; the flag clears.
+let __momAtt = 0, __momDef = 0;
+try {
+  const __momRoll = async (actor) => {
+    if (!actor?.getFlag?.("bbttcc-factions", "nextRollBonusDie")) return 0;
+    const rr = new Roll("1d10x"); await rr.evaluate();
+    try { await actor.unsetFlag("bbttcc-factions", "nextRollBonusDie"); } catch (_eU) {}
+    return Number(rr.total || 0);
+  };
+  const __supActors = (Array.isArray(r.supportFactionIds) ? r.supportFactionIds : []).map(id => game.actors?.get?.(String(id).replace(/^Actor\./, ""))).filter(Boolean);
+  for (const a of [attacker, ...__supActors]) { const v = await __momRoll(a); if (v) { __momAtt += v; __b3ThisRound.notes.push(`Momentum (${a.name}): +1d10 → +${v}`); } }
+  if (defender) { const v = await __momRoll(defender); if (v) { __momDef += v; __b3ThisRound.notes.push(`Momentum (${defender.name}): +1d10 → +${v}`); } }
+  if (__momAtt || __momDef) r.momentumDie = { att: __momAtt, def: __momDef };
+} catch (_eMom) { /* non-fatal */ }
+const __b3AttExtraFinal = Number(__b3AttExtra || 0) + Number(__b3ThisRound?.attackerRollBonusDelta || 0) + Number(__b3Gen.attBonus || 0) + __momAtt;
+const __b3DefExtraFinal = Number(__b3DefExtra || 0) + Number(__b3ThisRound?.defenderRollBonusDelta || 0) + Number(__b3Gen.defBonus || 0) + __momDef;
 
 // B3.4: this-round roll modes (Psychic Disruption etc) override/stack with pending nextRoll modes.
 function __b3MergeMode(baseMode, addMode){
