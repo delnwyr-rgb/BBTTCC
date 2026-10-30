@@ -732,7 +732,18 @@
   }
 
   // ── Hooks ──────────────────────────────────────────────────────────────
-  Hooks.once("ready", () => { try { _collapsed = window.localStorage?.getItem(COLL_KEY()) === "1"; } catch (_e) {} renderSoon(); });
+  Hooks.once("ready", () => {
+    try { _collapsed = window.localStorage?.getItem(COLL_KEY()) === "1"; } catch (_e) {}
+    renderSoon();
+    // 10-30: on a refresh mid-combat the Player HUD (and its Steward) can publish after this
+    // ready pass, so the dock found no subject and stayed gone until the next combat event.
+    // Retry for ~10 s until the dock mounts (or there is no combat here to show).
+    let tries = 0;
+    const retry = setInterval(() => {
+      if (++tries > 20 || document.getElementById(DOCK_ID) || !combatHere()) return clearInterval(retry);
+      renderNow();
+    }, 500);
+  });
   Hooks.on("canvasReady", () => { _moveGfx = null; renderSoon(); });
   for (const h of ["combatStart", "combatTurnChange", "updateCombat", "deleteCombat", "createCombatant", "updateCombatant", "deleteCombatant"]) {
     Hooks.on(h, (...args) => {

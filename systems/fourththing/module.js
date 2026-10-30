@@ -1550,8 +1550,14 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
           if (!options.skipActionGate && result) {
             const sysActs = (actor?.system?.system ?? actor?.system ?? {})?.actions;
             if (sysActs && !sysActs.actionUsed) {
-              try { await actor.update({ "system.actions.actionUsed": true }); }
-              catch (e) { console.warn("[fourththing] action-economy debit failed", e); }
+              // Striker paths make Tier strikes per round — only the last one spends the Action.
+              const sc = rig ? { spent: true } : await _ftCountStrike(actor);
+              if (sc.spent) {
+                try { await actor.update({ "system.actions.actionUsed": true }); }
+                catch (e) { console.warn("[fourththing] action-economy debit failed", e); }
+              } else {
+                ui.notifications?.info(`${actor.name}: Strike ${sc.used} of ${sc.max} — ${sc.max - sc.used} more this round.`);
+              }
             }
           }
 
@@ -4225,6 +4231,28 @@ function _ftInActiveCombat(actor) {
 }
 // Striker paths (owner ruling 2026-09-21): strikes per round = Tier. Casters and the rest stay at one.
 const FT_STRIKER_PATHS = ["Aurablade", "Bulwark", "Harmony Marshal", "Shadow Courier"];
+// 2026-10-30: the count the sheet promised ("Strikes 2/rd") was never kept — the first Strike
+// burned the whole Action. A Strike now spends the Action only on the actor's last strike of
+// the round. Counter = flags.fourththing.combat.strikeCount {combat, round, used}; the stamp
+// makes it reset itself each round (no turn-start clear needed).
+function _ftStrikesPerRound(actor) {
+  const v = Number((actor?.system?.system ?? actor?.system)?.derived?.strikes?.value);
+  return Math.max(1, Number.isFinite(v) ? v : 1);
+}
+function _ftStrikeCountNow(actor) {
+  const c = game.combat, s = actor?.flags?.fourththing?.combat?.strikeCount;
+  return (c && s && s.combat === c.id && s.round === c.round) ? (Number(s.used) || 0) : 0;
+}
+// True while a striker is partway through their strikes (the Action is committed to Striking).
+function _ftMidStrikes(actor) {
+  const used = _ftStrikeCountNow(actor);
+  return used > 0 && used < _ftStrikesPerRound(actor);
+}
+async function _ftCountStrike(actor) {
+  const c = game.combat, max = _ftStrikesPerRound(actor), used = _ftStrikeCountNow(actor) + 1;
+  if (c) { try { await actor.setFlag("fourththing", "combat.strikeCount", { combat: c.id, round: c.round, used }); } catch (_e) {} }
+  return { used, max, spent: !c || used >= max };
+}
 function _ftActionEconomyOn() { try { return game.settings.get("fourththing", "actionEconomy") === true; } catch (_e) { return false; } }
 function _ftIsActionEconomyActive(actor) {
   return _ftActionEconomyOn() && !!actor && _ftInActiveCombat(actor) && !_ftIsFoeActor(actor);
@@ -12244,6 +12272,10 @@ FT.COMBAT_ACTIONS = {
 async function ftActAgain(actor) {
   if (!actor) return;
   await actor.unsetFlag("fourththing", "actAgainAvailable");
+  // 10-30: a spent striker's Action comes back whole (Tier strikes), not as one leftover strike.
+  if ((actor.system?.system ?? actor.system)?.actions?.actionUsed && actor.flags?.fourththing?.combat?.strikeCount) {
+    try { await actor.unsetFlag("fourththing", "combat.strikeCount"); } catch (_e) {}
+  }
   await actor.update({ "system.actions.actionUsed": false });
   ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
@@ -19845,7 +19877,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         sys.derived.integrity.max += 2 * charLevel;
       }
       // STRIKES PER ROUND (owner ruling 2026-09-21): striker paths make Tier strikes per round (T1 1 · T2 2 · T3 3 ·
-      // T4 4); everyone else makes one. The Combat Tracker keeps the count — this is the number the sheet shows.
+      // T4 4); everyone else makes one. The Engage strike keeps the count (_ftCountStrike, 10-30) — this is the number the sheet shows.
       try {
         const clsName = String(this.items?.find?.(i => i.type === "class")?.name || "");
         const striker = FT_STRIKER_PATHS.some(n => clsName.toLowerCase().startsWith(n.toLowerCase()));
@@ -27895,7 +27927,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
   const requirePilot    = () => role === "pilot"    || warn(`${steward.name}: only the Pilot can do that (role: ${role}).`);
   const requireEngineer = () => role === "engineer" || warn(`${steward.name}: only the Engineer can repair (role: ${role}).`);
   const requirePilotGate = () => !_econActive || !stCmb.pilotActionUsedThisRound || warn(`${steward.name}: pilot action already taken this round.`);
-  const requireAction    = () => !_econActive || !sysActs.actionUsed              || warn(`${steward.name}: action already used this turn.`);
+  const requireAction    = () => !_econActive || (!sysActs.actionUsed && !_ftMidStrikes(steward)) || warn(`${steward.name}: ${sysActs.actionUsed ? "action already used this turn" : "your Action is committed to Striking this round"}.`);
   const requireBonus     = () => !_econActive || !sysActs.bonusUsed               || warn(`${steward.name}: bonus action already used this round (refreshes at the start of your turn).`);
   // Patch ONLY the changed keys (2026-10-01): re-writing the entry-time spread
   // reverted any heat / hexesMoved / operatedModules change made while a
