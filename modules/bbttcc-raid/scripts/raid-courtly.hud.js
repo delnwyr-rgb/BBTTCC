@@ -468,7 +468,7 @@
     d.style.bottom = Math.max(8, Math.round(window.innerHeight - top + 8)) + "px";
   }
   window.addEventListener("resize", () => _placeStrip());
-  Hooks.once("ready", () => { try { const r = (game.bbttcc ??= { api: {} }).api.raid ??= {}; r.courtlyHud = Object.assign(r.courtlyHud || {}, { place: () => _placeStrip() }); } catch (_e) {} });
+  Hooks.once("ready", () => { try { const r = (game.bbttcc ??= { api: {} }).api.raid ??= {}; r.courtlyHud = Object.assign(r.courtlyHud || {}, { place: () => _placeStrip(), sync: () => _scheduleRender(), view: _courtView, ping: _pingCourtier }); } catch (_e) {} });
   function _dock() {
     let d = document.getElementById(DOCK_ID);
     if (d) return d;
@@ -557,7 +557,37 @@
     setTimeout(() => fill.classList.remove("ft-courtly-valueflash"), 520);
   }
 
+  // 10-30 (owner: "add that info to the new bottom HUD proper") — the player Conflict bar draws the court itself, so
+  // this module hands it a plain VIEW of the same state the panels render, and stands its own strip down while the
+  // bar is up (the GM seat, with no bar, keeps the strip).
+  const _barUp = () => !!document.getElementById("bbttcc-conflict-bar");
+  function _courtView() {
+    let app = _ftActiveCourtlyConsole(); let state = null;
+    if (app) { try { state = app.__courtlyScenario.getState(); } catch (_e) { state = null; } }
+    if (!state) { app = _ftAnyCourtlyConsole(); state = app ? _fallbackState(app) : null; }
+    if (!app || !state || !_isParleyStage()) return null;
+    const { maxA, maxD } = _courtlyMaxFromRow(app);
+    const A = game.actors.get(state.attackerId), D = game.actors.get(state.defenderId);
+    const vc = _viewerCtx(state);
+    const holders = !vc ? [] : vc === "gm" ? [["att", A], ["def", D]] : vc === "attacker" ? [["att", A]] : [["def", D]];
+    const receipts = holders.filter(([, a]) => a).map(([side, a]) => ({
+      side, actorId: a.id, name: a.name,
+      items: (a.items?.contents || []).filter(i => i.flags?.[MOD_R]?.secret).filter(i => { const pid = i.flags?.[MOD_R]?.secret?.parleyId; return !pid || pid === state.id; })
+        .map(i => { const acq = String(i.flags?.[MOD_R]?.secret?.acquisition || "earned"); return { id: i.id, name: i.name, img: i.img, acq: acq === "template" ? "earned" : acq }; })
+    }));
+    return {
+      round: Number(state.round || 0), outcome: String(state.outcome || "ongoing"), goal: String(state.goalLabel || ""),
+      atk: { name: A?.name || "Attacker", val: Number(state.influenceA ?? 0), max: maxA, scandal: !!state.scandalOnA, bonus: Number(state.courtBonusA ?? 0) },
+      def: { name: D?.name || "Defender", val: Number(state.influenceD ?? 0), max: maxD, scandal: !!state.scandalOnD, bonus: Number(state.courtBonusD ?? 0) },
+      track: (state.performance || state.suspicionEnabled !== false) ? { label: state.performance ? String(state.trackLabel || "Crowd") : "Suspicion", val: clamp(state.suspicion ?? 0, 0, 10) } : null,
+      courtiers: _tableauTokens().map(t => ({ tokenId: t.id, name: t.actor?.name || t.name || "Courtier", img: t.actor?.img || t.document?.texture?.src || "icons/svg/mystery-man.svg", favA: _favorOf(t.actor, state.attackerId), favD: _favorOf(t.actor, state.defenderId) })),
+      receipts
+    };
+  }
+  function _pingCourtier(tokenId) { const tk = canvas.tokens?.get?.(tokenId); if (!tk) return; try { canvas.ping?.(tk.center); } catch (_e) {} }
+
   function _renderAll() {
+    if (_barUp()) { _teardownAll(); return; }   // the Conflict bar carries the court on this seat
     let app = _ftActiveCourtlyConsole();
     let state = null;
     if (app) {

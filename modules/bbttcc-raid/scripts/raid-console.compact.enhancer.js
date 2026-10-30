@@ -292,7 +292,38 @@
       #${BAR_ID} .cb-man small{opacity:.75}
       #${BAR_ID} .cb-man .cb-fire{padding:0 .35rem;font-size:.7rem}
       #${BAR_ID}.collapsed .cb-body{display:none}
-      #${BAR_ID} .cb-side{font-size:.68rem;opacity:.8;margin-right:.15rem}`;
+      #${BAR_ID} .cb-side{font-size:.68rem;opacity:.8;margin-right:.15rem}
+      #${BAR_ID}{background:var(--cd-bg,rgba(16,13,11,.92));border-color:var(--cd-line,rgba(214,178,106,.45));color:var(--cd-text,#f1e7d0)}
+      #${BAR_ID} .cb-title{color:var(--cd-gold,#d6b26a)}
+      #${BAR_ID} .cb-label{font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;color:var(--cd-dim,rgba(241,231,208,.55))}
+      #${BAR_ID} .cb-court,#${BAR_ID} .cb-court2{padding:.15rem 0;border-bottom:1px solid rgba(214,178,106,.15)}
+      #${BAR_ID} .cb-court.ended{opacity:.65;filter:saturate(.6)}
+      #${BAR_ID} .cb-inf{display:inline-flex;align-items:center;gap:.35rem;padding:.12rem .45rem;border-radius:5px;background:var(--cd-panel,rgba(38,31,25,.9));border:1px solid var(--acc)}
+      #${BAR_ID} .cb-inf.atk{--acc:#f4a63a}
+      #${BAR_ID} .cb-inf.def{--acc:#5fb6ff}
+      #${BAR_ID} .cb-inf-name{color:var(--acc);font-weight:700}
+      #${BAR_ID} .cb-inf b{color:var(--acc);font-variant-numeric:tabular-nums}
+      #${BAR_ID} .cb-segs{display:inline-flex;gap:2px}
+      #${BAR_ID} .cb-segs i{width:9px;height:10px;border-radius:2px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}
+      #${BAR_ID} .cb-segs i.on{background:var(--acc);border-color:var(--acc);box-shadow:0 0 5px var(--acc)}
+      #${BAR_ID} .cb-vs{color:var(--cd-dim);font-weight:700}
+      #${BAR_ID} .cb-chip{padding:.05rem .45rem;border-radius:10px;border:1px solid var(--cd-line);font-size:.7rem}
+      #${BAR_ID} .cb-chip.goal{border-color:#6ab0d6;color:#9fdcff}
+      #${BAR_ID} .cb-chip.track{border-color:#e0a34e;color:#ffd28a}
+      #${BAR_ID} .cb-chip.outcome{background:#3a2a1a;color:#ffd28a;border-color:#ffd28a}
+      #${BAR_ID} .cb-courtier{display:inline-flex;align-items:center;gap:.3rem;padding:.1rem .45rem .1rem .15rem!important;border-radius:14px!important;background:var(--cd-panel)!important}
+      #${BAR_ID} .cb-courtier img{width:24px;height:24px;border-radius:50%;object-fit:cover;border:2px solid var(--cd-gold);background:#222}
+      #${BAR_ID} .cb-cname{max-width:9em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      #${BAR_ID} .cb-pip{min-width:1.6em;text-align:center;padding:0 .3rem;border-radius:8px;font-size:.68rem;font-weight:700;border:1px solid}
+      #${BAR_ID} .cb-pip.atk{color:#f4a63a;border-color:rgba(244,166,58,.45)}
+      #${BAR_ID} .cb-pip.def{color:#5fb6ff;border-color:rgba(95,182,255,.45)}
+      #${BAR_ID} .cb-pip.lit.atk{background:rgba(244,166,58,.28);border-color:#f4a63a;box-shadow:0 0 5px rgba(244,166,58,.6)}
+      #${BAR_ID} .cb-pip.lit.def{background:rgba(95,182,255,.28);border-color:#5fb6ff;box-shadow:0 0 5px rgba(95,182,255,.6)}
+      #${BAR_ID} .cb-receipt{display:inline-flex;align-items:center;gap:.3rem;padding:.1rem .3rem;border-radius:6px;border:1px solid #b48cff;background:#1a1426;color:#e6dcff}
+      #${BAR_ID} .cb-receipt.stolen{border-color:#ff7a7a}
+      #${BAR_ID} .cb-receipt img{width:20px;height:20px;border-radius:3px}
+      #${BAR_ID} .cb-receipt button{border-color:#b48cff!important;background:#241a36!important;color:#d9c8ff!important;padding:0 .35rem!important}
+      #${BAR_ID} .cb-man.on{background:rgba(214,178,106,.3);border-color:var(--cd-gold);box-shadow:0 0 6px rgba(214,178,106,.45)}`;
     document.head.appendChild(st);
   }
 
@@ -316,12 +347,35 @@
       const r = el.getBoundingClientRect(); if (r.height > 0 && r.top > window.innerHeight * 0.5) top = Math.min(top, r.top);
     }
     bar.style.bottom = Math.max(8, Math.round(window.innerHeight - top + 8)) + "px";
-    try { game.bbttcc?.api?.raid?.courtlyHud?.place?.(); } catch (_e) {}
+    try { game.bbttcc?.api?.raid?.courtlyHud?.sync?.(); } catch (_e) {}   // the strip stands down while the bar carries the court
   }
 
   function teardown() {
     document.getElementById(BAR_ID)?.remove();
     try { _obs?.disconnect(); } catch (_e) {} _obs = null; _obsApp = null;
+  }
+
+  // The court, drawn in the combat dock's dress (owner 10-30: "more colorful and rad like the combat HUD"):
+  // segmented influence bars (Domain orange / defender blue), courtier portraits with favour pips, receipts as chips.
+  function courtHTML() {
+    let v = null; try { v = game.bbttcc?.api?.raid?.courtlyHud?.view?.() || null; } catch (_e) { v = null; }
+    if (!v) return "";
+    const segs = (val, max, cls) => { const n = Math.max(1, Math.min(20, Number(max) || 10)); let h = ""; for (let i = 0; i < n; i++) h += `<i class="${i < val ? cls : ""}"></i>`; return h; };
+    const side = (s, cls) => `<span class="cb-inf ${cls}"><span class="cb-inf-name">${esc(s.name)}${s.scandal ? " ⚠" : ""}</span><span class="cb-segs">${segs(s.val, s.max, "on")}</span><b>${s.val}/${s.max}</b>${s.bonus ? `<span class="cb-chip">★ ${s.bonus > 0 ? "+" : ""}${s.bonus}</span>` : ""}</span>`;
+    const pip = (n, cls) => `<span class="cb-pip ${cls}${n ? " lit" : ""}">${n > 0 ? "+" : ""}${n}</span>`;
+    const court = v.courtiers.map(c => `<button type="button" class="cb-courtier" data-cb="ping" data-token-id="${esc(c.tokenId)}" title="${esc(c.name)} — click to ping"><img src="${esc(c.img)}" alt=""><span class="cb-cname">${esc(c.name)}</span>${pip(c.favA, "atk")}${pip(c.favD, "def")}</button>`).join("");
+    const rec = v.receipts.flatMap(r => r.items.map(i => `<span class="cb-receipt${i.acq === "stolen" ? " stolen" : ""}" title="${esc(i.name)} (${esc(i.acq)})"><img src="${esc(i.img || "icons/svg/book.svg")}" alt="">${esc(i.name)}<button type="button" data-cb="play" data-actor-id="${esc(r.actorId)}" data-item-id="${esc(i.id)}">▶ Play</button></span>`));
+    const ended = v.outcome !== "ongoing";
+    return `<div class="cb-row cb-court${ended ? " ended" : ""}">
+        <span class="cb-label">⚜ Court</span>${side(v.atk, "atk")}<span class="cb-vs">vs</span>${side(v.def, "def")}
+        ${v.goal ? `<span class="cb-chip goal">${esc(v.goal)}</span>` : ""}
+        ${v.track ? `<span class="cb-chip track">${esc(v.track.label)} ${v.track.val}/10</span>` : ""}
+        ${ended ? `<span class="cb-chip outcome">${esc(v.outcome.toUpperCase())}</span>` : ""}
+      </div>
+      <div class="cb-row cb-court2">
+        <span class="cb-label">Courtiers</span>${court || `<span class="cb-dim">No courtiers marked on this scene.</span>`}
+        <span class="cb-label" style="margin-left:.6rem;">🧾 Receipts</span>${rec.length ? rec.join("") : `<span class="cb-dim">None yet — earn them with Read the Room or Eavesdrop.</span>`}
+      </div>`;
   }
 
   function render() {
@@ -402,7 +456,7 @@
       const manHtml = mans.length ? mans.map(m => m.html.replace('data-cb="man"', `data-cb="man"`)).join("") : `<span class="cb-dim">No maneuvers you can field this round.</span>`;
       body = line1 + `<div class="cb-row"><span class="cb-side">${sideLbl[mans[0]?.side] || "⚔"} Maneuvers</span></div><div class="cb-mans">${manHtml}</div>`;
     }
-    bar.innerHTML = head + `<div class="cb-body">${body}</div>`;
+    bar.innerHTML = head + `<div class="cb-body">${courtHTML()}${body}</div>`;
     place(bar);
   }
 
@@ -415,6 +469,8 @@
     try {
       if (act === "window") { _showWindow = !_showWindow; const app = liveConsole(); if (app) { app.element.classList.toggle("cb-docked", !_showWindow); if (_showWindow) app.bringToFront?.(); } return schedule(0); }
       if (act === "collapse") { _collapsed = !_collapsed; try { localStorage.setItem("bbttcc-conflict-bar-collapsed", _collapsed ? "1" : "0"); } catch (_e) {} return schedule(0); }
+      if (act === "ping") return game.bbttcc?.api?.raid?.courtlyHud?.ping?.(t.dataset.tokenId);
+      if (act === "play") { t.disabled = true; return game.bbttcc?.api?.raid?.courtlySecrets?.playSecret?.(t.dataset.actorId, t.dataset.itemId); }
       if (act === "stage") return bar?.__stage?.[i]?.click();
       if (act === "commit") return bar?.__commit?.click();
       if (act === "fire") return bar?.__mans?.[i]?.fire?.click();
@@ -426,6 +482,9 @@
   Hooks.on("closeApplicationV2", (app) => { if (app?.element?.classList?.contains?.(CLS)) schedule(); });
   Hooks.on("updateActor", (_a, ch) => { if (foundry.utils.hasProperty(ch, "flags.bbttcc-raid")) schedule(150); });
   Hooks.on("canvasReady", () => schedule(300));
+  Hooks.on("bbttcc:courtly:state", () => schedule(120));
+  Hooks.on("createItem", (it) => { if (it?.flags?.["bbttcc-raid"]?.secret) schedule(150); });
+  Hooks.on("deleteItem", (it) => { if (it?.flags?.["bbttcc-raid"]?.secret) schedule(150); });
   window.addEventListener("resize", () => { const b = document.getElementById(BAR_ID); if (b) place(b); });
   console.log(TAG, "Conflict bar loaded (player seats)");
 })();
