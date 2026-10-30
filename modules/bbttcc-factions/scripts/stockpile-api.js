@@ -131,6 +131,16 @@ function _registerRelay() {
   const gx = game.bbttcc?.api?.gmExec; if (!gx?.register) return;
   gx.register(RELAY_TYPE, async (p, meta) => {
     const F = _resolveActor(p?.factionId); if (!F) throw new Error("faction not found");
+    // 10-29: authorize the REAL sender (gmExec stamps it from the socket) — only the Domain's owner or
+    // someone who owns one of its stewards (ruling 16) may move its stockpile.
+    if (!meta?.local) {
+      const u = game.users?.get?.(String(meta?.fromUserId || ""));
+      const member = !!u && (u.isGM || F.testUserPermission?.(u, "OWNER")
+        || (game.actors?.contents ?? []).some(a => a.type === "character"
+          && String(a.getFlag?.("bbttcc-factions", "factionId") || "").replace(/^Actor\./, "") === F.id
+          && a.testUserPermission?.(u, "OWNER")));
+      if (!member) throw new Error("refused: not one of this Domain's stewards");
+    }
     const r = await adjust(F, String(p?.matKey || ""), Number(p?.delta) || 0, p?.opts || {});
     console.log(TAG, "relayed adjust", F.name, p?.matKey, p?.delta, `(for ${meta?.fromUserName || "?"})`);
     return r;

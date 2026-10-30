@@ -22,8 +22,9 @@
  * derived/integrity. Use the canonical path. We intercept, we don't bypass.
  *
  * Per [[crew-rig-combat-arc-2026-05-19-20]] — GM-relay is already handled
- * upstream in applyDamageFromButton; by the time damage interceptors fire,
- * we're on the GM client with write perms. No additional relay needed here.
+ * upstream in _applyDamageToActor for NON-owner seats. 10-29: an OWNER seat runs
+ * this interceptor itself (it can write its own structure), so GM-only follow-ups
+ * (collapse, siege layer) reach the GM through damage-path's stateChanged relay.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -63,7 +64,9 @@ async function structureDamageInterceptor(actor, baseDmg, opts = {}) {
     // consume it and route the damage through with bypassThreshold + noSalvage
     // so even chip-only damage punches through to Plates and salvage is
     // suppressed. (RFI-only maneuver; absent on dnd5e → both flags stay false.)
-    const sourceActor = getActiveDamageSource();
+    // 10-29: target-scoped + consumed — a player's announced source only counts for
+    // the structure they targeted, once (bulwark-hookups getActiveDamageSource).
+    const sourceActor = getActiveDamageSource(actor, { consume: true, fromUserId: opts._fromUserId ?? game.user?.id ?? null });
     const ce = await consumeCatastrophicEntry(sourceActor);
     const bypassThreshold = !!ce?.bypassThreshold;
     const noSalvage       = !!ce?.noSalvage;

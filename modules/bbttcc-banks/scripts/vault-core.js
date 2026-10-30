@@ -47,9 +47,13 @@ const FACTIONS_MOD = "bbttcc-factions";
 // Manage rights for a faction/coalition vault: the actor's Foundry owner or a GM —
 // and, since the steward IS the Domain (ruling 16, 2026-10-17), whoever owns one of
 // the Domain's stewards.
-function _canManage(actor) {
-  if (game.user?.isGM || actor?.isOwner) return true;
-  try { if (_isFactionActor(actor)) return stewardsOf(actor).some(c => c.isOwner); } catch (_e) {}
+// 10-29: takes the user to check (default this seat) so the GM relay can authorize the REAL
+// sender — a steward-owner without Domain ownership can't setFlag the faction actor, so their
+// faction/coalition item moves now run on the GM (see _relayTransfer / "banks.transferVault").
+function _canManage(actor, user = game.user) {
+  if (!actor || !user) return false;
+  if (user.isGM || actor.testUserPermission?.(user, "OWNER")) return true;
+  try { if (_isFactionActor(actor)) return stewardsOf(actor).some(c => c.testUserPermission?.(user, "OWNER")); } catch (_e) {}
   return false;
 }
 
@@ -140,7 +144,10 @@ function _salvageOf(payload) {
   if (markValue <= 0) return null;
   let bucket = String(s.bucket || "economy").toLowerCase();
   if (!OP_BUCKETS.includes(bucket)) bucket = "economy";
-  return { markValue, bucket };
+  // 10-29: markValue is PER UNIT — a merged xN salvage row (sheet drop / stack.merge keep the first
+  // row's flag) used to refine once and delete all N units. Total = per-unit value × quantity.
+  const qty = Math.max(1, Math.floor(Number(payload?.system?.quantity ?? 1)) || 1);
+  return { markValue: markValue * qty, unitValue: markValue, qty, bucket };
 }
 
 function _resolveActor(aOrId) {
@@ -345,11 +352,26 @@ async function transferVault({ source, target, items = [], marks = null, context
   if (!src || !tgt) return { ok: false, error: "Vault source/target could not be resolved." };
   if (!items.length && !marks) return { ok: false, error: "Nothing to transfer." };
 
+  // 10-29: faction/coalition vault flags live on the Domain actor, which a steward-owner
+  // (ruling 16) often can't write, and two seats writing the same {items} array raced (a Take
+  // duplicated, a Store lost an item). Player seats relay those moves to the primary GM, which
+  // runs them one at a time per vault actor.
+  if (!game.user?.isGM && (MARK_KINDS.has(src.kind) || MARK_KINDS.has(tgt.kind))) {
+    return _relayTransfer(src, tgt, items, marks, context);
+  }
+
   // Access gate: withdrawing (debiting) a faction/coalition store requires manage
   // rights. Deposits INTO a faction are open. Enforced only when asked (UI paths).
   if (context.enforceAccess && MARK_KINDS.has(src.kind) && !_canManage(src.actor)) {
     return { ok: false, error: "Only the faction owner or a GM may withdraw from this vault." };
   }
+
+  // 10-29: serialize per vault actor so the stash is re-read inside the lock — a Take whose
+  // entry another seat already took now fails "not found" instead of duplicating the item.
+  return _withVaultLock([src.actor.uuid, tgt.actor.uuid], () => _transferLocked(src, tgt, items, marks, context));
+}
+
+async function _transferLocked(src, tgt, items, marks, context) {
 
   // Resolve item payloads from the source up front (fail fast on stale handles).
   const moving = _collectItems(src, items);
@@ -397,6 +419,80 @@ async function transferVault({ source, target, items = [], marks = null, context
 
   _fireChanged(src, tgt, context);
   return { ok: true, moved: itemPayloads.length, marks: effMarks || null, transmuted };
+}
+
+// ---- Serialization + GM relay (10-29) ----------------------------------------
+
+// Per-actor promise chains. A transfer registers its tail on every key it touches
+// synchronously before awaiting, so the order is total and two-key locks can't deadlock.
+const _vaultQueues = new Map();
+function _withVaultLock(keys, fn) {
+  const ks = [...new Set(keys.filter(Boolean).map(String))];
+  const prior = ks.map(k => _vaultQueues.get(k)).filter(Boolean);
+  const run = Promise.all(prior).then(() => fn());
+  const done = run.then(() => {}, () => {});
+  for (const k of ks) _vaultQueues.set(k, done);
+  done.then(() => { for (const k of ks) if (_vaultQueues.get(k) === done) _vaultQueues.delete(k); });
+  return run;
+}
+
+async function _relayTransfer(src, tgt, items, marks, context) {
+  const gx = game?.bbttcc?.api?.gmExec;
+  if (!gx?.call) return { ok: false, error: "No GM relay available — a GM must be connected to use the Domain vault." };
+  try {
+    const res = await gx.call("banks.transferVault", {
+      source: { kind: src.kind, actorUuid: src.actor.uuid },
+      target: { kind: tgt.kind, actorUuid: tgt.actor.uuid },
+      items: (items || []).map(String),
+      marks: marks || null,
+      label: String(context?.label || "").slice(0, 60),
+    });
+    if (res?.ok) _fireChanged(src, tgt, context);   // the GM fired it on its seat; refresh this one too
+    return res || { ok: false, error: "The GM returned no result." };
+  } catch (e) {
+    return { ok: false, error: String(e?.message || e || "Vault relay failed.") };
+  }
+}
+
+async function _resolveRelayRef(ref) {
+  const kind = String(ref?.kind || "");
+  if (!["inventory", "personal", "faction", "coalition"].includes(kind)) return null;
+  let doc = null;
+  try { doc = ref?.actorUuid ? await fromUuid(String(ref.actorUuid)) : null; } catch (_e) { doc = null; }
+  const actor = (doc instanceof Actor) ? doc : (doc?.actor instanceof Actor ? doc.actor : null);
+  return actor ? { actor, kind } : null;
+}
+
+// GM side of the relay. Never trust the payload's ids: authorize meta.fromUserId (the real
+// socket sender) against every actor the move touches.
+async function _onRelayedTransfer(payload, meta) {
+  const user = game.users?.get?.(meta?.fromUserId);
+  if (!user) return { ok: false, error: "Unknown requesting user." };
+  const src = await _resolveRelayRef(payload?.source);
+  const tgt = await _resolveRelayRef(payload?.target);
+  if (!src || !tgt) return { ok: false, error: "Vault source/target could not be resolved." };
+  if (!MARK_KINDS.has(src.kind) && !MARK_KINDS.has(tgt.kind)) return { ok: false, error: "Only Domain vault moves are relayed." };
+  // Explicit marks moves are GM-only (no UI sends them; an inventory source would mint marks).
+  if (payload?.marks && !user.isGM) return { ok: false, error: "Moving marks directly is GM-only." };
+  const owns = (a) => !!a?.testUserPermission?.(user, "OWNER");
+  // Source: you give what is yours; you withdraw from a Domain you may manage.
+  if (MARK_KINDS.has(src.kind)) {
+    if (!_canManage(src.actor, user)) return { ok: false, error: "Only the faction owner, one of its stewards, or a GM may withdraw from this vault." };
+  } else if (!owns(src.actor)) return { ok: false, error: "You don't own that source." };
+  // Target: deposits INTO a Domain are open; anything else must land on an actor you own.
+  if (!MARK_KINDS.has(tgt.kind) && !owns(tgt.actor)) return { ok: false, error: "You don't own that recipient." };
+  const items = Array.isArray(payload?.items) ? payload.items.map(String).slice(0, 50) : [];
+  const context = {
+    label: String(payload?.label || "Bank").slice(0, 60),
+    userId: user.id,
+    requestedBy: meta?.fromUserName || user.name,
+  };
+  return _withVaultLock([src.actor.uuid, tgt.actor.uuid], () => _transferLocked(src, tgt, items, payload?.marks || null, context));
+}
+
+function _registerRelay() {
+  try { game?.bbttcc?.api?.gmExec?.register?.("banks.transferVault", _onRelayedTransfer); }
+  catch (e) { warn("banks.transferVault relay registration failed", e); }
 }
 
 // ---- Refresh + hook --------------------------------------------------------
@@ -531,8 +627,8 @@ function _attach() {
   }
 }
 
-Hooks.once("ready", _attach);
-try { if (game?.ready) _attach(); } catch (_e) {}
+Hooks.once("ready", () => { _attach(); _registerRelay(); });
+try { if (game?.ready) { _attach(); _registerRelay(); } } catch (_e) {}
 
 export {
   transferVault, deposit, withdraw, listVault,

@@ -5718,6 +5718,7 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   _ftSurgeRollSink = [];
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
+    flags: { fourththing: { surgeSpend: effectKey } },   // 10-29: marks a real spend card (bulwark-hookups ignores typed look-alikes)
     ...(_surgeRolls.length ? { rolls: _surgeRolls, sound: CONFIG.sounds?.dice } : {}),
     content: `<div class="fourththing-roll">
       <div class="ft-roll-header">
@@ -31112,7 +31113,7 @@ function _ftRelayEmit(payload) {
   try { game.socket?.emit?.("system.fourththing", { ...payload, nonce: foundry.utils.randomID() }); }
   catch (e) { console.warn("[fourththing] relay emit failed", e); }
 }
-function _ftRelayHandler(msg) {
+function _ftRelayHandler(msg, senderId) {   // senderId: Foundry stamps the real sender as the 2nd socket arg
   try {
     // Handled before the GM guard below: this one is aimed at the PLAYERS
     // (canvas selection is per-client state), not at the GM relay.
@@ -31182,7 +31183,8 @@ function _ftRelayHandler(msg) {
           damageFlavor: msg.damageFlavor ?? "",
           perTargetMultiplier: 1,
           ignoreResists: !!msg.ignoreResists,
-          nonlethal: !!msg.nonlethal
+          nonlethal: !!msg.nonlethal,
+          _fromUserId: senderId || null   // 10-29: bbttcc-structures matches a relayed Bulwark source to the real dealer
         }).then(desc => { if (desc) ui.notifications.info(desc); })
           .catch(e => console.warn("[fourththing] GM-relay damage apply failed", e));
         // 2026-05-29 — relayed multi-type damage parts.

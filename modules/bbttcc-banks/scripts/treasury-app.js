@@ -121,8 +121,10 @@ class TreasuryApp extends ApplicationV2 {
       const rfi = it.flags?.fourththing?.rfi?.item || {};
       const qty = Math.max(1, Math.floor(Number(it.system?.quantity ?? rfi?.charges ?? 1)) || 1);
       const sv = (() => { try { return it.getFlag(MOD_ID, "salvage"); } catch { return null; } })();
-      const svBadge = sv?.markValue
-        ? `<span class="bbttcc-bank-salvage" data-tooltip="Refines to ${_esc(sv.markValue)} ${_esc(sv.bucket || "economy")} Marks when stored${this.domain ? "" : " in a Domain's treasury"}"><i class="fas fa-bolt"></i>${_esc(sv.markValue)}</span>`
+      // 10-29: salvage markValue is per unit (vault-core refines value × quantity).
+      const svTotal = (Math.floor(Number(sv?.markValue) || 0)) * Math.max(1, Math.floor(Number(it.system?.quantity ?? 1)) || 1);
+      const svBadge = svTotal > 0
+        ? `<span class="bbttcc-bank-salvage" data-tooltip="Refines to ${_esc(svTotal)} ${_esc(sv.bucket || "economy")} Marks when stored${this.domain ? "" : " in a Domain's treasury"}"><i class="fas fa-bolt"></i>${_esc(svTotal)}</span>`
         : "";
       return `<li class="bbttcc-bank-row" data-item-id="${_esc(it.id)}">
         <img src="${_esc(it.img || "icons/svg/item-bag.svg")}" alt="" />
@@ -312,12 +314,18 @@ function openTreasury(actorOrId, { steward: stewardHint = null } = {}) {
 
 // ---- Keep open treasuries honest ------------------------------------------------------
 
+// 10-29: collect EVERY predicate while the timer is pending — keeping only the first dropped a
+// Domain's opBank update that landed within 60 ms of an unrelated actor's (stale Marks/Take rows).
 let _pending = null;
+let _preds = [];
 function _refresh(pred = () => true) {
+  _preds.push(pred);
   if (_pending) return;
   _pending = setTimeout(() => {
-    _pending = null;
-    for (const app of _open.values()) { try { if (app?.rendered && pred(app)) app.render(false); } catch (_e) {} }
+    const preds = _preds; _preds = []; _pending = null;
+    for (const app of _open.values()) {
+      try { if (app?.rendered && preds.some(p => { try { return p(app); } catch (_e) { return false; } })) app.render(false); } catch (_e) {}
+    }
   }, 60);
 }
 const _touches = (app, id) => id && (app.domain?.id === id || app.steward?.id === id);

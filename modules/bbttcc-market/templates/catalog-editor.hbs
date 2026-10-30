@@ -99,8 +99,9 @@
               </div>
 
               <div class="field" data-tooltip="{{bbttccTip 'market' 'entryCost'}}" {{#if @first}}data-tour="market.entryCost"{{/if}}>
-                <label>Economy OP Cost</label>
-                <input type="number" step="0.1" min="0" data-k="cost.economy" value="{{econ}}"/>
+                {{!-- 10-29 (#25): the value is MARKS (whole numbers) — the label used to say OP --}}
+                <label>Economy Cost (marks)</label>
+                <input type="number" step="1" min="0" data-k="cost.economy" value="{{econ}}"/>
               </div>
 
               <div class="field" data-tooltip="{{bbttccTip 'market' 'entryBlurb'}}" {{#if @first}}data-tour="market.entryBlurb"{{/if}}>

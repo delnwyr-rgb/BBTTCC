@@ -75,9 +75,21 @@ async function _syncTierFeats(a) {
   try { await game.bbttcc?.api?.characterOptions?.recalcActor?.(a.id); } catch (_e) {}
 }
 
+// 10-29 (#21): one hire per steward+family in flight — hire() awaits doc/slot/feat writes before the contract flag lands,
+// so two overlapping hires both passed the isActive check and the second replaced the first (both paid).
+const _hiring = new Set();
+
 /** Hire a crew / association for `turns` world turns (default 3). GM-side write (market relays players through gmExec). */
-async function hire(actorOrId, family, docId, { turns = 3, source = "market", entryId = null, vendorId = null, quiet = false, portrait = null } = {}) {
+async function hire(actorOrId, family, docId, opts = {}) {
   const a = _actor(actorOrId); if (!a) throw new Error("Steward not found.");
+  const key = `${a.id}:${family}`;
+  if (_hiring.has(key)) throw new Error(`${a.name} is already signing a contract — wait for it to land.`);
+  _hiring.add(key);
+  try { return await _hireNow(a, family, docId, opts); }
+  finally { _hiring.delete(key); }
+}
+
+async function _hireNow(a, family, docId, { turns = 3, source = "market", entryId = null, vendorId = null, quiet = false, portrait = null } = {}) {
   if (a.type !== "character") throw new Error("Only a steward can hold a contract.");
   const fam = FAMILIES[family]; if (!fam) throw new Error(`Unknown contract family "${family}".`);
   const cur = get(a, family);
@@ -147,7 +159,7 @@ async function sweep({ apply = true } = {}) {
       else if (Number(c.until) === t && c.noted !== t) {
         lastTurn++;
         try { await a.setFlag(CO, `contracts.${c.family}.noted`, t); } catch (_e) {}
-        _card(a, `⌛ Last turn: ${_esc(c.displayName)}`, `This is the last turn of ${_esc(a.name)}'s ${_esc(c.familyLabel.toLowerCase())} contract. Renew at the Muster or they walk at Day's End.`);
+        _card(a, `⌛ Last turn: ${_esc(c.displayName)}`, `This is the last turn of ${_esc(a.name)}'s ${_esc(c.familyLabel.toLowerCase())} contract. They walk at Day's End — hire them again at the Muster after that to keep them.`);   // 10-29 (#23): an active contract can't be renewed, so "Renew at the Muster" sent players into a refusal
         try { Hooks.callAll("bbttcc:contract:lastTurn", { actorId: a.id, family: c.family, contract: c }); } catch (_e) {}
       }
     }

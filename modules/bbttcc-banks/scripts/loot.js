@@ -70,12 +70,23 @@ async function _execTake({ tokenUuid, itemId, recipientId }) {
   });
 }
 
-async function _execCrack({ tokenUuid }) {
+// 10-29: the gate roll happens HERE, on the executing (GM) seat, against the requester's
+// validated Steward — a hand-emitted {t:"crack"} used to open any gated container unrolled.
+async function _execCrack({ tokenUuid, actorId }) {
   const tokenDoc = await fromUuid(tokenUuid);
   if (!tokenDoc) return { ok: false, error: "Token missing." };
   const loot = _lootFlag(tokenDoc);
+  const gate = loot.gate;
+  if (!gate || loot.cracked) return { ok: true, opened: true };
+  const actor = game.actors?.get(actorId);
+  if (!actor) return { ok: false, error: "No Steward to make the attempt." };
+  // A CHARACTER check: the system's own skill roll (RFI canon die / dnd5e tinker's tools) — dice split 2026-10-08.
+  const roll = await (game.bbttcc?.dice?.skillCheck ?? game.fourththing?.rolls?.skillCheck)?.(actor, { skill: gate.skill, label: `Crack the ${loot.flavor ?? "container"} — ${gate.skill} vs DC ${gate.dc}` });
+  const total = Number(roll?.total ?? 0);
+  const dc = Number(gate.dc);
+  if (!(total >= dc)) return { ok: true, opened: false, total, dc };
   await tokenDoc.setFlag(MOD_ID, "loot", { ...loot, cracked: true });
-  return { ok: true };
+  return { ok: true, opened: true, total, dc };
 }
 
 function _relay(kind, payload) {
@@ -102,8 +113,10 @@ async function _validateRelayed(kind, payload, fromUserId) {
   const fl = _lootFlag(tokenDoc);
   if (!fl.lootable) return "That isn't a lootable container.";
   if (kind === "crack") {
-    // The skill roll happens on the requesting seat; at minimum the container must be gated.
+    // 10-29: the roll now happens in _execCrack on this seat; the roller must be the sender's own.
     if (!fl.gate) return "That container has no lock.";
+    const roller = game.actors?.get(payload?.actorId);
+    if (!roller || roller.type !== "character" || !roller.testUserPermission(user, "OWNER")) return "You don't own that Steward.";
     return null;
   }
   if (fl.gate && !fl.cracked) return "That container is still secured.";
@@ -114,16 +127,21 @@ async function _validateRelayed(kind, payload, fromUserId) {
   return null;
 }
 
-function _onSocket(msg) {
+// 10-29: Foundry's server stamps the real sender as the 2nd arg — authorize THAT, never
+// msg.fromUserId (a player could name the GM and push loot into any actor).
+function _onSocket(msg, senderId) {
   if (!msg) return;
   if (msg.t === "take" || msg.t === "crack") {
     // Only the designated active GM executes, to avoid double-application.
     if (!game.user.isGM || game.users?.activeGM?.id !== game.user.id) return;
-    const exec = _validateRelayed(msg.t, msg.payload, msg.fromUserId).then(err => err
-      ? { ok: false, error: err }
-      : (msg.t === "take" ? _execTake(msg.payload) : _execCrack(msg.payload)))
+    const realId = senderId || null;
+    const mismatch = !realId || (msg.fromUserId && msg.fromUserId !== realId);
+    const exec = (mismatch ? Promise.resolve("Loot request sender could not be verified.") : _validateRelayed(msg.t, msg.payload, realId))
+      .then(err => err
+        ? { ok: false, error: err }
+        : (msg.t === "take" ? _execTake(msg.payload) : _execCrack(msg.payload)))
       .catch(e => ({ ok: false, error: String(e?.message || e) }));
-    exec.then(result => game.socket.emit(SOCKET, { t: "res", reqId: msg.reqId, result, toUserId: msg.fromUserId }));
+    exec.then(result => game.socket.emit(SOCKET, { t: "res", reqId: msg.reqId, result, toUserId: realId || msg.fromUserId }));
   } else if (msg.t === "res") {
     if (msg.toUserId !== game.user.id) return;
     const resolve = _pending.get(msg.reqId);
@@ -184,8 +202,10 @@ class LootApp extends ApplicationV2 {
     const rows = items.length
       ? items.map(it => {
           const sv = (() => { try { return it.getFlag(MOD_ID, "salvage"); } catch { return null; } })();
-          const svBadge = sv?.markValue
-            ? `<span class="bbttcc-bank-salvage" data-tooltip="Refines to ${_esc(sv.markValue)} ${_esc(sv.bucket || "economy")} Marks at a faction"><i class="fas fa-bolt"></i>${_esc(sv.markValue)}</span>`
+          // 10-29: salvage markValue is per unit (vault-core refines value × quantity).
+          const svTotal = (Math.floor(Number(sv?.markValue) || 0)) * Math.max(1, Math.floor(Number(it.system?.quantity ?? 1)) || 1);
+          const svBadge = svTotal > 0
+            ? `<span class="bbttcc-bank-salvage" data-tooltip="Refines to ${_esc(svTotal)} ${_esc(sv.bucket || "economy")} Marks at a faction"><i class="fas fa-bolt"></i>${_esc(svTotal)}</span>`
             : "";
           const qty = Math.max(1, Math.floor(Number(it.system?.quantity ?? 1)) || 1);
           return `<li class="bbttcc-bank-row" data-item-id="${_esc(it.id)}">
@@ -252,16 +272,11 @@ class LootApp extends ApplicationV2 {
     if (!gate) return;
     const actor = game.actors?.get(this.recipientId) || _defaultRecipient();
     if (!actor) { ui.notifications?.warn?.("No Steward to make the attempt."); return; }
-    // A CHARACTER check: the system's own skill roll (RFI canon die / dnd5e tinker's tools) — dice split 2026-10-08.
-    const roll = await (game.bbttcc?.dice?.skillCheck ?? game.fourththing?.rolls?.skillCheck)?.(actor, { skill: gate.skill, label: `Crack the ${fl.kind ?? "container"} — ${gate.skill} vs DC ${gate.dc}` });
-    const total = Number(roll?.total ?? 0);
-    if (total >= Number(gate.dc)) {
-      const res = await _relay("crack", { tokenUuid: this.token.uuid });
-      if (res?.ok) ui.notifications?.info?.(`Opened! (${total} vs DC ${gate.dc})`);
-      else ui.notifications?.warn?.(res?.error || "Could not open the container.");
-    } else {
-      ui.notifications?.warn?.(`Failed to open — ${total} vs DC ${gate.dc}.`);
-    }
+    // 10-29: the GM rolls the check (in _execCrack) so the result can't be skipped client-side.
+    const res = await _relay("crack", { tokenUuid: this.token.uuid, actorId: actor.id });
+    if (!res?.ok) ui.notifications?.warn?.(res?.error || "Could not open the container.");
+    else if (res.opened) ui.notifications?.info?.(res.total != null ? `Opened! (${res.total} vs DC ${res.dc})` : "Opened!");
+    else ui.notifications?.warn?.(`Failed to open — ${res.total} vs DC ${res.dc}.`);
   }
 
   async _take(itemId) {

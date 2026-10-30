@@ -24,9 +24,9 @@
   const content = `
     <div style="display:flex;flex-direction:column;gap:.5rem;">
       <p style="margin:0;opacity:.85;">Stamp an item on <b>${foundry.utils.escapeHTML(actor.name)}</b> as salvage.
-      When deposited to a faction it refines into Marks (1 OP = 10 marks; faction bucket cap 50–130).</p>
+      When deposited to a faction it refines into marks (faction bucket cap 50–130).</p>
       <label>Item <select name="item">${itemOpts}</select></label>
-      <label>Mark value <input type="number" name="markValue" value="30" min="1" step="1"/></label>
+      <label>Mark value (per unit) <input type="number" name="markValue" value="30" min="1" step="1"/></label>
       <label>Bucket <select name="bucket">${bucketOpts}</select></label>
     </div>`;
 
@@ -44,7 +44,7 @@
           const item = actor.items.get(id);
           if (!item) return ui.notifications.warn("Item not found.");
           await item.setFlag(MOD, "salvage", { markValue, bucket });
-          ui.notifications.info(`"${item.name}" → salvage: ${markValue} ${bucket} marks.`);
+          ui.notifications.info(`"${item.name}" → salvage: ${markValue} ${bucket} marks each.`);
           if (actor.sheet?.rendered) actor.sheet.render(false);
         },
       },

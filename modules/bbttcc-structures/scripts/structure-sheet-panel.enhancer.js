@@ -55,10 +55,10 @@ function _buildEmptyPanelHTML(actor) {
           This actor has no Material BOM yet. Stamp one to enable structural
           damage tracking (Phase B+) and to paper-test derivation math now.
         </p>
-        <button type="button" class="bbttcc-st-btn bbttcc-st-stamp"
+        ${game.user?.isGM ? `<button type="button" class="bbttcc-st-btn bbttcc-st-stamp"
                 data-action="bbttccStStampTest">
           Stamp Test BOM ▸
-        </button>
+        </button>` : ""}
       </div>
     </section>
   `;
@@ -175,12 +175,12 @@ function _buildFullPanelHTML(actor, state) {
                 data-tooltip="Refill chipped materials from a faction stockpile (same-material; cross-family substitution is Phase D+)">Repair</button>
         <button type="button" class="bbttcc-st-btn" data-action="bbttccStReclamation"
                 data-tooltip="Open the Bulwark Ruin to Renewal flow on this Structure as the target">Reclamation</button>
-        <button type="button" class="bbttcc-st-btn bbttcc-st-btn-secondary"
+        ${game.user?.isGM ? `<button type="button" class="bbttcc-st-btn bbttcc-st-btn-secondary"
                 data-action="bbttccStRestamp"
-                data-tooltip="Re-stamp the BOM (resets Plates to max)">Re-stamp</button>
+                data-tooltip="GM-only · Re-stamp the BOM (resets Plates to max)">Re-stamp</button>
         <button type="button" class="bbttcc-st-btn bbttcc-st-btn-danger"
                 data-action="bbttccStClear"
-                data-tooltip="Remove all Structure flags from this actor">Clear</button>
+                data-tooltip="GM-only · Remove all Structure flags from this actor">Clear</button>` : ""}
       </div>
       ${game.user?.isGM ? `
       <div class="bbttcc-st-gm-test" data-tooltip="GM-only · Phase B paper-test affordance">
@@ -359,9 +359,12 @@ function _bindActions(root, actor, app) {
   if (!api) return;
 
   // Stamp test BOM — opens a small picker dialog
+  // 10-29: Stamp Test BOM / Re-stamp / Clear are GM paper-test tools like the GM TEST row — on a
+  // player seat Re-stamp was a free heal (plates → the chipped max) and Stamp Test a free Plates layer.
   root.querySelectorAll(`[data-action="bbttccStStampTest"]`).forEach(btn => {
     btn.addEventListener("click", async (ev) => {
       ev.preventDefault();
+      if (!game.user?.isGM) return;
       await _openStampPicker(actor, () => app?.render?.(false));
     });
   });
@@ -370,6 +373,7 @@ function _bindActions(root, actor, app) {
   root.querySelectorAll(`[data-action="bbttccStRestamp"]`).forEach(btn => {
     btn.addEventListener("click", async (ev) => {
       ev.preventDefault();
+      if (!game.user?.isGM) return;
       const cur = api.readState(actor);
       if (!cur?.materialBOM?.length) {
         ui.notifications?.warn?.("No BOM to re-stamp.");
@@ -388,6 +392,7 @@ function _bindActions(root, actor, app) {
   root.querySelectorAll(`[data-action="bbttccStClear"]`).forEach(btn => {
     btn.addEventListener("click", async (ev) => {
       ev.preventDefault();
+      if (!game.user?.isGM) return;
       const ok = await Dialog.confirm({
         title: "Clear Structure",
         content: `<p>Remove all Structure flags from <b>${foundry.utils.escapeHTML(actor.name)}</b>?</p>`
@@ -440,21 +445,13 @@ function _bindActions(root, actor, app) {
     btn.addEventListener("click", async (ev) => {
       ev.preventDefault();
       if (!game.user?.isGM) return;
-      const cur = api.readState(actor);
-      if (!cur) return;
-      // Re-stamp from the original BOM (using originalQty if present)
-      const rawBom = cur.materialBOM.map(r => ({
-        materialKey: r.materialKey,
-        qty: Number(r.originalQty) > 0 ? r.originalQty : r.qty
-      }));
-      await api.stampBOM(actor, rawBom, {
-        facilityMode: cur.facilityMode,
-        collapseProfile: cur.collapseProfile,
-        resetCurrentPlates: true
-      });
-      // Clear the collapse-fired one-shot so Collapse can re-trigger
-      await actor.unsetFlag("bbttcc-structures", "collapseFired");
-      ui.notifications?.info?.(`Full repair: BOM restored, plates → max, collapse flag cleared.`);
+      // 10-29: go through api.fullRepair (re-stamp from originalQty + clear collapseFired) — read
+      // live, so destruction.vfx's wrapper runs and a razed token gets its look back too.
+      const fullRepair = game.bbttcc?.api?.structures?.fullRepair;
+      if (typeof fullRepair !== "function") return ui.notifications?.error?.("Structures API not loaded.");
+      const r = await fullRepair(actor);
+      if (r?.ok) ui.notifications?.info?.(`Full repair: BOM restored, plates → max, collapse flag cleared.`);
+      else ui.notifications?.warn?.(`Full repair failed: ${r?.reason ?? "unknown"}`);
       app?.render?.(false);
     });
   });
@@ -511,14 +508,17 @@ async function _openHardenDialog(actor, onDone) {
   // Factions are type:"npc" + the isFaction flag (see actor-kind.js) — the old
   // type==="character" check matched nothing, so Harden/Repair always reported
   // "No faction actors found" (atlas #16, fixed 2026-08-28).
+  // 10-29: only Domains this seat can pay from (GM: all) — any faction used to be listed, and the
+  // relayed adjust debited a rival's stockpile.
+  const canPay = api.recipes.canPayFrom ?? (() => !!game.user?.isGM);
   const factions = (game.actors?.contents ?? []).filter(a =>
-    a.getFlag("bbttcc-factions", "isFaction") === true);
-  if (!factions.length) return ui.notifications?.warn?.("No faction actors found.");
+    a.getFlag("bbttcc-factions", "isFaction") === true && canPay(a));
+  if (!factions.length) return ui.notifications?.warn?.("No Domain you can pay from.");
 
   // Default to actor's affiliated faction if any
   const sys = actor.system?.system ?? actor.system;
   const ownerId = sys?.identity?.factionOwnerId;
-  const defaultFaction = ownerId ? game.actors?.get(ownerId) : factions[0];
+  const defaultFaction = factions.find(f => f.id === ownerId) ?? factions[0];
 
   const factionOptions = factions.map(f =>
     `<option value="${f.id}" ${defaultFaction?.id === f.id ? "selected" : ""}>${foundry.utils.escapeHTML(f.name)}</option>`
@@ -630,13 +630,16 @@ async function _openRepairDialog(actor, onDone) {
   // Factions are type:"npc" + the isFaction flag (see actor-kind.js) — the old
   // type==="character" check matched nothing, so Harden/Repair always reported
   // "No faction actors found" (atlas #16, fixed 2026-08-28).
+  // 10-29: only Domains this seat can pay from (GM: all) — any faction used to be listed, and the
+  // relayed adjust debited a rival's stockpile.
+  const canPay = api.recipes.canPayFrom ?? (() => !!game.user?.isGM);
   const factions = (game.actors?.contents ?? []).filter(a =>
-    a.getFlag("bbttcc-factions", "isFaction") === true);
-  if (!factions.length) return ui.notifications?.warn?.("No faction actors found.");
+    a.getFlag("bbttcc-factions", "isFaction") === true && canPay(a));
+  if (!factions.length) return ui.notifications?.warn?.("No Domain you can pay from.");
 
   const sys = actor.system?.system ?? actor.system;
   const ownerId = sys?.identity?.factionOwnerId;
-  const defaultFaction = ownerId ? game.actors?.get(ownerId) : factions[0];
+  const defaultFaction = factions.find(f => f.id === ownerId) ?? factions[0];
 
   const factionOptions = factions.map(f =>
     `<option value="${f.id}" ${defaultFaction?.id === f.id ? "selected" : ""}>${foundry.utils.escapeHTML(f.name)}</option>`

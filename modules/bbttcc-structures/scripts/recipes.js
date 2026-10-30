@@ -78,8 +78,29 @@ export function canAfford(faction, materialOf) {
 }
 
 /**
+ * 10-29: can THIS seat pay from `faction`? GM always; a player only from a Domain they own or the
+ * Domain of a Steward they own (ruling 16 — market.domainOf). The GM-side stockpile relay is the
+ * real authority; this just stops a player seat from starting a spend on someone else's stockpile.
+ */
+export function canPayFrom(faction, user = game.user) {
+  if (!faction || !user) return false;
+  if (user.isGM) return true;
+  try { if (faction.testUserPermission?.(user, "OWNER")) return true; } catch (_e) {}
+  const domainOf = game.bbttcc?.api?.market?.domainOf;
+  if (typeof domainOf !== "function") return false;
+  for (const a of (game.actors?.contents ?? [])) {
+    if (a.type !== "character") continue;
+    try { if (a.testUserPermission?.(user, "OWNER") && domainOf(a)?.id === faction.id) return true; } catch (_e) {}
+  }
+  return false;
+}
+
+/**
  * Withdraw materialOf from faction stockpile. Caller must have already
  * verified canAfford. Returns { ok, withdrawn: [{key, qty}] }.
+ * 10-29: the serialized adjust is the authority — it clamps at 0 and still says ok, so count only
+ * what actually left (before − after). A short key, a refusal or a throw (relay timeout) puts back
+ * EVERYTHING already taken (the partial key too) and fails; nothing is ever half-paid.
  */
 async function withdraw(faction, materialOf) {
   const api = _stockApi();
@@ -88,14 +109,29 @@ async function withdraw(faction, materialOf) {
   for (const cost of (materialOf ?? [])) {
     const qty = Math.max(0, Math.floor(Number(cost.qty) || 0));
     if (qty <= 0) continue;
-    const res = await api.adjust(faction, cost.key, -qty);
-    if (res?.ok === false) {
-      console.warn(TAG, "withdraw step failed", res);
-      return { ok: false, error: res.error ?? "withdraw failed", withdrawn };
+    let res = null, err = null;
+    try { res = await api.adjust(faction, cost.key, -qty); } catch (e) { err = e; }
+    const taken = res?.ok ? Math.max(0, (Number(res.before) || 0) - (Number(res.after) || 0)) : 0;
+    if (taken > 0) withdrawn.push({ key: cost.key, qty: taken });
+    if (err || res?.ok === false || !res || taken < qty) {
+      console.warn(TAG, "withdraw step failed — refunding", err ?? res);
+      await refund(faction, withdrawn);
+      const error = err ? (err.message ?? String(err))
+        : (res?.ok ? `stockpile has ${Number(res.before) || 0} ${cost.key}, need ${qty}` : (res?.error ?? "withdraw failed"));
+      return { ok: false, error, withdrawn: [] };
     }
-    withdrawn.push({ key: cost.key, qty });
   }
   return { ok: true, withdrawn };
+}
+
+/** 10-29: put back exactly what withdraw() took (after a short key or a failed target write). */
+async function refund(faction, withdrawn) {
+  const api = _stockApi();
+  for (const w of (withdrawn ?? [])) {
+    if (!(w?.qty > 0)) continue;
+    try { await api?.adjust?.(faction, w.key, +w.qty); }
+    catch (e) { console.error(TAG, `refund of ${w.qty} ${w.key} to ${faction?.name} failed`, e); }
+  }
 }
 
 // ── Recipe listing + lookup ─────────────────────────────────────────────────
@@ -120,7 +156,7 @@ export function recipeById(id) {
  *   - actorName        override name (else uses recipe.name)
  *   - dropPosition     { x, y, sceneId? } where to place token; if absent,
  *                      no token is created and the actor sits in the directory
- *   - skipCostCheck    GM bypass for paper-testing
+ *   - skipCostCheck    GM bypass for paper-testing (10-29: honored on a GM seat only)
  */
 /** RG14 (2026-10-26): structure integrity by recipe bracket — the rig-builder size bases (bbttcc-auto-link rig-builder.js BRACKETS). */
 const STRUCTURE_INTEGRITY = { light: 20, heavy: 48 };
@@ -131,17 +167,24 @@ export async function build(recipeId, factionActor, opts = {}) {
   if (!recipe) return { ok: false, error: `Unknown recipe: ${recipeId}` };
 
   const cost = recipe.materialOf ?? [];
-  if (!opts.skipCostCheck) {
+  // 10-29: a free build is GM scenery — a player seat passing skipCostCheck (the Rig Builder's
+  // unchecked "Charge" box) used to raise full-Plates fortifications for nothing. Players always pay,
+  // and only from a Domain they can act for.
+  const skipCost = !!opts.skipCostCheck && !!game.user?.isGM;
+  if (!skipCost) {
+    if (!factionActor) return { ok: false, error: "Pick the Domain that pays for this build" };
+    if (!canPayFrom(factionActor)) return { ok: false, error: `You can't spend ${factionActor.name}'s stockpile` };
     const aff = canAfford(factionActor, cost);
-    if (!aff.ok) return { ok: false, error: "Insufficient materials", missing: aff.missing };
+    if (!aff.ok) return { ok: false, error: aff.error ?? "Insufficient materials", missing: aff.missing };
   }
 
   const api = game.bbttcc?.api?.structures;
   if (!api?.stampBOM) return { ok: false, error: "Structures API not loaded" };
 
   // Withdraw materials
-  if (!opts.skipCostCheck) {
-    const w = await withdraw(factionActor, cost);
+  let w = { withdrawn: [] };
+  if (!skipCost) {
+    w = await withdraw(factionActor, cost);
     if (!w.ok) return { ok: false, error: w.error ?? "Withdrawal failed" };
   }
 
@@ -156,7 +199,10 @@ export async function build(recipeId, factionActor, opts = {}) {
   // recipe said; existing structures keep their play state.
   const _bracket = recipe.facilityMode ? "heavy" : "light";
   const _integrityMax = STRUCTURE_INTEGRITY[_bracket] ?? 30;
-  const newActor = !R?.create ? await Actor.create({
+  // 10-29: materials are already gone — a failed create refunds them.
+  let newActor = null;
+  try {
+  newActor = !R?.create ? await Actor.create({
     name: actorName,
     type: "rig",
     img: recipe.tokenImg ?? "icons/svg/castle.svg",
@@ -180,7 +226,12 @@ export async function build(recipeId, factionActor, opts = {}) {
     },
     integrity: { bracket: _bracket, max: _integrityMax, value: _integrityMax, tier: 1 }
   });
-  if (!newActor) return { ok: false, error: "rigs.create returned null" };
+  } catch (e) {
+    console.error(TAG, "build: actor create failed", e);
+    await refund(factionActor, w.withdrawn);
+    return { ok: false, error: `Build failed: ${e?.message ?? e}` };
+  }
+  if (!newActor) { await refund(factionActor, w.withdrawn); return { ok: false, error: "rigs.create returned null" }; }
 
   // Stamp the BOM (Phase A API)
   const stampOpts = {
@@ -234,8 +285,12 @@ export async function harden(targetActor, additions, factionActor) {
                         .filter(a => a.qty > 0);
   if (!cost.length) return { ok: false, error: "All additions have zero qty" };
 
+  // 10-29: the payer must be a Domain this seat can act for, and the target one it can write —
+  // checked BEFORE anything leaves the stockpile.
+  if (!canPayFrom(factionActor)) return { ok: false, error: `You can't spend ${factionActor?.name ?? "that"} stockpile` };
+  if (!targetActor.isOwner) return { ok: false, error: `You don't own ${targetActor.name}` };
   const aff = canAfford(factionActor, cost);
-  if (!aff.ok) return { ok: false, error: "Insufficient materials", missing: aff.missing };
+  if (!aff.ok) return { ok: false, error: aff.error ?? "Insufficient materials", missing: aff.missing };
 
   const api = game.bbttcc?.api?.structures;
   if (!api) return { ok: false, error: "Structures API not loaded" };
@@ -280,6 +335,8 @@ export async function harden(targetActor, additions, factionActor) {
   const newCurrent = Math.min(derived.platesMax, (Number(oldPlates.current) || 0) + addedPlateValue);
 
   // Write (resists/vulns are re-derived maps; a merging update would keep stale keys)
+  // 10-29: a failed write refunds the materials (they were debited first).
+  try {
   await api.clearDerivedMaps?.(targetActor);
   await targetActor.update({
     [`flags.${FLAG_SCOPE}.materialBOM`]:    normalized,
@@ -291,6 +348,11 @@ export async function harden(targetActor, additions, factionActor) {
     [`flags.${FLAG_SCOPE}.loadBearing`]:    derived.loadBearing,
     [`flags.${FLAG_SCOPE}.state`]:          api.stateFromPlates(newCurrent, derived.platesMax, derived.loadBearing)
   });
+  } catch (e) {
+    console.error(TAG, "harden: target write failed — refunding", e);
+    await refund(factionActor, w.withdrawn);
+    return { ok: false, error: `Harden failed: ${e?.message ?? e}` };
+  }
 
   await postHardenCard(targetActor, factionActor, w.withdrawn, addedPlateValue, derived.platesMax);
 
@@ -320,6 +382,10 @@ export async function repair(targetActor, factionActor, opts = {}) {
   if (!api) return { ok: false, error: "Structures API not loaded" };
   const stockApi = _stockApi();
   if (!stockApi) return { ok: false, error: "Stockpile API not available" };
+
+  // 10-29: same payer/target gate as harden, before anything is withdrawn.
+  if (!canPayFrom(factionActor)) return { ok: false, error: `You can't spend ${factionActor?.name ?? "that"} stockpile` };
+  if (!targetActor.isOwner) return { ok: false, error: `You don't own ${targetActor.name}` };
 
   const bom = targetActor.getFlag(FLAG_SCOPE, "materialBOM") ?? [];
   if (!bom.length) return { ok: false, error: "No BOM on target" };
@@ -371,6 +437,7 @@ export async function repair(targetActor, factionActor, opts = {}) {
   const oldPlates = targetActor.getFlag(FLAG_SCOPE, "plates") ?? { current: 0, max: derived.platesMax };
   const newCurrent = Math.min(derived.platesMax, (Number(oldPlates.current) || 0) + addedPlateValue);
 
+  try {
   await api.clearDerivedMaps?.(targetActor);
   await targetActor.update({
     [`flags.${FLAG_SCOPE}.materialBOM`]:    newBom,
@@ -382,6 +449,11 @@ export async function repair(targetActor, factionActor, opts = {}) {
     [`flags.${FLAG_SCOPE}.loadBearing`]:    derived.loadBearing,
     [`flags.${FLAG_SCOPE}.state`]:          api.stateFromPlates(newCurrent, derived.platesMax, derived.loadBearing)
   });
+  } catch (e) {
+    console.error(TAG, "repair: target write failed — refunding", e);
+    await refund(factionActor, w.withdrawn);
+    return { ok: false, error: `Repair failed: ${e?.message ?? e}` };
+  }
 
   await postRepairCard(targetActor, factionActor, refillPlan, addedPlateValue, newCurrent, derived.platesMax);
 
@@ -447,6 +519,7 @@ Hooks.once("ready", async () => {
       list: listRecipes,
       byId: recipeById,
       canAfford,
+      canPayFrom,   // 10-29: may this seat spend that Domain's stockpile (GM / owner / owns its Steward)
       build,
       harden,
       repair,

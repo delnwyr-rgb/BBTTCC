@@ -25,6 +25,8 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
+import { getActiveDamageSource } from "./bulwark-hookups.js";
+
 const MOD_ID = "bbttcc-structures";
 const TAG = `[${MOD_ID}/damage]`;
 const FLAG_SCOPE = MOD_ID;
@@ -432,6 +434,9 @@ const TRANSITION_FLAVOR = {
 
 export async function transitionState(actor, fromState, toState, ctx = {}) {
   if (!actor || fromState === toState) return;
+  // 10-29: captured before any await (only live inside the damage-apply window) —
+  // rides the GM relay below so the collapse can still exclude the breacher.
+  const breacher = game.user?.isGM ? null : getActiveDamageSource(actor);
 
   // Append history
   const hist = actor.getFlag(FLAG_SCOPE, "history") ?? [];
@@ -452,9 +457,52 @@ export async function transitionState(actor, fromState, toState, ctx = {}) {
   // Emit hook
   Hooks.callAll("bbttcc:structure:stateChanged", { actor, fromState, toState, ctx });
 
+  // 10-29: Hooks.callAll is local. An OWNER seat applies damage to its own structure
+  // itself (no ft-applyDamage relay), so the GM-only subscribers — collapse, siege layer
+  // advance — never saw the transition. Hand it to the GM, who re-fires it (ctx.relayed).
+  if (!game.user?.isGM) _relayTransition(actor, fromState, toState, breacher);
+
   // Collapse trigger fires from the wedge / api caller, not here, so the
   // Phase B.5 module can detect token-on-top after state is committed.
 }
+
+// ── Player-seat transition → GM (10-29) ─────────────────────────────────────
+
+const STATE_RELAY = "structures.stateChanged.relay";
+const _STATES = new Set(["intact", "damaged", "breached", "razed"]);
+
+function _relayTransition(actor, fromState, toState, breacher) {
+  const gx = game.bbttcc?.api?.gmExec;
+  if (!gx?.call || !game.users?.some?.(u => u.isGM && u.active)) return;
+  gx.call(STATE_RELAY, { actorUuid: actor.uuid, fromState, toState, breacherUuid: breacher?.uuid ?? null }, { timeoutMs: 15000 })
+    .catch(e => console.warn(TAG, "state-change relay failed (collapse / siege layer will not fire)", e));
+}
+
+function _registerStateRelay() {
+  const gx = game.bbttcc?.api?.gmExec;
+  if (!gx?.register) return;
+  gx.register(STATE_RELAY, async (p, meta) => {
+    if (meta?.local) return { ok: true };   // a GM seat already fired the hook itself
+    let actor = null;
+    try { const d = await fromUuid(String(p?.actorUuid || "")); actor = d?.actor ?? d ?? null; } catch (_e) {}
+    if (actor?.documentName !== "Actor" || !actor.getFlag?.(FLAG_SCOPE, "hasStructure")) throw new Error("structure not found");
+    const caller = game.users?.get(String(meta?.fromUserId || ""));
+    if (!(caller && actor.testUserPermission?.(caller, "OWNER"))) throw new Error(`${caller?.name || "caller"} does not own ${actor.name}`);
+    const fromState = String(p?.fromState || ""), toState = String(p?.toState || "");
+    if (!_STATES.has(fromState) || !_STATES.has(toState) || fromState === toState) throw new Error("bad transition");
+    // Never the seat's word for it: the persisted state must already be the new one.
+    if (String(actor.getFlag(FLAG_SCOPE, "state") ?? "intact") !== toState) throw new Error(`${actor.name} is not ${toState}`);
+    let breacher = null;
+    try {
+      const b = p?.breacherUuid ? await fromUuid(String(p.breacherUuid)) : null;
+      const ba = b?.actor ?? b ?? null;
+      if (ba?.documentName === "Actor" && ba.testUserPermission?.(caller, "OWNER")) breacher = ba;
+    } catch (_e) {}
+    Hooks.callAll("bbttcc:structure:stateChanged", { actor, fromState, toState, ctx: { relayed: true, fromUserId: caller.id, breacher } });
+    return { ok: true };
+  });
+}
+Hooks.once("ready", _registerStateRelay);
 
 // ── Chat cards ───────────────────────────────────────────────────────────────
 

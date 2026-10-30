@@ -75,8 +75,10 @@ class PersonalBankApp extends ApplicationV2 {
       const rfi = it.flags?.fourththing?.rfi?.item || {};
       const qty = Math.max(1, Math.floor(Number(it.system?.quantity ?? rfi?.charges ?? 1)) || 1);
       const sv = (() => { try { return it.getFlag("bbttcc-banks", "salvage"); } catch { return null; } })();
-      const svBadge = sv?.markValue
-        ? `<span class="bbttcc-bank-salvage" data-tooltip="Refines to ${_esc(sv.markValue)} ${_esc(sv.bucket || "economy")} Marks when banked at a faction"><i class="fas fa-bolt"></i>${_esc(sv.markValue)}</span>`
+      // 10-29: salvage markValue is per unit (vault-core refines value × quantity).
+      const svTotal = (Math.floor(Number(sv?.markValue) || 0)) * Math.max(1, Math.floor(Number(it.system?.quantity ?? 1)) || 1);
+      const svBadge = svTotal > 0
+        ? `<span class="bbttcc-bank-salvage" data-tooltip="Refines to ${_esc(svTotal)} ${_esc(sv.bucket || "economy")} Marks when banked at a faction"><i class="fas fa-bolt"></i>${_esc(svTotal)}</span>`
         : "";
       return `<li class="bbttcc-bank-row" data-item-id="${_esc(it.id)}">
         <img src="${_esc(it.img || "icons/svg/item-bag.svg")}" alt="" />

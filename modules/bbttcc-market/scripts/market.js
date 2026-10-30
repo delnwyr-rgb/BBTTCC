@@ -203,7 +203,7 @@ async function resolveItemFlagPrice(entry) {
  */
 async function spendMarksByPools(factionId, deltasMap, meta = {}) {
   const total = Object.values(deltasMap).reduce((a, v) => a + (Number(v) || 0), 0);
-  if (total === 0) return { ok: true, committed: true, cost: 0 };
+  if (total === 0) return { ok: true, committed: true, cost: 0, applied: {} };
   const opApi = game.bbttcc?.api?.op;
   if (!opApi?.commit) throw new Error("OP API not available (game.bbttcc.api.op.commit).");
   const res = await opApi.commit(factionId, deltasMap, {
@@ -212,10 +212,18 @@ async function spendMarksByPools(factionId, deltasMap, meta = {}) {
     note:   meta?.note  || "",
     // Refunds restore a pre-purchase balance; if that balance was already
     // over cap, the engine's overcap-increase refusal must not eat the refund.
-    ...(meta?.allowOvercap ? { allowOvercap: true } : {})
+    ...(meta?.allowOvercap ? { allowOvercap: true } : {}),
+    // 10-29: refunds / sale reversals are transfers — no steward spend discount on them.
+    ...(meta?.noDiscount ? { noDiscount: true } : {})
   });
   if (!res?.committed) return { ok: false, committed: false, underflow: res?.underflow ?? null };
-  return { ok: true, committed: true, cost: Math.abs(total) };
+  // 10-29: report what the engine ACTUALLY applied (CO21 steward discounts cut the debit) —
+  // refunds, receipts and the item's paid stamp read `applied`/`cost`, never the request.
+  const applied = {};
+  const fc = (res.finalCost && typeof res.finalCost === "object") ? res.finalCost : deltasMap;
+  for (const [k, v] of Object.entries(fc)) { const n = Number(v) || 0; if (n) applied[k] = n; }
+  const appliedTotal = Object.values(applied).reduce((a, v) => a + v, 0);
+  return { ok: true, committed: true, cost: Math.abs(appliedTotal), applied, discounts: res.discounts || null };
 }
 
 async function resolveEntryRarity(entry) {
@@ -278,6 +286,25 @@ async function resolveEntryRarity(entry) {
    Economy bank FIRST; a refused credit (bank at cap) leaves the inventory alone.
 */
 const SELL_RELAY = "market.sell";
+// 10-29: the delivered copy remembers what was ACTUALLY paid per unit (after steward discounts / friction);
+// sell-back pays its stance share of that, not of list — buy-discounted-then-sell no longer mints marks.
+const PAID_FLAG = "paid";
+function _fmtMarksNum(n) { const v = Number(n) || 0; return String(Math.round(v * 100) / 100); }
+
+// 10-29: per-key serialization on the EXECUTING seat (all relays run on the primary GM). gmExec runs each
+// socket message as its own async handler, so two sells of one item / two buys for one Domain interleaved at
+// every await (double payouts, a second facility merged over the first). Each key runs one job at a time.
+const _sellQueue = new Map();       // itemUuid → tail promise
+const _purchaseQueue = new Map();   // factionId → tail promise
+function _runQueued(map, key, fn) {
+  const k = String(key || "");
+  const prev = map.get(k) || Promise.resolve();
+  const run = prev.catch(() => {}).then(fn);
+  const tail = run.catch(() => {});
+  map.set(k, tail);
+  tail.then(() => { if (map.get(k) === tail) map.delete(k); });
+  return run;
+}
 const SELL_RATE_DEFAULT = { allied: 60, friendly: 50, neutral: 40, unfriendly: 25, hostile: 10, at_war: 0 };
 const SELL_GEAR_TYPES = new Set(["weapon", "armor", "gear"]);
 
@@ -351,7 +378,7 @@ function isSellableGearItem(item) {
  * → { ok, reason, listMarks, rate, payout, qty, rarity, tier, bound, frame, stance }
  */
 async function sellQuote(item, { faction = null, vendor = null } = {}) {
-  const out = { ok: false, reason: "", listMarks: 0, rate: 0, payout: 0, qty: 1, rarity: "common", tier: "", bound: "free", frame: "tool", stance: null };
+  const out = { ok: false, reason: "", listMarks: 0, paidMarks: null, basis: "list", basisMarks: 0, rate: 0, payout: 0, qty: 1, rarity: "common", tier: "", bound: "free", frame: "tool", stance: null };
   if (!item) { out.reason = "No item"; return out; }
   const rfi = foundry.utils.getProperty(item, "flags.fourththing.rfi.item") || {};
   out.qty = Math.max(1, Number(item.system?.quantity) || 1);
@@ -370,8 +397,16 @@ async function sellQuote(item, { faction = null, vendor = null } = {}) {
       if (pr?.computeListPrice && out.tier) marks = Number(pr.computeListPrice({ tier: out.tier, frame: out.frame, bound: out.bound }));
     } catch {}
   }
-  if (!Number.isFinite(marks) || marks < 0) { out.reason = "Unpriced — ask the GM"; return out; }
-  out.listMarks = Math.round(marks);
+  // 10-29 (owner ruling, #18): a market-bought copy carries flags.bbttcc-market.paid = marks actually debited
+  // per unit; the vendor's share is of THAT price when present, else of list (rates unchanged).
+  const paidRaw = foundry.utils.getProperty(item, `flags.${MODULE_ID}.${PAID_FLAG}`);
+  const paid = (paidRaw === null || paidRaw === undefined || paidRaw === "") ? NaN : Number(paidRaw);
+  const hasPaid = Number.isFinite(paid) && paid >= 0;
+  if ((!Number.isFinite(marks) || marks < 0) && !hasPaid) { out.reason = "Unpriced — ask the GM"; return out; }
+  out.listMarks = (Number.isFinite(marks) && marks >= 0) ? Math.round(marks) : 0;
+  out.paidMarks = hasPaid ? paid : null;
+  out.basis = hasPaid ? "paid" : "list";
+  out.basisMarks = hasPaid ? paid : out.listMarks;
 
   // Standard Issue FOR THE SELLER: free to them, so worth nothing to anyone.
   if (faction) {
@@ -383,7 +418,7 @@ async function sellQuote(item, { faction = null, vendor = null } = {}) {
   out.stance = stance;
   out.rate = stance.rate;
   if (!(stance.rate > 0)) { out.reason = `${vendor?.name || "The vendor"} won't deal with ${faction?.name || "you"}`; return out; }
-  out.payout = Math.floor(out.listMarks * stance.rate / 100);
+  out.payout = Math.floor(out.basisMarks * stance.rate / 100);
   if (out.payout <= 0) { out.reason = "Worth less than a mark"; return out; }
   out.ok = true;
   return out;
@@ -400,6 +435,12 @@ async function sell({ itemUuid, factionId, vendorId, qty = 1, note = "", _relaye
       return gx.call(SELL_RELAY, { itemUuid, factionId, vendorId, qty, note }, { timeoutMs: 30000 });
     }
   }
+  // 10-29 (#3/#6): one sale per item at a time — the second call re-reads the item after the first settles
+  // (so it sees the lower quantity, or "Item not found"), instead of quoting the same stack and getting paid twice.
+  return _runQueued(_sellQueue, String(itemUuid || ""), () => _sellLocal({ itemUuid, factionId, vendorId, qty, note }));
+}
+
+async function _sellLocal({ itemUuid, factionId, vendorId, qty = 1, note = "" } = {}) {
   if (!_sellEnabled()) throw new Error("Selling is switched off in the market settings.");
   const faction = game.actors.get(String(factionId || ""));
   if (!faction || !isFactionActor(faction)) throw new Error("Seller faction not found.");
@@ -415,21 +456,32 @@ async function sell({ itemUuid, factionId, vendorId, qty = 1, note = "", _relaye
   const payout = quote.payout * n;
 
   // 1) Credit first — a refused credit (Economy bank at cap) leaves the inventory untouched.
-  const credit = await spendMarksByPools(faction.id, { economy: payout }, { label: `Market Sale: ${item.name}`, note: String(note || "") });
+  const credit = await spendMarksByPools(faction.id, { economy: payout }, { label: `Market Sale: ${item.name}`, note: String(note || ""), noDiscount: true });
   if (!credit.ok) throw new Error(`${faction.name}'s Economy bank refused the credit (at its cap?). Spend some marks first.`);
 
   // 2) Hand over the goods — peel units off a stack, delete the last one.
+  //    10-29 (#6): if the goods can't leave the inventory, take back exactly what was credited.
   const owner = item.parent;
   const itemName = item.name, itemImg = item.img, itemUuidStr = String(itemUuid);
-  if (quote.qty > n) await item.update({ "system.quantity": quote.qty - n });
-  else await item.delete();
+  try {
+    if (quote.qty > n) await item.update({ "system.quantity": quote.qty - n });
+    else await item.delete();
+  } catch (handErr) {
+    const back = {};
+    for (const [k, v] of Object.entries(credit.applied || {})) back[k] = -(Number(v) || 0);
+    let reversed = false;
+    try { reversed = !!(await spendMarksByPools(faction.id, back, { label: `Sale reversed — ${itemName}`, note: `The item could not be handed over (${handErr?.message || handErr}).`, noDiscount: true }))?.ok; }
+    catch (_eR) {}
+    if (!reversed) console.error(`[${MODULE_ID}] sale hand-over failed AND the credit reversal failed — take ${payout} marks back from ${faction.name}'s Economy bank manually`, { itemUuid: itemUuidStr, handErr });
+    throw new Error(`${itemName} could not be handed over — ${reversed ? "the sale was reversed" : "and the credit could not be reversed (GM: see console)"}.`);
+  }
 
   // 3) Receipt (faction war log) + 4) GM whisper.
   const receipt = {
     ts: Date.now(), type: "market_sale",
     summary: `Sold: ${itemName}${n > 1 ? ` ×${n}` : ""} to ${vendor.name} (+${payout} marks at ${quote.rate}%)`,
     vendorId: vendor.id, vendorFactionId: quote.stance?.vendorFactionId || "",
-    itemUuid: itemUuidStr, itemName, qty: n, listMarks: quote.listMarks, rate: quote.rate,
+    itemUuid: itemUuidStr, itemName, qty: n, listMarks: quote.listMarks, paidMarks: quote.paidMarks, basis: quote.basis, rate: quote.rate,
     stance: quote.stance?.tier || "neutral", payout, rarity: quote.rarity, sellerActorId: owner.id,
     note: String(note || "").trim()
   };
@@ -442,7 +494,7 @@ async function sell({ itemUuid, factionId, vendorId, qty = 1, note = "", _relaye
         speaker: { alias: "Bad Eden Market" },
         content: `<p><b>Market Sale</b></p>
           <p><b>${esc(owner.name)}</b> (${esc(faction.name)}) sold <b>${esc(itemName)}</b>${n > 1 ? ` ×${n}` : ""} to <b>${esc(vendor.name)}</b> for <code>+${payout} marks</code>.</p>
-          <p class="bbttcc-muted">List ${quote.listMarks} × ${quote.rate}% — ${esc(quote.stance?.label || "neutral")}. Rarity: <code>${esc(quote.rarity)}</code></p>
+          <p class="bbttcc-muted">${quote.basis === "paid" ? `Paid ${esc(_fmtMarksNum(quote.basisMarks))}` : `List ${quote.listMarks}`} × ${quote.rate}% — ${esc(quote.stance?.label || "neutral")}. Rarity: <code>${esc(quote.rarity)}</code></p>
           ${receipt.note ? `<p class="bbttcc-muted">Note: ${esc(receipt.note)}</p>` : ""}`
       });
     }
@@ -975,7 +1027,7 @@ async function appendFactionReceipt(factionActor, receipt) {
   }
 }
 
-async function deliverGearToCharacter(characterId, itemUuid, qty = 1) {
+async function deliverGearToCharacter(characterId, itemUuid, qty = 1, { paidTotal = null } = {}) {
   if (!characterId) throw new Error("No character selected for gear delivery.");
   if (!itemUuid) throw new Error("No gear UUID set on this catalog entry.");
 
@@ -1020,13 +1072,38 @@ async function deliverGearToCharacter(characterId, itemUuid, qty = 1) {
     data.flags.fourththing.rfi.item.origin = "vendor";
   }
 
+  // 10-29 (owner ruling #18): stamp the marks ACTUALLY paid, per delivered unit, so sell-back pays its share
+  // of that (a discounted buy no longer resells at a share of list). A source bundle (×N) splits the price.
+  const addUnits = Math.max(1, Number(foundry.utils.getProperty(data, "system.quantity")) || 1);
+  const paidPerUnit = (paidTotal === null || paidTotal === undefined || !Number.isFinite(Number(paidTotal)))
+    ? null : Math.max(0, Number(paidTotal)) / addUnits;
+  data.flags[MODULE_ID] = data.flags[MODULE_ID] ?? {};
+  if (paidPerUnit !== null) data.flags[MODULE_ID][PAID_FLAG] = paidPerUnit;
+  else delete data.flags[MODULE_ID][PAID_FLAG];
+
   // Deliver through the system's stacking surface when available — identical
   // gear (loot/consumables) merges onto an existing ×N inventory line instead
   // of piling up duplicate rows (2026-08-27). Weapons, armor, and crafted
   // manifestations still land as individual rows (the stacker scopes itself).
   const stackApi = game.fourththing?.stack;
-  if (typeof stackApi?.orCreate === "function") await stackApi.orCreate(actor, data);
-  else await actor.createEmbeddedDocuments("Item", [data]);
+  // 10-29 (#18): a merge keeps the EXISTING line's flags — re-value the stack at the quantity-weighted
+  // paid price (an unstamped line counts at its list price), so a cheap buy can't ride a list-priced stack.
+  const before = new Map((actor.items?.contents ?? []).map(it => [it.id, Math.max(1, Number(it.system?.quantity) || 1)]));
+  let out;
+  if (typeof stackApi?.orCreate === "function") out = await stackApi.orCreate(actor, data);
+  else out = await actor.createEmbeddedDocuments("Item", [data]);
+  try {
+    const doc = Array.isArray(out) ? out[0] : null;
+    if (paidPerUnit !== null && doc && before.has(doc.id)) {
+      const oldQty = before.get(doc.id);
+      const oldPaidRaw = doc.getFlag?.(MODULE_ID, PAID_FLAG);
+      const oldList = Number(foundry.utils.getProperty(doc, "flags.fourththing.rfi.item.price.marks"));
+      const oldPaid = (oldPaidRaw !== null && oldPaidRaw !== undefined && Number.isFinite(Number(oldPaidRaw))) ? Number(oldPaidRaw)
+        : (Number.isFinite(oldList) && oldList >= 0 ? oldList : paidPerUnit);
+      const blended = ((oldQty * oldPaid) + (addUnits * paidPerUnit)) / (oldQty + addUnits);
+      await doc.setFlag(MODULE_ID, PAID_FLAG, Math.floor(blended * 100) / 100);
+    }
+  } catch (eP) { warn("paid-price stamp on stacked gear failed", eP); }
   return true;
 }
 
@@ -1091,7 +1168,7 @@ async function _getFactionRigsArray(factionActor) {
 }
 
 // Target rig for an upgrade: rigId / name when the entry names one (MUST match — a
-// missing named rig is an error, never "the first rig"), else the first rig.
+// missing named rig is an error, never "the first rig"), {latest:true} the newest, else the first rig.
 function _findRigIndex(rigs, target) {
   target = target || {};
   if (!Array.isArray(rigs) || !rigs.length) return -1;
@@ -1101,6 +1178,8 @@ function _findRigIndex(rigs, target) {
     if (idx < 0 && target.name) idx = rigs.findIndex(r => String(r?.name||"") === String(target.name));
     return idx;
   }
+  // 10-29 (#22): {latest:true} = the newest rig (addRig appends) — it used to fall through to the oldest.
+  if (target.latest) return rigs.length - 1;
   return 0;
 }
 
@@ -1136,6 +1215,10 @@ async function deliverFacilityToHex(hexUuid, facilityPatch) {
   const tf = foundry.utils.duplicate(hex.flags?.[MOD_TERR] ?? {});
   const facilitiesRoot = tf.facilities ?? {};
   const currentPrimary = facilitiesRoot.primary ?? {};
+  // 10-29 (#21): re-check one-facility-per-hex at delivery — a throw here runs the purchase's exact refund.
+  const curType = String(currentPrimary?.facilityType || "").toLowerCase();
+  const newType = String(facilityPatch?.facilityType || "").toLowerCase();
+  if (curType && newType && curType !== newType) throw new Error(`${_hexName(hex)} already has a ${curType}; one facility per hex.`);
   const nextPrimary = foundry.utils.mergeObject(foundry.utils.duplicate(currentPrimary), foundry.utils.duplicate(facilityPatch || {}), { inplace:false, overwrite:true });
 
   const nextFacilities = foundry.utils.duplicate(facilitiesRoot);
@@ -1200,10 +1283,12 @@ async function deliverHexAsset(hexUuid, asset) {
  * Returns { ok, deltas: {pool: -marks}, lines: [{pool, marks, cross}], total, short } (short = native-equivalent marks
  * still uncovered when !ok).
  */
-function _spreadPayPlan(faction, nativePool, nativeMarks) {
+// 10-29 (#5): `reserve` = { pool: marks } already spoken for (freight) — the plan never drains it, so freight added
+// on top afterwards can't overdraw a pool the spread emptied.
+function _spreadPayPlan(faction, nativePool, nativeMarks, reserve = null) {
   const friction = game.fourththing?.pricing?.CROSS_POOL_FRICTION ?? 1.5;
   const bank = (faction?.getFlag?.("bbttcc-factions", "opBank")) || {};
-  const have = Object.fromEntries(OP_POOLS.map(k => [k, Math.max(0, Math.floor(Number(bank[k]) || 0))]));
+  const have = Object.fromEntries(OP_POOLS.map(k => [k, Math.max(0, Math.floor(Number(bank[k]) || 0) - Math.max(0, Math.ceil(Number(reserve?.[k]) || 0)))]));
   const native = _normPool(nativePool);
   const lines = [];
   let need = Math.max(0, Math.round(Number(nativeMarks) || 0));   // native-equivalent marks still owed
@@ -1227,32 +1312,43 @@ async function openBuyConfirmDialog({ entry, factionId, faction, hexUuid = "" })
   const flagPrice = await resolveItemFlagPrice(entry);
   // Freight line for hex-delivered kinds (2026-10-12).
   let deliveryLine = "";
+  let freightReserve = null;   // 10-29 (#5): the spread plans below leave the freight standing in its pool, as purchase() does
   if (HEX_KINDS.has(String(entry?.kind || "").toLowerCase()) && hexUuid) {
     try {
       const dest = await fromUuid(hexUuid);
       const f = _deliveryFeeFor(dest, { factionId });
+      if (dest && f.fee > 0) freightReserve = { [_normPool(f.pool)]: f.fee };
       if (dest) deliveryLine = `<p${_tipAttr("deliveryFee")}>🚚 ${esc(DELIVERY_HAULER)} delivers to <b>${esc(_hexName(dest))}</b> — danger ${f.score}${f.breakdown ? ` <span style="opacity:.75">(${esc(f.breakdown)})</span>` : ""}: <b>${f.fee ? `${f.fee} marks (${esc(poolShortLabel(f.pool))})` : "free"}</b></p>`;
     } catch (_e) {}
   }
   if (!flagPrice) {
     // Catalog-priced (economy-native) entries — facilities, contracts. Spread (2026-10-28): when Economy alone can't
     // cover the list price, the confirmation shows the spread plan and confirming pays it that way.
-    const listMarks = Number(entry?.cost?.economy ?? 0) || 0;
-    const econHave = Number(faction?.getFlag?.("bbttcc-factions", "opBank")?.economy) || 0;
+    // 10-29 (#20): price with purchase()'s exact math (horizon ×2/×4, Standard Issue free) — the dialog used to plan
+    // and label the unscaled list price, then purchase() charged the scaled one.
+    const lRaw = Number(entry?.cost?.economy ?? 0) || 0;
+    const lRarity = await resolveEntryRarity(entry);
+    const lDistance = rarityDistance(lRarity, factionEconomicHorizon(faction));
+    const listMarks = Math.round(horizonEconCost(lRaw, lDistance, String(entry.kind || "").toLowerCase(), lRarity));
+    const lScaleNote = (listMarks !== Math.round(lRaw))
+      ? (listMarks === 0 ? ` <em>(Standard Issue — free at your Horizon; list ${Math.round(lRaw)} marks)</em>` : ` <em>(horizon-scaled from ${Math.round(lRaw)} marks)</em>`)
+      : "";
+    const econHaveRaw = Number(faction?.getFlag?.("bbttcc-factions", "opBank")?.economy) || 0;
+    const econHave = Math.max(0, econHaveRaw - (Number(freightReserve?.economy) || 0));   // 10-29 (#5): freight comes out too
     const needSpread = listMarks > 0 && econHave < listMarks;
     if (!deliveryLine && !needSpread) return { ok: true, payFromPool: null };   // legacy path
     const DialogV2 = foundry.applications.api?.DialogV2;
     if (!DialogV2) return { ok: true, payFromPool: null };
     let spreadLine = "";
     if (needSpread) {
-      const plan = _spreadPayPlan(faction, "economy", listMarks);
+      const plan = _spreadPayPlan(faction, "economy", listMarks, freightReserve);
       spreadLine = plan.ok
-        ? `<p${_tipAttr("payFromPool")}>Your Economy pool holds ${econHave}. Paid spread: ${plan.lines.map(l => `${esc(POOL_SHORT_LABEL[l.pool] ?? l.pool)} ${l.marks}${l.cross ? " (×1.5)" : ""}`).join(" + ")} = <b>${plan.total} marks</b>.</p>`
-        : `<p style="color:var(--cb-warn,#e0a34e)">Even spread across every pool you're short about ${Math.ceil(plan.short)} marks.</p>`;
+        ? `<p${_tipAttr("payFromPool")}>Your Economy pool holds ${econHaveRaw}${freightReserve?.economy ? ` (${freightReserve.economy} of it goes to freight)` : ""}. Paid spread: ${plan.lines.map(l => `${esc(POOL_SHORT_LABEL[l.pool] ?? l.pool)} ${l.marks}${l.cross ? " (×1.5)" : ""}`).join(" + ")} = <b>${plan.total} marks</b>${freightReserve ? ", plus freight" : ""}.</p>`
+        : `<p style="color:var(--cb-warn,#e0a34e)">Even spread across every pool you're short about ${Math.ceil(plan.short)} marks${freightReserve ? " (after freight)" : ""}.</p>`;
     }
     const confirmed = await DialogV2.confirm({
       window: { title: `Buy — ${entry.name}` },
-      content: `<p><b>${esc(entry.name)}</b> — ${esc(costLabel(entry?.cost))}</p>${spreadLine}${deliveryLine}`,
+      content: `<p><b>${esc(entry.name)}</b> — Econ ${listMarks} marks${lScaleNote}</p>${spreadLine}${deliveryLine}`,
       defaultYes: true, rejectClose: false
     }).catch(() => false);
     return { ok: !!confirmed, payFromPool: (confirmed && needSpread) ? "spread" : null };
@@ -1319,8 +1415,8 @@ async function openBuyConfirmDialog({ entry, factionId, faction, hexUuid = "" })
   }).join("");
   // Spread (2026-10-28): native first, the rest from the fullest pools at ×1.5 — offered whenever the native pool alone
   // can't cover it, and pre-selected then.
-  const spread = _spreadPayPlan(faction, nativePool, nativeMarks);
-  const nativeShort = balances[nativePool] < nativeMarks;
+  const spread = _spreadPayPlan(faction, nativePool, nativeMarks, freightReserve);   // 10-29 (#5)
+  const nativeShort = (balances[nativePool] - (Number(freightReserve?.[_normPool(nativePool)]) || 0)) < nativeMarks;
   const spreadLabel = spread.ok
     ? `Spread across pools — ${spread.lines.map(l => `${POOL_SHORT_LABEL[l.pool] ?? l.pool} ${l.marks}${l.cross ? "×" : ""}`).join(" + ")} = ${spread.total} marks`
     : `Spread across pools — short by about ${Math.ceil(spread.short)} marks ⚠`;
@@ -1398,6 +1494,12 @@ async function _purchaseCore({ entryId, factionId, characterId, hexUuid, note, p
     }
     // gmExec absent (core disabled): fall through to the direct attempt.
   }
+  // 10-29 (#21): one purchase per Domain at a time on the executing seat — the one-facility-per-hex and
+  // one-contract-per-family checks read state, then await the spend; two buys in flight both passed and both paid.
+  return _runQueued(_purchaseQueue, String(factionId || ""), () => _purchaseLocal({ entryId, factionId, characterId, hexUuid, note, payFromPool, _relayed }));
+}
+
+async function _purchaseLocal({ entryId, factionId, characterId, hexUuid, note, payFromPool, _relayed = false } = {}) {
   const faction = game.actors.get(factionId);
   if (!faction || !isFactionActor(faction)) throw new Error("Buyer faction not found.");
 
@@ -1448,12 +1550,16 @@ async function _purchaseCore({ entryId, factionId, characterId, hexUuid, note, p
     if (!String(hexUuid || "").trim()) _abortPurchase(`Set a Delivery Hex UUID before buying "${entry.name}" (${kindLabel(kind)}).`);
     const destHex = await fromUuid(hexUuid).catch(() => null);
     if (!destHex) _abortPurchase("Delivery Hex UUID could not be resolved.");
+    // 10-29 (#4/#7): EVERY hex-delivered kind lands on YOUR ground — hex_asset / facility_upgrade used to write any hex.
+    const tfd = destHex.flags?.[MOD_TERR] ?? {};
+    const owner = String(tfd.factionId || tfd.ownerId || "").replace(/^Actor\./, "");
+    if (owner !== String(factionId || "")) _abortPurchase(`"${entry.name}" can only be delivered to a hex your Domain holds.`);
+    // An upgrade improves the facility that's there; it never conjures one onto bare ground.
+    const _prim = tfd.facilities?.primary;
+    if (kind === "facility_upgrade" && !(_prim && typeof _prim === "object" && Object.keys(_prim).length)) _abortPurchase(`${_hexName(destHex)} has no facility for "${entry.name}" to upgrade.`);
     // Facilities (2026-10-28): built on YOUR ground, Settled where the entry asks it (minIntegration), one per hex —
     // delivery merges into facilities.primary, so a different facility would have silently overwritten the old one.
     if (kind === "facility") {
-      const tfd = destHex.flags?.[MOD_TERR] ?? {};
-      const owner = String(tfd.factionId || tfd.ownerId || "").replace(/^Actor\./, "");
-      if (owner !== String(factionId || "")) _abortPurchase(`"${entry.name}" can only be built on a hex your Domain holds.`);
       const need = Number(entry.minIntegration || 0) || 0;
       const prog = Number(tfd.integration?.progress ?? 0) || 0;
       if (need > 0 && prog < need) _abortPurchase(`"${entry.name}" needs a Settled hex (integration ${need}+); ${_hexName(destHex)} is at ${prog}.`);
@@ -1461,7 +1567,23 @@ async function _purchaseCore({ entryId, factionId, characterId, hexUuid, note, p
       const curType = String(cur?.facilityType || "").toLowerCase();
       const newType = String(entry.facilityPatch?.facilityType || "").toLowerCase();
       if (curType && newType && curType !== newType) _abortPurchase(`${_hexName(destHex)} already has a ${curType}; one facility per hex.`);
+      // 10-29 (#17): the SAME type again merged an identical patch — full price for nothing, and a sieged facility
+      // stayed destroyed (the patch carries no damageStep). Damage is mended by the Repair Fortifications maneuver.
+      if (curType && newType && curType === newType) {
+        const dmg = Number(cur?.damageStep || 0) || 0;
+        _abortPurchase(dmg > 0
+          ? `${_hexName(destHex)}'s ${curType} is damaged — mend it with the Repair Fortifications maneuver on a Turn; buying it again won't rebuild it.`
+          : `${_hexName(destHex)} already has a ${curType}; one facility per hex.`);
+      }
     }
+    // 10-29 (#8): a blank payload delivers nothing — never charge for it.
+    const _blank = (o) => !o || typeof o !== "object" || !Object.keys(o).length;
+    if (kind === "facility" && (_blank(entry.facilityPatch) || !String(entry.facilityPatch?.facilityType || "").trim()))
+      _abortPurchase(`"${entry.name}" has no facility set up in its catalog entry — ask the GM to fix it.`);
+    if (kind === "hex_asset" && (_blank(entry.asset) || !String(entry.asset?.key || "").trim()))
+      _abortPurchase(`"${entry.name}" has no hex asset set up in its catalog entry — ask the GM to fix it.`);
+    if (kind === "facility_upgrade" && _blank(entry.patch?.patch || entry.patch))
+      _abortPurchase(`"${entry.name}" has no upgrade set up in its catalog entry — ask the GM to fix it.`);
   } else if (kind === "actor") {
     const src = String(entry.uuid || "").trim() ? await fromUuid(entry.uuid).catch(() => null) : null;
     if (!src) _abortPurchase(`Actor UUID on "${entry.name}" is missing or could not be resolved.`);
@@ -1481,6 +1603,9 @@ async function _purchaseCore({ entryId, factionId, characterId, hexUuid, note, p
     const rigs = faction.getFlag(MOD_FACTIONS, "rigs");
     if (!Array.isArray(rigs) || !rigs.length) _abortPurchase("Faction has no rigs to upgrade.");
     if (_findRigIndex(rigs, entry.patch?.target) < 0) _abortPurchase(`"${entry.name}" targets a rig this faction does not have.`);
+    // 10-29 (#8): the body applyRigUpgradePatch merges (patch.patch, else the patch minus `target`) must hold something.
+    const _rb = entry.patch?.patch || Object.fromEntries(Object.entries(entry.patch || {}).filter(([k]) => k !== "target"));
+    if (!_rb || typeof _rb !== "object" || !Object.keys(_rb).length) _abortPurchase(`"${entry.name}" has no upgrade set up in its catalog entry — ask the GM to fix it.`);
   }
 
   // Build per-pool marks deltas (negative). For flag-priced gear: split items
@@ -1488,6 +1613,18 @@ async function _purchaseCore({ entryId, factionId, characterId, hexUuid, note, p
   // amount to their native pool. Legacy catalog entries (no flag price) keep
   // the Economy-only path.
   const totalMarks = Math.round(econCost);   // marks
+  // 0.4) Freight is worked out BEFORE the pay plan (10-29 #5): a spread plan drains the native pool whole, so the
+  //      fee added on top afterwards overdrew it and every spread buy of hex-delivered goods failed. The plan now
+  //      leaves the fee standing in its pool (reserve); the fee itself still joins payDeltas at step 0.5.
+  let freight = null;
+  if (HEX_KINDS.has(kind) && hexUuid) {
+    try {
+      const dest = await fromUuid(hexUuid);
+      const f = _deliveryFeeFor(dest, { factionId });
+      if (f.fee > 0) freight = { ...f, dest };
+    } catch (e) { console.warn("[bbttcc-market] freight calc failed (shipping free)", e); }
+  }
+  const freightReserve = freight ? { [_normPool(freight.pool)]: freight.fee } : null;
   let payDeltas;
   if (flagPrice?.split && Object.keys(flagPrice.split).length) {
     const splitSum = Object.values(flagPrice.split).reduce((a, v) => a + (Number(v) || 0), 0);
@@ -1503,7 +1640,7 @@ async function _purchaseCore({ entryId, factionId, characterId, hexUuid, note, p
       : flagPrice.currency;
     // Spread (2026-10-28): native pool first, the rest from the fullest pools at ×1.5 (see _spreadPayPlan).
     if (String(payFromPool || "") === "spread") {
-      const plan = _spreadPayPlan(faction, nativePool, totalMarks);
+      const plan = _spreadPayPlan(faction, nativePool, totalMarks, freightReserve);
       if (!plan.ok) _abortPurchase(`"${entry.name}" — your pools can't cover ${totalMarks} marks even spread (short about ${Math.ceil(plan.short)}).`);
       payDeltas = plan.deltas;
     } else {
@@ -1519,7 +1656,7 @@ async function _purchaseCore({ entryId, factionId, characterId, hexUuid, note, p
     // Legacy (catalog-priced) entries are economy-native; an explicit payFromPool still works, with the same ×1.5
     // cross-pool friction as flag-priced gear (2026-10-18 — contracts are catalog-priced).
     if (String(payFromPool || "") === "spread") {   // 2026-10-28 — see _spreadPayPlan
-      const plan = _spreadPayPlan(faction, "economy", totalMarks);
+      const plan = _spreadPayPlan(faction, "economy", totalMarks, freightReserve);
       if (!plan.ok) _abortPurchase(`"${entry.name}" — your pools can't cover ${totalMarks} marks even spread (short about ${Math.ceil(plan.short)}).`);
       payDeltas = plan.deltas;
     } else {
@@ -1543,24 +1680,23 @@ async function _purchaseCore({ entryId, factionId, characterId, hexUuid, note, p
   }
 
   // 0.5) Freight (2026-10-12): hex-delivered kinds pay distance from the origin hex.
+  //      (fee computed at 0.4, before the pay plan)
   let freightNote = "";
-  if (HEX_KINDS.has(kind) && hexUuid) {
-    try {
-      const dest = await fromUuid(hexUuid);
-      const f = _deliveryFeeFor(dest, { factionId });
-      if (f.fee > 0) {
-        payDeltas[f.pool] = (payDeltas[f.pool] || 0) - f.fee;
-        freightNote = `${DELIVERY_HAULER} delivery to ${_hexName(dest)}: danger ${f.score}${f.breakdown ? ` (${f.breakdown})` : ""} = ${f.fee} marks (${poolShortLabel(f.pool)})`;
-      }
-    } catch (e) { console.warn("[bbttcc-market] freight calc failed (shipping free)", e); }
+  if (freight) {
+    const f = freight, fp = _normPool(f.pool);
+    payDeltas[fp] = (payDeltas[fp] || 0) - f.fee;
+    freightNote = `${DELIVERY_HAULER} delivery to ${_hexName(f.dest)}: danger ${f.score}${f.breakdown ? ` (${f.breakdown})` : ""} = ${f.fee} marks (${poolShortLabel(f.pool)})`;
   }
 
   // 1) Spend
   const spendRes = await spendMarksByPools(factionId, payDeltas, { label: entry.name, note: [note, freightNote].filter(Boolean).join(" · ") });
   if (!spendRes.ok) {
     const pools = Object.keys(payDeltas).join("/");
-    throw new Error(`Insufficient OP in ${pools} (or OP engine refused commit).`);
+    throw new Error(`Not enough marks in ${pools} (or the bank refused the spend).`);
   }
+  // 10-29 (#2): what the engine ACTUALLY debited (CO21 steward discounts cut it) — the refund, the receipt
+  // and the item's paid stamp all use this, never the requested payDeltas.
+  const paidDeltas = (spendRes.applied && Object.keys(spendRes.applied).length) ? spendRes.applied : {};
 
   // 2) Deliver. On failure, refund the exact spend through the same payment
   //    path (mirrored deltas) so a broken delivery never strands the marks.
@@ -1568,7 +1704,7 @@ async function _purchaseCore({ entryId, factionId, characterId, hexUuid, note, p
 
   try {
     if (kind === "gear") {
-      await deliverGearToCharacter(characterId, entry.uuid, 1);
+      await deliverGearToCharacter(characterId, entry.uuid, 1, { paidTotal: spendRes.cost });   // 10-29 (#18): stamps marks paid per unit
       delivered = { to: "character", characterId };
     } else if (kind === "rig") {
       const rig = await deliverRigToFaction(factionId, entry.rigData);
@@ -1602,25 +1738,27 @@ async function _purchaseCore({ entryId, factionId, characterId, hexUuid, note, p
   } catch (deliverErr) {
     if (spendRes.cost > 0) {
       try {
+        // 10-29 (#2): credit back exactly what was debited (the discounted debit), as a transfer.
         const refundDeltas = {};
-        for (const [pool, v] of Object.entries(payDeltas)) refundDeltas[pool] = -(Number(v) || 0);
+        for (const [pool, v] of Object.entries(paidDeltas)) refundDeltas[pool] = -(Number(v) || 0);
         const refundRes = await spendMarksByPools(factionId, refundDeltas, {
           label: `Refund — ${entry.name}`,
           note: `Automatic refund: delivery failed (${deliverErr?.message || deliverErr}).`,
-          allowOvercap: true
+          allowOvercap: true,
+          noDiscount: true
         });
         if (!refundRes?.ok) throw new Error("OP engine refused the refund commit.");
         ui.notifications?.warn?.(`Delivery failed for "${entry.name}" — the spent marks were refunded.`);
       } catch (refundErr) {
-        console.error(`[${MODULE_ID}] delivery failed AND the refund failed — restore the faction's OP manually`, { payDeltas, deliverErr, refundErr });
-        ui.notifications?.error?.(`Delivery failed for "${entry.name}" AND the automatic refund failed — restore the faction's OP manually (see console).`);
+        console.error(`[${MODULE_ID}] delivery failed AND the refund failed — restore the faction's marks manually`, { paidDeltas, deliverErr, refundErr });
+        ui.notifications?.error?.(`Delivery failed for "${entry.name}" AND the automatic refund failed — restore the faction's marks manually (see console).`);
       }
     }
     throw deliverErr;
   }
 
   // 3) Receipt (faction war log)
-  const poolSummary = Object.entries(payDeltas)
+  const poolSummary = Object.entries(paidDeltas)   // 10-29 (#2): what was actually debited
     .filter(([_, v]) => Number(v) !== 0)
     .map(([k, v]) => `${k} ${Math.abs(v)}`)
     .join(" + ");
@@ -1634,7 +1772,9 @@ async function _purchaseCore({ entryId, factionId, characterId, hexUuid, note, p
     entryId,
     econCost,
     baseCost,
-    payDeltas,           // per-pool marks spent (Phase 5)
+    payDeltas: paidDeltas,      // per-pool marks actually debited (10-29: after steward discounts)
+    requestedDeltas: payDeltas, // what was asked before discounts (audit)
+    discounts: spendRes.discounts || null,
     flagPrice,           // resolved item-flag price (or null) for audit trail
     rarity,
     horizon,
@@ -2185,7 +2325,9 @@ const vendors = visibleVendors.map(v => ({
             uuid: it.uuid, name: it.name, img: it.img || "", kindLabel: kindLabel(it.type === "weapon" || it.type === "armor" ? it.type : "gear"),
             tierLabel, qty: q.qty, stack: q.qty > 1, qtyLabel: q.qty > 1 ? `×${q.qty}` : "",
             sellable: q.ok, reason: q.reason, listLabel: q.listMarks ? `${q.listMarks} marks` : "—",
-            rate: q.rate, rateLabel: `${q.rate}%`, rateTitle: q.stance ? `${q.listMarks} × ${q.rate}% — ${q.stance.label}` : "",
+            // 10-29: a market-bought copy is valued at what was paid (owner ruling #18)
+            paidLabel: q.basis === "paid" ? `${_fmtMarksNum(q.basisMarks)} marks` : "",
+            rate: q.rate, rateLabel: `${q.rate}%`, rateTitle: q.stance ? `${q.basis === "paid" ? `Paid ${_fmtMarksNum(q.basisMarks)}` : q.listMarks} × ${q.rate}% — ${q.stance.label}` : "",
             payout: q.payout
           };
         }));
@@ -2455,31 +2597,41 @@ try {
         ev.preventDefault(); ev.stopPropagation();
         const row = ctl.closest("[data-item-uuid]");
         const itemUuid = String(row?.dataset?.itemUuid || "");
-        const qty = Math.max(1, Math.round(Number(row?.querySelector?.("[data-role='sellQty']")?.value) || 1));
-        const c = this._loadCtx();
-        const faction = game.actors.get(c.factionId);
-        const vendor = _vendorsArray().map(_normalizeVendor).find(v => v.id === c.vendorId);
-        const item = await fromUuid(itemUuid).catch(() => null);
-        if (!item || !faction || !vendor) { ui.notifications?.warn?.("Pick a Buyer Domain and Buyer Character first."); return; }
-        const quote = await sellQuote(item, { faction, vendor });
-        if (!quote.ok) { ui.notifications?.warn?.(quote.reason || "Not sellable."); return; }
-        const n = Math.min(qty, quote.qty);
-        const total = quote.payout * n;
-        const body = `<p>Sell <b>${esc(item.name)}</b>${n > 1 ? ` ×${n}` : ""} to <b>${esc(vendor.name)}</b> for <b>${total} marks</b>?</p>
-          <p class="bbttcc-muted">List ${quote.listMarks} × ${quote.rate}% (${esc(quote.stance?.label || "neutral")}) → <b>${esc(faction.name)}</b>'s Economy bank.</p>`;
-        const DV2 = foundry.applications.api?.DialogV2;
-        let ok = false;
+        // 10-29 (#3/#6): one Sell flow per item per window — a double-click used to stack two confirms → two sales.
+        this._sellBusy ??= new Set();
+        if (!itemUuid || this._sellBusy.has(itemUuid)) return;
+        this._sellBusy.add(itemUuid);
+        if (ctl instanceof HTMLButtonElement) ctl.disabled = true;
         try {
-          if (DV2?.confirm) ok = await DV2.confirm({ window: { title: "Sell" }, content: body, rejectClose: false, yes: { label: "Sell" }, no: { label: "Keep it" } });
-          else ok = await Dialog.confirm({ title: "Sell", content: body });
-        } catch (_e) { ok = false; }
-        if (!ok) return;
-        try {
-          const res = await sell({ itemUuid, factionId: faction.id, vendorId: vendor.id, qty: n, note: c.note });
-          if (res?.ok) ui.notifications?.info?.(`Sold ${res.itemName || item.name}${n > 1 ? ` ×${n}` : ""} for ${res.payout} marks.`);
-          else ui.notifications?.warn?.(res?.error || "Sale did not complete.");
-        } catch (e) {
-          ui.notifications?.error?.(e?.message || String(e));
+          const qty = Math.max(1, Math.round(Number(row?.querySelector?.("[data-role='sellQty']")?.value) || 1));
+          const c = this._loadCtx();
+          const faction = game.actors.get(c.factionId);
+          const vendor = _vendorsArray().map(_normalizeVendor).find(v => v.id === c.vendorId);
+          const item = await fromUuid(itemUuid).catch(() => null);
+          if (!item || !faction || !vendor) { ui.notifications?.warn?.("Pick a Buyer Domain and Buyer Character first."); return; }
+          const quote = await sellQuote(item, { faction, vendor });
+          if (!quote.ok) { ui.notifications?.warn?.(quote.reason || "Not sellable."); return; }
+          const n = Math.min(qty, quote.qty);
+          const total = quote.payout * n;
+          const body = `<p>Sell <b>${esc(item.name)}</b>${n > 1 ? ` ×${n}` : ""} to <b>${esc(vendor.name)}</b> for <b>${total} marks</b>?</p>
+            <p class="bbttcc-muted">${quote.basis === "paid" ? `Paid ${esc(_fmtMarksNum(quote.basisMarks))}` : `List ${quote.listMarks}`} × ${quote.rate}% (${esc(quote.stance?.label || "neutral")}) → <b>${esc(faction.name)}</b>'s Economy bank.</p>`;
+          const DV2 = foundry.applications.api?.DialogV2;
+          let ok = false;
+          try {
+            if (DV2?.confirm) ok = await DV2.confirm({ window: { title: "Sell" }, content: body, rejectClose: false, yes: { label: "Sell" }, no: { label: "Keep it" } });
+            else ok = await Dialog.confirm({ title: "Sell", content: body });
+          } catch (_e) { ok = false; }
+          if (!ok) return;
+          try {
+            const res = await sell({ itemUuid, factionId: faction.id, vendorId: vendor.id, qty: n, note: c.note });
+            if (res?.ok) ui.notifications?.info?.(`Sold ${res.itemName || item.name}${n > 1 ? ` ×${n}` : ""} for ${res.payout} marks.`);
+            else ui.notifications?.warn?.(res?.error || "Sale did not complete.");
+          } catch (e) {
+            ui.notifications?.error?.(e?.message || String(e));
+          }
+        } finally {
+          this._sellBusy.delete(itemUuid);
+          if (ctl instanceof HTMLButtonElement) ctl.disabled = false;
         }
         this.render(false);
         return;
@@ -2493,40 +2645,49 @@ try {
       const entryId = entryEl?.dataset?.entryId;
       if (!entryId) return;
 
-      const ctxNow = this._loadCtx();
-      // Charge the faction the window SHOWS (lastContext can be changed from a faction sheet).
-      const shownFaction = this.element?.querySelector?.("select[name='factionId']")?.value;
-      if (shownFaction) ctxNow.factionId = shownFaction;
-
-      // Phase 5.5: pre-purchase confirmation dialog with cross-pool override.
-      // Resolves the catalog entry + faction, then opens openBuyConfirmDialog.
-      // For legacy catalog items the dialog auto-passes through.
-      const catalog = game.settings.get(MODULE_ID, "catalog") || [];
-      const entry = (Array.isArray(catalog) ? catalog : []).find(e => e?.id === entryId);
-      const faction = game.actors.get(ctxNow.factionId);
-      let confirmRes = { ok: true, payFromPool: null };
-      if (entry && faction) {
-        try {
-          confirmRes = await openBuyConfirmDialog({ entry, factionId: ctxNow.factionId, faction, hexUuid: ctxNow.hexUuid });
-        } catch (e) { console.warn("buy-confirm dialog failed (proceeding without)", e); }
-      }
-      if (!confirmRes?.ok) return;  // user cancelled
-
+      // 10-29 (#21): one Buy flow per window at a time — two confirms in flight paid twice for one hex/slot.
+      if (this._buyBusy) return;
+      this._buyBusy = true;
+      if (ctl instanceof HTMLButtonElement) ctl.disabled = true;
       try {
-        const res = await purchase({
-          entryId,
-          factionId: ctxNow.factionId,
-          characterId: ctxNow.characterId,
-          hexUuid: ctxNow.hexUuid,
-          note: ctxNow.note,
-          payFromPool: confirmRes.payFromPool
-        });
-        ui.notifications?.info?.("Purchase complete.");
-        this.render(false);
-      } catch (e) {
-        console.error(e);
-        // Pre-spend validation aborts already warned the user (err.notified).
-        if (!e?.notified) ui.notifications?.error?.(e?.message || "Purchase failed.");
+        const ctxNow = this._loadCtx();
+        // Charge the faction the window SHOWS (lastContext can be changed from a faction sheet).
+        const shownFaction = this.element?.querySelector?.("select[name='factionId']")?.value;
+        if (shownFaction) ctxNow.factionId = shownFaction;
+
+        // Phase 5.5: pre-purchase confirmation dialog with cross-pool override.
+        // Resolves the catalog entry + faction, then opens openBuyConfirmDialog.
+        // For legacy catalog items the dialog auto-passes through.
+        const catalog = game.settings.get(MODULE_ID, "catalog") || [];
+        const entry = (Array.isArray(catalog) ? catalog : []).find(e => e?.id === entryId);
+        const faction = game.actors.get(ctxNow.factionId);
+        let confirmRes = { ok: true, payFromPool: null };
+        if (entry && faction) {
+          try {
+            confirmRes = await openBuyConfirmDialog({ entry, factionId: ctxNow.factionId, faction, hexUuid: ctxNow.hexUuid });
+          } catch (e) { console.warn("buy-confirm dialog failed (proceeding without)", e); }
+        }
+        if (!confirmRes?.ok) return;  // user cancelled
+
+        try {
+          const res = await purchase({
+            entryId,
+            factionId: ctxNow.factionId,
+            characterId: ctxNow.characterId,
+            hexUuid: ctxNow.hexUuid,
+            note: ctxNow.note,
+            payFromPool: confirmRes.payFromPool
+          });
+          ui.notifications?.info?.("Purchase complete.");
+          this.render(false);
+        } catch (e) {
+          console.error(e);
+          // Pre-spend validation aborts already warned the user (err.notified).
+          if (!e?.notified) ui.notifications?.error?.(e?.message || "Purchase failed.");
+        }
+      } finally {
+        this._buyBusy = false;
+        if (ctl instanceof HTMLButtonElement) ctl.disabled = false;
       }
     }, { capture: true, signal: sig });
   }
@@ -2625,7 +2786,11 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
   const sig = this._abort.signal;
 
   const vendorSel = root.querySelector("[data-role='vendor']");
-  vendorSel?.addEventListener("change", () => {
+  vendorSel?.addEventListener("change", async () => {
+    // 10-29 (#24): keep the outgoing vendor's unsaved edits — read the form while this.vendorId is still the old one.
+    const d = this._readDraft();
+    if (!d) { vendorSel.value = this.vendorId; return; }
+    await this._writeDraft(d);
     this.vendorId = vendorSel.value;
     this.render(false);
   }, { signal: sig });
@@ -2644,6 +2809,7 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
 
       try {
         const imported = await this._importDropData(data);
+        if (!imported) return;   // 10-29 (#24): draft refused (bad row JSON, warned) — keep the on-screen edits
         if (imported?.count) ui.notifications?.info?.(`Imported ${imported.count} item(s) into catalog.`);
         this.render(false);
       } catch (e) {
@@ -2688,7 +2854,7 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
     return { vendors, vendorId: vendors[idx].id };
   }
 
-  _readEntriesForm() {
+  _readEntriesForm(skipEntryId = null) {
     const root = this.element?.[0] ?? this.element;
     const vendorId = this.vendorId;
 
@@ -2696,7 +2862,7 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
     const keep = all.filter(e => e.vendorId !== vendorId);
     const prevById = new Map(all.filter(e => e.vendorId === vendorId).map(e => [e.id, e]));
 
-    const rows = [...root.querySelectorAll("[data-entry-id]")];
+    const rows = [...root.querySelectorAll("[data-entry-id]")].filter(r => !skipEntryId || r.dataset.entryId !== skipEntryId);   // 10-29 (#24): Delete skips its own row
     const entries = rows.map(row => {
       const id = row.dataset.entryId;
       const name = row.querySelector("[data-k='name']")?.value || id;
@@ -2717,12 +2883,23 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
         delete base.uuid; delete base.rigData; delete base.facilityPatch; delete base.asset; delete base.patch;
       }
 
+      // 10-29 (#8): a payload that won't parse is an ERROR (the caller warns and saves nothing) — it used to save as {}
+      // silently, wiping the GM's JSON and leaving a buyable entry that delivered nothing.
+      const _json = () => {
+        const s = String(payload || "").trim();
+        if (!s) return {};
+        let v;
+        try { v = JSON.parse(s); }
+        catch (e) { throw new Error(`"${name}" — the payload JSON doesn't parse (${e?.message || e}). Nothing was saved; fix the row and try again.`); }
+        if (!v || typeof v !== "object" || Array.isArray(v)) throw new Error(`"${name}" — the payload must be a JSON object { … }. Nothing was saved.`);
+        return v;
+      };
       if (kind === "gear" || kind === "actor") return _normalizeEntry({ ...base, uuid: payload.trim() });
-      if (kind === "contract") return _normalizeEntry({ ...base, contract: _safeJsonParse(payload, {}) });
-      if (kind === "rig") return _normalizeEntry({ ...base, rigData: _safeJsonParse(payload, {}) });
-      if (kind === "facility") return _normalizeEntry({ ...base, facilityPatch: _safeJsonParse(payload, {}) });
-      if (kind === "hex_asset") return _normalizeEntry({ ...base, asset: _safeJsonParse(payload, {}) });
-      if (kind === "rig_upgrade" || kind === "facility_upgrade") return _normalizeEntry({ ...base, patch: _safeJsonParse(payload, {}) });
+      if (kind === "contract") return _normalizeEntry({ ...base, contract: _json() });
+      if (kind === "rig") return _normalizeEntry({ ...base, rigData: _json() });
+      if (kind === "facility") return _normalizeEntry({ ...base, facilityPatch: _json() });
+      if (kind === "hex_asset") return _normalizeEntry({ ...base, asset: _json() });
+      if (kind === "rig_upgrade" || kind === "facility_upgrade") return _normalizeEntry({ ...base, patch: _json() });
 
       return _normalizeEntry(base);
     });
@@ -2736,7 +2913,9 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
   if (!vf) return;
 
   const nextVendors = vf.vendors;
-  const nextCatalog = this._readEntriesForm();
+  let nextCatalog;
+  try { nextCatalog = this._readEntriesForm(); }   // 10-29 (#8): throws on a payload that won't parse
+  catch (e) { ui.notifications?.warn?.(e?.message || String(e)); return; }
 
   this._saving = true;
   try {
@@ -2750,11 +2929,27 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
   this.render(false);
 }
 
+  // 10-29 (#24): editor actions (+ Entry, Duplicate, Delete, drop import, + Vendor, switching vendor) start from the
+  // FORM, not the saved settings — they used to throw away every unsaved row and vendor edit. Returns
+  // { vendors, catalog } (the current vendor's on-screen edits folded in), or null after a warning when a row's
+  // payload JSON won't parse, so the action stops and the edits stay on screen.
+  _readDraft(skipEntryId = null) {
+    try {
+      const vf = this._readVendorForm();
+      return { vendors: vf?.vendors ?? _vendorsArray().map(_normalizeVendor), catalog: this._readEntriesForm(skipEntryId) };
+    } catch (e) {
+      ui.notifications?.warn?.(e?.message || String(e));
+      return null;
+    }
+  }
+
   async _vendorAdd() {
-    const vendors = _vendorsArray().map(_normalizeVendor);
+    const d = this._readDraft(); if (!d) return;   // 10-29 (#24)
+    const vendors = d.vendors;
     const id = _makeId("vendor");
     vendors.push(_normalizeVendor({ id, name: "New Vendor", blurb: "", tags: [] }));
     await game.settings.set(MODULE_ID, "vendors", vendors);
+    await game.settings.set(MODULE_ID, "catalog", d.catalog);
     this.vendorId = id;
     this.render(false);
   }
@@ -2789,36 +2984,46 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
     this.render(false);
   }
 
+  // 10-29 (#24): the draft's vendors are written too, so on-screen vendor edits survive the re-render.
+  async _writeDraft(d) {
+    await game.settings.set(MODULE_ID, "vendors", d.vendors);
+    await game.settings.set(MODULE_ID, "catalog", d.catalog);
+  }
+
   async _entryAdd() {
-    const cat = _catalogArray().map(_normalizeEntry);
+    const d = this._readDraft(); if (!d) return;   // 10-29 (#24)
+    const cat = d.catalog.map(_normalizeEntry);
     const id = _makeId("entry");
     cat.unshift(_normalizeEntry({ id, vendorId: this.vendorId, kind: "gear", name: "New Entry", blurb: "", uuid: "", cost: { economy: 10 } }));
-    await game.settings.set(MODULE_ID, "catalog", cat);
+    await this._writeDraft({ vendors: d.vendors, catalog: cat });
     this.render(false);
   }
 
   async _entryDelete(entryId) {
     const vendorId = this.vendorId;
-    const cat = _catalogArray().map(_normalizeEntry).filter(e => !(e.vendorId === vendorId && e.id === entryId));
-    await game.settings.set(MODULE_ID, "catalog", cat);
+    const d = this._readDraft(entryId); if (!d) return;   // 10-29 (#24) — skips the doomed row, so a broken one can still go
+    const cat = d.catalog.map(_normalizeEntry).filter(e => !(e.vendorId === vendorId && e.id === entryId));
+    await this._writeDraft({ vendors: d.vendors, catalog: cat });
     this.render(false);
   }
 
   async _entryDuplicate(entryId) {
     const vendorId = this.vendorId;
-    const cat = _catalogArray().map(_normalizeEntry);
+    const d = this._readDraft(); if (!d) return;   // 10-29 (#24)
+    const cat = d.catalog.map(_normalizeEntry);
     const src = cat.find(e => e.vendorId === vendorId && e.id === entryId);
     if (!src) return;
     const dup = foundry.utils.duplicate(src);
     dup.id = _makeId("entry");
     dup.name = `${dup.name} (Copy)`;
     cat.unshift(_normalizeEntry(dup));
-    await game.settings.set(MODULE_ID, "catalog", cat);
+    await this._writeDraft({ vendors: d.vendors, catalog: cat });
     this.render(false);
   }
 
   async _importDropData(data) {
     const vendorId = this.vendorId;
+    const d = this._readDraft(); if (!d) return null;   // 10-29 (#24): read the form BEFORE any await
 
     const type = String(data.type || "").toLowerCase();
     const uuid = data.uuid || data?.data?.uuid;
@@ -2840,7 +3045,7 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
 
     if (!uuids.length) throw new Error("Drop did not resolve to any Items.");
 
-    const catalog = _catalogArray().map(_normalizeEntry);
+    const catalog = d.catalog.map(_normalizeEntry);
     let count = 0;
 
     for (const u of uuids) {
@@ -2851,7 +3056,7 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
       count += 1;
     }
 
-    await game.settings.set(MODULE_ID, "catalog", catalog);
+    await this._writeDraft({ vendors: d.vendors, catalog });
     return { count };
   }
 }
@@ -2898,6 +3103,16 @@ Hooks.once("ready", () => {
       const entry = _catalogArray().find(e => e?.id === p?.entryId);
       const vendor = entry ? _vendorsArray().map(_normalizeVendor).find(v => v.id === entry.vendorId) : null;
       if (!u.isGM && vendor && vendor.active === false) throw new Error("That market is closed.");
+      // 10-29 (#4/#7): the receiving steward must be the seat's OWN and belong to the buying Domain — gear and
+      // contracts used to land on (and contracts rewrite) any actor id the payload named. Hex kinds are checked
+      // against the buying Domain's ground in _purchaseLocal for every seat.
+      if (!u.isGM && p?.characterId) {
+        const ch = game.actors?.get?.(String(p.characterId));
+        if (!ch) throw new Error("Buyer Character not found.");
+        if (!ch.testUserPermission(u, "OWNER")) throw new Error("You can only buy for a character you own.");
+        const dom = domainOf(ch);
+        if (dom && dom.id !== faction.id) throw new Error(`${ch.name} answers to ${dom.name}, not ${faction.name}.`);
+      }
       return purchase({ entryId: p?.entryId, factionId: faction.id, characterId: p?.characterId, hexUuid: p?.hexUuid, note: p?.note, payFromPool: p?.payFromPool, _relayed: !meta?.local });
     });
   } catch (eReg) { warn("gmExec market.purchase registration failed", eReg); }

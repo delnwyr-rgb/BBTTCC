@@ -52,11 +52,27 @@ let _activeDamageSource = null;
 // as the fallback source for the relayed apply that follows.
 const SOURCE_RELAY = "structures.damageSource.announce";
 const RELAYED_SOURCE_TTL_MS = 8000;
-let _relayedDamageSource = null;   // { actor, ts } — GM seat only
+let _relayedDamageSource = null;   // { actor, ts, fromUserId, targets:Set, spent:Set } — GM seat only
 
-export function getActiveDamageSource() {
+// 10-29: the relayed source used to answer for EVERY GM-side apply for 8s (another
+// player's AoE, NPC automation) and spend the announcer's Catastrophic Entry. It is
+// now scoped to the structure actors the announcer targeted, and `consume` (the
+// damage wedge) spends it once per target; later non-consuming reads (collapse
+// breacher exclusion) still see a spent target inside the window.
+export function getActiveDamageSource(target = null, { consume = false, fromUserId = undefined } = {}) {
   if (_activeDamageSource) return _activeDamageSource;
-  if (_relayedDamageSource && (Date.now() - _relayedDamageSource.ts) <= RELAYED_SOURCE_TTL_MS) return _relayedDamageSource.actor;
+  const r = _relayedDamageSource;
+  if (!r || (Date.now() - r.ts) > RELAYED_SOURCE_TTL_MS) return null;
+  // 10-29: a consuming read must come from the announcer's own relayed damage (ft-applyDamage passes
+  // the socket sender) — another seat's hit, or the GM's own apply, never spends their Entry.
+  if (consume && fromUserId !== undefined && fromUserId !== r.fromUserId) return null;
+  const key = target?.uuid;
+  if (!key) return null;
+  if (r.targets.has(key)) {
+    if (consume) { r.targets.delete(key); r.spent.add(key); }
+    return r.actor;
+  }
+  if (!consume && r.spent.has(key)) return r.actor;
   return null;
 }
 
@@ -105,12 +121,32 @@ function _parseRuinCard(message) {
   return { action, label: m[1], actor };
 }
 
+const _seenRuinCards = new Set();   // message ids already acted on (10-29)
+
 async function _onRuinCard(message) {
   // Exactly one seat applies (two GM seats would double every Ruin effect).
   if (!game.user?.isGM || (game.users?.activeGM && game.users.activeGM.id !== game.user.id)) return;
+  // 10-29: only cards the system posted — the Breaker dialog stamps flags.fourththing.bulwarkRuin,
+  // the Surge spend card flags.fourththing.surgeSpend. A typed chat line can't carry flags.
+  const _ff = message.flags?.fourththing ?? {};
+  if (!_ff.bulwarkRuin && !_ff.surgeSpend) return;
   const parsed = _parseRuinCard(message);
   if (!parsed) return;
   const { action, actor } = parsed;
+  // 10-29: the header text alone used to be enough — any seat could type it with a
+  // borrowed speaker and the GM would chip structures / arm a free Entry. The card's
+  // AUTHOR must own the speaking Bulwark, and each message acts once.
+  const author = message.author ?? message.user ?? null;
+  if (!(author && actor.testUserPermission?.(author, "OWNER"))) {
+    console.warn(TAG, `Ruin card ignored — ${author?.name || "unknown author"} does not own ${actor.name}`);
+    return;
+  }
+  const mid = message.id ?? message._id;
+  if (mid) {
+    if (_seenRuinCards.has(mid)) return;
+    _seenRuinCards.add(mid);
+    if (_seenRuinCards.size > 500) _seenRuinCards.delete(_seenRuinCards.values().next().value);
+  }
   try {
     if (action === "entry")     await _onCatastrophicEntry(actor);
     if (action === "siege")     await _onSiegeCost(actor);
@@ -184,7 +220,7 @@ async function _onSiegeCost(actor) {
         ⚒ Siege Cost effect ready — but ${foundry.utils.escapeHTML(actor.name)} has no recognized faction affiliation to apply the discount to. (Phase C stub — Siege Raid Type sprint will resolve this fully.)
       </div>`
     });
-    return;
+    return false;   // 10-29: not armed — triggerRuinAction reports it, so the Surge card can't say "armed"
   }
   // TTL flag — Siege Raid Type sprint will consume this and clear it after
   // the next Siege scenario ends. For Phase C we just stamp + announce.
@@ -205,6 +241,7 @@ async function _onSiegeCost(actor) {
       </div>
     </div>`
   });
+  return true;
 }
 
 // ── Shockwave Footing ───────────────────────────────────────────────────────
@@ -469,6 +506,9 @@ async function _onRenewal(actor) {
 /**
  * Best-effort: find a faction the Bulwark is associated with. Order:
  *   1. If actor has flags.bbttcc-factions.affiliation set, use that
+ *   1b. 10-29: flags.bbttcc-factions.factionId — the Steward link the character
+ *       wizard writes (persistFactionBothShapes); without it no character Bulwark
+ *       ever resolved a faction
  *   2. If actor has system.identity.factionOwnerId set, use that
  *   3. If actor is the active user's character and there's exactly one faction
  *      they own, use that
@@ -479,6 +519,11 @@ function _findFactionForActor(actor) {
   const affil = actor.getFlag?.("bbttcc-factions", "affiliation");
   if (affil) {
     const f = game.actors?.get(affil);
+    if (f) return f;
+  }
+  const fid = actor.getFlag?.("bbttcc-factions", "factionId");
+  if (fid) {
+    const f = game.actors?.get(String(fid));
     if (f) return f;
   }
   // rig accessor (2026-10-08): works on dnd5e vehicles too
@@ -510,7 +555,7 @@ function installSourceCaptureWedge() {
         const src = item?.parent ?? null;
         if (src?.documentName === "Actor") {
           _setActiveDamageSource(src);
-          await _announceDamageSource(src);
+          await _announceDamageSource(src, await _structureTargetUuids(btn));
         }
       }
     } catch (_e) { /* swallow */ }
@@ -525,13 +570,32 @@ function installSourceCaptureWedge() {
   console.log(TAG, "source-capture wedge installed on applyDamageFromButton");
 }
 
-// Player seat → GM: "the damage I am about to relay comes from this actor".
-// Awaited so the GM holds the source before the system's relay message leaves.
-async function _announceDamageSource(src) {
-  if (game.user?.isGM) return;
+// 10-29: the structure actors this Apply will hit — same resolution as the system's
+// applyDamageFromButton (live targets, else the card's baked data-target-uuid; the
+// baked one wins when data-target-first). Only structures can spend a Catastrophic
+// Entry, so no structure target = nothing to announce.
+async function _structureTargetUuids(btn) {
+  const out = [];
+  try {
+    let actors = [...(game.user?.targets ?? [])].map(t => t.actor).filter(Boolean);
+    if ((!actors.length || btn?.dataset?.targetFirst === "1") && btn?.dataset?.targetUuid) {
+      const d = await (foundry.utils?.fromUuid ?? fromUuid)?.(btn.dataset.targetUuid).catch(() => null);
+      // the system hits the baked actor's first active token's actor (synthetic for unlinked)
+      const a = d?.getActiveTokens?.()?.[0]?.actor ?? d?.actor ?? d ?? null;
+      if (a?.documentName === "Actor") actors = [a];
+    }
+    for (const a of actors) if (a.flags?.[FLAG_SCOPE]?.hasStructure && a.uuid) out.push(a.uuid);
+  } catch (_e) {}
+  return out;
+}
+
+// Player seat → GM: "the damage I am about to relay to THESE structures comes from
+// this actor". Awaited so the GM holds the source before the system's relay leaves.
+async function _announceDamageSource(src, targetUuids = []) {
+  if (game.user?.isGM || !targetUuids.length) return;
   const gx = game.bbttcc?.api?.gmExec;
   if (!gx?.call || !game.users?.some?.(u => u.isGM && u.active)) return;
-  try { await gx.call(SOURCE_RELAY, { sourceUuid: src.uuid }, { timeoutMs: 3000 }); }
+  try { await gx.call(SOURCE_RELAY, { sourceUuid: src.uuid, targetUuids }, { timeoutMs: 3000 }); }
   catch (e) { console.warn(TAG, "damage-source announce failed (Catastrophic Entry will not apply to relayed damage)", e); }
 }
 function _registerSourceRelay() {
@@ -544,7 +608,10 @@ function _registerSourceRelay() {
     if (actor?.documentName !== "Actor") throw new Error("source actor not found");
     const caller = game.users?.get(String(meta?.fromUserId || ""));
     if (!(caller && actor.testUserPermission?.(caller, "OWNER"))) throw new Error(`${caller?.name || "caller"} does not own ${actor.name}`);
-    _relayedDamageSource = { actor, ts: Date.now() };
+    const targets = new Set((Array.isArray(p?.targetUuids) ? p.targetUuids : [])
+      .filter(u => typeof u === "string" && u).slice(0, 32));
+    if (!targets.size) { _relayedDamageSource = null; return { ok: true }; }
+    _relayedDamageSource = { actor, ts: Date.now(), fromUserId: caller.id, targets, spent: new Set() };
     return { ok: true };
   });
 }
@@ -564,10 +631,10 @@ export async function triggerRuinAction(actor, action) {
   const gx = game.bbttcc?.api?.gmExec;
   if (!gx?.call) {
     if (!game.user?.isGM) { console.warn(TAG, "gmExec unavailable — structure effect not applied"); return false; }
-    await TRIGGERABLE[action](actor);
-    return true;
+    return (await TRIGGERABLE[action](actor)) !== false;
   }
-  try { await gx.call(RUIN_RELAY, { actorUuid: actor.uuid, action }, { timeoutMs: 15000 }); return true; }
+  // 10-29: an effect that didn't land (Siege Cost with no faction) answers ok:false.
+  try { const res = await gx.call(RUIN_RELAY, { actorUuid: actor.uuid, action }, { timeoutMs: 15000 }); return res?.ok !== false; }
   catch (e) { console.warn(TAG, `Ruin action '${action}' relay failed`, e); return false; }
 }
 
@@ -584,8 +651,8 @@ function _registerRuinRelay() {
       const caller = game.users?.get(String(meta?.fromUserId || ""));
       if (!(caller && actor.testUserPermission?.(caller, "OWNER"))) throw new Error(`${caller?.name || "caller"} does not own ${actor.name}`);
     }
-    await fn(actor);   // Renewal only opens its dialog here — returns at once
-    return { ok: true };
+    const r = await fn(actor);   // Renewal only opens its dialog here — returns at once
+    return { ok: r !== false };
   });
 }
 

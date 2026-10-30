@@ -127,6 +127,26 @@
           const ownerId = ownerFactionId(tf);
           if (!ownerId) continue;
 
+          // 10-29 (#16): a facility sieged to breached/destroyed (damageStep >= 3) earns nothing — the effects pay
+          // "while operational". Mirrors getFacilityRaidProfile (raid-console), which already treats step >= 3 as inert.
+          // Repair (repair_fortifications) lowers damageStep and the income resumes.
+          // The numeric step wins: repair_fortifications (compat-bridge) lowers damageStep but leaves the old damageState
+          // string behind, so the state name only decides when no step is stored.
+          const hasStep  = (facRoot.damageStep ?? facRoot.damageIndex) != null;
+          const dmgStep  = Number(facRoot.damageStep ?? facRoot.damageIndex ?? 0) || 0;
+          const dmgState = String(facRoot.damageState || "").toLowerCase();
+          if (hasStep ? dmgStep >= 3 : (dmgState === "breached" || dmgState === "destroyed")) {
+            const dHex = String(dr.name || dr.text || tf.name || `Hex ${dr.id}`);
+            const dType = String(facRoot.facilityType || "Facility");
+            const dLabel = dType.charAt(0).toUpperCase() + dType.slice(1);
+            lines.push(
+              `• <b>${esc(dLabel)}</b> in <i>${esc(dHex)}</i> → `
+              + `<b>${esc(resolveFactionName(ownerId))}</b>: `
+              + `<span style="opacity:0.85;">(${esc(dmgState || "breached")} — no income until repaired)</span>`
+            );
+            continue;
+          }
+
           const rawEffects =
             integ.turnEffects ??
             integ.turnEffectsRaw ??

@@ -996,7 +996,7 @@ export async function openRigBuilder({ seed = null } = {}) {
         </label></div>
       <div class="ft-cast-field ft-cast-span-2">
         <label style="display:flex; align-items:center; gap:0.4rem; font-weight:normal;">
-          <input type="checkbox" data-bbttcc-infra="charge"/> Charge the owner faction's stockpile for the material bill (otherwise it's a free build)
+          <input type="checkbox" data-bbttcc-infra="charge" ${game.user?.isGM ? "" : "checked disabled"}/> Charge the owner faction's stockpile for the material bill${game.user?.isGM ? " (otherwise it's a free build)" : " (players always pay)"}
         </label></div>
     </div>
     <div id="bbttcc-rb-infra-preview" style="margin-top:0.5rem;"></div>
@@ -1424,12 +1424,17 @@ async function _commitInfrastructure(root) {
   const dropToken = !!root.querySelector('[data-bbttcc-infra="dropToken"]')?.checked;
   const faction = factionId ? game.actors?.get?.(factionId) : null;
 
+  // 10-29: free infrastructure builds are GM-only — a player seat always pays from an owned Domain.
+  if (!game.user?.isGM && !faction) {
+    ui.notifications?.warn?.("Choose your Domain to pay the material bill.");
+    return null;
+  }
   if (charge && !faction) {
     ui.notifications?.warn?.("Choose an owner faction to charge, or uncheck the stockpile-charge box.");
     return null;
   }
   // No faction (or charging disabled) ⇒ free build that bypasses the stockpile.
-  const skipCostCheck = !charge || !faction;
+  const skipCostCheck = game.user?.isGM ? (!charge || !faction) : false;
 
   let dropPosition = null;
   if (dropToken && canvas?.scene) {

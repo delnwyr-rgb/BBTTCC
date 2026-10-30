@@ -25,7 +25,7 @@
     razed:    { tint: "#4f4640", alpha: 0.82 },
     breached: { tint: "#a39282", alpha: 1 }
   };
-  const _recent = new Map();   // actorId → ts (dedupe stateChanged + layerBreached on one client)
+  const _recent = new Map();   // `${actorId}:${kind}` → ts (dedupe stateChanged + layerBreached on one client)
 
   const _seqReady = () => { try { return !!globalThis.Sequence && !!game.modules.get("sequencer")?.active; } catch { return false; } };
 
@@ -120,10 +120,24 @@
     if (gx?.call) { try { await gx.call("structures.ruinToken", { uuid: doc.uuid, upd }); } catch (e) { console.warn(TAG, "ruin relay failed", e); } }
   }
 
-  function _dupe(actorId) {
-    const now = Date.now(), last = _recent.get(actorId) || 0;
-    _recent.set(actorId, now);
+  // 10-29: keyed per kind — breached→razed inside 5s is a NEW event (it used to be
+  // swallowed, leaving a razed wall in the breached look); a duplicate razed still dedupes.
+  function _dupe(actorId, kind = "razed") {
+    const key = `${actorId}:${kind}`;
+    const now = Date.now(), last = _recent.get(key) || 0;
+    _recent.set(key, now);
     return now - last < 5000;
+  }
+
+  // 10-29: what look the actor's REAL state calls for — the GM relay below only ever
+  // writes this, never a seat's word for it. Rig wreck = integrity ≤ 0.
+  function _lookStateOf(actor) {
+    const R = game.bbttcc?.rigs;
+    const isRig = !!(R?.isRig ? R.isRig(actor) : actor?.type === "rig");
+    const integ = isRig ? Number(R?.data?.(actor)?.integrity?.value ?? actor.system?.integrity?.value) : NaN;
+    const rigDead = isRig && Number.isFinite(integ) && integ <= 0;
+    const struct = actor?.getFlag?.(MOD, "hasStructure") ? String(actor.getFlag(MOD, "state") || "intact") : null;
+    return { isRig, rigDead, struct };
   }
 
   // One entry point: spectacle + ruin for every token of the actor on this scene.
@@ -138,10 +152,13 @@
   }
 
   // ── Wiring ──
-  Hooks.on("bbttcc:structure:stateChanged", ({ actor, fromState, toState } = {}) => {
+  Hooks.on("bbttcc:structure:stateChanged", ({ actor, fromState, toState, ctx } = {}) => {
     if (!actor) return;
+    // 10-29: a player-seat transition re-fired on the GM (damage-path relay) — the
+    // seat that landed the hit already played + wrote the look.
+    if (ctx?.relayed) return;
     if (toState === "razed" || toState === "breached") {
-      if (_dupe(actor.id)) return;
+      if (_dupe(actor.id, toState)) return;
       play(actor, toState);
     } else if ((toState === "intact" || toState === "damaged") && (fromState === "razed" || fromState === "breached")) {
       for (const t of _tokensOf(actor)) restore(t);
@@ -152,7 +169,7 @@
   // art). bbttcc:rig:destroyed fires on the client that landed the killing hit;
   // ruin() relays the token write for player seats.
   Hooks.on("bbttcc:rig:destroyed", ({ rig } = {}) => {
-    if (!rig || _dupe(rig.id)) return;
+    if (!rig || _dupe(rig.id, "razed")) return;
     play(rig, "razed");
   });
   // No rig-repair hook exists: the active GM restores a wreck's look once its
@@ -172,7 +189,7 @@
   Hooks.on("bbttcc:siege:layerBreached", (p = {}) => {
     if (!game.user?.isGM || game.users?.activeGM?.id !== game.user.id) return;
     const actor = p.structureActorId ? game.actors.get(p.structureActorId) : null;
-    if (!actor || _dupe(actor.id)) return;
+    if (!actor || _dupe(actor.id, "razed")) return;
     play(actor, "razed");
   });
 
@@ -183,10 +200,41 @@
       game.socket?.on?.(`module.${MOD}`, (msg) => { if (msg?.t === "destructionShake") _shake(msg.kind === "razed" ? 1000 : 600); });
     } catch {}
     try {
-      game.bbttcc?.api?.gmExec?.register?.("structures.ruinToken", async ({ uuid, upd }) => {
-        const d = await fromUuid(uuid);
-        if (d) await d.update(upd, { animate: false });
-        return { ok: !!d };
+      // 10-29: locked down — this used to run fromUuid(uuid).update(upd) for ANY
+      // document + payload from any seat (marks into a faction bank, etc.). Now: Token
+      // only, structure/rig actor only, only the ruin-look keys _write() sends, and the
+      // GM RECOMPUTES the look itself (ruin/restore) from the actor's real state — the
+      // seat's values are never written. Sender must own the actor, or the state must
+      // call for exactly this look (an attacker's killing hit on a foe's wall).
+      const RUIN_KEYS = new Set(["texture.src", "texture.tint", "alpha",
+        `flags.${MOD}.preRuin`, `flags.${MOD}.ruinLook`, `flags.${MOD}.-=preRuin`, `flags.${MOD}.-=ruinLook`]);
+      game.bbttcc?.api?.gmExec?.register?.("structures.ruinToken", async (p = {}, meta = {}) => {
+        const upd = p?.upd;
+        if (!upd || typeof upd !== "object" || Array.isArray(upd)) throw new Error("ruinToken: bad update");
+        const keys = Object.keys(upd);
+        if (!keys.length || keys.some(k => !RUIN_KEYS.has(k))) throw new Error("ruinToken: key not allowed");
+        let d = null;
+        try { d = await fromUuid(String(p?.uuid || "")); } catch (_e) {}
+        if (d?.documentName !== "Token") throw new Error("ruinToken: not a token");
+        const actor = d.actor;
+        const st = _lookStateOf(actor);
+        if (!actor || !(st.isRig || st.struct)) throw new Error("ruinToken: not a structure or rig");
+        const caller = meta?.local ? game.user : game.users?.get(String(meta?.fromUserId || ""));
+        if (!caller) throw new Error("ruinToken: unknown sender");
+        const owns = !!actor.testUserPermission?.(caller, "OWNER");
+        const isRestore = (`flags.${MOD}.-=preRuin` in upd);
+        if (isRestore) {
+          const ruined = st.rigDead || st.struct === "razed" || st.struct === "breached";
+          if (ruined && !owns) throw new Error("ruinToken: structure is still ruined");
+          await restore(d);
+          return { ok: true };
+        }
+        const kind = String(upd[`flags.${MOD}.ruinLook`] || "");
+        if (!LOOK[kind]) throw new Error("ruinToken: bad look");
+        const earned = st.struct === kind || (kind === "razed" && st.rigDead);
+        if (!earned && !owns) throw new Error(`ruinToken: ${actor.name} is not ${kind}`);
+        await ruin(d, kind);
+        return { ok: true };
       });
     } catch (e) { console.warn(TAG, "gmExec register failed", e); }
     game.bbttcc = game.bbttcc || {}; game.bbttcc.api = game.bbttcc.api || {};

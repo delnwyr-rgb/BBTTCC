@@ -1681,6 +1681,7 @@ export async function openBreakerRuin(actor) {
             const costNote = deferRuin ? `armed — ${ruinCost} Ruin spent on hit` : `spent ${ruinCost}`;
             ChatMessage.create({
               speaker: ChatMessage.getSpeaker({ actor }),
+              flags: { fourththing: { bulwarkRuin: action } },   // 10-29: bulwark-hookups only acts on flagged cards
               content: `<div class="fourththing-roll">
                 <div class="ft-roll-header"><span class="ft-roll-name">⚒ Breaker: ${labels[action]?.split(' — ')[0]}</span></div>
                 <p style="margin:0.2rem 0;font-size:0.8rem;opacity:0.75">${labels[action]}${sunderNote}</p>

@@ -21,6 +21,10 @@
  * clients route damage through the existing ft-applyDamage socket; this file
  * only runs the structural side. Effective application of the damage rides
  * the wedge (which catches all _applyDamageToActor calls).
+ *
+ * 10-29: an OWNER seat applies damage to its own rig/structure locally, so the
+ * transition is relayed to the GM by damage-path.js (structures.stateChanged.relay)
+ * and re-fired there with ctx.relayed — that's what reaches triggerCollapse.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -225,7 +229,7 @@ async function applyProne(actor) {
 /**
  * Main collapse handler. Called from the state-transition hook subscriber.
  */
-export async function triggerCollapse(actor, { fromState, toState }) {
+export async function triggerCollapse(actor, { fromState, toState, breacher: relayedBreacher } = {}) {
   if (!actor) return;
 
   // Capture the breaching actor (the Bulwark who just damaged this structure)
@@ -233,9 +237,11 @@ export async function triggerCollapse(actor, { fromState, toState }) {
   // synchronous damage-apply window. 2026-05-25: the one who breaches a wall is
   // never caught in the collapse of THEIR OWN breach (they were adjacent, not
   // standing on it). Excluded from the footprint below.
-  const breacher = getActiveDamageSource();
+  // 10-29: a transition relayed from an owner seat (damage-path.js) carries its breacher.
+  const breacher = relayedBreacher !== undefined ? relayedBreacher : getActiveDamageSource(actor);
 
-  // Only GM-side, to avoid double-applying via multiple clients
+  // Only GM-side, to avoid double-applying via multiple clients. An owner seat's own
+  // transition reaches the GM through damage-path's stateChanged relay (10-29).
   if (!game.user?.isGM) return;
 
   const profile = actor.getFlag(FLAG_SCOPE, "collapseProfile") ?? {};
@@ -420,7 +426,8 @@ async function postCollapseTargetCard(structure, target, { rolled, applied, nonl
 Hooks.once("ready", () => {
   Hooks.on("bbttcc:structure:stateChanged", async (ctx) => {
     try {
-      await triggerCollapse(ctx?.actor, { fromState: ctx?.fromState, toState: ctx?.toState });
+      const relayed = ctx?.ctx?.relayed ? { breacher: ctx.ctx.breacher ?? null } : {};
+      await triggerCollapse(ctx?.actor, { fromState: ctx?.fromState, toState: ctx?.toState, ...relayed });
     } catch (e) {
       console.warn(TAG, "collapse hook failure", e);
     }
