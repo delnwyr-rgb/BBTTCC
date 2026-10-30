@@ -265,9 +265,20 @@
     // goes invisible after its beat has FIRED (director fire-marks land at
     // executeBeat entry). A DECLINED encounter never marks, so a declined
     // convoy can still roll up again later — that's the intended semantics.
+    // + ONCE PER CAMPAIGN (Dave 2026-10-30: the Acid Bog fired again on the road to Fixit): an entry whose BEAT is marked
+    // inject.repeatable === false is single-fire too — the Wendigo openers (bog, bridge, rockslide) play once in their
+    // initial form. "Fired" = the director's fire-marks OR the story store's played record (either can carry it).
     try {
       const fired = game.settings.get("bbttcc-campaign", "directorState")?.firedStoryBeats || {};
-      eligible = eligible.filter(ent => !(ent && ent.once && fired[String(ent.beatId || "")]));
+      let played = {}; try { played = game.bbttcc?.api?.campaign?.story?.state?.(campaignId)?.played || {}; } catch (_eP) {}
+      eligible = eligible.filter(ent => {
+        if (!ent) return false;
+        const id = String(ent.beatId || ""); const was = !!(fired[id] || played[id]);
+        if (!was) return true;
+        if (ent.once) return false;
+        const b = getBeatFromCampaignStore(String(ent.campaignId || campaignId || ""), id);
+        return b?.inject?.repeatable !== false;
+      });
     } catch (_e) {}
     if (!eligible.length) return { ok: false, reason: "no_eligible", tableId };
     // One of each per ride (2026-10-27, Dave: three Weather Fronts on one ride Lyrenn → Khezek-Tor).
