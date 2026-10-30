@@ -568,12 +568,12 @@
     return t.townHubSceneUuid || t.hexSceneLink?.targetSceneUuid || (typeof t.diveScene === "string" ? t.diveScene : null) || null;
   }
   const _facIdOf = (a) => { const s = a?.system?.system ?? a?.system ?? {}; return String(s.faction?.id || a?.flags?.[MOD_FAC]?.factionId || "").replace(/^Actor\./, ""); };
-  /** The party: factions of stewards this seat owns (player) or of any player-owned steward (GM). */
+  /** The party: factions of every player-owned steward — the Ride is everyone (ruling 2026-10-29), so the same on every seat. */
   function partyFactionIds() {
     const ids = new Set();
     for (const a of game.actors ?? []) {
       if (a.type !== "character") continue;
-      if (game.user.isGM ? !a.hasPlayerOwner : !a.isOwner) continue;
+      if (!a.hasPlayerOwner) continue;
       const f = _facIdOf(a); if (f) ids.add(f);
     }
     return [...ids];
