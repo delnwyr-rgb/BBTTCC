@@ -1991,6 +1991,7 @@ async function _rcResolveDefenderForFire(r) {
     if (r.targetType === "hex" || r.targetType === "facility") {
       const tgt = r.targetUuid ? await fromUuid(r.targetUuid).catch(()=>null) : null;
       const did = tgt?.flags?.[TERR_ID]?.factionId || "";
+      if (r.defenderId && game.actors?.get?.(r.defenderId)) return game.actors.get(r.defenderId);   // 10-30: the round's named defender first
       return did ? game.actors?.get?.(did) : null;
     }
   } catch (_e) {}
@@ -4281,7 +4282,7 @@ _renderScenarioHUD(host, round){
       targetHex = this.vm.targetUuid ? await fromUuid(this.vm.targetUuid) : null;
       const target = targetHex;
       const defId  = target?.flags?.[TERR_ID]?.factionId || "";
-      defender = defId ? game.actors.get(defId) : null;
+      defender = (this.vm.defenderId && game.actors.get(String(this.vm.defenderId).replace(/^Actor\./, ""))) || (defId ? game.actors.get(defId) : null);   // 10-30: a story offer's named defender first
 
       if (target && this.vm.targetType === "facility") {
         const facUI = await getFacilityRaidProfile(target);
@@ -4449,7 +4450,7 @@ _renderScenarioHUD(host, round){
       } else {
         const tgt = r.targetUuid ? await fromUuid(r.targetUuid) : null;
         const dId = tgt?.flags?.[TERR_ID]?.factionId || "";
-        def = dId ? game.actors.get(dId) : null;
+        def = (r.defenderId && game.actors.get(r.defenderId)) || (dId ? game.actors.get(dId) : null);   // 10-30: the round's named defender first
         if (r.targetType === "facility") {
         const fac = await getFacilityRaidProfile(tgt);
         facDefBonus = Number(fac?.defenderDcBonus || 0);
@@ -4521,7 +4522,7 @@ r.view = {
   defenderName: def?.name || "(none)",
   defenderId: def?.id || "",
   coalition: coalitionRound,
-  breakdown: `Att ${(attBaseRoll||0)} + ceil((StageA + Support) OP/2) ${stagedOpBonus(stagedA + stagedSupport)} = ${attProj}  •  Def ${(defBaseRoll||0)} + Base ${baseDefense} + Staged/2 ${defProjBonus}${diffR?` + Diff ${diffR}`:""}${facDefTotal?` + Defense ${facDefTotal}`:""}${nextBR?` + Next-Raid ${nextBR}`:""} = ${defProj}`};
+  breakdown: `Att ${(attBaseRoll||0)} + ceil((StageA + Support)/2) ${stagedOpBonus(stagedA + stagedSupport)} = ${attProj}  •  Def ${(defBaseRoll||0)} + Base ${baseDefense} + Staged/2 ${defProjBonus}${diffR?` + Diff ${diffR}`:""}${facDefTotal?` + Defense ${facDefTotal}`:""}${nextBR?` + Next-Raid ${nextBR}`:""} = ${defProj}`};
       // Alpha Cut — ONE Strength line per side (what the Domain owns, as the engine adds it) ABOVE the spend grid.
       // Ruling 5 retired 2026-10-26: marks are spent in every Battle/Heist/Parley, so the grid always renders.
       r.view.noMarks = false;
@@ -4812,6 +4813,12 @@ r.view = {
         const defId = target?.flags?.[TERR_ID]?.factionId || "";
         defender = defId ? game.actors.get(defId) : null;
       }
+      // 10-30: a story offer that NAMES its defender (worldEffects.raid.defenderId — the Vacancy Parley is against
+      // Allesh Gilliam, whose people hold court there) wins over the hex's owner. A hand-picked hex clears vm.defenderId.
+      if (this.vm.targetType !== "rig" && this.vm.defenderId) {
+        const named = game.actors.get(String(this.vm.defenderId).replace(/^Actor\./, ""));
+        if (named) defender = named;
+      }
 
       // Attacker-side next-raid DC shift (2026-09-12) — folded into the base so dry-run, contested and chat all agree.
       const __atkNext = _rcAttackerNextBonus(attacker?.flags?.[FCT_ID]);
@@ -4907,7 +4914,7 @@ r.view = {
 
         targetType: this.vm.targetType || "hex",
         targetUuid: ((this.vm.targetType==="hex" || this.vm.targetType==="facility") ? (this.vm.targetUuid || "") : ""),
-        defenderId: (this.vm.targetType==="rig") ? (this.vm.defenderId || "") : "",
+        defenderId: (this.vm.targetType==="rig" || defender?.id) ? (this.vm.targetType==="rig" ? (this.vm.defenderId || "") : (defender?.id || "")) : "",
         rigId: (this.vm.targetType==="rig") ? (this.vm.rigId || "") : "",
 
         creatureId: (this.vm.targetType==="creature") ? (this.vm.creatureId || "") : "",
@@ -5239,7 +5246,7 @@ r.view = {
       if (r.targetType === "rig") actorId = r.defenderId || "";
       else {
         const t = r.targetUuid ? await fromUuid(r.targetUuid) : null;
-        actorId = t?.flags?.[TERR_ID]?.factionId || "";
+        actorId = (r.defenderId && game.actors.get(r.defenderId)) ? r.defenderId : (t?.flags?.[TERR_ID]?.factionId || "");   // 10-30: named defender first
       }
       bucket = (r.localStaged.def ||= {});
       label = "Defender";
@@ -5517,6 +5524,8 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           const did = tgt?.flags?.[TERR_ID]?.factionId || "";
           defender = did ? game.actors.get(did) : null;
         }
+        // 10-30: the round's own defender (a story offer's named side, stamped at Add Round) wins over the hex owner
+        if (r.targetType !== "rig" && r.defenderId && game.actors.get(r.defenderId)) defender = game.actors.get(r.defenderId);
       } catch {}
       if (!defender) return ui.notifications?.warn?.("Scenario modes require a defender Domain (hex/facility/rig target).");
       r.defenderId = defender.id || r.defenderId || "";
@@ -6092,7 +6101,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
       targetHex = r.targetUuid ? await fromUuid(r.targetUuid) : null;
       if (!targetHex) return ui.notifications?.warn?.("Target hex not found.");
       const defId    = targetHex?.flags?.[TERR_ID]?.factionId || "";
-      defender = defId ? game.actors.get(defId) : null;
+      defender = (r.defenderId && game.actors.get(r.defenderId)) || (defId ? game.actors.get(defId) : null);   // 10-30: the round's named defender first
       facilityOrRigProfile = (r.targetType === "facility") ? await getFacilityRaidProfile(targetHex) : null;
     }
 
