@@ -21916,7 +21916,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           isConsumable: !!rfi?.consume,
           charges:      Number(rfi?.charges ?? 0) || null,
           // Inventory CATEGORY (owner ask 2026-10-06: "list items by category") — the sheet groups rows under these headers.
-          group: i.type === "weapon" ? "Weapons"
+          // QUEST ITEMS (Dave 2026-10-30): story objects the Steward carries (bbttcc-campaign choice.questItems) — own group,
+          // no equip toggle (isQuestItem)
+          isQuestItem: !!i.flags?.["bbttcc-campaign"]?.questItem,
+          group: i.flags?.["bbttcc-campaign"]?.questItem ? "Quest Items"
+               : i.type === "weapon" ? "Weapons"
                : i.type === "armor"  ? "Armor"
                : rfi?.consume        ? "Consumables"
                : (rfi?.frame === "relic" || (Array.isArray(i.system?.tags) && i.system.tags.some(t => /^relic/i.test(String(t))))) ? "Relics"
@@ -21924,7 +21928,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         };
       });
       // Grouped view: fixed category order, then higher tier first, then name. Empty categories are left out.
-      const GEAR_GROUP_ORDER = ["Weapons", "Armor", "Consumables", "Relics", "Gear"];
+      const GEAR_GROUP_ORDER = ["Quest Items", "Weapons", "Armor", "Consumables", "Relics", "Gear"];
       const gearGroups = GEAR_GROUP_ORDER.map(label => ({
         label,
         rows: gearRows.filter(r => r.group === label).sort((a, b) => (Number(b.tier) || 0) - (Number(a.tier) || 0) || String(a.name).localeCompare(String(b.name)))

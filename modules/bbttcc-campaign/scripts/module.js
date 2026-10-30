@@ -1262,6 +1262,50 @@ function _bookmarkClose(token, payload) {
 // the Travel Console with the window, so riding never needed the button and the window sat open for the whole ride).
 // choice.openTravel = { hexName?, note? } opens the console when THAT choice is picked (same op as the beat-level stage
 // direction, via the world-mutation engine; already at the destination → the arrival runs instead).
+// QUEST ITEMS (Dave 2026-10-30: "a quest item section in inventory … a notice 'Item Received - X' … the choice button
+// say 'with the Tetrarch Spanner'"). A quest item is a gear Item on the STEWARD who took it (the beat window's roster pick),
+// flagged flags.bbttcc-campaign.questItem = { key, beatId, at }; the system sheet lists it under "Quest Items".
+//   choice.questItems = [{ key, name, img?, description?, remove? }] — granted (or removed, any holder) when THAT choice is picked
+//   choice.withItem   = key   — the button reads "<label> — with the <name>" while someone holds it
+//   requires { questItem: key, not? } — the gate grammar (a choice/beat that needs the item in hand)
+function _questItemHeld(key) {
+  const k = String(key || "").trim(); if (!k) return null;
+  for (const a of (game.actors?.contents || [])) for (const it of (a.items?.contents || [])) if (it.flags?.["bbttcc-campaign"]?.questItem?.key === k) return { actor: a, item: it };
+  return null;
+}
+function _questItemHolderFor(campaign, rosterActorId, ctx = {}) {
+  const pick = rosterActorId ? game.actors?.get?.(String(rosterActorId)) : null; if (pick) return pick;
+  const viaCtx = ctx?.rosterActorId ? game.actors?.get?.(String(ctx.rosterActorId)) : null; if (viaCtx) return viaCtx;
+  const lead = String(campaign?.factionId || (campaign?.factionIds || [])[0] || "").replace(/^Actor\./, "");
+  try { const st = game.bbttcc?.api?.radiation?.partyStewardsOf?.(lead) || []; const played = st.find(a => a.hasPlayerOwner); if (played || st[0]) return played || st[0]; } catch (_e) {}
+  return null;
+}
+async function _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx = {}) {
+  const rows = Array.isArray(ch?.questItems) ? ch.questItems.filter(r => r && String(r.key || "").trim()) : [];
+  if (!rows.length) return;
+  if (!game.user?.isGM) { warn("[quest-items] skipped on a non-GM seat", beat?.id); return; }
+  const esc = foundry.utils.escapeHTML;
+  for (const r of rows) {
+    const key = String(r.key).trim(); const held = _questItemHeld(key);
+    if (r.remove === true) {
+      if (!held) continue;
+      try { await held.item.delete(); } catch (e) { warn("[quest-items] remove failed", key, e); continue; }
+      await ChatMessage.create({ speaker: { alias: "Bad Eden" }, content: `<div style="border-left:3px solid #8a8f98;padding:.35em .6em;background:rgba(138,143,152,.08);">🎒 <b>Item handed over</b> — ${esc(held.item.name)} <span style="opacity:.75">(from ${esc(held.actor.name)})</span></div>` }).catch(() => {});
+      continue;
+    }
+    if (held) { log(`[quest-items] '${key}' already held by ${held.actor.name}`); continue; }
+    const holder = _questItemHolderFor(campaign, rosterActorId, ctx);
+    if (!holder) { warn("[quest-items] no Steward to hold", key, beat?.id); continue; }
+    const name = String(r.name || key);
+    try {
+      await holder.createEmbeddedDocuments("Item", [{ name, type: "gear", img: r.img || "icons/tools/hand/spanner-steel-grey.webp",
+        system: { description: { value: r.description ? `<p>${foundry.utils.escapeHTML(String(r.description))}</p>` : "", chat: "" }, category: "gear", quantity: 1 },
+        flags: { "bbttcc-campaign": { questItem: { key, beatId: String(beat?.id || ""), at: Date.now() } } } }]);
+    } catch (e) { warn("[quest-items] grant failed", key, e); continue; }
+    await ChatMessage.create({ speaker: { alias: "Bad Eden" }, content: `<div style="border-left:3px solid #d4a72c;padding:.35em .6em;background:rgba(212,167,44,.08);">🎒 <b>Item received</b> — ${esc(name)} <span style="opacity:.75">(${esc(holder.name)} carries it · Inventory → Quest Items)</span></div>` }).catch(() => {});
+    ui.notifications?.info?.(`Item received — ${name} (${holder.name})`);
+  }
+}
 async function _choiceOpenTravel(campaign, beat, ch, ctx) {
   const ot = ch && ch.openTravel;
   if (!ot || typeof ot !== "object") return null;
@@ -2601,6 +2645,11 @@ function _expandStoryTokens(text, campaign, { raw = false } = {}) {   // raw: pl
 // Khezek-Tor's thread, and "🐎 Saddle up — ride for Khezek-Tor" still read like a ride). Display only — the stored label,
 // the choice log and the pick are unchanged; the openTravel op itself arrives without a ride (world-mutation-engine).
 function _choiceShownLabel(ch, i) {
+  const _base = _choiceShownLabelBase(ch, i);
+  try { if (ch?.withItem) { const h = _questItemHeld(ch.withItem); if (h) return `${_base} — with the ${h.item.name}`; } } catch (_e) {}
+  return _base;
+}
+function _choiceShownLabelBase(ch, i) {
   const base = (ch && ch.label) || ("Choice " + (i + 1));
   const dest = String(ch?.openTravel?.hexName || "").trim();
   return (dest && _partyIsAt(dest)) ? `▶ You're in ${dest} already — go on in` : base;
@@ -3084,7 +3133,7 @@ ${
                   : (ch.failNext || beat.outcomes?.failure || "");
 
                 try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
-                if (res.ok) { try { await _choiceOpenTravel(campaign, beat, ch, ctx); } catch (_eOT) {} }
+                if (res.ok) { try { await _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx); } catch (_eQI) {} try { await _choiceOpenTravel(campaign, beat, ch, ctx); } catch (_eOT) {} }
                 const chainTs = Date.now();
                 if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
                 if (!res.ok && ch.secret !== true) await _offerRetryInChain(campaign, beat, ctx, { sinceTs: chainTs });   // a secret miss stands quietly
@@ -3102,6 +3151,7 @@ ${
 // No check: route to next
               const nextId = ch.next || "";
               try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
+              try { await _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx); } catch (_eQI) {}
               try { await _choiceOpenTravel(campaign, beat, ch, ctx); } catch (_eOT) {}   // Saddle up carries the ride
               if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
 
@@ -5700,6 +5750,13 @@ async function _beatRequiresMet(beat, campaign, ctx) {
         continue;
       }
 
+      // { questItem: "<key>", not?: true } — some Steward holds that quest item (2026-10-30)
+      if (c.questItem != null) {
+        const held = !!_questItemHeld(c.questItem);
+        if (c.not === true ? held : !held) return false;
+        continue;
+      }
+
       // { questBucket: "<questId>", is: "active"|"completed"|"archived" }
       // or the negation { questBucket, isNot: "<bucket>" } — true when the quest
       // is NOT in that bucket (e.g. "offer this until the quest is underway").
@@ -5853,6 +5910,12 @@ async function _beatGateReport(beat, campaign, ctx = {}) {
         continue;
       }
 
+      if (c.questItem != null) {
+        const h = _questItemHeld(c.questItem); const ok = c.not === true ? !h : !!h;
+        out.conditions.push({ text: `quest item “${String(c.questItem)}” ${c.not === true ? "not held" : (h ? `held by ${h.actor.name}` : "held")}`, met: ok, kind: "questItem" });
+        if (!ok) out.met = false;
+        continue;
+      }
       if (c.beatMark != null) {
         const questId = String(c.quest || "").trim();
         const want = String(c.state || "seen").trim();
@@ -6855,6 +6918,7 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
     } catch (_eN) {}
     const nextId = res.ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
     try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
+    if (res.ok) { try { await _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx); } catch (_eQI) {} }
     if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
     return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch,
              check: { stat: res.stat, dc: res.dc, total: res.total, ok: res.ok, kind: res.kind, bonus: (res.bonus != null ? res.bonus : null) } };
@@ -6863,6 +6927,7 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
   // No check: route to next
   const nextId = ch.next || "";
   try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
+  try { await _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx); } catch (_eQI) {}
   if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
   return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch };
 }
