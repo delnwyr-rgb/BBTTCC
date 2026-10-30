@@ -86,7 +86,7 @@ async function open() {
         ? `<div class="open"><div class="k">Still open when you left</div><div class="v">${esc(d.open.label)}</div><div class="s">opened ${esc(_when(d.openSince))}</div></div>`
         : d.unfinished
         ? `<div class="open"><div class="k">Looks unfinished</div><div class="v">${esc(d.unfinished.label)}</div><div class="s">the last beat played (${esc(_when(d.unfinished.since))}) — no choice was ever made in it</div></div>`
-        : (d.next ? `<div class="open"><div class="k">Next in the story</div><div class="v">${esc(d.next.label)}</div>${d.next.line ? `<div class="s">${esc(d.next.line)}</div>` : ""}${d.next.ready ? "" : `<div class="s">(not ready yet — its conditions aren't met)</div>`}${d.next.ready && d.next.here === false ? `<div class="s">🐎 It's at <b>${esc(d.next.place || "another hex")}</b>; the party is at <b>${esc(d.next.where || "?")}</b>. Plot the ride on the Travel Console. Arriving opens the town, and the beat is waiting there.</div>` : ""}</div>`
+        : (d.next ? `<div class="open"><div class="k">Next in the story</div><div class="v">${esc(d.next.label)}</div>${d.next.line ? `<div class="s">${esc(d.next.line)}</div>` : ""}${d.next.ready ? "" : `<div class="s">(not ready yet — its conditions aren't met)</div>`}${d.next.ready && d.next.here === false ? `<div class="s">🐎 It's at <b>${esc(d.next.place || "another hex")}</b>; the party is at <b>${esc(d.next.where || "?")}</b>. Ride opens the Travel Console with the route planned; arriving opens the town, and the beat is waiting there.</div>` : ""}</div>`
                  : `<p class="s">Nothing was left open, and the story has no ready next beat.</p>`)) +
       (rows ? `<div class="k prev">Previously…</div><ol class="recent">${rows}</ol>` : "") +
     `</div>` +
@@ -113,6 +113,7 @@ async function open() {
   const buttons = {};
   if (d.open) buttons.pick = { icon: '<i class="fas fa-play"></i>', label: `Pick up: ${d.open.label}`, callback: () => { run(d.open.beatId); } };
   else if (d.unfinished) buttons.pick = { icon: '<i class="fas fa-play"></i>', label: `Pick up: ${d.unfinished.label}`, callback: () => { run(d.unfinished.beatId); } };
+  else if (d.next?.ready && d.next.here === false && d.next.place) buttons.ride = { icon: '<i class="fas fa-horse"></i>', label: `Ride to ${d.next.place}`, callback: () => { api()?.rideTo?.(d.next.place); } };
   else if (d.next?.ready && d.next.here !== false) buttons.next = { icon: '<i class="fas fa-play"></i>', label: `Run next: ${d.next.label}`, callback: () => { run(d.next.id, "resume-next"); } };
   buttons.close = { icon: '<i class="fas fa-times"></i>', label: "Not now" };
 

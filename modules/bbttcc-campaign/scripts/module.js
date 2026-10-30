@@ -8953,6 +8953,17 @@ function buildCampaignAPI() {
       scanStableKeysReport: scanStableKeysReport
     },
     openBuilder,
+    // RIDE HANDOFF (Dave 2026-10-29): the GM's one click from "that beat is in another town" to the ride — the same
+    // openTravel stage direction a ride beat carries (table pulled to the hex map holding the destination, Travel Console
+    // opened with the route auto-planned; already there → arrive instead). GM only.
+    rideTo: async (hexName, { note = "" } = {}) => {
+      if (!game.user?.isGM) return ui.notifications?.info?.("Ask your GM to plot the ride.");
+      const dest = String(hexName || "").trim(); const wm = game.bbttcc?.api?.worldMutation;
+      if (!dest || !wm?.applyWorldEffects) return ui.notifications?.warn?.("No destination to ride to.");
+      const c = getCampaign(getActiveCampaignId());
+      return wm.applyWorldEffects({ id: "ride-handoff", worldEffects: { openTravel: { hexName: dest, ...(note ? { note } : {}) } } },
+        { source: "bbttcc-campaign", campaignId: c?.id || null, campaignTitle: c?.label || "", factionId: c?.factionId || (c?.factionIds || [])[0] || null });
+    },
     getActiveCampaignId,
     setActiveCampaignId,
     builderClass: null

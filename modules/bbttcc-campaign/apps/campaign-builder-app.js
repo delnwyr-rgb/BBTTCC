@@ -1523,8 +1523,13 @@ const activeCampaignId = _getActiveCampaignId();
       c.quest = q.name; return c;
     }
     if (n.next.ready && n.next.here === false) {
-      const c = card(`🐎 RIDE — ${esc(q.name)}${chapTxt}`, b.label || b.id, b, [run(b, `Run it anyway (the party is at ${story.where || "?"})`)],
-        `${scriptLine}<b>${esc(b.label || b.id)}</b> is at <b>${esc(String(n.next.place || q.hex || "?"))}</b>; the party is at <b>${esc(String(story.where || "?"))}</b>. Plot the ride on the Travel Console — arrival opens the town, and this beat is waiting there.${progress}${endingsTxt}`);
+      // Dave 2026-10-29: "we should be facilitating an easy handoff to travel for the GM here" — the first button IS the ride
+      // (the openTravel stage direction: pull the table to the hex map holding the destination, console route auto-planned);
+      // "Run it anyway" is the deliberate override, so it forces past the location guard.
+      const dest = String(n.next.place || q.hex || "").trim();
+      const c = card(`🐎 RIDE — ${esc(q.name)}${chapTxt}`, b.label || b.id, b,
+        [...(dest && !/^anywhere$/i.test(dest) ? [{ id: String(b.id), ride: dest, text: `Ride to ${dest}` }] : []), run(b, `Run it anyway (the party is at ${story.where || "?"})`, true)],
+        `${scriptLine}<b>${esc(b.label || b.id)}</b> is at <b>${esc(dest || "?")}</b>; the party is at <b>${esc(String(story.where || "?"))}</b>. Ride opens the Travel Console with the route planned; arriving opens the town, and this beat is waiting there.${progress}${endingsTxt}`);
       c.quest = q.name; return c;
     }
     if (n.next.ready) {
@@ -1885,7 +1890,9 @@ const activeCampaignId = _getActiveCampaignId();
       `<div class="k">${esc(h.kicker)}</div>` +
       (h.title ? `<div class="t">${esc(h.title)}</div>` : "") +
       (h.quest ? `<div class="q">${esc(h.quest)}</div>` : "") +
-      h.runs.map(r => `<button type="button" class="bbttcc-now-hero-run" data-run="${esc(r.id)}"${r.force ? ` data-force="1"` : ""}>▶ ${esc(r.text)}</button>`).join("") +
+      h.runs.map(r => r.ride
+        ? `<button type="button" class="bbttcc-now-hero-run" data-ride="${esc(r.ride)}">🐎 ${esc(r.text)}</button>`   // hand the table to travel (2026-10-29)
+        : `<button type="button" class="bbttcc-now-hero-run" data-run="${esc(r.id)}"${r.force ? ` data-force="1"` : ""}>▶ ${esc(r.text)}</button>`).join("") +
       (h.note ? `<div class="alt">${h.note}</div>` : "") +
       (Array.isArray(h.roads) && h.roads.length ? `<div class="bbttcc-now-kv" style="margin-top:.4em"><span class="k">THE ROAD</span></div>` + h.roads.map(r => flyBtn(r.id, r.label, r.icon || "", false)).join("") : "") +
       `</div>`) : "";
@@ -2080,6 +2087,8 @@ const activeCampaignId = _getActiveCampaignId();
         row?.after(det);
         return;
       }
+      const ride = ev.target?.closest?.("[data-ride]");
+      if (ride) { ev.preventDefault(); ev.stopPropagation(); game.bbttcc?.api?.campaign?.rideTo?.(ride.dataset.ride); return; }
       const run = ev.target?.closest?.("[data-run]");
       if (run) { ev.preventDefault(); ev.stopPropagation(); this._runBeatFromConsole(run.dataset.run, { force: run.dataset.force === "1" }); return; }
       const btn = ev.target?.closest?.("[data-fly]");
