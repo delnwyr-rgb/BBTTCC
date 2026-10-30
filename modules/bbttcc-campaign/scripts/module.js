@@ -1306,6 +1306,20 @@ async function _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx = {}) {
     ui.notifications?.info?.(`Item received — ${name} (${holder.name})`);
   }
 }
+// CHOICE WORLD EFFECTS (Dave 2026-10-30: "I chose the parley method … it doesn't pop up anything"). A choice may carry its
+// own `worldEffects` (the story's raid offers — the Gearbox lease Parley, Wick's room Heist, the Hidden Vault Heist — sit on
+// the choice that makes the offer). Nothing read them: the pick logged and the console never opened. Applied at the pick
+// (a check choice only on success), through the same world-mutation engine as a beat's own effects.
+async function _choiceWorldEffects(campaign, beat, ch, ctx = {}) {
+  const we = ch && ch.worldEffects;
+  if (!we || typeof we !== "object" || !Object.keys(we).length) return null;
+  const wm = game.bbttcc?.api?.worldMutation;
+  if (!wm?.applyWorldEffects) return null;
+  return wm.applyWorldEffects(
+    { id: `${beat.id}#${String(ch.label || "choice").slice(0, 40)}`, worldEffects: we },
+    { source: "bbttcc-campaign", campaignId: campaign.id, campaignTitle: campaign.label, beatId: beat.id, factionId: ctx?.factionId || campaign.factionId || null, __chain: ctx?.__chain }
+  );
+}
 async function _choiceOpenTravel(campaign, beat, ch, ctx) {
   const ot = ch && ch.openTravel;
   if (!ot || typeof ot !== "object") return null;
@@ -3148,7 +3162,7 @@ ${
                   : (ch.failNext || beat.outcomes?.failure || "");
 
                 try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
-                if (res.ok) { try { await _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx); } catch (_eQI) {} try { await _choiceOpenTravel(campaign, beat, ch, ctx); } catch (_eOT) {} }
+                if (res.ok) { try { await _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx); } catch (_eQI) {} try { await _choiceWorldEffects(campaign, beat, ch, ctx); } catch (_eCW) { warn("choice worldEffects failed:", _eCW); } try { await _choiceOpenTravel(campaign, beat, ch, ctx); } catch (_eOT) {} }
                 const chainTs = Date.now();
                 if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
                 if (!res.ok && ch.secret !== true) await _offerRetryInChain(campaign, beat, ctx, { sinceTs: chainTs });   // a secret miss stands quietly
@@ -3167,6 +3181,7 @@ ${
               const nextId = ch.next || "";
               try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
               try { await _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx); } catch (_eQI) {}
+              try { await _choiceWorldEffects(campaign, beat, ch, ctx); } catch (_eCW) { warn("choice worldEffects failed:", _eCW); }
               try { await _choiceOpenTravel(campaign, beat, ch, ctx); } catch (_eOT) {}   // Saddle up carries the ride
               if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
 
@@ -6935,7 +6950,7 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
     } catch (_eN) {}
     const nextId = res.ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
     try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
-    if (res.ok) { try { await _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx); } catch (_eQI) {} }
+    if (res.ok) { try { await _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx); } catch (_eQI) {} try { await _choiceWorldEffects(campaign, beat, ch, ctx); } catch (_eCW) { warn("choice worldEffects failed:", _eCW); } }
     if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
     return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch,
              check: { stat: res.stat, dc: res.dc, total: res.total, ok: res.ok, kind: res.kind, bonus: (res.bonus != null ? res.bonus : null) } };
@@ -6945,6 +6960,7 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
   const nextId = ch.next || "";
   try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
   try { await _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx); } catch (_eQI) {}
+  try { await _choiceWorldEffects(campaign, beat, ch, ctx); } catch (_eCW) { warn("choice worldEffects failed:", _eCW); }
   if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
   return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch };
 }
