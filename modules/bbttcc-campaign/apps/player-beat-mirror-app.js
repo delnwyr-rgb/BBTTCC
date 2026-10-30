@@ -127,6 +127,7 @@ function normalizeBeatData(raw) {
   const choices = rawChoices.map((c, idx) => ({
     label: c?.label ?? c?.text ?? c?.title ?? `Choice ${idx + 1}`,
     description: c?.description ?? c?.desc ?? "",
+    spent: !!c?.spent, spentSoft: !!c?.spentSoft,   // universal greying (2026-10-30)
   }));
 
   return {
@@ -150,13 +151,13 @@ function renderMirrorHTML(data) {
   const descHTML = d.description || "";
 
   const choicesHTML = (d.choices || []).map((c) => {
-    const label = escapeHTML(c.label);
+    const label = (c.spent ? "✓ " : "") + escapeHTML(c.label) + (c.spent && !c.spentSoft ? " — done" : "");
     // Optional per-choice description shown as small text under label.
     const cDesc = (c.description && String(c.description).trim().length)
       ? `<div class="bbttcc-mirror__choice-desc" style="opacity:.8; font-size:12px; margin-top:4px;">${c.description}</div>`
       : "";
     return `
-      <button class="bbttcc-mirror__choice">
+      <button class="bbttcc-mirror__choice"${c.spent ? ` style="opacity:${c.spentSoft ? ".55" : ".45"};"${c.spentSoft ? "" : " disabled"}` : ""}>
         <div style="font-weight:600;">${label}</div>
         ${cDesc}
       </button>
