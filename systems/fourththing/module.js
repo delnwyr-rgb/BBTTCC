@@ -2653,6 +2653,7 @@ async function ftPlaceAreaTemplate(actor, area) {
       canvas.stage.off("mousedown",   onDown);
       canvas.stage.off("rightdown",   onRight);
       window.removeEventListener("keydown", onKey, true);
+      try { hitEl.remove(); } catch (_e) {}
       try { preview.destroy({ children: true }); } catch (_e) {}
       try { priorLayer?.activate?.(); } catch (_e) {}
       if (!commit) return resolve(null);
@@ -2696,6 +2697,27 @@ async function ftPlaceAreaTemplate(actor, area) {
         preview.document.updateSource({ x: p.x, y: p.y });
       }
       preview.refresh();
+      _hitLabel(ev);
+    };
+
+    // 10-29 (Combat Dock): live "N caught" readout beside the cursor while aiming —
+    // same hit test the commit uses, so the count is what Apply Damage will hit.
+    const hitEl = document.createElement("div");
+    hitEl.className = "ft-template-hitcount";
+    document.body.appendChild(hitEl);
+    let _hitAt = 0;
+    const _hitLabel = (ev) => {
+      const cx = ev.clientX ?? ev.data?.originalEvent?.clientX, cy = ev.clientY ?? ev.data?.originalEvent?.clientY;
+      if (cx != null) { hitEl.style.left = `${cx + 18}px`; hitEl.style.top = `${cy + 14}px`; }
+      const now = Date.now(); if (now - _hitAt < 60) return; _hitAt = now;
+      try {
+        const d = preview.document;
+        const toks = _ftTokensInTemplate({ x: d.x, y: d.y, t: d.t, distance: d.distance, object: preview }, { excludeActorUuids: new Set([actor?.uuid]) });
+        const cd = _ftActorDisposition(actor);
+        let foes = 0, allies = 0;
+        for (const tk of toks) (_ftAoeRelation(cd, tk.document?.disposition ?? 0) === "foe") ? foes++ : allies++;
+        hitEl.innerHTML = `<b>${toks.length}</b> caught${foes ? ` · ${foes} foe${foes === 1 ? "" : "s"}` : ""}${allies ? ` · <span class="ft-thc-ally">${allies} ally ⚠</span>` : ""}`;
+      } catch (_e) { hitEl.textContent = ""; }
     };
 
     const onDown = (ev) => {
@@ -8033,6 +8055,7 @@ const _FT_RELAY_FLAG_PATHS = new Set([
   "aurablade.preventDropOnce",
   "aurablade.autoPassLastStand",
   "bonusActionAvailable",
+  "actAgainAvailable",
   "soulSmith.relicWard",
   "tempConditions.calmed", "tempConditions.staggered", "tempConditions.shaken", "tempConditions.prone",
   // crew actions (2026-10-01): signal / suppression on targets, cycle-power
@@ -12205,6 +12228,21 @@ FT.COMBAT_ACTIONS = {
   }
 };
 
+// Double-10 Act Again (owner ruling 2026-10-29): clear the flag and give the Action back.
+// Shared by the sheet's ⚡ chip and the Combat Dock (game.fourththing.actAgain).
+async function ftActAgain(actor) {
+  if (!actor) return;
+  await actor.unsetFlag("fourththing", "actAgainAvailable");
+  await actor.update({ "system.actions.actionUsed": false });
+  ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll">
+      <div class="ft-roll-header"><span class="ft-roll-name">⚡ ${ftEscapeHtml(actor.name)} acts again</span></div>
+      <p style="margin:0.2rem 0;font-size:0.82rem;opacity:0.8">Double 10 — the Action is back. Take it now.</p>
+    </div>`
+  });
+}
+
 async function ftPerformCombatAction(actor, key) {
   const def = FT.COMBAT_ACTIONS[key];
   if (!def) { ui.notifications?.warn(`Unknown combat action: ${key}`); return; }
@@ -15875,7 +15913,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const doubleTen  = baseDice.filter(v => v === 10).length >= 2;
 
     if (explosions > 0) await _ftBankSurge(actor, explosions);
-    if (doubleTen) await actor.setFlag("fourththing", "bonusActionAvailable", true);
+    if (doubleTen) await actor.setFlag("fourththing", "actAgainAvailable", true);   // 10-29: double 10 gives the Action back
 
     // Shape B reroll grants — passive items can grant reroll-lowest/highest on
     // this roll (e.g. "advantage on Body checks" from a heritage). Surge for
@@ -16161,7 +16199,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (explosions > 0) {
       await _ftBankSurge(actor, explosions);
     }
-    if (doubleTen) await actor.setFlag("fourththing", "bonusActionAvailable", true);
+    if (doubleTen) await actor.setFlag("fourththing", "actAgainAvailable", true);   // 10-29: double 10 gives the Action back
 
     // Shape B reroll grants — context "caster-check" + per-attribute narrowing
     // covers the two pieces of magic vocabulary that came up in the survey.
@@ -16934,7 +16972,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const doubleTen   = keptVals.filter(v => v === 10).length >= 2;
 
     if (explosions > 0) await _ftBankSurge(actor, explosions);
-    if (doubleTen) await actor.setFlag("fourththing", "bonusActionAvailable", true);
+    if (doubleTen) await actor.setFlag("fourththing", "actAgainAvailable", true);   // 10-29: double 10 gives the Action back
 
     if (dropCount > 0) {
       const poolLabel = _masterPool
@@ -18052,6 +18090,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   };
   game.fourththing.ftOpenCastDialog   = ftOpenCastDialog;
   game.fourththing.classifyPrinciple  = ftClassifyPrinciple;
+  // 10-29: the Combat Dock (bbttcc-territory combat-dock.enhancer.js) fires the Engagement-tab
+  // moves (Dash / Disengage / Hold / Aid / Hide / Dodge) and sets targets the cross-version way.
+  game.fourththing.combatActions = { defs: FT.COMBAT_ACTIONS, perform: ftPerformCombatAction };
+  game.fourththing.actAgain = ftActAgain;
+  game.fourththing.setUserTargets = ftSetUserTargets;
   // The manifestation glossary + knob tooltips, exposed 2026-08-17 so the
   // onboarding teaching slides quote the ENGINE's own definitions instead of
   // paraphrasing them into a second, drifting copy. Same HTML the cast dialog's
@@ -18228,9 +18271,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (Array.isArray(actor.flags?.fourththing?.aptitudeBurn) && actor.flags.fourththing.aptitudeBurn.length) {
       await actor.unsetFlag("fourththing", "aptitudeBurn");
     }
-    // Clear the one-shot double-10 bonus action if it lingered across scenes.
+    // Clear a lingering freed Bonus Action / double-10 Act Again across scenes.
     if (actor.flags?.fourththing?.bonusActionAvailable) {
       await actor.unsetFlag("fourththing", "bonusActionAvailable");
+    }
+    if (actor.flags?.fourththing?.actAgainAvailable) {
+      await actor.unsetFlag("fourththing", "actAgainAvailable");
     }
 
     // Auto-reset per-discipline use trackers used by _openSomaBreakAbility
@@ -20351,6 +20397,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       "system.actions.movementUsedFt":  0,
       "system.actions.movementBudgetFt": moveFt
     });
+    // 10-29: an unused double-10 Act Again ends when your next turn starts — the Action is
+    // back anyway, and keeping it would bank a second Action.
+    if (actor.flags?.fourththing?.actAgainAvailable) {
+      try { await actor.unsetFlag("fourththing", "actAgainAvailable"); } catch (_e) {}
+    }
     // 10-29: Dodge / Disengage / Hold end at the start of your next turn (the
     // round-advance clear leaves them for this).
     try {
@@ -22851,6 +22902,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       if (this.actor.flags?.fourththing?.bonusActionAvailable) {
         await this.actor.unsetFlag("fourththing", "bonusActionAvailable");
       }
+      if (this.actor.flags?.fourththing?.actAgainAvailable) {
+        await this.actor.unsetFlag("fourththing", "actAgainAvailable");
+      }
       // Dreamwalker Walking Lane — per-round "ignore range" use refreshes at turn start.
       if (this.actor.flags?.fourththing?.modes?.walkingLaneUsedRound) {
         await this.actor.update({ "flags.fourththing.modes.-=walkingLaneUsedRound": null });
@@ -22897,6 +22951,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
 
     static async _onFtActAgain(event, target) {
+      // Double 10 (actAgainAvailable) gives the ACTION back (owner ruling 2026-10-29);
+      // a Surge grant (bonusActionAvailable) frees the Bonus Action.
+      if (this.actor.flags?.fourththing?.actAgainAvailable) return ftActAgain(this.actor);
       // Clear the flag and make sure bonus is available to use.
       await this.actor.unsetFlag("fourththing", "bonusActionAvailable");
       await this.actor.update({ "system.actions.bonusUsed": false });

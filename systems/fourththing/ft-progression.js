@@ -247,9 +247,10 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
     }
   }
 
-  // Flag bonus-action availability so the sheet can show an "Act Again" button.
+  // Double 10 = Act Again: the ACTION comes back (owner ruling 2026-10-29). Its own flag —
+  // bonusActionAvailable stays the Surge grants' freed Bonus Action.
   if (doubleTen) {
-    await actor.setFlag("fourththing", "bonusActionAvailable", true);
+    await actor.setFlag("fourththing", "actAgainAvailable", true);
   }
 
   // Mechanic note for the chat card.

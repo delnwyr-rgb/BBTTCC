@@ -110,7 +110,7 @@
       <button type="button" class="ft-econ-chip {{#if actionEconomy.actionUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="actionUsed">Action</button>
       <button type="button" class="ft-econ-chip {{#if actionEconomy.bonusUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="bonusUsed" data-tooltip="Bonus action — one per round, taken on your turn or at any point off it (a Steward's legendary action). Refreshes at the start of your turn.">Bonus</button>
       <button type="button" class="ft-econ-chip {{#if actionEconomy.reactionUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="reactionUsed">Reaction</button>
-      {{#if ftFlags.bonusActionAvailable}}
+      {{#if (or ftFlags.bonusActionAvailable ftFlags.actAgainAvailable)}}
       <button type="button" data-action="ftActAgain" class="ft-econ-chip ft-act-again" data-tooltip="A freed bonus action — take it now, on your turn or anyone else's. Click once your round's bonus is spent.">⚡ Act Again</button>
       {{/if}}
       <button type="button" class="ft-npc-tool" data-action="ftNewTurn" data-tooltip="Reset action economy">↻ New Turn</button>

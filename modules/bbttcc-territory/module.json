@@ -42,6 +42,7 @@
     "scripts/territory-unitybonus.enhancer.js",
     "scripts/bbttcc-toolbar-augment.enhancer.js",
     "scripts/player-hud.enhancer.js",
+    "scripts/combat-dock.enhancer.js",
     "scripts/zz-click-to-edit.js",
     "scripts/territory-garrison-upkeep.enhancer.js"
   ],
@@ -70,7 +71,8 @@
     "scripts/bbttcc-gate-beat-listener.js"
   ],
   "styles": [
-    "styles/territory-manager.css"
+    "styles/territory-manager.css",
+    "styles/combat-dock.css"
   ],
   "languages": [
     {

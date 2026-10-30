@@ -1151,6 +1151,16 @@
   }, 30);
 
   Hooks.once("ready", buildHud);
+  // 10-29: the Combat Dock (combat-dock.enhancer.js) reuses the tray's item
+  // buckets + fire paths, so a dock button fires exactly what the tray would.
+  Hooks.once("ready", () => {
+    game.bbttcc ??= { api: {} };
+    game.bbttcc.playerHud = {
+      getSteward, getBoardedRig, collectSections, collectSections5e, synopsisFor, abilityIcon,
+      isManifestationItem, refreshGroups, surgeHeatFor: (a) => readPool(a, "surge"),
+      fire: { ability: fireAbility, strike: fireStrike, mani: fireManifestation, pool: firePool, use5e: useItem5e }
+    };
+  });
   // Turn Ledger chip stays live: world settings replicate to every client, so
   // watching the two backing settings refreshes the "Day X of Y" readout for
   // players too (the accrual hooks themselves only fire on the GM client).

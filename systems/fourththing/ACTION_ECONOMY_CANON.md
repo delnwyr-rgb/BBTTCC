@@ -39,6 +39,11 @@ legendary action for Stewards."*
   Click it after the round's bonus is spent — it refreshes the slot, it does not stack a second one. The flag survives
   the combat turn-start reset (so an off-turn grant keeps until used) and clears on the sheet's ↺ New Turn and on
   Soma Break.
+- **Double 10 = Act Again — the ACTION comes back (owner ruling 2026-10-29).** A double-10 base roll (Engage /
+  Invoke / Steward checks) sets `flags.fourththing.actAgainAvailable` (its own flag, not `bonusActionAvailable`). The
+  ⚡ Act Again chip (sheet + Combat Dock) → `game.fourththing.actAgain(actor)` clears the flag and `actionUsed`. Unused,
+  it clears at the start of that actor's next turn (no banking a second Action), on ↺ New Turn and on Soma Break. The
+  Surge grants above still free only the Bonus Action (dock chip "⚡ Bonus back").
 - **Reactions are unchanged:** still triggered, still one per round, still refresh at the start of your turn.
 - **Rigs:** `requireBonus` in the rig action gate reads the same slot; the wording says "this round".
 
