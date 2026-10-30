@@ -461,13 +461,14 @@
   function _placeStrip(d = document.getElementById(DOCK_ID)) {
     if (!d || !d.classList.contains("ft-court-strip")) return;
     let top = window.innerHeight - 8;
-    for (const id of ["bbttcc-combat-dock", "hotbar", "ft-crew-hud"]) {
+    for (const id of ["bbttcc-conflict-bar", "bbttcc-combat-dock", "hotbar", "ft-crew-hud"]) {   // the player Conflict bar (10-30) sits below the strip
       const el = document.getElementById(id); if (!el || el.offsetParent === null) continue;
       const r = el.getBoundingClientRect(); if (r.height > 0 && r.top > window.innerHeight * 0.5) top = Math.min(top, r.top);
     }
     d.style.bottom = Math.max(8, Math.round(window.innerHeight - top + 8)) + "px";
   }
   window.addEventListener("resize", () => _placeStrip());
+  Hooks.once("ready", () => { try { const r = (game.bbttcc ??= { api: {} }).api.raid ??= {}; r.courtlyHud = Object.assign(r.courtlyHud || {}, { place: () => _placeStrip() }); } catch (_e) {} });
   function _dock() {
     let d = document.getElementById(DOCK_ID);
     if (d) return d;

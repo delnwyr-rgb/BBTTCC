@@ -30462,6 +30462,11 @@ function _ftBuildRaidHudHtml(consoleApp) {
   const integrityMax = Number(tgtSys?.integrity?.max)   || 0;
 
   const esc = (s) => foundry?.utils?.escapeHTML?.(String(s)) ?? String(s);
+  // 10-30 (owner): the tracker names both sides — the console window is going away for players, so this line is
+  // where "who is fighting whom" lives. Defender = the round's named side (story offer), else the target's owner.
+  const _atkName = (() => { try { return game.actors?.get?.(String(consoleVm?.attackerId || "").replace(/^Actor\./, ""))?.name || ""; } catch (_e) { return ""; } })();
+  const _defName = (() => { try { const id = String(lastRound?.defenderId || consoleVm?.defenderId || "").replace(/^Actor\./, ""); return (id && game.actors?.get?.(id)?.name) || (target && target.id !== consoleVm?.attackerId ? target.name : "") || ""; } catch (_e) { return ""; } })();
+  const sidesHtml = (_atkName || _defName) ? `<span style="opacity:.6;">·</span><span title="Attacker vs Defender"><b style="color:#f4a63a;">${esc(_atkName || "Attacker")}</b> <span style="opacity:.7;">vs</span> <b style="color:#5fb6ff;">${esc(_defName || "Defender")}</b></span>` : "";
 
   // Scenario meter — picks the right axis for the raid kind
   let meterHtml = "";
@@ -30504,6 +30509,7 @@ function _ftBuildRaidHudHtml(consoleApp) {
     <strong style="color:${preset.color};">${esc(activityLabel)}</strong>
     <span style="opacity:.6;">·</span>
     <span>Round <b>${(kind === "intrigue" && infilState) ? Number(infilState.round || 0) : (roundNo || 1)}</b></span>
+    ${sidesHtml}
     ${phaseHasContent ? `<span style="opacity:.6;">·</span><span title="Battle scene progression">${esc(phaseLabel)}</span>` : ""}
     ${target ? `<span style="opacity:.6;">·</span><span style="opacity:.85;" title="Target">${esc(targetName)}</span>` : (consoleVm?.targetName ? `<span style="opacity:.6;">·</span><span style="opacity:.85;" title="Target">${esc(consoleVm.targetName)}</span>` : "")}
     ${meterHtml ? `<span style="opacity:.6;">·</span>${meterHtml}` : ""}
