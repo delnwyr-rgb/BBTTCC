@@ -118,16 +118,25 @@
         out.bracket = best.b; out.rigName = best.rig.name; out.rigId = best.rig.id; out.via = via; out.scale = BRACKET_SCALE[best.b] || "rig";
         return true;
       };
+      // THE RIDE (Dave 2026-10-29): every faction riding with this one (lead + travelingWith passengers) — Brexit driving the
+      // big rig makes the whole party rig-scale, not just the lead's Stewards
+      let ride = [faction.id];
+      try { const ids = game.bbttcc?.api?.radiation?.partyFactionIds?.(faction.id); if (Array.isArray(ids) && ids.length) ride = ids; } catch (_e) {}
+      const rideFactions = ride.map(factionOf).filter(Boolean);
       // boarded first
       const boarded = [];
-      for (const st of stewardsOf(faction)) {
+      for (const st of rideFactions.flatMap(f => stewardsOf(f))) {
         try { const b = R?.boardedRigOf ? R.boardedRigOf(st) : (st?.flags?.fourththing?.boardedRig || null); const id = b?.rigId || (typeof b === "string" ? b : null); const rig = id ? game.actors.get(id) : null; if (rig) boarded.push(rig); } catch (_e) {}
       }
       if (pick(boarded, "boarded")) return out;
       // then the faction's mobile rigs (the travel domains' own list, same authority as the medium gate)
-      let owned = [];
-      try { owned = game.bbttcc?.api?.travel?.domains?.factionRigs?.(faction.id) || []; } catch (_e) {}
-      if (!owned.length && R?.listByFaction) { try { owned = R.listByFaction(faction.id) || []; } catch (_e) {} }
+      const owned = [];
+      for (const f of rideFactions) {
+        let mine = [];
+        try { mine = game.bbttcc?.api?.travel?.domains?.factionRigs?.(f.id) || []; } catch (_e) {}
+        if (!mine.length && R?.listByFaction) { try { mine = R.listByFaction(f.id) || []; } catch (_e) {} }
+        owned.push(...mine);
+      }
       if (pick(owned, "owned")) return out;
     } catch (e) { warn("partyScale failed", e); }
     return out;
