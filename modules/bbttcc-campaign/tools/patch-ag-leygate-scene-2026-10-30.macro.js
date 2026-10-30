@@ -45,7 +45,7 @@
     }
   }
   const KEY = "tetrarch_spanner";
-  const GRANT = { key: KEY, name: "Tetrarch Spanner", img: "icons/tools/hand/spanner-steel-grey.webp",
+  const GRANT = { key: KEY, name: "Tetrarch Spanner", img: "icons/tools/hand/wrench-steel-grey.webp",
     description: "The Leygate's own spanner, brass gone green at the jaws. Garren's words: whatever they sell you at Fixit, it fits THIS, or it's a very expensive doorstop." };
   const J = (x) => JSON.stringify(x);
   const Bx = (id) => beats.find(x => x && String(x.id) === id);

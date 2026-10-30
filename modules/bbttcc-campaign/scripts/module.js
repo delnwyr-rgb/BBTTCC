@@ -1298,7 +1298,7 @@ async function _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx = {}) {
     if (!holder) { warn("[quest-items] no Steward to hold", key, beat?.id); continue; }
     const name = String(r.name || key);
     try {
-      await holder.createEmbeddedDocuments("Item", [{ name, type: "gear", img: r.img || "icons/tools/hand/spanner-steel-grey.webp",
+      await holder.createEmbeddedDocuments("Item", [{ name, type: "gear", img: r.img || "icons/tools/hand/wrench-steel-grey.webp",
         system: { description: { value: r.description ? `<p>${foundry.utils.escapeHTML(String(r.description))}</p>` : "", chat: "" }, category: "gear", quantity: 1 },
         flags: { "bbttcc-campaign": { questItem: { key, beatId: String(beat?.id || ""), at: Date.now() } } } }]);
     } catch (e) { warn("[quest-items] grant failed", key, e); continue; }
