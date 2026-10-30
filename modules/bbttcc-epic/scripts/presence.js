@@ -239,6 +239,21 @@ Hooks.on("bbttcc:epic:converged", async (actor) => { try { await seedOnConverge(
 Hooks.on("renderActorSheet",   (app, html) => { try { injectFactionChip(app, html); } catch (e) { warn("faction chip error", e); } });
 Hooks.on("renderActorSheetV2", (app, html) => { try { injectFactionChip(app, html); } catch (e) { warn("faction chip v2 error", e); } });
 
+// 10-29: a seat that owns the steward but not the Domain can't write presenceParty (see the isOwner
+// bail above), so Mask/Unmask / seed / adjust from a player seat left the faction chip stale until the
+// GM reloaded. The active GM re-syncs off the replicated flag change — recomputed from members' flags,
+// nothing taken from the writer.
+Hooks.on("updateActor", (actor, changes, _opts, userId) => {
+  try {
+    if (!ftActive() || userId === game.user?.id) return; // the writing seat already synced what it could
+    if (!game.users?.activeGM?.isSelf) return;
+    if (actor?.type !== "character") return;
+    const f = changes?.flags?.[MOD];
+    if (!f || !(("presence" in f) || ("-=presence" in f))) return;
+    syncFactionPresence(actor).catch(e => warn("presence GM resync failed", e));
+  } catch (e) { warn("presence GM resync failed", e); }
+});
+
 Hooks.on("ready", async () => {
   try {
     if (!ftActive()) return;

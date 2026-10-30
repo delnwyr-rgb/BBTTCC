@@ -127,8 +127,13 @@ function _registerNPAncestries(loud = true) {
   }
   let added = 0;
   for (const [id, spec] of Object.entries(NP_ABILITIES)) {
+    // 10-29: never overwrite a spec the system already defines — 8 of these ids
+    // (dragon/angel/eidolon) have newer system specs matching the ANCESTRY_CUSTOM
+    // handlers; the stale copies here changed action costs + card text. Same rule
+    // as the system's own char-opt install (only route when unset).
+    if (cls.CHAR_OPT_ABILITIES[id]) continue;
     cls.CHAR_OPT_ABILITIES[id] = spec;
-    cls.FEATURE_ROUTER[id] = "char_opt_lookup";
+    if (!cls.FEATURE_ROUTER[id]) cls.FEATURE_ROUTER[id] = "char_opt_lookup";
     added++;
   }
   console.log(`[bbttcc-master-content/np-ancestries] Registered ${added} NP ancestry abilities into fourththing CHAR_OPT_ABILITIES + FEATURE_ROUTER.`);

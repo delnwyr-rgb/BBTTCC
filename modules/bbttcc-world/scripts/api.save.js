@@ -71,7 +71,18 @@
 
   // ── layers ───────────────────────────────────────────────────────────────
   // Never captured — not story, not game (snapshot store = saves of saves; call log = billing noise).
-  const EXCLUDE_SETTINGS = new Set(["bbttcc-world.worldSnapshots", "bbttcc-mal-voice.callLog"]);
+  // 10-29: + the Mal Voice apiKey (world scope before 10-02 — slots from that era carry it in plain text).
+  const EXCLUDE_SETTINGS = new Set(["bbttcc-world.worldSnapshots", "bbttcc-mal-voice.callLog", "bbttcc-mal-voice.apiKey"]);
+  // 10-29: saves never carry secrets — any key that looks like a credential is excluded on capture, restore and import.
+  const SECRET_KEY = /(api[-_]?key|secret|password|passwd|credential|bearer|authToken|accessToken)$/i;
+  const isSecretSetting = (_ns, key) => SECRET_KEY.test(String(key || ""));
+  // Strip secret-looking settings out of a snapshot body (old slots, imported files).
+  function stripSecrets(snap) {
+    if (!Array.isArray(snap?.settings)) return 0;
+    const before = snap.settings.length;
+    snap.settings = snap.settings.filter(s => !isSecretSetting(s?.ns, s?.key));
+    return before - snap.settings.length;
+  }
   // GAME-layer settings: left alone by a story load. Namespace-wide entries end in ".*".
   const GAME_SETTINGS = [
     "fourththing.*", "surge-powers.*", "bbttcc-mal-voice.*",
@@ -117,7 +128,7 @@
   const GAME_KEYS = new Set(GAME_SETTINGS.filter(k => !k.endsWith(".*")));
   function settingLayer(ns, key) {
     const full = `${ns}.${key}`;
-    if (EXCLUDE_SETTINGS.has(full) || (ns === MOD && key === SETTING_INDEX)) return "exclude";
+    if (EXCLUDE_SETTINGS.has(full) || (ns === MOD && key === SETTING_INDEX) || isSecretSetting(ns, key)) return "exclude";
     try {
       const tag = game.settings.settings.get(full)?.bbttcc?.layer;
       if (tag === "game" || tag === "story") return tag;
@@ -322,6 +333,7 @@
     for (const s of snap.settings) {
       const full = `${s.ns}.${s.key}`;
       if (!game.settings.settings.has(full)) { settingsUnknown++; continue; }
+      if (game.settings.settings.get(full)?.scope !== "world") continue;   // 10-29: client/user settings are never restored
       const layer = settingLayer(s.ns, s.key);
       if (layer === "exclude") continue;
       let live; try { live = game.settings.get(s.ns, s.key); } catch (_e) {}
@@ -364,6 +376,7 @@
     if (!row) throw new Error("save not found in index");
     const snap = await readFile(row.path);
     if (snap?.kind !== "bbttcc-savegame") throw new Error("not a Bad Eden save file");
+    stripSecrets(snap);   // 10-29: belt and braces with the scope check below
     const mode = modeOf(opts); const story = mode === "story";
     const deleteExtras = opts.deleteExtras !== false;            // story-layer actors made since the save
     const deleteGameExtras = story ? opts.deleteGameExtras === true : deleteExtras;   // library npcs made since the save: opt-IN on a story load
@@ -381,6 +394,8 @@
       for (const s of snap.settings) {
         try {
           if (!game.settings.settings.has(`${s.ns}.${s.key}`)) continue;
+          // 10-29: only WORLD-scope settings restore — an old slot's world-era apiKey must never land in the GM's client storage.
+          if (game.settings.settings.get(`${s.ns}.${s.key}`)?.scope !== "world") continue;
           const layer = settingLayer(s.ns, s.key);
           if (layer === "exclude") continue;
           const live = game.settings.get(s.ns, s.key);
@@ -568,12 +583,19 @@
     return { removed, kept: survivors.size, doomed: doomed.map(s => ({ id: s.id, label: s.label, at: s.at })) };
   }
   function exportSlot(id) {
+    if (!isGM()) throw new Error("GM only");   // 10-29: downloads are GM-only
     const row = readIndex().slots.find(s => s.id === id);
     if (!row) return false;
-    const a = document.createElement("a");
-    a.href = foundry.utils.getRoute ? foundry.utils.getRoute(row.path) : `/${row.path}`;
-    a.download = `bbttcc-save-${worldId()}-${(row.label || row.id).replace(/[^\w.-]+/g, "_")}.json`;
-    document.body.appendChild(a); a.click(); a.remove();
+    const name = `bbttcc-save-${worldId()}-${(row.label || row.id).replace(/[^\w.-]+/g, "_")}.json`;
+    // 10-29: download a secret-stripped copy, never the raw file (pre-10-02 slots carry the world-era apiKey).
+    readFile(row.path).then(snap => {
+      stripSecrets(snap);
+      const url = URL.createObjectURL(new Blob([JSON.stringify(snap)], { type: "application/json" }));
+      const a = document.createElement("a");
+      a.href = url; a.download = name;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+    }).catch(e => { warn("export failed", id, e); ui.notifications?.error?.(`Export failed: ${e?.message || e}`); });
     return true;
   }
   async function importFile(file) {
@@ -581,6 +603,7 @@
     const text = await file.text();
     const snap = JSON.parse(text);
     if (snap?.kind !== "bbttcc-savegame") throw new Error("not a Bad Eden save file");
+    stripSecrets(snap);   // 10-29: an imported file never lands a secret on the public Data route
     snap.id = randId();   // a fresh slot id — never collide with an existing row
     const body = JSON.stringify(snap);
     const path = await writeFile(`${snap.id}.json`, body);
@@ -592,9 +615,12 @@
     return row;
   }
   async function readSlot(id) {
+    if (!isGM()) throw new Error("GM only");   // 10-29: slot bodies are GM-only
     const row = readIndex().slots.find(s => s.id === id);
     if (!row) throw new Error("save not found");
-    return await readFile(row.path);
+    const snap = await readFile(row.path);
+    stripSecrets(snap);   // 10-29
+    return snap;
   }
 
   Hooks.once("init", () => {

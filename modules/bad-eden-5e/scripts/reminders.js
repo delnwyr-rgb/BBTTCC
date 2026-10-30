@@ -10,7 +10,9 @@
  *                          combatant's turnStart lines (auras fire on any turn)
  *   dnd5e.applyDamage    → struck/damaged on any damage; bloodied when HP first
  *                          drops to half or less; zero at 0 HP
- *   dnd5e.rollAttackV2   → attacked, for each targeted creature that has them
+ *   createChatMessage    → attacked, for each creature the attack card targeted
+ *                          (10-29: was dnd5e.rollAttackV2, which only fires on the
+ *                          roller's client — player attacks never reached the GM)
  * Only the active GM client posts, so a table with several GM windows gets one card.
  * ───────────────────────────────────────────────────────────────────────────── */
 import { MOD } from "./casting.js";
@@ -52,11 +54,25 @@ function onApplyDamage(actor, amount) {
   card(`${actor.name} takes ${amount} damage`, lines);
 }
 
-function onRollAttack(rolls, data) {
+// 10-29: read the attack card on the active GM's client — its recorded targets, not the GM's own.
+function targetActor(d) {
+  const look = (u) => { try { return u ? fromUuidSync(u) : null; } catch { return null; } };
+  const doc = look(d?.token) ?? look(d?.actor) ?? look(d?.uuid);
+  return doc?.actor ?? (doc instanceof Actor ? doc : null);
+}
+
+function onAttackMessage(message) {
   if (!isActiveGM()) return;
-  const attacker = data?.subject?.actor?.name ?? "someone";
-  for (const t of game.user.targets ?? []) {
-    const a = t.actor; const r = remindersOf(a)?.attacked;
+  const isAttack = (message.type === "attack") || (message.flags?.dnd5e?.roll?.type === "attack");
+  if (!isAttack) return;
+  const attackerActor = message.getAssociatedActor?.() ?? ChatMessage.getSpeakerActor?.(message.speaker);
+  const attacker = attackerActor?.name ?? message.speaker?.alias ?? "someone";
+  const descriptors = message.system?.targets?.length ? message.system.targets : (message.flags?.dnd5e?.targets ?? []);
+  const seen = new Set();
+  for (const d of descriptors) {
+    const a = targetActor(d); if (!a || seen.has(a)) continue;
+    seen.add(a);
+    const r = remindersOf(a)?.attacked;
     if (r?.length) card(`${a.name} is attacked by ${attacker}`, r);
   }
 }
@@ -65,5 +81,5 @@ export function activateReminders() {
   Hooks.on("combatTurnChange", onTurnChange);
   Hooks.on("dnd5e.preApplyDamage", onPreApplyDamage);
   Hooks.on("dnd5e.applyDamage", onApplyDamage);
-  Hooks.on("dnd5e.rollAttackV2", onRollAttack);
+  Hooks.on("createChatMessage", onAttackMessage);
 }

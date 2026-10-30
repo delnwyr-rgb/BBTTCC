@@ -12,9 +12,9 @@
  *
  * Outcomes:
  *   • Full success (roll ≥ DC): spark uncorrupts; eligible for re-deposit.
- *   • Partial (roll == DC-1 to DC-3): mats + OP consumed, DC drops 2 for
+ *   • Partial (roll == DC-1 to DC-3): mats + marks spent, DC drops 2 for
  *     the next attempt (tracked on spark.repair.attempts).
- *   • Failure (roll ≤ DC-4): mats + OP consumed; "ritual debt" entry
+ *   • Failure (roll ≤ DC-4): mats + marks spent; "ritual debt" entry
  *     stamped on faction warLogs as a narrative hook.
  *
  * Two surfaces:
@@ -35,6 +35,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
 
 (() => {
   const TAG = "[bbttcc-tikkun/repair]";
+  const _esc = (v) => foundry.utils.escapeHTML(String(v ?? ""));   // 10-29: player-chosen names into GM cards/dialogs
 
   // ── Faction OP channels ────────────────────────────────────────────────
   // The NINE channels a faction opBank actually holds (op-engine OP_KEYS).
@@ -181,13 +182,35 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     return Number(_opBank(factionActor)[pool]) || 0;
   }
 
+  // 10-29: pays through the op engine (serialized, live-bank check) and returns the
+  // marks actually debited, so a later failure can refund exactly that.
   async function _debitOp(factionActor, pool, amount) {
-    if (!factionActor || !pool || !amount) return;
+    if (!factionActor || !pool || !amount) return 0;
+    if (!_isOpChannel(pool)) throw new Error(`"${pool}" is not a faction OP channel — repair recipe cannot be paid.`);
+    const op = game.bbttcc?.api?.op;
+    if (typeof op?.commit === "function") {
+      const res = await op.commit(factionActor.id, { [pool]: -amount }, { source: "tikkun-repair", reason: "spark repair ritual" });
+      if (!res || res.committed === false || res.ok === false) {
+        throw new Error(res?.error && !Object.keys(res?.underflow || {}).length ?String(res.error) : `Insufficient ${pool} marks: have ${_factionOpAvailable(factionActor, pool)}, need ${amount}.`);
+      }
+      return Math.abs(Number(res.finalCost ? (res.finalCost[pool] || 0) : -amount) || 0);
+    }
     const bank = _opBank(factionActor);
     const cur = Number(bank[pool]) || 0;
-    if (!_isOpChannel(pool)) throw new Error(`"${pool}" is not a faction OP channel — repair recipe cannot be paid.`);
     if (cur < amount) throw new Error(`Insufficient ${pool} marks: have ${cur}, need ${amount}.`);
     bank[pool] = cur - amount;
+    await factionActor.update({ "flags.bbttcc-factions.opBank": bank });
+    return amount;
+  }
+  async function _refundOp(factionActor, pool, paid) {
+    if (!factionActor || !pool || !(paid > 0)) return;
+    const op = game.bbttcc?.api?.op;
+    if (typeof op?.commit === "function") {
+      await op.commit(factionActor.id, { [pool]: paid }, { source: "tikkun-repair", reason: "spark repair refund", noDiscount: true, allowOvercap: true });
+      return;
+    }
+    const bank = _opBank(factionActor);
+    bank[pool] = (Number(bank[pool]) || 0) + paid;
     await factionActor.update({ "flags.bbttcc-factions.opBank": bank });
   }
 
@@ -242,7 +265,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
 
     // Contributor picker — any faction member.
     const members = _getFactionMembers(factionActor.id);
-    const memberOpts = members.map(m => `<option value="${m.id}" ${m.id === ownerActor.id ? "selected" : ""}>${m.name}</option>`).join("");
+    const memberOpts = members.map(m => `<option value="${m.id}" ${m.id === ownerActor.id ? "selected" : ""}>${_esc(m.name)}</option>`).join("");
 
     const sephLabel = _sparkSys(sparkItem)?.sephirah
       ? (game.fourththing?.constants?.SEPHIROTH?.[_sparkSys(sparkItem)?.sephirah]?.label ?? _sparkSys(sparkItem)?.sephirah)
@@ -256,8 +279,8 @@ console.log("[bbttcc-tikkun/repair] LOADED");
       : `<li>Cost: <i>(no marks required)</i></li>`;
 
     const content = `<div style="font-size:0.86rem">
-      <h3 style="margin:0.2rem 0 0.4rem">⚒ Repair: ${sparkItem.name}${sephLabel ? ` <span style="opacity:0.6">(${sephLabel})</span>` : ""}</h3>
-      <p style="margin:0.3rem 0;font-size:0.78rem;opacity:0.8">Owner: <b>${ownerActor.name}</b> · Faction: <b>${factionActor.name}</b> · Attempts so far: <b>${attempts}</b> · DC: <b>${dc}</b>${attempts ? ` <span style="opacity:0.6">(base ${baseDC} − ${2*attempts})</span>` : ""}</p>
+      <h3 style="margin:0.2rem 0 0.4rem">⚒ Repair: ${_esc(sparkItem.name)}${sephLabel ? ` <span style="opacity:0.6">(${_esc(sephLabel)})</span>` : ""}</h3>
+      <p style="margin:0.3rem 0;font-size:0.78rem;opacity:0.8">Owner: <b>${_esc(ownerActor.name)}</b> · Faction: <b>${_esc(factionActor.name)}</b> · Attempts so far: <b>${attempts}</b> · DC: <b>${dc}</b>${attempts ? ` <span style="opacity:0.6">(base ${baseDC} − ${2*attempts})</span>` : ""}</p>
       <ul style="margin:0.4rem 0;padding-left:1.2rem">${matLine}${opLine}</ul>
       <hr/>
       <div class="form-group" style="margin:0.4rem 0">
@@ -332,25 +355,34 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     const breakdown = dice?.isRFI?.() === false ? [["ritual skill", ritSkill]]
       : [["ritual", Number(sys.skills?.ritual?.value ?? 0)], ["soul", Number(sys.attributes?.soul?.value ?? 2)]];
     const totalBonus = ritSkill + extraOp + opNeed; // OP cost itself contributes too
+
+    // 10-29: PAY FIRST, against the live stock and bank (the dialog's matOK/opOK were a
+    // snapshot from when it opened). Marks first (op engine, atomic), then material; a
+    // material failure refunds the marks. Any failure aborts before the roll — the spark
+    // is untouched and nothing is half-charged.
+    const liveMap = ownerActor.getFlag("bbttcc-tikkun", "sparks") || {};
+    const liveS = liveMap[sparkKey] || Object.values(liveMap).find(x => x.key === sparkKey);
+    if (!liveS?.corrupted) { ui.notifications?.warn?.("Repair: the spark is no longer corrupted — nothing paid, nothing rolled."); return; }
+    let paidMarks = 0;
+    try {
+      if (opPool && (opNeed || extraOp)) paidMarks = await _debitOp(factionActor, opPool, (opNeed + extraOp) * mpo);
+    } catch (e) {
+      ui.notifications?.error?.(`Repair not performed — marks: ${e.message}`);
+      return;
+    }
+    try {
+      if (matKey && matNeed) await _consumeMaterial(factionActor.id, matKey, matNeed);
+    } catch (e) {
+      try { await _refundOp(factionActor, opPool, paidMarks); } catch (eR) { console.warn(TAG, "marks refund failed:", eR); }
+      ui.notifications?.error?.(`Repair not performed — material: ${e.message}${paidMarks ? ` (${paidMarks} ${opPool} marks refunded)` : ""}`);
+      return;
+    }
+
     const formula  = `${dice?.checkFormula?.() ?? (game.fourththing?.rolls?.checkFormula?.() || "2d10x10")} + ${totalBonus}`;   // the check die
     const roll = await new Roll(formula).roll();
     const total = roll.total;
     const margin = total - dc;
     const outcome = margin >= 0 ? "success" : (margin >= -3 ? "partial" : "failure");
-
-    // Side effects: consume materials + debit OP regardless of outcome.
-    const debitErrors = [];
-    try {
-      if (matKey  && matNeed) await _consumeMaterial(factionActor.id, matKey, matNeed);
-    } catch (e) { debitErrors.push(`material: ${e.message}`); }
-    try {
-      if (opPool && (opNeed || extraOp)) await _debitOp(factionActor, opPool, (opNeed + extraOp) * mpo);
-    } catch (e) { debitErrors.push(`op: ${e.message}`); }
-    if (debitErrors.length) {
-      ui.notifications?.error?.(`Repair commit had errors: ${debitErrors.join("; ")}`);
-      // Continue — the dice were rolled and the table saw them. Better to
-      // record the result than to silently swallow.
-    }
 
     // Apply outcome to spark state.
     const map = ownerActor.getFlag("bbttcc-tikkun", "sparks") || {};
@@ -385,7 +417,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
           ts: Date.now(),
           type: "ritual-debt",
           source: "tikkun-repair",
-          msg: `Failed repair of ${sparkItem.name} (${ownerActor.name}). Roll ${total} vs DC ${dc}. Materials and OP consumed; spark remains corrupted; narrative debt incurred.`
+          msg: `Failed repair of ${sparkItem.name} (${ownerActor.name}). Roll ${total} vs DC ${dc}. Materials and marks spent; spark remains corrupted; narrative debt incurred.`
         });
         await factionActor.setFlag("bbttcc-factions", "warLogs", logs);
       } catch (e) { console.warn(TAG, "warLog stamp failed:", e); }
@@ -399,16 +431,16 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     const headerIcon  = outcome === "success" ? "✦" : (outcome === "partial" ? "⊘" : "⚠");
     const headerText  = outcome === "success" ? "Spark Repaired" : (outcome === "partial" ? "Repair Stalled" : "Repair Failed");
     const outcomeLine = outcome === "success"
-      ? `<p style="margin:0.3rem 0">The ${sparkItem.name} sheds its corruption. Eligible for re-deposit.</p>`
+      ? `<p style="margin:0.3rem 0">The ${_esc(sparkItem.name)} sheds its corruption. Eligible for re-deposit.</p>`
       : outcome === "partial"
-      ? `<p style="margin:0.3rem 0">The work bites but does not bind. Materials and OP consumed. The ritual scars the spark just enough that the next attempt's DC drops by 2 (now ${Math.max(8, dc - 2)}).</p>`
-      : `<p style="margin:0.3rem 0">The ritual breaks against the corruption. Materials and OP consumed; the spark remains tainted; <b>${factionActor.name}</b> incurs ritual debt — a narrative thread for the GM to weave back.</p>`;
+      ? `<p style="margin:0.3rem 0">The work bites but does not bind. Materials and marks spent. The ritual scars the spark just enough that the next attempt's DC drops by 2 (now ${Math.max(8, dc - 2)}).</p>`
+      : `<p style="margin:0.3rem 0">The ritual breaks against the corruption. Materials and marks spent; the spark remains tainted; <b>${_esc(factionActor.name)}</b> incurs ritual debt — a narrative thread for the GM to weave back.</p>`;
 
     ChatMessage.create({
       speaker: ChatMessage.getSpeaker?.({ actor: contributor }) ?? {},
       content: `<div class="fourththing-roll">
-        <div class="ft-roll-header"><span class="ft-roll-name" style="color:${headerColor}">${headerIcon} ${headerText}: ${sparkItem.name}</span></div>
-        <p style="margin:0.2rem 0;font-size:0.82rem">${contributor.name} performs the repair ritual on <b>${ownerActor.name}</b>'s ${sephLabel ? `<i>${sephLabel}</i> ` : ""}spark.</p>
+        <div class="ft-roll-header"><span class="ft-roll-name" style="color:${headerColor}">${headerIcon} ${headerText}: ${_esc(sparkItem.name)}</span></div>
+        <p style="margin:0.2rem 0;font-size:0.82rem">${_esc(contributor.name)} performs the repair ritual on <b>${_esc(ownerActor.name)}</b>'s ${sephLabel ? `<i>${_esc(sephLabel)}</i> ` : ""}spark.</p>
         <div class="ft-roll-formula">
           <span class="ft-fp" title="check die">${(roll.terms[0]?.results ?? []).map(r => r.result).join(" + ")}</span>
           ${breakdown.map(([t, v]) => `<span class="ft-fp" title="${t}">+${v}</span>`).join("\n          ")}
@@ -445,7 +477,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     if (!corrupted.length) {
       new Dialog({
         title: `Spark Repair Ledger — ${faction.name}`,
-        content: `<p style="margin:0.6rem 0">No corrupted sparks across <b>${faction.name}</b>'s members. The Great Work is unstained — for now.</p>`,
+        content: `<p style="margin:0.6rem 0">No corrupted sparks across <b>${_esc(faction.name)}</b>'s members. The Great Work is unstained — for now.</p>`,
         buttons: { ok: { label: "Close" } }
       }).render(true);
       return;
@@ -474,8 +506,8 @@ console.log("[bbttcc-tikkun/repair] LOADED");
       const ready = matAvail >= matNeed && opAvail >= opNeedMarks && !opPoolBad && (!opNeed || opNeedMarks > 0);
       return `
         <tr>
-          <td>${item?.name ?? sparkKey} ${sephLabel ? `<span style="opacity:0.6;font-size:0.74rem">(${sephLabel})</span>` : ""}</td>
-          <td>${actor.name}</td>
+          <td>${_esc(item?.name ?? sparkKey)} ${sephLabel ? `<span style="opacity:0.6;font-size:0.74rem">(${_esc(sephLabel)})</span>` : ""}</td>
+          <td>${_esc(actor.name)}</td>
           <td style="text-align:center">${matNeed ? `${matNeed}× ${matKey} <span style="opacity:0.7">(have ${matAvail === Infinity ? "—" : matAvail})</span>` : "—"}</td>
           <td style="text-align:center">${opNeed ? `${opNeedMarks} ${opPool} marks <span style="opacity:0.7">(${opPoolBad ? "⚠ not an OP channel — unpayable" : `have ${opAvail === Infinity ? "—" : opAvail}`})</span>` : "—"}</td>
           <td style="text-align:center">${dc}${attempts ? ` <span style="opacity:0.6">(-${2*attempts})</span>` : ""}</td>
@@ -484,7 +516,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     }).join("");
 
     const content = `<div style="font-size:0.84rem;max-height:60vh;overflow-y:auto">
-      <p style="margin:0.2rem 0 0.5rem">Corrupted sparks held by <b>${faction.name}</b> members. Begin Repair opens the ritual dialog.</p>
+      <p style="margin:0.2rem 0 0.5rem">Corrupted sparks held by <b>${_esc(faction.name)}</b> members. Begin Repair opens the ritual dialog.</p>
       <table style="width:100%;border-collapse:collapse" class="bbttcc-tk-ledger">
         <thead><tr style="background:rgba(255,255,255,0.06);text-align:left">
           <th style="padding:0.3rem">Spark</th>
@@ -550,7 +582,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     if (!pending.length) {
       new Dialog({
         title: `Pending Deposits — ${faction.name}`,
-        content: `<p style="margin:0.6rem 0">No sparks awaiting deposit on <b>${faction.name}</b>'s members. Either nothing has been integrated yet, or everything is already in the faction's hands.</p>`,
+        content: `<p style="margin:0.6rem 0">No sparks awaiting deposit on <b>${_esc(faction.name)}</b>'s members. Either nothing has been integrated yet, or everything is already in the faction's hands.</p>`,
         buttons: { ok: { label: "Close" } }
       }).render(true);
       return;
@@ -563,15 +595,15 @@ console.log("[bbttcc-tikkun/repair] LOADED");
       const kindLabel = spark.kind ?? _sparkSys(item)?.kind ?? "";
       return `
         <tr>
-          <td>${item?.name ?? spark.name ?? sparkKey} ${sephLabel ? `<span style="opacity:0.6;font-size:0.74rem">(${sephLabel})</span>` : ""}</td>
-          <td>${actor.name}</td>
+          <td>${_esc(item?.name ?? spark.name ?? sparkKey)} ${sephLabel ? `<span style="opacity:0.6;font-size:0.74rem">(${_esc(sephLabel)})</span>` : ""}</td>
+          <td>${_esc(actor.name)}</td>
           <td style="text-align:center">${kindLabel}</td>
           <td style="text-align:right"><button type="button" class="bbttcc-tk-deposit-accept" data-actor-id="${actor.id}" data-spark-key="${sparkKey}">Accept Deposit</button></td>
         </tr>`;
     }).join("");
 
     const content = `<div style="font-size:0.84rem;max-height:60vh;overflow-y:auto">
-      <p style="margin:0.2rem 0 0.5rem">Sparks integrated personally by <b>${faction.name}</b>'s operatives, awaiting faction handover. Accept Deposit transfers the spark into the faction's count.</p>
+      <p style="margin:0.2rem 0 0.5rem">Sparks integrated personally by <b>${_esc(faction.name)}</b>'s operatives, awaiting faction handover. Accept Deposit transfers the spark into the faction's count.</p>
       <table style="width:100%;border-collapse:collapse" class="bbttcc-tk-pending">
         <thead><tr style="background:rgba(255,255,255,0.06);text-align:left">
           <th style="padding:0.3rem">Spark</th>

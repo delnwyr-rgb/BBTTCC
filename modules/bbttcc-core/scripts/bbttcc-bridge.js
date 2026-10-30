@@ -95,8 +95,11 @@ async function _syncCanonicalFromBridge(actor, bridgeModel){
 async function _clearBridgeDebtAndLocks(actor){
   try {
     if (!actor || typeof actor.unsetFlag !== "function") return;
-    await actor.unsetFlag(FLAG_SCOPE, "bloodDebtModel");
-    await actor.unsetFlag(FLAG_SCOPE, "bloodDebt");
+    // 10-29: one update, not two.
+    var upd = {};
+    upd["flags." + FLAG_SCOPE + ".-=bloodDebtModel"] = null;
+    upd["flags." + FLAG_SCOPE + ".-=bloodDebt"] = null;
+    await actor.update(upd);
   } catch (_e) {}
 }
 
@@ -346,6 +349,13 @@ async function _clearBridgeDebtAndLocks(actor){
   //   exhaustion→ stress
   //   hitdie    → aptitude
   //   spellslot → manifestation
+  // 10-29: exchange rates are GM-side constants. Player seats always get these;
+  // only a GM seat may pass an override (the dialog fields were player-editable,
+  // so 1000 marks could be minted for one rank / one lockout tier). Rule units
+  // are per 10 marks (1 rank = 30 marks, 1 tier-lock = 40 marks).
+  var BRIDGE_RATES = { opPerRank: 3, opPerLockoutTier: 4, stressPerOp: 2, flatPerOp: 2, dicePerOp: "1d6" };
+  function _gmSeat(){ try { return !!(game.user && game.user.isGM); } catch(_e){ return false; } }
+
   var SACRIFICE_ALIAS = {
     hp: "integrity",
     exhaustion: "stress",
@@ -384,7 +394,10 @@ async function _clearBridgeDebtAndLocks(actor){
     if(!faction) throw new Error("Faction actor not found");
     if(!opKey) throw new Error("Missing OP key");
 
-    var integrityPer = Math.max(1, num(opts.integrityPerOpOverride, num(opts.hpPerOpOverride, integrityCostPerOp(faction))));
+    var gmSeat = _gmSeat();   // 10-29: rate overrides honored on a GM seat only
+    var integrityPer = gmSeat
+      ? Math.max(1, num(opts.integrityPerOpOverride, num(opts.hpPerOpOverride, integrityCostPerOp(faction))))
+      : Math.max(1, integrityCostPerOp(faction));
 
     // Blood Debt accrual: 1 BD point per OP yielded (narrative IOU).
     var bloodDebtDelta = opAmount;
@@ -408,7 +421,7 @@ async function _clearBridgeDebtAndLocks(actor){
       doDebit = function(){ return _debitIntegrity(pc, integrityCost); };
     }
     else if (sacType === "stress") {
-      var stressCost = Math.max(1, num(opts.stressPerOpOverride, 2)) * opAmount;
+      var stressCost = Math.max(1, gmSeat ? num(opts.stressPerOpOverride, BRIDGE_RATES.stressPerOp) : BRIDGE_RATES.stressPerOp) * opAmount;
       var haveS = num(_readStress(pc).value, 0);
       if (haveS < stressCost) throw new Error("Not enough Stress (need "+stressCost+", have "+haveS+")");
       debitMeta.stressCost = stressCost;
@@ -417,7 +430,7 @@ async function _clearBridgeDebtAndLocks(actor){
     }
     else if (sacType === "aptitude") {
       var aptKey  = String(opts.aptitudeKey || opts.skillKey || "").trim().toLowerCase();
-      var rankPerOp = Math.max(1, num(opts.opPerRank, 3));
+      var rankPerOp = Math.max(1, gmSeat ? num(opts.opPerRank, BRIDGE_RATES.opPerRank) : BRIDGE_RATES.opPerRank);
       // 1 rank yields rankPerOp OP. ceil(opAmount/rankPerOp) ranks burned.
       var ranksToBurn = Math.max(1, Math.ceil(opAmount / rankPerOp));
       if (!aptKey) throw new Error("Aptitude sacrifice requires opts.aptitudeKey (e.g. 'athletics').");
@@ -430,7 +443,7 @@ async function _clearBridgeDebtAndLocks(actor){
       doDebit = function(){ return _debitAptitudeRank(pc, aptKey, ranksToBurn); };
     }
     else if (sacType === "manifestation") {
-      var opPerLock = Math.max(1, num(opts.opPerLockoutTier, 4));
+      var opPerLock = Math.max(1, gmSeat ? num(opts.opPerLockoutTier, BRIDGE_RATES.opPerLockoutTier) : BRIDGE_RATES.opPerLockoutTier);
       var lockTiers = Math.max(1, Math.ceil(opAmount / opPerLock));
       debitMeta.lockoutTiers = lockTiers;
       lock.lockoutTiers = lockTiers;
@@ -449,7 +462,7 @@ async function _clearBridgeDebtAndLocks(actor){
     var deltas = {}; deltas[opKey] = +(opAmount * _mpo());
     var commitRes = await opCommit(faction.id, deltas, "Manifestation ("+sacType+"): "+pc.name+" → +"+(opAmount * _mpo())+" "+opLabel(opKey)+" marks");
     if (!commitRes || commitRes.committed === false || commitRes.ok === false) {
-      throw new Error("Faction OP deposit refused"+((commitRes && commitRes.error) ? ": "+commitRes.error : " (bank at cap?)")+" — nothing was sacrificed.");
+      throw new Error("Faction marks deposit refused"+((commitRes && commitRes.error) ? ": "+commitRes.error : " (bank at cap?)")+" — nothing was sacrificed.");
     }
 
     // ── Phase 3: debit the steward. If this somehow fails after the pre-check,
@@ -509,8 +522,11 @@ async function _clearBridgeDebtAndLocks(actor){
     var opKey = String(opts.opKey||"").trim().toLowerCase();
     var spend = Math.max(0, num(opts.spend,0));
     var mode  = String(opts.mode||"flat");
-    var dicePerOp = String(opts.dicePerOp||"1d6");
-    var flatPerOp = num(opts.flatPerOp, 2);
+    // 10-29: bonus rates are GM-side constants; only a GM seat may override them
+    // (the free-text dice field let 10 marks buy "+20d10" or "+50").
+    var gmSeat = _gmSeat();
+    var dicePerOp = gmSeat ? String(opts.dicePerOp||BRIDGE_RATES.dicePerOp) : BRIDGE_RATES.dicePerOp;
+    var flatPerOp = gmSeat ? num(opts.flatPerOp, BRIDGE_RATES.flatPerOp) : BRIDGE_RATES.flatPerOp;
     var rollKind = String(opts.rollKind||"skill");
     var rollKey  = String(opts.rollKey||"").trim().toLowerCase();
 
@@ -532,7 +548,7 @@ async function _clearBridgeDebtAndLocks(actor){
     var deltas={}; deltas[opKey] = -Math.abs(spendMarks);
     var commitRes = await opCommit(faction.id, deltas, "Backing: spent "+spendMarks+" "+opLabel(opKey)+" marks for "+actor.name);
     if (!commitRes || commitRes.committed === false || commitRes.ok === false) {
-      throw new Error("Faction OP spend refused"+((commitRes && commitRes.error) ? ": "+commitRes.error : "")+" — no roll fired.");
+      throw new Error("Faction marks spend refused"+((commitRes && commitRes.error) ? ": "+commitRes.error : "")+" — no roll fired.");
     }
 
     // Anything that throws from here on refunds the spend (Manifestation has the same claw-back).
@@ -601,17 +617,17 @@ async function _clearBridgeDebtAndLocks(actor){
   // One dictionary; mirrored into the central registry (game.bbttcc.help,
   // appKey "bridge") at attach() so the Operator tours read the same text.
   var BRIDGE_TIPS = {
-    open:        "Bad Eden Bridge — move power between a Steward and their faction: sacrifice body/mind for faction OP, or spend faction OP to back a personal roll.",
-    faction:     "Faction — the OP bank on the far side of the bridge. Sacrifices deposit here; Backing spends from here. Locked to your bound faction when opened from a sheet.",
+    open:        "Bad Eden Bridge — move power between a Steward and their faction: sacrifice body/mind for faction marks, or spend faction marks to back a personal roll.",
+    faction:     "Faction — the marks bank on the far side of the bridge. Sacrifices deposit here; Backing spends from here. Locked to your bound faction when opened from a sheet.",
     actor:       "Steward — the body paying the price (Manifestation) or receiving the boost (Backing). The list follows the selected faction's roster when one exists.",
     mOpKey:      "OP Type — which of the nine OP channels the faction receives. Banks hold MARKS; a standard OP check costs 10.",
     mOpQty:      "Marks — how many marks to generate (steps of 10). Every 10 marks yielded accrues 1 Blood Debt on the steward (the narrative IOU the world collects on).",
     sacrifice:   "Sacrifice — what the steward burns per 10 marks: Integrity (tier-priced meat), Stress (2 per 10 marks of mind), Aptitude ranks (30 marks per rank, restored at the next Soma Break), or a Manifestation tier-lock (40 marks per tier locked).",
     sacIntegrity:"Integrity cost per 10 marks scales with faction Standing — 0–1: 10 · 2: 7 · 3+: 5. Debited from the Integrity track; you must have the full cost on hand.",
-    stressPerOp: "Stress per 10 marks — Stress track points burned per 10 marks generated (default 2). The track floors at 0 and you need the full cost available.",
+    stressPerOp: "Stress per 10 marks — Stress track points burned per 10 marks generated (2; only a GM may change it). The track floors at 0 and you need the full cost available.",
     aptKey:      "Aptitude key — the skill whose ranks burn (e.g. athletics, stealth, occult). The burn is flag-tracked and restores automatically at the next Soma Break.",
-    opPerRank:   "Marks / Rank — marks yielded per aptitude rank burned (default 30). Ranks burned = ceiling(marks ÷ this).",
-    opPerLock:   "Marks / Tier-lock — marks yielded per manifestation tier locked (default 40). Lockouts stack, gate casting, and clear at Soma Break.",
+    opPerRank:   "Marks / Rank — marks yielded per aptitude rank burned (30). Ranks burned = ceiling(marks ÷ this). Only a GM may change the rate.",
+    opPerLock:   "Marks / Tier-lock — marks yielded per manifestation tier locked (40). Lockouts stack, gate casting, and clear at Soma Break. Only a GM may change the rate.",
     mNote:       "Note — stamped on the Blood Debt ledger entry and the GM receipt whisper.",
     manifestBtn: "Deposits the marks FIRST (a full bank refuses and nothing burns), then debits the resource, records a Blood Debt lock on the steward, and whispers a receipt to the GM.",
     bOpKey:      "OP Type — which faction OP track pays for the backing.",
@@ -619,8 +635,8 @@ async function _clearBridgeDebtAndLocks(actor){
     bRollKind:   "Roll — Aptitude fires the steward's full rank-aware skill check (rerolls, floors, surge); Faculty fires a bare attribute test.",
     bRollKey:    "Key — which aptitude or faculty to roll. The list follows the selected steward and shows current values.",
     bMode:       "Mode — Flat adds +2 per 10 marks to the roll total; Bonus Dice rolls extra dice (default 1d6 per 10 marks) and adds them.",
-    bDice:       "Dice per 10 marks — the die granted per 10 marks spent in dice mode (default 1d6).",
-    backingBtn:  "Spends the OP (verified against the bank), fires the steward's real roll, and posts base + backing = total to chat."
+    bDice:       "Dice per 10 marks — the die granted per 10 marks spent in dice mode (1d6; only a GM may change it).",
+    backingBtn:  "Spends the marks (verified against the bank), fires the steward's real roll, and posts base + backing = total to chat."
   };
   function tipAttr(key){
     var t = BRIDGE_TIPS[key] || "";
@@ -683,6 +699,8 @@ async function _clearBridgeDebtAndLocks(actor){
       return '<option value="'+a.id+'" '+(actor && a.id===actor.id ? "selected":"")+'>'+foundry.utils.escapeHTML(String(a.name))+'</option>';
     }).join("");
 
+    // 10-29: rate fields are GM-only; player seats see the fixed rate, read-only.
+    var rateLock = _gmSeat() ? '' : ' readonly disabled';
     var html =
       '<div class="bbttcc-choice-roll-dialog" style="min-width:560px;">'+
       ' <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; margin-bottom:10px;">'+
@@ -713,12 +731,12 @@ async function _clearBridgeDebtAndLocks(actor){
       '   </div>'+
 
       '   <div data-sac-panel="integrity" style="margin-top:8px;"'+tipAttr("sacIntegrity")+'>'+
-      '     <div class="bbttcc-muted">Integrity cost per OP scales by faction Standing (0–1: 10 · 2: 7 · 3+: 5). Integrity is debited and Blood Debt accrues.</div>'+
+      '     <div class="bbttcc-muted">Integrity cost per 10 marks scales by faction Standing (0–1: 10 · 2: 7 · 3+: 5). Integrity is debited and Blood Debt accrues.</div>'+
       '   </div>'+
 
       '   <div data-sac-panel="stress" style="margin-top:8px; display:none;">'+
       '     <div style="display:flex; gap:8px; align-items:flex-end;">'+
-      '       <div style="width:140px;"'+tipAttr("stressPerOp")+'><label>Stress per 10 marks</label><input name="m_stressPerOp" type="number" min="1" step="1" value="2" style="width:100%;"/></div>'+
+      '       <div style="width:140px;"'+tipAttr("stressPerOp")+'><label>Stress per 10 marks</label><input name="m_stressPerOp" type="number" min="1" step="1" value="'+BRIDGE_RATES.stressPerOp+'"'+rateLock+' style="width:100%;"/></div>'+
       '     </div>'+
       '     <div class="bbttcc-muted">Default: 2 Stress = 10 marks. The steward\'s Stress track depletes by this amount.</div>'+
       '   </div>'+
@@ -726,21 +744,21 @@ async function _clearBridgeDebtAndLocks(actor){
       '   <div data-sac-panel="aptitude" style="margin-top:8px; display:none;">'+
       '     <div style="display:flex; gap:8px; align-items:flex-end;">'+
       '       <div style="flex:1;"'+tipAttr("aptKey")+'><label>Aptitude key</label><input name="m_aptKey" type="text" value="" placeholder="e.g. athletics, stealth, occult" style="width:100%;"/></div>'+
-      '       <div style="width:140px;"'+tipAttr("opPerRank")+'><label>OP / Rank</label><input name="m_opPerRank" type="number" min="1" step="1" value="3" style="width:100%;"/></div>'+
+      '       <div style="width:140px;"'+tipAttr("opPerRank")+'><label>Marks / Rank</label><input name="m_opPerRank" type="number" min="10" step="10" value="'+(BRIDGE_RATES.opPerRank * _mpo())+'"'+rateLock+' style="width:100%;"/></div>'+
       '     </div>'+
       '     <div class="bbttcc-muted">Default: 1 rank burned = 30 marks. Burned ranks restore at the next Soma Break (flag-tracked).</div>'+
       '   </div>'+
 
       '   <div data-sac-panel="manifestation" style="margin-top:8px; display:none;">'+
       '     <div style="display:flex; gap:8px; align-items:flex-end;">'+
-      '       <div style="width:140px;"'+tipAttr("opPerLock")+'><label>OP / Tier-lock</label><input name="m_opPerLock" type="number" min="1" step="1" value="4" style="width:100%;"/></div>'+
+      '       <div style="width:140px;"'+tipAttr("opPerLock")+'><label>Marks / Tier-lock</label><input name="m_opPerLock" type="number" min="10" step="10" value="'+(BRIDGE_RATES.opPerLockoutTier * _mpo())+'"'+rateLock+' style="width:100%;"/></div>'+
       '     </div>'+
       '     <div class="bbttcc-muted">Default: 1 manifestation tier locked (this scene) = 40 marks. Lockout flag clears at scene end / Soma Break.</div>'+
       '   </div>'+
 
       '   <div style="margin-top:10px;">'+
-      '     <button type="button" class="bbttcc-sacrifice-btn" data-action="manifest"'+tipAttr("manifestBtn")+' style="border-color: rgba(244,63,94,0.55); background: rgba(244,63,94,0.10); color:#ffd6de;">Sacrifice & Grant OP</button>'+
-      '     <div class="bbttcc-muted" style="margin-top:6px;">Debits the selected resource, grants faction OP, and records a Blood Debt lock.</div>'+
+      '     <button type="button" class="bbttcc-sacrifice-btn" data-action="manifest"'+tipAttr("manifestBtn")+' style="border-color: rgba(244,63,94,0.55); background: rgba(244,63,94,0.10); color:#ffd6de;">Sacrifice & Grant Marks</button>'+
+      '     <div class="bbttcc-muted" style="margin-top:6px;">Debits the selected resource, grants faction marks, and records a Blood Debt lock.</div>'+
       '   </div>'+
       '  </div>'+
 
@@ -760,10 +778,10 @@ async function _clearBridgeDebtAndLocks(actor){
       '    <div style="flex:1;"'+tipAttr("bMode")+'><label>Mode</label><select name="b_mode" style="width:100%;">'+
       '      <option value="flat">Flat Bonus (+2 per 10 marks)</option><option value="dice">Bonus Dice (+1d6 per 10 marks)</option>'+
       '    </select></div>'+
-      '    <div style="width:140px;"'+tipAttr("bDice")+'><label>Dice per 10 marks</label><input name="b_dice" type="text" value="1d6" style="width:100%;"/></div>'+
+      '    <div style="width:140px;"'+tipAttr("bDice")+'><label>Dice per 10 marks</label><input name="b_dice" type="text" value="'+BRIDGE_RATES.dicePerOp+'"'+rateLock+' style="width:100%;"/></div>'+
       '   </div>'+
       '   <div style="margin-top:10px;">'+
-      '    <button type="button" class="bbttcc-sacrifice-btn" data-action="backing"'+tipAttr("backingBtn")+' style="border-color: rgba(56,189,248,0.55); background: rgba(56,189,248,0.10); color:#d6f3ff;">Spend OP & Roll</button>'+
+      '    <button type="button" class="bbttcc-sacrifice-btn" data-action="backing"'+tipAttr("backingBtn")+' style="border-color: rgba(56,189,248,0.55); background: rgba(56,189,248,0.10); color:#d6f3ff;">Spend Marks & Roll</button>'+
       '    <div class="bbttcc-muted" style="margin-top:6px;">Rolls, applies backing, posts the combined total to chat.</div>'+
       '   </div>'+
       '  </div>'+
@@ -862,8 +880,10 @@ async function _clearBridgeDebtAndLocks(actor){
 
             var stressPerOp = num(root.find("input[name='m_stressPerOp']").val(), 2);
             var aptKey      = String(root.find("input[name='m_aptKey']").val() || "").trim();
-            var opPerRank   = num(root.find("input[name='m_opPerRank']").val(), 3);
-            var opPerLock   = num(root.find("input[name='m_opPerLock']").val(), 4);
+            // 10-29: fields are MARKS (30 / 40); the engine takes rule units per 10 marks.
+            // The engine ignores these on a player seat (fixed rates).
+            var opPerRank   = num(root.find("input[name='m_opPerRank']").val(), BRIDGE_RATES.opPerRank * _mpo()) / _mpo();
+            var opPerLock   = num(root.find("input[name='m_opPerLock']").val(), BRIDGE_RATES.opPerLockoutTier * _mpo()) / _mpo();
 
             await manifestSacrificeToFactionOp({
               pcActorId: actorId,
@@ -878,7 +898,7 @@ async function _clearBridgeDebtAndLocks(actor){
               note: note
             });
 
-            try { ui.notifications.info("Sacrifice accepted. OP granted."); } catch(_eN){}
+            try { ui.notifications.info("Sacrifice accepted. Marks granted."); } catch(_eN){}
           }catch(e){
             warn(e);
             try { ui.notifications.warn(String(e.message||e)); } catch(_e2){}
@@ -967,6 +987,8 @@ try{
   Hooks.on("updateActor", function(actor, changed){
     try{
       if(!actor) return;
+      // 10-29: writes from hooks run on the active GM only (every seat was sending the unsets).
+      if(!(game.users && game.users.activeGM && game.users.activeGM.isSelf)) return;
       // only PCs/NPCs
       var t = String(actor.type||"");
       if(t !== "character" && t !== "npc") return;

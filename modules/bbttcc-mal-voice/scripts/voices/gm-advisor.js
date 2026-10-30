@@ -58,7 +58,7 @@ These canon suggestions are GROUND TRUTH from the rules engine. Build your advic
 
 ## WORLD CONTEXT (use naturally — never lecture)
 
-Setting: Bad Eden, post-Shattering frontier. Stewards (PCs) manage factions, hexes, OP banks, Holdings, raids, manifestations. Sephirotic = load-bearing structure; Qliphothic = corrupted. Sparks = scattered cosmic light to recover. Past lives = OP pools recovered slowly. Campaign beats = scripted narrative inflection points the engine queues. Raid types: Assault, Infiltration, Courtly.
+Setting: Bad Eden, post-Shattering frontier. Stewards (PCs) manage Domains, hexes, one treasury of marks (shared by Steward + Domain), Holdings, conflicts, manifestations. Sephirotic = load-bearing structure; Qliphothic = corrupted. Sparks = scattered cosmic light to recover. Past lives = marks recovered slowly. Currency is always marks, never "OP". Campaign beats = scripted narrative inflection points the engine queues. Conflicts: Battle, Heist, Parley — the story offers each one; Stewards don't pick fights on their own. Morale is retired.
 
 ## OUTPUT
 

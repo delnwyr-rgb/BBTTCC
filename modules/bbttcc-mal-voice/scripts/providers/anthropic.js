@@ -70,8 +70,15 @@ const ANTHROPIC_VERSION  = "2023-06-01";
 // rates as of 2026-07. Cache reads bill ~0.1x input, cache writes ~1.25x.
 // (claude-sonnet-5 has intro pricing of $2/$10 through 2026-08-31; we use
 // the sticker rate so estimates err high.)
+// 10-29: + the 5 / 5.5 families (Opus 5.5 $4/$20, Sonnet 5.5 $2/$10,
+// Haiku 5.5 $0.10/$0.50 up to 100K-token prompts).
 const COST_TABLE = {
+  "claude-fable-5-1":     { in:  10.00, out: 50.00 },
   "claude-fable-5":       { in:  10.00, out: 50.00 },
+  "claude-opus-5-5":      { in:   4.00, out: 20.00 },
+  "claude-opus-5":        { in:   5.00, out: 25.00 },
+  "claude-sonnet-5-5":    { in:   2.00, out: 10.00 },
+  "claude-haiku-5-5":     { in:   0.10, out:  0.50 },
   "claude-opus-4-8":      { in:   5.00, out: 25.00 },
   "claude-opus-4-7":      { in:   5.00, out: 25.00 },
   "claude-opus-4-6":      { in:   5.00, out: 25.00 },
@@ -93,7 +100,8 @@ function _rateFor(model) {
   const m = String(model || "");
   if (COST_TABLE[m]) return COST_TABLE[m];
   // Prefix match handles dated snapshots (e.g. claude-haiku-4-5-20251001).
-  const key = Object.keys(COST_TABLE).find(k => m.startsWith(k));
+  // 10-29: longest key first, so claude-sonnet-5-5-* never bills as claude-sonnet-5.
+  const key = Object.keys(COST_TABLE).sort((a, b) => b.length - a.length).find(k => m.startsWith(k));
   return key ? COST_TABLE[key] : null;
 }
 
@@ -107,19 +115,32 @@ function _estimateCost(model, inputTokens, outputTokens, cacheReadTokens = 0, ca
 }
 
 // Per-family request-shape rules (sending the wrong params is a hard 400).
+// 10-29: knows the 5 / 5.5 families. Opus 5, Opus 5.5, Sonnet 5.5 and Haiku
+// 5.5 all reject sampling params; Sonnet 5.5 and Opus 5.5 reject an explicit
+// {type:"disabled"} (Sonnet 5.5's off-form is "between_tools"), so they get
+// no thinking field at all. An id we don't recognise from a NEWER family is
+// treated like the newest known family (no sampling, no thinking field)
+// rather than the oldest — a guessed-wrong param is a hard 400 every call.
 function _modelCaps(model) {
   const m = String(model || "");
-  const isFable      = /fable-5|mythos-5/.test(m);
+  const isFable      = /fable-\d|mythos-\d/.test(m);
   const isOpus47Plus = /opus-4-[789]/.test(m);
-  const isSonnet5    = /sonnet-5/.test(m);
+  const isSonnet5    = /sonnet-5(?!-\d(?!\d))/.test(m);     // exactly Sonnet 5 (not 5-5; dated snapshots ok)
+  const isOpus5      = /opus-5(?!-\d(?!\d))/.test(m);
+  const isGen55      = /(opus|sonnet|haiku)-5-\d(?!\d)/.test(m);  // Opus/Sonnet/Haiku 5.5 (+ later 5.x)
+  // Newer than anything above: a 6+ major, or any family name we don't know.
+  const fam = m.match(/claude-([a-z]+)-(\d+)/);
+  const knownFam = fam && ["opus", "sonnet", "haiku", "fable", "mythos"].includes(fam[1]);
+  const isNewer = !!m && (!fam ? false : (!knownFam || Number(fam[2]) >= 6));
   return {
     // temperature/top_p/top_k rejected with 400 on these families
-    noSampling: isFable || isOpus47Plus || isSonnet5,
+    noSampling: isFable || isOpus47Plus || isSonnet5 || isOpus5 || isGen55 || isNewer,
     // Sonnet 5 defaults to adaptive thinking when `thinking` is omitted —
     // wrong default for short low-latency barks, so we disable explicitly.
     disableThinking: isSonnet5,
-    // Fable 5 rejects an explicit {type:"disabled"} — must omit entirely.
-    neverSendThinking: isFable
+    // Fable 5 / Opus 5.5 / Sonnet 5.5 reject an explicit {type:"disabled"} —
+    // must omit entirely (Opus 5 / Haiku 5.5 run adaptive when omitted too).
+    neverSendThinking: isFable || isGen55 || isNewer
   };
 }
 
@@ -567,7 +588,8 @@ async function _relayHandler(payload, meta) {
   st.inFlight++;
   let timer = null, pending = null, last = 0, seq = 0, closed = false;
   const emit = (text) => {
-    try { game.socket.emit(DELTA_CHANNEL, { op: DELTA_OP, reqId: String(payload.reqId || ""), toUserId: user.id, seq: ++seq, text }); } catch (_e) {}
+    // 10-29: recipients — a private NPC/advisor stream goes to the asking seat only, not every socket.
+    try { game.socket.emit(DELTA_CHANNEL, { op: DELTA_OP, reqId: String(payload.reqId || ""), toUserId: user.id, seq: ++seq, text }, { recipients: [user.id] }); } catch (_e) {}
   };
   const onDelta = payload.stream ? (text) => {
     if (closed) return;
@@ -610,6 +632,7 @@ async function _relayHandler(payload, meta) {
         costUSD: res.costEstimateUSD, durationMs: Date.now() - t0
       });
       await game.settings.set(MODULE_ID, "callLog", entries);
+      globalThis.game?.bbttcc?.mal?.output?.budgetCheck?.();   // 10-29: monthly-budget warning
     }
   } catch (_e) { /* non-fatal */ }
   return res;

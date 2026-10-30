@@ -50,6 +50,30 @@ function take(actor, keys) {
   return new Set(hits);
 }
 
+// 10-29: the preRoll*V2 hooks fire BEFORE the roll configuration dialog, and closing that
+// dialog makes no roll — so the pre-roll hooks only shape the config and mark what they
+// would spend here; onPostRollConfig spends it (and posts the notes) once rolls exist.
+const PENDING = `${ID}Spend`;
+
+/** Pick every armed rider in `keys` for this roll without spending it yet. */
+function pick(config, actor, keys, text) {
+  const hits = keys.filter(k => armed(actor, k));
+  if ( !hits.length ) return new Set();
+  const p = config[PENDING] ??= { actor, keys: new Set(), notes: [] };
+  hits.forEach(k => p.keys.add(k));
+  if ( text ) p.notes.push(text);
+  return new Set(hits);
+}
+
+function onPostRollConfig(rolls, config) {
+  const p = config?.[PENDING];
+  if ( !p ) return;
+  delete config[PENDING];
+  if ( !rolls?.length ) return;   // dialog closed: nothing rolled, nothing spent
+  if ( p.keys.size ) consume(p.actor, ...p.keys);
+  for ( const text of p.notes ) note(p.actor, text);
+}
+
 const profOf = actor => Number(actor?.system?.attributes?.prof) || 2;
 const actorOf = subject => subject?.actor ?? (subject instanceof Actor ? subject : null);
 
@@ -66,9 +90,8 @@ function note(actor, text) {
 
 function onPreRollD20(config) {
   const actor = actorOf(config.subject);
-  if ( take(actor, ["bonusDie"]).size ) {
+  if ( pick(config, actor, ["bonusDie"], "Bonus Die: rolling an extra d20, keeping the best.").size ) {
     config.advantage = true;
-    note(actor, "Bonus Die: rolling an extra d20, keeping the best.");
   }
 }
 
@@ -111,7 +134,7 @@ function onPreRollAttack(config) {
   const actor = actorOf(config.subject);
   if ( !actor ) return;
   applyEffectAttackModes(config, actor);
-  const got = take(actor, ["advAttack", "powerSurge"]);
+  const got = pick(config, actor, ["advAttack", "powerSurge"]);
   if ( got.has("advAttack") ) config.advantage = true;
   if ( got.has("powerSurge") ) {
     config.rolls ??= [{}];
@@ -126,9 +149,8 @@ function onPreRollAttack(config) {
 
 function onPreRollSave(config, dialog, message) {
   const actor = actorOf(config.subject);
-  if ( take(actor, ["autoSaveOnce"]).size ) {
+  if ( pick(config, actor, ["autoSaveOnce"], "Iron Word: this saving throw succeeds automatically.").size ) {
     foundry.utils.setProperty(message, "data.system.resisted", true);
-    note(actor, "Iron Word: this saving throw succeeds automatically.");
   }
 }
 
@@ -147,7 +169,7 @@ function onPreRollDamage(config, dialog, message) {
   const isMelee = activity?.attack?.type?.value === "melee";
   const meleeOnly = new Set(["absorbStrike", "pressHarder"]);
   const keys = DAMAGE_KEYS.filter(k => ((k !== "surgingCast") || !isWeapon) && (!meleeOnly.has(k) || isMelee));
-  const got = take(actor, keys);
+  const got = pick(config, actor, keys);
   if ( !got.size ) return;
 
   const plan = config[ID] = {};
@@ -205,6 +227,7 @@ export function activateRiders() {
   Hooks.on("dnd5e.preRollSavingThrowV2", onPreRollSave);
   Hooks.on("dnd5e.preRollDamageV2", onPreRollDamage);
   Hooks.on("dnd5e.postDamageRollConfiguration", onPostDamageConfig);
+  Hooks.on("dnd5e.postRollConfiguration", onPostRollConfig);   // every roll type, last
 }
 
 export { armed, consume, take };

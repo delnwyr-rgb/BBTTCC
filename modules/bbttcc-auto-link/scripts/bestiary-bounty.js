@@ -152,6 +152,10 @@ export async function resolve(actorOrUuid, { method = "kill", factionId, marks =
   const faction = factionId ? game.actors.get(factionId) : null;
   if (!faction) { ui.notifications?.warn?.("Pick the faction that resolved it."); return { ok: false, reason: "no-faction" }; }
   if (actor?.flags?.fourththing?.rfi?.actor?.resolved) { ui.notifications?.info?.(`${actor.name} has already paid its bounty.`); return { ok: false, reason: "already" }; }
+  // 10-29: a card that already paid can't pay again; a snapshot (token gone, nothing to stamp)
+  // pays once — any GM-authored bounty message for that uuid marked resolved means it's spent.
+  if (messageId && game.messages.get(messageId)?.flags?.[MOD]?.bountyOffer?.resolved) { ui.notifications?.info?.("That bounty card has already been paid."); return { ok: false, reason: "already" }; }
+  if (snap && _snapshotPaid(snap.uuid)) { ui.notifications?.info?.(`${snap.name} has already paid its bounty.`); return { ok: false, reason: "already" }; }
   if (!actor) actor = { uuid: snap.uuid, id: snap.id, name: snap.name };
 
   const b = snap ? snap.bounty : bountyFor(actor);
@@ -187,10 +191,20 @@ export async function resolve(actorOrUuid, { method = "kill", factionId, marks =
   try {
     const msg = messageId ? game.messages.get(messageId) : null;
     if (msg) await msg.update({ content: receipt, [`flags.${MOD}.bountyOffer.resolved`]: true });
-    else await ChatMessage.create({ content: receipt, speaker: { alias: "Bestiary" } });
+    // 10-29: the receipt carries the resolved marker too, so a snapshot paid by hand still dedupes.
+    else await ChatMessage.create({ content: receipt, speaker: { alias: "Bestiary" }, flags: { [MOD]: { bountyOffer: { actorUuid: actor.uuid, resolved: true } } } });
   } catch (_e) {}
   ui.notifications?.info?.(`${faction.name} collects ${_opFmt(credited)} of ${pool} for ${actor.name}${lost ? ` (${lost} marks lost to the cap)` : ""}.`);
   return { ok: true, ...payload, res };
+}
+
+/* 10-29: has a GM-authored bounty message for this uuid already been resolved? */
+function _snapshotPaid(uuid) {
+  if (!uuid) return false;
+  return (game.messages?.contents ?? []).some(m => {
+    const bo = m.flags?.[MOD]?.bountyOffer;
+    return bo?.resolved && bo.actorUuid === uuid && m.author?.isGM;
+  });
 }
 
 /* ── Card buttons ─────────────────────────────────────────────────────── */
@@ -200,13 +214,17 @@ function _bindCard(message, html) {
   if (!root) return;
   const card = root.querySelector("[data-bbttcc-bounty-actor]");
   if (!card) return;
-  if (!game.user.isGM) { card.querySelectorAll("button").forEach(b => { b.disabled = true; }); return; }
+  // 10-29: only a GM-authored card posted by _postOffer is live — a player can write a lookalike
+  // card (content + flags are theirs to set), so its uuid/snapshot must never drive a credit.
+  const offerFlag = message.flags?.[MOD]?.bountyOffer ?? null;
+  if (!game.user.isGM || !message.author?.isGM || !offerFlag?.actorUuid || offerFlag.resolved) { card.querySelectorAll("button").forEach(b => { b.disabled = true; }); return; }
   card.querySelectorAll("[data-bbttcc-bounty-method]").forEach(btn => {
     btn.addEventListener("click", async () => {
       const factionId = card.querySelector("[data-bbttcc-bounty-faction]")?.value ?? "";
       card.querySelectorAll("button").forEach(b => { b.disabled = true; });
-      const snapshot = message.flags?.[MOD]?.bountyOffer?.snapshot ?? null;
-      const r = await resolve(card.dataset.bbttccBountyActor, { method: btn.dataset.bbttccBountyMethod, factionId, messageId: message.id, snapshot });
+      // 10-29: uuid comes from the GM-written flags, not the card's DOM attribute.
+      const snapshot = offerFlag.snapshot?.uuid === offerFlag.actorUuid ? offerFlag.snapshot : null;
+      const r = await resolve(offerFlag.actorUuid, { method: btn.dataset.bbttccBountyMethod, factionId, messageId: message.id, snapshot });
       if (!r?.ok) card.querySelectorAll("button").forEach(b => { b.disabled = false; });
     });
   });
@@ -286,8 +304,9 @@ async function _flushBounties(combat, { clearFlag = false } = {}) {
   }
 }
 Hooks.on("deleteCombat", (combat) => { try { if (_isPrimaryGM()) _flushBounties(combat); } catch (_e) {} });
+// 10-29: Combat#started is a getter (round > 0), never in a diff — a stop/reset shows up as round → 0.
 Hooks.on("updateCombat", (combat, changes) => {
-  try { if (_isPrimaryGM() && changes.started === false) _flushBounties(combat, { clearFlag: true }); } catch (_e) {}
+  try { if (_isPrimaryGM() && "round" in (changes ?? {}) && Number(changes.round) === 0) _flushBounties(combat, { clearFlag: true }); } catch (_e) {}
 });
 
 /* ── Install ──────────────────────────────────────────────────────────── */

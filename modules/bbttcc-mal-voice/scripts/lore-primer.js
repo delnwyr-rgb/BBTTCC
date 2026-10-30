@@ -51,8 +51,8 @@ The metaphysics are Kabbalistic and load-bearing:
 
 Stewards are reincarnated souls carrying stacks of past lives. Their power IS memory:
 - MANIFESTATION = remembering a past life's capability so hard it becomes real. Casting is remembering.
-- OP POOLS (Operational Power) are recovered past lives, banked as faction energy. Nine flavors: Violence, Nonlethal, Intrigue, Economy, Softpower, Diplomacy, Logistics, Culture, Faith.
-- MARKS are the unit of OP: faction banks hold marks, every quantity is spoken in marks, and a standard OP check costs 10. Marks live in faction banks, never in a Steward's pocket; Stewards carry items and loot, which only becomes Marks when deposited with a faction.
+- MARKS are recovered past lives, banked as power — the one currency, and every quantity is spoken in marks. Nine flavors: Violence, Nonlethal, Intrigue, Economy, Softpower, Diplomacy, Logistics, Culture, Faith ("12 Economy marks").
+- ONE TREASURY: a Steward and their Domain share a single treasury of marks. Loot and items become marks when they're banked there.
 - REINCARNATION: death is a setback, not an ending. "Reincarnation ahoy."
 - ECHO ROSTERS: Stewards' crews and occult associations are populated by named people from their past lives — debts, scars, unfinished business made flesh.
 

@@ -183,7 +183,7 @@ const CLASS_BUILD_GUIDE = {
     primary: ["violence", "soul"],
     array: { violence: 5, intrigue: 2, presence: 3, body: 3, mind: 2, soul: 4 },
     aptitudes: ["athletics", "intimidation", "meditation"],
-    playstyle: "Emotion-fueled melee duelist — every turn asks: escalate into Burn, or stabilize?"
+    playstyle: "Emotion-fueled melee duelist — every turn asks: run your Surge hotter, or vent?"
   },
   "Soul-Smith": {
     primary: ["soul", "body"],
@@ -925,8 +925,11 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       : "The Tree has watched you descend. This is what it sees. Hover any line to read what it means; tweak any line if it doesn't fit.";
     const tallyHtml = isManual
       ? `<div class="bbttcc-twv2-tally-chip bbttcc-twv2-tally-chip-muted">Manual</div>`
-      : `<div class="bbttcc-twv2-tally-chip">${label}</div>
-         <div class="bbttcc-twv2-tally-detail">Mercy ${tally.mercy} · Severity ${tally.severity} · Neutral ${tally.neutral}</div>`;
+      : `<div class="bbttcc-twv2-tally-chip">${label}</div>${
+         // 10-29: the label reads tally.lean (summed tilt z-score); the per-answer
+         // counts often disagree with it, and the spec hides them from players.
+         spec?.pillarReadout?.classification?.showNumericCounts === true
+           ? `<div class="bbttcc-twv2-tally-detail">Mercy ${tally.mercy} · Severity ${tally.severity} · Neutral ${tally.neutral}</div>` : ""}`;
 
     return `
       <div class="bbttcc-twv2-review">
@@ -961,7 +964,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
                 <div class="bbttcc-twv2-section-title">${dnd ? "Yesod — Skill Picks" : "Yesod — Aptitude Picks"}</div>
                 <p class="bbttcc-twv2-section-note">${dnd
                   ? `Choose <strong>3 free skill proficiencies</strong> at character creation — the Bad Eden twin of RFI's three free aptitudes. Your class and background offer their own picks afterwards; anything already proficient is greyed out there.`
-                  : `Choose <strong>3 free aptitudes</strong> at character creation. Armor skills (Plating, Weave, Warding) come from your Path. Picks granted at rank&nbsp;1; aptitudes already provided by your class, heritage, crew, or occult association are greyed out — if you select one anyway, the duplicate pick is dropped at finalize.`}</p>
+                  : `Choose <strong>3 free aptitudes</strong> at character creation. Armor skills (Plating, Fitting, Bracing) come from your Path. Picks granted at rank&nbsp;1; aptitudes already provided by your class, heritage, crew, or occult association are greyed out — if you select one anyway, the duplicate pick is dropped at finalize.`}</p>
                 ${chargenAptitudesHtml}
               </div>
             </div>
@@ -1147,14 +1150,15 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
   _classL1Plan() {
     return {
       "Bulwark":          { combat: "melee", armor: "plating" },
-      "Aurablade":        { combat: "melee", armor: "weave"   },
-      "Cosmic Linguist":  { combat: "brawl", armor: "weave"   },
-      "Pactkeeper":       { combat: "brawl", armor: "warding" },
-      "Dreamwalker":      { combat: "brawl", armor: "weave"   },
-      "Harmony Marshal":  { combat: "melee", armor: "warding" },
+      // 10-29: armor keys renamed 08-22 (weave→fitting, warding→bracing) — match template + stamp macro.
+      "Aurablade":        { combat: "melee", armor: "fitting" },
+      "Cosmic Linguist":  { combat: "brawl", armor: "fitting" },
+      "Pactkeeper":       { combat: "brawl", armor: "bracing" },
+      "Dreamwalker":      { combat: "brawl", armor: "fitting" },
+      "Harmony Marshal":  { combat: "melee", armor: "bracing" },
       "Soul-Smith":       { combat: "melee", armor: "plating" },
-      "Wyrdlens Adept":   { combat: "brawl", armor: "weave"   },
-      "Shadow Courier":   { combat: "brawl", armor: "weave"   }
+      "Wyrdlens Adept":   { combat: "brawl", armor: "fitting" },
+      "Shadow Courier":   { combat: "brawl", armor: "fitting" }
     };
   }
 
@@ -1757,7 +1761,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     const used = facKeys().map(k => f[k]).sort((a, b) => b - a);
     const required = [...facArray()].sort((a, b) => b - a);
     const valid = used.length === required.length && used.every((v, i) => v === required[i]);
-    warn.textContent = valid ? "" : `Each value in [5,4,3,3,2,2] must be used exactly once. Currently: [${used.join(",")}]`;
+    warn.textContent = valid ? "" : `Each value in [${facArray().join(",")}] must be used exactly once. Currently: [${used.join(",")}]`;
     warn.style.display = valid ? "none" : "block";
     return valid;
   }
@@ -1959,7 +1963,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     const root = this.element;
     const valid = this._validateFaculties(root);
     if (!valid) {
-      ui.notifications?.warn("Faculty allocation is invalid. Use each value of [5,4,3,3,2,2] exactly once.");
+      ui.notifications?.warn(`Faculty allocation is invalid. Use each value of [${facArray().join(",")}] exactly once.`);
       return;
     }
     if (!this._heritageValid()) {
@@ -2024,7 +2028,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
         // through import → promotion, so armor/combat aptitudes can go missing
         // without this step.
         if (!isDnd()) try {
-          const ARMOR = new Set(["plating", "weave", "warding"]);
+          const ARMOR = new Set(["plating", "fitting", "bracing"]);
           const picks = (this._chargenAptitudes || []).filter(s => s && !ARMOR.has(s));
           const sys = created.system?.system ?? created.system ?? {};
           const skills = sys.skills ?? {};

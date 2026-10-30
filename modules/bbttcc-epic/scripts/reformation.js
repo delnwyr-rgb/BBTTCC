@@ -145,7 +145,14 @@ async function fireReformation(outcome, { forced = false } = {}) {
 }
 
 // One half done, the other pending → say so, once.
-async function maybeFire(source) {
+// 10-29: checks are serialized — the local hook, the updateSetting reconciler and the ready sweep can
+// all land together on the active GM, and two overlapping checks would both see done:false and fire twice.
+let _fireChain = Promise.resolve();
+function maybeFire(source) {
+  _fireChain = _fireChain.then(() => _maybeFire(source), () => _maybeFire(source));
+  return _fireChain;
+}
+async function _maybeFire(source) {
   try {
     if (!isActiveGM()) return;
     const st = refState();
@@ -168,6 +175,16 @@ async function maybeFire(source) {
 // ── Wiring — the void finally answers ───────────────────────────────────────
 Hooks.on("bbttcc:ritual:answered",     ({ outcome }) => { if (outcome === "parley" || outcome === "sunder") maybeFire("ritual"); });
 Hooks.on("bbttcc:epic:malkuthAligned", () => maybeFire("malkuth"));   // first listener this hook has ever had
+// 10-29: both hooks above are LOCAL — a non-active GM answering the Dragon (or latching Malkuth) fired
+// them on a seat maybeFire ignores, and the ending never posted. The world settings replicate to every
+// client, so the active GM reconciles off updateSetting (and once at ready for a half written while away).
+// (createSetting too — the FIRST write of a world setting creates its document and never fires updateSetting.)
+const _onEndSetting = (setting) => {
+  const key = setting?.key;
+  if (key === `${MOD}.daath` || key === `${MOD}.malkuthAligned`) maybeFire("setting");
+};
+Hooks.on("updateSetting", _onEndSetting);
+Hooks.on("createSetting", _onEndSetting);
 
 Hooks.on("init", () => {
   if (game?.system?.id !== "fourththing") return;
@@ -195,5 +212,6 @@ Hooks.on("ready", () => {
       }
     };
     log("The Reformation is listening (G3 — the ending has ears).");
+    maybeFire("ready"); // 10-29: pick up a half another seat wrote (active GM only; no-op when done)
   } catch (e) { warn("ready error", e); }
 });

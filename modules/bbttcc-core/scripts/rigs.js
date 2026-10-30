@@ -192,21 +192,71 @@ Hooks.once("init", () => {
 });
 
 Hooks.once("ready", () => {
-  // GM side of create()'s relay: the sender becomes the rig's OWNER, and may only
-  // name a Domain they own as its faction.
+  // GM side of create()'s relay: the sender becomes the rig's OWNER, must name a Domain
+  // they own as its faction, and that Domain pays the GM-side price (10-29).
   const gx = game.bbttcc?.api?.gmExec;
   if (typeof gx?.register !== "function") return console.warn(TAG, "gmExec missing — rigs.create relay not registered");
   gx.register("rigs.create", async ({ spec } = {}, meta = {}) => {
     const user = game.users?.get?.(String(meta.fromUserId || ""));
     if (!user) throw new Error("unknown sender");
-    const s = (spec && typeof spec === "object") ? { ...spec } : {};
+    let s = (spec && typeof spec === "object") ? { ...spec } : {};
+    let fac = null, charged = 0, marks = 0;
     if (!user.isGM) {
+      // 10-29: a player-built rig must be paid for from a Domain the sender owns — an empty faction
+      // used to pass (a free rig of any size), and the spec was taken whole (items with invented output
+      // yields, integrity/output overrides) while the only charge ran on the client. Now the GM
+      // whitelists the spec, re-prices it here and debits the Domain itself.
       const fid = String(s.identity?.factionOwnerId || "").replace(/^Actor\./, "");
-      const fac = fid ? game.actors?.get?.(fid) : null;
-      if (fid && !fac?.testUserPermission?.(user, "OWNER")) throw new Error("you don't own that Domain");
-      s.folder = null;
+      fac = fid ? game.actors?.get?.(fid) : null;
+      if (!fac) throw new Error("Choose your Domain to pay for this rig.");
+      // same Domain test as the op.commit relay — an owned character isn't a treasury
+      if (fac.getFlag?.("bbttcc-factions", "isFaction") !== true && !fac.getFlag?.("bbttcc-factions", "opBank")) throw new Error("Choose your Domain to pay for this rig.");
+      if (!fac.testUserPermission?.(user, "OWNER")) throw new Error("you don't own that Domain");
+      const bracket = String(s.integrity?.bracket || "medium").toLowerCase();
+      if (!(bracket in DT_BY_BRACKET)) throw new Error(`unknown rig size "${bracket}"`);
+      const mecha = bracket === "mecha";
+      const tier = Math.max(mecha ? 0 : 1, Math.min(mecha ? 5 : 4, Math.floor(num(s.integrity?.tier, mecha ? 0 : 1))));
+      const id = s.identity ?? {};
+      const arr = (v) => (Array.isArray(v) ? v.map(String) : []);
+      const def = s.defenses ?? {};
+      const defenses = { resistances: arr(def.resistances), immunities: arr(def.immunities), vulnerabilities: arr(def.vulnerabilities) };
+      const travel = (s.travel && typeof s.travel === "object") ? { ...s.travel } : {};
+      const hint = s.pricing?.counts ?? {};
+      const cnt = (v) => Math.max(0, Math.floor(num(v)));
+      s = {
+        name: String(s.name || "Rig").slice(0, 120), img: s.img, folder: null,
+        identity: { mobility: id.mobility === "stationary" ? "stationary" : "mobile", state: "parked",
+          factionOwnerId: fac.id, archetype: String(id.archetype || "") },
+        integrity: { bracket, tier },                       // max/value derive from the bracket / frame
+        crew: s.crew ?? {}, travel, defenses, output: {}, items: [],   // loadout is seeded after create
+        token: s.token ?? {}, tags: arr(s.tags)
+      };
+      const price = game.bbttcc?.api?.rigBuilder?.computeRigCost ?? globalThis.BBTTCC_RigBuilder?.computeRigCost;
+      if (typeof price !== "function") throw new Error("rig pricing isn't loaded on the GM seat (bbttcc-auto-link)");
+      marks = Math.max(0, Math.round(num(price({ bracket, tier,
+        counts: { weapons: cnt(hint.weapons), systems: cnt(hint.systems), outputs: cnt(hint.outputs) },
+        defenses: { resistances: defenses.resistances.length, immunities: defenses.immunities.length, vulnerabilities: defenses.vulnerabilities.length },
+        hazardResist: cnt(travel.hazardResist) })?.marks)));
+      if (marks > 0) {
+        const op = game.bbttcc?.api?.op;
+        if (typeof op?.commit !== "function") throw new Error("the marks engine isn't loaded on the GM seat");
+        const res = await op.commit(fac.id, { economy: -marks }, { context: "rig-fabrication", rigName: s.name, bracket, tier, viaSeat: user.name });
+        if (!res?.ok) throw new Error(`${fac.name} can't cover ${marks} Economy marks for this rig.`);
+        charged = Math.max(0, -num(res.finalCost?.economy ?? res.deltas?.economy, -marks));   // what was really debited (after discounts)
+      }
     }
-    const actor = await _createLocal(s, { ownership: { default: 0, [user.id]: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER } });
-    return { id: actor?.id ?? null };
+    let actor;
+    try {
+      actor = await _createLocal(s, { ownership: { default: 0, [user.id]: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER } });
+      if (!actor) throw new Error("rig creation failed");
+    } catch (err) {
+      // refund exactly the debit
+      if (charged > 0) { try { await game.bbttcc.api.op.commit(fac.id, { economy: charged }, { context: "rig-fabrication-refund", rigName: s.name, allowOvercap: true, noDiscount: true }); } catch (_e) {} }
+      throw err;
+    }
+    if (!user.isGM) {
+      try { await actor.update({ "flags.bbttcc-auto-link.fabricationCost": { marks, charged, bypassed: false, pricedBy: "gm" } }); } catch (_e) {}
+    }
+    return { id: actor?.id ?? null, charged };
   });
 });

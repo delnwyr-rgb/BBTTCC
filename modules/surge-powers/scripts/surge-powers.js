@@ -39,7 +39,10 @@
   // Rallying Cry / Phoenix on someone else). Owned → write directly; otherwise
   // emit on module.surge-powers and the active GM applies it (validated there).
   const SOCKET = `module.${MOD}`;
-  const RELAY_OPS = new Set(["heal", "phoenix", "tempHP", "addAE", "oneShot", "bank", "ward", "removeStatus", "saveAE", "fillSurge"]);
+  // 10-29: fillSurge never relays (its one caller fills the user's own pool, owner-direct).
+  const RELAY_OPS = new Set(["heal", "phoenix", "tempHP", "addAE", "oneShot", "bank", "ward", "removeStatus", "saveAE"]);
+  // Ally-only ops: a relayed heal / buff never lands on a hostile.
+  const ALLY_OPS = new Set(["heal", "phoenix", "tempHP", "oneShot", "ward", "removeStatus"]);
   // Riders another character may arm on you (an ally's "advantage on your next d20").
   const ARMABLE = new Set(["bonusDie", "advAttack", "reactionMiss", "autoSaveOnce"]);
   async function applyOp(targetActor, op, args = {}) {
@@ -71,7 +74,8 @@
       const max = Number(get(targetActor, "system.attributes.hp.max", 0)) || 0;
       const hp = Number(get(targetActor, "system.attributes.hp.value", 0)) || 0;
       const half = Math.floor(max / 2);
-      if (hp < half) return targetActor.update({ "system.attributes.hp.value": half, "system.attributes.death.failure": 0, "system.attributes.death.success": 0 });
+      // 10-29: Phoenix raises the fallen only (0 HP), never a merely wounded target.
+      if (hp <= 0 && hp < half) return targetActor.update({ "system.attributes.hp.value": half, "system.attributes.death.failure": 0, "system.attributes.death.success": 0 });
       return null;
     }
     if (op === "tempHP") {
@@ -98,18 +102,88 @@
     game.socket.emit(SOCKET, { type: "apply", actorUuid: targetActor.uuid, op, args, userId: game.user.id });
     return true;
   }
+  // 10-29: the relay trusts only the REAL socket sender (Foundry's 2nd socket.on
+  // arg), never payload ids — the sender must play a character, and every
+  // relayed value is re-checked/clamped here on the GM side.
+  let RELAY_AE = null;   // { keys:Set, statuses:Set } built from the Surge tables
+  function relayAEAllow() {
+    if (RELAY_AE) return RELAY_AE;
+    const keys = new Set(), statuses = new Set();
+    const walk = (o) => {
+      if (!o || typeof o !== "object") return;
+      if (Array.isArray(o.changes) && o.changes.every(Array.isArray)) for (const c of aeChanges(o.changes)) keys.add(c.key);
+      if (Array.isArray(o.statuses)) for (const s of o.statuses) statuses.add(String(s));
+      for (const v of Object.values(o)) walk(v);
+    };
+    walk(MENU); walk(PATHS);
+    for (const type of Object.keys(CONFIG.DND5E.damageTypes ?? {})) keys.add(`system.traits.dm.amount.${type}`);   // drAE
+    for (const k of ["system.traits.dr.value", "system.attributes.ac.bonus", "system.attributes.ac.flat", "system.attributes.ac.override"]) keys.add(k);
+    if (Object.keys(PATHS).length) RELAY_AE = { keys, statuses };   // don't cache before the Path data loads
+    return { keys, statuses };
+  }
+  /** A relayed Surge effect: timed (1–10 rounds), table keys only, small values, table statuses only. */
+  function relayAEOk(ae) {
+    if (!ae || typeof ae !== "object" || !ae.flags?.[MOD]) return false;
+    const rounds = Number(ae.duration?.rounds);
+    if (!Number.isFinite(rounds) || rounds < 1 || rounds > 10) return false;
+    const { keys, statuses } = relayAEAllow();
+    const changes = ae.system?.changes ?? ae.changes ?? [];
+    if (!Array.isArray(changes) || changes.length > 40) return false;
+    for (const c of changes) {
+      if (!keys.has(String(c?.key ?? ""))) return false;
+      const v = String(c?.value ?? "");
+      const n = Number(v);
+      if (v !== "" && Number.isFinite(n) ? Math.abs(n) > 10 : !/^[a-z]{1,20}$/i.test(v)) return false;
+    }
+    return (ae.statuses ?? []).every(s => statuses.has(String(s)));
+  }
+  /** Sanitised args for a relayed op, or null to refuse it. */
+  function relayArgs(sender, actor, op, args = {}) {
+    if (!sender) return null;
+    // The sender must play a character (the caster); a GM seat always may.
+    if (!sender.isGM && !game.actors.some(a => a.type === "character" && a.testUserPermission(sender, "OWNER"))) return null;
+    if (ALLY_OPS.has(op) && isHostile(actor)) return null;
+    if (op === "heal") return { amount: Math.max(0, Math.min(40, Math.round(Number(args.amount) || 0))) };
+    if (op === "tempHP") return { n: Math.max(0, Math.min(30, Math.round(Number(args.n) || 0))) };
+    if (op === "phoenix") return {};
+    if (op === "oneShot") return { keys: [].concat(args.keys ?? []).filter(k => ARMABLE.has(k)) };
+    if (op === "removeStatus") return { ids: [].concat(args.ids ?? []).filter(id => CONDITIONS.includes(id)) };
+    if (op === "ward") {
+      const now = game.time?.worldTime ?? 0;
+      return { until: Math.min(Number(args.until) || 0, now + 60), by: String(args.by ?? "").slice(0, 80) };
+    }
+    if (op === "addAE") return relayAEOk(args.ae) ? { ae: args.ae } : null;
+    if (op === "saveAE") {
+      const ability = String(args.ability ?? "wis");
+      if (!CONFIG.DND5E.abilities?.[ability]) return null;
+      if (args.ae && !relayAEOk(args.ae)) return null;
+      return { ability, dc: Math.max(1, Math.min(30, Number(args.dc) || 10)), ae: args.ae ?? null, label: String(args.label ?? "").slice(0, 80) };
+    }
+    if (op === "bank") {
+      // Re-derive the cap from the target's own Path rules; a generator it doesn't have never banks.
+      const gen = String(args.gen ?? "");
+      const rule = bankRules(actor).find(r => `${r.pathKey}_${r.on}` === gen);
+      return rule ? { gen, cap: capOf(rule, actor), resonance: !!args.resonance } : null;
+    }
+    return null;
+  }
   Hooks.once("ready", () => {
     if (game.system?.id !== "dnd5e") return;
-    game.socket.on(SOCKET, async (msg) => {
+    game.socket.on(SOCKET, async (msg, senderId) => {
       try {
+        if (msg?.type === "hb") return;   // the runtime's leader heartbeat
         if (!game.surgePowers?.isLeader?.()) return;
-        if (msg?.type === "pathLeave") return onLeaveRequest(msg);
+        const sender = game.users.get(senderId);
+        if (!sender) return;
+        if (msg?.type === "pathLeave") return onLeaveRequest(msg, sender);
         if (msg?.type !== "apply") return;
-        if (!RELAY_OPS.has(msg.op) || !game.users.get(msg.userId)) return;
+        if (!RELAY_OPS.has(msg.op)) return;
         const t = await fromUuid(String(msg.actorUuid || ""));
         const actor = t instanceof Actor ? t : t?.actor;
         if (!actor) return;
-        await applyOp(actor, msg.op, msg.args || {});
+        const args = relayArgs(sender, actor, msg.op, msg.args || {});
+        if (!args) return console.warn(TAG, `GM relay refused ${msg.op} on ${actor.name} from ${sender.name}`);
+        await applyOp(actor, msg.op, args);
       } catch (e) { console.warn(TAG, "GM relay apply failed", msg?.op, e); }
     });
   });
@@ -331,6 +405,7 @@
     { cost: 10, key: "final-argument", minProf: 6, bucket: "off", label: "Final Argument — next attack auto-hits, max damage, +Prof to damage",
       fiction: "There will be no negotiation.", fx: { tgt: "self", oneShot: "finalArgument", auto: "Your next attack auto-hits; its damage is maximised + Prof.", note: "Next attack auto-hits with maximized damage, plus your Proficiency Bonus (GM applies)." } },
     { cost: 10, key: "phoenix", bucket: "heal", label: "Phoenix — restore self/ally from 0 HP to half (1/encounter)",
+      oncePer: "encounter",   // 10-29: the label's 1/encounter is enforced (keyed to the combat id)
       fiction: "Remember what you were before the wound. Be that now.", fx: { tgt: "allyOrSelf", phoenix: true } },
   ];
 
@@ -370,8 +445,9 @@
     return out;
   }
   const usedKey = (entry) => entry.key.replace(/[^a-z0-9]+/gi, "_");
-  // oncePer: "long" | "short" (cleared by rests) · "round" | "turn" (keyed to the combat clock).
+  // oncePer: "long" | "short" (cleared by rests) · "round" | "turn" | "encounter" (keyed to the combat clock).
   function useStamp(entry) {
+    if (entry.oncePer === "encounter") return game.combat?.started ? `${game.combat.id}` : null;
     if (entry.oncePer === "round") return roundKey();
     if (entry.oncePer === "turn") return turnKey();
     return entry.oncePer ?? null;
@@ -428,7 +504,9 @@
     const formula = (f) => String(f).replaceAll("@prof", String(prof)).replaceAll("@level", String(Number(get(actor, "system.details.level", 0)) || 0));
     const shortName = entry.label.split("—")[0].trim();
     const ICON = "icons/magic/defensive/shield-barrier-glowing-blue.webp";
-    const surgeAE = (data) => ({ img: ICON, origin, flags: { [MOD]: { surgeMarker: true } }, ...data });
+    // 10-29: Path-made effects carry their pathKey so Remove/Leave a Path can find them.
+    const pathTag = entry.pathKey ? { pathKey: entry.pathKey } : {};
+    const surgeAE = (data) => ({ img: ICON, origin, flags: { [MOD]: { surgeMarker: true, ...pathTag } }, ...data });
 
     // Resolve targets.
     let targets = [];
@@ -455,7 +533,7 @@
       targets = tgt === "target" ? [foes[0]] : foes;
     }
     if (!entry._nested && usedUp(actor, entry)) {
-      const when = { long: "your next long rest", short: "your next rest", round: "next round", turn: "your next turn" }[entry.oncePer];
+      const when = { long: "your next long rest", short: "your next rest", round: "next round", turn: "your next turn", encounter: "this fight ends" }[entry.oncePer];
       ui.notifications?.warn?.(`${shortName}: already used until ${when}.`);
       return false;
     }
@@ -466,6 +544,11 @@
     if (writes && !game.users?.activeGM && targets.some(t => t && !t.isOwner)) {
       ui.notifications?.warn?.(`${entry.label}: no GM online to apply it to another character.`);
       return false;
+    }
+    // 10-29: Phoenix raises the fallen only — a target above 0 HP refunds the spend instead of eating it.
+    if (fx.phoenix) {
+      const up = targets.find(t => t && (Number(get(t, "system.attributes.hp.value", 0)) || 0) > 0);
+      if (up) { ui.notifications?.warn?.(`${shortName}: ${up.name} isn't at 0 HP.`); return false; }
     }
     // A stance replaces any other stance of its group (the Aurablade's four Auras).
     if (fx.stance) {
@@ -502,7 +585,7 @@
         await addAE(t, surgeAE({ name: fx.ae.name ?? shortName,
           ...(fx.ae.rounds === 0 ? {} : { duration: { rounds: fx.ae.rounds ?? 1, seconds: 6 * (fx.ae.rounds ?? 1) } }),
           changes: fitAC(aeChanges(fx.ae.changes, actor), t), statuses: fx.ae.statuses ?? [],
-          flags: { [MOD]: { surgeMarker: true, ...(fx.stance ? { stance: fx.stance } : {}) } } }));
+          flags: { [MOD]: { surgeMarker: true, ...pathTag, ...(fx.stance ? { stance: fx.stance } : {}) } } }));
         const how = fx.ae.rounds === 0 ? "" : (fx.ae.rounds ?? 1) > 1 ? ` for ${fx.ae.rounds} rounds` : " until your next turn";
         lines.push(`${t.name}: ${fx.ae.name ?? shortName}${how}.`);
       }
@@ -786,6 +869,7 @@
     const doc = def.doctrines[pick];
     await item.update({ name: `${def.name} (${doc.name})`, [`flags.${MOD}.path.doctrine`]: pick, [`flags.${MOD}.path.sheet`]: SHEET_VERSION,
       "system.description.value": pathDescription(def, pick) });
+    await ensurePerk(item);   // 10-29: restored (lost in d2eaff2f) — the doctrine perk's transfer effect
   }
   /** The doctrine perk's transfer effect, created once. */
   async function ensurePerk(item) {
@@ -984,8 +1068,11 @@
     if (!mine.length) { ui.notifications?.warn?.(`${actor.name} doesn't walk that Path.`); return false; }
     const def = PATHS[key], label = mine[0].item.name;
     const uuids = new Set(mine.map(p => p.item.uuid));
-    // Effects the Path left on the actor: anything it originated, and anything named after it.
-    const stale = actor.effects.filter(e => uuids.has(e.origin) || (def?.name && String(e.name ?? "").startsWith(def.name)));
+    // Effects the Path left on the actor: anything it originated, anything named after it, anything
+    // stamped with its key, and its stances (10-29: the Aurablade's untimed Auras use origin = actor).
+    const stances = new Set((def?.abilities ?? []).map(a => a.fx?.stance).filter(Boolean));
+    const stale = actor.effects.filter(e => uuids.has(e.origin) || (def?.name && String(e.name ?? "").startsWith(def.name))
+      || e.flags?.[MOD]?.pathKey === key || (stances.size && stances.has(e.flags?.[MOD]?.stance)));
     if (stale.length) await actor.deleteEmbeddedDocuments("ActiveEffect", stale.map(e => e.id));
     await actor.deleteEmbeddedDocuments("Item", mine.map(p => p.item.id), { surgePathForce: true });
     const flags = actor.flags?.[MOD] ?? {};
@@ -1053,8 +1140,8 @@
     ui.notifications?.info?.(`Asked your GM to remove the ${PATHS[key]?.name ?? key} from ${actor.name}.`);
   }
   /** Leader GM window: a player's leave request → confirm → remove (the player hears either way). */
-  async function onLeaveRequest(msg) {
-    const user = game.users.get(msg?.userId);
+  async function onLeaveRequest(msg, user) {
+    // 10-29: `user` = the real socket sender (never msg.userId — a forged id could ask for someone else's character).
     const t = await fromUuid(String(msg?.actorUuid || ""));
     const actor = t instanceof Actor ? t : t?.actor;
     if (!user || !actor || !actor.testUserPermission(user, "OWNER")) return;
@@ -1081,7 +1168,7 @@
   // not just the entry feature — before (and after) choosing.
   const SHEET_VERSION = 2;   // bump when the rendered description changes; stale items are rewritten on ready
   const PROF_LEVEL = { 0: "1st", 2: "1st", 3: "5th", 4: "9th", 5: "13th", 6: "17th" };
-  const ONCE = { long: "once per long rest", short: "once per short rest", round: "once per round", turn: "once per turn" };
+  const ONCE = { long: "once per long rest", short: "once per short rest", round: "once per round", turn: "once per turn", encounter: "once per encounter" };
   const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const sortedAbilities = (def) => [...(def?.abilities ?? [])].sort((a, z) => ((a.minProf ?? 0) - (z.minProf ?? 0)) || (a.cost - z.cost));
   /** Rows for a list of Path abilities. prof (optional) dims the rows above the reader's proficiency. */
@@ -1285,5 +1372,16 @@
     console.log(TAG, `Surge Powers table ready (${MENU.length} universal entries, ${Object.keys(PATHS).length} Path(s))`);
     // Existing Path items predate the full power list in their description: the active GM rewrites stale ones once.
     if (game.users.activeGM?.id === game.user.id) refreshPathDescriptions().catch(e => console.warn(TAG, "Path description refresh failed", e));
+    // 10-29: Paths whose doctrine was chosen between d2eaff2f and this fix never got their perk effect — repair once.
+    if (game.users.activeGM?.isSelf) {
+      (async () => {
+        let n = 0;
+        for (const a of game.actors.contents) for (const p of pathsOf(a)) {
+          if (!p.doctrine || p.item.effects.some(e => e.flags?.[MOD]?.doctrinePerk)) continue;
+          try { await ensurePerk(p.item); n++; } catch (e) { console.warn(TAG, "doctrine perk repair failed", a.name, e); }
+        }
+        if (n) console.log(TAG, `checked ${n} Path item(s) missing a doctrine perk`);
+      })();
+    }
   });
 })();

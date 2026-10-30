@@ -109,11 +109,19 @@ async function adjust(actor, key, delta) {
     const recent = Date.now() - (10 * 60 * 1000);
     const failed = game.messages.contents.findLast(m => (m.type === "save") && (m.timestamp > recent)
       && (m.getAssociatedActor?.() === actor) && m.rolls?.[0]?.isFailure && !m.system?.resisted);
-    if ( failed?.canUserModify(game.user, "update") ) await failed.update({ "system.resisted": true });
+    // 10-29: a GM-rolled save (autoSaves "all") can't be updated from a player seat — say so
+    // instead of announcing a success nothing recorded.
+    let marked = false;
+    if ( failed?.canUserModify(game.user, "update") ) {
+      try { await failed.update({ "system.resisted": true }); marked = true; }
+      catch(err) { console.warn(`${ID} | could not mark save resisted`, err); }
+    }
+    const hint = !failed ? " <em>(No recent failed save found; mark it by hand.)</em>"
+      : (marked ? "" : " <em>(This seat can't mark the GM-rolled save; GM, mark it resisted by hand.)</em>");
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor }),
       content: `<p><strong>${foundry.utils.escapeHTML(actor.name)}</strong> uses a <strong>Legendary Resistance</strong>: `
-        + `the failed saving throw succeeds instead.${failed ? "" : " <em>(No recent failed save found; mark it by hand.)</em>"}`
+        + `the failed saving throw succeeds instead.${hint}`
         + ` <em>(${left}/${pool.max} left)</em></p>`
     });
   }

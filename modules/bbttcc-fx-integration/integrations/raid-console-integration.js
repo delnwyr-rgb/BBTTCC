@@ -52,12 +52,15 @@ function bindUIDelegates(api, app, root) {
     const btn = ev.target?.closest?.("button[data-act], [data-manage-act], [data-id]");
     if (!btn) return;
 
-    const round = extractRound(app, Number(btn.dataset.roundIndex || 0));
+    // 10-29: the round index lives on the row (tr[data-idx]), not the button —
+    // reading btn.dataset.roundIndex always took round 0's tone.
+    const round = extractRound(app, Number(btn.closest?.("tr")?.dataset?.idx ?? 0) || 0);
     const raidType = roundRaidType(app, round);
-    const label = btn.textContent?.trim() || btn.dataset.act || btn.dataset.manageAct || btn.dataset.id;
-    if (btn.dataset.act === "commit" || btn.dataset.manageAct === "commit") {
-      api.playKey("raid_outcome", { root, label: `Resolving ${label}`, raidType }, { phase: "invoke", banner: true, raidType });
-    } else if (btn.dataset.act === "post") {
+    // 10-29: no "Resolving …" banner on commit clicks — this capture listener
+    // ran before native _commitRound could bail (cancelled confirm, already
+    // committed, in-flight lock), so it played a phantom banner. The gated
+    // _commitRound wrapper below + native commit own the commit FX.
+    if (btn.dataset.act === "post") {
       api.playKey("raid_outcome", { root, label: "Posting Raid Card", raidType }, { phase: "invoke", banner: true, raidType });
     } else if (btn.dataset.id === "add-round") {
       api.playKey("raid_outcome", { root, label: "Round Added", raidType }, { phase: "invoke", banner: true, raidType });

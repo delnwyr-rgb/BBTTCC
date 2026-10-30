@@ -75,9 +75,15 @@ function _resolveAudience(audience) {
 }
 
 // ----- Budget check (soft warning, never blocks) -----
-function _budgetCheck(voice, costEstimateUSD) {
-  if (!Number.isFinite(costEstimateUSD)) return;
+// 10-29: nothing ever set context._costEstimateUSD, so the warning was dead.
+// Now every callLog writer (trigger-engine fire, the player relay, NPC
+// dialogue) calls budgetCheck() right AFTER appending its entry — the new
+// call is already in the log, so nothing is added on top. GM seat only;
+// one toast per 10 minutes so a chatty NPC doesn't stack them.
+let _lastBudgetWarn = 0;
+function budgetCheck(extraUSD = 0) {
   try {
+    if (!game.user?.isGM) return;
     const budget = Number(game.settings.get(MODULE_ID, "monthlyBudgetUSD") || 0);
     if (budget <= 0) return;
     const callLog = game.settings.get(MODULE_ID, "callLog") || [];
@@ -86,8 +92,9 @@ function _budgetCheck(voice, costEstimateUSD) {
     const monthSpend = callLog
       .filter(e => e.ts >= cutoff)
       .reduce((s, e) => s + (Number(e.costUSD) || 0), 0);
-    const next = monthSpend + costEstimateUSD;
-    if (next > budget && game.user.isGM) {
+    const next = monthSpend + (Number.isFinite(extraUSD) ? extraUSD : 0);
+    if (next > budget && Date.now() - _lastBudgetWarn > 10 * 60 * 1000) {
+      _lastBudgetWarn = Date.now();
       ui.notifications?.warn(`[Mal Voice] Monthly spend $${next.toFixed(2)} exceeds budget $${budget.toFixed(2)}. Voice still active — adjust budget in module settings.`);
     }
   } catch (_) { /* non-fatal */ }
@@ -149,8 +156,7 @@ async function render({ voice, text, context } = {}) {
   if (!voice || !text) return { ok: false, error: "BAD_INPUT", message: "voice + text required" };
   const channel = voice.outputChannel || "chat";
 
-  // Budget warning (non-blocking)
-  _budgetCheck(voice, context?._costEstimateUSD);
+  // Budget warning now runs after each callLog append (budgetCheck, below).
 
   if (channel === "chat" || channel === "whisper") {
     // Dynamic audience: if the contextBuilder set _audienceOverride (e.g. Faction
@@ -257,6 +263,7 @@ function _install() {
     globalThis.game.bbttcc.mal.output = Object.assign(globalThis.game.bbttcc.mal.output || {}, {
       render,
       beginStream,
+      budgetCheck,
       _resolveAudience,
       _buildMessageData
     });

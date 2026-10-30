@@ -38,6 +38,15 @@
     return x;
   }
 
+  // 10-29: a blank or non-numeric field reads as null = "leave unchanged" (was coerced to 0 → Turn 1 / 0 days).
+  function numOrNull(v){
+    if (v == null) return null;
+    var str = String(v).trim();
+    if (!str.length) return null;
+    var x = Number(str);
+    return isFinite(x) ? x : null;
+  }
+
   function isUserGM(){
     try{
       if (game && game.user && game.user.isGM) return true;
@@ -53,14 +62,21 @@
     function has(name){ return fd.has(name); }
 
     var patch = {};
-    patch.turn = toInt(get("turn"), null);
+    var invalid = [];
+    var turnRaw = numOrNull(get("turn"));
+    patch.turn = (turnRaw == null) ? null : Math.trunc(turnRaw);
+    if (patch.turn != null && patch.turn < 1) { invalid.push("Turn must be 1 or more"); patch.turn = null; }
     // 2026-10-28 (Dave): World Darkness, Pressure Mod, Epoch and the Mutation / Politics / Logistics locks left the
     // panel — nothing in the game read them. The fields stay in the world record (harmless); the panel no longer
     // edits them. Lock Turn Advance is real now: turn-driver runAdvance refuses while it is ticked.
 
+    var lenRaw = numOrNull(get("time.turnLength"));
+    var progRaw = numOrNull(get("time.progress"));
+    if (lenRaw != null && lenRaw < 1) { invalid.push("Turn length must be 1 or more"); lenRaw = null; }
+    if (progRaw != null && progRaw < 0) { invalid.push("Days spent can't be negative"); progRaw = null; }
     patch.time = {
-      turnLength: toInt(get("time.turnLength"), 1),
-      progress: clampNumber(get("time.progress"), 0, 1e9, 0)   // fractional (half-day site visits) — never truncate
+      turnLength: (lenRaw == null) ? null : toInt(lenRaw, 1),
+      progress: (progRaw == null) ? null : clampNumber(progRaw, 0, 1e9, 0)   // fractional (half-day site visits) — never truncate
     };
 
     patch.locks = {
@@ -71,6 +87,7 @@
     var snapshotId = get("snapshotId");
     return {
       patch: patch,
+      invalid: invalid,
       note: note != null ? String(note) : "",
       snapshotId: snapshotId != null ? String(snapshotId) : ""
     };
@@ -78,14 +95,14 @@
 
   function stripUnchanged(patch, prev){
     var out = {};
-    if (!prev) return patch;
+    if (!prev) prev = { time: {}, locks: {} };   // 10-29: still drop blank (null) fields
 
-    if (patch.turn !== prev.turn) out.turn = patch.turn;
+    if (patch.turn != null && patch.turn !== prev.turn) out.turn = patch.turn;   // null = blank field, leave alone
 
     if (patch.time && prev.time) {
       var t = {};
-      if (patch.time.turnLength !== prev.time.turnLength) t.turnLength = patch.time.turnLength;
-      if (patch.time.progress !== prev.time.progress) t.progress = patch.time.progress;
+      if (patch.time.turnLength != null && patch.time.turnLength !== prev.time.turnLength) t.turnLength = patch.time.turnLength;
+      if (patch.time.progress != null && patch.time.progress !== prev.time.progress) t.progress = patch.time.progress;
       if (Object.keys(t).length) out.time = t;
     }
 
@@ -469,6 +486,11 @@
 
       var rf = readForm(formEl);
       this._lastNote = rf.note;
+      // 10-29: refuse out-of-range numbers instead of letting them coerce silently.
+      if (rf.invalid && rf.invalid.length) {
+        ui.notifications.warn(rf.invalid.join(" · ") + " — nothing applied.");
+        return;
+      }
 
       var prev = this._state || api.getState();
       var patch = stripUnchanged(rf.patch, prev);

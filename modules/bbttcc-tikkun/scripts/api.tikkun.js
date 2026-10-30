@@ -404,6 +404,20 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
       const caller = game.users?.get(String(meta?.fromUserId || ""));
       if (!meta?.local && !(caller && actor.testUserPermission?.(caller, "OWNER"))) throw new Error(`${caller?.name || "caller"} does not own ${actor.name}`);
       // Faction always resolves from the character's own flag on a relayed deposit.
+      // 10-29: that flag is owner-writable, so the faction must also be the caller's:
+      // they own the Domain, or the depositing character is their ASSIGNED steward
+      // (User.character). Any deposit by a non-owner of the Domain is whispered to GMs.
+      if (!meta?.local && !caller?.isGM) {
+        const fid = String(actor.getFlag?.("bbttcc-factions", "factionId") || "").replace(/^Actor\./, "");
+        const F = fid ? game.actors?.get(fid) : null;
+        if (!F) throw new Error("depositSpark: no faction linked to actor");
+        let ownsDomain = false; try { ownsDomain = !!F.testUserPermission?.(caller, "OWNER"); } catch (_e) {}
+        if (!ownsDomain) {
+          if (caller?.character?.id !== actor.id) throw new Error(`${caller?.name || "caller"} may deposit only from their assigned steward or into a Domain they own`);
+          const esc = (v) => foundry.utils.escapeHTML(String(v ?? ""));
+          try { await ChatMessage.create({ whisper: game.users.filter(u => u.isGM).map(u => u.id), content: `<p><b>Spark deposit relay:</b> ${esc(caller.name)} → ${esc(F.name)} via ${esc(actor.name)} (not the Domain's owner) · ${esc(p?.sparkKey)}</p>` }); } catch (_e) {}
+        }
+      }
       const s = await depositSpark({ actorId: actor.id, sparkKey: String(p?.sparkKey || ""), note: String(p?.note || "") });
       return foundry.utils.deepClone(s);
     });
@@ -419,7 +433,7 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     if (s.deposited)   throw new Error(`depositSpark: ${s.name ?? sparkKey} is already deposited`);
 
     // Resolve faction. Caller can override; default = actor's flag.
-    const fid = factionId || actor.getFlag?.("bbttcc-factions", "factionId");
+    const fid = String(factionId || actor.getFlag?.("bbttcc-factions", "factionId") || "").replace(/^Actor\./, "");
     if (!fid) throw new Error("depositSpark: no faction linked to actor");
     const faction = game.actors?.get(fid);
     if (!faction) throw new Error(`depositSpark: faction ${fid} not found`);
@@ -443,6 +457,8 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     // character flip, so the spark stays depositable and nothing claims a count
     // the faction never received.
     const sephKey = _foldSeph(s.sephirah || sparkKey);
+    // 10-29: s.sephirah is owner-writable — only a real sephira may become a faction key.
+    if (!Object.prototype.hasOwnProperty.call(SEPHIRAH_METHOD_ALIGNMENT, sephKey)) throw new Error(`depositSpark: "${sephKey}" is not a sephira — nothing deposited`);
     const factionApi = game?.bbttcc?.api?.tikkun?.integrateSpark;
     if (typeof factionApi !== "function") throw new Error("depositSpark: faction integrateSpark is not installed — nothing deposited");
     try {
@@ -465,12 +481,14 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     ui.notifications?.info?.(`${actor.name} deposited ${s.name} to ${faction.name}.`);
 
     // Chat narration — visible so the table sees the handover land.
+    // 10-29: names are player-chosen — escape before they reach a GM-authored card.
+    const _e = (v) => foundry.utils.escapeHTML(String(v ?? ""));
     const sephLabel = (game.fourththing?.constants?.SEPHIROTH?.[sephKey]?.label ?? sephKey);
     ChatMessage.create({
       speaker: ChatMessage.getSpeaker?.({ actor }) ?? {},
       content: `<div class="fourththing-roll">
-        <div class="ft-roll-header"><span class="ft-roll-name" style="color:#6fcf97">✦ Spark Deposited: ${s.name}</span></div>
-        <p style="margin:0.2rem 0;font-size:0.82rem">${actor.name} hands the <i>${sephLabel}</i> spark over to <b>${faction.name}</b>. The Great Work absorbs it; the faction's count rises.</p>
+        <div class="ft-roll-header"><span class="ft-roll-name" style="color:#6fcf97">✦ Spark Deposited: ${_e(s.name)}</span></div>
+        <p style="margin:0.2rem 0;font-size:0.82rem">${_e(actor.name)} hands the <i>${_e(sephLabel)}</i> spark over to <b>${_e(faction.name)}</b>. The Great Work absorbs it; the faction's count rises.</p>
       </div>`
     });
 

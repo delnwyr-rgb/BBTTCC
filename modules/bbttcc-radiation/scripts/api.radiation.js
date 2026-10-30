@@ -219,15 +219,34 @@
   // GM side of the player-seat exposure relay. Exposure only ever RAISES RP, so the relay accepts
   // positive amounts only (a player seat cannot clear RP through it).
   let _relayRegistered = false;
+  function _relayAllowed(A, caller) {
+    if (!A || !caller) return false;
+    if (caller.isGM || A.testUserPermission?.(caller, "OWNER")) return true;
+    const fid = String(A.flags?.["bbttcc-factions"]?.factionId || "");
+    if (!fid) return false;
+    // Only a Steward of that faction can be hit through the faction path.
+    if (!stewardsOf(fid).some(s => s.id === A.id)) return false;
+    const F = game.actors?.get(fid);
+    if (F && F.testUserPermission?.(caller, "OWNER")) return true;
+    // Member: the sender owns (or plays) a character on the same faction.
+    const mine = [caller.character, ...(game.actors?.contents ?? []).filter(a =>
+      a?.type === "character" && a.testUserPermission?.(caller, "OWNER"))].filter(Boolean);
+    return mine.some(a => String(a.flags?.["bbttcc-factions"]?.factionId || "") === fid);
+  }
   function _registerRelay() {
     try {
       const gx = game.bbttcc?.api?.gmExec;
       if (!gx?.register || _relayRegistered) return;
-      gx.register(RELAY, async (p) => {
+      gx.register(RELAY, async (p, meta) => {
         const amt = Number(p?.amount);
         if (!Number.isFinite(amt) || amt <= 0 || amt > 50) throw new Error("radiation relay: bad amount");
         const A = _asActor(String(p?.actorUuid || ""));
         if (!A) throw new Error("radiation relay: actor not found");
+        // 10-29: authorize the REAL sender (gmExec meta.fromUserId) — they must own the target, or the
+        // target must be a Steward of a faction the sender owns or belongs to (the travel leg's case).
+        if (!meta?.local && !_relayAllowed(A, game.users?.get(String(meta?.fromUserId || "")))) {
+          throw new Error("radiation relay: not permitted for this actor");
+        }
         const rp = await RadiationAPI.add(A, amt);
         return { ok: true, rp };
       });

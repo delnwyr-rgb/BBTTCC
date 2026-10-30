@@ -118,8 +118,11 @@
   }
   function startHeartbeat() {
     const SOCKET = `module.${MOD}`;
-    game.socket.on(SOCKET, (msg) => {
-      if (msg?.type === "hb" && msg.userId === game.user.id && msg.id !== WINDOW_ID) peers.set(msg.id, Date.now());
+    // 10-29: only a beat the server stamped as coming from this same GM user counts
+    // (senderId = Foundry's real sender; a payload userId could be forged by any seat).
+    game.socket.on(SOCKET, (msg, senderId) => {
+      if (msg?.type === "hb" && senderId === game.user.id && game.users.get(senderId)?.isGM
+        && typeof msg.id === "string" && msg.id !== WINDOW_ID) peers.set(msg.id, Date.now());
     });
     if (!game.user.isGM) return;
     const beat = () => game.socket.emit(SOCKET, { type: "hb", id: WINDOW_ID, userId: game.user.id });
@@ -210,14 +213,18 @@
         if (n > 0) grant(actor, n);
       } catch (e) { console.warn(TAG, "cast gain failed", e); }
     });
-    // Combat tick — every character banks Surge when the fight starts. The hook
-    // fires on every client; only the active GM applies it (players can't write
-    // each other's actors, and this keeps the grant single-fire).
-    Hooks.on("combatStart", (combat) => {
+    // Combat tick — every character banks Surge when the fight starts. 10-29:
+    // combatStart fires ONLY in the window that clicked Begin Combat (not
+    // broadcast), so the tick rides the broadcast updateCombat (round → 1, not a
+    // step back) and only the leader window applies it; a flag on the combat
+    // keeps it single-fire.
+    Hooks.on("updateCombat", (combat, changed, options) => {
       try {
-        if (!isLeader()) return;
+        if (changed?.round !== 1 || options?.direction === -1) return;
+        if (!isLeader() || combat.getFlag?.(MOD, "ticked")) return;
         const n = Number(setting("combatTick", 1)) || 0;
         if (n <= 0) return;
+        combat.setFlag(MOD, "ticked", true).catch(() => {});
         for (const c of (combat?.combatants ?? [])) {
           if (c.actor?.type === "character") grant(c.actor, n);
         }

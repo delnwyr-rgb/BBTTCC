@@ -246,12 +246,15 @@
 
       const report = [];
       for (const [fid, bag] of perFaction) {
-        const res = await op.commit(fid, bag.deltas, { source: "tikkun-hex", reason: "spark-hex yield" });
-        const fname = game.actors.get(fid)?.name ?? fid;
+        // 10-29: clampToCap — one full channel no longer cancels the faction's whole
+        // yield; each bucket fills to its cap and the trimmed marks are reported.
+        const res = await op.commit(fid, bag.deltas, { source: "tikkun-hex", reason: "spark-hex yield", clampToCap: true });
+        const fname = foundry.utils.escapeHTML(String(game.actors.get(fid)?.name ?? fid));
         if (res?.committed === false || res?.ok === false) {
           report.push(`<b>${fname}</b>: spark yield refused (bank full or error) — ${bag.lines.join(", ")}`);
         } else {
-          report.push(`<b>${fname}</b>: ${bag.lines.join(", ")}`);
+          const cut = Object.entries(res?.clamped ?? {}).filter(([, n]) => n > 0).map(([k, n]) => `${k} −${n}`);
+          report.push(`<b>${fname}</b>: ${bag.lines.join(", ")}${cut.length ? ` <i>(bank full — trimmed ${cut.join(", ")} marks)</i>` : ""}`);
         }
       }
       if (report.length) {

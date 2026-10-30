@@ -171,8 +171,9 @@ async function applyDamageCard(message) {
 
   // Save-based: wait briefly for outcomes to land before halving.
   const onSave = message.system?.onSave;
+  const waitSaves = !!onSave && (activity?.type === "save");
   let outcomes = saveOutcomes(usage);
-  if ( onSave && (activity?.type === "save") ) {
+  if ( waitSaves ) {
     for ( let i = 0; (i < 12) && (outcomes.size < descriptors.length); i++ ) {
       await sleep(500);
       outcomes = saveOutcomes(usage);
@@ -185,6 +186,7 @@ async function applyDamageCard(message) {
   const ignoreResist = !!message.flags?.[ID]?.ignoreResist;
   const lines = [];
   const undo = [];
+  const awaiting = [];
 
   for ( const descriptor of descriptors ) {
     const target = resolveTarget(descriptor);
@@ -203,6 +205,9 @@ async function applyDamageCard(message) {
 
     let multiplier = 1;
     const outcome = outcomes.get(uuid) ?? outcomes.get(descriptor.token);
+    // 10-29: a save that hasn't landed yet is NOT a failure — leave that target to the card's
+    // damage tray instead of applying full damage a late success could never halve.
+    if ( waitSaves && !outcome && (onSave !== "full") ) { awaiting.push(name); continue; }
     if ( onSave && (outcome === "success") ) multiplier = { full: 1, half: 0.5, none: 0 }[onSave] ?? 1;
 
     const hp = actor.system.attributes?.hp;
@@ -220,17 +225,33 @@ async function applyDamageCard(message) {
     lines.push(`<strong>${name}</strong> ${what}${why ? ` <em>(${why})</em>` : ""} → ${after.value}/${after.max} HP`);
   }
 
+  if ( awaiting.length ) {
+    lines.push(`Awaiting save: <strong>${awaiting.map(n => foundry.utils.escapeHTML(String(n))).join(", ")}</strong>`
+      + " <em>(not applied; apply from the damage card's tray once they roll)</em>");
+  }
   if ( lines.length ) {
     const source = message.flavor || activity?.item?.name || "Damage";
-    await gmCard(`⚔ ${source}`, lines, undo.length ? { undo } : {});
+    // 10-29: `by` stamps the GM who wrote the Undo list; onRenderMessage/undoDamage require it.
+    await gmCard(`⚔ ${source}`, lines, undo.length ? { undo, by: game.user.id } : {});
   }
 }
 
+/** 10-29: only a card a GM wrote through gmCard may carry an Undo list (players can post any flags). */
+function trustedUndo(message) {
+  const author = message?.author;
+  return !!author?.isGM && (message.flags?.[ID]?.by === author.id);
+}
+
 async function undoDamage(message) {
+  if ( !game.user.isGM || !trustedUndo(message) || message.flags?.[ID]?.undone ) return;
   const entries = message.flags?.[ID]?.undo ?? [];
   for ( const { uuid, value, temp } of entries ) {
     const actor = await fromUuid(uuid);
-    await actor?.update({ "system.attributes.hp.value": value, "system.attributes.hp.temp": temp || null });
+    const hp = actor?.system?.attributes?.hp;
+    if ( !hp ) continue;
+    const max = Number.isFinite(Number(hp.max)) ? Number(hp.max) : Number(value);
+    const v = Math.max(0, Math.min(Number(value) || 0, max));
+    await actor.update({ "system.attributes.hp.value": v, "system.attributes.hp.temp": Math.max(0, Number(temp) || 0) || null });
   }
   await message.update({ [`flags.${ID}.undone`]: true });
 }
@@ -429,7 +450,7 @@ async function onCreateMessage(message) {
 
 function onRenderMessage(message, html) {
   const undo = message.flags?.[ID]?.undo;
-  if ( !undo?.length || !game.user.isGM ) return;
+  if ( !undo?.length || !game.user.isGM || !trustedUndo(message) ) return;
   const root = html instanceof HTMLElement ? html : html?.[0];
   const card = root?.querySelector(".tk-card");
   if ( !card || card.querySelector(".tk-undo") ) return;

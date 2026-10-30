@@ -1590,10 +1590,17 @@ async function _commit(root, seed = null) {
   const seedDomains = useSeed && Array.isArray(seed.domains) ? seed.domains : undefined;
   const seedDepth = useSeed && seed.depthRating != null ? Number(seed.depthRating) : undefined;
   const seedItems = useSeed && Array.isArray(seed.items) ? seed.items : [];
-  const bypassCost = !!root.querySelector('[data-bbttcc-field="bypassCost"]')?.checked;
+  // 10-29: the bypass box is GM-only; a hand-ticked box on a player seat is ignored.
+  const bypassCost = !!game.user?.isGM && !!root.querySelector('[data-bbttcc-field="bypassCost"]')?.checked;
+  // 10-29: free rigs are GM-only (same rule as infrastructure) — a player seat pays from its Domain.
+  if (!game.user?.isGM && !factionOwnerId) {
+    ui.notifications?.warn?.("Choose your Domain to pay for this rig.");
+    return null;
+  }
+  const rigCounts = useSeed ? _itemLoadoutCounts(seedItems) : _chassisLoadoutCounts(chosen);
   const rigCost = computeRigCost({
     bracket, tier,
-    counts: useSeed ? _itemLoadoutCounts(seedItems) : _chassisLoadoutCounts(chosen),
+    counts: rigCounts,
     defenses: {
       resistances: resistances.length,
       immunities: immunities.length,
@@ -1602,7 +1609,10 @@ async function _commit(root, seed = null) {
     hazardResist
   });
   let chargedMarks = 0;
-  if (!bypassCost && factionOwnerId && rigCost.marks > 0) {
+  // 10-29: a seat that can't create actors goes through the GM's rigs.create relay, which re-prices
+  // the rig and debits the Domain itself — charging here too would bill it twice.
+  const relayed = _rigCreateRelayed();
+  if (!bypassCost && !relayed && factionOwnerId && rigCost.marks > 0) {
     const op = game.bbttcc?.api?.op;
     if (op?.commit) {
       const res = await op.commit(factionOwnerId, { economy: -rigCost.marks },
@@ -1612,7 +1622,7 @@ async function _commit(root, seed = null) {
         ui.notifications?.warn?.(`"${name}" not built — not enough Economy marks (needs ${rigCost.marks}).`);
         return null;
       }
-      chargedMarks = rigCost.marks;
+      chargedMarks = _debitedMarks(res, rigCost.marks);   // 10-29: the real debit (steward discounts apply)
     } else {
       console.warn("[bbttcc-auto-link/rig-builder] OP engine API unavailable — building rig without charge.");
     }
@@ -1627,9 +1637,11 @@ async function _commit(root, seed = null) {
         entityKind: (category === "facility") ? "facility" : "rig",
         createdViaRigBuilder: true,
         createdAt: Date.now(),
-        fabricationCost: { marks: rigCost.marks, charged: chargedMarks, bypassed: bypassCost }
+        // relayed: the GM stamps the real charge itself
+        ...(relayed ? {} : { fabricationCost: { marks: rigCost.marks, charged: chargedMarks, bypassed: bypassCost } })
       }
     },
+    pricing: { counts: rigCounts },   // 10-29: loadout counts for the GM relay's re-price (not a document field)
     system: {
       identity: {
         mobility,
@@ -1694,7 +1706,7 @@ async function _commit(root, seed = null) {
     if (chargedMarks > 0) {
       try {
         await game.bbttcc?.api?.op?.commit?.(factionOwnerId, { economy: chargedMarks },
-          { context: "rig-fabrication-refund", rigName: name, allowOvercap: true });
+          { context: "rig-fabrication-refund", rigName: name, allowOvercap: true, noDiscount: true });
       } catch (_e) { /* non-fatal */ }
     }
     return null;
@@ -1779,6 +1791,17 @@ async function _commit(root, seed = null) {
  * that into a game.bbttcc.rigs.create() spec (rig on RFI, vehicle+flags on
  * dnd5e), then stamps what the spec doesn't carry — module flags, ownership
  * and the description — in one follow-up update. */
+/* 10-29: mirrors game.bbttcc.rigs.create — a seat without Create Actor relays to the GM, which prices
+ * and charges the rig on its side. */
+function _rigCreateRelayed() {
+  return !game.user?.isGM && !game.user?.can?.("ACTOR_CREATE");
+}
+/* What op.commit really debited (steward spend discounts apply); refunds credit exactly this. Added 2026-10-29. */
+function _debitedMarks(res, fallback) {
+  const d = Number(res?.finalCost?.economy ?? res?.deltas?.economy);
+  return Number.isFinite(d) ? Math.max(0, -d) : fallback;
+}
+
 async function _createRigFromLegacyData(data) {
   const R = game.bbttcc?.rigs;
   if (!R?.create) throw new Error("game.bbttcc.rigs accessor not loaded (bbttcc-core)");
@@ -1787,7 +1810,8 @@ async function _createRigFromLegacyData(data) {
     name: data?.name, img: data?.img, folder: data?.folder ?? null,
     identity: sys.identity ?? {}, crew: sys.crew ?? {}, integrity: sys.integrity ?? {},
     defenses: sys.defenses ?? {}, output: sys.output ?? {}, travel: sys.travel ?? {},
-    tags: Array.isArray(sys.tags) ? sys.tags : [], token: data?.prototypeToken ?? {}
+    tags: Array.isArray(sys.tags) ? sys.tags : [], token: data?.prototypeToken ?? {},
+    ...(data?.pricing ? { pricing: data.pricing } : {})   // 10-29: read only by the GM relay's re-price
   });
   if (!actor) return null;
   const extra = {};
@@ -2044,7 +2068,10 @@ export async function mintFromChassis(chassisKey, { factionOwnerId = "", free = 
 
   // Charge unless free / no owner. Mirrors _commit's charge gate.
   let chargedMarks = 0;
-  if (!free && factionOwnerId) {
+  // 10-29: a relayed seat is priced + charged by the GM (rigs.create relay; `free` is GM-only there).
+  const relayed = _rigCreateRelayed();
+  data.pricing = { counts: _chassisLoadoutCounts(chassis) };
+  if (!free && !relayed && factionOwnerId) {
     const cost = computeRigCost({
       bracket, tier,
       counts: _chassisLoadoutCounts(chassis),
@@ -2062,10 +2089,10 @@ export async function mintFromChassis(chassisKey, { factionOwnerId = "", free = 
         ui.notifications?.warn?.(`"${data.name}" not minted — faction can't cover ${cost.marks} Economy marks.`);
         return null;
       }
-      chargedMarks = cost.marks;
+      chargedMarks = _debitedMarks(res, cost.marks);   // 10-29: the real debit
     }
   }
-  foundry.utils.setProperty(data, `flags.${MOD}.fabricationCost`,
+  if (!relayed) foundry.utils.setProperty(data, `flags.${MOD}.fabricationCost`,
     { marks: chargedMarks, charged: chargedMarks, bypassed: !!free });
 
   let actor;
@@ -2077,7 +2104,7 @@ export async function mintFromChassis(chassisKey, { factionOwnerId = "", free = 
     if (chargedMarks > 0) {
       try {
         await game.bbttcc?.api?.op?.commit?.(factionOwnerId, { economy: chargedMarks },
-          { context: "rig-fabrication-refund", allowOvercap: true });
+          { context: "rig-fabrication-refund", allowOvercap: true, noDiscount: true });
       } catch (_e) { /* non-fatal */ }
     }
     return null;

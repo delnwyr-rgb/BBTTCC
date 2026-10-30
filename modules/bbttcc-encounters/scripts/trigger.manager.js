@@ -639,13 +639,20 @@
     // Receive the settled handshake on every client (player-driven rides run
     // their arrival timer on the driving player's seat).
     try {
-      game.socket?.on?.("module.bbttcc-campaign", (msg) => {
+      game.socket?.on?.("module.bbttcc-campaign", (msg, senderId) => {
         const t = msg?.t;
         if (t !== "bbttccEncounterChainSettled" && t !== "bbttccEncounterChainLaunched") return;
+        // 10-29: only a GM seat runs the chain — drop the stamp from anyone else
+        // (a player could emit ts:9e15 and mark every later chain settled).
+        const sender = game.users?.get?.(senderId);
+        if (!sender?.isGM) return;
         const key = (t === "bbttccEncounterChainSettled") ? "_encounterChainSettledTs" : "_encounterChainLaunchedTs";
         try {
           game.bbttcc = game.bbttcc || {};
-          game.bbttcc[key] = Math.max(Number(game.bbttcc[key] || 0), Number(msg.ts) || Date.now());
+          // 10-29: stamp on receipt with the LOCAL clock — api.travel compares
+          // against a local Date.now() deferT0, so the GM's msg.ts (another
+          // machine's clock) skewed the arrival wait. msg.ts is ignored.
+          game.bbttcc[key] = Date.now();
         } catch (_e) {}
       });
     } catch (_eOn) {}

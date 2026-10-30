@@ -140,10 +140,15 @@ function computeBP() {
   let wh = 0;
   try { wh = Number(game.fourththing?.epic?.worldHealth?.()?.pct ?? 0) || 0; } catch (_e) {}
   const { temples, lamps } = sparkCensus();
-  const bp = Math.max(0, Math.min(100, Math.round(
+  let bp = Math.max(0, Math.min(100, Math.round(
     presencePts + TEMPLE_WEIGHT * temples + wh / 10 + LAMP_WEIGHT * lamps
   )));
-  return { bp, presencePts, temples, lamps, wh };
+  // 10-29: a ROUT pins the Gaze at Boiling Point 100 until its fragments are faced (daath.routPending
+  // clears on the next knock) — before, the stored 100 was overwritten by the next Apply turn's recompute.
+  let rout = false;
+  try { rout = !!game.settings.get(MOD, "daath")?.routPending; } catch (_e) {}
+  if (rout) bp = 100;
+  return { bp, presencePts, temples, lamps, wh, rout };
 }
 
 function tierFor(bp) {
@@ -164,6 +169,7 @@ async function gmCard(html) {
   await ChatMessage.create({ content: `<p style="font-size:0.78rem">${html}</p>`, whisper: gm }).catch(() => {});
 }
 function bpMath(detail) {
+  if (detail.rout) return `Boiling Point <b>${detail.bp}</b> (the ROUT holds it at 100 until its fragments are faced) · roll ${detail.roll} ≤ ${detail.bp}`;
   return `Boiling Point <b>${detail.bp}</b> (presence ${detail.presencePts} + temples ${detail.temples}×${TEMPLE_WEIGHT} + wh ${Math.round(detail.wh / 10)} + lamps ${detail.lamps}×${LAMP_WEIGHT}) · roll ${detail.roll} ≤ ${detail.bp}`;
 }
 
@@ -202,11 +208,15 @@ async function eventCorruption(tier, detail) {
 }
 
 async function eventReprisal(tier, detail) {
+  // 10-29: ALIGNED = under a protagonist banner (repair.js isHexAligned) — rival/NPC hexes and
+  // unowned Purified hexes were being picked, so the Gaze could miss the protagonists entirely.
+  let protagonists = new Set();
+  try { protagonists = new Set(game.fourththing?.epic?.worldHealth?.()?.protagonists ?? []); } catch (_e) {}
   const hexes = boardHexes().filter(d => {
     const tf = d.flags?.[TER] ?? {};
     if (tf.spark?.state === "integrated") return false; // temples hold
-    const purified = Array.isArray(tf.conditions) && tf.conditions.includes("Purified");
-    return purified || !!(tf.factionId || tf.ownerId);
+    const fid = tf.factionId || tf.ownerId || "";
+    return !!fid && protagonists.has(fid);
   });
   if (!hexes.length) return eventOmen(tier, detail);
   const d = pick(hexes);
@@ -366,7 +376,20 @@ Hooks.on("ready", () => {
       }
     };
     try {
-      game.bbttcc?.api?.gmExec?.register?.(HUNTER_RELAY, async (p) => {
+      game.bbttcc?.api?.gmExec?.register?.(HUNTER_RELAY, async (p, meta) => {
+        // 10-29: authorize the REAL sender (meta.fromUserId) — a player seat could spring any marked
+        // steward's hunter at will. Only a GM, the marked steward's owner, or the marked faction's owner.
+        const caller = game.users?.get(meta?.fromUserId);
+        if (!caller) return { ok: false, error: "unknown sender" };
+        if (!caller.isGM) {
+          const pending = game.settings.get(MOD, "hunterPending");
+          if (!pending?.stewardId) return { ok: true, sprung: false };
+          const steward = game.actors?.get(pending.stewardId);
+          const fid = pending.factionId || steward?.system?.faction?.id || steward?.getFlag?.("bbttcc-factions", "factionId") || null;
+          const faction = fid ? game.actors?.get(fid) : null;
+          const owns = (a) => { try { return !!a?.testUserPermission?.(caller, "OWNER"); } catch (_e) { return false; } };
+          if (!owns(steward) && !owns(faction)) return { ok: false, error: "not your steward" };
+        }
         const sprung = await _springHunter(String(p?.factionId || "") || null, String(p?.actorId || "") || null);
         return { ok: true, sprung };
       });

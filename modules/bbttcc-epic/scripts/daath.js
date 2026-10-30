@@ -135,7 +135,7 @@ async function checkLamps(reason = "manual") {
 async function knock(actorOrId = null) {
   try {
     if (!game.user?.isGM) { ui.notifications?.warn("The knock is played at the table — your GM performs it."); return null; }
-    const state = daathState();
+    let state = daathState();
     if (state.risen) { ui.notifications?.info("The Dragon has already risen."); return state; }
 
     // G2 — the road back from a ROUT runs through what broke you (Ruling 8):
@@ -157,6 +157,7 @@ async function knock(actorOrId = null) {
       const cleared = { ...state };
       delete cleared.routPending;
       await game.settings.set(MOD, "daath", cleared);
+      state = cleared; // 10-29: the door saves below build from `state` — don't write routPending back
       await gmCard("🐉 The rout's debts are faced — the pilgrimage stands. The knock proceeds.");
     }
 

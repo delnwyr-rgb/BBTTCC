@@ -313,6 +313,8 @@ async function fire(voiceId, triggerArgs = {}) {
         durationMs
       });
       await game.settings.set("bbttcc-mal-voice", "callLog", log);
+      // 10-29: the monthly-budget warning reads the log we just wrote.
+      globalThis.game?.bbttcc?.mal?.output?.budgetCheck?.();
     }
   } catch (e) { /* non-fatal */ }
 

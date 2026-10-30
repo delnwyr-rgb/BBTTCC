@@ -25,11 +25,29 @@
   ];
   const norm = (s) => String(s || "").replace(/ /g, " ").replace(/\s+/g, " ").trim();
   const canonSet = new Set(CANON.map(norm));
+  // 10-29: ONE-MAP aware — after the 10-26 merge the canon board is the scene flagged
+  // flags.bbttcc-travel.oneMap ("Bad Eden — The Whole Map"); emptied "(merged — safe to delete)" regions
+  // (flags.bbttcc-travel.mergedInto) are not canon. A rerun used to match 0/5 and strip the Whole Map's
+  // mark. Now a short count ABORTS before any flag is touched.
+  const TRV = "bbttcc-travel";
+  const oneMap = (game.scenes?.contents ?? []).filter(sc => sc.flags?.[TRV]?.oneMap === true && !sc.flags?.[TRV]?.mergedInto);
+  const isCanonScene = oneMap.length
+    ? (sc) => oneMap.includes(sc)
+    : (sc) => canonSet.has(norm(sc.name)) && !sc.flags?.[TRV]?.mergedInto;
+  const expected = oneMap.length ? 1 : CANON.length;
+  const what = oneMap.length ? "one-map scene" : "region scenes";
+  const foundCanon = (game.scenes?.contents ?? []).filter(isCanonScene).length;
+  if (foundCanon !== expected) {
+    console.warn(`[mark-canonical-board] ABORTED — found ${foundCanon}/${expected} canon ${what}; no flags changed.`,
+      oneMap.length ? oneMap.map(s => s.name) : CANON.filter(n => !(game.scenes?.contents ?? []).some(sc => isCanonScene(sc) && norm(sc.name) === norm(n))));
+    ui.notifications?.warn(`Canonical board: found ${foundCanon}/${expected} canon ${what} — aborted, nothing changed. See console (F12).`);
+    return;
+  }
 
   let marked = 0, cleared = 0, hexTotal = 0;
   const rows = [];
   for (const sc of game.scenes?.contents ?? []) {
-    const isCanon = canonSet.has(norm(sc.name));
+    const isCanon = isCanonScene(sc);
     const has = sc.getFlag(MOD, "boardScene") === true;
     if (isCanon) {
       const hexes = (sc.drawings ?? []).filter(d => {
@@ -46,11 +64,9 @@
   }
 
   const found = rows.length;
-  console.log(`[mark-canonical-board] canon scenes found ${found}/5 (${marked} newly marked, ${cleared} cleared):\n` + rows.join("\n"));
-  if (found < 5) console.warn("[mark-canonical-board] MISSING canon scenes — check names:", CANON.filter(n => !rows.some(r => r.includes(n.slice(10)))));
-  ui.notifications?.[found === 5 ? "info" : "warn"](
-    `Canonical board: ${found}/5 region scenes marked, ${hexTotal} hexes on the win-track` +
-    (cleared ? ` (${cleared} stale mark${cleared > 1 ? "s" : ""} cleared)` : "") +
-    (found < 5 ? " — see console (F12) for missing names." : ".")
+  console.log(`[mark-canonical-board] canon ${what} found ${found}/${expected} (${marked} newly marked, ${cleared} cleared):\n` + rows.join("\n"));
+  ui.notifications?.info(
+    `Canonical board: ${found}/${expected} ${what} marked, ${hexTotal} hexes on the win-track` +
+    (cleared ? ` (${cleared} stale mark${cleared > 1 ? "s" : ""} cleared).` : ".")
   );
 })();

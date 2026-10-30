@@ -57,7 +57,15 @@ const warn = (...a) => console.warn(TAG, ...a);
 
 const HISTORY_CAP = 40;          // stored turns (user+assistant combined)
 const MEMORY_CAP  = 30;          // durable story-event memories per NPC
-const APPS = new Map();          // actorId -> app instance
+// 10-29: keyed by actor.uuid — an unlinked token's synthetic actor shares its
+// base actor's id, so id keys merged every token of one actor into one window.
+// has() still answers by actor id for outside readers (campaign director's
+// "speaker in conversation" check passes a world actor id).
+class _AppMap extends Map {
+  has(k) { return super.has(k) || [...super.values()].some(app => app?.actor?.id === k); }
+}
+const APPS = new _AppMap();      // actorUuid -> app instance
+const _appKey = (actor) => String(actor?.uuid || actor?.id || "");
 
 // Stub choices for testing dialogue-driven beats before the campaign side
 // ships its API (see badeden-bible/new-content/dialogue-driven-beats-spec.md):
@@ -788,16 +796,13 @@ ${gmNotes ? `\n## PRIVATE TRUTH (GM notes — these facts are TRUE about you and
 // re-checks the talk boundary for THAT user, REBUILDS the cached primer +
 // persona itself (so a player can't swap in their own system prompt), admits
 // only the known live-tail sections and the six dialogue tools, bounds every
-// turn, and fixes maxTokens/temperature/model. Rate limits live in the
+// turn, and fixes maxTokens/temperature/model. 10-29: the live-tail sections
+// and tool definitions are GM-rebuilt too (payload.sections/tools ignored). Rate limits live in the
 // provider relay. What a player still authors: their own lines and the
 // tool_result text of the one tool round — same as before, under the NPC.
 // ---------------------------------------------------------------------------
 
 const RELAY_TOOL_NAMES = new Set(["enact_story_choice", "point_the_way", "divulge_secret", "teach_recipe", "open_court_door", "court_notices"]);
-const RELAY_SECTION_HEADS = [
-  "## STORY MOMENTS YOU MAY ENACT", "## WAYS YOU CAN OPEN", "## SECRETS YOU GUARD",
-  "## THINGS YOU KNOW HOW TO MAKE", "## THE COURT DOOR YOU HOLD", "## THE COURT TONIGHT", "## THE ROOM IS LISTENING"
-];
 const RELAY_PERSONA_TTL = 10 * 60 * 1000;
 const RELAY_MAX_TURNS = HISTORY_CAP + 4;   // sent by the player seat; the GM admits HISTORY_CAP + 8
 const _RELAY_PERSONA_CACHE = new Map();   // actorUuid -> { ts, lore, dossier } (GM side; byte-stable for prompt caching)
@@ -823,30 +828,52 @@ async function _npcRelayBuilder(payload, { user }) {
   try { actor = fromUuidSync(String(payload?.npcActorUuid || "")); } catch (_e) { actor = null; }
   if (!actor || actor.documentName !== "Actor") return refuse("NPC not found");
   // Same talk boundary as _refusalReason, judged for the REQUESTING user.
-  if (actor.token?.hidden) return refuse(`'${actor.name}' is hidden`);
+  // 10-29: Tabletop facilitation closes the AI voice here too (talkTo's check
+  // is client-side only), and hidden is judged on real tokens — a linked
+  // actor resolved as "Actor.<id>" has no .token, so check the requester's
+  // viewed scene for its placed tokens.
+  if (_facNpcAiOff()) return refuse("Facilitation: Tabletop — NPCs are played at the table");
   if (_isFactionActor(actor)) return refuse("factions are not conversational NPCs");
   if (!_isTaggedNpc(actor) && actor.hasPlayerOwner) return refuse(`'${actor.name}' is a player-owned character`);
-
-  // Live-tail system sections: known headers only, bounded.
-  const rawSections = Array.isArray(payload?.sections) ? payload.sections : [];
-  if (rawSections.length > RELAY_SECTION_HEADS.length) return refuse("too many prompt sections");
-  const sections = [];
-  let secChars = 0;
-  for (const s of rawSections) {
-    const text = String(s?.text ?? "");
-    if (!text) continue;
-    if (text.length > 16000) return refuse("prompt section too large");
-    if (!RELAY_SECTION_HEADS.some(h => text.startsWith(h))) return refuse("unknown prompt section");
-    secChars += text.length;
-    sections.push({ text });
+  {
+    let toks = [];
+    try {
+      if (actor.isToken) toks = actor.token ? [actor.token] : [];
+      else toks = (game.scenes?.get(String(user?.viewedScene || ""))?.tokens?.contents || []).filter(t => t.actorLink && t.actorId === actor.id);
+    } catch (_e) { toks = []; }
+    if (toks.length && toks.every(t => t.hidden)) return refuse(`'${actor.name}' is hidden`);
+    // Unplaced is fine for a tagged NPC or one the GM gave a persona (point-
+    // the-way "Talk to X" / invite cards open world actors off-scene).
+    if (!toks.length && !_isTaggedNpc(actor) && !actor.getFlag?.(MODULE_ID, "persona")) return refuse(`'${actor.name}' is not on your scene`);
   }
-  if (secChars > 40000) return refuse("prompt sections too large");
 
-  const tools = U.sanitizeTools(payload?.tools, RELAY_TOOL_NAMES);
-  if (tools === null) return refuse("tool definitions rejected");
+  // 10-29: the live-tail sections + tool definitions are REBUILT here from
+  // the GM's view of the NPC (same code the window runs) — player-sent
+  // section text and tool schemas are ignored, so a seat can't write its own
+  // system prompt onto the GM's key. The speaker is the requester's character.
+  let tail = null;
+  try {
+    const App = _defineAppClass();
+    const ctx = Object.create(App.prototype);
+    ctx.actor = actor; ctx._history = []; ctx._els = {};
+    ctx._speakerActor = () => user?.character || null;
+    tail = await App.prototype._liveTail.call(ctx);
+  } catch (e) { return refuse(`live sections could not be rebuilt (${e?.message || e})`); }
+  const sections = (tail?.sections || []).filter(x => x?.text).map(x => ({ text: String(x.text) }));
+  let tools = tail?.tools ? tail.tools.map(t => ({ name: t.name, description: t.description, input_schema: t.input_schema })) : undefined;
   const messages = U.sanitizeMessages(payload?.messages, { toolNames: RELAY_TOOL_NAMES, maxTurns: HISTORY_CAP + 8 });
   if (!messages) return refuse("conversation turns rejected");
-  const toolChoice = (payload?.toolChoice?.type === "none") ? { type: "none" } : undefined;
+  let toolChoice = (payload?.toolChoice?.type === "none") ? { type: "none" } : undefined;
+  // A tool round echoed in the turns needs its tool defined (else the API
+  // 400s); one the GM-side rebuild no longer offers gets a GM-written stub,
+  // and the call is forced tool-less.
+  const used = new Set();
+  for (const m of messages) if (Array.isArray(m.content)) for (const blk of m.content) if (blk?.type === "tool_use") used.add(blk.name);
+  for (const name of used) {
+    if ((tools || []).some(t => t.name === name)) continue;
+    (tools ||= []).push({ name, description: "No longer available in this conversation.", input_schema: { type: "object", properties: {} } });
+    toolChoice = { type: "none" };
+  }
 
   // Primer + persona built HERE, from the GM's view of the world.
   const state = await _storyState(actor);
@@ -906,7 +933,7 @@ function _defineAppClass() {
     };
 
     constructor(actor, options = {}) {
-      super({ ...options, id: `bbttcc-npc-dialogue-${actor.id}` });
+      super({ ...options, id: `bbttcc-npc-dialogue-${_appKey(actor).replace(/[^A-Za-z0-9_-]/g, "-")}` });
       this.actor = actor;
       this._history = _loadHistory(actor);   // [{role, content, speaker, ts}]
       this._busy = false;
@@ -919,7 +946,7 @@ function _defineAppClass() {
       this._storyState = null;
     }
 
-    get title() { return `${this.actor?.name ?? "NPC"}`; }
+    get title() { return _displayName(this.actor) || "NPC"; }   // 10-29: the alias, never the hidden true name
 
     async _renderHTML(_context, _options) {
       // Narrative-time-aware lore sweep, once per window open.
@@ -1329,7 +1356,7 @@ How to handle them:
           flags: { [MODULE_ID]: { pendingEnact: {
             beatId: choice.beatId ?? null, choiceIndex: choice.choiceIndex ?? null,
             choiceKey: choice.choiceKey, label: choice.label,
-            speakerActorId: this.actor.id, userId: game.user.id, transcript
+            speakerActorId: this.actor.id, npcActorUuid: this.actor.uuid, userId: game.user.id, transcript
           } } }
         });
       } catch (e) { warn("approval card failed:", e?.message); }
@@ -1455,7 +1482,7 @@ How to guard them:
             <button type="button" data-bbttcc-secret="decline" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-xmark"></i> Withhold</button>
           </div>`,
           flags: { [MODULE_ID]: { pendingSecret: {
-            npcActorId: this.actor.id, key: def.key, label: def.label, effectKey: def.effectKey,
+            npcActorId: this.actor.id, npcActorUuid: this.actor.uuid, key: def.key, label: def.label, effectKey: def.effectKey,
             truth: def.truth, condition: def.condition, method,
             factionId: faction?.id || null, speakerName, userId: game.user.id,
             transcript: this._history.slice(-6).map(m => m.content).join("\n")
@@ -1563,7 +1590,7 @@ How to hold them:
             <button type="button" data-bbttcc-teach="teach" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-book-open"></i> Teach</button>
             <button type="button" data-bbttcc-teach="decline" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-xmark"></i> Withhold</button>
           </div>`,
-          flags: { [MODULE_ID]: { pendingTeach: { npcActorId: this.actor.id, key: def.key, slug: def.slug, label: def.label, condition: def.condition, factionId: faction?.id || null, speakerName, userId: game.user.id } } } });
+          flags: { [MODULE_ID]: { pendingTeach: { npcActorId: this.actor.id, npcActorUuid: this.actor.uuid, key: def.key, slug: def.slug, label: def.label, condition: def.condition, factionId: faction?.id || null, speakerName, userId: game.user.id } } } });
       } catch (e) { warn("teach card failed:", e?.message); }
     }
 
@@ -1673,7 +1700,7 @@ How to hold it:
             <button type="button" data-bbttcc-court-door="decline" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-xmark"></i> Keep it shut</button>
           </div>`,
           flags: { [MODULE_ID]: { pendingCourtDoor: {
-            npcActorId: this.actor.id, condition: door.condition,
+            npcActorId: this.actor.id, npcActorUuid: this.actor.uuid, condition: door.condition,
             defenderId: door.defender.id, defenderName: door.defender.name, method,
             factionId: faction?.id || null, speakerName, userId: game.user.id,
             transcript: this._history.slice(-6).map(m => m.content).join("\n")
@@ -1905,30 +1932,8 @@ Every word of this conversation lands inside the engagement above — and courts
 
         // Story moments + doors: closed-enum tools + UNCACHED system sections
         // (quest state changes between sends; keep after cached breakpoints).
-        const choices = await this._availableChoices();
-        const doors = await this._availableDoors();
-        const secrets = await this._availableSecrets();
-        const recipes = this._availableRecipes();
-        const courtDoor = this._availableCourtDoor();
-        const toolList = [];
-        if (choices.length) { toolList.push(this._choiceTool(choices)); system.push({ text: this._momentsSection(choices) }); }
-        if (doors.length)   { toolList.push(this._doorTool(doors));     system.push({ text: this._doorsSection(doors) }); }
-        if (secrets.length) { toolList.push(this._secretTool(secrets)); system.push({ text: this._secretsSection(secrets) }); }
-        if (recipes.length) { toolList.push(this._recipeTool(recipes)); system.push({ text: this._recipesSection(recipes) }); }
-        if (courtDoor)      { toolList.push(this._courtDoorTool());     system.push({ text: this._courtDoorSection(courtDoor) }); }
-        const live = this._courtlyLive();
-        if (live) {
-          const favA = Number(this.actor.flags?.["bbttcc-raid"]?.courtFavor?.[live.A.id] ?? 0);
-          const favD = Number(this.actor.flags?.["bbttcc-raid"]?.courtFavor?.[live.D.id] ?? 0);
-          log(`courtly board INJECTED for '${_displayName(this.actor)}' — round ${live.st.round}, influence ${live.st.influenceA}/${live.st.influenceD}, suspicion ${live.st.suspicion}, favor A:${favA} D:${favD}${live.sc ? ", court_notices armed (direct)" : ", court_notices armed (routes via GM card)"}`);
-          const board = this._courtlyBoardSection(live);
-          if (board) system.push({ text: board });
-          // Direct apply where the scenario object lives; on snapshot
-          // clients (player seats) the tool posts a GM approval card.
-          toolList.push(this._suspicionTool());
-          system.push({ text: this._suspicionSection() });
-        }
-        const tools = toolList.length ? toolList : undefined;
+        const { choices, doors, secrets, recipes, courtDoor, live, sections: liveSections, tools } = await this._liveTail();
+        system.push(...liveSections);
 
         const baseMessages = this._history.map(m => ({ role: m.role, content: m.content }));
         // An intro-on-open opening line makes the transcript assistant-first;
@@ -2046,6 +2051,38 @@ Every word of this conversation lands inside the engagement above — and courts
       }
     }
 
+    // The per-send live tail (moments, ways, secrets, recipes, court door,
+    // court board, room) + its closed-enum tools. 10-29: shared with the GM
+    // relay builder, which rebuilds it from the GM's own view of the NPC
+    // instead of admitting player-sent section text / tool schemas.
+    async _liveTail() {
+      const sections = [];
+      const choices = await this._availableChoices();
+      const doors = await this._availableDoors();
+      const secrets = await this._availableSecrets();
+      const recipes = this._availableRecipes();
+      const courtDoor = this._availableCourtDoor();
+      const toolList = [];
+      if (choices.length) { toolList.push(this._choiceTool(choices)); sections.push({ text: this._momentsSection(choices) }); }
+      if (doors.length)   { toolList.push(this._doorTool(doors));     sections.push({ text: this._doorsSection(doors) }); }
+      if (secrets.length) { toolList.push(this._secretTool(secrets)); sections.push({ text: this._secretsSection(secrets) }); }
+      if (recipes.length) { toolList.push(this._recipeTool(recipes)); sections.push({ text: this._recipesSection(recipes) }); }
+      if (courtDoor)      { toolList.push(this._courtDoorTool());     sections.push({ text: this._courtDoorSection(courtDoor) }); }
+      const live = this._courtlyLive();
+      if (live) {
+        const favA = Number(this.actor.flags?.["bbttcc-raid"]?.courtFavor?.[live.A.id] ?? 0);
+        const favD = Number(this.actor.flags?.["bbttcc-raid"]?.courtFavor?.[live.D.id] ?? 0);
+        log(`courtly board INJECTED for '${_displayName(this.actor)}' — round ${live.st.round}, influence ${live.st.influenceA}/${live.st.influenceD}, suspicion ${live.st.suspicion}, favor A:${favA} D:${favD}${live.sc ? ", court_notices armed (direct)" : ", court_notices armed (routes via GM card)"}`);
+        const board = this._courtlyBoardSection(live);
+        if (board) sections.push({ text: board });
+        // Direct apply where the scenario object lives; on snapshot
+        // clients (player seats) the tool posts a GM approval card.
+        toolList.push(this._suspicionTool());
+        sections.push({ text: this._suspicionSection() });
+      }
+      return { choices, doors, secrets, recipes, courtDoor, live, sections, tools: toolList.length ? toolList : undefined };
+    }
+
     _logCall(res) {
       try {
         if (!game.user.isGM) return;
@@ -2067,7 +2104,7 @@ Every word of this conversation lands inside the engagement above — and courts
     }
 
     async close(options) {
-      APPS.delete(this.actor?.id);
+      APPS.delete(_appKey(this.actor));
       return super.close(options);
     }
   };
@@ -2133,7 +2170,7 @@ async function _postIntroText(actor, beat) {
     const plain = String(beat?.description || "")
       .replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
     if (!plain) return;
-    const app = APPS.get(actor.id);
+    const app = APPS.get(_appKey(actor));
     if (!app) return;
     if ((app._history || []).some(m => m?.introBeatId === beat.id)) return;
     // Wait out the fresh window's first render (async lore/story-state sweep)
@@ -2156,10 +2193,10 @@ async function talkTo(actorOrToken) {
   const App = _defineAppClass();
   if (!App) return ui.notifications?.error("ApplicationV2 not available in this Foundry version.");
 
-  let app = APPS.get(actor.id);
+  let app = APPS.get(_appKey(actor));
   if (app) return app.render({ force: true });
   app = new App(actor);
-  APPS.set(actor.id, app);
+  APPS.set(_appKey(actor), app);
   const rendered = app.render({ force: true });
   _playIntroAudio(actor).catch(() => {});   // fresh window only — never on re-focus
   return rendered;
@@ -2175,7 +2212,7 @@ async function talkTo(actorOrToken) {
 // pre-ApplicationV2 cores.
 // ---------------------------------------------------------------------------
 
-const PERSONA_APPS = new Map();   // actorId -> editor instance
+const PERSONA_APPS = new Map();   // actorUuid -> editor instance (10-29: uuid, see APPS)
 
 // Lenient split for the builder: never drops a malformed line — whatever the
 // GM typed shows up in the fields for repair. (Strict validation stays in
@@ -2195,7 +2232,7 @@ function _parseSecretLinesLenient(raw) {
 // effect immediately.
 async function _afterPersonaSave(actor) {
   _RELAY_PERSONA_CACHE.delete(actor.uuid);   // relayed player conversations re-sweep too
-  const app = APPS.get(actor.id);
+  const app = APPS.get(_appKey(actor));
   if (app) {
     app._storyState = await _storyState(actor);
     app._lore = _gatherWorldLore(actor, { state: app._storyState });
@@ -2219,7 +2256,7 @@ function _definePersonaEditor() {
     };
 
     constructor(actor, options = {}) {
-      super({ ...options, id: `bbttcc-npc-persona-${actor.id}` });
+      super({ ...options, id: `bbttcc-npc-persona-${_appKey(actor).replace(/[^A-Za-z0-9_-]/g, "-")}` });
       this.actor = actor;
       this._cur = actor.getFlag(MODULE_ID, "persona") || {};
       this._used = { ...(this._cur.secretsUsed || {}) };
@@ -2537,7 +2574,7 @@ function _definePersonaEditor() {
     }
 
     async close(options) {
-      PERSONA_APPS.delete(this.actor?.id);
+      PERSONA_APPS.delete(_appKey(this.actor));
       return super.close(options);
     }
   };
@@ -2549,10 +2586,10 @@ async function editPersona(actor) {
   if (!game.user.isGM) return;
   const App = _definePersonaEditor();
   if (App) {
-    let app = PERSONA_APPS.get(actor.id);
+    let app = PERSONA_APPS.get(_appKey(actor));
     if (app) return app.render({ force: true });
     app = new App(actor);
-    PERSONA_APPS.set(actor.id, app);
+    PERSONA_APPS.set(_appKey(actor), app);
     return app.render({ force: true });
   }
   return _editPersonaLegacy(actor);
@@ -2705,7 +2742,7 @@ Hooks.on("renderTokenHUD", (hud, html) => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "control-icon bbttcc-npc-talk";
-    btn.title = `Speak with ${actor.name}`;
+    btn.title = `Speak with ${_displayName(actor)}`;
     btn.innerHTML = `<i class="fa-solid fa-comments"></i>`;
     btn.addEventListener("click", (ev) => {
       ev.preventDefault();
@@ -2720,24 +2757,111 @@ Hooks.on("renderTokenHUD", (hud, html) => {
 // GM approval cards (player-initiated story moments in gm-confirm mode)
 // ---------------------------------------------------------------------------
 
+// 10-29: every approval card below is CREATED by the player's client — its
+// content AND its flags are player-written. The GM click never trusts them:
+// the card only names which NPC + which key; the secret/recipe/defender/
+// choice is re-derived from the NPC's GM-side data, the requesting seat is
+// message.author (stamped by the server), the faction <select> is rebuilt on
+// the GM seat, and the pending flag is claimed BEFORE the grant so a second
+// click (or a second GM seat) can't grant twice.
+function _cardNpc(p) {
+  let a = null;
+  try { if (p?.npcActorUuid) a = fromUuidSync(String(p.npcActorUuid)); } catch (_e) { a = null; }
+  if (!a || a.documentName !== "Actor") a = game.actors?.get(String(p?.npcActorId || p?.speakerActorId || "")) || null;
+  if (!a || _isFactionActor(a)) return null;
+  return a;
+}
+// The Steward a request card speaks for: an actor the AUTHOR owns that the
+// card names, else the author's assigned character. Never a payload id.
+function _cardSpeaker(author, p) {
+  if (!author) return null;
+  const named = String(p?.speakerName || "").trim();
+  if (named) {
+    const a = (game.actors?.contents || []).find(x => x.name === named && !_isFactionActor(x) && x.testUserPermission?.(author, "OWNER"));
+    if (a) return a;
+  }
+  return author.character || null;
+}
+function _cardSpeakerName(author, p) { return _cardSpeaker(author, p)?.name || author?.name || "a Steward"; }
+// The faction the GM picked in the (GM-rebuilt) select — must be a real
+// faction actor; else the author's own faction.
+function _cardFaction(root, selName, author, p, excludeId = null) {
+  const picked = String(root?.querySelector?.(`[name=${selName}]`)?.value || "");
+  const f = picked ? game.actors?.get(picked) : null;
+  if (f && _isFactionActor(f) && f.id !== excludeId) return f;
+  const mine = _factionOfCharacter(_cardSpeaker(author, p));
+  return (mine && mine.id !== excludeId) ? mine : null;
+}
+// Claim the card: clear the pending flag first (a GM write every client sees),
+// so the grant runs once however many times / seats click.
+async function _claimCard(message, key) {
+  try { await message.update({ [`flags.${MODULE_ID}.${key}`]: null }); return true; }
+  catch (e) { warn(`card claim failed (${key}):`, e?.message); return false; }
+}
+// GM seat only: swap the player-built faction options for the GM's own list,
+// and add a GM-side line saying what the click will ACTUALLY grant.
+function _gmCardPrep(root, { selName = null, author = null, p = null, excludeId = null, note = "", buttonSel = "button" } = {}) {
+  if (!game.user.isGM || !root) return;
+  try {
+    const sel = selName ? root.querySelector(`select[name=${selName}]`) : null;
+    if (sel && !sel.dataset.bbttccGm) {
+      sel.dataset.bbttccGm = "1";
+      const mine = _factionOfCharacter(_cardSpeaker(author, p));
+      sel.innerHTML = _allFactions().filter(f => f.id !== excludeId)
+        .map(f => `<option value="${_esc(f.id)}"${mine?.id === f.id ? " selected" : ""}>${_esc(f.name)}</option>`).join("");
+    }
+    const btn = root.querySelector(buttonSel);
+    if (note && btn && !root.querySelector(".bbttcc-gm-verify")) {
+      const div = document.createElement("div");
+      div.className = "bbttcc-gm-verify";
+      div.style.cssText = "font-size:.8em;margin:.3em 0;padding:.2em .4em;border:1px dashed rgba(127,127,127,.5);";
+      div.innerHTML = note;
+      btn.parentElement?.insertBefore(div, btn);
+    }
+  } catch (e) { warn("GM card prep failed:", e?.message); }
+}
+
+async function _gmChoicesFor(npcActor) {
+  try {
+    const api = game.bbttcc?.api?.campaign?.dialogue;
+    if (api?.choicesFor) {
+      const out = await api.choicesFor(npcActor.id, {});
+      if (Array.isArray(out)) return out.filter(c => c?.choiceKey && c?.label);
+    }
+  } catch (e) { warn("choicesFor failed:", e?.message); }
+  return TEST_CHOICES.get(npcActor.id) || [];
+}
+
 async function _handleApprovalClick(message, action) {
   if (!game.user.isGM) return;
   const p = message.getFlag(MODULE_ID, "pendingEnact");
   if (!p) return;
+  if (!(await _claimCard(message, "pendingEnact"))) return;
+  const author = message.author || null;
+  const npcActor = _cardNpc(p);
 
   let outcome;
+  let label = String(p.label || "");
   if (action === "approve") {
     try {
       const api = game.bbttcc?.api?.campaign?.dialogue;
-      if (api?.enact) {
+      // Re-derive the moment from the NPC's live choices (GM view) — the
+      // card's beatId/choiceIndex are never used.
+      const choice = npcActor ? (await _gmChoicesFor(npcActor)).find(c => String(c.choiceKey) === String(p.choiceKey || "")) : null;
+      if (!author) outcome = "⚠ the card has no author — nothing enacted.";
+      else if (!npcActor) outcome = "⚠ NPC actor no longer exists — nothing enacted.";
+      else if (!choice) outcome = `⚠ that moment is no longer one ${npcActor.name} can offer — nothing enacted.`;
+      else if (api?.enact) {
+        label = String(choice.label || label);
         const r = await api.enact({
-          beatId: p.beatId, choiceIndex: p.choiceIndex, choiceKey: p.choiceKey,
-          speakerActorId: p.speakerActorId, userId: p.userId, transcript: p.transcript
+          beatId: choice.beatId ?? null, choiceIndex: choice.choiceIndex ?? null, choiceKey: choice.choiceKey,
+          speakerActorId: npcActor.id, userId: author.id, transcript: String(p.transcript || "").slice(0, 8000)
         });
-        outcome = (r?.ok === false) ? `⚠ enact failed: ${r?.error || "unknown"}` : `✓ Enacted — ${r?.summary || p.label}`;
+        outcome = (r?.ok === false) ? `⚠ enact failed: ${r?.error || "unknown"}` : `✓ Enacted — ${r?.summary || label}`;
       } else {
-        log(`STUB enact (approval card): ${p.choiceKey} ("${p.label}")`);
-        outcome = `✓ Enacted (test harness) — ${p.label}`;
+        label = String(choice.label || label);
+        log(`STUB enact (approval card): ${choice.choiceKey} ("${label}")`);
+        outcome = `✓ Enacted (test harness) — ${label}`;
       }
     } catch (e) {
       outcome = `⚠ enact threw: ${e?.message || e}`;
@@ -2749,16 +2873,15 @@ async function _handleApprovalClick(message, action) {
   try {
     await message.update({
       content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #b8974d;padding:.4em .6em;background:rgba(184,151,77,.08);">
-        <b>Story moment</b> — ${_esc(p.label)}<br>${_esc(outcome)}</div>`,
-      [`flags.${MODULE_ID}.pendingEnact`]: null
+        <b>Story moment</b> — ${_esc(label)}<br>${_esc(outcome)}</div>`
     });
   } catch (e) { warn("approval card update failed:", e?.message); }
 }
 
-// One click per card: the pending flag is cleared only after the async grant
-// resolves, so a double-click (or a slow compendium load) would grant twice.
-// Per-client guard + buttons disabled on first click; the card re-renders
-// without buttons once message.update lands.
+// One click per card: a double-click (or a slow compendium load) must not
+// grant twice. Per-client guard + buttons disabled on first click; 10-29: the
+// handlers also claim the pending flag before granting (_claimCard), which
+// covers a second GM seat.
 const _CARD_INFLIGHT = new Set();
 async function _onceCard(message, root, fn) {
   if (!game.user.isGM) return;
@@ -2780,7 +2903,14 @@ function _hidePendingForPlayers(message, root) {
 }
 
 function _bindApprovalButtons(message, root) {
-  if (!root || !message?.getFlag?.(MODULE_ID, "pendingEnact")) return;
+  const p = message?.getFlag?.(MODULE_ID, "pendingEnact");
+  if (!root || !p) return;
+  if (game.user.isGM) {
+    const npc = _cardNpc(p);
+    _gmCardPrep(root, { buttonSel: "[data-bbttcc-enact]", note: npc
+      ? `GM check: requested by <b>${_esc(message.author?.name || "?")}</b>; the moment is re-read from <b>${_esc(npc.name)}</b>'s live story choices when you click.`
+      : `⚠ GM check: the NPC on this card doesn't exist — Enact will refuse.` });
+  }
   for (const btn of root.querySelectorAll("[data-bbttcc-enact]")) {
     if (btn.dataset.bbttccBound) continue;   // v13 fires BOTH render hooks — bind once
     btn.dataset.bbttccBound = "1";
@@ -2798,22 +2928,33 @@ async function _handleSecretCardClick(message, action, root) {
   if (!game.user.isGM) return;
   const p = message.getFlag(MODULE_ID, "pendingSecret");
   if (!p) return;
+  const author = message.author || null;
+  const npcActor = _cardNpc(p);
+  // 10-29: the secret comes from the NPC's persona, and only while still
+  // ARMED — a second card for a told secret grants nothing.
+  const def = npcActor ? (_armedSecrets(npcActor).find(s => s.key === String(p.key || "")) || null) : null;
+  const factionPick = (action === "decline") ? null : _cardFaction(root, "bbttccSecretFaction", author, p);
+  if (!(await _claimCard(message, "pendingSecret"))) return;
+  const label = def?.label || String(p.label || "");
 
   let outcome;
   if (action === "decline") {
     outcome = "✗ Withheld — the words were spoken, but the table grants no leverage.";
   } else {
     const acquisition = action === "stolen" ? "stolen" : "earned";
-    const factionId = root?.querySelector?.("[name=bbttccSecretFaction]")?.value || p.factionId;
-    const npcActor = game.actors?.get(p.npcActorId);
-    if (!npcActor) {
+    if (!author) {
+      outcome = "⚠ the card has no author — nothing granted.";
+    } else if (!npcActor) {
       outcome = "⚠ NPC actor no longer exists — nothing granted.";
+    } else if (!def) {
+      outcome = `⚠ ${npcActor.name} holds no such armed secret (already divulged, or not in the persona) — nothing granted.`;
+    } else if (!factionPick) {
+      outcome = "⚠ no faction to receive it — nothing granted.";
     } else {
-      const def = { key: p.key, label: p.label, effectKey: p.effectKey, condition: p.condition, truth: p.truth };
       try {
-        const r = await _grantSecret({ npcActor, def, factionId, acquisition, speakerName: p.speakerName });
+        const r = await _grantSecret({ npcActor, def, factionId: factionPick.id, acquisition, speakerName: _cardSpeakerName(author, p) });
         outcome = r.ok
-          ? `✓ Granted (${acquisition}) — "${p.label}" is now leverage held by ${r.faction.name}`
+          ? `✓ Granted (${acquisition}) — "${def.label}" is now leverage held by ${r.faction.name}`
           : `⚠ grant failed: ${r.error}`;
       } catch (e) {
         outcome = `⚠ grant threw: ${e?.message || e}`;
@@ -2824,14 +2965,21 @@ async function _handleSecretCardClick(message, action, root) {
   try {
     await message.update({
       content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #7a4db8;padding:.4em .6em;background:rgba(122,77,184,.08);">
-        <b>Secret</b> — ${_esc(p.label)}<br>${_esc(outcome)}</div>`,
-      [`flags.${MODULE_ID}.pendingSecret`]: null
+        <b>Secret</b> — ${_esc(label)}<br>${_esc(outcome)}</div>`
     });
   } catch (e) { warn("secret card update failed:", e?.message); }
 }
 
 function _bindSecretButtons(message, root) {
-  if (!root || !message?.getFlag?.(MODULE_ID, "pendingSecret")) return;
+  const p = message?.getFlag?.(MODULE_ID, "pendingSecret");
+  if (!root || !p) return;
+  if (game.user.isGM) {
+    const npc = _cardNpc(p);
+    const def = npc ? _armedSecrets(npc).find(s => s.key === String(p.key || "")) : null;
+    _gmCardPrep(root, { selName: "bbttccSecretFaction", author: message.author, p, buttonSel: "[data-bbttcc-secret]", note: def
+      ? `GM check (from ${_esc(npc.name)}'s persona): <b>${_esc(def.label)}</b> — <em>${_esc(def.truth)}</em><br>Effect if granted: ${_esc(_secretsApi()?.describeEffect?.(def.effectKey) || def.effectKey)}`
+      : `⚠ GM check: ${npc ? `${_esc(npc.name)} has no armed secret with this key (already told, or never written)` : "the NPC on this card doesn't exist"} — Grant will refuse.` });
+  }
   for (const btn of root.querySelectorAll("[data-bbttcc-secret]")) {
     if (btn.dataset.bbttccBound) continue;   // v13 fires BOTH render hooks — bind once
     btn.dataset.bbttccBound = "1";
@@ -2843,21 +2991,35 @@ function _bindSecretButtons(message, root) {
 }
 
 // Teach cards (player-initiated teach_recipe) — the NPC has already begun explaining; the card gates the book entry.
+// 10-29: the recipe is re-read from the NPC's armed recipes (never the card's slug).
 async function _handleTeachCardClick(message, action, root) {
   if (!game.user.isGM) return;
   const p = message.getFlag(MODULE_ID, "pendingTeach"); if (!p) return;
+  const author = message.author || null;
+  const npcActor = _cardNpc(p);
+  const def = npcActor ? (_armedRecipes(npcActor).find(r => r.key === String(p.key || "")) || null) : null;
+  const factionPick = (action === "decline") ? null : _cardFaction(root, "bbttccTeachFaction", author, p);
+  if (!(await _claimCard(message, "pendingTeach"))) return;
+  const label = def?.label || String(p.label || "");
   let outcome;
   if (action === "decline") outcome = "✗ Withheld — the words were spoken, but nothing is written in the book.";
-  else {
-    const factionId = root?.querySelector?.("[name=bbttccTeachFaction]")?.value || p.factionId;
-    const npcActor = game.actors?.get(p.npcActorId);
-    if (!npcActor) outcome = "⚠ NPC actor no longer exists — nothing taught.";
-    else { try { const r = await _grantRecipe({ npcActor, def: { key: p.key, slug: p.slug, label: p.label, condition: p.condition }, factionId, speakerName: p.speakerName }); outcome = r.ok ? `✓ Taught — ${r.faction.name} can forge "${p.label}"${r.already ? " (already knew it)" : ""}` : `⚠ teach failed: ${r.error}`; } catch (e) { outcome = `⚠ teach threw: ${e?.message || e}`; } }
-  }
-  try { await message.update({ content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #4d8fb8;padding:.4em .6em;background:rgba(77,143,184,.08);"><b>Recipe offered</b> — <i>${_esc(p.label)}</i><br>${_esc(outcome)}</div>`, [`flags.${MODULE_ID}.pendingTeach`]: null }); } catch (_e) {}
+  else if (!author) outcome = "⚠ the card has no author — nothing taught.";
+  else if (!npcActor) outcome = "⚠ NPC actor no longer exists — nothing taught.";
+  else if (!def) outcome = `⚠ ${npcActor.name} has no such recipe left to teach — nothing taught.`;
+  else if (!factionPick) outcome = "⚠ no faction to learn it — nothing taught.";
+  else { try { const r = await _grantRecipe({ npcActor, def, factionId: factionPick.id, speakerName: _cardSpeakerName(author, p) }); outcome = r.ok ? `✓ Taught — ${r.faction.name} can forge "${def.label}"${r.already ? " (already knew it)" : ""}` : `⚠ teach failed: ${r.error}`; } catch (e) { outcome = `⚠ teach threw: ${e?.message || e}`; } }
+  try { await message.update({ content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #4d8fb8;padding:.4em .6em;background:rgba(77,143,184,.08);"><b>Recipe offered</b> — <i>${_esc(label)}</i><br>${_esc(outcome)}</div>` }); } catch (_e) {}
 }
 function _bindTeachButtons(message, root) {
-  if (!root || !message?.getFlag?.(MODULE_ID, "pendingTeach")) return;
+  const p = message?.getFlag?.(MODULE_ID, "pendingTeach");
+  if (!root || !p) return;
+  if (game.user.isGM) {
+    const npc = _cardNpc(p);
+    const def = npc ? _armedRecipes(npc).find(r => r.key === String(p.key || "")) : null;
+    _gmCardPrep(root, { selName: "bbttccTeachFaction", author: message.author, p, buttonSel: "[data-bbttcc-teach]", note: def
+      ? `GM check (from ${_esc(npc.name)}'s persona): teaches <b>${_esc(def.label)}</b> — condition: ${_esc(def.condition)}`
+      : `⚠ GM check: ${npc ? `${_esc(npc.name)} has no such recipe left to teach` : "the NPC on this card doesn't exist"} — Teach will refuse.` });
+  }
   for (const btn of root.querySelectorAll("[data-bbttcc-teach]")) {
     if (btn.dataset.bbttccBound) continue; btn.dataset.bbttccBound = "1";
     btn.addEventListener("click", (ev) => { ev.preventDefault(); _onceCard(message, root, () => _handleTeachCardClick(message, btn.dataset.bbttccTeach, root)); });
@@ -2867,23 +3029,39 @@ function _bindTeachButtons(message, root) {
 // Court-door cards (player-initiated open_court_door) — same shape as the
 // secret cards: the ushering words are ALREADY spoken; the card only gates
 // the mechanical entry (the courtlyDoor stamp + Raid Console signpost).
+// 10-29: the defender is the NPC's OWN faction (never the card's defenderId),
+// and the NPC must still hold a door condition.
+function _cardCourtDefender(npcActor) {
+  if (!npcActor || !_courtlyRaidApi()) return null;
+  const condition = String(npcActor.getFlag(MODULE_ID, "persona")?.courtDoor || "").trim();
+  return condition ? _factionOfNpc(npcActor) : null;
+}
 async function _handleCourtDoorCardClick(message, action, root) {
   if (!game.user.isGM) return;
   const p = message.getFlag(MODULE_ID, "pendingCourtDoor");
   if (!p) return;
+  const author = message.author || null;
+  const npcActor = _cardNpc(p);
+  const defender = _cardCourtDefender(npcActor);
+  const factionPick = (action === "decline") ? null : _cardFaction(root, "bbttccCourtDoorFaction", author, p, defender?.id || null);
+  if (!(await _claimCard(message, "pendingCourtDoor"))) return;
 
   let outcome;
   if (action === "decline") {
     outcome = "✗ Kept shut — the words were warm, but the court receives no one.";
   } else {
     const method = action === "conceded" ? "conceded" : "invited";
-    const factionId = root?.querySelector?.("[name=bbttccCourtDoorFaction]")?.value || p.factionId;
-    const npcActor = game.actors?.get(p.npcActorId);
-    if (!npcActor) {
+    if (!author) {
+      outcome = "⚠ the card has no author — no door opened.";
+    } else if (!npcActor) {
       outcome = "⚠ NPC actor no longer exists — no door opened.";
+    } else if (!defender) {
+      outcome = `⚠ ${npcActor.name} holds no court door (no door condition, or no faction) — no door opened.`;
+    } else if (!factionPick) {
+      outcome = "⚠ no entering faction — no door opened.";
     } else {
       try {
-        const r = await _grantCourtDoor({ npcActor, defenderId: p.defenderId, factionId, method, speakerName: p.speakerName });
+        const r = await _grantCourtDoor({ npcActor, defenderId: defender.id, factionId: factionPick.id, method, speakerName: _cardSpeakerName(author, p) });
         outcome = r.ok
           ? `✓ Opened (${method}) — ${r.attacker.name} may now enter ${r.defender.name}'s court`
           : `⚠ door failed: ${r.error}`;
@@ -2896,14 +3074,21 @@ async function _handleCourtDoorCardClick(message, action, root) {
   try {
     await message.update({
       content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #4db87a;padding:.4em .6em;background:rgba(77,184,122,.08);">
-        <b>Court door</b> — ${_esc(p.defenderName || "the court")}<br>${_esc(outcome)}</div>`,
-      [`flags.${MODULE_ID}.pendingCourtDoor`]: null
+        <b>Court door</b> — ${_esc(defender?.name || "the court")}<br>${_esc(outcome)}</div>`
     });
   } catch (e) { warn("court door card update failed:", e?.message); }
 }
 
 function _bindCourtDoorButtons(message, root) {
-  if (!root || !message?.getFlag?.(MODULE_ID, "pendingCourtDoor")) return;
+  const p = message?.getFlag?.(MODULE_ID, "pendingCourtDoor");
+  if (!root || !p) return;
+  if (game.user.isGM) {
+    const npc = _cardNpc(p);
+    const defender = _cardCourtDefender(npc);
+    _gmCardPrep(root, { selName: "bbttccCourtDoorFaction", author: message.author, p, excludeId: defender?.id || null, buttonSel: "[data-bbttcc-court-door]", note: defender
+      ? `GM check: the door opens onto <b>${_esc(defender.name)}</b>'s court (${_esc(npc.name)}'s own faction).`
+      : `⚠ GM check: ${npc ? `${_esc(npc.name)} holds no court door` : "the NPC on this card doesn't exist"} — Open will refuse.` });
+  }
   for (const btn of root.querySelectorAll("[data-bbttcc-court-door]")) {
     if (btn.dataset.bbttccBound) continue;   // v13 fires BOTH render hooks — bind once
     btn.dataset.bbttccBound = "1";
@@ -2921,6 +3106,7 @@ async function _handleCourtNoticeCardClick(message, action) {
   if (!game.user.isGM) return;
   const p = message.getFlag(MODULE_ID, "pendingCourtNotice");
   if (!p) return;
+  if (!(await _claimCard(message, "pendingCourtNotice"))) return;   // 10-29: once, however many clicks
 
   let outcome;
   if (action === "dismiss") {
@@ -2929,11 +3115,13 @@ async function _handleCourtNoticeCardClick(message, action) {
     const amount = action === "stir" ? 2 : 1;
     const sc = game.bbttcc?.api?.raid?._lastCourtly;
     const st = sc?.getState?.();
-    if (typeof sc?.raiseSuspicion !== "function" || !st || st.outcome !== "ongoing") {
+    if (!message.author) {
+      outcome = "⚠ the card has no author — nothing applied.";
+    } else if (typeof sc?.raiseSuspicion !== "function" || !st || st.outcome !== "ongoing") {
       outcome = "⚠ No live courtly scenario on this client — nothing applied.";
     } else {
       try {
-        const after = await sc.raiseSuspicion(amount, p.line ? `overheard in conversation: ${p.line}` : "a misstep in conversation");
+        const after = await sc.raiseSuspicion(amount, p.line ? `overheard in conversation: ${String(p.line).slice(0, 300)}` : "a misstep in conversation");
         outcome = `✓ The court noticed (${action}) — Suspicion now ${after}/10.`;
       } catch (e) {
         outcome = `⚠ raiseSuspicion threw: ${e?.message || e}`;
@@ -2944,8 +3132,7 @@ async function _handleCourtNoticeCardClick(message, action) {
   try {
     await message.update({
       content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #d0a04a;padding:.4em .6em;background:rgba(208,160,74,.08);">
-        <b>The court notices?</b>${p.line ? ` — <em style="font-size:.85em;">"${_esc(p.line)}"</em>` : ""}<br>${_esc(outcome)}</div>`,
-      [`flags.${MODULE_ID}.pendingCourtNotice`]: null
+        <b>The court notices?</b>${p.line ? ` — <em style="font-size:.85em;">"${_esc(p.line)}"</em>` : ""}<br>${_esc(outcome)}</div>`
     });
   } catch (e) { warn("court notice card update failed:", e?.message); }
 }
@@ -2963,9 +3150,12 @@ function _bindCourtNoticeButtons(message, root) {
 }
 
 // The public "way is open" card: [To the Court] opens the Raid Console on
-// the entering faction for whoever clicks (GM or player).
-function _bindCourtConsoleButtons(_message, root) {
-  if (!root) return;
+// the entering faction.
+// 10-29: only the GM-posted signpost binds; a player seat must own the
+// entering faction AND its courtlyDoor stamp must still be unspent — else the
+// old card would be a standing ruling-22 bypass (fromBeat skips the gate).
+function _bindCourtConsoleButtons(message, root) {
+  if (!root || !message?.getFlag?.(MODULE_ID, "courtDoorOpened") || !message?.author?.isGM) return;
   for (const btn of root.querySelectorAll("[data-bbttcc-court-console]")) {
     if (btn.dataset.bbttccBound) continue;   // v13 fires BOTH render hooks — bind once
     btn.dataset.bbttccBound = "1";
@@ -2973,7 +3163,14 @@ function _bindCourtConsoleButtons(_message, root) {
       ev.preventDefault();
       const open = game.bbttcc?.api?.raid?.openConsole || game.bbttcc?.api?.raid?.openRaidConsole;
       if (typeof open !== "function") return ui.notifications?.warn?.("Raid Console not available on this world.");
-      open({ factionId: String(btn.dataset.bbttccCourtConsole || ""), fromBeat: true });   // ruling 22: an earned court door IS the story's offer
+      const fid = String(btn.dataset.bbttccCourtConsole || "");
+      if (!game.user.isGM) {
+        const fac = game.actors?.get(fid);
+        const member = !!fac && (fac.isOwner || _factionOfCharacter(game.user.character)?.id === fac.id);
+        if (!member) return ui.notifications?.warn?.("That introduction was made for another Domain.");
+        if (!fac.getFlag?.("bbttcc-raid", "courtlyDoor")) return ui.notifications?.info?.("That introduction has been spent — the court door is shut again.");
+      }
+      open({ factionId: fid, fromBeat: true });   // ruling 22: an earned court door IS the story's offer
     });
   }
 }
@@ -3079,7 +3276,7 @@ function _install() {
         const actor = (typeof actorOrId === "string") ? game.actors.get(actorOrId) : (actorOrId?.actor ?? actorOrId);
         if (!actor?.id || !String(context || "").trim()) return false;
         await talkTo(actor);
-        const app = APPS.get(actor.id);
+        const app = APPS.get(_appKey(actor));
         if (!app) return false;
         // Let the fresh window finish its first render/lore sweep.
         await new Promise(r => setTimeout(r, 50));

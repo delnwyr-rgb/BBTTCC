@@ -83,7 +83,7 @@ async function sweep({ apply = true } = {}) {
     const applied = { loyaltyDelta: band.loyalty, darknessDelta: band.darkness };
     try {
       if ((band.loyalty || band.darkness) && wm?.applyWorldEffects) {
-        await wm.applyWorldEffects({ factionEffects: [{ factionId: f.id, ...applied }], warLog: `Convictions: ${band.label} (${drift}) — Loyalty ${band.loyalty}, Darkness +${band.darkness}` },
+        await wm.applyWorldEffects({ factionEffects: [{ factionId: f.id, ...applied }], warLog: `Convictions: ${band.label} (${drift}) — ${[band.loyalty ? `Loyalty ${band.loyalty}` : "", band.darkness ? `Darkness +${band.darkness}` : ""].filter(Boolean).join(", ")}` },   // 10-29: zero terms left out (Fractured printed "Darkness +0"), like _card
           { source: AAE, factionId: f.id, logType: "convictions" });
       }
     } catch (e) { console.warn(TAG, "teeth failed", f.name, e); }

@@ -117,7 +117,7 @@ async function postStation(st) {
       const open = openFragments(a);
       if (!open.length) return `<b>${foundry.utils.escapeHTML(a.name)}</b> — nothing binds them. The Chain passes over.`;
       const heaviest = open[open.length - 1];
-      return `<b>${foundry.utils.escapeHTML(a.name)}</b> — the Dragon speaks: <em>"${heaviest.text || heaviest.qliphoth}"</em> (${open.length} open; Soul save vs DC 15; on fail, stress — and their channel is LOCKED this station).`;
+      return `<b>${foundry.utils.escapeHTML(a.name)}</b> — the Dragon speaks: <em>"${foundry.utils.escapeHTML(String(heaviest.text || heaviest.qliphoth || ""))}"</em> (${open.length} open; Soul save vs DC 15; on fail, stress — and their channel is LOCKED this station).`;
     }).join("<br/>");
     await beatCard(`🐉 STATION I — ${name}`,
       `Seven shackles' worth of memory, worn as teeth. Each steward is bound with their own heaviest un-faced fragment, verbatim:<br/><br/>${rows}`,
@@ -282,6 +282,8 @@ async function answer(choice) {
       const open = openFragments(a).map(f => f.id);
       if (open.length) routFragments[a.id] = open;
     }
+    // 10-29: the 100 now STICKS — adversary.js computeBP pins BP at 100 while daath.routPending stands
+    // (cleared by the knock once every rout fragment is faced); this write just shows it at once.
     await game.settings.set(MOD, "boilingPoint", 100);
     await game.settings.set(MOD, "daath", { ...daath, risen: false, darkDoor: false, outcome: null, routPending: { at: Date.now(), fragments: routFragments } });
     await game.settings.set(MOD, "ritual", { active: false });

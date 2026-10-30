@@ -108,6 +108,10 @@ function _install() {
   Hooks.on("canvasReady", () => {
     if (!_sceneEnterArmed) { _sceneEnterArmed = true; return; }
     if (!_ambientOn() || !game.user?.isGM || !_keyConfigured()) return;
+    // 10-29: one GM seat only — every GM's canvas redraws on a scene change,
+    // and each keyed seat would otherwise bill + whisper its own copy.
+    const primaryId = game.bbttcc?.api?.gmExec?.primaryGmId?.() ?? game.users?.activeGM?.id;
+    if (primaryId && primaryId !== game.user.id) return;
     try {
       Hooks.callAll("bbttcc:scene:enter", { sceneId: canvas?.scene?.id, sceneName: canvas?.scene?.name });
     } catch (_e) {}
