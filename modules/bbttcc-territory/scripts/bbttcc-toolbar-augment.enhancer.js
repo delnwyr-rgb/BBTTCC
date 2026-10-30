@@ -71,7 +71,10 @@
       // "Return to World Map" — every scene gets a way home. The hub is the
       // scene flagged bbttcc-travel.isWorldHub; ride the shared transition
       // primitive so the zoom-out/flash matches every other scene move.
-      const hub = game.scenes?.find?.(s => s.getFlag?.("bbttcc-travel", "isWorldHub"));
+      // Dave 2026-10-30: the button goes to "The Whole Map" (all 141 hexes on one scene, 10-26) — the flagged hub only as
+      // the fallback. The isWorldHub flag itself is untouched (ride fallbacks + return links still read it).
+      const hub = game.scenes?.find?.(s => /the whole map/i.test(String(s.name || "")))
+        || game.scenes?.find?.(s => s.getFlag?.("bbttcc-travel", "isWorldHub"));
       if (hub) {
         ensureButton(toolbar, {
           id: "bbttcc-btn-world-map",
