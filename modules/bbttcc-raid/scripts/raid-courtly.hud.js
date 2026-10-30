@@ -438,9 +438,36 @@
       #${DOCK_ID}.collapsed > .ft-hud-panel{display:none!important}
       #${DOCK_ID} > .ft-hud-panel{position:static!important;left:auto!important;right:auto!important;top:auto!important;
         bottom:auto!important;width:auto!important;max-height:none!important;transform:none!important;margin:0!important}
-      #${DOCK_ID} .ft-courtly-roster-list{max-height:30vh}`;
+      #${DOCK_ID} .ft-courtly-roster-list{max-height:30vh}
+      /* 2026-10-30 (owner: "a very hard time moving the raid interface around so we could see the courtiers, the raid
+         interface, and the courtier's meter") — STRIP: one slim band at the bottom centre, panels side by side, the
+         courtiers as a row of chips. ⇄ in the header flips back to the side column. */
+      #${DOCK_ID}.ft-court-strip{left:50%!important;top:auto!important;transform:translateX(-50%);width:min(1120px,calc(100vw - 340px));
+        max-height:24vh;flex-direction:row;align-items:stretch;overflow:hidden;padding:.3rem .4rem;gap:.35rem}
+      #${DOCK_ID}.ft-court-strip > .ft-courtly-dock-head{flex-direction:column;justify-content:flex-start;cursor:default;writing-mode:horizontal-tb;
+        padding:.15rem .1rem;gap:.3rem;flex:0 0 auto}
+      #${DOCK_ID}.ft-court-strip > .ft-courtly-dock-head button{margin-left:0}
+      #${DOCK_ID}.ft-court-strip > .ft-hud-panel{flex:1 1 0;min-width:200px;max-height:calc(24vh - .6rem);overflow-y:auto;padding:.35rem .5rem!important}
+      #${DOCK_ID}.ft-court-strip > #ft-courtly-roster{flex:1.6 1 0}
+      #${DOCK_ID}.ft-court-strip .ft-courtly-roster-list{flex-direction:row!important;flex-wrap:wrap;max-height:none;gap:4px!important}
+      #${DOCK_ID}.ft-court-strip .ft-courtly-roster-row{border:1px solid rgba(96,200,255,.22)!important;padding:.15rem .3rem!important;max-width:220px}
+      #${DOCK_ID}.ft-court-strip .ft-courtly-roster-row img{width:24px!important;height:24px!important}
+      #${DOCK_ID}.ft-court-strip #ft-courtly-roster > div:nth-child(2){display:none!important}
+      #${DOCK_ID}.ft-court-strip.collapsed{width:auto}`;
     document.head.appendChild(st);
   }
+  const _stripOn = () => { try { return localStorage.getItem("courtly:hud:dock:layout") !== "column"; } catch (_) { return true; } };
+  /** Strip mode: sit just above whatever owns the bottom edge (combat dock, hotbar) — re-run on render and resize. */
+  function _placeStrip(d = document.getElementById(DOCK_ID)) {
+    if (!d || !d.classList.contains("ft-court-strip")) return;
+    let top = window.innerHeight - 8;
+    for (const id of ["bbttcc-combat-dock", "hotbar", "ft-crew-hud"]) {
+      const el = document.getElementById(id); if (!el || el.offsetParent === null) continue;
+      const r = el.getBoundingClientRect(); if (r.height > 0 && r.top > window.innerHeight * 0.5) top = Math.min(top, r.top);
+    }
+    d.style.bottom = Math.max(8, Math.round(window.innerHeight - top + 8)) + "px";
+  }
+  window.addEventListener("resize", () => _placeStrip());
   function _dock() {
     let d = document.getElementById(DOCK_ID);
     if (d) return d;
@@ -450,7 +477,15 @@
     let collapsed = false;
     try { collapsed = localStorage.getItem("courtly:hud:dock:collapsed") === "1"; } catch (_) {}
     d.classList.toggle("collapsed", collapsed);
-    d.innerHTML = `<div class="ft-courtly-dock-head"><span>⚜ Court</span><button type="button" data-dock-toggle title="Collapse / expand">${collapsed ? "▸" : "▾"}</button></div>`;
+    d.classList.toggle("ft-court-strip", _stripOn());
+    d.innerHTML = `<div class="ft-courtly-dock-head"><span>⚜ Court</span><button type="button" data-dock-layout title="Strip along the bottom ⇄ column on the left">⇄</button><button type="button" data-dock-toggle title="Collapse / expand">${collapsed ? "▸" : "▾"}</button></div>`;
+    d.querySelector("[data-dock-layout]").addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      const strip = !d.classList.contains("ft-court-strip");
+      d.classList.toggle("ft-court-strip", strip);
+      try { localStorage.setItem("courtly:hud:dock:layout", strip ? "strip" : "column"); } catch (_) {}
+      if (strip) _placeStrip(d); else { d.style.bottom = ""; d.style.transform = ""; }
+    });
     d.querySelector("[data-dock-toggle]").addEventListener("click", (ev) => {
       ev.stopPropagation();
       const c = !d.classList.contains("collapsed");
@@ -466,6 +501,7 @@
     const head = d.querySelector(".ft-courtly-dock-head");
     head.addEventListener("pointerdown", (ev) => {
       if (ev.target.closest("button")) return;
+      if (d.classList.contains("ft-court-strip")) return;   // the strip is pinned above the bottom bars
       const r = d.getBoundingClientRect(); const ox = ev.clientX - r.left, oy = ev.clientY - r.top;
       const move = (e) => { d.style.left = Math.max(0, e.clientX - ox) + "px"; d.style.top = Math.max(0, e.clientY - oy) + "px"; };
       const up = () => { window.removeEventListener("pointermove", move); window.removeEventListener("pointerup", up);
@@ -494,6 +530,7 @@
       const el = document.getElementById(id); if (el && el.parentElement === dock) dock.appendChild(el);
     }
     if (bindFn) bindFn(slotRef.el);
+    _placeStrip(dock);
     // Individual panels are no longer separately draggable — the dock is.
   }
 
