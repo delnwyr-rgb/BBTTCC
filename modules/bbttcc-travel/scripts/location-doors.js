@@ -556,9 +556,91 @@
     canvas.stage.on("pointerdown", _stage.down); canvas.stage.on("pointermove", _stage.move);
   }
 
+  // ---------- MAP DIVE (owner 2026-10-30): on the hex map, click the party's hex to go into the place there ----------
+  // Same feel as a town hub's doors: plain left-click on a hex that leads somewhere (its town hub, a hexSceneLink,
+  // a diveScene) dives in — but ONLY the hex a party faction stands on (api.travel.whereIs). Anywhere else the
+  // map says "ride there first": nobody dives into a place without travelling to it. Clicks on tokens and
+  // modified clicks stay free (selection, the hex editor, the planner).
+  const hexMapHere = (scene = canvas?.scene) => !!scene && !isTownHub(scene) &&
+    (scene.drawings?.contents || []).some(d => d.flags?.["bbttcc-territory"]?.isHex);
+  function hexDiveTarget(doc) {
+    const t = doc?.flags?.[SCOPE] || {};
+    return t.townHubSceneUuid || t.hexSceneLink?.targetSceneUuid || (typeof t.diveScene === "string" ? t.diveScene : null) || null;
+  }
+  const _facIdOf = (a) => { const s = a?.system?.system ?? a?.system ?? {}; return String(s.faction?.id || a?.flags?.[MOD_FAC]?.factionId || "").replace(/^Actor\./, ""); };
+  /** The party: factions of stewards this seat owns (player) or of any player-owned steward (GM). */
+  function partyFactionIds() {
+    const ids = new Set();
+    for (const a of game.actors ?? []) {
+      if (a.type !== "character") continue;
+      if (game.user.isGM ? !a.hasPlayerOwner : !a.isOwner) continue;
+      const f = _facIdOf(a); if (f) ids.add(f);
+    }
+    return [...ids];
+  }
+  // whereIs can scan tokens across scenes — hover asks every mouse move, so the party's hexes are cached ~2 s.
+  let _partyHexes = { at: 0, set: new Set() };
+  function partyHexes({ fresh = false } = {}) {
+    const now = Date.now(); if (!fresh && now - _partyHexes.at < 2000) return _partyHexes.set;
+    const W = game.bbttcc?.api?.travel?.whereIs; const set = new Set();
+    if (W) for (const fid of partyFactionIds()) { try { const u = W(fid)?.hexUuid; if (u) set.add(u); } catch (_e) {} }
+    _partyHexes = { at: now, set }; return set;
+  }
+  const partyIsOn = (hexDoc, opts) => partyHexes(opts).has(hexDoc.uuid);
+  function hexAt(gx, gy) {
+    for (const d of (canvas?.drawings?.placeables || [])) {
+      if (!d.document?.flags?.["bbttcc-territory"]?.isHex) continue;
+      if (drawingContainsGlobal(d, gx, gy)) return d;
+    }
+    return null;
+  }
+  const tokenAt = (gx, gy) => (canvas?.tokens?.placeables || []).some(t => t.visible && t.bounds?.contains?.(gx, gy));
+  const hexName = (doc) => String(doc?.flags?.["bbttcc-territory"]?.name || doc?.text || "that hex");
+  async function mapDive(hexUuid, { audience = "activate" } = {}) {
+    const doc = await fromUuid(String(hexUuid || "")).catch(() => null);
+    const target = doc ? hexDiveTarget(doc) : null; if (!target) return false;
+    const tx = game.bbttcc?.api?.transition;
+    if (tx?.dive) return tx.dive(target, { focus: null, hexUuid: doc.uuid, label: hexName(doc), audience });   // dive resolves the hex's true middle
+    const scene = await fromUuid(target).catch(() => null); if (!scene) return false;
+    if (audience === "activate" && game.user.isGM) await scene.activate(); else await scene.view();
+    return true;
+  }
+  async function onMapPointerDown(event) {
+    try {
+      const btn = event.button ?? event.data?.originalEvent?.button ?? 0; if (btn !== 0) return;
+      const oe = event.data?.originalEvent ?? event.originalEvent ?? event;
+      if (oe?.shiftKey || oe?.ctrlKey || oe?.metaKey || oe?.altKey) return;
+      const p = localPos(event);
+      if (tokenAt(p.x, p.y)) return;
+      const hit = hexAt(p.x, p.y); if (!hit || !hexDiveTarget(hit.document)) return;
+      if (!partyIsOn(hit.document, { fresh: true })) { ui.notifications?.info?.(`${hexName(hit.document)}: ride there first — the party isn't there.`); return; }
+      event.stopPropagation?.();
+      if (game.user.isGM) return mapDive(hit.document.uuid, { audience: "activate" });
+      const gx = game.bbttcc?.api?.gmExec;
+      if (playerActivateAllowed() && gx?.call && gx.primaryGmId?.()) {
+        try { const r = await gx.call("travel.map.dive", { hexUuid: hit.document.uuid }, { timeoutMs: 8000 }); if (r?.ok) return; } catch (e) { warn("map dive relay failed", e); }
+      }
+      return mapDive(hit.document.uuid, { audience: "view" });
+    } catch (err) { console.error(TAG, "map pointerdown error:", err); }
+  }
+  let _mapHover = null;
+  function onMapPointerMove(event) {
+    try {
+      const p = localPos(event); const hit = hexAt(p.x, p.y);
+      const live = !!hit && !!hexDiveTarget(hit.document) && !tokenAt(p.x, p.y) && partyIsOn(hit.document);
+      if (live && _mapHover !== hit.id) { _mapHover = hit.id; document.body.style.cursor = "pointer"; }
+      else if (!live && _mapHover) { _mapHover = null; if (document.body.style.cursor === "pointer") document.body.style.cursor = ""; }
+    } catch (_e) {}
+  }
+  function bindMapStage() {
+    unbindStage(); _stage.down = onMapPointerDown; _stage.move = onMapPointerMove;
+    canvas.stage.on("pointerdown", _stage.down); canvas.stage.on("pointermove", _stage.move);
+  }
+
   // ---------- wire-up ----------
   function onCanvasReady() {
     forgetVisuals(); unbindStage();
+    if (hexMapHere()) return bindMapStage();
     if (!isTownHub()) return;
     bindStage(); refreshLit();
     const n = doorDrawings().length;
@@ -587,7 +669,23 @@
   Hooks.once("ready", () => {
     game.bbttcc = game.bbttcc || { api: {} }; game.bbttcc.api = game.bbttcc.api || {};
     game.bbttcc.api.travel = game.bbttcc.api.travel || {};
-    game.bbttcc.api.travel.doors = { list: listAll, forQuest, beatsForQuest, litDoorsHere, nowDoorsHere, dive, goto, pulse, refreshLit, isTownHub, enter, gateMet, _hitDoorAt: hitDoorAt };
+    game.bbttcc.api.travel.doors = { list: listAll, forQuest, beatsForQuest, litDoorsHere, nowDoorsHere, dive, goto, pulse, refreshLit, isTownHub, enter, gateMet, _hitDoorAt: hitDoorAt,
+      mapDive, hexDiveTarget, partyHexes: () => [...partyHexes({ fresh: true })] };
+    // GM-side relay (10-30): a player's click on the party's hex becomes a table dive — re-checked here (the party must
+    // stand on that hex and the table must be on that map); several seats clicking at once dive once.
+    try {
+      game.bbttcc.api.gmExec?.register?.("travel.map.dive", async (payload) => {
+        if (!game.user.isGM) return { ok: false, why: "not-gm" };
+        if (!playerActivateAllowed()) return { ok: false, why: "setting-off" };
+        const doc = await fromUuid(String(payload?.hexUuid || "")).catch(() => null);
+        if (!doc?.flags?.["bbttcc-territory"]?.isHex || !hexDiveTarget(doc)) return { ok: false, why: "no-place" };
+        if (game.scenes?.active?.id !== doc.parent?.id) return { ok: false, why: "table-elsewhere" };
+        if (!partyIsOn(doc, { fresh: true })) return { ok: false, why: "party-not-here" };
+        if (!_gmOnce(`map:${doc.uuid}`)) return { ok: true, deduped: true };
+        (async () => { await mapDive(doc.uuid, { audience: "activate" }); })().catch(e => warn("relay map dive failed", e));
+        return { ok: true };
+      });
+    } catch (e) { warn("gmExec map dive relay register failed", e); }
     // GM-side relay (walk-in gate, 2026-09-30): a player's token hit a gated door Region and the gate is shut —
     // the GM seat plays the fallback beat (Donny) at the table. The gate is re-checked here; players cannot skip it.
     try {

@@ -133,9 +133,29 @@
   // (e.g. an encounter/beat scene reached via requestDive).
   let _lastDive = null;
 
+  // 10-30: a hex's centre on the CURRENT canvas, from its uuid (territory hexes are Drawings: x/y = top-left +
+  // shape size). Null when the hex lives on another scene. Callers that built `focus` from a payload without
+  // .object/.document handed the dive {0,0} — the camera swung to the map's top-left corner.
+  async function hexFocus(hexUuid) {
+    if (!hexUuid) return null;
+    let doc = null;
+    try { doc = await fromUuid(String(hexUuid)); } catch (_e) { doc = null; }
+    if (!doc || (doc.parent && canvas?.scene && doc.parent.id !== canvas.scene.id)) return null;
+    // v14 polygon hexes: object.center reports the drawing's ORIGIN (top-left) and shape.width/height are null —
+    // the bounds (or the points' extent) give the real middle.
+    const b = doc.object?.bounds;
+    if (b && Number(b.width) > 0) return { x: b.x + b.width / 2, y: b.y + b.height / 2 };
+    const pts = Array.isArray(doc.shape?.points) ? doc.shape.points : [];
+    const xs = pts.filter((_, i) => i % 2 === 0), ys = pts.filter((_, i) => i % 2 === 1);
+    const w = Number(doc.shape?.width) || (xs.length ? Math.max(...xs) : 0), h = Number(doc.shape?.height) || (ys.length ? Math.max(...ys) : 0);
+    const x = Number(doc.x), y = Number(doc.y);
+    return (Number.isFinite(x) && Number.isFinite(y)) ? { x: x + w / 2, y: y + h / 2 } : null;
+  }
+  const _usableFocus = (f) => !!f && Number.isFinite(f.x) && Number.isFinite(f.y) && !(f.x === 0 && f.y === 0);
+
   let _busy = false;
   async function dive(targetSceneUuid, opts = {}) {
-    const { focus, flashColor = "#bfe3ff", hexUuid = null, audience = "view", label,
+    let { focus, flashColor = "#bfe3ff", hexUuid = null, audience = "view", label,
             originUuid = canvas?.scene?.uuid || null, portalLeadMs = 850,
             // landAt (opt-in): {x, y, scale?} on the DESTINATION scene — where the
             // camera settles after landing. Without it Foundry restores whatever
@@ -154,6 +174,8 @@
     }
     _busy = true;
     try {
+      // The hex's own centre beats a missing / {0,0} focus (10-30: encounter dives panned to the top-left corner).
+      if (!_usableFocus(focus) && hexUuid) focus = (await hexFocus(hexUuid)) || null;
       // 0) Kick off asset preload ASAP (concurrent with the zoom) so the target
       //    background — especially a VIDEO bg — is decoded + cached before we land.
       //    Without it you see the scene's loading placeholder (the "bezeled circle")
@@ -313,7 +335,7 @@
   Hooks.once("ready", () => {
     game.bbttcc = game.bbttcc || { api: {} };
     game.bbttcc.api = game.bbttcc.api || {};
-    game.bbttcc.api.transition = { dive, back, flash, shake, portalSwirl, requestDive, consumeDive };
+    game.bbttcc.api.transition = { dive, back, flash, shake, portalSwirl, requestDive, consumeDive, hexFocus };
     console.log("[bbttcc] Scene Transition primitive ready (game.bbttcc.api.transition).");
   });
 })();

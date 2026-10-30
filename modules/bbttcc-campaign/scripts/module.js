@@ -3986,11 +3986,24 @@ async function executeBeat(campaign, beat, ctx = {}) {
   // the whole table. Consumed ONCE per beat so chained/sceneless beats don't replay.
   const _tx = game.bbttcc?.api?.transition;
   const _dive = _tx?.consumeDive?.() || null;
+  // 10-30 (owner): the dive goes to the hex the ENCOUNTER is bound to (targetHexUuid → hexName/where on the
+  // map in view); an unbound ("anywhere") encounter keeps the hex that triggered it.
+  const _boundHexUuid = () => {
+    try {
+      if (beat?.targetHexUuid) return String(beat.targetHexUuid);
+      const place = placeOf(beat, null);
+      if (!place || place === "anywhere") return null;
+      const want = hexKey(place);
+      const d = (canvas?.scene?.drawings ?? []).find(x => { const tf = x.flags?.["bbttcc-territory"]; return tf && hexKey(tf.name || x.text) === want; });
+      return d?.uuid || null;
+    } catch (_e) { return null; }
+  };
   const _diveScene = async (scene) => {
     if (!scene) return;
     if (_dive && _tx?.dive) {
+      const _bound = _boundHexUuid();
       await _tx.dive(scene.uuid, {
-        focus: _dive.focus, hexUuid: _dive.hexUuid,
+        focus: _bound ? null : _dive.focus, hexUuid: _bound || _dive.hexUuid,
         audience: _dive.audience || "view", label: _dive.label || label,
         originUuid: _dive.originUuid
       });

@@ -558,16 +558,13 @@
       let dived = false;
       try {
         if (txn?.requestDive) {
+          // 10-30: the console sends ctx.to = { uuid, obj } — no .object/.document — so the old focus math
+          // collapsed to {0,0} (the dive swung to the map's top-left). Hand the dive the TRIGGERING hex only;
+          // transition.dive resolves its centre, and the beat launch swaps in the encounter's bound hex if it has one.
           const to = ctx?.to;
-          const place = to?.object || to;
-          const center = place?.center;
-          const tdoc = to?.document || to;
-          const w = Number(tdoc?.shape?.width || tdoc?.width || 0);
-          const h = Number(tdoc?.shape?.height || tdoc?.height || 0);
-          const focus = (center && Number.isFinite(center.x))
-            ? { x: center.x, y: center.y }
-            : { x: Number(tdoc?.x || 0) + w / 2, y: Number(tdoc?.y || 0) + h / 2 };
+          const tdoc = to?.obj || to?.document || null;
           const hexUuid = tdoc?.uuid || to?.uuid || ctx?.hexUuid || null;
+          const focus = null;
           txn.requestDive({
             // "activate": a road encounter is a TABLE moment — the storm takes
             // everybody (owner ruling 2026-08-26; was "view" = GM-solo preview).
