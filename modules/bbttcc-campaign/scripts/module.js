@@ -1556,19 +1556,20 @@ function _buildPlayerFacingDialogHtml(payload) {
       parts.push('<div class="bbttcc-campaign-dialog-choices">');
       for (var i = 0; i < choices.length; i++) {
         var ch = choices[i] || {};
-        var label = _escapeHtml(_choiceShownLabel(ch, i));
+        var label = (ch.spent ? "✓ " : "") + _escapeHtml(_choiceShownLabel(ch, i)) + (ch.spent ? " — done" : "");
         var cdesc = _stripGmNotes(_expandStoryTokens(String(ch.description || "").trim(), undefined, { raw: true }));   // escaped once below (review P3, 2026-10-27); round 2 E2 (2026-10-20): GM asides never reach the player card; story tokens expand (10-20 {{#at}})
         var checkLabel = String(ch.checkLabel || "").trim();
         var checkDC = _num(ch.checkDC, 0);
 
-        if (canPick) parts.push('<button type="button" class="bbttcc-mirror-pick" data-bbttcc-pick="' + i + '" style="display:block; width:100%; text-align:left; padding:8px 10px; border:1px solid rgba(120,190,255,0.55); border-radius:10px; margin:8px 0; cursor:pointer;">');
+        if (ch.spent) parts.push('<div style="padding:8px 10px; border:1px solid rgba(255,255,255,0.10); border-radius:10px; margin:8px 0; opacity:.45;">');
+        else if (canPick) parts.push('<button type="button" class="bbttcc-mirror-pick" data-bbttcc-pick="' + i + '" style="display:block; width:100%; text-align:left; padding:8px 10px; border:1px solid rgba(120,190,255,0.55); border-radius:10px; margin:8px 0; cursor:pointer;">');
         else parts.push('<div style="padding:8px 10px; border:1px solid rgba(255,255,255,0.10); border-radius:10px; margin:8px 0;">');
         parts.push('<div style="font-weight:700;">' + label + '</div>');
         if (cdesc) parts.push('<div style="opacity:0.85; margin-top:6px;">' + _escapeHtml(cdesc).replace(/\n/g, "<br/>") + '</div>');
         if (checkLabel) {
           parts.push('<div style="opacity:0.85; font-size:12px; margin-top:6px;"><b>Check:</b> ' + _escapeHtml(checkLabel) + '  -  <b>Difficulty:</b> ' + _escapeHtml(String(checkDC)) + '</div>');
         }
-        parts.push(canPick ? '</button>' : '</div>');
+        parts.push(canPick && !ch.spent ? '</button>' : '</div>');
       }
       if (canPick) parts.push('<div style="opacity:.8; font-size:12px; margin-top:6px;">◆ Autopilot — click a choice to make it. First click at the table wins.</div>');
       parts.push('</div>');
@@ -1751,6 +1752,19 @@ async function _choiceHidden(beat, ch, campaign, ctx = {}) {
     }
     return false;
   } catch (_e) { return false; }   // fail-open: a broken gate never hides a choice
+}
+// SPENT CHOICES (Dave 2026-10-29: "greying out the choices in a quest menu that aren't repeatable, and you've already
+// done"). A choice is spent when the beat it leads to on success has played and that beat is not repeatable (the engine's
+// own rule: repeatable !== true = once). A failed attempt never spends it (the retry stays), an exit (no next) never does,
+// and a route back to a hub never does (hubs are repeatable). Spent choices render greyed + disabled with a ✓.
+function _choiceSpent(ch, campaign) {
+  try {
+    const next = String(ch?.next || "").trim(); if (!next) return false;
+    const tgt = (campaign?.beats || []).find(b => String(b?.id) === next); if (!tgt || tgt.inject?.repeatable === true) return false;
+    if (_storyStateFor(campaign?.id)?.played?.[next]) return true;
+    const ds = _readDirectorState() || {};
+    return !!(ds.firedStoryBeats?.[next] || ds.dialogueFired?.[next]);
+  } catch (_e) { return false; }
 }
 async function _visibleChoiceIndices(beat, campaign, ctx = {}) {
   const cs = Array.isArray(beat?.choices) ? beat.choices : []; const out = [];
@@ -2638,7 +2652,7 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
   if (beat.storeFacts) { try { storeFactsHtml = await _storeFactsHtml(campaign, ctx); } catch (_eSF) { storeFactsHtml = ""; } }
   const visible = await _visibleChoiceIndices(beat, campaign, ctx);   // D-1/D-2: gated / cooling choices are not shown
   const choicesAll = Array.isArray(beat.choices) ? beat.choices : [];
-  const choices = visible.map(k => choicesAll[k]);
+  const choices = visible.map(k => (_choiceSpent(choicesAll[k], campaign) ? { ...choicesAll[k], spent: true } : choicesAll[k]));
   // FACILITATION (2026-10-07): the mode layer sits over the authored flag — Tabletop never mirrors,
   // Autopilot always does, Projectionist honours the beat. Choices: hidden / shown / player-pick.
   const facPol = facilitation();
@@ -2665,7 +2679,8 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
             label: ch && ch.label ? ch.label : ('Choice ' + (i + 1)),
             description: _stripGmNotes(_expandStoryTokens(String(ch && ch.description ? ch.description : '').trim(), undefined, { raw: true })),   // round 2 E2 + story tokens (plain text: the mirror escapes it)
             checkLabel: _choiceHasCheck(ch) ? _choiceCheckLabel(ch.checkStat) : '',
-            checkDC: _choiceHasCheck(ch) ? _num(ch.checkDC, 0) : 0
+            checkDC: _choiceHasCheck(ch) ? _num(ch.checkDC, 0) : 0,
+            spent: !!(ch && ch.spent)
           };
         })
       });
@@ -2779,7 +2794,7 @@ ${
         choices.length
           ? `<div class="bbttcc-campaign-dialog-choices">
                ${choices.map((ch, i) => {
-                 const label = _escapeHtml(_choiceShownLabel(ch, i));
+                 const label = (ch.spent ? "✓ " : "") + _escapeHtml(_choiceShownLabel(ch, i)) + (ch.spent ? " — done" : "");
                  const cdesc = _expandStoryTokens(String(ch.description || "").trim());   // story tokens in the GM dialog too (2026-10-20)
                  const meta = _choiceHasCheck(ch)
                    ? (() => {
@@ -2872,7 +2887,7 @@ ${
         // the GM's button names the check it carries (2026-09-18, owner: three "Inspect the set up" buttons told the GM
         // nothing) — players already see CHECK / DIFFICULTY on their mirror
         const checkTag = _choiceHasCheck(ch) ? ` · ${_choiceCheckLabel(String(ch.checkStat || "").trim()) || String(ch.checkStat || "").trim()}${_num(ch.checkDC, 0) ? ` DC ${_num(ch.checkDC, 0)}` : ""}` : "";
-        const label = _choiceShownLabel(ch, i) + checkTag;
+        const label = (ch.spent ? "✓ " : "") + _choiceShownLabel(ch, i) + (ch.spent ? " — done" : checkTag);
 
         buttons[`c${i}`] = {
           label,
@@ -3139,6 +3154,7 @@ ${
           const key = `c${i}`;
           if (!buttons[key] || typeof buttons[key].callback !== "function") throw new Error("no such choice");
           if (buttonTaken) throw new Error("already chosen");
+          if (choices[i]?.spent) throw new Error("that one's done");
           try {
             // The clicker's own steward makes the check when it is on the roster.
             const sel = dlg.element?.[0]?.querySelector?.('select[name="bbttccRosterActor"]');
@@ -3156,6 +3172,14 @@ ${
     // HexChrome styling hook (works for V1 Dialog)
     setTimeout(() => {
       try { dlg.element?.addClass("bbttcc-choice-roll-dialog bbttcc-hexchrome-dialog"); } catch (_eC) {}
+      // spent choices: greyed + disabled (2026-10-29)
+      try {
+        choices.forEach((ch, i) => {
+          if (!ch?.spent) return;
+          const btn = dlg.element?.[0]?.querySelector?.(`button[data-button="c${i}"]`);
+          if (btn) { btn.disabled = true; btn.style.opacity = "0.45"; btn.style.cursor = "not-allowed"; btn.dataset.tooltip = "Done — this one doesn't repeat."; }
+        });
+      } catch (_eSp) {}
     }, 0);
 
 
@@ -9856,7 +9880,8 @@ Hooks.once("ready", () => {
             label: (ch && ch.label) || ("Choice " + (i + 1)),
             description: _stripGmNotes(_expandStoryTokens(String((ch && ch.description) || "").trim(), undefined, { raw: true })),   // round 2 E2 + story tokens (raw: the mirror escapes once)
             checkLabel: _choiceHasCheck(ch) ? _choiceCheckLabel(ch.checkStat) : "",
-            checkDC: _choiceHasCheck(ch) ? _num(ch.checkDC, 0) : 0
+            checkDC: _choiceHasCheck(ch) ? _num(ch.checkDC, 0) : 0,
+            spent: _choiceSpent(ch, campaign0)
           }))
         });
         ui.notifications?.info?.(`Mirror re-broadcast: "${beat.label || beat.id}".`);
