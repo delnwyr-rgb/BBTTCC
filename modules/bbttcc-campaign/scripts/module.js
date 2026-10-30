@@ -2433,8 +2433,18 @@ async function _rollChoiceCheck(choice, ctx={}) {
     // from the Momentum spend) rides THIS check too — it was only ever read by the faction sheet's own roll. Consumed here.
     let momentumDie = false;
     try { if (faction?.getFlag?.("bbttcc-factions", "nextRollBonusDie")) { momentumDie = true; await faction.unsetFlag("bbttcc-factions", "nextRollBonusDie"); } } catch (_eMD) {}
-    const roll = await _evalRoll(new Roll(`${_ftCanonDie()}${momentumDie ? " + 1d10x" : ""} + @b`, { b: bonus }));
+    let roll = await _evalRoll(new Roll(`${_ftCanonDie()}${momentumDie ? " + 1d10x" : ""} + @b`, { b: bonus }));
     if (momentumDie) { try { ui.notifications?.info?.(`${faction.name}: Momentum +1d10 rides this check.`); } catch (_eN) {} }
+    // Momentum reroll (2026-10-30, automated): armed → roll the check again, keep the better
+    try {
+      if (faction?.getFlag?.("bbttcc-factions", "nextRollReroll")) {
+        await faction.unsetFlag("bbttcc-factions", "nextRollReroll");
+        const again = await _evalRoll(new Roll(`${_ftCanonDie()}${momentumDie ? " + 1d10x" : ""} + @b`, { b: bonus }));
+        const keep = Number(again.total ?? 0) > Number(roll.total ?? 0) ? again : roll;
+        ui.notifications?.info?.(`${faction.name}: Momentum reroll — ${roll.total} / ${again.total}, kept ${keep.total}.`);
+        roll = keep;
+      }
+    } catch (_eRR) {}
     const total = roll.total ?? 0;
     // RFI strategic layer (mirrors the faction sheet's OP roll): every exploded d10
     // banks +1 Momentum on the paying faction — owner ruling 2026-09-06, "give them

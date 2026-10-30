@@ -4026,8 +4026,15 @@ try {
           const poolSize = bonusDieArmed ? 3 : 2;
           const formula  = `${poolSize}d10x10 + @b`;
 
-          const roll = new Roll(formula, { b: base + contrib });
+          let roll = new Roll(formula, { b: base + contrib });
           await roll.evaluate({ async: true });
+          // Momentum reroll (2026-10-30): armed → roll again, keep the better
+          const rerollArmed = !!actor.getFlag(MODULE_ID, "nextRollReroll");
+          if (rerollArmed) {
+            await actor.unsetFlag(MODULE_ID, "nextRollReroll");
+            const second = new Roll(formula, { b: base + contrib }); await second.evaluate({ async: true });
+            if (Number(second.total) > Number(roll.total)) roll = second;
+          }
 
           const allResults = roll.terms[0]?.results ?? [];
           const baseDice   = allResults.slice(0, poolSize).map(r => r.result);
@@ -4042,6 +4049,7 @@ try {
           const label = key.charAt(0).toUpperCase() + key.slice(1);
           const noteBits = [];
           if (bonusDieArmed)   noteBits.push(`+1d10 spent — pool = 3d10`);
+          if (rerollArmed)     noteBits.push(`Momentum reroll — kept the better of two`);
           if (explosions > 0)  noteBits.push(`+${explosions} Momentum banked`);
           if (doubleTen)       noteBits.push(`✦ Decisive Moment — GM adjudicates a free strategic beat this turn.`);
           const noteHtml = noteBits.length
@@ -4076,12 +4084,21 @@ try {
     }
 
     const armed = !!actor.getFlag(MODULE_ID, "nextRollBonusDie");
+    const rerollArmed = !!actor.getFlag(MODULE_ID, "nextRollReroll");
+    // AUTOMATED (Dave 2026-10-30: "automate everything except the reshape fiction one"): Reroll arms a roll-twice-keep-better
+    // on the next opposed / OP check; Refund gives back the most recent spend THIS turn (op-engine recentSpends).
+    let turnNow = 0; try { turnNow = Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch (_eT) {}
+    const spends = Array.isArray(actor.getFlag(MODULE_ID, "recentSpends")) ? actor.getFlag(MODULE_ID, "recentSpends") : [];
+    const lastSpend = spends.find(e => Number(e?.turn || 0) === turnNow && e?.spent && Object.keys(e.spent).length) || null;
+    const spendTxt = lastSpend ? Object.entries(lastSpend.spent).map(([k, v]) => `${v} ${k}`).join(", ") : "";
 
     const OPTIONS = [
       { cost: 1, key: "bonusDie",  label: "Add +1d10 exploding to this faction's next OP check.",
         disabledReason: armed ? "Already armed" : null },
-      { cost: 2, key: "reroll",    label: "Force a reroll of an opposed strategic check." },
-      { cost: 3, key: "refund",    label: "Refund one OP cost on the current turn (GM adjudicates)." },
+      { cost: 2, key: "reroll",    label: "Reroll your next opposed or OP check — roll it twice, keep the better.",
+        disabledReason: rerollArmed ? "Already armed" : null },
+      { cost: 3, key: "refund",    label: lastSpend ? `Refund your last spend this turn: ${spendTxt} (${lastSpend.label}).` : "Refund your last OP spend this turn.",
+        disabledReason: lastSpend ? null : "Nothing spent this turn" },
       { cost: 5, key: "reshape",   label: "Reshape Strategy — narrative reshaping of a strategic-layer event (GM-gated)." }
     ];
 
@@ -4131,9 +4148,19 @@ try {
             await actor.setFlag(MODULE_ID, "nextRollBonusDie", true);
             flavor = `<strong>${actor.name}</strong> spends ${cost} Momentum — <em>+1d10 armed</em> for the next OP check.`;
           } else if (key === "reroll") {
-            flavor = `<strong>${actor.name}</strong> spends ${cost} Momentum — <em>forces a reroll</em> on the current opposed strategic check. GM adjudicates.`;
+            await actor.setFlag(MODULE_ID, "nextRollReroll", true);
+            flavor = `<strong>${actor.name}</strong> spends ${cost} Momentum — <em>reroll armed</em>: the next opposed or OP check rolls twice and keeps the better.`;
           } else if (key === "refund") {
-            flavor = `<strong>${actor.name}</strong> spends ${cost} Momentum — <em>OP refund</em> requested on the current turn. GM adjudicates.`;
+            const cur2 = Array.isArray(actor.getFlag(MODULE_ID, "recentSpends")) ? actor.getFlag(MODULE_ID, "recentSpends") : [];
+            const idx = cur2.findIndex(e => Number(e?.turn || 0) === turnNow && e?.spent && Object.keys(e.spent).length);
+            if (idx < 0) { await actor.setFlag(MODULE_ID, "momentum", cur); return ui.notifications?.warn?.("Nothing spent this turn to refund."); }
+            const entry = cur2[idx];
+            const res = await game.bbttcc?.api?.op?.commit?.(actor.id, { ...entry.spent }, { source: "momentum-refund", label: `Momentum refund — ${entry.label}`, momentumRefund: true, noDiscount: true, clampToCap: true });
+            if (!res?.committed) { await actor.setFlag(MODULE_ID, "momentum", cur); return ui.notifications?.warn?.("The refund was refused by the OP engine — Momentum kept."); }
+            await actor.setFlag(MODULE_ID, "recentSpends", cur2.filter((_, i) => i !== idx));
+            const back = Object.entries(entry.spent).map(([k, v]) => `${v} ${k}`).join(", ");
+            const lost = res?.clamped && Object.keys(res.clamped).length ? ` (${Object.entries(res.clamped).map(([k, v]) => `${v} ${k}`).join(", ")} lost to the cap)` : "";
+            flavor = `<strong>${actor.name}</strong> spends ${cost} Momentum — <em>refund</em>: ${back} back from "${entry.label}"${lost}.`;
           } else if (key === "reshape") {
             flavor = `<strong>${actor.name}</strong> spends ${cost} Momentum — <em>Reshape Strategy</em>. GM adjudicates a narrative reshape this turn.`;
           }
@@ -4249,6 +4276,7 @@ Hooks.on("bbttcc:advanceTurn:end", async (ctx) => {
       if (a.getFlag(MODULE_ID, "nextRollBonusDie")) {
         await a.unsetFlag(MODULE_ID, "nextRollBonusDie");
       }
+      if (a.getFlag(MODULE_ID, "nextRollReroll")) await a.unsetFlag(MODULE_ID, "nextRollReroll");
     }
   } catch (e) { warn("momentum turn-reset failed", e); }
 });

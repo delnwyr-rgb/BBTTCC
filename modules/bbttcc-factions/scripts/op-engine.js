@@ -538,6 +538,18 @@ async function _commitNow(factionId, deltas, context) {
 
   try {
     const upd = { [`flags.${MOD_ID}.opBank`]: result.after };
+    // RECENT SPENDS (Dave 2026-10-30, Momentum "Refund one OP cost on the current turn" automated): the last 10 real
+    // spends per Domain — { ts, turn, spent:{channel:marks}, label } — so the refund knows what to give back. Transfers
+    // (ctx.noDiscount), refunds themselves (ctx.momentumRefund) and credits are not spends.
+    try {
+      const spent = {};
+      for (const k of OP_KEYS) { const n = Number(result.finalCost?.[k] || 0); if (n < 0) spent[k] = -n; }
+      if (Object.keys(spent).length && !ctx?.noDiscount && !ctx?.momentumRefund) {
+        let turn = 0; try { turn = Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch (_eT) {}
+        const prev = Array.isArray(faction.getFlag(MOD_ID, "recentSpends")) ? faction.getFlag(MOD_ID, "recentSpends") : [];
+        upd[`flags.${MOD_ID}.recentSpends`] = [{ ts: Date.now(), turn, spent, label: String(ctx?.label || ctx?.source || "spend").slice(0, 120) }, ...prev].slice(0, 10);
+      }
+    } catch (_eRS) {}
     // A bank's FIRST write is marks-native: stamp it migrated so the one-shot ×10 marks
     // migration never inflates a pre-epoch actor that only now gains a bank.
     if (!faction.getFlag(MOD_ID, "opBank")) upd[`flags.${MOD_ID}.${MIGRATION_FLAG}`] = true;

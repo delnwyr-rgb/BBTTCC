@@ -6149,8 +6149,17 @@ function __b3MergeMode(baseMode, addMode){
   if (b === "adv" || b === "advantage") return "adv";
   return "normal";
 }
-const __b3AttModeFinal = __b3MergeMode(__b3MergeMode(__b3MergeMode(__b3AttMode, __b3ThisRound?.rollModeAtt), __b3Gen.attMode), __b3Boons.initiativeAdv ? "adv" : "normal");
-const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3DefMode, __b3ThisRound?.rollModeDef), __b3Gen.defMode);
+// MOMENTUM REROLL (Dave 2026-10-30, automated): an armed reroll (flags.bbttcc-factions.nextRollReroll) = roll twice keep the
+// better = this console's advantage mode, for the side whose Domain armed it (lead/supporters or defender). Clears on use.
+let __momRerollAtt = false, __momRerollDef = false;
+try {
+  const __takeReroll = async (a) => { if (!a?.getFlag?.("bbttcc-factions", "nextRollReroll")) return false; try { await a.unsetFlag("bbttcc-factions", "nextRollReroll"); } catch (_eU) {} return true; };
+  const __sup2 = (Array.isArray(r.supportFactionIds) ? r.supportFactionIds : []).map(id => game.actors?.get?.(String(id).replace(/^Actor\./, ""))).filter(Boolean);
+  for (const a of [attacker, ...__sup2]) if (await __takeReroll(a)) { __momRerollAtt = true; __b3ThisRound.notes.push(`Momentum reroll (${a.name}): roll twice, keep the better`); }
+  if (defender && await __takeReroll(defender)) { __momRerollDef = true; __b3ThisRound.notes.push(`Momentum reroll (${defender.name}): roll twice, keep the better`); }
+} catch (_eMR) { /* non-fatal */ }
+const __b3AttModeFinal = __b3MergeMode(__b3MergeMode(__b3MergeMode(__b3MergeMode(__b3AttMode, __b3ThisRound?.rollModeAtt), __b3Gen.attMode), __b3Boons.initiativeAdv ? "adv" : "normal"), __momRerollAtt ? "adv" : "normal");
+const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3MergeMode(__b3DefMode, __b3ThisRound?.rollModeDef), __b3Gen.defMode), __momRerollDef ? "adv" : "normal");
 
 // Existing resolver (if present) remains compatible; it just won't get targetHexId for rigs
     const resolver = game.bbttcc?.api?.raid?.resolveRoundWithManeuvers;
