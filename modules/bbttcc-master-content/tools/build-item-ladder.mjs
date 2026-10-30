@@ -76,7 +76,7 @@ const GRADE_MATS = {
 };
 const GRADE_BASES = [
   // T1 baseline arms (all three grades)
-  ..."Maul|Hand Axe|Combat Knife|Sap|Slug Pistol|Bolt-Driver|Hunting Rifle".split("|").map(n => ({ name: n, ranks: [1, 2, 3] })),
+  ..."Maul|Hand Axe|Combat Knife|Sap|Slug Pistol|Bolt-Driver|Hunting Rifle|Knuckle Dusters".split("|").map(n => ({ name: n, ranks: [1, 2, 3] })),
   ..."Patrolman's Plate|Bulwark Hauberk|Worker's Leathers|Drifter's Weave|Initiate's Robe|Pressed Buckler".split("|").map(n => ({ name: n, ranks: [1, 2, 3] })),
   // T2 arms — two grades (a Crowned T2 would read T4+, past the ladder)
   ..."Laser Pistol, Rad|Steelweave Hauberk|Septhide Vestments|Wardiron Targe".split("|").map(n => ({ name: n, ranks: [1, 2] }))

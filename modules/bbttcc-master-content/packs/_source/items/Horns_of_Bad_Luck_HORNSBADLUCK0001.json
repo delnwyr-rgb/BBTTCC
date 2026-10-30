@@ -6,7 +6,7 @@
   "system": {
     "category": "melee",
     "intent": "violence",
-    "skill": "melee",
+    "skill": "brawl",
     "damage": {
       "formula": "1d6",
       "attribute": "",

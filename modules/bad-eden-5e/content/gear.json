@@ -3,7 +3,7 @@
   "_generated": {
     "by": "tools/convert-5e.mjs",
     "rubric": "1.8.1",
-    "at": "2026-10-26",
+    "at": "2026-10-30",
     "overridesApplied": 0
   },
   "items": [
@@ -4658,6 +4658,188 @@
       "folder": "Graded Arms"
     },
     {
+      "slug": "gear-circuited-knuckle-dusters",
+      "name": "Circuited Knuckle Dusters",
+      "type": "weapon",
+      "img": "icons/weapons/fist/fist-knuckles-brass.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Four rings, one argument.</em></p><p>Rolls Brawl, not Melee. Concealable. No signature ability.</p><p>A bar of poured scrap with four finger holes, filed smooth where it matters and nowhere else. Most of Bad Eden's brawlers carry a pair in a coat pocket for the same reason they carry a coat: the weather turns. They make a fist count for a little more without making it anything other than a fist.</p><p>Swung with <em>Brawl</em> — the hand-to-hand weapon for Stewards who fight up close and never trained with a blade.</p>\n\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Circuited (+2). A closed circuit of sigils; it answers one hand.</strong></p>\n<ul>\n  <li><strong>+2 to hit and +2 damage</strong> with this weapon (the hit bonus is read from the weapon you swing).</li>\n  <li>Grade raises it to <strong>Tier III</strong> · attuned (one slot).</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 450,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 6,
+            "types": [
+              "bludgeoning"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "f1b413932c4a0000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "KnuckleDustersC2",
+            "pack": "items",
+            "identifier": "",
+            "hash": "0de7b13fc43f"
+          }
+        }
+      },
+      "folder": "Graded Arms"
+    },
+    {
       "slug": "gear-circuited-laser-pistol-rad",
       "name": "Circuited Laser Pistol, Rad",
       "type": "weapon",
@@ -6743,7 +6925,7 @@
             "id": "XijBL5fp1csEiC95",
             "pack": "items",
             "identifier": "",
-            "hash": "3eb553fe0235"
+            "hash": "39dfd4d17b06"
           }
         }
       },
@@ -7922,6 +8104,188 @@
             "pack": "items",
             "identifier": "",
             "hash": "34afa7d26c00"
+          }
+        }
+      },
+      "folder": "Graded Arms"
+    },
+    {
+      "slug": "gear-crowned-knuckle-dusters",
+      "name": "Crowned Knuckle Dusters",
+      "type": "weapon",
+      "img": "icons/weapons/fist/fist-knuckles-brass.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Four rings, one argument.</em></p><p>Rolls Brawl, not Melee. Concealable. No signature ability.</p><p>A bar of poured scrap with four finger holes, filed smooth where it matters and nowhere else. Most of Bad Eden's brawlers carry a pair in a coat pocket for the same reason they carry a coat: the weather turns. They make a fist count for a little more without making it anything other than a fist.</p><p>Swung with <em>Brawl</em> — the hand-to-hand weapon for Stewards who fight up close and never trained with a blade.</p>\n\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Crowned (+3). Keyed to a true name. It will not be sold.</strong></p>\n<ul>\n  <li><strong>+3 to hit and +3 damage</strong> with this weapon (the hit bonus is read from the weapon you swing).</li>\n  <li>Grade raises it to <strong>Tier IV</strong> · soulbound — one bearer, no sale.</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 2025,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 6,
+            "types": [
+              "bludgeoning"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "f882fafc59ec0000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "KnuckleDustersW3",
+            "pack": "items",
+            "identifier": "",
+            "hash": "7e9dbce011dd"
           }
         }
       },
@@ -12797,7 +13161,7 @@
             "id": "HORNSBADLUCK0001",
             "pack": "items",
             "identifier": "horns_of_bad_luck",
-            "hash": "e911e5b8abde"
+            "hash": "24266efc5184"
           }
         }
       },
@@ -14618,6 +14982,188 @@
       "folder": "Graded Arms"
     },
     {
+      "slug": "gear-inlaid-knuckle-dusters",
+      "name": "Inlaid Knuckle Dusters",
+      "type": "weapon",
+      "img": "icons/weapons/fist/fist-knuckles-brass.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Four rings, one argument.</em></p><p>Rolls Brawl, not Melee. Concealable. No signature ability.</p><p>A bar of poured scrap with four finger holes, filed smooth where it matters and nowhere else. Most of Bad Eden's brawlers carry a pair in a coat pocket for the same reason they carry a coat: the weather turns. They make a fist count for a little more without making it anything other than a fist.</p><p>Swung with <em>Brawl</em> — the hand-to-hand weapon for Stewards who fight up close and never trained with a blade.</p>\n\n<!-- BBTTCC:LADDER:START -->\n<hr/>\n<p><strong>⟡ Inlaid (+1). Hex-inlay along the working edge.</strong></p>\n<ul>\n  <li><strong>+1 to hit and +1 damage</strong> with this weapon (the hit bonus is read from the weapon you swing).</li>\n  <li>Grade raises it to <strong>Tier II</strong> · free to wield.</li>\n</ul>\n<!-- BBTTCC:LADDER:END -->",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 150,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 6,
+            "types": [
+              "bludgeoning"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "21168e28a5960000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "KnuckleDustersI1",
+            "pack": "items",
+            "identifier": "",
+            "hash": "2a529ed9aad5"
+          }
+        }
+      },
+      "folder": "Graded Arms"
+    },
+    {
       "slug": "gear-inlaid-laser-pistol-rad",
       "name": "Inlaid Laser Pistol, Rad",
       "type": "weapon",
@@ -16048,6 +16594,188 @@
         }
       },
       "folder": "Wondrous Items"
+    },
+    {
+      "slug": "gear-knuckle-dusters",
+      "name": "Knuckle Dusters",
+      "type": "weapon",
+      "img": "icons/weapons/fist/fist-knuckles-brass.webp",
+      "system": {
+        "description": {
+          "value": "<p><em>Four rings, one argument.</em></p><p>Rolls Brawl, not Melee. Concealable. No signature ability.</p><p>A bar of poured scrap with four finger holes, filed smooth where it matters and nowhere else. Most of Bad Eden's brawlers carry a pair in a coat pocket for the same reason they carry a coat: the weather turns. They make a fist count for a little more without making it anything other than a fist.</p><p><b>Standard Issue.</b> Swung with <em>Brawl</em> — the hand-to-hand weapon for Stewards who fight up close and never trained with a blade.</p>\n",
+          "chat": ""
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 3,
+          "units": "lb"
+        },
+        "price": {
+          "value": 50,
+          "denomination": "gp"
+        },
+        "rarity": "",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "properties": [],
+        "range": {
+          "value": null,
+          "long": null,
+          "units": "ft",
+          "reach": 5
+        },
+        "damage": {
+          "base": {
+            "number": 1,
+            "denomination": 6,
+            "types": [
+              "bludgeoning"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "bonus": ""
+          },
+          "versatile": {
+            "number": null,
+            "denomination": null,
+            "bonus": "",
+            "types": [],
+            "custom": {
+              "enabled": false,
+              "formula": ""
+            },
+            "scaling": {
+              "mode": "",
+              "number": null,
+              "formula": ""
+            }
+          }
+        },
+        "armor": {
+          "value": null
+        },
+        "hp": {
+          "value": null,
+          "max": null,
+          "dt": null,
+          "conditions": ""
+        },
+        "type": {
+          "value": "simpleM",
+          "baseItem": ""
+        },
+        "magicalBonus": null,
+        "proficient": null,
+        "ammunition": {},
+        "mastery": "",
+        "activities": {
+          "b809d0ce40ae0000": {
+            "type": "attack",
+            "activation": {
+              "type": "action",
+              "value": 1,
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false,
+                "max": ""
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "concentration": false,
+              "value": "",
+              "units": "inst",
+              "special": "",
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "override": false
+            },
+            "target": {
+              "template": {
+                "count": "",
+                "contiguous": false,
+                "type": "",
+                "size": "",
+                "width": "",
+                "height": "",
+                "units": ""
+              },
+              "affects": {
+                "count": "",
+                "type": "",
+                "choice": false,
+                "special": ""
+              },
+              "prompt": false,
+              "override": false
+            },
+            "attack": {
+              "ability": "",
+              "bonus": "",
+              "critical": {
+                "threshold": null
+              },
+              "flat": false,
+              "type": {
+                "value": "melee",
+                "classification": "weapon"
+              }
+            },
+            "damage": {
+              "critical": {
+                "bonus": ""
+              },
+              "includeBase": true,
+              "parts": []
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "sort": 0,
+            "name": "",
+            "img": "",
+            "appliedEffects": []
+          }
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "KnuckleDusters01",
+            "pack": "items",
+            "identifier": "",
+            "hash": "a1b340f49589"
+          }
+        }
+      },
+      "folder": "BBTTCC Weapons"
     },
     {
       "slug": "gear-lantern-of-unforgotten-light",
