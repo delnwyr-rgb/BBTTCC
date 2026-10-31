@@ -169,7 +169,10 @@ const PACK_TWINS = {
   "bbttcc-character-options.political-affiliations": "bad-eden-5e.political-affiliations",
   "bbttcc-character-options.sephirothic-alignments": "bad-eden-5e.sephirothic-alignments",
   "bbttcc-master-content.doctrines": "bad-eden-5e.doctrines",
-  "bbttcc-master-content.vehicles": "bad-eden-5e.vehicles"
+  "bbttcc-master-content.vehicles": "bad-eden-5e.vehicles",
+  // 2026-10-31: the items catalog (gear + the Rig & Boss Catalog's frames/weapons/systems) — the rig mint's loadout
+  // read this id and found nothing on dnd5e, so every D&D rig came with a frame and no guns
+  "bbttcc-master-content.items": "bad-eden-5e.gear"
 };
 const packs = {
   id: (rfiId) => (isRFI() ? rfiId : (game.packs?.get(rfiId) ? rfiId : (PACK_TWINS[rfiId] ?? rfiId))),

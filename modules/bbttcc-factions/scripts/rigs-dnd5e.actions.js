@@ -49,20 +49,34 @@
   ];
   const AE_SPECS = {
     "hold-position": { name: "Hold Position (gunner advantage)", changes: ADV, note: "rig weapon attacks have advantage until the pilot's next turn" },
-    "evasive": { name: "Evasive (attackers disadvantaged)", changes: [{ key: "flags.midi-qol.grants.disadvantage.attack.all", mode: 5, value: "1", priority: 20 }], note: "attacks against the rig are at disadvantage until the pilot's next turn" },
+    // the table kit (our midi replacement) reads flags.dnd5e-table-kit.grants.disadvantage.attack; midi's key kept for midi tables
+    "evasive": { name: "Evasive (attackers disadvantaged)", changes: [{ key: "flags.midi-qol.grants.disadvantage.attack.all", mode: 5, value: "1", priority: 20 }, { key: "flags.dnd5e-table-kit.grants.disadvantage.attack", mode: 5, value: "all", priority: 20 }], note: "attacks against the rig are at disadvantage until the pilot's next turn" },
     "raise-sail": { name: "Sails Raised", changes: [], note: "speed mode: faster, harder to turn" },
     "aimed-shot": { name: "Aimed Shot (advantage, next attack)", changes: ADV, note: "next rig weapon attack has advantage", extraFlags: { dae: { specialDuration: ["1Attack"] } } },
     "boost-system": { name: "System Boosted", changes: [], note: "one rig system performs at +1 effect step until end of round (GM applies)" },
-    "brace": { name: "Braced (+1 AC)", changes: [{ key: "system.attributes.ac.bonus", mode: 2, value: "1", priority: 20 }], note: "+1 AC until end of round" },
+    "brace": { name: "Braced (+1 AC)", changes: [{ key: "system.attributes.ac.flat", mode: 2, value: "1", priority: 20 }], note: "+1 AC until end of round" },
+    // RFI hit-and-run (owner ruling 2026-10-21, ported 2026-10-31): small rigs peel away after a shot — +(2 + Piloting)
+    // Evasion → here +(2 + Piloting) AC until the pilot's next turn. `value` is filled per pilot at write time.
+    // a D&D rig's AC is flat (bbttcc-core rigs.js AC_BY_BRACKET), so AC effects ADD to ac.flat — ac.bonus is ignored there
+    "hit-and-run": { name: "Hit and Run (evading)", changes: [{ key: "system.attributes.ac.flat", mode: 2, value: "2", priority: 20 }], note: "the rig peels away — AC bonus until the pilot's next turn" },
   };
+  // RFI mech stomp: (tier × bracket weight)d6; RIG BALANCE 2026-10-21 → mecha weight 2
+  const BRACKET_WEIGHT = { personal: 1, light: 2, medium: 3, heavy: 4, siege: 5, mecha: 2 };
+  const heatMax = (rig) => 2 + Math.max(1, Math.min(4, Number(data(rig)?.tier) || 1)) * 2;   // RFI: T1 4 · T2 6 · T3 8 · T4 10
+  const heatOf = (rig) => Math.max(0, Number(get(rig, "flags.bbttcc-factions.combat.heat", 0)) || 0);
+  // weapons fired this round by rig id (the hit-and-run gate; RFI keeps rigWeaponsFiredThisRound on the steward)
+  const _fired = new Map();
+  const firedKey = (rig) => `${rig.id}:${game.combat?.id ?? "-"}:${game.combat?.round ?? 0}`;
   // The write itself (runs on a seat that can modify the rig).
   async function doRigWrite(rig, op, args = {}) {
     if (op === "ae") {
       const spec = AE_SPECS[args.key];
       if (!spec) throw new Error(`unknown rig effect "${args.key}"`);
+      const changes = foundry.utils.deepClone(spec.changes);
+      if (args.key === "hit-and-run" && args.bonus != null) changes[0].value = String(args.bonus);
       await rig.createEmbeddedDocuments("ActiveEffect", [{
-        name: spec.name, img: "icons/vehicles/wheels/wheel-spokes-six-brown.webp", origin: rig.uuid,
-        duration: { rounds: 1, seconds: 6 }, changes: foundry.utils.deepClone(spec.changes),
+        name: args.key === "hit-and-run" ? `Hit and Run (+${args.bonus ?? 2} AC)` : spec.name, img: "icons/vehicles/wheels/wheel-spokes-six-brown.webp", origin: rig.uuid,
+        duration: { rounds: 1, seconds: 6 }, changes,
         flags: foundry.utils.mergeObject({ bbttcc: { rigAction: true, cue: spec.note || "" } }, foundry.utils.deepClone(spec.extraFlags ?? {})),
       }]);
       return { ok: true };
@@ -79,6 +93,11 @@
       const value = Math.min(max, hp + amount);
       await R().update(rig, { "integrity.value": value });
       return { ok: true, value, max };
+    }
+    if (op === "heat") {
+      const next = Math.max(0, Math.min(heatMax(rig), heatOf(rig) + (Number(args.delta) || 0)));
+      await rig.update({ "flags.bbttcc-factions.combat.heat": next });
+      return { ok: true, heat: next, max: heatMax(rig) };
     }
     if (op === "resetUses") {
       const it = rig.items?.get?.(args.itemId);
@@ -161,6 +180,35 @@
     return (rig.items ?? []).filter(i => ["rig-system", "output-module"].includes(subtypeOf(i)) || i.type === "equipment");
   }
 
+  async function fireWeapon(rig, st) {
+    const ws = weaponsOf(rig);
+    if (!ws.length) return cue(rig, st, "Fire Weapon", ["No mounted weapons on this rig."]);
+    const id = ws.length === 1 ? ws[0].id : await pickOne("Fire which weapon?", ws.map(w => ({ id: w.id, label: w.name })));
+    const w = ws.find(x => x.id === id);
+    if (!w) return;
+    _fired.set(firedKey(rig), true);   // the hit-and-run gate: a shot was taken this round
+    // RFI parity (2026-10-31): the GUNNER aims the gun. A dnd5e vehicle has no proficiency and Dex 10, so the roll
+    // carries the firing steward's ranged attack bonus (Dex mod + proficiency with Firearms) instead of the rig's.
+    const act = w.system.activities?.find?.(a => a.type === "attack") ?? w.system.activities?.contents?.[0];
+    if (!act) { try { await w.use(); } catch (_e) {} return; }
+    const tgt = [...(game.user.targets ?? [])][0];
+    if (!tgt?.actor) return ui.notifications?.warn?.(`${esc(w.name)}: target a token first.`);
+    const dex = Number(get(st, "system.abilities.dex.mod", 0)) || 0;
+    const prof = (get(st, "system.traits.weaponProf.value", new Set())?.has?.("fir") || get(st, "system.traits.weaponProf.value", new Set())?.has?.("sim")) ? (Number(get(st, "system.attributes.prof", 0)) || 0) : 0;
+    const bonus = dex + prof;
+    const atk = (await act.rollAttack({ attackMode: "ranged", event: { shiftKey: true } }, { configure: false, parts: bonus ? [String(bonus)] : [] }, {}))?.[0];
+    if (!atk) return;
+    const ac = Number(tgt.actor.system?.attributes?.ac?.value) || 10;
+    const hit = atk.isCritical || (!atk.isFumble && atk.total >= ac);
+    try { const rt = rig.getActiveTokens()[0]; if (rt) await new Sequence().effect().file("jb2a.bullet").atLocation(rt).stretchTo(tgt, { randomOffset: 0.4 }).missed(!hit).play(); } catch (_e) {}
+    if (!hit) return cue(rig, st, `🔫 ${esc(w.name)}`, [`${esc(st?.name ?? "Gunner")} fires at ${esc(tgt.name)}: <b>${atk.total}</b> vs AC ${ac} — <b>miss</b>.`]);
+    const dmg = (await act.rollDamage({ isCritical: atk.isCritical }, { configure: false }, {}))?.[0];
+    const total = dmg?.total ?? 0;
+    try { await tgt.actor.applyDamage([{ value: total, type: dmg?.options?.type ?? "piercing" }]); } catch (_e) {}
+    try { await new Sequence().effect().file("jb2a.impact").atLocation(tgt).scale(0.6).play(); } catch (_e) {}
+    await cue(rig, st, `🔫 ${esc(w.name)}`, [`${esc(st?.name ?? "Gunner")} fires at ${esc(tgt.name)}: <b>${atk.total}</b> vs AC ${ac} — <b>hit</b> for <b>${total}</b>${atk.isCritical ? " (critical!)" : ""}.${bonus ? ` <span style="opacity:.7">(+${bonus} = Dex ${dex >= 0 ? "+" : ""}${dex}${prof ? ` + prof ${prof}` : ""})</span>` : ""}`]);
+  }
+
   // ── The registry (canon §3.6) — handler(rig, steward); falsy = pure cue ────
   const ACTIONS = {
     pilot: [
@@ -186,6 +234,39 @@
           await cue(rig, st, "Evasive Maneuvers", ["Attacks <b>against</b> the rig are at disadvantage until the pilot's next turn (auto with midi)."]);
         } },
       { id: "swerve", type: "reaction", label: "Swerve", desc: "React to an incoming attack — pilot's check vs the attack roll to slip it (GM adjudicates)." },
+      // RFI parity (2026-10-31): a pilot-mount frame (Hexmobile, Power-Armor) lists fire-weapon for the pilot — the
+      // same control as the gunner's, so the ONE rider fires the rig's gun.
+      { id: "fire-weapon", type: "action", frameOnly: true, label: "Fire Weapon", desc: "Fire the rig's mounted weapon (pilot-mount frame).",
+        handler: async (rig, st) => fireWeapon(rig, st) },
+      { id: "hit-and-run", type: "bonus", label: "Hit and Run", desc: "Small rigs only — bonus action after you fire this round: peel away for +(2 + Piloting) AC until your next turn.",
+        handler: async (rig, st) => {
+          const bracket = data(rig)?.integrity?.bracket ?? "light";
+          if (!["personal", "light"].includes(bracket)) return ui.notifications?.warn?.(`${rig.name} is too big to hit and run — that's for personal and light rigs.`);
+          if (game.combat?.started && !_fired.get(firedKey(rig))) return ui.notifications?.warn?.(`${st?.name ?? "Pilot"}: fire a weapon first — hit and run peels away AFTER the shot.`);
+          if ((rig.effects ?? []).some(e => /Hit and Run|Evasive/.test(e.name))) return ui.notifications?.warn?.(`${rig.name} is already evading — peeling away would add nothing.`);
+          const pil = Number(get(st, "system.skills.pil.total", 0)) || 0;
+          const bonus = 2 + Math.max(0, pil);
+          if ((await rigWrite(rig, st, "ae", { key: "hit-and-run", bonus }))?.ok === false) return;
+          try { await new Sequence().effect().file("jb2a.smoke.puff.side.02.white").atLocation(rig.getActiveTokens()[0]).scaleToObject(1.6).play(); } catch (_e) {}
+          await cue(rig, st, "🏍 Hit and Run", [`Shot fired, wheels spinning: <b>+${bonus} AC</b> until the next pilot turn${pil ? ` (2 + Piloting ${pil >= 0 ? "+" : ""}${pil})` : ""}.`]);
+        } },
+      { id: "stomp", type: "action", frameOnly: true, label: "Stomp", desc: "Mech only — bring a foot down on a target in contact: (tier × bracket)d6 bludgeoning, knocked prone. Costs 1 Heat.",
+        handler: async (rig, st) => {
+          const h = heatOf(rig), hm = heatMax(rig);
+          if (h >= hm) return ui.notifications?.warn?.(`${rig.name} is overheated (${h}/${hm}) — vent heat before stomping.`);
+          const tgt = [...(game.user.targets ?? [])][0];
+          if (!tgt?.actor) return ui.notifications?.warn?.("Target a token first — a stomp needs something underfoot.");
+          const rt = rig.getActiveTokens()[0];
+          if (rt) { const gap = Math.hypot(rt.center.x - tgt.center.x, rt.center.y - tgt.center.y) / canvas.grid.size - (rt.document.width + tgt.document.width) / 2; if (gap > 1.01 && !game.user.isGM) return ui.notifications?.warn?.(`${tgt.name} isn't in contact — a stomp needs the target within a square.`); }
+          const tier = Math.max(1, Number(data(rig)?.tier) || 1), weight = BRACKET_WEIGHT[data(rig)?.integrity?.bracket] ?? 3;
+          const r = await new Roll(`${Math.max(1, tier * weight)}d6`).evaluate();
+          await r.toMessage({ speaker: ChatMessage.getSpeaker({ actor: rig }), flavor: `Stomp — ${tgt.name}` });
+          try { await tgt.actor.applyDamage([{ value: r.total, type: "bludgeoning" }]); } catch (_e) {}
+          if (!["vehicle"].includes(tgt.actor.type) && !tgt.actor.statuses?.has?.("prone")) { try { await tgt.actor.toggleStatusEffect("prone", { active: true }); } catch (_e) {} }
+          try { await new Sequence().effect().file("jb2a.impact.ground_crack.orange.01").atLocation(tgt).scaleToObject(2.2).belowTokens().play(); } catch (_e) {}
+          await rigWrite(rig, st, "heat", { delta: 1 });
+          await cue(rig, st, "🦶 Stomp", [`<b>${r.total}</b> bludgeoning to ${esc(tgt.name)} — knocked <b>prone</b>. Heat ${heatOf(rig)}/${hm}.`]);
+        } },
       // Sail variants — only surfaced when an equipped frame lists them.
       { id: "tack-against-wind", type: "action", frameOnly: true, label: "Tack Against the Wind", desc: "Move + the rig gains reach advantage against downwind targets (GM adjudicates the wind)." },
       { id: "raise-sail", type: "bonus", frameOnly: true, label: "Raise Sail", desc: "Shift to speed mode — faster, harder to turn (GM applies the trade).",
@@ -198,13 +279,7 @@
     ],
     gunner: [
       { id: "fire-weapon", type: "action", label: "Fire Weapon", desc: "Activate one of the rig's mounted weapons.",
-        handler: async (rig, st) => {
-          const ws = weaponsOf(rig);
-          if (!ws.length) return cue(rig, st, "Fire Weapon", ["No mounted weapons on this rig."]);
-          const id = await pickOne("Fire which weapon?", ws.map(w => ({ id: w.id, label: w.name })));
-          const w = ws.find(x => x.id === id);
-          if (w) { try { await w.use(); } catch (e) { await cue(rig, st, "Fire Weapon", [`${esc(w.name)}: use failed — fire it from the rig sheet.`]); } }
-        } },
+        handler: async (rig, st) => fireWeapon(rig, st) },
       { id: "aimed-shot", type: "action+bonus", label: "Aimed Shot", desc: "Spend action AND bonus action: the rig's next weapon attack has advantage.",
         handler: async (rig, st) => {
           if (!(await rigAE(rig, st, "aimed-shot"))) return;
@@ -286,7 +361,8 @@
   function bandFor(rig, role) {
     const all = [...(ACTIONS[role] ?? []), ...EXT.filter(a => a.role === role)];
     const frameList = data(rig)?.frame?.actions?.[role];
-    if (Array.isArray(frameList) && frameList.length) return all.filter(a => frameList.includes(a.id));
+    const small = role === "pilot" && ["personal", "light"].includes(data(rig)?.integrity?.bracket);
+    if (Array.isArray(frameList) && frameList.length) return all.filter(a => frameList.includes(a.id) || (small && a.id === "hit-and-run"));
     return all.filter(a => !a.frameOnly);
   }
 

@@ -630,11 +630,16 @@
           if (rigOf(actor)) {
             addBtn("🪂", "Disembark rig", () => disembark(actor));
           } else {
-            const rigs = (canvas?.tokens?.placeables ?? []).filter(t => t.actor && isRig(baseActor(t.actor)) && distFt(token, t) <= 10);
+            // adjacent = within one grid step, diagonals included (2026-10-31: a diagonal square read 11.2 ft on a
+            // 5-ft grid and the button vanished — Dave: "I have lost my ability to board"). Overlap counts too.
+            const step = (canvas?.scene?.grid?.distance ?? 5) * 1.5;
+            const all = (canvas?.tokens?.placeables ?? []).filter(t => t.actor && isRig(baseActor(t.actor)) && t !== token).map(t => ({ t, ft: distFt(token, t) })).sort((a, b) => a.ft - b.ft);
+            const rigs = all.filter(x => x.ft <= step).map(x => x.t);
             if (rigs.length) addBtn("🛻", `Board ${rigs[0].actor.name}`, async () => {
               const role = await pickRole();
               if (role) await board(actor, baseActor(rigs[0].actor), role, { token });
             });
+            else if (all.length && all[0].ft <= step * 4) addBtn("🛻", `${all[0].t.actor.name} is ${Math.round(all[0].ft)} ft away — move next to it to board`, () => ui.notifications?.info?.(`Move next to ${all[0].t.actor.name} to board it.`));
           }
         } else if (isRig(actor)) {
           const d = data(actor);

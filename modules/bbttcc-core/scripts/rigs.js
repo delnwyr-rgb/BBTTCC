@@ -36,6 +36,7 @@ const num = (v, d = 0) => (Number.isFinite(Number(v)) ? Number(v) : d);
 const clone = (v) => foundry.utils.deepClone(v);
 
 /** dnd5e damage threshold by bracket (RIG_SPRINT_PLAN §1; RFI plating is the system's own). */
+const AC_BY_BRACKET = { personal: 14, light: 13, medium: 11, heavy: 9, siege: 8, mecha: 12 };   // = RFI Evasion by bracket
 const DT_BY_BRACKET = { personal: 0, light: 5, medium: 10, heavy: 15, siege: 20, mecha: 5 };   // mecha: RG9 (2026-10-26)
 const HP_BY_BRACKET = { personal: 10, light: 30, medium: 60, heavy: 100, siege: 150 };
 const DEFAULT_CAPACITY = { pilot: { min: 1, max: 1 }, gunner: { min: 0, max: 2 }, engineer: { min: 0, max: 1 }, crew: { min: 0, max: 4 } };
@@ -140,8 +141,11 @@ async function _createLocal(spec = {}, { ownership = null } = {}) {
   // when the field is unset). Same rule as bad-eden-5e convert-5e laneRigs: no land domain → air (sky) or water.
   const domains = (rig.travel?.domains ?? []).map(String);
   const vehicleType = domains.length && !domains.includes("land") ? (domains.some(d => /air|sky/.test(d)) ? "air" : "water") : "land";
+  // AC (2026-10-31): a dnd5e vehicle's AC is flat and the mint left it null — every D&D rig sat at AC 0. RFI rigs carry
+  // Guard/Evasion by bracket (FT_RIG_DEFENSE_BY_BRACKET); D&D folds those into one number → RFI's Evasion.
+  const ac = AC_BY_BRACKET[bracket] ?? 11;
   return Actor.create({ name, type: "vehicle", img: img ?? "icons/svg/castle.svg", folder, ...own,
-    system: { vehicleType, attributes: { hp: { value, max, dt: DT_BY_BRACKET[bracket] ?? 0 } }, traits },
+    system: { vehicleType, attributes: { hp: { value, max, dt: DT_BY_BRACKET[bracket] ?? 0 }, ac: { calc: "flat", flat: ac } }, traits },
     items, prototypeToken: token, flags: { [F]: { rig, factionId: identity.factionOwnerId || null } } });
 }
 

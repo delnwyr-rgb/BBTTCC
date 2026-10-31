@@ -1865,7 +1865,7 @@ async function _seedLoadout(actor, loadout, { tier = 1 } = {}) {
   if (!actor || !loadout) return;
   const TAG = "[bbttcc-auto-link/rig-builder/_seedLoadout]";
   const PACK_ID = "bbttcc-master-content.items";
-  const pack = _pack(PACK_ID);
+  const pack = _pack(PACK_ID);   // twin-resolved: bad-eden-5e.gear on dnd5e (2026-10-31 — the loadout never installed there)
   if (!pack && (typeof loadout.frame === "string" || loadout.weapons?.length || loadout.systems?.length)) {
     console.warn(TAG, `Compendium pack '${PACK_ID}' not found — only synthetic frame (if any) will be created.`);
   }
