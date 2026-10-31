@@ -6,10 +6,12 @@ import { redshirts } from "./redshirts.js";
 import { activateRiders, registerRiderStatus, riders } from "./riders.js";
 import { activateReminders } from "./reminders.js";
 import { registerSheet, linkedDomain, domainContext } from "./sheet.js";
+import { registerRules, activateRules, grantFirearms, FIREARM_CLASSES } from "./rules.js";
 
 Hooks.once("init", () => {
   if (game.system.id !== "dnd5e") return;
   registerConfig();
+  registerRules();   // Piloting skill + Firearms weapon category (2026-10-31)
   // Feature subtypes our content uses (a Theurge's Shapes are picked from a pool by subtype).
   const sub = CONFIG.DND5E.featureTypes?.class?.subtypes;
   if (sub) Object.assign(sub, { be5eShape: "Shape (Theurge)", be5eAura: "Aura (Warden)", be5eTenet: "Tenet (Vigilant)" });
@@ -35,6 +37,7 @@ Hooks.once("ready", () => {
   activateRiders();
   activateReminders();
   activateDisciplines();
-  game.badEden5e = { MOD, TRADITIONS, castingFor, setPoints, restore, restorePoints, costAt, costFor, traditionOf, nativeTraditionOf, isCrossCast, abilityFor, castThrough, crossCastsFor, autoCastThrough, redshirts, riders, disciplines, linkedDomain, domainContext };
+  activateRules();
+  game.badEden5e = { MOD, TRADITIONS, castingFor, setPoints, restore, restorePoints, costAt, costFor, traditionOf, nativeTraditionOf, isCrossCast, abilityFor, castThrough, crossCastsFor, autoCastThrough, redshirts, riders, disciplines, linkedDomain, domainContext, rules: { grantFirearms, FIREARM_CLASSES } };
   console.log(`${MOD} | ready: the Flow and Artifice`);
 });

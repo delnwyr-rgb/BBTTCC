@@ -1,9 +1,9 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/rigs.json. The five faction rigs as dnd5e vehicles carrying flags.bbttcc-factions.rig (the shape game.bbttcc.rigs writes on dnd5e); rig gear keeps flags.fourththing.rigGear/rigFrame.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.10.0) — do not hand-edit; put fixes in content/overrides/rigs.json. The five faction rigs as dnd5e vehicles carrying flags.bbttcc-factions.rig (the shape game.bbttcc.rigs writes on dnd5e); rig gear keeps flags.fourththing.rigGear/rigFrame.",
   "_pack": "vehicles",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.9.0",
+    "rubric": "1.10.0",
     "at": "2026-10-31",
     "overridesApplied": 0
   },

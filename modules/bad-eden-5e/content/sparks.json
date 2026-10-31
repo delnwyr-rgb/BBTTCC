@@ -1,9 +1,9 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/sparks.json. The 30 Tikkun sparks as dnd5e loot; the RFI spark block rides at flags.bbttcc-tikkun.spark.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.10.0) — do not hand-edit; put fixes in content/overrides/sparks.json. The 30 Tikkun sparks as dnd5e loot; the RFI spark block rides at flags.bbttcc-tikkun.spark.",
   "_pack": "sparks",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.9.0",
+    "rubric": "1.10.0",
     "at": "2026-10-31",
     "overridesApplied": 0
   },

@@ -1,8 +1,8 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/gear.json. Bad Eden weapons, armor, gear, wondrous items and consumables as dnd5e items (prices in marks).",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.10.0) — do not hand-edit; put fixes in content/overrides/gear.json. Bad Eden weapons, armor, gear, wondrous items and consumables as dnd5e items (prices in marks).",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.9.0",
+    "rubric": "1.10.0",
     "at": "2026-10-31",
     "overridesApplied": 0
   },
@@ -2052,7 +2052,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -2887,7 +2887,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -3111,7 +3111,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -5015,7 +5015,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "martialR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -5793,7 +5793,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -6799,7 +6799,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "martialR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -7423,7 +7423,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": 2,
@@ -8732,7 +8732,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -11007,7 +11007,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -12013,7 +12013,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "martialR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -13358,7 +13358,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -19114,7 +19114,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -20254,7 +20254,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -21183,7 +21183,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "martialR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -21407,7 +21407,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "martialR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -22064,7 +22064,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -23050,7 +23050,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "martialR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -23662,7 +23662,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": 1,
@@ -24947,7 +24947,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -26442,7 +26442,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -26849,7 +26849,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "martialR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -28711,7 +28711,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -35756,7 +35756,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "martialR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -40040,7 +40040,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "martialR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -42829,7 +42829,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "martialR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -43855,7 +43855,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -44078,7 +44078,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "simpleR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,
@@ -45502,7 +45502,7 @@
           "conditions": ""
         },
         "type": {
-          "value": "martialR",
+          "value": "firearmR",
           "baseItem": ""
         },
         "magicalBonus": null,

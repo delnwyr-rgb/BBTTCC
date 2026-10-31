@@ -1,9 +1,9 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/manifestations.json. The starter-kit manifestations as ordinary dnd5e slot spells (pack spells) with the class lists they join; Doctrine signatures are Path-locked (flags.bad-eden-5e.requiresPath).",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.10.0) — do not hand-edit; put fixes in content/overrides/manifestations.json. The starter-kit manifestations as ordinary dnd5e slot spells (pack spells) with the class lists they join; Doctrine signatures are Path-locked (flags.bad-eden-5e.requiresPath).",
   "_pack": "spells",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.9.0",
+    "rubric": "1.10.0",
     "at": "2026-10-31",
     "overridesApplied": 0
   },

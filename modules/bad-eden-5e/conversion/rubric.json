@@ -1,6 +1,6 @@
 {
   "_about": "THE conversion rubric: how a Bad Eden mechanic written for RFI (the fourththing system) becomes its D&D 5E (dnd5e 6) twin. Read by tools/build-packs.mjs (the lint), bin/ft-convert-5e (the converter) and bin/ft-lint-parity (the parity check). Rendered for humans as CONVERSION_RUBRIC.md — keep the two in step. Every entry marked ruling:true was ruled by Dave; ruling:'owed' is a draft awaiting one.",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "date": "2026-10-07",
   "direction": "rfi→5e",
   "sourceOfTruth": {
@@ -204,9 +204,9 @@
       "key": "tinker"
     },
     "piloting": {
-      "kind": "tool",
-      "key": "vehicle",
-      "text": "vehicles (land or water)"
+      "kind": "skill",
+      "key": "pil",
+      "text": "Piloting"
     },
     "streetwise": {
       "kind": "skill",
@@ -986,6 +986,7 @@
     "2026-10-07b": "Dave ruled Scarred = −1 Flow point per 5 of Flow max (min 1) and that the big Resolve/Evasion save bonuses on legendary vestments stand in 5E. Cross-tradition casting (Flow-Touched / Crossed Wires / Wired for Both) automated in the engine (castThrough).",
     "2026-10-07c": "PROPOSED (built, awaiting Dave): the nine Path-discipline techniques and the Clarity techniques → Active Effects / riders per engine.discipline.* and engine['Clarity techniques']; needs-human for techniques fell 31 → 6.",
     "2026-10-07d": "Dave APPROVED all five discipline/Clarity mappings (Paths doc, 'Rulings owed'). Martial subclass names ruled: Leyline Runner, Circuit Sarge (Fighter); Rhapsodist, Wheelstick (Rogue); Warrior of the Wire keeps its name with the nickname Wireior; the Furies and the Riptide stand.",
-    "2026-10-30": "Archetype prose pass: skill names after 'proficiency in' map through the skill table (Faith→Religion, Lore→History, Occult→Arcana, Diplomacy→Persuasion, Empathy→Insight); bare Violence/Intrigue stay as Domain mark pools when the sentence is about marks. 'the X aptitude' → the skill/tool through the skill table (Tinkering → tinker's tools, Occult → Arcana)."
+    "2026-10-30": "Archetype prose pass: skill names after 'proficiency in' map through the skill table (Faith→Religion, Lore→History, Occult→Arcana, Diplomacy→Persuasion, Empathy→Insight); bare Violence/Intrigue stay as Domain mark pools when the sentence is about marks. 'the X aptitude' → the skill/tool through the skill table (Tinkering → tinker's tools, Occult → Arcana).",
+    "2026-10-31": "Dave: Piloting is a Bad Eden 5E skill (Dex, key pil); Firearms is a weapon category (firearmR / proficiency fir), not a skill — martial classes + Warden/Vigilant proficient. The Chariot and The Fool swap Perception for Piloting."
   }
 }

@@ -1,9 +1,9 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/doctrines.json. The faction doctrines as dnd5e feats (flags.bbttcc kind/key carried verbatim for the factions module).",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.10.0) — do not hand-edit; put fixes in content/overrides/doctrines.json. The faction doctrines as dnd5e feats (flags.bbttcc kind/key carried verbatim for the factions module).",
   "_pack": "doctrines",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.9.0",
+    "rubric": "1.10.0",
     "at": "2026-10-31",
     "overridesApplied": 0
   },

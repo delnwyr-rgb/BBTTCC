@@ -1,9 +1,9 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/enlightenment.json. The Enlightenment Levels (bbttcc-character-options.enlightenment-levels) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.10.0) — do not hand-edit; put fixes in content/overrides/enlightenment.json. The Enlightenment Levels (bbttcc-character-options.enlightenment-levels) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
   "_pack": "enlightenment-levels",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.9.0",
+    "rubric": "1.10.0",
     "at": "2026-10-31",
     "overridesApplied": 0
   },

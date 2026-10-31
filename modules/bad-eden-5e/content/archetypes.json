@@ -1,11 +1,11 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/archetypes.json. The Character Archetypes (bbttcc-character-options.character-archetypes) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.10.0) — do not hand-edit; put fixes in content/overrides/archetypes.json. The Character Archetypes (bbttcc-character-options.character-archetypes) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
   "_pack": "character-archetypes",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.9.0",
+    "rubric": "1.10.0",
     "at": "2026-10-31",
-    "overridesApplied": 0
+    "overridesApplied": 2
   },
   "items": [
     {
@@ -1433,7 +1433,7 @@
       "folder": "The Chariot",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain proficiency in Athletics and Perception.</li>\n\n</ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain proficiency in Athletics and Piloting.</li>\n\n</ul>",
           "chat": ""
         },
         "type": {
@@ -2543,7 +2543,7 @@
       "folder": "The Fool",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Athletics and Perception.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Athletics and Piloting.</li></ul>",
           "chat": ""
         },
         "type": {

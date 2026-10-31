@@ -282,7 +282,7 @@ function rawItemDoc(it, folderId) {
  * base + Tier 1 at 0, Tier 2/3/4 at 5/11/17. Prose = the base card's quote and
  * lede + a benefits list built from the row. */
 const ABIL_LONG = { str: "Strength", dex: "Dexterity", con: "Constitution", int: "Intelligence", wis: "Wisdom", cha: "Charisma" };
-const SKILL_LONG = { acr: "Acrobatics", ani: "Animal Handling", arc: "Arcana", ath: "Athletics", dec: "Deception", his: "History", ins: "Insight", itm: "Intimidation", inv: "Investigation", med: "Medicine", nat: "Nature", prc: "Perception", prf: "Performance", per: "Persuasion", rel: "Religion", slt: "Sleight of Hand", ste: "Stealth", sur: "Survival" };
+const SKILL_LONG = { pil: "Piloting", acr: "Acrobatics", ani: "Animal Handling", arc: "Arcana", ath: "Athletics", dec: "Deception", his: "History", ins: "Insight", itm: "Intimidation", inv: "Investigation", med: "Medicine", nat: "Nature", prc: "Perception", prf: "Performance", per: "Persuasion", rel: "Religion", slt: "Sleight of Hand", ste: "Stealth", sur: "Survival" };
 const cardUuid = slug => `Compendium.${MOD}.character-archetypes.Item.${id(`gear:${slug}`)}`;
 function backgroundDoc(b, originFeats, cards) {
   const key = `archetypes:${b.slug}`;

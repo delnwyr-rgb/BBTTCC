@@ -1,0 +1,16 @@
+{
+  "archetype-chariot-t1": {
+    "system": {
+      "description": {
+        "value": "<p><strong>Tier 1 (Level 1) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain proficiency in Athletics and Piloting.</li>\n\n</ul>"
+      }
+    }
+  },
+  "archetype-fool-t1": {
+    "system": {
+      "description": {
+        "value": "<p><strong>Tier 1 (Level 1) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Athletics and Piloting.</li></ul>"
+      }
+    }
+  }
+}

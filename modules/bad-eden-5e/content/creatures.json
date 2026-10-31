@@ -1,8 +1,8 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/creatures.json. The Bad Eden bestiary (the live NPC Pack's lineage-flagged monsters) as dnd5e npc actors, scored by tier and bracket through the threat chassis.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.10.0) — do not hand-edit; put fixes in content/overrides/creatures.json. The Bad Eden bestiary (the live NPC Pack's lineage-flagged monsters) as dnd5e npc actors, scored by tier and bracket through the threat chassis.",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.9.0",
+    "rubric": "1.10.0",
     "at": "2026-10-31",
     "overridesApplied": 0
   },
@@ -11727,7 +11727,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "simpleR",
+              "value": "firearmR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -12507,7 +12507,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "martialR",
+              "value": "firearmR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -13437,7 +13437,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "simpleR",
+              "value": "firearmR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -17159,7 +17159,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "martialR",
+              "value": "firearmR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -20416,7 +20416,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "simpleR",
+              "value": "firearmR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -29594,7 +29594,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "simpleR",
+              "value": "firearmR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -30520,7 +30520,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "simpleR",
+              "value": "firearmR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -32522,7 +32522,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "martialR",
+              "value": "firearmR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -39111,7 +39111,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "martialR",
+              "value": "firearmR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -42671,7 +42671,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "simpleR",
+              "value": "firearmR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -44169,7 +44169,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "martialR",
+              "value": "firearmR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -59148,7 +59148,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "simpleR",
+              "value": "firearmR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -60280,7 +60280,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "martialR",
+              "value": "firearmR",
               "baseItem": ""
             },
             "magicalBonus": null,

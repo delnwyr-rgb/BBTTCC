@@ -39,7 +39,7 @@ const walk = dir => existsSync(dir) ? readdirSync(dir, { withFileTypes: true }).
 const loadPack = pack => walk(join(SRC, pack)).map(f => { try { return JSON.parse(readFileSync(f, "utf8")); } catch { return null; } }).filter(d => d && d._id && d.type);
 const ABIL = { violence: "str", intrigue: "dex", body: "con", mind: "int", soul: "wis", presence: "cha" };
 const ABIL_NAME = { str: "Strength", dex: "Dexterity", con: "Constitution", int: "Intelligence", wis: "Wisdom", cha: "Charisma" };
-const SKILL_NAME = { ath: "Athletics", ste: "Stealth", inv: "Investigation", per: "Persuasion", itm: "Intimidation", ins: "Insight", his: "History", arc: "Arcana", rel: "Religion", prc: "Perception", prf: "Performance" };
+const SKILL_NAME = { pil: "Piloting", ath: "Athletics", ste: "Stealth", inv: "Investigation", per: "Persuasion", itm: "Intimidation", ins: "Insight", his: "History", arc: "Arcana", rel: "Religion", prc: "Perception", prf: "Performance" };
 const skillOf = rfi => RUBRIC.skills[String(rfi).toLowerCase()];
 const skillText = rfi => { const s = skillOf(rfi); if (!s) return rfi; if (s.text) return s.text; return s.kind === "skill" ? SKILL_NAME[s.key] : s.kind === "tool" ? `${s.key}'s tools` : rfi; };
 
@@ -352,7 +352,9 @@ function convertWeapon(d, needs) {
     damage: { base: { number, denomination: denom, types: [dtype], custom: { enabled: false }, scaling: { number: 1 }, bonus: "" },
       versatile: props.has("ver") ? { number, denomination: DIE_UP[denom] ?? denom, types: [dtype], bonus: "", custom: { enabled: false, formula: "" }, scaling: { mode: "", number: null, formula: "" } } : { number: null, denomination: null, bonus: "", types: [], custom: { enabled: false, formula: "" }, scaling: { mode: "", number: null, formula: "" } } },
     armor: { value: null }, hp: { value: null, max: null, dt: null, conditions: "" },
-    type: { value: ranged ? (martial ? "martialR" : "simpleR") : (martial ? "martialM" : "simpleM"), baseItem: "" },
+    // Firearms (2026-10-31): RFI's firearms-skill guns are their own category (bad-eden-5e rules.js) — bows and
+    // rig-mounted guns stay where they were
+    type: { value: (s.skill === "firearms" && !/\bbow\b/i.test(d.name) && !d.flags?.fourththing?.rigGear) ? "firearmR" : ranged ? (martial ? "martialR" : "simpleR") : (martial ? "martialM" : "simpleM"), baseItem: "" },
     magicalBonus: magical, properties: [...props], proficient: null, ammunition: {}, mastery: "",
     activities: { [sha("act" + e.slug).slice(0, 16).padEnd(16, "0")]: { type: "attack", activation: { type: "action", value: 1, condition: "", override: false }, consumption: { targets: [], scaling: { allowed: false, max: "" }, spellSlot: true }, description: { chatFlavor: "" }, duration: { concentration: false, value: "", units: "inst", special: "", override: false }, effects: [], range: { override: false }, target: { template: { count: "", contiguous: false, type: "", size: "", width: "", height: "", units: "" }, affects: { count: "", type: "", choice: false, special: "" }, prompt: false, override: false }, attack: { ability: "", bonus: "", critical: { threshold: null }, flat: false, type: { value: ranged ? "ranged" : "melee", classification: "weapon" } }, damage: { critical: { bonus: "" }, includeBase: true, parts: [] }, uses: { spent: 0, recovery: [], max: "" }, sort: 0, name: "", img: "", appliedEffects: [] } }
   });
