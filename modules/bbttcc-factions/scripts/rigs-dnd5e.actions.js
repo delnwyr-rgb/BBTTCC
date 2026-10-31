@@ -193,10 +193,18 @@
     if (!act) { try { await w.use(); } catch (_e) {} return; }
     const tgt = [...(game.user.targets ?? [])][0];
     if (!tgt?.actor) return ui.notifications?.warn?.(`${esc(w.name)}: target a token first.`);
+    // The steward's bonus rides in through the runtime's crew-roll hook (preRollD20TestV2 swaps the vehicle's
+    // mod/prof for the roller's on EVERY rig d20 test — sheet, card or dock); setRollAs names the roller so a GM
+    // firing for a steward who isn't in the roster yet still gets their numbers. Read back for the receipt.
     const dex = Number(get(st, "system.abilities.dex.mod", 0)) || 0;
-    const prof = (get(st, "system.traits.weaponProf.value", new Set())?.has?.("fir") || get(st, "system.traits.weaponProf.value", new Set())?.has?.("sim")) ? (Number(get(st, "system.attributes.prof", 0)) || 0) : 0;
+    const profKey = CONFIG.DND5E?.weaponProficienciesMap?.[w.system?.type?.value];
+    const wp = get(st, "system.traits.weaponProf.value", new Set());
+    const prof = (wp?.has?.(profKey) || wp?.has?.(w.system?.type?.value)) ? (Number(get(st, "system.attributes.prof", 0)) || 0) : 0;
     const bonus = dex + prof;
-    const atk = (await act.rollAttack({ attackMode: "ranged", event: { shiftKey: true } }, { configure: false, parts: bonus ? [String(bonus)] : [] }, {}))?.[0];
+    I().setRollAs?.(st);
+    let atk;
+    try { atk = (await act.rollAttack({ attackMode: "ranged", event: { shiftKey: true } }, { configure: false }, {}))?.[0]; }
+    finally { I().setRollAs?.(null); }
     if (!atk) return;
     const ac = Number(tgt.actor.system?.attributes?.ac?.value) || 10;
     const hit = atk.isCritical || (!atk.isFumble && atk.total >= ac);

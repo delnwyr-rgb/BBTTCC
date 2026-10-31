@@ -1156,7 +1156,10 @@ function _registerOps() {
     try {
       await actor.update({
         ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
-        [`flags.${MODULE_ID}`]: { spawned: true, kind: "obstacle", ownerUserId, ...shared }
+        [`flags.${MODULE_ID}`]: { spawned: true, kind: "obstacle", ownerUserId, ...shared },
+        // dnd5e vehicles carry a damage THRESHOLD by bracket (light = 5 = these wrecks' whole hp): a 4-damage
+        // stomp/shot bounced off a 5-hp Rusted Sedan (2026-10-31). Derelicts have no hull threshold.
+        ...(game.system.id === "dnd5e" ? { "system.attributes.hp.dt": 0 } : {})
       });
     } catch (e) { console.warn(TAG, "spawnObstacle: ownership/flag stamp failed", e); }
     // Optional ARMAMENT (2026-08-27): the sim's gun-truck is fictionally an

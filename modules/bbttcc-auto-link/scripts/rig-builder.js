@@ -1844,7 +1844,11 @@ function _rigItemForSystem(data) {
   const isWeapon = data.type === "weapon" || gear?.subtype === "rig-weapon";
   const map = game.bbttcc?.types?.item;
   data.type = isWeapon ? "weapon" : (typeof map === "function" ? map(data.type) : data.type);
-  if (game.system?.id !== "fourththing" && data.system && typeof data.system === "object") {
+  // A record that is ALREADY a dnd5e item (the bad-eden-5e.gear twin the loadout resolves to on D&D, 2026-10-31)
+  // keeps its system verbatim — stripping it to the description left the Space Marine's Twin Autocannons with no
+  // damage dice, no range and "Simple Melee" (Dave: "doesn't look like the autocannons are set up to do any damage").
+  const native5e = !!data.flags?.["bad-eden-5e"]?.rfi || ("base" in (data.system?.damage ?? {}));
+  if (game.system?.id !== "fourththing" && !native5e && data.system && typeof data.system === "object") {
     // dnd5e: the RFI mechanical payload doesn't fit the 5e item schemas — keep only
     // the description (same {value, chat} shape) and stash the rest for the runtime.
     const rfi = data.system;

@@ -725,6 +725,64 @@
     } catch (e) { /* best-effort */ }
   }
 
+  // ── Crew rolls (2026-10-31, Dave: "RFI uses the stewards own skills for attacks, checks, etc. This is going
+  // through the mech, and it has +0 to rolls") — a dnd5e vehicle has Dex 10 and no proficiency, so anything rolled
+  // THROUGH the rig (its sheet, a mounted gun's card, the combat dock) came out at +0. RFI rolls the steward's own
+  // aptitude; here one hook on every d20 test a rig makes swaps the vehicle's mod/prof for the boarded steward's:
+  // attacks use the GUNNER (else the pilot) with their ability mod + proficiency when they're proficient with the
+  // gun; checks, saves, skills (Piloting) and initiative use the PILOT. `setRollAs(steward)` lets the dock name the
+  // roller explicitly (GM firing for a steward who isn't in the roster yet). Damage is the gun's own dice — the
+  // steward's mod isn't added, same as RFI's rig weapons.
+  let _rollAs = null;
+  const setRollAs = (steward) => { _rollAs = steward ?? null; };
+  function crewRoller(rig, kind) {
+    if (_rollAs) return _rollAs;
+    const slots = data(rig)?.crew?.slots ?? [];
+    const pick = role => { const s = slots.find(x => x.role === role && x.actorId); return s ? game.actors?.get?.(s.actorId) : null; };
+    return (kind === "attack" ? (pick("gunner") ?? pick("pilot")) : pick("pilot")) ?? slots.map(x => x.actorId && game.actors?.get?.(x.actorId)).find(Boolean) ?? null;
+  }
+  function installCrewRolls() {
+    Hooks.on("dnd5e.preRollD20TestV2", (config, _dialog, message) => {
+      try {
+        const subject = config?.subject;
+        const isActivity = !!subject?.item && !!subject?.actor;
+        const rig = baseActor(isActivity ? subject.actor : subject);
+        if (!rig || rig.type !== "vehicle" || !isRig(rig)) return;
+        const kind = isActivity ? "attack" : (config.skill ? "skill" : "check");
+        const st = crewRoller(rig, kind);
+        if (!st || st.id === rig.id) return;
+        const ability = config.ability ?? config.rolls?.[0]?.data?.roll?.ability ?? (isActivity ? "dex" : null);
+        const abil = st.system?.abilities?.[ability];
+        let mod = Number(abil?.mod) || 0, prof = null;
+        if (kind === "attack") {
+          const w = subject.item, profKey = CONFIG.DND5E?.weaponProficienciesMap?.[w?.system?.type?.value];
+          const wp = st.system?.traits?.weaponProf?.value;
+          const proficient = w?.system?.proficient === 1 || !!(wp?.has?.(profKey) || wp?.has?.(w?.system?.type?.value) || wp?.has?.(w?.system?.type?.baseItem));
+          if (proficient) prof = String(Number(st.system?.attributes?.prof) || 0);
+        } else if (kind === "skill") {
+          const sk = st.system?.skills?.[config.skill];
+          if (sk) { mod = Number(sk.mod) || mod; if (sk.prof?.hasProficiency) prof = sk.prof.term; }
+        } else {
+          const t = config.hookNames?.includes?.("save") ? "save" : "check";
+          if (abil?.[t]?.prof?.hasProficiency) prof = abil[t].prof.term;
+        }
+        for (const r of config.rolls ?? []) {
+          r.data ??= {}; r.parts ??= [];
+          if (isActivity) {
+            // attacks: dnd5e's buildConfig adds "@mod"/"@prof" AFTER this hook (AttackActivity._buildAttackConfig,
+            // `config.data = { ...data, ...config.data }` — ours wins), so only the values go in here
+            r.data.mod = mod; r.data.prof = prof ?? "0";
+            continue;
+          }
+          if (r.parts.includes("@mod")) r.data.mod = mod; else { r.parts.unshift("@mod"); r.data.mod = mod; }
+          if (prof != null && prof !== "0") { if (!r.parts.includes("@prof")) r.parts.push("@prof"); r.data.prof = prof; }
+          else if (r.parts.includes("@prof")) r.data.prof = 0;
+        }
+        if (message) { message.data ??= {}; const f = message.data.flavor ?? ""; if (!/at the controls|aims/.test(f)) message.data.flavor = `${f}${f ? " · " : ""}${st.name} ${kind === "attack" ? "aims" : "at the controls"}`; }
+      } catch (e) { console.warn(TAG, "crew roll swap failed", e); }
+    });
+  }
+
   // ── Wiring ─────────────────────────────────────────────────────────────────
   Hooks.once("ready", () => {
     if (game.system?.id !== "dnd5e") return;
@@ -733,6 +791,7 @@
     const keys = OP()?.KEYS;
     if (Array.isArray(keys) && keys.length) CHANNELS.splice(0, CHANNELS.length, ...keys);
     installCrewFollow();   // crew tokens ride the rig; player boards relay to the GM (2026-10-31)
+    installCrewRolls();    // rig d20 tests roll with the boarded steward's mod/prof (2026-10-31)
 
     // Turn integration: GM seat only AND the real apply pass — `bbttcc:advanceTurn:end`
     // carries { apply } for dry runs. review P2 (2026-10-28): the hook is a LOCAL
@@ -750,6 +809,7 @@
     installDamageHooks();
 
     Object.assign(Rg.impl, {
+      setRollAs, crewRoller,   // crew rolls (2026-10-31)
       board, disembark, park, deploy, destroy, restore, outputFor, applyTurnOutput, setState, applyFrame, applyTemplate,
       ORDERS, CHANNELS,
       // helpers the sheet / actions files lean on
