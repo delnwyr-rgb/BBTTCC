@@ -1,18 +1,13 @@
 {
   "name": "Archetype: The World (Integrator) (Tier 1)",
   "type": "feat",
-  "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: The World (Integrator) (Tier 1)",
-      "book": ""
-    },
+    "source": "Bad Eden – Archetype: The World (Integrator) (Tier 1) (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 (Level 1) — The World (Integrator)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Investigation and Insight.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+      "value": "<p><strong>Tier 1 (Level 1) — The World (Integrator)</strong></p><ul><li><p><strong>Tactical:</strong> You gain a skill rank in Investigation and Insight.</p></li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -48,7 +43,7 @@
       },
       "flags": {},
       "name": "Archetype Tier 1 Proficiencies",
-      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
       "_id": "30KpHnBFassI7jxI",
       "type": "base",
       "system": {
@@ -79,17 +74,16 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346195514,
-        "modifiedTime": 1777433499507
+        "modifiedTime": 1792989154259
       },
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!wekq7vMprCH7byIR.30KpHnBFassI7jxI"
+      "folder": null
     }
   ],
   "folder": "2EZWi9nK8TsgCvFZ",
@@ -126,12 +120,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986816349,
-    "modifiedTime": 1775063021487,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989154168,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

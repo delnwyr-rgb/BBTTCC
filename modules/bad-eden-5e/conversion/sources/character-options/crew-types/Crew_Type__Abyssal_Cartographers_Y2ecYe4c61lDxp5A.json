@@ -3,6 +3,17 @@
   "type": "feat",
   "img": "icons/tools/navigation/map-marked-black.webp",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Crew Type (Bad Eden): Abyssal Cartographers.</em></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic Identity:</strong> Your Domain earns <strong>+10 Intrigue</strong> marks each turn while you serve it.</li></ul>",
+      "chat": ""
+    },
     "activities": {},
     "uses": {
       "spent": 0,
@@ -10,16 +21,7 @@
       "max": ""
     },
     "advancement": {},
-    "description": {
-      "value": "<p><em>Crew Type (BBTTCC): Abyssal Cartographers.</em></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><ul><li><strong>Tactical Identity:</strong> You gain proficiency in Survival and Investigation.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
-      "chat": ""
-    },
     "identifier": "crew-abyssal-cartographers",
-    "source": {
-      "revision": 2,
-      "rules": "2024",
-      "custom": "BBTTCC"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -68,7 +70,10 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
   },
   "_stats": {
     "compendiumSource": "Item.KyfZwh7D2gmXOnxD",
@@ -80,12 +85,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986939199,
-    "modifiedTime": 1775063028690,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989165272,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

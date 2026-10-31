@@ -1,10 +1,10 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/archetypes.json. The Character Archetypes (bbttcc-character-options.character-archetypes) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/archetypes.json. The Character Archetypes (bbttcc-character-options.character-archetypes) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
   "_pack": "character-archetypes",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.8.1",
-    "at": "2026-10-14",
+    "rubric": "1.9.0",
+    "at": "2026-10-31",
     "overridesApplied": 0
   },
   "items": [
@@ -12,11 +12,11 @@
       "slug": "archetype-death",
       "name": "Archetype: Death (Transformer)",
       "type": "feat",
-      "img": "icons/weapons/sickles/scythe-curved-steel.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_death.webp",
       "folder": "Death",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“This must end for something else to begin.”</em></p><p><strong>Archetype (BBTTCC): Death (Transformer).</strong> You are not annihilation. You are necessary ending, painful transition, and the force that cuts dead things loose so the living can survive.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens sacrifice, transition, and value recovered from collapse. This Archetype is associated with <strong>+1 Strength</strong> and <strong>+1 Culture</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>“This must end for something else to begin.”</em></p><p><strong>Archetype (Bad Eden): Death (Transformer).</strong> You are not annihilation. You are necessary ending, painful transition, and the force that cuts dead things loose so the living can survive.</p><h3>Archetype Effects</h3><ul><li><p><strong>Faction Edge.</strong> Your archetype strengthens sacrifice, transition, and value recovered from collapse. Your Domain earns <strong>+10 Violence</strong> and <strong>+10 Culture</strong> marks each turn while you serve it.</p></li><li><p><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -57,7 +57,7 @@
             "id": "Fh0RpFSMNkEVD3mt",
             "pack": "character-archetypes",
             "identifier": "archetype-death",
-            "hash": "fdb0708b4317"
+            "hash": "7a4bf8dfe544"
           }
         }
       }
@@ -66,11 +66,11 @@
       "slug": "archetype-death-t1",
       "name": "Archetype: Death (Transformer) (Tier 1)",
       "type": "feat",
-      "img": "icons/weapons/sickles/scythe-curved-steel.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_death.webp",
       "folder": "Death",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — Death (Transformer)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Medicine and Intimidation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — Death (Transformer)</strong></p><ul><li><p><strong>Tactical:</strong> You gain proficiency in Religion and Intimidation.</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -113,7 +113,7 @@
             "id": "ZnWwUX4bVtwvubaY",
             "pack": "character-archetypes",
             "identifier": "archetype-death-t1",
-            "hash": "10f231dc54a5"
+            "hash": "d65a5431bfb0"
           }
         }
       }
@@ -122,11 +122,11 @@
       "slug": "archetype-death-t2",
       "name": "Archetype: Death (Transformer) (Tier 2)",
       "type": "feat",
-      "img": "icons/weapons/sickles/scythe-curved-steel.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_death.webp",
       "folder": "Death",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — Death (Transformer)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During recovery, salvage, reform, or post-catastrophe stabilization scenarios, your faction may convert one failed or destroyed asset, initiative, or position into a reduced but usable replacement outcome instead of losing it entirely.</li></ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — Death (Transformer)</strong></p><ul><li><p><strong>Strategic:</strong> Once per short rest of recovery, salvage, reform or post-catastrophe stabilisation, your Domain converts one failed or destroyed asset, initiative or position into a reduced but usable replacement (the card fires it).</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -168,7 +168,7 @@
             "id": "3KH7U2mFY1NQerJM",
             "pack": "character-archetypes",
             "identifier": "archetype-death-t2",
-            "hash": "239cabe9bd6c"
+            "hash": "3164a8f1cd68"
           }
         }
       }
@@ -177,11 +177,11 @@
       "slug": "archetype-death-t3",
       "name": "Archetype: Death (Transformer) (Tier 3)",
       "type": "feat",
-      "img": "icons/weapons/sickles/scythe-curved-steel.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_death.webp",
       "folder": "Death",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Death (Transformer)</strong></p><ul><li><strong>Tactical:</strong> You have advantage on saving throws against being frightened, and on checks related to corpses, endings, funerary rites, irreversible damage, or confronting what others cannot bear to face.</li><li><strong>Strategic:</strong> —</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Tier 3 (Level 11) — Death (Transformer)</strong></p><ul><li><p><strong>Tactical:</strong> You have advantage on checks against being frightened, and on checks related to corpses, endings, funerary rites, irreversible damage, or confronting what others cannot bear to face.</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -224,7 +224,7 @@
             "id": "nxNJnhico1lg4A2F",
             "pack": "character-archetypes",
             "identifier": "archetype-death-t3",
-            "hash": "9713324f45a8"
+            "hash": "3fe2218f1cdb"
           }
         }
       }
@@ -233,11 +233,11 @@
       "slug": "archetype-death-t4",
       "name": "Archetype: Death (Transformer) (Tier 4)",
       "type": "feat",
-      "img": "icons/weapons/sickles/scythe-curved-steel.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_death.webp",
       "folder": "Death",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — Death (Transformer)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a collapse, purge, retirement, sacrificial reform, or systemic transition scenario, the Strength or Culture OP cost is reduced by 3 (minimum 1).</li></ul>",
+          "value": "<p><strong>Tier 4 (Level 17) — Death (Transformer)</strong></p><ul><li><p><strong>Strategic:</strong> Whenever your Domain spends Violence or Culture marks, it spends 30 fewer (never below 10).</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -280,280 +280,7 @@
             "id": "vqkizEXo4bCWbHmw",
             "pack": "character-archetypes",
             "identifier": "archetype-death-t4",
-            "hash": "4a1397f1c6c3"
-          }
-        }
-      }
-    },
-    {
-      "slug": "archetype-hierophant",
-      "name": "Archetype: Hierophant",
-      "type": "feat",
-      "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
-      "folder": "The Hierophant",
-      "system": {
-        "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You speak for something bigger than yourself. Unfortunately, it has opinions.”</em></p>\n<p><strong>Archetype (BBTTCC): Hierophant.</strong> Spiritual leader and mediator between factions and the higher weirdness. You are part priest, part occult systems admin, part HR for gods and genii loci.</p>\n<p>This Archetype means you’ve stood between people and the powers they invoked, and somehow not been turned into a cautionary tale. Yet.</p>\n\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Soft Power / Faith Hooks.</strong> This Archetype integrates you deeply with BBTTCC’s Soft Power and Tikkun systems. See the Hierophant Tier feats (Tier 1–4) for the full tactical and strategic details of your miracles, sermons, and extremely pointed blessings.</li>\n</ul>",
-          "chat": ""
-        },
-        "type": {
-          "value": "",
-          "subtype": ""
-        },
-        "requirements": "",
-        "properties": [],
-        "uses": {
-          "max": "",
-          "spent": 0,
-          "recovery": []
-        },
-        "identifier": "archetype-hierophant"
-      },
-      "effects": [],
-      "flags": {
-        "bbttcc-character-options": {
-          "category": "character-archetypes",
-          "bonuses": {
-            "softpower": 1,
-            "faith": 1
-          },
-          "option": {
-            "category": "archetype",
-            "key": "hierophant",
-            "progressionType": "level",
-            "tags": [
-              "bbttcc:archetype",
-              "bbttcc:hierophant",
-              "bbttcc:base"
-            ]
-          }
-        },
-        "bad-eden-5e": {
-          "rfi": {
-            "id": "LakgHhzI6R4ugCEO",
-            "pack": "character-archetypes",
-            "identifier": "archetype-hierophant",
-            "hash": "f64e5be24480"
-          }
-        }
-      }
-    },
-    {
-      "slug": "archetype-hierophant-t1",
-      "name": "Archetype: Hierophant (Tier 1)",
-      "type": "feat",
-      "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
-      "folder": "The Hierophant",
-      "system": {
-        "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — Hierophant (Tier 1)</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain proficiency in Religion and Insight. You learn the Guidance Tier-0 powers.</li>\n<li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li>\n</ul>",
-          "chat": ""
-        },
-        "type": {
-          "value": "",
-          "subtype": ""
-        },
-        "requirements": "",
-        "properties": [],
-        "uses": {
-          "max": "",
-          "spent": 0,
-          "recovery": []
-        },
-        "identifier": "archetype-hierophant-t1"
-      },
-      "effects": [],
-      "flags": {
-        "bbttcc-character-options": {
-          "category": "archetype",
-          "bonuses": {},
-          "option": {
-            "category": "archetype",
-            "key": "hierophant",
-            "progressionType": "level",
-            "tier": 1,
-            "levelMin": 1,
-            "levelMax": 1,
-            "tags": [
-              "bbttcc:archetype",
-              "bbttcc:hierophant",
-              "bbttcc:tier:1",
-              "bbttcc:softpower_op_cap:+3"
-            ]
-          }
-        },
-        "bad-eden-5e": {
-          "rfi": {
-            "id": "mCZc9xfaPf1U4Kzk",
-            "pack": "character-archetypes",
-            "identifier": "archetype-hierophant-t1",
-            "hash": "67859d2ac197"
-          }
-        }
-      }
-    },
-    {
-      "slug": "archetype-hierophant-t2",
-      "name": "Archetype: Hierophant (Tier 2)",
-      "type": "feat",
-      "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
-      "folder": "The Hierophant",
-      "system": {
-        "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — Hierophant</strong></p>\n<ul>\n<li><strong>Tactical:</strong> —</li>\n<li><strong>Strategic:</strong> When spending <strong>Soft Power OPs</strong> to raise <strong>population loyalty</strong> or to <strong>inspire troops during a Siege</strong>, the <strong>effectiveness of the spent OPs is increased by 25%</strong>.</li>\n</ul>",
-          "chat": ""
-        },
-        "type": {
-          "value": "",
-          "subtype": ""
-        },
-        "requirements": "",
-        "properties": [],
-        "uses": {
-          "max": "",
-          "spent": 0,
-          "recovery": []
-        },
-        "identifier": "archetype-hierophant-t2"
-      },
-      "effects": [],
-      "flags": {
-        "bbttcc-character-options": {
-          "category": "archetype",
-          "bonuses": {},
-          "option": {
-            "category": "archetype",
-            "key": "hierophant",
-            "progressionType": "level",
-            "tier": 2,
-            "levelMin": 2,
-            "levelMax": 2,
-            "tags": [
-              "bbttcc:archetype",
-              "bbttcc:hierophant",
-              "bbttcc:tier:2",
-              "bbttcc:softpower_effect:+25%",
-              "bbttcc:scenario:siege",
-              "bbttcc:action:raise_loyalty",
-              "bbttcc:action:inspire_troops"
-            ]
-          }
-        },
-        "bad-eden-5e": {
-          "rfi": {
-            "id": "ylF1MQw8hiQaAwto",
-            "pack": "character-archetypes",
-            "identifier": "archetype-hierophant-t2",
-            "hash": "f0b5892e6127"
-          }
-        }
-      }
-    },
-    {
-      "slug": "archetype-hierophant-t3",
-      "name": "Archetype: Hierophant (Tier 3)",
-      "type": "feat",
-      "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
-      "folder": "The Hierophant",
-      "system": {
-        "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Hierophant</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You have advantage on saving throws against effects caused by <strong>Qliphothic entities</strong> (Fiends, Aberrations) and effects related to the <strong>Darkness Track</strong>.</li>\n<li><strong>Strategic:</strong> —</li>\n</ul>",
-          "chat": ""
-        },
-        "type": {
-          "value": "",
-          "subtype": ""
-        },
-        "requirements": "",
-        "properties": [],
-        "uses": {
-          "max": "",
-          "spent": 0,
-          "recovery": []
-        },
-        "identifier": "archetype-hierophant-t3"
-      },
-      "effects": [],
-      "flags": {
-        "bbttcc-character-options": {
-          "category": "archetype",
-          "bonuses": {},
-          "option": {
-            "category": "archetype",
-            "key": "hierophant",
-            "progressionType": "level",
-            "tier": 3,
-            "levelMin": 3,
-            "levelMax": 3,
-            "tags": [
-              "bbttcc:archetype",
-              "bbttcc:hierophant",
-              "bbttcc:tier:3",
-              "bbttcc:qliphothic_resist",
-              "bbttcc:darkness_resist"
-            ]
-          }
-        },
-        "bad-eden-5e": {
-          "rfi": {
-            "id": "vnL5EIezYHAzzJa6",
-            "pack": "character-archetypes",
-            "identifier": "archetype-hierophant-t3",
-            "hash": "84cfcadfaf48"
-          }
-        }
-      }
-    },
-    {
-      "slug": "archetype-hierophant-t4",
-      "name": "Archetype: Hierophant (Tier 4)",
-      "type": "feat",
-      "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
-      "folder": "The Hierophant",
-      "system": {
-        "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — Hierophant</strong></p>\n<ul>\n<li><strong>Tactical:</strong> —</li>\n<li><strong>Strategic:</strong> Your spiritual authority aids <strong>Tikkun Olam</strong>. The <strong>OP cost or time required to shift a Hex's alignment towards a beneficial Sephirah is reduced by 20%</strong>.</li>\n</ul>",
-          "chat": ""
-        },
-        "type": {
-          "value": "",
-          "subtype": ""
-        },
-        "requirements": "",
-        "properties": [],
-        "uses": {
-          "max": "",
-          "spent": 0,
-          "recovery": []
-        },
-        "identifier": "archetype-hierophant-t4"
-      },
-      "effects": [],
-      "flags": {
-        "bbttcc-character-options": {
-          "category": "archetype",
-          "bonuses": {},
-          "option": {
-            "category": "archetype",
-            "key": "hierophant",
-            "progressionType": "level",
-            "tier": 4,
-            "levelMin": 4,
-            "levelMax": 4,
-            "tags": [
-              "bbttcc:archetype",
-              "bbttcc:hierophant",
-              "bbttcc:tier:4",
-              "bbttcc:tikkun:sephirot_shift_cost:-20%"
-            ]
-          }
-        },
-        "bad-eden-5e": {
-          "rfi": {
-            "id": "Bl7LXJeIEXrYesYB",
-            "pack": "character-archetypes",
-            "identifier": "archetype-hierophant-t4",
-            "hash": "54b039f46dbf"
+            "hash": "2ed295c2f85e"
           }
         }
       }
@@ -563,10 +290,10 @@
       "name": "Archetype: Judgment (Reckoner)",
       "type": "feat",
       "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
-      "folder": "Judgement",
+      "folder": "Judgment",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You are called. You will answer.”</em></p><p><strong>Archetype (BBTTCC): Judgment (Reckoner).</strong> You are final account, exposure, and the terrifying moment when evasion ends. You force consequences to arrive on time.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens revelation, decisive resolution, and moral or violent finality. This Archetype is associated with <strong>+1 Strength</strong> and <strong>+1 Faith</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You are called. You will answer.”</em></p><p><strong>Archetype (Bad Eden): Judgment (Reckoner).</strong> You are final account, exposure, and the terrifying moment when evasion ends. You force consequences to arrive on time.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens revelation, decisive resolution, and moral or violent finality. Your Domain earns <strong>+10 Faith</strong> and <strong>+10 Violence</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -607,7 +334,7 @@
             "id": "JMTncIu9OBfxha6h",
             "pack": "character-archetypes",
             "identifier": "archetype-judgment",
-            "hash": "2208e0a6e8e6"
+            "hash": "f744f02c4634"
           }
         }
       }
@@ -617,10 +344,10 @@
       "name": "Archetype: Judgment (Reckoner) (Tier 1)",
       "type": "feat",
       "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
-      "folder": "Judgement",
+      "folder": "Judgment",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — Judgment (Reckoner)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Religion and Intimidation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — Judgment (Reckoner)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Religion and Intimidation.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -663,7 +390,7 @@
             "id": "6SPS9Q6xtXPD2aiY",
             "pack": "character-archetypes",
             "identifier": "archetype-judgment-t1",
-            "hash": "89f127497f1d"
+            "hash": "46c1146fa6a4"
           }
         }
       }
@@ -673,10 +400,10 @@
       "name": "Archetype: Judgment (Reckoner) (Tier 2)",
       "type": "feat",
       "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
-      "folder": "Judgement",
+      "folder": "Judgment",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — Judgment (Reckoner)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During purge, revelation, judgment, exposure, or final-account scenarios, the first major resistance, denial, or concealment effect is ignored once.</li></ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — Judgment (Reckoner)</strong></p><ul><li><strong>Strategic:</strong> Once per short rest of purge, revelation, judgment, exposure or final account, your Domain ignores the first major resistance, denial or concealment effect (the card fires it).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -718,7 +445,7 @@
             "id": "nDVGel7KEfjAMICZ",
             "pack": "character-archetypes",
             "identifier": "archetype-judgment-t2",
-            "hash": "c378bfb8ab4e"
+            "hash": "eb91cc5a7385"
           }
         }
       }
@@ -728,10 +455,10 @@
       "name": "Archetype: Judgment (Reckoner) (Tier 3)",
       "type": "feat",
       "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
-      "folder": "Judgement",
+      "folder": "Judgment",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Judgment (Reckoner)</strong></p><ul><li><strong>Tactical:</strong> You have advantage on saving throws against being charmed, and on checks made to detect lies, confessions, concealed guilt, or false repentance.</li><li><strong>Strategic:</strong> —</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Judgment (Reckoner)</strong></p><ul><li><strong>Tactical:</strong> You have advantage on checks against being charmed, and on checks made to detect lies, confessions, concealed guilt, or false repentance.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -774,7 +501,7 @@
             "id": "xr6unYasNmX4oHvK",
             "pack": "character-archetypes",
             "identifier": "archetype-judgment-t3",
-            "hash": "6d11d458c0ec"
+            "hash": "327fc5f587fd"
           }
         }
       }
@@ -784,10 +511,10 @@
       "name": "Archetype: Judgment (Reckoner) (Tier 4)",
       "type": "feat",
       "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
-      "folder": "Judgement",
+      "folder": "Judgment",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — Judgment (Reckoner)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving an exposure, purge, ultimatum, execution, or final reckoning scenario, the Faith or Strength OP cost is reduced by 3 (minimum 1).</li></ul>",
+          "value": "<p><strong>Tier 4 (Level 17) — Judgment (Reckoner)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Faith or Violence marks, it spends 30 fewer (never below 10).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -830,7 +557,7 @@
             "id": "jw3jCYjtJk75JBjV",
             "pack": "character-archetypes",
             "identifier": "archetype-judgment-t4",
-            "hash": "018afbc32b77"
+            "hash": "8c8cfac8a3dc"
           }
         }
       }
@@ -843,7 +570,7 @@
       "folder": "Justice",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Balance is not discovered. It is enforced.”</em></p><p><strong>Archetype (BBTTCC): Justice (Arbiter).</strong> You are legitimacy under pressure: law, accountability, and the dangerous idea that consequences should actually mean something.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens social order, reform, and conflict resolution. This Archetype is associated with <strong>+1 Diplomacy</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Balance is not discovered. It is enforced.”</em></p><p><strong>Archetype (Bad Eden): Justice (Arbiter).</strong> You are legitimacy under pressure: law, accountability, and the dangerous idea that consequences should actually mean something.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens social order, reform, and conflict resolution. Your Domain earns <strong>+10 Diplomacy</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -883,7 +610,7 @@
             "id": "cdg1DqajiKZnlVgJ",
             "pack": "character-archetypes",
             "identifier": "archetype-justice",
-            "hash": "7e5418366bc5"
+            "hash": "2fd77e32e3bf"
           }
         }
       }
@@ -896,7 +623,7 @@
       "folder": "Justice",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — Justice (Arbiter)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Insight and Investigation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — Justice (Arbiter)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Insight and Investigation.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -938,7 +665,7 @@
             "id": "fJfZJw1WBV7fJN6s",
             "pack": "character-archetypes",
             "identifier": "archetype-justice-t1",
-            "hash": "742a85462c65"
+            "hash": "2226ba54ccb4"
           }
         }
       }
@@ -951,7 +678,7 @@
       "folder": "Justice",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — Justice (Arbiter)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When spending Diplomacy OPs to settle disputes, restore legitimacy, arbitrate reforms, or de-escalate internal pressure, the effectiveness of spent OPs is increased by 25%.</li></ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — Justice (Arbiter)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Diplomacy marks, it spends 20% less (never below 10).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -993,7 +720,7 @@
             "id": "vAACrGynXXLapH8h",
             "pack": "character-archetypes",
             "identifier": "archetype-justice-t2",
-            "hash": "49425a59de7a"
+            "hash": "3b8bd87f62ce"
           }
         }
       }
@@ -1006,7 +733,7 @@
       "folder": "Justice",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Justice (Arbiter)</strong></p><ul><li><strong>Tactical:</strong> You have advantage on saving throws against being charmed or frightened by creatures or effects attempting coercion, false authority, or magical compulsion.</li><li><strong>Strategic:</strong> —</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Justice (Arbiter)</strong></p><ul><li><strong>Tactical:</strong> You have advantage on checks against being charmed or frightened by creatures or effects attempting coercion, false authority, or magical compulsion.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -1049,7 +776,7 @@
             "id": "4Z3YLVkEbHDWjkf2",
             "pack": "character-archetypes",
             "identifier": "archetype-justice-t3",
-            "hash": "1224e323d2f4"
+            "hash": "14d4fabaa415"
           }
         }
       }
@@ -1062,7 +789,7 @@
       "folder": "Justice",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 4 (Level 17) — Justice (Arbiter)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a policy, trial, arbitration, reform, or legitimacy scenario, you have advantage on all relevant strategic checks.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 4 (Level 17) — Justice (Arbiter)</strong></p><ul><li><strong>Strategic:</strong> Once per short rest of policy, trial, arbitration, reform or legitimacy, your Domain is made with advantage on its Domain rolls (the card fires it).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -1105,7 +832,7 @@
             "id": "51Bscfj3yMihLjbq",
             "pack": "character-archetypes",
             "identifier": "archetype-justice-t4",
-            "hash": "4026a73dcceb"
+            "hash": "d4dcedfdc9d6"
           }
         }
       }
@@ -1114,11 +841,11 @@
       "slug": "archetype-strength",
       "name": "Archetype: Strength (Warlord)",
       "type": "feat",
-      "img": "icons/creatures/abilities/lion-roar-yellow.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_strength.webp",
       "folder": "Strength",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Power is not rage. Power is what still obeys you after the world breaks.”</em></p>\n<p><strong>Archetype (BBTTCC): Strength (Warlord).</strong> Commander, breaker, disciplined engine of force. You do not merely hit hard — you make force coherent.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> This Archetype is associated with <strong>+1 Strength OP</strong> in faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of battlefield command, violent pressure, and military dominance.</li>\n</ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>“Power is not rage. Power is what still obeys you after the world breaks.”</em></p><p><strong>Archetype (Bad Eden): Strength (Warlord).</strong> Commander, breaker, disciplined engine of force. You do not merely hit hard — you make force coherent.</p><h3>Archetype Effects</h3><ul><li><p><strong>Faction Edge.</strong> Your Domain earns <strong>+10 Violence</strong> marks each turn while you serve it.</p></li><li><p><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of battlefield command, violent pressure, and military dominance.</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -1158,7 +885,7 @@
             "id": "D0STYsIpRHDddIiz",
             "pack": "character-archetypes",
             "identifier": "archetype-strength",
-            "hash": "6c20997e5dc8"
+            "hash": "6f2325a59d07"
           }
         }
       }
@@ -1167,11 +894,11 @@
       "slug": "archetype-strength-t1",
       "name": "Archetype: Strength (Warlord) (Tier 1)",
       "type": "feat",
-      "img": "icons/creatures/abilities/lion-roar-yellow.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_strength.webp",
       "folder": "Strength",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — Strength</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain proficiency in <strong>Intimidation</strong> and <strong>Athletics</strong>.</li>\n<li><strong>Strategic:</strong> Your faction's <strong>Strength OP cap increases by 1</strong>.</li>\n</ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — Strength (Warlord)</strong></p><ul><li><p><strong>Tactical:</strong> You gain proficiency in <strong>Intimidation</strong> and <strong>Athletics</strong>.</p></li><li><p><strong>Strategic:</strong> Your Domain's Violence marks cap rises by 10.</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -1215,7 +942,7 @@
             "id": "ruSAm6Tlq6EX9j1z",
             "pack": "character-archetypes",
             "identifier": "archetype-strength-t1",
-            "hash": "a8e36a58c7e2"
+            "hash": "3739c4ed4ac3"
           }
         }
       }
@@ -1224,11 +951,11 @@
       "slug": "archetype-strength-t2",
       "name": "Archetype: Strength (Warlord) (Tier 2)",
       "type": "feat",
-      "img": "icons/creatures/abilities/lion-roar-yellow.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_strength.webp",
       "folder": "Strength",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — Strength</strong></p>\n<ul>\n<li><strong>Tactical:</strong> Your force of presence and battlefield authority begin to shape momentum.</li>\n<li><strong>Strategic:</strong> Once per raid, siege, or violent strategic action, your faction may add <strong>+2</strong> to one relevant Opposed Strategic Roll involving Strength.</li>\n</ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — Strength (Warlord)</strong></p><ul><li><p><strong>Tactical:</strong> Your force of presence and battlefield authority begin to shape momentum.</p></li><li><p><strong>Strategic:</strong> Once per Battle or Siege, your Domain adds +2 to one Strength Domain roll (the card fires it).</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -1272,7 +999,7 @@
             "id": "hsHaJbxpiqPOweab",
             "pack": "character-archetypes",
             "identifier": "archetype-strength-t2",
-            "hash": "41fd03e58c0d"
+            "hash": "b5702ef17b5e"
           }
         }
       }
@@ -1281,11 +1008,11 @@
       "slug": "archetype-strength-t3",
       "name": "Archetype: Strength (Warlord) (Tier 3)",
       "type": "feat",
-      "img": "icons/creatures/abilities/lion-roar-yellow.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_strength.webp",
       "folder": "Strength",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Strength</strong></p>\n<ul>\n<li><strong>Tactical:</strong> When you make a Strength check, an Intimidation check, or a contested battlefield command check, you may treat any d20 roll of <strong>9 or lower as a 10</strong>.</li>\n<li><strong>Strategic:</strong> Your battlefield reliability increasingly shapes faction confidence, but its primary effect is expressed through your repeated competence at the table.</li>\n</ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Tier 3 (Level 11) — Strength (Warlord)</strong></p><ul><li><p><strong>Tactical:</strong> When you make a Strength check, an Intimidation check, or a contested battlefield command check, you may treat any 2d10 roll of <strong>9 or lower as a 10</strong>.</p></li><li><p><strong>Strategic:</strong> Your battlefield reliability increasingly shapes faction confidence, but its primary effect is expressed through your repeated competence at the table.</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -1327,7 +1054,7 @@
             "id": "4a3HlDwhIdfXK9Ce",
             "pack": "character-archetypes",
             "identifier": "archetype-strength-t3",
-            "hash": "80f930d9802e"
+            "hash": "bb5e6d58d460"
           }
         }
       }
@@ -1336,11 +1063,11 @@
       "slug": "archetype-strength-t4",
       "name": "Archetype: Strength (Warlord) (Tier 4)",
       "type": "feat",
-      "img": "icons/creatures/abilities/lion-roar-yellow.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_strength.webp",
       "folder": "Strength",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — Strength</strong></p>\n<ul>\n<li><strong>Tactical:</strong> Your mastery of force, discipline, and command places you among the most feared battlefield leaders of the age.</li>\n<li><strong>Strategic:</strong> When undertaking a major raid, siege, or direct military action, the <strong>Strength OP cost is reduced by 3</strong> (minimum 1).</li>\n</ul>",
+          "value": "<p><strong>Tier 4 (Level 17) — Strength (Warlord)</strong></p><ul><li><p><strong>Tactical:</strong> Your mastery of force, discipline, and command places you among the most feared battlefield leaders of the age.</p></li><li><p><strong>Strategic:</strong> Whenever your Domain spends Violence marks, it spends 30 fewer (never below 10).</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -1384,7 +1111,7 @@
             "id": "KvINR4JAPTw4Baxk",
             "pack": "character-archetypes",
             "identifier": "archetype-strength-t4",
-            "hash": "e52569bc92d2"
+            "hash": "d6b6ba5a7476"
           }
         }
       }
@@ -1397,7 +1124,7 @@
       "folder": "Temperance",
       "system": {
         "description": {
-          "value": "<p><em>“Too much breaks. Too little fails. You are the line between.”</em></p><p><strong>Temperance</strong> stabilizes extremes and converts volatility into control.</p>",
+          "value": "<p><em>“Too much breaks. Too little fails. You are the line between.”</em></p><p><strong>Temperance</strong> stabilizes extremes and converts volatility into control.</p><p><strong>Domain edge:</strong> Your Domain earns <strong>+10 Logistics</strong> marks each turn while you serve it.</p>",
           "chat": ""
         },
         "type": {
@@ -1425,14 +1152,15 @@
               "bbttcc:temperance",
               "bbttcc:base"
             ]
-          }
+          },
+          "category": "character-archetypes"
         },
         "bad-eden-5e": {
           "rfi": {
             "id": "ZglOBfB8VnrfFn0f",
             "pack": "character-archetypes",
             "identifier": "archetype-temperance",
-            "hash": "0e751028f619"
+            "hash": "d737a22f7c68"
           }
         }
       }
@@ -1445,7 +1173,7 @@
       "folder": "Temperance",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Temperance</strong></p><ul><li><strong>Tactical:</strong> Medicine + Insight, Resistance Tier-0 powers.</li><li><strong>Strategic:</strong> +2 Logistics OP cap.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Temperance</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Religion and Insight.</li><li><strong>Strategic:</strong> Your Domain's Logistics marks cap rises by 20.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -1484,7 +1212,7 @@
             "id": "GhYr8T4ZZvomq3r8",
             "pack": "character-archetypes",
             "identifier": "archetype-temperance-t1",
-            "hash": "4796d021d67b"
+            "hash": "5b9efa962aab"
           }
         }
       }
@@ -1535,7 +1263,7 @@
             "id": "YM0Oe8C4SpS3EPmW",
             "pack": "character-archetypes",
             "identifier": "archetype-temperance-t2",
-            "hash": "70d6ebf54c20"
+            "hash": "2e564baeadb8"
           }
         }
       }
@@ -1548,7 +1276,7 @@
       "folder": "Temperance",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Temperance</strong></p><ul><li><strong>Tactical:</strong> Advantage vs Stress, poison, environmental effects.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Temperance</strong></p><ul><li><strong>Tactical:</strong> Gain advantage vs Stress, poison, environmental effects.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -1586,7 +1314,7 @@
             "id": "Jrk0HK6931JuVjsn",
             "pack": "character-archetypes",
             "identifier": "archetype-temperance-t3",
-            "hash": "93b3bab8925e"
+            "hash": "f69db8afa39c"
           }
         }
       }
@@ -1599,7 +1327,7 @@
       "folder": "Temperance",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 — Temperance</strong></p><ul><li><strong>Strategic:</strong> −1 OP cost when hitting extremes (empty/full).</li></ul>",
+          "value": "<p><strong>Tier 4 — Temperance</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends from a channel that sits empty or at its cap, it spends 10 fewer marks (never below 10).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -1638,7 +1366,7 @@
             "id": "ywk8qnzQ8apMhUjg",
             "pack": "character-archetypes",
             "identifier": "archetype-temperance-t4",
-            "hash": "64c0bb5e1a07"
+            "hash": "cda3ba22e995"
           }
         }
       }
@@ -1651,7 +1379,7 @@
       "folder": "The Chariot",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Velocity is not speed. It is direction maintained under pressure.”</em></p>\n<p><strong>Archetype (BBTTCC): The Chariot (Squad Leader).</strong> Field commander, momentum-anchor, and small-unit tactician. You turn chaos into movement and movement into victory.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> This Archetype is associated with <strong>+1 Strength</strong> and <strong>+1 Dexterity</strong> in faction calculus, reflecting mixed-method tactical control.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of squad command, coordinated action, and breach momentum.</li>\n</ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Velocity is not speed. It is direction maintained under pressure.”</em></p>\n<p><strong>Archetype (Bad Eden): The Chariot (Squad Leader).</strong> Field commander, momentum-anchor, and small-unit tactician. You turn chaos into movement and movement into victory.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your Domain earns <strong>+10 Violence</strong> and <strong>+10 Intrigue</strong> marks each turn while you serve it.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of squad command, coordinated action, and breach momentum.</li>\n</ul>",
           "chat": ""
         },
         "type": {
@@ -1692,7 +1420,7 @@
             "id": "yBGS562D4hxSSohx",
             "pack": "character-archetypes",
             "identifier": "archetype-chariot",
-            "hash": "a9db392913fa"
+            "hash": "788b2084b768"
           }
         }
       }
@@ -1705,7 +1433,7 @@
       "folder": "The Chariot",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain proficiency in Survival and Perception.</li>\n<li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li>\n</ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain proficiency in Athletics and Perception.</li>\n\n</ul>",
           "chat": ""
         },
         "type": {
@@ -1748,7 +1476,7 @@
             "id": "kriHks5FUAji1Txn",
             "pack": "character-archetypes",
             "identifier": "archetype-chariot-t1",
-            "hash": "cee247da6846"
+            "hash": "53f7b737d64e"
           }
         }
       }
@@ -1761,7 +1489,7 @@
       "folder": "The Chariot",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain 2 reliable NPC squadmates (typically using AC or Scout stat blocks).</li>\n<li><strong>Strategic:</strong> If a squadmate dies, it can be replaced during the next strategic turn at the cost of 2 Non-Lethal OPs.</li>\n</ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain 2 reliable NPC squadmates (typically using AC or Scout stat blocks).</li>\n<li><strong>Strategic:</strong> If a squadmate dies, your Domain replaces them during the next turn for 20 Non-Lethal marks (the card fires it).</li>\n</ul>",
           "chat": ""
         },
         "type": {
@@ -1804,7 +1532,7 @@
             "id": "l46EM2BlGQpmqQYz",
             "pack": "character-archetypes",
             "identifier": "archetype-chariot-t2",
-            "hash": "e90344b594b2"
+            "hash": "aa2ddec7a7a5"
           }
         }
       }
@@ -1817,7 +1545,7 @@
       "folder": "The Chariot",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 3 (Level 11) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You can use the Help action as a bonus action during combat, provided the target is an allied NPC or squadmate.</li>\n<li><strong>Strategic:</strong> Once per Siege or Bunker operation, you may grant a +2 bonus to one Opposed Strategic Roll involving Strength or Dexterity.</li>\n</ul>",
+          "value": "<p><strong>Tier 3 (Level 11) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You can use the Help action as a bonus action during combat, provided the target is an allied NPC or squadmate.</li>\n<li><strong>Strategic:</strong> Once per Siege or Bunker operation, you grant +2 to one Strength or Dexterity Domain roll (the card fires it).</li>\n</ul>",
           "chat": ""
         },
         "type": {
@@ -1862,7 +1590,7 @@
             "id": "4UNXvXLroJydtIUl",
             "pack": "character-archetypes",
             "identifier": "archetype-chariot-t3",
-            "hash": "7177af83ef0a"
+            "hash": "07f27d0bb708"
           }
         }
       }
@@ -1875,7 +1603,7 @@
       "folder": "The Chariot",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> —</li>\n<li><strong>Strategic:</strong> When undertaking a Bunker Busters (Strategic Raid) scenario, your presence and squad grant Advantage to your faction's Opposed Strategic Roll.</li>\n</ul>",
+          "value": "<p><strong>Tier 4 (Level 17) — The Chariot</strong></p>\n<ul>\n\n<li><strong>Strategic:</strong> Once per Bunker Busters scene, your presence and squad let your Domain gain advantage on its Domain roll (the card fires it).</li>\n</ul>",
           "chat": ""
         },
         "type": {
@@ -1918,7 +1646,7 @@
             "id": "qoZyJ0TvpXxwSCY5",
             "pack": "character-archetypes",
             "identifier": "archetype-chariot-t4",
-            "hash": "180dc6397c21"
+            "hash": "903689d47004"
           }
         }
       }
@@ -1931,7 +1659,7 @@
       "folder": "The Devil",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Everything has a price. You just admit it.”</em></p><p><strong>Archetype (BBTTCC): The Devil (Exploiter).</strong> You are leverage without innocence. Debt, temptation, extraction, and the cold mathematics of turning weakness into yield.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens predatory bargaining, economic pressure, and profit under corruption. This Archetype is associated with <strong>+1 Economy</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Everything has a price. You just admit it.”</em></p><p><strong>Archetype (Bad Eden): The Devil (Exploiter).</strong> You are leverage without innocence. Debt, temptation, extraction, and the cold mathematics of turning weakness into yield.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens predatory bargaining, economic pressure, and profit under corruption. Your Domain earns <strong>+10 Economy</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -1971,7 +1699,7 @@
             "id": "EuEIYMDv0xo4lmXI",
             "pack": "character-archetypes",
             "identifier": "archetype-devil",
-            "hash": "a8eabd26e463"
+            "hash": "292e53d1dd72"
           }
         }
       }
@@ -1984,7 +1712,7 @@
       "folder": "The Devil",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — The Devil (Exploiter)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Deception and Persuasion.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — The Devil (Exploiter)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Stealth and Persuasion.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -2026,7 +1754,7 @@
             "id": "XVBUziB2SmOfiiIu",
             "pack": "character-archetypes",
             "identifier": "archetype-devil-t1",
-            "hash": "3616cb04d9d4"
+            "hash": "5a94a5353b8f"
           }
         }
       }
@@ -2039,7 +1767,7 @@
       "folder": "The Devil",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — The Devil (Exploiter)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When spending Economy OPs to exploit dependency, purchase silence, pressure debtors, or monopolize a supply channel, the effectiveness of the spent OPs is increased by 25%.</li></ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — The Devil (Exploiter)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Economy marks, it spends 20% less (never below 10).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -2081,7 +1809,7 @@
             "id": "dnwbmkI5caftMxSg",
             "pack": "character-archetypes",
             "identifier": "archetype-devil-t2",
-            "hash": "4e47c7f85d64"
+            "hash": "c8b3dd907713"
           }
         }
       }
@@ -2094,7 +1822,7 @@
       "folder": "The Devil",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Devil (Exploiter)</strong></p><ul><li><strong>Tactical:</strong> When you make a Charisma or Intelligence check related to bargaining, coercive negotiation, blackmail, temptation, or leverage, you can treat any d20 roll of 9 or lower as a 10.</li><li><strong>Strategic:</strong> —</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Devil (Exploiter)</strong></p><ul><li><strong>Tactical:</strong> When you make a Charisma or Intelligence check related to bargaining, coercive negotiation, blackmail, temptation, or leverage, you gain advantage.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -2136,7 +1864,7 @@
             "id": "xhGUdPv973h9UXI0",
             "pack": "character-archetypes",
             "identifier": "archetype-devil-t3",
-            "hash": "6829e64468ed"
+            "hash": "990d7314e068"
           }
         }
       }
@@ -2149,7 +1877,7 @@
       "folder": "The Devil",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — The Devil (Exploiter)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving an extraction, monopoly, debt-enforcement, corruption, or coercive acquisition scenario, the Economy OP cost is reduced by 3 (minimum 1).</li></ul>",
+          "value": "<p><strong>Tier 4 (Level 17) — The Devil (Exploiter)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Economy marks, it spends 30 fewer (never below 10).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -2192,7 +1920,7 @@
             "id": "ZCaieLVwYbFzzb36",
             "pack": "character-archetypes",
             "identifier": "archetype-devil-t4",
-            "hash": "f0aac45835bf"
+            "hash": "80d3d31b1125"
           }
         }
       }
@@ -2205,7 +1933,7 @@
       "folder": "The Emperor",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Order is not an idea. It is a budget, a road network, and somebody staying late to sign the papers.”</em></p>\n<p><strong>Archetype (BBTTCC): The Emperor (Administrator).</strong> Civic architect, system-builder, and keeper of functional continuity. You turn collapse into policy and policy into survival.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your faction’s economy stretches farther around you. This Archetype is associated with <strong>+3 Economy OPs</strong> in faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of logistics, management, civic control, and state capacity.</li>\n</ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Order is not an idea. It is a budget, a road network, and somebody staying late to sign the papers.”</em></p>\n<p><strong>Archetype (Bad Eden): The Emperor (Administrator).</strong> Civic architect, system-builder, and keeper of functional continuity. You turn collapse into policy and policy into Athletics.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your Domain’s economy stretches farther around you. Your Domain earns <strong>+30 Economy</strong> marks each turn while you serve it.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of logistics, management, civic control, and state capacity.</li>\n</ul>",
           "chat": ""
         },
         "type": {
@@ -2245,7 +1973,7 @@
             "id": "c2FVJMXGkoyIYhzh",
             "pack": "character-archetypes",
             "identifier": "archetype-emperor",
-            "hash": "ce1ac4f2b285"
+            "hash": "cee1fc1f37c1"
           }
         }
       }
@@ -2258,7 +1986,7 @@
       "folder": "The Emperor",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — The Emperor</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain proficiency in Investigation and Persuasion.</li>\n<li><strong>Strategic:</strong> Your faction's Economy OP cap increases by 3.</li>\n</ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — The Emperor</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain proficiency in Investigation and Persuasion.</li>\n<li><strong>Strategic:</strong> Your Domain's Economy marks cap increases by 3.</li>\n</ul>",
           "chat": ""
         },
         "type": {
@@ -2302,7 +2030,7 @@
             "id": "oqsCNy0eKTT0jT8k",
             "pack": "character-archetypes",
             "identifier": "archetype-emperor-t1",
-            "hash": "836636973a60"
+            "hash": "48bf474278cd"
           }
         }
       }
@@ -2315,7 +2043,7 @@
       "folder": "The Emperor",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — The Emperor</strong></p>\n<ul>\n<li><strong>Tactical:</strong> —</li>\n<li><strong>Strategic:</strong> During the Resource Regeneration phase, your faction generates 1 additional Economy OP for every three controlled Hexes (rounded down, minimum 1 extra).</li>\n</ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — The Emperor</strong></p>\n<ul>\n\n<li><strong>Strategic:</strong> Each turn your Domain earns 10 extra Economy marks for every three hexes it holds (at least 10).</li>\n</ul>",
           "chat": ""
         },
         "type": {
@@ -2358,7 +2086,7 @@
             "id": "SSJWkTm8idbCQbmh",
             "pack": "character-archetypes",
             "identifier": "archetype-emperor-t2",
-            "hash": "5b957d84beb0"
+            "hash": "b4f8411410c6"
           }
         }
       }
@@ -2371,7 +2099,7 @@
       "folder": "The Emperor",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Emperor</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You have advantage on Intelligence checks related to logistics, trade routes, or deciphering bureaucracy. When searching for supplies in urban areas, you find twice as much as usual.</li>\n<li><strong>Strategic:</strong> —</li>\n</ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Emperor</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You have advantage on Intelligence checks related to logistics, trade routes, or deciphering bureaucracy. When searching for supplies in urban areas, you find twice as much as usual.</li>\n\n</ul>",
           "chat": ""
         },
         "type": {
@@ -2414,7 +2142,7 @@
             "id": "5PisqMbFuXX8VykF",
             "pack": "character-archetypes",
             "identifier": "archetype-emperor-t3",
-            "hash": "1c610f0ffc9f"
+            "hash": "44497fa3ea78"
           }
         }
       }
@@ -2427,7 +2155,7 @@
       "folder": "The Emperor",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 4 (Level 17) — The Emperor</strong></p>\n<ul>\n<li><strong>Tactical:</strong> —</li>\n<li><strong>Strategic:</strong> When resolving a Policy &amp; Crisis Management (Administrative) scenario, you have advantage on all relevant strategic skill checks.</li>\n</ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 4 (Level 17) — The Emperor</strong></p>\n<ul>\n\n<li><strong>Strategic:</strong> Once per Policy & Crisis Management scene, your Domain is made with advantage on its Domain rolls (the card fires it).</li>\n</ul>",
           "chat": ""
         },
         "type": {
@@ -2470,7 +2198,7 @@
             "id": "YXpxQF0xsNCXTkvG",
             "pack": "character-archetypes",
             "identifier": "archetype-emperor-t4",
-            "hash": "d446611565df"
+            "hash": "ca7e14a31a62"
           }
         }
       }
@@ -2483,7 +2211,7 @@
       "folder": "The Empress",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“If it lives, you are responsible for it.”</em></p><p><strong>Archetype (BBTTCC): The Empress (Caretaker).</strong> You are abundance under pressure: not softness, but stewardship. You keep people, places, and fragile futures alive long enough to matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype nurtures resilience, relief, and sustainable flourishing. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Culture</strong> in faction calculus in BBTTCC’s faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“If it lives, you are responsible for it.”</em></p><p><strong>Archetype (Bad Eden): The Empress (Caretaker).</strong> You are abundance under pressure: not softness, but stewardship. You keep people, places, and fragile futures alive long enough to matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype nurtures resilience, relief, and sustainable flourishing. Your Domain earns <strong>+10 Culture</strong> and <strong>+10 Economy</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -2523,8 +2251,8 @@
           "rfi": {
             "id": "EjzyiP3AiAz5OPGp",
             "pack": "character-archetypes",
-            "identifier": "archetype_empress",
-            "hash": "73bdbac12832"
+            "identifier": "archetype-empress",
+            "hash": "67c1d50e3f00"
           }
         }
       }
@@ -2537,7 +2265,7 @@
       "folder": "The Empress",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Medicine and Persuasion. You learn the Spare the Dying Tier-0 powers.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Religion and Persuasion.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -2580,7 +2308,7 @@
             "id": "AMhVpBKx6M1NeqFc",
             "pack": "character-archetypes",
             "identifier": "archetype-empress-t1",
-            "hash": "7f6d059a02d0"
+            "hash": "628d407960f9"
           }
         }
       }
@@ -2593,7 +2321,7 @@
       "folder": "The Empress",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During the Resource Regeneration phase, one controlled Hex of your choice produces +1 additional non-Strength modifier if it is not contested.</li></ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — The Empress (Caretaker)</strong></p><ul><li><strong>Strategic:</strong> Each turn one controlled hex of your choice yields 10 extra Culture marks for your Domain.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -2613,7 +2341,9 @@
       "flags": {
         "bbttcc-character-options": {
           "category": "archetype",
-          "bonuses": {},
+          "bonuses": {
+            "culture": 1
+          },
           "option": {
             "category": "archetype",
             "key": "empress",
@@ -2635,7 +2365,7 @@
             "id": "6O8fvyxF7JOEzhAn",
             "pack": "character-archetypes",
             "identifier": "archetype-empress-t2",
-            "hash": "f588cffdc92a"
+            "hash": "9f76ecab4f07"
           }
         }
       }
@@ -2648,7 +2378,7 @@
       "folder": "The Empress",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> You have advantage on Wisdom checks related to healing, caretaking, morale triage, or reading communal distress.</li><li><strong>Strategic:</strong> —</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> You have advantage on Wisdom checks related to healing, caretaking, Loyalty triage, or reading communal distress.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -2690,7 +2420,7 @@
             "id": "cJj1AicHRHKA1IiM",
             "pack": "character-archetypes",
             "identifier": "archetype-empress-t3",
-            "hash": "7fcb6ab141af"
+            "hash": "28027bb8367b"
           }
         }
       }
@@ -2703,7 +2433,7 @@
       "folder": "The Empress",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a recovery, relief, resettlement, or reconstruction scenario, the Economy or Culture OP cost is reduced by 3 (minimum 1).</li></ul>",
+          "value": "<p><strong>Tier 4 (Level 17) — The Empress (Caretaker)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Economy or Culture marks, it spends 30 fewer (never below 10).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -2746,7 +2476,7 @@
             "id": "yQckYj1PBriyaMs1",
             "pack": "character-archetypes",
             "identifier": "archetype-empress-t4",
-            "hash": "5c62bbf3b3dc"
+            "hash": "e6d6a9bf800d"
           }
         }
       }
@@ -2759,7 +2489,7 @@
       "folder": "The Fool",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You move before the map exists.”</em></p><p><strong>Archetype (BBTTCC): The Fool (Catalyst).</strong> You are motion before certainty, risk before consensus, and the destabilizing force that turns unknown ground into lived reality.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens exploration, scouting, improvisation, and risky openings. This Archetype is associated with <strong>+1 Dexterity</strong> and <strong>+1 Logistics</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You move before the map exists.”</em></p><p><strong>Archetype (Bad Eden): The Fool (Catalyst).</strong> You are motion before certainty, risk before consensus, and the destabilizing force that turns unknown ground into lived reality.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens exploration, scouting, improvisation, and risky openings. Your Domain earns <strong>+10 Logistics</strong> and <strong>+10 Intrigue</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -2800,7 +2530,7 @@
             "id": "oJOxhhmR9ahZxwZs",
             "pack": "character-archetypes",
             "identifier": "archetype-fool",
-            "hash": "97ba878ab804"
+            "hash": "1e5e41d58504"
           }
         }
       }
@@ -2813,7 +2543,7 @@
       "folder": "The Fool",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Acrobatics and Survival.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Athletics and Perception.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -2856,7 +2586,7 @@
             "id": "plU4QSfA5jtwMZVe",
             "pack": "character-archetypes",
             "identifier": "archetype-fool-t1",
-            "hash": "1261a847934e"
+            "hash": "14a1e9a1fdfa"
           }
         }
       }
@@ -2869,7 +2599,7 @@
       "folder": "The Fool",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During travel, scouting, route-finding, or first-contact scenarios, the first setback or complication may be rerolled once.</li></ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — The Fool (Catalyst)</strong></p><ul><li><strong>Strategic:</strong> Once per turn, on a travel, scouting, route-finding or first-contact leg, your Domain rerolls the first setback or complication (the card fires it).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -2911,7 +2641,7 @@
             "id": "wZMgwjbPhR4aeNjN",
             "pack": "character-archetypes",
             "identifier": "archetype-fool-t2",
-            "hash": "b0e2a3d27715"
+            "hash": "bf1dfed761f9"
           }
         }
       }
@@ -2924,7 +2654,7 @@
       "folder": "The Fool",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> When you make a Dexterity or Wisdom check related to movement, travel hazard response, scouting, or improvising under pressure, you can treat any d20 roll of 9 or lower as a 10.</li><li><strong>Strategic:</strong> —</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> When you make a Dexterity or Wisdom check related to movement, travel hazard response, scouting, or improvising under pressure, you gain advantage.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -2966,7 +2696,7 @@
             "id": "y8aOahW2RJHVSBoD",
             "pack": "character-archetypes",
             "identifier": "archetype-fool-t3",
-            "hash": "4a978681ab69"
+            "hash": "1c79785c7ce5"
           }
         }
       }
@@ -2979,7 +2709,7 @@
       "folder": "The Fool",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a travel, exploration, frontier-contact, or dangerous discovery scenario, the Logistics or Dexterity OP cost is reduced by 3 (minimum 1).</li></ul>",
+          "value": "<p><strong>Tier 4 (Level 17) — The Fool (Catalyst)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Logistics or Intrigue marks, it spends 30 fewer (never below 10).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -3022,7 +2752,7 @@
             "id": "YfYceGiS4pRO59qf",
             "pack": "character-archetypes",
             "identifier": "archetype-fool-t4",
-            "hash": "d5a519ebdc1c"
+            "hash": "7d4270b12589"
           }
         }
       }
@@ -3035,7 +2765,7 @@
       "folder": "The Hanged Man",
       "system": {
         "description": {
-          "value": "<p><em>“You understand cost.”</em></p><p><strong>Archetype (BBTTCC): The Hanged Man.</strong> You gain power through sacrifice, inversion, and delay.</p>",
+          "value": "<p><em>“You understand cost.”</em></p><p><strong>Archetype (Bad Eden): The Hanged Man.</strong> You gain power through sacrifice, inversion, and delay.</p><p><strong>Domain edge:</strong> Your Domain earns <strong>+10 Intrigue</strong> marks each turn while you serve it.</p>",
           "chat": ""
         },
         "type": {
@@ -3075,7 +2805,7 @@
             "id": "uqaS1xp0kImMr3yo",
             "pack": "character-archetypes",
             "identifier": "archetype-hanged-man",
-            "hash": "9d201286fed4"
+            "hash": "09b1f7815db2"
           }
         }
       }
@@ -3088,7 +2818,7 @@
       "folder": "The Hanged Man",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Hanged Man</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Insight and Arcana. You learn the <strong>Resistance</strong> Tier-0 powers.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Hanged Man</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Insight and Arcana. You learn the <strong>Resistance</strong> Tier-0 powers.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -3130,7 +2860,7 @@
             "id": "3tXpVy3ZG7QlLHkt",
             "pack": "character-archetypes",
             "identifier": "archetype-hanged-man-t1",
-            "hash": "38b4633126d2"
+            "hash": "e59e424b26a9"
           }
         }
       }
@@ -3143,7 +2873,7 @@
       "folder": "The Hanged Man",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — The Hanged Man</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> The first failed Dexterity or Soft Power action your faction attempts each strategic turn generates <strong>1 Dexterity OP</strong> instead of being a pure loss.</li></ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — The Hanged Man</strong></p><ul><li><strong>Strategic:</strong> Once per turn, the first failed Intrigue or Soft Power action your Domain attempts returns 10 Intrigue marks instead of being a pure loss (the card fires it).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -3186,7 +2916,7 @@
             "id": "wWkpVcp1zjgj0FQD",
             "pack": "character-archetypes",
             "identifier": "archetype-hanged-man-t2",
-            "hash": "d900ed22f373"
+            "hash": "2d68755c3dff"
           }
         }
       }
@@ -3199,7 +2929,7 @@
       "folder": "The Hanged Man",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Hanged Man</strong></p><ul><li><strong>Tactical:</strong> When you fail a saving throw against being charmed, frightened, or restrained, you may immediately reroll it 1/long rest.</li><li><strong>Strategic:</strong> —</li></ul><p><strong>Reroll Failed Save</strong> <em>(Recovery: 1/long rest · Action: Reaction (on failed save))</em> — When you fail a save vs. charmed / frightened / restrained, immediately reroll it.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Hanged Man</strong></p><ul><li><strong>Tactical:</strong> When you fail a check against being charmed, frightened, or restrained, you may immediately reroll it 1/long rest.</li></ul><p><strong>Reroll Failed Save</strong> <em>(Recovery: 1/long rest · Action: Reaction (on failed save))</em> — When you fail a check vs. charmed / frightened / restrained, immediately reroll it.</p>",
           "chat": ""
         },
         "type": {
@@ -3241,7 +2971,7 @@
             "id": "XX3jJF9HTwCrxxYe",
             "pack": "character-archetypes",
             "identifier": "archetype-hanged-man-t3",
-            "hash": "0f82bdc0e765"
+            "hash": "aabbe1c12543"
           }
         }
       }
@@ -3254,7 +2984,7 @@
       "folder": "The Hanged Man",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — The Hanged Man</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Once per strategic turn, after a failed raid, intrigue action, or diplomatic action, your faction may immediately regain <strong>1 spent OP</strong> of the type used and apply <strong>+1</strong> to its next related strategic roll.</li></ul><p><strong>Sacrifice Refund</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic (after failed action))</em> — After a failed raid / intrigue / diplomatic action, regain 1 spent OP of the type used and apply +1 to the next related strategic roll.</p>",
+          "value": "<p><strong>Tier 4 (Level 17) — The Hanged Man</strong></p><ul><li><strong>Strategic:</strong> Once per turn, after a failed raid, intrigue action, or diplomatic action, your Domain may immediately regain <strong>1 spent OP</strong> of the type used and apply <strong>+1</strong> to its next related strategic roll.</li></ul><p><strong>Sacrifice Refund</strong> <em>(Recovery: 1/turn · Action: Strategic (after failed action))</em> — After a failed raid / intrigue / diplomatic action, regain 1 spent OP of the type used and apply +1 to the next related strategic roll.</p>",
           "chat": ""
         },
         "type": {
@@ -3297,7 +3027,7 @@
             "id": "kyEXtmLMAByIb0RD",
             "pack": "character-archetypes",
             "identifier": "archetype-hanged-man-t4",
-            "hash": "6c1c0833e71a"
+            "hash": "3c65168ab867"
           }
         }
       }
@@ -3310,7 +3040,7 @@
       "folder": "The Hermit",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Leave me alone. I’ll return with something useful.”</em></p><p><strong>Archetype (BBTTCC): The Hermit (Mystic-Isolator).</strong> You step away in order to see clearly. Solitude is not withdrawal to you. It is a forge, a lens, and a discipline.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens contemplation, covert preparation, and hidden spiritual leverage. This Archetype is associated with <strong>+1 Faith OP</strong> and <strong>+1 Dexterity OP</strong>.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Leave me alone. I’ll return with something useful.”</em></p><p><strong>Archetype (Bad Eden): The Hermit (Mystic-Isolator).</strong> You step away in order to see clearly. Solitude is not withdrawal to you. It is a forge, a lens, and a discipline.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens contemplation, covert preparation, and hidden spiritual leverage. Your Domain earns <strong>+10 Faith</strong> and <strong>+10 Intrigue</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -3351,7 +3081,7 @@
             "id": "Mufyd0GAcuSRnzuP",
             "pack": "character-archetypes",
             "identifier": "archetype-hermit",
-            "hash": "205bff6bc026"
+            "hash": "4edb0c975545"
           }
         }
       }
@@ -3364,7 +3094,7 @@
       "folder": "The Hermit",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Religion and Stealth. You learn the Light Tier-0 powers.</li><li><strong>Strategic:</strong> Your faction's Faith OP cap increases by 1 and Dexterity OP cap increases by 1.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Religion and Stealth.</li><li><strong>Strategic:</strong> Your Domain's Faith marks cap and Intrigue marks cap rise by 10 each.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -3410,7 +3140,7 @@
             "id": "af7YNbKZ7x4H7jVv",
             "pack": "character-archetypes",
             "identifier": "archetype-hermit-t1",
-            "hash": "cb794b8191aa"
+            "hash": "2a8ff6326510"
           }
         }
       }
@@ -3423,7 +3153,7 @@
       "folder": "The Hermit",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During meditation, retreat, hidden study, or covert preparation scenarios, the time or resource cost is reduced by 25%.</li></ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Faith or Intrigue marks, it spends 25% less (never below 10).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -3465,7 +3195,7 @@
             "id": "ZvHBIwCbR83KUT5t",
             "pack": "character-archetypes",
             "identifier": "archetype-hermit-t2",
-            "hash": "9d95036c0fcb"
+            "hash": "61cd667b43c3"
           }
         }
       }
@@ -3478,7 +3208,7 @@
       "folder": "The Hermit",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> When you are acting alone or without an adjacent ally, you have advantage on Wisdom checks related to perception, spiritual insight, or occult interpretation.</li><li><strong>Strategic:</strong> —</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> When you are acting alone or without an adjacent ally, you have advantage on Wisdom checks related to perception, spiritual insight, or occult interpretation.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -3520,7 +3250,7 @@
             "id": "k1KV0wqTMZah8uoh",
             "pack": "character-archetypes",
             "identifier": "archetype-hermit-t3",
-            "hash": "0cefc28c6701"
+            "hash": "13f3012c5e59"
           }
         }
       }
@@ -3533,7 +3263,7 @@
       "folder": "The Hermit",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a hidden retreat, mystical preparation, covert pilgrimage, or occult seclusion scenario, the Faith or Dexterity OP cost is reduced by 3 (minimum 1).</li></ul>",
+          "value": "<p><strong>Tier 4 (Level 17) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Faith or Intrigue marks, it spends 30 fewer (never below 10).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -3576,7 +3306,280 @@
             "id": "08AeIpg4AhC1EjX5",
             "pack": "character-archetypes",
             "identifier": "archetype-hermit-t4",
-            "hash": "f9b1ce380f56"
+            "hash": "99baf8759bba"
+          }
+        }
+      }
+    },
+    {
+      "slug": "archetype-hierophant",
+      "name": "Archetype: The Hierophant",
+      "type": "feat",
+      "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
+      "folder": "The Hierophant",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You speak for something bigger than yourself. Unfortunately, it has opinions.”</em></p>\n<p><strong>Archetype (Bad Eden): Hierophant.</strong> Spiritual leader and mediator between factions and the higher weirdness. You are part priest, part occult systems admin, part HR for gods and genii loci.</p>\n<p>This Archetype means you’ve stood between people and the powers they invoked, and somehow not been turned into a cautionary tale. Yet.</p>\n\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Soft Power / Faith Hooks.</strong> This Archetype integrates you deeply with Bad Eden’s Soft Power and Tikkun systems. See the Hierophant Tier feats (Tier 1–4) for the full tactical and strategic details of your miracles, sermons, and extremely pointed blessings.</li>\n</ul><p><strong>Domain edge:</strong> Your Domain earns <strong>+10 Soft Power</strong> and <strong>+10 Faith</strong> marks each turn while you serve it.</p>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "archetype-hierophant"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "character-archetypes",
+          "bonuses": {
+            "softpower": 1,
+            "faith": 1
+          },
+          "option": {
+            "category": "archetype",
+            "key": "hierophant",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:hierophant",
+              "bbttcc:base"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "LakgHhzI6R4ugCEO",
+            "pack": "character-archetypes",
+            "identifier": "archetype-hierophant",
+            "hash": "98c27695e1cf"
+          }
+        }
+      }
+    },
+    {
+      "slug": "archetype-hierophant-t1",
+      "name": "Archetype: The Hierophant (Tier 1)",
+      "type": "feat",
+      "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
+      "folder": "The Hierophant",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — Hierophant (Tier 1)</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain proficiency in Religion and Insight.</li>\n\n</ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "archetype-hierophant-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "hierophant",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:hierophant",
+              "bbttcc:tier:1",
+              "bbttcc:softpower_op_cap:+3"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "mCZc9xfaPf1U4Kzk",
+            "pack": "character-archetypes",
+            "identifier": "archetype-hierophant-t1",
+            "hash": "ef1883c27809"
+          }
+        }
+      }
+    },
+    {
+      "slug": "archetype-hierophant-t2",
+      "name": "Archetype: The Hierophant (Tier 2)",
+      "type": "feat",
+      "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
+      "folder": "The Hierophant",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 (Level 5) — Hierophant</strong></p>\n<ul>\n\n<li><strong>Strategic:</strong> Whenever your Domain spends Soft Power marks, it spends 20% less (never below 10).</li>\n</ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "archetype-hierophant-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "hierophant",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:hierophant",
+              "bbttcc:tier:2",
+              "bbttcc:softpower_effect:+25%",
+              "bbttcc:scenario:siege",
+              "bbttcc:action:raise_loyalty",
+              "bbttcc:action:inspire_troops"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "ylF1MQw8hiQaAwto",
+            "pack": "character-archetypes",
+            "identifier": "archetype-hierophant-t2",
+            "hash": "41d1876b4e48"
+          }
+        }
+      }
+    },
+    {
+      "slug": "archetype-hierophant-t3",
+      "name": "Archetype: The Hierophant (Tier 3)",
+      "type": "feat",
+      "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
+      "folder": "The Hierophant",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Hierophant</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You have advantage on checks against effects caused by <strong>Qliphothic entities</strong> (Fiends, Aberrations) and effects related to the <strong>Darkness Track</strong>.</li>\n\n</ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "archetype-hierophant-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "hierophant",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:hierophant",
+              "bbttcc:tier:3",
+              "bbttcc:qliphothic_resist",
+              "bbttcc:darkness_resist"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "vnL5EIezYHAzzJa6",
+            "pack": "character-archetypes",
+            "identifier": "archetype-hierophant-t3",
+            "hash": "23671b27122c"
+          }
+        }
+      }
+    },
+    {
+      "slug": "archetype-hierophant-t4",
+      "name": "Archetype: The Hierophant (Tier 4)",
+      "type": "feat",
+      "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
+      "folder": "The Hierophant",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 (Level 17) — Hierophant</strong></p>\n<ul>\n\n<li><strong>Strategic:</strong> Your spiritual authority aids Tikkun Olam: once per short rest, the marks cost or time to shift a hex's alignment toward a beneficial Sephirah drops by 20% (the card fires it).</li>\n</ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "archetype-hierophant-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "hierophant",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:hierophant",
+              "bbttcc:tier:4",
+              "bbttcc:tikkun:sephirot_shift_cost:-20%"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Bl7LXJeIEXrYesYB",
+            "pack": "character-archetypes",
+            "identifier": "archetype-hierophant-t4",
+            "hash": "6503fd48127a"
           }
         }
       }
@@ -3589,7 +3592,7 @@
       "folder": "The High Priestess",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You already know. You just refuse to say it too early.”</em></p><p><strong>Archetype (BBTTCC): The High Priestess (Seer).</strong> You read the invisible pressure in a room before anyone else admits it exists. You are intuition weaponized, omen-bearing, and very difficult to surprise in ways that matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype sharpens the faction’s hidden-state awareness and information leverage. This Archetype is associated with <strong>+1 Dexterity</strong> in faction calculus in BBTTCC’s faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit; those are granted automatically by the Tier Engine at the appropriate character levels.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You already know. You just refuse to say it too early.”</em></p><p><strong>Archetype (Bad Eden): The High Priestess (Seer).</strong> You read the invisible pressure in a room before anyone else admits it exists. You are intuition weaponized, omen-bearing, and very difficult to surprise in ways that matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype sharpens the faction’s hidden-state awareness and information leverage. Your Domain earns <strong>+10 Intrigue</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit; those are granted automatically by the Tier Engine at the appropriate character levels.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -3629,7 +3632,7 @@
             "id": "kW4AStDB3daDBaue",
             "pack": "character-archetypes",
             "identifier": "archetype-high-priestess",
-            "hash": "ee7c8a4e7199"
+            "hash": "7d821ff82b68"
           }
         }
       }
@@ -3642,7 +3645,7 @@
       "folder": "The High Priestess",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The High Priestess (Seer)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Insight and Perception. You learn the Guidance Tier-0 powers.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The High Priestess (Seer)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Insight and Perception.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -3684,7 +3687,7 @@
             "id": "kf0PeKxmsieBGMNs",
             "pack": "character-archetypes",
             "identifier": "archetype-high-priestess-t1",
-            "hash": "20ddc7378030"
+            "hash": "54e78a100d37"
           }
         }
       }
@@ -3697,7 +3700,7 @@
       "folder": "The High Priestess",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — The High Priestess (Seer)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During reconnaissance, espionage, omen-reading, or hidden-threat scenarios, the first successful information-gathering step reveals one additional hidden tag, threat, or condition.</li></ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — The High Priestess (Seer)</strong></p><ul><li><strong>Strategic:</strong> Once per short rest of reconnaissance, espionage, omen-reading or hidden threat, your Domain's first successful information-gathering step reveals one additional hidden tag, threat or condition (the card fires it).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -3740,7 +3743,7 @@
             "id": "DtNYPRTfJjxBcqAb",
             "pack": "character-archetypes",
             "identifier": "archetype-high-priestess-t2",
-            "hash": "4adda02815ed"
+            "hash": "e045009ff1bf"
           }
         }
       }
@@ -3753,7 +3756,7 @@
       "folder": "The High Priestess",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The High Priestess (Seer)</strong></p><ul><li><strong>Tactical:</strong> When you make a Wisdom check related to reading motives, lies, omens, hidden influence, or intuition under pressure, you can treat any d20 roll of 9 or lower as a 10.</li><li><strong>Strategic:</strong> —</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The High Priestess (Seer)</strong></p><ul><li><strong>Tactical:</strong> When you make a Wisdom check related to reading motives, lies, omens, hidden influence, or intuition under pressure, you gain advantage.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -3795,7 +3798,7 @@
             "id": "pIFj7WqFA0PnmTSr",
             "pack": "character-archetypes",
             "identifier": "archetype-high-priestess-t3",
-            "hash": "4526b8fa3e3e"
+            "hash": "1adacaaa8459"
           }
         }
       }
@@ -3808,7 +3811,7 @@
       "folder": "The High Priestess",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 4 (Level 17) — The High Priestess (Seer)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a prophecy, espionage, hidden-threat, omen, or clandestine revelation scenario, you have advantage on all relevant strategic checks.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 4 (Level 17) — The High Priestess (Seer)</strong></p><ul><li><strong>Strategic:</strong> Once per short rest of prophecy, espionage, hidden threat, omen or clandestine revelation, your Domain is made with advantage on its Domain rolls (the card fires it).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -3851,7 +3854,7 @@
             "id": "XonJdmnpeUqGBLu0",
             "pack": "character-archetypes",
             "identifier": "archetype-high-priestess-t4",
-            "hash": "d45abc7dd655"
+            "hash": "0328ce570fd5"
           }
         }
       }
@@ -3860,11 +3863,11 @@
       "slug": "archetype-lovers",
       "name": "Archetype: The Lovers",
       "type": "feat",
-      "img": "icons/equipment/neck/amulet-heart.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_lovers.webp",
       "folder": "The Lovers",
       "system": {
         "description": {
-          "value": "<p><em>“You are what you choose—and who you choose to stand with.”</em></p><p><strong>Archetype (BBTTCC): The Lovers.</strong> Bonds define you. Commitment empowers you. Division weakens you.</p>",
+          "value": "<p><em>“You are what you choose—and who you choose to stand with.”</em></p><p><strong>Archetype (Bad Eden): The Lovers.</strong> Bonds define you. Commitment empowers you. Division weakens you.</p><p><strong>Domain edge:</strong> Your Domain earns <strong>+10 Diplomacy</strong> marks each turn while you serve it.</p>",
           "chat": ""
         },
         "type": {
@@ -3903,7 +3906,7 @@
             "id": "opM8ykoCSwTcEa4l",
             "pack": "character-archetypes",
             "identifier": "archetype-lovers",
-            "hash": "e681067305f2"
+            "hash": "4b0aa25a6d9e"
           }
         }
       }
@@ -3912,11 +3915,11 @@
       "slug": "archetype-lovers-t1",
       "name": "Archetype: The Lovers (Tier 1)",
       "type": "feat",
-      "img": "icons/equipment/neck/amulet-heart.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_lovers.webp",
       "folder": "The Lovers",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 1 — The Lovers</strong></p><ul><li><strong>Tactical:</strong> Insight + Persuasion proficiency. Learn Friends.</li><li><strong>Strategic:</strong> +2 Diplomacy OP cap.</li></ul>",
+          "value": "<p><strong>Tier 1 — The Lovers</strong></p><ul><li><p><strong>Tactical:</strong> You gain proficiency in Insight and Persuasion.</p></li><li><p><strong>Strategic:</strong> Your Domain's Diplomacy marks cap rises by 20.</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -3956,7 +3959,7 @@
             "id": "YtwdLwJl2KVxg8Cq",
             "pack": "character-archetypes",
             "identifier": "archetype-lovers-t1",
-            "hash": "88b161c7fc8a"
+            "hash": "aa7b93b1761c"
           }
         }
       }
@@ -3965,11 +3968,11 @@
       "slug": "archetype-lovers-t2",
       "name": "Archetype: The Lovers (Tier 2)",
       "type": "feat",
-      "img": "icons/equipment/neck/amulet-heart.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_lovers.webp",
       "folder": "The Lovers",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 — The Lovers</strong></p><ul><li><strong>Strategic:</strong> Coalition actions gain +1 effectiveness on first shared OP.</li></ul>",
+          "value": "<p><strong>Tier 2 — The Lovers</strong></p><ul><li><p><strong>Strategic:</strong> Once per short rest, the first coalition action your Domain shares gains +1 (the card fires it).</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -4007,7 +4010,7 @@
             "id": "Iasf4BpmVVCcaXni",
             "pack": "character-archetypes",
             "identifier": "archetype-lovers-t2",
-            "hash": "03d1b98978bb"
+            "hash": "c5555c3bda4e"
           }
         }
       }
@@ -4016,11 +4019,11 @@
       "slug": "archetype-lovers-t3",
       "name": "Archetype: The Lovers (Tier 3)",
       "type": "feat",
-      "img": "icons/equipment/neck/amulet-heart.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_lovers.webp",
       "folder": "The Lovers",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 3 — The Lovers</strong></p><ul><li><strong>Tactical:</strong> Advantage vs charm/fear near allies.</li></ul>",
+          "value": "<p><strong>Tier 3 — The Lovers</strong></p><ul><li><p><strong>Tactical:</strong> Gain advantage vs charm/fear near allies.</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -4059,7 +4062,7 @@
             "id": "PZwbgzAnfZKp8os0",
             "pack": "character-archetypes",
             "identifier": "archetype-lovers-t3",
-            "hash": "e6255853a966"
+            "hash": "faf244756aab"
           }
         }
       }
@@ -4068,11 +4071,11 @@
       "slug": "archetype-lovers-t4",
       "name": "Archetype: The Lovers (Tier 4)",
       "type": "feat",
-      "img": "icons/equipment/neck/amulet-heart.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_lovers.webp",
       "folder": "The Lovers",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 — The Lovers</strong></p><ul><li><strong>Strategic:</strong> −1 coordination penalty, coalition rolls gain Advantage.</li></ul>",
+          "value": "<p><strong>Tier 4 — The Lovers</strong></p><ul><li><p><strong>Strategic:</strong> Once per short rest, your coalition rolls gain advantage and shed one coordination penalty (the card fires it).</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -4111,7 +4114,7 @@
             "id": "YS29e2SkiCjpa6mB",
             "pack": "character-archetypes",
             "identifier": "archetype-lovers-t4",
-            "hash": "640896b0d287"
+            "hash": "d2e6be1f6a7d"
           }
         }
       }
@@ -4124,7 +4127,7 @@
       "folder": "The Magician",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You do not wave your hands and hope. You know what symbols are for.”</em></p>\n<p><strong>Archetype (BBTTCC): The Magician (Scholar).</strong> Researcher, operator, and wielder of applied understanding. You turn knowledge into leverage and leverage into effect.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> This Archetype is associated with <strong>+1 Dexterity</strong> in faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of scholarship, arcane literacy, research throughput, and recovered knowledge.</li>\n</ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You do not wave your hands and hope. You know what symbols are for.”</em></p>\n<p><strong>Archetype (Bad Eden): The Magician (Scholar).</strong> Researcher, operator, and wielder of applied understanding. You turn knowledge into leverage and leverage into effect.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your Domain earns <strong>+10 Intrigue</strong> marks each turn while you serve it.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of scholarship, arcane literacy, research throughput, and recovered knowledge.</li>\n</ul>",
           "chat": ""
         },
         "type": {
@@ -4164,7 +4167,7 @@
             "id": "zuucF5ViMQMJu8dF",
             "pack": "character-archetypes",
             "identifier": "archetype-magician",
-            "hash": "f6fe167e0fe2"
+            "hash": "7d66d06e541d"
           }
         }
       }
@@ -4177,7 +4180,7 @@
       "folder": "The Magician",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Magician</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain proficiency in Arcana and History. You learn one Tier-0 powers from the Wizard spell list.</li>\n<li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li>\n</ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Magician</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain proficiency in Arcana and History.</li>\n\n</ul>",
           "chat": ""
         },
         "type": {
@@ -4220,7 +4223,7 @@
             "id": "EbtF7JsgqmBjR1er",
             "pack": "character-archetypes",
             "identifier": "archetype-magician-t1",
-            "hash": "ceafdc67ebfc"
+            "hash": "4a50e0b5cbdb"
           }
         }
       }
@@ -4233,7 +4236,7 @@
       "folder": "The Magician",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — The Magician</strong></p>\n<ul>\n<li><strong>Tactical:</strong> Your obsessive research habits begin to pay off in the metaphysical lab.</li>\n<li><strong>Strategic:</strong> During the <strong>Identification</strong> phase of <strong>The Great Work</strong>, the time or resources required to uncover the nature of an assigned Spark (Conceptual, Vestigial, or Animate) are <strong>halved</strong>.</li>\n</ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — The Magician</strong></p>\n<ul>\n<li><strong>Tactical:</strong> Your obsessive research habits begin to pay off in the metaphysical lab.</li>\n<li><strong>Strategic:</strong> Once per short rest of the Great Work's Identification phase, the time or resources needed to uncover the Lore of an assigned Spark are halved (the card fires it).</li>\n</ul>",
           "chat": ""
         },
         "type": {
@@ -4275,7 +4278,7 @@
             "id": "Gu1yMRgigKSJSn4b",
             "pack": "character-archetypes",
             "identifier": "archetype-magician-t2",
-            "hash": "da84be5034d8"
+            "hash": "0567945a6bb9"
           }
         }
       }
@@ -4288,7 +4291,7 @@
       "folder": "The Magician",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Magician</strong></p>\n<ul>\n<li><strong>Tactical:</strong> When you make an <strong>Intelligence check</strong> related to <strong>lore, magic, or old-world history</strong>, you can treat any d20 roll of <strong>9 or lower as a 10</strong>.</li>\n<li><strong>Strategic:</strong> Your deep knowledge increasingly guides faction decisions, but its main impact is felt through your reliable successes at the table.</li>\n</ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Magician</strong></p>\n<ul>\n<li><strong>Tactical:</strong> When you make an <strong>Intelligence check</strong> related to <strong>lore, magic, or old-world Lore</strong>, you can treat any 2d10 roll of <strong>9 or lower as a 10</strong>.</li>\n<li><strong>Strategic:</strong> Your deep knowledge increasingly guides faction decisions, but its main impact is felt through your reliable successes at the table.</li>\n</ul>",
           "chat": ""
         },
         "type": {
@@ -4330,7 +4333,7 @@
             "id": "3QJRwu0hbpC9gmXz",
             "pack": "character-archetypes",
             "identifier": "archetype-magician-t3",
-            "hash": "dbbee76da939"
+            "hash": "c4e6c7b0e65b"
           }
         }
       }
@@ -4343,7 +4346,7 @@
       "folder": "The Magician",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — The Magician</strong></p>\n<ul>\n<li><strong>Tactical:</strong> Your mastery of ancient and modern lore places you among the greatest scholars of the age.</li>\n<li><strong>Strategic:</strong> When undertaking an <strong>Asset Retrieval</strong> scenario to recover lost knowledge (ancient texts, blueprints, occult schematics, etc.), the <strong>Strength or Dexterity OP cost is reduced by 3</strong> (minimum 1).</li>\n</ul>",
+          "value": "<p><strong>Tier 4 (Level 17) — The Magician</strong></p>\n<ul>\n<li><strong>Tactical:</strong> Your mastery of ancient and modern lore places you among the greatest scholars of the age.</li>\n<li><strong>Strategic:</strong> Whenever your Domain spends Violence or Intrigue marks, it spends 30 fewer (never below 10).</li>\n</ul>",
           "chat": ""
         },
         "type": {
@@ -4386,7 +4389,7 @@
             "id": "TOWyXHH5o4npJy5b",
             "pack": "character-archetypes",
             "identifier": "archetype-magician-t4",
-            "hash": "3a9984b0357d"
+            "hash": "ecf9cbe76993"
           }
         }
       }
@@ -4399,7 +4402,7 @@
       "folder": "The Moon",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You were never alone in your body.”</em></p>\n<p><strong>Archetype (BBTTCC): The Moon (Ancient Blood).</strong> You carry something older than law. Memory moves through you. It expects to matter.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your presence amplifies symbolism, inherited legitimacy, buried memory, and eerie cultural authority. This Archetype is associated with <strong>+1 Soft Power</strong> in faction calculus in BBTTCC’s faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit; those are granted automatically by the Tier Engine at the appropriate character levels.</li>\n</ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You were never alone in your body.”</em></p>\n<p><strong>Archetype (Bad Eden): The Moon (Ancient Blood).</strong> You carry something older than law. Memory moves through you. It expects to matter.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your presence amplifies symbolism, inherited legitimacy, buried memory, and eerie cultural authority. Your Domain earns <strong>+10 Soft Power</strong> marks each turn while you serve it.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit; those are granted automatically by the Tier Engine at the appropriate character levels.</li>\n</ul>",
           "chat": ""
         },
         "type": {
@@ -4439,7 +4442,7 @@
             "id": "sKa3fbmCLPBH5Z2k",
             "pack": "character-archetypes",
             "identifier": "archetype-moon",
-            "hash": "3ba4f04d28be"
+            "hash": "c8bb515ffb9e"
           }
         }
       }
@@ -4452,7 +4455,7 @@
       "folder": "The Moon",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — The Moon</strong></p><ul><li><strong>Tactical:</strong> You learn Message and gain proficiency in History.</li><li><strong>Strategic:</strong> Soft Power OP cap +2.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — The Moon</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in History.</li><li><strong>Strategic:</strong> Your Domain's Soft Power marks cap rises by 20.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -4494,7 +4497,7 @@
             "id": "85Sjjy3ID6Ob4BIQ",
             "pack": "character-archetypes",
             "identifier": "archetype-moon-t1",
-            "hash": "c04a7eb4d6e8"
+            "hash": "503344745aba"
           }
         }
       }
@@ -4507,7 +4510,7 @@
       "folder": "The Moon",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — The Moon</strong></p>\n<ul>\n<li><strong>Tactical:</strong> —</li>\n<li><strong>Strategic:</strong> Controlled Hexes gain a bonus to stability checks due to ancestral resonance, making them more resistant to enemy Soft Power attacks.</li>\n</ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — The Moon</strong></p>\n<ul>\n\n<li><strong>Strategic:</strong> Ancestral resonance steadies your hexes: your Domain adds +1 to its Soft Power Domain rolls.</li>\n</ul>",
           "chat": ""
         },
         "type": {
@@ -4550,7 +4553,7 @@
             "id": "PN4ehtGFX792fmYH",
             "pack": "character-archetypes",
             "identifier": "archetype-moon-t2",
-            "hash": "2711126b8c56"
+            "hash": "0bc03953a84c"
           }
         }
       }
@@ -4563,7 +4566,7 @@
       "folder": "The Moon",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Moon</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You can cast <strong>Detect Thoughts</strong> 1/long rest without expending a powers slot and gain advantage on saving throws against being charmed.</li>\n<li><strong>Strategic:</strong> —</li>\n</ul><p><strong>Detect Thoughts</strong> <em>(Recovery: 1/long rest · Action: Action)</em> — Cast Detect Thoughts without expending a powers slot. (Permanent advantage vs. charm is passive.)</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Moon</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You can cast <strong>Detect Thoughts</strong> 1/long rest without expending a powers slot and gain advantage on checks against being charmed.</li>\n\n</ul><p><strong>Detect Thoughts</strong> <em>(Recovery: 1/long rest · Action: Action)</em> — Cast Detect Thoughts without expending a powers slot. (Permanent gain advantage vs. charm is passive.)</p>",
           "chat": ""
         },
         "type": {
@@ -4606,7 +4609,7 @@
             "id": "5enjuSrIeiONta6e",
             "pack": "character-archetypes",
             "identifier": "archetype-moon-t3",
-            "hash": "e2bc14d012ed"
+            "hash": "3a6740247f78"
           }
         }
       }
@@ -4619,7 +4622,7 @@
       "folder": "The Moon",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — The Moon</strong></p>\n<ul>\n<li><strong>Tactical:</strong> —</li>\n<li><strong>Strategic:</strong> When your faction achieves a Justice/Reformation outcome, the resulting Hex immediately shifts one step closer to Keter (Crown) or Tiferet (Harmony).</li>\n</ul>",
+          "value": "<p><strong>Tier 4 (Level 17) — The Moon</strong></p>\n<ul>\n\n<li><strong>Strategic:</strong> When your Domain achieves a Justice or Reformation outcome, the hex shifts one step toward Keter (Crown) or Tiferet (Harmony) (the card fires it).</li>\n</ul>",
           "chat": ""
         },
         "type": {
@@ -4662,7 +4665,7 @@
             "id": "NAxsLd1t8GrUzczE",
             "pack": "character-archetypes",
             "identifier": "archetype-moon-t4",
-            "hash": "c8f0fd27e74a"
+            "hash": "49889d935bba"
           }
         }
       }
@@ -4675,7 +4678,7 @@
       "folder": "The Star",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“It is not over. That is not optimism. That is doctrine.”</em></p><p><strong>Archetype (BBTTCC): The Star (Hopebringer).</strong> You are morale after catastrophe, the refusal to collapse, the dangerous force that makes people try again when the math says they should not.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens inspiration, cohesion, and recovery after losses. This Archetype is associated with <strong>+1 Soft Power</strong> and <strong>+1 Culture</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“It is not over. That is not optimism. That is doctrine.”</em></p><p><strong>Archetype (Bad Eden): The Star (Hopebringer).</strong> You are morale after catastrophe, the refusal to collapse, the dangerous force that makes people try again when the math says they should not.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens inspiration, cohesion, and recovery after losses. Your Domain earns <strong>+10 Soft Power</strong> and <strong>+10 Culture</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -4716,7 +4719,7 @@
             "id": "XSR4nSokic0gyFCU",
             "pack": "character-archetypes",
             "identifier": "archetype-star",
-            "hash": "1eb66186f777"
+            "hash": "5dd1a1b92d7a"
           }
         }
       }
@@ -4729,7 +4732,7 @@
       "folder": "The Star",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Star (Hopebringer)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Performance and Insight. You learn the Friends Tier-0 powers.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Star (Hopebringer)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Performance and Insight.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -4772,7 +4775,7 @@
             "id": "OfcMAXCeac6Vs0tC",
             "pack": "character-archetypes",
             "identifier": "archetype-star-t1",
-            "hash": "deb0bc93fdee"
+            "hash": "4388bf83da6e"
           }
         }
       }
@@ -4785,7 +4788,7 @@
       "folder": "The Star",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — The Star (Hopebringer)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When spending Soft Power or Culture OPs to improve morale, loyalty, or social cohesion, the effectiveness of spent OPs is increased by 25%.</li></ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — The Star (Hopebringer)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Soft Power or Culture marks, it spends 20% less (never below 10).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -4827,7 +4830,7 @@
             "id": "acJPRrtkirhVj85t",
             "pack": "character-archetypes",
             "identifier": "archetype-star-t2",
-            "hash": "ac7bf5d1ad79"
+            "hash": "4b5bafa9789c"
           }
         }
       }
@@ -4840,7 +4843,7 @@
       "folder": "The Star",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Star (Hopebringer)</strong></p><ul><li><strong>Tactical:</strong> Allies within earshot who can see or hear you have advantage on saving throws against being frightened 1/long rest during a major scene or encounter.</li><li><strong>Strategic:</strong> —</li></ul><p><strong>Hopebringer Aura</strong> <em>(Recovery: 1/long rest · Action: Action (during major scene))</em> — Allies within earshot who can see/hear you have advantage on saves vs. frightened.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Star (Hopebringer)</strong></p><ul><li><strong>Tactical:</strong> Allies within earshot who can see or hear you have advantage on checks against being frightened 1/long rest during a major scene or encounter.</li></ul><p><strong>Hopebringer Aura</strong> <em>(Recovery: 1/long rest · Action: Action (during major scene))</em> — Allies within earshot who can see/hear you have advantage on checks vs. frightened.</p>",
           "chat": ""
         },
         "type": {
@@ -4882,7 +4885,7 @@
             "id": "fAJUez4PqXB1AL4Q",
             "pack": "character-archetypes",
             "identifier": "archetype-star-t3",
-            "hash": "bebb4ac113f7"
+            "hash": "a5fb81e4ba75"
           }
         }
       }
@@ -4895,7 +4898,7 @@
       "folder": "The Star",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 4 (Level 17) — The Star (Hopebringer)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> After your faction suffers a major setback, failed siege, or catastrophic beat, the first recovery or rally scenario attempted before the next turn is made with advantage on all relevant strategic checks.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 4 (Level 17) — The Star (Hopebringer)</strong></p><ul><li><strong>Strategic:</strong> After your Domain suffers a major setback, failed siege or catastrophic beat, the first recovery or rally scene before the next turn is made with advantage on its Domain rolls (the card fires it).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -4938,7 +4941,7 @@
             "id": "LFgOIRJ3XWqcuT7s",
             "pack": "character-archetypes",
             "identifier": "archetype-star-t4",
-            "hash": "81950dcef4b7"
+            "hash": "b5695ab1da76"
           }
         }
       }
@@ -4951,7 +4954,7 @@
       "folder": "The Sun",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“People believe because you are visible.”</em></p><p><strong>Archetype (BBTTCC): The Sun (Beacon).</strong> You are morale made public. Hope in daylight. Certainty others can gather around before the dark gets another vote.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens morale, visibility, and coordinated uplift. This Archetype is associated with <strong>+1 Soft Power</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“People believe because you are visible.”</em></p><p><strong>Archetype (Bad Eden): The Sun (Beacon).</strong> You are morale made public. Hope in daylight. Certainty others can gather around before the dark gets another vote.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens morale, visibility, and coordinated uplift. Your Domain earns <strong>+10 Soft Power</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -4991,7 +4994,7 @@
             "id": "I6Sg69Ubyyp2irgm",
             "pack": "character-archetypes",
             "identifier": "archetype-sun",
-            "hash": "02cd42f88a50"
+            "hash": "4ea0c854535f"
           }
         }
       }
@@ -5004,7 +5007,7 @@
       "folder": "The Sun",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Sun (Beacon)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Performance and Persuasion. You learn the Light Tier-0 powers.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Sun (Beacon)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Performance and Persuasion.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -5046,7 +5049,7 @@
             "id": "vFPE6ywRIKVyuZVV",
             "pack": "character-archetypes",
             "identifier": "archetype-sun-t1",
-            "hash": "30f43d32ee58"
+            "hash": "e519efd510c0"
           }
         }
       }
@@ -5059,7 +5062,7 @@
       "folder": "The Sun",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — The Sun (Beacon)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When spending Soft Power OPs to raise morale, stabilize public confidence, or project legitimacy in open view, the effectiveness of spent OPs is increased by 25%.</li></ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — The Sun (Beacon)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Soft Power marks, it spends 20% less (never below 10).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -5101,7 +5104,7 @@
             "id": "hlsAvY7lY2E0402B",
             "pack": "character-archetypes",
             "identifier": "archetype-sun-t2",
-            "hash": "90d60f54b03c"
+            "hash": "dd7940f1349c"
           }
         }
       }
@@ -5114,7 +5117,7 @@
       "folder": "The Sun",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Sun (Beacon)</strong></p><ul><li><strong>Tactical:</strong> Allies within earshot who can see or hear you have advantage on saving throws against being frightened or charmed 1/long rest during a major scene or encounter.</li><li><strong>Strategic:</strong> —</li></ul><p><strong>Beacon Aura</strong> <em>(Recovery: 1/long rest · Action: Action (during major scene))</em> — Allies within earshot who can see/hear you have advantage on saves vs. frightened or charmed.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Sun (Beacon)</strong></p><ul><li><strong>Tactical:</strong> Allies within earshot who can see or hear you have advantage on checks against being frightened or charmed 1/long rest during a major scene or encounter.</li></ul><p><strong>Beacon Aura</strong> <em>(Recovery: 1/long rest · Action: Action (during major scene))</em> — Allies within earshot who can see/hear you have advantage on checks vs. frightened or charmed.</p>",
           "chat": ""
         },
         "type": {
@@ -5157,7 +5160,7 @@
             "id": "rckUsGR6X1BLofVo",
             "pack": "character-archetypes",
             "identifier": "archetype-sun-t3",
-            "hash": "62ffe46ba4fd"
+            "hash": "48b345eba2d0"
           }
         }
       }
@@ -5170,7 +5173,7 @@
       "folder": "The Sun",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — The Sun (Beacon)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a public rally, morale restoration, legitimacy crisis, or visible unity scenario, the Soft Power OP cost is reduced by 3 (minimum 1).</li></ul>",
+          "value": "<p><strong>Tier 4 (Level 17) — The Sun (Beacon)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Soft Power marks, it spends 30 fewer (never below 10).</li></ul>",
           "chat": ""
         },
         "type": {
@@ -5213,7 +5216,7 @@
             "id": "EZo7krqF7v2fM4mj",
             "pack": "character-archetypes",
             "identifier": "archetype-sun-t4",
-            "hash": "2df324e5f41c"
+            "hash": "0828208fcf5f"
           }
         }
       }
@@ -5222,11 +5225,11 @@
       "slug": "archetype-tower",
       "name": "Archetype: The Tower (Breaker)",
       "type": "feat",
-      "img": "icons/environment/settlement/tower-stone-blue.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_tower.webp",
       "folder": "The Tower",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“If it stands, it can fall.”</em></p><p><strong>Archetype (BBTTCC): The Tower (Breaker).</strong> You are structural collapse, breach doctrine, and the terrible logic of proving that a thing was never as stable as it claimed.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens demolition, disruption, breach operations, and catastrophic openings. This Archetype is associated with <strong>+1 Strength</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>“If it stands, it can fall.”</em></p><p><strong>Archetype (Bad Eden): The Tower (Breaker).</strong> You are structural collapse, breach doctrine, and the terrible logic of proving that a thing was never as stable as it claimed.</p><h3>Archetype Effects</h3><ul><li><p><strong>Faction Edge.</strong> Your archetype strengthens demolition, disruption, breach operations, and catastrophic openings. Your Domain earns <strong>+10 Violence</strong> marks each turn while you serve it.</p></li><li><p><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -5266,7 +5269,7 @@
             "id": "UjKM1dHrs9MdPDWG",
             "pack": "character-archetypes",
             "identifier": "archetype-tower",
-            "hash": "0e61bdc0e549"
+            "hash": "ff43e353811f"
           }
         }
       }
@@ -5275,11 +5278,11 @@
       "slug": "archetype-tower-t1",
       "name": "Archetype: The Tower (Breaker) (Tier 1)",
       "type": "feat",
-      "img": "icons/environment/settlement/tower-stone-blue.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_tower.webp",
       "folder": "The Tower",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — The Tower (Breaker)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Athletics and Investigation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) — The Tower (Breaker)</strong></p><ul><li><p><strong>Tactical:</strong> You gain proficiency in Athletics and Investigation.</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -5321,7 +5324,7 @@
             "id": "iVltrwttzL4FDZc4",
             "pack": "character-archetypes",
             "identifier": "archetype-tower-t1",
-            "hash": "b1ae545c0877"
+            "hash": "b5c8ea33a274"
           }
         }
       }
@@ -5330,11 +5333,11 @@
       "slug": "archetype-tower-t2",
       "name": "Archetype: The Tower (Breaker) (Tier 2)",
       "type": "feat",
-      "img": "icons/environment/settlement/tower-stone-blue.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_tower.webp",
       "folder": "The Tower",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — The Tower (Breaker)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When spending Strength OPs to breach fortifications, break infrastructure, sabotage facilities, or trigger cascading failure, the effectiveness of spent OPs is increased by 25%.</li></ul>",
+          "value": "<p><strong>Tier 2 (Level 5) — The Tower (Breaker)</strong></p><ul><li><p><strong>Strategic:</strong> Whenever your Domain spends Violence marks, it spends 20% less (never below 10).</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -5376,7 +5379,7 @@
             "id": "3CRGiSanmwkNoWga",
             "pack": "character-archetypes",
             "identifier": "archetype-tower-t2",
-            "hash": "0ce9321b241d"
+            "hash": "42e464ae8a7c"
           }
         }
       }
@@ -5385,11 +5388,11 @@
       "slug": "archetype-tower-t3",
       "name": "Archetype: The Tower (Breaker) (Tier 3)",
       "type": "feat",
-      "img": "icons/environment/settlement/tower-stone-blue.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_tower.webp",
       "folder": "The Tower",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Tower (Breaker)</strong></p><ul><li><strong>Tactical:</strong> When you make a Strength or Intelligence check related to demolition, breaching, structural weakness, or deliberate sabotage, you can treat any d20 roll of 9 or lower as a 10.</li><li><strong>Strategic:</strong> —</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Tier 3 (Level 11) — The Tower (Breaker)</strong></p><ul><li><p><strong>Tactical:</strong> When you make a Strength or Intelligence check related to demolition, breaching, structural weakness, or deliberate sabotage, you gain advantage.</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -5431,7 +5434,7 @@
             "id": "QcReXz61T8mo3a1L",
             "pack": "character-archetypes",
             "identifier": "archetype-tower-t3",
-            "hash": "3be6c14ad812"
+            "hash": "6a8555f8fdb3"
           }
         }
       }
@@ -5440,11 +5443,11 @@
       "slug": "archetype-tower-t4",
       "name": "Archetype: The Tower (Breaker) (Tier 4)",
       "type": "feat",
-      "img": "icons/environment/settlement/tower-stone-blue.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_tower.webp",
       "folder": "The Tower",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — The Tower (Breaker)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a siege-break, breach, facility-destruction, or cascading-collapse scenario, the Strength OP cost is reduced by 3 (minimum 1).</li></ul>",
+          "value": "<p><strong>Tier 4 (Level 17) — The Tower (Breaker)</strong></p><ul><li><p><strong>Strategic:</strong> Whenever your Domain spends Violence marks, it spends 30 fewer (never below 10).</p></li></ul>",
           "chat": ""
         },
         "type": {
@@ -5487,296 +5490,20 @@
             "id": "8h3qErPnjl9omvcG",
             "pack": "character-archetypes",
             "identifier": "archetype-tower-t4",
-            "hash": "28677f1792c5"
-          }
-        }
-      }
-    },
-    {
-      "slug": "archetype-world",
-      "name": "Archetype: The World (Integrator)",
-      "type": "feat",
-      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
-      "folder": "The World",
-      "system": {
-        "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Everything connects. Including you.”</em></p><p><strong>Archetype (BBTTCC): The World (Integrator).</strong> You see systems as wholes. Supply, ritual, morale, politics, travel, violence, myth — to you, these are not separate tracks, but one machine with many faces.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens cross-system alignment and broad operational cohesion. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Diplomacy</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
-          "chat": ""
-        },
-        "type": {
-          "value": "",
-          "subtype": ""
-        },
-        "requirements": "",
-        "properties": [],
-        "uses": {
-          "max": "",
-          "spent": 0,
-          "recovery": []
-        },
-        "identifier": "archetype-world"
-      },
-      "effects": [],
-      "flags": {
-        "bbttcc-character-options": {
-          "category": "character-archetypes",
-          "bonuses": {
-            "economy": 1,
-            "diplomacy": 1
-          },
-          "option": {
-            "category": "archetype",
-            "key": "world",
-            "progressionType": "level",
-            "tags": [
-              "bbttcc:archetype",
-              "bbttcc:arcana:world",
-              "bbttcc:expression:integrator",
-              "bbttcc:base"
-            ]
-          }
-        },
-        "bad-eden-5e": {
-          "rfi": {
-            "id": "6cYK3ZPuq5YnkSP0",
-            "pack": "character-archetypes",
-            "identifier": "archetype-world",
-            "hash": "98b8e4ee19e1"
-          }
-        }
-      }
-    },
-    {
-      "slug": "archetype-world-t1",
-      "name": "Archetype: The World (Integrator) (Tier 1)",
-      "type": "feat",
-      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
-      "folder": "The World",
-      "system": {
-        "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — The World (Integrator)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Investigation and Insight.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
-          "chat": ""
-        },
-        "type": {
-          "value": "",
-          "subtype": ""
-        },
-        "requirements": "",
-        "properties": [],
-        "uses": {
-          "max": "",
-          "spent": 0,
-          "recovery": []
-        },
-        "identifier": "archetype-world-t1"
-      },
-      "effects": [],
-      "flags": {
-        "bbttcc-character-options": {
-          "category": "archetype",
-          "bonuses": {},
-          "option": {
-            "category": "archetype",
-            "key": "world",
-            "progressionType": "level",
-            "tier": 1,
-            "levelMin": 1,
-            "levelMax": 1,
-            "tags": [
-              "bbttcc:archetype",
-              "bbttcc:arcana:world",
-              "bbttcc:expression:integrator",
-              "bbttcc:tier:1",
-              "bbttcc:economy_op_cap:+1",
-              "bbttcc:diplomacy_op_cap:+1"
-            ]
-          }
-        },
-        "bad-eden-5e": {
-          "rfi": {
-            "id": "wekq7vMprCH7byIR",
-            "pack": "character-archetypes",
-            "identifier": "archetype-world-t1",
-            "hash": "fd904a361112"
-          }
-        }
-      }
-    },
-    {
-      "slug": "archetype-world-t2",
-      "name": "Archetype: The World (Integrator) (Tier 2)",
-      "type": "feat",
-      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
-      "folder": "The World",
-      "system": {
-        "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — The World (Integrator)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During multi-step strategic scenarios that involve at least two different subsystem domains, the first cross-domain transition or coordination penalty is ignored once.</li></ul>",
-          "chat": ""
-        },
-        "type": {
-          "value": "",
-          "subtype": ""
-        },
-        "requirements": "",
-        "properties": [],
-        "uses": {
-          "max": "",
-          "spent": 0,
-          "recovery": []
-        },
-        "identifier": "archetype-world-t2"
-      },
-      "effects": [],
-      "flags": {
-        "bbttcc-character-options": {
-          "category": "archetype",
-          "bonuses": {},
-          "option": {
-            "category": "archetype",
-            "key": "world",
-            "progressionType": "level",
-            "tier": 2,
-            "levelMin": 2,
-            "levelMax": 2,
-            "tags": [
-              "bbttcc:archetype",
-              "bbttcc:arcana:world",
-              "bbttcc:expression:integrator",
-              "bbttcc:tier:2",
-              "bbttcc:ignore_first_cross_domain_penalty"
-            ]
-          }
-        },
-        "bad-eden-5e": {
-          "rfi": {
-            "id": "rfJT2HfrEy6gwuwA",
-            "pack": "character-archetypes",
-            "identifier": "archetype-world-t2",
-            "hash": "a1c255af4b01"
-          }
-        }
-      }
-    },
-    {
-      "slug": "archetype-world-t3",
-      "name": "Archetype: The World (Integrator) (Tier 3)",
-      "type": "feat",
-      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
-      "folder": "The World",
-      "system": {
-        "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The World (Integrator)</strong></p><ul><li><strong>Tactical:</strong> When you make an Intelligence or Wisdom check related to systems mapping, coordination, cross-domain analysis, or whole-pattern strategy, you can treat any d20 roll of 9 or lower as a 10.</li><li><strong>Strategic:</strong> —</li></ul>",
-          "chat": ""
-        },
-        "type": {
-          "value": "",
-          "subtype": ""
-        },
-        "requirements": "",
-        "properties": [],
-        "uses": {
-          "max": "",
-          "spent": 0,
-          "recovery": []
-        },
-        "identifier": "archetype-world-t3"
-      },
-      "effects": [],
-      "flags": {
-        "bbttcc-character-options": {
-          "category": "archetype",
-          "bonuses": {},
-          "option": {
-            "category": "archetype",
-            "key": "world",
-            "progressionType": "level",
-            "tier": 3,
-            "levelMin": 3,
-            "levelMax": 3,
-            "tags": [
-              "bbttcc:archetype",
-              "bbttcc:arcana:world",
-              "bbttcc:expression:integrator",
-              "bbttcc:tier:3",
-              "bbttcc:int_or_wis_checks_floor10:systems_coordination"
-            ]
-          }
-        },
-        "bad-eden-5e": {
-          "rfi": {
-            "id": "GVrK155qovzALM51",
-            "pack": "character-archetypes",
-            "identifier": "archetype-world-t3",
-            "hash": "e21776e64619"
-          }
-        }
-      }
-    },
-    {
-      "slug": "archetype-world-t4",
-      "name": "Archetype: The World (Integrator) (Tier 4)",
-      "type": "feat",
-      "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
-      "folder": "The World",
-      "system": {
-        "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — The World (Integrator)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a campaign-scale integration, alliance-structure, logistics-network, or whole-system repair scenario, the Economy or Diplomacy OP cost is reduced by 3 (minimum 1).</li></ul>",
-          "chat": ""
-        },
-        "type": {
-          "value": "",
-          "subtype": ""
-        },
-        "requirements": "",
-        "properties": [],
-        "uses": {
-          "max": "",
-          "spent": 0,
-          "recovery": []
-        },
-        "identifier": "archetype-world-t4"
-      },
-      "effects": [],
-      "flags": {
-        "bbttcc-character-options": {
-          "category": "archetype",
-          "bonuses": {},
-          "option": {
-            "category": "archetype",
-            "key": "world",
-            "progressionType": "level",
-            "tier": 4,
-            "levelMin": 4,
-            "levelMax": 4,
-            "tags": [
-              "bbttcc:archetype",
-              "bbttcc:arcana:world",
-              "bbttcc:expression:integrator",
-              "bbttcc:tier:4",
-              "bbttcc:scenario:system_integration_alliance_network",
-              "bbttcc:economy_or_diplomacy_cost:-3"
-            ]
-          }
-        },
-        "bad-eden-5e": {
-          "rfi": {
-            "id": "MIs5SBVNzPwETn8w",
-            "pack": "character-archetypes",
-            "identifier": "archetype-world-t4",
-            "hash": "a8942e268c31"
+            "hash": "16147ca8bfdf"
           }
         }
       }
     },
     {
       "slug": "archetype-wheel-of-fortune",
-      "name": "Archetype: Wheel of Fortune",
+      "name": "Archetype: The Wheel of Fortune",
       "type": "feat",
       "img": "icons/tools/nautical/steering-wheel.webp",
       "folder": "The Wheel of Fortune",
       "system": {
         "description": {
-          "value": "<p><em>“You do not control chaos. You time it.”</em></p><p><strong>Archetype (BBTTCC): Wheel of Fortune.</strong> You are variance and leverage.</p>",
+          "value": "<p><em>“You do not control chaos. You time it.”</em></p><p><strong>Archetype (Bad Eden): Wheel of Fortune.</strong> You are variance and leverage.</p><p><strong>Domain edge:</strong> Your Domain earns <strong>+10 Soft Power</strong> and <strong>+10 Intrigue</strong> marks each turn while you serve it.</p>",
           "chat": ""
         },
         "type": {
@@ -5817,20 +5544,20 @@
             "id": "8kNSj9D6RMYQUSUU",
             "pack": "character-archetypes",
             "identifier": "archetype-wheel-of-fortune",
-            "hash": "8863504bb1f7"
+            "hash": "28207b92f978"
           }
         }
       }
     },
     {
       "slug": "archetype-wheel-of-fortune-t1",
-      "name": "Archetype: Wheel of Fortune (Tier 1)",
+      "name": "Archetype: The Wheel of Fortune (Tier 1)",
       "type": "feat",
       "img": "icons/tools/nautical/steering-wheel.webp",
       "folder": "The Wheel of Fortune",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — Wheel of Fortune</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Perception and Deception. You learn the <strong>Guidance</strong> Tier-0 powers.</li><li><strong>Strategic:</strong> Your faction's <strong>Soft Power OP cap</strong> and <strong>Dexterity OP cap</strong> increase by 1 each.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — Wheel of Fortune</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Perception and Stealth. You learn the <strong>Guidance</strong> Tier-0 powers.</li><li><strong>Strategic:</strong> Your Domain's Soft Power marks cap and Intrigue marks cap rise by 10 each.</li></ul>",
           "chat": ""
         },
         "type": {
@@ -5873,20 +5600,20 @@
             "id": "ptsol65L7gOjyJNN",
             "pack": "character-archetypes",
             "identifier": "archetype-wheel-of-fortune-t1",
-            "hash": "16d40068a444"
+            "hash": "d45d0b588ad4"
           }
         }
       }
     },
     {
       "slug": "archetype-wheel-of-fortune-t2",
-      "name": "Archetype: Wheel of Fortune (Tier 2)",
+      "name": "Archetype: The Wheel of Fortune (Tier 2)",
       "type": "feat",
       "img": "icons/tools/nautical/steering-wheel.webp",
       "folder": "The Wheel of Fortune",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 2 (Level 5) — Wheel of Fortune</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Once per strategic turn, after any random table roll, encounter roll, or variable-outcome result is revealed, your faction may shift the result <strong>one step up or down</strong> the table, if a legal adjacent result exists.</li></ul><p><strong>Tilt the Table</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic (after roll reveal))</em> — After any random table / encounter / variable result reveal, shift one step up or down if a legal adjacent result exists.</p>",
+          "value": "<p><strong>Tier 2 (Level 5) — Wheel of Fortune</strong></p><ul><li><strong>Strategic:</strong> Once per turn, after any random table roll, encounter roll, or variable-outcome result is revealed, your Domain may shift the result <strong>one step up or down</strong> the table, if a legal adjacent result exists.</li></ul><p><strong>Tilt the Table</strong> <em>(Recovery: 1/turn · Action: Strategic (after roll reveal))</em> — After any random table / encounter / variable result reveal, shift one step up or down if a legal adjacent result exists.</p>",
           "chat": ""
         },
         "type": {
@@ -5929,20 +5656,20 @@
             "id": "r5c25yxTcqRECNIW",
             "pack": "character-archetypes",
             "identifier": "archetype-wheel-of-fortune-t2",
-            "hash": "3d536bd1be65"
+            "hash": "7e00c1c4fa84"
           }
         }
       }
     },
     {
       "slug": "archetype-wheel-of-fortune-t3",
-      "name": "Archetype: Wheel of Fortune (Tier 3)",
+      "name": "Archetype: The Wheel of Fortune (Tier 3)",
       "type": "feat",
       "img": "icons/tools/nautical/steering-wheel.webp",
       "folder": "The Wheel of Fortune",
       "system": {
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Wheel of Fortune</strong></p><ul><li><strong>Tactical:</strong> 1/long rest, when you miss with an attack or fail an attribute check, you may treat the roll as a <strong>10 before modifiers</strong>.</li><li><strong>Strategic:</strong> —</li></ul><p><strong>Treat as 10</strong> <em>(Recovery: 1/long rest · Action: Free (on miss / failed check))</em> — Treat the roll as a 10 before modifiers.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Wheel of Fortune</strong></p><ul><li><strong>Tactical:</strong> 1/long rest, when you miss with an attack or fail an attribute check, you may treat the roll as a <strong>10 before modifiers</strong>.</li></ul><p><strong>Treat as 10</strong> <em>(Recovery: 1/long rest · Action: Free (on miss / failed check))</em> — Treat the roll as a 10 before modifiers.</p>",
           "chat": ""
         },
         "type": {
@@ -5984,20 +5711,20 @@
             "id": "9ZgYI0aQzQRud8Zj",
             "pack": "character-archetypes",
             "identifier": "archetype-wheel-of-fortune-t3",
-            "hash": "c231e9ecf00b"
+            "hash": "3193d5c84cc5"
           }
         }
       }
     },
     {
       "slug": "archetype-wheel-of-fortune-t4",
-      "name": "Archetype: Wheel of Fortune (Tier 4)",
+      "name": "Archetype: The Wheel of Fortune (Tier 4)",
       "type": "feat",
       "img": "icons/tools/nautical/steering-wheel.webp",
       "folder": "The Wheel of Fortune",
       "system": {
         "description": {
-          "value": "<p><strong>Tier 4 (Level 17) — Wheel of Fortune</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Once per strategic turn, after an outcome is revealed on a raid, campaign beat, travel encounter, or crisis table, your faction may <strong>force a reroll</strong> or <strong>choose between the rolled outcome and the rerolled one</strong>.</li></ul><p><strong>Force the Reroll</strong> <em>(Recovery: 1/Strategic Turn · Action: Strategic (after outcome reveal))</em> — Force a reroll on a raid / beat / travel / crisis table, OR pick between rolled and rerolled outcome.</p>",
+          "value": "<p><strong>Tier 4 (Level 17) — Wheel of Fortune</strong></p><ul><li><strong>Strategic:</strong> Once per turn, after an outcome is revealed on a Battle, campaign beat, travel encounter, or crisis table, your Domain may <strong>force a reroll</strong> or <strong>choose between the rolled outcome and the rerolled one</strong>.</li></ul><p><strong>Force the Reroll</strong> <em>(Recovery: 1/turn · Action: Strategic (after outcome reveal))</em> — Force a reroll on a raid / beat / travel / crisis table, OR pick between rolled and rerolled outcome.</p>",
           "chat": ""
         },
         "type": {
@@ -6040,7 +5767,283 @@
             "id": "0Wk57EXoC8w71aDc",
             "pack": "character-archetypes",
             "identifier": "archetype-wheel-of-fortune-t4",
-            "hash": "02694cae77b9"
+            "hash": "4c6c217cb3b9"
+          }
+        }
+      }
+    },
+    {
+      "slug": "archetype-world",
+      "name": "Archetype: The World (Integrator)",
+      "type": "feat",
+      "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
+      "folder": "The World",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>“Everything connects. Including you.”</em></p><p><strong>Archetype (Bad Eden): The World (Integrator).</strong> You see systems as wholes. Supply, ritual, morale, politics, travel, violence, myth — to you, these are not separate tracks, but one machine with many faces.</p><h3>Archetype Effects</h3><ul><li><p><strong>Faction Edge.</strong> Your archetype strengthens cross-system alignment and broad operational cohesion. Your Domain earns <strong>+10 Economy</strong> and <strong>+10 Diplomacy</strong> marks each turn while you serve it.</p></li><li><p><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</p></li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "archetype-world"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "character-archetypes",
+          "bonuses": {
+            "economy": 1,
+            "diplomacy": 1
+          },
+          "option": {
+            "category": "archetype",
+            "key": "world",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:world",
+              "bbttcc:expression:integrator",
+              "bbttcc:base"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "6cYK3ZPuq5YnkSP0",
+            "pack": "character-archetypes",
+            "identifier": "archetype-world",
+            "hash": "18530fa92aed"
+          }
+        }
+      }
+    },
+    {
+      "slug": "archetype-world-t1",
+      "name": "Archetype: The World (Integrator) (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
+      "folder": "The World",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 1 (Level 1) — The World (Integrator)</strong></p><ul><li><p><strong>Tactical:</strong> You gain proficiency in Investigation and Insight.</p></li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "archetype-world-t1"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "world",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:world",
+              "bbttcc:expression:integrator",
+              "bbttcc:tier:1",
+              "bbttcc:economy_op_cap:+1",
+              "bbttcc:diplomacy_op_cap:+1"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "wekq7vMprCH7byIR",
+            "pack": "character-archetypes",
+            "identifier": "archetype-world-t1",
+            "hash": "e69b5c8550c4"
+          }
+        }
+      }
+    },
+    {
+      "slug": "archetype-world-t2",
+      "name": "Archetype: The World (Integrator) (Tier 2)",
+      "type": "feat",
+      "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
+      "folder": "The World",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 2 (Level 5) — The World (Integrator)</strong></p><ul><li><p><strong>Strategic:</strong> Once per multi-step scene that spans two different subsystems, your Domain ignores the first cross-domain transition or coordination penalty (the card fires it).</p></li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "archetype-world-t2"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "world",
+            "progressionType": "level",
+            "tier": 2,
+            "levelMin": 2,
+            "levelMax": 2,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:world",
+              "bbttcc:expression:integrator",
+              "bbttcc:tier:2",
+              "bbttcc:ignore_first_cross_domain_penalty"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "rfJT2HfrEy6gwuwA",
+            "pack": "character-archetypes",
+            "identifier": "archetype-world-t2",
+            "hash": "6c9424e860e5"
+          }
+        }
+      }
+    },
+    {
+      "slug": "archetype-world-t3",
+      "name": "Archetype: The World (Integrator) (Tier 3)",
+      "type": "feat",
+      "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
+      "folder": "The World",
+      "system": {
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Tier 3 (Level 11) — The World (Integrator)</strong></p><ul><li><p><strong>Tactical:</strong> When you make an Intelligence or Wisdom check related to systems mapping, coordination, cross-domain analysis, or whole-pattern strategy, you gain advantage.</p></li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "archetype-world-t3"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "world",
+            "progressionType": "level",
+            "tier": 3,
+            "levelMin": 3,
+            "levelMax": 3,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:world",
+              "bbttcc:expression:integrator",
+              "bbttcc:tier:3",
+              "bbttcc:int_or_wis_checks_floor10:systems_coordination"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "GVrK155qovzALM51",
+            "pack": "character-archetypes",
+            "identifier": "archetype-world-t3",
+            "hash": "d7f7f904c0af"
+          }
+        }
+      }
+    },
+    {
+      "slug": "archetype-world-t4",
+      "name": "Archetype: The World (Integrator) (Tier 4)",
+      "type": "feat",
+      "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
+      "folder": "The World",
+      "system": {
+        "description": {
+          "value": "<p><strong>Tier 4 (Level 17) — The World (Integrator)</strong></p><ul><li><p><strong>Strategic:</strong> Whenever your Domain spends Economy or Diplomacy marks, it spends 30 fewer (never below 10).</p></li></ul>",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "archetype-world-t4"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "world",
+            "progressionType": "level",
+            "tier": 4,
+            "levelMin": 4,
+            "levelMax": 4,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:world",
+              "bbttcc:expression:integrator",
+              "bbttcc:tier:4",
+              "bbttcc:scenario:system_integration_alliance_network",
+              "bbttcc:economy_or_diplomacy_cost:-3"
+            ]
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "MIs5SBVNzPwETn8w",
+            "pack": "character-archetypes",
+            "identifier": "archetype-world-t4",
+            "hash": "e3ccd7fbc31c"
           }
         }
       }

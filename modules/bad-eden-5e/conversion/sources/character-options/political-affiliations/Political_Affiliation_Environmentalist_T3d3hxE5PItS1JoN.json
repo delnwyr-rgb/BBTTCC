@@ -1,0 +1,68 @@
+{
+  "name": "Political Affiliation: Environmentalist",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "Nature protector. +20 Soft Power and +10 Diplomacy marks to your Domain each turn.",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "political-affiliation-environmentalist",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "political-affiliations",
+      "bonuses": {
+        "softpower": 2,
+        "diplomacy": 1
+      }
+    }
+  },
+  "img": "icons/magic/nature/leaf-oak-glow-green.webp",
+  "effects": [],
+  "folder": null,
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1759971176018,
+    "modifiedTime": 1792989143629,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3
+  },
+  "_id": "T3d3hxE5PItS1JoN",
+  "sort": 125000,
+  "_key": "!items!T3d3hxE5PItS1JoN"
+}

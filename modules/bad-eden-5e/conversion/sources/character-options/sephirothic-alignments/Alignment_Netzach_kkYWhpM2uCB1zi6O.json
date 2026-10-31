@@ -1,0 +1,75 @@
+{
+  "name": "Alignment: Netzach",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "Victory - Endurance becomes momentum. +10 Culture and +10 Violence marks to your Domain each turn.\n\nNetzach is passion that refuses extinction. It rewards Loyalty, persistence, and the emotional drive to keep moving when a lesser faction would break or quietly go home.",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "alignment-netzach",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "img": "icons/magic/life/heart-glowing-red.webp",
+  "effects": [],
+  "folder": "RAOWJYon3t34M5XY",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "sephirothic-alignments",
+      "bonuses": {
+        "culture": 1,
+        "violence": 1
+      },
+      "option": {}
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.rD5cfO8T0wNdlosX",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.VwHrRTBmSa7J77WL",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1774978150205,
+    "modifiedTime": 1792989141489,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "kkYWhpM2uCB1zi6O",
+  "sort": 800000,
+  "_key": "!items!kkYWhpM2uCB1zi6O"
+}

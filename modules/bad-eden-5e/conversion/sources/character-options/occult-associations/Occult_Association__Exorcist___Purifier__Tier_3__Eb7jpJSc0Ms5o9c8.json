@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Exorcist</strong></p><p><strong>“This place holds.”</strong></p><p><strong>Strategic</strong></p><ul><li>Once per Scenario, negate one corruption-based penalty or hostile effect</li><li>reroll the lowest die on rolls involving purification, stabilization, or resisting Darkness</li></ul><p><strong>Cost:</strong> stability reduces flexibility; your faction may struggle with unconventional or adaptive approaches.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"exorcT3\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Negate Corruption</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Scenario &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Negate one corruption-based penalty or hostile effect.</div>\n</div>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Exorcist</strong></p><p><strong>“This place holds.”</strong></p><p><strong>Strategic</strong></p><ul><li>Once per Scenario, negate one corruption-based penalty or hostile effect</li><li>reroll the lowest die on rolls involving purification, stabilization, or resisting Darkness</li></ul><p><strong>Cost:</strong> stability reduces flexibility; your Domain may struggle with unconventional or adaptive approaches.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"exorcT3\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Negate Corruption</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Scenario &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Negate one corruption-based penalty or hostile effect.</div>\n</div>",
       "chat": ""
     },
     "identifier": "occult-association-exorcist-t3",
@@ -29,7 +29,7 @@
       "level": null
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Level 11+",
     "type": {
       "value": "",
       "subtype": ""
@@ -52,6 +52,193 @@
         "levelMax": 3
       },
       "category": "occult"
+    },
+    "autoanimations": {
+      "id": "67947658-9212-4f72-80dc-3874c4b2e66a",
+      "label": "Occult Association: Exorcist / Purifier (Tier 3)",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "yellowwhite",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "mode": "reroll-lowest",
+          "context": "check",
+          "vs": "purification, stabilization, or resisting Darkness",
+          "note": "Exorcist T3"
+        }
+      ]
     }
   },
   "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
@@ -67,12 +254,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987089076,
-    "modifiedTime": 1777515322476,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989176009,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

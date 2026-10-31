@@ -3,6 +3,18 @@
   "type": "feat",
   "img": "icons/magic/death/gallows-hanged-humanoid.webp",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Hanged Man (Tier 2)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 (Level 5) — The Hanged Man</strong></p><ul><li><strong>Strategic:</strong> Once per turn, the first failed Intrigue or Soft Power action your Domain attempts returns 10 Intrigue marks instead of being a pure loss (the card fires it).</li></ul>",
+      "chat": ""
+    },
     "activities": {},
     "uses": {
       "spent": 0,
@@ -10,17 +22,7 @@
       "max": ""
     },
     "advancement": {},
-    "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — The Hanged Man</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> The first failed Intrigue or Soft Power action your faction attempts each strategic turn generates <strong>1 Intrigue OP</strong> instead of being a pure loss.</li></ul>",
-      "chat": ""
-    },
     "identifier": "archetype-hanged-man-t2",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: The Hanged Man (Tier 2)",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -70,12 +72,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986731225,
-    "modifiedTime": 1775063021207,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989160020,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

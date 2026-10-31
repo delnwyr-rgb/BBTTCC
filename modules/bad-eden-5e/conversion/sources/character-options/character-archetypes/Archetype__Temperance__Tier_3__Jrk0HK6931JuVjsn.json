@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Temperance</strong></p><ul><li><strong>Tactical:</strong> Advantage vs Stress, poison, environmental effects.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Temperance</strong></p><ul><li><strong>Tactical:</strong> Reroll the lowest die vs Stress, poison, environmental effects.</li></ul>",
       "chat": ""
     },
     "identifier": "archetype-temperance-t3",
@@ -30,7 +30,7 @@
       "level": null
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Level 11+",
     "type": {
       "value": "",
       "subtype": ""
@@ -51,6 +51,16 @@
         "levelMax": 3
       },
       "category": "archetype"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "mode": "reroll-lowest",
+          "context": "defense",
+          "vs": "Stress, poison, or environmental effects",
+          "note": "Temperance T3"
+        }
+      ]
     }
   },
   "effects": [],
@@ -65,12 +75,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986658337,
-    "modifiedTime": 1777515322188,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989150498,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

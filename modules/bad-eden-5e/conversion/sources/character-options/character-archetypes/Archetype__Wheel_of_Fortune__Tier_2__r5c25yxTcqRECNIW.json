@@ -1,5 +1,5 @@
 {
-  "name": "Archetype: Wheel of Fortune (Tier 2)",
+  "name": "Archetype: The Wheel of Fortune (Tier 2)",
   "type": "feat",
   "img": "icons/tools/nautical/steering-wheel.webp",
   "system": {
@@ -7,12 +7,12 @@
     "source": {
       "revision": 1,
       "rules": "2024",
-      "custom": "BBTTCC – Archetype: Wheel of Fortune (Tier 2)",
+      "custom": "Bad Eden – Archetype: Wheel of Fortune (Tier 2)",
       "book": ""
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — Wheel of Fortune</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Once per strategic turn, after any random table roll, encounter roll, or variable-outcome result is revealed, your faction may shift the result <strong>one step up or down</strong> the table, if a legal adjacent result exists.</li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wheelT2\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Tilt the Table</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic (after roll reveal) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">After any random table / encounter / variable result reveal, shift one step up or down if a legal adjacent result exists.</div>\n</div>",
+      "value": "<p><strong>Tier 2 (Level 5) — Wheel of Fortune</strong></p><ul><li><strong>Strategic:</strong> Once per turn, after any random table roll, encounter roll, or variable-outcome result is revealed, your Domain may shift the result <strong>one step up or down</strong> the table, if a legal adjacent result exists.</li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wheelT2\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Tilt the Table</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic (after roll reveal) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">After any random table / encounter / variable result reveal, shift one step up or down if a legal adjacent result exists.</div>\n</div>",
       "chat": ""
     },
     "activities": {},
@@ -72,12 +72,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986809498,
-    "modifiedTime": 1777339606410,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989149642,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

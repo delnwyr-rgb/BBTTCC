@@ -3,15 +3,17 @@
   "type": "feat",
   "img": "icons/tools/navigation/map-marked-black.webp",
   "system": {
-    "description": {
-      "value": "<p><strong>Tier 4 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You no longer discover secret routes. You administer a second geography.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Your faction gains strong regional control over hidden route logic in water- and cavern-linked terrain. Travel becomes more flexible for allies, less predictable for enemies, and deep-route discoveries yield greater long-term value.</li></ul>",
-      "chat": ""
-    },
+    "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Abyssal Cartographers (Tier 4)",
+      "custom": "Bad Eden – Crew Type: Abyssal Cartographers (Tier 4)",
       "revision": 2,
       "rules": "2024",
       "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You no longer discover secret routes. You administer a second geography.</em></p><ul><li><strong>Strategic:</strong> Your Domain owns the hidden route logic: each water- or cavern-linked hex it holds also yields 10 extra Intrigue marks a turn.</li></ul>",
+      "chat": ""
     },
     "identifier": "crew-abyssal-cartographers-t4",
     "activities": {},
@@ -86,6 +88,25 @@
           "bbttcc:theme:deep-discovery"
         ]
       }
+    },
+    "fourththing": {
+      "domainIncome": {
+        "perHexType": [
+          {
+            "types": [
+              "river",
+              "ocean",
+              "depths",
+              "abyss",
+              "reef",
+              "swamp",
+              "port"
+            ],
+            "channel": "intrigue",
+            "op": 1
+          }
+        ]
+      }
     }
   },
   "_stats": {
@@ -98,12 +119,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986939199,
-    "modifiedTime": 1775063031843,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989168278,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

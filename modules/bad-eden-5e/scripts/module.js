@@ -5,6 +5,7 @@ import { activateMastery } from "./mastery.js";
 import { redshirts } from "./redshirts.js";
 import { activateRiders, registerRiderStatus, riders } from "./riders.js";
 import { activateReminders } from "./reminders.js";
+import { registerSheet, linkedDomain, domainContext } from "./sheet.js";
 
 Hooks.once("init", () => {
   if (game.system.id !== "dnd5e") return;
@@ -20,6 +21,12 @@ Hooks.once("init", () => {
   }
 });
 
+// The sheet: Domain tab + the Archetype in the background slot (2026-10-30). setup = dnd5e's sheet classes exist, nothing rendered yet.
+Hooks.once("setup", () => {
+  if (game.system.id !== "dnd5e") return;
+  try { registerSheet(); } catch (e) { console.error(`${MOD} | sheet registration failed`, e); }
+});
+
 Hooks.once("ready", () => {
   if (game.system.id !== "dnd5e") return;
   activateCasting();
@@ -28,6 +35,6 @@ Hooks.once("ready", () => {
   activateRiders();
   activateReminders();
   activateDisciplines();
-  game.badEden5e = { MOD, TRADITIONS, castingFor, setPoints, restore, restorePoints, costAt, costFor, traditionOf, nativeTraditionOf, isCrossCast, abilityFor, castThrough, crossCastsFor, autoCastThrough, redshirts, riders, disciplines };
+  game.badEden5e = { MOD, TRADITIONS, castingFor, setPoints, restore, restorePoints, costAt, costFor, traditionOf, nativeTraditionOf, isCrossCast, abilityFor, castThrough, crossCastsFor, autoCastThrough, redshirts, riders, disciplines, linkedDomain, domainContext };
   console.log(`${MOD} | ready: the Flow and Artifice`);
 });

@@ -1,10 +1,10 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/political.json. The Political Affiliations (bbttcc-character-options.political-affiliations) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/political.json. The Political Affiliations (bbttcc-character-options.political-affiliations) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
   "_pack": "political-affiliations",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.8.1",
-    "at": "2026-10-14",
+    "rubric": "1.9.0",
+    "at": "2026-10-31",
     "overridesApplied": 0
   },
   "items": [
@@ -16,7 +16,7 @@
       "folder": "Political Affiliations",
       "system": {
         "description": {
-          "value": "Anti-authority rebel. +2 Strength, +1 Dexterity OPs",
+          "value": "Anti-authority rebel. +20 Violence and +10 Intrigue marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -39,6 +39,9 @@
           "bonuses": {
             "violence": 2,
             "intrigue": 1
+          },
+          "option": {
+            "philosophyKey": "anarchist"
           }
         },
         "bad-eden-5e": {
@@ -46,7 +49,53 @@
             "id": "orSaMEPikIfI3bM5",
             "pack": "political-affiliations",
             "identifier": "political-affiliation-anarchist",
-            "hash": "6a84f2d267ad"
+            "hash": "18295fa5ace0"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-authoritarian",
+      "name": "Political Affiliation: Authoritarian / Statist",
+      "type": "feat",
+      "img": "icons/sundries/flags/banner-standard-blue.webp",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Order, predictability, and safety through hierarchy. What hurts: chaos, fragmentation, and disobedience. +10 Violence and +10 Logistics marks to your Domain each turn.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-authoritarian"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "violence": 1,
+            "logistics": 1
+          },
+          "option": {
+            "philosophyKey": "authoritarian"
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "urXXl7hd1pI2j5Vo",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-authoritarian",
+            "hash": "1c1c772cfd60"
           }
         }
       }
@@ -59,7 +108,7 @@
       "folder": "Political Affiliations",
       "system": {
         "description": {
-          "value": "Business believer. +2 Economy, +1 Soft Power OPs",
+          "value": "Business believer. +20 Economy and +10 Soft Power marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -89,7 +138,7 @@
             "id": "ggKmav3CTBPjxDxR",
             "pack": "political-affiliations",
             "identifier": "political-affiliation-corporate-loyalist",
-            "hash": "3ae5ed036b42"
+            "hash": "8c39ffec3590"
           }
         }
       }
@@ -102,7 +151,7 @@
       "folder": "Political Affiliations",
       "system": {
         "description": {
-          "value": "Equality advocate. +2 Diplomacy, +1 Soft Power OPs",
+          "value": "Equality advocate. +20 Diplomacy and +10 Soft Power marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -132,7 +181,7 @@
             "id": "piZcOXzSJMLBfXjA",
             "pack": "political-affiliations",
             "identifier": "political-affiliation-democratic-socialist",
-            "hash": "e8d8e9b14fe9"
+            "hash": "12928ceff25a"
           }
         }
       }
@@ -145,7 +194,7 @@
       "folder": "Political Affiliations",
       "system": {
         "description": {
-          "value": "Nature protector. +2 Soft Power, +1 Diplomacy OPs",
+          "value": "Nature protector. +20 Soft Power and +10 Diplomacy marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -175,7 +224,7 @@
             "id": "T3d3hxE5PItS1JoN",
             "pack": "political-affiliations",
             "identifier": "political-affiliation-environmentalist",
-            "hash": "6c3cf2c4ceae"
+            "hash": "5731689d6120"
           }
         }
       }
@@ -188,7 +237,7 @@
       "folder": "Political Affiliations",
       "system": {
         "description": {
-          "value": "Authoritarian nationalist. +2 Strength, +1 Non-Lethal OPs",
+          "value": "Authoritarian nationalist. +20 Violence and +10 Non-Lethal marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -211,6 +260,9 @@
           "bonuses": {
             "violence": 2,
             "nonlethal": 1
+          },
+          "option": {
+            "philosophyKey": "fascist"
           }
         },
         "bad-eden-5e": {
@@ -218,7 +270,7 @@
             "id": "KUX28iTEsltKDiBK",
             "pack": "political-affiliations",
             "identifier": "political-affiliation-fascist",
-            "hash": "cd7cdcee5ecb"
+            "hash": "7ad458e63531"
           }
         }
       }
@@ -231,7 +283,7 @@
       "folder": "Political Affiliations",
       "system": {
         "description": {
-          "value": "Progressive reformer. +2 Diplomacy, +1 Economy OPs",
+          "value": "Progressive reformer. +20 Diplomacy and +10 Economy marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -254,6 +306,9 @@
           "bonuses": {
             "diplomacy": 2,
             "economy": 1
+          },
+          "option": {
+            "philosophyKey": "liberal"
           }
         },
         "bad-eden-5e": {
@@ -261,7 +316,7 @@
             "id": "FMKtMWBDBF5FkbVH",
             "pack": "political-affiliations",
             "identifier": "political-affiliation-liberal",
-            "hash": "3084f3991863"
+            "hash": "b17a0ec124d9"
           }
         }
       }
@@ -274,7 +329,7 @@
       "folder": "Political Affiliations",
       "system": {
         "description": {
-          "value": "Freedom maximizer. +2 Economy, +1 Dexterity OPs",
+          "value": "Freedom maximizer. +20 Economy and +10 Intrigue marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -297,6 +352,9 @@
           "bonuses": {
             "economy": 2,
             "intrigue": 1
+          },
+          "option": {
+            "philosophyKey": "libertarian"
           }
         },
         "bad-eden-5e": {
@@ -304,7 +362,53 @@
             "id": "gE2ThWEw7F7o2GCi",
             "pack": "political-affiliations",
             "identifier": "political-affiliation-libertarian",
-            "hash": "f46e5e30f01d"
+            "hash": "ace78f56ae8b"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-marxist",
+      "name": "Political Affiliation: Marxist / Communist",
+      "type": "feat",
+      "img": "icons/sundries/flags/banner-standard-tattered-red.webp",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Collective emancipation through ending exploitation and alienation. What hurts: exploitation, alienation, and manufactured scarcity. +10 Economy and +10 Culture marks to your Domain each turn.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-marxist"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "economy": 1,
+            "culture": 1
+          },
+          "option": {
+            "philosophyKey": "marxist"
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "uYKd7ezSJvZo8Bmx",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-marxist",
+            "hash": "fe07f1ea6cbd"
           }
         }
       }
@@ -317,7 +421,7 @@
       "folder": "Political Affiliations",
       "system": {
         "description": {
-          "value": "Royal authority supporter. +2 Diplomacy, +1 Soft Power OPs",
+          "value": "Royal authority supporter. +20 Diplomacy and +10 Soft Power marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -347,7 +451,7 @@
             "id": "h4gcSEH4MEx55pe1",
             "pack": "political-affiliations",
             "identifier": "political-affiliation-monarchist",
-            "hash": "bd69df6ddaed"
+            "hash": "4cb91e05ef9c"
           }
         }
       }
@@ -360,7 +464,7 @@
       "folder": "Political Affiliations",
       "system": {
         "description": {
-          "value": "Cultural supremacist. +2 Strength, +1 Diplomacy OPs",
+          "value": "Cultural supremacist. +20 Violence and +10 Diplomacy marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -390,44 +494,7 @@
             "id": "ytJ4W9XTb6hqUu5C",
             "pack": "political-affiliations",
             "identifier": "political-affiliation-nationalist",
-            "hash": "0353950ad1ce"
-          }
-        }
-      }
-    },
-    {
-      "slug": "political-affiliation-oligarch-militarist-coalition",
-      "name": "Political Affiliation: Oligarch/Militarist Coalition",
-      "type": "feat",
-      "img": "icons/magic/death/skull-humanoid-crown-white-blue.webp",
-      "folder": "Political Affiliations",
-      "system": {
-        "description": {
-          "value": "A league of warlords ruled by reputation, power, and council. High capability but prone to internal conflicts.",
-          "chat": ""
-        },
-        "type": {
-          "value": "",
-          "subtype": ""
-        },
-        "requirements": "",
-        "properties": [],
-        "uses": {
-          "max": "",
-          "spent": 0,
-          "recovery": []
-        },
-        "identifier": "political-affiliation-oligarch-militarist-coalition"
-      },
-      "effects": [],
-      "flags": {
-        "bbttcc-character-options": {},
-        "bad-eden-5e": {
-          "rfi": {
-            "id": "8yNFvm02LSI8Fszq",
-            "pack": "political-affiliations",
-            "identifier": "political-affiliation-oligarch-militarist-coalition",
-            "hash": "a7ef21e1aac5"
+            "hash": "8bae538ee89a"
           }
         }
       }
@@ -440,7 +507,7 @@
       "folder": "Political Affiliations",
       "system": {
         "description": {
-          "value": "Social reformer. +2 Soft Power, +1 Diplomacy OPs",
+          "value": "Social reformer. +20 Soft Power and +10 Diplomacy marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -470,7 +537,7 @@
             "id": "iQF02bsnjvr0aoY4",
             "pack": "political-affiliations",
             "identifier": "political-affiliation-progressive",
-            "hash": "7664a8a66b81"
+            "hash": "18512e81f02c"
           }
         }
       }
@@ -483,7 +550,7 @@
       "folder": "Political Affiliations",
       "system": {
         "description": {
-          "value": "Traditionalist restorer. +2 Strength, +1 Soft Power OPs",
+          "value": "Traditionalist restorer. +20 Violence and +10 Soft Power marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -513,7 +580,53 @@
             "id": "ysPaCr9KvqAIGUMZ",
             "pack": "political-affiliations",
             "identifier": "political-affiliation-reactionary",
-            "hash": "cbe6391de39a"
+            "hash": "a7dfbaf74c2a"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-social-democratic",
+      "name": "Political Affiliation: Social Democratic",
+      "type": "feat",
+      "img": "icons/sundries/flags/banner-standard-green.webp",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Material security, dignity, and the reduction of preventable harm. What hurts: abandonment and unchecked inequality. +10 Diplomacy and +10 Culture marks to your Domain each turn.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-social-democratic"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "diplomacy": 1,
+            "culture": 1
+          },
+          "option": {
+            "philosophyKey": "social_democratic"
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "ipxCTqULBhrXxqBk",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-social-democratic",
+            "hash": "1a615d040b53"
           }
         }
       }
@@ -526,7 +639,7 @@
       "folder": "Political Affiliations",
       "system": {
         "description": {
-          "value": "Science-based ruler. +2 Soft Power, +1 Economy OPs",
+          "value": "Science-based ruler. +20 Soft Power and +10 Economy marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -556,7 +669,52 @@
             "id": "fALS6fgZOrMWHf9W",
             "pack": "political-affiliations",
             "identifier": "political-affiliation-technocrat",
-            "hash": "e6a1edba38c8"
+            "hash": "3e34b1ae827f"
+          }
+        }
+      }
+    },
+    {
+      "slug": "political-affiliation-theocratic",
+      "name": "Political Affiliation: Theocratic",
+      "type": "feat",
+      "img": "icons/sundries/flags/banner-standard-moon.webp",
+      "folder": "Political Affiliations",
+      "system": {
+        "description": {
+          "value": "Alignment with a transcendent moral truth. What hurts: heresy, corruption, and desecration. +20 Faith marks to your Domain each turn.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "political-affiliation-theocratic"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "political-affiliations",
+          "bonuses": {
+            "faith": 2
+          },
+          "option": {
+            "philosophyKey": "theocratic"
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "dDsbMtX80MzHaOyZ",
+            "pack": "political-affiliations",
+            "identifier": "political-affiliation-theocratic",
+            "hash": "293f2ec4e490"
           }
         }
       }

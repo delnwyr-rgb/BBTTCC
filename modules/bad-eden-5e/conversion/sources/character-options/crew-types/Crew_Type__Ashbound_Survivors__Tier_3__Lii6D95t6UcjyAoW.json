@@ -81,6 +81,31 @@
         "progressionType": "level"
       },
       "category": "crew"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "attribute": "body",
+          "vs": "enduring environmental strain",
+          "note": "Ashbound Survivors T3"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "perception",
+          "vs": "locating shelter; navigating by ruin-sign, stars, or ashfall",
+          "note": "Ashbound Survivors T3"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "streetwise",
+          "vs": "scavenging sustenance",
+          "note": "Ashbound Survivors T3"
+        }
+      ]
     }
   },
   "folder": "EV3LjQRYeE2vKgof",
@@ -94,12 +119,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.1",
     "createdTime": 1774986941276,
-    "modifiedTime": 1777515322401,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1791344270196,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

@@ -30,7 +30,7 @@
       "level": null
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Level 5+",
     "type": {
       "value": "",
       "subtype": ""
@@ -65,12 +65,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986658337,
-    "modifiedTime": 1777339606303,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989150364,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

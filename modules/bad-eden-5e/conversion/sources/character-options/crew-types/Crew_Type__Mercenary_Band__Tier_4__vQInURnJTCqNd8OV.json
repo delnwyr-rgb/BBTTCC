@@ -3,15 +3,17 @@
   "type": "feat",
   "img": "icons/commodities/currency/coin-embossed-sword-copper.webp",
   "system": {
-    "description": {
-      "value": "<p><strong>Tier 4 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> The Violence Point Attrition (war-weariness) mechanic affects your faction 50% less than normal. The cost to replenish Violence OPs is reduced by 10%.</li></ul>",
-      "chat": ""
-    },
+    "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Mercenary Band (Tier 4)",
+      "custom": "Bad Eden – Crew Type: Mercenary Band (Tier 4)",
       "revision": 2,
       "rules": "2024",
       "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Strategic:</strong> War-weariness bites less: your Domain's Violence income each turn is 10% higher.</li></ul>",
+      "chat": ""
     },
     "identifier": "crew-mercenary-band-t4",
     "activities": {},
@@ -70,6 +72,14 @@
           "bbttcc:theme:sustained-conflict"
         ]
       }
+    },
+    "fourththing": {
+      "domainIncome": {
+        "pct": 10,
+        "channels": [
+          "violence"
+        ]
+      }
     }
   },
   "_stats": {
@@ -82,12 +92,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986954715,
-    "modifiedTime": 1775063032121,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989170327,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

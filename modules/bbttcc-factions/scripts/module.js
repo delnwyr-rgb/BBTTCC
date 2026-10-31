@@ -5035,12 +5035,12 @@ factionApi.openCreationWizard ??= (() => {
     if (!game.user?.isGM) return ui.notifications.warn("GM only.");
     const choice = await new Promise((resolve) => {
       new Dialog({
-        title: "Create Faction",
+        title: "Create Domain",
         content: `
           <form>
             <div class="form-group">
-              <label>Faction Name</label>
-              <input type="text" name="name" value="New Faction" autofocus style="width:100%;" />
+              <label>Domain Name</label>
+              <input type="text" name="name" value="New Domain" autofocus style="width:100%;" />
             </div>
             <div class="form-group">
               <label>Starter Rig</label>
@@ -5049,7 +5049,7 @@ factionApi.openCreationWizard ??= (() => {
                 <option value="space_marine">Space Marine — Tier 0 giant fighting robot</option>
               </select>
               <p class="notes" style="opacity:.8;margin-top:.35rem;">
-                Creates a Standing 1 faction with the Standard Package applied (no hexes), plus this free starter rig.
+                Creates a Standing 1 Domain with the Standard Package applied (no hexes), plus this free starter rig.
               </p>
             </div>
           </form>`,
@@ -5061,7 +5061,7 @@ factionApi.openCreationWizard ??= (() => {
               const root = html instanceof jQuery ? html[0] : html;
               const v = String(root?.querySelector('input[name="name"]')?.value ?? "").trim();
               const starterRig = String(root?.querySelector('select[name="starterRig"]')?.value ?? "hexmobile");
-              resolve({ name: v || "New Faction", starterRig });
+              resolve({ name: v || "New Domain", starterRig });
             }
           }
         },
@@ -5078,7 +5078,7 @@ factionApi.openCreationWizard ??= (() => {
       });
       const a = game.actors.get(created.actorId);
       if (!a) throw new Error("Created faction actor not found.");
-      ui.notifications.info(`Faction created: ${name}`);
+      ui.notifications.info(`Domain created: ${name}`);
       a.sheet?.render?.(true, { focus: true });
       return a;
     } catch (e) {

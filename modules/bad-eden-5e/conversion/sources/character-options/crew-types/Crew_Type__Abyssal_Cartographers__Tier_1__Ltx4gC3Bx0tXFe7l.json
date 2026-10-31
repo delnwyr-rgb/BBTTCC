@@ -5,14 +5,14 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Abyssal Cartographers (Tier 1)",
+      "custom": "Bad Eden – Crew Type: Abyssal Cartographers (Tier 1)",
       "revision": 2,
       "rules": "2024",
       "book": ""
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You’ve learned the first law of deep travel: the visible route is usually the stupid one.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency in Survival and Investigation.</li><li><strong>Strategic:</strong> In River, Lake, Sea, Ocean, or Cavern-adjacent routes, discovery and route-finding are more reliable.</li></ul>",
+      "value": "<p><strong>Tier 1 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You’ve learned the first law of deep travel: the visible route is usually the stupid one.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic:</strong> In River, Lake, Sea, Ocean, or Cavern-adjacent routes, discovery and route-finding are more reliable.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-abyssal-cartographers-t1",
@@ -85,12 +85,12 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346195718,
-        "modifiedTime": 1777433499531
+        "modifiedTime": 1792989167143
       },
       "start": {
         "combat": null,
@@ -101,8 +101,7 @@
         "initiative": null
       },
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!Ltx4gC3Bx0tXFe7l.ab38c4d514f24f69"
+      "folder": null
     }
   ],
   "folder": "RkZhM7hoNJJnRSIB",
@@ -155,6 +154,9 @@
           "bbttcc:theme:discovery"
         ]
       }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
     }
   },
   "_stats": {
@@ -167,12 +169,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
     "createdTime": 1774986939199,
-    "modifiedTime": 1775063026549,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1782167238949,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

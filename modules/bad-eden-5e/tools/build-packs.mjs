@@ -269,6 +269,68 @@ function rawItemDoc(it, folderId) {
   };
 }
 
+/* ── Archetype origins (2026-10-30): the Archetype IS the 5E background ─────
+ * content/archetype-origins.json → dnd5e `background` items in pack
+ * `archetypes`. A 2024-shaped origin: ASI (3 points, cap 2, the three named
+ * abilities), the two Tier 1 skills, one Origin feat, then ItemGrants of the
+ * Archetype's own cards (raw items in character-archetypes, id gear:<slug>):
+ * base + Tier 1 at 0, Tier 2/3/4 at 5/11/17. Prose = the base card's quote and
+ * lede + a benefits list built from the row. */
+const ABIL_LONG = { str: "Strength", dex: "Dexterity", con: "Constitution", int: "Intelligence", wis: "Wisdom", cha: "Charisma" };
+const SKILL_LONG = { acr: "Acrobatics", ani: "Animal Handling", arc: "Arcana", ath: "Athletics", dec: "Deception", his: "History", ins: "Insight", itm: "Intimidation", inv: "Investigation", med: "Medicine", nat: "Nature", prc: "Perception", prf: "Performance", per: "Persuasion", rel: "Religion", slt: "Sleight of Hand", ste: "Stealth", sur: "Survival" };
+const cardUuid = slug => `Compendium.${MOD}.character-archetypes.Item.${id(`gear:${slug}`)}`;
+function backgroundDoc(b, originFeats, cards) {
+  const key = `archetypes:${b.slug}`;
+  const base = cards.get(b.card);
+  if (!base) throw new Error(`archetype origin ${b.slug}: no card "${b.card}" in character-archetypes`);
+  for (const t of [1, 2, 3, 4]) if (!cards.get(`${b.card}-t${t}`)) throw new Error(`archetype origin ${b.slug}: no Tier ${t} card "${b.card}-t${t}"`);
+  const abil = b.abilities.map(a => ABIL_LONG[a]);
+  const skills = b.skills.map(k => SKILL_LONG[k]);
+  // the card's quote + first paragraph of lede (the "Archetype Effects" list stays on the card itself)
+  const baseHtml = String(base.system?.description?.value ?? "").replace(/<div[^>]*display:none[^>]*><\/div>/g, "");
+  const lede = (baseHtml.match(/<p>[\s\S]*?<\/p>/g) ?? []).slice(0, 2).join("");
+  const desc = `${lede}<h3>Archetype</h3><ul>`
+    + `<li><p><strong>Ability Scores:</strong> ${abil.join(", ")}. Increase one by 2 and a different one by 1, or all three by 1 (none above 20).</p></li>`
+    + `<li><p><strong>Skills:</strong> ${skills.join(" and ")}.</p></li>`
+    + `<li><p><strong>Origin Feat:</strong> choose one (Alert, Magic Initiate, Savage Attacker or Skilled).</p></li>`
+    + `<li><p><strong>Archetype Cards:</strong> @UUID[${cardUuid(b.card)}]{${base.name.replace(/^Archetype:\s*/, "")}} and its Tier 1 card now; Tier 2, 3 and 4 at levels 5, 11 and 17.</p></li></ul>`;
+  lint(`archetype origin ${b.slug}`, desc, { rfi: true });
+  const a = [];
+  const locked = Object.keys(ABIL_LONG).filter(k => !b.abilities.includes(k));
+  a.push({ ...asi(key, 0, 3, { cap: 2, locked, title: "Archetype Ability Scores" }),
+    hint: `Your Archetype lets you increase ${abil.slice(0, 2).join(", ")} and ${abil[2]}: one by 2 and a different one by 1, or all three by 1. None can rise above 20.` });
+  a.push(trait(key, "skills", 0, "Archetype Skills", b.skills.map(k => `skills:${k}`), [], { hint: `Your Archetype grants proficiency in ${skills.join(" and ")}.` }));
+  a.push(adv(key, "origin-feat", "ItemChoice", {
+    configuration: { choices: { 0: { count: 1, replacement: false } }, allowDrops: false, type: "feat",
+      pool: originFeats.map(u => ({ uuid: u })), restriction: { type: "", subtype: "", level: "" },
+      spell: { ability: [], preparation: "", uses: { max: "", per: "" } } },
+    value: { added: {} }, level: 0, title: "Origin Feat", hint: "Choose one Origin feat."
+  }));
+  const cardGrant = (level, slugs, title) => adv(key, `card:${level}`, "ItemGrant", {
+    configuration: { items: slugs.map(s => ({ uuid: cardUuid(s), optional: false })), optional: false,
+      spell: { ability: [], preparation: "", uses: { max: "", per: "" } } },
+    value: {}, level, title
+  });
+  a.push(cardGrant(0, [b.card, `${b.card}-t1`], "Archetype"));
+  a.push(cardGrant(5, [`${b.card}-t2`], "Archetype Tier II"));
+  a.push(cardGrant(11, [`${b.card}-t3`], "Archetype Tier III"));
+  a.push(cardGrant(17, [`${b.card}-t4`], "Archetype Tier IV"));
+  return {
+    _id: id(key), name: b.name, type: "background", img: base.img, folder: null, sort: 0,
+    system: {
+      description: { value: desc, chat: "" },
+      source: { ...SOURCE_META, rules: "2024" },
+      identifier: `archetype-${b.slug}`,
+      advancement: a,
+      startingEquipment: [],
+      wealth: ""
+    },
+    effects: [],
+    flags: { [MOD]: { archetype: { slug: b.slug, card: b.card, key: base.flags?.["bbttcc-character-options"]?.option?.key ?? "" } } },
+    _key: `!items!${id(key)}`
+  };
+}
+
 /* ── raw dnd5e actors (the creatures lane hands us complete npc documents) ── */
 function rawActorDoc(a, folderId) {
   const key = `monsters:${a.slug}`;
@@ -401,7 +463,7 @@ function main() {
   const files = readdirSync(CONTENT).filter(f => f.endsWith(".json")).sort();
   // item lanes route by the content file's `_pack` (default gear): courtly-secrets / npc-callings / sparks (2026-10-08)
   // 2026-10-11: + the six character-options twins, doctrines and vehicles (rigs) — the packs a D&D world on Ember needs
-  const TWIN_PACKS = ["character-archetypes", "crew-types", "enlightenment-levels", "occult-associations", "political-affiliations", "sephirothic-alignments", "doctrines", "vehicles"];
+  const TWIN_PACKS = ["archetypes", "character-archetypes", "crew-types", "enlightenment-levels", "occult-associations", "political-affiliations", "sephirothic-alignments", "doctrines", "vehicles"];
   const docs = { classes: [], subclasses: [], features: [], powers: [], species: [], tables: [], gear: [], monsters: [], "courtly-secrets": [], "npc-callings": [], sparks: [], ...Object.fromEntries(TWIN_PACKS.map(p => [p, []])) };
   const folders = { features: new Map(), powers: new Map(), species: new Map(), gear: new Map(), monsters: new Map(), "courtly-secrets": new Map(), "npc-callings": new Map(), sparks: new Map(), ...Object.fromEntries(TWIN_PACKS.map(p => [p, new Map()])) };
   const folderFor = (pack, name, parent) => {
@@ -410,6 +472,7 @@ function main() {
     return folders[pack].get(k)._id;
   };
 
+  const pendingBackgrounds = [];
   for (const file of files) {
     const data = JSON.parse(readFileSync(join(CONTENT, file), "utf8"));
     for (const c of data.classes ?? []) docs.classes.push(classDoc(c));
@@ -419,6 +482,7 @@ function main() {
     for (const a of data.actors ?? []) docs[actorPack].push(rawActorDoc(a, a.folder ? folderFor(actorPack, a.folder, null) : null));
     const itemPack = docs[data._pack] && folders[data._pack] ? data._pack : "gear";
     for (const it of data.items ?? []) docs[itemPack].push(rawItemDoc(it, it.folder ? folderFor(itemPack, it.folder, it.folderParent ?? null) : null));
+    if (data.backgrounds) pendingBackgrounds.push(data);
     for (const r of data.races ?? []) { const d = raceDoc(r); if (r.family) d.folder = folderFor("species", r.family, null); docs.species.push(d); }
     for (const f of data.features ?? []) {
       const fid = f.folder ? folderFor("features", f.folder, f.folderParent ?? null) : null;
@@ -431,6 +495,11 @@ function main() {
       docs.powers.push(powerDoc(p, folderFor("powers", `${LEVEL[p.level] ?? p.level} level`, trad)));
       folderFor("powers", trad, null);
     }
+  }
+  // Archetype origins resolve against the cards once every lane is loaded
+  if (pendingBackgrounds.length) {
+    const cards = new Map(JSON.parse(readFileSync(join(CONTENT, "archetypes.json"), "utf8")).items.map(it => [it.slug, it]));
+    for (const data of pendingBackgrounds) for (const b of data.backgrounds) docs.archetypes.push(backgroundDoc(b, data.originFeats ?? [], cards));
   }
   // a power's slug must be unique, and a feature's too
   for (const pack of ["features", "powers"]) {

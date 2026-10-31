@@ -3,15 +3,17 @@
   "type": "feat",
   "img": "icons/sundries/misc/badge-law-sheriff.webp",
   "system": {
-    "description": {
-      "value": "<p><strong>Tier 2 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> In Tower Trashers (Tactical Defense) scenarios, your faction's defensive structures have 25% more durability, and Demolition units are less effective.</li></ul>",
-      "chat": ""
-    },
+    "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Peacekeeper Corps (Tier 2)",
+      "custom": "Bad Eden – Crew Type: Peacekeeper Corps (Tier 2)",
       "revision": 2,
       "rules": "2024",
       "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Strategic:</strong> Your defensive works hold: your Domain gets 20 free marks of siege works every time it commits to a siege.</li></ul>",
+      "chat": ""
     },
     "identifier": "crew-peacekeeper-corps-t2",
     "activities": {},
@@ -67,6 +69,11 @@
           "bbttcc:theme:enforcement"
         ]
       }
+    },
+    "fourththing": {
+      "domainCapBonus": {
+        "siege": 20
+      }
     }
   },
   "effects": [],
@@ -81,12 +88,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986956943,
-    "modifiedTime": 1775063024360,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989170458,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

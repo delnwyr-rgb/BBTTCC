@@ -993,21 +993,21 @@ function normalizeFactionRigsFlag(factionFlags){
 }
 
 async function createFactionViaBBTTCC(){
-  if (!game.user?.isGM) { ui.notifications?.warn?.('Only the GM can create factions.'); return null; }
+  if (!game.user?.isGM) { ui.notifications?.warn?.('Only the GM can create Domains.'); return null; }
   const content = `
     <div class="form-group">
-      <label>Faction Name</label>
-      <input type="text" name="name" value="New Faction" autofocus style="width:100%;" />
-      <p class="notes" style="opacity:.8;margin-top:.35rem;">Creates a new Actor flagged as a Bad Eden Faction and opens the Bad Eden Faction Sheet.</p>
+      <label>Domain Name</label>
+      <input type="text" name="name" value="New Domain" autofocus style="width:100%;" />
+      <p class="notes" style="opacity:.8;margin-top:.35rem;">Creates a new Bad Eden Domain and opens its sheet.</p>
     </div>`;
   return new Promise((resolve)=>{
     new Dialog({
-      title:"Create Faction",
+      title:"Create Domain",
       content,
       buttons:{
         cancel:{ icon:'<i class="fas fa-times"></i>', label:'Cancel', callback:()=>resolve(null) },
         create:{ icon:'<i class="fas fa-flag"></i>',  label:'Create', callback: async (html)=>{
-          const name = String(html.find('input[name="name"]').val()||"New Faction").trim();
+          const name = String(html.find('input[name="name"]').val()||"New Domain").trim();
           const type = resolveFactionActorType();
           try {
             const actor = await Actor.create({
@@ -1016,10 +1016,10 @@ async function createFactionViaBBTTCC(){
               system: { details: { type: { value: "faction" } } },
               flags: { "bbttcc-factions": normalizeFactionRigsFlag({ isFaction: true, rigs: [], activeRigId: "" }), core: { sheetClass: FACTION_SHEET_CLASS } }
             });
-            ui.notifications?.info?.(`Faction "${name}" created.`);
+            ui.notifications?.info?.(`Domain "${name}" created.`);
             await actor?.sheet?.render(true);
             resolve(actor);
-          } catch (e) { warn("Failed to create Faction", e); ui.notifications?.error?.("Failed to create Faction."); resolve(null); }
+          } catch (e) { warn("Failed to create Faction", e); ui.notifications?.error?.("Failed to create Domain."); resolve(null); }
         }}
       },
       default:"create",
@@ -1034,7 +1034,7 @@ function insertCreateFactionButton(html){
     const $html = html instanceof jQuery ? html : $(html);
     const header = $html.find(".directory-header .header-actions, .directory-header .action-buttons, .directory-header").first();
     if (!header.length || header.find("#bbttcc-create-faction").length) return;
-    const $btn = $(`<button id="bbttcc-create-faction" type="button" class="header-control" title="Create Bad Eden Faction"><i class="fas fa-flag"></i> Create Faction</button>`);
+    const $btn = $(`<button id="bbttcc-create-faction" type="button" class="header-control" title="Create a Bad Eden Domain"><i class="fas fa-flag"></i> Create Domain</button>`);
     header.append($btn); $btn.on("click", async (ev) => {
       try {
         ev?.preventDefault?.();

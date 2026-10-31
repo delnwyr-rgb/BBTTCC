@@ -3,15 +3,17 @@
   "type": "feat",
   "img": "icons/skills/social/diplomacy-peace-alliance.webp",
   "system": {
-    "description": {
-      "value": "<p><strong>Tier 4 — Diplomatic Envoys</strong></p><p><strong>“We are here in peace. Don’t make that embarrassing.”</strong></p><p>Diplomatic Envoys are the faction’s public face and private threat. They shake hands with one hand and count exits with the other. Their talent is making every negotiation feel like the only sensible outcome was the one they wanted.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> The OP cost to achieve a Best Friends/Integration outcome (merging factions) is reduced by 30%.</li></ul>",
-      "chat": ""
-    },
+    "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Diplomatic Envoys (Tier 4)",
+      "custom": "Bad Eden – Crew Type: Diplomatic Envoys (Tier 4)",
       "revision": 2,
       "rules": "2024",
       "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 — Diplomatic Envoys</strong></p><p><strong>“We are here in peace. Don’t make that embarrassing.”</strong></p><p>Diplomatic Envoys are the faction’s public face and private threat. They shake hands with one hand and count exits with the other. Their talent is making every negotiation feel like the only sensible outcome was the one they wanted.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Diplomacy marks, it spends 30% less (never below 10).</li></ul>",
+      "chat": ""
     },
     "identifier": "crew-diplomatic-envoys-t4",
     "activities": {},
@@ -70,6 +72,19 @@
           "bbttcc:theme:merger"
         ]
       }
+    },
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "diplomacy"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Crew Type: Diplomatic Envoys (Tier 4)",
+          "pct": 30
+        }
+      ]
     }
   },
   "_stats": {
@@ -82,12 +97,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986946918,
-    "modifiedTime": 1775063030547,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989169368,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

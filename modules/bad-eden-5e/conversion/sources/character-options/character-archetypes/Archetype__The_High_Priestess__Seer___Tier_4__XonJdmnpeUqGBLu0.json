@@ -7,12 +7,12 @@
     "source": {
       "revision": 1,
       "rules": "2024",
-      "custom": "BBTTCC – Archetype: The High Priestess (Seer) (Tier 4)",
+      "custom": "Bad Eden – Archetype: The High Priestess (Seer) (Tier 4)",
       "book": ""
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 4 (Level 17) — The High Priestess (Seer)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a prophecy, espionage, hidden-threat, omen, or clandestine revelation scenario, you reroll the lowest die on all relevant strategic checks.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 4 (Level 17) — The High Priestess (Seer)</strong></p><ul><li><strong>Strategic:</strong> Once per scene of prophecy, espionage, hidden threat, omen or clandestine revelation, your Domain rerolls the lowest die on its Domain rolls (the card fires it).</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -72,12 +72,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986753400,
-    "modifiedTime": 1777515322237,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989162078,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

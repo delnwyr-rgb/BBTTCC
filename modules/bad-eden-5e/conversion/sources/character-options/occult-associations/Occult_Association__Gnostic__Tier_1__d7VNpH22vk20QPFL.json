@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Gnostic</strong></p><p><strong>“The lie is structural.”</strong></p><p>You can feel distortion now. Propaganda scrapes. Illusions itch. You may not yet know the truth, but you know when something is <em>false</em>.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain proficiency in <strong>Insight</strong></li><li>reroll the lowest die on saving throws against <strong>Illusion</strong> effects</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction resists propaganda, misinformation, or psychological manipulation, gain <strong>+1 to the relevant Soft Power OP roll</strong></li></ul><p><strong>Cost:</strong> once you can feel falsehood structurally, ordinary social comfort gets harder. Expect friction when you refuse to participate in convenient lies.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Gnostic</strong></p><p><strong>“The lie is structural.”</strong></p><p>You can feel distortion now. Propaganda scrapes. Illusions itch. You may not yet know the truth, but you know when something is <em>false</em>.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong></li><li>reroll the lowest die on checks against <strong>Illusion</strong> effects</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your Domain resists propaganda, misinformation, or psychological manipulation, gain <strong>+1 to the relevant Soft Power marks roll</strong></li></ul><p><strong>Cost:</strong> once you can feel falsehood structurally, ordinary social comfort gets harder. Expect friction when you refuse to participate in convenient lies.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -69,11 +69,24 @@
           "bbttcc:theme:falsehood-detection"
         ]
       }
+    },
+    "fourththing": {
+      "domainRollBonus": {
+        "softpower": 1
+      },
+      "rerolls": [
+        {
+          "mode": "reroll-lowest",
+          "context": "defense",
+          "vs": "Illusion effects",
+          "note": "Gnostic T1"
+        }
+      ]
     }
   },
   "effects": [
     {
-      "name": "Occult Tier1 Proficiencies",
+      "name": "Occult Tier 1 Proficiencies",
       "disabled": false,
       "transfer": true,
       "img": "icons/skills/social/symbol-pyramid-eye.webp",
@@ -106,17 +119,16 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346196115,
-        "modifiedTime": 1777433499563
+        "modifiedTime": 1792989174442
       },
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!d7VNpH22vk20QPFL.3MI7aYnvakMu0F2o"
+      "folder": null
     }
   ],
   "img": "icons/skills/social/symbol-pyramid-eye.webp",
@@ -131,12 +143,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987091124,
-    "modifiedTime": 1777515322495,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989174271,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

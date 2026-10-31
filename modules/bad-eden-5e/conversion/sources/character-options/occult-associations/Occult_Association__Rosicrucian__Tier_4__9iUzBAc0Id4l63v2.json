@@ -2,8 +2,15 @@
   "name": "Occult Association: Rosicrucian (Tier 4)",
   "type": "feat",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 — Rosicrucian</strong></p><p><strong>“When the Spark arrives, my people already have a place to put it.”</strong></p><p>At Tier 4, your order stops feeling like a club and starts feeling like infrastructure. When your faction achieves a Spark recovery, your network amplifies the downstream benefit.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction successfully gathers a Spark of Light for the Great Work, increase the resulting <strong>Faction Resource Injection</strong> by <strong>20%</strong></li></ul><p>The Great Work is not just discovery. It is what happens <em>after</em> discovery — and you are built for that.</p><p><strong>Cost:</strong> once your network becomes the obvious place recovered value flows through, rivals, allies, and dependents all begin measuring you by whether that flow ever stops.</p>",
+      "value": "<p><strong>Tier 4 — Rosicrucian</strong></p><p><strong>“When the Spark arrives, my people already have a place to put it.”</strong></p><p>At Tier 4, your order stops feeling like a club and starts feeling like infrastructure. When your Domain achieves a Spark recovery, your network amplifies the downstream benefit.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Infrastructure for what comes after the Spark: your Domain's income each turn is <strong>10% higher</strong>.</li></ul><p>The Great Work is not just discovery. It is what happens <em>after</em> discovery — and you are built for that.</p><p><strong>Cost:</strong> once your network becomes the obvious place recovered value flows through, rivals, allies, and dependents all begin measuring you by whether that flow ever stops.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -15,11 +22,6 @@
       "max": ""
     },
     "identifier": "occult-association-rosicrucian-t4",
-    "source": {
-      "revision": 2,
-      "rules": "2024",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -63,6 +65,11 @@
           "bbttcc:theme:network-as-infrastructure"
         ]
       }
+    },
+    "fourththing": {
+      "domainIncome": {
+        "pct": 10
+      }
     }
   },
   "effects": [],
@@ -78,12 +85,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987100132,
-    "modifiedTime": 1775063035644,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989177236,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

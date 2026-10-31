@@ -7,12 +7,12 @@
     "source": {
       "revision": 1,
       "rules": "2024",
-      "custom": "BBTTCC – Archetype: Justice (Arbiter) (Tier 4)",
+      "custom": "Bad Eden – Archetype: Justice (Arbiter) (Tier 4)",
       "book": ""
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 4 (Level 17) — Justice (Arbiter)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a policy, trial, arbitration, reform, or legitimacy scenario, you reroll the lowest die on all relevant strategic checks.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 4 (Level 17) — Justice (Arbiter)</strong></p><ul><li><strong>Strategic:</strong> Once per scene of policy, trial, arbitration, reform or legitimacy, your Domain rerolls the lowest die on its Domain rolls (the card fires it).</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -72,12 +72,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986332024,
-    "modifiedTime": 1777515322102,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989161718,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

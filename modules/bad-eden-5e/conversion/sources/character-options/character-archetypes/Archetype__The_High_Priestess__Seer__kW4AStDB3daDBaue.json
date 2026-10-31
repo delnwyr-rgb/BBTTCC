@@ -7,11 +7,11 @@
     "source": {
       "revision": 1,
       "rules": "2024",
-      "custom": "BBTTCC"
+      "custom": "Bad Eden"
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You already know. You just refuse to say it too early.”</em></p><p><strong>Archetype (BBTTCC): The High Priestess (Seer).</strong> You read the invisible pressure in a room before anyone else admits it exists. You are intuition weaponized, omen-bearing, and very difficult to surprise in ways that matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype sharpens the faction’s hidden-state awareness and information leverage. This Archetype is associated with <strong>+1 Intrigue</strong> in faction calculus in BBTTCC’s faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit; those are granted automatically by the Tier Engine at the appropriate character levels.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You already know. You just refuse to say it too early.”</em></p><p><strong>Archetype (Bad Eden): The High Priestess (Seer).</strong> You read the invisible pressure in a room before anyone else admits it exists. You are intuition weaponized, omen-bearing, and very difficult to surprise in ways that matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype sharpens the faction’s hidden-state awareness and information leverage. Your Domain earns <strong>+10 Intrigue</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit; those are granted automatically by the Tier Engine at the appropriate character levels.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -94,12 +94,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986753400,
-    "modifiedTime": 1777515322282,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989147316,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

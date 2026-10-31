@@ -1,6 +1,6 @@
 {
   "_about": "THE conversion rubric: how a Bad Eden mechanic written for RFI (the fourththing system) becomes its D&D 5E (dnd5e 6) twin. Read by tools/build-packs.mjs (the lint), bin/ft-convert-5e (the converter) and bin/ft-lint-parity (the parity check). Rendered for humans as CONVERSION_RUBRIC.md — keep the two in step. Every entry marked ruling:true was ruled by Dave; ruling:'owed' is a draft awaiting one.",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "date": "2026-10-07",
   "direction": "rfi→5e",
   "sourceOfTruth": {
@@ -558,8 +558,14 @@
         "to": "AC = 10 + guardBonus for light, 12 + bonus for medium, 14 + bonus for heavy — band by armorSkill/tags",
         "ruling": true
       },
-      "evasionBonus": { "to": "Dex save bonus AE (abilities.dex.bonuses.save), carried at full value", "ruling": true },
-      "resolveBonus": { "to": "Wis save bonus AE (abilities.wis.bonuses.save), carried at full value — +3..+5 on the legendary vestments STAND (ruled 2026-10-07)", "ruling": true },
+      "evasionBonus": {
+        "to": "Dex save bonus AE (abilities.dex.bonuses.save), carried at full value",
+        "ruling": true
+      },
+      "resolveBonus": {
+        "to": "Wis save bonus AE (abilities.wis.bonuses.save), carried at full value — +3..+5 on the legendary vestments STAND (ruled 2026-10-07)",
+        "ruling": true
+      },
       "resistances[]": "via damage → ae dr",
       "armorSkill": "fitting → light, plating → medium/heavy, bracing → shield (ruled)"
     },
@@ -691,6 +697,30 @@
       [
         "\\bYou gain a skill rank in\\b",
         "You gain proficiency in"
+      ],
+      [
+        "\\bthe (\\w+) aptitude\\b",
+        "@SKILL"
+      ],
+      [
+        "\\b(proficiency in (?:[A-Z][a-z]+ and )?)Faith\\b",
+        "\\1Religion"
+      ],
+      [
+        "\\b(proficiency in (?:[A-Z][a-z]+ and )?)Lore\\b",
+        "\\1History"
+      ],
+      [
+        "\\b(proficiency in (?:[A-Z][a-z]+ and )?)Occult\\b",
+        "\\1Arcana"
+      ],
+      [
+        "\\b(proficiency in (?:[A-Z][a-z]+ and )?)Diplomacy\\b",
+        "\\1Persuasion"
+      ],
+      [
+        "\\b(proficiency in (?:[A-Z][a-z]+ and )?)Empathy\\b",
+        "\\1Insight"
       ],
       [
         "\\bdefense checks\\b",
@@ -849,11 +879,11 @@
         "character"
       ],
       [
-        "\\bViolence\\b",
+        "\\bViolence\\b(?<!Domain's Violence)(?![^.]{0,80}?\\bmarks\\b)",
         "Strength"
       ],
       [
-        "\\bIntrigue\\b",
+        "\\bIntrigue\\b(?<!Domain's Intrigue)(?![^.]{0,80}?\\bmarks\\b)",
         "Dexterity"
       ],
       [
@@ -955,6 +985,7 @@
     "2026-10-07": "Dave ruled rubric lines 1–8 (small bonus +2, Stress points, Clarity/Noise kept with Flow-point bonus, radiation stays a ladder, the skill table, armor bands, martial weapons, marks, creature scores 10+2×value). Scarred's scale is the one open question.",
     "2026-10-07b": "Dave ruled Scarred = −1 Flow point per 5 of Flow max (min 1) and that the big Resolve/Evasion save bonuses on legendary vestments stand in 5E. Cross-tradition casting (Flow-Touched / Crossed Wires / Wired for Both) automated in the engine (castThrough).",
     "2026-10-07c": "PROPOSED (built, awaiting Dave): the nine Path-discipline techniques and the Clarity techniques → Active Effects / riders per engine.discipline.* and engine['Clarity techniques']; needs-human for techniques fell 31 → 6.",
-    "2026-10-07d": "Dave APPROVED all five discipline/Clarity mappings (Paths doc, 'Rulings owed'). Martial subclass names ruled: Leyline Runner, Circuit Sarge (Fighter); Rhapsodist, Wheelstick (Rogue); Warrior of the Wire keeps its name with the nickname Wireior; the Furies and the Riptide stand."
+    "2026-10-07d": "Dave APPROVED all five discipline/Clarity mappings (Paths doc, 'Rulings owed'). Martial subclass names ruled: Leyline Runner, Circuit Sarge (Fighter); Rhapsodist, Wheelstick (Rogue); Warrior of the Wire keeps its name with the nickname Wireior; the Furies and the Riptide stand.",
+    "2026-10-30": "Archetype prose pass: skill names after 'proficiency in' map through the skill table (Faith→Religion, Lore→History, Occult→Arcana, Diplomacy→Persuasion, Empathy→Insight); bare Violence/Intrigue stay as Domain mark pools when the sentence is about marks. 'the X aptitude' → the skill/tool through the skill table (Tinkering → tinker's tools, Occult → Arcana)."
   }
 }

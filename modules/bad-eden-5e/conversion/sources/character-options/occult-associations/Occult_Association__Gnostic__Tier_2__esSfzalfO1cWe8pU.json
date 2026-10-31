@@ -2,8 +2,15 @@
   "name": "Occult Association: Gnostic (Tier 2)",
   "type": "feat",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 — Gnostic</strong></p><p><strong>“Noise is the enemy.”</strong></p><p>You have learned to reduce interference. Your faction becomes harder to sway, harder to confuse, and harder to redirect with polished lies.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Enemy <strong>Soft Power</strong> actions targeting your faction or controlled Hexes suffer <strong>–3 to their OP roll</strong> (minimum 0 penalty floor as adjudicated by the table’s OP logic)</li></ul><p>This does not make you popular. It makes you <em>inconvenient</em>.</p><p><strong>Cost:</strong> clarity makes soft control fail, but it also makes diplomacy messier. Expect brittle relationships, exposed tensions, and institutions that resent becoming legible.</p>",
+      "value": "<p><strong>Tier 2 — Gnostic</strong></p><p><strong>“Noise is the enemy.”</strong></p><p>You have learned to reduce interference. Your Domain becomes harder to sway, harder to confuse, and harder to redirect with polished lies.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Noise finds no purchase: your Domain adds <strong>+1</strong> to its Soft Power Domain rolls, and rival propaganda has to beat that first.</li></ul><p>This does not make you popular. It makes you <em>inconvenient</em>.</p><p><strong>Cost:</strong> clarity makes soft control fail, but it also makes diplomacy messier. Expect brittle relationships, exposed tensions, and institutions that resent becoming legible.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -15,11 +22,6 @@
       "max": ""
     },
     "identifier": "occult-association-gnostic-t2",
-    "source": {
-      "revision": 2,
-      "rules": "2024",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -63,6 +65,11 @@
           "bbttcc:theme:inconvenient-clarity"
         ]
       }
+    },
+    "fourththing": {
+      "domainRollBonus": {
+        "softpower": 1
+      }
     }
   },
   "effects": [],
@@ -78,12 +85,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987091124,
-    "modifiedTime": 1775063039227,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989176277,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

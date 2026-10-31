@@ -1,9 +1,9 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/creatures.json. The Bad Eden bestiary (the live NPC Pack's lineage-flagged monsters) as dnd5e npc actors, scored by tier and bracket through the threat chassis.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/creatures.json. The Bad Eden bestiary (the live NPC Pack's lineage-flagged monsters) as dnd5e npc actors, scored by tier and bracket through the threat chassis.",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.8.1",
-    "at": "2026-10-26",
+    "rubric": "1.9.0",
+    "at": "2026-10-31",
     "overridesApplied": 0
   },
   "actors": [
@@ -16734,7 +16734,7 @@
           "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
           "system": {
             "description": {
-              "value": "<p>It can take 2 legendary actions, choosing from the options below. Only one legendary action can be used at a time and only at the end of another creature's turn. It regains spent legendary actions at the start of its turn.</p><ul><li><strong>Its Own Calendar (recharges on a Soma Break).</strong> It makes one Its Own Calendar (recharges on a Soma Break) attack.</li><li><strong>Debt Called In (1/scene).</strong> It makes one Debt Called In (1/scene) attack.</li><li><strong>Move.</strong> It moves up to its speed without provoking opportunity attacks.</li></ul>"
+              "value": "<p>It can take 2 legendary actions, choosing from the options below. Only one legendary action can be used at a time and only at the end of another creature's turn. It regains spent legendary actions at the start of its turn.</p><ul><li><strong>Its Own Calendar (recharges on a long rest).</strong> It makes one Its Own Calendar (recharges on a long rest) attack.</li><li><strong>Debt Called In (1/short rest).</strong> It makes one Debt Called In (1/short rest) attack.</li><li><strong>Move.</strong> It moves up to its speed without provoking opportunity attacks.</li></ul>"
             },
             "type": {
               "value": "monster",
@@ -30861,7 +30861,7 @@
           "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
           "system": {
             "description": {
-              "value": "<p>It can take 1 legendary action, choosing from the options below. Only one legendary action can be used at a time and only at the end of another creature's turn. It regains spent legendary actions at the start of its turn.</p><ul><li><strong>Toll-Hook.</strong> It makes one Toll-Hook attack.</li><li><strong>Everybody Pays (recharges on a Soma Break).</strong> It makes one Everybody Pays (recharges on a Soma Break) attack.</li><li><strong>Move.</strong> It moves up to its speed without provoking opportunity attacks.</li></ul>"
+              "value": "<p>It can take 1 legendary action, choosing from the options below. Only one legendary action can be used at a time and only at the end of another creature's turn. It regains spent legendary actions at the start of its turn.</p><ul><li><strong>Toll-Hook.</strong> It makes one Toll-Hook attack.</li><li><strong>Everybody Pays (recharges on a long rest).</strong> It makes one Everybody Pays (recharges on a long rest) attack.</li><li><strong>Move.</strong> It moves up to its speed without provoking opportunity attacks.</li></ul>"
             },
             "type": {
               "value": "monster",
@@ -55448,7 +55448,7 @@
           "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
           "system": {
             "description": {
-              "value": "<p>It can take 1 legendary action, choosing from the options below. Only one legendary action can be used at a time and only at the end of another creature's turn. It regains spent legendary actions at the start of its turn.</p><ul><li><strong>Lantern Toll.</strong> It makes one Lantern Toll attack.</li><li><strong>Fare Due (recharges on a Soma Break).</strong> It makes one Fare Due (recharges on a Soma Break) attack.</li><li><strong>Move.</strong> It moves up to its speed without provoking opportunity attacks.</li></ul>"
+              "value": "<p>It can take 1 legendary action, choosing from the options below. Only one legendary action can be used at a time and only at the end of another creature's turn. It regains spent legendary actions at the start of its turn.</p><ul><li><strong>Lantern Toll.</strong> It makes one Lantern Toll attack.</li><li><strong>Fare Due (recharges on a long rest).</strong> It makes one Fare Due (recharges on a long rest) attack.</li><li><strong>Move.</strong> It moves up to its speed without provoking opportunity attacks.</li></ul>"
             },
             "type": {
               "value": "monster",

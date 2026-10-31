@@ -1,10 +1,16 @@
 {
   "name": "Archetype: The Lovers",
   "type": "feat",
-  "img": "icons/equipment/neck/amulet-heart.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_lovers.webp",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
     "description": {
-      "value": "<p><em>“You are what you choose—and who you choose to stand with.”</em></p><p><strong>Archetype (BBTTCC): The Lovers.</strong> Bonds define you. Commitment empowers you. Division weakens you.</p>",
+      "value": "<p><em>“You are what you choose—and who you choose to stand with.”</em></p><p><strong>Archetype (Bad Eden): The Lovers.</strong> Bonds define you. Commitment empowers you. Division weakens you.</p><p><strong>Domain edge:</strong> Your Domain earns <strong>+10 Diplomacy</strong> marks each turn while you serve it.</p>",
       "chat": ""
     },
     "identifier": "archetype-lovers",
@@ -16,10 +22,6 @@
       "max": ""
     },
     "advancement": {},
-    "source": {
-      "revision": 1,
-      "rules": "2024"
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -63,12 +65,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986761329,
-    "modifiedTime": 1775063018637,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989147458,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

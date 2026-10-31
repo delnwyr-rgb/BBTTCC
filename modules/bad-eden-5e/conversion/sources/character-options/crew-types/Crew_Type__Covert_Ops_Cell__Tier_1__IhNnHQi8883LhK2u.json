@@ -5,14 +5,14 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Covert Ops Cell (Tier 1)",
+      "custom": "Bad Eden – Crew Type: Covert Ops Cell (Tier 1)",
       "revision": 2,
       "rules": "2024",
       "book": ""
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency in Stealth and with Thieves' Tools.</li><li><strong>Strategic:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
+      "value": "<p><strong>Tier 1 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Stealth and with the Tinkering aptitude.</li><li><strong>Strategic:</strong> Your Domain starts with +1 Intrigue OPs.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-covert-ops-cell-t1",
@@ -51,6 +51,13 @@
             "value": 1,
             "phase": "initial",
             "priority": 20
+          },
+          {
+            "key": "system.skills.tinkering.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
           }
         ]
       },
@@ -78,12 +85,12 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
-        "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "systemVersion": "0.6.37",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346195715,
-        "modifiedTime": 1777433499530
+        "modifiedTime": 1792989167230
       },
       "start": {
         "combat": null,
@@ -94,8 +101,7 @@
         "initiative": null
       },
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!IhNnHQi8883LhK2u.cea1f8081551430c"
+      "folder": null
     }
   ],
   "folder": "s5WL7k82FGQGsYdL",
@@ -133,6 +139,9 @@
           "bbttcc:theme:denial"
         ]
       }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
     }
   },
   "_stats": {
@@ -145,12 +154,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986943268,
-    "modifiedTime": 1775063026208,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792977820861,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

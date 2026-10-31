@@ -5,14 +5,14 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Peacekeeper Corps (Tier 1)",
+      "custom": "Bad Eden – Crew Type: Peacekeeper Corps (Tier 1)",
       "revision": 2,
       "rules": "2024",
       "book": ""
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency in Insight and Investigation.</li><li><strong>Strategic:</strong> Your faction starts with +1 Non-Lethal OPs.</li></ul>",
+      "value": "<p><strong>Tier 1 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Insight and Investigation.</li><li><strong>Strategic:</strong> Your Domain starts with +1 Non-Lethal OPs.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-peacekeeper-corps-t1",
@@ -118,12 +118,12 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346195668,
-        "modifiedTime": 1777433499529
+        "modifiedTime": 1792989167664
       },
       "start": {
         "combat": null,
@@ -134,8 +134,7 @@
         "initiative": null
       },
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!CanZXdkMSrwSRrCt.264f8f132eec45dd"
+      "folder": null
     }
   ],
   "folder": "YYzAyfS4RhZxZ0f7",
@@ -149,12 +148,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986956943,
-    "modifiedTime": 1775063025736,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792977820372,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

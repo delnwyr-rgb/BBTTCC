@@ -1,0 +1,71 @@
+{
+  "name": "Political Affiliation: Theocratic",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "Alignment with a transcendent moral truth. What hurts: heresy, corruption, and desecration. +20 Faith marks to your Domain each turn.",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "political-affiliation-theocratic",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "political-affiliations",
+      "bonuses": {
+        "faith": 2
+      },
+      "option": {
+        "philosophyKey": "theocratic"
+      }
+    }
+  },
+  "img": "icons/sundries/flags/banner-standard-moon.webp",
+  "effects": [],
+  "folder": null,
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989143106,
+    "modifiedTime": 1792989143107,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_id": "dDsbMtX80MzHaOyZ",
+  "sort": 215000,
+  "_key": "!items!dDsbMtX80MzHaOyZ"
+}

@@ -3,15 +3,17 @@
   "type": "feat",
   "img": "icons/commodities/currency/coin-embossed-sword-copper.webp",
   "system": {
-    "description": {
-      "value": "<p><strong>Tier 2 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During Siege and Battlefield scenarios, your faction gains a +1 bonus on Violence rolls.</li></ul>",
-      "chat": ""
-    },
+    "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Mercenary Band (Tier 2)",
+      "custom": "Bad Eden – Crew Type: Mercenary Band (Tier 2)",
       "revision": 2,
       "rules": "2024",
       "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Strategic:</strong> In a Battle or Siege your Domain adds +1 to its Violence Domain rolls.</li></ul>",
+      "chat": ""
     },
     "identifier": "crew-mercenary-band-t2",
     "activities": {},
@@ -70,6 +72,11 @@
           "bbttcc:theme:shock-force"
         ]
       }
+    },
+    "fourththing": {
+      "domainRollBonus": {
+        "violence": 1
+      }
     }
   },
   "_stats": {
@@ -82,12 +89,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986954715,
-    "modifiedTime": 1775063029933,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989170119,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

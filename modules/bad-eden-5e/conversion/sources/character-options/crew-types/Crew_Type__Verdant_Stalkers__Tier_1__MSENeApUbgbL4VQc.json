@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 — Verdant Stalkers</strong></p><p><em>You’ve learned the first rule of green country: visibility is a choice.</em></p><ul><li><strong>Tactical:</strong> Stealth + Survival proficiency.</li><li><strong>Strategic:</strong> In Forest or Jungle hexes, encounter rolls are made twice and you choose the result. Routes may be concealed.</li></ul>",
+      "value": "<p><strong>Tier 1 — Verdant Stalkers</strong></p><p><em>You’ve learned the first rule of green country: visibility is a choice.</em></p><ul><li><strong>Tactical:</strong> Stealth + Athletics proficiency.</li><li><strong>Strategic:</strong> In Forest or Jungle hexes, encounter rolls are made twice and you choose the result. Routes may be concealed.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-verdant-stalkers-t1",
@@ -78,17 +78,16 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346195764,
-        "modifiedTime": 1777433499532
+        "modifiedTime": 1792989167797
       },
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!MSENeApUbgbL4VQc.PobaIDuwSu4dCXI7"
+      "folder": null
     }
   ],
   "flags": {
@@ -127,6 +126,9 @@
         "progressionType": "level"
       },
       "category": "crew"
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
     }
   },
   "folder": "3hFwHalyNvJcfIyJ",
@@ -140,12 +142,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
     "createdTime": 1774986965136,
-    "modifiedTime": 1775063026703,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1778970593521,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

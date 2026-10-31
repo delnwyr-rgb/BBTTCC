@@ -1,8 +1,15 @@
 {
   "name": "Archetype: Death (Transformer) (Tier 2)",
   "type": "feat",
-  "img": "icons/weapons/sickles/scythe-curved-steel.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_death.webp",
   "system": {
+    "category": "technique",
+    "source": "Bad Eden – Archetype: Death (Transformer) (Tier 2) (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 (Level 5) — Death (Transformer)</strong></p><ul><li><p><strong>Strategic:</strong> Once per scene of recovery, salvage, reform or post-catastrophe stabilisation, your Domain converts one failed or destroyed asset, initiative or position into a reduced but usable replacement (the card fires it).</p></li></ul>",
+      "chat": ""
+    },
     "activities": {},
     "uses": {
       "spent": 0,
@@ -10,17 +17,7 @@
       "max": ""
     },
     "advancement": {},
-    "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — Death (Transformer)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During recovery, salvage, reform, or post-catastrophe stabilization scenarios, your faction may convert one failed or destroyed asset, initiative, or position into a reduced but usable replacement outcome instead of losing it entirely.</li></ul>",
-      "chat": ""
-    },
     "identifier": "archetype-death-t2",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: Death (Transformer) (Tier 2)",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -69,12 +66,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986315820,
-    "modifiedTime": 1775063004962,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989159343,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

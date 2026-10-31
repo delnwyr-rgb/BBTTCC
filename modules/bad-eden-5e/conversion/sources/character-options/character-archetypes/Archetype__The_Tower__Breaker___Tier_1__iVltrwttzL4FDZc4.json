@@ -1,18 +1,13 @@
 {
   "name": "Archetype: The Tower (Breaker) (Tier 1)",
   "type": "feat",
-  "img": "icons/environment/settlement/tower-stone-blue.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_tower.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: The Tower (Breaker) (Tier 1)",
-      "book": ""
-    },
+    "source": "Bad Eden – Archetype: The Tower (Breaker) (Tier 1) (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 (Level 1) — The Tower (Breaker)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Athletics and Investigation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+      "value": "<p><strong>Tier 1 (Level 1) — The Tower (Breaker)</strong></p><ul><li><p><strong>Tactical:</strong> You gain a skill rank in Athletics and Investigation.</p></li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -48,7 +43,7 @@
       },
       "flags": {},
       "name": "Archetype Tier 1 Proficiencies",
-      "img": "icons/environment/settlement/tower-stone-blue.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_tower.webp",
       "_id": "zOYSsV6rMdmfERTi",
       "type": "base",
       "system": {
@@ -79,17 +74,16 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346195267,
-        "modifiedTime": 1777433499498
+        "modifiedTime": 1792989154078
       },
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!iVltrwttzL4FDZc4.zOYSsV6rMdmfERTi"
+      "folder": null
     }
   ],
   "folder": "RnuL7aCXXxgV9QU4",
@@ -125,12 +119,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986801383,
-    "modifiedTime": 1775063016543,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989153989,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -2,8 +2,15 @@
   "name": "Occult Association: Gnostic (Tier 4)",
   "type": "feat",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 — Gnostic</strong></p><p><strong>“The archons have no leverage left.”</strong></p><p>At this level, misinformation simply fails around you. False peace offers unravel. Illusions collapse under scrutiny. The system cannot trick what no longer participates in its symbolic shortcuts.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When pursuing the <strong>Spark of Truth (Tiferet)</strong>, enemy factions cannot gain bonuses from deception, misinformation, or false alliances</li></ul><p>The Great Work recognizes clarity. So do the things that depended on confusion.</p><p><strong>Cost:</strong> when truth reaches this level of force, it breaks camouflage for everyone nearby. Expect retaliation, exposed conflict lines, and enemies who prefer open hostility to further revelation.</p>",
+      "value": "<p><strong>Tier 4 — Gnostic</strong></p><p><strong>“The archons have no leverage left.”</strong></p><p>At this level, misinformation simply fails around you. False peace offers unravel. Illusions collapse under scrutiny. The system cannot trick what no longer participates in its symbolic shortcuts.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Archon's Leverage:</strong> once per scene while your Domain pursues the Spark of Truth (Tiferet), cancel one bonus a rival Domain gains from Stealth, misinformation or a false alliance (the card fires it).</li></ul><p>The Great Work recognizes clarity. So do the things that depended on confusion.</p><p><strong>Cost:</strong> when truth reaches this level of force, it breaks camouflage for everyone nearby. Expect retaliation, exposed conflict lines, and enemies who prefer open hostility to further revelation.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -15,11 +22,6 @@
       "max": ""
     },
     "identifier": "occult-association-gnostic-t4",
-    "source": {
-      "revision": 2,
-      "rules": "2024",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -65,6 +67,9 @@
           "bbttcc:theme:archon-denial"
         ]
       }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
     }
   },
   "effects": [],
@@ -80,12 +85,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987091124,
-    "modifiedTime": 1775063036274,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989176409,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -1,18 +1,13 @@
 {
   "name": "Archetype: Death (Transformer) (Tier 3)",
   "type": "feat",
-  "img": "icons/weapons/sickles/scythe-curved-steel.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_death.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: Death (Transformer) (Tier 3)",
-      "book": ""
-    },
+    "source": "Bad Eden – Archetype: Death (Transformer) (Tier 3) (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Death (Transformer)</strong></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on saving throws against being frightened, and on checks related to corpses, endings, funerary rites, irreversible damage, or confronting what others cannot bear to face.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Tier 3 (Level 11) — Death (Transformer)</strong></p><ul><li><p><strong>Tactical:</strong> You reroll the lowest die on checks against being frightened, and on checks related to corpses, endings, funerary rites, irreversible damage, or confronting what others cannot bear to face.</p></li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -60,7 +55,23 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "rerolls": [
+        {
+          "mode": "reroll-lowest",
+          "context": "defense",
+          "vs": "being frightened",
+          "note": "Death T3"
+        },
+        {
+          "mode": "reroll-lowest",
+          "context": "check",
+          "vs": "corpses, endings, funerary rites, irreversible damage, or what others cannot face",
+          "note": "Death T3"
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": null,
@@ -72,12 +83,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986315820,
-    "modifiedTime": 1777515322300,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989162901,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -3,6 +3,18 @@
   "type": "feat",
   "img": "icons/magic/holy/angel-winged-humanoid-blue.webp",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: Judgment (Reckoner) (Tier 4)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 (Level 17) — Judgment (Reckoner)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Faith or Violence marks, it spends 30 fewer (never below 10).</li></ul>",
+      "chat": ""
+    },
     "activities": {},
     "uses": {
       "spent": 0,
@@ -10,17 +22,7 @@
       "max": ""
     },
     "advancement": {},
-    "description": {
-      "value": "<p><strong>Tier 4 (Level 17) — Judgment (Reckoner)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving an exposure, purge, ultimatum, execution, or final reckoning scenario, the Faith or Violence OP cost is reduced by 3 (minimum 1).</li></ul>",
-      "chat": ""
-    },
     "identifier": "archetype-judgment-t4",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: Judgment (Reckoner) (Tier 4)",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -58,7 +60,21 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "faith",
+            "violence"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Archetype: Judgment (Reckoner) (Tier 4)",
+          "marks": 30
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": null,
@@ -70,12 +86,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986323670,
-    "modifiedTime": 1775063016696,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989155607,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -5,14 +5,14 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Cultural Ambassadors (Tier 4)",
+      "custom": "Bad Eden – Crew Type: Cultural Ambassadors (Tier 4)",
       "revision": 2,
       "rules": "2024",
       "book": ""
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 4 — Cultural Ambassadors</strong></p><p><strong>“A smile is a blade if you know where to put it.”</strong></p><p>Cultural Ambassadors weaponize hospitality. They learn your customs, flatter your saints, and find the one story you tell yourself to stay brave. Then they use it to open doors—or to make you open them.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Once per strategic turn, you can attempt to shift the alignment of an adjacent neutral Hex toward your faction’s political affiliation without spending OPs.</li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"culturalT4\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Soft Annex</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Shift the alignment of an adjacent neutral Hex toward your faction's political affiliation without spending OPs.</div>\n</div>",
+      "value": "<p><strong>Tier 4 — Cultural Ambassadors</strong></p><p><strong>“A smile is a blade if you know where to put it.”</strong></p><p>Cultural Ambassadors weaponize hospitality. They learn your customs, flatter your saints, and find the one story you tell yourself to stay brave. Then they use it to open doors—or to make you open them.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Strategic:</strong> Once per turn, you can attempt to shift the alignment of an adjacent neutral Hex toward your Domain’s political affiliation without spending OPs.</li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"culturalT4\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Soft Annex</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Shift the alignment of an adjacent neutral Hex toward your Domain's political affiliation without spending OPs.</div>\n</div>",
       "chat": ""
     },
     "identifier": "crew-cultural-ambassadors-t4",
@@ -87,12 +87,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986945169,
-    "modifiedTime": 1777339606507,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989172170,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

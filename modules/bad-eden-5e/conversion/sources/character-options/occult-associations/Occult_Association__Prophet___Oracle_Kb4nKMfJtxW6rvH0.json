@@ -9,7 +9,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Occult Association (BBTTCC): Prophet / Oracle.</em></p><p><strong>“The future is not hidden. It is just expensive to hear clearly.”</strong></p><p>Prophets do not control the future. They endure proximity to it.</p><p>Where Tarot Mages manipulate timing and probability like gamblers with dangerous discipline, Prophets stand closer to the signal itself. They hear pattern before it becomes event, consequence before it becomes story, and warning before anyone else admits there is something to warn about.</p><p>To a Prophet, the Great Work is not just about choosing well. It is about seeing the shape of what is coming early enough to alter who is prepared for it.</p><p><strong>How Prophets pursue the Great Work:</strong></p><ul><li>By reading emerging pressure before it resolves into action</li><li>By recognizing encounter patterns before they fully manifest</li><li>By turning foresight into factional advantage</li><li>By making ignorance more expensive than preparation</li></ul><p><strong>Resonance:</strong> <strong>Keter / Signal</strong> — possibility, revelation, pattern-emergence, and the unbearable weight of glimpsing too much too early.</p><p><strong>Tell-tales:</strong> pauses before bad news, unfinished sentences that become correct later, eyes that track causes before effects.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Intrigue, planning, or foresight-adjacent OP rolls</strong> (GM adjudicates the exact lane)</li></ul><p><strong>Cost Principle:</strong> foresight creates burden. Expect omen pressure, emotional Stress, false-positive anxiety, and resentment from people who preferred not to know what was coming.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Occult Association (Bad Eden): Prophet / Oracle.</em></p><p><strong>“The future is not hidden. It is just expensive to hear clearly.”</strong></p><p>Prophets do not control the future. They endure proximity to it.</p><p>Where Tarot Mages manipulate timing and probability like gamblers with dangerous discipline, Prophets stand closer to the signal itself. They hear pattern before it becomes event, consequence before it becomes story, and warning before anyone else admits there is something to warn about.</p><p>To a Prophet, the Great Work is not just about choosing well. It is about seeing the shape of what is coming early enough to alter who is prepared for it.</p><p><strong>How Prophets pursue the Great Work:</strong></p><ul><li>By reading emerging pressure before it resolves into action</li><li>By recognizing encounter patterns before they fully manifest</li><li>By turning foresight into factional advantage</li><li>By making ignorance more expensive than preparation</li></ul><p><strong>Resonance:</strong> <strong>Keter / Signal</strong> — possibility, revelation, pattern-emergence, and the unbearable weight of glimpsing too much too early.</p><p><strong>Tell-tales:</strong> pauses before bad news, unfinished sentences that become correct later, eyes that track causes before effects.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Intrigue, planning, or foresight-adjacent OP rolls</strong> (GM adjudicates the exact lane)</li></ul><p><strong>Cost Principle:</strong> foresight creates burden. Expect omen pressure, emotional Stress, false-positive anxiety, and resentment from people who preferred not to know what was coming.</p><p><strong>Domain edge:</strong> Your Domain earns <strong>+10 Intrigue</strong> marks each turn while you serve it.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -62,6 +62,11 @@
           "bbttcc:theme:signal-reception"
         ]
       }
+    },
+    "fourththing": {
+      "domainRollBonus": {
+        "intrigue": 1
+      }
     }
   },
   "effects": [],
@@ -77,12 +82,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987097550,
-    "modifiedTime": 1777515322486,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989173520,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

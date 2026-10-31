@@ -3,6 +3,18 @@
   "type": "feat",
   "img": "icons/magic/symbols/star-rising-purple.webp",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Star (Hopebringer) (Tier 2)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 (Level 5) — The Star (Hopebringer)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Soft Power or Culture marks, it spends 20% less (never below 10).</li></ul>",
+      "chat": ""
+    },
     "activities": {},
     "uses": {
       "spent": 0,
@@ -10,17 +22,7 @@
       "max": ""
     },
     "advancement": {},
-    "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — The Star (Hopebringer)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When spending Soft Power or Culture OPs to improve morale, loyalty, or social cohesion, the effectiveness of spent OPs is increased by 25%.</li></ul>",
-      "chat": ""
-    },
     "identifier": "archetype-star-t2",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: The Star (Hopebringer) (Tier 2)",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -57,7 +59,21 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "softpower",
+            "culture"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Archetype: The Star (Hopebringer) (Tier 2)",
+          "pct": 20
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": "Item.wUXROVe3uFqlOQEn",
@@ -69,12 +85,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986788012,
-    "modifiedTime": 1775063014764,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989157315,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

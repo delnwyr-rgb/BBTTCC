@@ -1,18 +1,13 @@
 {
   "name": "Archetype: Death (Transformer) (Tier 1)",
   "type": "feat",
-  "img": "icons/weapons/sickles/scythe-curved-steel.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_death.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: Death (Transformer) (Tier 1)",
-      "book": ""
-    },
+    "source": "Bad Eden – Archetype: Death (Transformer) (Tier 1) (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 (Level 1) — Death (Transformer)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Medicine and Intimidation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+      "value": "<p><strong>Tier 1 (Level 1) — Death (Transformer)</strong></p><ul><li><p><strong>Tactical:</strong> You gain a skill rank in Faith and Intimidation.</p></li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -48,7 +43,7 @@
       },
       "flags": {},
       "name": "Archetype Tier 1 Proficiencies",
-      "img": "icons/weapons/sickles/scythe-curved-steel.webp",
+      "img": "art/bbttcc/asli-archetypes/archetype_death.webp",
       "_id": "20klYsXI5oiLtO5c",
       "type": "base",
       "system": {
@@ -79,17 +74,16 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346195216,
-        "modifiedTime": 1777433499494
+        "modifiedTime": 1792989151554
       },
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!ZnWwUX4bVtwvubaY.20klYsXI5oiLtO5c"
+      "folder": null
     }
   ],
   "folder": "Z28ttIM7Yzl2LgF9",
@@ -114,7 +108,10 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
   },
   "_stats": {
     "compendiumSource": null,
@@ -126,12 +123,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986315820,
-    "modifiedTime": 1775063014456,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989151460,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

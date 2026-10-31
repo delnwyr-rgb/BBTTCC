@@ -1,0 +1,67 @@
+{
+  "name": "Enlightenment: Unawakened",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "Material focused. +10 Economy marks to your Domain each turn.",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "enlightenment-unawakened",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "enlightenment-levels",
+      "bonuses": {
+        "economy": 1
+      }
+    }
+  },
+  "img": "icons/magic/control/sleep-bubble-purple.webp",
+  "effects": [],
+  "folder": null,
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1759971264913,
+    "modifiedTime": 1792989142352,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3
+  },
+  "_id": "U2AmJc18OQtQYAKB",
+  "sort": 125000,
+  "_key": "!items!U2AmJc18OQtQYAKB"
+}

@@ -7,12 +7,12 @@
     "source": {
       "revision": 1,
       "rules": "2024",
-      "custom": "BBTTCC – Archetype: The Emperor (Administrator) (Tier 1)",
+      "custom": "Bad Eden – Archetype: The Emperor (Administrator) (Tier 1)",
       "book": ""
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 (Level 1) — The Emperor</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain proficiency in Investigation and Persuasion.</li>\n<li><strong>Strategic:</strong> Your faction's Economy OP cap increases by 3.</li>\n</ul>",
+      "value": "<p><strong>Tier 1 (Level 1) — The Emperor</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain a skill rank in Investigation and Diplomacy.</li>\n<li><strong>Strategic:</strong> Your Domain's Economy marks cap increases by 3.</li>\n</ul>",
       "chat": ""
     },
     "activities": {},
@@ -79,17 +79,16 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346195368,
-        "modifiedTime": 1777433499501
+        "modifiedTime": 1792989151106
       },
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!oqsCNy0eKTT0jT8k.emperorTier1Prof"
+      "folder": null
     }
   ],
   "folder": "ZpijzDYpj6Zza5am",
@@ -115,18 +114,21 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
   },
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.360",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1773893516714,
-    "modifiedTime": 1775063018776,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792977815808,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

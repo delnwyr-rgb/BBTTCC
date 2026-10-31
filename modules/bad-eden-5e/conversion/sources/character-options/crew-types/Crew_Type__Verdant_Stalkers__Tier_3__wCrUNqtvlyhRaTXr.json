@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Verdant Stalkers</strong></p><p><em>You hide intent, not just presence.</em></p><ul><li><strong>Tactical:</strong> reroll-lowest on Stealth (natural terrain) and Survival (tracking/ambush).</li><li><strong>Strategic:</strong> Movement, routes, and ownership signals can be masked.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Verdant Stalkers</strong></p><p><em>You hide intent, not just presence.</em></p><ul><li><strong>Tactical:</strong> reroll-lowest on Stealth (natural terrain) and Athletics (tracking/ambush).</li><li><strong>Strategic:</strong> Movement, routes, and ownership signals can be masked.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-verdant-stalkers-t3",
@@ -70,6 +70,25 @@
         "progressionType": "level"
       },
       "category": "crew"
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16",
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "stealth",
+          "vs": "in natural terrain",
+          "note": "Verdant Stalkers T3"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "athletics",
+          "vs": "tracking or ambush",
+          "note": "Verdant Stalkers T3"
+        }
+      ]
     }
   },
   "folder": "3hFwHalyNvJcfIyJ",
@@ -83,12 +102,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.1",
     "createdTime": 1774986965136,
-    "modifiedTime": 1777515322432,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1791344271333,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

@@ -1,8 +1,20 @@
 {
-  "name": "Archetype: Hierophant (Tier 4)",
+  "name": "Archetype: The Hierophant (Tier 4)",
   "type": "feat",
   "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
   "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Archetype: Hierophant (Tier 4)",
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 (Level 17) — Hierophant</strong></p>\n<ul>\n\n<li><strong>Strategic:</strong> Your spiritual authority aids Tikkun Olam: once per scene, the marks cost or time to shift a hex's alignment toward a beneficial Sephirah drops by 20% (the card fires it).</li>\n</ul>",
+      "chat": ""
+    },
     "activities": {},
     "uses": {
       "spent": 0,
@@ -10,17 +22,7 @@
       "max": ""
     },
     "advancement": {},
-    "description": {
-      "value": "<p><strong>Tier 4 (Level 17) — Hierophant</strong></p>\n<ul>\n<li><strong>Tactical:</strong> —</li>\n<li><strong>Strategic:</strong> Your spiritual authority aids <strong>Tikkun Olam</strong>. The <strong>OP cost or time required to shift a Hex's alignment towards a beneficial Sephirah is reduced by 20%</strong>.</li>\n</ul>",
-      "chat": ""
-    },
     "identifier": "archetype-hierophant-t4",
-    "source": {
-      "custom": "BBTTCC – Archetype: Hierophant (Tier 4)",
-      "revision": 1,
-      "rules": "2024",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -68,12 +70,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986744488,
-    "modifiedTime": 1775063007727,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989149321,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

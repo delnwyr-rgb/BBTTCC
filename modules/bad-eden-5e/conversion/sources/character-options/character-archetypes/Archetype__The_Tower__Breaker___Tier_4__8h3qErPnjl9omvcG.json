@@ -1,8 +1,15 @@
 {
   "name": "Archetype: The Tower (Breaker) (Tier 4)",
   "type": "feat",
-  "img": "icons/environment/settlement/tower-stone-blue.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_tower.webp",
   "system": {
+    "category": "technique",
+    "source": "Bad Eden – Archetype: The Tower (Breaker) (Tier 4) (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 (Level 17) — The Tower (Breaker)</strong></p><ul><li><p><strong>Strategic:</strong> Whenever your Domain spends Violence marks, it spends 30 fewer (never below 10).</p></li></ul>",
+      "chat": ""
+    },
     "activities": {},
     "uses": {
       "spent": 0,
@@ -10,17 +17,7 @@
       "max": ""
     },
     "advancement": {},
-    "description": {
-      "value": "<p><strong>Tier 4 (Level 17) — The Tower (Breaker)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a siege-break, breach, facility-destruction, or cascading-collapse scenario, the Violence OP cost is reduced by 3 (minimum 1).</li></ul>",
-      "chat": ""
-    },
     "identifier": "archetype-tower-t4",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: The Tower (Breaker) (Tier 4)",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -58,7 +55,20 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "violence"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Archetype: The Tower (Breaker) (Tier 4)",
+          "marks": 30
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": "Item.kqKouogxkmVhY9KG",
@@ -70,12 +80,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986801383,
-    "modifiedTime": 1775063007099,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989156700,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

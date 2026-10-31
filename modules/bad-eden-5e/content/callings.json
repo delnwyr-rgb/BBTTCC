@@ -1,10 +1,10 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/callings.json. The NPC callings (trade + trick per tier) as dnd5e monster feats.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/callings.json. The NPC callings (trade + trick per tier) as dnd5e monster feats.",
   "_pack": "npc-callings",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.8.1",
-    "at": "2026-10-26",
+    "rubric": "1.9.0",
+    "at": "2026-10-31",
     "overridesApplied": 0
   },
   "items": [
@@ -16,7 +16,7 @@
       "folder": "NPC Callings",
       "system": {
         "description": {
-          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Strength Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 AC</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Skill kit:</strong> signature: <strong>melee attack rolls</strong> (proficient); secondary: <strong>melee attack rolls</strong> (proficient).</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Strength</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A character is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Strength Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 AC</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Skill kit:</strong> signature: <strong>melee attack rolls</strong> (proficient); secondary: <strong>melee attack rolls</strong> (proficient).</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A character is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         },
         "type": {
@@ -935,7 +935,7 @@
       "folder": "NPC Callings",
       "system": {
         "description": {
-          "value": "<p><em>\"Everything's a door if you hold it right.\"</em></p><p><strong>Operator</strong> is the Dexterity Calling — the trade that kept its bearers alive after the Shattering. Umbrella: thief, smuggler, spy, courier, fence, hacker, fixer. A profession is a flavor label on the Calling.</p><p><strong>Knack — Underfoot:</strong> In crowds, markets, and streets, the Operator passes unremarked unless actively hunted; Streetwise checks never fumble (at Tier III, also Stealth).</p><p><strong>Skill kit:</strong> signature skill <strong>Stealth</strong>: proficient at Tier I, expertise from Tier II; secondary <strong>Investigation (Persuasion in a town)</strong>: proficient from Tier II, expertise from Tier III.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Dexterity</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Shadow Courier. A character is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Everything's a door if you hold it right.\"</em></p><p><strong>Operator</strong> is the Dexterity Calling — the trade that kept its bearers alive after the Shattering. Umbrella: thief, smuggler, spy, courier, fence, hacker, fixer. A profession is a flavor label on the Calling.</p><p><strong>Knack — Underfoot:</strong> In crowds, markets, and streets, the Operator passes unremarked unless actively hunted; Streetwise checks never fumble (at Tier III, also Stealth).</p><p><strong>Skill kit:</strong> signature skill <strong>Stealth</strong>: proficient at Tier I, expertise from Tier II; secondary <strong>Investigation (Persuasion in a town)</strong>: proficient from Tier II, expertise from Tier III.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Intrigue</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Shadow Courier. A character is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         },
         "type": {

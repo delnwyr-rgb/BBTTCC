@@ -1,0 +1,72 @@
+{
+  "name": "Political Affiliation: Marxist / Communist",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "Collective emancipation through ending exploitation and alienation. What hurts: exploitation, alienation, and manufactured scarcity. +10 Economy and +10 Culture marks to your Domain each turn.",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "political-affiliation-marxist",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "political-affiliations",
+      "bonuses": {
+        "economy": 1,
+        "culture": 1
+      },
+      "option": {
+        "philosophyKey": "marxist"
+      }
+    }
+  },
+  "img": "icons/sundries/flags/banner-standard-tattered-red.webp",
+  "effects": [],
+  "folder": null,
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1792989143106,
+    "modifiedTime": 1792989143107,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "FKSQOY3vDSH1mLWk": 3
+  },
+  "_id": "uYKd7ezSJvZo8Bmx",
+  "sort": 212000,
+  "_key": "!items!uYKd7ezSJvZo8Bmx"
+}

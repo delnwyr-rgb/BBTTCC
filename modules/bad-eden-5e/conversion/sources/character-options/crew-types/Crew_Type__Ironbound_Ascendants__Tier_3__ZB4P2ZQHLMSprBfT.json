@@ -5,7 +5,7 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Ironbound Ascendants (Tier 3)",
+      "custom": "Bad Eden – Crew Type: Ironbound Ascendants (Tier 3)",
       "revision": 2,
       "rules": "2024",
       "book": ""
@@ -84,6 +84,24 @@
           "bbttcc:theme:terrain-control"
         ]
       }
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "athletics",
+          "vs": "climbing, treacherous footing, establishing or contesting fortified high ground",
+          "note": "Ironbound Ascendants T3"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "attribute": "body",
+          "vs": "enduring thin air or treacherous footing",
+          "note": "Ironbound Ascendants T3"
+        }
+      ]
     }
   },
   "_stats": {
@@ -96,12 +114,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.368",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.1",
     "createdTime": 1774986952092,
-    "modifiedTime": 1777515322410,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1791344270461,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

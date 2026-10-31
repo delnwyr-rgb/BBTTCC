@@ -1,10 +1,13 @@
 {
   "name": "Archetype: The Lovers (Tier 1)",
   "type": "feat",
-  "img": "icons/equipment/neck/amulet-heart.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_lovers.webp",
   "system": {
+    "category": "technique",
+    "source": "(2024 rules)",
+    "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 — The Lovers</strong></p><ul><li><strong>Tactical:</strong> Insight + Persuasion proficiency. Learn Friends.</li><li><strong>Strategic:</strong> +2 Diplomacy OP cap.</li></ul>",
+      "value": "<p><strong>Tier 1 — The Lovers</strong></p><ul><li><p><strong>Tactical:</strong> You gain a skill rank in Insight and Diplomacy.</p></li><li><p><strong>Strategic:</strong> Your Domain's Diplomacy marks cap rises by 20.</p></li></ul>",
       "chat": ""
     },
     "identifier": "archetype-lovers-t1",
@@ -16,11 +19,6 @@
       "max": ""
     },
     "advancement": {},
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -51,9 +49,68 @@
         "levelMax": 1
       },
       "category": "archetype"
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16",
+      "domainCapBonus": {
+        "diplomacy": 20
+      }
     }
   },
-  "effects": [],
+  "effects": [
+    {
+      "_id": "Vl51wHMEQS1RDsU0",
+      "name": "Archetype Tier 1 Proficiencies",
+      "img": "art/bbttcc/asli-archetypes/archetype_lovers.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.insight.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "system.skills.diplomacy.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989154819,
+        "modifiedTime": 1792989154819,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
   "folder": "yQL9oYdZ12Vtohtl",
   "_stats": {
     "compendiumSource": "Item.x8FReGtjOZp46rkF",
@@ -65,12 +122,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986761329,
-    "modifiedTime": 1775063013924,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989154733,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

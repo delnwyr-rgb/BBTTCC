@@ -2,8 +2,15 @@
   "name": "Occult Association: Rosicrucian (Tier 2)",
   "type": "feat",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 — Rosicrucian</strong></p><p><strong>“I don’t preach Enlightenment. I smuggle it.”</strong></p><p>Your network makes progress easier to sustain. People advance faster when the path is lit — and when someone is quietly removing the traps.</p><p><strong>Strategic (Faction / Party Scale)</strong></p><ul><li>When the party earns Enlightenment Points or meets narrative criteria for advancement, increase the rate of progress by <strong>10%</strong> (GM adjudicates exact pacing benefits)</li></ul><p>This is not a miracle. This is logistics — and Rosicrucians have always been very good at logistics.</p><p><strong>Cost:</strong> accelerated progress strains the chain supporting it. Expect supply burden, mentor fatigue, increased expectations, or rival attention once advancement starts looking organized instead of accidental.</p>",
+      "value": "<p><strong>Tier 2 — Rosicrucian</strong></p><p><strong>“I don’t preach Enlightenment. I smuggle it.”</strong></p><p>Your network makes progress easier to sustain. People advance faster when the path is lit — and when someone is quietly removing the traps.</p><p><strong>Strategic (Faction / Party Scale)</strong></p><ul><li>The lit path feeds the Domain: your Domain earns <strong>+10 Faith marks</strong> each turn while you serve it.</li></ul><p>This is not a miracle. This is logistics — and Rosicrucians have always been very good at logistics.</p><p><strong>Cost:</strong> accelerated progress strains the chain supporting it. Expect supply burden, mentor fatigue, increased expectations, or rival attention once advancement starts looking organized instead of accidental.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -15,11 +22,6 @@
       "max": ""
     },
     "identifier": "occult-association-rosicrucian-t2",
-    "source": {
-      "revision": 2,
-      "rules": "2024",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -36,7 +38,9 @@
   "flags": {
     "bbttcc-character-options": {
       "category": "occult",
-      "bonuses": {},
+      "bonuses": {
+        "faith": 1
+      },
       "option": {
         "category": "occult",
         "key": "rosicrucian",
@@ -79,12 +83,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987100132,
-    "modifiedTime": 1775063034644,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989177104,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -511,12 +511,17 @@ function _applyIndexRules(category, packEntry) {
 // per heritage line); class and background prefer Bad Eden content and fall
 // back to the SRD (2024 packs first, legacy second). Path / doctrine /
 // ancestry have no pack on dnd5e — see _loadDescription.
+// 2026-10-30 (Dave): players get the SRD 5.2 species and classes too, but NOT the SRD backgrounds — the Archetype
+// is the origin. `background` therefore resolves to the Bad Eden Archetypes pack (dnd5e background items, one per
+// card); the wizard has no Background row and fills the slot from the Archetype pick.
 const DND_PACK_KEYS = {
-  heritage:   "bad-eden-5e.species",
+  heritage:   ["bad-eden-5e.species", "dnd5e.origins24"],
   class:      ["bad-eden-5e.classes", "dnd5e.classes24", "dnd5e.classes"],
-  background: ["dnd5e.origins24", "dnd5e.backgrounds"],
+  background: ["bad-eden-5e.archetypes"],
   ancestry:   null, path: null, doctrine: null
 };
+// SRD species family = the name before the comma ("Elf, Drow" → Elf). A family Bad Eden also has (Human) merges.
+const _srdFamily = (name) => String(name || "").split(",")[0].trim();
 const DND_PACK_TYPES = { heritage: "race", class: "class", background: "background" };
 function _packKeysFor(category) {
   if (isDnd() && category in DND_PACK_KEYS) return DND_PACK_KEYS[category];
@@ -603,6 +608,17 @@ async function _loadDescription(category, optionName) {
       }
     } else if (category === "ancestry") {
       const blurb = _DEAD_INLINE_DESCRIPTIONS_REMOVED.ancestry?.[optionName];
+      if (!blurb) {
+        // an SRD 5.2 family (Dwarf, Elf, …): show its first species' own text
+        const srdKey = DND_PACK_KEYS.heritage.find(k => !k.startsWith("bad-eden-5e."));
+        const pack = srdKey ? game.packs.get(srdKey) : null;
+        const idx = pack ? await pack.getIndex({ fields: ["type"] }) : null;
+        const hit = idx ? [...idx].filter(e => e.type === "race" && _srdFamily(e.name) === optionName).sort((x, y) => x.name.localeCompare(y.name))[0] : null;
+        if (hit) {
+          const doc = await pack.getDocument(hit._id).catch(() => null);
+          if (doc) return { name: optionName, img: doc.img || "", source: "SRD 5.2", descriptionHtml: doc.system?.description?.value || `<p><em>${_esc(optionName)}</em></p>` };
+        }
+      }
       return { name: optionName, img: "", source: "Bad Eden 5E",
         descriptionHtml: blurb ? `<p>${_esc(blurb)}</p>` : `<p><em>${_esc(optionName)}</em></p>` };
     }
@@ -903,7 +919,9 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     const alphaOccult = (game.bbttcc?.alpha?.cut ?? game.bbttcc?.alpha?.hidden)?.("associations") === true;
     const buildRows = [
       this._buildRow("archetype",  "Archetype",            sug.build.archetype,  sug.rankings.archetype),
-      this._buildRow("ancestry",   "Ancestry",             sug.build.ancestry,   sug.rankings.ancestry),
+      this._buildRow("ancestry",   "Ancestry",             sug.build.ancestry,
+        dnd ? [...(sug.rankings.ancestry || []), ...(this._dndOptions?.srdFamilies ?? []).map(name => ({ name, score: 0 }))] : sug.rankings.ancestry,
+        dnd ? "(Bad Eden, then the SRD)" : ""),
       this._buildHeritageRow(heritageOptions),
       ...(alphaCrew ? [] : [this._buildRow("crew",       "Awesome Crew",         sug.build.crew,       sug.rankings.crew)]),
       this._buildRow("path",       dnd ? "Surge Path" : "Path (Class)", sug.build.path, sug.rankings.path),
@@ -911,8 +929,8 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       // Bad Eden 5E: the D&D class and background are rows of their own — the
       // Surge Path above is a layer on top of any class, not the class itself.
       ...(dnd ? [
-        this._buildRow("class",      "Class",      null, this._dndOptions.class,      "(Bad Eden, then the SRD)"),
-        this._buildRow("background", "Background", null, this._dndOptions.background, "(optional)")
+        this._buildRow("class",      "Class",      null, this._dndOptions.class,      "(Bad Eden, then the SRD)")
+        // no Background row: the Archetype above fills the background slot (2026-10-30)
       ] : []),
       this._buildRow("philosophy", "Political Philosophy", sug.build.philosophy, sug.rankings.philosophy),
       ...(alphaOccult ? [] : [this._buildRow("occult",     "Occult Association",   sug.build.occult,     sug.rankings.occult)]),
@@ -956,14 +974,14 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
               <div class="bbttcc-twv2-faculties" data-finalize-section="faculties">
                 <div class="bbttcc-twv2-section-title">${dnd ? "Malkuth — Ability Scores" : "Malkuth — Faculty Allocation"}</div>
                 <p class="bbttcc-twv2-section-note">${dnd
-                  ? `Distribute the standard array <strong>[15, 14, 13, 12, 10, 8]</strong> across the six abilities. Each value used exactly once; your species and background add their increases on top.`
+                  ? `Distribute the standard array <strong>[15, 14, 13, 12, 10, 8]</strong> across the six abilities. Each value used exactly once; your Archetype adds its increases on top (+2/+1 or +1/+1/+1).`
                   : `Distribute the starting array <strong>[5, 4, 3, 3, 2, 2]</strong> across the six RFI faculties. Each value used exactly once.`}</p>
                 ${facultiesHtml}
               </div>
               <div class="bbttcc-twv2-chargen-aptitudes" data-finalize-section="aptitudes">
                 <div class="bbttcc-twv2-section-title">${dnd ? "Yesod — Skill Picks" : "Yesod — Aptitude Picks"}</div>
                 <p class="bbttcc-twv2-section-note">${dnd
-                  ? `Choose <strong>3 free skill proficiencies</strong> at character creation — the Bad Eden twin of RFI's three free aptitudes. Your class and background offer their own picks afterwards; anything already proficient is greyed out there.`
+                  ? `Choose <strong>3 free skill proficiencies</strong> at character creation — the Bad Eden twin of RFI's three free aptitudes. Your Archetype and class add their own skills afterwards; anything already proficient is greyed out there.`
                   : `Choose <strong>3 free aptitudes</strong> at character creation. Armor skills (Plating, Fitting, Bracing) come from your Path. Picks granted at rank&nbsp;1; aptitudes already provided by your class, heritage, crew, or occult association are greyed out — if you select one anyway, the duplicate pick is dropped at finalize.`}</p>
                 ${chargenAptitudesHtml}
               </div>
@@ -1056,15 +1074,21 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     const speciesIdx = await _loadPackIndex("heritage");
     const species = [];
     if (speciesIdx) {
-      const pack = game.packs.get(DND_PACK_KEYS.heritage);
-      const full = await pack?.getIndex({ fields: ["name", "type", "flags.bad-eden-5e"] });
-      for (const e of full ?? []) {
-        if (e.type !== "race") continue;
-        const f = e.flags?.["bad-eden-5e"] ?? {};
-        species.push({ name: e.name, family: f.family || e.name.replace(/\s*\(.*$/, ""), heritage: f.heritage || "" });
+      for (const key of DND_PACK_KEYS.heritage) {
+        const pack = game.packs.get(key); if (!pack) continue;
+        const srd = !key.startsWith("bad-eden-5e.");
+        const full = await pack.getIndex({ fields: ["name", "type", "flags.bad-eden-5e"] });
+        for (const e of full ?? []) {
+          if (e.type !== "race") continue;
+          const f = e.flags?.["bad-eden-5e"] ?? {};
+          species.push({ name: e.name, srd, family: srd ? _srdFamily(e.name) : (f.family || e.name.replace(/\s*\(.*$/, "")), heritage: f.heritage || "" });
+        }
       }
     }
-    this._dndOptions = { class: await rows("class"), background: await rows("background"), species };
+    // Ancestry row: Bad Eden's families (the spec's ranking) first, then the SRD families it doesn't already name.
+    const beFamilies = new Set(species.filter(s => !s.srd).map(s => _normalizeOptionName(s.family)));
+    const srdFamilies = [...new Set(species.filter(s => s.srd).map(s => s.family))].filter(f => !beFamilies.has(_normalizeOptionName(f))).sort();
+    this._dndOptions = { class: await rows("class"), background: await rows("background"), species, srdFamilies };
     return this._dndOptions;
   }
 
@@ -2155,7 +2179,8 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       payload.classUuid    = await resolveUuid("class", build.class?.name);
       payload.subclassUuid = "";
       payload.dnd5e = {
-        backgroundUuid: await resolveUuid("background", build.background?.name),
+        // the Archetype IS the background (2026-10-30): its card in bad-eden-5e.archetypes
+        backgroundUuid: await resolveUuid("background", build.archetype?.name),
         surgePath: sp ? { key: sp.key, doctrine: dc?.key ?? null, pathName: build.path?.name, doctrineName: build.doctrine?.name } : null,
         skills: (this._chargenAptitudes || []).filter(Boolean)
       };
@@ -2883,7 +2908,10 @@ function _injectStylesOnce() {
 // Public entry
 // ============================================================================
 
-Hooks.once("ready", () => {
+// Load race (2026-10-30): this ESM can finish evaluating after "ready" has
+// already fired, and a Hooks.once("ready") registered then never runs — the
+// wizard silently vanished on some loads. Run now if ready already passed.
+function _publishWizard() {
   game.bbttcc ??= {};
   game.bbttcc.openTreeWizardV2 = (actorOrNull) => {
     const actor = (actorOrNull && actorOrNull.documentName === "Actor") ? actorOrNull : null;
@@ -2927,6 +2955,7 @@ Hooks.once("ready", () => {
 
   LOG("Option A wizard ready (Hex Chrome) — call game.bbttcc.openTreeWizardV2(actor) to open.");
   LOG("Diagnostic: game.bbttcc.dumpSEPacks() returns per-category pack contents.");
-});
+}
+if (game?.ready) _publishWizard(); else Hooks.once("ready", _publishWizard);
 
 export default BBTTCCTreeWizardV2;

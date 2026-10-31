@@ -31,6 +31,10 @@ class BBTTCCRadiationModule {
   // Actor Sheet Integration (PCs + NPCs, non-faction)
   // -------------------------------------------------------------------------
   static registerActorSheetHooks() {
+    // Bad Eden 5E (2026-10-30, Dave: "outdated elements in the form of radiation … displays"): the D&D sheet gets no
+    // Radiation tab. Radiation is the one switch (hex level 0–3 → characters through their gear), not an RP meter on
+    // the character. The RFI sheet carries its own Radiation readout and never took this overlay's Path B anyway.
+    if (game.system?.id === "dnd5e") return;
     const handler = (app, html, data) =>
       BBTTCCRadiationModule.onRenderActorSheet(app, html, data);
 

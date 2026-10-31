@@ -5,14 +5,14 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Cultural Ambassadors (Tier 3)",
+      "custom": "Bad Eden – Crew Type: Cultural Ambassadors (Tier 3)",
       "revision": 2,
       "rules": "2024",
       "book": ""
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Cultural Ambassadors</strong></p><p><strong>“A smile is a blade if you know where to put it.”</strong></p><p>Cultural Ambassadors weaponize hospitality. They learn your customs, flatter your saints, and find the one story you tell yourself to stay brave. Then they use it to open doors—or to make you open them.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on Presence checks made to influence crowds, inspire hope, or spread information and rumors in a settlement.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Cultural Ambassadors</strong></p><p><strong>“A smile is a blade if you know where to put it.”</strong></p><p>Cultural Ambassadors weaponize hospitality. They learn your customs, flatter your saints, and find the one story you tell yourself to stay brave. Then they use it to open doors—or to make you open them.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on Presence checks made to influence crowds, inspire hope, or spread information and rumors in a settlement.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-cultural-ambassadors-t3",
@@ -79,6 +79,17 @@
           "bbttcc:theme:narrative-pressure"
         ]
       }
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "attribute": "presence",
+          "vs": "influencing crowds, inspiring hope, or spreading information and rumors in a settlement",
+          "note": "Cultural Ambassadors T3"
+        }
+      ]
     }
   },
   "_stats": {
@@ -91,12 +102,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986945169,
-    "modifiedTime": 1777515322414,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989172036,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

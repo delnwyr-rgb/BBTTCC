@@ -1,8 +1,15 @@
 {
   "name": "Archetype: The World (Integrator) (Tier 2)",
   "type": "feat",
-  "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
   "system": {
+    "category": "technique",
+    "source": "Bad Eden – Archetype: The World (Integrator) (Tier 2) (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 (Level 5) — The World (Integrator)</strong></p><ul><li><p><strong>Strategic:</strong> Once per multi-step scene that spans two different subsystems, your Domain ignores the first cross-domain transition or coordination penalty (the card fires it).</p></li></ul>",
+      "chat": ""
+    },
     "activities": {},
     "uses": {
       "spent": 0,
@@ -10,17 +17,7 @@
       "max": ""
     },
     "advancement": {},
-    "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — The World (Integrator)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During multi-step strategic scenarios that involve at least two different subsystem domains, the first cross-domain transition or coordination penalty is ignored once.</li></ul>",
-      "chat": ""
-    },
     "identifier": "archetype-world-t2",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: The World (Integrator) (Tier 2)",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -69,12 +66,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986816349,
-    "modifiedTime": 1775063019879,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989160827,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -3,6 +3,18 @@
   "type": "feat",
   "img": "icons/magic/nature/cornucopia-orange.webp",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Empress (Caretaker) (Tier 2)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 (Level 5) — The Empress (Caretaker)</strong></p><ul><li><strong>Strategic:</strong> Each turn one controlled hex of your choice yields 10 extra Culture marks for your Domain.</li></ul>",
+      "chat": ""
+    },
     "activities": {},
     "uses": {
       "spent": 0,
@@ -10,17 +22,7 @@
       "max": ""
     },
     "advancement": {},
-    "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During the Resource Regeneration phase, one controlled Hex of your choice produces +1 additional non-Violence value if it is not contested.</li></ul>",
-      "chat": ""
-    },
     "identifier": "archetype-empress-t2",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: The Empress (Caretaker) (Tier 2)",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -40,7 +42,9 @@
   "flags": {
     "bbttcc-character-options": {
       "category": "archetype",
-      "bonuses": {},
+      "bonuses": {
+        "culture": 1
+      },
       "option": {
         "category": "archetype",
         "key": "empress",
@@ -69,12 +73,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986713706,
-    "modifiedTime": 1775063006400,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989158860,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

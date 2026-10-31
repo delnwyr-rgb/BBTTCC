@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Prophet / Oracle</strong></p><p><strong>“I know which failure matters.”</strong></p><p>At Tier 3, foresight stops being vague and starts becoming operational. You may not know everything that will happen, but you know which branch is dangerous enough to deserve intervention first.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>1/Soma Break, before a roll is made, declare a creature, ally, or visible event-thread and grant <strong>Advantage</strong> on one attack roll, saving throw, or attribute check tied to avoiding a meaningful failure</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Scenario, after a failed key check, you may identify it as a <strong>foreseen failure</strong> and either:</li><ul><li>reroll the check, taking the new result, <em>or</em></li><li>accept the failure but downgrade one attached narrative consequence by one step</li></ul></ul><p><strong>Cost:</strong> strong foresight creates emotional wear and inevitability-dread. Expect fatigue, dread, or the unsettling feeling that saving one branch made another one brighter instead of dimmer.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT3\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Foreseen Failure</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free (before roll) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Declare a creature/ally/event-thread; grant reroll-lowest on one attack/save/check tied to avoiding meaningful failure.</div>\n</div>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Prophet / Oracle</strong></p><p><strong>“I know which failure matters.”</strong></p><p>At Tier 3, foresight stops being vague and starts becoming operational. You may not know everything that will happen, but you know which branch is dangerous enough to deserve intervention first.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>1/Soma Break, before a roll is made, declare a creature, ally, or visible event-thread and grant <strong>Advantage</strong> on one attack roll, check, or attribute check tied to avoiding a meaningful failure</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Scenario, after a failed key check, you may identify it as a <strong>foreseen failure</strong> and either:</li><ul><li>reroll the check, taking the new result, <em>or</em></li><li>accept the failure but downgrade one attached narrative consequence by one step</li></ul></ul><p><strong>Cost:</strong> strong foresight creates emotional wear and inevitability-dread. Expect fatigue, dread, or the unsettling feeling that saving one branch made another one brighter instead of dimmer.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT3\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Foreseen Failure</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free (before roll) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Declare a creature/ally/event-thread; grant reroll-lowest on one attack/save/check tied to avoiding meaningful failure.</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -70,7 +70,184 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "autoanimations": {
+      "id": "de8a2f96-befa-4fc0-afd7-c793816cd48b",
+      "label": "Occult Association: Prophet / Oracle (Tier 3)",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "yellowwhite",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
   },
   "effects": [],
   "img": "icons/magic/perception/orb-crystal-ball-scrying-blue.webp",
@@ -85,12 +262,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.364",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.1",
     "createdTime": 1774987097550,
-    "modifiedTime": 1777515322472,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1782167239250,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

@@ -3,6 +3,18 @@
   "type": "feat",
   "img": "icons/sundries/lights/lantern-iron-lit-yellow.webp",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Hermit (Mystic-Isolator) (Tier 4)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 (Level 17) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Faith or Intrigue marks, it spends 30 fewer (never below 10).</li></ul>",
+      "chat": ""
+    },
     "activities": {},
     "uses": {
       "spent": 0,
@@ -10,17 +22,7 @@
       "max": ""
     },
     "advancement": {},
-    "description": {
-      "value": "<p><strong>Tier 4 (Level 17) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a hidden retreat, mystical preparation, covert pilgrimage, or occult seclusion scenario, the Faith or Intrigue OP cost is reduced by 3 (minimum 1).</li></ul>",
-      "chat": ""
-    },
     "identifier": "archetype-hermit-t4",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: The Hermit (Mystic-Isolator) (Tier 4)",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -58,18 +60,32 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "faith",
+            "intrigue"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Archetype: The Hermit (Mystic-Isolator) (Tier 4)",
+          "marks": 30
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1773893636709,
-    "modifiedTime": 1775063004475,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989156224,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

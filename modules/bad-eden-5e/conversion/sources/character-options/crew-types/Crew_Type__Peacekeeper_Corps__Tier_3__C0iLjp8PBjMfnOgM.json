@@ -5,14 +5,14 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Peacekeeper Corps (Tier 3)",
+      "custom": "Bad Eden – Crew Type: Peacekeeper Corps (Tier 3)",
       "revision": 2,
       "rules": "2024",
       "book": ""
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on Charisma (Persuasion) checks made to de-escalate violence or negotiate a surrender, and on checks to grapple or restrain.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on Presence (Diplomacy) checks made to de-escalate violence or negotiate a surrender, and on checks to grapple or restrain.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-peacekeeper-corps-t3",
@@ -76,6 +76,33 @@
           "bbttcc:theme:restraint"
         ]
       }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16",
+      "rerolls": [
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "diplomacy",
+          "attribute": "presence",
+          "vs": "de-escalating violence or negotiating a surrender",
+          "note": "Peacekeeper Corps T3"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "brawl",
+          "vs": "grappling or restraining",
+          "note": "Peacekeeper Corps T3"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "skill": "athletics",
+          "vs": "grappling or restraining",
+          "note": "Peacekeeper Corps T3"
+        }
+      ]
     }
   },
   "effects": [],
@@ -90,12 +117,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986956943,
-    "modifiedTime": 1777515322396,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989172382,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

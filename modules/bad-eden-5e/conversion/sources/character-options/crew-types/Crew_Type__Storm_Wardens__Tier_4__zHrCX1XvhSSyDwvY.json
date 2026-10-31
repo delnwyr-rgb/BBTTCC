@@ -3,15 +3,17 @@
   "type": "feat",
   "img": "icons/magic/lightning/bolt-cloud-sky-white.webp",
   "system": {
-    "description": {
-      "value": "<p><strong>Tier 4 — Storm Wardens</strong></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><p><em>You no longer survive hostile weather. You set policy for it.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Controlled hazardous regions become significantly safer and more reliable for your faction. Environmental penalties, weather disruptions, and corruption-weather pressure are reduced across the region, while enemy operations remain exposed.</li></ul>",
-      "chat": ""
-    },
+    "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Storm Wardens (Tier 4)",
+      "custom": "Bad Eden – Crew Type: Storm Wardens (Tier 4)",
       "revision": 2,
       "rules": "2024",
       "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 — Storm Wardens</strong></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><p><em>You no longer survive hostile weather. You set policy for it.</em></p><ul><li><strong>Strategic:</strong> Hazard country runs on your schedule: each Wasteland, Desert, Ash Wastes, Swamp or Radiation hex your Domain holds yields 10 extra Logistics marks a turn.</li></ul>",
+      "chat": ""
     },
     "identifier": "crew-storm-wardens-t4",
     "activities": {},
@@ -77,6 +79,23 @@
           "bbttcc:theme:regional-sanctuary"
         ]
       }
+    },
+    "fourththing": {
+      "domainIncome": {
+        "perHexType": [
+          {
+            "types": [
+              "desert",
+              "ashWastes",
+              "wasteland",
+              "swamp",
+              "radiation"
+            ],
+            "channel": "logistics",
+            "op": 1
+          }
+        ]
+      }
     }
   },
   "_stats": {
@@ -89,12 +108,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986959359,
-    "modifiedTime": 1775063032583,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989170811,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

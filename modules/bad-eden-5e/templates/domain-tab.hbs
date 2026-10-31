@@ -1,0 +1,108 @@
+{{!-- Bad Eden 5E · DOMAIN tab (2026-10-30): the RFI steward sheet's Domain panel (systems/fourththing/templates/partials/domain-panel.hbs, ruling 16) on the dnd5e character sheet. Context: `domain` from scripts/sheet.js domainContext(). Keep in step with the RFI partial. --}}
+<section class="tab {{ tab.cssClass }} be5e-domain-tab" data-tab="{{ tab.id }}" data-group="{{ tab.group }}">
+<section class="ft-domain" data-domain-id="{{domain.id}}">
+  {{#if domain.linked}}
+  <div class="ft-section-header ft-domain-head">
+    <h3>{{domain.name}}</h3>
+    <span class="ft-domain-tier" data-tooltip="Reach of your will over the land. It grows as the Domain grows.">Tier {{domain.tierRoman}} · {{domain.tierLabel}}</span>
+    {{#if domain.isGM}}<button type="button" class="ft-chip" data-domain-act="record" data-tooltip="GM: open the full Domain record (the faction window).">⚙ Record</button>{{/if}}
+  </div>
+
+  <div class="ft-domain-grid">
+    <div class="ft-domain-card ft-domain-treasury" data-tooltip="Marks are what the land yields to you. One treasury: everything you buy, build, hire or wager is paid from here.">
+      <div class="ft-domain-card-title">Treasury <span class="ft-domain-total">{{domain.treasury.total}}<span class="ft-muted"> / {{domain.treasury.max}} marks</span></span></div>
+      <div class="ft-domain-pools">
+        {{#each domain.treasury.pools}}
+        <span class="ft-domain-pool{{#if zero}} is-zero{{/if}}" data-tooltip="{{label}}: {{marks}} of {{cap}} marks">{{label}} <b>{{marks}}</b></span>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="ft-domain-card ft-domain-feel" data-tooltip="As above, so below. You feel the land; the land feels you.">
+      <div class="ft-domain-card-title">The land</div>
+      <div class="ft-meters ft-domain-meters">
+        <div class="ft-meter-row" data-tooltip="{{domain.meters.loyalty.hint}}"><span class="ft-meter-label">Loyalty</span> <b>{{domain.meters.loyalty.value}}</b> <span class="ft-chip ft-domain-band is-{{domain.meters.loyalty.key}}">{{domain.meters.loyalty.band}}</span></div>
+        <div class="ft-meter-row" data-tooltip="{{domain.meters.darkness.hint}}"><span class="ft-meter-label">Darkness</span> <b>{{domain.meters.darkness.value}}</b> <span class="ft-chip ft-domain-band is-{{domain.meters.darkness.key}}">{{domain.meters.darkness.band}}</span></div>
+        <div class="ft-meter-row" data-tooltip="{{domain.meters.momentum.hint}}"><span class="ft-meter-label">Momentum</span> <b>{{domain.meters.momentum.value}}</b>{{#if domain.meters.momentum.canSpend}} <button type="button" class="ft-chip ft-domain-spend" data-domain-act="momentum" data-tooltip="Spend banked Momentum: +1d10 on your next OP roll, or more for more.">✦ Spend</button>{{/if}}</div>
+      </div>
+      {{#if domain.pressure.length}}
+      <div class="ft-domain-pressure">
+        {{#each domain.pressure}}<span class="ft-chip ft-domain-warn" data-tooltip="{{hint}}">{{label}}</span>{{/each}}
+      </div>
+      {{/if}}
+    </div>
+
+    <div class="ft-domain-card ft-domain-holdings">
+      <div class="ft-domain-card-title">Holdings</div>
+      <div class="ft-domain-holding-row"><span>Hexes held</span><b>{{domain.hexes}}</b></div>
+      {{#if domain.hexList.length}}
+      <div class="ft-domain-hexes">
+        {{#each domain.hexList}}<button type="button" class="ft-chip ft-domain-hex{{#if here}} is-here{{/if}}" data-domain-act="hex:{{uuid}}" data-tooltip="{{hint}}">{{name}}{{#if kind}} <span class="ft-muted">{{kind}}</span>{{/if}}</button>{{/each}}
+      </div>
+      {{/if}}
+      <div class="ft-domain-holding-row"><span>Rigs</span><b>{{domain.rigs}}</b></div>
+      {{#if domain.rigList.length}}
+      <div class="ft-domain-rigs" style="font-size:.74rem;line-height:1.3;margin:.1rem 0 .2rem;">
+        {{#each domain.rigList}}
+        <div class="ft-domain-rig" data-tooltip="{{#if produces}}Deploying costs {{lost}} a turn.{{else}}Earns nothing per turn.{{/if}}" style="display:flex;flex-wrap:wrap;gap:.15rem .5rem;padding:.1rem 0;">
+          <span style="font-weight:600">{{icon}} {{name}}</span>
+          {{#if produces}}<span style="opacity:.85">🅿️ {{parked}}</span><span style="opacity:.85">🚚 {{deployed}}</span>{{else}}<span style="opacity:.6">earns nothing</span>{{/if}}
+        </div>
+        {{/each}}
+      </div>
+      {{/if}}
+    </div>
+
+    {{!-- CONVICTIONS (ruling 17, 2026-10-18): the Alignment monitor — sworn philosophy + the Domain's drift from it --}}
+    <div class="ft-domain-card ft-domain-convictions" data-tooltip="{{#if domain.convictionsMeter}}{{domain.convictionsMeter.hint}}{{else}}What you swore to. Pick your convictions on the Steward tab; the land will measure you against them.{{/if}}">
+      <div class="ft-domain-card-title">Convictions{{#if domain.convictionsMeter}} <span class="ft-chip ft-domain-band is-{{domain.convictionsMeter.css}}">{{domain.convictionsMeter.bandLabel}}</span>{{/if}}</div>
+      <div class="ft-domain-holding-row"><span>Sworn to</span><b>{{domain.convictions}}</b></div>
+      {{#if domain.convictionsMeter}}
+      <div class="ft-domain-conv-bar is-{{domain.convictionsMeter.css}}" data-tooltip="Drift {{domain.convictionsMeter.drift}} of 100. Steadfast to 15 · Strained to 35 · Fractured to 65 · Rupturing beyond.">
+        <span class="ft-domain-conv-fill" style="width:{{domain.convictionsMeter.pct}}%"></span>
+        <i class="ft-domain-conv-mark" style="left:15%"></i><i class="ft-domain-conv-mark" style="left:35%"></i><i class="ft-domain-conv-mark" style="left:65%"></i>
+      </div>
+      {{#if domain.convictionsMeter.impacts.length}}
+      <ul class="ft-domain-conv-impacts">{{#each domain.convictionsMeter.impacts}}<li>{{this}}</li>{{/each}}</ul>
+      {{else}}
+      <p class="ft-hint">Nothing has tested you yet.</p>
+      {{/if}}
+      {{/if}}
+    </div>
+
+    <div class="ft-domain-card ft-domain-retinue" data-tooltip="Who rides with you. Crews and Associations are hired at the Muster by the turn; their maneuvers, bonuses and people are yours while the contract runs.">
+      <div class="ft-domain-card-title">Retinue</div>
+      {{#if domain.retinue.length}}
+      {{#each domain.retinue}}
+      <div class="ft-domain-holding-row ft-domain-retinue-row"><span class="ft-domain-retinue-who"><button type="button" class="ft-domain-retinue-face" data-domain-act="portrait:{{family}}" data-tooltip="Choose who leads them.">{{#if portrait}}<img src="{{portrait}}" alt="">{{else}}<i class="fas fa-user-plus"></i>{{/if}}</button>{{label}}: <b>{{name}}</b></span><span class="ft-muted">{{#if last}}last turn{{else}}{{turnsLeft}} turns{{/if}} <button type="button" class="ft-chip ft-domain-release" data-domain-act="release:{{family}}" data-tooltip="Let them go now.">✂</button></span></div>
+      {{/each}}
+      {{else}}
+      <p class="ft-hint">No one under contract. Hire a crew or an association at the Muster.</p>
+      {{/if}}
+    </div>
+
+    <div class="ft-domain-card ft-domain-turn">
+      <div class="ft-domain-card-title">Next turn</div>
+      {{#if domain.planned.length}}
+      <ul class="ft-domain-planned">
+        {{#each domain.planned}}<li><b>{{label}}</b>{{#if costLine}} <span class="ft-muted">· {{costLine}}</span>{{/if}}{{#if targetName}} <span class="ft-muted">→ {{targetName}}</span>{{/if}}{{#if ref}} <a href="#" data-domain-act="unplan:{{ref}}" title="Cancel this order" style="margin-left:.35rem; opacity:.7;">✕</a>{{/if}}</li>{{/each}}
+      </ul>
+      {{else}}
+      <p class="ft-hint">Nothing planned. Plan the turn, then run it at Day's End.</p>
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="ft-domain-actions">
+    <button type="button" class="ft-add-btn" data-domain-act="planner" data-tooltip="Choose what your Domain does this turn: secure, supply, build, expand.">⟳ Plan the turn</button>
+    <button type="button" class="ft-add-btn" data-domain-act="raid" data-alpha-hide="raidDoors" data-tooltip="Battle, Heist or Parley against another will over the land.">⚔ Conflict</button>
+    <button type="button" class="ft-add-btn" data-domain-act="quests" data-tooltip="The jobs the land has given you.">📜 Quest log</button>
+    <button type="button" class="ft-add-btn" data-domain-act="market" data-tooltip="Spend the treasury on gear and rigs.">🛒 Market</button>
+    <button type="button" class="ft-add-btn" data-domain-act="vault" data-tooltip="What the Domain keeps in store.">🏦 Vault</button>
+  </div>
+  {{else}}
+  <div class="ft-section-header"><h3>Domain</h3></div>
+  <p class="ft-hint">No land answers to you yet. The GM links a steward to their Domain; until then there is no treasury to spend and no turn to plan.</p>
+  {{/if}}
+</section>
+</section>

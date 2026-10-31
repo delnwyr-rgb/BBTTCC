@@ -1,10 +1,10 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/alignments.json. The Sephirothic Alignments (bbttcc-character-options.sephirothic-alignments) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/alignments.json. The Sephirothic Alignments (bbttcc-character-options.sephirothic-alignments) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
   "_pack": "sephirothic-alignments",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.8.1",
-    "at": "2026-10-14",
+    "rubric": "1.9.0",
+    "at": "2026-10-31",
     "overridesApplied": 0
   },
   "items": [
@@ -16,7 +16,7 @@
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
-          "value": "Understanding - Structure gives shape to power. +1 Dexterity, +1 Logistics OPs\n\nBinah is discernment, containment, and the discipline to make dangerous ideas survivable. It rewards planning, governance, and strategic control that turns chaos into infrastructure.",
+          "value": "Understanding - Structure gives shape to power. +10 Logistics and +10 Intrigue marks to your Domain each turn.\n\nBinah is discernment, containment, and the discipline to make dangerous ideas survivable. It rewards planning, governance, and strategic control that turns chaos into infrastructure.",
           "chat": ""
         },
         "type": {
@@ -47,7 +47,7 @@
             "id": "CsOtf4GflVPZePHJ",
             "pack": "sephirothic-alignments",
             "identifier": "alignment-binah",
-            "hash": "bad07cfdca11"
+            "hash": "390fbe55779e"
           }
         }
       }
@@ -60,7 +60,7 @@
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
-          "value": "Mercy - Expansion without fear. +1 Diplomacy, +1 Culture OPs\n\nChesed creates room for others to live, recover, and belong. It rewards community-building, morale recovery, and factions that grow stronger by sheltering rather than merely surviving.",
+          "value": "Mercy - Expansion without fear. +10 Diplomacy and +10 Culture marks to your Domain each turn.\n\nChesed creates room for others to live, recover, and belong. It rewards community-building, Loyalty recovery, and Domains that grow stronger by sheltering rather than merely surviving.",
           "chat": ""
         },
         "type": {
@@ -91,7 +91,7 @@
             "id": "xUnl5SPUxJmY3241",
             "pack": "sephirothic-alignments",
             "identifier": "alignment-chesed",
-            "hash": "6e229fb132c6"
+            "hash": "da21e8065ea2"
           }
         }
       }
@@ -104,7 +104,7 @@
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
-          "value": "Wisdom - Creative energy. +1 Strength, +1 Soft Power OPs\n\nCreation arrives all at once. Chokmah rewards decisive action, inspired leadership, and bold openers that turn possibility into momentum before anyone else is ready.",
+          "value": "Wisdom - Creative energy. +10 Soft Power and +10 Violence marks to your Domain each turn.\n\nCreation arrives all at once. Chokmah rewards decisive action, inspired leadership, and bold openers that turn possibility into momentum before anyone else is ready.",
           "chat": ""
         },
         "type": {
@@ -135,7 +135,7 @@
             "id": "SO8CCo1JqxifZ2c0",
             "pack": "sephirothic-alignments",
             "identifier": "alignment-chokmah",
-            "hash": "bfdd128f95a7"
+            "hash": "a206d6007e52"
           }
         }
       }
@@ -148,7 +148,7 @@
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
-          "value": "Judgment - Necessary force. +1 Strength, +1 Logistics OPs\n\nGeburah draws the line. It rewards discipline, enforcement, and decisive action against fortified problems, but always risks becoming cruelty if severity outruns wisdom.",
+          "value": "Judgment - Necessary force. +10 Violence and +10 Logistics marks to your Domain each turn.\n\nGeburah draws the line. It rewards discipline, enforcement, and decisive action against fortified problems, but always risks becoming cruelty if severity outruns wisdom.",
           "chat": ""
         },
         "type": {
@@ -179,7 +179,7 @@
             "id": "iMPSWMqenjUBpnMd",
             "pack": "sephirothic-alignments",
             "identifier": "alignment-geburah",
-            "hash": "0a7ac1963f28"
+            "hash": "a45e7fe80ade"
           }
         }
       }
@@ -192,7 +192,7 @@
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
-          "value": "Splendor - Meaning made visible. +1 Dexterity, +1 Diplomacy OPs\n\nHod renders truth through language, symbol, and presentation. It rewards courtly play, ritual precision, and the ability to turn naming, framing, and interpretation into strategic force.",
+          "value": "Splendor - Meaning made visible. +10 Intrigue and +10 Diplomacy marks to your Domain each turn.\n\nHod renders truth through language, symbol, and presentation. It rewards courtly play, ritual precision, and the ability to turn naming, framing, and interpretation into strategic force.",
           "chat": ""
         },
         "type": {
@@ -223,7 +223,7 @@
             "id": "aYGsfvm8EuKcBjLP",
             "pack": "sephirothic-alignments",
             "identifier": "alignment-hod",
-            "hash": "69e994f4165d"
+            "hash": "690521435aef"
           }
         }
       }
@@ -236,7 +236,7 @@
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
-          "value": "The Crown - Divine unity. +1 Soft Power, +1 Diplomacy OPs\n\nYou are called upward toward unity, legitimacy, and the better shape of the world. Kether rewards coalition-building, visionary leadership, and factions that hold together under pressure.",
+          "value": "The Crown - Divine unity. +10 Diplomacy and +10 Soft Power marks to your Domain each turn.\n\nYou are called upward toward unity, legitimacy, and the better shape of the world. Kether rewards coalition-building, visionary leadership, and factions that hold together under pressure.",
           "chat": ""
         },
         "type": {
@@ -267,7 +267,7 @@
             "id": "Yb7rLajuzX3HWtmx",
             "pack": "sephirothic-alignments",
             "identifier": "alignment-kether",
-            "hash": "6b8ac9d8b08d"
+            "hash": "3f96956c6f7c"
           }
         }
       }
@@ -280,7 +280,7 @@
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
-          "value": "The Kingdom - Reality that must work. +1 Economy, +1 Logistics OPs\n\nMalkuth is grounded stewardship: land, labor, roads, walls, and the actual world. It rewards hex development, infrastructure, and practical leadership that makes civilization durable.",
+          "value": "The Kingdom - Reality that must work. +10 Economy and +10 Logistics marks to your Domain each turn.\n\nMalkuth is grounded stewardship: land, labor, roads, walls, and the actual world. It rewards hex development, infrastructure, and practical leadership that makes civilization durable.",
           "chat": ""
         },
         "type": {
@@ -311,7 +311,7 @@
             "id": "uczM9QF2Ccb50Rd5",
             "pack": "sephirothic-alignments",
             "identifier": "alignment-malkuth",
-            "hash": "01f4f24d71b1"
+            "hash": "5bedee135f9d"
           }
         }
       }
@@ -324,7 +324,7 @@
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
-          "value": "Victory - Endurance becomes momentum. +1 Strength, +1 Culture OPs\n\nNetzach is passion that refuses extinction. It rewards morale, persistence, and the emotional drive to keep moving when a lesser faction would break or quietly go home.",
+          "value": "Victory - Endurance becomes momentum. +10 Culture and +10 Violence marks to your Domain each turn.\n\nNetzach is passion that refuses extinction. It rewards Loyalty, persistence, and the emotional drive to keep moving when a lesser faction would break or quietly go home.",
           "chat": ""
         },
         "type": {
@@ -355,7 +355,7 @@
             "id": "kkYWhpM2uCB1zi6O",
             "pack": "sephirothic-alignments",
             "identifier": "alignment-netzach",
-            "hash": "e78792057ffa"
+            "hash": "33e3821c7ef4"
           }
         }
       }
@@ -368,7 +368,7 @@
       "folder": "Sephirotic Alignments",
       "system": {
         "description": {
-          "value": "Beauty - Balance that costs something. +1 Diplomacy, +1 Soft Power OPs\n\nTiphareth holds justice and mercy in living tension. It rewards balanced play, stability across multiple systems, and factions that survive by integrating contradictions instead of denying them.",
+          "value": "Beauty - Balance that costs something. +10 Diplomacy and +10 Soft Power marks to your Domain each turn.\n\nTiphareth holds justice and mercy in living tension. It rewards balanced play, stability across multiple systems, and factions that survive by integrating contradictions instead of denying them.",
           "chat": ""
         },
         "type": {
@@ -399,7 +399,51 @@
             "id": "ammb5TPGcVEbjCXb",
             "pack": "sephirothic-alignments",
             "identifier": "alignment-tiphareth",
-            "hash": "3faf0d44a67f"
+            "hash": "593c9c27125a"
+          }
+        }
+      }
+    },
+    {
+      "slug": "alignment-yesod",
+      "name": "Alignment: Yesod",
+      "type": "feat",
+      "img": "icons/magic/symbols/rune-sigil-horned-white-purple.webp",
+      "folder": "Sephirotic Alignments",
+      "system": {
+        "description": {
+          "value": "Foundation - The conduit the whole Tree pours through. +10 Intrigue and +10 Faith marks to your Domain each turn.\n\nYesod is the funnel beneath the Tree: dreams, gateways, and the quiet machinery that carries meaning down into the world. It rewards the steward who works unseen, holds the channel open, and lets others pass through — and it answers only once the first arc is done.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "alignment-yesod"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "intrigue": 1,
+            "faith": 1
+          },
+          "option": {}
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "dc7qTtkBjLsCj1Fd",
+            "pack": "sephirothic-alignments",
+            "identifier": "alignment-yesod",
+            "hash": "7b058670a7df"
           }
         }
       }

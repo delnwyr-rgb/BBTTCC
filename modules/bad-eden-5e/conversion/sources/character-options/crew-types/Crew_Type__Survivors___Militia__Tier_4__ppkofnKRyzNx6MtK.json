@@ -3,15 +3,17 @@
   "type": "feat",
   "img": "icons/environment/people/group.webp",
   "system": {
-    "description": {
-      "value": "<p><strong>Tier 4 — Survivors / Militia</strong></p><p><strong>“We were here before your grand strategy, and we’ll be here after it catches fire.”</strong></p><p>Survivors and militias are what happens when ordinary people become infrastructure. They patch walls, ration supplies, drag neighbors out of burning buildings, and keep the faction alive long after cleaner doctrines would have folded.</p><p><em>When everyone else calls it over, you call it relocation.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> If your faction loses its last controlled Hex, it does not dissolve immediately. Instead, it may reform as a Nomad faction and retain 25% of its OP reserve.</li></ul>",
-      "chat": ""
-    },
+    "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Survivors / Militia (Tier 4)",
+      "custom": "Bad Eden – Crew Type: Survivors / Militia (Tier 4)",
       "revision": 2,
       "rules": "2024",
       "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 — Survivors / Militia</strong></p><p><strong>“We were here before your grand strategy, and we’ll be here after it catches fire.”</strong></p><p>Survivors and militias are what happens when ordinary people become infrastructure. They patch walls, ration supplies, drag neighbors out of burning buildings, and keep the faction alive long after cleaner doctrines would have folded.</p><p><em>When everyone else calls it over, you call it relocation.</em></p><ul><li><strong>Strategic:</strong> If your Domain loses its last hex, it does not dissolve: it reforms as a Nomad Domain and keeps a quarter of its marks (the card fires it).</li></ul>",
+      "chat": ""
     },
     "identifier": "crew-survivors-militia-t4",
     "activities": {},
@@ -83,12 +85,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986961797,
-    "modifiedTime": 1775063031365,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989171077,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

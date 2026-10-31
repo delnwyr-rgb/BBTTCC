@@ -5,14 +5,14 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Gridbreakers (Tier 3)",
+      "custom": "Bad Eden – Crew Type: Gridbreakers (Tier 3)",
       "revision": 2,
       "rules": "2024",
       "book": ""
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Gridbreakers</strong></p><p><strong>“Everything broken still remembers how it worked.”</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><p><em>You’ve learned how to make a dead system blink one more time.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on checks made to investigate urban systems, disable hostile mechanisms, or restore partial function to broken infrastructure.</li><li><strong>Strategic:</strong> Once per strategic turn, you can temporarily reactivate a dormant urban asset, granting a short-lived but meaningful local benefit.</li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"gridT3\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Reactivate Asset</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Temporarily reactivate a dormant urban asset, granting a short-lived but meaningful local benefit.</div>\n</div>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Gridbreakers</strong></p><p><strong>“Everything broken still remembers how it worked.”</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><p><em>You’ve learned how to make a dead system blink one more time.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on checks made to investigate urban systems, disable hostile mechanisms, or restore partial function to broken infrastructure.</li><li><strong>Strategic:</strong> Once per turn, you can temporarily reactivate a dormant urban asset, granting a short-lived but meaningful local benefit.</li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"gridT3\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Reactivate Asset</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Temporarily reactivate a dormant urban asset, granting a short-lived but meaningful local benefit.</div>\n</div>",
       "chat": ""
     },
     "identifier": "crew-gridbreakers-t3",
@@ -96,12 +96,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986948790,
-    "modifiedTime": 1777515322386,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792977819573,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

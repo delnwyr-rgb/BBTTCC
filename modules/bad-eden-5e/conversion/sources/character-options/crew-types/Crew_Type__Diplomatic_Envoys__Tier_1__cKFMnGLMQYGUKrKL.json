@@ -5,14 +5,14 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Diplomatic Envoys (Tier 1)",
+      "custom": "Bad Eden – Crew Type: Diplomatic Envoys (Tier 1)",
       "revision": 2,
       "rules": "2024",
       "book": ""
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 — Diplomatic Envoys</strong></p><p><strong>“We are here in peace. Don’t make that embarrassing.”</strong></p><p>Diplomatic Envoys are the faction’s public face and private threat. They shake hands with one hand and count exits with the other. Their talent is making every negotiation feel like the only sensible outcome was the one they wanted.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain proficiency in Insight and Persuasion, and you learn one extra language.</li><li><strong>Strategic:</strong> Your faction starts with +1 Diplomacy OPs.</li></ul>",
+      "value": "<p><strong>Tier 1 — Diplomatic Envoys</strong></p><p><strong>“We are here in peace. Don’t make that embarrassing.”</strong></p><p>Diplomatic Envoys are the faction’s public face and private threat. They shake hands with one hand and count exits with the other. Their talent is making every negotiation feel like the only sensible outcome was the one they wanted.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Insight and Diplomacy, and you learn one extra language.</li><li><strong>Strategic:</strong> Your Domain starts with +1 Diplomacy OPs.</li></ul>",
       "chat": ""
     },
     "identifier": "crew-diplomatic-envoys-t1",
@@ -85,12 +85,12 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346195865,
-        "modifiedTime": 1777433499539
+        "modifiedTime": 1792989167318
       },
       "start": {
         "combat": null,
@@ -101,8 +101,7 @@
         "initiative": null
       },
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!cKFMnGLMQYGUKrKL.ea6238af2d9b4b8c"
+      "folder": null
     }
   ],
   "folder": "IFHZoz9eqRJSNEWx",
@@ -142,6 +141,9 @@
           "bbttcc:theme:integration"
         ]
       }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
     }
   },
   "_stats": {
@@ -154,12 +156,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986946918,
-    "modifiedTime": 1775063029313,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792977822669,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

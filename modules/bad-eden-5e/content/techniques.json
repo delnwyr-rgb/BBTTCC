@@ -1,9 +1,9 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/techniques.json. The 75 Bad Eden Core techniques as dnd5e feats.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/techniques.json. The 75 Bad Eden Core techniques as dnd5e feats.",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.8.1",
-    "at": "2026-10-26",
+    "rubric": "1.9.0",
+    "at": "2026-10-31",
     "overridesApplied": 0
   },
   "features": [
@@ -239,7 +239,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/skills/social/diplomacy-peace-alliance.webp",
-      "description": "<p><em>Crowds don’t think. They feel. So you give them something else to feel.</em></p><p>You gain proficiency in Persuasion or Intimidation (your choice). If you already have it, you gain expertise with it instead.</p><p>When you spend at least 1 minute addressing a group of non-hostile or uncertain creatures, you may make a Charisma (Persuasion or Intimidation) check (DC set by the GM). On a success, you reduce immediate hostility: the crowd hesitates, disperses, or agrees to hear terms. On a failure, you still buy time, but a complication occurs (a challenger steps forward, guards arrive, a rumor spreads).</p>",
+      "description": "<p><em>Crowds don’t think. They feel. So you give them something else to feel.</em></p><p>You gain proficiency in Persuasion (Charisma) or Intimidation (your choice). If you already have it, you gain expertise with it instead.</p><p>When you spend at least 1 minute addressing a group of non-hostile or uncertain creatures, you may make a Charisma (Persuasion or Intimidation) check (DC set by the GM). On a success, you reduce immediate hostility: the crowd hesitates, disperses, or agrees to hear terms. On a failure, you still buy time, but a complication occurs (a challenger steps forward, guards arrive, a rumor spreads).</p>",
       "traits": [
         {
           "tag": "choice",
@@ -1298,7 +1298,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/unholy/strike-body-life-soul-green.webp",
-      "description": "<p><em>Out here, healing is logistics.</em></p><p>You gain proficiency in Religion. If you already have it, you gain expertise with it instead.</p><p>When you use a medkit to stabilize a creature, it also regains hit points equal to your proficiency bonus.</p><p>Additionally, during a short rest, you may allow up to two creatures to regain additional hit points equal to your proficiency bonus. A creature can benefit from this technique only once per short rest.</p>",
+      "description": "<p><em>Out here, healing is logistics.</em></p><p>You gain proficiency in Religion (Wisdom). If you already have it, you gain expertise with it instead.</p><p>When you use a medkit to stabilize a creature, it also regains hit points equal to your proficiency bonus.</p><p>Additionally, during a short rest, you may allow up to two creatures to regain additional hit points equal to your proficiency bonus. A creature can benefit from this technique only once per short rest.</p>",
       "uses": {
         "max": "1",
         "per": "sr"
@@ -1877,7 +1877,7 @@
       "requirements": "",
       "folder": "Techniques",
       "img": "icons/magic/perception/eye-slit-orange.webp",
-      "description": "<p><em>Some truths are louder than sound.</em></p><p>You gain proficiency in Arcana. If you already have it, you gain expertise with it instead.</p><p>As an action, you may focus on the unseen and learn one of the following about a creature, object, or place within 30 feet (choose one):</p><ul><li>Whether it is suffused with resonance</li><li>Whether it feels aligned toward Renewal or toward Corruption (GM adjudication)</li><li>Whether it bears an active ward, curse, or binding</li></ul><p>You can use this technique a number of times equal to your proficiency bonus, regaining all uses on a long rest.</p>",
+      "description": "<p><em>Some truths are louder than sound.</em></p><p>You gain proficiency in Arcana (Intelligence). If you already have it, you gain expertise with it instead.</p><p>As an action, you may focus on the unseen and learn one of the following about a creature, object, or place within 30 feet (choose one):</p><ul><li>Whether it is suffused with resonance</li><li>Whether it feels aligned toward Renewal or toward Corruption (GM adjudication)</li><li>Whether it bears an active ward, curse, or binding</li></ul><p>You can use this technique a number of times equal to your proficiency bonus, regaining all uses on a long rest.</p>",
       "uses": {
         "max": "@prof",
         "per": "lr"

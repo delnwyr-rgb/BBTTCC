@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Exorcist</strong></p><p><strong>“That should not be here.”</strong></p><p>You can identify corruption, spiritual pressure, and Qliphothic influence.</p><p><strong>Tactical</strong></p><ul><li>reroll-lowest on saves vs corruption, fear, or possession</li></ul><p><strong>Strategic</strong></p><ul><li>When entering a Hex, automatically detect presence of corruption or unnatural influence</li></ul><p><strong>Cost:</strong> constant awareness of corruption creates strain and intolerance for ambiguity.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Exorcist</strong></p><p><strong>“That should not be here.”</strong></p><p>You can identify corruption, spiritual pressure, and Qliphothic influence.</p><p><strong>Tactical</strong></p><ul><li>reroll-lowest on checks vs corruption, fear, or possession</li></ul><p><strong>Strategic</strong></p><ul><li>When entering a Hex, automatically detect presence of corruption or unnatural influence</li></ul><p><strong>Cost:</strong> constant awareness of corruption creates strain and intolerance for ambiguity.</p>",
       "chat": ""
     },
     "identifier": "occult-association-exorcist-t1",
@@ -29,7 +29,7 @@
       "level": null
     },
     "properties": [],
-    "requirements": "",
+    "requirements": "Level 1+",
     "type": {
       "value": "",
       "subtype": ""
@@ -52,6 +52,16 @@
         "levelMax": 1
       },
       "category": "occult"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "save",
+          "mode": "reroll-lowest",
+          "vs": "corruption, fear, or possession",
+          "note": "Exorcist / Purifier T1"
+        }
+      ]
     }
   },
   "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
@@ -67,12 +77,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987089076,
-    "modifiedTime": 1777515322514,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989175661,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

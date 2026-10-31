@@ -1,0 +1,75 @@
+{
+  "name": "Alignment: Chesed",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "Mercy - Expansion without fear. +10 Diplomacy and +10 Culture marks to your Domain each turn.\n\nChesed creates room for others to live, recover, and belong. It rewards community-building, Loyalty recovery, and Domains that grow stronger by sheltering rather than merely surviving.",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "alignment-chesed",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "img": "icons/magic/nature/plant-seed-hands-glow-yellow.webp",
+  "effects": [],
+  "folder": "RAOWJYon3t34M5XY",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "sephirothic-alignments",
+      "bonuses": {
+        "diplomacy": 1,
+        "culture": 1
+      },
+      "option": {}
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.aickB2gnSqzrWmze",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.EwCwwr9w1kap3UD3",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1774978150205,
+    "modifiedTime": 1792989140614,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "xUnl5SPUxJmY3241",
+  "sort": 200000,
+  "_key": "!items!xUnl5SPUxJmY3241"
+}

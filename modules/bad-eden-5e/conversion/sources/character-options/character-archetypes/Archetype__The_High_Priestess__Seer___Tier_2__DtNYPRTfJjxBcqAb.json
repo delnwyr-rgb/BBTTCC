@@ -3,6 +3,18 @@
   "type": "feat",
   "img": "icons/magic/perception/third-eye-blue-red.webp",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The High Priestess (Seer) (Tier 2)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 (Level 5) — The High Priestess (Seer)</strong></p><ul><li><strong>Strategic:</strong> Once per scene of reconnaissance, espionage, omen-reading or hidden threat, your Domain's first successful information-gathering step reveals one additional hidden tag, threat or condition (the card fires it).</li></ul>",
+      "chat": ""
+    },
     "activities": {},
     "uses": {
       "spent": 0,
@@ -10,17 +22,7 @@
       "max": ""
     },
     "advancement": {},
-    "description": {
-      "value": "<p><strong>Tier 2 (Level 5) — The High Priestess (Seer)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During reconnaissance, espionage, omen-reading, or hidden-threat scenarios, the first successful information-gathering step reveals one additional hidden tag, threat, or condition.</li></ul>",
-      "chat": ""
-    },
     "identifier": "archetype-high-priestess-t2",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: The High Priestess (Seer) (Tier 2)",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -70,12 +72,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986753400,
-    "modifiedTime": 1775063008004,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989160280,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

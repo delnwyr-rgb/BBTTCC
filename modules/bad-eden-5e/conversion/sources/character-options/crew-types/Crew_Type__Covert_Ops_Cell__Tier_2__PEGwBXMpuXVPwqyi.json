@@ -3,15 +3,17 @@
   "type": "feat",
   "img": "icons/magic/perception/silhouette-stealth-shadow.webp",
   "system": {
-    "description": {
-      "value": "<p><strong>Tier 2 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When undertaking an Infiltration scenario, the Alarm Level threshold is increased, allowing for more failures before a full alert is triggered.</li></ul>",
-      "chat": ""
-    },
+    "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Covert Ops Cell (Tier 2)",
+      "custom": "Bad Eden – Crew Type: Covert Ops Cell (Tier 2)",
       "revision": 2,
       "rules": "2024",
       "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Strategic:</strong> Alarms trip later around your cell: your Domain adds +1 to its Intrigue Domain rolls.</li></ul>",
+      "chat": ""
     },
     "identifier": "crew-covert-ops-cell-t2",
     "activities": {},
@@ -67,6 +69,11 @@
           "bbttcc:theme:pressure-control"
         ]
       }
+    },
+    "fourththing": {
+      "domainRollBonus": {
+        "intrigue": 1
+      }
     }
   },
   "_stats": {
@@ -79,12 +86,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986943268,
-    "modifiedTime": 1775063027351,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989168756,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

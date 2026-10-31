@@ -3,6 +3,18 @@
   "type": "feat",
   "img": "icons/environment/people/cavalry-heavy.webp",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Chariot (Squad Leader) (Tier 4)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 (Level 17) — The Chariot</strong></p>\n<ul>\n\n<li><strong>Strategic:</strong> Once per Bunker Busters scene, your presence and squad let your Domain reroll the lowest die on its Domain roll (the card fires it).</li>\n</ul>",
+      "chat": ""
+    },
     "activities": {},
     "uses": {
       "spent": 0,
@@ -10,17 +22,7 @@
       "max": ""
     },
     "advancement": {},
-    "description": {
-      "value": "<p><strong>Tier 4 (Level 17) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> —</li>\n<li><strong>Strategic:</strong> When undertaking a Bunker Busters (Strategic Raid) scenario, your presence and squad grant Advantage to your faction's Opposed Strategic Roll.</li>\n</ul>",
-      "chat": ""
-    },
     "identifier": "archetype-chariot-t4",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: The Chariot (Squad Leader) (Tier 4)",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -70,12 +72,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986677898,
-    "modifiedTime": 1775063019397,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989161548,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

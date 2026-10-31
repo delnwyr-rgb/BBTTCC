@@ -7,11 +7,11 @@
     "source": {
       "revision": 1,
       "rules": "2024",
-      "custom": "BBTTCC"
+      "custom": "Bad Eden"
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Leave me alone. I’ll return with something useful.”</em></p><p><strong>Archetype (BBTTCC): The Hermit (Mystic-Isolator).</strong> You step away in order to see clearly. Solitude is not withdrawal to you. It is a forge, a lens, and a discipline.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens contemplation, covert preparation, and hidden spiritual leverage. This Archetype is associated with <strong>+1 Faith OP</strong> and <strong>+1 Intrigue OP</strong>.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Leave me alone. I’ll return with something useful.”</em></p><p><strong>Archetype (Bad Eden): The Hermit (Mystic-Isolator).</strong> You step away in order to see clearly. Solitude is not withdrawal to you. It is a forge, a lens, and a discipline.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens contemplation, covert preparation, and hidden spiritual leverage. Your Domain earns <strong>+10 Faith</strong> and <strong>+10 Intrigue</strong> marks each turn while you serve it.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -89,12 +89,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1773893625345,
-    "modifiedTime": 1777515322205,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989147172,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

@@ -10,7 +10,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Tier 1 — Alchemist</strong></p><p><strong>“You’re not powerful yet. You’re noticeable.”</strong></p><p>At Tier 1, you learn the first dangerous lesson: <strong>matter listens</strong>.</p><p>You are not generating value yet. You are accelerating reactions, shortening timelines, and making crude but effective substitutions when a system would otherwise stall out.</p><p>People start bringing you problems that smell like “this should not work.”</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain proficiency with <strong>Alchemist’s Supplies</strong></li><li>When crafting basic alchemical items, the time required is halved</li><li>You can identify substances, compounds, and chemical hazards in minutes instead of hours</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Production Reliability:</strong> once per Strategic Turn, when your faction spends <strong>Economy OP</strong> on production, infrastructure, or supply stabilization, reduce that spend by <strong>1</strong> (minimum 1)</li></ul><p><strong>Cost:</strong> every use leaves evidence — fumes, scarcity elsewhere, suspicious efficiency, or a process that now depends on you.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"alchT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Production Reliability</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When faction spends Economy OP on production / infrastructure / supply, reduce spend by 1 (min 1).</div>\n</div>",
+      "value": "<p><strong>Tier 1 — Alchemist</strong></p><p><strong>“You’re not powerful yet. You’re noticeable.”</strong></p><p>At Tier 1, you learn the first dangerous lesson: <strong>matter listens</strong>.</p><p>You are not generating value yet. You are accelerating reactions, shortening timelines, and making crude but effective substitutions when a system would otherwise stall out.</p><p>People start bringing you problems that smell like “this should not work.”</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank with <strong>the Occult aptitude</strong></li><li>When crafting basic alchemical items, the time required is halved</li><li>You can identify substances, compounds, and chemical hazards in minutes instead of hours</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Production Reliability:</strong> once per turn, when your Domain spends <strong>Economy marks</strong> on production, infrastructure, or supply stabilization, reduce that spend by <strong>1</strong> (minimum 1)</li></ul><p><strong>Cost:</strong> every use leaves evidence — fumes, scarcity elsewhere, suspicious efficiency, or a process that now depends on you.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"alchT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Production Reliability</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When faction spends Economy marks on production / infrastructure / supply, reduce spend by 1 (min 1).</div>\n</div>",
       "chat": ""
     },
     "advancement": {},
@@ -69,9 +69,235 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    },
+    "autoanimations": {
+      "id": "401d7c21-eb0b-4d51-b568-79aabdef17ec",
+      "label": "Occult Association: Alchemist (Tier 1)",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "range",
+      "primary": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "spell",
+          "animation": "guidingbolt",
+          "variant": "02",
+          "color": "random",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
   },
-  "effects": [],
+  "effects": [
+    {
+      "_id": "Q2g6e6Xvd4c6vvHx",
+      "name": "Occult Tier 1 Proficiencies",
+      "img": "icons/consumables/potions/bottle-conical-bubbling-blue.webp",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.occult.value",
+            "type": "add",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "coreVersion": "14.369",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.37",
+        "createdTime": 1792989174836,
+        "modifiedTime": 1792989174836,
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      }
+    }
+  ],
   "img": "icons/consumables/potions/bottle-conical-bubbling-blue.webp",
   "folder": "zganGfpVDhLbTMgv",
   "_stats": {
@@ -84,12 +310,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987084174,
-    "modifiedTime": 1777339606718,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792977828190,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
   },
   "ownership": {
     "default": 0,

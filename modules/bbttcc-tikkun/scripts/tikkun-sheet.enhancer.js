@@ -302,6 +302,9 @@
       return;
     }
 
+    // Bad Eden 5E (2026-10-30, Dave: the Tikkun display is outdated on the D&D sheet): no overlay tab on dnd5e.
+    if (game.system?.id === "dnd5e") return;
+
     // Path B — dnd5e and other sheets without a pre-existing tikkun tab.
     // Add a Tikkun overlay tab that toggles via primary tab nav clicks.
     const $nav = _findPrimaryTabNav($html);

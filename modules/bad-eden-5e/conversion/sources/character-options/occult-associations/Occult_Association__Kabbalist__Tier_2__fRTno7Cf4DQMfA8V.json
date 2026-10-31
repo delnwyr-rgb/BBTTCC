@@ -2,8 +2,15 @@
   "name": "Occult Association: Kabbalist (Tier 2)",
   "type": "feat",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
     "description": {
-      "value": "<p><strong>Tier 2 — Kabbalist</strong></p><p><strong>“You don’t hunt Sparks. You classify them — and classification is power.”</strong></p><p>At Tier 2, you stop mistaking mystery for depth. Most mysteries are just unlabeled containers. You bring labels.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Identification Efficiency:</strong> during the <strong>Identification</strong> phase of the Great Work, reduce the <strong>OP cost</strong> or <strong>time/resources required</strong> to identify a required Spark by <strong>25%</strong> (GM adjudicates narrative reductions as needed).</li></ul><p><em>Mechanically, you waste fewer resources on the wrong answer. Narratively, the world stops wasting your time.</em></p><p><strong>Cost:</strong> every act of correct classification closes some other possibility. Expect rigidity, social friction, or backlash from people who preferred the ambiguity.</p>",
+      "value": "<p><strong>Tier 2 — Kabbalist</strong></p><p><strong>“You don’t hunt Sparks. You classify them — and classification is power.”</strong></p><p>At Tier 2, you stop mistaking mystery for depth. Most mysteries are just unlabeled containers. You bring labels.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Identification Efficiency:</strong> once per scene of the Great Work's Identification phase, the marks cost or time to identify a required Spark drops by 25% (the card fires it).</li></ul><p><em>Mechanically, you waste fewer resources on the wrong answer. Narratively, the world stops wasting your time.</em></p><p><strong>Cost:</strong> every act of correct classification closes some other possibility. Expect rigidity, social friction, or backlash from people who preferred the ambiguity.</p>",
       "chat": ""
     },
     "advancement": {},
@@ -15,11 +22,6 @@
       "max": ""
     },
     "identifier": "occult-association-kabbalist-t2",
-    "source": {
-      "revision": 2,
-      "rules": "2024",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -80,12 +82,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774987095107,
-    "modifiedTime": 1775063039362,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989176751,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

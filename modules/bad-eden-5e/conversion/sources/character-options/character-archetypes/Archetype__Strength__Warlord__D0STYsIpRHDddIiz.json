@@ -1,17 +1,13 @@
 {
   "name": "Archetype: Strength (Warlord)",
   "type": "feat",
-  "img": "icons/creatures/abilities/lion-roar-yellow.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_strength.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC"
-    },
+    "source": "Bad Eden (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Power is not rage. Power is what still obeys you after the world breaks.”</em></p>\n<p><strong>Archetype (BBTTCC): Strength (Warlord).</strong> Commander, breaker, disciplined engine of force. You do not merely hit hard — you make force coherent.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> This Archetype is associated with <strong>+1 Violence OP</strong> in faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of battlefield command, violent pressure, and military dominance.</li>\n</ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>“Power is not rage. Power is what still obeys you after the world breaks.”</em></p><p><strong>Archetype (Bad Eden): Violence (Warlord).</strong> Commander, breaker, disciplined engine of force. You do not merely hit hard — you make force coherent.</p><h3>Archetype Effects</h3><ul><li><p><strong>Faction Edge.</strong> Your Domain earns <strong>+10 Violence</strong> marks each turn while you serve it.</p></li><li><p><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of battlefield command, violent pressure, and military dominance.</p></li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -94,12 +90,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986646202,
-    "modifiedTime": 1777515322139,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989145866,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

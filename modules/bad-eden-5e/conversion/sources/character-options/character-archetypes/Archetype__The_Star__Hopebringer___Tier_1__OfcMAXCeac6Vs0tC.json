@@ -7,12 +7,12 @@
     "source": {
       "revision": 1,
       "rules": "2024",
-      "custom": "BBTTCC – Archetype: The Star (Hopebringer) (Tier 1)",
+      "custom": "Bad Eden – Archetype: The Star (Hopebringer) (Tier 1)",
       "book": ""
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Star (Hopebringer)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Performance and Insight. You learn the Friends Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Star (Hopebringer)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Performance and Insight.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -79,17 +79,16 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346195116,
-        "modifiedTime": 1777433499492
+        "modifiedTime": 1792989153642
       },
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!OfcMAXCeac6Vs0tC.VeYjrglaft9xrsuy"
+      "folder": null
     }
   ],
   "folder": "LPn67mZIjggfprir",
@@ -126,12 +125,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986788012,
-    "modifiedTime": 1777515322210,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989153552,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

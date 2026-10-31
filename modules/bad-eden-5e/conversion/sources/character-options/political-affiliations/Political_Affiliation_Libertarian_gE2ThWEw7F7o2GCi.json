@@ -1,0 +1,71 @@
+{
+  "name": "Political Affiliation: Libertarian",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "Freedom maximizer. +20 Economy and +10 Intrigue marks to your Domain each turn.",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "political-affiliation-libertarian",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "political-affiliations",
+      "bonuses": {
+        "economy": 2,
+        "intrigue": 1
+      },
+      "option": {
+        "philosophyKey": "libertarian"
+      }
+    }
+  },
+  "img": "icons/sundries/misc/lock-open-yellow.webp",
+  "effects": [],
+  "folder": null,
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
+    "createdTime": 1759971183862,
+    "modifiedTime": 1792989144066,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3
+  },
+  "_id": "gE2ThWEw7F7o2GCi",
+  "sort": 103125,
+  "_key": "!items!gE2ThWEw7F7o2GCi"
+}

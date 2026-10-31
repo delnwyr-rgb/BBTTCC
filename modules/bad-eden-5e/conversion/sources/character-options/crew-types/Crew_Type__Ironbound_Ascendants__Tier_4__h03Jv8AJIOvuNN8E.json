@@ -3,15 +3,17 @@
   "type": "feat",
   "img": "icons/environment/settlement/watchtower-cliff.webp",
   "system": {
-    "description": {
-      "value": "<p><strong>Tier 4 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You no longer defend the mountains. The mountains defend you.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Controlled Mountains and Highlands become severe positional assets. Enemy movement through them is slower, less reliable, and more costly, while your faction gains strong defensive and logistical superiority across the region.</li></ul>",
-      "chat": ""
-    },
+    "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Ironbound Ascendants (Tier 4)",
+      "custom": "Bad Eden – Crew Type: Ironbound Ascendants (Tier 4)",
       "revision": 2,
       "rules": "2024",
       "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You no longer defend the mountains. The mountains defend you.</em></p><ul><li><strong>Strategic:</strong> Heights become supply: each Mountain, Highland or Canyon hex your Domain holds yields 10 extra Logistics marks a turn.</li></ul>",
+      "chat": ""
     },
     "identifier": "crew-ironbound-ascendants-t4",
     "activities": {},
@@ -81,6 +83,21 @@
           "bbttcc:theme:terrain-sovereignty"
         ]
       }
+    },
+    "fourththing": {
+      "domainIncome": {
+        "perHexType": [
+          {
+            "types": [
+              "mountains",
+              "canyons",
+              "mine"
+            ],
+            "channel": "logistics",
+            "op": 1
+          }
+        ]
+      }
     }
   },
   "_stats": {
@@ -93,12 +110,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986952092,
-    "modifiedTime": 1775063029795,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989169986,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

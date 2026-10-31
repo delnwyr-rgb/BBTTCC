@@ -7,12 +7,12 @@
     "source": {
       "revision": 1,
       "rules": "2024",
-      "custom": "BBTTCC – Archetype: The High Priestess (Seer) (Tier 1)",
+      "custom": "Bad Eden – Archetype: The High Priestess (Seer) (Tier 1)",
       "book": ""
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The High Priestess (Seer)</strong></p><ul><li><strong>Tactical:</strong> You gain proficiency in Insight and Perception. You learn the Guidance Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The High Priestess (Seer)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Insight and Perception.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -79,17 +79,16 @@
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.360",
+        "coreVersion": "14.369",
         "systemId": "fourththing",
         "systemVersion": "0.6.0",
-        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "lastModifiedBy": "FKSQOY3vDSH1mLWk",
         "createdTime": 1777346195315,
-        "modifiedTime": 1777433499499
+        "modifiedTime": 1792989153211
       },
       "start": null,
       "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!kf0PeKxmsieBGMNs.sFn0HqnFAD0Pptum"
+      "folder": null
     }
   ],
   "folder": "UIcw6II5mueD7t5N",
@@ -125,12 +124,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986753400,
-    "modifiedTime": 1777515322288,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989153120,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

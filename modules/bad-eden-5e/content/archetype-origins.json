@@ -1,0 +1,34 @@
+{
+  "_about": "HAND-AUTHORED (origin:5e, 2026-10-30). Bad Eden 5E replaces the SRD Background with the Archetype (Dave 2026-10-30: 'It should be the thing that provides stat bonuses'). Each row becomes a dnd5e `background` item in pack bad-eden-5e.archetypes, so the sheet's background slot shows the Archetype's name and card. It does the 2024 background's job: +2/+1 (or +1/+1/+1) across three abilities, two skills (the Tier 1 skills, through the rubric skill table), one Origin feat, then grants the Archetype's own items from bad-eden-5e.character-archetypes: the base card + Tier 1 at level 0, Tier 2/3/4 at levels 5/11/17. Prose = the base card's quote + lede (pulled at build time). abilities = DRAFT for Dave's review; skills follow RFI canon (Moon's second skill, Arcana, is a 5E pick: RFI gives Lore only).",
+  "_pack": "archetypes",
+  "originFeats": [
+    "Compendium.dnd5e.feats24.Item.phbftAlert000000",
+    "Compendium.dnd5e.feats24.Item.phbftMagicInitia",
+    "Compendium.dnd5e.feats24.Item.phbftSavageAttac",
+    "Compendium.dnd5e.feats24.Item.phbftSkilled0000"
+  ],
+  "backgrounds": [
+    { "slug": "fool",             "name": "The Fool (Catalyst)",          "card": "archetype-fool",             "abilities": ["dex", "con", "cha"], "skills": ["ath", "prc"] },
+    { "slug": "magician",         "name": "The Magician (Scholar)",       "card": "archetype-magician",         "abilities": ["int", "wis", "cha"], "skills": ["arc", "his"] },
+    { "slug": "high-priestess",   "name": "The High Priestess (Seer)",    "card": "archetype-high-priestess",   "abilities": ["wis", "int", "cha"], "skills": ["ins", "prc"] },
+    { "slug": "empress",          "name": "The Empress (Caretaker)",      "card": "archetype-empress",          "abilities": ["wis", "con", "cha"], "skills": ["rel", "per"] },
+    { "slug": "emperor",          "name": "The Emperor (Administrator)",  "card": "archetype-emperor",          "abilities": ["int", "cha", "con"], "skills": ["inv", "per"] },
+    { "slug": "hierophant",       "name": "The Hierophant",               "card": "archetype-hierophant",       "abilities": ["wis", "cha", "int"], "skills": ["rel", "ins"] },
+    { "slug": "lovers",           "name": "The Lovers",                   "card": "archetype-lovers",           "abilities": ["cha", "wis", "dex"], "skills": ["ins", "per"] },
+    { "slug": "chariot",          "name": "The Chariot (Squad Leader)",   "card": "archetype-chariot",          "abilities": ["str", "dex", "cha"], "skills": ["ath", "prc"] },
+    { "slug": "strength",         "name": "Strength (Warlord)",           "card": "archetype-strength",         "abilities": ["str", "con", "cha"], "skills": ["itm", "ath"] },
+    { "slug": "hermit",           "name": "The Hermit (Mystic-Isolator)", "card": "archetype-hermit",           "abilities": ["wis", "int", "dex"], "skills": ["rel", "ste"] },
+    { "slug": "wheel-of-fortune", "name": "Wheel of Fortune",             "card": "archetype-wheel-of-fortune", "abilities": ["dex", "cha", "wis"], "skills": ["prc", "ste"] },
+    { "slug": "justice",          "name": "Justice (Arbiter)",            "card": "archetype-justice",          "abilities": ["wis", "int", "cha"], "skills": ["ins", "inv"] },
+    { "slug": "hanged-man",       "name": "The Hanged Man",               "card": "archetype-hanged-man",       "abilities": ["con", "wis", "int"], "skills": ["ins", "arc"] },
+    { "slug": "death",            "name": "Death (Transformer)",          "card": "archetype-death",            "abilities": ["con", "wis", "cha"], "skills": ["rel", "itm"] },
+    { "slug": "temperance",       "name": "Temperance",                   "card": "archetype-temperance",       "abilities": ["con", "wis", "dex"], "skills": ["rel", "ins"] },
+    { "slug": "devil",            "name": "The Devil (Exploiter)",        "card": "archetype-devil",            "abilities": ["cha", "dex", "int"], "skills": ["ste", "per"] },
+    { "slug": "tower",            "name": "The Tower (Breaker)",          "card": "archetype-tower",            "abilities": ["str", "con", "int"], "skills": ["ath", "inv"] },
+    { "slug": "star",             "name": "The Star (Hopebringer)",       "card": "archetype-star",             "abilities": ["cha", "wis", "con"], "skills": ["prf", "ins"] },
+    { "slug": "moon",             "name": "The Moon (Ancient Blood)",     "card": "archetype-moon",             "abilities": ["wis", "cha", "con"], "skills": ["his", "arc"] },
+    { "slug": "sun",              "name": "The Sun (Beacon)",             "card": "archetype-sun",              "abilities": ["cha", "str", "wis"], "skills": ["prf", "per"] },
+    { "slug": "judgment",         "name": "Judgment (Reckoner)",          "card": "archetype-judgment",         "abilities": ["wis", "cha", "str"], "skills": ["rel", "itm"] },
+    { "slug": "world",            "name": "The World (Integrator)",       "card": "archetype-world",            "abilities": ["int", "wis", "cha"], "skills": ["inv", "ins"] }
+  ]
+}

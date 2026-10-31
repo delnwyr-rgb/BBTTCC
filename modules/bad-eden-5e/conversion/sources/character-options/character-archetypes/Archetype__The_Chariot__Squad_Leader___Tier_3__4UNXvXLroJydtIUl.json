@@ -3,6 +3,18 @@
   "type": "feat",
   "img": "icons/environment/people/cavalry-heavy.webp",
   "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Chariot (Squad Leader) (Tier 3)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 3 (Level 11) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You can use the Help action as a bonus action during combat, provided the target is an allied NPC or squadmate.</li>\n<li><strong>Strategic:</strong> Once per Siege or Bunker operation, you grant +2 to one Violence or Intrigue Domain roll (the card fires it).</li>\n</ul>",
+      "chat": ""
+    },
     "activities": {},
     "uses": {
       "spent": 0,
@@ -10,17 +22,7 @@
       "max": ""
     },
     "advancement": {},
-    "description": {
-      "value": "<p><strong>Tier 3 (Level 11) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You can use the Help action as a bonus action during combat, provided the target is an allied NPC or squadmate.</li>\n<li><strong>Strategic:</strong> Once per Siege or Bunker operation, you may grant a +2 bonus to one Opposed Strategic Roll involving Violence or Intrigue.</li>\n</ul>",
-      "chat": ""
-    },
     "identifier": "archetype-chariot-t3",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: The Chariot (Squad Leader) (Tier 3)",
-      "book": ""
-    },
     "crewed": false,
     "enchant": {},
     "prerequisites": {
@@ -72,12 +74,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986677898,
-    "modifiedTime": 1775063005486,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989161393,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

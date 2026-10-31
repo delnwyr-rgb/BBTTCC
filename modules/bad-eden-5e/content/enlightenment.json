@@ -1,10 +1,10 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/enlightenment.json. The Enlightenment Levels (bbttcc-character-options.enlightenment-levels) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/enlightenment.json. The Enlightenment Levels (bbttcc-character-options.enlightenment-levels) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.",
   "_pack": "enlightenment-levels",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.8.1",
-    "at": "2026-10-14",
+    "rubric": "1.9.0",
+    "at": "2026-10-31",
     "overridesApplied": 0
   },
   "items": [
@@ -16,7 +16,7 @@
       "folder": "Enlightenment Levels",
       "system": {
         "description": {
-          "value": "Questioning reality. +1 Dexterity, +1 Soft Power OPs",
+          "value": "Questioning reality. +10 Intrigue and +10 Soft Power marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -46,7 +46,7 @@
             "id": "Jrpm9oiTdKnyLSZj",
             "pack": "enlightenment-levels",
             "identifier": "enlightenment-awakening",
-            "hash": "baac398f4519"
+            "hash": "db87199e1061"
           }
         }
       }
@@ -59,7 +59,7 @@
       "folder": "Enlightenment Levels",
       "system": {
         "description": {
-          "value": "Universal consciousness. +3 Diplomacy, +2 Soft Power OPs",
+          "value": "Universal consciousness. +30 Diplomacy and +20 Soft Power marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -89,7 +89,50 @@
             "id": "9wbLUswj3671cxJo",
             "pack": "enlightenment-levels",
             "identifier": "enlightenment-enlightened",
-            "hash": "3993c27f2e65"
+            "hash": "72d19af94711"
+          }
+        }
+      }
+    },
+    {
+      "slug": "enlightenment-qliphothic",
+      "name": "Enlightenment: Qliphothic",
+      "type": "feat",
+      "img": "icons/magic/unholy/hand-fire-skeleton-pink.webp",
+      "folder": "Enlightenment Levels",
+      "system": {
+        "description": {
+          "value": "Dark enlightenment. The Shells answer before the Tree does. +20 Violence and +20 Intrigue marks to your Domain each turn.",
+          "chat": ""
+        },
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "requirements": "",
+        "properties": [],
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "identifier": "enlightenment-qliphothic"
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "enlightenment-levels",
+          "bonuses": {
+            "violence": 2,
+            "intrigue": 2
+          }
+        },
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "RhOtYw4aqQrDBdak",
+            "pack": "enlightenment-levels",
+            "identifier": "enlightenment-qliphothic",
+            "hash": "0c8372bb5fd7"
           }
         }
       }
@@ -102,7 +145,7 @@
       "folder": "Enlightenment Levels",
       "system": {
         "description": {
-          "value": "Actively pursuing knowledge. +2 Dexterity, +1 Soft Power OPs",
+          "value": "Actively pursuing knowledge. +20 Intrigue and +10 Soft Power marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -132,7 +175,7 @@
             "id": "J6zvvges8ZjUF5ip",
             "pack": "enlightenment-levels",
             "identifier": "enlightenment-seeking",
-            "hash": "97489662137d"
+            "hash": "b6f31e2b58c2"
           }
         }
       }
@@ -145,7 +188,7 @@
       "folder": "Enlightenment Levels",
       "system": {
         "description": {
-          "value": "Material focused. +1 Economy OPs",
+          "value": "Material focused. +10 Economy marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -174,7 +217,7 @@
             "id": "U2AmJc18OQtQYAKB",
             "pack": "enlightenment-levels",
             "identifier": "enlightenment-unawakened",
-            "hash": "fccdb531f9d4"
+            "hash": "6ac3c74816a6"
           }
         }
       }
@@ -187,7 +230,7 @@
       "folder": "Enlightenment Levels",
       "system": {
         "description": {
-          "value": "Gained insight. +2 Soft Power, +1 Diplomacy OPs",
+          "value": "Gained insight. +20 Soft Power and +10 Diplomacy marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -217,7 +260,7 @@
             "id": "HWk9XvzjrJpxqAKF",
             "pack": "enlightenment-levels",
             "identifier": "enlightenment-understanding",
-            "hash": "54323aef0d38"
+            "hash": "cc25177537e3"
           }
         }
       }
@@ -230,7 +273,7 @@
       "folder": "Enlightenment Levels",
       "system": {
         "description": {
-          "value": "Deep integration. +2 Diplomacy, +1 Soft Power OPs",
+          "value": "Deep integration. +20 Diplomacy and +10 Soft Power marks to your Domain each turn.",
           "chat": ""
         },
         "type": {
@@ -260,7 +303,7 @@
             "id": "dAJYWCfLPJ6H83UB",
             "pack": "enlightenment-levels",
             "identifier": "enlightenment-wisdom",
-            "hash": "175b20a5b772"
+            "hash": "194397c44600"
           }
         }
       }

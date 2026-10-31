@@ -7,12 +7,12 @@
     "source": {
       "revision": 1,
       "rules": "2024",
-      "custom": "BBTTCC – Archetype: Justice (Arbiter) (Tier 3)",
+      "custom": "Bad Eden – Archetype: Justice (Arbiter) (Tier 3)",
       "book": ""
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Justice (Arbiter)</strong></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on saving throws against being charmed or frightened by creatures or effects attempting coercion, false authority, or magical compulsion.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Justice (Arbiter)</strong></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on checks against being charmed or frightened by creatures or effects attempting coercion, false authority, or magical compulsion.</li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -60,7 +60,17 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "rerolls": [
+        {
+          "mode": "reroll-lowest",
+          "context": "defense",
+          "vs": "charm or fear from coercion, false authority, or compulsion",
+          "note": "Justice T3"
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": null,
@@ -72,12 +82,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986332024,
-    "modifiedTime": 1777515322091,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989163175,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

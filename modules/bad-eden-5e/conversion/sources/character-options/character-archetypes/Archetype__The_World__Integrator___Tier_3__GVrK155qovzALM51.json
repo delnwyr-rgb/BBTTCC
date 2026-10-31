@@ -1,18 +1,13 @@
 {
   "name": "Archetype: The World (Integrator) (Tier 3)",
   "type": "feat",
-  "img": "icons/environment/cosmos/astronomy-planetary-orbits.webp",
+  "img": "art/bbttcc/asli-archetypes/archetype_world.webp",
   "system": {
     "category": "technique",
-    "source": {
-      "revision": 1,
-      "rules": "2024",
-      "custom": "BBTTCC – Archetype: The World (Integrator) (Tier 3)",
-      "book": ""
-    },
+    "source": "Bad Eden – Archetype: The World (Integrator) (Tier 3) (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The World (Integrator)</strong></p><ul><li><strong>Tactical:</strong> When you make an Intelligence or Soul check related to systems mapping, coordination, cross-domain analysis, or whole-pattern strategy, you can treat any d20 roll of 9 or lower as a 10.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Tier 3 (Level 11) — The World (Integrator)</strong></p><ul><li><p><strong>Tactical:</strong> When you make an Mind or Soul check related to systems mapping, coordination, cross-domain analysis, or whole-pattern strategy, you reroll the lowest die.</p></li></ul>",
       "chat": ""
     },
     "activities": {},
@@ -59,7 +54,18 @@
         ]
       }
     },
-    "dnd5e": {}
+    "dnd5e": {},
+    "fourththing": {
+      "rerolls": [
+        {
+          "mode": "reroll-lowest",
+          "context": "check",
+          "attribute": "mind",
+          "vs": "systems mapping, coordination, cross-domain analysis, or whole-pattern strategy",
+          "note": "The World T3"
+        }
+      ]
+    }
   },
   "_stats": {
     "compendiumSource": "Item.DZMUAjCP14TwoEv6",
@@ -71,12 +77,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "14.360",
+    "coreVersion": "14.369",
     "systemId": "fourththing",
-    "systemVersion": "0.6.0",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986816349,
-    "modifiedTime": 1777515322165,
-    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+    "modifiedTime": 1792989164476,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,

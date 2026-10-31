@@ -1,10 +1,10 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.8.1) — do not hand-edit; put fixes in content/overrides/doctrines.json. The faction doctrines as dnd5e feats (flags.bbttcc kind/key carried verbatim for the factions module).",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/doctrines.json. The faction doctrines as dnd5e feats (flags.bbttcc kind/key carried verbatim for the factions module).",
   "_pack": "doctrines",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.8.1",
-    "at": "2026-10-28",
+    "rubric": "1.9.0",
+    "at": "2026-10-31",
     "overridesApplied": 0
   },
   "items": [
@@ -211,7 +211,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Apocalyptic Weapon Test</b></p><p>The target hex is blasted: Contaminated + Radiation Zone, darkness pips +3, Loyalty −3, integration reset, contested. Your Darkness +3, its holder's +1, your stewards +1 each.</p><p><b>Cost:</b> Strength 60 · Dexterity 30 marks</p>",
+          "value": "<p><b>Apocalyptic Weapon Test</b></p><p>The target hex is blasted: Contaminated + Radiation Zone, darkness pips +3, Loyalty −3, integration reset, contested. Your Darkness +3, its holder's +1, your stewards +1 each.</p><p><b>Cost:</b> Violence 60 · Intrigue 30 marks</p>",
           "chat": ""
         },
         "type": {
@@ -259,7 +259,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Arcane Attribution</strong></p><p>The Magician (Scholar). Target any hex: it is revealed, a full dossier is whispered to you, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower.</p><p><em>Cost: Dexterity 8 · Soft Power 8 marks.</em></p>",
+          "value": "<p><strong>Arcane Attribution</strong></p><p>The Magician (Scholar). Target any hex: it is revealed, a full dossier is whispered to you, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower.</p><p><em>Cost: Intrigue 8 · Soft Power 8 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -365,7 +365,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Auto-Recon Sweep</b></p><p>Deploy drones/recorders to sweep nearby territory; gain intel and reduce risk on the next leg/turn (GM adjudicates).</p><p><b>Cost:</b> Dexterity 8 marks</p>",
+          "value": "<p><b>Auto-Recon Sweep</b></p><p>Deploy drones/recorders to sweep nearby territory; gain intel and reduce risk on the next leg/turn (GM adjudicates).</p><p><b>Cost:</b> Intrigue 8 marks</p>",
           "chat": ""
         },
         "type": {
@@ -466,7 +466,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Begin Siege</h3><p>Establish a multi-turn siege on a target hex. Layers are drawn from the hex's structureActorIds (or GM override at planning time). Commits a Supply Buffer in marks that ticks down per turn from the derived Siege Cost (terrain + supply-chain length + harassment, less Bulwark discount). Resolves over multiple campaign turns until a layer is breached, defender surrenders, attacker withdraws, or Buffer is exhausted. See bbttcc-raid/SIEGE_RAID_TYPE_SPEC.md.</p><p><strong>Cost:</strong> Strength 23 · Logistics 15 · Economy 8 marks</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Begin Siege</h3><p>Establish a multi-turn siege on a target hex. Layers are drawn from the hex's structureActorIds (or GM override at planning time). Commits a Supply Buffer in marks that ticks down per turn from the derived Siege Cost (terrain + supply-chain length + harassment, less Bulwark discount). Resolves over multiple campaign turns until a layer is breached, defender surrenders, attacker withdraws, or Buffer is exhausted. See bbttcc-raid/SIEGE_RAID_TYPE_SPEC.md.</p><p><strong>Cost:</strong> Violence 23 · Logistics 15 · Economy 8 marks</p></div>",
           "chat": ""
         },
         "type": {
@@ -558,7 +558,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Boiling Oil</strong></p><p>Siege, defender. Pour it from the wall: the besiegers' Buffer −2 marks; your garrison's Loyalty +1. In the clash: 12 marks from the garrison's own bank.</p><p><em>Queued on the turn: Strength 15 · Logistics 10 marks. Fired in the clash: 12 marks from the garrison's bank.</em></p>",
+          "value": "<p><strong>Boiling Oil</strong></p><p>Siege, defender. Pour it from the wall: the besiegers' Buffer −2 marks; your garrison's Loyalty +1. In the clash: 12 marks from the garrison's own bank.</p><p><em>Queued on the turn: Violence 15 · Logistics 10 marks. Fired in the clash: 12 marks from the garrison's bank.</em></p>",
           "chat": ""
         },
         "type": {
@@ -601,7 +601,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Bombard</strong></p><p>Siege, attacker. Batter the current wall layer for 2d10+15 concussive structure damage; when a layer is razed, the next one opens. In the clash: 15 marks off the Buffer.</p><p><em>Queued on the turn: Strength 20 · Logistics 20 marks. Fired in the clash: 15 marks from the siege Buffer.</em></p>",
+          "value": "<p><strong>Bombard</strong></p><p>Siege, attacker. Batter the current wall layer for 2d10+15 concussive structure damage; when a layer is razed, the next one opens. In the clash: 15 marks off the Buffer.</p><p><em>Queued on the turn: Violence 20 · Logistics 20 marks. Fired in the clash: 15 marks from the siege Buffer.</em></p>",
           "chat": ""
         },
         "type": {
@@ -644,7 +644,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Border Patrol</b></p><p>Patrols on the roads — Domain Loyalty +2.</p><p><b>Cost:</b> Strength 8 · Nonlethal 8 marks</p>",
+          "value": "<p><b>Border Patrol</b></p><p>Patrols on the roads — Domain Loyalty +2.</p><p><b>Cost:</b> Violence 8 · Nonlethal 8 marks</p>",
           "chat": ""
         },
         "type": {
@@ -692,7 +692,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Brace the Breach</strong></p><p>Siege, defender; needs a Bulwark on your roster. Brace the breach and the line holds: your Anytime budget +2 and Loyalty +1. In the clash: 15 marks from the garrison's bank.</p><p><em>Queued on the turn: Strength 15 · Logistics 10 marks. Fired in the clash: 15 marks from the garrison's bank.</em></p>",
+          "value": "<p><strong>Brace the Breach</strong></p><p>Siege, defender; needs a Bulwark on your roster. Brace the breach and the line holds: your Anytime budget +2 and Loyalty +1. In the clash: 15 marks from the garrison's bank.</p><p><em>Queued on the turn: Violence 15 · Logistics 10 marks. Fired in the clash: 15 marks from the garrison's bank.</em></p>",
           "chat": ""
         },
         "type": {
@@ -1036,7 +1036,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Defends Wall</h3><p>A named defender Champion takes the wall: locked Active for 2 turns and +1 Anytime budget. Optional note {\"championId\":\"...\"} picks the champion; otherwise the first eligible. Target the besieged hex.</p><p><strong>Cost:</strong> Strength 8 marks</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Defends Wall</h3><p>A named defender Champion takes the wall: locked Active for 2 turns and +1 Anytime budget. Optional note {\"championId\":\"...\"} picks the champion; otherwise the first eligible. Target the besieged hex.</p><p><strong>Cost:</strong> Violence 8 marks</p></div>",
           "chat": ""
         },
         "type": {
@@ -1344,7 +1344,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Cite the Clause</strong></p><p>Siege, attacker; needs a Cosmic Linguist on your roster. Cite a binding clause: the defenders' Renewal pool −1. In the clash: 15 marks off the Buffer.</p><p><em>Queued on the turn: Dexterity 15 · Culture 10 marks. Fired in the clash: 15 marks from the garrison's bank.</em></p>",
+          "value": "<p><strong>Cite the Clause</strong></p><p>Siege, attacker; needs a Cosmic Linguist on your roster. Cite a binding clause: the defenders' Renewal pool −1. In the clash: 15 marks off the Buffer.</p><p><em>Queued on the turn: Intrigue 15 · Culture 10 marks. Fired in the clash: 15 marks from the garrison's bank.</em></p>",
           "chat": ""
         },
         "type": {
@@ -1387,7 +1387,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Civic Audit</b></p><p>Detect corruption; restore Loyalty +1.</p><p><b>Cost:</b> Dexterity 8 · Economy 8 marks</p>",
+          "value": "<p><b>Civic Audit</b></p><p>Detect corruption; restore Loyalty +1.</p><p><b>Cost:</b> Intrigue 8 · Economy 8 marks</p>",
           "chat": ""
         },
         "type": {
@@ -1674,7 +1674,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Counter-Interdict</h3><p>Clear an enemy interdiction from one of your siege's supply-path hexes. Restores the stripped 'Supply Line' modifier and lowers this turn's harassment. Played by the besieger or a supporter. Target the interdicted supply-road hex.</p><p><strong>Cost:</strong> Strength 8 · Dexterity 8 marks</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Counter-Interdict</h3><p>Clear an enemy interdiction from one of your siege's supply-path hexes. Restores the stripped 'Supply Line' modifier and lowers this turn's harassment. Played by the besieger or a supporter. Target the interdicted supply-road hex.</p><p><strong>Cost:</strong> Violence 8 · Intrigue 8 marks</p></div>",
           "chat": ""
         },
         "type": {
@@ -2144,7 +2144,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Cut the Bridge</b></p><p>Bring down a standing bridge: nobody crosses there until its holder plans Build Bridge again. Cutting your own bridge closes it to everyone, you included.</p><p><b>Cost:</b> Strength 8 · Dexterity 8 marks</p>",
+          "value": "<p><b>Cut the Bridge</b></p><p>Bring down a standing bridge: nobody crosses there until its holder plans Build Bridge again. Cutting your own bridge closes it to everyone, you included.</p><p><b>Cost:</b> Violence 8 · Intrigue 8 marks</p>",
           "chat": ""
         },
         "type": {
@@ -2241,7 +2241,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Deep Cover Network</strong></p><p>Covert Ops Cell. Target a hex held by a rival: an agent goes in, and at the next turn that Domain's marks banks and planned activities are whispered to you.</p><p><em>Cost: Dexterity 15 marks.</em></p>",
+          "value": "<p><strong>Deep Cover Network</strong></p><p>Covert Ops Cell. Target a hex held by a rival: an agent goes in, and at the next turn that Domain's marks banks and planned activities are whispered to you.</p><p><em>Cost: Intrigue 15 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -2439,7 +2439,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Demand Surrender</h3><p>Attacker issues an ultimatum. The defender responds: yield (won_surrender) · parley (besieger Buffer +10) · refuse (Loyalty −1 on the besieged hex) — via siege.resolveSurrender. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 15 · Strength 8 · Soft Power 8 marks</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Demand Surrender</h3><p>Attacker issues an ultimatum. The defender responds: yield (won_surrender) · parley (besieger Buffer +10) · refuse (Loyalty −1 on the besieged hex) — via siege.resolveSurrender. Target the besieged hex.</p><p><strong>Cost:</strong> Diplomacy 15 · Violence 8 · Soft Power 8 marks</p></div>",
           "chat": ""
         },
         "type": {
@@ -2816,7 +2816,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Doctrine Force Projection</strong></p><p>Strength (Warlord). Domain-wide: your next Battle or Heist rolls initiative rerolling the lowest die.</p><p><em>Cost: Strength 8 · Logistics 8 marks.</em></p>",
+          "value": "<p><strong>Doctrine Force Projection</strong></p><p>Strength (Warlord). Domain-wide: your next Battle or Heist rolls initiative rerolling the lowest die.</p><p><em>Cost: Violence 8 · Logistics 8 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -2859,7 +2859,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Doctrine Of Clarity</strong></p><p>Gnostic. Domain-wide: your Domain's Darkness −1.</p><p><em>Cost: Faith 10 · Dexterity 10 marks.</em></p>",
+          "value": "<p><strong>Doctrine Of Clarity</strong></p><p>Gnostic. Domain-wide: your Domain's Darkness −1.</p><p><em>Cost: Faith 10 · Intrigue 10 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -3107,7 +3107,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p>You don't kill the boss. You make them SMALLER. Permanently. That's so much meaner than killing, and I respect it.</p><p><b>On success the enemy Domain's Strength cap drops 30 marks, permanently (applied at commit).</b></p>",
+          "value": "<p>You don't kill the boss. You make them SMALLER. Permanently. That's so much meaner than killing, and I respect it.</p><p><b>On success the enemy Domain's Violence cap drops 30 marks, permanently (applied at commit).</b></p>",
           "chat": ""
         },
         "type": {
@@ -3364,7 +3364,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Escalade</strong></p><p>Siege, attacker. Ladders up and swarm: 1d10+10 bludgeoning structure damage to the current wall layer. In the clash: 18 marks off the Buffer.</p><p><em>Queued on the turn: Strength 25 · Logistics 10 marks. Fired in the clash: 18 marks from the siege Buffer.</em></p>",
+          "value": "<p><strong>Escalade</strong></p><p>Siege, attacker. Ladders up and swarm: 1d10+10 bludgeoning structure damage to the current wall layer. In the clash: 18 marks off the Buffer.</p><p><em>Queued on the turn: Violence 25 · Logistics 10 marks. Fired in the clash: 18 marks from the siege Buffer.</em></p>",
           "chat": ""
         },
         "type": {
@@ -3407,7 +3407,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Escort Supply Line</h3><p>Screen your own siege's supply convoy. Adds one escort pip; each pip cancels one enemy interdiction at the next strategic tick and deters defender sorties (escort-protected hexes inflict heavier sortie casualties on the defender). Played by the besieger or a supporter. Target the siege's supply-road hex or the besieged hex.</p><p><strong>Cost:</strong> Strength 8 · Logistics 8 marks</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Escort Supply Line</h3><p>Screen your own siege's supply convoy. Adds one escort pip; each pip cancels one enemy interdiction at the next strategic tick and deters defender sorties (escort-protected hexes inflict heavier sortie casualties on the defender). Played by the besieger or a supporter. Target the siege's supply-road hex or the besieged hex.</p><p><strong>Cost:</strong> Violence 8 · Logistics 8 marks</p></div>",
           "chat": ""
         },
         "type": {
@@ -3495,7 +3495,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Siege Camp</h3><p>Stamp the 'Beached Camp' modifier on a target hex (must be owned, neutral, or claimable by the attacker). Hex qualifies as a temporary siege depot for the duration of the attacker's active siege; auto-clears on siege resolution. Used for naval/wilderness sieges where no permanent depot is in range.</p><p><strong>Cost:</strong> Strength 8 · Logistics 15 marks</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Siege Camp</h3><p>Stamp the 'Beached Camp' modifier on a target hex (must be owned, neutral, or claimable by the attacker). Hex qualifies as a temporary siege depot for the duration of the attacker's active siege; auto-clears on siege resolution. Used for naval/wilderness sieges where no permanent depot is in range.</p><p><strong>Cost:</strong> Violence 8 · Logistics 15 marks</p></div>",
           "chat": ""
         },
         "type": {
@@ -4172,7 +4172,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Fortify Hex</strong></p><p>Target one hex. At the turn: it gains the Fortified tag and Defense +2.</p><p><em>Cost: Economy 15 · Logistics 15 · Strength 8 marks.</em></p>",
+          "value": "<p><strong>Fortify Hex</strong></p><p>Target one hex. At the turn: it gains the Fortified tag and Defense +2.</p><p><em>Cost: Economy 15 · Logistics 15 · Violence 8 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -4333,7 +4333,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Found Fortress</b></p><p>Found a new fortress site at a developed settlement.</p><p><b>Cost:</b> Strength 15 · Logistics 15 · Economy 8 marks</p>",
+          "value": "<p><b>Found Fortress</b></p><p>Found a new fortress site at a developed settlement.</p><p><b>Cost:</b> Violence 15 · Logistics 15 · Economy 8 marks</p>",
           "chat": ""
         },
         "type": {
@@ -4477,7 +4477,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Found Research Site</b></p><p>Found a new research site at a developed settlement.</p><p><b>Cost:</b> Dexterity 15 · Soft Power 15 · Economy 8 marks</p>",
+          "value": "<p><b>Found Research Site</b></p><p>Found a new research site at a developed settlement.</p><p><b>Cost:</b> Intrigue 15 · Soft Power 15 · Economy 8 marks</p>",
           "chat": ""
         },
         "type": {
@@ -4573,7 +4573,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Gather Intel</strong></p><p>Target any hex. It is revealed now, a dossier (holder, defense, loyalty, integration, modifiers, alignment) is whispered to your Domain, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower.</p><p><em>Cost: Dexterity 15 marks.</em></p>",
+          "value": "<p><strong>Gather Intel</strong></p><p>Target any hex. It is revealed now, a dossier (holder, defense, loyalty, integration, modifiers, alignment) is whispered to your Domain, it carries the Intel tag next turn, and your next Battle or Heist DC is 2 lower.</p><p><em>Cost: Intrigue 15 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -5305,7 +5305,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Inquisition Mandate</b></p><p>Expose Qliphothic assets; Darkness −1.</p><p><b>Cost:</b> Faith 30 · Dexterity 15 marks</p>",
+          "value": "<p><b>Inquisition Mandate</b></p><p>Expose Qliphothic assets; Darkness −1.</p><p><b>Cost:</b> Faith 30 · Intrigue 15 marks</p>",
           "chat": ""
         },
         "type": {
@@ -5396,7 +5396,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Interdict Supply Line</h3><p>Cut a supply-path hex feeding an enemy siege. Strips the hex's 'Supply Line' modifier (severs the route until restored) and lands an immediate harassment pulse: the besieger's Supply Buffer is shaved and per-turn attrition rises. Any Domain except the besieger may interdict. Target the supply-road hex, not the besieged hex.</p><p><strong>Cost:</strong> Dexterity 11 · Strength 8 marks</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Interdict Supply Line</h3><p>Cut a supply-path hex feeding an enemy siege. Strips the hex's 'Supply Line' modifier (severs the route until restored) and lands an immediate harassment pulse: the besieger's Supply Buffer is shaved and per-turn attrition rises. Any Domain except the besieger may interdict. Target the supply-road hex, not the besieged hex.</p><p><strong>Cost:</strong> Intrigue 11 · Violence 8 marks</p></div>",
           "chat": ""
         },
         "type": {
@@ -5436,7 +5436,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Judgment of Light</b></p><p>A rival's hex is purified without being taken: taints and hostile tags removed, darkness pips 0, Purified.</p><p><b>Cost:</b> Faith 45 · Strength 45 marks</p>",
+          "value": "<p><b>Judgment of Light</b></p><p>A rival's hex is purified without being taken: taints and hostile tags removed, darkness pips 0, Purified.</p><p><b>Cost:</b> Faith 45 · Violence 45 marks</p>",
           "chat": ""
         },
         "type": {
@@ -5907,7 +5907,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Mass Mobilization</strong></p><p>Domain-wide. Your your next Battle or Heist rolls initiative rerolling the lowest die and gets one free maneuver.</p><p><em>Cost: Strength 30 · Logistics 15 · Economy 8 marks.</em></p>",
+          "value": "<p><strong>Mass Mobilization</strong></p><p>Domain-wide. Your your next Battle or Heist rolls initiative rerolling the lowest die and gets one free maneuver.</p><p><em>Cost: Violence 30 · Logistics 15 · Economy 8 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -5950,7 +5950,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Mercy's Edge</strong></p><p>Siege, attacker; needs an Aurablade on your roster. A merciful edge staggers the garrison without a death: the defender's Anytime budget −1. In the clash: 15 marks off the Buffer.</p><p><em>Queued on the turn: Strength 15 · Soft Power 10 marks. Fired in the clash: 15 marks from the garrison's bank.</em></p>",
+          "value": "<p><strong>Mercy's Edge</strong></p><p>Siege, attacker; needs an Aurablade on your roster. A merciful edge staggers the garrison without a death: the defender's Anytime budget −1. In the clash: 15 marks off the Buffer.</p><p><em>Queued on the turn: Violence 15 · Soft Power 10 marks. Fired in the clash: 15 marks from the garrison's bank.</em></p>",
           "chat": ""
         },
         "type": {
@@ -6137,7 +6137,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Oblivion Protocol</b></p><p>Collapse Qliphothic gate; resets Darkness Track to 0.</p><p><b>Cost:</b> Dexterity 60 · Faith 60 marks</p>",
+          "value": "<p><b>Oblivion Protocol</b></p><p>Collapse Qliphothic gate; resets Darkness Track to 0.</p><p><b>Cost:</b> Intrigue 60 · Faith 60 marks</p>",
           "chat": ""
         },
         "type": {
@@ -6185,7 +6185,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Open the Postern</strong></p><p>Siege, attacker; needs a Shadow Courier on your roster. Slip the postern and breach from inside: 3d10+12 bludgeoning structure damage to the current layer. In the clash: 22 marks off the Buffer.</p><p><em>Queued on the turn: Dexterity 20 · Strength 10 marks. Fired in the clash: 22 marks from the siege Buffer.</em></p>",
+          "value": "<p><strong>Open the Postern</strong></p><p>Siege, attacker; needs a Shadow Courier on your roster. Slip the postern and breach from inside: 3d10+12 bludgeoning structure damage to the current layer. In the clash: 22 marks off the Buffer.</p><p><em>Queued on the turn: Intrigue 20 · Violence 10 marks. Fired in the clash: 22 marks from the siege Buffer.</em></p>",
           "chat": ""
         },
         "type": {
@@ -6228,7 +6228,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Operational Cohesion</strong></p><p>The Chariot (Squad Leader). Domain-wide: your next Battle or Heist gets one free maneuver.</p><p><em>Cost: Strength 8 · Logistics 8 marks.</em></p>",
+          "value": "<p><strong>Operational Cohesion</strong></p><p>The Chariot (Squad Leader). Domain-wide: your next Battle or Heist gets one free maneuver.</p><p><em>Cost: Violence 8 · Logistics 8 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -6331,7 +6331,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Parley Council</b></p><p>Open a Parley with the target hex's holder; gain intel on their plans.</p><p><b>Cost:</b> Dexterity 23 · Diplomacy 15 marks</p>",
+          "value": "<p><b>Parley Council</b></p><p>Open a Parley with the target hex's holder; gain intel on their plans.</p><p><b>Cost:</b> Intrigue 23 · Diplomacy 15 marks</p>",
           "chat": ""
         },
         "type": {
@@ -6431,7 +6431,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Patrol Routes</strong></p><p>Target one hex you hold. At the turn: it gains the Patrolled tag, Defense +1 and Loyalty +1; if it is already Fortified there is a 40% chance it also becomes Well-Maintained.</p><p><em>Cost: Logistics 15 · Strength 8 marks.</em></p>",
+          "value": "<p><strong>Patrol Routes</strong></p><p>Target one hex you hold. At the turn: it gains the Patrolled tag, Defense +1 and Loyalty +1; if it is already Fortified there is a 40% chance it also becomes Well-Maintained.</p><p><em>Cost: Logistics 15 · Violence 8 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -6592,7 +6592,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Phantom Host</strong></p><p>Siege, defender; needs a Dreamwalker on your roster. A phantom host walks the siege lines: the besiegers' Buffer −2 marks; your Loyalty +1. In the clash: 15 marks from the garrison's bank.</p><p><em>Queued on the turn: Dexterity 15 · Faith 10 marks. Fired in the clash: 15 marks from the garrison's bank.</em></p>",
+          "value": "<p><strong>Phantom Host</strong></p><p>Siege, defender; needs a Dreamwalker on your roster. A phantom host walks the siege lines: the besiegers' Buffer −2 marks; your Loyalty +1. In the clash: 15 marks from the garrison's bank.</p><p><em>Queued on the turn: Intrigue 15 · Faith 10 marks. Fired in the clash: 15 marks from the garrison's bank.</em></p>",
           "chat": ""
         },
         "type": {
@@ -7102,7 +7102,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p><strong>Prepared Insight</strong></p><p>The Magician (Scholar), pre-roll. The opposing side rolls rolling 3d10 and keeping the lowest 2 this round.</p><p><em>Cost: Dexterity 8 marks.</em></p>",
+          "value": "<p><strong>Prepared Insight</strong></p><p>The Magician (Scholar), pre-roll. The opposing side rolls rolling 3d10 and keeping the lowest 2 this round.</p><p><em>Cost: Intrigue 8 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -7247,7 +7247,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Psych-Ops Broadcast</b></p><p>−2 Loyalty to enemy Hex.</p><p><b>Cost:</b> Soft Power 23 · Dexterity 23 marks</p>",
+          "value": "<p><b>Psych-Ops Broadcast</b></p><p>−2 Loyalty to enemy Hex.</p><p><b>Cost:</b> Soft Power 23 · Intrigue 23 marks</p>",
           "chat": ""
         },
         "type": {
@@ -7823,7 +7823,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Ram the Gate</strong></p><p>Siege, attacker. Drive the ram home: 2d10+12 concussive structure damage to the current layer, and the garrison reels (defender Anytime budget −1). In the clash: 20 marks off the Buffer.</p><p><em>Queued on the turn: Strength 30 marks. Fired in the clash: 20 marks from the garrison's bank.</em></p>",
+          "value": "<p><strong>Ram the Gate</strong></p><p>Siege, attacker. Drive the ram home: 2d10+12 concussive structure damage to the current layer, and the garrison reels (defender Anytime budget −1). In the clash: 20 marks off the Buffer.</p><p><em>Queued on the turn: Violence 30 marks. Fired in the clash: 20 marks from the garrison's bank.</em></p>",
           "chat": ""
         },
         "type": {
@@ -8022,7 +8022,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Read the Weak Point</strong></p><p>Siege, attacker; needs a Wyrdlens Adept on your roster. Strike the revealed weak point: 2d10+14 bludgeoning structure damage to the current wall layer. In the clash: 18 marks off the Buffer.</p><p><em>Queued on the turn: Dexterity 15 · Strength 10 marks. Fired in the clash: 18 marks from the siege Buffer.</em></p>",
+          "value": "<p><strong>Read the Weak Point</strong></p><p>Siege, attacker; needs a Wyrdlens Adept on your roster. Strike the revealed weak point: 2d10+14 bludgeoning structure damage to the current wall layer. In the clash: 18 marks off the Buffer.</p><p><em>Queued on the turn: Intrigue 15 · Violence 10 marks. Fired in the clash: 18 marks from the siege Buffer.</em></p>",
           "chat": ""
         },
         "type": {
@@ -8118,7 +8118,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Recon Sweep</b></p><p>Reveal alignment of 1 adjacent Hex.</p><p><b>Cost:</b> Dexterity 8 marks</p>",
+          "value": "<p><b>Recon Sweep</b></p><p>Reveal alignment of 1 adjacent Hex.</p><p><b>Cost:</b> Intrigue 8 marks</p>",
           "chat": ""
         },
         "type": {
@@ -8209,7 +8209,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Reinforce Garrison</h3><p>Defender stiffens the defence: +1 Anytime budget per round AND +1 Renewal pool for the duration. Played by the besieged Domain; target the besieged hex.</p><p><strong>Cost:</strong> Strength 11 · Logistics 8 marks</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Reinforce Garrison</h3><p>Defender stiffens the defence: +1 Anytime budget per round AND +1 Renewal pool for the duration. Played by the besieged Domain; target the besieged hex.</p><p><strong>Cost:</strong> Violence 11 · Logistics 8 marks</p></div>",
           "chat": ""
         },
         "type": {
@@ -8351,7 +8351,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Resource Expropriation</b></p><p>Takes up to 20 marks Economy from the target hex's holder into your bank; hex Loyalty −1; your Darkness +1.</p><p><b>Cost:</b> Economy 23 · Strength 15 marks</p>",
+          "value": "<p><b>Resource Expropriation</b></p><p>Takes up to 20 marks Economy from the target hex's holder into your bank; hex Loyalty −1; your Darkness +1.</p><p><b>Cost:</b> Economy 23 · Violence 15 marks</p>",
           "chat": ""
         },
         "type": {
@@ -8399,7 +8399,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Ritual Binding</strong></p><p>Goetic Summoner. Target a hex with a dormant spark seated on it: the spark is integrated (a Lamp for the Threshold) and your Reach is debited. Needs a GM seat.</p><p><em>Cost: Dexterity 15 · Faith 8 marks.</em></p>",
+          "value": "<p><strong>Ritual Binding</strong></p><p>Goetic Summoner. Target a hex with a dormant spark seated on it: the spark is integrated (a Lamp for the Threshold) and your Reach is debited. Needs a GM seat.</p><p><em>Cost: Intrigue 15 · Faith 8 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -8613,7 +8613,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Sapper's Undermine</strong></p><p>Siege, attacker. Collapse a tunnel under the current wall layer: 3d10+12 concussive structure damage. In the clash: 25 marks off the Buffer.</p><p><em>Queued on the turn: Strength 20 · Logistics 30 marks. Fired in the clash: 25 marks from the siege Buffer.</em></p>",
+          "value": "<p><strong>Sapper's Undermine</strong></p><p>Siege, attacker. Collapse a tunnel under the current wall layer: 3d10+12 concussive structure damage. In the clash: 25 marks off the Buffer.</p><p><em>Queued on the turn: Violence 20 · Logistics 30 marks. Fired in the clash: 25 marks from the siege Buffer.</em></p>",
           "chat": ""
         },
         "type": {
@@ -8656,7 +8656,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Secure Perimeter</strong></p><p>Target one hex. At the turn: it gains the Strategic Position tag and Defense +1.</p><p><em>Cost: Logistics 15 · Strength 8 marks.</em></p>",
+          "value": "<p><strong>Secure Perimeter</strong></p><p>Target one hex. At the turn: it gains the Strategic Position tag and Defense +1.</p><p><em>Cost: Logistics 15 · Violence 8 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -8807,7 +8807,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p><strong>Shock Command</strong></p><p>Strength (Warlord), pre-roll. +2 to the attacker's roll this round.</p><p><em>Cost: Strength 8 marks.</em></p>",
+          "value": "<p><strong>Shock Command</strong></p><p>Strength (Warlord), pre-roll. +2 to the attacker's roll this round.</p><p><em>Cost: Violence 8 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -9030,7 +9030,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Siege Logistics Overhaul</b></p><p>Reduce Siege costs by 25%.</p><p><b>Cost:</b> Economy 23 · Strength 15 marks</p>",
+          "value": "<p><b>Siege Logistics Overhaul</b></p><p>Reduce Siege costs by 25%.</p><p><b>Cost:</b> Economy 23 · Violence 15 marks</p>",
           "chat": ""
         },
         "type": {
@@ -9176,7 +9176,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Silent Brotherhood</strong></p><p>Rosicrucian. Target a hex held by a rival: their marks bank, their standing toward you and what they have planned this turn are whispered to you at once.</p><p><em>Cost: Dexterity 8 · Soft Power 8 marks.</em></p>",
+          "value": "<p><strong>Silent Brotherhood</strong></p><p>Rosicrucian. Target a hex held by a rival: their marks bank, their standing toward you and what they have planned this turn are whispered to you at once.</p><p><em>Cost: Intrigue 8 · Soft Power 8 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -9219,7 +9219,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p><strong>Silent Entry</strong></p><p>Covert Ops Cell, pre-roll. +1 to your roll this round; in a Heist the Alarm also drops 1.</p><p><em>Cost: Dexterity 8 marks.</em></p>",
+          "value": "<p><strong>Silent Entry</strong></p><p>Covert Ops Cell, pre-roll. +1 to your roll this round; in a Heist the Alarm also drops 1.</p><p><em>Cost: Intrigue 8 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -9318,7 +9318,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Smuggling Network</b></p><p>A trade route from the target hex to a TO hex you hold (the planner asks for it); +10 marks Diplomacy next turn; Darkness +1.</p><p><b>Cost:</b> Dexterity 23 marks</p>",
+          "value": "<p><b>Smuggling Network</b></p><p>A trade route from the target hex to a TO hex you hold (the planner asks for it); +10 marks Diplomacy next turn; Darkness +1.</p><p><b>Cost:</b> Intrigue 23 marks</p>",
           "chat": ""
         },
         "type": {
@@ -9366,7 +9366,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Sortie</h3><p>Defender sallies out to strike an adjacent attacker supply hex. Severs the 'Supply Line' modifier and shaves 15 marks from the besieger's Buffer. Risk: 1d4 of your own garrison holdings are lost (+2 if the hex is escort-protected). Played by the besieged Domain. Target the attacker's supply-road hex.</p><p><strong>Cost:</strong> Strength 15 marks</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Sortie</h3><p>Defender sallies out to strike an adjacent attacker supply hex. Severs the 'Supply Line' modifier and shaves 15 marks from the besieger's Buffer. Risk: 1d4 of your own garrison holdings are lost (+2 if the hex is escort-protected). Played by the besieged Domain. Target the attacker's supply-road hex.</p><p><strong>Cost:</strong> Violence 15 marks</p></div>",
           "chat": ""
         },
         "type": {
@@ -9471,7 +9471,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Spy Insertion</b></p><p>Reveal enemy marks banks next turn.</p><p><b>Cost:</b> Dexterity 15 · Diplomacy 8 marks</p>",
+          "value": "<p><b>Spy Insertion</b></p><p>Reveal enemy marks banks next turn.</p><p><b>Cost:</b> Intrigue 15 · Diplomacy 8 marks</p>",
           "chat": ""
         },
         "type": {
@@ -9582,7 +9582,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Storm Final Assault</h3><p>Throw everything at the walls: the next Breach Scene's maneuver budget is doubled, and the Buffer drops 30 marks regardless of outcome. Lights the Convene pip. Target the besieged hex.</p><p><strong>Cost:</strong> Strength 30 · Logistics 15 marks</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Storm Final Assault</h3><p>Throw everything at the walls: the next Breach Scene's maneuver budget is doubled, and the Buffer drops 30 marks regardless of outcome. Lights the Convene pip. Target the besieged hex.</p><p><strong>Cost:</strong> Violence 30 · Logistics 15 marks</p></div>",
           "chat": ""
         },
         "type": {
@@ -10466,7 +10466,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Thread The Spread</strong></p><p>Tarot Mage. Target a hex: one fogged hex adjacent to it is revealed, and every neighbour's alignment and holder is whispered to your Domain.</p><p><em>Cost: Dexterity 8 marks.</em></p>",
+          "value": "<p><strong>Thread The Spread</strong></p><p>Tarot Mage. Target a hex: one fogged hex adjacent to it is revealed, and every neighbour's alignment and holder is whispered to your Domain.</p><p><em>Cost: Intrigue 8 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -10572,7 +10572,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Training Drills</b></p><p>Strength cap +10 marks for 2 turns.</p><p><b>Cost:</b> Strength 23 marks</p>",
+          "value": "<p><b>Training Drills</b></p><p>Violence cap +10 marks for 2 turns.</p><p><b>Cost:</b> Violence 23 marks</p>",
           "chat": ""
         },
         "type": {
@@ -10620,7 +10620,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><b>Training Parade</b></p><p>Retired (2026-10-28) — its +1 raid Morale went with Morale.</p><p><b>Cost:</b> Soft Power 8 · Strength 8 marks</p>",
+          "value": "<p><b>Training Parade</b></p><p>Retired (2026-10-28) — its +1 raid Morale went with Morale.</p><p><b>Cost:</b> Soft Power 8 · Violence 8 marks</p>",
           "chat": ""
         },
         "type": {
@@ -10669,7 +10669,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Trojan Horse</h3><p>A T4 Dexterity gambit: a 3-roll gate (sneak/sabotage/breach) that can end a siege from within. Sinon Mode sacrifices a Champion for a force multiplier.</p><p><strong>Cost:</strong> Dexterity 30 · Diplomacy 15 · Soft Power 15 marks</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Trojan Horse</h3><p>A T4 Dexterity gambit: a 3-roll gate (sneak/sabotage/breach) that can end a siege from within. Sinon Mode sacrifices a Champion for a force multiplier.</p><p><strong>Cost:</strong> Intrigue 30 · Diplomacy 15 · Soft Power 15 marks</p></div>",
           "chat": ""
         },
         "type": {
@@ -10709,7 +10709,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p><strong>Turn The Card</strong></p><p>Tarot Mage, pre-roll. Gain advantage on your roll this round.</p><p><em>Cost: Dexterity 8 marks.</em></p>",
+          "value": "<p><strong>Turn The Card</strong></p><p>Tarot Mage, pre-roll. Gain advantage on your roll this round.</p><p><em>Cost: Intrigue 8 marks.</em></p>",
           "chat": ""
         },
         "type": {
@@ -10803,7 +10803,7 @@
       "folder": "Raid Maneuvers",
       "system": {
         "description": {
-          "value": "<p><strong>Veiled Access</strong></p><p>Rosicrucian, pre-roll. +1 to your roll; in a Heist progress +1, in a Parley you draw one Secret.</p><p><em>Cost: Dexterity 8 marks.</em></p>",
+          "value": "<p><strong>Veiled Access</strong></p><p>Rosicrucian, pre-roll. +1 to your roll; in a Heist progress +1, in a Parley you draw one Secret.</p><p><em>Cost: Intrigue 8 marks.</em></p>",
           "chat": ""
         },
         "type": {

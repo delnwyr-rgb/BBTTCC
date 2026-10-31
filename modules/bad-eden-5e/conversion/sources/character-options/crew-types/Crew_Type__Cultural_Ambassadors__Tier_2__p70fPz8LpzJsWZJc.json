@@ -3,15 +3,17 @@
   "type": "feat",
   "img": "icons/skills/social/diplomacy-offering-ritual.webp",
   "system": {
-    "description": {
-      "value": "<p><strong>Tier 2 — Cultural Ambassadors</strong></p><p><strong>“A smile is a blade if you know where to put it.”</strong></p><p>Cultural Ambassadors weaponize hospitality. They learn your customs, flatter your saints, and find the one story you tell yourself to stay brave. Then they use it to open doors—or to make you open them.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When spending Soft Power OPs for psychological warfare or propaganda during a Siege scenario, the effect on enemy morale is increased by 25%.</li></ul>",
-      "chat": ""
-    },
+    "category": "technique",
     "source": {
-      "custom": "BBTTCC – Crew Type: Cultural Ambassadors (Tier 2)",
+      "custom": "Bad Eden – Crew Type: Cultural Ambassadors (Tier 2)",
       "revision": 2,
       "rules": "2024",
       "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 — Cultural Ambassadors</strong></p><p><strong>“A smile is a blade if you know where to put it.”</strong></p><p>Cultural Ambassadors weaponize hospitality. They learn your customs, flatter your saints, and find the one story you tell yourself to stay brave. Then they use it to open doors—or to make you open them.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Strategic:</strong> Whenever your Domain spends Soft Power marks, it spends 20% less (never below 10).</li></ul>",
+      "chat": ""
     },
     "identifier": "crew-cultural-ambassadors-t2",
     "activities": {},
@@ -72,6 +74,19 @@
           "bbttcc:theme:morale-pressure"
         ]
       }
+    },
+    "fourththing": {
+      "domainCostDiscount": [
+        {
+          "channels": [
+            "softpower"
+          ],
+          "min": 10,
+          "when": "any",
+          "note": "Crew Type: Cultural Ambassadors (Tier 2)",
+          "pct": 20
+        }
+      ]
     }
   },
   "_stats": {
@@ -84,12 +99,12 @@
       "systemId": "dnd5e",
       "systemVersion": "5.2.5"
     },
-    "coreVersion": "13.351",
-    "systemId": "dnd5e",
-    "systemVersion": "5.3.0",
+    "coreVersion": "14.369",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.37",
     "createdTime": 1774986945169,
-    "modifiedTime": 1775063031226,
-    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+    "modifiedTime": 1792989169016,
+    "lastModifiedBy": "FKSQOY3vDSH1mLWk"
   },
   "ownership": {
     "default": 0,
