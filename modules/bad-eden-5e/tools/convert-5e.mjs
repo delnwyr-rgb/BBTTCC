@@ -435,15 +435,22 @@ function laneGear() {
   const all = loadPack("items");
   const byId = new Map(all.map(d => [d._id, d]));
   const folderOf = d => { const p = []; let f = d.folder; while (f && byId.has(f)) { p.unshift(byId.get(f).name); f = byId.get(f).folder; } return p.join("/"); };
-  const src = all.filter(d => ["weapon", "armor", "gear", "equipment", "consumable"].includes(d.type) && !d.flags?.fourththing?.rigGear && !d.flags?.fourththing?.rigFrame && !/^Rig & Boss/.test(folderOf(d)));
+  // Rig parts (2026-10-30): frames, rig weapons and rig systems from the Rig & Boss Catalog ride along so the
+  // Arc Bay sells them on D&D too. Converted like the rigs lane's mounted gear; flags.fourththing.rigGear/rigFrame
+  // kept verbatim (game.bbttcc.rigs.gearOf reads that scope on either system). Frames saved as feats convert as gear.
+  const isRigPart = d => !!(d.flags?.fourththing?.rigGear || d.flags?.fourththing?.rigFrame) && ["weapon", "gear", "equipment", "feat"].includes(d.type);
+  const src = all.filter(d => isRigPart(d) || (["weapon", "armor", "gear", "equipment", "consumable"].includes(d.type) && !d.flags?.fourththing?.rigGear && !d.flags?.fourththing?.rigFrame && !/^Rig & Boss/.test(folderOf(d))));
   const out = [], needsAll = [];
   for (const d of src.sort((a, b) => a.name.localeCompare(b.name))) {
-    const needs = [], folder = folderOf(d);
-    const e = d.type === "weapon" ? convertWeapon(d, needs) : d.type === "armor" ? convertArmor(d, needs) : d.type === "gear" ? convertGear(d, needs, folder) : passthrough(d, needs, folder);
-    e.folder = folder.split("/")[0] || "Gear";
+    const needs = [], folder = folderOf(d), rigPart = isRigPart(d);
+    const e = d.type === "weapon" ? convertWeapon(d, needs) : d.type === "armor" ? convertArmor(d, needs) : (d.type === "gear" || rigPart) ? convertGear(d, needs, rigPart ? "Rig Parts" : folder) : passthrough(d, needs, folder);
+    e.folder = rigPart ? "Rig Parts" : (folder.split("/")[0] || "Gear");
     for (const l of leftovers(e.system.description.value)) needs.push(`leftover term "${l}"`);
     if (!rfiPrice(d) && !e.system.price?.value) needs.push("no price in marks");
     e.flags = { "bad-eden-5e": { rfi: { id: d._id, pack: "items", identifier: d.system?.identifier ?? "", hash: sha(JSON.stringify({ n: d.name, s: d.system, f: d.flags?.fourththing ?? {} })) } } };
+    if (rigPart) e.flags.fourththing = JSON.parse(JSON.stringify(d.flags?.fourththing ?? {}));
+    // the market prices by flags.fourththing.rfi.item {price, frame, tier, rarity, bound} on either system (2026-10-30)
+    else if (d.flags?.fourththing?.rfi?.item) e.flags.fourththing = { rfi: { item: JSON.parse(JSON.stringify(d.flags.fourththing.rfi.item)) } };
     out.push(e); if (needs.length) needsAll.push({ slug: e.slug, name: e.name, needs });
   }
   return { src, out, needsAll, kind: "items" };

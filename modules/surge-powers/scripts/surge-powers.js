@@ -740,6 +740,16 @@
   // ── Spend dialog ───────────────────────────────────────────────────────────
   const BUCKETS = [["off", "⚔ Offense"], ["def", "🛡 Defense"], ["heal", "✚ Restoration"], ["narr", "✦ Narrative"]];
 
+  // Surge heat strip (2026-10-30): pips + band, the same ladder as RFI (Cool / Stoked / Overheated).
+  function heatBar(actor) {
+    const h = game.surgePowers?.heat?.(actor);
+    if (!h) return "";
+    const pips = h.pips.map(on => `<span style="display:inline-block;width:14px;height:14px;margin-right:3px;border-radius:3px;border:1px solid ${h.color};background:${on ? h.color : "transparent"}"></span>`).join("");
+    return `<div style="display:flex;align-items:center;gap:.6rem;margin:0 0 .5rem;padding:.35rem .5rem;border:1px solid ${h.color}66;border-radius:6px;background:rgba(0,0,0,.15)" title="${h.tip}">
+      <span>${pips}</span><b style="color:${h.color}">${h.icon} ${h.label}</b>
+      <span style="font-size:.72rem;opacity:.7">${h.overheated ? "Full — banking more in a fight costs a level of Exhaustion." : `Overheated at ${h.cap}.`}</span></div>`;
+  }
+
   async function openMenu(actor) {
     if (!actor) actor = canvas?.tokens?.controlled?.[0]?.actor ?? game.user?.character;
     if (!actor) return ui.notifications?.warn?.("Select a token or assign a character first.");
@@ -783,9 +793,10 @@
     const dlg = await new foundry.applications.api.DialogV2({
       window: { title: `⚡ Surge Powers — ${actor.name} (${cur}/${max})`, resizable: true },
       position: { width: 900 + 220 * pathCols.length },
-      content: `<div style="display:flex;gap:.8rem;max-height:60vh;overflow:auto">${cols}</div>
+      content: `${heatBar(actor)}<div style="display:flex;gap:.8rem;max-height:60vh;overflow:auto">${cols}</div>
         <p style="font-size:.7rem;opacity:.55;margin:.5rem 0 0">Spends are hard-gated by your pool. Mechanical effects apply now; <em>italic</em> lines are GM-applied riders.</p>`,
       buttons: [
+        ...(cur > 0 && actor.isOwner && surge.vent ? [{ action: "vent", label: "💨 Vent (−2 Surge, an action)", callback: () => { surge.vent(actor, 2); } }] : []),
         ...(canTakePath(actor) ? [{ action: "path", label: "🜂 Choose a Path…", callback: () => { pickPath(actor); } }] : []),
         ...(pathsOf(actor).length && game.user.isGM ? [{ action: "manage", label: "🜂 Manage Paths…", callback: () => { managePaths(actor); } }] : []),
         ...(pathsOf(actor).length && !game.user.isGM && actor.isOwner ? [{ action: "leave", label: "🜂 Leave a Path…", callback: () => { leavePath(actor); } }] : []),

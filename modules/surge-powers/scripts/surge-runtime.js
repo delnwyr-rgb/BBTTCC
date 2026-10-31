@@ -54,6 +54,14 @@
       scope: "world", config: true, type: Number,
       range: { min: 0, max: 5, step: 1 }, default: 1
     });
+    // SURGE HEAT (2026-10-30, the RFI ruling "C" of 10-29 brought to D&D): banked Surge IS the heat. Full + more
+    // arriving = the overheat bite. RFI bites 1 Stress; D&D bites 1 level of Exhaustion (Dave's pick, 10-30).
+    game.settings.register(MOD, "overheatBite", {
+      name: "Overheat bite (Exhaustion)",
+      hint: "When a character's Surge is already full and more arrives in combat, they gain 1 level of Exhaustion — at most once per round, and never past level 3 from Surge alone. Vent (−2 Surge) keeps you out of it.",
+      // on by default only in a Bad Eden 5E world — the Kaeron War home game (same module) opts in by hand
+      scope: "world", config: true, type: Boolean, default: !!game.modules.get("bad-eden-5e")?.active
+    });
     game.settings.register(MOD, "restRefill", {
       name: "Long rest refill",
       hint: "A long rest banks +proficiency Surge, so the economy isn't gated entirely on high rolls.",
@@ -88,9 +96,51 @@
     } catch (e) { /* best-effort */ }
     return v;
   }
-  async function grant(actor, n = 1, { quiet = false, resonance = false } = {}) {
+  // ── Heat ───────────────────────────────────────────────────────────────────
+  // Bands scale to the cap exactly as RFI's (_ftHeatBands): Cool < ⌈cap/2⌉ ≤ Stoked < cap ≤ Overheated (= full).
+  const HEAT = {
+    cool:       { label: "Cool",       color: "#7fb8e8", icon: "❄", tip: "Cool — room to bank. Spend freely, or let it build." },
+    stoked:     { label: "Stoked",     color: "#e8a84a", icon: "🔥", tip: "Stoked — half full or more. Spend before it boils over." },
+    overheated: { label: "Overheated", color: "#e8604a", icon: "♨", tip: "Overheated — full. Banking more in a fight costs a level of Exhaustion. Spend or Vent." }
+  };
+  function heat(actor) {
+    const cap = maxSurge(actor), value = getSurge(actor), half = Math.ceil(cap / 2);
+    const key = value >= cap ? "overheated" : value >= half ? "stoked" : "cool";
+    return { cap, value, key, ...HEAT[key], overheated: key === "overheated", pips: Array.from({ length: cap }, (_, i) => i < value) };
+  }
+  const EXHAUSTION_CAP = 3;
+  async function overheatBite(actor) {
+    if (!setting("overheatBite", true) || !actor?.isOwner) return false;
+    const combat = game.combat;
+    if (!combat?.started || !combat.combatants?.some(c => c.actor?.id === actor.id)) return false;   // heat bites in a fight
+    const stamp = `${combat.id}:${combat.round}`;
+    if (get(actor, `flags.${MOD}.lastBite`) === stamp) return false;                               // once per round
+    const ex = Number(get(actor, "system.attributes.exhaustion", 0)) || 0;
+    await actor.update({ [`flags.${MOD}.lastBite`]: stamp });
+    if (ex >= EXHAUSTION_CAP) {
+      ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p>♨ <b>${actor.name}</b> is Overheated, but Surge alone won't push Exhaustion past ${EXHAUSTION_CAP}. Spend or Vent.</p>` }).catch(() => {});
+      return false;
+    }
+    await actor.update({ "system.attributes.exhaustion": ex + 1 });
+    ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+      content: `<p>♨ <b>${actor.name}</b> is Overheated — Surge keeps coming and has nowhere to go. <b>+1 Exhaustion</b> (now ${ex + 1}). Spend Surge or <b>Vent</b> (−2) to cool down.</p>` }).catch(() => {});
+    return true;
+  }
+  /** Vent: shed Surge on purpose (RFI default: an action, −2). */
+  async function vent(actor, n = 2) {
+    if (!actor) return 0;
+    const before = getSurge(actor);
+    if (before <= 0) { ui.notifications?.info?.(`${actor.name} has no Surge to vent.`); return 0; }
+    const after = await setSurge(actor, before - n);
+    ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+      content: `<p>💨 <b>${actor.name}</b> vents ${before - after} Surge (uses an action) — ${after}/${maxSurge(actor)}, ${heat(actor).label}.</p>` }).catch(() => {});
+    return before - after;
+  }
+
+  async function grant(actor, n = 1, { quiet = false, resonance = false, noBite = false } = {}) {
     if (!actor || n <= 0) return getSurge(actor);
     const before = getSurge(actor);
+    if (!noBite && before >= maxSurge(actor)) { try { await overheatBite(actor); } catch (e) { console.warn(TAG, "overheat bite failed", e); } }
     const after = await setSurge(actor, before + n);
     if (!quiet && after > before && setting("notify", true))
       ui.notifications?.info?.(`${actor.name}: +${after - before} Surge (${after}/${maxSurge(actor)})`);
@@ -247,11 +297,11 @@
         if (!setting("restRefill", true)) return;
         if (result?.longRest === false) return;  // short rest: no baseline refill
         const pb = Number(get(actor, "system.attributes.prof", 2)) || 2;
-        grant(actor, pb);
+        grant(actor, pb, { noBite: true });   // a rest never bites
       } catch (e) { /* best-effort */ }
     });
     startHeartbeat();
-    game.surgePowers = Object.assign(game.surgePowers || {}, { get: getSurge, max: maxSurge, grant, spend, set: setSurge, isLeader });
+    game.surgePowers = Object.assign(game.surgePowers || {}, { get: getSurge, max: maxSurge, grant, spend, set: setSurge, isLeader, heat, vent, HEAT });
     console.log(TAG, "Surge runtime ready (threshold fill + explosion + cast gain + combat tick + rest refill)");
   });
 })();

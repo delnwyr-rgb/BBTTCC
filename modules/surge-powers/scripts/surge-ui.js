@@ -59,9 +59,11 @@
       if (!col || col.querySelector(".surge-powers-hud")) return;
       const btn = document.createElement("div");
       btn.className = "control-icon surge-powers-hud";
-      btn.title = `${s.get(actor)}/${s.max(actor)} ${TIP}`;
-      btn.innerHTML = `<i class="fas fa-bolt" style="color:#e8c84a"></i>
-        <span style="position:absolute;bottom:-2px;right:2px;font-size:.62em;font-weight:700;color:#e8c84a;text-shadow:0 0 3px #000">${s.get(actor)}</span>`;
+      const h = s.heat?.(actor);
+      const hc = h?.color ?? "#e8c84a";
+      btn.title = `${s.get(actor)}/${s.max(actor)}${h ? ` · ${h.label}` : ""} ${TIP}`;
+      btn.innerHTML = `<i class="fas fa-bolt" style="color:${hc}"></i>
+        <span style="position:absolute;bottom:-2px;right:2px;font-size:.62em;font-weight:700;color:${hc};text-shadow:0 0 3px #000">${s.get(actor)}</span>`;
       btn.style.position = "relative";
       btn.addEventListener("click", (ev) => { ev.preventDefault(); ev.stopPropagation(); s.openMenu(actor); });
       btn.addEventListener("contextmenu", (ev) => { ev.preventDefault(); ev.stopPropagation(); editPool(actor); });
@@ -87,11 +89,14 @@
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "surge-powers-header";
-      btn.title = TIP;
-      btn.textContent = `⚡ ${s.get(actor)}/${s.max(actor)}`;
+      // Surge heat (2026-10-30): the meter wears its band — Cool / Stoked / Overheated
+      const h = s.heat?.(actor);
+      const col = h?.color ?? "#e8c84a";
+      btn.title = h ? `${h.tip}\n${TIP}` : TIP;
+      btn.textContent = `⚡ ${s.get(actor)}/${s.max(actor)}${h ? ` ${h.icon} ${h.label}` : ""}`;
       btn.style.cssText = "flex:0 0 auto;width:auto;margin:0 .25rem;padding:0 .45rem;line-height:1.6;" +
-        "font-size:.72rem;font-weight:700;color:#e8c84a;background:rgba(185,136,46,.15);" +
-        "border:1px solid #b9882e66;border-radius:4px;cursor:pointer";
+        `font-size:.72rem;font-weight:700;color:${col};background:rgba(185,136,46,.15);` +
+        `border:1px solid ${col}88;border-radius:4px;cursor:pointer` + (h?.overheated ? ";box-shadow:0 0 6px " + col : "");
       btn.addEventListener("click", (ev) => { ev.preventDefault(); ev.stopPropagation(); s.openMenu(actor); });
       btn.addEventListener("contextmenu", (ev) => { ev.preventDefault(); ev.stopPropagation(); editPool(actor); });
       const close = header.querySelector('[data-action="close"], .close, .header-control');
