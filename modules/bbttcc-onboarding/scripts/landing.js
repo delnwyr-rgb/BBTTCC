@@ -442,7 +442,7 @@ function _showLanding({ theme = false } = {}) {
   ];
   const create = gm ? [
     _tile("make-steward", "✦", "Make a Steward", "The Tree-of-Life wizard."),
-    _tile("found-domain", "⚑", "Found a Faction", "The GM faction wizard."),
+    _tile("found-domain", "⚑", "Found a Domain", "The GM Domain wizard."),
     _tile("build-rig", "⛭", "Build a Rig", "The Rig Builder.")
   ] : [
     _tile("make-steward", "✦", "Make a Steward", st ? "Another body on file — you choose who you play." : "Descend the Tree and become somebody.", st ? "" : "gold"),

@@ -389,13 +389,23 @@ function _registerOps() {
   // the death spiral (owner playtest: shot-up wrecks started rolling Last Stand).
   reg("spawnDummy", async ({ sceneId, x = 1300, y = 1000, name = "Training Dummy", ownerUserId = "" }) => {
     const folder = await _folder();
-    const actor = await Actor.create({
+    // Bad Eden 5E (2026-10-31): on a D&D table the straw adversary is a plain dnd5e npc — 60 HP, AC 10, CR 0,
+    // owned by everyone so the player's own client can land the hits (same reason as the wrecks).
+    const dnd = game.system?.id === "dnd5e";
+    const actor = await Actor.create(dnd ? {
+      name, type: "npc", folder: folder?.id, img: "icons/svg/target.svg",
+      ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
+      prototypeToken: { actorLink: false, disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE, name },
+      system: { attributes: { hp: { value: 60, max: 60 }, ac: { flat: 10, calc: "flat" } }, details: { cr: 0, type: { value: "construct" } },
+        abilities: { str: { value: 10 }, dex: { value: 1 }, con: { value: 10 }, int: { value: 1 }, wis: { value: 1 }, cha: { value: 1 } } },
+      flags: { [MODULE_ID]: { spawned: true, kind: "dummy", ownerUserId } }
+    } : {
       name, type: "npc", folder: folder?.id, img: "icons/svg/target.svg",
       prototypeToken: { actorLink: false, disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE, name },
       system: { details: { level: 1 }, attributes: { violence: { value: 1 }, intrigue: { value: 1 }, presence: { value: 1 }, body: { value: 10 }, mind: { value: 10 }, soul: { value: 10 } } },
       flags: { [MODULE_ID]: { spawned: true, kind: "dummy", ownerUserId } }
     });
-    try {
+    if (!dnd) try {
       const s = actor.system?.system ?? actor.system;
       await actor.update({
         "system.derived.integrity.value": s?.derived?.integrity?.max ?? 100,

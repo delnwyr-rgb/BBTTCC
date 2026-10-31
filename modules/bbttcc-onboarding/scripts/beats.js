@@ -188,6 +188,26 @@ const incarnation = {
 // 10-29 (owner ruling): that free Soma Break is paid ONCE PER STEWARD — a replay
 // is still free practice, but it never hands out another real rest.
 const SOMA_BREAK_FLAG = "somaBreakGiven";
+// Bad Eden 5E (2026-10-31): the same induction on a D&D table — the free rest is a long rest, abilities fire through
+// dnd5e activities, rigs are boarded from the token HUD and steered by dragging their token.
+const _isDnd = () => globalThis.game?.system?.id === "dnd5e";
+const _restWord = () => _isDnd() ? "long rest" : "Soma Break";
+/** "The meat answers the mind": call `cb(actor)` whenever an ability fires, on either system. Returns an off(). */
+function _onAbilityUse(cb) {
+  const pairs = _isDnd()
+    ? [["dnd5e.postUseActivity", (activity) => cb(activity?.item?.actor ?? activity?.actor)],
+       ["dnd5e.rollAttackV2", (_rolls, data) => cb(data?.subject?.item?.actor ?? data?.subject?.actor)]]
+    : [["fourththing:itemAnimated", (data = {}) => cb(data.actor || data.sourceToken?.actor)],
+       ["fourththing.manifestationCast", (actor) => cb(actor)],
+       ["fourththing.featureDispatched", (actor) => cb(actor)]];
+  for (const [h, f] of pairs) Hooks.on(h, f);
+  return () => { for (const [h, f] of pairs) Hooks.off(h, f); };
+}
+/** The once-per-Steward free rest: RFI Soma Break, D&D long rest (no dialog, no new day). */
+async function _freeRest(actor) {
+  if (_isDnd()) return actor?.longRest?.({ dialog: false, chat: false, newDay: false });
+  return globalThis.game?.fourththing?.actions?.somaBreak?.(actor, { confirmed: true });
+}
 function _somaBreakOwed(ctx) {
   try { return !!ctx.steward && !ctx.steward.getFlag?.(MODULE_ID, SOMA_BREAK_FLAG); } catch (_) { return false; }
 }
@@ -224,9 +244,10 @@ const meatsuit = {
     }
     await _pause(500);
     try { ctx.steward?.sheet?.render(true, { focus: true }); } catch (_) {}
+    const where = _isDnd() ? "the Features and Spells tabs, the ⚡ Surge button up top" : "Principles tab and the rest";
     await ctx.speak(_somaBreakOwed(ctx)
-      ? "Those are your ABILITIES — the entries with a play button, Principles tab and the rest. Click through them. See what each one does. Nothing out here counts: spend freely. When you've seen enough, hit my button — we'll get you dressed before anything gets hit."
-      : "Those are your ABILITIES — the entries with a play button, Principles tab and the rest. Click through them. See what each one does. You've had the sim's free Soma Break already, so what you spend this time stays spent — read freely, fire carefully. When you've seen enough, hit my button and we'll get you geared.");
+      ? `Those are your ABILITIES — the entries with a play button, ${where}. Click through them. See what each one does. Nothing out here counts: spend freely. When you've seen enough, hit my button — we'll get you dressed before anything gets hit.`
+      : `Those are your ABILITIES — the entries with a play button, ${where}. Click through them. See what each one does. You've had the sim's free ${_restWord()} already, so what you spend this time stays spent — read freely, fire carefully. When you've seen enough, hit my button and we'll get you geared.`);
     ctx.riff({ beat: "meatsuit", line: "Player is browsing their real abilities for the first time, no pressure, nothing counts.", intent: "Invite them to poke everything. Dry, glitchy, one line." });
   },
 
@@ -241,26 +262,19 @@ const meatsuit = {
       nodded = true;
       ctx.speak("*bzzt* There it is — the meat answers the mind. Keep poking, One; out here it's all reversible.");
     };
-    const onAnim = (data = {}) => nod(data.actor || data.sourceToken?.actor);
-    const onCast = (actor) => nod(actor);
-    const onFeature = (actor) => nod(actor);
-    Hooks.on("fourththing:itemAnimated", onAnim);
-    Hooks.on("fourththing.manifestationCast", onCast);
-    Hooks.on("fourththing.featureDispatched", onFeature);
+    const offUse = _onAbilityUse(nod);
     // The player's own pace IS the gate (owner redesign 2026-08-29).
     ctx.prompt({
       title: GATE_TITLE,
       content:
         (_somaBreakOwed(ctx)
           ? `<p>Browse your <b>abilities</b> — anything on the sheet with a play button. Click them, read them, fire them; <i>nothing here counts</i> and everything you spend comes back when we move on.</p>`
-          : `<p>Browse your <b>abilities</b> — anything on the sheet with a play button. Click them and read them. <i>Your free Soma Break is spent</i>, so anything you fire this time stays spent.</p>`) +
+          : `<p>Browse your <b>abilities</b> — anything on the sheet with a play button. Click them and read them. <i>Your free ${_restWord()} is spent</i>, so anything you fire this time stays spent.</p>`) +
         `<p><i>Take your time. Next stop is the Market, then something to swing at.</i></p>`,
       label: "Seen enough — move on"
     }).then(() => done());
     return () => {
-      Hooks.off("fourththing:itemAnimated", onAnim);
-      Hooks.off("fourththing.manifestationCast", onCast);
-      Hooks.off("fourththing.featureDispatched", onFeature);
+      offUse();
       globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(GATE_TITLE);
     };
   },
@@ -300,7 +314,7 @@ const provingRange = {
     try { ctx.steward?.sheet?.render(true, { focus: true }); } catch (_) {}
     await ctx.speak(_somaBreakOwed(ctx)
       ? "That's a STRAW ADVERSARY. Target it and fire your new kit from the sheet — equipped weapons, abilities, whatever you bought. Nothing out here counts; everything you spend comes back when we move on."
-      : "That's a STRAW ADVERSARY. Target it and fire your new kit from the sheet. Your free Soma Break is spent, so what you burn this time stays burned — swing smart.");
+      : `That's a STRAW ADVERSARY. Target it and fire your new kit from the sheet. Your free ${_restWord()} is spent, so what you burn this time stays burned — swing smart.`);
     ctx.riff({ beat: "proving_range", line: "Player is trying out freshly bought gear on a straw dummy.", intent: "Range-officer energy, dry. One line." });
   },
 
@@ -312,25 +326,18 @@ const provingRange = {
       nodded = true;
       ctx.speak("*bzzt* Contact. That's what the marks were for, One.");
     };
-    const onAnim = (data = {}) => nod(data.actor || data.sourceToken?.actor);
-    const onCast = (actor) => nod(actor);
-    const onFeature = (actor) => nod(actor);
-    Hooks.on("fourththing:itemAnimated", onAnim);
-    Hooks.on("fourththing.manifestationCast", onCast);
-    Hooks.on("fourththing.featureDispatched", onFeature);
+    const offUse = _onAbilityUse(nod);
     ctx.prompt({
       title: GATE_TITLE,
       content:
         `<p>Target the <b>Straw Adversary</b> and try your new gear — weapons you <b>equipped</b>, abilities, anything with a play button.</p>` +
         (_somaBreakOwed(ctx)
           ? `<p><i>Nothing here counts: everything you spend comes back when we move on.</i></p>`
-          : `<p><i>Your free Soma Break is spent — what you fire this time stays spent.</i></p>`),
+          : `<p><i>Your free ${_restWord()} is spent — what you fire this time stays spent.</i></p>`),
       label: "Done swinging — move on"
     }).then(() => done());
     return () => {
-      Hooks.off("fourththing:itemAnimated", onAnim);
-      Hooks.off("fourththing.manifestationCast", onCast);
-      Hooks.off("fourththing.featureDispatched", onFeature);
+      offUse();
       globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(GATE_TITLE);
     };
   },
@@ -353,12 +360,12 @@ const provingRange = {
         else console.warn(TAG, "range exit: this seat can't stamp the Steward — skipping the free Soma Break");
       } catch (e) { console.warn(TAG, "range exit soma-break stamp failed", e); }
       if (stamped) {
-        try { await globalThis.game?.fourththing?.actions?.somaBreak?.(ctx.steward, { confirmed: true }); rested = true; }
+        try { await _freeRest(ctx.steward); rested = true; }
         catch (e) { console.warn(TAG, "range exit soma break failed", e); }
       }
     }
     await ctx.speak(rested
-      ? "Reflexes intact, soul bolted in. SOMA BREAK — everything you just spent is restored; the sim picks up the tab. The straw adversary sends its regards— *bzzt* —dismissing it now."
+      ? `Reflexes intact, soul bolted in. ${_restWord().toUpperCase()} — everything you just spent is restored; the sim picks up the tab. The straw adversary sends its regards— *bzzt* —dismissing it now.`
       : "Reflexes intact, soul bolted in. The sim already picked up your tab once, One — what you spent this time is yours to rest off. The straw adversary sends its regards— *bzzt* —dismissing it now.");
     ctx._spawned = await _cleanupKeepPlayer(ctx);
   }
@@ -431,7 +438,14 @@ const driving = {
     }
     await _pause(500);
     try { rig?.sheet?.render(true, { focus: true }); } catch (_) {}
-    if (rig) {
+    if (rig && _isDnd()) {
+      await ctx.speak(`Getting aboard: select your character's token, RIGHT-CLICK it, and press 🛻 BOARD in the token HUD — you have to be within 10 feet of ${rig.name}. You ride inside; a bar appears above your hotbar with your crew actions.`);
+      await _pause(900);
+      await ctx.speak(`STEER by dragging ${rig.name}'s token — up to its speed in a fight. The 🎛 button on the rig's token HUD opens the crew actions: Fire Weapon, Ram, Brace.`);
+      await _pause(700);
+      await ctx.speak("Four dead vehicles squat on your track. Put every one back into scrap: target a wreck and FIRE the rig's weapon, or RAM it — physics bills both parties. Clear all four before that storm at the far end gets bored.");
+    }
+    else if (rig) {
       // Boarding is the one step with no discoverable affordance — it lives in the
       // token HUD, which a new player has no reason to open (owner ask 2026-08-17).
       await ctx.speak(`Getting aboard: select your Steward's token, then RIGHT-CLICK it to open the token HUD and press the 🚚 truck button — that boards the nearest rig and seats you. Your Steward's token tucks into ${rig.name}; from here you drive the rig, not the body.`);
@@ -501,13 +515,25 @@ const driving = {
       const aid = tokenDoc?.actorId;
       if (aid && obstacleActorIds.has(aid) && !downed.has(aid)) scrapped(tokenDoc.actor ?? aid);
     };
+    // D&D rigs are steered by dragging their token (no hexesMoved counter) — the first move counts as steering.
+    const onTokMove = (tokenDoc, changed) => {
+      if (steered || tokenDoc?.actorId !== rig.id || !("x" in (changed ?? {}) || "y" in (changed ?? {}))) return;
+      steered = true;
+      if (total > 0) ctx.speak?.("Rolling. Now the wrecks — flatten all four.");
+      else done();
+    };
     Hooks.on("bbttcc:rig:destroyed", onRigDestroyed);
     Hooks.on("updateActor", onUpd);
     Hooks.on("deleteToken", onDelTok);
+    if (_isDnd()) Hooks.on("updateToken", onTokMove);
     // Escape hatch — never trap the player on the track.
     ctx.prompt({
       title: FALLBACK_TITLE,
-      content: total > 0
+      content: (total > 0 && _isDnd())
+        ? `<p><b>Board:</b> select your character's token within 10 ft of the rig, right-click it, press <b>🛻 Board</b>.</p>` +
+          `<p><b>Drive:</b> drag the rig's token to steer; its token HUD <b>🎛</b> opens Fire Weapon and Ram. Scrap all <b>${total} wrecks</b>.</p>` +
+          `<p><i>Stuck, or the track won't cooperate? Conclude and move on.</i></p>`
+        : total > 0
         ? `<p><b>Board:</b> select your Steward's token, right-click it, and press the <b>🚚 truck</b> button in the token HUD. Boarding hands the selection to the <b>rig's</b> token — move that one from here on.</p>` +
           `<p><b>Drive:</b> use <b>Steer</b> from the rig's pilot actions, then destroy all <b>${total} wrecks</b> — target one and fire the rig's weapons, or <b>Ram</b> it (ramming costs you half the damage back).</p>` +
           `<p><i>Stuck, or the track won't cooperate? Conclude and move on.</i></p>`
@@ -519,6 +545,7 @@ const driving = {
       Hooks.off("bbttcc:rig:destroyed", onRigDestroyed);
       Hooks.off("updateActor", onUpd);
       Hooks.off("deleteToken", onDelTok);
+      Hooks.off("updateToken", onTokMove);
       closeFallback();
     };
   },
@@ -1190,6 +1217,7 @@ const surgeBeat = {
   scope: "personal",
 
   enter: async (ctx) => {
+    if (_isDnd()) return _surgeEnterDnd(ctx);
     const sys = ctx.steward?.system?.system ?? ctx.steward?.system ?? {};
     const cur = Number(sys?.resources?.surge?.value) || 0;
     // The engine's tier-scaled bank cap (T1 = 4), same number the Spend dialog
@@ -1252,7 +1280,7 @@ const surgeBeat = {
     let noted = false;
     const onUpd = (actor, changed) => {
       if (actor?.id !== ctx.steward?.id || noted) return;
-      const v = foundry.utils.getProperty(changed, "system.resources.surge.value");
+      const v = foundry.utils.getProperty(changed, _isDnd() ? "flags.surge-powers.value" : "system.resources.surge.value");
       if (v === undefined) return;
       noted = true;
       ctx.speak?.(`There — Surge just moved to ${v}. That's the dice paying you.`);
@@ -1260,7 +1288,10 @@ const surgeBeat = {
     Hooks.on("updateActor", onUpd);
     ctx.prompt({
       title: FALLBACK_TITLE,
-      content:
+      content: _isDnd()
+        ? `<p>Your sheet's header → the <b>⚡ Surge</b> button. Click it and read the menu (right-click edits the pool).</p>` +
+          `<p>Banked on kept d20s of 15+, on every cast, and when a fight starts. Spent on Surge powers and your Path. Full = <b>Overheated</b>: banking more in a fight costs a level of Exhaustion — spend or <b>Vent</b>.</p>`
+        :
         `<p>Sheet → <b>Conflict</b> tab → the <b>✦ Surge</b> panel. Press <b>Spend</b> and read the menu.</p>` +
         (_alphaWorld()
           ? `<p>Banked by exploding dice (+1 per explosion). Spent on class powers. Full bank = Overheated: each further bank costs 1 Stress — spend or Vent.</p>`
@@ -1274,6 +1305,37 @@ const surgeBeat = {
     await ctx.speak("Surge banked is a decision you haven't made yet. Just don't sit on a full bank — it bites.");
   }
 };
+
+/** The Surge lesson on a D&D table (2026-10-31): surge-powers' pool + the heat meter of the RFI ruling "C". */
+async function _surgeEnterDnd(ctx) {
+  const S = globalThis.game?.surgePowers;
+  const h = S?.heat?.(ctx.steward) ?? { value: 0, cap: 4, label: "Cool" };
+  await ctx.handoff("Last lesson: Surge — the currency nobody explains until it's too late. It lives on the ⚡ button at the top of your sheet.");
+  await ctx.deck({
+    title: "◇ OPERATOR — Surge",
+    label: "Open my sheet",
+    slides: [
+      { title: "What Surge is",
+        speak: "You've been earning this since your first roll. Nobody told you. That's on me.",
+        body: `<p><b>Surge</b> is a bank beside your hit points and spell slots. It never changes a roll by itself — it <b>buys</b> things: Surge powers anyone can use, and the powers of your <b>Path</b>.</p>
+          <p>Right now you're holding <b>${h.value} / ${h.cap}</b> — <b>${h.label}</b>.</p>
+          <span class="bbttcc-deck-key">It's the only resource you earn by <em>succeeding</em>.</span>` },
+      { title: "How you bank it",
+        body: `<p>Every d20 you <b>keep</b> that lands on <b>15 or more</b> banks +1 (advantage helps; a natural 20 can chain). Casting a spell or power banks more, and so does the start of every fight.</p>
+          <p>How full it sits is your <b>heat</b>: <b>Cool</b>, <b>Stoked</b>, <b>Overheated</b>. A full bank is Overheated — and banking more <b>in a fight</b> costs <b>a level of Exhaustion</b> (once a round, never past 3 from Surge alone).</p>` },
+      { title: "How you spend it",
+        body: `<p>Click the <b>⚡</b> button in your sheet's header (or the ⚡ on your token's HUD). The menu shows what you can afford; your Path gets its own column.</p>
+          <p>Running hot? <b>💨 Vent</b> at the bottom of that menu sheds 2 Surge for an action.</p>
+          <span class="bbttcc-deck-key">Spend before the bank tops out — a full bank bites.</span>` }
+    ]
+  });
+  try { await ctx.steward?.sheet?.render(true, { focus: true }); } catch (_) {}
+  await _pause(500);
+  await ctx.speak(h.value > 0
+    ? `The ⚡ button at the top of your sheet — you're holding ${h.value}, ${h.label}. Open it and read what's on the menu. You don't have to buy anything; just learn where the shop is.`
+    : "The ⚡ button at the top of your sheet. You're empty right now — the bank fills the moment your d20s run hot. Open it anyway and read the menu so you know what you're saving for.");
+  ctx.riff({ beat: "surge", line: "Player is being shown the Surge economy for the first time.", intent: "One line — the daemon is slightly embarrassed it didn't mention this earlier." });
+}
 
 /* ──────────────────── MANIFESTATIONS & CASTING ──────────────────── */
 // The big one: the dials, then BUILD one in the real Manifestation Engine, then

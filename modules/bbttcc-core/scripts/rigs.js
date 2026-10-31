@@ -136,8 +136,12 @@ async function _createLocal(spec = {}, { ownership = null } = {}) {
     binding: { hexId: "", sceneId: "", tokenId: "", ...(identity.binding ?? {}) }, tier: num(integrity.tier, 1), bracket,
     crew: { slots: [], capacity: DEFAULT_CAPACITY, crewMin: 1, crewMax: 8, ...crew }, output: { modules: [], basePerTurn: {}, ...output }, travel: { ...DEFAULT_TRAVEL, ...travel }, order: "none", tags };
   const traits = {}; for (const [k, kind] of [["resistances", "dr"], ["immunities", "di"], ["vulnerabilities", "dv"]]) if (defenses[k]?.length) traits[kind] = { value: defenses[k] };
+  // dnd5e vehicleType from the travel domains (2026-10-31: a Hexmobile minted as a "Water Vehicle" — dnd5e's default
+  // when the field is unset). Same rule as bad-eden-5e convert-5e laneRigs: no land domain → air (sky) or water.
+  const domains = (rig.travel?.domains ?? []).map(String);
+  const vehicleType = domains.length && !domains.includes("land") ? (domains.some(d => /air|sky/.test(d)) ? "air" : "water") : "land";
   return Actor.create({ name, type: "vehicle", img: img ?? "icons/svg/castle.svg", folder, ...own,
-    system: { attributes: { hp: { value, max, dt: DT_BY_BRACKET[bracket] ?? 0 } }, traits },
+    system: { vehicleType, attributes: { hp: { value, max, dt: DT_BY_BRACKET[bracket] ?? 0 } }, traits },
     items, prototypeToken: token, flags: { [F]: { rig, factionId: identity.factionOwnerId || null } } });
 }
 

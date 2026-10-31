@@ -34,7 +34,9 @@ const _beats = []; // ordered
 // players have not met yet; the Alpha induction never mentions them.
 const ALPHA_CUT_BEATS = new Set(["manifestations", "combat_sim", "travel", "raid_violence", "raid_intrigue", "raid_presence", "proving_trials", "final_showdown", "crew_occult"]);
 function _alphaOn() { try { return globalThis.game?.bbttcc?.alpha?.enabled?.() === true; } catch (_e) { return false; } }
-function _arcBeats() { return _alphaOn() ? _beats.filter(b => !ALPHA_CUT_BEATS.has(b.id)) : _beats.slice(); }
+// Bad Eden 5E (2026-10-31): the cut beats are RFI-only (manifestations, the RFI combat sim, raids…) — a D&D world
+// always walks the induction arc, Alpha or not.
+function _arcBeats() { return (_alphaOn() || globalThis.game?.system?.id === "dnd5e") ? _beats.filter(b => !ALPHA_CUT_BEATS.has(b.id)) : _beats.slice(); }
 
 function registerBeat(beat) {
   if (!beat?.id) return;

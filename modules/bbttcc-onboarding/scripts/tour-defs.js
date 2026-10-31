@@ -125,6 +125,46 @@ const stewardSheetTour = {
   ]
 };
 
+/* ───────────────────── PLAYER · the D&D character sheet (Bad Eden 5E, 2026-10-31) ───────────────────── */
+// Same id as the RFI tour — registered instead of it on a dnd5e world — so every offer/seam that names
+// "steward-sheet" gets the D&D sheet. Anchors = dnd5e 6 CharacterActorSheet + bad-eden-5e/surge-powers additions.
+const _dndTab = (tab) => `nav.tabs [data-tab="${tab}"]`;
+const stewardSheetTour5e = {
+  id: "steward-sheet",
+  title: "The Meatsuit Interface (Character Sheet)",
+  audience: "player",
+  intro: "Pulling up your chassis diagnostics— *bzzt* —your sheet. It's a D&D sheet with Bad Eden bolted on. Touring the parts that matter; everything here is live, so poke freely.",
+  outro: "Tour complete. Hover anything on the sheet for the fine print — and the ⚡ up top is where the fun money lives.",
+  open: async (ctx) => {
+    const sheet = ctx.steward?.sheet;
+    if (!sheet) { ui.notifications?.warn?.("No character assigned — set your character (player config → Select Character) and rerun the tour."); return false; }
+    await sheet.render(true);
+    try { sheet.changeTab?.("details", "primary"); } catch (_) {}
+    return sheet;
+  },
+  steps: [
+    { id: "identity", title: "Who the meat says you are", selector: ".sheet-header",
+      text: "Name, class and level. Your class is plain D&D — or one of Bad Eden's own: the Flow Wolves (who cast from the Flow) and the Gearwright (who builds Artifice)." },
+    { id: "abilities", title: "Six abilities", pre: _dndTab("details"), selector: ".ability-scores",
+      text: "Strength to Charisma, exactly as D&D. Your Archetype raised two or three of these when you made the character." },
+    { id: "archetype", title: "Your Archetype", pre: _dndTab("details"), selector: '.pill-lg.be5e-archetype-pill, .pill-lg[data-item-type="background"]',
+      text: "In Bad Eden your Archetype takes the background's place: the tarot card you were dealt. It set your ability increases, two skills and an Origin feat, and it grows with you at levels 5, 11 and 17." },
+    { id: "skills", title: "Skills", pre: _dndTab("details"), selector: ".skills",
+      text: "Trained skills are filled in. Click any skill to roll it." },
+    { id: "surge", title: "Surge — the currency nobody explains", selector: ".surge-powers-header",
+      text: "The ⚡ button is your Surge: banked when your d20s run hot, spent on powers and your Path. Its colour is your heat — Cool, Stoked, Overheated. A full bank bites in a fight." },
+    { id: "features", title: "Features", pre: _dndTab("features"), selector: _dndTab("features"),
+      text: "Class features, your Archetype cards, your Path and its Doctrine live here. Anything with a use button can be fired from the sheet." },
+    { id: "flow", title: "Flow and Artifice", pre: _dndTab("spells"), selector: ".be5e-points-group", optional: true,
+      text: "Flow Wolves and Gearwrights cast from a pool of points instead of slots. The bar shows what's left; a long rest fills it." },
+    { id: "inventory", title: "Inventory", pre: _dndTab("inventory"), selector: _dndTab("inventory"),
+      text: "What you carry. Gear from the Market lands here — equip it before you swing." },
+    { id: "domain", title: "Your Domain — the bigger body", pre: _dndTab("domain"), selector: ".be5e-domain-tab",
+      text: "You aren't just a body — you're a stake in a Domain. This tab is its treasury in marks, how the land feels about you, your hexes and rigs, and the doors to plan the next Turn.",
+      speak: "Meatsuit: toured. Next size up is the Domain — a body made of people. Different manual— *bzzt* —same principle." }
+  ]
+};
+
 /* ───────────────────── PLAYER · The Bridge ───────────────────── */
 // Steward ↔ Faction OP exchange. Anchors + text come from the "bridge" help
 // dictionary registered by bbttcc-core/scripts/bbttcc-bridge.js — one source.
@@ -200,6 +240,7 @@ async function _openFactionSheet(ctx) {
     sheet.tabGroups ??= {}; sheet.tabGroups.primary = "domain";
     await sheet.render(true, { focus: true });
     try { sheet._applyActiveTab?.(); } catch (_) {}
+    try { if (game.system?.id === "dnd5e") sheet.changeTab?.("domain", "primary"); } catch (_) {}   // the D&D Domain tab (bad-eden-5e)
     return sheet;
   }
   const sheet = faction.sheet;
@@ -1421,7 +1462,7 @@ const beatEditorTour = {
 Hooks.once("ready", () => {
   const tours = globalThis.game?.bbttcc?.onboarding?.tours;
   if (!tours?.register) return console.warn(TAG, "tour engine missing — defs not registered.");
-  tours.register(stewardSheetTour);
+  tours.register(game.system?.id === "dnd5e" ? stewardSheetTour5e : stewardSheetTour);
   tours.register(bridgeTour);
   tours.register(factionSheetTour);
   tours.register(factionGmTour);

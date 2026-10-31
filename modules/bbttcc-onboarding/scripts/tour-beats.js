@@ -37,6 +37,7 @@ const TOUR_OFFERS = {
   },
   driving: {
     tour: "rig-sheet",
+    skipIf: () => globalThis.game?.system?.id === "dnd5e",   // the RFI rig sheet's tour; D&D rigs use the bbttcc rig sheet
     prompt: "The rig has a manual. Nobody reads the manual. The manual is now a guided tour with a glowing ring — want it before you drive?",
     label: "Tour the rig",
     resume: "Manual closed. Board the rig, take the pilot seat, STEER — then put it through every wreck on the track. All of them, One. The storm can watch."

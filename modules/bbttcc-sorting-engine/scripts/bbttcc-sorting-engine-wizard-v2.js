@@ -616,7 +616,11 @@ async function _loadDescription(category, optionName) {
         const hit = idx ? [...idx].filter(e => e.type === "race" && _srdFamily(e.name) === optionName).sort((x, y) => x.name.localeCompare(y.name))[0] : null;
         if (hit) {
           const doc = await pack.getDocument(hit._id).catch(() => null);
-          if (doc) return { name: optionName, img: doc.img || "", source: "SRD 5.2", descriptionHtml: doc.system?.description?.value || `<p><em>${_esc(optionName)}</em></p>` };
+          if (doc) {
+            let html = doc.system?.description?.value || `<p><em>${_esc(optionName)}</em></p>`;
+            try { html = await foundry.applications.ux.TextEditor.implementation.enrichHTML(html, { relativeTo: doc }); } catch (_e) {}
+            return { name: optionName, img: doc.img || "", source: "SRD 5.2", descriptionHtml: html };
+          }
         }
       }
       return { name: optionName, img: "", source: "Bad Eden 5E",
@@ -651,6 +655,10 @@ async function _loadDescription(category, optionName) {
     if (typeof desc === "string") html = desc;
     else if (desc?.value) html = desc.value;
     else if (desc?.chat)  html = desc.chat;
+    // D&D (2026-10-31): SRD text is full of @Embed/@UUID — enrich it, or the panel shows the raw enricher syntax.
+    if (isDnd() && html && /@(Embed|UUID|Compendium)\[/.test(html)) {
+      try { html = await foundry.applications.ux.TextEditor.implementation.enrichHTML(html, { relativeTo: doc }); } catch (_e) {}
+    }
     const result = {
       name: doc.name,
       img: doc.img || entry.img || "",
