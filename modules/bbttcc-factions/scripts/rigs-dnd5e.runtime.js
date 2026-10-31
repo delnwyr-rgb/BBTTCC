@@ -393,6 +393,46 @@
   function tokenOf(actor) {
     return actor?.getActiveTokens?.(true)?.[0]?.object ?? actor?.getActiveTokens?.()?.[0] ?? null;
   }
+  // ── board / disembark / crew-follow (2026-10-31, Dave mid-shoot: "the boarding and unboarding and token to rig
+  // adhesion during movement isn't working properly") — a port of the RFI system's rig boarding (fourththing
+  // module.js ftBoardRig / ftDisembarkRig / the updateToken crew-snap hook / _ftSyncBoardSelection). Before this the
+  // dnd5e port only hid the steward's token on the current scene: nothing moved it with the rig, nothing handed the
+  // player the rig's wheel, and disembark put the steward back off-grid. Now:
+  //   board      every steward token on EVERY scene is hidden and displaced into the rig token on that scene, its
+  //              sight swapped for the rig's (prior sight kept on the token for disembark), the rig token's own
+  //              sight switched on, and whoever boarded (or owns the steward) gets the rig token selected.
+  //   rig moves  after the rig's move animation settles, its crew tokens are displaced to its new position (RFI's
+  //              dual-source resolution: the rig's crew slots AND each steward's boardedRig flag). GM seats run it;
+  //              a hidden tab stops waiting on the animation (it never ticks there) and snaps straight away.
+  //   disembark  tokens step out beside the rig on the grid, unhidden, with their prior sight restored; the rig
+  //              token's forced vision goes back; the steward's own token is selected again.
+  const FLAG_SIGHT = "boardSightOverride", FLAG_RIGVIS = "boardVisionOverride";
+  const _tokDocsOf = (scene, actorId) => scene.tokens.filter(t => t.actorId === actorId);
+  function _selectAfter({ stewardId, rigId, mode, initiatorUserId }) {
+    try {
+      if (!canvas?.ready) return;
+      const steward = game.actors.get(stewardId);
+      const mine = (initiatorUserId && game.user.id === initiatorUserId) || (!game.user.isGM && !!steward?.isOwner);
+      if (!mine) return;
+      const toks = id => canvas.tokens.placeables.filter(t => t.actor?.id === id);
+      const canDrive = t => !!t && (game.user.isGM || !!t.actor?.isOwner);
+      if (mode === "board") {
+        const rt = toks(rigId).find(canDrive);
+        if (!rt) { if (toks(rigId).length) ui.notifications?.info?.("Aboard as crew — whoever owns the rig drives."); return; }
+        for (const t of toks(stewardId)) t.release();
+        rt.control({ releaseOthers: true });
+        ui.notifications?.info?.(`You have the controls — move ${rt.actor?.name ?? "the rig"}, not ${steward?.name ?? "your character"}.`);
+      } else {
+        const st = toks(stewardId).find(canDrive);
+        if (st) { for (const t of toks(rigId)) t.release(); st.control({ releaseOthers: true }); }
+      }
+    } catch (e) { console.warn(TAG, "selection sync failed", e); }
+  }
+  const SOCKET = "module.bbttcc-factions";
+  function _broadcastSelect(payload) {
+    _selectAfter(payload);
+    try { game.socket.emit(SOCKET, { t: "rig-select", ...payload }); } catch (_e) {}
+  }
   // board(steward, rig, "gunner", { token })  — June signature
   // board(steward, rig, { role, token })      — accessor signature
   async function board(steward, rig, roleOrOpts = "crew", opts = {}) {
@@ -408,8 +448,14 @@
     if (!ROLES.includes(role)) role = "crew";
     if (rigOf(steward)) throw new Error(`${steward.name} is already aboard a rig`);
     if ((d.crew?.slots ?? []).some(s => s.actorId === steward.id)) throw new Error(`${steward.name} is already in ${rig.name}'s roster`);
-    if (!rig.canUserModify?.(game.user, "update")) throw new Error(`No permission to update ${rig.name} — ask the GM to board you`);
-    // Frame capacity: an equipped frame's per-role max gates boarding. No frame → unlimited.
+    // A player's board relays to the GM (token hides + rig vision need GM rights on tokens they don't own)
+    if (!game.user.isGM) {
+      const gx = game.bbttcc?.api?.gmExec;
+      if (typeof gx?.call !== "function" || !game.users.some(u => u.isGM && u.active)) throw new Error("No GM is online to confirm boarding.");
+      const r = await gx.call("rigs.board", { stewardId: steward.id, rigId: rig.id, role, initiatorUserId: game.user.id });
+      if (r?.error) throw new Error(r.error);
+      return true;
+    }
     const cap = d.frame?.capacity?.[role];
     if (cap && Number.isFinite(Number(cap.max))) {
       const inRole = (d.crew?.slots ?? []).filter(s => s.role === role).length;
@@ -418,33 +464,64 @@
     const slots = foundry.utils.deepClone(d.crew?.slots ?? []);
     slots.push({ role, actorId: steward.id, label: steward.name });
     await setSlots(rig, slots);
-    const tok = token ?? tokenOf(steward);
-    await steward.setFlag(SCOPE, "boardedRig", { rigId: rig.id, tokenId: tok?.id ?? null, sceneId: tok?.scene?.id ?? null });
-    if (tok) { try { await tok.document.update({ hidden: true }); } catch (e) { /* best-effort */ } }
+    const tok = token?.document ?? token ?? tokenOf(steward)?.document ?? null;
+    await steward.setFlag(SCOPE, "boardedRig", { rigId: rig.id, role, tokenId: tok?.id ?? null, sceneId: tok?.parent?.id ?? null });
+    // every scene: the steward's tokens step into the rig
+    for (const scene of game.scenes) {
+      const sts = _tokDocsOf(scene, steward.id); if (!sts.length) continue;
+      const rt = _tokDocsOf(scene, rig.id)[0] ?? null;
+      const rigSight = rt?.sight?.toObject?.() ?? null;
+      const updates = [];
+      if (rt && rt.sight?.enabled === false) updates.push({ _id: rt.id, "sight.enabled": true, [`flags.${SCOPE}.${FLAG_RIGVIS}`]: true });
+      for (const t of sts) {
+        const u = { _id: t.id, hidden: true, action: "displace" };
+        if (rt) { u.x = rt.x; u.y = rt.y; if (rt.elevation != null) u.elevation = rt.elevation; }
+        if (rigSight) { u.sight = { ...foundry.utils.deepClone(rigSight), enabled: true }; u[`flags.${SCOPE}.${FLAG_SIGHT}`] = { priorSight: t.sight?.toObject?.() ?? null, rigId: rig.id }; }
+        updates.push(u);
+      }
+      try { await scene.updateEmbeddedDocuments("Token", updates, { animate: false }); }
+      catch (e) { console.warn(TAG, "board: token sync failed on", scene.name, e); }
+    }
     await chatNote(rig, `🛻 ${foundry.utils.escapeHTML(steward.name)} boards ${foundry.utils.escapeHTML(rig.name)}`, [`Role: <b>${role}</b>. They spend their own action economy on rig actions.`]);
+    _broadcastSelect({ stewardId: steward.id, rigId: rig.id, mode: "board", initiatorUserId: opts.initiatorUserId ?? game.user.id });
     return true;
   }
-  async function disembark(steward, _opts = {}) {
+  async function disembark(steward, opts = {}) {
     steward = baseActor(steward);
     const rig = rigOf(steward);
     if (!rig) throw new Error(`${steward.name} is not aboard a rig`);
+    if (!game.user.isGM) {
+      const gx = game.bbttcc?.api?.gmExec;
+      if (typeof gx?.call !== "function" || !game.users.some(u => u.isGM && u.active)) throw new Error("No GM is online to confirm disembarking.");
+      const r = await gx.call("rigs.disembark", { stewardId: steward.id, initiatorUserId: game.user.id });
+      if (r?.error) throw new Error(r.error);
+      return true;
+    }
     const d = data(rig);
     const slots = foundry.utils.deepClone(d?.crew?.slots ?? []);
     const idx = slots.findIndex(s => s.actorId === steward.id);
     const role = idx >= 0 ? slots[idx].role : null;
     if (idx >= 0) { slots.splice(idx, 1); await setSlots(rig, slots); }
-    // Restore the steward's token beside the rig's token.
-    const board0 = R()?.boardedRigOf?.(steward) ?? {};
-    const scene = game.scenes?.get?.(board0.sceneId) ?? canvas?.scene;
-    const tokDoc = scene?.tokens?.get?.(board0.tokenId);
-    const rigTok = tokenOf(rig);
-    if (tokDoc) {
-      const upd = { hidden: false };
-      if (rigTok) { upd.x = rigTok.x + (rigTok.w ?? canvas?.grid?.size ?? 100); upd.y = rigTok.y; }
-      try { await tokDoc.update(upd); } catch (e) { /* best-effort */ }
+    // every scene: step out beside the rig, on the grid, sight restored
+    for (const scene of game.scenes) {
+      const sts = _tokDocsOf(scene, steward.id); if (!sts.length) continue;
+      const rt = _tokDocsOf(scene, rig.id)[0] ?? null;
+      const g = scene.grid.size;
+      const updates = [];
+      sts.forEach((t, i) => {
+        const u = { _id: t.id, hidden: false, action: "displace" };
+        if (rt) { u.x = rt.x + (rt.width ?? 1) * g + i * g; u.y = rt.y; }
+        const ov = t.getFlag(SCOPE, FLAG_SIGHT);
+        if (ov) { if (ov.priorSight) u.sight = ov.priorSight; u[`flags.${SCOPE}.-=${FLAG_SIGHT}`] = null; }
+        updates.push(u);
+      });
+      // nobody left aboard on this scene → the rig's forced vision goes back
+      const stillAboard = (slots ?? []).some(s => s.actorId && _tokDocsOf(scene, s.actorId).length);
+      if (rt && rt.getFlag(SCOPE, FLAG_RIGVIS) && !stillAboard) updates.push({ _id: rt.id, "sight.enabled": false, [`flags.${SCOPE}.-=${FLAG_RIGVIS}`]: null });
+      try { await scene.updateEmbeddedDocuments("Token", updates, { animate: false }); }
+      catch (e) { console.warn(TAG, "disembark: token restore failed on", scene.name, e); }
     }
     await steward.unsetFlag(SCOPE, "boardedRig");
-    // Canon: a mobile/hybrid rig auto-parks when its last pilot steps off.
     const d2 = data(rig);
     if (role === "pilot" && d2 && d2.identity.mobility !== "stationary" && d2.identity.state === "deployed"
         && !(d2.crew?.slots ?? []).some(s => s.role === "pilot")) {
@@ -452,7 +529,70 @@
       await chatNote(rig, `🅿️ ${foundry.utils.escapeHTML(rig.name)} auto-parks`, ["Its pilot stepped off (canon: no pilot, no motion)."]);
     }
     await chatNote(rig, `🪂 ${foundry.utils.escapeHTML(steward.name)} disembarks ${foundry.utils.escapeHTML(rig.name)}`, []);
+    _broadcastSelect({ stewardId: steward.id, rigId: rig.id, mode: "disembark", initiatorUserId: opts.initiatorUserId ?? game.user.id });
     return true;
+  }
+  // crew-follow: the rig moved → its crew tokens jump to it once the animation settles (GM seats)
+  function _strandedCrew(tokenDoc, rig, scene) {
+    const ids = new Set((data(rig)?.crew?.slots ?? []).filter(s => s.actorId).map(s => s.actorId));
+    const out = [];
+    for (const t of scene.tokens) {
+      if (t.id === tokenDoc.id) continue;
+      const byFlag = t.actor?.flags?.[SCOPE]?.boardedRig?.rigId === rig.id;
+      if (!ids.has(t.actorId) && !byFlag) continue;
+      const there = t.x === tokenDoc.x && t.y === tokenDoc.y && (tokenDoc.elevation == null || t.elevation === tokenDoc.elevation);
+      if (!there) out.push(t);
+    }
+    return out;
+  }
+  const _followPending = new Map();
+  async function _awaitAnim(anim, capMs = 20000) {
+    if (!anim) return;
+    const hidden = () => document.visibilityState === "hidden";
+    if (hidden()) { await new Promise(r => setTimeout(r, 0)); return; }
+    let onVis = null, timer = null;
+    const bail = new Promise(res => { onVis = () => { if (hidden()) res(); }; document.addEventListener("visibilitychange", onVis); timer = setTimeout(res, capMs); });
+    try { await Promise.race([anim.then(() => {}, () => {}), bail]); }
+    finally { if (onVis) document.removeEventListener("visibilitychange", onVis); if (timer) clearTimeout(timer); }
+    await new Promise(r => setTimeout(r, 0));
+  }
+  async function _snapCrew(tokenDoc, rig, scene, attempt = 1) {
+    const stranded = _strandedCrew(tokenDoc, rig, scene); if (!stranded.length) return;
+    const updates = stranded.map(t => ({ _id: t.id, action: "displace", x: tokenDoc.x, y: tokenDoc.y, ...(tokenDoc.elevation != null ? { elevation: tokenDoc.elevation } : {}) }));
+    try { await scene.updateEmbeddedDocuments("Token", updates, { animate: false }); } catch (e) { console.warn(TAG, "crew snap failed", e); }
+    if (_strandedCrew(tokenDoc, rig, scene).length && attempt < 2) { await new Promise(r => setTimeout(r, 1200)); return _snapCrew(tokenDoc, rig, scene, attempt + 1); }
+  }
+  function installCrewFollow() {
+    Hooks.on("updateToken", async (tokenDoc, change) => {
+      try {
+        if (!game.user.isGM || game.users.activeGM?.id !== game.user.id) return;
+        if (!("x" in change) && !("y" in change) && !("elevation" in change)) return;
+        const rig = baseActor(tokenDoc.actor); if (!rig || !isRig(rig)) return;
+        const scene = tokenDoc.parent; if (!scene) return;
+        const key = `${scene.id}:${tokenDoc.id}`;
+        const pend = _followPending.get(key);
+        if (pend && Date.now() - pend.since < 30000) { pend.again = true; return; }
+        const st = { again: true, since: Date.now() }; _followPending.set(key, st);
+        try { while (st.again) { st.again = false; await _awaitAnim(tokenDoc.object?.movementAnimationPromise); await _snapCrew(tokenDoc, rig, scene); } }
+        finally { _followPending.delete(key); }
+      } catch (e) { console.warn(TAG, "crew follow failed", e); }
+    });
+    // the GM looks again → anything stranded while the tab was hidden snaps now
+    document.addEventListener("visibilitychange", async () => {
+      try {
+        if (document.visibilityState !== "visible" || !game.user.isGM) return;
+        for (const scene of game.scenes) for (const td of scene.tokens) { const rig = baseActor(td.actor); if (rig && isRig(rig)) await _snapCrew(td, rig, scene); }
+      } catch (_e) {}
+    });
+    game.socket.on(SOCKET, (msg) => { if (msg?.t === "rig-select") _selectAfter(msg); });
+    // player seats board/disembark through the GM relay
+    const gx = game.bbttcc?.api?.gmExec;
+    if (typeof gx?.register === "function") {
+      gx.register("rigs.board", async ({ stewardId, rigId, role, initiatorUserId }) => {
+        try { await board(game.actors.get(stewardId), game.actors.get(rigId), { role, initiatorUserId }); return { ok: true }; } catch (e) { return { error: e.message }; } });
+      gx.register("rigs.disembark", async ({ stewardId, initiatorUserId }) => {
+        try { await disembark(game.actors.get(stewardId), { initiatorUserId }); return { ok: true }; } catch (e) { return { error: e.message }; } });
+    }
   }
 
   // ── Token HUD (v13+ HUD is a <form> — unwrap guard) ────────────────────────
@@ -587,6 +727,7 @@
     if (!Rg?.impl) { console.warn(TAG, "game.bbttcc.rigs accessor missing (bbttcc-core not loaded?) — dnd5e rig runtime NOT installed"); return; }
     const keys = OP()?.KEYS;
     if (Array.isArray(keys) && keys.length) CHANNELS.splice(0, CHANNELS.length, ...keys);
+    installCrewFollow();   // crew tokens ride the rig; player boards relay to the GM (2026-10-31)
 
     // Turn integration: GM seat only AND the real apply pass — `bbttcc:advanceTurn:end`
     // carries { apply } for dry runs. review P2 (2026-10-28): the hook is a LOCAL
