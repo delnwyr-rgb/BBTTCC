@@ -1,0 +1,5487 @@
+{
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.9.0) — do not hand-edit; put fixes in content/overrides/manifestations.json. The starter-kit manifestations as ordinary dnd5e slot spells (pack spells) with the class lists they join; Doctrine signatures are Path-locked (flags.bad-eden-5e.requiresPath).",
+  "_pack": "spells",
+  "_generated": {
+    "by": "tools/convert-5e.mjs",
+    "rubric": "1.9.0",
+    "at": "2026-10-31",
+    "overridesApplied": 0
+  },
+  "spells": [
+    {
+      "slug": "manifest-already-ducked",
+      "name": "Already Ducked",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Already Ducked",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-already-ducked"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "sorcerer",
+        "bard"
+      ],
+      "description": "<p><em>You watch the next second arrive a second early and lend it to whoever needs it. By the time the swing exists, its target already isn't there.</em></p><p>You or one ally within range gains a +2 bonus to AC for the duration.</p><p><strong>Path of the Wyrdlens Adept only.</strong> This is a Doctrine signature; only a character who walks the Path of the Wyrdlens Adept can learn or prepare it.</p><p><em>Mal:</em> 'Dodging is for people who wait until it happens. Amateurs.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "4Gnt6N9g9XQYqDHN",
+            "pack": "items",
+            "identifier": "",
+            "hash": "76d167c9a82f"
+          },
+          "manifestation": {
+            "path": "wyrdlens",
+            "signature": true
+          },
+          "requiresPath": "wyrdlens"
+        }
+      }
+    },
+    {
+      "slug": "manifest-amicus-brief",
+      "name": "Amicus Brief",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Amicus Brief",
+          "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.wis.bonuses.save",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.cha.bonuses.save",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-amicus-brief"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "warlock",
+        "cleric",
+        "paladin"
+      ],
+      "description": "<p><em>You file a friend-of-the-court brief on an ally's behalf: history itself weighs in, noting that people like them have prevailed before.</em></p><p>One ally within range gains a +1 bonus to AC, +1 bonus to Wisdom and Charisma saving throws for the duration.</p><p><strong>Path of the Pactkeeper only.</strong> This is a Doctrine signature; only a character who walks the Path of the Pactkeeper can learn or prepare it.</p><p><em>Mal:</em> 'It's a hug, but citable.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "LTI0SVKw5wB9HypP",
+            "pack": "items",
+            "identifier": "",
+            "hash": "86287b64acc9"
+          },
+          "manifestation": {
+            "path": "pactkeeper",
+            "signature": true
+          },
+          "requiresPath": "pactkeeper"
+        }
+      }
+    },
+    {
+      "slug": "manifest-angle-of-witness",
+      "name": "Angle of Witness",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "level": 1,
+      "school": "div",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Angle of Witness",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-angle-of-witness"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "sorcerer",
+        "bard"
+      ],
+      "description": "<p><em>Everything impossible is only impossible from most angles. You hold open the one angle from which the target can absolutely, definitely, be hit.</em></p><p>One creature you can see within range gains a −2 penalty to AC for the duration.</p><p><em>From the Path of the Wyrdlens Adept.</em></p><p><em>Mal:</em> 'There's always a spot where the untouchable guy is just a guy. It's usually behind the ego.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "CltV6Ib6Qv5N8a75",
+            "pack": "items",
+            "identifier": "",
+            "hash": "1483f954f5ee"
+          },
+          "manifestation": {
+            "path": "wyrdlens",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-atlas-prism",
+      "name": "Atlas Prism",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "hour"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Atlas Prism",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 3600
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-atlas-prism"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "sorcerer",
+        "bard"
+      ],
+      "description": "<p><em>A palm-sized prism that carries the weight of the world one refraction at a time — you aim it at someone and the incoming harm bends around their edges.</em></p><p>One ally within range gains a +2 bonus to AC for the duration.</p><p><strong>Path of the Wyrdlens Adept only.</strong> This is a Doctrine signature; only a character who walks the Path of the Wyrdlens Adept can learn or prepare it.</p><p><em>Mal:</em> 'It doesn't stop the hit. It just files it under someone with broader shoulders. The prism has VERY broad shoulders.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "RnIF8m8WYsMJGjTD",
+            "pack": "items",
+            "identifier": "",
+            "hash": "c8c3e95c8c16"
+          },
+          "manifestation": {
+            "path": "wyrdlens",
+            "signature": true
+          },
+          "requiresPath": "wyrdlens"
+        }
+      }
+    },
+    {
+      "slug": "manifest-bind-witness",
+      "name": "Bind Witness",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+      "level": 1,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Bind Witness",
+          "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "charmed"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-bind-witness"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "warlock",
+        "cleric",
+        "paladin"
+      ],
+      "description": "<p><em>You swear the target in. Whatever they do next is testimony, and the record does not permit evasive action.</em></p><p>One creature you can see within range must make a Wisdom saving throw. On a failed save, it is charmed, and it must spend its action each turn on what the spell demands for the duration.</p><p>At the end of each of its turns, an affected creature repeats the saving throw, ending the effect on itself on a success.</p><p><strong>Path of the Pactkeeper only.</strong> This is a Doctrine signature; only a character who walks the Path of the Pactkeeper can learn or prepare it.</p><p><em>Mal:</em> 'Do you swear to tell the truth? Doesn't matter. The paperwork already assumed you would.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "rBbJj6YEb73pGY8m",
+            "pack": "items",
+            "identifier": "",
+            "hash": "9665b26a56d0"
+          },
+          "manifestation": {
+            "path": "pactkeeper",
+            "signature": true
+          },
+          "requiresPath": "pactkeeper"
+        }
+      }
+    },
+    {
+      "slug": "manifest-borrowed-face",
+      "name": "Borrowed Face",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "level": 1,
+      "school": "trs",
+      "method": "spell",
+      "activation": "action",
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Borrowed Face",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-borrowed-face"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "sorcerer",
+        "warlock",
+        "bard",
+        "druid"
+      ],
+      "description": "<p><em>You reach into the crowd of selves you've dreamed being and put one on. It fits. It always fits. That's the unsettling part.</em></p><p>You gain a +1 bonus to AC for the duration.</p><p><strong>Path of the Dreamwalker only.</strong> This is a Doctrine signature; only a character who walks the Path of the Dreamwalker can learn or prepare it.</p><p><em>Mal:</em> 'Today she's a customs inspector named Doreen. Doreen has a lanyard. You don't argue with a lanyard.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "0bAM8ANsCZBijWSU",
+            "pack": "items",
+            "identifier": "",
+            "hash": "f932d8552e89"
+          },
+          "manifestation": {
+            "path": "dreamwalker",
+            "signature": true
+          },
+          "requiresPath": "dreamwalker"
+        }
+      }
+    },
+    {
+      "slug": "manifest-breath-before-the-cut",
+      "name": "Breath Before the Cut",
+      "img": "icons/skills/melee/blade-tip-energy-green.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Breath Before the Cut",
+          "img": "icons/skills/melee/blade-tip-energy-green.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            },
+            {
+              "key": "system.attributes.init.bonus",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-breath-before-the-cut"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "paladin",
+        "ranger",
+        "sorcerer"
+      ],
+      "description": "<p><em>You put on the stillness like a coat. Your pulse does not rise. Your blade does not hurry. It doesn't have to.</em></p><p>You gain a +1 bonus to AC, +1 to initiative for the duration.</p><p><strong>Path of the Aurablade only.</strong> This is a Doctrine signature; only a character who walks the Path of the Aurablade can learn or prepare it.</p><p><em>Mal:</em> Everyone else brought adrenaline. You brought punctuality.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "PNM6AvYHdw1tx0xl",
+            "pack": "items",
+            "identifier": "",
+            "hash": "df7581e3f4a7"
+          },
+          "manifestation": {
+            "path": "aurablade",
+            "signature": true
+          },
+          "requiresPath": "aurablade"
+        }
+      }
+    },
+    {
+      "slug": "manifest-cadence-standard",
+      "name": "Cadence Standard",
+      "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 20
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Cadence Standard",
+          "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.abilities.wis.bonuses.save",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.cha.bonuses.save",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-cadence-standard"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "bard",
+        "paladin",
+        "cleric"
+      ],
+      "description": "<p><em>A marching cadence that keeps counting whether or not anyone is marching. The line holds to the beat.</em></p><p>Each creature of your choice in a 20-foot-radius sphere centered on a point within range gains a +2 bonus to Wisdom and Charisma saving throws for the duration.</p><p><strong>Path of the Harmony Marshal only.</strong> This is a Doctrine signature; only a character who walks the Path of the Harmony Marshal can learn or prepare it.</p><p><em>Mal:</em> Left. Left. Left, right, left. Congratulations: you are now unbreakable, and slightly annoying.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "LZZoiLOEJFgEJXGq",
+            "pack": "items",
+            "identifier": "",
+            "hash": "f673e908246f"
+          },
+          "manifestation": {
+            "path": "harmony",
+            "signature": true
+          },
+          "requiresPath": "harmony"
+        }
+      }
+    },
+    {
+      "slug": "manifest-carry-the-unsayable",
+      "name": "Carry-the-Unsayable",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "level": 2,
+      "school": "evo",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 20
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 4,
+          "types": [
+            "psychic"
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "name": "Carry-the-Unsayable",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "frightened"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-carry-the-unsayable"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "sorcerer",
+        "warlock",
+        "bard",
+        "druid"
+      ],
+      "description": "<p><em>You open your mouth and let out the part of last night's dream that language refuses to hold. Everyone nearby catches a piece of it.</em></p><p>Each creature of your choice in a 20-foot-radius sphere centered on a point within range must make a Wisdom saving throw. On a failed save, it takes 1d4 psychic damage and is frightened until the end of its next turn. On a successful save, it takes half as much damage and suffers no other effect.</p><p><em>From the Path of the Dreamwalker.</em></p><p><em>Mal:</em> 'There's no word for it. That's the problem. Now it's THEIR problem.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "xIUIp6YHvxw3PTjX",
+            "pack": "items",
+            "identifier": "",
+            "hash": "3efd2313049b"
+          },
+          "manifestation": {
+            "path": "dreamwalker",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-citation-needed",
+      "name": "Citation Needed",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "level": 1,
+      "school": "div",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Citation Needed",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.abilities.wis.bonuses.save",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.cha.bonuses.save",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-citation-needed"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "bard",
+        "warlock"
+      ],
+      "description": "<p><em>A glowing bracketed tag hangs over the target's head, flagging their entire posture as an unsupported claim. Everyone can see it. Everyone judges.</em></p><p>One creature you can see within range gains a −2 penalty to Wisdom and Charisma saving throws for the duration.</p><p><strong>Path of the Cosmic Linguist only.</strong> This is a Doctrine signature; only a character who walks the Path of the Cosmic Linguist can learn or prepare it.</p><p><em>Mal:</em> 'Their whole personality just got flagged for review. I've been saying this for years.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "waTregYDLI3LNYEU",
+            "pack": "items",
+            "identifier": "",
+            "hash": "5b78f3eac4f6"
+          },
+          "manifestation": {
+            "path": "linguist",
+            "signature": true
+          },
+          "requiresPath": "linguist"
+        }
+      }
+    },
+    {
+      "slug": "manifest-cite-precedent",
+      "name": "Cite Precedent",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+      "level": 1,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Cite Precedent",
+          "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "charmed"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-cite-precedent"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "warlock",
+        "cleric",
+        "paladin"
+      ],
+      "description": "<p><em>You cite the prior case — the one where this exact fight already happened and everyone regretted it. The precedent is binding.</em></p><p>One creature you can see within range must make a Wisdom saving throw. On a failed save, it is charmed (it can't willingly take violent action) for the duration.</p><p>At the end of each of its turns, an affected creature repeats the saving throw, ending the effect on itself on a success.</p><p><em>From the Path of the Pactkeeper.</em></p><p><em>Mal:</em> 'See Everybody v. Everybody, ruling: knock it off. Upheld on appeal.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "zO1j8LpqGlaBVpl0",
+            "pack": "items",
+            "identifier": "",
+            "hash": "fe7a03bd35df"
+          },
+          "manifestation": {
+            "path": "pactkeeper",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-clause-lantern",
+      "name": "Clause Lantern",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+      "level": 2,
+      "school": "div",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 30
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Clause Lantern",
+          "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "frightened"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-clause-lantern"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "warlock",
+        "cleric",
+        "paladin"
+      ],
+      "description": "<p><em>A lantern that burns the terms of every deal in the room. Hidden costs curl up out of it as smoke, in a legible font.</em></p><p>Each creature of your choice in a 30-foot-radius sphere centered on a point within range must make a Wisdom saving throw. On a failed save, it is frightened for the duration.</p><p><em>From the Path of the Pactkeeper.</em></p><p><em>Mal:</em> 'Ambiance AND discovery. Every restaurant should have one. No restaurant would survive one.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "ipLiOetKOzRmIYb6",
+            "pack": "items",
+            "identifier": "",
+            "hash": "48862da37926"
+          },
+          "manifestation": {
+            "path": "pactkeeper",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-committee-of-me",
+      "name": "Committee of Me",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "level": 2,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 15
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Committee of Me",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-committee-of-me"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "sorcerer",
+        "warlock",
+        "bard",
+        "druid"
+      ],
+      "description": "<p><em>For one breath, every you that you have ever dreamed of being stands up at once. There are a lot of you. Some are waving.</em></p><p>Each creature of your choice in a 15-foot-radius sphere centered on a point within range must make a Wisdom saving throw. On a failed save, it is staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn.</p><p><strong>Path of the Dreamwalker only.</strong> This is a Doctrine signature; only a character who walks the Path of the Dreamwalker can learn or prepare it.</p><p><em>Mal:</em> 'Quorum reached. Motion to be unhittable carries, eleven to zero, all in favor being her.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "l4vR4gBU9CLRmuh3",
+            "pack": "items",
+            "identifier": "",
+            "hash": "5be5023950e2"
+          },
+          "manifestation": {
+            "path": "dreamwalker",
+            "signature": true
+          },
+          "requiresPath": "dreamwalker"
+        }
+      }
+    },
+    {
+      "slug": "manifest-correspondence-strike",
+      "name": "Correspondence Strike",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "level": 1,
+      "school": "evo",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "con",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 6,
+          "types": [
+            "lightning"
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "name": "Correspondence Strike",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-correspondence-strike"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "sorcerer",
+        "bard"
+      ],
+      "description": "<p><em>As above, so below; as the bottle you just cracked, so the knee of the man holding it. You break the small thing and the big thing agrees.</em></p><p>One creature you can see within range must make a Constitution saving throw. On a failed save, it takes 1d6 lightning damage and is staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn. On a successful save, it takes half as much damage and suffers no other effect.</p><p><em>From the Path of the Wyrdlens Adept.</em></p><p><em>Mal:</em> 'Sympathy is a beautiful force of cosmic unity. Also you can hit a guy with it.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "xW1BbFFleRAWVyXi",
+            "pack": "items",
+            "identifier": "",
+            "hash": "55669ff492ca"
+          },
+          "manifestation": {
+            "path": "wyrdlens",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-court-of-seven",
+      "name": "Court of Seven",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+      "level": 2,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 20
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Court of Seven",
+          "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "charmed"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-court-of-seven"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "warlock",
+        "cleric",
+        "paladin"
+      ],
+      "description": "<p><em>Seven empty chairs assemble around the target area. Whoever sits in them is unclear. That they are presiding is not.</em></p><p>Each creature of your choice in a 20-foot-radius sphere centered on a point within range must make a Wisdom saving throw. On a failed save, it is charmed, and it must spend its action each turn on what the spell demands for the duration.</p><p>At the end of each of its turns, an affected creature repeats the saving throw, ending the effect on itself on a success.</p><p><strong>Path of the Pactkeeper only.</strong> This is a Doctrine signature; only a character who walks the Path of the Pactkeeper can learn or prepare it.</p><p><em>Mal:</em> 'You are now in session. All rise. Yes, mid-gunfight. The court has seen worse dockets.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "zFssmlJnwap40SJC",
+            "pack": "items",
+            "identifier": "",
+            "hash": "4f980075a26e"
+          },
+          "manifestation": {
+            "path": "pactkeeper",
+            "signature": true
+          },
+          "requiresPath": "pactkeeper"
+        }
+      }
+    },
+    {
+      "slug": "manifest-covenant-hearth",
+      "name": "Covenant Hearth",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 15
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Covenant Hearth",
+          "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-covenant-hearth"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "warlock",
+        "cleric",
+        "paladin"
+      ],
+      "description": "<p><em>You kindle the old agreement — the one where a fire means everyone around it is, for now, one household. The warmth has terms, and the terms hold.</em></p><p>Each creature of your choice in a 15-foot-radius sphere centered on a point within range gains a +2 bonus to AC for the duration.</p><p><strong>Path of the Pactkeeper only.</strong> This is a Doctrine signature; only a character who walks the Path of the Pactkeeper can learn or prepare it.</p><p><em>Mal:</em> 'Home is where somebody signed for you. This counts. It's small, but it counts.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "4qHBL9vL1NW4HYV0",
+            "pack": "items",
+            "identifier": "",
+            "hash": "3e90535469fe"
+          },
+          "manifestation": {
+            "path": "pactkeeper",
+            "signature": true
+          },
+          "requiresPath": "pactkeeper"
+        }
+      }
+    },
+    {
+      "slug": "manifest-deposition-lens",
+      "name": "Deposition Lens",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "level": 1,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 15
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Deposition Lens",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "charmed"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-deposition-lens"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "sorcerer",
+        "bard"
+      ],
+      "description": "<p><em>A monocle-sized lens on a brass stalk. Whoever you study through it finds that lying has developed a paperwork problem.</em></p><p>One creature you can see within range must make a Wisdom saving throw. On a failed save, it is charmed, and it must spend its action each turn on what the spell demands for the duration.</p><p>At the end of each of its turns, an affected creature repeats the saving throw, ending the effect on itself on a success.</p><p><strong>Path of the Wyrdlens Adept only.</strong> This is a Doctrine signature; only a character who walks the Path of the Wyrdlens Adept can learn or prepare it.</p><p><em>Mal:</em> 'Sworn testimony, except the oath is physics.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "HW8P5BlHQgEcJvVz",
+            "pack": "items",
+            "identifier": "",
+            "hash": "c1de2c564910"
+          },
+          "manifestation": {
+            "path": "wyrdlens",
+            "signature": true
+          },
+          "requiresPath": "wyrdlens"
+        }
+      }
+    },
+    {
+      "slug": "manifest-doorframe-discount",
+      "name": "Doorframe Discount",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "level": 1,
+      "school": "con",
+      "method": "spell",
+      "activation": "action",
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Doorframe Discount",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-doorframe-discount"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "sorcerer",
+        "warlock",
+        "bard",
+        "druid"
+      ],
+      "description": "<p><em>All doorways are the same doorway if you fell asleep in enough of them. Step into any opening; step out of another one nearby.</em></p><p>You gain a +1 bonus to AC for the duration.</p><p><strong>Path of the Dreamwalker only.</strong> This is a Doctrine signature; only a character who walks the Path of the Dreamwalker can learn or prepare it.</p><p><em>Mal:</em> 'Doors are a franchise. She has the loyalty card.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "LdwxPAZ035C0I5xq",
+            "pack": "items",
+            "identifier": "",
+            "hash": "c78f4180faaf"
+          },
+          "manifestation": {
+            "path": "dreamwalker",
+            "signature": true
+          },
+          "requiresPath": "dreamwalker"
+        }
+      }
+    },
+    {
+      "slug": "manifest-dream-twin",
+      "name": "Dream-Twin",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Dream-Twin",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-dream-twin"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "sorcerer",
+        "warlock",
+        "bard",
+        "druid"
+      ],
+      "description": "<p><em>You dream a twin for an ally and set it half a step to their left, where the bullet was going to be.</em></p><p>One ally within range gains a +2 bonus to AC for the duration.</p><p><em>From the Path of the Dreamwalker.</em></p><p><em>Mal:</em> 'Best bodyguard in Bad Eden. Doesn't eat, doesn't sleep, technically IS sleep.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "55fMlrf40C94ZqNG",
+            "pack": "items",
+            "identifier": "",
+            "hash": "b59ac9352d7c"
+          },
+          "manifestation": {
+            "path": "dreamwalker",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-errata-slip",
+      "name": "Errata Slip",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Errata Slip",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.wis.bonuses.save",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.cha.bonuses.save",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-errata-slip"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "bard",
+        "warlock"
+      ],
+      "description": "<p><em>You issue a small official correction to an ally: 'For \"doomed,\" read \"fine.\"' Reality, sheepish about the typo, complies.</em></p><p>One ally within range gains a +1 bonus to AC, +1 bonus to Wisdom and Charisma saving throws for the duration.</p><p><strong>Path of the Cosmic Linguist only.</strong> This is a Doctrine signature; only a character who walks the Path of the Cosmic Linguist can learn or prepare it.</p><p><em>Mal:</em> 'The previous edition of you contained errors. This one's been fixed. Mostly.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "j5doNd2kEAYznl0z",
+            "pack": "items",
+            "identifier": "",
+            "hash": "41ff898f0ce7"
+          },
+          "manifestation": {
+            "path": "linguist",
+            "signature": true
+          },
+          "requiresPath": "linguist"
+        }
+      }
+    },
+    {
+      "slug": "manifest-everyone-gets-a-chair",
+      "name": "Everyone Gets A Chair",
+      "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+      "level": 1,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Everyone Gets A Chair",
+          "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "charmed"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-everyone-gets-a-chair"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "bard",
+        "paladin",
+        "cleric"
+      ],
+      "description": "<p><em>A chair that wasn't there, and now insists. Negotiation begins whether or not anyone scheduled it.</em></p><p>One creature you can see within range must make a Wisdom saving throw. On a failed save, it is charmed, and it must spend its action each turn on what the spell demands for the duration.</p><p>At the end of each of its turns, an affected creature repeats the saving throw, ending the effect on itself on a success.</p><p><strong>Path of the Harmony Marshal only.</strong> This is a Doctrine signature; only a character who walks the Path of the Harmony Marshal can learn or prepare it.</p><p><em>Mal:</em> You can't stay mad in a chair with lumbar support. This is documented.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "LRAwsNMCqY6h0aSk",
+            "pack": "items",
+            "identifier": "",
+            "hash": "fe99af85d1eb"
+          },
+          "manifestation": {
+            "path": "harmony",
+            "signature": true
+          },
+          "requiresPath": "harmony"
+        }
+      }
+    },
+    {
+      "slug": "manifest-footnote",
+      "name": "Footnote",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "level": 1,
+      "school": "evo",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "int",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 4,
+          "types": [
+            "psychic"
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "name": "Footnote",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "frightened"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-footnote"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "bard",
+        "warlock"
+      ],
+      "description": "<p><em>A tiny superscript numeral appears over the target's head. They become unbearably aware there is a note about them, at the bottom, in smaller print.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it takes 1d4 psychic damage and is frightened until the end of its next turn. On a successful save, it takes half as much damage and suffers no other effect.</p><p><em>From the Path of the Cosmic Linguist.</em></p><p><em>Mal:</em> 'Nobody reads the footnotes. That's what makes them load-bearing.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "FJrVAZTyLjouQ1aK",
+            "pack": "items",
+            "identifier": "",
+            "hash": "d05175a198cd"
+          },
+          "manifestation": {
+            "path": "linguist",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-freeze-assets",
+      "name": "Freeze Assets",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+      "level": 1,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Freeze Assets",
+          "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "restrained"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-freeze-assets"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "warlock",
+        "cleric",
+        "paladin"
+      ],
+      "description": "<p><em>Pending review, the target's assets are frozen. All of them. Including the arms and legs, which are, technically, assets.</em></p><p>One creature you can see within range must make a Wisdom saving throw. On a failed save, it is restrained until the end of its next turn.</p><p><strong>Path of the Pactkeeper only.</strong> This is a Doctrine signature; only a character who walks the Path of the Pactkeeper can learn or prepare it.</p><p><em>Mal:</em> 'Your account has been locked for suspicious activity. The suspicious activity was \"charging at the Pactkeeper.\"'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "9jpfNlZv0B9NznBD",
+            "pack": "items",
+            "identifier": "",
+            "hash": "ca7bcade01e0"
+          },
+          "manifestation": {
+            "path": "pactkeeper",
+            "signature": true
+          },
+          "requiresPath": "pactkeeper"
+        }
+      }
+    },
+    {
+      "slug": "manifest-hearth-nail-covenant",
+      "name": "Hearth-Nail Covenant",
+      "img": "icons/tools/smithing/anvil.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 15
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Hearth-Nail Covenant",
+          "img": "icons/tools/smithing/anvil.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-hearth-nail-covenant"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "cleric"
+      ],
+      "description": "<p><em>Drive one true nail into a room and it becomes a place. Places hold together — including the people in them.</em></p><p>Each creature of your choice in a 15-foot-radius sphere centered on a point within range gains a +2 bonus to AC for the duration.</p><p><em>From the Path of the Soul-Smith.</em></p><p><em>Mal:</em> Home is where somebody hammered a nail in on purpose. That's it. That's the whole secret.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "zuwm7mtgLu8qxGln",
+            "pack": "items",
+            "identifier": "",
+            "hash": "0bf605840e69"
+          },
+          "manifestation": {
+            "path": "soulsmith",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-heavily-redacted",
+      "name": "Heavily Redacted",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Heavily Redacted",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-heavily-redacted"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "bard",
+        "warlock"
+      ],
+      "description": "<p><em>You strike sensitive details from an ally's public record: outline, heading, current position. Onlookers get the gist and nothing actionable.</em></p><p>You or one ally within range gains a +2 bonus to AC for the duration.</p><p><strong>Path of the Cosmic Linguist only.</strong> This is a Doctrine signature; only a character who walks the Path of the Cosmic Linguist can learn or prepare it.</p><p><em>Mal:</em> 'Witness protection, but for your silhouette.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "xtXZ2l6zgKWJQJUc",
+            "pack": "items",
+            "identifier": "",
+            "hash": "4542ee43de62"
+          },
+          "manifestation": {
+            "path": "linguist",
+            "signature": true
+          },
+          "requiresPath": "linguist"
+        }
+      }
+    },
+    {
+      "slug": "manifest-hymn-of-the-open-vein",
+      "name": "Hymn of the Open Vein",
+      "img": "icons/skills/melee/blade-tip-energy-green.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Hymn of the Open Vein",
+          "img": "icons/skills/melee/blade-tip-energy-green.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.abilities.wis.bonuses.save",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.cha.bonuses.save",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-hymn-of-the-open-vein"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "paladin",
+        "ranger",
+        "sorcerer"
+      ],
+      "description": "<p><em>The old war-hymn only sings in a voice that's bleeding. You provide the voice. It provides everything else.</em></p><p>You gain a +2 bonus to Wisdom and Charisma saving throws for the duration.</p><p><strong>Path of the Aurablade only.</strong> This is a Doctrine signature; only a character who walks the Path of the Aurablade can learn or prepare it.</p><p><em>Mal:</em> All the best songs cost somebody something. This one just skips the middleman.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "WNTlW9lo3tLSXWbx",
+            "pack": "items",
+            "identifier": "",
+            "hash": "50e75160eff4"
+          },
+          "manifestation": {
+            "path": "aurablade",
+            "signature": true
+          },
+          "requiresPath": "aurablade"
+        }
+      }
+    },
+    {
+      "slug": "manifest-hypnagogic-shrug",
+      "name": "Hypnagogic Shrug",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "level": 1,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "int",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Hypnagogic Shrug",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-hypnagogic-shrug"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "sorcerer",
+        "warlock",
+        "bard",
+        "druid"
+      ],
+      "description": "<p><em>You gift one enemy the 3 p.m. feeling. The full-body head-nod. The where-was-I. Mid-swing, if you time it right.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it is staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn.</p><p><em>From the Path of the Dreamwalker.</em></p><p><em>Mal:</em> 'Everybody's fought a war on six hours of sleep. Now they're fighting yours on none.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "qrGjADszzi1ID2TM",
+            "pack": "items",
+            "identifier": "",
+            "hash": "fd31f5f41aa5"
+          },
+          "manifestation": {
+            "path": "dreamwalker",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-impossible-second-self",
+      "name": "Impossible Second Self",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "level": 1,
+      "school": "trs",
+      "method": "spell",
+      "activation": "action",
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Impossible Second Self",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            },
+            {
+              "key": "system.attributes.init.bonus",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-impossible-second-self"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "sorcerer",
+        "warlock",
+        "bard",
+        "druid"
+      ],
+      "description": "<p><em>A dream-double peels off and keeps you company — scouting corners, standing in doorways, being the you that gets shot at first.</em></p><p>You gain a +1 bonus to AC, +1 to initiative for the duration.</p><p><em>From the Path of the Dreamwalker.</em></p><p><em>Mal:</em> 'Two of you. Because the universe looked at one and said, sure, why not, double it.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "JNi6aS8CLIDCiwZ1",
+            "pack": "items",
+            "identifier": "",
+            "hash": "0397f6b2019b"
+          },
+          "manifestation": {
+            "path": "dreamwalker",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-italic-emphasis",
+      "name": "Italic Emphasis",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "units": "touch"
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Italic Emphasis",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.abilities.wis.bonuses.save",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.cha.bonuses.save",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-italic-emphasis"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "bard",
+        "warlock"
+      ],
+      "description": "<p><em>You set yourself in italics. Everything you say and do leans forward slightly, and the world takes it as intended.</em></p><p>You or one ally within range gains a +2 bonus to Wisdom and Charisma saving throws for the duration.</p><p><em>From the Path of the Cosmic Linguist.</em></p><p><em>Mal:</em> 'You can tell they mean it. Typographically.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "6o0wCV0IyEdfRQZ4",
+            "pack": "items",
+            "identifier": "",
+            "hash": "c9dd73fba1d3"
+          },
+          "manifestation": {
+            "path": "linguist",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-keystone-verdict",
+      "name": "Keystone Verdict",
+      "img": "icons/equipment/shield/heater-steel-worn.webp",
+      "level": 1,
+      "school": "evo",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "damage",
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 6,
+          "types": [
+            "force"
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "name": "Keystone Verdict",
+          "img": "icons/equipment/shield/heater-steel-worn.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-keystone-verdict"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "paladin",
+        "cleric"
+      ],
+      "description": "<p><em>Every structure has the one brick holding the argument together. You circle it in chalk that was never chalk.</em></p><p>One creature you can see within range takes 1d6 force damage.</p><p>The target also has a −2 penalty to AC for the duration.</p><p><strong>Path of the Bulwark only.</strong> This is a Doctrine signature; only a character who walks the Path of the Bulwark can learn or prepare it.</p><p><em>Mal:</em> Everything is load-bearing if you're honest about it. Most people aren't. Walls never are.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "paAnEqIU24izAYQa",
+            "pack": "items",
+            "identifier": "",
+            "hash": "0d49645ef9fc"
+          },
+          "manifestation": {
+            "path": "bulwark",
+            "signature": true
+          },
+          "requiresPath": "bulwark"
+        }
+      }
+    },
+    {
+      "slug": "manifest-latchkey-lullaby",
+      "name": "Latchkey Lullaby",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "level": 1,
+      "school": "con",
+      "method": "spell",
+      "activation": "action",
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "hour"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "effects": [],
+      "linkEffects": true,
+      "classes": [
+        "sorcerer",
+        "warlock",
+        "bard",
+        "druid"
+      ],
+      "description": "<p><em>A small blue key that exists because you dreamed you owned it. It opens any lock that is, at that moment, asleep — and most locks are always asleep.</em></p><p>Bound tool: once per short rest, open one mundane lock, latch, or seal by singing it three descending notes. Wards, alarms, and anything actively watched are beyond it.</p><p><strong>Path of the Dreamwalker only.</strong> This is a Doctrine signature; only a character who walks the Path of the Dreamwalker can learn or prepare it.</p><p><em>Mal:</em> 'Every lock dreams of being a door. This key is deeply unethical about that.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "aTXKQRxwSzbA6MGt",
+            "pack": "items",
+            "identifier": "",
+            "hash": "50098a7b4946"
+          },
+          "manifestation": {
+            "path": "dreamwalker",
+            "signature": true
+          },
+          "requiresPath": "dreamwalker"
+        }
+      }
+    },
+    {
+      "slug": "manifest-lensing",
+      "name": "Lensing",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "level": 1,
+      "school": "evo",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "int",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 4,
+          "types": [
+            "psychic"
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "name": "Lensing",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "frightened"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-lensing"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "sorcerer",
+        "bard"
+      ],
+      "description": "<p><em>You fold every stray glance in the room through one lens and focus it on a single point behind the target's eyes.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it takes 1d4 psychic damage and is frightened until the end of its next turn. On a successful save, it takes half as much damage and suffers no other effect.</p><p><em>From the Path of the Wyrdlens Adept.</em></p><p><em>Mal:</em> 'Kid used to fry ants. Now the ants are existential and the magnifying glass is everyone's attention.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "QFuDkGPNLhLpRsf0",
+            "pack": "items",
+            "identifier": "",
+            "hash": "dc3696ac6ac4"
+          },
+          "manifestation": {
+            "path": "wyrdlens",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-living-glossary",
+      "name": "Living Glossary",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "level": 1,
+      "school": "div",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Living Glossary",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "charmed"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-living-glossary"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "bard",
+        "warlock"
+      ],
+      "description": "<p><em>A small floating book follows you and loudly defines every term your enemy uses. It has opinions about their word choices. It cites sources.</em></p><p>One creature you can see within range must make a Wisdom saving throw. On a failed save, it is charmed, and it must spend its action each turn on what the spell demands for the duration.</p><p>At the end of each of its turns, an affected creature repeats the saving throw, ending the effect on itself on a success.</p><p><em>From the Path of the Cosmic Linguist.</em></p><p><em>Mal:</em> '\"Ambush, noun: see also — oh, they're already mad. Good, it's working.\"'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "serdiO40f6Ul2KUA",
+            "pack": "items",
+            "identifier": "",
+            "hash": "459034afe07e"
+          },
+          "manifestation": {
+            "path": "linguist",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-long-ledger",
+      "name": "Long Ledger",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+      "level": 1,
+      "school": "div",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Long Ledger",
+          "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "frightened"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-long-ledger"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "warlock",
+        "cleric",
+        "paladin"
+      ],
+      "description": "<p><em>You open the ledger — the long one — and read the target's running balance aloud. Every favor taken, every kindness unpaid, itemized, with interest.</em></p><p>One creature you can see within range must make a Wisdom saving throw. On a failed save, it is frightened until the end of its next turn.</p><p><em>From the Path of the Pactkeeper.</em></p><p><em>Mal:</em> 'Everybody's fine with karma until it shows up with line items.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "P50ppHe8UQbgcbGQ",
+            "pack": "items",
+            "identifier": "",
+            "hash": "c6b9f7b6d6c6"
+          },
+          "manifestation": {
+            "path": "pactkeeper",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-lucid-standard",
+      "name": "Lucid Standard",
+      "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Lucid Standard",
+          "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-lucid-standard"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "bard",
+        "paladin",
+        "cleric"
+      ],
+      "description": "<p><em>Plant the standard and keep watch. Under your sightline, an ally is very hard to surprise, because you already weren't.</em></p><p>One ally within range gains a +2 bonus to AC for the duration.</p><p><strong>Path of the Harmony Marshal only.</strong> This is a Doctrine signature; only a character who walks the Path of the Harmony Marshal can learn or prepare it.</p><p><em>Mal:</em> Being watched by someone who likes you: statistically the best armor nobody sells.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "kurDsrtgcWYQhHZA",
+            "pack": "items",
+            "identifier": "",
+            "hash": "6c8ba9ea7ebc"
+          },
+          "manifestation": {
+            "path": "harmony",
+            "signature": true
+          },
+          "requiresPath": "harmony"
+        }
+      }
+    },
+    {
+      "slug": "manifest-margin-note-not-yet",
+      "name": "Margin Note: Not Yet",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "level": 1,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "int",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Margin Note: Not Yet",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-margin-note-not-yet"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "bard",
+        "warlock"
+      ],
+      "description": "<p><em>You jot a small editorial note in the air beside an event that is happening too soon. The universe, embarrassed, agrees to circle back.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it is staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn.</p><p><em>From the Path of the Cosmic Linguist.</em></p><p><em>Mal:</em> 'The cosmos respects exactly one thing, and it's a correction politely worded.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "mxpUg49IkFOxMr4Y",
+            "pack": "items",
+            "identifier": "",
+            "hash": "0f2377295888"
+          },
+          "manifestation": {
+            "path": "linguist",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-marginalia-drift",
+      "name": "Marginalia Drift",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "level": 1,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "con",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Marginalia Drift",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "restrained"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-marginalia-drift"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "bard",
+        "warlock"
+      ],
+      "description": "<p><em>Your accumulated margin-notes peel off their pages and swarm the target, cross-referencing them into place. Asterisks around the ankles. Daggers at the cuffs.</em></p><p>One creature you can see within range must make a Constitution saving throw. On a failed save, it is restrained until the end of its next turn.</p><p><strong>Path of the Cosmic Linguist only.</strong> This is a Doctrine signature; only a character who walks the Path of the Cosmic Linguist can learn or prepare it.</p><p><em>Mal:</em> 'Death by a thousand annotations. Well. Inconvenience by forty of them.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "L7YNOFVGy9c6nnBw",
+            "pack": "items",
+            "identifier": "",
+            "hash": "4dd30a9cd620"
+          },
+          "manifestation": {
+            "path": "linguist",
+            "signature": true
+          },
+          "requiresPath": "linguist"
+        }
+      }
+    },
+    {
+      "slug": "manifest-marshal-s-mantle",
+      "name": "Marshal's Mantle",
+      "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Marshal's Mantle",
+          "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.wis.bonuses.save",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.cha.bonuses.save",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-marshal-s-mantle"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "bard",
+        "paladin",
+        "cleric"
+      ],
+      "description": "<p><em>A mantle of visible jurisdiction. People can tell you're the adult in the room. So can the room.</em></p><p>You gain a +1 bonus to AC, +1 bonus to Wisdom and Charisma saving throws for the duration.</p><p><em>From the Path of the Harmony Marshal.</em></p><p><em>Mal:</em> Authority is 90% posture, 9% laundry, and 1% cosmic mandate. The mantle handles the laundry.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "qrQ3a6B9bQXTHV89",
+            "pack": "items",
+            "identifier": "",
+            "hash": "3e30d0b6e6be"
+          },
+          "manifestation": {
+            "path": "harmony",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-measured-breath-accord",
+      "name": "Measured Breath Accord",
+      "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+      "level": 2,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 30
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Measured Breath Accord",
+          "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "charmed"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-measured-breath-accord"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "bard",
+        "paladin",
+        "cleric"
+      ],
+      "description": "<p><em>The room is set to one lawful breath. Chaos may proceed, but it pays rent, in advance, at the counter.</em></p><p>Each creature of your choice in a 30-foot-radius sphere centered on a point within range must make a Wisdom saving throw. On a failed save, it is charmed (it can't willingly take violent action) for the duration.</p><p>At the end of each of its turns, an affected creature repeats the saving throw, ending the effect on itself on a success.</p><p><em>From the Path of the Harmony Marshal.</em></p><p><em>Mal:</em> In, two three four. Out, two three four. Riots are just breathing that got ahead of itself.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "IN8esH0xDcSB836l",
+            "pack": "items",
+            "identifier": "",
+            "hash": "285fcf47f29b"
+          },
+          "manifestation": {
+            "path": "harmony",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-mutual-aid-clause",
+      "name": "Mutual Aid Clause",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Mutual Aid Clause",
+          "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-mutual-aid-clause"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "warlock",
+        "cleric",
+        "paladin"
+      ],
+      "description": "<p><em>You invoke the clause every real community keeps in force: when one of ours is in trouble, the neighbors show up. Briefly, invisibly, they do.</em></p><p>One ally within range gains a +2 bonus to AC for the duration.</p><p><strong>Path of the Pactkeeper only.</strong> This is a Doctrine signature; only a character who walks the Path of the Pactkeeper can learn or prepare it.</p><p><em>Mal:</em> 'Forty invisible casseroles and a guy with a truck. You cannot buy this coverage.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "kSzeahnnWMOmPb9m",
+            "pack": "items",
+            "identifier": "",
+            "hash": "29560b870303"
+          },
+          "manifestation": {
+            "path": "pactkeeper",
+            "signature": true
+          },
+          "requiresPath": "pactkeeper"
+        }
+      }
+    },
+    {
+      "slug": "manifest-passphrase-please",
+      "name": "Passphrase: Please",
+      "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+      "level": 1,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Passphrase: Please",
+          "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "charmed"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-passphrase-please"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "ranger",
+        "bard"
+      ],
+      "description": "<p><em>The courtesy every door was raised on, spoken in the old tongue. Doorkeepers remember their manners. So do locks.</em></p><p>One creature you can see within range must make a Wisdom saving throw. On a failed save, it is charmed until the end of its next turn.</p><p><strong>Path of the Shadow Courier only.</strong> This is a Doctrine signature; only a character who walks the Path of the Shadow Courier can learn or prepare it.</p><p><em>Mal:</em> 'Please' is a skeleton key. Mal has been saying this for nine hundred years. Nobody writes it down.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "4CTeTJq3pqwxRzXd",
+            "pack": "items",
+            "identifier": "",
+            "hash": "714d308f45a6"
+          },
+          "manifestation": {
+            "path": "courier",
+            "signature": true
+          },
+          "requiresPath": "courier"
+        }
+      }
+    },
+    {
+      "slug": "manifest-penalty-clause",
+      "name": "Penalty Clause",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+      "level": 1,
+      "school": "evo",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 6,
+          "types": [
+            "qliphothic"
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "name": "Penalty Clause",
+          "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "frightened"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-penalty-clause"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "warlock",
+        "cleric",
+        "paladin"
+      ],
+      "description": "<p><em>The target broke a promise — to you, to someone, to themselves; there's always one. You invoke the fine print, and the breach collects.</em></p><p>One creature you can see within range must make a Wisdom saving throw. On a failed save, it takes 1d6 qliphothic damage and is frightened until the end of its next turn. On a successful save, it takes half as much damage and suffers no other effect.</p><p><em>From the Path of the Pactkeeper.</em></p><p><em>Mal:</em> 'Nobody reads section 12(b). Section 12(b) reads YOU.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "YGNoMJmRP1RFYsyX",
+            "pack": "items",
+            "identifier": "",
+            "hash": "8b55d86ca32e"
+          },
+          "manifestation": {
+            "path": "pactkeeper",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-pressure-front",
+      "name": "Pressure Front",
+      "img": "icons/equipment/shield/heater-steel-worn.webp",
+      "level": 2,
+      "school": "evo",
+      "method": "spell",
+      "activation": "action",
+      "target": {
+        "template": {
+          "type": "cone",
+          "size": 15
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "con",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 6,
+          "types": [
+            "force"
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "name": "Pressure Front",
+          "img": "icons/equipment/shield/heater-steel-worn.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "prone"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-pressure-front"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "paladin",
+        "cleric"
+      ],
+      "description": "<p><em>You carry the exact moment an avalanche decides. Point it somewhere.</em></p><p>Each creature in a 15-foot cone must make a Constitution saving throw. On a failed save, it takes 1d6 force damage and is knocked prone. On a successful save, it takes half as much damage and suffers no other effect.</p><p><strong>Path of the Bulwark only.</strong> This is a Doctrine signature; only a character who walks the Path of the Bulwark can learn or prepare it.</p><p><em>Mal:</em> Snow doesn't hate anyone. That's what makes it so good at this.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "lhrfIiPDtuITuhts",
+            "pack": "items",
+            "identifier": "",
+            "hash": "a2917157b464"
+          },
+          "manifestation": {
+            "path": "bulwark",
+            "signature": true
+          },
+          "requiresPath": "bulwark"
+        }
+      }
+    },
+    {
+      "slug": "manifest-pulled-punch-postulate",
+      "name": "Pulled Punch Postulate",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "level": 1,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Pulled Punch Postulate",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "charmed"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-pulled-punch-postulate"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "sorcerer",
+        "bard"
+      ],
+      "description": "<p><em>You refract one enemy's violence through the kindest available version of them. The swing arrives as a hesitation.</em></p><p>One creature you can see within range must make a Wisdom saving throw. On a failed save, it is charmed (it can't willingly take violent action) for the duration.</p><p>At the end of each of its turns, an affected creature repeats the saving throw, ending the effect on itself on a success.</p><p><strong>Path of the Wyrdlens Adept only.</strong> This is a Doctrine signature; only a character who walks the Path of the Wyrdlens Adept can learn or prepare it.</p><p><em>Mal:</em> 'Somewhere in there is the guy who feeds a stray cat. The lens just gives him the wheel for a minute.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "4NxDelhHFTCSMkDM",
+            "pack": "items",
+            "identifier": "",
+            "hash": "d99f8bbd35b7"
+          },
+          "manifestation": {
+            "path": "wyrdlens",
+            "signature": true
+          },
+          "requiresPath": "wyrdlens"
+        }
+      }
+    },
+    {
+      "slug": "manifest-redacted",
+      "name": "Redacted",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "level": 1,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "int",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Redacted",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "blinded"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-redacted"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "bard",
+        "warlock"
+      ],
+      "description": "<p><em>A crisp black bar stamps itself across the target's eyes. Their view of the scene is now classified above their clearance.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it is blinded until the end of its next turn.</p><p><strong>Path of the Cosmic Linguist only.</strong> This is a Doctrine signature; only a character who walks the Path of the Cosmic Linguist can learn or prepare it.</p><p><em>Mal:</em> 'They can appeal the redaction in writing. Processing time: one round. Convenient.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "vEXSygpG845jV3Pv",
+            "pack": "items",
+            "identifier": "",
+            "hash": "b651d51a16ca"
+          },
+          "manifestation": {
+            "path": "linguist",
+            "signature": true
+          },
+          "requiresPath": "linguist"
+        }
+      }
+    },
+    {
+      "slug": "manifest-reliquary-vow",
+      "name": "Reliquary Vow",
+      "img": "icons/tools/smithing/anvil.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "hour"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Reliquary Vow",
+          "img": "icons/tools/smithing/anvil.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.abilities.wis.bonuses.save",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.cha.bonuses.save",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 3600
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-reliquary-vow"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "cleric"
+      ],
+      "description": "<p><em>Salvage something broken — a hinge, a locket, a promise — and bind a vow into it. It is now a relic. Relics keep their people.</em></p><p>One ally within range gains a +2 bonus to Wisdom and Charisma saving throws for the duration.</p><p><strong>Path of the Soul-Smith only.</strong> This is a Doctrine signature; only a character who walks the Path of the Soul-Smith can learn or prepare it.</p><p><em>Mal:</em> One man's trash is another man's holy artifact with a warranty written in oath-language.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "ey7bJpESfPOJRAoK",
+            "pack": "items",
+            "identifier": "",
+            "hash": "a2fab7ce731a"
+          },
+          "manifestation": {
+            "path": "soulsmith",
+            "signature": true
+          },
+          "requiresPath": "soulsmith"
+        }
+      }
+    },
+    {
+      "slug": "manifest-repaired-memory",
+      "name": "Repaired Memory",
+      "img": "icons/tools/smithing/anvil.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "units": "touch"
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Repaired Memory",
+          "img": "icons/tools/smithing/anvil.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-repaired-memory"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "cleric"
+      ],
+      "description": "<p><em>Take one of their good memories — a birthday that went fine, a door held open — and forge it into plate. Hammered light, worn as armor.</em></p><p>One ally within range gains a +2 bonus to AC for the duration.</p><p><strong>Path of the Soul-Smith only.</strong> This is a Doctrine signature; only a character who walks the Path of the Soul-Smith can learn or prepare it.</p><p><em>Mal:</em> Nostalgia, but load-rated.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "wCHvuhUUEg9Z2MaS",
+            "pack": "items",
+            "identifier": "",
+            "hash": "8d78da79973f"
+          },
+          "manifestation": {
+            "path": "soulsmith",
+            "signature": true
+          },
+          "requiresPath": "soulsmith"
+        }
+      }
+    },
+    {
+      "slug": "manifest-sanction-protocol",
+      "name": "Sanction Protocol",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+      "level": 1,
+      "school": "evo",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "int",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 4,
+          "types": [
+            "psychic"
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "name": "Sanction Protocol",
+          "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-sanction-protocol"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "warlock",
+        "cleric",
+        "paladin"
+      ],
+      "description": "<p><em>You flag the target's defenses as non-compliant. Findings are published immediately. Their armor develops an audit trail, and the audit trail has gaps.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it takes 1d4 psychic damage.</p><p>The target also has a −2 penalty to AC for the duration.</p><p><strong>Path of the Pactkeeper only.</strong> This is a Doctrine signature; only a character who walks the Path of the Pactkeeper can learn or prepare it.</p><p><em>Mal:</em> 'Turns out the breastplate was expensed under \"miscellaneous.\" Denied.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "3A9EDlixVHidPeP2",
+            "pack": "items",
+            "identifier": "",
+            "hash": "1a8850bb0ff9"
+          },
+          "manifestation": {
+            "path": "pactkeeper",
+            "signature": true
+          },
+          "requiresPath": "pactkeeper"
+        }
+      }
+    },
+    {
+      "slug": "manifest-siesta-sanctum",
+      "name": "Siesta Sanctum",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 20
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Siesta Sanctum",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.wis.bonuses.save",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.cha.bonuses.save",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-siesta-sanctum"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "sorcerer",
+        "warlock",
+        "bard",
+        "druid"
+      ],
+      "description": "<p><em>A pocket of golden afternoon settles over your people — hammock light, porch warmth, the certainty that nothing bad happens before dinner.</em></p><p>Each creature of your choice in a 20-foot-radius sphere centered on a point within range gains a +1 bonus to AC, +1 bonus to Wisdom and Charisma saving throws for the duration.</p><p><strong>Path of the Dreamwalker only.</strong> This is a Doctrine signature; only a character who walks the Path of the Dreamwalker can learn or prepare it.</p><p><em>Mal:</em> 'Somewhere it's always 2 p.m. on a Sunday. She just brings it to the gunfight.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "haOeSgsPNCKmDEVE",
+            "pack": "items",
+            "identifier": "",
+            "hash": "49b3716c5713"
+          },
+          "manifestation": {
+            "path": "dreamwalker",
+            "signature": true
+          },
+          "requiresPath": "dreamwalker"
+        }
+      }
+    },
+    {
+      "slug": "manifest-sigil-of-seeing",
+      "name": "Sigil of Seeing",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "level": 1,
+      "school": "div",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Sigil of Seeing",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            },
+            {
+              "key": "system.attributes.init.bonus",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-sigil-of-seeing"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "sorcerer",
+        "bard"
+      ],
+      "description": "<p><em>A small mark over an ally's brow that shows them the half-second ahead of now — where the punch starts, when the door opens.</em></p><p>One creature you can see within range gains a +1 bonus to AC, +1 to initiative for the duration.</p><p><strong>Path of the Wyrdlens Adept only.</strong> This is a Doctrine signature; only a character who walks the Path of the Wyrdlens Adept can learn or prepare it.</p><p><em>Mal:</em> 'A little eye that watches the future so yours can watch the road. Everyone needs a hobby.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "1fHdjBvPOyMr4qXF",
+            "pack": "items",
+            "identifier": "",
+            "hash": "945e34d3acf8"
+          },
+          "manifestation": {
+            "path": "wyrdlens",
+            "signature": true
+          },
+          "requiresPath": "wyrdlens"
+        }
+      }
+    },
+    {
+      "slug": "manifest-signed-on-delivery",
+      "name": "Signed On Delivery",
+      "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "hour"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Signed On Delivery",
+          "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 3600
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-signed-on-delivery"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "ranger",
+        "bard"
+      ],
+      "description": "<p><em>Declare the parcel — object, message, or person under escort — and the route itself countersigns. The route wants what you're carrying to arrive.</em></p><p>You gain a +2 bonus to AC for the duration.</p><p><strong>Path of the Shadow Courier only.</strong> This is a Doctrine signature; only a character who walks the Path of the Shadow Courier can learn or prepare it.</p><p><em>Mal:</em> The route cares about the package arriving. Whether YOU arrive is a separate line item.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "U9pvgl9MZgilBFZE",
+            "pack": "items",
+            "identifier": "",
+            "hash": "ba3057c6c75b"
+          },
+          "manifestation": {
+            "path": "courier",
+            "signature": true
+          },
+          "requiresPath": "courier"
+        }
+      }
+    },
+    {
+      "slug": "manifest-sleep-loop",
+      "name": "Sleep-Loop",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "level": 1,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Sleep-Loop",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "charmed"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-sleep-loop"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "sorcerer",
+        "warlock",
+        "bard",
+        "druid"
+      ],
+      "description": "<p><em>You hand the target the same ten seconds of a very pleasant dream, on repeat. They keep almost finishing it. It keeps almost being finished.</em></p><p>One creature you can see within range must make a Wisdom saving throw. On a failed save, it is charmed for the duration.</p><p>At the end of each of its turns, an affected creature repeats the saving throw, ending the effect on itself on a success.</p><p><em>From the Path of the Dreamwalker.</em></p><p><em>Mal:</em> 'It's the one where their teeth aren't falling out and everyone claps. Of course they went back in.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "c9rTXBwRBBmpIIVo",
+            "pack": "items",
+            "identifier": "",
+            "hash": "7bf78eaa72b7"
+          },
+          "manifestation": {
+            "path": "dreamwalker",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-spoiler-alert",
+      "name": "Spoiler Alert",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "level": 1,
+      "school": "div",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "int",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Spoiler Alert",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-spoiler-alert"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "sorcerer",
+        "bard"
+      ],
+      "description": "<p><em>You read the target's next move off the wyrd and announce it to the room, loudly, with commentary, before they do it.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it is staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn.</p><p><em>From the Path of the Wyrdlens Adept.</em></p><p><em>Mal:</em> 'He was going to feint left. Everyone knows he was going to feint left. He knows everyone knows. Watch him not.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "dxst3Suw9h0C77om",
+            "pack": "items",
+            "identifier": "",
+            "hash": "561876cbe204"
+          },
+          "manifestation": {
+            "path": "wyrdlens",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-standing-oath",
+      "name": "Standing Oath",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "units": "touch"
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Standing Oath",
+          "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.abilities.wis.bonuses.save",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.cha.bonuses.save",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-standing-oath"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "warlock",
+        "cleric",
+        "paladin"
+      ],
+      "description": "<p><em>You renew a promise you have never broken and wear it like a coat. It has weathered worse than today.</em></p><p>You or one ally within range gains a +2 bonus to Wisdom and Charisma saving throws for the duration.</p><p><em>From the Path of the Pactkeeper.</em></p><p><em>Mal:</em> 'Some armor is riveted. Some is just a sentence somebody refused to take back.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "xCGTsPe98jUgD1vH",
+            "pack": "items",
+            "identifier": "",
+            "hash": "96d4d593000e"
+          },
+          "manifestation": {
+            "path": "pactkeeper",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-strikethrough",
+      "name": "Strikethrough",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "level": 1,
+      "school": "evo",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "int",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 6,
+          "types": [
+            "psychic"
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "name": "Strikethrough",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "frightened"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-strikethrough"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "bard",
+        "warlock"
+      ],
+      "description": "<p><em>You draw one clean horizontal line through a word the target was standing on — 'inevitable,' usually. The sentence sags.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it takes 1d6 psychic damage and is frightened until the end of its next turn. On a successful save, it takes half as much damage and suffers no other effect.</p><p><em>From the Path of the Cosmic Linguist.</em></p><p><em>Mal:</em> 'It's still legible under the line. That's the cruel part. They can see what they used to mean.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "tk0EUGzvQroHWPP6",
+            "pack": "items",
+            "identifier": "",
+            "hash": "a85d3e1b21c3"
+          },
+          "manifestation": {
+            "path": "linguist",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-the-delete-key",
+      "name": "The Delete Key",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "level": 1,
+      "school": "evo",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "int",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 6,
+          "types": [
+            "psychic"
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "name": "The Delete Key",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "frightened"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-the-delete-key"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "bard",
+        "warlock"
+      ],
+      "description": "<p><em>You select one word the target was using — 'confidence' is popular — and press delete. They feel it go.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it takes 1d6 psychic damage and is frightened until the end of its next turn. On a successful save, it takes half as much damage and suffers no other effect.</p><p><strong>Path of the Cosmic Linguist only.</strong> This is a Doctrine signature; only a character who walks the Path of the Cosmic Linguist can learn or prepare it.</p><p><em>Mal:</em> 'No, it's not in the trash. The trash is a mercy. This was Shift-Delete.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "d5ydLU8CT9Qe6kHi",
+            "pack": "items",
+            "identifier": "",
+            "hash": "1c2fa61dbc24"
+          },
+          "manifestation": {
+            "path": "linguist",
+            "signature": true
+          },
+          "requiresPath": "linguist"
+        }
+      }
+    },
+    {
+      "slug": "manifest-the-good-dream",
+      "name": "The Good Dream",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "heal",
+      "effects": [
+        {
+          "name": "The Good Dream",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.abilities.wis.bonuses.save",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.cha.bonuses.save",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-the-good-dream"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "sorcerer",
+        "warlock",
+        "bard",
+        "druid"
+      ],
+      "description": "<p><em>You slip an ally thirty seconds of the good one — the flying one, the one where the dog is still alive — and they come back steadier.</em></p><p>One creature you can see within range gains a +2 bonus to Wisdom and Charisma saving throws for the duration.</p><p><strong>Path of the Dreamwalker only.</strong> This is a Doctrine signature; only a character who walks the Path of the Dreamwalker can learn or prepare it.</p><p><em>Mal:</em> 'Thirty seconds of the dream where it all worked out. Non-refundable. Extremely effective.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "TtjRchyPm3uI6WZ7",
+            "pack": "items",
+            "identifier": "",
+            "hash": "aff63e128371"
+          },
+          "manifestation": {
+            "path": "dreamwalker",
+            "signature": true
+          },
+          "requiresPath": "dreamwalker"
+        }
+      }
+    },
+    {
+      "slug": "manifest-the-ground-remembers-you",
+      "name": "The Ground Remembers You",
+      "img": "icons/equipment/shield/heater-steel-worn.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "hour"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "The Ground Remembers You",
+          "img": "icons/equipment/shield/heater-steel-worn.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.wis.bonuses.save",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.cha.bonuses.save",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 3600
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-the-ground-remembers-you"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "paladin",
+        "cleric"
+      ],
+      "description": "<p><em>You introduce yourself to the bedrock, formally, once. After that it counts you as terrain.</em></p><p>You gain a +1 bonus to AC, +1 bonus to Wisdom and Charisma saving throws for the duration.</p><p><strong>Path of the Bulwark only.</strong> This is a Doctrine signature; only a character who walks the Path of the Bulwark can learn or prepare it.</p><p><em>Mal:</em> Mountains don't win arguments. They just outlast everyone who had one.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "v93HUnUPkgvIsvCU",
+            "pack": "items",
+            "identifier": "",
+            "hash": "8f5aa7417b7e"
+          },
+          "manifestation": {
+            "path": "bulwark",
+            "signature": true
+          },
+          "requiresPath": "bulwark"
+        }
+      }
+    },
+    {
+      "slug": "manifest-the-kind-angle",
+      "name": "The Kind Angle",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "The Kind Angle",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.wis.bonuses.save",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.cha.bonuses.save",
+              "mode": 2,
+              "value": "+1",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-the-kind-angle"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "sorcerer",
+        "bard"
+      ],
+      "description": "<p><em>You show an ally themselves from the one angle where they're already the person who survives this. Light does the rest.</em></p><p>One ally within range gains a +1 bonus to AC, +1 bonus to Wisdom and Charisma saving throws for the duration.</p><p><strong>Path of the Wyrdlens Adept only.</strong> This is a Doctrine signature; only a character who walks the Path of the Wyrdlens Adept can learn or prepare it.</p><p><em>Mal:</em> 'Everyone has a good side. Hers can stop shrapnel.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "cyp1yQBPODPbYMAx",
+            "pack": "items",
+            "identifier": "",
+            "hash": "720f9e79b03d"
+          },
+          "manifestation": {
+            "path": "wyrdlens",
+            "signature": true
+          },
+          "requiresPath": "wyrdlens"
+        }
+      }
+    },
+    {
+      "slug": "manifest-the-real-shape",
+      "name": "The Real Shape",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "level": 1,
+      "school": "evo",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 6,
+          "types": [
+            "psychic"
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "name": "The Real Shape",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "frightened"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-the-real-shape"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "sorcerer",
+        "bard"
+      ],
+      "description": "<p><em>You show one enemy the exact shape of what they are, uncropped, unfiltered, with the lighting they've been avoiding since the war.</em></p><p>One creature you can see within range must make a Wisdom saving throw. On a failed save, it takes 1d6 psychic damage and is frightened until the end of its next turn. On a successful save, it takes half as much damage and suffers no other effect.</p><p><strong>Path of the Wyrdlens Adept only.</strong> This is a Doctrine signature; only a character who walks the Path of the Wyrdlens Adept can learn or prepare it.</p><p><em>Mal:</em> 'The truth doesn't hurt. THIS truth hurts. There's a difference and it's 1d6.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "uJB7xvlqMuLcXywz",
+            "pack": "items",
+            "identifier": "",
+            "hash": "1b3327c4ab4b"
+          },
+          "manifestation": {
+            "path": "wyrdlens",
+            "signature": true
+          },
+          "requiresPath": "wyrdlens"
+        }
+      }
+    },
+    {
+      "slug": "manifest-the-record-shows",
+      "name": "The Record Shows",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+      "level": 1,
+      "school": "div",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "The Record Shows",
+          "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-the-record-shows"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "warlock",
+        "cleric",
+        "paladin"
+      ],
+      "description": "<p><em>You enter the target's position into the record — location, stance, habits, tells. The record is public. The record updates in real time.</em></p><p>One creature you can see within range gains a −2 penalty to AC for the duration.</p><p><strong>Path of the Pactkeeper only.</strong> This is a Doctrine signature; only a character who walks the Path of the Pactkeeper can learn or prepare it.</p><p><em>Mal:</em> 'Hard to dodge when your dodge is pre-registered. With diagrams.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "iVaGPLE16DlVsrrm",
+            "pack": "items",
+            "identifier": "",
+            "hash": "f84543659918"
+          },
+          "manifestation": {
+            "path": "pactkeeper",
+            "signature": true
+          },
+          "requiresPath": "pactkeeper"
+        }
+      }
+    },
+    {
+      "slug": "manifest-the-unlisted-stair",
+      "name": "The Unlisted Stair",
+      "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+      "level": 1,
+      "school": "con",
+      "method": "spell",
+      "activation": "action",
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "ranger",
+        "bard"
+      ],
+      "description": "<p><em>A service stairwell that isn't on anyone's plans, connecting here to there. Management doesn't know about it. Management never will.</em></p><p>Sustained gate: a stair connects your position to a spot within 30 feet — across a gap, up a wall, past a barrier. You (and one guest you lead) may climb it; it declines to exist for anyone else.</p><p><strong>Path of the Shadow Courier only.</strong> This is a Doctrine signature; only a character who walks the Path of the Shadow Courier can learn or prepare it.</p><p><em>Mal:</em> Every building has one stairwell management doesn't know about. Every building. Yes, that one. Especially that one.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "XTVmguMxJjT3qNUE",
+            "pack": "items",
+            "identifier": "",
+            "hash": "bfa51b3368dc"
+          },
+          "manifestation": {
+            "path": "courier",
+            "signature": true
+          },
+          "requiresPath": "courier"
+        }
+      }
+    },
+    {
+      "slug": "manifest-the-unstitching",
+      "name": "The Unstitching",
+      "img": "icons/skills/melee/blade-tip-energy-green.webp",
+      "level": 1,
+      "school": "evo",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "damage",
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 4,
+          "types": [
+            "psychic"
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "name": "The Unstitching",
+          "img": "icons/skills/melee/blade-tip-energy-green.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.abilities.wis.bonuses.save",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            },
+            {
+              "key": "system.abilities.cha.bonuses.save",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-the-unstitching"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "paladin",
+        "ranger",
+        "sorcerer"
+      ],
+      "description": "<p><em>The Void Edge doesn't cut things. It cuts the stitch between things — a target and the certainty it was leaning on.</em></p><p>One creature you can see within range takes 1d4 psychic damage.</p><p>The target also has a −2 penalty to Wisdom and Charisma saving throws for the duration.</p><p><strong>Path of the Aurablade only.</strong> This is a Doctrine signature; only a character who walks the Path of the Aurablade can learn or prepare it.</p><p><em>Mal:</em> Everything is attached to something. Mal recommends not asking what YOU'RE attached to. Too late.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "g17h5zKVLlfxhMFp",
+            "pack": "items",
+            "identifier": "",
+            "hash": "db3dde03b83f"
+          },
+          "manifestation": {
+            "path": "aurablade",
+            "signature": true
+          },
+          "requiresPath": "aurablade"
+        }
+      }
+    },
+    {
+      "slug": "manifest-the-weight-of-the-world",
+      "name": "The Weight Of The World",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "level": 1,
+      "school": "evo",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "con",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 6,
+          "types": [
+            "psychic"
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "name": "The Weight Of The World",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-the-weight-of-the-world"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "bard",
+        "warlock"
+      ],
+      "description": "<p><em>For one second, the target carries the weight of the world. Not the planet — the idiom. It is heavier.</em></p><p>One creature you can see within range must make a Constitution saving throw. On a failed save, it takes 1d6 psychic damage and is staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn. On a successful save, it takes half as much damage and suffers no other effect.</p><p><strong>Path of the Cosmic Linguist only.</strong> This is a Doctrine signature; only a character who walks the Path of the Cosmic Linguist can learn or prepare it.</p><p><em>Mal:</em> 'Atlas shrugged. This guy buckled. There's a lesson in there about stretching first.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "QTFT21jTgts8wgkx",
+            "pack": "items",
+            "identifier": "",
+            "hash": "6b6bfe58a384"
+          },
+          "manifestation": {
+            "path": "linguist",
+            "signature": true
+          },
+          "requiresPath": "linguist"
+        }
+      }
+    },
+    {
+      "slug": "manifest-thick-skin-literally",
+      "name": "Thick Skin, Literally",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Thick Skin, Literally",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-thick-skin-literally"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "bard",
+        "warlock"
+      ],
+      "description": "<p><em>You compliment an ally on being thick-skinned, and the metaphor settles over them like a well-worn duster: insults and shrapnel alike now mostly bounce.</em></p><p>You or one ally within range gains a +2 bonus to AC for the duration.</p><p><strong>Path of the Cosmic Linguist only.</strong> This is a Doctrine signature; only a character who walks the Path of the Cosmic Linguist can learn or prepare it.</p><p><em>Mal:</em> 'Rhino-adjacent. Emotionally AND ballistically.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "DEfmmKr1VlpluNjF",
+            "pack": "items",
+            "identifier": "",
+            "hash": "857038b048c7"
+          },
+          "manifestation": {
+            "path": "linguist",
+            "signature": true
+          },
+          "requiresPath": "linguist"
+        }
+      }
+    },
+    {
+      "slug": "manifest-threshold-cloak",
+      "name": "Threshold Cloak",
+      "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Threshold Cloak",
+          "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-threshold-cloak"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "ranger",
+        "bard"
+      ],
+      "description": "<p><em>You are dressed in the moment just before a door opens. That moment is famously hard to hit.</em></p><p>You gain a +2 bonus to AC for the duration.</p><p><em>From the Path of the Shadow Courier.</em></p><p><em>Mal:</em> Nobody looks at a doorway. They look at what comes through it. Be the doorway.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "o6lnyTk4D0hvYPSl",
+            "pack": "items",
+            "identifier": "",
+            "hash": "66e80b7d3335"
+          },
+          "manifestation": {
+            "path": "courier",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-threshold-vertigo",
+      "name": "Threshold Vertigo",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "level": 1,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "con",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Threshold Vertigo",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "prone"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-threshold-vertigo"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "sorcerer",
+        "warlock",
+        "bard",
+        "druid"
+      ],
+      "description": "<p><em>You convince the ground under one enemy's next step that it is briefly a threshold to somewhere five feet away and slightly lower.</em></p><p>One creature you can see within range must make a Constitution saving throw. On a failed save, it is knocked prone.</p><p><strong>Path of the Dreamwalker only.</strong> This is a Doctrine signature; only a character who walks the Path of the Dreamwalker can learn or prepare it.</p><p><em>Mal:</em> 'Missing the last stair, as a service.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "wG7lb7rabTR45KDu",
+            "pack": "items",
+            "identifier": "",
+            "hash": "fd72d54861b1"
+          },
+          "manifestation": {
+            "path": "dreamwalker",
+            "signature": true
+          },
+          "requiresPath": "dreamwalker"
+        }
+      }
+    },
+    {
+      "slug": "manifest-tied-up-at-the-moment",
+      "name": "Tied Up At The Moment",
+      "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+      "level": 1,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "con",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Tied Up At The Moment",
+          "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "restrained"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-tied-up-at-the-moment"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "bard",
+        "warlock"
+      ],
+      "description": "<p><em>You observe, mildly, that the target seems tied up right now. The figure of speech takes this as instructions.</em></p><p>One creature you can see within range must make a Constitution saving throw. On a failed save, it is restrained until the end of its next turn.</p><p><strong>Path of the Cosmic Linguist only.</strong> This is a Doctrine signature; only a character who walks the Path of the Cosmic Linguist can learn or prepare it.</p><p><em>Mal:</em> 'The rope isn't real. Their schedule conflict, however, is now very literal.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "mNUnrE55IVl8Bqpc",
+            "pack": "items",
+            "identifier": "",
+            "hash": "25e9425dfb27"
+          },
+          "manifestation": {
+            "path": "linguist",
+            "signature": true
+          },
+          "requiresPath": "linguist"
+        }
+      }
+    },
+    {
+      "slug": "manifest-tuesday-s-newspaper",
+      "name": "Tuesday's Newspaper",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "level": 1,
+      "school": "div",
+      "method": "spell",
+      "activation": "action",
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": false,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Tuesday's Newspaper",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.init.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-tuesday-s-newspaper"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "sorcerer",
+        "bard"
+      ],
+      "description": "<p><em>You skim tomorrow's headline about the next sixty seconds. It's mostly weather and violence, but it's YOUR weather and violence.</em></p><p>You gain a +2 to initiative for the duration.</p><p><strong>Path of the Wyrdlens Adept only.</strong> This is a Doctrine signature; only a character who walks the Path of the Wyrdlens Adept can learn or prepare it.</p><p><em>Mal:</em> 'Spoilers: somebody makes a terrible decision in the next minute. The lens just tells you which body it happens to.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "p2XyLaxsZtW1weUu",
+            "pack": "items",
+            "identifier": "",
+            "hash": "5390188155de"
+          },
+          "manifestation": {
+            "path": "wyrdlens",
+            "signature": true
+          },
+          "requiresPath": "wyrdlens"
+        }
+      }
+    },
+    {
+      "slug": "manifest-understudy",
+      "name": "Understudy",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Understudy",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-understudy"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "sorcerer",
+        "warlock",
+        "bard",
+        "druid"
+      ],
+      "description": "<p><em>One of your spare selves learns an ally's part and shadows them through the scene, stepping into the worst moments in their place.</em></p><p>One ally within range gains a +2 bonus to AC for the duration.</p><p><strong>Path of the Dreamwalker only.</strong> This is a Doctrine signature; only a character who walks the Path of the Dreamwalker can learn or prepare it.</p><p><em>Mal:</em> 'The show must go on. Just not, technically, happening to you.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "GyQGRomtWATbV3FY",
+            "pack": "items",
+            "identifier": "",
+            "hash": "efa6154b1064"
+          },
+          "manifestation": {
+            "path": "dreamwalker",
+            "signature": true
+          },
+          "requiresPath": "dreamwalker"
+        }
+      }
+    },
+    {
+      "slug": "manifest-unmasking-flash",
+      "name": "Unmasking Flash",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "level": 2,
+      "school": "div",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 15
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "round"
+      },
+      "concentration": false,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 4,
+          "types": [
+            "psychic"
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "name": "Unmasking Flash",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "frightened"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 6,
+            "rounds": 1
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-unmasking-flash"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "sorcerer",
+        "bard"
+      ],
+      "description": "<p><em>One camera-flash of absolute accuracy. Disguises, glamours, and comfortable self-images all develop at once, in public.</em></p><p>Each creature of your choice in a 15-foot-radius sphere centered on a point within range must make a Wisdom saving throw. On a failed save, it takes 1d4 psychic damage and is frightened until the end of its next turn. On a successful save, it takes half as much damage and suffers no other effect.</p><p><strong>Path of the Wyrdlens Adept only.</strong> This is a Doctrine signature; only a character who walks the Path of the Wyrdlens Adept can learn or prepare it.</p><p><em>Mal:</em> 'Everybody looks like their ID photo for one second. No one has ever forgiven the lens for this.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "IxAnTiZJa9OeD4Ao",
+            "pack": "items",
+            "identifier": "",
+            "hash": "415524876500"
+          },
+          "manifestation": {
+            "path": "wyrdlens",
+            "signature": true
+          },
+          "requiresPath": "wyrdlens"
+        }
+      }
+    },
+    {
+      "slug": "manifest-wall-of-my-people",
+      "name": "Wall of My People",
+      "img": "icons/equipment/shield/heater-steel-worn.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 30
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Wall of My People",
+          "img": "icons/equipment/shield/heater-steel-worn.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-wall-of-my-people"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "paladin",
+        "cleric"
+      ],
+      "description": "<p><em>The names of everyone you're protecting settle over the ground like poured foundation. Allies inside stand behind all of them at once.</em></p><p>Each creature of your choice in a 30-foot-radius sphere centered on a point within range gains a +2 bonus to AC for the duration.</p><p><em>From the Path of the Bulwark.</em></p><p><em>Mal:</em> It's not a metaphor. It's masonry with a mailing list.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "hE28c5uAkkiKJVJp",
+            "pack": "items",
+            "identifier": "",
+            "hash": "6f57fc75168f"
+          },
+          "manifestation": {
+            "path": "bulwark",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-warm-milk-ultimatum",
+      "name": "Warm Milk Ultimatum",
+      "img": "icons/magic/control/sleep-bubble-purple.webp",
+      "level": 1,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "Warm Milk Ultimatum",
+          "img": "icons/magic/control/sleep-bubble-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "charmed"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-warm-milk-ultimatum"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "sorcerer",
+        "warlock",
+        "bard",
+        "druid"
+      ],
+      "description": "<p><em>The Quiet Sun leans on one furious person with the entire warm weight of every nap they ever refused. It is not a suggestion.</em></p><p>One creature you can see within range must make a Wisdom saving throw. On a failed save, it is charmed (it can't willingly take violent action) for the duration.</p><p>At the end of each of its turns, an affected creature repeats the saving throw, ending the effect on itself on a success.</p><p><strong>Path of the Dreamwalker only.</strong> This is a Doctrine signature; only a character who walks the Path of the Dreamwalker can learn or prepare it.</p><p><em>Mal:</em> 'You will be soothed. This is a stick-up. Hands where I can tuck them in.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "tAs8r2pRj7MW65jO",
+            "pack": "items",
+            "identifier": "",
+            "hash": "da12685fc60b"
+          },
+          "manifestation": {
+            "path": "dreamwalker",
+            "signature": true
+          },
+          "requiresPath": "dreamwalker"
+        }
+      }
+    },
+    {
+      "slug": "manifest-wayhound-companion",
+      "name": "Wayhound Companion",
+      "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+      "level": 1,
+      "school": "evo",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "type": "creature",
+        "count": 1
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "con",
+        "onSave": "half"
+      },
+      "damage": [
+        {
+          "number": 1,
+          "denomination": 6,
+          "types": [
+            "force"
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "name": "Wayhound Companion",
+          "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "restrained"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-wayhound-companion"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "ranger",
+        "bard"
+      ],
+      "description": "<p><em>A hound made of every shortcut you've ever taken. It knows the way, and it knows how to hold a stranger's ankle about it.</em></p><p>One creature you can see within range must make a Constitution saving throw. On a failed save, it takes 1d6 force damage and is restrained for the duration. On a successful save, it takes half as much damage and suffers no other effect.</p><p><em>From the Path of the Shadow Courier.</em></p><p><em>Mal:</em> Good boy. Technically a metaphor. Still a good boy.</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Un84Ue4tw1buOL7N",
+            "pack": "items",
+            "identifier": "",
+            "hash": "72b63b3d3874"
+          },
+          "manifestation": {
+            "path": "courier",
+            "signature": false
+          }
+        }
+      }
+    },
+    {
+      "slug": "manifest-we-signed-for-each-other",
+      "name": "We Signed For Each Other",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+      "level": 2,
+      "school": "enc",
+      "method": "spell",
+      "activation": "action",
+      "range": {
+        "value": 30
+      },
+      "target": {
+        "template": {
+          "type": "sphere",
+          "size": 30
+        }
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "none"
+      },
+      "effects": [
+        {
+          "name": "We Signed For Each Other",
+          "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [
+            "charmed"
+          ],
+          "changes": [],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-we-signed-for-each-other"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "warlock",
+        "cleric",
+        "paladin"
+      ],
+      "description": "<p><em>You read out the mutual-defense compact this ground remembers: everyone here has been vouched for by someone. Violence becomes a breach of a promise with witnesses.</em></p><p>Each creature of your choice in a 30-foot-radius sphere centered on a point within range must make a Wisdom saving throw. On a failed save, it is charmed (it can't willingly take violent action) for the duration.</p><p>At the end of each of its turns, an affected creature repeats the saving throw, ending the effect on itself on a success.</p><p><strong>Path of the Pactkeeper only.</strong> This is a Doctrine signature; only a character who walks the Path of the Pactkeeper can learn or prepare it.</p><p><em>Mal:</em> 'Peer pressure, notarized.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "Qj9VxzMMqmyOdpag",
+            "pack": "items",
+            "identifier": "",
+            "hash": "783cdcf2e82c"
+          },
+          "manifestation": {
+            "path": "pactkeeper",
+            "signature": true
+          },
+          "requiresPath": "pactkeeper"
+        }
+      }
+    },
+    {
+      "slug": "manifest-wide-angle",
+      "name": "Wide Angle",
+      "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+      "level": 1,
+      "school": "abj",
+      "method": "spell",
+      "activation": "action",
+      "target": {
+        "type": "self"
+      },
+      "duration": {
+        "value": "1",
+        "units": "minute"
+      },
+      "concentration": true,
+      "activity": "utility",
+      "effects": [
+        {
+          "name": "Wide Angle",
+          "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
+          "transfer": false,
+          "disabled": false,
+          "statuses": [],
+          "changes": [
+            {
+              "key": "system.attributes.ac.bonus",
+              "mode": 2,
+              "value": "+2",
+              "priority": 20
+            }
+          ],
+          "duration": {
+            "seconds": 60
+          },
+          "description": "",
+          "flags": {
+            "bad-eden-5e": {
+              "manifestation": "manifest-wide-angle"
+            }
+          }
+        }
+      ],
+      "linkEffects": true,
+      "classes": [
+        "wizard",
+        "sorcerer",
+        "bard"
+      ],
+      "description": "<p><em>You stop looking at the fight and start looking at the whole frame — every line of fire a thread of light you simply stand between.</em></p><p>You gain a +2 bonus to AC for the duration.</p><p><em>From the Path of the Wyrdlens Adept.</em></p><p><em>Mal:</em> 'Can't hit the photographer. Union rules. Cosmic union, but still.'</p>",
+      "flags": {
+        "bad-eden-5e": {
+          "rfi": {
+            "id": "i0k6h6tbnYrSwGni",
+            "pack": "items",
+            "identifier": "",
+            "hash": "f35139d88463"
+          },
+          "manifestation": {
+            "path": "wyrdlens",
+            "signature": false
+          }
+        }
+      }
+    }
+  ]
+}

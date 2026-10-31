@@ -988,7 +988,7 @@ function writeLane(name, features, needsAll, about, kind = "features") {
   const overrides = existsSync(ovPath) ? JSON.parse(readFileSync(ovPath, "utf8")) : {};
   let applied = 0;
   for (const f of features) if (overrides[f.slug]) { deepMerge(f, overrides[f.slug]); applied++; }
-  const PACK = { secrets: "courtly-secrets", callings: "npc-callings", sparks: "sparks", doctrines: "doctrines", rigs: "vehicles",
+  const PACK = { manifestations: "spells", secrets: "courtly-secrets", callings: "npc-callings", sparks: "sparks", doctrines: "doctrines", rigs: "vehicles",
     ...Object.fromEntries(Object.entries(OPTION_LANES).map(([k, v]) => [k, v.pack])) };   // build-packs routes items/actors by _pack
   const doc = { _about: about, ...(PACK[name] ? { _pack: PACK[name] } : {}), _generated: { by: "tools/convert-5e.mjs", rubric: RUBRIC.version, at: new Date().toISOString().slice(0, 10), overridesApplied: applied }, [kind]: features };
   const outPath = join(ROOT, "content", `${name}.json`);
@@ -1018,14 +1018,150 @@ function parity(name, src, features, kind = "features") {
   if (missing.length || stale.length || orphaned.length) process.exitCode = 1;
 }
 
+/* ── manifestations → dnd5e spells (2026-10-31, Dave: "keep it trad … convert them to 5E effects and terminology and
+ * level, and add them to the spell lists … limit some of them by path") ──────────────────────────────────────────────
+ * The 76 starter-kit manifestations (master-content items, type power, category manifestation) become ordinary
+ * slot spells (method "spell") in pack `spells`. Mechanics are rebuilt from the structured manifestation block, not
+ * the RFI sentence: function → school, "X defense vs Cast DC" → saving throw, appliedStates → conditions through the
+ * rubric, appliedEffects modifiers → an Active Effect (Guard/Evasion → AC, Resolve → Wis+Cha saves, Initiative),
+ * squares → feet, scene → concentration up to 1 minute, upkeep folded into concentration. Level: 1st; an area that
+ * imposes a condition or deals damage is 2nd. Doctrine signatures carry flags.bad-eden-5e.requiresPath (sheet guard);
+ * Path-core spells are open. `classes` = the spell lists each joins (build-packs writes the spell-list pages).
+ * Prose = Dave's concept line (italic) + the generated 5E mechanics + Mal's line. */
+const MANIF_PATH = { "wyrdlens-adept": "wyrdlens", cosmic_linguist: "linguist", pactkeeper: "pactkeeper", dreamwalker: "dreamwalker",
+  harmonymarshal: "harmony", shadow_courier: "courier", bulwark: "bulwark", "soul-smith": "soulsmith", aurablade: "aurablade" };
+const MANIF_PATH_NAME = { wyrdlens: "Wyrdlens Adept", linguist: "Cosmic Linguist", pactkeeper: "Pactkeeper", dreamwalker: "Dreamwalker",
+  harmony: "Harmony Marshal", courier: "Shadow Courier", bulwark: "Bulwark", soulsmith: "Soul-Smith", aurablade: "Aurablade" };
+// which SRD class lists each Path's manifestations join (Wizard reaches Eldritch Knights and Arcane Tricksters)
+const MANIF_CLASSES = { wyrdlens: ["wizard", "sorcerer", "bard"], linguist: ["wizard", "bard", "warlock"], pactkeeper: ["warlock", "cleric", "paladin"],
+  dreamwalker: ["sorcerer", "warlock", "bard", "druid"], harmony: ["bard", "paladin", "cleric"], courier: ["wizard", "ranger", "bard"],
+  bulwark: ["paladin", "cleric"], soulsmith: ["wizard", "cleric"], aurablade: ["paladin", "ranger", "sorcerer"] };
+const MANIF_SCHOOL = { protect: "abj", harm: "evo", command: "enc", bind: "enc", reveal: "div", move: "con", transform: "trs", repair: "abj", heal: "abj" };
+const MANIF_SAVE = { soul: "wis", mind: "int", body: "con", evasion: "dex", resolve: "wis" };
+const MANIF_SAVE_NAME = { wis: "Wisdom", int: "Intelligence", con: "Constitution", dex: "Dexterity" };
+const MANIF_DMG = { psychic: "psychic", electrical: "lightning", kinetic: "force", thermal: "fire", chemical: "acid", poison: "poison", energy: "lightning", sephirotic: "sephirotic", qliphothic: "qliphothic" };
+const MANIF_COND = { shaken: { status: "frightened", text: "frightened" }, calmed: { status: "charmed", text: "charmed (it can't willingly take violent action)" },
+  compelled: { status: "charmed", text: "charmed, and it must spend its action each turn on what the spell demands" },
+  restrained: { status: "restrained", text: "restrained" }, charmed: { status: "charmed", text: "charmed" },
+  prone: { status: "prone", text: "knocked prone" }, blinded: { status: "blinded", text: "blinded" },
+  staggered: { status: "", text: "staggered: its speed is halved and it has a −2 penalty to attack rolls" } };
+function laneManifestations() {
+  const src = loadPack("items").filter(d => d.type === "power" && (d.system?.category === "manifestation" || d.system?.manifestation));
+  const out = [], needsAll = [], taken = new Set();
+  const sentence = s => String(s ?? "").trim().replace(/^(.)/, c => c.toUpperCase()).replace(/([^.!?])$/, "$1.");
+  for (const d of src.sort((a, b) => a.name.localeCompare(b.name))) {
+    const needs = [], S = d.system ?? {}, M = S.manifestation ?? {}, tags = S.tags ?? [];
+    const rfiPath = (tags.find(t => t.startsWith("path:")) ?? "").slice(5);
+    const pathKey = MANIF_PATH[rfiPath] ?? "";
+    if (!pathKey) needs.push(`unknown path tag "${rfiPath}"`);
+    const signature = tags.includes("doctrine-signature");
+    const slug = uniqueSlug(taken, slugOf("manifest-", d.name), d, needs);
+    const effectTxt = String(S.effect ?? "");
+    const fn = M.function ?? "protect";
+    const school = MANIF_SCHOOL[fn] ?? "abj";
+    const self = S.target === "self" || /^(Self|Sustained vestment \(self\)|Sustained self)/i.test(effectTxt);
+    const allyOrSelf = /\(or yourself\)|Self or one ally|or one touched ally/i.test(effectTxt);
+    const area = M.area?.shape && M.area.shape !== "none" ? { type: M.area.shape === "cone" ? "cone" : "sphere", size: Number(M.area.size) || 15 } : null;
+    const near = /within 3 squares/i.test(effectTxt) ? 15 : 30;
+    const touch = /touched ally|touch/i.test(effectTxt) && !/within/i.test(effectTxt);
+    const eachRound0 = /each round|re-saving each round|until they save/i.test(effectTxt) || !!(M.appliedStates ?? {}).saveEachRound;
+    // a held condition with a repeat save is a Hold Person shape: concentration, up to 1 minute
+    const sustained = M.duration === "scene" || M.stability === "sustained" || (eachRound0 && ((M.appliedStates ?? {}).states ?? []).length > 0);
+    const forScene = /for the scene/i.test(effectTxt);
+    const lasting = M.duration === "persistent" || M.stability === "bound" || M.stability === "enduring";
+    const st = M.appliedStates ?? {};
+    const states = (st.states ?? []).filter(Boolean);
+    const saveAb = MANIF_SAVE[String(st.saveAttribute ?? (effectTxt.match(/\b(Soul|Mind|Body)\b defense/i)?.[1] ?? "")).toLowerCase()] ?? (states.length ? "wis" : "");
+    const eachRound = /each round|re-saving each round|until they save/i.test(effectTxt) || !!st.saveEachRound;
+    const DR = S.damageRoll ?? {};
+    const dmg = DR.op === "damage" && Number(DR.number) > 0 ? { number: Number(DR.number), denomination: Number(String(DR.die ?? "d6").replace("d", "")) || 6, types: [MANIF_DMG[DR.type] ?? MANIF_DMG[S.damageType] ?? "force"] } : null;
+    const mods = M.appliedEffects?.modifiers ?? [];
+    const level = area && (states.length || dmg) ? 2 : 1;
+    // ── the effect on the target(s)
+    const changes = [];
+    let buffBits = [];
+    for (const m of mods) {
+      const v = (m.op === "-" ? -1 : 1) * Number(m.value || 0);
+      const sg = v >= 0 ? `+${v}` : `${v}`;
+      if (m.stat === "guard" || m.stat === "evasion") { changes.push({ key: "system.attributes.ac.bonus", mode: 2, value: sg, priority: 20 }); buffBits.push(`${sg} ${v >= 0 ? "bonus" : "penalty"} to AC`); }
+      else if (m.stat === "resolve") { changes.push({ key: "system.abilities.wis.bonuses.save", mode: 2, value: sg, priority: 20 }, { key: "system.abilities.cha.bonuses.save", mode: 2, value: sg, priority: 20 }); buffBits.push(`${sg} ${v >= 0 ? "bonus" : "penalty"} to Wisdom and Charisma saving throws`); }
+      else if (m.stat === "initiative") { changes.push({ key: "system.attributes.init.bonus", mode: 2, value: sg, priority: 20 }); buffBits.push(`${sg} to initiative`); }
+      else needs.push(`modifier on "${m.stat}" not mapped`);
+    }
+    // merge "+1 AC" twice (Guard +1 and Evasion +1) into one line
+    const acSum = changes.filter(c => c.key === "system.attributes.ac.bonus").reduce((a, c) => a + Number(c.value), 0);
+    if (changes.filter(c => c.key === "system.attributes.ac.bonus").length > 1) {
+      const rest = changes.filter(c => c.key !== "system.attributes.ac.bonus");
+      changes.length = 0; changes.push({ key: "system.attributes.ac.bonus", mode: 2, value: acSum >= 0 ? `+${acSum}` : `${acSum}`, priority: 20 }, ...rest);
+      buffBits = [`${acSum >= 0 ? "+" + acSum : acSum} ${acSum >= 0 ? "bonus" : "penalty"} to AC`, ...buffBits.filter(b => !/to AC$/.test(b))];
+    }
+    const conds = states.map(c => MANIF_COND[String(c).toLowerCase()]).filter(Boolean);
+    for (const c of states) if (!MANIF_COND[String(c).toLowerCase()]) needs.push(`state "${c}" not mapped`);
+    const statuses = [...new Set(conds.map(c => c.status).filter(Boolean))];
+    const durRounds = /for 1 round/i.test(effectTxt) && !eachRound && !forScene ? 1 : null;
+    const effects = [];
+    if (changes.length || statuses.length || conds.length) {
+      const seconds = durRounds ? 6 : (sustained ? 60 : lasting ? 3600 : 60);
+      effects.push({ name: d.name, img: d.img, transfer: false, disabled: false, statuses,
+        changes, duration: { seconds, ...(durRounds ? { rounds: 1 } : {}) }, description: "", flags: { "bad-eden-5e": { manifestation: slug } } });
+    }
+    // ── the activity
+    const debuff = mods.some(m => m.op === "-");
+    const activity = saveAb && (states.length || dmg) ? "save" : dmg ? "damage" : fn === "heal" ? "heal" : "utility";
+    // ── 5E prose
+    const who = area ? (area.type === "cone" ? `Each creature in a ${area.size}-foot cone` : `Each creature of your choice in a ${area.size}-foot-radius sphere centered on a point within range`)
+      : self && !allyOrSelf ? "You" : allyOrSelf ? "You or one ally within range" : (fn === "protect" || fn === "repair") && !debuff ? "One ally within range" : "One creature you can see within range";
+    const lines = [];
+    if (activity === "save") {
+      const lasting1 = conds.every(c => c.status === "prone") ? "" : (durRounds ? " until the end of its next turn" : " for the duration");
+      const onFail = [dmg ? `takes ${dmg.number}d${dmg.denomination} ${dmg.types[0]} damage` : "", conds.length ? `is ${conds.map(c => c.text).join(" and ")}${lasting1}` : ""].filter(Boolean).join(" and ");
+      const an = /^[AEIOU]/.test(MANIF_SAVE_NAME[saveAb]) ? "an" : "a";
+      lines.push(`${who} must make ${an} ${MANIF_SAVE_NAME[saveAb]} saving throw. On a failed save, it ${onFail}.` + (dmg && conds.length ? " On a successful save, it takes half as much damage and suffers no other effect." : ""));
+      if (eachRound && conds.length) lines.push("At the end of each of its turns, an affected creature repeats the saving throw, ending the effect on itself on a success.");
+    } else if (activity === "damage") {
+      lines.push(`${who === "You" ? "One creature you can see within range" : who} takes ${dmg.number}d${dmg.denomination} ${dmg.types[0]} damage.`);
+    }
+    if (buffBits.length) {
+      const subj = activity === "save" || activity === "damage" ? "The target also has" : who === "You" ? "You gain" : `${who} ${area ? "gains" : "gains"}`;
+      lines.push(`${subj} a ${buffBits.join(", ")} for the duration.`.replace(/^(.+?) gains a/, "$1 gains a").replace("a +", "a +").replace(" a -", " a −"));
+    }
+    if (!lines.length) { lines.push(sentence(convertText(effectTxt))); needs.push("no structured mechanics — 5E text is the rubric-converted RFI sentence; read it"); }
+    // flavour clauses Dave wrote after the mechanics ("as the neighborhood arrives") stay in the concept line
+    const concept = String(M.concept ?? "").trim();
+    const mal = String(S.flavor ?? "").replace(/^Mal:\s*/, "").trim();
+    const pathLine = signature
+      ? `<p><strong>Path of the ${MANIF_PATH_NAME[pathKey]} only.</strong> This is a Doctrine signature; only a character who walks the Path of the ${MANIF_PATH_NAME[pathKey]} can learn or prepare it.</p>`
+      : `<p><em>From the Path of the ${MANIF_PATH_NAME[pathKey]}.</em></p>`;
+    const description = (concept ? `<p><em>${concept}</em></p>` : "") + lines.map(l => `<p>${l}</p>`).join("") + pathLine + (mal ? `<p><em>Mal:</em> ${mal}</p>` : "");
+    for (const l of leftovers(description)) needs.push(`leftover term "${l}"`);
+    const range = (self && !allyOrSelf && !area) || area?.type === "cone" ? null : touch ? { units: "touch" } : { value: near };
+    const e = {
+      slug, name: d.name, img: d.img, level, school, method: "spell", activation: "action",
+      ...(range ? { range } : {}),
+      target: area ? { template: { type: area.type === "cone" ? "cone" : "sphere", size: area.size } } : self && !allyOrSelf ? { type: "self" } : { type: "creature", count: 1 },
+      // "for the scene" on an instant cast (a buff that simply lasts) → 1 minute without concentration
+      duration: sustained || (forScene && !lasting) ? { value: "1", units: "minute" } : lasting ? { value: "1", units: "hour" } : durRounds ? { value: "1", units: "round" } : { units: "inst" },
+      concentration: sustained,
+      activity, ...(activity === "save" ? { save: { ability: saveAb, onSave: dmg ? "half" : "none" } } : {}),
+      ...(dmg ? { damage: [dmg] } : {}),
+      effects, linkEffects: true, classes: MANIF_CLASSES[pathKey] ?? [],
+      description,
+      flags: { "bad-eden-5e": { rfi: rfiFlag(d, "items"), manifestation: { path: pathKey, signature }, ...(signature ? { requiresPath: pathKey } : {}) } }
+    };
+    out.push(e); if (needs.length) needsAll.push({ slug, name: d.name, needs });
+  }
+  return { src, out, needsAll, kind: "spells" };
+}
+
 /* ── main ────────────────────────────────────────────────────────────────── */
 const LANES = { techniques: laneTechniques, gear: laneGear, creatures: laneCreatures, secrets: laneSecrets, callings: laneCallings, sparks: laneSparks,
-  doctrines: laneDoctrines, rigs: laneRigs, ...Object.fromEntries(Object.keys(OPTION_LANES).map(k => [k, () => laneOptions(k)])) };
+  doctrines: laneDoctrines, rigs: laneRigs, manifestations: laneManifestations, ...Object.fromEntries(Object.keys(OPTION_LANES).map(k => [k, () => laneOptions(k)])) };
 if (!lane || !LANES[lane]) { console.error(`usage: convert-5e.mjs <${Object.keys(LANES).join("|")}> [--write] [--parity]`); process.exit(2); }
 const { src, out, needsAll, kind = "features" } = LANES[lane]();
 if (flag("--parity")) { parity(lane, src, out, kind); }
 else if (flag("--write")) {
   const ABOUT = { techniques: "The 75 Bad Eden Core techniques as dnd5e feats.", gear: "Bad Eden weapons, armor, gear, wondrous items and consumables as dnd5e items (prices in marks).", secrets: "The Courtly Intrigue secrets as dnd5e feats (the secret engine block carried verbatim).", callings: "The NPC callings (trade + trick per tier) as dnd5e monster feats.", sparks: "The 30 Tikkun sparks as dnd5e loot; the RFI spark block rides at flags.bbttcc-tikkun.spark.", creatures: "The Bad Eden bestiary (the live NPC Pack's lineage-flagged monsters) as dnd5e npc actors, scored by tier and bracket through the threat chassis.",
+    manifestations: "The starter-kit manifestations as ordinary dnd5e slot spells (pack spells) with the class lists they join; Doctrine signatures are Path-locked (flags.bad-eden-5e.requiresPath).",
     doctrines: "The faction doctrines as dnd5e feats (flags.bbttcc kind/key carried verbatim for the factions module).",
     rigs: "The five faction rigs as dnd5e vehicles carrying flags.bbttcc-factions.rig (the shape game.bbttcc.rigs writes on dnd5e); rig gear keeps flags.fourththing.rigGear/rigFrame.",
     ...Object.fromEntries(Object.entries(OPTION_LANES).map(([k, v]) => [k, `The ${v.folder} (bbttcc-character-options.${v.pack}) as dnd5e feats; flags.bbttcc-character-options carried verbatim for the pickers.`])) };

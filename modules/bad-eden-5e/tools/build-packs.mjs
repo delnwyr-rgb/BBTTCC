@@ -148,11 +148,12 @@ const DAMAGE_PART = p => ({
   number: p.number ?? null, denomination: p.denomination ?? 0, bonus: p.bonus ?? "", types: p.types ?? [],
   scaling: { mode: p.scaling?.mode ?? "", number: p.scaling?.number ?? 1 }
 });
-function powerDoc(p, folderId) {
-  const key = `powers:${p.slug}`;
-  lint(`power ${p.slug}`, p.description);
-  lint(`power ${p.slug} (name)`, p.name);
-  const method = SCHOOL_TRADITION[p.school];
+function powerDoc(p, folderId, pack = "powers") {
+  const key = `${pack}:${p.slug}`;
+  const slotSpell = p.method === "spell";   // 2026-10-31: manifestations are ordinary slot spells (dnd5e schools)
+  lint(`power ${p.slug}`, p.description, { rfi: slotSpell });
+  lint(`power ${p.slug} (name)`, p.name, { rfi: slotSpell });
+  const method = slotSpell ? "spell" : SCHOOL_TRADITION[p.school];
   if (!method) { console.error(`power ${p.slug}: unknown school "${p.school}" (seph|qliph|unal|art)`); process.exit(1); }
   const aid = id(`activity:${key}`);
   const type = p.activity ?? "utility";
@@ -167,7 +168,7 @@ function powerDoc(p, folderId) {
   const act = {
     _id: aid, type, name: "", img: "", sort: 0,
     activation: { type: p.activation ?? "action", value: p.activationValue ?? null, condition: p.condition ?? "", override: false },
-    consumption: { targets: [], scaling: { allowed: p.level > 0 && p.scaling !== "none", max: "" }, spellSlot: false },  // the engine charges points; dnd5e never touches slots
+    consumption: { targets: [], scaling: { allowed: p.level > 0 && p.scaling !== "none", max: "" }, spellSlot: slotSpell },  // points engines charge their own pool; slot spells spend slots
     description: { chatFlavor: "" },
     duration: { concentration: !!p.concentration, ...duration, override: false },
     effects: [], range: { ...range, override: false }, target: { ...target, prompt: true, override: false },
@@ -185,6 +186,13 @@ function powerDoc(p, folderId) {
   const properties = [];
   if (p.concentration) properties.push("concentration");
   if (p.ritual) properties.push("ritual");
+  if (slotSpell) properties.unshift("vocal", "somatic");
+  const effects = (p.effects ?? []).map((e, i) => {
+    const eid = /^[A-Za-z0-9]{16}$/.test(e._id ?? "") ? e._id : id(`effect:${key}:${i}`);
+    return { ...e, _id: eid, _key: `!items.effects!${id(key)}.${eid}` };
+  });
+  // the activity applies the spell's effects (save: on a failed save only)
+  if (p.linkEffects) act.effects = effects.map(e => ({ _id: e._id, onSave: false, level: {} }));
   return {
     _id: id(key), name: p.name, type: "spell", img: p.img ?? "icons/magic/water/orb-water-bubbles.webp",
     folder: folderId ?? null, sort: p.level * 100000,
@@ -196,15 +204,12 @@ function powerDoc(p, folderId) {
       uses: { max: "", spent: 0, recovery: [] },
       level: p.level, school: p.school, properties,
       materials: { value: "", consumed: false, cost: 0, supply: 0 },
-      method, prepared: 1, ability: "",
+      method, prepared: slotSpell ? 0 : 1, ability: "",
       activities: { [aid]: act },
       identifier: p.slug
     },
-    effects: (p.effects ?? []).map((e, i) => {
-      const eid = /^[A-Za-z0-9]{16}$/.test(e._id ?? "") ? e._id : id(`effect:${key}:${i}`);
-      return { ...e, _id: eid, _key: `!items.effects!${id(key)}.${eid}` };
-    }),
-    flags: { [MOD]: { sw5e: p.sw5e ?? "" }, dnd5e: { riders: { activity: [], effect: [] } } },
+    effects,
+    flags: { [MOD]: { sw5e: p.sw5e ?? "", ...(p.flags?.[MOD] ?? {}) }, dnd5e: { riders: { activity: [], effect: [] } } },
     _key: `!items!${id(key)}`
   };
 }
@@ -463,7 +468,7 @@ function main() {
   const files = readdirSync(CONTENT).filter(f => f.endsWith(".json")).sort();
   // item lanes route by the content file's `_pack` (default gear): courtly-secrets / npc-callings / sparks (2026-10-08)
   // 2026-10-11: + the six character-options twins, doctrines and vehicles (rigs) — the packs a D&D world on Ember needs
-  const TWIN_PACKS = ["archetypes", "character-archetypes", "crew-types", "enlightenment-levels", "occult-associations", "political-affiliations", "sephirothic-alignments", "doctrines", "vehicles"];
+  const TWIN_PACKS = ["spells", "spell-lists", "archetypes", "character-archetypes", "crew-types", "enlightenment-levels", "occult-associations", "political-affiliations", "sephirothic-alignments", "doctrines", "vehicles"];
   const docs = { classes: [], subclasses: [], features: [], powers: [], species: [], tables: [], gear: [], monsters: [], "courtly-secrets": [], "npc-callings": [], sparks: [], ...Object.fromEntries(TWIN_PACKS.map(p => [p, []])) };
   const folders = { features: new Map(), powers: new Map(), species: new Map(), gear: new Map(), monsters: new Map(), "courtly-secrets": new Map(), "npc-callings": new Map(), sparks: new Map(), ...Object.fromEntries(TWIN_PACKS.map(p => [p, new Map()])) };
   const folderFor = (pack, name, parent) => {
@@ -473,6 +478,7 @@ function main() {
   };
 
   const pendingBackgrounds = [];
+  const spellLists = {};   // class identifier → spell UUIDs (2026-10-31: the manifestations join the SRD lists)
   for (const file of files) {
     const data = JSON.parse(readFileSync(join(CONTENT, file), "utf8"));
     for (const c of data.classes ?? []) docs.classes.push(classDoc(c));
@@ -483,6 +489,11 @@ function main() {
     const itemPack = docs[data._pack] && folders[data._pack] ? data._pack : "gear";
     for (const it of data.items ?? []) docs[itemPack].push(rawItemDoc(it, it.folder ? folderFor(itemPack, it.folder, it.folderParent ?? null) : null));
     if (data.backgrounds) pendingBackgrounds.push(data);
+    for (const sp of data.spells ?? []) {
+      const LEVEL = ["Cantrips", "1st level", "2nd level", "3rd level", "4th level", "5th level", "6th level", "7th level", "8th level", "9th level"];
+      docs.spells.push(powerDoc(sp, folderFor("spells", LEVEL[sp.level] ?? `Level ${sp.level}`, null), "spells"));
+      for (const c of sp.classes ?? []) (spellLists[c] ??= []).push(`Compendium.${MOD}.spells.Item.${id(`spells:${sp.slug}`)}`);
+    }
     for (const r of data.races ?? []) { const d = raceDoc(r); if (r.family) d.folder = folderFor("species", r.family, null); docs.species.push(d); }
     for (const f of data.features ?? []) {
       const fid = f.folder ? folderFor("features", f.folder, f.folderParent ?? null) : null;
@@ -500,6 +511,20 @@ function main() {
   if (pendingBackgrounds.length) {
     const cards = new Map(JSON.parse(readFileSync(join(CONTENT, "archetypes.json"), "utf8")).items.map(it => [it.slug, it]));
     for (const data of pendingBackgrounds) for (const b of data.backgrounds) docs.archetypes.push(backgroundDoc(b, data.originFeats ?? [], cards));
+  }
+  // One journal, one "spells" page per class: dnd5e merges pages by (type, identifier) into the class's list.
+  // module.json flags.dnd5e.spellLists names these pages (printed below; ids are deterministic).
+  if (Object.keys(spellLists).length) {
+    const jid = id("spell-lists:bad-eden");
+    const CLASS_NAME = { bard: "Bard", cleric: "Cleric", druid: "Druid", paladin: "Paladin", ranger: "Ranger", sorcerer: "Sorcerer", warlock: "Warlock", wizard: "Wizard" };
+    const pages = Object.keys(spellLists).sort().map((c, i) => {
+      const pid = id(`spell-lists:bad-eden:${c}`);
+      return { _id: pid, name: `${CLASS_NAME[c] ?? c} Spells (Bad Eden)`, type: "spells", sort: i * 1000, title: { show: true, level: 1 },
+        system: { type: "class", identifier: c, grouping: "level", description: { value: "<p>Bad Eden manifestations on this class's spell list.</p>" }, spells: [...new Set(spellLists[c])].sort(), unlinkedSpells: [] },
+        _key: `!journal.pages!${jid}.${pid}` };
+    });
+    docs["spell-lists"].push({ _id: jid, name: "Bad Eden Spell Lists", folder: null, sort: 0, pages, flags: {}, _key: `!journal!${jid}` });
+    console.log("spellLists flag: " + JSON.stringify(pages.map(p => `Compendium.${MOD}.spell-lists.JournalEntry.${jid}.JournalEntryPage.${p._id}`)));
   }
   // a power's slug must be unique, and a feature's too
   for (const pack of ["features", "powers"]) {

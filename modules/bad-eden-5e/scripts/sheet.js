@@ -224,6 +224,20 @@ export function registerSheet() {
     });
   });
 
+  // Path-locked manifestations (2026-10-31): a Doctrine-signature spell needs its Path (a surge-powers Path item,
+  // flags.surge-powers.path.key). Players are refused; the GM is warned and may proceed.
+  Hooks.on("preCreateItem", (item, data, options, userId) => {
+    if (userId !== game.user.id || item.type !== "spell" || item.parent?.type !== "character") return;
+    const need = item.getFlag?.(MOD, "requiresPath") ?? data?.flags?.[MOD]?.requiresPath;
+    if (!need) return;
+    const has = item.parent.items.some(i => i.flags?.["surge-powers"]?.path?.key === need);
+    if (has) return;
+    const pathName = game.surgePowers?.paths?.data?.[need]?.name ?? `the ${need} Path`;
+    if (game.user.isGM) { ui.notifications?.warn?.(`${item.name} belongs to ${pathName}; ${item.parent.name} doesn't walk it (added anyway — you're the GM).`); return; }
+    ui.notifications?.warn?.(`${item.name} is a ${pathName} signature. ${item.parent.name} has to walk that Path to learn it.`);
+    return false;
+  });
+
   // An SRD background is not part of Bad Eden: the Archetype is the character's origin.
   Hooks.on("preCreateItem", (item, data, options, userId) => {
     if (userId !== game.user.id || item.type !== "background" || item.parent?.type !== "character") return;

@@ -2,7 +2,7 @@
   "id": "bad-eden-5e",
   "title": "Bad Eden 5E",
   "description": "Bad Eden for D&D 5E: the Flow and Artifice (points-based casting), the Flow Wolves (Theurge, Warden, Vigilant) and the Gearwright, and their powers. D&D-only content; the RFI system never loads this module.",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "authors": [
     {
       "name": "David English"
@@ -68,6 +68,28 @@
       "label": "Bad Eden Powers",
       "path": "packs/powers",
       "type": "Item",
+      "system": "dnd5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "spells",
+      "label": "Bad Eden Spells",
+      "path": "packs/spells",
+      "type": "Item",
+      "system": "dnd5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "spell-lists",
+      "label": "Bad Eden Spell Lists",
+      "path": "packs/spell-lists",
+      "type": "JournalEntry",
       "system": "dnd5e",
       "ownership": {
         "PLAYER": "OBSERVER",
@@ -260,6 +282,8 @@
         "subclasses",
         "features",
         "powers",
+        "spells",
+        "spell-lists",
         "archetypes",
         "species",
         "tables",
@@ -285,7 +309,20 @@
       ]
     }
   ],
-  "flags": {},
+  "flags": {
+    "dnd5e": {
+      "spellLists": [
+        "Compendium.bad-eden-5e.spell-lists.JournalEntry.oIsRoAxFnIsMaFT1.JournalEntryPage.GQGVeWNHuSe8sDYN",
+        "Compendium.bad-eden-5e.spell-lists.JournalEntry.oIsRoAxFnIsMaFT1.JournalEntryPage.EPm5eH0Oz63SyR7M",
+        "Compendium.bad-eden-5e.spell-lists.JournalEntry.oIsRoAxFnIsMaFT1.JournalEntryPage.InAUDfoj1sYH2BFm",
+        "Compendium.bad-eden-5e.spell-lists.JournalEntry.oIsRoAxFnIsMaFT1.JournalEntryPage.iSFZyDfW2LByROFj",
+        "Compendium.bad-eden-5e.spell-lists.JournalEntry.oIsRoAxFnIsMaFT1.JournalEntryPage.hoLRK7TAzmcJHVnB",
+        "Compendium.bad-eden-5e.spell-lists.JournalEntry.oIsRoAxFnIsMaFT1.JournalEntryPage.USFV3mZ7J173JimR",
+        "Compendium.bad-eden-5e.spell-lists.JournalEntry.oIsRoAxFnIsMaFT1.JournalEntryPage.meDhu04H1c7PqXaP",
+        "Compendium.bad-eden-5e.spell-lists.JournalEntry.oIsRoAxFnIsMaFT1.JournalEntryPage.8e687ENOcn1bOSw8"
+      ]
+    }
+  },
   "url": "https://github.com/delnwyr-rgb/BBTTCC",
   "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bad-eden-5e.module.json",
   "download": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bad-eden-5e.zip"
