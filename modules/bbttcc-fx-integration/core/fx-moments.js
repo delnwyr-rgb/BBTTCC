@@ -361,6 +361,10 @@ async function loadSpecs() {
       if (k.startsWith("_")) continue;
       specs.set(k, { size: "beat", tone: "info", audience: "all", ...v });
     }
+    // Per-system wording (2026-10-31): "_systems": { "<system id>": { "<moment>": { kicker/title/subtitle… } } } merges
+    // over the base spec on that system — Bad Eden 5E says Level, not Initiation.
+    const over = json?._systems?.[game.system?.id] ?? {};
+    for (const [k, v] of Object.entries(over)) if (specs.has(k)) specs.set(k, { ...specs.get(k), ...v });
     console.log(TAG, `${specs.size} moments loaded.`);
   } catch (e) { console.warn(TAG, "could not load", DATA_URL, e); }
 }

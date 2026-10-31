@@ -7,6 +7,7 @@ import { activateRiders, registerRiderStatus, riders } from "./riders.js";
 import { activateReminders } from "./reminders.js";
 import { registerSheet, linkedDomain, domainContext } from "./sheet.js";
 import { registerRules, activateRules, grantFirearms, FIREARM_CLASSES } from "./rules.js";
+import { activateMoments } from "./moments.js";
 
 Hooks.once("init", () => {
   if (game.system.id !== "dnd5e") return;
@@ -38,6 +39,7 @@ Hooks.once("ready", () => {
   activateReminders();
   activateDisciplines();
   activateRules();
+  activateMoments();   // the RFI announcements (Surge, level/tier up, Last Stand, Enlightenment) — 2026-10-31
   game.badEden5e = { MOD, TRADITIONS, castingFor, setPoints, restore, restorePoints, costAt, costFor, traditionOf, nativeTraditionOf, isCrossCast, abilityFor, castThrough, crossCastsFor, autoCastThrough, redshirts, riders, disciplines, linkedDomain, domainContext, rules: { grantFirearms, FIREARM_CLASSES } };
   console.log(`${MOD} | ready: the Flow and Artifice`);
 });

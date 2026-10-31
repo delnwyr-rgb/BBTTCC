@@ -467,8 +467,33 @@
         ${tag ? `<span class="cd-port-tag">${tag}</span>` : ""}</button>`;
     }).join("") + `</div>`;
   }
+  // D&D (2026-10-31, Dave mid-shoot: "we need the surge … meter info on the combat HUD"): the Surge heat meter from
+  // surge-powers (heat(): Cool / Stoked / Overheated, click = the Surge menu with Vent) + Flow / Artifice points for the
+  // bad-eden-5e casters. dnd5e tracks its own action economy, so no A/B/R pips here.
+  function slotsHTML5e(s) {
+    let surge = "", points = "";
+    try {
+      const H = game.surgePowers?.heat?.(s.actor);
+      if (H && H.cap > 0) {
+        const segs = Array.from({ length: H.cap }, (_, i) => `<span class="cd-heat-seg ${i < H.value ? "is-lit" : ""}"></span>`).join("");
+        surge = `<button type="button" class="cd-heat ${H.overheated ? "is-overheated" : ""}" data-dock="surge" style="--heat:${H.color}"
+          data-tooltip="${esc(`Surge ${H.value}/${H.cap} — ${H.label}<br>${H.tip}<br>Click for the Surge menu (Vent is at the bottom).`)}">
+          <i class="fas fa-fire"></i><span class="cd-heat-bar">${segs}</span><span class="cd-heat-val">${H.value}/${H.cap}</span><span class="cd-heat-band">${esc(H.label)}</span></button>`;
+      }
+    } catch (_e) {}
+    try {
+      const C = game.badEden5e?.castingFor?.(s.actor) ?? {};
+      for (const t of Object.values(C)) {
+        if (!t?.max) continue;
+        const pct = Math.round(Math.max(0, Math.min(1, t.value / t.max)) * 100);
+        points += `<span class="cd-move" data-tooltip="${esc(`${t.pointsLabel}: ${t.value} of ${t.max} — a long rest refills them`)}"><i class="fas fa-${t.key === "artifice" ? "gears" : "water"}"></i><span class="cd-move-bar"><span style="width:${pct}%"></span></span>${t.value}/${t.max} ${esc(t.key === "artifice" ? "Artifice" : "Flow")}</span>`;
+      }
+    } catch (_e) {}
+    if (!surge && !points) return "";
+    return `<div class="cd-slots">${points}${surge}</div>`;
+  }
   function slotsHTML(s) {
-    if (IS_5E()) return "";
+    if (IS_5E()) return slotsHTML5e(s);
     const a = sysOf(s.actor).actions ?? {};
     const pip = (k, label, used) => `<span class="cd-slot ${used ? "is-spent" : ""}" data-tooltip="${label}${used ? " — spent" : " — ready"}">${used ? "◇" : "◆"} ${label}</span>`;
     const budget = Number(a.movementBudgetFt) || 0, used = Number(a.movementUsedFt) || 0;
@@ -619,7 +644,7 @@
       const s = subject(); if (!s) return;
       switch (b.dataset.dock) {
         case "fire": { const e = findEntry(s, b.dataset.g, b.dataset.k); if (e) activate(e, s); return; }
-        case "surge": return hud()?.fire?.pool?.(s.actor, "surge");
+        case "surge": return IS_5E() ? game.surgePowers?.openMenu?.(s.actor) : hud()?.fire?.pool?.(s.actor, "surge");
         case "end": {
           if (_aim) endAim();
           try { await game.combat?.nextTurn(); } catch (e) { ui.notifications?.warn?.("Couldn't end the turn — ask the GM."); warn(e); }
