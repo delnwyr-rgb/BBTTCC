@@ -5,8 +5,10 @@
  *   game.bbttcc.rigs.gauntlet.teardown()   delete the probes (run() tears down at the end anyway)
  *
  * Probes: a scratch faction ("Rig Probe Faction", bank at 0 so turn-output deltas are exact), a
- * scratch steward, a medium hybrid rig made through the accessor, a hexmobile from the rig-builder,
- * and a watchtower from the structures recipes. Mirrors the Crashtest Redshirts harness (bad-eden-5e).
+ * scratch steward (always a probe — never a world actor, review C28), a medium hybrid rig made through
+ * the accessor, a hexmobile from the rig-builder, and a watchtower from the structures recipes. Teardown
+ * steps every probe steward off its rig before deleting (tokens / sight / boardedRig restored).
+ * Mirrors the Crashtest Redshirts harness (bad-eden-5e).
  * ───────────────────────────────────────────────────────────────────────────── */
 (() => {
   if (game?.system?.id && game.system.id !== "dnd5e") return;
@@ -33,8 +35,15 @@
 
   const probes = () => game.actors.filter(a => a.name.startsWith(PFX) || a.flags?.[F]?.rigProbe);
   async function teardown() {
+    const R = game.bbttcc?.rigs;
+    // review C28: a timed-out disembark used to leave the steward hidden on every scene — force it off first
+    for (const a of probes()) {
+      if (!R?.boardedRigOf?.(a)?.rigId) continue;
+      try { await R.impl?.forceUnboard?.(a, { why: "gauntlet teardown" }); } catch (e) { console.warn(TAG, "teardown unboard failed", a.name, e); }
+    }
     const ids = probes().map(a => a.id);
     if (ids.length) await Actor.deleteDocuments(ids);
+    try { R?.impl?.sweepOrphanCrew?.(); } catch (_e) {}
     log(`torn down ${ids.length} probe actor(s)`);
     return ids.length;
   }
@@ -51,7 +60,7 @@
     let faction, steward, rig, hexmobile, tower;
     await Rp.step("probe faction + steward exist", async () => {
       faction = await Actor.create({ name: `${PFX} Faction`, type: "character", img: "icons/svg/castle.svg", flags: { [F]: { isFaction: true, rigProbe: true, opBank: {} } } });
-      steward = game.actors.find(a => a.name === "Redshirt Fighter") ?? await Actor.create({ name: `${PFX} Steward`, type: "character", flags: stamp });
+      steward = await Actor.create({ name: `${PFX} Steward`, type: "character", flags: stamp });   // C28: never a world actor
       return [!!faction && !!steward, `${faction?.name} · steward ${steward?.name}`];
     });
 
@@ -63,12 +72,17 @@
     });
 
     // ── create through the accessor ──
-    await Rp.step("rigs.create: a medium hybrid rig = vehicle, 60/60 HP, dt 10, owned", async () => {
-      rig = await R.create({ name: `${PFX} Barge`, identity: { mobility: "hybrid", archetype: "probe-barge", factionOwnerId: faction.id }, integrity: { bracket: "medium" }, travel: { domains: ["land", "water"] } });
+    await Rp.step("rigs.create: a medium hybrid rig = vehicle, 60/60 HP, dt 10, AC 11 + tier, owned", async () => {
+      rig = await R.create({ name: `${PFX} Barge`, identity: { mobility: "hybrid", archetype: "probe-barge", factionOwnerId: faction.id }, integrity: { bracket: "medium", tier: 2 }, travel: { domains: ["land", "water"] } });
       await rig.update({ flags: stamp });
-      const d = R.data(rig);
-      return [rig.type === "vehicle" && R.isRig(rig) && d.integrity.max === 60 && d.integrity.value === 60 && rig.system.attributes.hp.dt === 10 && R.ownerOf(rig) === faction.id,
-        `${rig.type}, ${d.integrity.value}/${d.integrity.max} dt ${rig.system.attributes.hp.dt}, domains ${d.travel.domains.join("+")}`];
+      const d = R.data(rig); const ac = rig.system.attributes.ac?.flat;
+      return [rig.type === "vehicle" && R.isRig(rig) && d.integrity.max === 60 && d.integrity.value === 60 && rig.system.attributes.hp.dt === 10 && ac === R.acFor("medium", 2) && R.ownerOf(rig) === faction.id,
+        `${rig.type}, ${d.integrity.value}/${d.integrity.max} dt ${rig.system.attributes.hp.dt} ac ${ac}, domains ${d.travel.domains.join("+")}`];
+    });
+    await Rp.step("AC follows bracket + tier through update (C20): heavy T3 → 12, back to medium T2 → 13", async () => {
+      await R.update(rig, { "integrity.bracket": "heavy", "integrity.tier": 3 }); await sleep(150); const a1 = rig.system.attributes.ac?.flat, dt1 = rig.system.attributes.hp.dt;
+      await R.update(rig, { "integrity.bracket": "medium", "integrity.tier": 2 }); await sleep(150); const a2 = rig.system.attributes.ac?.flat;
+      return [a1 === R.acFor("heavy", 3) && dt1 === 15 && a2 === R.acFor("medium", 2), `heavy T3 ac ${a1} dt ${dt1} → medium T2 ac ${a2}`];
     });
     await Rp.step("rigs.listByFaction finds it; ownerOf honours both owner keys", () => {
       const names = R.listByFaction(faction.id).map(a => a.name);
@@ -100,27 +114,26 @@
       return [got && st !== "destroyed", `destroyed hook ${got}, state ${st}`];
     });
 
-    // ── output per turn through the OP engine ──
-    await Rp.step("output + order: outputFor reports the parked rate", async () => {
-      await R.update(rig, { "output.basePerTurn": { economy: 2, logistics: 1 }, order: "harvest" }); await sleep(150);
-      const o = await R.outputFor(rig);
-      return [o?.economy === 2 && o?.logistics === 1, JSON.stringify(o)];
+    // ── output per turn — RFI's math (review C18): a medium rig that moves earns 2 Logistics OP (= 2 × marksPerOp marks) parked ──
+    const mpo = () => Number(game.bbttcc?.api?.op?.marksPerOp?.()) || 0;
+    await Rp.step("outputFor (parked): base-by-size Logistics in marks; outputPreview says it produces", async () => {
+      const o = await R.outputFor(rig); const p = R.outputPreview?.(rig);
+      return [o?.marks?.logistics === 2 * mpo() && p?.produces === true && /Logistics marks/.test(p?.parkedText ?? ""), `${JSON.stringify(o)} · ${p?.parkedText}`];
     });
-    await Rp.step("applyTurnOutput credits the faction bank in marks (2 econ + 1 log + harvest 1 log = 20/20)", async () => {
+    await Rp.step("applyTurnOutput pays the Domain bank (parked medium = base-by-size Logistics, in marks) + GM card", async () => {
       const bank = () => faction.flags?.[F]?.opBank ?? {};
-      const b0 = { e: Number(bank().economy) || 0, l: Number(bank().logistics) || 0 };
+      const l0 = Number(bank().logistics) || 0;
       const since = game.messages.size;
       await race(R.applyTurnOutput({ quiet: false }), 12000); await sleep(600);
-      const b1 = { e: Number(bank().economy) || 0, l: Number(bank().logistics) || 0 };
-      const mpo = Number(game.bbttcc?.api?.op?.marksPerOp?.()) || 10;
+      const l1 = Number(bank().logistics) || 0;
       const card = game.messages.contents.slice(since).some(m => /Rig output/.test(m.content));
-      return [b1.e - b0.e === 2 * mpo && b1.l - b0.l === 2 * mpo && card, `economy +${b1.e - b0.e}, logistics +${b1.l - b0.l} marks; card ${card}`];
+      return [l1 - l0 === 2 * mpo() && card, `logistics +${l1 - l0} marks; card ${card}`];
     });
     await Rp.step("deployed rig produces half; destroyed produces none", async () => {
       await race(R.deploy(rig)); await sleep(150); const half = await R.outputFor(rig);
       await race(R.park(rig)); await R.update(rig, { "identity.state": "destroyed" }); await sleep(150); const none = await R.outputFor(rig);
       await R.update(rig, { "identity.state": "parked" });
-      return [Number(half?.economy) === 1 && !(Number(none?.economy) > 0), `deployed ${JSON.stringify(half)}, destroyed ${JSON.stringify(none)}`];
+      return [Number(half?.marks?.logistics) === mpo() && !Object.keys(none?.marks ?? {}).length, `deployed ${JSON.stringify(half?.marks)}, destroyed ${JSON.stringify(none?.marks)}`];
     });
 
     // ── boarding ──

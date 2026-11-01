@@ -131,10 +131,13 @@ async function onRollAttack(rolls, { subject: activity }={}) {
   const attacked = lastAttack?.system?.targets?.length ? lastAttack.system.targets : usage.system?.targets;
   const system = { origin: usage.id };
   if ( attacked?.length ) system.targets = attacked.map(t => (t.toObject ? t.toObject() : { ...t }));
+  // 10-31 (review C54): name the attack this damage follows, so the GM judges the card against ITS roll —
+  // not the usage's latest attack (Scorching Ray: three rays, one usage; ray 2's miss was skipping ray 1's hit).
+  const flags = lastAttack ? { [ID]: { attackMessage: lastAttack.id } } : {};
   await activity.rollDamage(
     { ability, ammunition, attackMode, isCritical: roll.isCritical },
     { configure: false },
-    { data: { system } }
+    { data: { system, flags } }
   );
 }
 
@@ -163,11 +166,26 @@ async function applyDamageCard(message) {
   const rolls = message.rolls.filter(r => r instanceof DamageRoll);
   if ( !rolls.length ) return;
 
-  // Which targets does this land on?
-  const attack = (activity?.type === "attack") ? usage?.getAssociatedRolls("attack").pop() : null;
+  // Which targets does this land on? The card's own attack (stamped by onRollAttack, C54); the usage's last
+  // attack only for cards that arrived without the stamp.
+  const stamped = game.messages.get(message.flags?.[ID]?.attackMessage);
+  const attack = (activity?.type === "attack") ? (stamped ?? usage?.getAssociatedRolls("attack").pop()) : null;
   if ( (activity?.type === "attack") && !attack ) return;   // damage without an attack roll: leave it manual
   const attackRoll = attack?.rolls?.[0];
   const attackAC = new Map((attack?.system?.targets ?? []).map(t => [t.token, t.ac]));
+
+  // 10-31 (review C70): dnd5e stamps EVERY current target on each attack card, so one attack roll against
+  // several targets (Scorching Ray / Eldritch Blast rays, or a stray second target) would land on each one the
+  // roll beats — up to 3× damage per target. A single attack roll decides one target: leave these to the tray.
+  const rolledAgainst = attack?.system?.targets?.length ?? 0;
+  if ( attackRoll && (rolledAgainst > 1) ) {
+    const names = attack.system.targets.map(t => foundry.utils.escapeHTML(String(t.name ?? "?"))).join(", ");
+    await gmCard(`⚔ ${message.flavor || activity?.item?.name || "Damage"}`, [
+      `One attack roll, ${rolledAgainst} targets (${names}): <em>not applied</em>. Apply it from the damage card's tray`
+      + " to the one this roll was aimed at — ray and beam spells want one target per attack roll."
+    ]);
+    return;
+  }
 
   // Save-based: wait briefly for outcomes to land before halving.
   const onSave = message.system?.onSave;
@@ -424,8 +442,15 @@ async function onAttackCard(message) {
   const effects = await usage.system?.getEffects?.() ?? [];
   if ( !effects.length ) return;
   if ( !(await claim(message, "effects")) ) return;
+  // 10-31 (review C70): one attack roll, several recorded targets — the same ray problem for effects.
+  const descriptors = message.system?.targets ?? [];
+  if ( descriptors.length > 1 ) {
+    await gmCard(`✦ ${usage.getAssociatedItem?.()?.name ?? "Effects"}`,
+      [`One attack roll, ${descriptors.length} targets: effects <em>not applied</em> — pick the target this roll hit from the card's Effects tray.`]);
+    return;
+  }
   const hit = [];
-  for ( const descriptor of message.system?.targets ?? [] ) {
+  for ( const descriptor of descriptors ) {
     if ( !attackHits(roll, descriptor.ac) ) continue;
     const target = resolveTarget(descriptor);
     if ( target?.actor ) hit.push(target.actor);

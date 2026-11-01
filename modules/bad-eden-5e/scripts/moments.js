@@ -27,23 +27,35 @@ export function activateMoments() {
   });
 
   // ── Level up / tier up (a class item's levels rise on this client) ──
+  // dnd5e's AdvancementManager commits a level-up as ONE Item update batch holding EVERY item on the actor
+  // (diff:false), and Foundry hands the same options object to every document in that batch — so the class item's
+  // preUpdate stash is visible to every feature, weapon and spell in it (review C1: ~30 TIER UP cards). Only class
+  // items announce, and a per-actor memory of the last announced level keeps the two paths (an existing class's
+  // update; the create of a new one — a multiclass dip arrives already at its final levels, review P1) from
+  // announcing the same level twice.
+  const announced = new Map();   // actorId → { to, at }
+  const announce = (actor, from, to) => {
+    if (!actor || !(to > from)) return;
+    const last = announced.get(actor.id);
+    if (last && last.to === to && Date.now() - last.at < 5000) return;
+    announced.set(actor.id, { to, at: Date.now() });
+    const tierFrom = tierFor(from), tier = tierFor(to);
+    emit("fourththing.leveledUp", { actorId: actor.id, actorUuid: actor.uuid, actorName: actor.name, from, to, tierFrom, tier, tierUp: tier > tierFrom });
+  };
   Hooks.on("preUpdateItem", (item, changes, options) => {
     if (item.type !== "class" || item.parent?.type !== "character" || !foundry.utils.hasProperty(changes, "system.levels")) return;
     options.be5eLevelFrom = charLevel(item.parent);
   });
   Hooks.on("updateItem", (item, changes, options, userId) => {
-    if (userId !== game.user.id || options.be5eLevelFrom == null) return;
-    const actor = item.parent, from = options.be5eLevelFrom, to = charLevel(actor);
-    if (!(to > from)) return;
-    const tierFrom = tierFor(from), tier = tierFor(to);
-    emit("fourththing.leveledUp", { actorId: actor.id, actorUuid: actor.uuid, actorName: actor.name, from, to, tierFrom, tier, tierUp: tier > tierFrom });
+    if (userId !== game.user.id || options.be5eLevelFrom == null || item.type !== "class" || item.parent?.type !== "character") return;
+    announce(item.parent, options.be5eLevelFrom, charLevel(item.parent));
   });
-  // a first class landing on a character is level 0 → 1 (the wizard's import)
+  // a first class landing on a character is level 0 → 1 (the wizard's import); a later one is a dip on top of the rest
   Hooks.on("createItem", (item, _options, userId) => {
     if (userId !== game.user.id || item.type !== "class" || item.parent?.type !== "character") return;
-    const actor = item.parent, to = charLevel(actor), from = to - (Number(item.system?.levels) || 0);
-    if (from > 0 || to <= 0) return;   // a multiclass dip is announced by its level change, not here
-    emit("fourththing.leveledUp", { actorId: actor.id, actorUuid: actor.uuid, actorName: actor.name, from, to, tierFrom: 1, tier: tierFor(to), tierUp: false });
+    const actor = item.parent, to = charLevel(actor), from = Math.max(0, to - (Number(item.system?.levels) || 0));
+    if (to <= 0) return;
+    announce(actor, from, to);
   });
 
   // ── Last Stand (a character falls to 0 HP) + Enlightenment steps ──

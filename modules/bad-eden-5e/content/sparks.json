@@ -1,10 +1,10 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.10.0) — do not hand-edit; put fixes in content/overrides/sparks.json. The 30 Tikkun sparks as dnd5e loot; the RFI spark block rides at flags.bbttcc-tikkun.spark.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.11.0) — do not hand-edit; put fixes in content/overrides/sparks.json. The 30 Tikkun sparks as dnd5e loot; the RFI spark block rides at flags.bbttcc-tikkun.spark.",
   "_pack": "sparks",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.10.0",
-    "at": "2026-10-31",
+    "rubric": "1.11.0",
+    "at": "2026-11-01",
     "overridesApplied": 0
   },
   "items": [
@@ -889,7 +889,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Malkuth — Matter, stability, powers.</p>\n<p><strong>Aligned methods:</strong> economy, logistics, body. <strong>Misaligned (causes Corruption):</strong> violence.</p>",
+          "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Malkuth — Matter, stability, spell.</p>\n<p><strong>Aligned methods:</strong> economy, logistics, body. <strong>Misaligned (causes Corruption):</strong> violence.</p>",
           "chat": ""
         },
         "type": {
@@ -961,7 +961,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Malkuth — Matter, stability, powers.</p>\n<p><strong>Aligned methods:</strong> economy, logistics, body. <strong>Misaligned (causes Corruption):</strong> violence.</p>",
+          "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Malkuth — Matter, stability, spell.</p>\n<p><strong>Aligned methods:</strong> economy, logistics, body. <strong>Misaligned (causes Corruption):</strong> violence.</p>",
           "chat": ""
         },
         "type": {
@@ -1033,7 +1033,7 @@
       "folder": "Sparks",
       "system": {
         "description": {
-          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Malkuth — Matter, stability, powers.</p>\n<p><strong>Aligned methods:</strong> economy, logistics, body. <strong>Misaligned (causes Corruption):</strong> violence.</p>",
+          "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Malkuth — Matter, stability, spell.</p>\n<p><strong>Aligned methods:</strong> economy, logistics, body. <strong>Misaligned (causes Corruption):</strong> violence.</p>",
           "chat": ""
         },
         "type": {

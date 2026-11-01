@@ -14,6 +14,8 @@
  *   {
  *     id, title,
  *     audience: "player" | "gm",          // gm tours refuse to start for players
+ *     systems: ["fourththing"],           // optional — shelf/list hide it on any other system; start() refuses it (10-31)
+ *     skipIf: () => bool,                 // optional — true hides it from the shelf/list (e.g. Beta-only in the Alpha)
  *     intro?: string, outro?: string,      // Operator chat lines (whispered to self)
  *     open:  async (ctx) => root Element | Application | null | false,  // false = could not open → abort
  *     close?: async (ctx) => {},
@@ -45,8 +47,21 @@ function register(def) {
   if (!def?.id || !Array.isArray(def.steps)) return console.warn(TAG, "bad tour def", def);
   _tours.set(def.id, def);
 }
+/** Tour belongs to the running system (no `systems` = every system). */
+function _forThisSystem(def) {
+  return !Array.isArray(def?.systems) || def.systems.includes(globalThis.game?.system?.id);
+}
+/** Tour is shelved for now (def.skipIf) — never thrown by a bad predicate. */
+function _shelved(def) {
+  if (typeof def?.skipIf !== "function") return false;
+  try { return !!def.skipIf(); } catch (_) { return false; }
+}
 function list() {
-  return [..._tours.values()].map(t => ({ id: t.id, title: t.title, audience: t.audience || "player" }));
+  // 10-31 (C59): the shelf used to offer the RFI rig-sheet tour on dnd5e (it found no anchors and toured nothing)
+  // and the Beta-only Bridge in the Alpha. A def can now say which systems it is for and when to hide itself.
+  return [..._tours.values()]
+    .filter(t => _forThisSystem(t) && !_shelved(t))
+    .map(t => ({ id: t.id, title: t.title, audience: t.audience || "player" }));
 }
 function get(id) { return _tours.get(id) || null; }
 
@@ -206,6 +221,9 @@ async function start(id) {
   if (!def) { ui.notifications?.warn?.(`No tour "${id}". Known: ${[..._tours.keys()].join(", ")}`); return; }
   if ((def.audience === "gm") && !game.user.isGM) {
     ui.notifications?.warn?.("That tour covers GM-only controls."); return;
+  }
+  if (!_forThisSystem(def)) {
+    ui.notifications?.warn?.(`"${def.title || id}" is a ${def.systems.join("/")} tour — not on ${game.system?.id}.`); return;
   }
   if (_active) _finish(false);
   _starting = true;

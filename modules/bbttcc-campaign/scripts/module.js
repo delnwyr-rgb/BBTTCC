@@ -1298,8 +1298,14 @@ async function _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx = {}) {
     if (!holder) { warn("[quest-items] no Steward to hold", key, beat?.id); continue; }
     const name = String(r.name || key);
     try {
-      await holder.createEmbeddedDocuments("Item", [{ name, type: "gear", img: r.img || "icons/tools/hand/wrench-steel-grey.webp",
-        system: { description: { value: r.description ? `<p>${foundry.utils.escapeHTML(String(r.description))}</p>` : "", chat: "" }, category: "gear", quantity: 1 },
+      // Item type through the bbttcc-core seam: RFI "gear", dnd5e "loot" (review C30 — "gear" failed document validation
+      // on the D&D table, so the Tetrarch Spanner never landed and every questItem door stayed shut). The quest flag is
+      // what the gates read; the system block is shaped per system (dnd5e loot has no `category`).
+      const descHtml = r.description ? `<p>${foundry.utils.escapeHTML(String(r.description))}</p>` : "";
+      const onRFI = game.system?.id === "fourththing";
+      await holder.createEmbeddedDocuments("Item", [{ name, type: game.bbttcc?.types?.item?.("gear") ?? "gear", img: r.img || "icons/tools/hand/wrench-steel-grey.webp",
+        system: onRFI ? { description: { value: descHtml, chat: "" }, category: "gear", quantity: 1 }
+                      : { description: { value: descHtml, chat: "" }, quantity: 1 },
         flags: { "bbttcc-campaign": { questItem: { key, beatId: String(beat?.id || ""), at: Date.now() } } } }]);
     } catch (e) { warn("[quest-items] grant failed", key, e); continue; }
     await ChatMessage.create({ speaker: { alias: "Bad Eden" }, content: `<div style="border-left:3px solid #d4a72c;padding:.35em .6em;background:rgba(212,167,44,.08);">🎒 <b>Item received</b> — ${esc(name)} <span style="opacity:.75">(${esc(holder.name)} carries it · Inventory → Quest Items)</span></div>` }).catch(() => {});
@@ -2096,6 +2102,9 @@ function _opKeyLabel(key) {
 function _mpo() { return game.bbttcc?.api?.op?.OP_TO_MARKS ?? game.fourththing?.constants?.MARKS_PER_OP ?? game.fourththing?.pricing?.MARKS_PER_OP; }
 // Canon check die (2d10, tens explode) — from the system when loaded, literal otherwise.
 function _ftCanonDie() { try { return game.fourththing?.rolls?.checkFormula?.() || "2d10x10"; } catch (_e) { return "2d10x10"; } }
+// The CHARACTER check die (owner's dice split, 2026-10-08): the canon 2d10 on RFI, a d20 on dnd5e — through the bbttcc-core
+// seam. Faction-level OP rolls above stay on _ftCanonDie() in both flavours; only a roster actor's basic check uses this.
+function _ftCharacterDie() { try { return game.bbttcc?.dice?.checkFormula?.() || _ftCanonDie(); } catch (_e) { return _ftCanonDie(); } }
 // Marks are the unit everywhere (owner ruling 2026-09-06) — whole marks.
 function _marksToOpDisplay(marks) { return String(Math.round(_num(marks, 0))); }
 
@@ -2487,31 +2496,41 @@ async function _rollChoiceCheck(choice, ctx={}) {
         }
       }
 
-      // Saving throw support: checkStat "save.str" / "save.dex" / etc.
-      if (stat.indexOf("save.") === 0) {
-        const abil = String(stat.slice(5) || "").trim().toLowerCase();
-        if (typeof actor.rollAbilitySave === "function") {
-          const r = await actor.rollAbilitySave(abil, { chatMessage:false });
-          return { kind:"actor", subkind:"save", stat, dc, actorName:actor.name, total:(r.total + supportBonus), ok:(r.total + supportBonus)>=dc, roll:r, support:{ opKey:supportKey, spend:supportSpend, bonus:supportBonus } };
+      // dnd5e lane (review C29, 2026-10-31) — through the bbttcc-core dice seam. The old branches here called the
+      // dnd5e 4.x signatures (rollSkill("inv"), rollAbilitySave / rollAbilityTest) which 5.x/6.x no longer have, so
+      // every authored check on the D&D table threw, was swallowed, and fell to the stat-blind 2d10 below.
+      // dnd5e 6: rollSkill/rollSavingThrow/rollAbilityCheck take ({ skill|ability }, dialog, message) and return rolls[].
+      const dice = game.bbttcc?.dice;
+      if (dice && typeof dice.isRFI === "function" && !dice.isRFI()) {
+        const supp = { opKey:supportKey, spend:supportSpend, bonus:supportBonus };
+        const one = (res) => (Array.isArray(res) ? res[0] : (res?.roll ?? res)) ?? null;
+        const tot = (res) => { const r = one(res); const t = Number(r?.total); return Number.isFinite(t) ? t : null; };
+        const noDialog = { configure: false }, msg = { create: true };
+        if (stat.indexOf("save.") === 0) {
+          const abil = String(stat.slice(5) || "").trim().toLowerCase();
+          if (abil && typeof actor.rollSavingThrow === "function") {
+            const res = await _withSecretRollMode(choice, () => actor.rollSavingThrow({ ability: abil }, noDialog, msg));
+            const t = tot(res);
+            if (t !== null) { const total = t + supportBonus; return { kind:"actor", subkind:"save", stat, dc, actorName:actor.name, total, ok: total>=dc, roll: one(res), support: supp }; }
+          }
+        } else if (actor.system?.abilities?.[stat] && typeof actor.rollAbilityCheck === "function") {
+          const res = await _withSecretRollMode(choice, () => actor.rollAbilityCheck({ ability: stat }, noDialog, msg));
+          const t = tot(res);
+          if (t !== null) { const total = t + supportBonus; return { kind:"actor", subkind:"ability", stat, dc, actorName:actor.name, total, ok: total>=dc, roll: one(res), support: supp }; }
+        } else if (typeof dice.skillCheck === "function") {
+          // authored codes (inv / per / prc / "Investigation (Mind)") → the RFI skill name → the seam maps it to the 5E sheet
+          const ftKey = _ftSkillKeyFor(stat);
+          if (ftKey && dice.skillRef?.(ftKey)) {
+            const r = await _withSecretRollMode(choice, () => dice.skillCheck(actor, { skill: ftKey }));
+            const t = Number(r?.total);
+            if (Number.isFinite(t)) { const total = t + supportBonus; return { kind:"actor", subkind:"skill", stat, skill: ftKey, dc, actorName:actor.name, total, ok: total>=dc, roll: r?.roll ?? null, support: supp }; }
+          }
         }
-        if (typeof actor.rollAbilityTest === "function") {
-          const r = await actor.rollAbilityTest(abil, { chatMessage:false });
-          return { kind:"actor", subkind:"save_fallback", stat, dc, actorName:actor.name, total:(r.total + supportBonus), ok:(r.total + supportBonus)>=dc, roll:r, support:{ opKey:supportKey, spend:supportSpend, bonus:supportBonus } };
-        }
-      }
-
-      if (actor.system?.skills?.[stat]) {
-        const r = await actor.rollSkill(stat, { chatMessage:false });
-        return { kind:"actor", stat, dc, actorName:actor.name, total:(r.total + supportBonus), ok:(r.total + supportBonus)>=dc, roll:r, support:{ opKey:supportKey, spend:supportSpend, bonus:supportBonus } };
-      }
-      if (actor.system?.abilities?.[stat]) {
-        const r = await actor.rollAbilityTest(stat, { chatMessage:false });
-        return { kind:"actor", stat, dc, actorName:actor.name, total:(r.total + supportBonus), ok:(r.total + supportBonus)>=dc, roll:r, support:{ opKey:supportKey, spend:supportSpend, bonus:supportBonus } };
       }
     } catch {}
   }
 
-  const roll = await _evalRoll(new Roll(_ftCanonDie()));
+  const roll = await _evalRoll(new Roll(_ftCharacterDie()));
   const totalB = (roll.total ?? 0) + supportBonus;
   return { kind:"basic", stat, dc, total:totalB, ok:totalB>=dc, roll, support:{ opKey:supportKey, spend:supportSpend, bonus:supportBonus } };
 }

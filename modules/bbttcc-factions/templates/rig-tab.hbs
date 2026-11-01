@@ -52,25 +52,18 @@
     <p style="font-size:.72rem;opacity:.55;margin:.1rem 0 .4rem">⚙ No frame equipped — drop a <em>rig-frame</em> item (or a <em>rig-template</em>) on this sheet to define hull, slots, crew capacity, and role actions.</p>
     {{/if}}
 
-    {{#if bbttccRig.showOrder}}
-    <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem;margin:.2rem 0 .5rem">📋 Order (this strategic turn)
-      {{#if bbttccRig.editable}}
-      <select data-rig-field="order" style="flex:1">{{#each bbttccRig.order}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
-      {{else}}<b>{{#each bbttccRig.order}}{{#if selected}}{{label}}{{/if}}{{/each}}</b>{{/if}}
-    </label>
-    {{/if}}
-
     <h4 style="margin:.3rem 0 .2rem;border-bottom:1px solid rgba(185,136,46,.4)">Output / strategic turn <span style="font-size:.72rem;opacity:.65">{{ bbttccRig.mult }}</span></h4>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.2rem .8rem;margin-bottom:.6rem">
-      {{#each bbttccRig.output}}
-      <label style="display:flex;align-items:center;gap:.35rem;font-size:.76rem">
-        <span style="flex:1;text-transform:capitalize">{{ channel }}</span>
-        {{#if @root.bbttccRig.editable}}<input type="number" min="0" data-rig-output="{{channel}}" value="{{base}}" style="width:3.2rem"/>{{else}}<b>{{base}}</b>{{/if}}
-        <span style="opacity:.65;min-width:2.4rem">→ +{{ effective }}</span>
-      </label>
-      {{/each}}
+    {{!-- data-rig-output keeps the onboarding tour anchor (bbttcc-onboarding tour-defs "output" step) --}}
+    {{#if bbttccRig.output.produces}}
+    <div data-rig-output style="display:grid;grid-template-columns:auto 1fr;gap:.15rem .6rem;font-size:.78rem;margin-bottom:.4rem">
+      <span style="opacity:.7">🅿️ Parked</span><b>{{ bbttccRig.output.parkedText }}</b>
+      <span style="opacity:.7">🛻 Deployed</span><b>{{ bbttccRig.output.deployedText }}</b>
+      <span style="opacity:.7">Lost while deployed</span><span>{{ bbttccRig.output.lostText }}</span>
     </div>
-    <p style="font-size:.7rem;opacity:.55;margin:.1rem 0 .6rem">Base values author flat output; equipped <em>output-module</em> gear items add on top (P3 catalog). Deployed = halved (floored); modules that can't run mobile produce 0 while deployed.</p>
+    {{else}}
+    <p data-rig-output style="font-size:.78rem;margin:.1rem 0 .4rem">This rig produces <b>nothing</b> on its own{{#if bbttccRig.showTravel}} — a moving rig earns Logistics by size once it is parked{{/if}}.</p>
+    {{/if}}
+    <p style="font-size:.7rem;opacity:.55;margin:.1rem 0 .6rem">Same math as Roll for Initiation: rigs that move earn Logistics marks by size, equipped <em>output-module</em> gear adds its yield (bank channels pay marks, everything else lands in the Domain stockpile). Parked earns in full; deployed earns half (modules that can't run mobile earn nothing); destroyed earns nothing.</p>
 
     <h4 style="margin:.3rem 0 .2rem;border-bottom:1px solid rgba(185,136,46,.4)">Crew</h4>
     {{#if bbttccRig.hasCrew}}

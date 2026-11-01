@@ -506,7 +506,8 @@
     if (!want) return null;
     const world = game.actors?.find?.(a => a?.name === want) || null;
     if (world) return world;
-    const pack = game.packs?.get(NPC_PACK);
+    // Through the pack seam: the RFI npcs pack isn't registered on dnd5e; its twin is bad-eden-5e.monsters (review C33).
+    const pack = game.bbttcc?.packs?.get?.(NPC_PACK) ?? game.packs?.get(NPC_PACK);
     if (!pack) return null;
     try {
       const idx = (await pack.getIndex()).find(e => e.name === want);

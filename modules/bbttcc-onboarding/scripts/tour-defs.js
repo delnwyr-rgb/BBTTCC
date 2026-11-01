@@ -173,6 +173,9 @@ const bridgeTour = {
   id: "bridge",
   title: "The Bridge (Steward ↔ Faction OP)",
   audience: "player",
+  // ALPHA CUT ruling 16: one treasury, so the Bridge is Beta-only — hidden from the shelf while the Alpha is on
+  // (tour-beats already skipped the in-flow offer; the graduation shelf still listed it — C59, 10-31).
+  skipIf: () => globalThis.game?.bbttcc?.alpha?.enabled?.() === true,
   intro: "Opening the Bridge — the exchange rate between your meat and your movement. Everything you burn here, somebody collects on later. That's not a warning, it's— *bzzt* —it's accounting.",
   outro: "Bridge tour complete. Sacrifice makes the faction strong; backing makes you dangerous; Blood Debt makes the world remember. Spend accordingly.",
 
@@ -930,6 +933,64 @@ const rigSheetTour = {
   ]
 };
 
+/* ───────────────────── PLAYER · the D&D rig sheet (Bad Eden 5E, 2026-10-31) ───────────────────── */
+// Same id as the RFI rig tour — registered INSTEAD of it on a dnd5e world (C59: the RFI tour anchored on
+// header.ft-rig-header / nav.ft-tabs / .ft-rig-*, none of which the dnd5e sheet has, so it toured nothing).
+// D&D rigs are dnd5e vehicle actors; bbttcc-factions/scripts/rigs-dnd5e.sheet.js subclasses dnd5e 6's
+// VehicleActorSheet and adds one "bbttcc" tab from templates/rig-tab.hbs. Anchors here = that tab's stable
+// container (.bbttcc-rig-tab) and its data-rig-* controls — nothing the sheet owner may restyle.
+const _dndRigTab = 'nav.tabs [data-tab="bbttcc"], [data-tab="bbttcc"][data-action="tab"], .sheet-tabs [data-tab="bbttcc"]';
+const rigSheetTour5e = {
+  id: "rig-sheet",
+  title: "The Rolling Body (Rig Sheet)",
+  audience: "player",
+  intro: "Opening your rig — a D&D vehicle sheet with Bad Eden bolted on. Same rules as every other body you own: feed it, crew it, don't let the hull hit zero.",
+  outro: "Rig toured. Parked rigs produce, deployed rigs fight at half output, wrecks produce paperwork. Board it from your token, steer it with Piloting.",
+
+  open: async (ctx) => {
+    const rig = _resolveRigForTour(ctx);
+    if (!rig) { ui.notifications?.warn?.("No rig actor found — mint one from the Rig Builder first."); return false; }
+    await rig.sheet?.render(true);
+    return rig.sheet;
+  },
+
+  steps: [
+    {
+      id: "header", title: "Identity — a vehicle, by D&D's rules",
+      selector: ".sheet-header, .window-header",
+      text: "Up top it is a plain D&D vehicle: name, hit points, AC. Bad Eden sets the AC from the rig's bracket and tier, and its hit points are the hull — zero and it's a wreck.\nEverything Bad Eden adds lives on the Rig tab."
+    },
+    {
+      id: "rigtab", title: "The Rig tab — mobility, state, owner",
+      pre: _dndRigTab,
+      selector: ".bbttcc-rig-tab",
+      text: "State runs the output throttle — Parked yields 100%, Deployed 50%, Destroyed nothing. Faction binds it to a Domain; Mobility decides if it travels at all; Bracket and Tier gate what it can mount.\nThe frame line below is the law: hull, slots, crew capacity."
+    },
+    {
+      id: "state", title: "Deploy / Park",
+      pre: _dndRigTab,
+      selector: "[data-rig-deploy], [data-rig-park]",
+      optional: true,
+      text: "Mobile rigs flip between Parked and Deployed right here. Deploy before a fight, park when it's over — the Domain's payout each Turn follows the switch."
+    },
+    {
+      id: "output", title: "Output — why the Domain keeps it",
+      pre: _dndRigTab,
+      selector: "[data-rig-output]",
+      optional: true,
+      text: "Output pays the owning Domain every strategic Turn, scaled by the state throttle. A parked rig is a little factory; a deployed one is a half-speed factory with a gun."
+    },
+    {
+      id: "crew", title: "Crew — who runs the meat-wagon",
+      pre: _dndRigTab,
+      selector: "[data-rig-act]",
+      optional: true,
+      text: "Boarded crew by role — pilot, gunner, engineer. Board from your token's HUD (🛻) while adjacent; aboard, your token rides inside the rig and the pilot takes the wheel.\nEach crew member spends their own actions on rig actions: the pilot steers (Piloting), gunners fire with their own to-hit.",
+      speak: "A rig with no crew is just expensive terrain."
+    }
+  ]
+};
+
 /* ───────────────────── PLAYER · Market ───────────────────── */
 // Anchors + text ship with bbttcc-market's own registry entries (appKey
 // "market"). Opens via the singleton API; buyer context rides a setting.
@@ -1470,7 +1531,7 @@ Hooks.once("ready", () => {
   tours.register(travelConsoleTour);
   tours.register(plannerTour);
   tours.register(raidConsoleTour);
-  tours.register(rigSheetTour);
+  tours.register(game.system?.id === "dnd5e" ? rigSheetTour5e : rigSheetTour);   // C59 (10-31): the D&D sheet has none of the RFI anchors
   tours.register(marketTour);
   tours.register(banksTour);
   tours.register(facilitiesTour);

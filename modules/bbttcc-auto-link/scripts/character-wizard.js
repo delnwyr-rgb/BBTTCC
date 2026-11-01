@@ -733,6 +733,13 @@ async function persistIdentityFlags(actor, selections) {
   if (selections.political && selections.political.id) {
     await actor.setFlag(AAE_SCOPE, "politicalPhilosophy", selections.political.id);
   }
+  // Bad Eden 5E (review C9): RFI derives the sheet's alignment from the Sephira; the dnd5e sheet's Alignment field is
+  // a plain string nothing else writes — mirror the Sephira there so the header isn't blank (and a player can't type
+  // "Chaotic Good" over a Tree pick unnoticed).
+  if (isDnd5e() && selections.sephirot && selections.sephirot.name) {
+    try { await actor.update({ "system.details.alignment": selections.sephirot.name }); }
+    catch (e) { warn("alignment mirror failed (non-fatal)", e); }
+  }
 }
 
 function getActorItemIdentifier(item) {
@@ -847,29 +854,44 @@ function isDnd5e() { return game.system?.id === "dnd5e"; }
 async function createWithAdvancement(actor, itemData) {
   const AM = globalThis.dnd5e?.applications?.advancement?.AdvancementManager;
   const already = () => actor.items.find(i => i.type === itemData.type && i.name === itemData.name);
-  let manager = null;
-  try { manager = AM ? AM.forNewItem(actor, itemData) : null; }
-  catch (e) { warn("AdvancementManager.forNewItem failed; creating item directly", e); }
-  if (!manager || !manager.steps?.length) {
-    const [doc] = await actor.createEmbeddedDocuments("Item", [itemData]);
-    return doc || null;
-  }
-  await new Promise((resolve) => {
-    const hook = Hooks.on("closeAdvancementManager", (app) => {
-      if (app !== manager) return;
-      Hooks.off("closeAdvancementManager", hook);
-      resolve();
+  const open = () => { try { return AM ? AM.forNewItem(actor, itemData) : null; } catch (e) { warn("AdvancementManager.forNewItem failed; creating item directly", e); return null; } };
+  const plain = async () => { const [doc] = await actor.createEmbeddedDocuments("Item", [itemData]); return doc || null; };
+  let manager = open();
+  if (!manager || !manager.steps?.length) return plain();
+  // dnd5e itself creates NOTHING when its manager is dismissed (_onDropSingleItem returns false once the manager
+  // renders): a class landed bare has no hit points, saves or skills; an Archetype no ASI, skills or Origin feat.
+  // Mirror that (review C8): a dismissed manager is offered again; if the player stops, the slot stays empty and
+  // the sheet says so — never a bare item.
+  const what = itemData.type === "class" ? "hit points, saving throws and skills"
+    : itemData.type === "background" ? "ability increases, skills and the Origin feat"
+    : "size, speed and traits";
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await new Promise((resolve) => {
+      const hook = Hooks.on("closeAdvancementManager", (app) => {
+        if (app !== manager) return;
+        Hooks.off("closeAdvancementManager", hook);
+        resolve();
+      });
+      manager.render(true);
     });
-    manager.render(true);
-  });
-  // The player closed the manager without finishing — land the item plainly so
-  // the sheet still carries it (they can re-run advancement from the sheet).
-  if (!already()) {
-    warn("advancement for " + itemData.name + " was dismissed; creating the item without its advancement choices");
-    const [doc] = await actor.createEmbeddedDocuments("Item", [itemData]);
-    return doc || null;
+    const doc = already();
+    if (doc) return doc;
+    const name = foundry.utils.escapeHTML(itemData.name);
+    const again = await foundry.applications.api.DialogV2.confirm({
+      window: { title: "Finish " + itemData.name + "?" },
+      content: "<p>You closed <b>" + name + "</b> before its choices were made (" + what + "). Finish them now?</p>"
+        + "<p class=\"hint\">Stop, and " + name + " is left off the sheet — drag it on from the compendium later and the same choices come up.</p>",
+      yes: { label: "Finish the choices", default: true },
+      no: { label: "Leave it off" },
+      rejectClose: false
+    }).catch(() => false);
+    if (!again) break;
+    manager = open();
+    if (!manager || !manager.steps?.length) return plain();
   }
-  return already();
+  warn("advancement for " + itemData.name + " was dismissed; nothing created (dnd5e creates nothing either)");
+  ui.notifications?.warn?.(itemData.name + " was not added to " + actor.name + ": its choices were never finished. Drag it onto the sheet when you're ready.", { permanent: true });
+  return null;
 }
 
 async function grantSurgePath(actor, sp) {

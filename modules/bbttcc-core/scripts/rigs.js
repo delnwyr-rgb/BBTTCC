@@ -9,7 +9,7 @@
  *
  *   game.bbttcc.rigs.isRig(actor)                   a rig on this system?
  *   game.bbttcc.rigs.data(actor) → {identity:{mobility,state,factionOwnerId,archetype,binding},
- *                                   integrity:{value,max,tier,bracket}, crew:{slots,capacity,crewMin,crewMax},
+ *                                   integrity:{value,max,tier,bracket,authored}, crew:{slots,capacity,crewMin,crewMax},
  *                                   travel:{speed,range,hazardResist,domains,depthRating},
  *                                   output:{modules,basePerTurn}, defenses:{resistances,immunities,vulnerabilities},
  *                                   order, frame, tags}   (never null for a rig; null otherwise)
@@ -24,10 +24,12 @@
  *   game.bbttcc.rigs.impl   — the per-system runtime hooks (dnd5e: bbttcc-factions rigs runtime)
  *
  * dnd5e field map (write side): identity.* / crew.* / travel.* / output.* / order / frame /
- * tier / bracket → flags.bbttcc-factions.rig.*; integrity.value|max → system.attributes.hp;
+ * tier / bracket → flags.bbttcc-factions.rig.*; integrity.value|max → system.attributes.hp; integrity.bracket|tier also
+ * re-seat system.attributes.ac.flat = AC_BY_BRACKET[bracket] + tier (acFor; economy.constants.js RIG_AC_BY_BRACKET);
  * defenses.* → system.traits.dr/di/dv (through the rubric damage map, best effort).
  * The second owner key `flags.bbttcc-factions.factionId` is kept in step on both systems.
  * ───────────────────────────────────────────────────────────────────────────── */
+import { RIG_AC_BY_BRACKET, RIG_DT_BY_BRACKET, RIG_HP_BY_BRACKET, rigAcFor } from "/modules/bbttcc-core/scripts/economy.constants.js";
 const TAG = "[bbttcc-core/rigs]";
 const F = "bbttcc-factions";                    // the flag scope the June layer and the faction link share
 const isRFI = () => game.system?.id === "fourththing";
@@ -35,10 +37,12 @@ const rawSys = (a) => a?.system?.system ?? a?.system ?? {};
 const num = (v, d = 0) => (Number.isFinite(Number(v)) ? Number(v) : d);
 const clone = (v) => foundry.utils.deepClone(v);
 
-/** dnd5e damage threshold by bracket (RIG_SPRINT_PLAN §1; RFI plating is the system's own). */
-const AC_BY_BRACKET = { personal: 14, light: 13, medium: 11, heavy: 9, siege: 8, mecha: 12 };   // = RFI Evasion by bracket
-const DT_BY_BRACKET = { personal: 0, light: 5, medium: 10, heavy: 15, siege: 20, mecha: 5 };   // mecha: RG9 (2026-10-26)
-const HP_BY_BRACKET = { personal: 10, light: 30, medium: 60, heavy: 100, siege: 150 };
+/** dnd5e AC / damage threshold / hull by bracket — ONE table in economy.constants.js (review C20/C25/C47, 2026-10-31);
+ *  AC = RFI Evasion by bracket + tier, recomputed by toUpdate whenever bracket or tier change and seated by ensure(). */
+const AC_BY_BRACKET = RIG_AC_BY_BRACKET;
+const DT_BY_BRACKET = RIG_DT_BY_BRACKET;
+const HP_BY_BRACKET = RIG_HP_BY_BRACKET;
+const acFor = (bracket, tier) => rigAcFor(bracket, tier);
 const DEFAULT_CAPACITY = { pilot: { min: 1, max: 1 }, gunner: { min: 0, max: 2 }, engineer: { min: 0, max: 1 }, crew: { min: 0, max: 4 } };
 const DEFAULT_TRAVEL = { speed: 1, range: 5, hazardResist: 0, domains: ["land"], depthRating: 0 };
 
@@ -58,7 +62,7 @@ function data(actor) {
   const setOf = (t) => [...(t?.value ?? [])].concat(t?.custom ? String(t.custom).split(";").map(s => s.trim()).filter(Boolean) : []);
   return {
     identity: { mobility: r.mobility ?? "mobile", state: r.state ?? "parked", factionOwnerId: r.factionOwnerId ?? actor.flags?.[F]?.factionId ?? "", archetype: r.archetype ?? "", binding: { hexId: "", sceneId: "", tokenId: "", ...(r.binding ?? {}) } },
-    integrity: { value: num(hp.value), max: num(hp.max), tier: num(r.tier, 1), bracket: r.bracket ?? "medium" },
+    integrity: { value: num(hp.value), max: num(hp.max), tier: num(r.tier, 1), bracket: r.bracket ?? "medium", authored: !!r.integrityAuthored },
     crew: { slots: clone(r.crew?.slots ?? []), capacity: clone(r.crew?.capacity ?? r.frame?.capacity ?? DEFAULT_CAPACITY), crewMin: num(r.crew?.crewMin, 1), crewMax: num(r.crew?.crewMax, 8) },
     travel: { ...DEFAULT_TRAVEL, ...(r.travel ?? {}) },
     output: { modules: clone(r.output?.modules ?? []), basePerTurn: clone(r.output?.basePerTurn ?? {}) },
@@ -78,10 +82,23 @@ function toUpdate(actor, patch = {}) {
     if (k === "integrity.value") out["system.attributes.hp.value"] = num(v);
     else if (k === "integrity.max") out["system.attributes.hp.max"] = num(v);
     else if (k === "integrity.tier") out[`flags.${F}.rig.tier`] = num(v, 1);
+    else if (k === "integrity.authored") out[`flags.${F}.rig.integrityAuthored`] = !!v;   // chassis-authored hull: applyFrame leaves hp.max alone (C25)
     else if (k === "integrity.bracket") { out[`flags.${F}.rig.bracket`] = v; out["system.attributes.hp.dt"] = DT_BY_BRACKET[v] ?? 0; }
     else if (k.startsWith("identity.")) { const sub = k.slice("identity.".length); out[`flags.${F}.rig.${sub}`] = v; if (sub === "factionOwnerId") out[`flags.${F}.factionId`] = v || null; }
     else if (k.startsWith("defenses.")) { const kind = { resistances: "dr", immunities: "di", vulnerabilities: "dv" }[k.split(".")[1]]; if (kind) out[`system.traits.${kind}.value`] = Array.isArray(v) ? v : [v]; }
     else out[`flags.${F}.rig.${k}`] = v;   // crew.*, travel.*, output.*, order, frame, tags
+  }
+  // AC follows bracket + tier (review C20, 2026-10-31): the RFI derive pass recomputes Evasion every pass; here the flat AC is
+  // re-seated whenever the bracket or tier really changes (frame swap, sheet select, builder) or the hull has no AC yet
+  // (every D&D rig minted before 10-31, every vehicle the GM clicked "init as rig" on). A GM-authored AC survives an
+  // ensure() that changes nothing.
+  if (!isRFI() && ("integrity.bracket" in flat || "integrity.tier" in flat)) {
+    const cur = data(actor);
+    const nb = flat["integrity.bracket"] ?? cur?.integrity?.bracket ?? "medium";
+    const nt = num(flat["integrity.tier"] ?? cur?.integrity?.tier, 1);
+    const have = num(actor?.system?.attributes?.ac?.flat);
+    const changed = !cur || nb !== cur.integrity.bracket || nt !== num(cur.integrity.tier, 1);
+    if (changed || !have || actor?.system?.attributes?.ac?.calc !== "flat") { out["system.attributes.ac.flat"] = acFor(nb, nt); out["system.attributes.ac.calc"] = "flat"; }
   }
   return out;
 }
@@ -140,10 +157,12 @@ async function _createLocal(spec = {}, { ownership = null } = {}) {
   // dnd5e vehicleType from the travel domains (2026-10-31: a Hexmobile minted as a "Water Vehicle" — dnd5e's default
   // when the field is unset). Same rule as bad-eden-5e convert-5e laneRigs: no land domain → air (sky) or water.
   const domains = (rig.travel?.domains ?? []).map(String);
-  const vehicleType = domains.length && !domains.includes("land") ? (domains.some(d => /air|sky/.test(d)) ? "air" : "water") : "land";
+  // review C25: dnd5e 6 has a native "space" vehicle type — an Orbital Bunker (domains ["space"]) minted as a Water Vehicle.
+  const vehicleType = domains.length && !domains.includes("land") ? (domains.some(d => /space|orbit/.test(d)) ? "space" : domains.some(d => /air|sky/.test(d)) ? "air" : "water") : "land";
   // AC (2026-10-31): a dnd5e vehicle's AC is flat and the mint left it null — every D&D rig sat at AC 0. RFI rigs carry
-  // Guard/Evasion by bracket (FT_RIG_DEFENSE_BY_BRACKET); D&D folds those into one number → RFI's Evasion.
-  const ac = AC_BY_BRACKET[bracket] ?? 11;
+  // Guard/Evasion by bracket (FT_RIG_DEFENSE_BY_BRACKET) + tier; D&D folds those into one number → RFI's Evasion + tier (C20).
+  const ac = acFor(bracket, tier);
+  if (integrity.authored) rig.integrityAuthored = true;   // C25: a chassis that authors its hull keeps it through applyFrame
   return Actor.create({ name, type: "vehicle", img: img ?? "icons/svg/castle.svg", folder, ...own,
     system: { vehicleType, attributes: { hp: { value, max, dt: DT_BY_BRACKET[bracket] ?? 0 }, ac: { calc: "flat", flat: ac } }, traits },
     items, prototypeToken: token, flags: { [F]: { rig, factionId: identity.factionOwnerId || null } } });
@@ -188,13 +207,25 @@ async function disembark(steward, opts = {}) {
 }
 const via = (name) => async (...args) => (typeof impl[name] === "function" ? impl[name](...args) : (ui.notifications?.warn?.(`${name} isn't available on this system yet.`), false));
 
+// The movement domains a rig declares (system.travel.domains / flags.bbttcc-factions.rig.travel.domains) — the same table as
+// FT.MOVEMENT_DOMAINS in the RFI system, published here so travel copy on dnd5e prints "Water (Surface)" instead of the raw
+// key (review C68). Readers prefer the system's own table when it exists.
+const MOVEMENT_DOMAINS = {
+  "land":          { label: "Land",              short: "Land",  desc: "Ground travel — the default for any rig or on-foot party." },
+  "water-surface": { label: "Water (Surface)",   short: "Surf",  desc: "Floats and crosses rivers, lakes, seas, and oceans on the surface." },
+  "water-sub":     { label: "Water (Submerged)", short: "Sub",   desc: "Dives below the surface — reefs, depths, and the abyss." },
+  "air":           { label: "Air",               short: "Air",   desc: "Flies over any terrain; ignores ground hazards." },
+  "space":         { label: "Space / Orbital",   short: "Orbit", desc: "Operates in vacuum and orbit." }
+};
+
 Hooks.once("init", () => {
   game.bbttcc = game.bbttcc || {};
+  game.bbttcc.constants = Object.assign(game.bbttcc.constants || {}, { MOVEMENT_DOMAINS });
   game.bbttcc.rigs = {
     isRig, data, update, toUpdate, create, list, listByFaction, ownerOf, setOwner, health,
     gearOf, isFrame, frameOf, boardedRigOf, board, disembark, impl,
     park: via("park"), deploy: via("deploy"), destroy: via("destroy"), restore: via("restore"), outputFor: via("outputFor"), applyTurnOutput: via("applyTurnOutput"),
-    DT_BY_BRACKET, HP_BY_BRACKET, FLAG_SCOPE: F
+    DT_BY_BRACKET, HP_BY_BRACKET, AC_BY_BRACKET, acFor, FLAG_SCOPE: F
   };
   console.log(TAG, `installed game.bbttcc.rigs (${isRFI() ? "fourththing rig actors" : "dnd5e vehicles + flags." + F + ".rig"})`);
 });

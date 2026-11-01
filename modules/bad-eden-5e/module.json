@@ -2,7 +2,7 @@
   "id": "bad-eden-5e",
   "title": "Bad Eden 5E",
   "description": "Bad Eden for D&D 5E: the Flow and Artifice (points-based casting), the Flow Wolves (Theurge, Warden, Vigilant) and the Gearwright, and their powers. D&D-only content; the RFI system never loads this module.",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "authors": [
     {
       "name": "David English"

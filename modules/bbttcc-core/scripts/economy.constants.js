@@ -115,6 +115,18 @@ export const RIG_BASE_OUTPUT_OP = {
 };
 export const RIG_OUTPUT_STATE_MULT = { parked: 1, deployed: 0.5, destroyed: 0 };
 
+// ── rig defenses on dnd5e (D&D port review C20/C25/C47, 2026-10-31) ────────────────────────────────
+// A dnd5e vehicle's AC is one flat number; it is RFI's Evasion by bracket (systems/fourththing FT_RIG_DEFENSE_BY_BRACKET)
+// plus the rig's tier, exactly as the RFI derive pass adds +tier. ONE rule for the builder, the accessor's toUpdate/
+// ensure() and the content pipeline (bad-eden-5e/tools/convert-5e.mjs laneRigs imports or copies these numbers).
+export const RIG_AC_BY_BRACKET = { personal: 14, light: 13, medium: 11, heavy: 9, siege: 8, mecha: 12 };
+export const RIG_DT_BY_BRACKET = { personal: 0, light: 5, medium: 10, heavy: 15, siege: 20, mecha: 5 };   // damage threshold (mecha: RG9 2026-10-26)
+export const RIG_HP_BY_BRACKET = { personal: 10, light: 30, medium: 60, heavy: 100, siege: 150, mecha: 60 };   // bracket-seeded hull when no frame says otherwise
+export function rigAcFor(bracket, tier) {
+  const base = RIG_AC_BY_BRACKET[String(bracket || "medium").toLowerCase()] ?? RIG_AC_BY_BRACKET.medium;
+  return base + Math.max(0, Math.floor(Number(tier) || 0));   // mecha T0 adds nothing; T1–T5 add their tier
+}
+
 export const HEX_MOD_LOYALTY = { "loyal population": 2, "hostile population": -2, "well-maintained": 1, "well maintained": 1, "damaged infrastructure": -1, "harmonized grove": 1, "menace": -2 };   // menace: MENACES 2026-10-21
 
 // ── hex STATES (2026-09-13, owner ask: "a place in the beat to apply generic states, and unique states") ──

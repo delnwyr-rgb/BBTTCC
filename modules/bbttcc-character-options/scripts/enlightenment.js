@@ -294,7 +294,9 @@ function decorateSheet(app, html) {
 
     el.querySelector("#bbttcc-enlightenment-row")?.remove();
 
-    const showMiracle = canMiracle(actor);
+    // the card is the D&D sheet's only Enlightenment readout (the level feats step it there too); only the Miracle
+    // button is RFI-bound — it routes through fourththing castManifestation, so it stays off on dnd5e (review P4)
+    const showMiracle = canMiracle(actor) && game.system?.id !== "dnd5e";
     const spent = !!actor.getFlag(MOD, "miracleUsed");
     const miracleBtn = showMiracle
       ? `<button type="button" class="flex0 bbttcc-miracle-btn" ${spent ? "disabled" : ""}
@@ -614,6 +616,7 @@ async function _pickMiraclePower(actor) {
 async function castMinorMiracle(actor, item = null) {
   if (!canMiracle(actor)) return ui.notifications?.warn(`${actor?.name ?? "Actor"}: Minor Miracles are an Enlightened gift.`);
   if (actor.getFlag(MOD, "miracleUsed")) return ui.notifications?.warn(`${actor.name}: Minor Miracle already spent — refreshes on Soma Break.`);
+  if (game.system?.id === "dnd5e") return ui.notifications?.info(`${actor.name} is Enlightened: on D&D the GM works the Minor Miracle by hand (cast any power up to level 4 free — no points, no slot). Not wired to the sheet yet.`);
   const cast = game.fourththing?.castManifestation;
   if (typeof cast !== "function") return ui.notifications?.error("fourththing castManifestation unavailable.");
 

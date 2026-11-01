@@ -104,6 +104,28 @@ Hooks.on("updateItem", (item, changes, _opts, userId) => {
 });
 
 /**
+ * Bad Eden 5E (review P3, 2026-10-31): on dnd5e the Archetype is a background whose ItemGrants own the tier ladder
+ * (5/11/17). When that background is removed, dnd5e reverses its grants — but identity.archetype would still point
+ * at the pick, and the next syncOptionTiers (market, wizard, level change) would mint the cards again with no
+ * background owning them. Clear the slot; the engine keeps serving legacy D&D actors that never had the background.
+ */
+Hooks.on("deleteItem", (item, _opts, userId) => {
+  try {
+    if (userId !== game.user.id || game.system?.id !== "dnd5e") return;
+    if ((item.type ?? "") !== "background" || !item.flags?.["bad-eden-5e"]?.archetype) return;
+    const actor = item.parent;
+    if (!actor || (actor.type ?? "").toLowerCase() !== "character") return;
+    const identity = getIdentityFlags(actor);
+    if (!identity?.archetype && !actor.getFlag(MOD, "archetype")) return;
+    log("Archetype background removed — clearing identity.archetype", { actor: actor.name, item: item.name });
+    actor.update({ [`flags.${MOD}.identity.-=archetype`]: null, [`flags.${MOD}.-=archetype`]: null })
+      .catch(e => warn("clearing identity.archetype failed", e));
+  } catch (e) {
+    warn("deleteItem hook (Archetype background) failed", e);
+  }
+});
+
+/**
  * fourththing level-ups write actor.system.details.level (no class item
  * levels), so resync tiers on that too. Single writer: the changing client.
  */

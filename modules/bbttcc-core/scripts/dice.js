@@ -31,10 +31,15 @@ const SKILLS = {
   insight: { kind: "skill", key: "ins" }, investigation: { kind: "skill", key: "inv" }, lore: { kind: "skill", key: "his" },
   occult: { kind: "skill", key: "arc" }, faith: { kind: "skill", key: "rel" }, ritual: { kind: "skill", key: "rel" },
   meditation: { kind: "skill", key: "rel" }, perception: { kind: "skill", key: "prc" }, performance: { kind: "skill", key: "prf" },
-  hacking: { kind: "tool", key: "tinker" }, tinkering: { kind: "tool", key: "tinker" }, piloting: { kind: "tool", key: "land" },
+  hacking: { kind: "tool", key: "tinker" }, tinkering: { kind: "tool", key: "tinker" },
+  // 2026-10-31 ruling: Piloting is a Bad Eden 5E skill (Dex, `pil`, registered by bad-eden-5e/rules.js) — it was the
+  // Land Vehicles tool here (review C32), so chases rolled INT+0 and piloting-rank AEs missed the sheet's Piloting.
+  piloting: { kind: "skill", key: "pil" },
   plating: { kind: "tool", key: "smith" }, fitting: { kind: "tool", key: "carpenter" }, bracing: { kind: "tool", key: "mason" }
 };
 const ATTACK_ABILITY = { melee: "str", ranged: "dex" };
+// bad-eden-5e not loaded (no CONFIG.DND5E.skills.pil) → Piloting falls back to the Land Vehicles tool.
+const PILOTING_FALLBACK = { kind: "tool", key: "land" };
 
 const isRFI = () => game.system?.id === "fourththing";
 const rfiRolls = () => game.fourththing?.rolls;
@@ -55,7 +60,11 @@ function abilityMod(actor, attr) {
   return num(actor.system?.abilities?.[abilityKey(attr)]?.mod);
 }
 
-const skillRef = (skill) => SKILLS[String(skill ?? "").toLowerCase()] ?? null;
+const skillRef = (skill) => {
+  const ref = SKILLS[String(skill ?? "").toLowerCase()] ?? null;
+  if (ref?.key === "pil" && !isRFI() && !CONFIG?.DND5E?.skills?.pil) return PILOTING_FALLBACK;
+  return ref;
+};
 
 /** The flat bonus a skill adds to the check die: RFI attribute + rank; dnd5e the sheet's skill/tool/attack total. */
 function skillBonus(actor, skill, attribute) {
@@ -129,7 +138,11 @@ const AE_KEYS = {
   "system.derived.initiative.bonus":  "system.attributes.init.bonus",
   "system.derived.integrity.aeBonus": "system.attributes.hp.bonuses.overall",
   "system.derived.stress.aeBonus":    "system.attributes.hp.tempmax",
-  "system.magic.castBonus":           "system.bonuses.spell.dc"
+  "system.magic.castBonus":           "system.bonuses.spell.dc",
+  // 2026-10-31 (review C37): the RFI grant rows (Bucket A — resists / immunities the derive reads) → dnd5e's trait Sets.
+  // Mode ADD appends to a SetField; qliphothic/sephirotic are registered dnd5e damage types (bad-eden-5e/module.js).
+  "flags.fourththing.grant.resists":    "system.traits.dr.value",
+  "flags.fourththing.grant.immunities": "system.traits.di.value"
 };
 function aeKey(key) {
   if (isRFI()) return key;
@@ -172,7 +185,10 @@ const PACK_TWINS = {
   "bbttcc-master-content.vehicles": "bad-eden-5e.vehicles",
   // 2026-10-31: the items catalog (gear + the Rig & Boss Catalog's frames/weapons/systems) — the rig mint's loadout
   // read this id and found nothing on dnd5e, so every D&D rig came with a frame and no guns
-  "bbttcc-master-content.items": "bad-eden-5e.gear"
+  "bbttcc-master-content.items": "bad-eden-5e.gear",
+  // 2026-10-31 (review C33): the story foes — spawner.actorByName / onboarding spawnFromPack read the RFI npcs pack
+  // raw and staged empty battlemaps on dnd5e; the converter's monsters lane carries the same names.
+  "bbttcc-master-content.npcs": "bad-eden-5e.monsters"
 };
 const packs = {
   id: (rfiId) => (isRFI() ? rfiId : (game.packs?.get(rfiId) ? rfiId : (PACK_TWINS[rfiId] ?? rfiId))),

@@ -148,7 +148,9 @@ export function castingFor(actor) {
       if (prog === "half" && trad.halfStartsAt && levels < trad.halfStartsAt) continue;
       classesCount++;
       points += levels * (trad.perLevel[prog] ?? 0);
-      casterLevel += levels * MAX_LEVEL[prog][20] / 9;
+      // multiclass share (review C2): each class adds its floored D&D multiclass fraction — full = levels,
+      // 3/4 = ⌊¾⌋, half = ⌊½⌋, arch = ⌊⅓⌋ — never a weight from its single-class cap (that let a dip skip a level).
+      casterLevel += prog === "full" ? levels : prog === "3/4" ? Math.floor(levels * 3 / 4) : prog === "half" ? Math.floor(levels / 2) : Math.floor(levels / 3);
       maxOf20 = Math.max(maxOf20, MAX_LEVEL[prog][20]);
       if (!single || levels > single.levels) single = { levels, prog };
     }
@@ -156,7 +158,6 @@ export function castingFor(actor) {
     // bonus) lands on every tradition the actor has class levels in.
     const bonus = (Number(actor.flags?.[MOD]?.bonus?.[key]) || 0) + (classesCount ? Number(actor.flags?.[MOD]?.bonus?.points) || 0 : 0);
     if (!classesCount && !bonus) continue;
-    casterLevel = Math.round(casterLevel);
     const maxPowerLevel = classesCount === 1 ? MAX_LEVEL[single.prog][single.levels]
       : Math.min(maxOf20, MAX_LEVEL.full[Math.min(20, casterLevel)] ?? 0);
     const ability = bestOf(actor, trad.attrs);
@@ -359,6 +360,7 @@ function patchUsageDialog() {
 function onActivityConsumption(activity, usageConfig, messageConfig, updates) {
   const tk = traditionOf(activity?.item);
   if (!tk) return;
+  if (usageConfig?.consume === false) return;   // a free use (GM demo, replay) spends nothing — dnd5e writes no updates for it either (review C4)
   const c = castingFor(activity.actor)[tk];
   const base = baseLevel(activity);
   const level = base + (Number(usageConfig?.scaling) || 0);
@@ -470,9 +472,10 @@ function onRenderSheet(app, element) {
 }
 
 export function activateCasting() {
-  // dnd5e builds its spellcasting models at i18nInit from the base type, which has no
-  // getSpellSlotKey; a scalable spell's usage config calls it anyway. Answer with the
-  // method key, exactly as dnd5e falls back to elsewhere.
+  // dnd5e builds its spellcasting models at i18nInit; a method with no `type` becomes the BASE SpellcastingModel
+  // (dnd5e 6.0.5: TYPES.base = SpellcastingModel), and getSpellSlotKey is defined one class down on SlotSpellcasting,
+  // yet a scalable spell's usage config and the spellbook call it on any model. Answer with the method key, exactly
+  // as dnd5e falls back to elsewhere. (Review C6 read this against 5.3.0 — on 6.0.5 the shim is live, keep it.)
   for (const trad of Object.values(TRADITIONS)) {
     const model = CONFIG.DND5E?.spellcasting?.[trad.method];
     if (model && typeof model.getSpellSlotKey !== "function") Object.defineProperty(model, "getSpellSlotKey", { value: () => trad.method, configurable: true });

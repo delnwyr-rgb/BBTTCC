@@ -13,8 +13,9 @@
  * sheet-panel enhancer injects into it).
  *
  * Tab contents: state chip + park/deploy/restore, faction link, mobility /
- * bracket / tier / archetype, output authoring with the state-multiplied
- * "next turn" preview, travel, order picker, frame summary, crew roster.
+ * bracket (incl. mecha) / tier (0–5 mecha, 1–4 otherwise — review C27) / archetype,
+ * the RFI output preview (parked / deployed / lost — review C18; orders retired),
+ * travel, frame summary, crew roster.
  * Data + state machine live in rigs-dnd5e.runtime.js (game.bbttcc.rigs.impl).
  * DORMANT off-dnd5e.
  * ───────────────────────────────────────────────────────────────────────────── */
@@ -67,11 +68,13 @@
       .filter(x => x.getFlag?.(SCOPE, "isFaction"))
       .sort((x, y) => (isFixture(x) - isFixture(y)) || x.name.localeCompare(y.name))
       .map(f => ({ value: f.id, label: isFixture(f) ? `🧪 ${f.name}` : f.name, selected: f.id === id.factionOwnerId }));
-    const out = (typeof I().outputFor === "function" ? I().outputFor(a) : {}) ?? {};
-    const base = rig.output?.basePerTurn ?? {};
+    // RFI output math (review C18): base by size + module yields, previewed as parked / deployed / lost
+    const preview = (typeof I().outputPreview === "function" ? I().outputPreview(a) : null) ?? { produces: false, parkedText: "nothing", deployedText: "nothing", lostText: "nothing" };
     const mult = id.state === "parked" ? "×1.0 (parked)" : id.state === "deployed" ? "×0.5 (deployed)" : "×0 (destroyed)";
+    // review C27: the builder mints `mecha` rigs on a 0–5 ladder; the selects used to show "personal, tier 1" for a mech
+    const mecha = ig.bracket === "mecha";
+    const tiers = mecha ? ["0", "1", "2", "3", "4", "5"] : ["1", "2", "3", "4"];
     const crew = (rig.crew?.slots ?? []).map((s, i) => ({ i, role: s.role, name: game.actors?.get?.(s.actorId)?.name ?? s.label ?? "(empty)" }));
-    const channels = I().CHANNELS ?? game.bbttcc?.api?.op?.KEYS ?? [];
     const frame = (() => {
       const f = rig.frame;
       if (!f) return null;
@@ -86,8 +89,8 @@
       canPark: editable && id.state === "deployed",
       destroyed: id.state === "destroyed",
       mobility: sel(["stationary", "mobile", "hybrid"], id.mobility),
-      bracket: sel(["personal", "light", "medium", "heavy", "siege"], ig.bracket),
-      tier: sel(["1", "2", "3", "4"], String(ig.tier ?? 1)),
+      bracket: sel(["personal", "light", "medium", "heavy", "siege", "mecha"], ig.bracket),
+      tier: sel(tiers, String(ig.tier ?? (mecha ? 0 : 1))),
       archetype: id.archetype ?? "",
       showTravel: id.mobility !== "stationary",
       travel: rig.travel ?? { speed: 1, range: 3, hazardResist: 0 },
@@ -96,10 +99,8 @@
         options: editable ? [{ value: "", label: "— (unowned)", selected: !id.factionOwnerId }].concat(factionActors) : null,
       },
       mult,
-      output: channels.map(ch => ({ channel: ch, base: Number(base[ch] ?? 0) || 0, effective: out[ch] ?? 0 })),
+      output: preview,
       crew, hasCrew: crew.length > 0,
-      showOrder: id.state === "parked",
-      order: Object.entries(I().ORDERS ?? {}).map(([k, o]) => ({ value: k, label: o.label + (o.desc ? ` — ${o.desc}` : ""), selected: (rig.order ?? "none") === k })),
       frame,
     };
   }
@@ -121,13 +122,14 @@
       let v = e.currentTarget.value;
       if (["tier", "travel.speed", "travel.range", "travel.hazardResist"].includes(field)) v = Number(v) || 0;
       if (field === "factionOwnerId" && v === "") v = "";
-      await R().update(a, { [FIELD_PATH[field] ?? field]: v });
-      rerender();
-    });
-    on("input[data-rig-output]", "change", async (e) => {
-      const ch = e.currentTarget.dataset.rigOutput;
-      const v = Math.max(0, Number(e.currentTarget.value) || 0);
-      await R().update(a, { [`output.basePerTurn.${ch}`]: v });
+      const patch = { [FIELD_PATH[field] ?? field]: v };
+      // review C27: the tier ladder follows the bracket (mecha 0–5, otherwise 1–4) — clamp when either select moves
+      const cur = data(a)?.integrity ?? {};
+      const bracket = field === "bracket" ? v : cur.bracket;
+      const tier = field === "tier" ? v : Number(cur.tier ?? 1);
+      const clamped = bracket === "mecha" ? Math.max(0, Math.min(5, tier)) : Math.max(1, Math.min(4, tier));
+      if (clamped !== tier || field === "tier") patch["integrity.tier"] = clamped;
+      await R().update(a, patch);   // the accessor re-seats AC + DT from bracket/tier (C20)
       rerender();
     });
     on("[data-rig-act]", "click", async (e) => {

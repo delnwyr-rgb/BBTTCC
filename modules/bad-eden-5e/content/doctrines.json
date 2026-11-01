@@ -1,10 +1,10 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.10.0) — do not hand-edit; put fixes in content/overrides/doctrines.json. The faction doctrines as dnd5e feats (flags.bbttcc kind/key carried verbatim for the factions module).",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.11.0) — do not hand-edit; put fixes in content/overrides/doctrines.json. The faction doctrines as dnd5e feats (flags.bbttcc kind/key carried verbatim for the factions module).",
   "_pack": "doctrines",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.10.0",
-    "at": "2026-10-31",
+    "rubric": "1.11.0",
+    "at": "2026-11-01",
     "overridesApplied": 0
   },
   "items": [
@@ -3862,7 +3862,7 @@
       "folder": "Strategic Activities",
       "system": {
         "description": {
-          "value": "<p><strong>Field Refit</strong></p><p>Siege, defender; needs a Wisdom-Smith on your roster. A field forge refits the wall under fire: your Renewal pool +2 and Loyalty +1. In the clash: 15 marks from the garrison's bank.</p><p><em>Queued on the turn: Logistics 15 · Economy 10 marks. Fired in the clash: 15 marks from the garrison's bank.</em></p>",
+          "value": "<p><strong>Field Refit</strong></p><p>Siege, defender; needs a Soul-Smith on your roster. A field forge refits the wall under fire: your Renewal pool +2 and Loyalty +1. In the clash: 15 marks from the garrison's bank.</p><p><em>Queued on the turn: Logistics 15 · Economy 10 marks. Fired in the clash: 15 marks from the garrison's bank.</em></p>",
           "chat": ""
         },
         "type": {

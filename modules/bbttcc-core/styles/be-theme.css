@@ -389,3 +389,56 @@
     box-shadow: 0 0 20px rgba(var(--be-accent-rgb, 76, 245, 255), 0.34);
   }
 }
+
+/* ---------------------------------------------------------------------------
+   RFI chat-card shim for dnd5e (review C69, 2026-10-31)
+   ---------------------------------------------------------------------------
+   The modules' chat cards (hex gathering, chase, orbital strike, convictions,
+   tikkun, contracts…) are wrapped in the fourththing system's roll-card classes.
+   Their rules live in systems/fourththing/styles/fourththing.css, so on the
+   D&D table those cards rendered as unstyled text. Same values as the system's
+   rules, at ZERO specificity (:where) so on RFI the system stylesheet always
+   wins and nothing changes there.
+   ------------------------------------------------------------------------- */
+:where(.fourththing-roll) {
+  font-family: var(--font-primary, system-ui, sans-serif);
+  font-size: 0.85rem;
+  color: #e8ecff;
+  background: rgba(5,7,18,0.85);
+  border: 1px solid rgba(160,180,255,0.15);
+  border-radius: 6px;
+  padding: 0.6rem 0.7rem;
+  line-height: 1.5;
+}
+:where(.ft-magic-roll) { border-color: rgba(155,89,182,0.3); }
+:where(.ft-roll-header) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+}
+:where(.ft-roll-name) {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #d0e0ff;
+}
+:where(.ft-misfire-box) {
+  margin-top: 0.4rem;
+  padding: 0.45rem 0.55rem;
+  background: rgba(242,153,74,0.1);
+  border: 1px solid rgba(242,153,74,0.35);
+  border-radius: 4px;
+}
+:where(.ft-misfire-label) {
+  display: block;
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: #f2c94c;
+  margin-bottom: 0.2rem;
+}
+:where(.ft-misfire-desc) {
+  font-size: 0.78rem;
+  opacity: 0.75;
+  margin: 0;
+  line-height: 1.5;
+}

@@ -2,7 +2,7 @@
   "_about": "Qliph-Scarred — three heritages (Husk, Diabolic, Chthonic) as dnd5e species items, the family core 'What Walked Out', per-heritage traits and Strategic Hooks, each heritage's Tier I signature, and the shared family ladder at 5/11/17. Converted from the RFI ancestries pack (v1.1 heritage cards); Dave's text kept, RFI mechanics mapped to 5E per the rulebook. Built by tools/build-packs.mjs.",
   "_unsure": [
     "Tier ladder (family-wide, same on all three heritages): Tier I = the heritage signature (What the Deep Dark Taught You / What's Inside You / The Quiet Inside) at level 0; Tier II (5th) = Hunger Mask; Tier III (11th) = Qliphothic Saturation; Tier IV (17th) = Shadow-Wake. These three are the older stand-alone family docs; their core-duplicate sentences are kept as written. The old stand-alone Shadow Resilience doc is superseded by the v1.1 core text — its one extra mechanic (the unsettling weight, a bonus to Intimidation) is folded into the core's Shadow Resilience line.",
-    "The family-level 'Strategic Hooks (Qliph-Scarred)' doc (no numbers) is superseded by the per-heritage Strategic Hooks blocks on the v1.1 cards, which carry the OP numbers; each heritage gets its own level-0 Strategic Hooks feature.",
+    "The family-level 'Strategic Hooks (Qliph-Scarred)' doc (no numbers) is superseded by the per-heritage Strategic Hooks blocks on the v1.1 cards, which carry the marks numbers; each heritage gets its own level-0 Strategic Hooks feature.",
     "'Strategic Turn' → 'campaign turn' (the lint bans the RFI phrasing; the faction layer calls it a turn).",
     "'small bonus' / '+1 rank bonus' on a check have no rulebook line: rendered as a +2 bonus (Intimidation in the core, Stealth in Hunger Mask and Shadow-Wake, Constitution checks in Root-Bound). Unconditional ones are Active Effects; conditional ones are text.",
     "'Soul check' in Qliphothic Saturation → 'Wisdom check or saving throw' (RFI checks cover both); 'Darkness-gain count' kept as the Bad Eden Darkness term.",
@@ -63,7 +63,7 @@
     {
       "slug": "qliph-scarred-husk-strategic-hooks", "name": "Strategic Hooks (Husk)", "featType": "race", "level": 0, "requirements": "Qliph-Scarred (Husk)",
       "folder": "Qliph-Scarred (Husk)", "folderParent": "Qliph-Scarred", "img": "icons/sundries/books/book-open-turquoise.webp",
-      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>OP Edge.</strong> Your faction gains +2 Intrigue OP and +1 Non-Lethal OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Empty / Abandoned / Liminal hexes, your faction's infiltration and passage operations cost 1 fewer OP.</p><p><strong>Nothing to Grab.</strong> Once per Strategic Turn, when a rival faction attempts a divination, intelligence, or surveillance operation targeting your faction, you may force them to reroll that check. They find less than they expected.</p>"
+      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>Domain Edge.</strong> Your faction gains +20 Intrigue marks and +10 Non-Lethal marks at campaign start.</p><p><strong>Hex Synergy.</strong> In Empty / Abandoned / Liminal hexes, your faction's infiltration and passage operations cost 10 fewer marks.</p><p><strong>Nothing to Grab.</strong> Once per Strategic Turn, when a rival faction attempts a divination, intelligence, or surveillance operation targeting your faction, you may force them to reroll that check. They find less than they expected.</p>"
     },
     {
       "slug": "qliph-scarred-the-quiet-inside", "name": "The Quiet Inside", "featType": "race", "level": 0, "requirements": "Qliph-Scarred (Husk)",
@@ -79,7 +79,7 @@
     {
       "slug": "qliph-scarred-diabolic-strategic-hooks", "name": "Strategic Hooks (Diabolic)", "featType": "race", "level": 0, "requirements": "Qliph-Scarred (Diabolic)",
       "folder": "Qliph-Scarred (Diabolic)", "folderParent": "Qliph-Scarred", "img": "icons/sundries/books/book-open-turquoise.webp",
-      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>OP Edge.</strong> Your faction gains +2 Presence OP and +1 Violence OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Black Market / Cult / Corrupted-Territory hexes, your faction's negotiation and recruitment operations gain +2 on the success check.</p><p><strong>Splinter Network.</strong> Once per Strategic Turn, when a rival faction has a member who is secretly compromised (GM determines), you may learn that such a person exists. You do not learn who. You learn they exist.</p>"
+      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>Domain Edge.</strong> Your faction gains +20 Presence marks and +10 Violence marks at campaign start.</p><p><strong>Hex Synergy.</strong> In Black Market / Cult / Corrupted-Territory hexes, your faction's negotiation and recruitment operations gain +2 on the success check.</p><p><strong>Splinter Network.</strong> Once per Strategic Turn, when a rival faction has a member who is secretly compromised (GM determines), you may learn that such a person exists. You do not learn who. You learn they exist.</p>"
     },
     {
       "slug": "qliph-scarred-whats-inside-you", "name": "What's Inside You", "featType": "race", "level": 0, "requirements": "Qliph-Scarred (Diabolic)",
@@ -97,7 +97,7 @@
     {
       "slug": "qliph-scarred-chthonic-strategic-hooks", "name": "Strategic Hooks (Chthonic)", "featType": "race", "level": 0, "requirements": "Qliph-Scarred (Chthonic)",
       "folder": "Qliph-Scarred (Chthonic)", "folderParent": "Qliph-Scarred", "img": "icons/sundries/books/book-open-turquoise.webp",
-      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>OP Edge.</strong> Your faction gains +2 Violence OP and +1 Faith OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Underground / Sunken / Primordial hexes, your faction's excavation, exhumation, and deep-passage operations cost 1 fewer OP.</p><p><strong>Downward Witness.</strong> Once per Strategic Turn, you may consult the depth beneath any hex your faction occupies. The GM answers one question about what lies structurally or historically below the surface. The depth does not lie; the depth is also not always relevant.</p>"
+      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>Domain Edge.</strong> Your faction gains +20 Violence marks and +10 Faith marks at campaign start.</p><p><strong>Hex Synergy.</strong> In Underground / Sunken / Primordial hexes, your faction's excavation, exhumation, and deep-passage operations cost 10 fewer marks.</p><p><strong>Downward Witness.</strong> Once per Strategic Turn, you may consult the depth beneath any hex your faction occupies. The GM answers one question about what lies structurally or historically below the surface. The depth does not lie; the depth is also not always relevant.</p>"
     },
     {
       "slug": "qliph-scarred-what-the-deep-dark-taught-you", "name": "What the Deep Dark Taught You", "featType": "race", "level": 0, "requirements": "Qliph-Scarred (Chthonic)",

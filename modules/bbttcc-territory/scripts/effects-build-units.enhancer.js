@@ -505,7 +505,9 @@ try {
                   if (old?.unsetFlag && old.flags?.["bbttcc-travel"]?.diveOrigin?.hexUuid === doc.uuid) {
                     await old.unsetFlag("bbttcc-travel", "diveOrigin");
                     await old.unsetFlag("bbttcc-travel", "returnLink");
-                    await old.unsetFlag("fourththing", cfg.envFlag);
+                    // Not unsetFlag: "fourththing" is only a legal flag scope on the RFI system — on dnd5e it threw and
+                    // left the old target reading as an underwater/aloft band (review C38). A raw update works on both.
+                    await old.update({ [`flags.fourththing.-=${cfg.envFlag}`]: null });
                   }
                 } catch (eU) { warn("unlink target reset failed", eU); }
                 ui.notifications?.info?.(`Unlinked ${band}.`);

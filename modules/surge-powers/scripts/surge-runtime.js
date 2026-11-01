@@ -58,7 +58,7 @@
     // arriving = the overheat bite. RFI bites 1 Stress; D&D bites 1 level of Exhaustion (Dave's pick, 10-30).
     game.settings.register(MOD, "overheatBite", {
       name: "Overheat bite (Exhaustion)",
-      hint: "When a character's Surge is already full and more arrives in combat, they gain 1 level of Exhaustion — at most once per round, and never past level 3 from Surge alone. Vent (−2 Surge) keeps you out of it.",
+      hint: "When a character's Surge is already full and more arrives in combat, they gain 1 level of Exhaustion — at most once per round, and never while their Exhaustion is already 3 or more (whatever put it there). Vent (−2 Surge) keeps you out of it.",
       // on by default only in a Bad Eden 5E world — the Kaeron War home game (same module) opts in by hand
       scope: "world", config: true, type: Boolean, default: !!game.modules.get("bad-eden-5e")?.active
     });
@@ -233,19 +233,29 @@
       ?? null;
   }
 
-  // dnd5e 5.x hook names (verified against 5.3.x): saves/checks fire WITHOUT a
-  // V2 suffix. Concentration rolls via rollSavingThrow internally, so the save
-  // hook already covers it — no rollConcentration listener (would double-bank).
+  // Hook names verified against dnd5e 6.0.5 (the port's system; 10-31, review C57). The pair is
+  // ASYMMETRIC on purpose: skill and tool checks fire BOTH `dnd5e.rollSkill` and `dnd5e.rollSkillV2`
+  // (Actor5e#rollSkill), while ability checks and saves fire ONLY the non-V2 name
+  // (`dnd5e.rollAbilityCheck` / `dnd5e.rollSavingThrow` — there is no rollSavingThrowV2 to
+  // "upgrade" to; listening for it would stop Surge banking on saves). Attacks fire both and we
+  // take the V2. Concentration rolls via rollSavingThrow internally, so the save hook already
+  // covers it — no rollConcentration listener (would double-bank).
   const ROLL_HOOKS = [
     "dnd5e.rollAttackV2", "dnd5e.rollSavingThrow", "dnd5e.rollAbilityCheck", "dnd5e.rollSkillV2"
   ];
+  const HOOKS_VERIFIED_MAJOR = 6;
 
   Hooks.once("ready", () => {
     if (game.system.id !== "dnd5e") return;
+    if ((parseInt(game.system.version) || 0) !== HOOKS_VERIFIED_MAJOR)
+      console.warn(TAG, `ROLL_HOOKS were verified against dnd5e ${HOOKS_VERIFIED_MAJOR}.x; this is ${game.system.version} — re-check the hook names before trusting Surge fill.`);
     for (const h of ROLL_HOOKS) {
       Hooks.on(h, (rolls, data) => {
         try {
-          const actor = actorFromRollData(data, rolls);
+          let actor = actorFromRollData(data, rolls);
+          // D&D port review C56 (2026-10-31): a rig's d20 is really its crew's — the gunner (attacks) or pilot (checks)
+          // banks the 15+/natural 20, as on RFI where the steward rolls the rig weapon themselves.
+          if (actor?.type === "vehicle" && game.bbttcc?.rigs?.isRig?.(actor)) actor = game.bbttcc.rigs.impl?.crewRoller?.(actor, h === "dnd5e.rollAttackV2" ? "attack" : "check") ?? null;
           if (actor?.type === "character") explodeFromRoll(actor, rolls);
         } catch (e) { console.warn(TAG, h, "failed", e); }
       });

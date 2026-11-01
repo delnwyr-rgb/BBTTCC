@@ -113,13 +113,16 @@ const directorLines = speakLines("director.js", { idRx: /^(?!x)x/m });
 
 /* ── tours ─────────────────────────────────────────────────────────── */
 const tourSrc = S("tour-defs.js");
-const tourBlocks = [...tourSrc.matchAll(/^const (\w+Tour) = \{/gm)].map((m) => { const close = tourSrc.indexOf("\n};", m.index); return { name: m[1], start: m.index, end: close < 0 ? tourSrc.length : close + 3 }; });   // a tour block ends at its own closing brace, not at the next tour (helpers may sit between)
-const regOrder = [...tourSrc.matchAll(/tours\.register\((\w+)\)/g)].map(m => m[1]);
+const tourBlocks = [...tourSrc.matchAll(/^const (\w+Tour(?:5e)?) = \{/gm)].map((m) => { const close = tourSrc.indexOf("\n};", m.index); return { name: m[1], start: m.index, end: close < 0 ? tourSrc.length : close + 3 }; });   // a tour block ends at its own closing brace, not at the next tour (helpers may sit between)
+// 10-31: a register call may pick a system twin — `tours.register(sys === "dnd5e" ? xTour5e : xTour)` — print both, RFI first.
+const regOrder = [...tourSrc.matchAll(/tours\.register\(([^)]*)\)/g)]
+  .flatMap(m => (m[1].match(/\b\w+Tour(?:5e)?\b/g) || []).sort((a, b) => a.endsWith("5e") - b.endsWith("5e")));
 const tours = [];
 for (const name of regOrder) {
   const b = tourBlocks.find(t => t.name === name); if (!b) continue;
   const body = tourSrc.slice(b.start, b.end);
   const t = { name, id: "", title: "", audience: "", intro: "", outro: "", steps: [] };
+  const dndTwin = name.endsWith("5e");   // same id as the RFI tour, registered instead of it on dnd5e
   const keyRx = /(?:^|,)[ \t]*(id|title|text|speak|intro|outro|audience|optional):\s*/gm; let m; let cur = null; let seenTourTitle = false;
   while ((m = keyRx.exec(body))) {
     const key = m[1]; const at = m.index + m[0].length;
@@ -127,7 +130,7 @@ for (const name of regOrder) {
     const L = readLiteral(body, at); if (!L) continue;
     const lineStart = body.lastIndexOf("\n", m.index) + 1; const indent = body.slice(lineStart).match(/^[ \t]*/)[0].length;
     if (indent <= 2) {                         // tour-level
-      if (key === "id") t.id = L.text; else if (key === "title") t.title = L.text; else if (key === "audience") t.audience = L.text;
+      if (key === "id") t.id = dndTwin ? `${L.text} · D&D (Bad Eden 5E)` : L.text; else if (key === "title") t.title = L.text; else if (key === "audience") t.audience = L.text;
       else if (key === "intro") t.intro = L.text; else if (key === "outro") t.outro = L.text;
       continue;
     }

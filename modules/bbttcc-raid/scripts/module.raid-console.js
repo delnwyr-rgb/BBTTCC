@@ -607,12 +607,32 @@ function _bossStateLabel(def, state){
 // actor's integrity ratio against the hit-track length. Returns null
 // when integrity isn't readable so the caller can fall back to the
 // legacy stored damageStep (BC for state-only bosses with no actor).
+// A registered boss actor (review C67, 2026-10-31): no Actor type "boss" exists on either system (RFI = character/npc/rig,
+// dnd5e = npc/vehicle), so every `type === "boss"` gate below was dead — the hit track advanced but the boss actor's pool
+// never dropped and its Rounds tile never ticked. A boss is the registry entry / the auto-link kind / a stored boss state.
+function _rcIsBossActor(actor, bossKey) {
+  if (!actor) return false;
+  if (actor.type === "boss") return true;
+  if (actor.flags?.["bbttcc-auto-link"]?.entityKind === "boss") return true;
+  try { const raid = game.bbttcc?.api?.raid; if (bossKey && raid?.boss && typeof raid.boss.get === "function" && raid.boss.get(bossKey)) return true; } catch (_e) {}
+  try { if (bossKey && _getBossState(bossKey)) return true; } catch (_e) {}
+  return false;
+}
+// The boss's pool on either system: the authored RFI boss integrity, else the combat seam (RFI derived Integrity / dnd5e HP).
+function _rcBossPool(actor) {
+  const sys = actor?.system?.system ?? actor?.system ?? {};
+  let value = Number(sys?.integrity?.value), max = Number(sys?.integrity?.max);
+  if (!(Number.isFinite(max) && max > 0)) { try { const h = game.bbttcc?.combat?.getHealth?.(actor); value = Number(h?.value); max = Number(h?.max); } catch (_e) {} }
+  if (!(Number.isFinite(max) && max > 0)) { value = Number(sys?.derived?.integrity?.value); max = Number(sys?.derived?.integrity?.max); }
+  return { value, max };
+}
+
 function _rcDeriveBossStepFromIntegrity(bossActor, maxStep) {
   try {
-    if (!bossActor || bossActor.type !== "boss") return null;
-    const sys = bossActor.system?.system ?? bossActor.system ?? {};
-    const intMax = Number(sys?.integrity?.max);
-    const intVal = Number(sys?.integrity?.value);
+    if (!bossActor || !_rcIsBossActor(bossActor, bossActor.id)) return null;
+    const pool = _rcBossPool(bossActor);
+    const intMax = pool.max;
+    const intVal = pool.value;
     if (!Number.isFinite(intMax) || !Number.isFinite(intVal) || intMax <= 0) return null;
     const ratioLost = Math.max(0, Math.min(1, 1 - (intVal / intMax)));
     const m = Math.max(1, Number(maxStep) || 1);
@@ -6938,9 +6958,8 @@ try {
         try {
           if (dmg > 0) {
             const bossActor = game.actors?.get(bossKey);
-            if (bossActor && bossActor.type === "boss") {
-              const bSys = bossActor.system?.system ?? bossActor.system ?? {};
-              const intMax = Number(bSys?.integrity?.max) || 0;
+            if (bossActor && _rcIsBossActor(bossActor, bossKey)) {   // review C67: was `type === "boss"` (a type on neither system)
+              const intMax = Number(_rcBossPool(bossActor).max) || 0;
               if (intMax > 0) {
                 const intPerStep = Math.max(1, Math.floor(intMax / Math.max(1, maxStep)));
                 const intDmg = intPerStep * dmg;
@@ -6964,9 +6983,12 @@ try {
         // (not gated on dmg > 0) — rounds count rounds-fought.
         try {
           const bossActorR = game.actors?.get(bossKey);
-          if (bossActorR && bossActorR.type === "boss") {
-            const curRounds = Number(bossActorR.system?.raidStats?.rounds || 0);
-            await bossActorR.update({ "system.raidStats.rounds": curRounds + 1 });
+          if (bossActorR && _rcIsBossActor(bossActorR, bossKey)) {   // review C67
+            // RFI (template.json data) keeps the authored system.raidStats path; dnd5e's data model has no such field, so the
+            // tile lives in the module's flag there.
+            const roundsPath = (game.system?.id === "fourththing") ? "system.raidStats.rounds" : "flags.bbttcc-raid.raidStats.rounds";
+            const curRounds = Number(foundry.utils.getProperty(bossActorR, roundsPath) || 0);
+            await bossActorR.update({ [roundsPath]: curRounds + 1 });
           }
         } catch (eRounds) { warn("[raid-console] boss rounds increment failed", eRounds); }
 

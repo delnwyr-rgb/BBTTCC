@@ -55,6 +55,28 @@
   }
   const findHexDrawing = (hexId) => { if (!hexId) return null; for (const s of game.scenes ?? []) { const d = s.drawings?.get?.(hexId); if (d) return d; } return null; };
 
+  // ── Relay authorization (review C65, 2026-10-31) ─────────────────────────────────────────────────────────────────
+  // The RFI system copy dedups; this twin now also checks the sender the way the other GM relays do (gm-exec, the raid
+  // session relay): the server stamps the real sender id as the socket callback's 2nd arg — trust that, never the payload.
+  // A player seat may only activate a scene BOUND to the hex it names, and only for a hex it drives (owns the hex's
+  // faction, or owns the lead attacker / a listed supporter of a stored raid session targeting that hex). GM seats pass.
+  const __seen = new Map();
+  const seenRecently = (key, windowMs = 3000) => { const now = Date.now(); for (const [k, t] of __seen) if (now - t > windowMs) __seen.delete(k); if (__seen.has(key)) return true; __seen.set(key, now); return false; };
+  const hexFactionId = (hexDoc) => { const f = hexDoc?.flags?.["bbttcc-territory"] || {}; for (const c of [f.factionId, f.ownerId, f.ownerFactionId, f.controllerFactionId, f.faction]) if (typeof c === "string" && c) return c.replace(/^Actor\./, ""); return null; };
+  function userDrivesHex(user, hexDoc) {
+    const owns = (a) => { try { return !!a && a.testUserPermission(user, "OWNER"); } catch (_e) { return false; } };
+    const fid = hexFactionId(hexDoc);
+    if (fid && owns(game.actors?.get(fid))) return true;
+    const hexUuid = String(hexDoc?.uuid || "");
+    for (const a of (game.actors?.contents ?? [])) {
+      const s = a.flags?.["bbttcc-raid"]?.raidSession;
+      if (!s || !hexUuid || String(s.targetUuid || "") !== hexUuid) continue;
+      if (owns(a)) return true;
+      if ((Array.isArray(s.supportFactionIds) ? s.supportFactionIds : []).some(id => owns(game.actors?.get(String(id))))) return true;
+    }
+    return false;
+  }
+
   const waitFor = (fn, ms = 5000, step = 250) => new Promise((res) => { const t0 = Date.now(); const tick = () => { const v = fn(); if (v) return res(v); if (Date.now() - t0 > ms) return res(null); setTimeout(tick, step); }; tick(); });
 
   Hooks.once("ready", async () => {
@@ -62,12 +84,19 @@
     if (!game.bbttcc.api.raid.battleScenes) game.bbttcc.api.raid.battleScenes = { list, current, bind, unbind, activate };
 
     // Player activation requests land on the GM.
-    game.socket?.on?.(`module.${MOD}`, async (msg) => {
+    game.socket?.on?.(`module.${MOD}`, async (msg, senderId) => {
       if (msg?.t !== "ft-activateBattleScene" || !game.user?.isGM || game.users.activeGM?.id !== game.user.id) return;
       try {
+        if (seenRecently(`activate:${msg.sceneId}:${msg.hexUuid}:${msg.idx}`)) return;
+        const sender = (typeof senderId === "string" && senderId) ? game.users?.get?.(senderId) : null;
+        if (!sender) { console.warn(TAG, "activation relay DENIED — no server sender id"); return; }
         const scene = game.scenes?.get(msg.sceneId); if (!scene) return;
-        await scene.activate();
         const hexDoc = msg.hexUuid ? await fromUuid(msg.hexUuid) : null;
+        if (!sender.isGM) {
+          if (!hexDoc || !list(hexDoc).some(e => e.sceneId === scene.id)) { console.warn(TAG, `activation relay DENIED — "${scene.name}" is not a battle scene bound to that hex (${sender.name})`); return; }
+          if (!userDrivesHex(sender, hexDoc)) { console.warn(TAG, `activation relay DENIED — ${sender.name} does not drive that hex's raid`); return; }
+        }
+        await scene.activate();
         if (hexDoc) await setCurrent(hexDoc, msg.idx);
       } catch (e) { console.warn(TAG, "activation relay failed", e); }
     });

@@ -2111,7 +2111,7 @@
                 const gate = domApi.canEnterTerrainKey(factionId, tKey, hexDoc);
                 if (gate && gate.ok === false) {
                   const need = (gate.required || [])
-                    .map(k => game.fourththing?.constants?.MOVEMENT_DOMAINS?.[k]?.label || k).join(" or ");
+                    .map(k => game.fourththing?.constants?.MOVEMENT_DOMAINS?.[k]?.label || game.bbttcc?.constants?.MOVEMENT_DOMAINS?.[k]?.label || k).join(" or ");   // bbttcc-core twin on dnd5e (review C68)
                   const where = gate.medium === "water"
                     ? (gate.depthBand === "surface" ? "open water" : `the ${gate.depthBand}`)
                     : gate.medium;

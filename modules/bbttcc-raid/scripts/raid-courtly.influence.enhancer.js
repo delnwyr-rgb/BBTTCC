@@ -429,6 +429,7 @@
         trackLabel: PERF ? (PERF.crowdTrack || "Crowd") : (goal === "unnoticed" ? "Suspicion" : null),
         attackerId: A.id,
         defenderId: D.id,
+        sceneId: canvas?.scene?.id || null,   // review C66: the scene the Parley opened on — tableau.courtiers() falls back to it off-canvas
         label,
         round: 0,
         roundCap: 6,                   // Phase E — spec §8 resolution 5

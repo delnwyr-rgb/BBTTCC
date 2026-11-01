@@ -1,10 +1,10 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.10.0) — do not hand-edit; put fixes in content/overrides/manifestations.json. The starter-kit manifestations as ordinary dnd5e slot spells (pack spells) with the class lists they join; Doctrine signatures are Path-locked (flags.bad-eden-5e.requiresPath).",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.11.0) — do not hand-edit; put fixes in content/overrides/manifestations.json. The starter-kit manifestations as ordinary dnd5e slot spells (pack spells) with the class lists they join; Doctrine signatures are Path-locked (flags.bad-eden-5e.requiresPath).",
   "_pack": "spells",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.10.0",
-    "at": "2026-10-31",
+    "rubric": "1.11.0",
+    "at": "2026-11-01",
     "overridesApplied": 0
   },
   "spells": [
@@ -913,8 +913,29 @@
           "img": "icons/magic/control/sleep-bubble-purple.webp",
           "transfer": false,
           "disabled": false,
-          "statuses": [],
-          "changes": [],
+          "statuses": [
+            "be5e-staggered"
+          ],
+          "changes": [
+            {
+              "key": "system.attributes.movement.walk",
+              "mode": 1,
+              "value": "0.5",
+              "priority": 20
+            },
+            {
+              "key": "system.bonuses.mwak.attack",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            },
+            {
+              "key": "system.bonuses.rwak.attack",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            }
+          ],
           "duration": {
             "seconds": 6,
             "rounds": 1
@@ -934,7 +955,7 @@
         "bard",
         "druid"
       ],
-      "description": "<p><em>For one breath, every you that you have ever dreamed of being stands up at once. There are a lot of you. Some are waving.</em></p><p>Each creature of your choice in a 15-foot-radius sphere centered on a point within range must make a Wisdom saving throw. On a failed save, it is staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn.</p><p><strong>Path of the Dreamwalker only.</strong> This is a Doctrine signature; only a character who walks the Path of the Dreamwalker can learn or prepare it.</p><p><em>Mal:</em> 'Quorum reached. Motion to be unhittable carries, eleven to zero, all in favor being her.'</p>",
+      "description": "<p><em>For one breath, every you that you have ever dreamed of being stands up at once. There are a lot of you. Some are waving.</em></p><p>Each creature of your choice in a 15-foot-radius sphere centered on a point within range must make a Wisdom saving throw. On a failed save, it is Staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn.</p><p><strong>Path of the Dreamwalker only.</strong> This is a Doctrine signature; only a character who walks the Path of the Dreamwalker can learn or prepare it.</p><p><em>Mal:</em> 'Quorum reached. Motion to be unhittable carries, eleven to zero, all in favor being her.'</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -991,8 +1012,29 @@
           "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
           "transfer": false,
           "disabled": false,
-          "statuses": [],
-          "changes": [],
+          "statuses": [
+            "be5e-staggered"
+          ],
+          "changes": [
+            {
+              "key": "system.attributes.movement.walk",
+              "mode": 1,
+              "value": "0.5",
+              "priority": 20
+            },
+            {
+              "key": "system.bonuses.mwak.attack",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            },
+            {
+              "key": "system.bonuses.rwak.attack",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            }
+          ],
           "duration": {
             "seconds": 6,
             "rounds": 1
@@ -1011,7 +1053,7 @@
         "sorcerer",
         "bard"
       ],
-      "description": "<p><em>As above, so below; as the bottle you just cracked, so the knee of the man holding it. You break the small thing and the big thing agrees.</em></p><p>One creature you can see within range must make a Constitution saving throw. On a failed save, it takes 1d6 lightning damage and is staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn. On a successful save, it takes half as much damage and suffers no other effect.</p><p><em>From the Path of the Wyrdlens Adept.</em></p><p><em>Mal:</em> 'Sympathy is a beautiful force of cosmic unity. Also you can hit a guy with it.'</p>",
+      "description": "<p><em>As above, so below; as the bottle you just cracked, so the knee of the man holding it. You break the small thing and the big thing agrees.</em></p><p>One creature you can see within range must make a Constitution saving throw. On a failed save, it takes 1d6 lightning damage and is Staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn. On a successful save, it takes half as much damage and suffers no other effect.</p><p><em>From the Path of the Wyrdlens Adept.</em></p><p><em>Mal:</em> 'Sympathy is a beautiful force of cosmic unity. Also you can hit a guy with it.'</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -1918,8 +1960,29 @@
           "img": "icons/magic/control/sleep-bubble-purple.webp",
           "transfer": false,
           "disabled": false,
-          "statuses": [],
-          "changes": [],
+          "statuses": [
+            "be5e-staggered"
+          ],
+          "changes": [
+            {
+              "key": "system.attributes.movement.walk",
+              "mode": 1,
+              "value": "0.5",
+              "priority": 20
+            },
+            {
+              "key": "system.bonuses.mwak.attack",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            },
+            {
+              "key": "system.bonuses.rwak.attack",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            }
+          ],
           "duration": {
             "seconds": 6,
             "rounds": 1
@@ -1939,7 +2002,7 @@
         "bard",
         "druid"
       ],
-      "description": "<p><em>You gift one enemy the 3 p.m. feeling. The full-body head-nod. The where-was-I. Mid-swing, if you time it right.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it is staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn.</p><p><em>From the Path of the Dreamwalker.</em></p><p><em>Mal:</em> 'Everybody's fought a war on six hours of sleep. Now they're fighting yours on none.'</p>",
+      "description": "<p><em>You gift one enemy the 3 p.m. feeling. The full-body head-nod. The where-was-I. Mid-swing, if you time it right.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it is Staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn.</p><p><em>From the Path of the Dreamwalker.</em></p><p><em>Mal:</em> 'Everybody's fought a war on six hours of sleep. Now they're fighting yours on none.'</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -2122,7 +2185,11 @@
         "units": "minute"
       },
       "concentration": true,
-      "activity": "damage",
+      "activity": "save",
+      "save": {
+        "ability": "dex",
+        "onSave": "half"
+      },
       "damage": [
         {
           "number": 1,
@@ -2163,7 +2230,7 @@
         "paladin",
         "cleric"
       ],
-      "description": "<p><em>Every structure has the one brick holding the argument together. You circle it in chalk that was never chalk.</em></p><p>One creature you can see within range takes 1d6 force damage.</p><p>The target also has a −2 penalty to AC for the duration.</p><p><strong>Path of the Bulwark only.</strong> This is a Doctrine signature; only a character who walks the Path of the Bulwark can learn or prepare it.</p><p><em>Mal:</em> Everything is load-bearing if you're honest about it. Most people aren't. Walls never are.</p>",
+      "description": "<p><em>Every structure has the one brick holding the argument together. You circle it in chalk that was never chalk.</em></p><p>One creature you can see within range must make a Dexterity saving throw. On a failed save, it takes 1d6 force damage. On a successful save, it takes half as much damage and suffers no other effect.</p><p>On a failed save, the target also has a −2 penalty to AC for the duration.</p><p><strong>Path of the Bulwark only.</strong> This is a Doctrine signature; only a character who walks the Path of the Bulwark can learn or prepare it.</p><p><em>Mal:</em> Everything is load-bearing if you're honest about it. Most people aren't. Walls never are.</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -2538,8 +2605,29 @@
           "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
           "transfer": false,
           "disabled": false,
-          "statuses": [],
-          "changes": [],
+          "statuses": [
+            "be5e-staggered"
+          ],
+          "changes": [
+            {
+              "key": "system.attributes.movement.walk",
+              "mode": 1,
+              "value": "0.5",
+              "priority": 20
+            },
+            {
+              "key": "system.bonuses.mwak.attack",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            },
+            {
+              "key": "system.bonuses.rwak.attack",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            }
+          ],
           "duration": {
             "seconds": 6,
             "rounds": 1
@@ -2558,7 +2646,7 @@
         "bard",
         "warlock"
       ],
-      "description": "<p><em>You jot a small editorial note in the air beside an event that is happening too soon. The universe, embarrassed, agrees to circle back.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it is staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn.</p><p><em>From the Path of the Cosmic Linguist.</em></p><p><em>Mal:</em> 'The cosmos respects exactly one thing, and it's a correction politely worded.'</p>",
+      "description": "<p><em>You jot a small editorial note in the air beside an event that is happening too soon. The universe, embarrassed, agrees to circle back.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it is Staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn.</p><p><em>From the Path of the Cosmic Linguist.</em></p><p><em>Mal:</em> 'The cosmos respects exactly one thing, and it's a correction politely worded.'</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -3436,7 +3524,7 @@
         "cleric",
         "paladin"
       ],
-      "description": "<p><em>You flag the target's defenses as non-compliant. Findings are published immediately. Their armor develops an audit trail, and the audit trail has gaps.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it takes 1d4 psychic damage.</p><p>The target also has a −2 penalty to AC for the duration.</p><p><strong>Path of the Pactkeeper only.</strong> This is a Doctrine signature; only a character who walks the Path of the Pactkeeper can learn or prepare it.</p><p><em>Mal:</em> 'Turns out the breastplate was expensed under \"miscellaneous.\" Denied.'</p>",
+      "description": "<p><em>You flag the target's defenses as non-compliant. Findings are published immediately. Their armor develops an audit trail, and the audit trail has gaps.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it takes 1d4 psychic damage. On a successful save, it takes half as much damage and suffers no other effect.</p><p>On a failed save, the target also has a −2 penalty to AC for the duration.</p><p><strong>Path of the Pactkeeper only.</strong> This is a Doctrine signature; only a character who walks the Path of the Pactkeeper can learn or prepare it.</p><p><em>Mal:</em> 'Turns out the breastplate was expensed under \"miscellaneous.\" Denied.'</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -3780,8 +3868,29 @@
           "img": "icons/magic/perception/eye-tendrils-web-purple.webp",
           "transfer": false,
           "disabled": false,
-          "statuses": [],
-          "changes": [],
+          "statuses": [
+            "be5e-staggered"
+          ],
+          "changes": [
+            {
+              "key": "system.attributes.movement.walk",
+              "mode": 1,
+              "value": "0.5",
+              "priority": 20
+            },
+            {
+              "key": "system.bonuses.mwak.attack",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            },
+            {
+              "key": "system.bonuses.rwak.attack",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            }
+          ],
           "duration": {
             "seconds": 6,
             "rounds": 1
@@ -3800,7 +3909,7 @@
         "sorcerer",
         "bard"
       ],
-      "description": "<p><em>You read the target's next move off the wyrd and announce it to the room, loudly, with commentary, before they do it.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it is staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn.</p><p><em>From the Path of the Wyrdlens Adept.</em></p><p><em>Mal:</em> 'He was going to feint left. Everyone knows he was going to feint left. He knows everyone knows. Watch him not.'</p>",
+      "description": "<p><em>You read the target's next move off the wyrd and announce it to the room, loudly, with commentary, before they do it.</em></p><p>One creature you can see within range must make an Intelligence saving throw. On a failed save, it is Staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn.</p><p><em>From the Path of the Wyrdlens Adept.</em></p><p><em>Mal:</em> 'He was going to feint left. Everyone knows he was going to feint left. He knows everyone knows. Watch him not.'</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -4494,7 +4603,11 @@
         "units": "minute"
       },
       "concentration": true,
-      "activity": "damage",
+      "activity": "save",
+      "save": {
+        "ability": "wis",
+        "onSave": "half"
+      },
       "damage": [
         {
           "number": 1,
@@ -4542,7 +4655,7 @@
         "ranger",
         "sorcerer"
       ],
-      "description": "<p><em>The Void Edge doesn't cut things. It cuts the stitch between things — a target and the certainty it was leaning on.</em></p><p>One creature you can see within range takes 1d4 psychic damage.</p><p>The target also has a −2 penalty to Wisdom and Charisma saving throws for the duration.</p><p><strong>Path of the Aurablade only.</strong> This is a Doctrine signature; only a character who walks the Path of the Aurablade can learn or prepare it.</p><p><em>Mal:</em> Everything is attached to something. Mal recommends not asking what YOU'RE attached to. Too late.</p>",
+      "description": "<p><em>The Void Edge doesn't cut things. It cuts the stitch between things — a target and the certainty it was leaning on.</em></p><p>One creature you can see within range must make a Wisdom saving throw. On a failed save, it takes 1d4 psychic damage. On a successful save, it takes half as much damage and suffers no other effect.</p><p>On a failed save, the target also has a −2 penalty to Wisdom and Charisma saving throws for the duration.</p><p><strong>Path of the Aurablade only.</strong> This is a Doctrine signature; only a character who walks the Path of the Aurablade can learn or prepare it.</p><p><em>Mal:</em> Everything is attached to something. Mal recommends not asking what YOU'RE attached to. Too late.</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {
@@ -4599,8 +4712,29 @@
           "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
           "transfer": false,
           "disabled": false,
-          "statuses": [],
-          "changes": [],
+          "statuses": [
+            "be5e-staggered"
+          ],
+          "changes": [
+            {
+              "key": "system.attributes.movement.walk",
+              "mode": 1,
+              "value": "0.5",
+              "priority": 20
+            },
+            {
+              "key": "system.bonuses.mwak.attack",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            },
+            {
+              "key": "system.bonuses.rwak.attack",
+              "mode": 2,
+              "value": "-2",
+              "priority": 20
+            }
+          ],
           "duration": {
             "seconds": 6,
             "rounds": 1
@@ -4619,7 +4753,7 @@
         "bard",
         "warlock"
       ],
-      "description": "<p><em>For one second, the target carries the weight of the world. Not the planet — the idiom. It is heavier.</em></p><p>One creature you can see within range must make a Constitution saving throw. On a failed save, it takes 1d6 psychic damage and is staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn. On a successful save, it takes half as much damage and suffers no other effect.</p><p><strong>Path of the Cosmic Linguist only.</strong> This is a Doctrine signature; only a character who walks the Path of the Cosmic Linguist can learn or prepare it.</p><p><em>Mal:</em> 'Atlas shrugged. This guy buckled. There's a lesson in there about stretching first.'</p>",
+      "description": "<p><em>For one second, the target carries the weight of the world. Not the planet — the idiom. It is heavier.</em></p><p>One creature you can see within range must make a Constitution saving throw. On a failed save, it takes 1d6 psychic damage and is Staggered: its speed is halved and it has a −2 penalty to attack rolls until the end of its next turn. On a successful save, it takes half as much damage and suffers no other effect.</p><p><strong>Path of the Cosmic Linguist only.</strong> This is a Doctrine signature; only a character who walks the Path of the Cosmic Linguist can learn or prepare it.</p><p><em>Mal:</em> 'Atlas shrugged. This guy buckled. There's a lesson in there about stretching first.'</p>",
       "flags": {
         "bad-eden-5e": {
           "rfi": {

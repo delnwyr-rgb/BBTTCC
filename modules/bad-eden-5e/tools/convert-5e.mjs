@@ -23,6 +23,8 @@ import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+// the shared rig tables (bbttcc-core, pure ESM): AC / damage threshold by bracket and the tiered AC the in-world builder mints
+import { RIG_DT_BY_BRACKET, rigAcFor } from "../../bbttcc-core/scripts/economy.constants.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const REPO = join(ROOT, "..", "..");
@@ -56,7 +58,7 @@ export function convertText(html) {
     s = s.replace(re, (...m) => {
       const cap = first && /^[A-Z]/.test(m[0]);
       const fix = out => cap ? out.charAt(0).toUpperCase() + out.slice(1) : out;
-      if (rep.includes("@ABILITY")) return fix(rep.replace("@ABILITY", ABIL_NAME[ABIL[m[1].toLowerCase()]] ?? m[1]));
+      if (rep.includes("@ABILITY")) return fix(rep.replace("@ABILITY", ABIL_NAME[ABIL[m[1].toLowerCase()]] ?? m[1]).replace(/\\(\d)/g, (_, i) => m[Number(i)]));
       if (rep.includes("@SAVE")) { const sv = { resolve: "Wisdom", evasion: "Dexterity", guard: "Armor Class" }[m[1].toLowerCase()] ?? m[1]; return fix(rep.replace("@SAVE", sv).replace(/\\(\d)/g, (_, i) => m[Number(i)])); }
       if (/\\1 saving throw/.test(rep)) { const sv = { resolve: "Wisdom", evasion: "Dexterity" }[m[1].toLowerCase()] ?? m[1]; return fix(rep.replace("\\1", sv).replace(/\\(\d)/g, (_, i) => m[Number(i)])); }
       if (rep.includes("@SKILL")) return fix(skillText(m[1]));
@@ -318,11 +320,18 @@ function gearDescription(d, needs = []) {
   const strip = h => String(h ?? "")
     .replace(/<!-- BBTTCC:MECHANICS:START -->[\s\S]*?<!-- BBTTCC:MECHANICS:END -->/g, m => { const t = m.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(); needs.push(`RFI engine block dropped: "${t.replace(/^.*?⚙️ Mechanical Effects\s*/, "").slice(0, 110)}"`); return ""; })
     .replace(/(<hr\s*\/?>\s*)?<p>\s*<strong>\s*⚙️?[^<]*Mechanical Effects[\s\S]*?<\/ul>/g, m => { const t = m.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(); needs.push(`RFI engine block dropped: "${t.replace(/^.*?Mechanical Effects\s*/, "").slice(0, 110)}"`); return ""; });
-  if (s.flavor) parts.push(`<p><em>${s.flavor}</em></p>`);
-  const desc = strip(s.description?.value ?? "");
-  const effPlain = String(s.effect ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  const plainOf = h => String(h ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  let desc = strip(s.description?.value ?? "");
+  const descPlain = plainOf(desc);
+  // the flavour line is often the description's own <em> line — keep it once
+  if (s.flavor && !descPlain.includes(plainOf(s.flavor).slice(0, 60))) parts.push(`<p><em>${s.flavor}</em></p>`);
+  const effPlain = plainOf(s.effect);
   // the effect line is often repeated inside the description — keep it once
-  if (s.effect && !(effPlain && desc.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").includes(effPlain.slice(0, 60)))) parts.push(`<p>${s.effect}</p>`);
+  if (s.effect && !(effPlain && descPlain.includes(effPlain.slice(0, 60)))) {
+    parts.push(`<p>${s.effect}</p>`);
+    // …and a description paragraph that only restates the effect (creature riders after the stat idiom is stripped) goes
+    if (effPlain) { const effLc = effPlain.toLowerCase(); desc = desc.replace(/<p>(?!<em>)([\s\S]*?)<\/p>/g, (p, inner) => { const ss = plainOf(inner).split(/(?<=\.)\s+/).filter(x => x.length > 20); return ss.length && ss.filter(x => effLc.includes(x.toLowerCase())).length * 3 >= ss.length * 2 ? "" : p; }); }
+  }
   if (desc) parts.push(desc);
   return convertText(parts.join("")).replace(/\s+([.,;:])/g, "$1");
 }
@@ -335,12 +344,17 @@ function convertWeapon(d, needs) {
   const dtype = weaponDamageType(s, tags);
   const attune = tags.includes("attunement") || tags.includes("soulbound");
   const ranged = s.category === "ranged";
-  const firearm = /pistol|rifle|ballistic|laser|slug|gun/i.test(tags.join(" ") + " " + d.name);
-  const martial = ranged ? (firearm && !tags.includes("pistol") && !tags.includes("sidearm") && !/pistol/i.test(d.name)) : tags.some(t => ["heavy", "two-handed", "reach", "longsword", "maul"].includes(t));
+  // P7 (2026-10-31): `firearm` is the one test that also types the weapon firearmR — RFI's firearms skill, not a name regex;
+  // a bow (by name) and rig-mounted guns are not firearms. No 'amm' anywhere: Bad Eden has no ammunition items (the Bolt-Drivers
+  // are crossbow-TAGGED firearms-skill guns and keep 'lod'); re-add 'amm' on bows when an ammo consumable exists in the pack.
+  const bow = /\bbow\b/i.test(d.name) || tags.includes("bow");
+  const rigGun = !!d.flags?.fourththing?.rigGear;
+  const firearm = s.skill === "firearms" && !bow && !rigGun;
+  const gunName = /pistol|rifle|ballistic|laser|slug|gun|cannon|mortar|lance/i.test(tags.join(" ") + " " + d.name);
+  const martial = ranged ? (firearm ? !(tags.includes("pistol") || tags.includes("sidearm") || /pistol/i.test(d.name)) : (rigGun || gunName) && !/pistol/i.test(d.name)) : tags.some(t => ["heavy", "two-handed", "reach", "longsword", "maul"].includes(t));
   const props = new Set();
   for (const [t, p] of [["two-handed", "two"], ["light", "lgt"], ["heavy", "hvy"], ["thrown", "thr"], ["versatile", "ver"], ["finesse", "fin"], ["reach", "rch"], ["slow-reload", "lod"]]) if (tags.includes(t)) props.add(p);
   if (firearm) props.add("fir");
-  if (ranged && !firearm) props.add("amm");
   if (bonus && !tags.includes("t1-baseline")) props.add("mgc");
   const magical = bonus && !tags.includes("t1-baseline") ? bonus : null;
   if (bonus && !magical) needs.push(`flat +${bonus} dropped (baseline weapon)`);
@@ -354,7 +368,7 @@ function convertWeapon(d, needs) {
     armor: { value: null }, hp: { value: null, max: null, dt: null, conditions: "" },
     // Firearms (2026-10-31): RFI's firearms-skill guns are their own category (bad-eden-5e rules.js) — bows and
     // rig-mounted guns stay where they were
-    type: { value: (s.skill === "firearms" && !/\bbow\b/i.test(d.name) && !d.flags?.fourththing?.rigGear) ? "firearmR" : ranged ? (martial ? "martialR" : "simpleR") : (martial ? "martialM" : "simpleM"), baseItem: "" },
+    type: { value: firearm ? "firearmR" : ranged ? (martial ? "martialR" : "simpleR") : (martial ? "martialM" : "simpleM"), baseItem: "" },
     magicalBonus: magical, properties: [...props], proficient: null, ammunition: {}, mastery: "",
     activities: { [sha("act" + e.slug).slice(0, 16).padEnd(16, "0")]: { type: "attack", activation: { type: "action", value: 1, condition: "", override: false }, consumption: { targets: [], scaling: { allowed: false, max: "" }, spellSlot: true }, description: { chatFlavor: "" }, duration: { concentration: false, value: "", units: "inst", special: "", override: false }, effects: [], range: { override: false }, target: { template: { count: "", contiguous: false, type: "", size: "", width: "", height: "", units: "" }, affects: { count: "", type: "", choice: false, special: "" }, prompt: false, override: false }, attack: { ability: "", bonus: "", critical: { threshold: null }, flat: false, type: { value: ranged ? "ranged" : "melee", classification: "weapon" } }, damage: { critical: { bonus: "" }, includeBase: true, parts: [] }, uses: { spent: 0, recovery: [], max: "" }, sort: 0, name: "", img: "", appliedEffects: [] } }
   });
@@ -401,6 +415,66 @@ function convertArmor(d, needs, src = null) {
   e.system.description.value = gearDescription(d, needs) + extra;
   return e;
 }
+/* ── consumables (review C46, ruled 2026-10-31) ──────────────────────────────────────────────────────────────────
+ * The RFI "⚙️ Mechanical Effects — On use: …; Charges: N" block becomes real dnd5e activities where the rubric can
+ * express the op; the rest stays honest prose, a chat line naming the RFI op, and a needs row:
+ *   Restore NdM(+K) Integrity → heal (healing)       Restore / Reduce N Stress → heal (temphp = @prof; the Stress-points ruling)
+ *   Inflict N Stress → damage, self, Nd4 psychic     Cure <condition> → utility + flags.bad-eden-5e.cure [status]; chat says what ends
+ *   Restore N Clarity → utility + flags.bad-eden-5e.flow N (Clarity = Flow points)
+ *   Noise · Radiation · Surge · FrameDice · BloodDebt · mutations → utility; the chat line names the op (no D&D engine yet)
+ * Every activity spends one use; Charges → uses.max; the item destroys itself at 0 (autoDestroy). Wondrous items get a
+ * transfer Active Effect for an unconditional damage resistance; everything else they promise is listed for an override. */
+const useAct = (slug, tag, type, { name = "", flavor = "", body = {} } = {}) => ({ _id: actId(slug, tag), type, name, img: "", sort: 0,
+  activation: { type: "action", value: null, condition: "", override: false },
+  consumption: { targets: [{ type: "itemUses", target: "", value: "1", scaling: { mode: "", formula: "" } }], scaling: { allowed: false, max: "" }, spellSlot: false },
+  description: { chatFlavor: flavor }, duration: { concentration: false, value: "", units: "inst", special: "", override: false }, effects: [],
+  range: { value: "", units: "self", special: "", override: false },
+  target: { template: { count: "", contiguous: false, type: "", size: "", width: "", height: "", units: "" }, affects: { count: "", type: "self", choice: false, special: "" }, prompt: false, override: false },
+  uses: { spent: 0, recovery: [] }, appliedEffects: [], ...body });
+const healBody = (formula, type) => ({ healing: { custom: { enabled: true, formula }, number: null, denomination: 0, bonus: "", types: [type], scaling: { mode: "", number: null } } });
+const utilBody = { roll: { formula: "", name: "", prompt: false, visible: false } };
+function rfiMechanics(d) {
+  const h = String(d.system?.description?.value ?? "");
+  const m = h.match(/Mechanical Effects[\s\S]*?(?:<\/ul>|<!-- BBTTCC:MECHANICS:END -->)/);
+  return m ? m[0].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim() : "";
+}
+const RFI_OP_TEXT = [
+  [/^Lose\s+(\d+)\s+Radiation$/i, () => "Steps you down the radiation ladder — the GM applies it on the exposure card."],
+  [/^Lose\s+(\d+)\s+Surge/i, () => "Cools your Surge one band."],
+  [/^Gain\s+(\d+)\s+FrameDice$/i, m => `Returns ${m[1]} Frame ${Number(m[1]) === 1 ? "Die" : "Dice"} to your pool (an RFI engine op; no D&D counterpart yet).`],
+  [/^Lose\s+(\d+)\s+BloodDebt$/i, m => `Softens ${m[1]} Blood Debt ledger ${Number(m[1]) === 1 ? "entry" : "entries"} — the GM applies it.`],
+  [/^Restore\s+(\d+)\s+Noise$/i, m => `Clears ${m[1]} Noise — the GM applies it.`],
+  [/^Cleanse\s+(.*)$/i, m => `Strips ${m[1]} — the GM removes the radiation mutation(s).`]
+];
+function consumableActivities(e, mech, needs) {
+  const ops = (mech.match(/On use:\s*(.*?)\s*(?:Charges:|Target:|Tier:|Cost:|$)/)?.[1] ?? "").split(/\s*;\s*/).map(x => x.trim()).filter(Boolean);
+  const charges = Number(mech.match(/Charges:\s*(\d+)/)?.[1]) || 1;
+  e.system.uses = { max: String(charges), spent: 0, recovery: [], autoDestroy: true };
+  const acts = {}, flags = {}, text = [];
+  ops.forEach((op, n) => {
+    const tag = `use${n}`; let m;
+    if ((m = op.match(/^Restore\s+([\dd+ ]+?)\s+Integrity$/i))) { const f = m[1].replace(/\s/g, ""); acts[actId(e.slug, tag)] = useAct(e.slug, tag, "heal", { body: healBody(f, "healing") }); text.push(`regain ${f} hit points`); }
+    else if ((m = op.match(/^(?:Restore|Reduce)\s+(\d+)\s+Stress$/i))) { acts[actId(e.slug, tag)] = useAct(e.slug, tag, "heal", { name: "Steady the nerves", body: healBody("@prof", "temphp") }); text.push("gain temporary hit points equal to your proficiency bonus"); }
+    else if ((m = op.match(/^Inflict\s+(\d+)\s+Stress$/i))) { acts[actId(e.slug, tag)] = useAct(e.slug, tag, "damage", { name: "The cost", body: { damage: { critical: { allow: false, bonus: "" }, parts: [{ custom: { enabled: false, formula: "" }, number: Number(m[1]), denomination: 4, bonus: "", types: ["psychic"], scaling: { mode: "", number: 1 } }] } } }); text.push(`take ${m[1]}d4 psychic damage`); }
+    else if ((m = op.match(/^Cure\s+(\w+)$/i))) { const w = conditionWord(m[1]); if (!w) needs.push(`consumable: Cure "${m[1]}" — no dnd5e condition`); else if (!(flags.cure ?? []).includes(w)) { flags.cure = [...(flags.cure ?? []), w]; acts[actId(e.slug, tag)] = useAct(e.slug, tag, "utility", { name: `Cure ${cap(w)}`, flavor: `Ends the ${w} condition on you.`, body: utilBody }); text.push(`the ${w} condition ends on you`); } }
+    else if ((m = op.match(/^Restore\s+(\d+)\s+Clarity$/i))) { flags.flow = Number(m[1]); acts[actId(e.slug, tag)] = useAct(e.slug, tag, "utility", { name: "Clear the channel", flavor: `Regain ${m[1]} Flow point${Number(m[1]) === 1 ? "" : "s"}.`, body: utilBody }); text.push(`regain ${m[1]} Flow point${Number(m[1]) === 1 ? "" : "s"}`); }
+    else { const row = RFI_OP_TEXT.find(([re]) => re.test(op)); const line = row ? row[1](op.match(row[0])) : `${op} (an RFI engine op; the GM applies it).`; acts[actId(e.slug, tag)] = useAct(e.slug, tag, "utility", { name: op, flavor: line, body: utilBody }); text.push(line.replace(/\.$/, "")); needs.push(`consumable: "${op}" has no D&D engine — chat line only (override to automate)`); }
+  });
+  e.system.activities = acts;
+  if (Object.keys(flags).length) e.flags = { ...(e.flags ?? {}), "bad-eden-5e": { ...(e.flags?.["bad-eden-5e"] ?? {}), ...flags } };
+  if (text.length) e.system.description.value += `<p><strong>Use${charges > 1 ? ` (${charges} charges)` : ""}:</strong> ${text.join("; ")}.</p>`;
+}
+function wondrousPassives(e, d, needs) {
+  const plain = String(e.system.description.value ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  const changes = [];
+  for (const m of plain.matchAll(/(?:^|[.;] )((?:[^.;]){0,40}?)\b(?:grants?|gains?|have|has|you gain) resistance to ([a-z, ]+?)(?: damage)?(?=[.;,])/gi)) {
+    if (/\b(while|when|once|if|until|during)\b/i.test(m[1])) continue;
+    for (const w of m[2].split(/,|\band\b/).map(x => x.trim()).filter(Boolean)) for (const t of dmgTypes([w])) changes.push({ key: "system.traits.dr.value", mode: 2, value: t, priority: 20 });
+  }
+  if (changes.length) e.effects = [{ _id: "be5e" + sha(e.slug).slice(0, 12), name: d.name, img: e.img, transfer: true, disabled: false, changes, duration: {}, flags: {}, origin: null, tint: "#ffffff", statuses: [], description: "" }];
+  if (/advantage|disadvantage|resistance|\+\d|DC \d+|saving throw|once per|\bcharges?\b/i.test(plain) && !changes.length) needs.push("wondrous: the text promises a mechanic the lane can't express — prose only; needs an override to automate");
+  else if (!changes.length) needs.push("wondrous: no expressible mechanic — prose only");
+}
 function convertGear(d, needs, folder) {
   const s = d.system, tags = (s.tags ?? []).map(String), marks = rfiPrice(d);
   const consumable = s.slot === "consumable" || tags.includes("consumable") || tags.includes("potion") || tags.includes("single-use") || /Consumables/.test(folder);
@@ -419,6 +493,11 @@ function convertGear(d, needs, folder) {
     delete e.system.uses; delete e.system.equipped; delete e.system.attuned; delete e.system.attunement;
   }
   e.system.description.value = gearDescription(d, needs);
+  if (consumable) {
+    const mech = rfiMechanics(d);
+    if (mech) for (let i = needs.length - 1; i >= 0; i--) if (needs[i].startsWith("RFI engine block dropped")) needs.splice(i, 1);   // parsed, not dropped
+    if (mech) consumableActivities(e, mech, needs); else needs.push("consumable: no RFI mechanics block — Use only spends it");
+  } else if (wondrous) wondrousPassives(e, d, needs);
   return e;
 }
 function passthrough(d, needs, folder) {
@@ -449,7 +528,10 @@ function laneGear() {
     e.folder = rigPart ? "Rig Parts" : (folder.split("/")[0] || "Gear");
     for (const l of leftovers(e.system.description.value)) needs.push(`leftover term "${l}"`);
     if (!rfiPrice(d) && !e.system.price?.value) needs.push("no price in marks");
-    e.flags = { "bad-eden-5e": { rfi: { id: d._id, pack: "items", identifier: d.system?.identifier ?? "", hash: sha(JSON.stringify({ n: d.name, s: d.system, f: d.flags?.fourththing ?? {} })) } } };
+    // C64 (2026-10-31): flags.bbttcc rides along (hazardResist / radiation.tierDelta / darkness* — api.radiation protectionFor and the
+    // darkness engine read it on either system) and is part of the parity hash
+    e.flags = { ...(e.flags ?? {}), "bad-eden-5e": { ...(e.flags?.["bad-eden-5e"] ?? {}), rfi: { id: d._id, pack: "items", identifier: d.system?.identifier ?? "", hash: sha(JSON.stringify({ n: d.name, s: d.system, f: d.flags?.fourththing ?? {}, b: d.flags?.bbttcc ?? {} })) } } };
+    if (d.flags?.bbttcc && Object.keys(d.flags.bbttcc).length) e.flags.bbttcc = JSON.parse(JSON.stringify(d.flags.bbttcc));
     if (rigPart) e.flags.fourththing = JSON.parse(JSON.stringify(d.flags?.fourththing ?? {}));
     // the market prices by flags.fourththing.rfi.item {price, frame, tier, rarity, bound} on either system (2026-10-30)
     else if (d.flags?.fourththing?.rfi?.item) e.flags.fourththing = { rfi: { item: JSON.parse(JSON.stringify(d.flags.fourththing.rfi.item)) } };
@@ -463,11 +545,56 @@ function laneGear() {
 const CR = { 1: { light: 0.5, medium: 1, heavy: 2, boss: 4 }, 2: { light: 3, medium: 5, heavy: 6, boss: 8 }, 3: { light: 7, medium: 9, heavy: 11, boss: 13 }, 4: { light: 12, medium: 14, heavy: 16, boss: 20 } };
 const CHASSIS = { damage: [0, 3, 4, 5], pool: { light: [0.6, 0.6, 0.6, 0.6], medium: [2, 1.5, 1.5, 1.5], heavy: [3, 3, 3, 3], boss: [5, 5, 5, 4] }, strikes: { light: [1, 1, 1, 2], medium: [1, 2, 2, 3], heavy: [2, 2, 3, 3], boss: [2, 3, 3, 3] }, legendary: { light: [0, 0, 0, 0], medium: [0, 0, 0, 0], heavy: [0, 0, 0, 0], boss: [1, 1, 1, 2] } };
 const ROMAN = { I: 1, II: 2, III: 3, IV: 4 };
-const acFor = cr => cr < 4 ? 13 : cr < 5 ? 14 : cr < 8 ? 15 : cr < 10 ? 16 : cr < 13 ? 17 : cr < 17 ? 18 : 19;
+/* C45 (ruled 2026-10-31): the sheet carries the RFI numbers — hp = Integrity, AC = Guard (rubric creatures: integrity.max → hp.max,
+ * guard → ac.flat) — and the CR label is DERIVED from them so the number the GM sees matches the stat block: DMG p.274
+ * "Monster Statistics by Challenge Rating", defensive CR from the hp band shifted 1 per 2 AC off the band's AC, offensive
+ * CR from damage/round shifted 1 per 2 attack-bonus points off the band's, averaged and snapped to a legal CR. The old
+ * tier×bracket table (CR above) is now only the band a needs-row compares against. */
+const CR_ROWS = [ // [cr, hp max, AC, damage/round max, attack bonus, save DC]
+  [0, 6, 13, 1, 3, 13], [0.125, 35, 13, 3, 3, 13], [0.25, 49, 13, 5, 3, 13], [0.5, 70, 13, 8, 3, 13], [1, 85, 13, 14, 3, 13], [2, 100, 13, 20, 3, 13], [3, 115, 13, 26, 4, 13],
+  [4, 130, 14, 32, 5, 14], [5, 145, 15, 38, 6, 15], [6, 160, 15, 44, 6, 15], [7, 175, 15, 50, 6, 15], [8, 190, 16, 56, 7, 16], [9, 205, 16, 62, 7, 16], [10, 220, 17, 68, 7, 16],
+  [11, 235, 17, 74, 8, 17], [12, 250, 17, 80, 8, 17], [13, 265, 18, 86, 8, 18], [14, 280, 18, 92, 8, 18], [15, 295, 18, 98, 8, 18], [16, 310, 18, 104, 9, 18], [17, 325, 19, 110, 10, 19],
+  [18, 340, 19, 116, 10, 19], [19, 355, 19, 122, 10, 19], [20, 400, 19, 140, 10, 19], [21, 445, 19, 158, 11, 20], [22, 490, 19, 176, 11, 20], [23, 535, 19, 194, 11, 20], [24, 580, 19, 212, 12, 21],
+  [25, 625, 19, 230, 12, 21], [26, 670, 19, 248, 12, 21], [27, 715, 19, 266, 13, 22], [28, 760, 19, 284, 13, 22], [29, 805, 19, 302, 13, 22], [30, 850, 19, 320, 14, 23]];
+const crRow = (field, v) => { const i = CR_ROWS.findIndex(r => v <= r[field]); return i < 0 ? CR_ROWS.length - 1 : i; };
+const crStep = (i, by) => Math.max(0, Math.min(CR_ROWS.length - 1, i + by));
+function deriveCr({ hp, ac, dpr, atk }) {
+  let di = crRow(1, hp); di = crStep(di, Math.trunc((ac - CR_ROWS[di][2]) / 2));
+  let oi = crRow(3, dpr); oi = crStep(oi, Math.trunc((atk - CR_ROWS[oi][4]) / 2));
+  const avg = (CR_ROWS[di][0] + CR_ROWS[oi][0]) / 2;
+  return CR_ROWS.map(r => r[0]).reduce((best, c) => Math.abs(c - avg) < Math.abs(best - avg) ? c : best, 0);
+}
+const profFor = cr => Math.max(2, Math.floor((cr + 7) / 4));   // dnd5e's NPC proficiency by CR
 const LINEAGE_TYPE = { qliphothic: "fiend", sephirotic: "celestial", wild: "beast", "pre-fall": "construct", "hex-touched": "monstrosity", dream: "aberration", revenant: "undead", mortal: "humanoid" };
 const DND_TYPES = new Set(["aberration", "beast", "celestial", "construct", "dragon", "elemental", "fey", "fiend", "giant", "humanoid", "monstrosity", "ooze", "plant", "undead"]);
 const DND_CI = new Set(["blinded", "charmed", "deafened", "diseased", "exhaustion", "frightened", "grappled", "incapacitated", "invisible", "paralyzed", "petrified", "poisoned", "prone", "restrained", "stunned", "unconscious"]);
 const INTENT_SAVE = { violence: "str", intrigue: "dex", body: "con", mind: "int", soul: "wis", presence: "cha" };
+// Condition words that turn up in RFI defense lists ("immune to fear") — they belong in traits.ci, not di (review C47, 2026-10-31).
+// `poison` / `disease` as a damage immunity stay damage; `diseased` / `fatigue` are conditions.
+const CONDITION_WORD = { fear: "frightened", feared: "frightened", frightened: "frightened", shaken: "frightened", charm: "charmed", charmed: "charmed", calmed: "charmed", compelled: "charmed",
+  prone: "prone", restrained: "restrained", blinded: "blinded", stunned: "stunned", paralyzed: "paralyzed", paralysed: "paralyzed", grappled: "grappled", deafened: "deafened", petrified: "petrified",
+  unconscious: "unconscious", incapacitated: "incapacitated", surprised: "surprised", diseased: "diseased", fatigue: "exhaustion", strain: "exhaustion", strained: "exhaustion", exhaustion: "exhaustion", poisoned: "poisoned" };
+const conditionWord = c => { const k = String(typeof c === "string" ? c : c?.key ?? c?.type ?? "").toLowerCase(); const w = CONDITION_WORD[k] ?? String(RUBRIC.conditions[k]?.to ?? "").split(/[ (]/)[0]; return DND_CI.has(w) ? w : null; };
+/** Split an RFI defenses list into damage types and condition words. */
+function splitDefenses(list) {
+  const damage = [], conditions = [];
+  for (const r of list ?? []) { const k = String(typeof r === "string" ? r : r?.type ?? "").toLowerCase(); const w = CONDITION_WORD[k] ? conditionWord(k) : null; if (w) conditions.push(w); else damage.push(r); }
+  return { damage, conditions };
+}
+/** A rule condition (a string or the object form {key, duration, save}) in 5E words — the object form used to print
+ *  "[object Object]" into 46 feature texts and GM reminders (review C41, 2026-10-31). */
+const COND_TEXT = { shaken: "frightened", calmed: "charmed (it can't willingly take violent action)", compelled: "charmed (it must spend its action on the directive)",
+  staggered: "Staggered (speed halved, −2 to attack rolls)", imposed: "Imposed (disadvantage on its next attack roll or saving throw)", strained: "one level of exhaustion worse",
+  burning: "burning (1d4 fire damage at the start of each of its turns)", surprised: "surprised", dying: "dying (0 hit points)", scarred: "Scarred", jolted: "unable to take reactions until the start of its next turn" };
+const COND_DUR = { "1-round": " until the end of its next turn", "until-saved": " until it saves (it repeats the saving throw at the end of each of its turns)", scene: " until the end of the encounter", encounter: " until the end of the encounter", "soma-break": " until its next long rest" };
+function condText(c) {
+  const key = typeof c === "string" ? c : (c?.key ?? c?.condition ?? "");
+  if (!key) return "affected";
+  const k = String(key).toLowerCase();
+  const word = COND_TEXT[k] ?? (DND_CI.has(k) ? k : String(key).replace(/\b\w/g, ch => ch.toUpperCase()));
+  const dur = typeof c === "object" && c ? (COND_DUR[c.duration] ?? (c.duration ? ` (${c.duration})` : "")) : "";
+  return word + dur;
+}
 function dmgTypes(list) {
   const out = [];
   for (const r of list ?? []) {
@@ -489,7 +616,7 @@ function autoRulesText(na) {
     if (d.damage) bits.push(`deal ${typeof d.damage === "object" ? `${d.damage.formula ?? d.damage.amount ?? ""} ${dmgTypes([d.damage.type ?? "kinetic"]).join("/")}`.trim() : d.damage} damage`);
     if (d.heal) bits.push(`regain ${typeof d.heal === "object" ? d.heal.formula ?? d.heal.amount : d.heal} hit points`);
     if (d.tempIntegrity) bits.push(`gain ${d.tempIntegrity} temporary hit points`);
-    if (d.condition) bits.push(`the target is ${[].concat(d.condition).map(c => RUBRIC.conditions[c]?.to?.split(/[ (]/)[0] ?? c).join(", ")}`);
+    if (d.condition) bits.push(`the target is ${[].concat(d.condition).map(condText).join(" and ")}`);
     if (d.reroll) bits.push(typeof d.reroll === "object" && d.reroll.mode === "reroll-highest" ? "the roll is at disadvantage" : "the roll is at advantage");
     if (d.save) bits.push(`the target makes a ${ABIL_NAME[INTENT_SAVE[d.save.ability] ?? d.save.ability] ?? "Wisdom"} saving throw`);
     if (d.noReactions) bits.push("the target can't take reactions until the start of its next turn");
@@ -503,7 +630,39 @@ function autoRulesText(na) {
   }
   return lines.join("");
 }
-function monsterFeature(it, needs, actorSlug, dc = 12) {
+/* ── the RFI stat-block idiom in creature prose (review C43, 2026-10-31) ─────────────────────────────────────────
+ * Monster items carry their RFI numbers in the text: "<strong>Strike.</strong> reach 1 square., one target. Damage:
+ * <code>2d10</code> kinetic + violence. <rider sentence>" / "Hit: <code>2d10</code> psychic + violence; half on success." /
+ * "Fail: <code>1d8</code> psychic (Stress) + Staggered." / "<p><strong>Cost.</strong> 2 Clarity, +2 Noise · action</p>".
+ * The dnd5e activity carries the real dice, so the stat clause is stripped BEFORE the rubric runs and the rider
+ * sentence + Dave's flavour line stay. Save summaries keep their condition ("Fail: Staggered."). */
+const STAT_ABIL = "(?:violence|intrigue|body|mind|soul|presence)";
+const STAT_DMG = "(?:<code>)?\\d+d\\d+(?:\\s*\\+\\s*\\d+)?(?:</code>)?";
+function stripStatIdiom(html) {
+  if (!html) return html;
+  return String(html)
+    .replace(/(\d+)\+ squares?\b/g, (_, n) => `${Number(n) * 5}+ feet`)
+    .replace(/(\d+)-squares?\b/g, (_, n) => `${Number(n) * 5}-foot`)              // "a 3-square. cone" → "a 15-foot cone"
+    .replace(/(\d+ squares?|\d+-foot)\.\s+(?=[a-z])/g, "$1 ")                      // the stray period of the RFI range stamp
+    .replace(/\bDamage goes (straight )?to (the )?Stress( track)?( straight)?\.\s*/gi, "")
+    .replace(/<p>\s*<strong>\s*Cost\.\s*<\/strong>[^<]*<\/p>/g, "")
+    .replace(/<strong>\s*(Strike|Working|Form)\.\s*<\/strong>\s*/g, "")
+    // "reach 1 square., one target." / "range 12/36 squares, one target." / "reach 1 square., after 20+ feet of straight movement, one target."
+    .replace(new RegExp(`\\b(?:reach|range)\\s+\\d+(?:\\/\\d+)?\\s+squares?\\.?,?\\s*(?:(after [^.,]*),\\s*)?(?:one target|all targets|per target|one creature|each target)[^.]*\\.\\s*`, "gi"), (_, after) => after ? `${after.charAt(0).toUpperCase()}${after.slice(1)}. ` : "")
+    // "Damage: <code>2d10</code> kinetic (frame-arm) + violence." — the activity rolls it
+    .replace(new RegExp(`Damage:\\s*${STAT_DMG}\\s*[a-z]+(?:\\s*\\([^)]*\\))?(?:\\s*(?:to|\\(?[Ss]tress\\)?))*\\s*(?:damage\\s*)?(?:\\+\\s*${STAT_ABIL})?\\.?\\s*`, "g"), "")
+    // "Hit: <code>2d10</code> psychic (scenario-rewrite) + violence; half on success." on a save weapon
+    .replace(new RegExp(`Hit:\\s*${STAT_DMG}[^.;<]*\\+\\s*${STAT_ABIL}\\s*[;.]\\s*(?:[Hh]alf on (?:a )?success\\.?\\s*)?`, "g"), "")
+    // "Fail: <code>1d8</code> psychic (Stress) + Staggered." → "Fail: Staggered."; "Fail: <code>2d8</code> qliphothic (their own blow)." → ""
+    .replace(new RegExp(`Fail:\\s*${STAT_DMG}\\s*[a-z]+(?:\\s+damage)?(?:\\s*\\([^)]*\\))?(?:\\s+damage)?(?:\\s*to Stress)?(?:\\s*\\+\\s*|\\s+and\\s+(?:becomes?\\s+|is\\s+)?)`, "g"), "Fail: ")
+    .replace(new RegExp(`Fail:\\s*${STAT_DMG}\\s*[a-z]+(?:\\s+damage)?(?:\\s*\\([^)]*\\))?(?:\\s+damage)?(?:\\s*to Stress)?\\.\\s*`, "g"), "")
+    .replace(new RegExp(`\\s*\\+\\s*${STAT_ABIL}\\b(?=[.;,]|\\s|$)`, "g"), "")
+    .replace(/<p>\s*<\/p>/g, "");
+}
+/** A creature's embedded item with its prose pre-stripped of the stat idiom (the rubric runs after). */
+const creatureItem = it => ({ ...it, system: { ...(it.system ?? {}), effect: stripStatIdiom(it.system?.effect ?? ""), description: { ...(it.system?.description ?? {}), value: stripStatIdiom(it.system?.description?.value ?? "") } } });
+function monsterFeature(it0, needs, actorSlug, dc = 12) {
+  const it = creatureItem(it0);
   const s = it.system ?? {}, na = it.flags?.fourththing?.npcAuto;
   const e = { slug: it.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""), name: it.name, type: "feat", img: it.img && !/fourththing|bbttcc/.test(it.img) ? it.img : "icons/svg/aura.svg", system: {}, effects: [], flags: {} };
   const text = convertText([s.effect ? `<p>${s.effect}</p>` : "", s.description?.value ?? ""].join("")).replace(/<!-- BBTTCC[\s\S]*?-->/g, "");
@@ -527,7 +686,8 @@ function monsterFeature(it, needs, actorSlug, dc = 12) {
       range: { value: self ? "" : "60", units: self ? "self" : "ft", special: "", override: false },
       target: { template: { count: "", contiguous: false, type: "", size: "", width: "", height: "", units: "" }, affects: { count: self ? "" : "1", type: self ? "self" : "creature", choice: false, special: "" }, prompt: true, override: false },
       uses: { spent: 0, recovery: [] }, appliedEffects: [],
-      ...(dm && !self ? { save: { ability: [ability === "str" || ability === "con" ? "con" : ability === "dex" ? "dex" : "wis"], dc: { calculation: "", formula: String(dc) } }, damage: { onSave: "half", critical: { allow: false, bonus: "" }, parts: [{ custom: { enabled: false, formula: "" }, number: Number(dm[1]), denomination: Number(dm[2]), bonus: dm[3] ?? "", types, scaling: { mode: "", number: 1 } }] } } : { roll: { formula: "", name: "", prompt: false, visible: false } }) };
+      // C48 (2026-10-31): the intent's own save — Mind → Intelligence, Presence → Charisma (they used to collapse to Wisdom)
+      ...(dm && !self ? { save: { ability: [ability], dc: { calculation: "", formula: String(dc) } }, damage: { onSave: "half", critical: { allow: false, bonus: "" }, parts: [{ custom: { enabled: false, formula: "" }, number: Number(dm[1]), denomination: Number(dm[2]), bonus: dm[3] ?? "", types, scaling: { mode: "", number: 1 } }] } } : { roll: { formula: "", name: "", prompt: false, visible: false } }) };
     e.img = "icons/magic/unholy/orb-glowing-purple.webp";
   }
   applyUseRules(e, na, actorSlug, dc, needs, it.name);
@@ -707,19 +867,27 @@ function convertMonster(a, items, needs) {
   const tier = Math.max(1, Math.min(4, ROMAN[rfi.tier] || Number(rfi.tier) || Number(s.details?.tier) || 1));
   const bracketRaw = String(rfi.bracket || "medium").toLowerCase();
   const bracket = CHASSIS.pool[bracketRaw] ? bracketRaw : ({ elite: "heavy", minion: "light", standard: "medium" }[bracketRaw] ?? "medium");
-  const cr = CR[tier][bracket], t = tier - 1;
+  const t = tier - 1, bandCr = CR[tier][bracket];
   const slug = a.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   const abil = {}; for (const [k, v] of Object.entries(ABIL)) abil[v] = Math.min(30, 10 + 2 * (Number(s.attributes?.[k]?.value) || 1));
   const d = s.derived ?? {};
-  const hp = Math.max(5, Math.round((Number(d.integrity?.max) || 10) * CHASSIS.pool[bracket][t]));
-  const ac = acFor(cr);
+  // C45: hp = Integrity, AC = Guard; CR derived from what lands on the sheet (see CR_ROWS)
+  const hp = Math.max(1, Math.round(Number(d.integrity?.max) || Number(d.integrity?.value) || 10));
+  const ac = Math.max(5, Math.round(Number(d.guard?.value) || 10));
+  const strikes = CHASSIS.strikes[bracket][t], legendary = CHASSIS.legendary[bracket][t];
+  const dieAvg = f => { const m = String(f ?? "").replace(/\s/g, "").match(/^(\d+)d(\d+)(?:\+(\d+))?$/); return m ? Number(m[1]) * (Number(m[2]) + 1) / 2 + (Number(m[3]) || 0) : 0; };
+  const bestDie = Math.max(0, ...items.filter(i => i.type === "weapon").map(i => dieAvg(i.system?.damage?.formula)), ...items.filter(i => i.type === "power").map(i => dieAvg(i.system?.damage)));
+  const dpr = Math.round(Math.max(1, bestDie + CHASSIS.damage[t]) * strikes);
+  const mod = v => Math.floor((v - 10) / 2);
+  const cr = deriveCr({ hp, ac, dpr, atk: (tier + 1) + Math.max(mod(abil.str), mod(abil.dex)) });
+  if (Math.abs(cr - bandCr) > 2) needs.push(`CR ${cr} derived from the stat block (${hp} hp, AC ${ac}, ~${dpr} damage/round); the Tier ${tier} ${bracket} band says CR ${bandCr}`);
   const creatureTypeRaw = [].concat(ff.creatureType ?? [])[0];
   const type = /dragon|wyrm/i.test(a.name) ? "dragon" : DND_TYPES.has(String(creatureTypeRaw)) ? creatureTypeRaw : (LINEAGE_TYPE[rfi.lineage] ?? "monstrosity");
   const themes = (rfi.bestiary?.themes ?? []).map(String); const name = a.name;
   const size = themes.includes("dragon") || /dragon|apex|colossus/i.test(name) ? "huge" : /patriarch|berserker|construct|tree|elemental|serpent|mother|warlord|wendigo/i.test(name) && bracket !== "light" ? "lg" : /tick|hound|stray|skitter|kiddo|hawk/i.test(name) && bracket === "light" ? "sm" : "med";
   if (size !== "med") needs.push(`size guessed ${size} from the name — check`);
   const dark = ["qliphothic", "dream", "revenant", "pre-fall", "hex-touched"].includes(rfi.lineage) || type !== "humanoid" ? 60 : 0;
-  const prof = Math.max(2, Math.ceil(cr / 4) + 1);
+  const prof = profFor(cr);
   const abilities = {}; for (const k of Object.keys(ABIL_NAME)) abilities[k] = { value: abil[k], proficient: 0, bonuses: { check: "", save: "" }, max: null };
   if (Number(d.evasion?.value) >= 14) abilities.dex.proficient = 1;
   if (Number(d.resolve?.value) >= 14) abilities.wis.proficient = 1;
@@ -727,15 +895,16 @@ function convertMonster(a, items, needs) {
   if ((Number(s.attributes?.violence?.value) || 0) >= 4) abilities.str.proficient = 1;
   const skills = {};
   for (const [k, v] of Object.entries(s.skills ?? {})) { const n = Number(v?.value) || 0; const sk = skillOf(k); if (n >= 1 && sk?.kind === "skill") skills[sk.key] = { value: n >= 2 ? 2 : 1, ability: "", bonuses: { check: "", passive: "" }, roll: { min: null, max: null, mode: 0 } }; }
-  const dr = dmgTypes(s.defenses?.resistances), di = dmgTypes(s.defenses?.immunities), dv = dmgTypes(s.defenses?.vulnerabilities);
-  const ci = (s.conditionImmunities ?? []).map(c => String(RUBRIC.conditions[c]?.to ?? c).split(/[ (]/)[0]).filter(c => DND_CI.has(c));
-  const strikes = CHASSIS.strikes[bracket][t], legendary = CHASSIS.legendary[bracket][t];
+  // C47: condition words in the RFI defense lists ("immune to fear") go to traits.ci, not di
+  const defs = Object.fromEntries(["resistances", "immunities", "vulnerabilities"].map(k => [k, splitDefenses(s.defenses?.[k])]));
+  const dr = dmgTypes(defs.resistances.damage), di = dmgTypes(defs.immunities.damage), dv = dmgTypes(defs.vulnerabilities.damage);
+  const ci = [...new Set([...(s.conditionImmunities ?? []).map(conditionWord), ...defs.immunities.conditions].filter(Boolean))];
   // embedded items
   const out = [];
   const weapons = items.filter(i => i.type === "weapon");
   for (const w of weapons) {
     const needsW = [];
-    const e = convertWeapon({ ...w, flags: w.flags ?? {} }, needsW);
+    const e = convertWeapon(creatureItem({ ...w, flags: w.flags ?? {} }), needsW);   // C43: stat idiom stripped before the rubric
     e.slug = e.slug.replace(/^gear-/, "");
     e.system.proficient = 1; e.system.price = { value: 0, denomination: "gp" };
     const bonus = CHASSIS.damage[t]; if (bonus) e.system.damage.base.bonus = String(bonus);
@@ -757,7 +926,7 @@ function convertMonster(a, items, needs) {
   }
   const mental = Math.max(abil.int, abil.wis, abil.cha); const dc = 8 + prof + Math.floor((mental - 10) / 2);
   for (const f of items.filter(i => ["feat", "feature", "power"].includes(i.type))) out.push(monsterFeature(f, needs, slug, dc));
-  for (const g of items.filter(i => ["armor", "gear"].includes(i.type))) { const n = []; const e = g.type === "armor" ? convertArmor(g, n) : convertGear(g, n, ""); e.slug = e.slug.replace(/^gear-/, ""); out.push(e); }
+  for (const g0 of items.filter(i => ["armor", "gear"].includes(i.type))) { const g = creatureItem(g0), n = []; const e = g.type === "armor" ? convertArmor(g, n) : convertGear(g, n, ""); e.slug = e.slug.replace(/^gear-/, ""); out.push(e); }
   if (strikes > 1) out.unshift({ slug: "multiattack", name: "Multiattack", type: "feat", img: "icons/skills/melee/strike-sword-slashing-red.webp", system: { description: { value: `<p>It makes ${strikes} attacks.</p>` }, type: { value: "monster", subtype: "" }, uses: { max: "", spent: 0, recovery: [] }, requirements: "", prerequisites: { level: null, repeatable: false }, properties: [], activities: {}, enchant: {}, identifier: "multiattack" }, effects: [], flags: {} });
   if (legendary) out.push({ slug: "legendary-actions", name: "Legendary Actions", type: "feat", img: "icons/magic/light/explosion-star-glow-silhouette.webp", system: { description: { value: `<p>It can take ${legendary} legendary action${legendary > 1 ? "s" : ""}, choosing from the options below. Only one legendary action can be used at a time and only at the end of another creature's turn. It regains spent legendary actions at the start of its turn.</p><ul>${weapons.slice(0, 2).map(w => { const n = convertText(w.name); return `<li><strong>${n}.</strong> It makes one ${n} attack.</li>`; }).join("")}<li><strong>Move.</strong> It moves up to its speed without provoking opportunity attacks.</li></ul>` }, type: { value: "monster", subtype: "" }, uses: { max: "", spent: 0, recovery: [] }, requirements: "", prerequisites: { level: null, repeatable: false }, properties: [], activities: {}, enchant: {}, identifier: "legendary-actions" }, effects: [], flags: {} });
   // the sheet text: concept + notes + bestiary line
@@ -781,21 +950,44 @@ function convertMonster(a, items, needs) {
   };
   return actor;
 }
-function laneCreatures() {
+/** The creature source is RFI canon — bbttcc-master-content/packs/_source/npcs, the lineage-flagged actors with their
+ *  items embedded — like every other lane (review C40, 2026-10-31: the lane used to convert a frozen Oct-26 jsonl dump
+ *  and --parity hashed that dump against itself, so 4 bosses never got a twin and 70 drifted unseen). The jsonl
+ *  (conversion/sources/npcs-monsters.jsonl, refreshed with `bin/ft-dump-pack npcs`) is only a fallback when _source is
+ *  absent; --parity prints its drift from canon as a warning. */
+const creatureHash = (a, items) => sha(JSON.stringify({ n: a.name, s: a.system, f: a.flags?.fourththing ?? {}, i: items.map(i => [i.name, i.system, i.flags?.fourththing ?? {}]) }));
+// key-order-stable twin of creatureHash for the snapshot drift line (a LevelDB dump and a _source file order their keys differently)
+const stable = v => Array.isArray(v) ? `[${v.map(stable).join(",")}]` : v && typeof v === "object" ? `{${Object.keys(v).sort().map(k => `${JSON.stringify(k)}:${stable(v[k])}`).join(",")}}` : JSON.stringify(v);
+const creatureKey = (a, items) => sha(stable({ n: a.name, s: a.system, f: a.flags?.fourththing ?? {}, i: [...items.map(i => stable([i.name, i.system, i.flags?.fourththing ?? {}]))].sort() }));
+function creatureSource() {
+  const lineage = a => a?.flags?.fourththing?.rfi?.actor?.lineage;
+  const canon = loadPack("npcs").filter(a => a.type === "npc" && lineage(a)).map(a => ({ ...a, items: a.items ?? [] }));
   const file = join(ROOT, "conversion", "sources", "npcs-monsters.jsonl");
-  const rows = readFileSync(file, "utf8").split("\n").filter(Boolean).map(l => JSON.parse(l));
-  const actors = rows.filter(r => r.k.startsWith("!actors!")).map(r => r.v).filter(a => a.flags?.fourththing?.rfi?.actor?.lineage);
-  const itemsOf = id => rows.filter(r => r.k.startsWith(`!actors.items!${id}.`)).map(r => r.v);
+  let snapshot = null;
+  if (existsSync(file)) {
+    const rows = readFileSync(file, "utf8").split("\n").filter(Boolean).map(l => JSON.parse(l));
+    const itemsOf = id => rows.filter(r => r.k.startsWith(`!actors.items!${id}.`)).map(r => r.v);
+    snapshot = rows.filter(r => r.k.startsWith("!actors!")).map(r => r.v).filter(lineage).map(a => ({ ...a, items: itemsOf(a._id) }));
+  }
+  if (canon.length) return { actors: canon, from: "_source/npcs", snapshot };
+  if (snapshot) { console.warn("creatures: _source/npcs is absent — converting the jsonl snapshot (fallback; refresh it with bin/ft-dump-pack npcs)"); return { actors: snapshot, from: "snapshot", snapshot }; }
+  throw new Error("creatures: no RFI source — neither packs/_source/npcs nor conversion/sources/npcs-monsters.jsonl");
+}
+function laneCreatures() {
+  const { actors, snapshot } = creatureSource();
   const out = [], needsAll = [];
   for (const a of actors.sort((x, y) => x.name.localeCompare(y.name))) {
-    const needs = [], items = itemsOf(a._id);
+    const needs = [], items = a.items;
     const e = convertMonster(a, items, needs);
-    for (const it of e.items) for (const l of leftovers(it.system?.description?.value ?? "")) needs.push(`"${it.name}": leftover term "${l}"`);
+    for (const it of e.items) {
+      const prose = it.system?.description?.value ?? "";
+      for (const l of leftovers(prose)) needs.push(`"${it.name}": leftover term "${l}"`);
+    }
     for (const l of leftovers(e.system.details.biography.value)) needs.push(`biography: leftover term "${l}"`);
-    e.flags["bad-eden-5e"] = { ...(e.flags["bad-eden-5e"] ?? {}), rfi: { id: a._id, pack: "npcs", identifier: a.name, hash: sha(JSON.stringify({ n: a.name, s: a.system, f: a.flags?.fourththing ?? {}, i: items.map(i => [i.name, i.system, i.flags?.fourththing ?? {}]) })) } };
+    e.flags["bad-eden-5e"] = { ...(e.flags["bad-eden-5e"] ?? {}), rfi: { id: a._id, pack: "npcs", identifier: a.name, hash: creatureHash(a, items) } };
     out.push(e); if (needs.length) needsAll.push({ slug: e.slug, name: e.name, needs });
   }
-  return { src: actors, out, needsAll, kind: "actors" };
+  return { src: actors, out, needsAll, kind: "actors", snapshot };
 }
 
 /* ── secrets / callings / sparks lanes (2026-10-08): the RFI-only packs the D&D overlay used to drop ── */
@@ -948,7 +1140,7 @@ function laneDoctrines() {
 // identity / crew / travel / output / tags → the flag, Integrity → hp (dt by bracket), defenses → traits through
 // the rubric damage map. Rig gear keeps `flags.fourththing.rigGear / rigFrame` verbatim (rigs.gearOf reads that
 // scope on either system); weapons and gear go through the gear lane's converters so they're real dnd5e items.
-const DT_BY_BRACKET = { personal: 0, light: 5, medium: 10, heavy: 15, siege: 20, mecha: 5 };   // mecha: RG9 (2026-10-26)
+const DT_BY_BRACKET = RIG_DT_BY_BRACKET;   // one table, bbttcc-core/scripts/economy.constants.js (C47 2026-10-31)
 function laneRigs() {
   const src = loadPack("vehicles").filter(d => d.type === "rig");
   const out = [], needsAll = [];
@@ -959,12 +1151,17 @@ function laneRigs() {
       binding: { hexId: "", sceneId: "", tokenId: "" }, tier: Number(integ.tier ?? 1), bracket,
       crew: { slots: [], capacity: s.crew?.capacity ?? {}, crewMin: Number(s.crew?.crewMin ?? 1), crewMax: Number(s.crew?.crewMax ?? 8) },
       output: { modules: s.output?.modules ?? [], basePerTurn: s.output?.basePerTurn ?? {} }, travel: { ...(s.travel ?? {}) }, order: "none", tags: s.tags ?? [] };
-    const traits = {};
+    const traits = {}, ci = (s.conditionImmunities ?? []).map(conditionWord).filter(Boolean);
     for (const [k, kind] of [["resistances", "dr"], ["immunities", "di"], ["vulnerabilities", "dv"]]) {
-      const v = resistanceTypes(s.defenses?.[k] ?? []); if (v.length) traits[kind] = { value: v, custom: "" };
+      // C47: "fear" in an RFI immunity list is the frightened condition, not a damage type
+      const { damage, conditions } = splitDefenses(s.defenses?.[k] ?? []);
+      const v = resistanceTypes(damage); if (v.length) traits[kind] = { value: v, custom: "" };
+      if (kind === "di") ci.push(...conditions); else if (conditions.length) needs.push(`${k}: "${conditions.join(", ")}" is a condition, not a damage type — dropped`);
     }
+    if (ci.length) traits.ci = { value: [...new Set(ci)], custom: "" };
     const domains = (s.travel?.domains ?? []).map(String);
-    const vehicleType = domains.length && !domains.includes("land") ? (domains.some(d => /air|sky/.test(d)) ? "air" : "water") : "land";
+    // the same rule as bbttcc-core rigs.js: no land domain → space (dnd5e 6 has the native type) / air / water
+    const vehicleType = domains.length && !domains.includes("land") ? (domains.some(d => /space|orbit/.test(d)) ? "space" : domains.some(d => /air|sky/.test(d)) ? "air" : "water") : "land";
     const items = (a.items ?? []).map(it => {
       const e = it.type === "weapon" ? convertWeapon(it, needs) : convertGear(it, needs, "");
       e.flags = { ...(e.flags ?? {}), fourththing: JSON.parse(JSON.stringify(it.flags?.fourththing ?? {})) };
@@ -975,7 +1172,8 @@ function laneRigs() {
     const flags = { "bbttcc-factions": { rig, factionId: null }, "bad-eden-5e": { rfi: rfiFlag(a, "vehicles") } };
     if (a.flags?.fourththing?.rfi) flags.fourththing = { rfi: JSON.parse(JSON.stringify(a.flags.fourththing.rfi)) };
     const e = { slug: slugOf("rig-", a.name), name: a.name, type: "vehicle", img: a.img, folder: "Rigs", prototypeToken: a.prototypeToken,
-      system: { vehicleType, attributes: { hp: { value: Number(integ.value ?? integ.max ?? 30), max: Number(integ.max ?? 30), dt: DT_BY_BRACKET[bracket] ?? 0, mt: null } }, traits, details: { biography: { value: bio } } },
+      // C47: a dnd5e vehicle's AC is flat and unset = 0 — the same tiered AC-by-bracket the in-world builder mints (economy.constants rigAcFor)
+      system: { vehicleType, attributes: { hp: { value: Number(integ.value ?? integ.max ?? 30), max: Number(integ.max ?? 30), dt: DT_BY_BRACKET[bracket] ?? 0, mt: null }, ac: { flat: rigAcFor(bracket, rig.tier), calc: "flat", formula: "" } }, traits, details: { biography: { value: bio } } },
       items, effects: [], flags };
     out.push(e); if (needs.length) needsAll.push({ slug: e.slug, name: e.name, needs });
   }
@@ -1002,7 +1200,7 @@ function writeLane(name, features, needsAll, about, kind = "features") {
   return { outPath, applied };
 }
 
-function parity(name, src, features, kind = "features") {
+function parity(name, src, features, kind = "features", extra = {}) {
   const outPath = join(ROOT, "content", `${name}.json`);
   if (!existsSync(outPath)) { console.log(`parity ${name}: no content/${name}.json yet — ${src.length} missing`); return; }
   const have = JSON.parse(readFileSync(outPath, "utf8"))[kind] ?? [];
@@ -1018,6 +1216,13 @@ function parity(name, src, features, kind = "features") {
   console.log(`parity ${name}: ${missing.length} missing · ${stale.length} stale · ${orphaned.length} orphaned (of ${features.length} RFI docs)`);
   for (const [k, v] of Object.entries({ missing, stale, orphaned })) if (v.length) console.log(`  ${k}: ${v.join(", ")}`);
   if (missing.length || stale.length || orphaned.length) process.exitCode = 1;
+  // creatures: how far the fallback snapshot sits from canon (a warning — the lane converts canon)
+  if (extra.snapshot) {
+    const canon = new Map(src.map(a => [a._id, creatureKey(a, a.items ?? [])])), snap = new Map(extra.snapshot.map(a => [a._id, creatureKey(a, a.items ?? [])]));
+    const liveOnly = extra.snapshot.filter(a => !canon.has(a._id)).map(a => a.name), canonOnly = src.filter(a => !snap.has(a._id)).map(a => a.name), drift = src.filter(a => snap.has(a._id) && snap.get(a._id) !== canon.get(a._id)).map(a => a.name);
+    const notes = [...liveOnly.map(n => `snapshot-only ${n}`), ...canonOnly.map(n => `canon-only ${n}`), ...drift.map(n => `drifted ${n}`)];
+    console.log(`  snapshot (conversion/sources/npcs-monsters.jsonl, fallback only): ${liveOnly.length} snapshot-only · ${canonOnly.length} canon-only · ${drift.length} drifted${notes.length ? ` — ${notes.join(", ")}` : ""}`);
+  }
 }
 
 /* ── manifestations → dnd5e spells (2026-10-31, Dave: "keep it trad … convert them to 5E effects and terminology and
@@ -1046,7 +1251,9 @@ const MANIF_COND = { shaken: { status: "frightened", text: "frightened" }, calme
   compelled: { status: "charmed", text: "charmed, and it must spend its action each turn on what the spell demands" },
   restrained: { status: "restrained", text: "restrained" }, charmed: { status: "charmed", text: "charmed" },
   prone: { status: "prone", text: "knocked prone" }, blinded: { status: "blinded", text: "blinded" },
-  staggered: { status: "", text: "staggered: its speed is halved and it has a −2 penalty to attack rolls" } };
+  // C42 (2026-10-31): the same Staggered the creature lane applies — status be5e-staggered (scripts/riders.js) + speed ×½, −2 to attacks
+  staggered: { status: "be5e-staggered", text: "Staggered: its speed is halved and it has a −2 penalty to attack rolls",
+    changes: [{ key: "system.attributes.movement.walk", mode: 1, value: "0.5", priority: 20 }, { key: "system.bonuses.mwak.attack", mode: 2, value: "-2", priority: 20 }, { key: "system.bonuses.rwak.attack", mode: 2, value: "-2", priority: 20 }] } };
 function laneManifestations() {
   const src = loadPack("items").filter(d => d.type === "power" && (d.system?.category === "manifestation" || d.system?.manifestation));
   const out = [], needsAll = [], taken = new Set();
@@ -1073,7 +1280,7 @@ function laneManifestations() {
     const lasting = M.duration === "persistent" || M.stability === "bound" || M.stability === "enduring";
     const st = M.appliedStates ?? {};
     const states = (st.states ?? []).filter(Boolean);
-    const saveAb = MANIF_SAVE[String(st.saveAttribute ?? (effectTxt.match(/\b(Soul|Mind|Body)\b defense/i)?.[1] ?? "")).toLowerCase()] ?? (states.length ? "wis" : "");
+    let saveAb = MANIF_SAVE[String(st.saveAttribute ?? (effectTxt.match(/\b(Soul|Mind|Body)\b defense/i)?.[1] ?? "")).toLowerCase()] ?? (states.length ? "wis" : "");
     const eachRound = /each round|re-saving each round|until they save/i.test(effectTxt) || !!st.saveEachRound;
     const DR = S.damageRoll ?? {};
     const dmg = DR.op === "damage" && Number(DR.number) > 0 ? { number: Number(DR.number), denomination: Number(String(DR.die ?? "d6").replace("d", "")) || 6, types: [MANIF_DMG[DR.type] ?? MANIF_DMG[S.damageType] ?? "force"] } : null;
@@ -1100,6 +1307,12 @@ function laneManifestations() {
     const conds = states.map(c => MANIF_COND[String(c).toLowerCase()]).filter(Boolean);
     for (const c of states) if (!MANIF_COND[String(c).toLowerCase()]) needs.push(`state "${c}" not mapped`);
     const statuses = [...new Set(conds.map(c => c.status).filter(Boolean))];
+    for (const c of conds) for (const ch of c.changes ?? []) if (!changes.some(x => x.key === ch.key)) changes.push({ ...ch });
+    // C50 (ruled 2026-10-31): a damage-only harm never auto-hits — "vs Evasion" in the RFI sentence → a spell attack; otherwise a
+    // save from the lane's defense table (the named defense, else Dexterity for Integrity-track damage, Wisdom for Stress-track),
+    // half damage on a success, and the rider (−2 AC / −2 saves) only lands on a hit or a failed save.
+    const attackSpell = !!dmg && !states.length && !saveAb && /\bvs\.? Evasion\b|\bEvasion (defense|check|save)/i.test(effectTxt);
+    if (dmg && !states.length && !saveAb && !attackSpell) saveAb = MANIF_SAVE[String(effectTxt.match(/\b(Soul|Mind|Body|Resolve)\b (defense|check)/i)?.[1] ?? "").toLowerCase()] ?? ((DR.track === "stress" || dmg.types[0] === "psychic") ? "wis" : "dex");
     const durRounds = /for 1 round/i.test(effectTxt) && !eachRound && !forScene ? 1 : null;
     const effects = [];
     if (changes.length || statuses.length || conds.length) {
@@ -1109,7 +1322,7 @@ function laneManifestations() {
     }
     // ── the activity
     const debuff = mods.some(m => m.op === "-");
-    const activity = saveAb && (states.length || dmg) ? "save" : dmg ? "damage" : fn === "heal" ? "heal" : "utility";
+    const activity = attackSpell ? "attack" : saveAb && (states.length || dmg) ? "save" : dmg ? "damage" : fn === "heal" ? "heal" : "utility";
     // ── 5E prose
     const who = area ? (area.type === "cone" ? `Each creature in a ${area.size}-foot cone` : `Each creature of your choice in a ${area.size}-foot-radius sphere centered on a point within range`)
       : self && !allyOrSelf ? "You" : allyOrSelf ? "You or one ally within range" : (fn === "protect" || fn === "repair") && !debuff ? "One ally within range" : "One creature you can see within range";
@@ -1118,13 +1331,15 @@ function laneManifestations() {
       const lasting1 = conds.every(c => c.status === "prone") ? "" : (durRounds ? " until the end of its next turn" : " for the duration");
       const onFail = [dmg ? `takes ${dmg.number}d${dmg.denomination} ${dmg.types[0]} damage` : "", conds.length ? `is ${conds.map(c => c.text).join(" and ")}${lasting1}` : ""].filter(Boolean).join(" and ");
       const an = /^[AEIOU]/.test(MANIF_SAVE_NAME[saveAb]) ? "an" : "a";
-      lines.push(`${who} must make ${an} ${MANIF_SAVE_NAME[saveAb]} saving throw. On a failed save, it ${onFail}.` + (dmg && conds.length ? " On a successful save, it takes half as much damage and suffers no other effect." : ""));
+      lines.push(`${who} must make ${an} ${MANIF_SAVE_NAME[saveAb]} saving throw. On a failed save, it ${onFail}.` + (dmg && (conds.length || changes.length) ? " On a successful save, it takes half as much damage and suffers no other effect." : dmg ? " On a successful save, it takes half as much damage." : ""));
       if (eachRound && conds.length) lines.push("At the end of each of its turns, an affected creature repeats the saving throw, ending the effect on itself on a success.");
+    } else if (activity === "attack") {
+      lines.push(`Make a ranged spell attack against ${who === "You" ? "one creature you can see within range" : who.replace(/^One/, "one")}. On a hit, the target takes ${dmg.number}d${dmg.denomination} ${dmg.types[0]} damage.`);
     } else if (activity === "damage") {
       lines.push(`${who === "You" ? "One creature you can see within range" : who} takes ${dmg.number}d${dmg.denomination} ${dmg.types[0]} damage.`);
     }
     if (buffBits.length) {
-      const subj = activity === "save" || activity === "damage" ? "The target also has" : who === "You" ? "You gain" : `${who} ${area ? "gains" : "gains"}`;
+      const subj = activity === "save" ? "On a failed save, the target also has" : activity === "attack" ? "On a hit, the target also has" : activity === "damage" ? "The target also has" : who === "You" ? "You gain" : `${who} ${area ? "gains" : "gains"}`;
       lines.push(`${subj} a ${buffBits.join(", ")} for the duration.`.replace(/^(.+?) gains a/, "$1 gains a").replace("a +", "a +").replace(" a -", " a −"));
     }
     if (!lines.length) { lines.push(sentence(convertText(effectTxt))); needs.push("no structured mechanics — 5E text is the rubric-converted RFI sentence; read it"); }
@@ -1144,7 +1359,7 @@ function laneManifestations() {
       // "for the scene" on an instant cast (a buff that simply lasts) → 1 minute without concentration
       duration: sustained || (forScene && !lasting) ? { value: "1", units: "minute" } : lasting ? { value: "1", units: "hour" } : durRounds ? { value: "1", units: "round" } : { units: "inst" },
       concentration: sustained,
-      activity, ...(activity === "save" ? { save: { ability: saveAb, onSave: dmg ? "half" : "none" } } : {}),
+      activity, ...(activity === "save" ? { save: { ability: saveAb, onSave: dmg ? "half" : "none" } } : {}), ...(activity === "attack" ? { attack: { type: touch ? "melee" : "ranged" } } : {}),
       ...(dmg ? { damage: [dmg] } : {}),
       effects, linkEffects: true, classes: MANIF_CLASSES[pathKey] ?? [],
       description,
@@ -1159,8 +1374,8 @@ function laneManifestations() {
 const LANES = { techniques: laneTechniques, gear: laneGear, creatures: laneCreatures, secrets: laneSecrets, callings: laneCallings, sparks: laneSparks,
   doctrines: laneDoctrines, rigs: laneRigs, manifestations: laneManifestations, ...Object.fromEntries(Object.keys(OPTION_LANES).map(k => [k, () => laneOptions(k)])) };
 if (!lane || !LANES[lane]) { console.error(`usage: convert-5e.mjs <${Object.keys(LANES).join("|")}> [--write] [--parity]`); process.exit(2); }
-const { src, out, needsAll, kind = "features" } = LANES[lane]();
-if (flag("--parity")) { parity(lane, src, out, kind); }
+const { src, out, needsAll, kind = "features", snapshot } = LANES[lane]();
+if (flag("--parity")) { parity(lane, src, out, kind, { snapshot }); }
 else if (flag("--write")) {
   const ABOUT = { techniques: "The 75 Bad Eden Core techniques as dnd5e feats.", gear: "Bad Eden weapons, armor, gear, wondrous items and consumables as dnd5e items (prices in marks).", secrets: "The Courtly Intrigue secrets as dnd5e feats (the secret engine block carried verbatim).", callings: "The NPC callings (trade + trick per tier) as dnd5e monster feats.", sparks: "The 30 Tikkun sparks as dnd5e loot; the RFI spark block rides at flags.bbttcc-tikkun.spark.", creatures: "The Bad Eden bestiary (the live NPC Pack's lineage-flagged monsters) as dnd5e npc actors, scored by tier and bracket through the threat chassis.",
     manifestations: "The starter-kit manifestations as ordinary dnd5e slot spells (pack spells) with the class lists they join; Doctrine signatures are Path-locked (flags.bad-eden-5e.requiresPath).",

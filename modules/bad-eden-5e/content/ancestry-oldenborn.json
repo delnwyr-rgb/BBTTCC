@@ -119,7 +119,7 @@
     {
       "slug": "rustland-strategic-hooks", "name": "Strategic Hooks (Rustland Scavenger)", "featType": "race", "level": 0, "requirements": "Oldenborn (Rustland Scavenger)",
       "folder": "Oldenborn (Rustland Scavenger)", "folderParent": "Oldenborn", "img": "icons/sundries/books/book-open-turquoise.webp",
-      "description": "<p><strong>Strategic Hooks (Foundry / Bad Eden)</strong></p><p><strong>OP Edge.</strong> Your faction gains +2 Economy OP and +1 Intrigue OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Ruins / Urban Wreckage hexes, faction travel Intrigue costs are reduced by 1 (minimum 0).</p><p><strong>Salvage Windfall.</strong> Once per Strategic Turn, your faction may perform an extra Salvage action in a controlled Ruins hex without consuming its action slot.</p>"
+      "description": "<p><strong>Strategic Hooks (Foundry / Bad Eden)</strong></p><p><strong>Domain Edge.</strong> Your faction gains +20 Economy marks and +10 Intrigue marks at campaign start.</p><p><strong>Hex Synergy.</strong> In Ruins / Urban Wreckage hexes, faction travel Intrigue costs are reduced by 10 marks (minimum 0).</p><p><strong>Salvage Windfall.</strong> Once per Strategic Turn, your faction may perform an extra Salvage action in a controlled Ruins hex without consuming its action slot.</p>"
     },
     {
       "slug": "rustland-ruin-sense", "name": "Oldenborn (Rustland Scavenger): Ruin-Sense", "featType": "race", "level": 0, "requirements": "Oldenborn (Rustland Scavenger)",

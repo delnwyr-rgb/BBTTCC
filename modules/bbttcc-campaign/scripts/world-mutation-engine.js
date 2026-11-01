@@ -2010,10 +2010,31 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
               if (dup) continue;
               const passives = {}; if (checkBonus.length) passives.checkBonus = checkBonus; if (ranks) passives.ranks = ranks;
               const desc = `<p>${esc(row.note || "")}</p><p><i>${permanent ? "Permanent." : `Until the end of turn ${expiresTurn}.`}</i></p>`;
-              await Item.create({ name, type: "feature", img: row.img || "icons/consumables/food/bowl-stew-brown.webp",
-                system: { category: "principle", source: String(beat?.label || "The Recalcitrant Cafe"), tags: ["recalcitrant-cafe"], description: { value: desc, chat: "" } },
-                flags: { fourththing: Object.keys(passives).length ? { passives } : {}, "bbttcc-campaign": { partyEffect: { beatId: String(beatCtx.beatId || ""), name, grantTurn: turnNow, expiresTurn, permanent } } } }, { parent: a });
+              // Item type through the bbttcc-core seam: RFI "feature", dnd5e "feat" (review C34 — "feature" failed validation on
+              // the D&D table and no buff ever landed). On dnd5e the RFI roll path never itemises flags.fourththing.passives, so the
+              // buff rides as a transfer Active Effect on the feat (ranks / skill bonuses → the mapped skill's check bonus, a plain
+              // check bonus → all ability checks, attack → mwak/rwak); the same (beatId, name) flag drives expiry on both systems.
+              const onRFI = game.system?.id === "fourththing";
+              const itemData = { name, type: game.bbttcc?.types?.item?.("feature") ?? "feature", img: row.img || "icons/consumables/food/bowl-stew-brown.webp",
+                system: onRFI ? { category: "principle", source: String(beat?.label || "The Recalcitrant Cafe"), tags: ["recalcitrant-cafe"], description: { value: desc, chat: "" } }
+                              : { description: { value: desc, chat: "" } },
+                flags: { fourththing: Object.keys(passives).length ? { passives } : {}, "bbttcc-campaign": { partyEffect: { beatId: String(beatCtx.beatId || ""), name, grantTurn: turnNow, expiresTurn, permanent } } } };
+              if (!onRFI) {
+                const ADD = CONST.ACTIVE_EFFECT_MODES.ADD; const raw = [];
+                for (const g of checkBonus) {
+                  const v = String(g.bonus), ctxk = String(g.context || "check").toLowerCase();
+                  if (g.skill) raw.push({ key: `system.skills.${String(g.skill).toLowerCase()}.value`, mode: ADD, value: v });
+                  else if (ctxk === "attack") { raw.push({ key: "system.bonuses.mwak.attack", mode: ADD, value: v }); raw.push({ key: "system.bonuses.rwak.attack", mode: ADD, value: v }); }
+                  else if (ctxk === "save") raw.push({ key: "system.bonuses.abilities.save", mode: ADD, value: v });
+                  else raw.push({ key: "system.bonuses.abilities.check", mode: ADD, value: v });
+                }
+                for (const [sk, n] of Object.entries(ranks || {})) if (Number(n)) raw.push({ key: `system.skills.${String(sk).toLowerCase()}.value`, mode: ADD, value: String(Number(n)) });
+                const changes = (typeof game.bbttcc?.dice?.aeChanges === "function") ? game.bbttcc.dice.aeChanges(raw) : raw;
+                if (changes.length) itemData.effects = [{ name, img: itemData.img, transfer: true, disabled: false, changes }];
+              }
+              await Item.create(itemData, { parent: a });
               if (relief && get(game, "fourththing.strain.set", null)) { const cur = Number(game.fourththing.strain.get(a)) || 0; if (cur > 0) await game.fourththing.strain.set(a, Math.max(0, cur - relief), name); }
+              else if (relief && !onRFI) { const ex = Number(a.system?.attributes?.exhaustion) || 0; if (ex > 0) await a.update({ "system.attributes.exhaustion": Math.max(0, ex - relief) }); }   // rubric: Strained → exhaustion
               who.push(a.name); changed = true;
             } catch (eA) { console.warn(TAG, "partyEffects: grant failed", a?.name, eA); }
           }

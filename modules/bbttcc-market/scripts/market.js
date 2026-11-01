@@ -1027,6 +1027,21 @@ async function appendFactionReceipt(factionActor, receipt) {
   }
 }
 
+/** dnd5e stack target: an owned loot/consumable that is the same catalog item (review P9). Weapons/armor stay single rows. */
+function _dndStackTarget(actor, data) {
+  try {
+    if (!["loot", "consumable"].includes(String(data?.type || ""))) return null;
+    const rfiId = foundry.utils.getProperty(data, "flags.bad-eden-5e.rfi.id") || null;
+    for (const it of (actor.items?.contents ?? [])) {
+      if (it.type !== data.type) continue;
+      const itId = foundry.utils.getProperty(it, "flags.bad-eden-5e.rfi.id") || null;
+      if (rfiId && itId) { if (itId === rfiId) return it; continue; }
+      if (it.name === data.name) return it;
+    }
+  } catch (_e) {}
+  return null;
+}
+
 async function deliverGearToCharacter(characterId, itemUuid, qty = 1, { paidTotal = null } = {}) {
   if (!characterId) throw new Error("No character selected for gear delivery.");
   if (!itemUuid) throw new Error("No gear UUID set on this catalog entry.");
@@ -1050,10 +1065,13 @@ async function deliverGearToCharacter(characterId, itemUuid, qty = 1, { paidTota
   // error and the system's preCreateItem hook only fires on already-valid
   // documents. Reset the system block to an empty object since dnd5e fields
   // don't fit the fourththing schema; preserved RFI flags carry the meaning.
+  // RFI ONLY (review C31, 2026-10-31): on dnd5e the bought item already IS a native equipment/consumable/loot twin —
+  // coercing it to "gear" made every non-weapon Arc Bay purchase throw "Invalid Item type" and refund.
+  const onRFI = (typeof game.bbttcc?.dice?.isRFI === "function") ? game.bbttcc.dice.isRFI() : (game.system?.id === "fourththing");
   const FT_TYPE_COERCE = {
     equipment: "gear", consumable: "gear", tool: "gear", loot: "gear", backpack: "gear"
   };
-  if (FT_TYPE_COERCE[data.type]) {
+  if (onRFI && FT_TYPE_COERCE[data.type]) {
     data.type   = FT_TYPE_COERCE[data.type];
     data.system = {};
   }
@@ -1091,7 +1109,16 @@ async function deliverGearToCharacter(characterId, itemUuid, qty = 1, { paidTota
   const before = new Map((actor.items?.contents ?? []).map(it => [it.id, Math.max(1, Number(it.system?.quantity) || 1)]));
   let out;
   if (typeof stackApi?.orCreate === "function") out = await stackApi.orCreate(actor, data);
-  else out = await actor.createEmbeddedDocuments("Item", [data]);
+  else {
+    // dnd5e (review P9): no system stacker there — merge an identical loot/consumable onto the existing ×N row ourselves
+    // (same catalog twin by flags.bad-eden-5e.rfi.id, else same name + type), so the paid-price blend below still runs.
+    const target = onRFI ? null : _dndStackTarget(actor, data);
+    if (target) {
+      const oldQty = Math.max(1, Number(target.system?.quantity) || 1);
+      await target.update({ "system.quantity": oldQty + addUnits });
+      out = [target];
+    } else out = await actor.createEmbeddedDocuments("Item", [data]);
+  }
   try {
     const doc = Array.isArray(out) ? out[0] : null;
     if (paidPerUnit !== null && doc && before.has(doc.id)) {

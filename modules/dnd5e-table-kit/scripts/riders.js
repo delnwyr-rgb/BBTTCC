@@ -65,12 +65,25 @@ function pick(config, actor, keys, text) {
   return new Set(hits);
 }
 
+/** Park Active Effects to delete once this roll is actually made (midi/DAE `specialDuration: 1Attack`). */
+function expireAfter(config, actor, effects, text) {
+  if ( !effects.length ) return;
+  const p = config[PENDING] ??= { actor, keys: new Set(), notes: [] };
+  (p.effects ??= []).push(...effects);
+  if ( text ) p.notes.push(text);
+}
+
 function onPostRollConfig(rolls, config) {
   const p = config?.[PENDING];
   if ( !p ) return;
   delete config[PENDING];
   if ( !rolls?.length ) return;   // dialog closed: nothing rolled, nothing spent
   if ( p.keys.size ) consume(p.actor, ...p.keys);
+  for ( const effect of p.effects ?? [] ) {
+    if ( p.actor?.isOwner ) effect.delete().catch(err => console.warn(`${ID} | could not expire effect`, effect.name, err));
+    else ChatMessage.create({ whisper: ChatMessage.getWhisperRecipients("GM"), speaker: { alias: "Table Kit" },
+      content: `<p style="margin:0">⚡ <em>${foundry.utils.escapeHTML(effect.name)}</em> on <em>${foundry.utils.escapeHTML(p.actor?.name ?? "?")}</em> has been used — remove it (this seat can't).</p>` }).catch(() => {});
+  }
   for ( const text of p.notes ) note(p.actor, text);
 }
 
@@ -103,7 +116,27 @@ function onPreRollD20(config) {
  *   flags.dnd5e-table-kit.grants.disadvantage.attack  truthy, on the TARGET — attacks against it have disadvantage
  * Scope: "all" | "weapon" | "melee" | "ranged" | an ability key ("str", "dex"…) for attacks using it.
  * Advantage and disadvantage together cancel, exactly as dnd5e resolves them.
+ *
+ * 10-31 (review C53): content authored for midi tables writes the same intent as
+ *   flags.midi-qol.advantage.attack.{all|mwak|rwak|msak|rsak|<ability>} = 1   (and disadvantage / grants.*)
+ *   flags.dnd5e.advantage.attack.{…}                                         (no such native key in dnd5e 6)
+ * (the rig actions' Hold Position / Aimed Shot AEs). Both are honoured here as aliases, and an effect
+ * carrying flags.dae.specialDuration ["1Attack"] expires once the bearer's attack roll is made.
  */
+const MIDI_SCOPES = { mwak: ["weapon", "melee"], rwak: ["weapon", "ranged"], msak: ["spell", "melee"], rsak: ["spell", "ranged"] };
+function midiMatches(obj, activity) {
+  if ( !obj || (typeof obj !== "object") ) return false;
+  const on = v => !!v && (v !== "0") && (v !== "false");
+  if ( on(obj.all) ) return true;
+  const kind = activity?.attack?.type?.classification ?? ((activity?.item?.type === "weapon") ? "weapon" : "spell");
+  const range = activity?.attack?.type?.value;
+  for ( const [key, [cls, rng]] of Object.entries(MIDI_SCOPES) ) {
+    if ( on(obj[key]) && (kind === cls) && (range === rng) ) return true;
+  }
+  return Object.keys(CONFIG.DND5E.abilities ?? {}).some(a => on(obj[a]) && (activity?.ability === a));
+}
+const midiFlag = (actor, path, activity) => [actor?.flags?.["midi-qol"], actor?.flags?.dnd5e]
+  .some(f => midiMatches(foundry.utils.getProperty(f ?? {}, path), activity));
 function attackMatches(scope, activity) {
   if ( !scope ) return false;
   if ( (scope === true) || (scope === "all") || (scope === "1") ) return true;
@@ -128,6 +161,15 @@ function applyEffectAttackModes(config, actor) {
   const targets = attackTargets(activity);
   if ( targets.some(t => t.flags?.[ID]?.grants?.advantage?.attack) ) config.advantage = true;
   if ( targets.some(t => t.flags?.[ID]?.grants?.disadvantage?.attack) ) config.disadvantage = true;
+  // midi-qol / flags.dnd5e aliases (C53)
+  if ( midiFlag(actor, "advantage.attack", activity) ) config.advantage = true;
+  if ( midiFlag(actor, "disadvantage.attack", activity) ) config.disadvantage = true;
+  if ( targets.some(t => midiFlag(t, "grants.advantage.attack", activity)) ) config.advantage = true;
+  if ( targets.some(t => midiFlag(t, "grants.disadvantage.attack", activity)) ) config.disadvantage = true;
+  // DAE-style one-attack effects (Aimed Shot) go once this attack is really rolled.
+  const oneShot = (actor.effects ?? []).filter(e => !e.disabled
+    && [].concat(e.flags?.dae?.specialDuration ?? []).includes("1Attack"));
+  expireAfter(config, actor, oneShot, oneShot.length ? `${oneShot.map(e => e.name).join(", ")}: used on this attack.` : "");
 }
 
 function onPreRollAttack(config) {

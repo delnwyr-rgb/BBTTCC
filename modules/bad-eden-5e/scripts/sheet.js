@@ -74,10 +74,31 @@ function retinue(actor) {
   } catch (_e) { return []; }
 }
 
+/* ── Convictions (ruling 17): the sworn philosophy + the Domain's drift from it. On dnd5e there is no Steward tab, so
+   the Domain tab is where a steward swears (review C10); labels come from bbttcc-aae's canonical table, the same
+   list RFI's ftLabelForPoliticalPhilosophy reads (review C12). ── */
+function convictionsContext(actor, faction, isGM) {
+  let convictions = "Unsworn"; let convictionsMeter = null; let convictionsEdit = null;
+  try {
+    const AAE = game.bbttcc?.api?.aae;
+    const labelFor = key => AAE?.POLITICAL_PHILOSOPHIES?.[key]?.label || key.replace(/[_-]+/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+    const own = String(actor?.getFlag?.("bbttcc-aae", "politicalPhilosophy") || "").trim();
+    const st = faction ? (game.bbttcc?.api?.convictions?.stateFor?.(faction) || null) : null;
+    const sworn = own ? labelFor(own) : (st?.center?.label || "");
+    convictions = sworn || "Unsworn";
+    if (st) convictionsMeter = { drift: st.drift, pct: Math.max(0, Math.min(100, st.drift)), band: st.band, bandLabel: st.bandLabel, css: st.css,
+      hint: `${st.hint} Every choice that carries weight moves this: hold to your convictions and it falls, betray them and it climbs. Steadfast to 15 · Strained to 35 · Fractured to 65 · Rupturing beyond.`,
+      impacts: (st.impacts || []).map(x => String(x).replace(/\s*\[[^\]]*\]\s*$/, "")) };
+    const list = typeof AAE?.listPoliticalPhilosophies === "function" ? AAE.listPoliticalPhilosophies() : [];
+    if (list.length && (isGM || !!actor?.isOwner)) convictionsEdit = { options: list.map(p => ({ key: p.key, label: p.label, selected: p.key === own, hint: `${p.happiness} Suffering: ${p.suffering}` })), unsworn: !own };
+  } catch (_e) {}
+  return { convictions, convictionsMeter, convictionsEdit };
+}
+
 export async function domainContext(actor) {
   const isGM = !!game.user?.isGM;
   const faction = linkedDomain(actor);
-  if (!faction) return { linked: false, isGM };
+  if (!faction) return { linked: false, isGM, ...convictionsContext(actor, null, isGM) };
   const F = faction.flags?.["bbttcc-factions"] ?? {};
   const facts = game.bbttcc?.facts?.faction ?? {};
   const bank = F.opBank || {};
@@ -105,24 +126,26 @@ export async function domainContext(actor) {
       try { if (!costLine && turn.activityCost) costLine = turn.formatActivityCost?.(turn.activityCost({ entry: e, faction })) || ""; } catch (_e) {}
       return { label, costLine, targetName: String(e.targetName || ""), ref: String(e.id || e.ts || "") };
     });
-  let convictions = "Unsworn"; let convictionsMeter = null;
-  try {
-    const own = String(actor?.getFlag?.("bbttcc-aae", "politicalPhilosophy") || "").trim();
-    const st = game.bbttcc?.api?.convictions?.stateFor?.(faction) || null;
-    const sworn = own ? own.replace(/[_-]+/g, " ").replace(/\b\w/g, c => c.toUpperCase()) : (st?.center?.label || "");
-    convictions = sworn || "Unsworn";
-    if (st) convictionsMeter = { drift: st.drift, pct: Math.max(0, Math.min(100, st.drift)), band: st.band, bandLabel: st.bandLabel, css: st.css,
-      hint: `${st.hint} Every choice that carries weight moves this: hold to your convictions and it falls, betray them and it climbs. Steadfast to 15 · Strained to 35 · Fractured to 65 · Rupturing beyond.`,
-      impacts: (st.impacts || []).map(x => String(x).replace(/\s*\[[^\]]*\]\s*$/, "")) };
-  } catch (_e) {}
   return {
     linked: true, isGM, id: faction.id, name: faction.name, isOwner: !!faction.isOwner,
     tier, tierRoman: ["I", "I", "II", "III", "IV", "V"][tier] || "I", tierLabel: ["", "Rooted", "Rising", "Established", "Ascendant", "Transcendent"][tier] || "Rooted",
     treasury: { total, max, pools },
     meters: { loyalty: { value: loyalty, ...loyaltyBand(loyalty) }, darkness: { value: darkness, ...darknessBand(darkness) },
       momentum: { value: momentum, canSpend: momentum > 0 && (isGM || !!faction.isOwner), hint: "Momentum: banked +1 each time a Domain check rolls a 10. Spend it before the turn ends — it resets at Day's End." } },
-    pressure, hexes: hexList.length, hexList, rigs: rigList.length, rigList, convictions, convictionsMeter, planned, retinue: retinue(actor)
+    pressure, hexes: hexList.length, hexList, rigs: rigList.length, rigList, ...convictionsContext(actor, faction, isGM), planned, retinue: retinue(actor)
   };
+}
+
+/** The steward swears (or re-swears) their convictions: the same flag RFI's steward sheet writes (bbttcc-aae). */
+async function domainSwear(sheet, key) {
+  const actor = sheet.actor; const AAE = game.bbttcc?.api?.aae;
+  if (!(game.user?.isGM || actor?.isOwner)) return ui.notifications?.info?.("Only the steward or the GM can change their convictions.");
+  if (typeof AAE?.setPoliticalPhilosophy !== "function") return ui.notifications?.warn?.("Convictions not available.");
+  try {
+    await AAE.setPoliticalPhilosophy(actor, key);
+    await game.bbttcc?.api?.characterOptions?.recalcActor?.(actor.id);
+  } catch (e) { console.warn(`${MOD} | convictions change failed`, e); ui.notifications?.warn?.(`Couldn't change convictions: ${e?.message || e}`); }
+  return sheet.render(false);
 }
 
 async function domainAct(sheet, act) {
@@ -156,25 +179,31 @@ async function domainAct(sheet, act) {
         await canvas.animatePan({ x: Number(d.x) + w / 2, y: Number(d.y) + h / 2, duration: 450 });
       }
     } catch (_e) {}
-    return A.territory?.openHexSheet?.(uuid);
+    const open = A.territory?.openHexSheet;
+    if (typeof open === "function") return open(uuid);
+    return ui.notifications?.warn?.("Hex sheet not available.");
   }
+  // a door whose module didn't load says so, the way RFI's _ftDomainAct does (review C11)
   try {
     switch (act) {
-      case "planner": return A.raid?.openActivityPlanner?.({ factionId: faction.id, lockFaction: true });
-      case "raid": return (A.raid?.openConsole || A.raid?.openRaidConsole)?.({ factionId: faction.id, mode: "commit" });
-      case "quests": return A.quests?.openQuestLog?.({ factionId: faction.id });
+      case "planner": { if (typeof A.raid?.openActivityPlanner !== "function") return ui.notifications?.warn?.("Planner not available."); return A.raid.openActivityPlanner({ factionId: faction.id, lockFaction: true }); }
+      case "raid": { const fn = A.raid?.openConsole || A.raid?.openRaidConsole; if (typeof fn !== "function") return ui.notifications?.warn?.("Domain Conflict console not available."); return fn({ factionId: faction.id, mode: "commit" }); }
+      case "quests": { if (typeof A.quests?.openQuestLog !== "function") return ui.notifications?.warn?.("Quest Log not available."); return A.quests.openQuestLog({ factionId: faction.id }); }
       case "market": {
+        if (typeof A.market?.openMarket !== "function") return ui.notifications?.warn?.("Market not available.");
         try { const cur = game.settings.get("bbttcc-market", "lastContext") || {}; await game.settings.set("bbttcc-market", "lastContext", { ...cur, factionId: faction.id, characterId: actor.id }); } catch (_e) {}
-        return A.market?.openMarket?.();
+        return A.market.openMarket();
       }
       case "vault": {
-        if (typeof A.banks?.openTreasury === "function") return A.banks.openTreasury(actor, { steward: actor });
-        return A.banks?.openFactionBank?.(faction);
+        const fnT = A.banks?.openTreasury, fnF = A.banks?.openFactionBank;
+        if (typeof fnT === "function") return fnT(actor, { steward: actor });
+        if (typeof fnF !== "function") return ui.notifications?.warn?.("Vault not available.");
+        return fnF(faction);
       }
       case "record": if (game.user?.isGM) faction.sheet?.render(true); return;
       case "momentum": {
         if (!(game.user?.isGM || faction.isOwner)) return ui.notifications?.info?.("Only the Domain's steward or the GM can spend Momentum.");
-        const fn = faction.sheet?._onMomentumSpend; if (typeof fn !== "function") return;
+        const fn = faction.sheet?._onMomentumSpend; if (typeof fn !== "function") return ui.notifications?.warn?.("Momentum spend not available.");
         await fn.call(faction.sheet); return sheet.render(false);
       }
     }
@@ -238,7 +267,19 @@ export function registerSheet() {
     return false;
   });
 
-  // An SRD background is not part of Bad Eden: the Archetype is the character's origin.
+  // An SRD background is not part of Bad Eden: the Archetype is the character's origin. dnd5e's drop path runs the
+  // AdvancementManager first and commits the ASI, skill picks and Origin feat in the SAME bulk update as the background
+  // item, and Foundry's preCreate refusal drops only that one document (review C7) — so the whole completion is refused
+  // here, before anything lands (dnd5e 6.0.5 AdvancementManager #complete → dnd5e.preAdvancementManagerComplete).
+  Hooks.on("dnd5e.preAdvancementManagerComplete", (manager, _updates, toCreate) => {
+    if (manager?.actor?.type !== "character") return;
+    const srd = (Array.isArray(toCreate) ? toCreate : []).find(d => d?.type === "background" && !d?.flags?.[MOD]?.archetype);
+    if (!srd) return;
+    if (game.user.isGM) return;   // the GM may; the preCreateItem belt below says so once
+    ui.notifications?.warn?.(`Bad Eden uses Archetypes instead of backgrounds. ${srd.name} was not added — pick one from the Bad Eden Archetypes compendium.`);
+    return false;
+  });
+  // the belt for paths with no advancement manager (scripts, disableAdvancements)
   Hooks.on("preCreateItem", (item, data, options, userId) => {
     if (userId !== game.user.id || item.type !== "background" || item.parent?.type !== "character") return;
     if (item.getFlag?.(MOD, "archetype") || data?.flags?.[MOD]?.archetype) return;
@@ -257,6 +298,12 @@ function bindDomain(app, root) {
     if (!b || !panel.contains(b)) return;
     ev.preventDefault(); ev.stopPropagation();
     domainAct(app, String(b.dataset.domainAct || ""));
+  });
+  panel.addEventListener("change", ev => {
+    const sel = ev.target?.closest?.("select[data-domain-conviction]");
+    if (!sel || !panel.contains(sel)) return;
+    ev.stopPropagation();
+    domainSwear(app, String(sel.value || ""));
   });
 }
 

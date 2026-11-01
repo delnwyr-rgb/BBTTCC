@@ -13,7 +13,7 @@
  * no-op there (the RFI impl owns the contract). Registration never clobbers an
  * impl another source already installed.
  *
- * Built + verified against the locally installed dnd5e v5.3.0 API (Foundry v14):
+ * Built against dnd5e 5.3.0; verified live on dnd5e 6.0.5 (the installed port build):
  *   - Actor5e#applyDamage(damages, options): `damages` is [{value,type}] or a
  *     plain number (number form sets options.ignore=true → bypasses DR/DI/DV).
  *     Positive value = damage, negative = healing. Returns the Actor (NOT a
@@ -22,9 +22,14 @@
  *   - CONFIG.DND5E.damageTypes validates damage-type ids.
  *   - Actor#toggleStatusEffect(id, {active}) toggles conditions ("prone", …).
  *
- * NOTE — UNVALIDATED IN-WORLD. The owner runs fourththing, so this dnd5e path
- * has not been exercised live. It is the reference impl a real dnd5e deployment
- * would use; validate it by spinning up a dnd5e world before relying on it.
+ * STATUS (2026-10-31) — LIVE on the D&D world (dnd5e 6.0.5; the owner's D&D
+ * table on ember, world gottgait-files). This adapter is in the hot
+ * path for raids, collapse, the orbital strike, chase damage and the Bridge's
+ * Integrity sacrifice; it was played and filmed the week of 2026-10-27.
+ * Known gaps (review DND5E_PORT_REVIEW_2026_10_31): the condition map is the
+ * raw Foundry status id (no RFI→5E condition translation yet); `track`
+ * ("stress"/"radiation") and `nonlethal` are accepted and ignored — callers
+ * clamp (collapse.js) and RFI's radiation ladder has no dnd5e twin (C36).
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -33,7 +38,11 @@ const TAG = "[bbttcc-core/combat.dnd5e]";
 // Best-effort map from RFI/raid damage-type strings → dnd5e damage types where
 // there is a clean equivalent. Anything unmapped (or not a real dnd5e type) is
 // applied UNTYPED (resistances bypassed) so the amount still lands rather than
-// being silently dropped. Tune this once a real dnd5e campaign is in play.
+// being silently dropped. Mirrors the conversion rubric's "Damage and
+// conditions" table (modules/bad-eden-5e/conversion/CONVERSION_RUBRIC.md) —
+// the canonical FT.DAMAGE_TYPES keys (electrical / thermal / chemical) were
+// missing here (review P5), so a raid intent or the agent verb authored with
+// the canon key bypassed lightning/acid resistance via the untyped path.
 const RFI_TO_DND5E_TYPE = {
   kinetic:    "bludgeoning",
   concussive: "thunder",
@@ -41,13 +50,22 @@ const RFI_TO_DND5E_TYPE = {
   blade:      "slashing",
   thermal:    "fire",
   incendiary: "fire",
+  heat:       "fire",
+  flame:      "fire",
   cryo:       "cold",
+  frost:      "cold",
+  ice:        "cold",
+  electrical: "lightning",   // FT canon key
   shock:      "lightning",
   electric:   "lightning",
+  chemical:   "acid",        // FT canon key
   caustic:    "acid",
   toxic:      "poison",
+  sonic:      "thunder",     // SW5E / legacy
+  energy:     "lightning",   // legacy pre-split RFI type (the system aliases it forward; lightning is its default flavour)
   void:       "necrotic"
-  // "radiation" has no clean dnd5e analog → untyped.
+  // "radiation" has no clean dnd5e analog → untyped (the rubric says the ladder, never a damage type).
+  // poison / psychic / sephirotic / qliphothic pass straight through (registered dnd5e types).
 };
 
 /** Resolve an RFI damage-type to a valid dnd5e type, or null for "apply untyped". */

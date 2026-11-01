@@ -1,10 +1,10 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.10.0) — do not hand-edit; put fixes in content/overrides/rigs.json. The five faction rigs as dnd5e vehicles carrying flags.bbttcc-factions.rig (the shape game.bbttcc.rigs writes on dnd5e); rig gear keeps flags.fourththing.rigGear/rigFrame.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.11.0) — do not hand-edit; put fixes in content/overrides/rigs.json. The five faction rigs as dnd5e vehicles carrying flags.bbttcc-factions.rig (the shape game.bbttcc.rigs writes on dnd5e); rig gear keeps flags.fourththing.rigGear/rigFrame.",
   "_pack": "vehicles",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.10.0",
-    "at": "2026-10-31",
+    "rubric": "1.11.0",
+    "at": "2026-11-01",
     "overridesApplied": 0
   },
   "actors": [
@@ -114,6 +114,11 @@
             "max": 120,
             "dt": 15,
             "mt": null
+          },
+          "ac": {
+            "flat": 12,
+            "calc": "flat",
+            "formula": ""
           }
         },
         "traits": {
@@ -167,8 +172,7 @@
               "recovery": []
             },
             "properties": [
-              "hvy",
-              "amm"
+              "hvy"
             ],
             "range": {
               "value": 40,
@@ -217,7 +221,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "simpleR",
+              "value": "martialR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -747,6 +751,11 @@
             "max": 50,
             "dt": 10,
             "mt": null
+          },
+          "ac": {
+            "flat": 13,
+            "calc": "flat",
+            "formula": ""
           }
         },
         "traits": {
@@ -756,9 +765,9 @@
             ],
             "custom": ""
           },
-          "di": {
+          "ci": {
             "value": [
-              "fear"
+              "frightened"
             ],
             "custom": ""
           }
@@ -1299,6 +1308,11 @@
             "max": 32,
             "dt": 5,
             "mt": null
+          },
+          "ac": {
+            "flat": 15,
+            "calc": "flat",
+            "formula": ""
           }
         },
         "traits": {},
@@ -1447,8 +1461,7 @@
               "recovery": []
             },
             "properties": [
-              "lgt",
-              "amm"
+              "lgt"
             ],
             "range": {
               "value": 20,
@@ -1497,7 +1510,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "simpleR",
+              "value": "martialR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -1906,6 +1919,11 @@
             "max": 50,
             "dt": 10,
             "mt": null
+          },
+          "ac": {
+            "flat": 13,
+            "calc": "flat",
+            "formula": ""
           }
         },
         "traits": {
@@ -2072,9 +2090,7 @@
               "spent": 0,
               "recovery": []
             },
-            "properties": [
-              "amm"
-            ],
+            "properties": [],
             "range": {
               "value": 30,
               "long": 60,
@@ -2122,7 +2138,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "simpleR",
+              "value": "martialR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -2596,6 +2612,11 @@
             "max": 75,
             "dt": 15,
             "mt": null
+          },
+          "ac": {
+            "flat": 11,
+            "calc": "flat",
+            "formula": ""
           }
         },
         "traits": {
@@ -2774,8 +2795,7 @@
               "recovery": []
             },
             "properties": [
-              "hvy",
-              "amm"
+              "hvy"
             ],
             "range": {
               "value": 40,
@@ -2824,7 +2844,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "simpleR",
+              "value": "martialR",
               "baseItem": ""
             },
             "magicalBonus": null,
@@ -2972,8 +2992,7 @@
               "recovery": []
             },
             "properties": [
-              "lgt",
-              "amm"
+              "lgt"
             ],
             "range": {
               "value": 20,
@@ -3022,7 +3041,7 @@
               "conditions": ""
             },
             "type": {
-              "value": "simpleR",
+              "value": "martialR",
               "baseItem": ""
             },
             "magicalBonus": null,

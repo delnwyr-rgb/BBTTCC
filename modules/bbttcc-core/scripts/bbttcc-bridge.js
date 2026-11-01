@@ -248,8 +248,20 @@ async function _clearBridgeDebtAndLocks(actor){
   // legacy sacType strings still resolve via the alias map in
   // manifestSacrificeToFactionOp.
 
+  // review C35 (2026-10-31): the Bridge is reachable on dnd5e (api.bridge.open, the onboarding Bridge tour). Integrity
+  // reads/debits go through the combat seam there (Integrity → HP per the rubric); Stress and Aptitude burn are RFI-only
+  // tracks and are disabled on dnd5e; the backing roll uses game.bbttcc.dice (a real d20 skill/ability check).
+  function _onRFI(){ try { return game.system?.id === "fourththing"; } catch(_e){ return true; } }
+
   function _readIntegrity(pc){
     try {
+      if (!_onRFI()) {
+        var h = (game.bbttcc && game.bbttcc.combat && typeof game.bbttcc.combat.getHealth === "function") ? (game.bbttcc.combat.getHealth(pc) || {}) : {};
+        var hv = num(h.value, NaN), hm = num(h.max, NaN);
+        if (!isFinite(hv)) hv = num(pc?.system?.attributes?.hp?.value, 0);
+        if (!isFinite(hm)) hm = num(pc?.system?.attributes?.hp?.max, 0);
+        return { value: hv, max: hm };
+      }
       // fourththing schema: system.derived.integrity.{value,max}
       var sys = pc?.system?.system ?? pc?.system;
       var iv  = num(sys?.derived?.integrity?.value, 0);
@@ -262,6 +274,13 @@ async function _clearBridgeDebtAndLocks(actor){
     var integ = _readIntegrity(pc);
     var cur = num(integ.value, 0);
     if (cur < cost) throw new Error("Not enough Integrity (need "+cost+", have "+cur+")");
+    if (!_onRFI()) {
+      // dnd5e: HP through the combat seam (untyped, resist-bypass — a sacrifice is not an attack)
+      var apply = game.bbttcc && game.bbttcc.combat && game.bbttcc.combat.applyDamage;
+      if (typeof apply === "function") await apply(pc, cost, { op: "damage", damageType: "", damageFlavor: "bridge", ignoreResists: true });
+      else await pc.update({ "system.attributes.hp.value": Math.max(0, cur - cost) });
+      return { integrityCost: cost };
+    }
     await pc.update({ "system.derived.integrity.value": Math.max(0, cur - cost) });
     return { integrityCost: cost };
   }
@@ -420,6 +439,10 @@ async function _clearBridgeDebtAndLocks(actor){
       lock.integrityCost = integrityCost;
       doDebit = function(){ return _debitIntegrity(pc, integrityCost); };
     }
+    else if ((sacType === "stress" || sacType === "aptitude") && !_onRFI()) {
+      // review C35: RFI-only tracks (no Stress pool / aptitude ranks on a dnd5e sheet)
+      throw new Error((sacType === "stress" ? "Stress" : "Aptitude Rank") + " sacrifice is RFI-only — on D&D use Integrity (HP) or Manifestation Lockout.");
+    }
     else if (sacType === "stress") {
       var stressCost = Math.max(1, gmSeat ? num(opts.stressPerOpOverride, BRIDGE_RATES.stressPerOp) : BRIDGE_RATES.stressPerOp) * opAmount;
       var haveS = num(_readStress(pc).value, 0);
@@ -570,10 +593,24 @@ async function _clearBridgeDebtAndLocks(actor){
       baseTotal = num(baseRoll && baseRoll.total, 0);
       baseDesc  = opLabel(rollKey) + " (Faculty)";
     }
+    else if (rollKind === "skill" && rollKey && !_onRFI() && game.bbttcc && game.bbttcc.dice && typeof game.bbttcc.dice.skillCheck === "function") {
+      // review C35: dnd5e — the seam maps the RFI skill name to the 5E sheet's skill/tool (a real d20 + the steward's bonus)
+      var skRes5 = await game.bbttcc.dice.skillCheck(actor, { skill: rollKey, label: opLabel(rollKey) + " check (Backing)" });
+      baseTotal = num(skRes5 && skRes5.total, 0);
+      baseRoll  = (skRes5 && skRes5.roll) || null;
+      baseDesc  = opLabel(rollKey) + " (Skill)";
+    }
+    else if (rollKey && !_onRFI() && game.bbttcc && game.bbttcc.dice && typeof game.bbttcc.dice.check === "function") {
+      var abRes5 = await game.bbttcc.dice.check(actor, { attribute: rollKey, label: opLabel(rollKey) + " check (Backing)" });
+      baseTotal = num(abRes5 && abRes5.total, 0);
+      baseRoll  = (abRes5 && abRes5.roll) || null;
+      baseDesc  = opLabel(rollKey) + " (Ability)";
+    }
     else {
-      baseRoll  = await (new Roll("2d10x10")).evaluate();
+      var plainDie = (!_onRFI() && game.bbttcc && game.bbttcc.dice && typeof game.bbttcc.dice.checkFormula === "function") ? game.bbttcc.dice.checkFormula() : "2d10x10";
+      baseRoll  = await (new Roll(plainDie)).evaluate();
       baseTotal = num(baseRoll.total, 0);
-      baseDesc  = "2d10 (exploding, untyped)";
+      baseDesc  = _onRFI() ? "2d10 (exploding, untyped)" : (plainDie + " (untyped)");
     }
     var finalTotal = baseTotal;
 
@@ -721,9 +758,9 @@ async function _clearBridgeDebtAndLocks(actor){
       '   <div style="display:flex; gap:8px; align-items:flex-end; margin-top:8px;">'+
       '    <div style="flex:1;"'+tipAttr("sacrifice")+'><label>Sacrifice</label>'+
       '      <select name="m_sacType" style="width:100%;">'+
-      '        <option value="integrity">Integrity</option>'+
-      '        <option value="stress">Stress</option>'+
-      '        <option value="aptitude">Aptitude Rank Burn</option>'+
+      '        <option value="integrity">'+(_onRFI() ? 'Integrity' : 'Integrity (HP)')+'</option>'+
+      (_onRFI() ? ('        <option value="stress">Stress</option>'+
+      '        <option value="aptitude">Aptitude Rank Burn</option>') : '')+   // review C35: RFI-only tracks
       '        <option value="manifestation">Manifestation Lockout</option>'+
       '      </select>'+
       '    </div>'+
@@ -835,12 +872,23 @@ async function _clearBridgeDebtAndLocks(actor){
             var sel = root.find("select[name='b_key']");
             if (!sel.length) return;
             var cur = sel.val() || "";
-            var src = (kind === "skill") ? ((sys && sys.skills) || {}) : ((sys && sys.attributes) || {});
-            var opts = Object.keys(src).map(function(k){
-              var e = src[k] || {};
-              var lbl = e.label ? String(e.label) : opLabel(k);
-              return '<option value="'+k+'" '+(k===cur?"selected":"")+'>'+foundry.utils.escapeHTML(lbl)+' ('+num(e.value,0)+')</option>';
-            }).join("");
+            var opts;
+            var dice5 = game.bbttcc && game.bbttcc.dice;
+            if (!_onRFI() && a && dice5 && dice5.SKILLS && dice5.ABILITY) {
+              // review C35: dnd5e — offer the RFI skill / faculty names the dice seam translates, with the sheet's own bonus
+              var keys5 = (kind === "skill") ? Object.keys(dice5.SKILLS) : Object.keys(dice5.ABILITY);
+              opts = keys5.map(function(k){
+                var b = (kind === "skill") ? num(dice5.skillBonus(a, k), 0) : num(dice5.abilityMod(a, k), 0);
+                return '<option value="'+k+'" '+(k===cur?"selected":"")+'>'+foundry.utils.escapeHTML(opLabel(k))+' ('+(b>=0?"+":"")+b+')</option>';
+              }).join("");
+            } else {
+              var src = (kind === "skill") ? ((sys && sys.skills) || {}) : ((sys && sys.attributes) || {});
+              opts = Object.keys(src).map(function(k){
+                var e = src[k] || {};
+                var lbl = e.label ? String(e.label) : opLabel(k);
+                return '<option value="'+k+'" '+(k===cur?"selected":"")+'>'+foundry.utils.escapeHTML(lbl)+' ('+num(e.value,0)+')</option>';
+              }).join("");
+            }
             sel.html(opts || '<option value="">—</option>');
           }catch(_e){}
         }

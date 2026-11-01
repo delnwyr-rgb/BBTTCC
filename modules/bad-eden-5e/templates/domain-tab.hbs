@@ -1,4 +1,30 @@
 {{!-- Bad Eden 5E · DOMAIN tab (2026-10-30): the RFI steward sheet's Domain panel (systems/fourththing/templates/partials/domain-panel.hbs, ruling 16) on the dnd5e character sheet. Context: `domain` from scripts/sheet.js domainContext(). Keep in step with the RFI partial. --}}
+{{!-- The Convictions card, shared by the linked and unlinked branches. Context: `domain`. --}}
+{{#*inline "be5e-domain-convictions"}}
+    <div class="ft-domain-card ft-domain-convictions" data-tooltip="{{#if convictionsMeter}}{{convictionsMeter.hint}}{{else}}What you swore to. Choose your convictions here; the land will measure you against them.{{/if}}">
+      <div class="ft-domain-card-title">Convictions{{#if convictionsMeter}} <span class="ft-chip ft-domain-band is-{{convictionsMeter.css}}">{{convictionsMeter.bandLabel}}</span>{{/if}}</div>
+      <div class="ft-domain-holding-row"><span>Sworn to</span>
+        {{#if convictionsEdit}}
+        <select class="ft-domain-conv-select" data-domain-conviction data-tooltip="Change what you stand for. The Domain's drift is measured against it from the next weighty choice on.">
+          <option value="" {{#if convictionsEdit.unsworn}}selected{{/if}}>— Unsworn —</option>
+          {{#each convictionsEdit.options}}<option value="{{key}}" {{#if selected}}selected{{/if}} title="{{hint}}">{{label}}</option>{{/each}}
+        </select>
+        {{else}}<b>{{convictions}}</b>{{/if}}
+      </div>
+      {{#if convictionsMeter}}
+      <div class="ft-domain-conv-bar is-{{convictionsMeter.css}}" data-tooltip="Drift {{convictionsMeter.drift}} of 100. Steadfast to 15 · Strained to 35 · Fractured to 65 · Rupturing beyond.">
+        <span class="ft-domain-conv-fill" style="width:{{convictionsMeter.pct}}%"></span>
+        <i class="ft-domain-conv-mark" style="left:15%"></i><i class="ft-domain-conv-mark" style="left:35%"></i><i class="ft-domain-conv-mark" style="left:65%"></i>
+      </div>
+      {{#if convictionsMeter.impacts.length}}
+      <ul class="ft-domain-conv-impacts">{{#each convictionsMeter.impacts}}<li>{{this}}</li>{{/each}}</ul>
+      {{else}}
+      <p class="ft-hint">Nothing has tested you yet.</p>
+      {{/if}}
+      {{/if}}
+    </div>
+{{/inline}}
+
 <section class="tab {{ tab.cssClass }} be5e-domain-tab" data-tab="{{ tab.id }}" data-group="{{ tab.group }}">
 <section class="ft-domain" data-domain-id="{{domain.id}}">
   {{#if domain.linked}}
@@ -53,22 +79,8 @@
       {{/if}}
     </div>
 
-    {{!-- CONVICTIONS (ruling 17, 2026-10-18): the Alignment monitor — sworn philosophy + the Domain's drift from it --}}
-    <div class="ft-domain-card ft-domain-convictions" data-tooltip="{{#if domain.convictionsMeter}}{{domain.convictionsMeter.hint}}{{else}}What you swore to. Pick your convictions on the Steward tab; the land will measure you against them.{{/if}}">
-      <div class="ft-domain-card-title">Convictions{{#if domain.convictionsMeter}} <span class="ft-chip ft-domain-band is-{{domain.convictionsMeter.css}}">{{domain.convictionsMeter.bandLabel}}</span>{{/if}}</div>
-      <div class="ft-domain-holding-row"><span>Sworn to</span><b>{{domain.convictions}}</b></div>
-      {{#if domain.convictionsMeter}}
-      <div class="ft-domain-conv-bar is-{{domain.convictionsMeter.css}}" data-tooltip="Drift {{domain.convictionsMeter.drift}} of 100. Steadfast to 15 · Strained to 35 · Fractured to 65 · Rupturing beyond.">
-        <span class="ft-domain-conv-fill" style="width:{{domain.convictionsMeter.pct}}%"></span>
-        <i class="ft-domain-conv-mark" style="left:15%"></i><i class="ft-domain-conv-mark" style="left:35%"></i><i class="ft-domain-conv-mark" style="left:65%"></i>
-      </div>
-      {{#if domain.convictionsMeter.impacts.length}}
-      <ul class="ft-domain-conv-impacts">{{#each domain.convictionsMeter.impacts}}<li>{{this}}</li>{{/each}}</ul>
-      {{else}}
-      <p class="ft-hint">Nothing has tested you yet.</p>
-      {{/if}}
-      {{/if}}
-    </div>
+    {{!-- CONVICTIONS (ruling 17, 2026-10-18): the Alignment monitor — sworn philosophy + the Domain's drift from it. On dnd5e the steward swears HERE (no Steward tab; review C10) --}}
+    {{> be5e-domain-convictions domain}}
 
     <div class="ft-domain-card ft-domain-retinue" data-tooltip="Who rides with you. Crews and Associations are hired at the Muster by the turn; their maneuvers, bonuses and people are yours while the contract runs.">
       <div class="ft-domain-card-title">Retinue</div>
@@ -103,6 +115,7 @@
   {{else}}
   <div class="ft-section-header"><h3>Domain</h3></div>
   <p class="ft-hint">No land answers to you yet. The GM links a steward to their Domain; until then there is no treasury to spend and no turn to plan.</p>
+  <div class="ft-domain-grid">{{> be5e-domain-convictions domain}}</div>
   {{/if}}
 </section>
 </section>

@@ -245,7 +245,7 @@
       "folder": "Cryptidkin (Jackalope)",
       "folderParent": "Cryptidkin",
       "img": "icons/sundries/books/book-open-turquoise.webp",
-      "description": "<p><strong>Strategic Hooks (Foundry / Bad Eden)</strong></p><p>If you see Jackalope tracks circling your hex, you are not under attack. You are being advised.</p><p><strong>OP Edge.</strong> Your faction gains +1 Soft Power OP and +1 Non-Lethal OP at campaign start.</p><p><strong>Trail Whisper.</strong> Once per Strategic Turn, your faction can reroll a single Travel or Scout check made in a hex adjacent to your home territory.</p>"
+      "description": "<p><strong>Strategic Hooks (Foundry / Bad Eden)</strong></p><p>If you see Jackalope tracks circling your hex, you are not under attack. You are being advised.</p><p><strong>Domain Edge.</strong> Your faction gains +10 Soft Power marks and +10 Non-Lethal marks at campaign start.</p><p><strong>Trail Whisper.</strong> Once per Strategic Turn, your faction can reroll a single Travel or Scout check made in a hex adjacent to your home territory.</p>"
     },
     {
       "slug": "jackalope-startle-reflex",

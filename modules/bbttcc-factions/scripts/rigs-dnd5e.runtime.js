@@ -10,9 +10,10 @@
  * (delete-key semantics → unsetFlag; Foundry 14 killed "-=key").
  *
  *   REGISTERS   game.bbttcc.rigs.impl = { board, disembark, park, deploy, destroy,
- *               restore, outputFor, applyTurnOutput, setState, applyFrame,
- *               applyTemplate, ORDERS, CHANNELS }  (+ helpers: ensure, rigOf,
- *               healCrew, baseActor, frameOf, runOrder, migrateLegacyRigs)
+ *               restore, outputFor, outputPreview, describeOutput, applyTurnOutput,
+ *               setState, applyFrame, applyTemplate, CHANNELS }  (+ helpers: ensure,
+ *               rigOf, healCrew, baseActor, frameOf, migrateLegacyRigs, sweepOrphanCrew,
+ *               forceUnboard, setRollAs, crewRoller)  and game.bbttcc.rigs.outputPreview.
  *               The accessor's board/disembark/park/deploy/destroy/restore/
  *               outputFor/applyTurnOutput delegate here. game.bbttcc.rigs itself
  *               is NEVER overwritten.
@@ -21,20 +22,19 @@
  *                  mobile/hybrid: parked ⇄ deployed → destroyed
  *                  (restore() = explicit GM mercy; not a normal transition)
  *
- *   OUTPUT  each BBTTCC strategic turn (`bbttcc:advanceTurn:end`, the GM seat that ran it
- *           AND apply:true — dry runs never credit), every faction-owned rig
- *           credits its faction's OP bank through game.bbttcc.api.op.commit:
- *             parked ×1.0 · deployed ×0.5 (halved, never floored — the
- *             chokepoint rounds once in MARKS; output-modules with
- *             mobileLegal:false → 0 while deployed) · destroyed ×0
- *           Rig output + orders are AUTHORED IN OP; the bank is MARKS, so the
- *           single write chokepoint converts with op.marksPerOp().
+ *   OUTPUT  RFI's math, verbatim (rigs-rfi.output.js; D&D port review C18/C63, owner
+ *           ruling 2026-10-31 "parity is the goal"): each strategic turn
+ *           (`bbttcc:advanceTurn:end`, the GM seat that ran it AND apply:true)
+ *           every faction-owned rig pays its Domain
+ *             base output BY SIZE for rigs that move (RIG_BASE_OUTPUT_OP)
+ *             + every equipped output-module's `yield` (bank channels → marks,
+ *               anything else → the Domain stockpile as materials)
+ *             × the state throttle: parked 1 · deployed 0.5 (mobileLegal:false → 0)
+ *               · destroyed 0. Marks halve in MARKS (no OP flooring); materials floor.
+ *           outputPreview(rig) = the opportunity cost the Rig tab + 5E Domain tab show.
  *           ONE CLOCK: never the native bastion turn.
- *
- *   ORDERS  any PARKED rig runs one order per strategic turn (craft/trade/
- *           harvest/recruit/research → +1 OP on the channel, +1 per equipped
- *           module declaring the order; repair → +10% max HP). 0 HP or
- *           destroyed = "disabled by attack" → skipped.
+ *           The dnd5e-only ORDERS (+1 OP per parked rig) and hand-authored
+ *           basePerTurn are RETIRED — RFI never had them; `order` on old rigs is ignored.
  *
  *   HOOKS   bbttcc:rig:damaged   { rig, amount, newIntegrity, before, after }
  *           bbttcc:rig:destroyed { rig, finalHit, before, after }
@@ -45,12 +45,23 @@
  *   HUD     steward tokens: 🛻 Board (≤10 ft of a rig token) / 🪂 Disembark;
  *           rig tokens: 🛻 Deploy / 🅿️ Park / 🎛 Rig actions.
  *
+ *   RELAYS  gmExec "rigs.board" / "rigs.disembark" — the GM seat checks the SOCKET
+ *           sender owns the steward (C15); the initiator is meta.fromUserId, never the payload.
+ *
+ *   CREW    boarded crew's tokens ride the rig; a deleted rig's crew are swept back onto
+ *           the grid (sweepOrphanCrew / forceUnboard — C23). Rig d20 tests roll with the
+ *           steward's numbers (attacks: gunner; checks/saves/skills/initiative: pilot — C21/C22);
+ *           every rig attack card stamps combat.fired for the hit-and-run gate (C24); heat and
+ *           the fired stamp clear at deleteCombat (C17).
+ *
  *   GEAR    accessor gearOf(item)/isFrame(item) — honours flags.fourththing.rigGear,
  *           flags.bbttcc.rigGear (June) and flags.bbttcc-factions.rigGear.
  *
  *   MIGRATION  legacy flags.bbttcc-factions.rigs[] → vehicle rigs, GM-gated,
  *           once per faction (rigsMigrated stamp), legacy array kept as audit.
  * ───────────────────────────────────────────────────────────────────────────── */
+import { RIG_BASE_OUTPUT_OP, RIG_OUTPUT_STATE_MULT } from "/modules/bbttcc-core/scripts/economy.constants.js";
+
 (() => {
   const TAG = "[bbttcc-factions/rigs-dnd5e]";
   if (game?.system?.id && game.system.id !== "dnd5e") return;   // DORMANT off-dnd5e
@@ -88,7 +99,6 @@
     integrity: { tier: 1, bracket: "light" },
     output: { basePerTurn: {} },
     travel: { speed: 1, range: 3, hazardResist: 0 },
-    order: "none",
   };
   function normaliseSeed(seed = {}) {
     const s = foundry.utils.deepClone(seed || {});
@@ -108,13 +118,13 @@
     const current = cur ? {
       identity: { mobility: cur.identity.mobility, state: cur.identity.state, factionOwnerId: cur.identity.factionOwnerId, archetype: cur.identity.archetype, binding: cur.identity.binding },
       integrity: { tier: cur.integrity.tier, bracket: cur.integrity.bracket },
-      output: { basePerTurn: cur.output.basePerTurn }, travel: cur.travel, order: cur.order,
+      output: { basePerTurn: cur.output.basePerTurn }, travel: cur.travel,
     } : {};
     const next = foundry.utils.mergeObject(
       foundry.utils.mergeObject(foundry.utils.deepClone(DEFAULTS), current, { inplace: false }),
       normaliseSeed(seed), { inplace: false });
     if (next.identity.mobility === "stationary" && next.identity.state === "deployed") next.identity.state = "parked";
-    const upd = Rg.toUpdate(actor, next);
+    const upd = Rg.toUpdate(actor, next);   // also seats AC = bracket + tier when the hull has none (accessor, review C20)
     // DT sanity: seat a damage threshold by bracket if the hull has none —
     // chip damage should bounce off a war rig. Never clobbers an authored dt.
     const dt = Number(get(actor, "system.attributes.hp.dt", 0)) || 0;
@@ -160,121 +170,122 @@
     return data(actor);
   }
 
-  // ── Output math — { channel: OP } for ONE strategic turn, by state ─────────
-  function outputFor(actor) {
-    const d = data(actor);
-    if (!d) return {};
-    const state = d.identity.state ?? "parked";
-    if (state === "destroyed") return {};
-    const deployed = state === "deployed";
-    const acc = {};
-    const add = (channel, n, mobileLegal = true) => {
-      let v = Number(n) || 0;
-      if (v <= 0) return;
-      // review P3 (2026-10-28): no OP floor — a 1-OP channel pays half its marks while deployed; creditFaction rounds in marks.
-      if (deployed) v = mobileLegal ? v * 0.5 : 0;
-      if (v <= 0) return;
-      if (!CHANNELS.includes(channel)) console.warn(TAG, `${actor.name}: unknown OP channel "${channel}" (credited anyway)`);
-      acc[channel] = (acc[channel] ?? 0) + v;
-    };
-    for (const [ch, n] of Object.entries(d.output?.basePerTurn ?? {})) add(ch, n, true);
-    for (const item of actor.items ?? []) {
-      const gear = gearOf(item);
-      if (gear?.subtype !== "output-module") continue;
-      if (item.system?.equipped === false) continue;
-      for (const [ch, n] of Object.entries(gear.perTurn ?? {})) add(ch, n, gear.mobileLegal !== false);
-    }
-    return acc;
-  }
+  // ── Output — RFI's math, verbatim (review C18/C63, 2026-10-31; owner ruling: parity) ──────────
+  // Was: hand-authored basePerTurn + module `perTurn` in OP, plus dnd5e-only ORDERS (+1 OP per parked rig) RFI never
+  // had — the same Domain paid differently per system, and the 5E gear twins carry `yield` (Mounted Forge
+  // steel 2 / parts 1), so an output module credited nothing. Now, like rigs-rfi.output.js:
+  //   rawOutput(rig)      base output BY SIZE (RIG_BASE_OUTPUT_OP) for rigs that move + equipped output-modules' `yield`
+  //                       (`perTurn` honoured as a fallback); bank channels → op, anything else → materials
+  //   outputFor(rig,{state}) → { state, marks:{ch:n}, materials:{key:n} } for ONE turn — MARKS, not OP
+  //   outputPreview(rig)  → parked / deployed / lost + text, for the Rig tab and the 5E Domain tab
+  //   applyTurnOutput()   pays marks through op.commit and materials through api.factions.stockpile.adjust + GM card
+  const LABEL = { violence: "Violence", nonlethal: "Nonlethal", intrigue: "Intrigue", economy: "Economy", softpower: "Soft Power", diplomacy: "Diplomacy", logistics: "Logistics", culture: "Culture", faith: "Faith" };
+  const marksPerOp = () => { const op = OP(); const n = Number(op?.marksPerOp?.() ?? op?.OP_TO_MARKS); return Number.isFinite(n) && n > 0 ? n : 0; };   // the live engine is the only ratio authority
+  const pretty = (k) => String(k || "").replace(/[_-]+/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  const bracketOf = (rig) => String(frameOf(rig)?.bracket || data(rig)?.integrity?.bracket || "medium").toLowerCase();
+  const stateOf = (rig) => String(data(rig)?.identity?.state ?? "parked").toLowerCase();
 
-  // The single bank-write chokepoint. `deltasOp` = { channel: OP } (authoring
-  // unit); the bank stores MARKS → converted here with the live op engine.
-  async function creditFaction(faction, deltasOp, context = {}) {
-    if (!faction) return null;
-    const op = OP();
-    const perOp = Number(op?.marksPerOp?.() ?? op?.OP_TO_MARKS) || 0;   // the live engine is the only ratio authority (marks-everywhere)
-    if (!perOp) { console.warn("[rigs-dnd5e] marks ratio unavailable — credit skipped", deltasOp); return null; }
-    const marks = {};
-    for (const [ch, n] of Object.entries(deltasOp ?? {})) { const m = Math.round((Number(n) || 0) * perOp); if (m) marks[ch] = m; }
-    if (!Object.keys(marks).length) return null;
-    if (typeof op?.commit === "function") {
-      const res = await op.commit(faction.id, marks, { source: "rig", ...context });
-      if (!res?.ok) console.warn(TAG, `OP commit refused for ${faction.name}`, res?.error ?? res);
-      return res;
-    }
-    // Stale client without the op engine: write the bank directly (marks).
-    const bank = foundry.utils.deepClone(faction.getFlag(SCOPE, "opBank") || {});
-    for (const [ch, m] of Object.entries(marks)) bank[ch] = (Number(bank[ch]) || 0) + m;
-    await faction.update({ [`flags.${SCOPE}.opBank`]: bank }, { diff: true, recursive: true });
-    return { ok: true, committed: true, after: bank };
-  }
-
-  // ── Orders (the Bastion steal, executed on OUR clock) ──────────────────────
-  const ORDERS = {
-    none:     { label: "— (no order)" },
-    craft:    { label: "Craft",    channel: "economy",   desc: "+10 Economy marks (forges and workshops run)" },
-    trade:    { label: "Trade",    channel: "softpower", desc: "+10 Soft Power marks (markets and favors)" },
-    harvest:  { label: "Harvest",  channel: "logistics", desc: "+10 Logistics marks (fields, scrap, water)" },
-    recruit:  { label: "Recruit",  channel: "violence",  desc: "+10 Violence marks (muster fodder, drill yards)" },
-    research: { label: "Research", channel: "intrigue",  desc: "+10 Intrigue marks (archives, labs, listening posts)" },
-    repair:   { label: "Repair",   channel: null,        desc: "Restore 10% of the rig's max HP (no OP)" },
-  };
-  // Resolves the rig's order; returns { key, note, deltas? } — OP deltas are
-  // handed back so applyTurnOutput commits output + order in ONE bank write.
-  async function runOrder(rig) {
+  /** Raw (parked, 100%) output: { op: {channel: OP}, opMobile, mats: {key: n}, matMobile } */
+  function rawOutput(rig) {
+    const op = {}, opMobile = {}, mats = {}, matMobile = {};
+    const addOp = (ch, n, mobileLegal) => { const v = Number(n) || 0; if (v <= 0) return; op[ch] = (op[ch] || 0) + v; opMobile[ch] = (opMobile[ch] || 0) + (mobileLegal ? v : 0); };
+    const addMat = (k, n, mobileLegal) => { const v = Math.floor(Number(n) || 0); if (v <= 0) return; mats[k] = (mats[k] || 0) + v; matMobile[k] = (matMobile[k] || 0) + (mobileLegal ? v : 0); };
     const d = data(rig);
-    const key = d?.order ?? "none";
-    const spec = ORDERS[key];
-    if (!spec || key === "none") return null;
-    if (d.identity.state !== "parked") return { key, note: "skipped (not parked)" };
-    const { value: hp, max } = hpOf(rig);
-    if (hp <= 0) return { key, note: "skipped (disabled by damage)" };
-    if (key === "repair") {
-      const heal = Math.max(1, Math.floor(max * 0.1));
-      await R().update(rig, { "integrity.value": Math.min(max, hp + heal) });
-      return { key, note: `hull +${heal}` };
+    if (!d) return { op, opMobile, mats, matMobile };
+    if (String(d.identity?.mobility ?? "mobile") !== "stationary") for (const [ch, n] of Object.entries(RIG_BASE_OUTPUT_OP[bracketOf(rig)] || {})) addOp(ch, n, true);
+    for (const it of rig?.items ?? []) {
+      const g = gearOf(it);   // either flag scope (fourththing / bbttcc / bbttcc-factions)
+      if (g?.subtype !== "output-module") continue;
+      if (it.system?.equipped === false) continue;
+      const mobileLegal = g.mobileLegal !== false;
+      for (const [k, n] of Object.entries(g.yield || g.perTurn || {})) {
+        const key = String(k).toLowerCase();
+        if (CHANNELS.includes(key)) addOp(key, n, mobileLegal); else addMat(key, n, mobileLegal);
+      }
     }
-    let amount = 1;   // each equipped module declaring this order adds +1
-    for (const item of rig.items ?? []) {
-      const gear = gearOf(item);
-      if (gear?.subtype === "output-module" && gear.order === key && item.system?.equipped !== false) amount += 1;
-    }
-    return { key, note: `+${amount} ${spec.channel}`, deltas: { [spec.channel]: amount } };
+    return { op, opMobile, mats, matMobile };
   }
 
-  // The strategic-turn pass: credit every faction-owned rig's output + order.
+  /** One turn's output at a given state (default: the rig's current state). Marks, not OP. */
+  function outputFor(rig, { state = null } = {}) {
+    const st = String(state || stateOf(rig)).toLowerCase();
+    const mult = Number(RIG_OUTPUT_STATE_MULT[st] ?? 1);
+    const out = { state: st, marks: {}, materials: {} };
+    if (!rig || !data(rig) || mult <= 0) return out;
+    const per = marksPerOp();
+    const raw = rawOutput(rig);
+    const deployedish = st !== "parked";
+    for (const [ch, v] of Object.entries(raw.op)) {
+      const base = deployedish ? raw.opMobile[ch] || 0 : v;
+      const m = Math.round(base * per * mult);
+      if (m > 0) out.marks[ch] = m;
+    }
+    for (const [k, v] of Object.entries(raw.mats)) {
+      const base = deployedish ? raw.matMobile[k] || 0 : v;
+      const n = Math.floor(base * mult);
+      if (n > 0) out.materials[k] = n;
+    }
+    return out;
+  }
+
+  function describeOutput(out) {
+    const parts = [];
+    for (const [ch, m] of Object.entries(out?.marks || {})) parts.push(`+${m} ${LABEL[ch] || pretty(ch)} marks`);
+    for (const [k, n] of Object.entries(out?.materials || {})) parts.push(`+${n} ${pretty(k)}`);
+    return parts.length ? parts.join(", ") : "nothing";
+  }
+
+  /** The opportunity cost, for the Rig tab + the 5E Domain tab (bad-eden-5e/scripts/sheet.js domainRigs). */
+  function outputPreview(rig) {
+    const parked = outputFor(rig, { state: "parked" });
+    const deployed = outputFor(rig, { state: "deployed" });
+    const lost = { marks: {}, materials: {} };
+    for (const [ch, m] of Object.entries(parked.marks)) { const d = m - (deployed.marks[ch] || 0); if (d > 0) lost.marks[ch] = d; }
+    for (const [k, n] of Object.entries(parked.materials)) { const d = n - (deployed.materials[k] || 0); if (d > 0) lost.materials[k] = d; }
+    const has = (o) => Object.keys(o.marks).length || Object.keys(o.materials).length;
+    return {
+      state: stateOf(rig), produces: !!has(parked),
+      parked, deployed, lost,
+      parkedText: describeOutput(parked), deployedText: describeOutput(deployed),
+      lostText: has(lost) ? describeOutput(lost).replace(/\+/g, "−") : "nothing"
+    };
+  }
+
+  // The strategic-turn pass: pay every faction-owned rig (marks → op.commit, materials → the Domain stockpile).
   async function applyTurnOutput({ quiet = false } = {}) {
     const report = [];
+    const op = OP(); const stock = game.bbttcc?.api?.factions?.stockpile || game.bbttcc?.api?.stockpile;
     for (const rig of list()) {
-      const d = data(rig);
-      const fid = String(d?.identity?.factionOwnerId ?? "").replace(/^Actor\./, "");
+      const fid = String(data(rig)?.identity?.factionOwnerId ?? "").replace(/^Actor\./, "");
       const faction = fid ? game.actors?.get?.(fid) ?? null : null;
+      if (!faction) continue;
       const out = outputFor(rig);
-      const order = await runOrder(rig).catch(e => { console.warn(TAG, "order failed", rig.name, e); return null; });
-      const entry = { rig: rig.name, state: d?.identity?.state, faction: faction?.name ?? null, out, order, credited: null };
+      if (!Object.keys(out.marks).length && !Object.keys(out.materials).length) continue;
+      const entry = { rig: rig.name, state: out.state, faction: faction.name, out, text: describeOutput(out), refused: null };
+      try {
+        if (Object.keys(out.marks).length) {
+          if (typeof op?.commit !== "function") throw new Error("the marks engine isn't loaded");
+          const res = await op.commit(faction.id, out.marks, { source: "rig", context: "rig-output", rigId: rig.id, rigName: rig.name });
+          if (res && res.ok === false) entry.refused = String(res.error || "refused (cap?)");
+        }
+        for (const [k, n] of Object.entries(out.materials)) {
+          const r = await stock?.adjust?.(faction, k, n, { name: pretty(k) });
+          if (!stock?.adjust) entry.refused = (entry.refused ? entry.refused + "; " : "") + `${k}: no stockpile API`;
+          else if (r && r.ok === false) entry.refused = (entry.refused ? entry.refused + "; " : "") + `${k}: ${r.error}`;
+        }
+      } catch (e) { entry.refused = String(e?.message || e); console.warn(TAG, "credit failed", rig.name, e); }
       report.push(entry);
-      if (!faction) { if (order?.deltas) order.note += " — no faction linked"; continue; }
-      const deltas = foundry.utils.deepClone(out);
-      for (const [ch, n] of Object.entries(order?.deltas ?? {})) deltas[ch] = (deltas[ch] ?? 0) + n;
-      if (!Object.keys(deltas).length) continue;
-      const res = await creditFaction(faction, deltas, { rigId: rig.id, rigName: rig.name, order: order?.key ?? null });
-      entry.credited = res?.ok !== false;
-      if (res && res.ok === false) entry.refused = res.error ?? "refused (cap?)";
     }
-    if (!quiet && report.some(r => Object.keys(r.out).length || r.order)) {
+    if (!quiet && report.length) {
       const esc = (v) => foundry.utils.escapeHTML(String(v ?? ""));
-      // review P3 (2026-10-28): halved output can be fractional OP — show the card in marks (the bank unit).
-      const perOp = Number(OP()?.marksPerOp?.() ?? OP()?.OP_TO_MARKS) || 0;
-      const fmt = (n) => perOp ? `${Math.round(n * perOp)} marks` : `${n}`;
-      const rows = report.filter(r => r.faction || r.order).map(r =>
-        `<tr><td>${ICONS[r.state] ?? ""} ${esc(r.rig)}</td><td>${esc(r.state)}</td><td>${esc(r.faction ?? "—")}</td>
-         <td>${Object.entries(r.out).map(([c, n]) => `+${fmt(n)} ${c}`).join(", ") || "—"}${r.order ? ` · 📋 ${r.order.key}: ${r.order.note}` : ""}${r.refused ? ` · ⚠ ${esc(r.refused)}` : ""}</td></tr>`).join("");
+      const rows = report.map(r => `<tr><td>${ICONS[r.state] ?? ""} ${esc(r.rig)}</td><td>${esc(r.state)}</td><td>${esc(r.faction)}</td><td>${esc(r.text)}${r.refused ? ` · ⚠ ${esc(r.refused)}` : ""}</td></tr>`).join("");
       try {
         await ChatMessage.create({
           whisper: ChatMessage.getWhisperRecipients?.("GM")?.map(u => u.id) ?? [],
           content: `<div class="bbttcc-class-cue" style="border:1px solid #b9882e;border-radius:6px;padding:.4rem .6rem">
             <p style="margin:.1rem 0;font-weight:700">🛻 Rig output — strategic turn</p>
-            <table style="font-size:.78rem;width:100%"><tr><th style="text-align:left">Rig</th><th style="text-align:left">State</th><th style="text-align:left">Faction</th><th style="text-align:left">Output</th></tr>${rows}</table>
+            <table style="font-size:.78rem;width:100%"><tr><th style="text-align:left">Rig</th><th style="text-align:left">State</th><th style="text-align:left">Domain</th><th style="text-align:left">Earned</th></tr>${rows}</table>
+            <div style="opacity:.7;font-size:.72rem;margin-top:.2rem">Parked rigs earn in full; deployed rigs earn half; destroyed rigs earn nothing.</div>
           </div>`
         });
       } catch (e) { console.warn(TAG, "summary card failed", e); }
@@ -299,7 +310,9 @@
     if (!d) return;     // only rigs consume frames
     const tier = Number(d.integrity.tier) || 1;
     const patch = {};
-    if (f.baseIntegrity) {
+    // review C25 (owner ruling 2026-10-31): a chassis that AUTHORS its hull (Siege Titan 140, Worldbreaker 240, the
+    // flagships) keeps it — frame math (base + tierStep × (tier−1)) only fills in when nothing was authored.
+    if (f.baseIntegrity && !d.integrity.authored) {
       const max = Number(f.baseIntegrity) + (tier - 1) * (Number(f.tierStep) || 0);
       patch["integrity.max"] = max;
       // a rig sitting at its old full value (a fresh mint seeded by bracket) rides up to the new max
@@ -315,7 +328,7 @@
     patch["frame"] = { name: frameItem.name, itemId: frameItem.id, slots: f.slots ?? {}, capacity: f.capacity ?? {}, actions: f.actions ?? null, bracket: f.bracket ?? d.integrity.bracket };
     await R().update(rig, patch);
     await chatNote(rig, `⚙ Frame equipped: ${foundry.utils.escapeHTML(frameItem.name)}`, [
-      `Bracket <b>${f.bracket ?? d.integrity.bracket}</b>${f.baseIntegrity ? ` · hull ${f.baseIntegrity}+${f.tierStep ?? 0}/tier` : ""}.`,
+      `Bracket <b>${f.bracket ?? d.integrity.bracket}</b>${f.baseIntegrity ? (d.integrity.authored ? ` · hull stays at its authored ${d.integrity.max}` : ` · hull ${f.baseIntegrity}+${f.tierStep ?? 0}/tier`) : ""}.`,
       f.capacity ? `Crew capacity: ${Object.entries(f.capacity).map(([r, c]) => `${r} ${c.min ?? 0}–${c.max ?? 0}`).join(" · ")}.` : ""].filter(Boolean));
   }
   function installFrameHooks() {
@@ -446,7 +459,13 @@
     if (!d) throw new Error(`${rig?.name} is not a rig`);
     if (d.identity.state === "destroyed") throw new Error(`${rig.name} is destroyed — nothing to board`);
     if (!ROLES.includes(role)) role = "crew";
-    if (rigOf(steward)) throw new Error(`${steward.name} is already aboard a rig`);
+    // RFI parity (ftBoardRig 2026-08-27, review C15): monsters don't take the wheel — a bestiary / hostile npc is refused
+    // unless the caller forces it. Real NPC crew (friendly hirelings) still board.
+    if (!opts.force && steward.type === "npc") {
+      const bestiary = !!steward.flags?.fourththing?.rfi?.actor?.bestiary;
+      if (bestiary || steward.prototypeToken?.disposition === CONST.TOKEN_DISPOSITIONS.HOSTILE) throw new Error(`${steward.name} is not crew material — it does not get a seat in ${rig.name}.`);
+    }
+    if (R()?.boardedRigOf?.(steward)?.rigId) throw new Error(`${steward.name} is already aboard a rig`);
     if ((d.crew?.slots ?? []).some(s => s.actorId === steward.id)) throw new Error(`${steward.name} is already in ${rig.name}'s roster`);
     // A player's board relays to the GM (token hides + rig vision need GM rights on tokens they don't own)
     if (!game.user.isGM) {
@@ -488,13 +507,21 @@
   }
   async function disembark(steward, opts = {}) {
     steward = baseActor(steward);
-    const rig = rigOf(steward);
-    if (!rig) throw new Error(`${steward.name} is not aboard a rig`);
+    const flag = R()?.boardedRigOf?.(steward);
+    if (!flag?.rigId) throw new Error(`${steward.name} is not aboard a rig`);
     if (!game.user.isGM) {
       const gx = game.bbttcc?.api?.gmExec;
       if (typeof gx?.call !== "function" || !game.users.some(u => u.isGM && u.active)) throw new Error("No GM is online to confirm disembarking.");
       const r = await gx.call("rigs.disembark", { stewardId: steward.id, initiatorUserId: game.user.id });
       if (r?.error) throw new Error(r.error);
+      return true;
+    }
+    const rig = rigOf(steward);
+    if (!rig) {
+      // review C23: the rig was deleted with this steward aboard — step off from the flag alone
+      await forceUnboard(steward, { why: "its rig no longer exists" });
+      await chatNote(steward, `🪂 ${foundry.utils.escapeHTML(steward.name)} steps off`, ["The rig is gone — tokens and sight restored."]);
+      _broadcastSelect({ stewardId: steward.id, rigId: flag.rigId, mode: "disembark", initiatorUserId: opts.initiatorUserId ?? game.user.id });
       return true;
     }
     const d = data(rig);
@@ -531,6 +558,46 @@
     await chatNote(rig, `🪂 ${foundry.utils.escapeHTML(steward.name)} disembarks ${foundry.utils.escapeHTML(rig.name)}`, []);
     _broadcastSelect({ stewardId: steward.id, rigId: rig.id, mode: "disembark", initiatorUserId: opts.initiatorUserId ?? game.user.id });
     return true;
+  }
+  // review C23: a rig deleted with crew aboard left its stewards hidden on every scene with the dead rig's sight and no
+  // Disembark control (rigOf() → null; disembark() threw). RFI sweeps orphan crew (_ftSweepOrphanCrew on deleteActor /
+  // deleteToken / ready); this is that sweep. forceUnboard() needs no rig: it unhides every token of the steward,
+  // restores the prior sight kept on the token flag, and clears boardedRig.
+  async function forceUnboard(steward, { why = "rig no longer exists" } = {}) {
+    steward = baseActor(steward);
+    if (!steward) return false;
+    for (const scene of game.scenes) {
+      const sts = _tokDocsOf(scene, steward.id); if (!sts.length) continue;
+      const updates = sts.map(t => {
+        const u = { _id: t.id, hidden: false };
+        const ov = t.getFlag(SCOPE, FLAG_SIGHT);
+        if (ov) { if (ov.priorSight) u.sight = ov.priorSight; u[`flags.${SCOPE}.-=${FLAG_SIGHT}`] = null; }
+        return u;
+      });
+      try { await scene.updateEmbeddedDocuments("Token", updates, { animate: false }); }
+      catch (e) { console.warn(TAG, "forceUnboard: token restore failed on", scene.name, e); }
+    }
+    try { await steward.unsetFlag(SCOPE, "boardedRig"); } catch (_e) {}
+    console.log(TAG, `${steward.name} stepped off (${why})`);
+    return true;
+  }
+  let _sweepTimer = null;
+  function sweepOrphanCrew() {
+    if (!game.user?.isGM || game.users?.activeGM?.id !== game.user.id) return;
+    if (_sweepTimer) clearTimeout(_sweepTimer);
+    _sweepTimer = setTimeout(async () => {
+      _sweepTimer = null;
+      let n = 0;
+      try {
+        for (const a of game.actors?.contents ?? []) {
+          const b = R()?.boardedRigOf?.(a); if (!b?.rigId) continue;
+          const rig = game.actors.get(b.rigId);
+          if (rig && isRig(rig)) continue;
+          if (await forceUnboard(a)) n++;
+        }
+      } catch (e) { console.warn(TAG, "orphan crew sweep failed", e); }
+      if (n) ui.notifications?.info?.(`Disembarked ${n} steward(s) whose rig no longer exists.`);
+    }, 1500);
   }
   // crew-follow: the rig moved → its crew tokens jump to it once the animation settles (GM seats)
   function _strandedCrew(tokenDoc, rig, scene) {
@@ -585,13 +652,40 @@
       } catch (_e) {}
     });
     game.socket.on(SOCKET, (msg) => { if (msg?.t === "rig-select") _selectAfter(msg); });
-    // player seats board/disembark through the GM relay
+    // the rig is gone → its crew step off (RFI: deleteActor / deleteToken / ready sweeps)
+    Hooks.on("deleteActor", (actor) => { try { if (actor?.type === "vehicle" && actor.flags?.[SCOPE]?.rig) sweepOrphanCrew(); } catch (_e) {} });
+    sweepOrphanCrew();
+    // player seats board/disembark through the GM relay. review C15 (2026-10-31): the GM seat trusts the SOCKET sender
+    // (meta.fromUserId — Foundry stamps it; gm-exec refuses a payload id that disagrees), requires that sender to OWN the
+    // steward, and takes the initiator from the sender, never the payload — any seat could hide any actor's tokens on
+    // every scene before. Same test as rigsActionHandler.
     const gx = game.bbttcc?.api?.gmExec;
     if (typeof gx?.register === "function") {
-      gx.register("rigs.board", async ({ stewardId, rigId, role, initiatorUserId }) => {
-        try { await board(game.actors.get(stewardId), game.actors.get(rigId), { role, initiatorUserId }); return { ok: true }; } catch (e) { return { error: e.message }; } });
-      gx.register("rigs.disembark", async ({ stewardId, initiatorUserId }) => {
-        try { await disembark(game.actors.get(stewardId), { initiatorUserId }); return { ok: true }; } catch (e) { return { error: e.message }; } });
+      const authorise = (payload = {}, meta = {}) => {
+        const user = game.users?.get?.(String(meta?.fromUserId || ""));
+        if (!user) throw new Error("unknown sender");
+        const steward = game.actors?.get?.(String(payload?.stewardId ?? ""));
+        if (!steward) throw new Error("unknown steward");
+        if (!user.isGM) {
+          if (!steward.testUserPermission?.(user, "OWNER")) throw new Error("you don't own that steward");
+          if (!["character", "npc"].includes(steward.type)) throw new Error(`${steward.name} can't crew a rig`);
+        }
+        return { user, steward };
+      };
+      gx.register("rigs.board", async (payload = {}, meta = {}) => {
+        try {
+          const { user, steward } = authorise(payload, meta);
+          const rig = game.actors?.get?.(String(payload.rigId ?? ""));
+          if (!rig || !data(rig)) throw new Error("unknown rig");
+          await board(steward, rig, { role: String(payload.role ?? "crew"), initiatorUserId: user.id });
+          return { ok: true };
+        } catch (e) { return { error: e.message }; } });
+      gx.register("rigs.disembark", async (payload = {}, meta = {}) => {
+        try {
+          const { user, steward } = authorise(payload, meta);
+          await disembark(steward, { initiatorUserId: user.id });
+          return { ok: true };
+        } catch (e) { return { error: e.message }; } });
     }
   }
 
@@ -627,7 +721,7 @@
           col.appendChild(div);
         };
         if (actor.type === "character") {
-          if (rigOf(actor)) {
+          if (R()?.boardedRigOf?.(actor)?.rigId) {   // C23: offered from the flag, so a dead rig's crew can still step off
             addBtn("🪂", "Disembark rig", () => disembark(actor));
           } else {
             // adjacent = within one grid step, diagonals included (2026-10-31: a diagonal square read 11.2 ft on a
@@ -741,17 +835,43 @@
     const pick = role => { const s = slots.find(x => x.role === role && x.actorId); return s ? game.actors?.get?.(s.actorId) : null; };
     return (kind === "attack" ? (pick("gunner") ?? pick("pilot")) : pick("pilot")) ?? slots.map(x => x.actorId && game.actors?.get?.(x.actorId)).find(Boolean) ?? null;
   }
+  const roundKey = () => `${game.combat?.id ?? "-"}:${game.combat?.round ?? 0}`;
+  // Roll All / Roll NPCs never open the dialog (Combat5e.rollInitiative → Combatant5e#getInitiativeRoll → the vehicle's own
+  // +0 roll, no preRollD20TestV2) — review C22. One guarded wrap on the combatant's getInitiativeRoll hands a boarded rig's
+  // initiative to its pilot's own roll; the dialog path (rollInitiativeDialog) caches its roll on the actor first and is
+  // left alone (it is swapped in the preRollD20TestV2 hook below).
+  function installInitiativeWrap() {
+    const proto = CONFIG.Combatant?.documentClass?.prototype;
+    if (!proto || typeof proto.getInitiativeRoll !== "function" || proto.getInitiativeRoll._bbttccRig) return;
+    const orig = proto.getInitiativeRoll;
+    const wrapped = function (formula) {
+      try {
+        const rig = baseActor(this.actor);
+        if (rig && rig.type === "vehicle" && isRig(rig) && !rig._cachedInitiativeRoll) {
+          const st = crewRoller(rig, "initiative");
+          if (st && st.id !== rig.id && typeof st.getInitiativeRoll === "function") { const r = st.getInitiativeRoll(); if (r) return r; }
+        }
+      } catch (e) { console.warn(TAG, "rig initiative swap failed", e); }
+      return orig.call(this, formula);
+    };
+    wrapped._bbttccRig = true;
+    proto.getInitiativeRoll = wrapped;
+  }
   function installCrewRolls() {
+    installInitiativeWrap();
     Hooks.on("dnd5e.preRollD20TestV2", (config, _dialog, message) => {
       try {
         const subject = config?.subject;
         const isActivity = !!subject?.item && !!subject?.actor;
         const rig = baseActor(isActivity ? subject.actor : subject);
         if (!rig || rig.type !== "vehicle" || !isRig(rig)) return;
-        const kind = isActivity ? "attack" : (config.skill ? "skill" : "check");
+        const names = (config.hookNames ?? []).map(String);
+        const isInit = names.includes("initiativeDialog");
+        const kind = isActivity ? "attack" : isInit ? "initiative" : (config.skill ? "skill" : "check");
         const st = crewRoller(rig, kind);
         if (!st || st.id === rig.id) return;
-        const ability = config.ability ?? config.rolls?.[0]?.data?.roll?.ability ?? (isActivity ? "dex" : null);
+        const ability = isInit ? (st.system?.attributes?.init?.ability || CONFIG.DND5E?.defaultAbilities?.initiative || "dex")
+          : (config.ability ?? config.rolls?.[0]?.data?.roll?.ability ?? (isActivity ? "dex" : null));
         const abil = st.system?.abilities?.[ability];
         let mod = Number(abil?.mod) || 0, prof = null;
         if (kind === "attack") {
@@ -762,8 +882,15 @@
         } else if (kind === "skill") {
           const sk = st.system?.skills?.[config.skill];
           if (sk) { mod = Number(sk.mod) || mod; if (sk.prof?.hasProficiency) prof = sk.prof.term; }
+        } else if (kind === "initiative") {
+          // the pilot's own initiative numbers (C22): their init ability mod + initiative proficiency (Alert / JoaT)
+          const init = st.system?.attributes?.init;
+          mod = Number(init?.mod ?? abil?.mod) || 0;
+          if (init?.prof?.hasProficiency) prof = init.prof.term;
         } else {
-          const t = config.hookNames?.includes?.("save") ? "save" : "check";
+          // dnd5e 6.0.5 Actor5e#rollD20Test: hookNames = [..., "SavingThrow" | "AbilityCheck", "d20Test"] — the string
+          // "save" is never there, so saves took the pilot's CHECK proficiency (review C21).
+          const t = names.some(h => /SavingThrow|^save$/i.test(h)) ? "save" : "check";
           if (abil?.[t]?.prof?.hasProficiency) prof = abil[t].prof.term;
         }
         for (const r of config.rolls ?? []) {
@@ -780,6 +907,31 @@
         }
         if (message) { message.data ??= {}; const f = message.data.flavor ?? ""; if (!/at the controls|aims/.test(f)) message.data.flavor = `${f}${f ? " · " : ""}${st.name} ${kind === "attack" ? "aims" : "at the controls"}`; }
       } catch (e) { console.warn(TAG, "crew roll swap failed", e); }
+    });
+    // review C24: the hit-and-run gate must see EVERY rig shot (sheet, item card, dock, bar) from any seat — the attack
+    // card (dnd5e 6: message.type "attack") is the one thing all paths share. The active GM stamps the rig's
+    // flags.bbttcc-factions.combat.fired = "<combat>:<round>"; rigs-dnd5e.actions reads it next to its local gate.
+    Hooks.on("createChatMessage", (msg) => {
+      try {
+        if (!game.user?.isGM || game.users?.activeGM?.id !== game.user.id) return;
+        if (msg?.type !== "attack" && msg?.flags?.dnd5e?.roll?.type !== "attack") return;
+        const rig = game.actors?.get?.(String(msg.speaker?.actor ?? ""));
+        if (!rig || !isRig(rig)) return;
+        const key = roundKey();
+        if (rig.flags?.[SCOPE]?.combat?.fired !== key) rig.update({ [`flags.${SCOPE}.combat.fired`]: key }).catch(() => {});
+      } catch (_e) {}
+    });
+    // review C17: heat (stomp +1 / vent −1 −2, rigs-dnd5e.actions) and the fired stamp clear when the fight ends — nothing
+    // ever lowered heat between combats, so a Space Marine that stomped four times was overheated for good.
+    Hooks.on("deleteCombat", async () => {
+      try {
+        if (!game.user?.isGM || game.users?.activeGM?.id !== game.user.id) return;
+        for (const rig of list()) {
+          const c = rig.flags?.[SCOPE]?.combat ?? {};
+          if (!(Number(c.heat) > 0) && !c.fired) continue;
+          await rig.update({ [`flags.${SCOPE}.combat.heat`]: 0, [`flags.${SCOPE}.combat.fired`]: null });
+        }
+      } catch (e) { console.warn(TAG, "combat-end rig sweep failed", e); }
     });
   }
 
@@ -810,12 +962,13 @@
 
     Object.assign(Rg.impl, {
       setRollAs, crewRoller,   // crew rolls (2026-10-31)
-      board, disembark, park, deploy, destroy, restore, outputFor, applyTurnOutput, setState, applyFrame, applyTemplate,
-      ORDERS, CHANNELS,
+      board, disembark, park, deploy, destroy, restore, outputFor, outputPreview, describeOutput, applyTurnOutput, setState, applyFrame, applyTemplate,
+      CHANNELS,
       // helpers the sheet / actions files lean on
-      ensure, rigOf, healCrew, baseActor, frameOf, runOrder, migrateLegacyRigs, creditFaction,
+      ensure, rigOf, healCrew, baseActor, frameOf, migrateLegacyRigs, sweepOrphanCrew, forceUnboard,
     });
+    Rg.outputPreview = outputPreview;   // the 5E Domain tab reads game.bbttcc.rigs.outputPreview (C63), as on RFI
     migrateLegacyRigs().catch(e => console.warn(TAG, "legacy migration failed", e));
-    console.log(TAG, "dnd5e rig runtime registered on game.bbttcc.rigs.impl (state machine · output/orders · boarding · HUD · frames · damage hooks · migration)");
+    console.log(TAG, "dnd5e rig runtime registered on game.bbttcc.rigs.impl (state machine · RFI output math · boarding + orphan sweep · HUD · frames · crew rolls · damage hooks · migration)");
   });
 })();

@@ -666,7 +666,8 @@ function _registerOps() {
                                 mergeDefenses = null, conditions = [], integrityCap = 0, ownerUserId = "", ownerKey = "" }) => {
     const shared = ownerKey ? { ownerKey } : {};   // a class's shared foe (group induction Phase 1)
     const scene = game.scenes?.get?.(String(sceneId || ""));
-    const pack = game.packs?.get?.(String(packId));
+    // Through the pack seam: on dnd5e the RFI npcs pack isn't registered — its twin is bad-eden-5e.monsters (review C33).
+    const pack = game.bbttcc?.packs?.get?.(String(packId)) ?? game.packs?.get?.(String(packId));
     if (!scene || !pack || !actorName) return null;
     try {
       const idx = pack.index.find(e => e.name === actorName);
@@ -1169,7 +1170,8 @@ function _registerOps() {
     // any name that misses the compendium is skipped, never fatal.
     if (loadout && (loadout.weapons?.length || loadout.systems?.length)) {
       try {
-        const pack = game.packs?.get?.("bbttcc-master-content.items");
+        // Through the pack seam (bad-eden-5e.gear on dnd5e) — the training gun-truck came with no guns there (review C33).
+        const pack = game.bbttcc?.packs?.get?.("bbttcc-master-content.items") ?? game.packs?.get?.("bbttcc-master-content.items");
         const idx = pack ? await pack.getIndex() : null;
         const toCreate = [];
         for (const nm of [...(loadout.weapons ?? []), ...(loadout.systems ?? [])]) {

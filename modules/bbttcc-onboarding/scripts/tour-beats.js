@@ -37,7 +37,7 @@ const TOUR_OFFERS = {
   },
   driving: {
     tour: "rig-sheet",
-    skipIf: () => globalThis.game?.system?.id === "dnd5e",   // the RFI rig sheet's tour; D&D rigs use the bbttcc rig sheet
+    skipIf: () => globalThis.game?.system?.id === "dnd5e",   // in-flow offer stays RFI-only (the D&D driving beat was verified 10-31 without it); the shelf carries the D&D rig tour (tour-defs rigSheetTour5e, C59)
     prompt: "The rig has a manual. Nobody reads the manual. The manual is now a guided tour with a glowing ring — want it before you drive?",
     label: "Tour the rig",
     resume: "Manual closed. Board the rig, take the pilot seat, STEER — then put it through every wreck on the track. All of them, One. The storm can watch."
@@ -73,7 +73,9 @@ const TOUR_OFFERS = {
     tour: "market",
     prompt: "The Long Market has a manual too — buyer context, the Horizon chip, who pays versus who receives. Want the tour before you spend the stipend?",
     label: "Tour the Market",
-    resume: "Market toured. Now SHOP: buy what your training can carry, equip it on your sheet, and conclude when you're dressed for trouble."
+    resume: () => globalThis.game?.system?.id === "dnd5e"   // C60 (10-31): no training warnings on D&D — proficiency is the gate
+      ? "Market toured. Now SHOP: buy what you're proficient with, equip it on your sheet, and conclude when you're dressed for trouble."
+      : "Market toured. Now SHOP: buy what your training can carry, equip it on your sheet, and conclude when you're dressed for trouble."
   },
   travel: {
     tour: "travel-console",
@@ -305,7 +307,8 @@ Hooks.once("ready", () => {
           let took = false;
           try { took = await _offerTour(spec); } catch (e) { console.warn(TAG, "tour offer failed", e); }
           // Tours run long — restate the beat's gate so the player lands knowing their next move.
-          if (took && spec.resume) { try { await ctx.speak?.(spec.resume); } catch (_) {} }
+          const resume = typeof spec.resume === "function" ? spec.resume() : spec.resume;   // 10-31: a resume may pick its line per system
+          if (took && resume) { try { await ctx.speak?.(resume); } catch (_) {} }
         }
       }
     }));

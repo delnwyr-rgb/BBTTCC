@@ -15,11 +15,26 @@
  *     (gunner advantage AE on the rig), evasive (attacks AGAINST the rig at
  *     disadvantage via midi `grants`), aimed-shot (advantage AE + DAE 1Attack),
  *     reload / vent-heat (reset an item's uses), repair (tool check DC 15 →
- *     1d6+PB hull), brace (+1 AC, 1 rd), hold-on (temp HP), ram (bracket dice).
+ *     1d6+PB hull), brace (+1 AC, 1 rd), hold-on (temp HP), ram ((tier × bracket
+ *     weight + Piloting)d6 in contact, target damaged, recoil to the rig — RFI's),
+ *     stomp (mech: (tier × weight)d6, prone, +1 Heat), hit-and-run (small rigs,
+ *     after a shot this round: +(2 + Piloting) AC), vent-heat (pilot −1 / engineer −2).
  *   CUE — swerve, suppression, opportunity-fire, boost-system,
  *     counter-sabotage, signal (GM-adjudicated; clean chat card).
  * Frames narrow each role's list (frame.actions.<role>); frame-only entries
  * (sail variants) appear only when a frame lists them.
+ *
+ * WRITES + SECURITY (D&D port review C15/C26/C51, 2026-10-31): every write a seat
+ * can't make itself goes through gmExec "rigs.action"; the GM seat checks the
+ * socket sender owns a steward boarded on that rig, then DERIVES the numbers
+ * itself — heat from an action id (stomp +1 · vent-pilot −1 · vent-engineer −2,
+ * role-checked), the Hit-and-Run AC bonus from the steward's Piloting, a hit on a
+ * TARGET token ("hitTarget") capped by the rig's most recent damage/stomp/ram roll
+ * card, repair healing by 1d6 + PB. A player's rig hit therefore lands on tokens
+ * they don't own (it used to fail silently inside a try/catch).
+ * Heat lives at flags.bbttcc-factions.combat.heat (max 2 + tier × 2, RFI's);
+ * combat.fired = "<combat>:<round>" is stamped by the runtime on every rig attack
+ * card (the hit-and-run gate); both clear at deleteCombat.
  *
  *   REGISTERS  game.bbttcc.rigs.impl.{ openRigActions, renderRigBar,
  *              registerAction, ACTIONS }
@@ -35,7 +50,6 @@
   const baseActor = (a) => I().baseActor?.(a) ?? a;
   const subtypeOf = (item) => R()?.gearOf?.(item)?.subtype ?? "";
 
-  const RAM_DICE = { personal: "1d6", light: "2d6", medium: "4d6", heavy: "6d6", siege: "8d6" };
   const esc = (v) => foundry.utils.escapeHTML(String(v ?? ""));   // review P3 (2026-10-28): names are player-editable
 
   // review P2 (2026-10-28): a GM can board a player's steward onto a rig the
@@ -60,13 +74,20 @@
     // a D&D rig's AC is flat (bbttcc-core rigs.js AC_BY_BRACKET), so AC effects ADD to ac.flat — ac.bonus is ignored there
     "hit-and-run": { name: "Hit and Run (evading)", changes: [{ key: "system.attributes.ac.flat", mode: 2, value: "2", priority: 20 }], note: "the rig peels away — AC bonus until the pilot's next turn" },
   };
-  // RFI mech stomp: (tier × bracket weight)d6; RIG BALANCE 2026-10-21 → mecha weight 2
+  // RFI mech stomp / ram: (tier × bracket weight)d6; RIG BALANCE 2026-10-21 → mecha weight 2 (FT_RIG_BRACKET_WEIGHT)
   const BRACKET_WEIGHT = { personal: 1, light: 2, medium: 3, heavy: 4, siege: 5, mecha: 2 };
-  const heatMax = (rig) => 2 + Math.max(1, Math.min(4, Number(data(rig)?.tier) || 1)) * 2;   // RFI: T1 4 · T2 6 · T3 8 · T4 10
+  // review C16: tier lives at integrity.tier in the normalised view (data(rig).tier never existed → every rig read T1)
+  const tierOf = (rig) => Math.max(1, Math.min(4, Number(data(rig)?.integrity?.tier) || 1));   // RFI _ftRigHeatMax clamps 1..4
+  const heatMax = (rig) => 2 + tierOf(rig) * 2;   // RFI: T1 4 · T2 6 · T3 8 · T4 10
   const heatOf = (rig) => Math.max(0, Number(get(rig, "flags.bbttcc-factions.combat.heat", 0)) || 0);
-  // weapons fired this round by rig id (the hit-and-run gate; RFI keeps rigWeaponsFiredThisRound on the steward)
+  // review C17/C26: heat moves by ACTION ID, never a raw delta — the GM side derives the number and checks the role
+  const HEAT_ACTIONS = { stomp: { delta: +1, roles: ["pilot"] }, "vent-pilot": { delta: -1, roles: ["pilot"] }, "vent-engineer": { delta: -2, roles: ["engineer"] } };
+  const roleOf = (rig, st) => (data(rig)?.crew?.slots ?? []).find(s => s.actorId === st?.id)?.role ?? null;
+  // weapons fired this round: a local note for this seat's own Fire Weapon, plus the rig flag the runtime stamps on EVERY
+  // rig attack card (sheet / item card / dock / bar, any seat — review C24; RFI keeps rigWeaponsFiredThisRound)
   const _fired = new Map();
-  const firedKey = (rig) => `${rig.id}:${game.combat?.id ?? "-"}:${game.combat?.round ?? 0}`;
+  const roundKey = () => `${game.combat?.id ?? "-"}:${game.combat?.round ?? 0}`;
+  const firedThisRound = (rig) => !!_fired.get(`${rig.id}:${roundKey()}`) || get(rig, "flags.bbttcc-factions.combat.fired", null) === roundKey();
   // The write itself (runs on a seat that can modify the rig).
   async function doRigWrite(rig, op, args = {}) {
     if (op === "ae") {
@@ -95,9 +116,25 @@
       return { ok: true, value, max };
     }
     if (op === "heat") {
-      const next = Math.max(0, Math.min(heatMax(rig), heatOf(rig) + (Number(args.delta) || 0)));
+      const spec = HEAT_ACTIONS[args.action];
+      if (!spec) throw new Error(`unknown heat action "${args.action}"`);
+      const before = heatOf(rig);
+      const next = Math.max(0, Math.min(heatMax(rig), before + spec.delta));
       await rig.update({ "flags.bbttcc-factions.combat.heat": next });
-      return { ok: true, heat: next, max: heatMax(rig) };
+      return { ok: true, before, heat: next, max: heatMax(rig) };
+    }
+    if (op === "damage") {   // recoil to the rig itself (ram) — dnd5e applyDamage honours the hull's damage threshold
+      const amount = Math.max(0, Math.floor(Number(args.amount) || 0));
+      if (amount) await rig.applyDamage([{ value: amount, type: String(args.type || "bludgeoning") }]);
+      return { ok: true, applied: amount };
+    }
+    if (op === "hitTarget") {   // review C51: the rig's hit lands on a token the firing seat doesn't own
+      const doc = await fromUuid(String(args.targetUuid ?? ""));
+      const actor = doc?.actor ?? (doc instanceof Actor ? doc : null);
+      if (!actor) throw new Error("target not found");
+      const amount = Math.max(0, Math.floor(Number(args.amount) || 0));
+      if (amount) await actor.applyDamage([{ value: amount, type: String(args.type || "bludgeoning") }]);
+      return { ok: true, applied: amount, target: actor.name };
     }
     if (op === "resetUses") {
       const it = rig.items?.get?.(args.itemId);
@@ -121,22 +158,79 @@
       return { ok: false, error: String(e?.message ?? e) };
     }
   }
-  // GM side: the sender must own a steward that is boarded on this rig.
+  // The ceiling a player-side damage claim may reach: the rig's most recent damage / stomp / ram roll card (30 s).
+  function recentRigRollCap(rig) {
+    const since = Date.now() - 30000;
+    let cap = 0;
+    for (const m of (game.messages?.contents ?? []).slice(-60)) {
+      if (m.timestamp < since || String(m.speaker?.actor ?? "") !== rig.id || !m.rolls?.length) continue;
+      const isDamage = m.type === "damage" || m.flags?.dnd5e?.roll?.type === "damage" || !!m.flags?.bbttcc?.rigRoll;
+      if (!isDamage) continue;
+      cap = Math.max(cap, ...m.rolls.map(r => Number(r.total) || 0));
+    }
+    return cap;
+  }
+  // GM side: the sender must own a steward that is boarded on this rig; the numbers are derived HERE (review C26/C51).
   async function rigsActionHandler(payload = {}, meta = {}) {
     const user = game.users?.get?.(meta.fromUserId);
     const rig = game.actors?.get?.(String(payload.rigId ?? ""));
     const st = game.actors?.get?.(String(payload.stewardId ?? ""));
     if (!user || !rig || !data(rig)) return { ok: false, error: "unknown rig" };
+    const op = String(payload.op ?? "");
+    let args = foundry.utils.deepClone(payload.args ?? {});
     if (!user.isGM) {
       if (!st || !st.testUserPermission?.(user, "OWNER")) return { ok: false, error: "you don't own that steward" };
       if (R()?.boardedRigOf?.(st)?.rigId !== rig.id || !(data(rig)?.crew?.slots ?? []).some(s => s.actorId === st.id)) return { ok: false, error: `${st.name} is not aboard ${rig.name}` };
-      if (payload.op === "heal") {   // clamp to the action's own ceiling (1d6 + PB)
+      const role = roleOf(rig, st);
+      if (op === "heal") {   // clamp to the action's own ceiling (1d6 + PB)
         const pb = Number(get(st, "system.attributes.prof", 2)) || 2;
-        payload.args = { amount: Math.min(Number(payload.args?.amount) || 0, 6 + pb) };
+        args = { amount: Math.min(Number(args.amount) || 0, 6 + pb) };
+      } else if (op === "heat") {   // the delta comes from the action id and the steward's seat, never the payload
+        const spec = HEAT_ACTIONS[args.action];
+        if (!spec) return { ok: false, error: "unknown heat action" };
+        if (!spec.roles.includes(role)) return { ok: false, error: `${st.name} is ${role ?? "unseated"} — ${args.action} needs the ${spec.roles.join("/")}` };
+        args = { action: args.action };
+      } else if (op === "ae" && args.key === "hit-and-run") {   // the AC bonus is recomputed from the steward's Piloting
+        if (role !== "pilot") return { ok: false, error: `${st.name} isn't the pilot` };
+        args = { key: "hit-and-run", bonus: 2 + Math.max(0, Number(get(st, "system.skills.pil.total", 0)) || 0) };
+      } else if (op === "hitTarget" || op === "damage") {   // capped by the rig's own most recent damage/stomp/ram card
+        const cap = recentRigRollCap(rig);
+        if (!cap) return { ok: false, error: "no recent rig damage roll to apply" };
+        args = { ...args, amount: Math.min(Math.max(0, Math.floor(Number(args.amount) || 0)), cap) };
       }
     }
-    try { return await doRigWrite(rig, String(payload.op ?? ""), payload.args ?? {}); }
+    try { return await doRigWrite(rig, op, args); }
     catch (e) { return { ok: false, error: String(e?.message ?? e) }; }
+  }
+  // A hit on a TARGET token: local when this seat can modify it, else through the relay (review C51 — the player gunner's
+  // applyDamage on a hostile token was refused and swallowed; the cue still said "hit for N"). Returns {ok}.
+  async function applyHit(rig, st, tgt, amount, type = "bludgeoning") {
+    const actor = tgt?.actor;
+    amount = Math.max(0, Math.floor(Number(amount) || 0));
+    if (!actor || !amount) return { ok: false, error: "nothing to apply" };
+    try {
+      if (actor.canUserModify?.(game.user, "update")) { await actor.applyDamage([{ value: amount, type }]); return { ok: true, applied: amount, local: true }; }
+      const gx = game.bbttcc?.api?.gmExec;
+      if (!gx?.call) throw new Error("no GM relay available");
+      const res = await gx.call("rigs.action", { rigId: rig.id, stewardId: st?.id ?? null, op: "hitTarget", args: { targetUuid: tgt.document?.uuid ?? tgt.uuid, amount, type } });
+      if (res?.ok === false) throw new Error(res.error || "refused");
+      return res;
+    } catch (e) {
+      console.warn(TAG, "rig hit didn't land", e);
+      ui.notifications?.warn?.(`${tgt.name}: the ${amount} damage didn't land — ${e?.message ?? e}. GM: apply it by hand.`);
+      return { ok: false, error: String(e?.message ?? e) };
+    }
+  }
+  // Contact gate shared by Ram and Stomp (RFI: edge-to-edge, one square; the GM may proceed with a warning).
+  function inContact(rig, tgt, what) {
+    const rt = rig.getActiveTokens()[0];
+    if (!rt || !tgt?.document) return true;
+    const gap = Math.hypot(rt.center.x - tgt.center.x, rt.center.y - tgt.center.y) / canvas.grid.size - (rt.document.width + tgt.document.width) / 2;
+    if (gap <= 1.01) return true;
+    const msg = `${tgt.name} isn't in contact — a ${what} needs the target within a square.`;
+    if (!game.user.isGM) { ui.notifications?.warn?.(msg); return false; }
+    ui.notifications?.warn?.(`${msg} Proceeding (GM's call).`);
+    return true;
   }
 
   // ── Appliers ───────────────────────────────────────────────────────────────
@@ -186,7 +280,7 @@
     const id = ws.length === 1 ? ws[0].id : await pickOne("Fire which weapon?", ws.map(w => ({ id: w.id, label: w.name })));
     const w = ws.find(x => x.id === id);
     if (!w) return;
-    _fired.set(firedKey(rig), true);   // the hit-and-run gate: a shot was taken this round
+    _fired.set(`${rig.id}:${roundKey()}`, true);   // the hit-and-run gate (local note; the runtime also stamps the rig flag)
     // RFI parity (2026-10-31): the GUNNER aims the gun. A dnd5e vehicle has no proficiency and Dex 10, so the roll
     // carries the firing steward's ranged attack bonus (Dex mod + proficiency with Firearms) instead of the rig's.
     const act = w.system.activities?.find?.(a => a.type === "attack") ?? w.system.activities?.contents?.[0];
@@ -212,9 +306,34 @@
     if (!hit) return cue(rig, st, `🔫 ${esc(w.name)}`, [`${esc(st?.name ?? "Gunner")} fires at ${esc(tgt.name)}: <b>${atk.total}</b> vs AC ${ac} — <b>miss</b>.`]);
     const dmg = (await act.rollDamage({ isCritical: atk.isCritical }, { configure: false }, {}))?.[0];
     const total = dmg?.total ?? 0;
-    try { await tgt.actor.applyDamage([{ value: total, type: dmg?.options?.type ?? "piercing" }]); } catch (_e) {}
+    const landed = await applyHit(rig, st, tgt, total, dmg?.options?.type ?? "piercing");   // C51: through the GM relay when needed
     try { await new Sequence().effect().file("jb2a.impact").atLocation(tgt).scale(0.6).play(); } catch (_e) {}
-    await cue(rig, st, `🔫 ${esc(w.name)}`, [`${esc(st?.name ?? "Gunner")} fires at ${esc(tgt.name)}: <b>${atk.total}</b> vs AC ${ac} — <b>hit</b> for <b>${total}</b>${atk.isCritical ? " (critical!)" : ""}.${bonus ? ` <span style="opacity:.7">(+${bonus} = Dex ${dex >= 0 ? "+" : ""}${dex}${prof ? ` + prof ${prof}` : ""})</span>` : ""}`]);
+    await cue(rig, st, `🔫 ${esc(w.name)}`, [`${esc(st?.name ?? "Gunner")} fires at ${esc(tgt.name)}: <b>${atk.total}</b> vs AC ${ac} — <b>hit</b> for <b>${total}</b>${atk.isCritical ? " (critical!)" : ""}${landed?.ok === false ? " <b>(not applied — see the warning)</b>" : ""}.${bonus ? ` <span style="opacity:.7">(+${bonus} = Dex ${dex >= 0 ? "+" : ""}${dex}${prof ? ` + prof ${prof}` : ""})</span>` : ""}`]);
+  }
+
+  // RFI vent-heat (review C17): the dnd5e vent only reset an item's uses and never touched the heat flag, so a mech that
+  // stomped to its cap was overheated for good. Engineer −2 / pilot −1, weapons re-arm when it drops below the cap; the
+  // uses reset stays as the second half of the action.
+  async function ventHeat(rig, st) {
+    const role = roleOf(rig, st);
+    const lines = [];
+    const h = heatOf(rig), hm = heatMax(rig);
+    if (h > 0 && (role === "engineer" || role === "pilot")) {
+      const res = await rigWrite(rig, st, "heat", { action: role === "engineer" ? "vent-engineer" : "vent-pilot" });
+      if (res?.ok !== false) {
+        const next = Number(res?.heat ?? Math.max(0, h + HEAT_ACTIONS[role === "engineer" ? "vent-engineer" : "vent-pilot"].delta));
+        lines.push(`Heat <b>${h} → ${next}</b> / ${hm} <span style="opacity:.7">(${role === "engineer" ? "Engineer −2" : "Pilot −1"})</span>.${next >= hm ? " Still overheated." : (h >= hm ? " <b>Weapons re-armed</b>." : "")}`);
+        try { await new Sequence().effect().file("jb2a.smoke.puff.side.02.white").atLocation(rig.getActiveTokens()[0]).scaleToObject(1.4).play(); } catch (_e) {}
+      }
+    } else if (h > 0) lines.push(`Only the pilot or engineer can vent heat (${esc(st?.name ?? "this crew member")} is ${esc(role ?? "unseated")}). Heat ${h}/${hm}.`);
+    const its = [...weaponsOf(rig), ...systemsOf(rig)].filter(i => Number(get(i, "system.uses.spent", 0)) > 0);
+    if (its.length) {
+      const id = await pickOne("Cycle which system?", its.map(i => ({ id: i.id, label: i.name })));
+      const it = its.find(x => x.id === id);
+      if (it && (await rigWrite(rig, st, "resetUses", { itemId: it.id }))?.ok !== false) lines.push(`${esc(it.name)} cycled — uses restored.`);
+    }
+    if (!lines.length) lines.push("Nothing is overheated or spent.");
+    await cue(rig, st, "🌬 Vent Heat", lines);
   }
 
   // ── The registry (canon §3.6) — handler(rig, steward); falsy = pure cue ────
@@ -222,14 +341,28 @@
     pilot: [
       { id: "steer", type: "action", label: "Steer", desc: "Move the rig up to its speed (drag the token; travel speed on the sheet sidebar).",
         handler: async (rig, st) => cue(rig, st, "Steer", [`Move up to the rig's speed. <em>In combat: drag the token; overland: ${data(rig)?.travel?.speed ?? 1} hex/turn.</em>`]) },
-      { id: "ram", type: "action", label: "Ram", desc: "Charge into a target — collision damage scales with the rig's bracket.",
+      // RFI ram (review C19): (tier × bracket weight + Piloting)d6 on a target in contact, applied; the rig takes half back —
+      // or 3 × Threshold when it rams a structure (a flimsy shack scuffs the paint, a stone wall bites).
+      { id: "ram", type: "action", label: "Ram", desc: "Charge into a target in contact: (tier × bracket weight + Piloting)d6 bludgeoning; the rig takes half back (3 × Threshold against a structure).",
         handler: async (rig, st) => {
+          const tgt = [...(game.user.targets ?? [])][0];
+          if (!tgt?.actor) return ui.notifications?.warn?.("Target a token first (the ram needs an objective).");
+          if (!inContact(rig, tgt, "ram")) return;
           const bracket = data(rig)?.integrity?.bracket ?? "light";
-          const dice = RAM_DICE[bracket] ?? "2d6";
-          const r = await new Roll(dice).evaluate();
-          await r.toMessage({ speaker: ChatMessage.getSpeaker({ actor: rig }), flavor: `Ram — ${bracket} bracket collision` });
-          await cue(rig, st, "Ram", [`Collision: <b>${r.total}</b> bludgeoning to the rammed target (GM applies; structures/objects take full).`,
-            `<em>The rig takes half (${Math.floor(r.total / 2)}) on a solid impact — GM's call by target.</em>`]);
+          const tier = tierOf(rig), weight = BRACKET_WEIGHT[bracket] ?? 3;
+          const pil = Math.max(0, Number(get(st, "system.skills.pil.total", 0)) || 0);
+          const dice = Math.max(1, tier * weight) + pil;
+          const r = await new Roll(`${dice}d6`).evaluate();
+          await r.toMessage({ speaker: ChatMessage.getSpeaker({ actor: rig }), flavor: `💥 Ram — ${esc(tgt.name)} · ${dice}d6 (${esc(bracket)} ×${weight} × T${tier}${pil ? ` + Piloting ${pil}` : ""})`, flags: { bbttcc: { rigRoll: "ram" } } });
+          const dmg = Math.max(1, Number(r.total) || 1);
+          const isStruct = !!tgt.actor.flags?.["bbttcc-structures"]?.hasStructure;
+          const threshold = isStruct ? (Number(tgt.actor.getFlag?.("bbttcc-structures", "threshold")) || 0) : 0;
+          const self = isStruct ? Math.max(0, Math.round(threshold * 3)) : Math.max(1, Math.floor(dmg / 2));
+          const landed = await applyHit(rig, st, tgt, dmg, "bludgeoning");
+          if (self > 0) await rigWrite(rig, st, "damage", { amount: self, type: "bludgeoning" });
+          try { const rt = rig.getActiveTokens()[0]; if (rt) await new Sequence().effect().file("jb2a.impact.ground_crack.orange.01").atLocation(tgt).scaleToObject(1.6).belowTokens().play(); } catch (_e) {}
+          await cue(rig, st, "💥 Ram", [`<b>${dmg}</b> bludgeoning to ${esc(tgt.name)}${landed?.ok === false ? " <b>(not applied — see the warning)</b>" : ""}.`,
+            isStruct ? (self > 0 ? `Recoil <b>${self}</b> to ${esc(rig.name)} (Threshold ${threshold}).` : "No recoil — a flimsy structure.") : `Feedback <b>${self}</b> to ${esc(rig.name)} (half).`]);
         } },
       { id: "hold-position", type: "action", label: "Hold Position", desc: "Steady the rig — gunners gain advantage on attacks until your next turn.",
         handler: async (rig, st) => {
@@ -250,7 +383,7 @@
         handler: async (rig, st) => {
           const bracket = data(rig)?.integrity?.bracket ?? "light";
           if (!["personal", "light"].includes(bracket)) return ui.notifications?.warn?.(`${rig.name} is too big to hit and run — that's for personal and light rigs.`);
-          if (game.combat?.started && !_fired.get(firedKey(rig))) return ui.notifications?.warn?.(`${st?.name ?? "Pilot"}: fire a weapon first — hit and run peels away AFTER the shot.`);
+          if (game.combat?.started && !firedThisRound(rig)) return ui.notifications?.warn?.(`${st?.name ?? "Pilot"}: fire a weapon first — hit and run peels away AFTER the shot.`);
           if ((rig.effects ?? []).some(e => /Hit and Run|Evasive/.test(e.name))) return ui.notifications?.warn?.(`${rig.name} is already evading — peeling away would add nothing.`);
           const pil = Number(get(st, "system.skills.pil.total", 0)) || 0;
           const bonus = 2 + Math.max(0, pil);
@@ -264,17 +397,19 @@
           if (h >= hm) return ui.notifications?.warn?.(`${rig.name} is overheated (${h}/${hm}) — vent heat before stomping.`);
           const tgt = [...(game.user.targets ?? [])][0];
           if (!tgt?.actor) return ui.notifications?.warn?.("Target a token first — a stomp needs something underfoot.");
-          const rt = rig.getActiveTokens()[0];
-          if (rt) { const gap = Math.hypot(rt.center.x - tgt.center.x, rt.center.y - tgt.center.y) / canvas.grid.size - (rt.document.width + tgt.document.width) / 2; if (gap > 1.01 && !game.user.isGM) return ui.notifications?.warn?.(`${tgt.name} isn't in contact — a stomp needs the target within a square.`); }
-          const tier = Math.max(1, Number(data(rig)?.tier) || 1), weight = BRACKET_WEIGHT[data(rig)?.integrity?.bracket] ?? 3;
+          if (!inContact(rig, tgt, "stomp")) return;
+          const tier = tierOf(rig), weight = BRACKET_WEIGHT[data(rig)?.integrity?.bracket] ?? 3;   // C16: integrity.tier (a T4 Titan stomped 2d6)
           const r = await new Roll(`${Math.max(1, tier * weight)}d6`).evaluate();
-          await r.toMessage({ speaker: ChatMessage.getSpeaker({ actor: rig }), flavor: `Stomp — ${tgt.name}` });
-          try { await tgt.actor.applyDamage([{ value: r.total, type: "bludgeoning" }]); } catch (_e) {}
+          await r.toMessage({ speaker: ChatMessage.getSpeaker({ actor: rig }), flavor: `🦶 Stomp — ${esc(tgt.name)} · ${Math.max(1, tier * weight)}d6`, flags: { bbttcc: { rigRoll: "stomp" } } });
+          const landed = await applyHit(rig, st, tgt, r.total, "bludgeoning");   // C51
           if (!["vehicle"].includes(tgt.actor.type) && !tgt.actor.statuses?.has?.("prone")) { try { await tgt.actor.toggleStatusEffect("prone", { active: true }); } catch (_e) {} }
           try { await new Sequence().effect().file("jb2a.impact.ground_crack.orange.01").atLocation(tgt).scaleToObject(2.2).belowTokens().play(); } catch (_e) {}
-          await rigWrite(rig, st, "heat", { delta: 1 });
-          await cue(rig, st, "🦶 Stomp", [`<b>${r.total}</b> bludgeoning to ${esc(tgt.name)} — knocked <b>prone</b>. Heat ${heatOf(rig)}/${hm}.`]);
+          const heat = await rigWrite(rig, st, "heat", { action: "stomp" });
+          await cue(rig, st, "🦶 Stomp", [`<b>${r.total}</b> bludgeoning to ${esc(tgt.name)}${landed?.ok === false ? " <b>(not applied — see the warning)</b>" : ""} — knocked <b>prone</b>. Heat ${heat?.heat ?? heatOf(rig)}/${hm}.`]);
         } },
+      // RFI vent-heat: the pilot can vent too (−1, emergency cooling) — mech frames list it for the pilot (review C17).
+      { id: "vent-heat", type: "bonus", frameOnly: true, label: "Vent Heat", desc: "Emergency cooling — lower the rig's heat by 1 (the engineer vents 2).",
+        handler: async (rig, st) => ventHeat(rig, st) },
       // Sail variants — only surfaced when an equipped frame lists them.
       { id: "tack-against-wind", type: "action", frameOnly: true, label: "Tack Against the Wind", desc: "Move + the rig gains reach advantage against downwind targets (GM adjudicates the wind)." },
       { id: "raise-sail", type: "bonus", frameOnly: true, label: "Raise Sail", desc: "Shift to speed mode — faster, harder to turn (GM applies the trade).",
@@ -325,14 +460,8 @@
           if (!(await rigAE(rig, st, "boost-system"))) return;
           await cue(rig, st, "Boost System", ["One system runs hot until end of round — +1 effect step (GM applies)."]);
         } },
-      { id: "vent-heat", type: "bonus", label: "Vent Heat / Cycle Power", desc: "Reset a weapon or system's cooldown/uses.",
-        handler: async (rig, st) => {
-          const its = [...weaponsOf(rig), ...systemsOf(rig)].filter(i => Number(get(i, "system.uses.spent", 0)) > 0);
-          if (!its.length) return cue(rig, st, "Vent Heat", ["Nothing is overheated or spent."]);
-          const id = await pickOne("Cycle which system?", its.map(i => ({ id: i.id, label: i.name })));
-          const it = its.find(x => x.id === id);
-          if (it && (await rigWrite(rig, st, "resetUses", { itemId: it.id }))?.ok !== false) await cue(rig, st, "Vent Heat", [`${esc(it.name)} cycled — uses restored.`]);
-        } },
+      { id: "vent-heat", type: "bonus", label: "Vent Heat / Cycle Power", desc: "Lower the rig's heat (engineer −2, pilot −1) and reset a spent weapon or system's uses.",
+        handler: async (rig, st) => ventHeat(rig, st) },
       { id: "counter-sabotage", type: "reaction", label: "Counter-Sabotage", desc: "Cancel a hostile boarding or sabotage attempt (contested check — GM adjudicates)." },
     ],
     crew: [

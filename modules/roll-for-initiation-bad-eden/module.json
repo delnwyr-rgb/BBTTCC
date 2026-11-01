@@ -2,7 +2,7 @@
   "id": "roll-for-initiation-bad-eden",
   "title": "Roll For Initiation – Bad Eden",
   "description": "<p><strong>Bad Eden</strong>, the Roll For Initiation campaign engine, as one install: enable this module and every part of Bad Eden (factions, territory, raids, travel, the Director, Tikkun, the Mal voice, the content packs) is pulled in with it. Plays on the Roll For Initiation system (<code>fourththing</code>) and, with the Bad Eden 5E parts, on D&amp;D 5E (<code>dnd5e</code> 6+).</p>",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "compatibility": {
     "minimum": "13",
     "verified": "14"
@@ -136,6 +136,14 @@
         "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-master-content.module.json"
       },
       {
+        "id": "bbttcc-onboarding",
+        "type": "module",
+        "compatibility": {
+          "minimum": "0.5.0"
+        },
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-onboarding.module.json"
+      },
+      {
         "id": "bbttcc-radiation",
         "type": "module",
         "compatibility": {
@@ -205,7 +213,7 @@
         "id": "bad-eden-5e",
         "type": "module",
         "compatibility": {
-          "minimum": "0.4.0"
+          "minimum": "0.7.0"
         },
         "reason": "Bad Eden 5E (dnd5e) only",
         "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bad-eden-5e.module.json"
@@ -220,13 +228,13 @@
         "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-epic.module.json"
       },
       {
-        "id": "bbttcc-onboarding",
+        "id": "dnd5e-hybrid-guard",
         "type": "module",
         "compatibility": {
-          "minimum": "0.4.0"
+          "minimum": "1.0.0"
         },
-        "reason": "Roll For Initiation (fourththing) only",
-        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/bbttcc-onboarding.module.json"
+        "reason": "Bad Eden 5E (dnd5e) only",
+        "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/dnd5e-hybrid-guard.module.json"
       },
       {
         "id": "dnd5e-table-kit",
@@ -241,7 +249,7 @@
         "id": "surge-powers",
         "type": "module",
         "compatibility": {
-          "minimum": "1.2.0"
+          "minimum": "1.3.1"
         },
         "reason": "Bad Eden 5E (dnd5e) only",
         "manifest": "https://github.com/delnwyr-rgb/BBTTCC/releases/latest/download/surge-powers.module.json"
@@ -279,15 +287,16 @@
         "bbttcc-tikkun",
         "bbttcc-travel",
         "bbttcc-world",
+        "dnd5e-hybrid-guard",
         "dnd5e-table-kit",
         "surge-powers"
       ],
       "rfiOnly": [
-        "bbttcc-epic",
-        "bbttcc-onboarding"
+        "bbttcc-epic"
       ],
       "dnd5eOnly": [
         "bad-eden-5e",
+        "dnd5e-hybrid-guard",
         "dnd5e-table-kit",
         "surge-powers"
       ]

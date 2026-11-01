@@ -120,9 +120,12 @@ function _actorMine(user, actor, _depth = 0) {
   // 10-29: the faction the sender's own Steward is bound to
   if (user?.character && user.character.getFlag?.("bbttcc-factions", "factionId") === actor.id) return true;
   // 10-29: a rig is the sender's when its owning faction is (ensureOwned re-grants a lost rig grant)
-  if (actor.type === "rig" && _depth === 0) {
-    const fid = actor.getFlag?.("fourththing", "factionOwnerId") || actor.system?.identity?.factionOwnerId;
-    const f = fid ? game.actors?.get?.(String(fid)) : null;
+  // Through game.bbttcc.rigs so a D&D rig (a `vehicle` with flags.bbttcc-factions.rig) resolves too (review C62).
+  const R = game.bbttcc?.rigs;
+  const isRig = R?.isRig ? R.isRig(actor) : actor.type === "rig";
+  if (isRig && _depth === 0) {
+    const fid = (R?.ownerOf ? R.ownerOf(actor) : "") || actor.getFlag?.("fourththing", "factionOwnerId") || actor.system?.identity?.factionOwnerId;
+    const f = fid ? game.actors?.get?.(String(fid).replace(/^Actor\./, "")) : null;
     if (f && !_spawned(f) && _actorMine(user, f, 1)) return true;
   }
   // a faction is the sender's when its roster holds a character they own

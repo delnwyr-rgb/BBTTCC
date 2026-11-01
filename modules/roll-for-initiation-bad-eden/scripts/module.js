@@ -4,9 +4,11 @@
  * Bad Eden ships as ~25 modules. This one carries no engine of its own: its
  * manifest `requires` every shared part (Foundry enables them with it and, once
  * the parts have manifest/download URLs, installs them with it) and `recommends`
- * the system-specific ones — bbttcc-epic / bbttcc-onboarding on fourththing,
- * surge-powers / bad-eden-5e / dnd5e-table-kit on dnd5e. At ready it checks the
- * parts for the running system and tells the GM what's missing, once per world.
+ * the system-specific ones — bbttcc-epic on fourththing; surge-powers /
+ * bad-eden-5e / dnd5e-table-kit / dnd5e-hybrid-guard on dnd5e. bbttcc-onboarding
+ * is SHARED (2026-10-31): it carries the D&D landing page + Driving-Sim arc too,
+ * so it sits in `requires`, not `rfiOnly`. At ready it checks the parts for the
+ * running system and tells the GM what's missing, once per version per world.
  * ───────────────────────────────────────────────────────────────────────────── */
 const ID = "roll-for-initiation-bad-eden";
 const TAG = `[${ID}]`;

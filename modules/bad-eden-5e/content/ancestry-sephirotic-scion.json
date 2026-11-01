@@ -65,7 +65,7 @@
     {
       "slug": "sephirotic-scion-seraphic-strategic-hooks", "name": "Strategic Hooks (Seraphic)", "featType": "race", "level": 0, "requirements": "Sephirotic Scion (Seraphic)",
       "folder": "Sephirotic Scion (Seraphic)", "folderParent": "Sephirotic Scion", "img": "icons/sundries/books/book-open-turquoise.webp",
-      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>OP Edge.</strong> Your faction gains +2 Faith OP and +1 Violence OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Consecrated / Pyre-Marked / Witnessed hexes, your faction's cleansing, judgment, and pyre operations cost 1 fewer OP.</p><p><strong>Burning Witness.</strong> Once per Strategic Turn, when your faction confronts a rival faction in open negotiation, the rival must commit to one truth they would have preferred to conceal. The flame is close to the throne; lying hurts.</p>"
+      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>Domain Edge.</strong> Your faction gains +20 Faith marks and +10 Violence marks at campaign start.</p><p><strong>Hex Synergy.</strong> In Consecrated / Pyre-Marked / Witnessed hexes, your faction's cleansing, judgment, and pyre operations cost 10 fewer marks.</p><p><strong>Burning Witness.</strong> Once per Strategic Turn, when your faction confronts a rival faction in open negotiation, the rival must commit to one truth they would have preferred to conceal. The flame is close to the throne; lying hurts.</p>"
     },
     {
       "slug": "sephirotic-scion-cleansing-breath", "name": "Cleansing Breath", "featType": "race", "level": 0, "requirements": "Sephirotic Scion (Seraphic)",
@@ -82,7 +82,7 @@
     {
       "slug": "sephirotic-scion-cherubic-strategic-hooks", "name": "Strategic Hooks (Cherubic)", "featType": "race", "level": 0, "requirements": "Sephirotic Scion (Cherubic)",
       "folder": "Sephirotic Scion (Cherubic)", "folderParent": "Sephirotic Scion", "img": "icons/sundries/books/book-open-turquoise.webp",
-      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>OP Edge.</strong> Your faction gains +2 Faith OP and +1 Soft Power OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Consecrated / Warded / Gate-Adjacent hexes, your faction's diplomatic and witnessing operations gain +2 on the success check.</p><p><strong>Gate-Audit.</strong> Once per Strategic Turn, your faction may audit the movements in and out of a single hex you occupy. The GM tells you who crossed the boundary this turn, in what direction, and (if your faction rank is sufficient) with what intent.</p>"
+      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>Domain Edge.</strong> Your faction gains +20 Faith marks and +10 Soft Power marks at campaign start.</p><p><strong>Hex Synergy.</strong> In Consecrated / Warded / Gate-Adjacent hexes, your faction's diplomatic and witnessing operations gain +2 on the success check.</p><p><strong>Gate-Audit.</strong> Once per Strategic Turn, your faction may audit the movements in and out of a single hex you occupy. The GM tells you who crossed the boundary this turn, in what direction, and (if your faction rank is sufficient) with what intent.</p>"
     },
     {
       "slug": "sephirotic-scion-the-gate-knows-you", "name": "The Gate Knows You", "featType": "race", "level": 0, "requirements": "Sephirotic Scion (Cherubic)",
@@ -98,7 +98,7 @@
     {
       "slug": "sephirotic-scion-ophanic-strategic-hooks", "name": "Strategic Hooks (Ophanic)", "featType": "race", "level": 0, "requirements": "Sephirotic Scion (Ophanic)",
       "folder": "Sephirotic Scion (Ophanic)", "folderParent": "Sephirotic Scion", "img": "icons/sundries/books/book-open-turquoise.webp",
-      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>OP Edge.</strong> Your faction gains +2 Intrigue OP and +1 Violence OP at campaign start.</p><p><strong>Hex Synergy.</strong> In Battlefield / Procession / High-Traffic hexes, your faction's observation and counter-intel operations gain +2 on the success check.</p><p><strong>Turning Witness.</strong> Once per Strategic Turn, you may observe one exchange of goods, intelligence, or personnel between two rival factions within your field of influence. You learn that it happened and between whom, though not necessarily what was exchanged.</p>"
+      "description": "<p><em>Strategic Hooks (Foundry / Bad Eden)</em></p><p><strong>Domain Edge.</strong> Your faction gains +20 Intrigue marks and +10 Violence marks at campaign start.</p><p><strong>Hex Synergy.</strong> In Battlefield / Procession / High-Traffic hexes, your faction's observation and counter-intel operations gain +2 on the success check.</p><p><strong>Turning Witness.</strong> Once per Strategic Turn, you may observe one exchange of goods, intelligence, or personnel between two rival factions within your field of influence. You learn that it happened and between whom, though not necessarily what was exchanged.</p>"
     },
     {
       "slug": "sephirotic-scion-the-wheel-never-stops", "name": "The Wheel Never Stops", "featType": "race", "level": 0, "requirements": "Sephirotic Scion (Ophanic)",

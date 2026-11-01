@@ -1076,8 +1076,9 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     if (this._dndOptions) return this._dndOptions;
     const rows = async (cat) => {
       const idx = await _loadPackIndex(cat);
-      return [...(idx?.values() ?? [])].map(e => ({ name: e.displayName, score: 0 }))
-        .sort((a, b) => a.name.localeCompare(b.name));
+      // Bad Eden's own first, then the SRD — the row note promises it (review C14)
+      return [...(idx?.values() ?? [])].map(e => ({ name: e.displayName, score: 0, srd: !String(e.packKey || "").startsWith("bad-eden-5e.") }))
+        .sort((a, b) => (a.srd - b.srd) || a.name.localeCompare(b.name));
     };
     const speciesIdx = await _loadPackIndex("heritage");
     const species = [];

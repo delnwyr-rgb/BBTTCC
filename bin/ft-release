@@ -69,8 +69,10 @@ targets = [("module", pid, os.path.join(REPO_DIR, "modules", pid)) for pid in pa
 for kind, pid, d in targets:
     man = os.path.join(d, f"{kind}.json")
     if not os.path.isfile(man): print(f"!! {pid}: no {kind}.json at {d}"); sys.exit(1)
-    if pid == "bad-eden-5e" and not os.path.isfile(os.path.join(d, "packs", "classes", "CURRENT")):
-        print("!! bad-eden-5e packs not built — run node modules/bad-eden-5e/tools/build-packs.mjs first"); sys.exit(1)
+    if pid == "bad-eden-5e":   # every pack the manifest declares must be built (10-31: a pre-spells local build used to pass on classes alone)
+        unbuilt = [pk["path"] for pk in load(man).get("packs", []) if not os.path.isfile(os.path.join(d, pk["path"], "CURRENT"))]
+        if unbuilt:
+            print(f"!! bad-eden-5e packs not built ({', '.join(unbuilt)}) — run node modules/bad-eden-5e/tools/build-packs.mjs first"); sys.exit(1)
     if stamp(kind, pid, man): stamped.append(pid)
     zpath = os.path.join(work, f"{pid}.zip"); n = zip_dir(d, zpath)
     mpath = os.path.join(work, f"{pid}.{kind}.json"); save(mpath, load(man))
@@ -83,7 +85,7 @@ exists = subprocess.run(["gh", "release", "view", tag, "--repo", GH_REPO], captu
 notes = (f"Roll For Initiation – Bad Eden, release {tag}.\n\n"
          f"**Install:** Foundry → Add-on Modules → Install Module → paste `{BASE}/{FRONT}.module.json` — the front door lists every part, "
          f"so Foundry offers to install them with it. For Roll For Initiation play install the system first: Game Systems → Install System → `{BASE}/fourththing.system.json`. "
-         f"Bad Eden 5E (D&D 5E) parts: `bad-eden-5e`, `surge-powers`, `dnd5e-table-kit` (dnd5e 6+).\n\nParts: " + ", ".join(parts) + ".")
+         f"Bad Eden 5E (D&D 5E) parts: `bad-eden-5e`, `surge-powers`, `dnd5e-table-kit`, `dnd5e-hybrid-guard` (dnd5e 6+).\n\nParts: " + ", ".join(parts) + ".")
 if exists:
     r = subprocess.run(["gh", "release", "upload", tag, *assets, "--repo", GH_REPO, "--clobber"], text=True)
 else:

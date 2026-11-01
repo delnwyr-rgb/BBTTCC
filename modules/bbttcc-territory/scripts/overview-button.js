@@ -1,5 +1,5 @@
 // modules/bbttcc-territory/scripts/overview-button.js
-// Relationships mini-card + editor, Character Enlightenment control,
+// Relationships mini-card + editor,
 // floating Overview button, and "Create Faction" button.
 // NOTE: No advanceTurn fallback here — the Turn Driver owns turn execution.
 
@@ -598,130 +598,6 @@ function insertRelationsMiniCard($root, actor){
 }
 
 /* ====================================================================================
-   CHARACTER ENLIGHTENMENT (lightweight control for character sheets)
-==================================================================================== */
-const CANON_EFFECTS = {
-  sleeper:      { label:"Bad Eden: Sleeper", icon:"icons/magic/air/air-burst-spiral-blue.webp", changes:[] },
-  awakened:     { label:"Bad Eden: Awakened (+1 WIS saves)", icon:"icons/magic/perception/eye-slit-glowing-yellow.webp",
-                  changes:[{ key:"system.bonuses.abilities.save", mode:CONST.ACTIVE_EFFECT_MODES.ADD, value:"+1", priority:20 }] },
-  adept:        { label:"Bad Eden: Adept (Divine Insight)", icon:"icons/magic/perception/eye-tendrils-web-purple.webp",
-                  changes:[{ key:"flags.dnd5e.skills.rel.adv", mode:CONST.ACTIVE_EFFECT_MODES.OVERRIDE, value:"true", priority:20 },
-                           { key:"flags.dnd5e.skills.ins.adv", mode:CONST.ACTIVE_EFFECT_MODES.OVERRIDE, value:"true", priority:20 }] },
-  illuminated:  { label:"Bad Eden: Illuminated (Aura of Clarity)", icon:"icons/magic/light/explosion-star-large-orange-white.webp",
-                  changes:[], extraFlags:{ "bbttcc-character-options.enlightenment.auraClarity":true, "bbttcc-character-options.enlightenment.auraRange":10 } },
-  transcendent: { label:"Bad Eden: Transcendent (Miracle + OP Regen)", icon:"icons/magic/light/explosion-star-glow-blue-yellow.webp",
-                  changes:[], extraFlags:{ "bbttcc-character-options.enlightenment.opRegenBonus":0.10, "bbttcc-character-options.enlightenment.minorMiracles":true } },
-  qliphothic:   { label:"Bad Eden: Qliphothic", icon:"icons/magic/unholy/orb-hands-pink.webp",
-                  changes:[{ key:"system.traits.dr.value", mode:CONST.ACTIVE_EFFECT_MODES.ADD, value:"necrotic", priority:20 },
-                           { key:"flags.dnd5e.skills.itm.adv", mode:CONST.ACTIVE_EFFECT_MODES.OVERRIDE, value:"true", priority:20 }],
-                  extraFlags:{ "bbttcc-character-options.enlightenment.healingHalved":true } }
-};
-const DISPLAY_TO_CANON = {
-  unawakened:"sleeper", awakening:"sleeper",
-  seeking:"awakened", wisdom:"adept",
-  understanding:"illuminated", enlightened:"transcendent",
-  qliphothic:"qliphothic"
-};
-const DISPLAY_LEVELS = [
-  { value:"unawakened",   label:"Unawakened" },
-  { value:"awakening",    label:"Awakening" },
-  { value:"seeking",      label:"Seeking" },
-  { value:"wisdom",       label:"Wisdom" },
-  { value:"understanding",label:"Understanding" },
-  { value:"enlightened",  label:"Enlightened" },
-  { value:"qliphothic",   label:"Qliphothic (Corrupted)" }
-];
-
-function findBBTTCCPanel($root){
-  const explicit = $root.find('[data-bbttcc-panel="true"]').first();
-  if (explicit.length) return explicit;
-  const containers = $root.find('section, .card, .app, .window-content, .sheet-sidebar, .sheet-body, div, aside, article');
-  let best=null, scoreBest=0;
-  containers.each((_,el)=>{
-    const txt = (el.textContent||"").replace(/\s+/g," ").toLowerCase();
-    let score=0;
-    if (/\bbbttcc\b/.test(txt)) score+=3;
-    if (/\bradiation\b/.test(txt)) score+=2;
-    if (/\btikkun\b/.test(txt)) score+=2;
-    if (/\braid\s*xp\b/.test(txt)) score+=2;
-    if (/\bsave bbttcc\b/.test(txt)) score+=3;
-    const bbox = el.getBoundingClientRect?.() || { width:9999, height:9999 };
-    if (bbox.width < 420) score+=1;
-    if (score > scoreBest) { scoreBest=score; best=el; }
-  });
-  if (best && scoreBest>=5) return $(best);
-  if ($root.find(".sheet-sidebar").first().length) return $root.find(".sheet-sidebar").first();
-  return $root.find(".sheet-body").first().length ? $root.find(".sheet-body").first() : $root.find(".window-content").first();
-}
-
-function renderEnlightenmentControl($panel, actor){
-  const MODCO = "bbttcc-character-options";
-  const det = detectFromItems(actor);
-  const currentDisp = actor.getFlag(MODCO,"enlightenment")?.display || det.display || "";
-  const label = (DISPLAY_LEVELS.find(e=>e.value===currentDisp)?.label) || "—";
-  const select = DISPLAY_LEVELS.map(e=>`<option value="${e.value}" ${e.value===currentDisp?"selected":""}>${e.label}</option>`).join("");
-
-  const id = "bbttcc-enlightenment-control";
-  $panel.find(`#${id}`).remove();
-
-  let anchor = $panel.find('button, a').filter((_,el)=>/save bbttcc/i.test(el.textContent||"")).first();
-  if (!anchor.length) anchor = $panel.children().first();
-
-  const row = $(`
-    <div id="${id}" style="margin:.35rem 0; padding:.35rem; border:1px solid var(--color-border,#555); border-radius:8px;">
-      <div class="flexrow" style="gap:.5rem; align-items:center;">
-        <label class="flex0" style="min-width:8rem;"><strong>Enlightenment</strong></label>
-        <select class="flex1" data-role="bbttcc-enlightenment-select">${select}</select>
-        <button type="button" class="flex0" data-action="bbttcc-enlightenment-apply"><i class="fas fa-save"></i> Apply</button>
-        <small class="flex0" style="opacity:.7;">Current: ${label}</small>
-      </div>
-    </div>
-  `);
-
-  if (anchor.length) $(row).insertBefore(anchor); else $panel.prepend(row);
-
-  row.on("click",'[data-action="bbttcc-enlightenment-apply"]', async ()=>{
-    const val = String(row.find('[data-role="bbttcc-enlightenment-select"]').val()||"");
-    await setEnlightenment(actor, val);
-    actor.sheet?.render(false);
-    ui.notifications?.info?.("Enlightenment updated.");
-  });
-}
-
-function detectFromItems(actor){
-  const items = actor.items?.contents ?? actor.items ?? [];
-  const pat = /^enlightenment:\s*(.+)\b/i;
-  for (const it of items) {
-    const m = String(it.name||"").match(pat); if (!m) continue;
-    const raw = m[1].trim().toLowerCase();
-    const display = ({
-      "unawakened":"unawakened","awakening":"awakening","seeking":"seeking","wisdom":"wisdom","understanding":"understanding","enlightened":"enlightened",
-      "sleeper":"unawakened","awakened":"seeking","adept":"wisdom","illuminated":"understanding","transcendent":"enlightened","qliphothic":"qliphothic"
-    })[raw];
-    if (display) return { display, canon: DISPLAY_TO_CANON[display] };
-  }
-  return { display:"", canon:"" };
-}
-async function setEnlightenment(actor, displayValue){
-  if (!actor || actor.type!=="character") return;
-  const canon = DISPLAY_TO_CANON[displayValue] || "";
-  const MODCO = "bbttcc-character-options";
-  await actor.setFlag(MODCO, "enlightenment", { display: displayValue, level: canon });
-
-  const owned = (actor.effects ?? []).filter(e=>e.getFlag(MODCO,"enlightenment")==="owned");
-  if (owned.length) await actor.deleteEmbeddedDocuments("ActiveEffect", owned.map(e=>e.id));
-
-  if (!canon || !CANON_EFFECTS[canon]) return;
-  const spec = CANON_EFFECTS[canon];
-  const data = {
-    label:spec.label, icon:spec.icon, origin:`Actor.${actor.id}`, disabled:false,
-    changes: spec.changes ?? [],
-    flags: { [MODCO]: { enlightenment:"owned", level:canon, display:displayValue }, ...(spec.extraFlags||{}) }
-  };
-  await actor.createEmbeddedDocuments("ActiveEffect", [data]);
-}
-
-/* ====================================================================================
    ACTOR SHEET RENDER HOOK
 ==================================================================================== */
 async function onRenderActorSheet(app, html){
@@ -731,15 +607,10 @@ async function onRenderActorSheet(app, html){
 
     const $root = html instanceof jQuery ? html : $(html);
 
-    if (isFactionActor(actor)) {
-      ensureRelationsMiniCardIn($root, actor);
-      return;
-    }
-
-    if (actor.type === "character") {
-      const $panel = findBBTTCCPanel($root);
-      if ($panel?.length) renderEnlightenmentControl($panel, actor);
-    }
+    // Factions only. The character Enlightenment control that lived here was unreachable (V1 renderActorSheet,
+    // RFI panel finder, midi-shaped dnd5e keys) — bbttcc-character-options/enlightenment.js owns Enlightenment
+    // on both systems (review C61, 2026-10-31).
+    if (isFactionActor(actor)) ensureRelationsMiniCardIn($root, actor);
   } catch (e) { warn("Panel render failed", e); }
 }
 Hooks.off("renderActorSheet", onRenderActorSheet);
@@ -958,7 +829,7 @@ function _bbttccControlPanelCleanupTick(){
 Hooks.on("canvasReady", _bbttccControlPanelCleanupTick);
 Hooks.on("renderSceneControls", _bbttccControlPanelCleanupTick);
 Hooks.once("ready", () => {
-  log("Overview button cleanup + Relationships + Enlightenment + Create Faction ready.");
+  log("Overview button cleanup + Relationships + Create Faction ready.");
   _bbttccControlPanelCleanupTick();
 });
 

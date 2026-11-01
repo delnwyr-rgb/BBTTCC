@@ -325,6 +325,10 @@ const CHASSIS_STARTERS = [
       }
     }
   },
+  // D&D port review C25 (owner ruling 2026-10-31): the mecha chips used to promise charge / barrage / overcharge /
+  // bombardment / raise-shields / world-ender — action ids no system ever handled (RFI has no case for them, the dnd5e
+  // band drops them silently). Stripped; the pilot gets vent-heat (RFI: pilot −1 emergency cooling) so a solo mech can
+  // cool its own actuators.
   {
     key: "war_mech",
     label: "War Mech (Mecha · T2)",
@@ -337,7 +341,7 @@ const CHASSIS_STARTERS = [
         frame: { synthName: "War-Mech Chassis", bracket: "mecha", baseIntegrity: 60, tierStep: 14,
                  mobilityAllowed: ["mobile"], slots: { weapon: 2, system: 2, output: 0 },
                  capacity: { pilot: {min:1,max:1}, gunner: {min:0,max:2}, engineer: {min:0,max:1}, crew: {min:0,max:2} },
-                 actions: { pilot: ["steer","stomp","evasive","charge"], gunner: ["fire-weapon","aimed-shot","barrage"], engineer: ["repair","vent-heat","overcharge"], crew: ["brace","hold-on"] },
+                 actions: { pilot: ["steer","stomp","evasive","vent-heat"], gunner: ["fire-weapon","aimed-shot"], engineer: ["repair","vent-heat"], crew: ["brace","hold-on"] },
                  travel: { speed: 4, range: 10 } },
         weapons: ["Twin Autocannons", "Plasma Lance"],
         systems: ["Reinforced Plating", "Sensor Suite"]
@@ -359,7 +363,7 @@ const CHASSIS_STARTERS = [
         frame: { synthName: "Titan Chassis", bracket: "mecha", baseIntegrity: 120, tierStep: 24,
                  mobilityAllowed: ["mobile"], slots: { weapon: 3, system: 3, output: 1 },
                  capacity: { pilot: {min:1,max:2}, gunner: {min:2,max:4}, engineer: {min:1,max:2}, crew: {min:2,max:8} },
-                 actions: { pilot: ["steer","stomp","charge","evasive"], gunner: ["fire-weapon","aimed-shot","barrage","bombardment"], engineer: ["repair","overcharge","vent-heat","raise-shields"], crew: ["operate-module","brace","signal","hold-on"] },
+                 actions: { pilot: ["steer","stomp","evasive","vent-heat"], gunner: ["fire-weapon","aimed-shot"], engineer: ["repair","vent-heat"], crew: ["operate-module","brace","signal","hold-on"] },
                  travel: { speed: 3, range: 12 } },
         weapons: ["Plasma Lance", "Mortar Battery", "Twin Autocannons"],
         systems: ["Reinforced Plating", "Repair Bay", "Sensor Suite"],
@@ -385,7 +389,7 @@ const CHASSIS_STARTERS = [
         frame: { synthName: "Worldbreaker Chassis", bracket: "mecha", baseIntegrity: 200, tierStep: 40,
                  mobilityAllowed: ["mobile"], slots: { weapon: 4, system: 4, output: 1 },
                  capacity: { pilot: {min:1,max:2}, gunner: {min:4,max:8}, engineer: {min:2,max:4}, crew: {min:6,max:18} },
-                 actions: { pilot: ["steer","stomp","charge","evasive"], gunner: ["fire-weapon","aimed-shot","barrage","world-ender"], engineer: ["repair","overcharge","vent-heat","raise-shields"], crew: ["operate-module","brace","signal","hold-on"] },
+                 actions: { pilot: ["steer","stomp","evasive","vent-heat"], gunner: ["fire-weapon","aimed-shot"], engineer: ["repair","vent-heat"], crew: ["operate-module","brace","signal","hold-on"] },
                  travel: { speed: 4, range: 14 } },
         weapons: ["Plasma Lance", "Mortar Battery", "Resonance Howler", "Twin Autocannons"],
         systems: ["Reinforced Plating", "Repair Bay", "Sensor Suite", "Comms Array"],
@@ -643,6 +647,9 @@ function _esc(s) {
   }[c]));
 }
 
+// Gauntlet fixtures ("RAIDGAUNTLET · …", "TRAVELGAUNTLET · …", the rig gauntlet's "Rig Probe Faction") never reach a
+// player's picker; the GM sees them tagged 🧪 at the bottom, as the rig sheet does (review C28, 2026-10-31).
+const _isFixtureFaction = (a) => /^[A-Z]+GAUNTLET\s*·/.test(a?.name ?? "") || /^Rig Probe\b/.test(a?.name ?? "") || !!a?.flags?.["bbttcc-factions"]?.rigProbe;
 function _factionOptions() {
   const factions = (game.actors?.contents ?? [])
     .filter(a => {
@@ -654,11 +661,12 @@ function _factionOptions() {
           || String(foundry.utils.getProperty(a, "system.details.type.value") ?? "").toLowerCase() === "faction";
       } catch { return false; }
     })
-    .map(a => ({ id: a.id, name: a.name }))
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .filter(a => game.user?.isGM || !_isFixtureFaction(a))
+    .map(a => ({ id: a.id, name: a.name, fixture: _isFixtureFaction(a) }))
+    .sort((a, b) => (a.fixture - b.fixture) || a.name.localeCompare(b.name));
 
   return ['<option value="">— Unaffiliated —</option>']
-    .concat(factions.map(f => `<option value="${f.id}">${_esc(f.name)}</option>`))
+    .concat(factions.map(f => `<option value="${f.id}">${f.fixture ? "🧪 " : ""}${_esc(f.name)}</option>`))
     .join("");
 }
 
@@ -2016,7 +2024,8 @@ function _rigDataFromChassis(chassis, { factionOwnerId = "" } = {}) {
         binding: { hexId: "", sceneId: "", tokenId: "" }
       },
       crew: { slots: [], capacity, crewMin: crewMinTotal, crewMax: crewMaxTotal },
-      integrity: { value: integrityMax, max: integrityMax, tier, bracket },
+      // C25: a chassis that AUTHORS its hull (titans, flagships) says so — on dnd5e the frame hook leaves hp.max alone
+      integrity: { value: integrityMax, max: integrityMax, tier, bracket, ...(d.integrity != null ? { authored: true } : {}) },
       defenses: {
         resistances: csv(d.resistances),
         immunities: csv(d.immunities),
@@ -2121,8 +2130,10 @@ export async function mintFromChassis(chassisKey, { factionOwnerId = "", free = 
   }
   // Owner ruling 2026-10-21: a minted rig's integrity comes from its FRAME (baseIntegrity + tierStep × (tier − 1),
   // tier floored at 1), not the size default — every Hexmobile was minted at 10 although its frame says 14. A chassis
-  // that authors an explicit `integrity` keeps it (titans, flagships).
-  if (chassis?.defaults?.integrity == null && mobility !== "stationary") {   // moving rigs only; forts keep their size math
+  // that authors an explicit `integrity` keeps it (titans, flagships) — on dnd5e too since review C25 (the frame hook
+  // honours integrity.authored). On RFI the system's derive pass recomputes hull from the frame for every rig, forts
+  // included; this sync only matters for moving rigs minted before that pass runs.
+  if (chassis?.defaults?.integrity == null && mobility !== "stationary") {   // moving rigs only
     try { await _syncIntegrityToFrame(actor, tier); }
     catch (e) { console.warn("[bbttcc-auto-link/rig-builder] mintFromChassis frame integrity sync failed (non-fatal):", e); }
   }

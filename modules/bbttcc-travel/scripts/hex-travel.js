@@ -1184,7 +1184,7 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
       if (gateOn && opts.bypassDomainGate !== true) {
         const gate = canFactionEnterTerrain(factionId, spec, to?.document ?? to);
         if (!gate.ok) {
-          const domLabel = (k) => game.fourththing?.constants?.MOVEMENT_DOMAINS?.[k]?.label || k;
+          const domLabel = (k) => game.fourththing?.constants?.MOVEMENT_DOMAINS?.[k]?.label || game.bbttcc?.constants?.MOVEMENT_DOMAINS?.[k]?.label || k;   // bbttcc-core twin on dnd5e (review C68)
           const need = gate.required.map(domLabel).join(" or ");
           const mediumWord = gate.medium === "water"
             ? (gate.depthBand === "surface" ? "open water" : `the ${gate.depthBand}`)

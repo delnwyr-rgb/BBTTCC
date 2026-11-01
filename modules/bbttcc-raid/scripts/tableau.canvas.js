@@ -144,9 +144,20 @@
   // A token marked tableauActor:true is a courtier anywhere (the mark only changes how it LOOKS on a tableau scene).
   // On a plain map with nobody marked, the courtiers are the non-party people present: NPC or character tokens with
   // no player owner, not structures / factions / rigs, not hidden, and not pinned out (tableauActor:false).
-  function courtiers(scene = canvas?.scene) {
-    if (!scene || scene !== canvas?.scene) return [];
-    const toks = (canvas?.tokens?.placeables || []).filter(t => t?.actor && t.document);
+  // The Parley's BOUND scene (review C66, 2026-10-31): the scene the Parley started on (the courtly state carries it as
+  // `sceneId`) or one pinned through api.raid.tableau.bindParleyScene(). When the GM is viewing another scene — the
+  // strategic map — courtiers() falls back to it, reading token DOCUMENTS (off-canvas tokens have no placeable), so the
+  // court bonus / Patron's Word / Clean Triumph favor still find the court. Cleared when the Parley resolves.
+  let _parleySceneId = null;
+  Hooks.on("bbttcc:courtly:state", (p) => {
+    try {
+      const st = p?.state; if (!st) return;
+      if (st.outcome && st.outcome !== "ongoing") { _parleySceneId = null; return; }
+      if (st.sceneId) _parleySceneId = String(st.sceneId);
+    } catch (_e) {}
+  });
+  const _tokenLike = (doc) => ({ id: doc.id, name: doc.name, actor: doc.actor, document: doc, scene: doc.parent, offCanvas: true });
+  function _filterCourtiers(scene, toks) {
     const marked = toks.filter(t => isTableauActor(t.document));
     if (marked.length || getTableau(scene)) return marked;
     return toks.filter(t => {
@@ -158,6 +169,17 @@
       if (a.flags?.["bbttcc-rigs"] || /vehicle|rig/i.test(String(a.system?.details?.type?.value || ""))) return false;
       return true;
     });
+  }
+  function courtiers(scene = canvas?.scene) {
+    if (!scene) return [];
+    const onCanvas = scene === canvas?.scene;
+    const toks = onCanvas
+      ? (canvas?.tokens?.placeables || []).filter(t => t?.actor && t.document)
+      : Array.from(scene.tokens ?? []).filter(d => d?.actor).map(_tokenLike);
+    const found = _filterCourtiers(scene, toks);
+    if (found.length || !onCanvas) return found;
+    const bound = (_parleySceneId && _parleySceneId !== scene.id) ? game.scenes?.get(_parleySceneId) : null;
+    return bound ? courtiers(bound) : found;
   }
 
   // Restore vanilla appearance for tokens that previously had spike scale/sort.
@@ -492,6 +514,9 @@
       DEFAULTS,
       readConfig: (scene = canvas?.scene) => getTableau(scene) || { ...DEFAULTS, enabled: false },
       courtiers,
+      // review C66: pin / read the Parley's bound scene (null clears it)
+      bindParleyScene: (sceneId) => { _parleySceneId = sceneId ? String(sceneId?.id ?? sceneId) : null; return _parleySceneId; },
+      parleySceneId: () => _parleySceneId,
       enable: async (partial = {}, scene = canvas?.scene) => {
         if (!scene) return ui.notifications?.warn("No active scene.");
         const cur = scene.flags?.[MOD]?.tableau || {};

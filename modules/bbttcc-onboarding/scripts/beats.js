@@ -943,7 +943,10 @@ const outfitting = {
     await _pause(600);
     await ctx.speak(`This is the LONG MARKET. I've already set the buyer to ${ctx.faction?.name || "your Domain"} and the receiver to ${ctx.steward?.name || "you"} — if either box reads "(Select)", pick them yourself or the till refuses you.`);
     await _pause(700);
-    await ctx.speak("Buy what you can afford and can actually USE — your sheet warns you when a weapon or armor sits beyond your training. Watch the price line: it's in MARKS, the same marks in your Domain's banks. And gear does nothing in a duffel bag: EQUIP it from your sheet once it arrives.");
+    // C60 (10-31): the training warning is an RFI sheet feature; dnd5e applies non-proficiency silently, so the D&D line points at the proficiency tick instead.
+    await ctx.speak(_isDnd()
+      ? "Buy what you can afford and can actually USE — D&D won't warn you: check the proficiency tick on a weapon or armor before you buy it. Martial classes, Wardens and Vigilants handle Firearms; anything you're not proficient with swings without your bonus. Watch the price line: it's in MARKS, the same marks in your Domain's banks. And gear does nothing in a duffel bag: EQUIP it from your sheet once it arrives."
+      : "Buy what you can afford and can actually USE — your sheet warns you when a weapon or armor sits beyond your training. Watch the price line: it's in MARKS, the same marks in your Domain's banks. And gear does nothing in a duffel bag: EQUIP it from your sheet once it arrives.");
     ctx.riff({ beat: "outfitting", line: "Player is gearing up at the Market before their first swing on the proving range.", intent: "Quartermaster energy — dry, practical. One line." });
   },
 
@@ -958,7 +961,9 @@ const outfitting = {
       title: "◇ OPERATOR — Outfitting",
       content:
         `<p>Spend some stipend: buy gear from the <b>Market</b>, then <b>equip it</b> on your sheet.</p>` +
-        `<p>Mind the training warnings — owning a cannon isn't the same as being able to aim it.</p>`,
+        (_isDnd()
+          ? `<p>Check the proficiency tick before you buy — owning a cannon isn't the same as being able to aim it.</p>`
+          : `<p>Mind the training warnings — owning a cannon isn't the same as being able to aim it.</p>`),
       label: "Geared up — move out"
     }).then(() => done());
     return () => Hooks.off("createItem", onBuy);
@@ -2202,10 +2207,14 @@ async function _pgMintRelicItem(steward, key) {
   try {
     const has = steward.items?.find?.(i => i.getFlag?.(MODULE_ID, "relicKey") === key);
     if (has) return has;
+    // Item type through the bbttcc-core seam: RFI "gear", dnd5e "loot" (review P6 — the beat is cut from the D&D arc, but a
+    // GM debug run of proving_trials there minted nothing). The relic flag stays the showdown's source of truth.
     const data = {
-      name: spec.name, type: "gear", img: spec.img,
-      system: { quantity: 1, category: "relic", tags: ["relic", "proving-ground"],
-                source: "The Proving Ground — Trials", description: { value: spec.desc, chat: "" } },
+      name: spec.name, type: game.bbttcc?.types?.item?.("gear") ?? "gear", img: spec.img,
+      system: _isDnd()
+        ? { quantity: 1, description: { value: spec.desc, chat: "" } }
+        : { quantity: 1, category: "relic", tags: ["relic", "proving-ground"],
+            source: "The Proving Ground — Trials", description: { value: spec.desc, chat: "" } },
       flags: { [MODULE_ID]: { spawned: true, relicKey: key } }
     };
     if (spec.consume) {

@@ -13,12 +13,20 @@
  *   createChatMessage    → attacked, for each creature the attack card targeted
  *                          (10-29: was dnd5e.rollAttackV2, which only fires on the
  *                          roller's client — player attacks never reached the GM)
- * Only the active GM client posts, so a table with several GM windows gets one card.
+ * Only ONE GM window posts the broadcast moments (turn change, attack cards).
+ * 10-31 (review C55): Dave and Mags share the Gamemaster login, so `game.users.activeGM`
+ * is the same USER in two browser windows and both passed the old check — two cards per
+ * moment. surge-powers already elects one GM WINDOW (socket heartbeat, lowest window id
+ * wins: game.surgePowers.isLeader); the broadcast handlers use it, falling back to the
+ * user-level check when surge-powers isn't loaded. applyDamage only fires on the client
+ * that applied the damage, so it keeps the user-level gate (a non-leader GM window
+ * applying by hand still gets its card).
  * ───────────────────────────────────────────────────────────────────────────── */
 import { MOD } from "./casting.js";
 
 const remindersOf = (actor) => actor?.flags?.[MOD]?.reminders ?? null;
 const isActiveGM = () => game.user.isGM && game.users.activeGM?.id === game.user.id;
+const isLeadGM = () => (typeof game.surgePowers?.isLeader === "function") ? game.surgePowers.isLeader() : isActiveGM();
 
 function card(title, lines) {
   if (!lines.length) return;
@@ -28,7 +36,7 @@ function card(title, lines) {
 }
 
 function onTurnChange(combat, prior, current) {
-  if (!isActiveGM() || !current?.combatantId) return;
+  if (!isLeadGM() || !current?.combatantId) return;
   const me = combat.combatants.get(current.combatantId)?.actor;
   if (!me) return;
   const lines = [];
@@ -62,7 +70,7 @@ function targetActor(d) {
 }
 
 function onAttackMessage(message) {
-  if (!isActiveGM()) return;
+  if (!isLeadGM()) return;
   const isAttack = (message.type === "attack") || (message.flags?.dnd5e?.roll?.type === "attack");
   if (!isAttack) return;
   const attackerActor = message.getAssociatedActor?.() ?? ChatMessage.getSpeakerActor?.(message.speaker);

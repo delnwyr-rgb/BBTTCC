@@ -1,6 +1,6 @@
 {
   "_about": "THE conversion rubric: how a Bad Eden mechanic written for RFI (the fourththing system) becomes its D&D 5E (dnd5e 6) twin. Read by tools/build-packs.mjs (the lint), bin/ft-convert-5e (the converter) and bin/ft-lint-parity (the parity check). Rendered for humans as CONVERSION_RUBRIC.md — keep the two in step. Every entry marked ruling:true was ruled by Dave; ruling:'owed' is a draft awaiting one.",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "date": "2026-10-07",
   "direction": "rfi→5e",
   "sourceOfTruth": {
@@ -408,7 +408,9 @@
   },
   "conditions": {
     "staggered": {
-      "to": "speed halved and −2 to attack rolls until the end of its next turn (text)"
+      "to": "status be5e-staggered (scripts/riders.js) + speed ×½, −2 to attack rolls — the same Active Effect on the creature lane and the manifestation (spell) lane",
+      "ruling": true,
+      "_why": "C42 2026-10-31: six Stagger spells shipped an empty effect"
     },
     "scarred": {
       "to": "keep the mark; the Clarity bite scales to the Flow pool: −1 Flow point per 5 points of your Flow maximum (minimum 1) until the end of the scene",
@@ -578,10 +580,25 @@
     },
     "rigGear / rigFrame": {
       "to": "vehicle lane — not drafted"
-    }
+    },
+    "consumables": {
+      "_about": "C46 ruled 2026-10-31: the RFI 'On use: …; Charges: N' block becomes real dnd5e activities where the rubric can express the op; every activity spends one use, Charges → uses.max, autoDestroy at 0",
+      "Restore NdM(+K) Integrity": "heal activity (healing NdM+K)",
+      "Restore / Reduce N Stress": "heal activity, temporary hit points = @prof (the Stress-points ruling)",
+      "Inflict N Stress": "damage activity on yourself, Nd4 psychic",
+      "Cure <condition>": "utility activity + flags.bad-eden-5e.cure [dnd5e status]; the chat line says which condition ends (runtime hook owed: scripts/ reads the flag and removes the status)",
+      "Restore N Clarity": "utility activity + flags.bad-eden-5e.flow N (Clarity = Flow points)",
+      "Noise · Radiation · Surge · FrameDice · BloodDebt · mutations": "utility activity whose chat line names the op for the GM — no D&D engine yet; listed in _needs-human/gear.md",
+      "ruling": true
+    },
+    "wondrous": {
+      "to": "an unconditional 'resistance to X' in the text → a transfer Active Effect on traits.dr; every other promised mechanic stays honest prose and is listed in _needs-human/gear.md for an override (C46 ruled 2026-10-31)",
+      "ruling": true
+    },
+    "flags.bbttcc": "carried verbatim on every gear twin and part of the parity hash (hazardResist / radiation.tierDelta / radiationResist / darkness*: api.radiation protectionFor and the darkness engine read it on either system) — C64 2026-10-31"
   },
   "creatures": {
-    "_about": "RFI NPC/monster → dnd5e npc (the monster lane; drafted, not yet run). Budgets come from systems/fourththing/threat-chassis.js and the dnd5e-table-kit sim",
+    "_about": "RFI NPC/monster → dnd5e npc (the monster lane). Source = packs/_source/npcs (lineage-flagged actors, items embedded) — C40 2026-10-31; conversion/sources/npcs-monsters.jsonl is a fallback only. Numbers: hp = Integrity, AC = Guard, CR DERIVED from them (DMG p.274 defensive/offensive average) so the label matches the sheet — C45 ruled 2026-10-31; the tier×bracket band is now only the needs-row comparison. Chassis (threat-chassis.js) still sets strikes, legendary actions and the per-tier damage bonus.",
     "tier": {
       "1": "CR 1–4",
       "2": "CR 5–8",
@@ -589,8 +606,8 @@
       "4": "CR 14+",
       "bracket": "light/medium/heavy/boss shifts within the band"
     },
-    "integrity.max": "hp.max",
-    "guard": "ac.flat",
+    "integrity.max": "hp.max (verbatim — no chassis pool multiplier; C45 2026-10-31)",
+    "guard": "ac.flat (verbatim; C45 2026-10-31)",
     "evasion": "Dex save (prof if ≥ base)",
     "resolve": "Wis save (prof if ≥ base)",
     "attributes (1–5)": {
@@ -601,11 +618,147 @@
     "actions / weapons": "dnd5e weapon items through gear",
     "lineage / creatureType": "dnd5e creature type (humanoid, construct, fey, fiend, celestial, beast, monstrosity, aberration)",
     "npcAuto rules": "activities + AEs; what can't be modelled → feature text",
-    "price (bounty/hire)": "keep marks"
+    "price (bounty/hire)": "keep marks",
+    "cr": {
+      "to": "derived from hp / AC / damage-per-round / attack bonus (DMG table, CR_ROWS in convert-5e.mjs); needs-row when it sits >2 off the Tier×bracket band",
+      "ruling": true,
+      "_why": "ruled 2026-10-31 (C45): the number the GM sees must match the stat block"
+    },
+    "power saves": "the intent's own save: Violence Str · Intrigue Dex · Body Con · Mind Int · Soul Wis · Presence Cha (C48 2026-10-31; no fold to Wisdom)",
+    "defense lists": "condition words in resistances/immunities (fear, charm, …) → traits.ci (frightened, charmed, …), never a damage type (C47 2026-10-31)",
+    "prose": "the RFI stat idiom (Strike./Working. labels, 'reach 1 square., one target.', 'Damage: 2d10 kinetic + violence', 'Hit: … + violence; half on success', 'Fail: <dice> type + Condition', 'Cost. 2 Clarity, +2 Noise', 'Damage goes to Stress') is stripped before the rubric runs — the activity carries the dice; the rider sentence and Dave's flavour line stay (C43 2026-10-31)"
   },
   "vocabulary": {
     "_about": "text substitutions the converter applies before a human sees the draft, and the terms the lint refuses to ship",
     "replace": [
+      [
+        "\\bDamage goes (?:straight )?to (?:the )?Stress(?: track)?(?: straight)?\\.\\s*",
+        ""
+      ],
+      [
+        "\\bDamage goes (?:straight )?to (?:the )?Stress(?: track)?\\b",
+        "The damage is psychic"
+      ],
+      [
+        "\\btwice-keep-worse on\\b",
+        "with disadvantage on"
+      ],
+      [
+        "\\bResolve checks\\b",
+        "Wisdom saving throws"
+      ],
+      [
+        "\\brolls vs DC (\\d+)",
+        "makes a saving throw (DC \\1)"
+      ],
+      [
+        "\\b(\\d+) (overflow|unspent|banked) OP\\b",
+        "\\10 \\2 marks"
+      ],
+      [
+        "\\b(Violence|Intrigue|Body|Mind|Soul|Presence) (?:check|defense|save) vs DC (\\d+)",
+        "DC \\2 @ABILITY saving throw"
+      ],
+      [
+        "\\b(Violence|Intrigue|Body|Mind|Soul|Presence) vs DC (\\d+)",
+        "DC \\2 @ABILITY saving throw"
+      ],
+      [
+        "\\bsucceed an? (DC \\d+ [A-Z][a-z]+ saving throw)",
+        "succeed on a \\1"
+      ],
+      [
+        "\\bResolve check\\b",
+        "Wisdom saving throw"
+      ],
+      [
+        "\\bEvasion check\\b",
+        "Dexterity saving throw"
+      ],
+      [
+        "\\bagainst your Resolve DC\\b",
+        "against your save DC (8 + your proficiency bonus + your Wisdom modifier)"
+      ],
+      [
+        "\\byour Resolve DC\\b",
+        "your save DC"
+      ],
+      [
+        "\\bResolve DC (\\d+)",
+        "Wisdom saving throw (DC \\1)"
+      ],
+      [
+        "\\b(Constitution|Wisdom|Dexterity|Strength|Intelligence|Charisma) defense vs\\b",
+        "\\1 saving throw against"
+      ],
+      [
+        "\\bvs\\.? Cast DC\\b",
+        "against your spell save DC"
+      ],
+      [
+        "\\bCast DC\\b",
+        "spell save DC"
+      ],
+      [
+        "\\broll twice, keep (?:the )?worse\\b",
+        "roll with disadvantage"
+      ],
+      [
+        "\\brerolls the highest die on\\b",
+        "has disadvantage on"
+      ],
+      [
+        "\\breroll the highest die on\\b",
+        "have disadvantage on"
+      ],
+      [
+        "\\brerolls the highest die\\b",
+        "is made with disadvantage"
+      ],
+      [
+        "\\breroll-the-highest\\b",
+        "disadvantage"
+      ],
+      [
+        "\\bDamage die rerolls the highest\\b",
+        "Roll the damage twice and keep the lower result"
+      ],
+      [
+        "\\breroll the highest die\\b",
+        "have disadvantage"
+      ],
+      [
+        "\\brerolls the highest die\\b",
+        "has disadvantage"
+      ],
+      [
+        "\\b(?:is|rolls?) 3d10 keep-lowest-2\\b",
+        "is made with disadvantage"
+      ],
+      [
+        "\\b3d10 keep-lowest-2\\b",
+        "disadvantage"
+      ],
+      [
+        "\\(Body → Guard, Soul → Resolve\\)",
+        "(Constitution or Wisdom saving throws)"
+      ],
+      [
+        "\\s*\\((?:Stress|stress)\\)",
+        ""
+      ],
+      [
+        "\\b([+−-]?\\d+) (Violence|Nonlethal|Non-Lethal|Intrigue|Economy|Soft ?Power|Diplomacy|Logistics|Culture|Faith|Body|Mind|Soul|Presence) OP\\b",
+        "\\10 \\2 marks"
+      ],
+      [
+        "\\b(\\d+) (fewer|less|spent|extra|additional) OP\\b",
+        "\\10 \\2 marks"
+      ],
+      [
+        "\\b([+−-]?\\d+) OP\\b(?![_A-Za-z])",
+        "\\10 marks"
+      ],
       [
         "\\brerolls the lowest die\\b",
         "is made with advantage"
@@ -644,7 +797,7 @@
       ],
       [
         "\\bStaggered\\b",
-        "slowed (speed halved, −2 to attack rolls)"
+        "Staggered (speed halved, −2 to attack rolls)"
       ],
       [
         "\\b1/scene\\b",
@@ -851,8 +1004,12 @@
         "opportunity attacks"
       ],
       [
-        "\\bmanifestations?\\b",
-        "powers"
+        "\\bmanifestations\\b",
+        "spells"
+      ],
+      [
+        "\\bmanifestation\\b",
+        "spell"
       ],
       [
         "\\bImpose the target: its next attack roll is 3d10 keep-lowest-2\\b",
@@ -879,27 +1036,27 @@
         "character"
       ],
       [
-        "\\bViolence\\b(?<!Domain's Violence)(?![^.]{0,80}?\\bmarks\\b)",
+        "(?<!category: )(?<!category: <strong>)(?<!Domain's )\\bViolence\\b(?![^.]{0,120}?\\bmarks\\b)",
         "Strength"
       ],
       [
-        "\\bIntrigue\\b(?<!Domain's Intrigue)(?![^.]{0,80}?\\bmarks\\b)",
+        "(?<!category: )(?<!category: <strong>)(?<!Domain's )\\bIntrigue\\b(?![^.]{0,120}?\\bmarks\\b)",
         "Dexterity"
       ],
       [
-        "\\bBody\\b",
+        "(?<!-)(?<!this )(?<!\\(\\d{1,3} )\\bBody\\b(?!-)(?![^.]{0,30}\\bmarks\\b)",
         "Constitution"
       ],
       [
-        "\\bMind\\b",
+        "(?<!-)(?<!this )(?<!\\(\\d{1,3} )\\bMind\\b(?!-)(?![^.]{0,30}\\bmarks\\b)",
         "Intelligence"
       ],
       [
-        "\\bSoul\\b",
+        "(?<!-)(?<!this )(?<!\\(\\d{1,3} )\\bSoul\\b(?!-)(?!-Smith)(?![^.]{0,30}\\bmarks\\b)",
         "Wisdom"
       ],
       [
-        "\\bPresence\\b",
+        "(?<!-)(?<!this )(?<!\\(\\d{1,3} )\\bPresence\\b(?!-)(?![^.]{0,30}\\bmarks\\b)",
         "Charisma"
       ],
       [
@@ -925,6 +1082,10 @@
       [
         "\\breroll-highest\\b",
         "disadvantage"
+      ],
+      [
+        "\\ba (Intelligence|Insight|Arcana|Athletics)\\b",
+        "an \\1"
       ]
     ],
     "squares": "(\\d+) squares? → N×5 feet (handled by the converter, not a plain substitution)",
@@ -948,7 +1109,18 @@
       "\\bkinetic damage\\b",
       "\\benergy damage\\b",
       "Per-Use Ability",
-      "Click this feature"
+      "Click this feature",
+      "\\breroll(s|ing)? the highest\\b",
+      "\\breroll-the-highest\\b",
+      "\\bCast DC\\b",
+      "\\bResolve DC\\b",
+      "\\(Stress\\)",
+      "\\bkeep-lowest-2\\b",
+      "\\bDamage: \\d+d\\d+",
+      "\\bOperations? Points?\\b",
+      "\\b[+−-]?\\d+ OP\\b(?![_A-Za-z])",
+      "\\b\\d+ (fewer|less|spent) OP\\b",
+      "\\bDamage goes to Stress\\b"
     ],
     "bannedFlags": "i for the case-insensitive ones is decided by the tool: everything in banned is tested case-insensitively except the capitalised proper terms (Integrity, Violence…, VIO…)",
     "keep": [
@@ -970,7 +1142,8 @@
       "Surge",
       "Path",
       "Doctrine",
-      "Steward? → character (RFI's word for a PC)"
+      "Steward? → character (RFI's word for a PC)",
+      "Soul-Smith"
     ],
     "tokens": {
       "@ABILITY": "the faculty in the match, through abilities (full name)",
@@ -979,7 +1152,8 @@
       "@SAVE": "Resolve → Wisdom, Evasion → Dexterity, Guard → (AC; no save)"
     },
     "_order": "front: grammatical reroll/rank rows · middle: the mechanics table · tail: bare capitalised faculty names (Violence→Strength …) so phrases like 'Presence (Persuasion) check' and 'Violence or Dexterity' resolve",
-    "lintScope": "docs carrying flags.bad-eden-5e.rfi (RFI-origin) are linted for RFI vocabulary only; the Star Wars list applies to origin:5e content (classes, subclasses, powers) — a Bad Eden blaster is a Bad Eden blaster"
+    "lintScope": "docs carrying flags.bad-eden-5e.rfi (RFI-origin) are linted for RFI vocabulary only; the Star Wars list applies to origin:5e content (classes, subclasses, powers) — a Bad Eden blaster is a Bad Eden blaster",
+    "_opToMarks": "rows '\\10 marks' append a 0: 1 OP = 10 marks (rfi-pricing authority; the RFI ancestry cards say '+20 Intrigue marks') — OP is a name, quantities are marks (marks-everywhere, C72 2026-10-31)"
   },
   "_rulings": {
     "2026-10-07": "Dave ruled rubric lines 1–8 (small bonus +2, Stress points, Clarity/Noise kept with Flow-point bonus, radiation stays a ladder, the skill table, armor bands, martial weapons, marks, creature scores 10+2×value). Scarred's scale is the one open question.",
@@ -988,5 +1162,13 @@
     "2026-10-07d": "Dave APPROVED all five discipline/Clarity mappings (Paths doc, 'Rulings owed'). Martial subclass names ruled: Leyline Runner, Circuit Sarge (Fighter); Rhapsodist, Wheelstick (Rogue); Warrior of the Wire keeps its name with the nickname Wireior; the Furies and the Riptide stand.",
     "2026-10-30": "Archetype prose pass: skill names after 'proficiency in' map through the skill table (Faith→Religion, Lore→History, Occult→Arcana, Diplomacy→Persuasion, Empathy→Insight); bare Violence/Intrigue stay as Domain mark pools when the sentence is about marks. 'the X aptitude' → the skill/tool through the skill table (Tinkering → tinker's tools, Occult → Arcana).",
     "2026-10-31": "Dave: Piloting is a Bad Eden 5E skill (Dex, key pil); Firearms is a weapon category (firearmR / proficiency fir), not a skill — martial classes + Warden/Vigilant proficient. The Chariot and The Fool swap Perception for Piloting."
+  },
+  "manifestations": {
+    "damage-only harm": {
+      "to": "never auto-hits: 'vs Evasion' in the RFI sentence → a ranged spell attack (melee on touch); otherwise a saving throw — the named defense, else Dexterity for Integrity-track damage, Wisdom for Stress-track — half damage on a success; the −2 AC / −2 saves rider lands only on a hit or a failed save",
+      "ruling": true,
+      "_why": "C50 ruled 2026-10-31 (Keystone Verdict, The Unstitching)"
+    },
+    "staggered": "status be5e-staggered + speed ×½, −2 attacks (C42)"
   }
 }

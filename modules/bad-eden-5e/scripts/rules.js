@@ -42,8 +42,19 @@ export async function grantFirearms() {
 
 /** ready: a martial class landing on a character brings Firearms with it (the creating client owns the actor). */
 export function activateRules() {
+  const grant = actor => grantFor(actor).catch(e => console.warn(`${MOD} | firearms grant failed`, e));
   Hooks.on("createItem", (item, _options, userId) => {
     if (userId !== game.user.id || item.type !== "class" || !FIREARM_CLASSES.has(item.system?.identifier)) return;
-    grantFor(item.parent).catch(e => console.warn(`${MOD} | firearms grant failed`, e));
+    grant(item.parent);
   });
+  // Actor.create({ items }) (the Redshirts, pregens), a compendium import or a duplicate never fire createItem for the
+  // embedded class — catch the actor instead (review C5) …
+  Hooks.on("createActor", (actor, _options, userId) => {
+    if (userId !== game.user.id || actor.type !== "character") return;
+    grant(actor);
+  });
+  // … and the active GM sweeps the world once per session (cheap: grantFor early-returns when already proficient).
+  if (game.users?.activeGM?.isSelf) (async () => {
+    for (const a of game.actors?.contents ?? []) if (a.type === "character") await grant(a);
+  })();
 }

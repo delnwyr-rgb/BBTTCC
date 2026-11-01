@@ -1,10 +1,10 @@
 {
-  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.10.0) — do not hand-edit; put fixes in content/overrides/callings.json. The NPC callings (trade + trick per tier) as dnd5e monster feats.",
+  "_about": "GENERATED from RFI canon by tools/convert-5e.mjs (rubric v1.11.0) — do not hand-edit; put fixes in content/overrides/callings.json. The NPC callings (trade + trick per tier) as dnd5e monster feats.",
   "_pack": "npc-callings",
   "_generated": {
     "by": "tools/convert-5e.mjs",
-    "rubric": "1.10.0",
-    "at": "2026-10-31",
+    "rubric": "1.11.0",
+    "at": "2026-11-01",
     "overridesApplied": 0
   },
   "items": [
@@ -1473,7 +1473,7 @@
       "folder": "NPC Callings",
       "system": {
         "description": {
-          "value": "<p><em>\"The Shattering didn't end the work. Nothing ends the work.\"</em></p><p><strong>Stalwart</strong> is the Constitution Calling — the trade that kept its bearers alive after the Shattering. Umbrella: laborer, teamster, forager, wall-crew, rig-hand, survivor. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hazard-Hardened:</strong> Reduce each environmental hazard/radiation tick by 1 (by 2 at Tier III), and labor output counts double for facility/build work.</p><p><strong>Skill kit:</strong> signature skill <strong>Athletics</strong>: proficient at Tier I, expertise from Tier II; secondary <strong>smith's tools</strong>: proficient from Tier II, expertise from Tier III.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Bulwark or Wisdom-Smith. A character is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"The Shattering didn't end the work. Nothing ends the work.\"</em></p><p><strong>Stalwart</strong> is the Constitution Calling — the trade that kept its bearers alive after the Shattering. Umbrella: laborer, teamster, forager, wall-crew, rig-hand, survivor. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hazard-Hardened:</strong> Reduce each environmental hazard/radiation tick by 1 (by 2 at Tier III), and labor output counts double for facility/build work.</p><p><strong>Skill kit:</strong> signature skill <strong>Athletics</strong>: proficient at Tier I, expertise from Tier II; secondary <strong>smith's tools</strong>: proficient from Tier II, expertise from Tier III.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Bulwark or Soul-Smith. A character is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         },
         "type": {
