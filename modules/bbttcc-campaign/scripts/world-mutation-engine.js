@@ -2706,6 +2706,14 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           const a = game.actors.get(id); if (!a || !isSteward(a)) continue;
           seen.add(id); out.push(a);
         }
+        // 2026-11-01 (Dave: "all of the stewards should have gotten the effect. Toblerone and Brexit are both members of the
+        // Domains involved"): the roster flag is not the only membership link — a Steward's own flags.bbttcc-factions.factionId
+        // is the canonical one (radiation.stewardsOf, the Ride). The coffee's spark reached Marginalia alone; union both.
+        try {
+          const sOf = get(game, "bbttcc.api.radiation.stewardsOf", null);
+          const more = typeof sOf === "function" ? (sOf(fid) || []) : (game.actors?.contents ?? []).filter(a => a?.type === "character" && !a.getFlag?.(MOD_FACTIONS, "isFaction") && String(a.flags?.[MOD_FACTIONS]?.factionId || "") === fid);
+          for (const a of more) { const id = String(a?.id || ""); if (!id || seen.has(id) || !isSteward(a)) continue; seen.add(id); out.push(a); }
+        } catch (_eM) {}
       }
     } catch (e) { console.warn(TAG, "_coalitionStewards failed", e); }
     return out;

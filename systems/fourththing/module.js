@@ -18576,6 +18576,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   //   rung = integrated ≥ total ? 5 : ⌊5 · integrated / total⌋  (3-spark constellation:
   //   1 → Awakening · 2 → Wisdom · 3 → Enlightened). It never lowers by itself, and a
   //   Qliphothic Steward is not lifted — corruption has to be faced first.
+  // THE GREAT WORK IS NEVER SMALLER THAN THREE (2026-11-01, live: Marginalia's first-ever spark — the Recalcitrant Café boon —
+  // read 1/1 and jumped her Unawakened → Enlightened in one go). The rung divides by max(sparks held, 3): one spark = Awakening,
+  // two = Wisdom, three = Enlightened, exactly the 09-21 ruling; a Steward who holds more than three needs them all.
+  const FT_ENL_GREAT_WORK = 3;
   const FT_ENL_LADDER = ["unawakened", "awakening", "seeking", "wisdom", "understanding", "enlightened"];
   const FT_ENL_LABELS = { unawakened: "Unawakened", awakening: "Awakening", seeking: "Seeking", wisdom: "Wisdom", understanding: "Understanding", enlightened: "Enlightened", qliphothic: "Qliphothic" };
   function _ftSparkTally(actor) {
@@ -18587,13 +18591,15 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     return { total, integrated, corrupted };
   }
   function _ftRungForSparks({ total, integrated }) {
-    if (!total) return 0;
-    if (integrated >= total) return FT_ENL_LADDER.length - 1;
-    return Math.max(0, Math.min(FT_ENL_LADDER.length - 1, Math.floor((FT_ENL_LADDER.length - 1) * integrated / total)));
+    const size = Math.max(Number(total) || 0, FT_ENL_GREAT_WORK);
+    if (!(integrated > 0)) return 0;
+    if (integrated >= size) return FT_ENL_LADDER.length - 1;
+    return Math.max(0, Math.min(FT_ENL_LADDER.length - 1, Math.floor((FT_ENL_LADDER.length - 1) * integrated / size)));
   }
   game.fourththing.enlightenment = {
     LADDER: FT_ENL_LADDER,
     LABELS: FT_ENL_LABELS,
+    GREAT_WORK: FT_ENL_GREAT_WORK,
     level(actor)  { return String(actor?.getFlag?.("bbttcc-character-options", "enlightenment")?.level || "unawakened"); },
     tally: _ftSparkTally,
     rungForSparks: _ftRungForSparks,
@@ -18604,9 +18610,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const rank = FT_ENL_LADDER.indexOf(level);
       const rung = _ftRungForSparks(t);
       let nextLabel = null, nextAt = null;
-      if (level !== "qliphothic" && t.total && rank < FT_ENL_LADDER.length - 1) {
-        // smallest integrated count whose rung exceeds the current rank
-        for (let n = t.integrated + 1; n <= t.total; n++) {
+      if (level !== "qliphothic" && rank < FT_ENL_LADDER.length - 1) {
+        // smallest integrated count whose rung exceeds the current rank (the Great Work is at least three sparks)
+        for (let n = t.integrated + 1; n <= Math.max(t.total, FT_ENL_GREAT_WORK); n++) {
           if (_ftRungForSparks({ total: t.total, integrated: n }) > rank) { nextAt = n; nextLabel = FT_ENL_LABELS[FT_ENL_LADDER[_ftRungForSparks({ total: t.total, integrated: n })]]; break; }
         }
       }
