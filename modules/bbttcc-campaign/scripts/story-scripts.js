@@ -72,7 +72,7 @@ export const STORY_SCRIPTS = {
       { id: "gate", label: "The Gate That Remembers Wrong", group: "errands", line: "Go and see the Leygate. Garren knows what it needs, and he has something for you to carry.", beats: ["ag_leygate_visit"] },
       { id: "fixit", label: "Ride for Furrier's Fixit", line: "Ride for Furrier's Fixit Farm with the spanner and bring back the stabilizer.",
         beats: ["ag_ride_fixit"], handoff: { quest: "fixit_farm", chapter: "the_leyline_stabilizer" }, done: { chapter: ["fixit_farm", "the_leyline_stabilizer"] } },
-      { id: "install", label: "The Gate Remembers Right", line: "Bring the crate to Garren at the Leygate and let him work.", beats: ["ag_leygate_delivery", "ag_leygate_installed"], done: { mark: "ag_leygate_installed" } },
+      { id: "install", label: "The Gate Remembers Right", line: "When you're next in Allesh-Gilliam, bring the stabilizer crate to Garren at the Leygate. It keeps.", beats: ["ag_leygate_delivery", "ag_leygate_installed"], done: { mark: "ag_leygate_installed" } },
       { id: "close", label: "Pike Updates the Map", line: "Pike is updating the map. Go and see your names on it.", beats: ["allesh_gilliam_pike_closure"] }
     ],
     doors: [

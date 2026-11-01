@@ -16,6 +16,9 @@
  *              channel); every other checkStat → GM adjudication
  *   effects    WME reads factionEffects/relationshipEffects/worldModifiers/
  *              turnRequests as ARRAYS (anything else is silently dropped)
+ *   outlived   X01–X04 (BEAT AUDIT 2026-11-01): choices that outlive what they ask about — a stale ask about a done chapter
+ *              (X01, INFO), an open meal-or-refusal fork (X02), a town beat whose only exit rides out (X03), a chapter beat
+ *              re-offered after its chapter ends (X04). Engine: repeatable !== true = once-only; unmet choice.requires = hidden.
  *
  * INPUTS (any mix, later files win for the campaign; quests/tables come from
  * whichever file carries them):
@@ -227,6 +230,7 @@ for (const pl of (Array.isArray(campaign.npcPlacements) ? campaign.npcPlacements
 }
 
 // ── choices: CG01–CG03 (STORY FLOW D-1/D-2/D-9, 2026-09-17) — choice.requires · choice.cooldownTurns · beat.pinLeg ──
+const QUEST_ITEM_KEYS = new Set(); for (const b of beats) for (const c of (Array.isArray(b.choices) ? b.choices : [])) for (const q of (Array.isArray(c?.questItems) ? c.questItems : [])) if (q && q.remove !== true && s(q.key)) QUEST_ITEM_KEYS.add(s(q.key));
 for (const b of beats) {
   for (const [ci, c] of (Array.isArray(b.choices) ? b.choices : []).entries()) {
     if (!c || typeof c !== "object") continue;
@@ -238,6 +242,8 @@ for (const b of beats) {
         if (x.beatMark != null) { if (!exists(s(x.beatMark))) F("CG01", "ERROR", b.id, `choice[${ci}] "${s(c.label)}" requires beatMark '${x.beatMark}' — no such beat`); continue; }
         if (x.questBucket != null) { if (quests && !quests[s(x.questBucket)]) F("CG01", "ERROR", b.id, `choice[${ci}] "${s(c.label)}" requires questBucket '${x.questBucket}' — not in the registry`); continue; }
         if (x.relation != null) continue;
+        // { questItem: key, not? } (2026-10-30 engine) — some Steward holds that quest item. A key no choice in the campaign grants can only be met by GM hand.
+        if (x.questItem != null) { if (!QUEST_ITEM_KEYS.has(s(x.questItem))) F("CG01", x.not === true ? "INFO" : "WARN", b.id, `choice[${ci}] "${s(c.label)}" requires questItem '${x.questItem}' — no choice.questItems row grants that key`); continue; }
         if (!(s(x.flag) in GATE_FLAGS)) F("CG01", "ERROR", b.id, `choice[${ci}] "${s(c.label)}" requires unknown gate flag '${x.flag}' — hidden forever`);
       }
     }
@@ -250,7 +256,7 @@ for (const b of beats) {
 }
 
 // ── receipts: E15 (STORY FLOW D-4, 2026-09-17) — worldEffects.receipts rows must name a label + a known effect key ──
-const RECEIPT_EFFECT_KEYS = new Set(["rollPlus2","forceReroll","influenceDmg2","clearScandal","favorPlus1","favorShift","rollPlus3","influenceDmg3","coverTracks","favorPlus2","doubleAgent","oppRollMinus2","stirThePot","discardStolen","freezePurse"]);
+const RECEIPT_EFFECT_KEYS = new Set(["rollPlus2","forceReroll","influenceDmg2","clearScandal","favorPlus1","favorShift","rollPlus3","influenceDmg3","coverTracks","favorPlus2","doubleAgent","oppRollMinus2","stirThePot","discardStolen","freezePurse","recess","strikeRecord","namePrice","counterfeit","rewriteStake","decree","favorAllPlus1"]);
 for (const b of beats) {
   const rows = b.worldEffects?.receipts; if (rows == null) continue;
   if (!Array.isArray(rows)) { F("E15", "ERROR", b.id, `worldEffects.receipts must be an array of rows`); continue; }
@@ -1058,6 +1064,97 @@ for (const b of beats) {
         if (kit.has(key) || granted.has(key)) continue;
         F("K04", "WARN", b.id, `names the activity "${lbl}" (${key}) — it is not in the starting kit and no beat grants it (unlocks.strategics), so no Domain can plan it`);
       }
+    }
+  }
+}
+
+// ─── X-rules: choices that OUTLIVE what they ask about (BEAT AUDIT 2026-11-01) ───────────────────────────────────
+// Three live bugs on 11-01 had three shapes, each checkable from the data: a question about an objective the party already
+// holds (Gully: "We're here for the stabilizer"), a meal-or-refusal fork whose sides never hid each other (the Recalcitrant
+// Café pairs), and a beat whose only exit rides out of town (Load the Crate → ride_back_home). Engine facts the rules lean on:
+// repeatable !== true = once-only (never re-offered; _choiceSpent locks the way in); a beat whose Quest link sits in the
+// Completed/Archived bucket never fires again; choice.requires unmet = hidden.
+{
+  let SMX = null; try { SMX = require(path.join(__dirname, "..", "scripts", "story-model.js")); } catch (_e) {}
+  const QMX = SMX?.QUEST_MAP;
+  if (QMX) {
+    const choicesOf = b => Array.isArray(b?.choices) ? b.choices.filter(Boolean) : [];
+    const reqOf = x => { const r = x?.requires; return Array.isArray(r) ? r : (r && typeof r === "object" ? [r] : []); };
+    const flat = (rows) => { const out = []; const walk = r => { if (!r) return; if (Array.isArray(r.anyOf)) r.anyOf.forEach(walk); else if (Array.isArray(r.allOf)) r.allOf.forEach(walk); else out.push(r); }; rows.forEach(walk); return out; };
+    const textOf = x => (s(x?.label) + " " + s(x?.description)).replace(/<[^>]+>/g, " ");
+    const onceOnly = b => !!b && b.inject?.repeatable !== true;
+    const isTravelX = b => !!(b && (b.worldEffects?.openTravel || b.type === "travel" || /\btravel\b/i.test(s(b.tags)) || /^(ride_|ag_ride_|lyrenn_word_ride)/.test(s(b.id))));
+    const routersOf = b => beats.filter(o => choicesOf(o).some(ch => s(ch.next) === s(b.id) || s(ch.failNext) === s(b.id)));
+    // effectively once: once-only itself, or an answer/relay beat that only once-only beats reach
+    const effectivelyOnce = (b, depth = 0) => { if (!b) return false; if (onceOnly(b)) return true; if (depth > 2 || !/^ans_/.test(s(b.id))) return false; const rs = routersOf(b); return rs.length > 0 && rs.every(r => effectivelyOnce(r, depth + 1)); };
+    // chapter keywords: distinctive tokens of the chapter name (≥ 6 letters, generic words dropped) — X01 is INFO: a door that
+    // shares a word with a chapter is not an ask; the reviewer decides
+    const STOPX = new Set(["remembers", "trouble", "starts", "furrier", "furrier's", "forgotten", "strain", "anchor", "singing", "forest", "official", "ledger", "chapel", "fought", "yesterdays", "widening", "khezek", "offices", "destinies", "lyrenn"]);
+    const toks = name => s(name).toLowerCase().replace(/[^a-z' ]/g, " ").split(/\s+/).filter(t => t.length >= 6 && !STOPX.has(t));
+    const chaptersX = [];
+    for (const [qk, q] of Object.entries(QMX.quests || {})) for (const [ck, c] of Object.entries(q.chapters || {})) {
+      const endings = beats.filter(b => b.story?.quest === qk && b.story?.chapter === ck && (b.story.role === "ending" || b.story.role === "closer")).map(b => s(b.id));
+      chaptersX.push({ quest: qk, chapter: ck, registryId: c.registryId || null, name: c.name, qname: q.name, keys: new Set(toks(c.name)), endings });
+    }
+    const endingsComplete = (c, questId) => !!questId && c.endings.length > 0 && c.endings.every(id => ((byId.get(id)?.worldEffects?.questEffects) || []).some(e => /^complete/.test(s(e?.action)) && s(e.questId) === s(questId)));
+    const gatedOnCh = (rows, c) => flat(rows).some(r => r && ((r.questBucket && s(r.questBucket) === s(c.registryId)) || (r.beatMark && c.endings.includes(s(r.beatMark)) && r.not === true)));
+    // X01 (INFO): a re-offerable choice whose text names a chapter of its own quest, with no gate on that chapter
+    for (const b of beats) {
+      if (effectivelyOnce(b)) continue;
+      for (const ch of choicesOf(b)) {
+        const t = byId.get(s(ch.next)); const words = new Set(textOf(ch).toLowerCase().replace(/[^a-z' ]/g, " ").split(/\s+/));
+        for (const c of chaptersX) {
+          if (!c.registryId || !c.endings.length) continue;
+          const hit = [...c.keys].filter(k => words.has(k)); if (!hit.length) continue;
+          if (b.story?.quest !== c.quest && t?.story?.quest !== c.quest) continue;
+          if (gatedOnCh(reqOf(ch), c) || (t && gatedOnCh(reqOf(t.inject), c))) continue;
+          if (t && (s(t.questId) === s(c.registryId) || endingsComplete(c, t.questId))) continue;
+          if (t && t.story?.chapter === c.chapter && t.story?.quest === c.quest) continue;
+          F("X01", "INFO", b.id, `choice "${ch.label}" names ${c.qname} · ${c.name} (${hit.join(",")}) with no gate on that chapter — still offered after it is done${t ? ` → ${t.id}` : ""}; gate it on {questBucket:${c.registryId}, isNot:"completed"} if it asks about the objective`);
+        }
+      }
+    }
+    // X02 (WARN): an OPEN FORK — sibling once-only targets of one re-offerable beat, same id stem, one rewarding (party effect /
+    // receipt / loyalty up) and one souring (loyalty or relationship down), neither hiding the other by {beatMark, not:true}
+    const polarity = b => { const we = b?.worldEffects || {}; let p = 0;
+      for (const f of (we.factionEffects || [])) p += Math.sign(Number(f?.loyaltyDelta) || 0) + Math.sign(Number(f?.moraleDelta) || 0);
+      for (const r of (we.relationshipEffects || [])) p += Math.sign(Number(r?.step) || 0);
+      if ((we.partyEffects || []).length || (we.receipts || []).length) p += 1; return p; };
+    const stem = id => s(id).replace(/_[a-z0-9]+$/, "");
+    for (const b of beats) {
+      if (effectivelyOnce(b)) continue;
+      const cs = choicesOf(b).map(ch => ({ ch, t: byId.get(s(ch.next)) })).filter(x => x.t && onceOnly(x.t) && s(x.t.id) !== s(b.id));
+      for (const A of cs) for (const B of cs) {
+        if (A === B || polarity(A.t) <= 0 || polarity(B.t) >= 0 || stem(A.t.id) !== stem(B.t.id)) continue;
+        if (!flat(reqOf(A.ch)).some(r => r.beatMark && s(r.beatMark) === s(B.t.id) && r.not === true)) F("X02", "WARN", b.id, `open fork: "${A.ch.label}" → ${A.t.id} (rewards) is still offered after its souring sibling "${B.ch.label}" → ${B.t.id} is played — add {beatMark:"${B.t.id}", not:true}`);
+        if (!flat(reqOf(B.ch)).some(r => r.beatMark && s(r.beatMark) === s(A.t.id) && r.not === true)) F("X02", "WARN", b.id, `open fork: "${B.ch.label}" → ${B.t.id} (sours) is still offered after its rewarding sibling "${A.ch.label}" → ${A.t.id} is played — add {beatMark:"${A.t.id}", not:true}`);
+      }
+    }
+    // X03 (WARN): NO WAY BACK — a beat on a town scene whose every exit (through answer beats) rides out or ends the dialog
+    const exitsOf = (b, depth = 0, seen = new Set()) => {
+      const out = []; if (!b || depth > 3 || seen.has(s(b.id))) return out; seen.add(s(b.id));
+      for (const ch of choicesOf(b)) for (const nx of [ch.next, ch.failNext]) {
+        const id = s(nx); if (!id) { out.push({ kind: "end" }); continue; }
+        const t = byId.get(id); if (!t) { out.push({ kind: "missing", id }); continue; }
+        if (/^ans_/.test(id) || (choicesOf(t).length && !s(t.description))) out.push(...exitsOf(t, depth + 1, seen));
+        else out.push({ kind: (t.worldEffects?.openTravel || /^(ride_|ag_ride_|lyrenn_word_ride)/.test(id)) ? "travel" : (/days_end/.test(id) ? "daysend" : "beat"), id });   // a ride = openTravel / a road beat; an encounter typed "travel" is still on the hex
+      }
+      return out;
+    };
+    for (const b of beats) {
+      if (!s(b.sceneId) || isTravelX(b) || /^ans_/.test(s(b.id)) || b.story?.role === "closer" || !choicesOf(b).length) continue;
+      const ex = exitsOf(b); const travel = ex.filter(e => e.kind === "travel");
+      if (!ex.length || !travel.length || ex.some(e => e.kind === "beat" || e.kind === "daysend")) continue;
+      F("X03", "WARN", b.id, `no way back: every exit rides out (${[...new Set(travel.map(e => e.id))].join(", ")})${ex.some(e => e.kind === "end") ? " or ends the dialog" : ""} — the party is forced off the hex; lead with a choice back to the town hub`);
+    }
+    // X04 (WARN): a chapter's beat that OUTLIVES the chapter — story.chapter set, Quest link not the chapter's registry id, no
+    // bucket gate, and a re-offerable beat still routes to it after the chapter's endings play
+    for (const b of beats) {
+      const d = b.story; if (!d?.quest || !d.chapter || d.role === "ending" || d.role === "closer" || effectivelyOnce(b)) continue;
+      const c = chaptersX.find(x => x.quest === d.quest && x.chapter === d.chapter); if (!c || !c.registryId || !c.endings.length) continue;
+      if (s(b.questId) === s(c.registryId) || endingsComplete(c, b.questId) || gatedOnCh(reqOf(b.inject), c)) continue;
+      const routers = beats.filter(o => !effectivelyOnce(o) && choicesOf(o).some(ch => s(ch.next) === s(b.id) && !gatedOnCh(reqOf(ch), c)));
+      if (routers.length) F("X04", "WARN", b.id, `belongs to ${c.qname} · ${c.name} but its Quest link is ${s(b.questId) || "(none)"} and nothing gates it on the chapter — ${routers.map(r => r.id).join(", ")} still route to it after the chapter is done`);
     }
   }
 }

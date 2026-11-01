@@ -200,6 +200,8 @@
         receipts: [{ label: "The Certification", effectKey: "rollPlus2", acquisition: "earned", source: { name: "Young Gearbox, in block capitals" },
           truth: "Signed by Young Gearbox, fitting drawn in the margin: TETRARCH. The first stabilizer certification since the Cough that says what it fits. Show it to Pike and he will finally ask who signed the last one. Show it to Garren and his hands will shake, after." }],
         choices: [
+          // 2026-11-01 (Dave): the crate waits at the Farm — the yard leads, the ride is optional; Garren takes it when the party is next in Allesh-Gilliam
+          ch("Back to the yard.", "fixit_intro_scene", { description: "The crate's roped and it isn't going anywhere without you. Garren has waited since the Cough; he'll keep until you're next in Allesh-Gilliam. The Farm is still open." }),
           ch("Ride home to Garren.", "ride_back_home"),
           ch("Ask about the three doorstops.", "", { description: "\"Wrong fitting. Every one. Nobody brought a spanner.\" He taps the drawing in the margin. \"Nobody's forgetting again.\"" })
         ] }),
