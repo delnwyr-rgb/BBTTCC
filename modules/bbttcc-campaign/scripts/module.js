@@ -2549,6 +2549,12 @@ function _chainCtxFrom(ctx) {
   for (const k of ["factionId", "actor", "joiningFactionIds", "participantFactionIds", "rosterActorId"]) {
     if (ctx[k] !== undefined) out[k] = ctx[k];
   }
+  // THE ENTERED HEX rides along (Dave 2026-11-01, the Forest of Early Tifaret bound to PolygonForest.d): a hex-entry chain
+  // carries the hex it entered, and the location guard accepts beats placed AT THAT HEX — not a blanket exemption (the
+  // 09-18 leak), so "Back to town" from a road hex is still refused. Mid-ride the party's recorded position is still the end
+  // of the last EXECUTED leg (the entry fires before the leg is marked executed), which is why the hex itself has to travel.
+  if (ctx.__enteredHexUuid) out.__enteredHexUuid = ctx.__enteredHexUuid;
+  else if (String(ctx.source || "") === "hex_entry" && ctx.hexUuid) out.__enteredHexUuid = String(ctx.hexUuid);
   return out;
 }
 
@@ -3951,7 +3957,10 @@ async function executeBeat(campaign, beat, ctx = {}) {
       const pw = _partyWhere(campaign); const place = placeOf(beat, null);
       if (pw?.hex && place && place !== "anywhere") {
         const want = hexKey(place), here = hexKey(pw.hex);
-        if (want !== here && _knownHexKeys().has(want)) {
+        // the hex a hex-entry chain entered counts as "here" for beats placed there (2026-11-01, see _chainCtxFrom)
+        let entered = "";
+        try { if (ctx?.__enteredHexUuid) { const d = fromUuidSync(String(ctx.__enteredHexUuid)); const doc = d?.document ?? d; entered = hexKey(doc?.flags?.["bbttcc-territory"]?.name || doc?.flags?.["bbttcc-territory"]?.hexName || ""); } } catch (_eEH) { entered = ""; }
+        if (want !== here && want !== entered && _knownHexKeys().has(want)) {
           const lbl = beat.label || beat.id || "(unnamed)";
           log(`[where] '${beat.id}' refused — it is at ${place}, the party is at ${pw.hex}`);
           if (game.user?.isGM) ChatMessage.create({ whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id), speaker: { alias: "Bad Eden" }, content: `<div style="border-left:3px solid #8a6d3b;padding:.35em .6em;background:rgba(138,109,59,.08);">🐎 <b>${foundry.utils.escapeHTML(String(lbl))}</b> is at <b>${foundry.utils.escapeHTML(String(place))}</b> — the party is at <b>${foundry.utils.escapeHTML(String(pw.hex))}</b>. Plot the ride on the Travel Console; arrival opens the town. (A forced run overrides this.)</div>` }).catch(() => {});
