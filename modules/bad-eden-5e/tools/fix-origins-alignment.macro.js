@@ -14,7 +14,7 @@
   const fixed = [], srd = [], bare = [];
   for (const a of game.actors.filter(x => x.type === "character")) {
     const cur = String(a.system?.details?.alignment ?? "").trim();
-    const seph = a.getFlag(CO, "identity")?.sephirothicAlignment?.name || a.getFlag(CO, "sephirot")?.name || "";
+    const seph = String(a.getFlag(CO, "identity")?.sephirothicAlignment?.name || a.getFlag(CO, "sephirot")?.name || "").replace(/^Alignment:\s*/i, "").trim();
     if (!cur && seph) { await a.update({ "system.details.alignment": seph }); fixed.push(`${a.name} → ${seph}`); }
     const bgs = a.items.filter(i => i.type === "background");
     for (const b of bgs) if (!b.getFlag(BE, "archetype")) srd.push(`${a.name}: ${b.name}${bgs.length > 1 ? ` (+${bgs.length - 1} more origin item)` : ""}`);

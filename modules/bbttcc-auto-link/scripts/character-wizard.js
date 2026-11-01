@@ -737,7 +737,7 @@ async function persistIdentityFlags(actor, selections) {
   // a plain string nothing else writes — mirror the Sephira there so the header isn't blank (and a player can't type
   // "Chaotic Good" over a Tree pick unnoticed).
   if (isDnd5e() && selections.sephirot && selections.sephirot.name) {
-    try { await actor.update({ "system.details.alignment": selections.sephirot.name }); }
+    try { await actor.update({ "system.details.alignment": String(selections.sephirot.name).replace(/^Alignment:\s*/i, "").trim() }); }
     catch (e) { warn("alignment mirror failed (non-fatal)", e); }
   }
 }
