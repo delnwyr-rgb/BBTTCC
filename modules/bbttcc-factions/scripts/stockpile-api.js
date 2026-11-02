@@ -329,7 +329,7 @@ async function unitPrice(faction, matKey) {
 }
 // HEADROOM (2026-09-21): a sale that would push a bank over its cap is REFUSED by the OP engine (Sell Surplus tried to sell
 // 79 wild herb into a 57/70 Logistics bank and got "commit refused"). Sales size themselves to the room the cap leaves.
-function headroom(faction, channel) {
+function headroom(faction, channel, { channelOnly = false } = {}) {
   const F = _resolveActor(faction); if (!F) return 0;
   const ff = F.flags?.[MOD_ID] || {}; const k = String(channel || "").toLowerCase();
   const bank = Number(ff.opBank?.[k] || 0);
@@ -340,6 +340,7 @@ function headroom(faction, channel) {
   // …and the TOTAL cap the engine also enforces (2026-11-02 click-through: Sell Surplus "Bog-Iron would not sell — commit refused"
   // two months running — Errata's Violence sat over its own cap from story rewards, so the bank was at its TOTAL cap and every
   // Economy credit was refused although the Economy channel had room). Room = the smaller of the two.
+  if (channelOnly) return room;
   try {
     let tCap = 0, tBank = 0; for (const [kk, v] of Object.entries(caps)) { const c = Number(v) || 0; if (c > 0) { tCap += c; tBank += Number(ff.opBank?.[kk] || 0); } }
     if (tCap > 0) room = Math.min(room, Math.max(0, Math.floor(tCap - tBank)));
@@ -357,7 +358,10 @@ async function sell(faction, matKey, qtyWanted, opts = {}) {
   const channel = String(opts.channel || price.channel).toLowerCase(); const home = channel === price.channel; const chanFrac = home ? 1 : MATERIAL_MARKET.OFF_CHANNEL_FRACTION;
   const unitMarks = Math.max(1, Math.round(price.sell * mult * chanFrac));
   let n = Math.min(have, Math.max(0, Math.floor(Number(qtyWanted) || 0))); let clamped = 0;
-  if (!opts.allowOvercap) { const room = headroom(F, channel); const fit = Math.floor(room / unitMarks); if (fit < n) { clamped = n - fit; n = fit; } }
+  // opts.channelCapOnly (2026-11-02): inside the Advance the regen credits land UNCLAMPED and the end-of-Advance clamp trims every
+  // channel afterwards, so the TOTAL cap is meaningless mid-Advance — Sell Surplus fits the sale to its own channel's room only and
+  // commits past the transient total (the clamp that follows keeps every channel at its cap).
+  if (!opts.allowOvercap) { const room = headroom(F, channel, { channelOnly: !!opts.channelCapOnly }); const fit = Math.floor(room / unitMarks); if (fit < n) { clamped = n - fit; n = fit; } }
   if (n <= 0) return { ok: false, error: clamped ? `the ${channel} bank is at its cap — nothing fits` : "nothing to sell", have, clamped };
   const op = game.bbttcc?.api?.op; if (!op?.commit) return { ok: false, error: "OP api unavailable" };
   const name = (_readMap(F)[matKey]?.name) || matKey;
@@ -370,7 +374,7 @@ async function sell(faction, matKey, qtyWanted, opts = {}) {
   n = taken;
   if (n <= 0) return { ok: false, error: adj?.ok ? "nothing to sell" : (adj?.error || "stockpile adjust refused"), have: adj?.ok ? _safeQty(adj.before) : have, clamped };
   const marks = unitMarks * n;
-  const res = await op.commit(F.id, { [channel]: marks }, { source: "stockpile-sell", label: `Sold ${n}× ${name} → ${channel}`, note: `${n} × ${unitMarks} marks (retail ${price.retail}, T${price.tier}${mult !== 1 ? `, ×${mult}` : ""}${home ? "" : `, off-channel ×${MATERIAL_MARKET.OFF_CHANNEL_FRACTION}`})`, allowOvercap: !!opts.allowOvercap });
+  const res = await op.commit(F.id, { [channel]: marks }, { source: "stockpile-sell", label: `Sold ${n}× ${name} → ${channel}`, note: `${n} × ${unitMarks} marks (retail ${price.retail}, T${price.tier}${mult !== 1 ? `, ×${mult}` : ""}${home ? "" : `, off-channel ×${MATERIAL_MARKET.OFF_CHANNEL_FRACTION}`})`, allowOvercap: !!(opts.allowOvercap || opts.channelCapOnly) });
   if (!res || res.ok === false) {   // unpaid → the reserved units go back
     await adjust(F, matKey, +n, { name });
     return { ok: false, error: res?.error || "commit refused", marks };

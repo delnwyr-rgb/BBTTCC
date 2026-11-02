@@ -545,7 +545,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const rows = (stock.list(A) || []).filter(r => Number(r?.qty || 0) > 0).sort((a, b) => Number(b.qty) - Number(a.qty));
       if (!rows.length) return _refused("Sell Surplus: the stockpile is empty — nothing to take to market.");
       const top = rows[0]; const n = Math.max(1, Math.floor(Number(top.qty) / 2));
-      const r = await stock.sell(A, top.key, n, { priceMult: MATERIAL_MARKET.SURPLUS_MULT });
+      const r = await stock.sell(A, top.key, n, { priceMult: MATERIAL_MARKET.SURPLUS_MULT, channelCapOnly: true });   // the Advance clamps after the orders (2026-11-02)
       if (!r?.ok) return _refused(`Sell Surplus: ${top.name || top.key} would not sell — ${r?.error || "refused"}.`);
       await pushWarLog(A, `Sell Surplus: sold ${r.qty}× ${top.name || top.key} for ${r.marks} marks ${r.channel} (its home channel, sell price ×${MATERIAL_MARKET.SURPLUS_MULT})${r.clamped ? ` — ${r.clamped} held back, the bank is at its cap` : ""}.`);
     },
