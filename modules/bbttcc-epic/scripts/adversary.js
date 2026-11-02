@@ -287,6 +287,9 @@ Hooks.on("bbttcc:advanceTurn:end", async (payload) => {
     const activeGM = game.users?.activeGM;
     if (activeGM && !activeGM.isSelf) return;
     if (game.system?.id !== "fourththing") return;
+    // THE GAZE IS STILLED once Yesod is realigned at the Bunker (Dave 2026-11-02: "No more adversary for this part of the campaign
+    // after Yesod is realigned at the Bunker") — either finale Yesod ending played, or the GM override (see _stilled).
+    if (_stilled()) { log("the Gaze is stilled — no drumbeat this turn."); return; }
 
     const detail = computeBP();
     await game.settings.set(MOD, "boilingPoint", detail.bp);
@@ -316,9 +319,18 @@ function _hunterMatches(pending, factionId, actorId) {
     || (() => { try { const st = game.actors?.get(pending.stewardId); return st?.system?.faction?.id || st?.getFlag?.("bbttcc-factions", "factionId") || null; } catch (_e) { return null; } })();
   return !!(fid && factionId && fid === factionId);
 }
+// Stilled = the STORY says Yesod was realigned at the Bunker (either finale Yesod ending played — story state, so a golden reset wakes
+// the Gaze again with no extra bookkeeping), or the GM override setting `gazeStilled` (adversary.still(true)).
+const YESOD_REALIGNED = ["raid_thatwards_outcome_friends", "raid_thatwards_outcome_neutral_spark"];
+const _stilled = () => {
+  try { if (game.settings.get(MOD, "gazeStilled") === true) return true; } catch (_e) {}
+  try { const st = game.bbttcc?.api?.campaign?.story; if (st?.hasMark && YESOD_REALIGNED.some(id => st.hasMark(id))) return true; } catch (_e) {}
+  return false;
+};
 let _springing = false;
 async function _springHunter(factionId, actorId) {
   if (_springing) return false;
+  if (_stilled()) { try { await game.settings.set(MOD, "hunterPending", null); } catch (_eS) {} return false; }
   const pending = game.settings.get(MOD, "hunterPending");
   if (!_hunterMatches(pending, factionId, actorId)) return false;
   _springing = true;
@@ -356,6 +368,7 @@ Hooks.on("init", () => {
   if (game?.system?.id !== "fourththing") return;
   game.settings.register(MOD, "boilingPoint",  { scope: "world", config: false, type: Number, default: 0 });
   game.settings.register(MOD, "hunterPending", { scope: "world", config: false, type: Object, default: null });
+  game.settings.register(MOD, "gazeStilled",   { scope: "world", config: false, type: Boolean, default: false });   // 2026-11-02
 });
 
 Hooks.on("ready", () => {
@@ -366,6 +379,9 @@ Hooks.on("ready", () => {
     game.fourththing.epic.adversary = {
       boilingPoint: () => game.settings.get(MOD, "boilingPoint"),
       compute: computeBP,
+      // GM override: still(true) stills the Gaze outright; still(false) clears the override (the finale's realignment still holds)
+      still: async (on = true) => { await game.settings.set(MOD, "gazeStilled", !!on); if (on) { try { await game.settings.set(MOD, "hunterPending", null); } catch (_e) {} } return !!on; },
+      stilled: _stilled,
       census: sparkCensus,
       // GM console: force one event of a tier for testing/drama —
       // game.fourththing.epic.adversary.force("reaching")
