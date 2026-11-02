@@ -1848,6 +1848,12 @@ async function _choiceHidden(beat, ch, campaign, ctx = {}) {
 //            routes back to this one): greyed, ✓, still clickable (re-read the answer).
 // Exits never grey: no next, or a Leave / Back / Return / Call it a day / Ride / Onward label.
 const _EXIT_LABEL = /^\W*(leave|back\b|return|call it a day|ride\b|onward|go back|actually\b|not this one|not yet|not today|climb back|another time|stay a while)/i;   // 2026-11-02 click-through: "Climb back up. Another time." greyed as done
+const __inboundCache = new WeakMap();
+function _inboundRoutes(campaign, id) {
+  const beats = Array.isArray(campaign?.beats) ? campaign.beats : []; let m = __inboundCache.get(beats);
+  if (!m) { m = new Map(); for (const b of beats) { const seen = new Set(); for (const c of (b?.choices || [])) { const t = String(c?.next || ""); if (t && !seen.has(t)) { seen.add(t); m.set(t, (m.get(t) || 0) + 1); } } } __inboundCache.set(beats, m); }
+  return m.get(String(id)) || 0;
+}
 function _choiceSpent(ch, campaign, fromBeatId = null) {
   try {
     const next = String(ch?.next || "").trim(); if (!next) return false;
@@ -1856,7 +1862,10 @@ function _choiceSpent(ch, campaign, fromBeatId = null) {
     let played = !!_storyStateFor(campaign?.id)?.played?.[next];
     if (!played) { const ds = _readDirectorState() || {}; played = !!(ds.firedStoryBeats?.[next] || ds.dialogueFired?.[next]); }
     if (!played) return false;
-    if (tgt.inject?.repeatable !== true) return "lock";
+    // A PLACE IS NEVER LOCKED (2026-11-02 click-through, Chuckle Creek): "Go find him under the piano" routes back to the street
+    // hub — once-only, but 29 beats route into it — and greyed "done" as the dialog's only choice: a dead end. A beat that four or
+    // more beats route into is somewhere you go back to, not a moment that's spent.
+    if (tgt.inject?.repeatable !== true) return _inboundRoutes(campaign, next) >= 4 ? false : "lock";
     const from = String(fromBeatId || "");
     const isQuestion = /^ans_/.test(next) || /\banswer\b/.test(String(tgt.tags || "")) || (!!from && (tgt.choices || []).some(c => String(c?.next || "") === from));
     return isQuestion ? "soft" : false;
@@ -4048,6 +4057,7 @@ async function executeBeat(campaign, beat, ctx = {}) {
   // Contact screen — the meter rode "bbttcc:beat:resolved", which fires only when a beat's whole awaited chain unwinds, and the
   // verification answers route straight on into the Terms inside that chain, so "Pursue alliance" (crVerify ≥ 2) was hidden until
   // the table had already left). The verification tally and worldEffects.meters now land when the beat STARTS, like the play mark.
+  if (game.user?.isGM && beat?.id && !_resumed) { try { await _applyBeatTimePoints(campaign, beat, ctx); } catch (_eTP) {} }   // ONE CLOCK: the day is spent when the step starts
   if (game.user?.isGM && beat?.id && !_resumed) { try { await _onBeatResolvedCrVerify({ beat }); } catch (_eCV) {} try { await _onBeatResolvedMeters({ beat }); } catch (_eMt) {} if (BANDIT_ENC_RE.test(String(beat.id)) && !BANDIT_MERCY_RE.test(String(beat.id)) && !BANDIT_FEAR_RE.test(String(beat.id)) && ctx?.source !== "arms-down") { let _div = false; try { _div = await _onBeatResolvedBanditLedger({ beat, campaign, atEntry: true }); } catch (_eBL) {} if (_div === true) return { ok: true, diverted: BANDIT_ARMS_DOWN_BEAT_ID }; } }
 
   // Phase Charter closers apply AT ENTRY (2026-08-30) — same lesson as the
@@ -4790,8 +4800,7 @@ async function executeBeat(campaign, beat, ctx = {}) {
     warn("World mutation failed:", e);
   }
 
-  // Time Points (optional): accumulate beat-time into world clock
-  await _applyBeatTimePoints(campaign, beat, ctx);
+  // Time Points: charged at ENTRY now (one clock, 2026-11-02 — a chain cut short by a reload or a dead end lost its day here)
 
   // Subscriber hook for cross-module reactions to beat resolution. Tikkun
   // module subscribes to advance spark state when a beat carries
