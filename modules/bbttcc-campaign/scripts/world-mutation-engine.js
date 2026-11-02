@@ -2249,6 +2249,13 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
     }
 
+    // ── revealHexes (HEX VISIBILITY, Dave 2026-11-02): worldEffects.revealHexes = ["Crown Mall", …] — a beat that tells the table
+    // where something is lifts that hex out of the fog (GM only; the campaign module owns the reveal) ──
+    if (Array.isArray(we.revealHexes) && we.revealHexes.length) {
+      try { const n = await game.bbttcc?.api?.campaign?.revealHexes?.(we.revealHexes, { why: "the story named it" }); if (n) { changed = true; notes.push(`revealHexes:${n}`); } }
+      catch (e) { console.warn(TAG, "revealHexes failed", e); }
+    }
+
     // ── openTravel: hand the table to the travel engine (2026-08-24) ──
     // worldEffects.openTravel = { hexName?, note? } — pull the table to the hex
     // map, open the Travel Console on EVERY client, name the destination. The

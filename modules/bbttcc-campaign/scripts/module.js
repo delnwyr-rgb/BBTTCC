@@ -5032,6 +5032,60 @@ async function _oneClockDoorBeats() {
   return __oneClockDoors.ids;
 }
 
+// HEX VISIBILITY (Dave 2026-11-02: "Some games automatically point out quest locations once the quest has been accepted … that's a
+// pretty standard deal, and gives them reasons to travel with intent"). A hex is a hidden Drawing until something reveals it:
+//   • ARRIVAL — the hex the party enters, and its neighbours (you can see the next valley from where you stand);
+//   • THE QUEST LOG — the place NOW's next names, and every active quest's next step's place, the moment it becomes Next;
+//   • THE STORY — worldEffects.revealHexes: [names] (a beat that tells the table where something is).
+// GM only (a Drawing write). Neighbours are measured like the Travel Console does: centres within 1.2× the hex's nearest spacing.
+const _hexNameNorm = (s) => String(s || "").replace(/[\s\u00a0]+/g, " ").trim().toLowerCase();
+function _hexCentre(d) { const pts = d?.shape?.points || []; if (pts.length >= 4) { let x = 0, y = 0; const n = pts.length / 2; for (let i = 0; i < pts.length; i += 2) { x += pts[i]; y += pts[i + 1]; } return { x: d.x + x / n, y: d.y + y / n }; } return { x: Number(d?.x) || 0, y: Number(d?.y) || 0 }; }
+const _isHexDoc = (d) => { const f = d?.flags?.["bbttcc-territory"]; return !!(f && (f.isHex || f.kind === "territory-hex" || f.name)); };
+function _hexByName(name) {
+  const want = _hexNameNorm(name); if (!want || want === "anywhere") return null;
+  const scenes = [...(game.scenes || [])].sort((a, b) => Number(/the whole map/i.test(b.name)) - Number(/the whole map/i.test(a.name)));
+  for (const sc of scenes) for (const d of (sc.drawings?.contents || [])) if (_isHexDoc(d) && _hexNameNorm(d.flags["bbttcc-territory"].name || d.text) === want) return d;
+  return null;
+}
+function _hexNeighboursOf(d) {
+  const hexes = (d?.parent?.drawings?.contents || []).filter(x => _isHexDoc(x) && x.id !== d.id); if (!hexes.length) return [];
+  const c = _hexCentre(d); const ds = hexes.map(x => { const o = _hexCentre(x); return [x, Math.hypot(o.x - c.x, o.y - c.y)]; });
+  const nearest = Math.min(...ds.map(([, v]) => v).filter(v => v > 0)); if (!Number.isFinite(nearest)) return [];
+  return ds.filter(([, v]) => v > 0 && v <= nearest * 1.2).map(([x]) => x);
+}
+async function _revealHexDocs(docs, why = "") {
+  if (!game.user?.isGM) return 0;
+  const byScene = new Map();
+  for (const d of docs) if (d && d.hidden === true && d.parent) { const l = byScene.get(d.parent) || []; l.push({ _id: d.id, hidden: false }); byScene.set(d.parent, l); }
+  let n = 0;
+  for (const [sc, ups] of byScene) { try { await sc.updateEmbeddedDocuments("Drawing", ups); n += ups.length; } catch (e) { warn("[reveal] hex reveal failed", e); } }
+  if (n) log(`[reveal] ${n} hex(es) revealed${why ? " — " + why : ""}`);
+  return n;
+}
+async function _revealHexesNamed(names, { neighbours = false, why = "" } = {}) {
+  const docs = [];
+  for (const nm of (Array.isArray(names) ? names : [names])) { const d = _hexByName(nm); if (!d) continue; docs.push(d); if (neighbours) docs.push(..._hexNeighboursOf(d)); }
+  return _revealHexDocs(docs, why);
+}
+async function _onHexVisitedReveal(payload) {
+  try { if (!game.user?.isGM) return; const d = payload?.hexUuid ? await fromUuid(payload.hexUuid).catch(() => null) : null; if (!d) return; await _revealHexDocs([d, ..._hexNeighboursOf(d)], `arrived at ${payload.hexName || d.id}`); } catch (e) { warn("[reveal] arrival reveal failed", e); }
+}
+let __revealTimer = null;
+function _scheduleQuestReveal() {
+  if (!game.user?.isGM) return;
+  clearTimeout(__revealTimer);
+  __revealTimer = setTimeout(async () => {
+    try {
+      const sit = await game.bbttcc?.api?.campaign?.director?.situation?.(); if (!sit) return;
+      const places = new Set();
+      const add = (n) => { const p = String(n?.place || n?.where || "").trim(); if (p && p.toLowerCase() !== "anywhere") places.add(p); };
+      if (sit.now?.next) add(sit.now.next);
+      for (const q of (sit.quests || [])) if (q?.state === "active" && q.next && !q.background) add(q.next);
+      if (places.size) await _revealHexesNamed([...places], { why: "the quest log points there" });
+    } catch (e) { warn("[reveal] quest reveal failed", e); }
+  }, 1500);
+}
+
 // ONE CLOCK — the week turns (Dave 2026-11-02): the Domains' income comes in four weekly slices at the START of each week (day 1,
 // 8, 15, 22 = spent 0 / 7 / 14 / 21); the month's close pays the rest (bbttcc-territory turn-driver api.turn.payIncomeSlice —
 // idempotent per slice per world turn). When the month's days are spent, the GM is told once: run the turn.
@@ -9242,6 +9296,7 @@ function buildCampaignAPI() {
       pointTheWay: dialoguePointTheWay
     },
     placements: { reconcile: reconcileNpcPlacements },
+    revealHexes: (names, opts = {}) => _revealHexesNamed(names, opts),   // HEX VISIBILITY (2026-11-02) — GM only
     ledger: {
       get: _ledgerGet,
       spend: _ledgerSpend,
@@ -10103,7 +10158,10 @@ Hooks.once("ready", () => {
   // (_applyBeatTimePoints → world.addTime) lights up on its own now that the
   // sink exists — no beat-side wiring needed here.
   Hooks.on("bbttcc:time:accrued", _onTimeAccruedLedger);
-  Hooks.on("bbttcc:time:accrued", _onTimeAccruedClock);          // ONE CLOCK (2026-11-02): weekly income slices + month-spent prompt
+  Hooks.on("bbttcc:time:accrued", _onTimeAccruedClock);
+  Hooks.on("bbttcc:hex:visited", _onHexVisitedReveal);             // HEX VISIBILITY (2026-11-02): arrival reveals the hex + neighbours
+  for (const h of ["bbttcc:story:changed", "bbttcc:beat:resolved"]) Hooks.on(h, _scheduleQuestReveal);   // the quest log's places
+  setTimeout(_scheduleQuestReveal, 5000);          // ONE CLOCK (2026-11-02): weekly income slices + month-spent prompt
   setTimeout(_oneClockCatchUp, 4000);                              // (inside ready) a month already under way gets the slices it is owed
   Hooks.on("bbttcc:afterTravel", _onAfterTravelLedger);
   Hooks.on("bbttcc:advanceTurn:end", (tctx) => {

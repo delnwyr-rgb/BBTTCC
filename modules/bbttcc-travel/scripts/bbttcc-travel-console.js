@@ -179,6 +179,7 @@
           id:   p.id,
           uuid: doc.uuid,
           label,
+          hidden: doc.hidden === true,
           terrainKey: String(key),
           terrainType: flags.terrainType || (flags.terrain?.key ?? "") || "",
           travelUnits: Number(flags.travelUnits || 1),
@@ -1498,7 +1499,9 @@
       const hexesSorted = hexes.slice().sort((a, b) =>
         String(a.label || "").localeCompare(String(b.label || ""), undefined, { sensitivity: "base", numeric: true })
       );
-      const hexOpts = hexesSorted.map(h => `<option value="${h.uuid}">${enc(h.label)}</option>`).join("");
+      // HEX VISIBILITY (Dave 2026-11-02): a player's From/To lists only the hexes they can see — the names of fogged hexes were a map
+      // leak (Auto-Plan still paths THROUGH fog; arrival and the quest log reveal destinations). The GM sees every hex.
+      const hexOpts = hexesSorted.filter(h => game.user?.isGM || !h.hidden).map(h => `<option value="${h.uuid}">${enc(h.label)}</option>`).join("");
       $rf.innerHTML = `<option value="">[From]</option>${hexOpts}`;
       $rt.innerHTML = `<option value="">[To]</option>${hexOpts}`;
 
