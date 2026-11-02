@@ -27,6 +27,8 @@
  *   bin/ft-sim-economy                       # all policies, engine-as-is knobs, 30 turns
  *   bin/ft-sim-economy --turns 40 --recipes --occupation-mult 0.5 --price-mult 0.75
  *   bin/ft-sim-economy --spend-order after   # regen lands before plans are paid
+ *   bin/ft-sim-economy --lump                # the pre-one-clock economy (2026-11-02): whole month's income at the Advance
+ *                                            # default = ONE CLOCK: 4 weekly slices clamped as they land, plans billed when planned
  *   bin/ft-sim-economy --parity /path/to/save.json --faction "The Errata Society"
  *   bin/ft-sim-economy --json out.json       # machine-readable per-turn rows
  *   bin/ft-sim-economy --policy expand --verbose
@@ -61,6 +63,7 @@ const KNOBS = {
   priceMult:        num("price-mult", null),         // every activity price × this (default = the engine's PRICE_MULT)
   econPriceMult:    num("econ-price-mult", 1.0),     // the ECONOMY part of every price × this (on top)
   occupationMult:   num("occupation-mult", 1.0),     // occupation-phase upkeep × this (engine 1.5 phase mult stays)
+  lump:             !!flag("lump", false),          // 2026-11-02: the pre-one-clock economy (whole month's income at the Advance, plans billed there); default = ONE CLOCK
   spendOrder:       String(flag("spend-order", "after")),   // after = engine since 2026-09-12 (regen lands, THEN plans are paid); before = the old order
   sprawlExp:        num("sprawl-exp", null),         // override LOGI.SPRAWL_EXP
   sprawlThreshold:  num("sprawl-threshold", null),
@@ -378,15 +381,55 @@ function pickFirst(F, days, keys) {
 }
 function headroomB(B, cost) { return Math.min(...Object.entries(cost).map(([k, v]) => (B[k] || 0) - v)); }
 
+/* ───────────────────── player actions during the month ───────────────────── */
+// week 0 = the whole month at once (lump); 1..4 = that week's share (one clock). Counts split round-robin
+// (leg i goes in week i % 4 + 1); gear is a mid-month market visit (week 2).
+function duringPlay(F, policy, t, row, play, week) {
+  const share = (n) => week === 0 ? n : Array.from({ length: Math.max(0, n) }, (_, i) => i).filter(i => i % 4 === week - 1).length;
+  if (KNOBS.travelLegs > 0) {
+    const tc0 = E.TERRAIN_TABLE[KNOBS.travelTerrain]?.cost || E.TERRAIN_TABLE.plains?.cost || { economy:10 };
+    const tc = Object.fromEntries(Object.entries(tc0).map(([k, v]) => [k, Math.max(1, Math.round(Number(v) * KNOBS.priceMult))]));   // hex-travel _applyPricePolicy (2026-09-12)
+    for (let i = 0; i < share(KNOBS.travelLegs); i++) { const leg = ++play.legs; for (const [k0, v] of Object.entries(tc)) { const k = k0 === "nonLethal" ? "nonlethal" : k0; if ((F.bank[k] || 0) >= v) { F.bank[k] -= v; F.spentChannels.add(k); } else { play.short.push(`travel leg ${leg} SHORT (${k})`); } } }
+  }
+  if (KNOBS.raidRounds > 0) {
+    // Engine truth (2026-09-12): a raid round needs 10 marks in the primary pool as a GATE (not a charge);
+    // what a round actually spends is the STAGED marks.
+    const pool = KNOBS.raidPool;
+    for (let i = 0; i < share(KNOBS.raidRounds); i++) { const stake = Math.max(0, KNOBS.raidStaged); if ((F.bank[pool] || 0) >= Math.max(10, stake)) { F.bank[pool] -= stake; if (stake) F.spentChannels.add(pool); play.raid++; } }
+  }
+  if (KNOBS.courtlyRounds > 0) {
+    for (let i = 0; i < share(KNOBS.courtlyRounds); i++) { if ((F.bank.diplomacy || 0) >= 20) { F.bank.diplomacy -= 20; F.spentChannels.add("diplomacy"); play.court++; } }
+  }
+  // gear policy: a Steward buys from the faction bank (economy first, then any pool at cross-pool friction)
+  if (policy.gear && t % KNOBS.gearEvery === 0 && (week === 0 || week === 2)) {
+    const GEAR_NOW = KNOBS.gearByTier ? Math.round(E.TIER_BASE_MARKS[Math.max(1, F.tier)] * (E.CATEGORY_MULT.weapon ?? 1) + (E.TIER_FEE_MARKS[["I", "I", "II", "III", "IV"][F.tier]] ?? 10)) : GEAR_MARKS;
+    if (KNOBS.spread ? spreadPay(F, "economy", GEAR_NOW) : (F.bank.economy >= GEAR_NOW && (F.bank.economy -= GEAR_NOW, true))) { F.gearSpend = (F.gearSpend || 0) + GEAR_NOW; F.spentChannels.add("economy"); row.notes.push(`gear −${GEAR_NOW} economy (T${F.tier})`); F.gearBought = (F.gearBought || 0) + 1; F.firstGear ??= t; }
+    else row.notes.push(`gear UNAFFORDABLE (${GEAR_NOW} at T${F.tier})`);
+  }
+}
+function finishPlay(row, play) {
+  if (KNOBS.travelLegs > 0) { row.notes.push(...play.short); row.notes.push(`travel ×${KNOBS.travelLegs} ${KNOBS.travelTerrain}`); }
+  if (KNOBS.raidRounds > 0) {
+    const perBonus = Math.max(1, Math.round(20 * KNOBS.priceMult));
+    row.notes.push(`raid rounds ${play.raid}/${KNOBS.raidRounds} (${KNOBS.raidPool}${KNOBS.raidStaged ? `, staged ${KNOBS.raidStaged} → +${Math.ceil(KNOBS.raidStaged / perBonus)}` : ""})`); if (play.raid < KNOBS.raidRounds) row.notes.push(`raid SHORT (${KNOBS.raidPool})`);
+  }
+  if (KNOBS.courtlyRounds > 0) { row.notes.push(`courtly ${play.court}/${KNOBS.courtlyRounds}`); if (play.court < KNOBS.courtlyRounds) row.notes.push("courtly SHORT (diplomacy)"); }
+}
+
 /* ───────────────────── one turn (engine order) ───────────────────── */
 function rng(seed) { let s = seed >>> 0; return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
 function runTurn(F, policy, t, rand) {
-  F.turnIndex = t; const row = { turn:t, notes:[] };
-  const plans = policy.plan(F, M.DAYS_PER_TURN);
-  const applyPlans = () => {
+  F.turnIndex = t; const row = { turn:t, notes:[], sliceLost:0, clampLost:0 };
+  let plans = [];
+  // mode "both" = pay then resolve (the old lump Advance) · "pay" = bill at plan (one clock, 2026-11-02) · "effect" = resolve a paid plan at the Advance
+  const applyPlans = (mode = "both") => {
     for (const p of plans) {
-      if (!canPay(F, p.recipe.cost)) { row.notes.push(`${p.key} HELD (cannot afford at resolution)`); continue; }
-      pay(F, p.recipe.cost, `${p.key} via ${p.recipe.label}`);
+      if (mode !== "effect") {
+        if (!canPay(F, p.recipe.cost)) { row.notes.push(`${p.key} HELD (cannot afford ${mode === "pay" ? "when planned" : "at resolution"})`); p.held = true; continue; }
+        pay(F, p.recipe.cost, `${p.key} via ${p.recipe.label}`);
+        if (mode === "pay") continue;
+      }
+      if (p.held) continue;
       const fxH = p.recipe.fx?.hex || {}, fxF = p.recipe.fx?.faction || {};
       if (fxF.loyaltyDelta) F.loyalty = Math.max(0, Math.min(100, F.loyalty + Number(fxF.loyaltyDelta)));
       if (fxF.moraleDelta) F.morale = Math.max(0, Math.min(100, F.morale + Number(fxF.moraleDelta)));
@@ -399,7 +442,6 @@ function runTurn(F, policy, t, rand) {
       row.notes.push(`${p.key}${p.recipe.label !== "engine" ? ` (${p.recipe.label})` : ""}`);
     }
   };
-  row.optionsAtPlan = optionsCount(F, M.DAYS_PER_TURN);
   // Calendar hard door (campaign _storyPhaseAdvance → PHASE_FLOORS → directorReconcileLevels → opCaps to the tier band).
   // "pre": the turn driver opens the door against the turn this Advance produces, BEFORE income lands (2026-09-12).
   const worldTurnNext = KNOBS.startTurn + t;
@@ -407,15 +449,49 @@ function runTurn(F, policy, t, rand) {
   // × PHASE_FLOORS faction {2:1,3:2,4:3,5:4}. Default = the old single T1 door at --tier-floor-turn.
   const DOORS = KNOBS.tierDoors ? String(KNOBS.tierDoors).split(",").map(x => x.split(":").map(Number)).filter(([a, b]) => a > 0 && b >= 0) : [[KNOBS.tierFloorTurn, 1]];
   const openDoor = (when) => { for (const [turnGte, tier] of DOORS) if (worldTurnNext >= turnGte && F.tier < tier) { F.tier = tier; row.notes.push(`door → T${tier} (${when})`); } };
-  if (KNOBS.doorOrder === "pre") openDoor("pre-regen");
-  if (KNOBS.spendOrder === "before") applyPlans();
-  // regen (turn-driver advanceOPRegen): matrix income × loyalty pct (2026-09-10) × overextension logistics mult, clamp to caps
-  const inc = factionIncome(F); const pct = KNOBS.loyaltyPenalty ? F.pendingPct : 0;
-  const lg = logistics(F); F.lastBand = lg.band; const lm = M.OVEREXT_LOGI_MULT[lg.band] ?? 1;
-  for (const k of OPK) { let v = inc[k]; if (pct) v = Math.max(0, Math.floor(v * (1 + pct / 100))); if (k === "logistics" && lm !== 1) v = Math.floor(v * lm); F.bank[k] = F.bank[k] + v; }   // clamp AFTER the spend (engine clampBanksToCaps, 2026-09-12)
+  // The month's income (turn-driver computeRegenIncomeFor): matrix income × loyalty pct (2026-09-10) × overextension logistics mult —
+  // from the hexes as they stand before this month's plans resolve (the Advance regens BEFORE plannedRaidsStep).
+  const monthIncome = () => {
+    const inc = factionIncome(F); const pct = KNOBS.loyaltyPenalty ? F.pendingPct : 0;
+    const lg = logistics(F); const lm = M.OVEREXT_LOGI_MULT[lg.band] ?? 1; const v = {};
+    for (const k of OPK) { let x = inc[k]; if (pct) x = Math.max(0, Math.floor(x * (1 + pct / 100))); if (k === "logistics" && lm !== 1) x = Math.floor(x * lm); v[k] = x; }
+    return { inc, lg, v };
+  };
+  const play = { legs:0, short:[], raid:0, court:0 };
+  let inc, lg;
+  if (KNOBS.lump) {
+    // ── LUMP (the engine before 2026-11-02): plan from the bank, the whole month's income at the Advance, spend, clamp once.
+    plans = policy.plan(F, M.DAYS_PER_TURN);
+    row.optionsAtPlan = optionsCount(F, M.DAYS_PER_TURN);
+    if (KNOBS.doorOrder === "pre") openDoor("pre-regen");
+    if (KNOBS.spendOrder === "before") applyPlans();
+    let v; ({ inc, lg, v } = monthIncome()); F.lastBand = lg.band;
+    for (const k of OPK) F.bank[k] = F.bank[k] + v[k];   // clamp AFTER the spend (engine clampBanksToCaps, 2026-09-12)
   if (policy.reward && KNOBS.rewardMarks > 0 && t % KNOBS.rewardEvery === 0) { const scarce = OPK.slice().sort((a, b) => F.bank[a] - F.bank[b])[0]; F.bank[scarce] = Math.min(caps(F), F.bank[scarce] + KNOBS.rewardMarks); row.notes.push(`reward +${KNOBS.rewardMarks} ${scarce}`); }
-  F.pendingPct = 0;
-  if (KNOBS.spendOrder === "after") applyPlans();
+    F.pendingPct = 0;
+    if (KNOBS.spendOrder === "after") applyPlans();
+  } else {
+    // ── ONE CLOCK (Dave 2026-11-02, turn-driver payIncomeSlice / debitPaidIncomeSlices / raid.planActivity entry.paid):
+    // four weekly slices of floor(income / 4), each clamped to caps WHEN IT LANDS (a full bank wastes it); the plan is billed
+    // when planned (after slice 1, which lands as the month opens); play drains run between slices; the Advance runs the full
+    // regen and takes the nominal slices back out (= the remainder lands), then resolves the plans and clamps. Total = lump total.
+    let v; ({ inc, lg, v } = monthIncome());
+    const slice = {}; for (const k of OPK) slice[k] = Math.floor(Math.max(0, v[k]) / 4);
+    const land = () => { for (const k of OPK) { const room = Math.max(0, caps(F) - F.bank[k]); const got = Math.min(slice[k], room); F.bank[k] += got; row.sliceLost += slice[k] - got; } };
+    land();
+    plans = policy.plan(F, M.DAYS_PER_TURN);
+    row.optionsAtPlan = optionsCount(F, M.DAYS_PER_TURN);
+    applyPlans("pay");
+    duringPlay(F, policy, t, row, play, 1);
+    for (const w of [2, 3, 4]) { land(); duringPlay(F, policy, t, row, play, w); }
+    if (KNOBS.doorOrder === "pre") openDoor("pre-regen");
+    F.lastBand = lg.band;
+    for (const k of OPK) F.bank[k] = F.bank[k] + v[k] - 4 * slice[k];   // full regen − the nominal slices already paid
+  if (policy.reward && KNOBS.rewardMarks > 0 && t % KNOBS.rewardEvery === 0) { const scarce = OPK.slice().sort((a, b) => F.bank[a] - F.bank[b])[0]; F.bank[scarce] = Math.min(caps(F), F.bank[scarce] + KNOBS.rewardMarks); row.notes.push(`reward +${KNOBS.rewardMarks} ${scarce}`); }
+    F.pendingPct = 0;
+    applyPlans("effect");
+    if (row.sliceLost) row.notes.push(`slice_clamp −${row.sliceLost}`);
+  }
   { let lost = 0; for (const k of OPK) { const over = F.bank[k] - caps(F); if (over > 0) { lost += over; F.bank[k] = caps(F); } }   // cap clamp after planned spend (engine clampBanksToCaps)
     row.clampLost = lost; if (lost) row.notes.push(`cap_clamp −${lost}`); }
   if (KNOBS.doorOrder !== "pre") openDoor("advanceTurn:end");   // the old order: caps rise only after this Advance's clamp
@@ -434,30 +510,10 @@ function runTurn(F, policy, t, rand) {
   }
   if (unpaid) F.unpaidTurns++;
   F.morale = Math.max(0, Math.min(100, F.morale + bonusM)); F.loyalty = Math.max(0, Math.min(100, F.loyalty + bonusL));
-  // travel / raid / courtly drains (2026-09-12): player actions during the turn, paid as they happen
-  if (KNOBS.travelLegs > 0) {
-    const tc0 = E.TERRAIN_TABLE[KNOBS.travelTerrain]?.cost || E.TERRAIN_TABLE.plains?.cost || { economy:10 };
-    const tc = Object.fromEntries(Object.entries(tc0).map(([k, v]) => [k, Math.max(1, Math.round(Number(v) * KNOBS.priceMult))]));   // hex-travel _applyPricePolicy (2026-09-12)
-    for (let i = 0; i < KNOBS.travelLegs; i++) { for (const [k0, v] of Object.entries(tc)) { const k = k0 === "nonLethal" ? "nonlethal" : k0; if ((F.bank[k] || 0) >= v) { F.bank[k] -= v; F.spentChannels.add(k); } else { row.notes.push(`travel leg ${i + 1} SHORT (${k})`); } } }
-    row.notes.push(`travel ×${KNOBS.travelLegs} ${KNOBS.travelTerrain}`);
-  }
-  if (KNOBS.raidRounds > 0) {
-    // Engine truth (2026-09-12): a raid round needs 10 marks in the primary pool as a GATE (not a charge);
-    // what a round actually spends is the STAGED marks (+1 bonus per 2 OP × PRICE_MULT = 15 marks).
-    const pool = KNOBS.raidPool; let done = 0; const perBonus = Math.max(1, Math.round(20 * KNOBS.priceMult));
-    for (let i = 0; i < KNOBS.raidRounds; i++) { const stake = Math.max(0, KNOBS.raidStaged); if ((F.bank[pool] || 0) >= Math.max(10, stake)) { F.bank[pool] -= stake; if (stake) F.spentChannels.add(pool); done++; } }
-    row.notes.push(`raid rounds ${done}/${KNOBS.raidRounds} (${pool}${KNOBS.raidStaged ? `, staged ${KNOBS.raidStaged} → +${Math.ceil(KNOBS.raidStaged / perBonus)}` : ""})`); if (done < KNOBS.raidRounds) row.notes.push(`raid SHORT (${pool})`);
-  }
-  if (KNOBS.courtlyRounds > 0) {
-    let done = 0; for (let i = 0; i < KNOBS.courtlyRounds; i++) { if ((F.bank.diplomacy || 0) >= 20) { F.bank.diplomacy -= 20; F.spentChannels.add("diplomacy"); done++; } }
-    row.notes.push(`courtly ${done}/${KNOBS.courtlyRounds}`); if (done < KNOBS.courtlyRounds) row.notes.push("courtly SHORT (diplomacy)");
-  }
-  // gear policy: a Steward buys from the faction bank (economy first, then any pool at cross-pool friction)
-  if (policy.gear && t % KNOBS.gearEvery === 0) {
-    const GEAR_NOW = KNOBS.gearByTier ? Math.round(E.TIER_BASE_MARKS[Math.max(1, F.tier)] * (E.CATEGORY_MULT.weapon ?? 1) + (E.TIER_FEE_MARKS[["I", "I", "II", "III", "IV"][F.tier]] ?? 10)) : GEAR_MARKS;
-    if (KNOBS.spread ? spreadPay(F, "economy", GEAR_NOW) : (F.bank.economy >= GEAR_NOW && (F.bank.economy -= GEAR_NOW, true))) { F.gearSpend = (F.gearSpend || 0) + GEAR_NOW; F.spentChannels.add("economy"); row.notes.push(`gear −${GEAR_NOW} economy (T${F.tier})`); F.gearBought = (F.gearBought || 0) + 1; }
-    else row.notes.push(`gear UNAFFORDABLE (${GEAR_NOW} at T${F.tier})`);
-  }
+  // travel / raid / courtly drains + gear (2026-09-12): player actions during the month — lump: all here, after upkeep;
+  // one clock: spread over the four weeks between the income slices (duringPlay, above).
+  if (KNOBS.lump) duringPlay(F, policy, t, row, play, 0);
+  finishPlay(row, play);
   // rigs (2026-10-28): rig-builder RIG_COST_CHASSIS (economy marks) · output economy.constants RIG_BASE_OUTPUT_OP × MARKS_PER_OP
   // × state mult (parked 1 / deployed 0.5), paid into logistics each turn.
   if (KNOBS.rigEvery > 0) {
@@ -535,7 +591,7 @@ function parity(savePath, factionName) {
 
 /* ───────────────────── run ───────────────────── */
 function header() {
-  console.log(`sim-op-economy — ${KNOBS.turns} turns · max hexes ${KNOBS.maxHexes} · price×${KNOBS.priceMult} (engine ${ENGINE_PRICE_MULT}) (economy×${KNOBS.econPriceMult}) · occupation×${KNOBS.occupationMult} (engine phase ${ENGINE_OCCUPATION_MULT}) · spend ${KNOBS.spendOrder} regen · sprawl ^${E.LOGI.SPRAWL_EXP} over ${E.LOGI.SPRAWL_THRESHOLD} · recipes ${KNOBS.recipes ? "ON" : "off"} · door T1 @ world turn ${KNOBS.tierFloorTurn} (${KNOBS.doorOrder}-regen, start turn ${KNOBS.startTurn}) · gear ${GEAR_MARKS} marks · lanes ${KNOBS.lanes ? "on" : "OFF"}${KNOBS.travelLegs ? ` · travel ${KNOBS.travelLegs}×${KNOBS.travelTerrain}/turn` : ""}${KNOBS.raidRounds ? ` · raid ${KNOBS.raidRounds} rounds/turn` : ""}${KNOBS.courtlyRounds ? ` · courtly ${KNOBS.courtlyRounds}/turn` : ""}`);
+  console.log(`sim-op-economy — ${KNOBS.turns} turns · max hexes ${KNOBS.maxHexes} · price×${KNOBS.priceMult} (engine ${ENGINE_PRICE_MULT}) (economy×${KNOBS.econPriceMult}) · occupation×${KNOBS.occupationMult} (engine phase ${ENGINE_OCCUPATION_MULT}) · ${KNOBS.lump ? `LUMP income · spend ${KNOBS.spendOrder} regen` : "ONE CLOCK (4 weekly slices, bill at plan)"} · sprawl ^${E.LOGI.SPRAWL_EXP} over ${E.LOGI.SPRAWL_THRESHOLD} · recipes ${KNOBS.recipes ? "ON" : "off"} · door T1 @ world turn ${KNOBS.tierFloorTurn} (${KNOBS.doorOrder}-regen, start turn ${KNOBS.startTurn}) · gear ${GEAR_MARKS} marks · lanes ${KNOBS.lanes ? "on" : "OFF"}${KNOBS.travelLegs ? ` · travel ${KNOBS.travelLegs}×${KNOBS.travelTerrain}/turn` : ""}${KNOBS.raidRounds ? ` · raid ${KNOBS.raidRounds} rounds/turn` : ""}${KNOBS.courtlyRounds ? ` · courtly ${KNOBS.courtlyRounds}/turn` : ""}`);
   if (DRIFT.length) { console.log("DRIFT? engine constants not parsed (fallbacks in use):"); for (const d of DRIFT) console.log("  · " + d); }
   else console.log("engine constants: all parsed from source ✓");
 }
@@ -546,7 +602,11 @@ function summarize(name, rows, F) {
   const idleChannels = OPK.filter(k => !F.spentChannels.has(k)); const loanTurns = rows.filter(r => Math.min(...Object.values(r.bank)) < 0 || r.unpaid).length;
   const shortTurns = rows.filter(r => r.notes.some(n => /SHORT/.test(n))).length;
   const avgIncome = Object.fromEntries(OPK.map(k => [k, round(rows.reduce((a, r) => a + (r.income?.[k] || 0), 0) / T * 10) / 10]));
-  return { policy: name, turnsActed: acted, turnsIdle: idle, plansHeld: held, avgOptions: round(avgOpt * 10) / 10, turnsOneOrNone: oneOrNone, firstStrainTurn: firstStrain, firstExpandTurn: firstExpand, hexes: F.hexes.length, routes: F.routes, unpaidTurns: F.unpaidTurns, loanTurns, gearBought: F.gearBought || 0, shortTurns, avgIncome, idleChannels: idleChannels.join(",") || "none", endBank: F.bank, endBand: rows[rows.length - 1].band };
+  const sliceLost = rows.reduce((a, r) => a + (r.sliceLost || 0), 0), clampLost = rows.reduce((a, r) => a + (r.clampLost || 0), 0);
+  const bankSum = r => OPK.reduce((a, k) => a + (r.bank[k] || 0), 0);
+  const avgBank = round(rows.reduce((a, r) => a + bankSum(r), 0) / T);
+  const clock = { sliceLost, clampLost, waste: sliceLost + clampLost, wastePerTurn: round((sliceLost + clampLost) / T * 10) / 10, avgBank, endBankTotal: bankSum(rows[rows.length - 1]), firstGearTurn: F.firstGear ?? null, tiers: rows.flatMap(r => r.notes.filter(n => /door → T|EARNED → T/.test(n)).map(n => `${n.replace(/ \(.*\)$/, "").replace(/^EARNED → |^door → /, "")}@${r.turn}`)).join(",") || "—" };
+  return { ...clock, policy: name, turnsActed: acted, turnsIdle: idle, plansHeld: held, avgOptions: round(avgOpt * 10) / 10, turnsOneOrNone: oneOrNone, firstStrainTurn: firstStrain, firstExpandTurn: firstExpand, hexes: F.hexes.length, routes: F.routes, unpaidTurns: F.unpaidTurns, loanTurns, gearBought: F.gearBought || 0, shortTurns, avgIncome, idleChannels: idleChannels.join(",") || "none", endBank: F.bank, endBand: rows[rows.length - 1].band };
 }
 function main() {
   if (KNOBS.parity) { header(); parity(String(KNOBS.parity), KNOBS.parityFaction); return; }
@@ -562,11 +622,12 @@ function main() {
     for (const r of rows) if (KNOBS.verbose || r.turn <= 12 || r.turn % 5 === 0 || r.held || r.unpaid) console.log(`${String(r.turn).padStart(4)} | ${String(r.bank.economy).padStart(4)} ${String(r.bank.violence).padStart(4)} ${String(r.bank.diplomacy).padStart(5)} ${String(r.bank.logistics).padStart(5)} ${String(r.bank.softpower).padStart(5)} ${String(r.bank.faith).padStart(5)} | ${r.band.padEnd(12)} | ${String(r.optionsAtPlan).padStart(4)} | ${r.notes.join("; ") || "—"}${r.unpaid ? "  ⚠ unpaid upkeep" : ""}`);
     const s = out[name].summary;
     console.log(`── avg income/turn: ${OPK.map(k => `${k.slice(0,4)} ${s.avgIncome[k]}`).join(" · ")}`);
+    console.log(`── clock: waste ${s.waste} (slice ${s.sliceLost} + cap_clamp ${s.clampLost}, ${s.wastePerTurn}/turn) · avg bank ${s.avgBank} · end bank ${s.endBankTotal} · first gear T${s.firstGearTurn ?? "—"} · tiers ${s.tiers}`);
     console.log(`── acted ${s.turnsActed}/${KNOBS.turns} · idle ${s.turnsIdle} · held ${s.plansHeld} · avg options at plan ${s.avgOptions} · one-or-nothing turns ${s.turnsOneOrNone} · first strain T${s.firstStrainTurn ?? "—"} · hexes ${s.hexes} · routes ${s.routes} · unpaid ${s.unpaidTurns} · gear ${s.gearBought} · idle channels: ${s.idleChannels}`);
   }
   console.log("\n═══ TARGET SCORECARD");
-  console.log("policy     | T1 acted/turns | T3 one-or-nothing | T4 first strain | T2 idle channels                      | T6 gear | unpaid | short");
-  for (const [n, o] of Object.entries(out)) { const s = o.summary; console.log(`${n.padEnd(10)} | ${String(s.turnsActed + "/" + KNOBS.turns).padEnd(14)} | ${String(s.turnsOneOrNone).padEnd(17)} | ${String("T" + (s.firstStrainTurn ?? "—")).padEnd(15)} | ${s.idleChannels.padEnd(37)} | ${String(s.gearBought).padEnd(7)} | ${String(s.unpaidTurns).padEnd(6)} | ${s.shortTurns}`); }
+  console.log("policy     | T1 acted/turns | T3 one-or-nothing | T4 first strain | T2 idle channels                      | T6 gear | unpaid | short | held | waste/turn | avg bank");
+  for (const [n, o] of Object.entries(out)) { const s = o.summary; console.log(`${n.padEnd(10)} | ${String(s.turnsActed + "/" + KNOBS.turns).padEnd(14)} | ${String(s.turnsOneOrNone).padEnd(17)} | ${String("T" + (s.firstStrainTurn ?? "—")).padEnd(15)} | ${s.idleChannels.padEnd(37)} | ${String(s.gearBought).padEnd(7)} | ${String(s.unpaidTurns).padEnd(6)} | ${String(s.shortTurns).padEnd(5)} | ${String(s.plansHeld).padEnd(4)} | ${String(s.wastePerTurn).padEnd(10)} | ${s.avgBank}`); }
   if (KNOBS.json) { fs.writeFileSync(String(KNOBS.json), JSON.stringify({ knobs: KNOBS, engine: E, drift: DRIFT, results: out }, null, 1)); console.log(`\nwrote ${KNOBS.json}`); }
 }
 main();

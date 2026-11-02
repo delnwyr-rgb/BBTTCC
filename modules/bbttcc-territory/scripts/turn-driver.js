@@ -465,7 +465,7 @@ function ensureConsumePlannedShim(){
         }
       }
 
-      const spendResult = apply
+      let spendResult = apply
         ? (prepaid ? { ok:true, paid: prepaid, prepaid:true } : await payActivityCost({ factionActor, effect, entry }))
         : { ok:true, preview:true, paid:{} };
 
@@ -475,6 +475,32 @@ function ensureConsumePlannedShim(){
           { summary: `${factionActor.name} could NOT afford ${entry.activityKey} (short: ${Object.entries(spendResult.insufficient||{}).map(([k,v])=>`${k}:${v}`).join(", ")}) — activity refused.` }
         ));
         continue;
+      }
+
+      // Going home (Dave 2026-11-02): with home weeks to spare the Stewards run the order in person — part of its
+      // price comes back BEFORE the effect runs, so paidCost (activity ledger, ↩ Back out, failure refund) is the net.
+      if (apply && __homeAdvance?.weeks > 0 && spendResult?.ok !== false) {
+        const back = homeRefundFor(spendResult.paid, __homeAdvance.weeks);
+        if (Object.keys(back).length) {
+          let given = {};
+          try {
+            const op = game.bbttcc?.api?.op;
+            if (op && typeof op.commit === "function") {
+              const r = await op.commit(factionActor.id, back, { source: "strategic", label: "The Stewards ran it themselves (time at home)", noDiscount: true, allowOvercap: true });
+              if (r?.ok !== false) given = back;
+            } else {
+              const bank = foundry.utils.duplicate(factionActor.getFlag(MOD_FACTIONS, "opBank") || {});
+              for (const [k, v] of Object.entries(back)) bank[k] = (Number(bank[k]) || 0) + v;
+              await factionActor.update({ [`flags.${MOD_FACTIONS}.opBank`]: bank });
+              given = back;
+            }
+          } catch (eH) { warn("home refund failed", entry?.activityKey, eH); }
+          if (Object.keys(given).length) {
+            const net = {};
+            for (const [k, v] of Object.entries(spendResult.paid || {})) { const n = safeNum(v) - safeNum(given[k]); if (n > 0) net[k] = n; }
+            spendResult = Object.assign({}, spendResult, { paid: net, homeRefund: given, homeWeeks: __homeAdvance.weeks });
+          }
+        }
       }
 
       let effectResult = null;
@@ -537,7 +563,9 @@ function ensureConsumePlannedShim(){
         try { const r = await applyRecipeSideEffects({ factionActor, entry }); if (r?.notes?.length) effectResult = Object.assign({}, effectResult, { recipeFx: r.notes }); }
         catch (eFx) { warn("recipe side effects failed", entry?.activityKey, eFx); }
       }
-      await record(entry, finalizeEntry({ entry, factionActor, effect, effectResult, spendResult }));
+      const done = finalizeEntry({ entry, factionActor, effect, effectResult, spendResult });
+      if (spendResult?.homeRefund && Object.keys(spendResult.homeRefund).length) done.summary += ` — run in person (time at home): ${fmtMarks(spendResult.homeRefund)} marks back`;
+      await record(entry, done);
     }
 
     if (apply && practice.length) {
@@ -1411,6 +1439,97 @@ async function debitPaidIncomeSlices(){
   return { changed: rows.length > 0, rows };
 }
 
+/* ---------------- going home (one clock, Dave 2026-11-02) ----------------
+ * "If the table stops early, the remaining days become time at home. The Stewards run the month's
+ * planned activities in person for a bonus, and recover." At an APPLIED Advance the Turn Ledger's
+ * remaining days are read BEFORE anything else runs (the campaign module resets the ledger at
+ * advanceTurn:end): homeWeeks = min(3, floor(remaining / 7)). Per home week:
+ *   • IN PERSON — every planned activity that resolves gets HOME_REFUND_PCT_PER_WEEK % of the price it
+ *     was billed back (per channel, floored) BEFORE its effect runs, so the price the activity ledger
+ *     records (and ↩ Back out / a failure refund give back) is the net one. No activity outcome in the
+ *     catalog scales uniformly (each throughput handler writes its own fixed deltas), so the bonus is
+ *     on the price: the Stewards did the work themselves.
+ *   • RECOVER — each Domain's assigned Steward(s) ease one level of Strain (game.fourththing.strain.recover,
+ *     the same step a Soma Break takes).
+ * ---------------------------------------------------------------------------------------------- */
+const HOME_WEEKS_MAX = 3;
+const HOME_REFUND_PCT_PER_WEEK = 10;
+const HOME_STRAIN_PER_WEEK = 1;
+// The snapshot this Advance runs under (set at the top of an applied driverAdvanceTurn, cleared in its finally).
+let __homeAdvance = null;   // { weeks, remaining, month } | null
+function homeWeeksFromRemaining(remaining){
+  const r = Number(remaining);
+  if (!Number.isFinite(r) || r <= 0) return 0;
+  return Math.max(0, Math.min(HOME_WEEKS_MAX, Math.floor(r / 7)));
+}
+// Public: homeWeeks() → the home weeks the current month would give if the GM advanced now (read-only, live ledger).
+function homeWeeks(){
+  try {
+    const b = game.bbttcc?.api?.world?.getTimeBudget?.();
+    if (!b || !Number.isFinite(Number(b.remaining))) return 0;
+    return homeWeeksFromRemaining(b.remaining);
+  } catch { return 0; }
+}
+function homeRefundFor(paid, weeks){
+  const out = {};
+  const w = Math.max(0, Math.floor(Number(weeks) || 0));
+  if (!w) return out;
+  for (const [k, v] of Object.entries(paid || {})) {
+    const n = Math.floor(safeNum(v) * HOME_REFUND_PCT_PER_WEEK * w / 100);
+    if (n > 0) out[k] = Math.min(n, safeNum(v));
+  }
+  return out;
+}
+// The Steward(s) of a Domain: characters assigned to it (the same reader steward identity income uses).
+function stewardsOf(A){
+  return (game.actors?.contents || []).filter(a => a.type === "character" && a.getFlag?.(MOD_FACTIONS, "factionId") === A.id);
+}
+async function homeRecoverStewards(weeks){
+  const rows = [];
+  const S = game.fourththing?.strain;
+  const n = Math.max(0, Math.floor(Number(weeks) || 0)) * HOME_STRAIN_PER_WEEK;
+  if (!n || typeof S?.recover !== "function" || typeof S?.get !== "function") return rows;
+  for (const A of allFactions()) {
+    for (const st of stewardsOf(A)) {
+      try {
+        const before = safeNum(S.get(st));
+        if (before <= 0) continue;
+        await S.recover(st, n, "time at home");
+        const after = safeNum(S.get(st));
+        if (after < before) rows.push({ factionId: A.id, factionName: A.name, actorId: st.id, name: st.name, before, after });
+      } catch (e) { warn("home recovery failed for", st?.name, e); }
+    }
+  }
+  return rows;
+}
+// One line to the table, in the turn-end voice. Rows = consumePlanned rows (resolved ones carry spendResult.homeRefund).
+async function postHomeLine({ home, plannedRows = [], recovered = [] } = {}){
+  if (!home?.weeks) return;
+  const esc = foundry.utils.escapeHTML;
+  const byFaction = new Map();
+  for (const r of plannedRows) {
+    const hr = r?.spendResult?.homeRefund;
+    if (!hr || !Object.keys(hr).length || r?.effectResult?.ok === false) continue;
+    const id = String(r.attackerId || "");
+    const cur = byFaction.get(id) || { n: 0, back: {} };
+    cur.n += 1; for (const [k, v] of Object.entries(hr)) cur.back[k] = safeNum(cur.back[k]) + safeNum(v);
+    byFaction.set(id, cur);
+  }
+  const W = home.weeks;
+  const ran = [...byFaction.entries()].map(([id, v]) => `${esc(game.actors.get(id)?.name || "a Domain")}: ${v.n} order${v.n === 1 ? "" : "s"}, ${esc(fmtActivityCost(v.back) || "nothing")} back`);
+  const rec = recovered.map(r => `${esc(r.name)} Strain ${r.before} → ${r.after}`);
+  const parts = [];
+  parts.push(ran.length ? `they ran the orders themselves (${ran.join("; ")})` : "no orders to run, so they rested");
+  if (rec.length) parts.push(`and recovered (${rec.join(", ")})`);
+  try {
+    await ChatMessage.create({
+      content: `<p><b>Month ${home.month}:</b> the Stewards came home with ${W} week${W === 1 ? "" : "s"} to spare — ${parts.join(" ")}.</p>`,
+      whisper: tableAudience(),
+      speaker: { alias: "Bad Eden Turn Driver" }
+    });
+  } catch (_e) {}
+}
+
 async function advanceOPRegen({ apply=false, factionId=null, deferCapClamp=false } = {}){
   const targets = factionId ? [game.actors.get(factionId)].filter(Boolean) : allFactions();
   const results = [];
@@ -1712,10 +1831,12 @@ async function plannedRaidsStep({ apply=false } = {}){
   }
 
   const fmt = (c)=>OP_KEYS.filter(k=>safeNum(c[k])>0).map(k=>`${c[k]} ${k}`).join(", ")||"—";
+  const __hwDry = homeWeeks();
   await ChatMessage.create({
-    content: any
+    content: (any
       ? `<p><i>Planned Activities (Dry Preview)</i> — paid in plan order after this turn\u2019s income</p><ul>${rows.map(r => `<li><b>${foundry.utils.escapeHTML(r.faction)}</b>: ${foundry.utils.escapeHTML(r.label)} — ${fmt(r.cost)}${r.prepaid ? " <em>(paid when planned)</em>" : ""} ${r.canAfford?"":"<em>(cannot afford after the orders before it, even with this turn\u2019s income)</em>"}</li>`).join("")}</ul>`
-      : `<p><i>Planned Activities (Dry Preview)</i>: none queued.</p>`,
+      : `<p><i>Planned Activities (Dry Preview)</i>: none queued.</p>`)
+      + (__hwDry > 0 ? `<p><i>Time at home:</i> ${__hwDry} week${__hwDry === 1 ? "" : "s"} to spare if you advance now — each order that resolves gives back ${HOME_REFUND_PCT_PER_WEEK * __hwDry}% of its price, and each Steward eases ${HOME_STRAIN_PER_WEEK * __hwDry} level${HOME_STRAIN_PER_WEEK * __hwDry === 1 ? "" : "s"} of Strain.</p>` : ""),
     whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
     speaker: { alias: "Bad Eden Turn Driver" }
   });
@@ -2095,6 +2216,16 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     }
   }
   window._bbttccTurnLock = true;
+  // Going home (Dave 2026-11-02): read the month's unspent days NOW — the campaign module resets the ledger at
+  // advanceTurn:end. Applied Advances only; a dry run just mentions it in the planned-activities preview.
+  __homeAdvance = null;
+  if (apply) {
+    try {
+      const b = game.bbttcc?.api?.world?.getTimeBudget?.();
+      const weeks = b ? homeWeeksFromRemaining(b.remaining) : 0;
+      if (weeks > 0) __homeAdvance = { weeks, remaining: Number(b.remaining) || 0, month: Math.max(1, worldTurnNow()) };
+    } catch (e) { warn("home weeks read failed (non-fatal)", e); }
+  }
   Hooks.callAll("bbttcc:advanceTurn:begin", { apply });
   if (apply) { try { await _bbttccTurnFxPlay("turn_start", { label:"Advance Turn" }, { phase:"invoke", broadcast:true }); } catch(_eFxStart) {} }
 
@@ -2155,6 +2286,12 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     // against) before plannedRaidsStep consumes every queue; the bonus tick's spyReport reads the snapshot.
     if (apply) { try { __plannedSnapshot = new Map(allFactions().map(F => [String(F.id), { planned: clone((F.getFlag(MOD_FACTIONS, "warLogs") || []).filter(e => e?.type === "planned" && e?.practice !== true)), bank: clone(F.getFlag(MOD_FACTIONS, "opBank") || {}) }])); } catch (_e) { __plannedSnapshot = null; } }
     const planned = await plannedRaidsStep({ apply });
+    // Going home: the Stewards recover, and the table hears how the spare weeks went (one line).
+    let homeRecovered = [];
+    if (apply && __homeAdvance?.weeks > 0) {
+      try { homeRecovered = await homeRecoverStewards(__homeAdvance.weeks); } catch (e) { warn("home recovery failed (non-fatal)", e); }
+      try { await postHomeLine({ home: __homeAdvance, plannedRows: planned.rows || [], recovered: homeRecovered }); } catch (e) { warn("home line failed (non-fatal)", e); }
+    }
     if (apply) await clampBanksToCaps();     // caps bite AFTER the spend (2026-09-12) — income funds this turn's plans first
     if (apply) await tickFactionBonuses();   // expire regenPlan / capBump / truce / nextTurn boons (2026-09-09)
 
@@ -2207,6 +2344,7 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     };
   } finally {
     window._bbttccTurnLock = false;
+    __homeAdvance = null;
     if (ownToken) await releaseTurnLock(ownToken);
     // HARVEST NODES REGROW (owner ruling 2026-09-20: harvest once, regrow after a turn advance). Every scene's nodes
     // refill to their ceiling at the end of an APPLIED turn. GM-only, never on a dry run.
@@ -2421,6 +2559,8 @@ function __bbttccPublishTurnApi() {
   game.bbttcc.api.turn.payIncomeSlice = payIncomeSlice;           // ({slice:1..4}) GM only, idempotent per world turn
   game.bbttcc.api.turn.dueIncomeSlices = dueIncomeSlices;         // (spentDays) → [1..4] due so far
   game.bbttcc.api.turn.incomeSliceRecord = incomeSliceRecord;     // (factionActor, turn?) → {turn, slices, nominal}
+  // Going home (Dave 2026-11-02): () → 0..3 home weeks the current month gives if advanced now (read-only).
+  game.bbttcc.api.turn.homeWeeks = homeWeeks;
 }
 Hooks.once("init", __bbttccPublishTurnApi);
 Hooks.once("ready", __bbttccPublishTurnApi);
