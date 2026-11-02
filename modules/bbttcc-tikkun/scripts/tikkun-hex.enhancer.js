@@ -133,7 +133,7 @@
     // Descent A2 — a corrupted spark cannot be integrated; repair it first
     // (transformation, not disposal — spec Law 3).
     if (existing.state === "corrupted") {
-      ui.notifications?.warn(`${existing.key} is corrupted — repair it first (api.tikkun.hex.repair).`);
+      ui.notifications?.warn(`${existing.key} is corrupted — repair it first (on site: Quest Log ⚒ Repair / api.tikkun.openHexRepairRite).`);
       return { ok: false, error: "corrupted — repair first" };
     }
     // Integration is an Act of Repair — it shares the faction's Reach budget

@@ -340,10 +340,19 @@
         } catch (_e) { selected.locations = []; }
       }
 
+      // ✦ Corrupted sparks (Dave 2026-11-02): every hex spark the dark has taken, world-wide (a seated spark
+      // belongs to the land, not one Domain); the ⚒ Repair button is live only when THIS Domain's party stands there.
+      let corruptedSparks = [];
+      try {
+        const lister = game.bbttcc?.api?.tikkun?.listCorruptedHexSparks;
+        if (typeof lister === "function") corruptedSparks = await lister({ factionId: this.factionId });
+      } catch (_e) { corruptedSparks = []; }
+
       return {
         ...ctx,
         isGM: !!game.user?.isGM,
         faction,
+        corruptedSparks,
         tab,
         search,
         counts: { invites: invites.length, active: active.length, completed: completed.length, archived: archived.length, all: all.length },
@@ -450,6 +459,15 @@
           const uuid = String(btn.dataset.drawingUuid || "");
           if (!doors?.goto || !uuid) return ui.notifications?.warn?.("Quest Log: the travel module's doors are not loaded.");
           try { await doors.goto(uuid); } catch (e) { warn("goto-door failed", e); }
+          return;
+        }
+
+        // ⚒ Repair a corrupted hex spark (any seat — the rite relays to the GM).
+        if (act === "hex-spark-repair") {
+          const open = game.bbttcc?.api?.tikkun?.openHexRepairRite;
+          const hexUuid = String(btn.dataset.hexUuid || "");
+          if (typeof open !== "function" || !hexUuid) return ui.notifications?.warn?.("Quest Log: the Tikkun module is not loaded.");
+          try { await open({ hexUuid, factionId: this.factionId }); } catch (e) { warn("hex-spark-repair failed", e); }
           return;
         }
 
@@ -676,7 +694,8 @@
         this.__updateHook = (actor, data) => {
           try {
             if (!actor || actor.id !== this.factionId) return;
-            if (!foundry.utils.hasProperty(data, `flags.${MOD_FAC}.quests`)) return;
+            // travel: the party's position decides the corrupted-spark ⚒ Repair / "Ride to" button
+            if (!foundry.utils.hasProperty(data, `flags.${MOD_FAC}.quests`) && !foundry.utils.hasProperty(data, `flags.${MOD_FAC}.travel`)) return;
             this.render(false);
           } catch (_e) {}
         };
@@ -693,6 +712,16 @@
         };
         Hooks.on("updateSetting", this.__settingHook);
       }
+      // ✦ Corrupted sparks: the tikkun hooks fire on the GM seat only; the hex Drawing update reaches every seat.
+      if (!this.__sparkHook) {
+        this.__sparkHook = () => { try { this.render(false); } catch (_e) {} };
+        this.__sparkDrawHook = (doc, data) => {
+          try { if (foundry.utils.hasProperty(data, "flags.bbttcc-territory.spark")) this.render(false); } catch (_e) {}
+        };
+        Hooks.on("bbttcc:spark:hexCorrupted", this.__sparkHook);
+        Hooks.on("bbttcc:spark:hexRepaired", this.__sparkHook);
+        Hooks.on("updateDrawing", this.__sparkDrawHook);
+      }
     }
 
     async close(options) {
@@ -701,6 +730,11 @@
         if (this.__qlSearchTimer) { clearTimeout(this.__qlSearchTimer); this.__qlSearchTimer = null; }
         if (this.__updateHook) { try { Hooks.off("updateActor", this.__updateHook); } catch {} }
         if (this.__settingHook) { try { Hooks.off("updateSetting", this.__settingHook); } catch {} }
+        if (this.__sparkHook) {
+          try { Hooks.off("bbttcc:spark:hexCorrupted", this.__sparkHook); Hooks.off("bbttcc:spark:hexRepaired", this.__sparkHook); } catch {}
+          try { Hooks.off("updateDrawing", this.__sparkDrawHook); } catch {}
+          this.__sparkHook = null; this.__sparkDrawHook = null;
+        }
       } catch (_e) {}
       return super.close(options);
     }

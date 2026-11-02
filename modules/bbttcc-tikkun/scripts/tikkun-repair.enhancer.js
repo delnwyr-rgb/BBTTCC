@@ -474,10 +474,12 @@ console.log("[bbttcc-tikkun/repair] LOADED");
       return;
     }
     const corrupted = await _scanCorruptedSparks(factionId);
-    if (!corrupted.length) {
+    // 2026-11-02: corrupted HEX sparks (seated in the land) ride alongside the carried ones.
+    const hexSparks = await listCorruptedHexSparks({ factionId }).catch(() => []);
+    if (!corrupted.length && !hexSparks.length) {
       new Dialog({
         title: `Spark Repair Ledger — ${faction.name}`,
-        content: `<p style="margin:0.6rem 0">No corrupted sparks across <b>${_esc(faction.name)}</b>'s members. The Great Work is unstained — for now.</p>`,
+        content: `<p style="margin:0.6rem 0">No corrupted sparks across <b>${_esc(faction.name)}</b>'s members, and none seated in the land. The Great Work is unstained — for now.</p>`,
         buttons: { ok: { label: "Close" } }
       }).render(true);
       return;
@@ -515,8 +517,24 @@ console.log("[bbttcc-tikkun/repair] LOADED");
         </tr>`;
     }).join("");
 
+    const hexRows = (await Promise.all(hexSparks.map(async (h) => {
+      const info = await _hexRiteInfo(h.hexUuid, factionId).catch(() => null);
+      if (!info?.ok) return "";
+      const can = info.ready && info.party.here;
+      const label = info.party.here ? "⚒ Repair" : `Ride to ${_esc(info.hexName)}`;
+      return `
+        <tr>
+          <td>${_esc(info.sparkName)} ${info.sephLabel ? `<span style="opacity:0.6;font-size:0.74rem">(${_esc(info.sephLabel)})</span>` : ""}</td>
+          <td>⬡ ${_esc(info.hexName)} <span style="opacity:0.6;font-size:0.74rem">(seated)</span></td>
+          <td style="text-align:center">${info.matNeed ? `${info.matNeed}× ${_esc(info.matKey)} <span style="opacity:0.7">(have ${info.matScan.available})</span>` : "—"}</td>
+          <td style="text-align:center">${info.opNeed ? `${info.opNeedMarks} ${_esc(info.opPool)} marks <span style="opacity:0.7">(${info.opPoolBad ? "⚠ not an OP channel — unpayable" : `have ${info.opAvail}`})</span>` : "—"}</td>
+          <td style="text-align:center">${info.dc}${info.attempts ? ` <span style="opacity:0.6">(-${2 * info.attempts})</span>` : ""}</td>
+          <td style="text-align:right"><button type="button" class="bbttcc-tk-hex-repair-begin" data-hex-uuid="${_esc(info.hexUuid)}" ${can ? "" : "disabled style=\"opacity:0.5\""} title="${info.party.here ? "" : `The party is at ${_esc(info.party.name || "?")}`}">${label}</button></td>
+        </tr>`;
+    }))).join("");
+
     const content = `<div style="font-size:0.84rem;max-height:60vh;overflow-y:auto">
-      <p style="margin:0.2rem 0 0.5rem">Corrupted sparks held by <b>${_esc(faction.name)}</b> members. Begin Repair opens the ritual dialog.</p>
+      <p style="margin:0.2rem 0 0.5rem">Corrupted sparks held by <b>${_esc(faction.name)}</b> members${hexSparks.length ? ", and sparks seated in the land the dark has taken (⬡ — repaired on site)" : ""}. Begin Repair opens the ritual dialog.</p>
       <table style="width:100%;border-collapse:collapse" class="bbttcc-tk-ledger">
         <thead><tr style="background:rgba(255,255,255,0.06);text-align:left">
           <th style="padding:0.3rem">Spark</th>
@@ -526,7 +544,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
           <th style="padding:0.3rem;text-align:center">DC</th>
           <th style="padding:0.3rem;text-align:right"></th>
         </tr></thead>
-        <tbody>${rows}</tbody>
+        <tbody>${rows}${hexRows}</tbody>
       </table>
     </div>`;
 
@@ -544,8 +562,286 @@ console.log("[bbttcc-tikkun/repair] LOADED");
           dlg.close();
           await openRepairRitual({ ownerActor, sparkKey, factionId });
         });
+        html.find(".bbttcc-tk-hex-repair-begin").on("click", async (ev) => {
+          const hexUuid = ev.currentTarget.dataset.hexUuid;
+          if (!hexUuid) return;
+          dlg.close();
+          await openHexRepairRite({ hexUuid, factionId });
+        });
       }
-    }, { width: 720 }).render(true);
+    }, { width: 760 }).render(true);
+  }
+
+  // ── Hex-spark repair rite (Dave 2026-11-02: "Corrupted Sparks should show on the
+  // quest log and an option to repair") ──────────────────────────────────
+  // A SEATED spark (flags.bbttcc-territory.spark on a hex Drawing) the Advance's
+  // Boiling Point corrupted. Same ritual as a carried spark — the recipe is the
+  // spark item's repair block (resolved by key from the sparks pack), paid from
+  // the Domain's stockpile/pockets + bank, a contributor's check die + ritual vs
+  // DC — with one more gate: the party must stand IN the hex (api.travel.whereIs).
+  // Attempts live on the hex flag as spark.repairAttempts (DC −2 each, floor 8);
+  // full success calls tikkun.hex.repair (state → dormant, hexRepaired hook) and
+  // clears the counter. Player seats relay the whole rite to the GM (gmExec type
+  // "tikkun.hexRepairRite"); the handler re-checks everything against live state.
+  const TER = "bbttcc-territory";
+  const HEX_RITE_RELAY = "tikkun.hexRepairRite";
+  const _hexName = (doc) => String(doc?.flags?.[TER]?.name || doc?.text || "").replace(/\s+/g, " ").trim() || "that hex";
+  const _sephLabelOf = (seph) => seph
+    ? String(game.fourththing?.constants?.SEPHIROTH?.[seph]?.label ?? (seph.charAt(0).toUpperCase() + seph.slice(1)))
+    : "";
+  function _partyAt(factionId, hexUuid) {
+    const w = game.bbttcc?.api?.travel?.whereIs;
+    if (typeof w !== "function") return { known: false, here: true, name: "" };   // no travel module → ungated
+    let r = null;
+    try { r = w(factionId); } catch (_e) { r = null; }
+    return { known: true, here: !!r && String(r.hexUuid) === String(hexUuid), name: String(r?.name || "") };
+  }
+  function _defaultFactionId() {
+    const c = game.user?.character;
+    const fid = String(c?.getFlag?.("bbttcc-factions", "factionId") || "").replace(/^Actor\./, "");
+    return fid || null;
+  }
+
+  async function _hexRiteInfo(hexUuid, factionId) {
+    let doc = null;
+    try { const r = await fromUuid(String(hexUuid || "")); doc = r?.document ?? r; } catch (_e) { doc = null; }
+    if (!doc) return { ok: false, error: "hex not found" };
+    const s = doc.flags?.[TER]?.spark;
+    if (!s?.key) return { ok: false, error: "no spark seated here", doc };
+    const parsed = game.bbttcc?.api?.tikkun?.hex?.parseKey?.(s.key) ?? null;
+    const key = parsed?.key || String(s.key);
+    const sephirah = parsed?.sephirah || "";
+    const sparkItem = await _resolveSparkSafely(null, key);
+    const recipe = sparkItem ? (_sparkSys(sparkItem)?.repair ?? {}) : {};
+    const matKey  = String(recipe.materialKey ?? "").trim();
+    const matNeed = Number(recipe.materialAmount) || 0;
+    const opPool  = String(recipe.opCost?.pool ?? "").trim();
+    const opNeed  = Number(recipe.opCost?.amount) || 0;   // authored in OP steps (roll-bonus scale)
+    const mpo     = _marksPerOp();
+    const opNeedMarks = opNeed * mpo;
+    const baseDC  = Number(recipe.ritualDC) || 15;
+    const attempts = Number(s.repairAttempts) || 0;
+    const dc      = Math.max(8, baseDC - 2 * attempts);
+    const fid = String(factionId || "").replace(/^Actor\./, "") || null;
+    const faction = fid ? game.actors?.get(fid) ?? null : null;
+    const matScan = faction ? _scanMaterialAcrossFaction(faction.id, matKey) : { available: 0, stockpile: 0, holders: [] };
+    const opAvail = faction ? _factionOpAvailable(faction, opPool) : 0;
+    const opPoolBad = !!opPool && opNeed > 0 && !_isOpChannel(opPool);
+    const matOK = !matKey || matScan.available >= matNeed;
+    const opOK  = !opPool || (!opPoolBad && opAvail >= opNeedMarks);
+    const party = fid ? _partyAt(fid, doc.uuid) : { known: false, here: false, name: "" };
+    return {
+      ok: true, doc, hexUuid: doc.uuid, hexName: _hexName(doc), key, sephirah, sephLabel: _sephLabelOf(sephirah),
+      state: String(s.state || "dormant"), corrupted: s.state === "corrupted",
+      sparkItem, sparkName: sparkItem?.name || (sephirah ? `Spark of ${_sephLabelOf(sephirah)}` : key),
+      matKey, matNeed, opPool, opNeed, opNeedMarks, mpo, baseDC, attempts, dc,
+      faction, matScan, opAvail, opPoolBad, matOK, opOK, party,
+      ready: !!sparkItem && matOK && opOK && !opPoolBad && (!opNeed || mpo > 0)
+    };
+  }
+
+  // Corrupted hex sparks, for the Quest Log / Repair Ledger. World-wide (a seated
+  // spark belongs to the land, not a Domain); `here` is read for factionId's party.
+  async function listCorruptedHexSparks({ factionId } = {}) {
+    const hx = game.bbttcc?.api?.tikkun?.hex;
+    if (typeof hx?.all !== "function") return [];
+    const fid = String(factionId || _defaultFactionId() || "").replace(/^Actor\./, "") || null;
+    const out = [];
+    for (const s of hx.all()) {
+      if (s?.state !== "corrupted") continue;
+      // HEX VISIBILITY (Dave 2026-11-02): a player only hears about a lamp in a hex they can see — a fogged hex is not a map leak
+      if (!game.user?.isGM) { try { const d = fromUuidSync?.(s.hexUuid); if (d?.hidden === true) continue; } catch (_eH) {} }
+      const info = await _hexRiteInfo(s.hexUuid, fid).catch(() => null);
+      if (!info?.ok) continue;
+      out.push({
+        hexUuid: info.hexUuid, hexName: info.hexName, scene: s.scene, key: info.key,
+        sephirah: info.sephirah, sephLabel: info.sephLabel, sparkName: info.sparkName,
+        dc: info.dc, attempts: info.attempts, here: !!info.party.here, partyAt: info.party.name, ready: info.ready
+      });
+    }
+    return out;
+  }
+
+  async function openHexRepairRite({ hexUuid, factionId } = {}) {
+    const fid = String(factionId || _defaultFactionId() || "").replace(/^Actor\./, "");
+    if (!hexUuid) { ui.notifications?.error?.("Hex repair: hexUuid required."); return { ok: false, error: "hexUuid required" }; }
+    if (!fid) { ui.notifications?.warn?.("Hex repair: no Domain — open it from your Domain's Quest Log."); return { ok: false, error: "no faction" }; }
+    const info = await _hexRiteInfo(hexUuid, fid);
+    if (!info.ok) { ui.notifications?.warn?.(`Hex repair: ${info.error}.`); return info; }
+    if (!info.corrupted) { ui.notifications?.info?.(`The ${info.sparkName} at ${info.hexName} is not corrupted.`); return { ok: false, error: "not corrupted" }; }
+    if (!info.faction) { ui.notifications?.error?.(`Domain ${fid} not found.`); return { ok: false, error: "faction not found" }; }
+    if (!info.party.here) {
+      ui.notifications?.warn?.(`Ride to ${info.hexName} first — the rite is done on site.`);
+      return { ok: false, error: "not-here", hexName: info.hexName };
+    }
+    if (!info.sparkItem) {
+      ui.notifications?.error?.(`Spark "${info.key}" is not resolvable in the sparks pack — no recipe to repair it with.`);
+      return { ok: false, error: "no recipe" };
+    }
+    if (info.opNeed && !info.mpo) { ui.notifications?.error?.("Repair: OP↔marks ratio unavailable (bbttcc-factions op engine not ready)."); return { ok: false, error: "no ratio" }; }
+
+    const { matKey, matNeed, opPool, opNeedMarks, matScan, opAvail, matOK, opOK, opPoolBad, dc, baseDC, attempts, mpo } = info;
+    const members = _getFactionMembers(info.faction.id);
+    const mine = game.user?.character?.id;
+    const memberOpts = members.map(m => `<option value="${m.id}" ${m.id === mine ? "selected" : ""}>${_esc(m.name)}</option>`).join("");
+    const matLine = matKey
+      ? `<li>Material: <b>${matNeed}× ${_esc(matKey)}</b> &nbsp; <span style="color:${matOK ? "#6fcf97" : "#c03030"}">${matOK ? "✓ available" : `✗ have ${matScan.available}`}</span>${matScan.stockpile ? ` <span style="opacity:0.6">(${matScan.stockpile} in the Domain stockpile)</span>` : ""}</li>`
+      : `<li>Material: <i>(none required)</i></li>`;
+    const opLine = opPool
+      ? `<li>Cost: <b>${opNeedMarks} ${_esc(opPool)} marks</b> &nbsp; <span style="color:${opOK ? "#6fcf97" : "#c03030"}">${opOK ? `✓ have ${opAvail}` : (opPoolBad ? `✗ "${_esc(opPool)}" is not a Domain channel — recipe cannot be paid` : `✗ have ${opAvail}`)}</span></li>`
+      : `<li>Cost: <i>(no marks required)</i></li>`;
+    const content = `<div style="font-size:0.86rem">
+      <h3 style="margin:0.2rem 0 0.4rem">⚒ Repair: ${_esc(info.sparkName)}${info.sephLabel ? ` <span style="opacity:0.6">(${_esc(info.sephLabel)})</span>` : ""}</h3>
+      <p style="margin:0.3rem 0;font-size:0.78rem;opacity:0.8">Seated at <b>${_esc(info.hexName)}</b> · Domain: <b>${_esc(info.faction.name)}</b> · Attempts so far: <b>${attempts}</b> · DC: <b>${dc}</b>${attempts ? ` <span style="opacity:0.6">(base ${baseDC} − ${2 * attempts})</span>` : ""}</p>
+      <p style="margin:0.3rem 0;font-size:0.78rem;font-style:italic">The dark took this lamp. Mend it here, where it burns.</p>
+      <ul style="margin:0.4rem 0;padding-left:1.2rem">${matLine}${opLine}</ul>
+      <hr/>
+      <div class="form-group" style="margin:0.4rem 0">
+        <label>Ritual contributor</label>
+        <select name="contributor">${memberOpts || `<option value="">— no Stewards in this Domain —</option>`}</select>
+      </div>
+      <div class="form-group" style="margin:0.4rem 0">
+        <label>Extra ${opPool ? `${_esc(opPool)} ` : ""}spend — steps of ${mpo} marks, +1 to roll each (0–3)</label>
+        <input type="number" name="extraOp" value="0" min="0" max="3" />
+      </div>
+      <p style="margin:0.4rem 0 0;font-size:0.74rem;opacity:0.7">Roll: <code>check die + ritual skill + cost steps + extra steps</code> vs DC ${dc}. Margin ≥0 → the lamp is mended; -1 to -3 → partial (DC drops 2 next try); -4 or worse → failure (ritual debt). Materials and marks are spent either way.</p>
+    </div>`;
+
+    new Dialog({
+      title: `Repair Rite: ${info.sparkName} — ${info.hexName}`,
+      content,
+      buttons: {
+        roll: {
+          label: "Roll Ritual",
+          callback: async (html) => {
+            if (opPoolBad) { ui.notifications?.error?.(_badPoolMsg(opPool, info.sparkName)); return; }
+            if (!matOK || !opOK) {
+              const missing = [];
+              if (!matOK) missing.push(`materials: need ${matNeed}× ${matKey}, have ${matScan.available}`);
+              if (!opOK)  missing.push(`marks: need ${opNeedMarks} ${opPool}, have ${opAvail}`);
+              ui.notifications?.warn?.(`Cannot proceed — ${missing.join(" · ")}.`);
+              return;
+            }
+            const contributorId = String(html.find("[name='contributor']").val() || "");
+            if (!contributorId) { ui.notifications?.warn?.("No contributor selected."); return; }
+            const extraOp = Math.max(0, Math.min(3, Math.floor(Number(html.find("[name='extraOp']").val()) || 0)));
+            const payload = { hexUuid: info.hexUuid, factionId: info.faction.id, contributorId, extraOp };
+            try {
+              const gx = game.bbttcc?.api?.gmExec;
+              let res;
+              if (gx?.call) res = await gx.call(HEX_RITE_RELAY, payload, { timeoutMs: 30000 });
+              else if (game.user?.isGM) res = await _performHexRite(payload, { fromUserId: game.user.id, fromUserName: game.user.name, local: true });
+              else throw new Error("a GM must be connected to perform the rite");
+              if (res?.outcome && !game.user?.isGM) ui.notifications?.info?.(`Repair rite at ${info.hexName}: ${res.outcome} (${res.total} vs DC ${res.dc}).`);
+            } catch (e) {
+              ui.notifications?.error?.(`Repair rite not performed — ${e?.message ?? e}`);
+            }
+          }
+        },
+        cancel: { label: "Cancel" }
+      },
+      default: "roll"
+    }, { width: 480 }).render(true);
+    return { ok: true, opened: true };
+  }
+
+  // GM side — the authority. Validates the payload against live state, pays, rolls, applies.
+  async function _performHexRite(p, meta = {}) {
+    if (!game.user?.isGM) throw new Error("hex repair rite runs on a GM seat");
+    const fid = String(p?.factionId || "").replace(/^Actor\./, "");
+    const info = await _hexRiteInfo(p?.hexUuid, fid);
+    if (!info.ok) throw new Error(info.error);
+    if (!info.corrupted) throw new Error(`the ${info.sparkName} at ${info.hexName} is no longer corrupted — nothing paid, nothing rolled`);
+    const factionActor = info.faction;
+    if (!factionActor) throw new Error("Domain not found");
+    if (!info.sparkItem) throw new Error(`spark "${info.key}" has no recipe (not in the sparks pack)`);
+
+    const caller = game.users?.get(String(meta?.fromUserId || "")) || null;
+    if (!meta?.local && !caller?.isGM) {
+      let ownsDomain = false; try { ownsDomain = !!factionActor.testUserPermission?.(caller, "OWNER"); } catch (_e) {}
+      const stewardFid = String(caller?.character?.getFlag?.("bbttcc-factions", "factionId") || "").replace(/^Actor\./, "");
+      if (!ownsDomain && stewardFid !== factionActor.id) throw new Error(`${caller?.name || "caller"} does not ride with ${factionActor.name}`);
+    }
+    if (!info.party.here) throw new Error(`ride to ${info.hexName} first — the rite is done on site`);
+
+    const contributor = game.actors?.get(String(p?.contributorId || ""));
+    if (!contributor || String(contributor.getFlag?.("bbttcc-factions", "factionId") || "").replace(/^Actor\./, "") !== factionActor.id) {
+      throw new Error("the contributor must be one of the Domain's Stewards");
+    }
+    const { matKey, matNeed, opPool, opNeed, mpo, dc } = info;
+    if (info.opPoolBad) throw new Error(_badPoolMsg(opPool, info.sparkName));
+    if (opNeed && !mpo) throw new Error("OP↔marks ratio unavailable");
+    let extraOp = Math.max(0, Math.min(3, Math.floor(Number(p?.extraOp) || 0)));
+    if (extraOp && !opPool) extraOp = 0;
+    if (extraOp && info.opAvail < (opNeed + extraOp) * mpo) throw new Error(`extra spend needs ${(opNeed + extraOp) * mpo} ${opPool} marks in total, have ${info.opAvail}`);
+
+    // Pay first (marks, then material; a material failure refunds the marks) — same rule as the carried rite.
+    let paidMarks = 0;
+    if (opPool && (opNeed || extraOp)) paidMarks = await _debitOp(factionActor, opPool, (opNeed + extraOp) * mpo);
+    try {
+      if (matKey && matNeed) await _consumeMaterial(factionActor.id, matKey, matNeed);
+    } catch (e) {
+      try { await _refundOp(factionActor, opPool, paidMarks); } catch (eR) { console.warn(TAG, "marks refund failed:", eR); }
+      throw new Error(`material: ${e.message}${paidMarks ? ` (${paidMarks} ${opPool} marks refunded)` : ""}`);
+    }
+
+    const dice = game.bbttcc?.dice;
+    const sys = contributor.system?.system ?? contributor.system ?? {};
+    const ritSkill = dice ? dice.skillBonus(contributor, "ritual", "soul")
+      : Number(sys.skills?.ritual?.value ?? 0) + Number(sys.attributes?.soul?.value ?? 2);
+    const breakdown = dice?.isRFI?.() === false ? [["ritual skill", ritSkill]]
+      : [["ritual", Number(sys.skills?.ritual?.value ?? 0)], ["soul", Number(sys.attributes?.soul?.value ?? 2)]];
+    const totalBonus = ritSkill + extraOp + opNeed;
+    const formula = `${dice?.checkFormula?.() ?? (game.fourththing?.rolls?.checkFormula?.() || "2d10x10")} + ${totalBonus}`;
+    const roll = await new Roll(formula).roll();
+    const total = roll.total;
+    const margin = total - dc;
+    const outcome = margin >= 0 ? "success" : (margin >= -3 ? "partial" : "failure");
+
+    const doc = info.doc;
+    if (outcome === "success") {
+      const r = await game.bbttcc?.api?.tikkun?.hex?.repair?.(doc.uuid);
+      if (r && r.ok === false) console.warn(TAG, "hex.repair refused after a won rite:", r);
+      try { await doc.update({ [`flags.${TER}.spark.repairAttempts`]: 0 }); } catch (_e) {}   // repair() merges, so the counter is zeroed by hand
+    } else {
+      try { await doc.update({ [`flags.${TER}.spark.repairAttempts`]: info.attempts + 1 }); } catch (e) { console.warn(TAG, "attempt counter write failed:", e); }
+    }
+    if (outcome === "failure") {
+      try {
+        const logs = factionActor.getFlag("bbttcc-factions", "warLogs") || [];
+        logs.push({
+          ts: Date.now(), type: "ritual-debt", source: "tikkun-repair",
+          msg: `Failed repair of the ${info.sparkName} seated at ${info.hexName} (${contributor.name}${caller && !meta?.local ? `, called by ${caller.name}` : ""}). Roll ${total} vs DC ${dc}. Materials and marks spent; the lamp stays dark; narrative debt incurred.`
+        });
+        await factionActor.setFlag("bbttcc-factions", "warLogs", logs);
+      } catch (e) { console.warn(TAG, "warLog stamp failed:", e); }
+    }
+
+    const headerColor = outcome === "success" ? "#6fcf97" : (outcome === "partial" ? "#e8c84a" : "#c03030");
+    const headerIcon  = outcome === "success" ? "✦" : (outcome === "partial" ? "⊘" : "⚠");
+    const headerText  = outcome === "success" ? "Lamp Mended" : (outcome === "partial" ? "Repair Stalled" : "Repair Failed");
+    const where = _esc(info.hexName);
+    const outcomeLine = outcome === "success"
+      ? `<p style="margin:0.3rem 0">The ${_esc(info.sparkName)} at <b>${where}</b> sheds its corruption. It sleeps again, waiting to be integrated.</p>`
+      : outcome === "partial"
+      ? `<p style="margin:0.3rem 0">The work bites but does not bind. Materials and marks spent. The next rite at ${where} goes at DC ${Math.max(8, dc - 2)}.</p>`
+      : `<p style="margin:0.3rem 0">The rite breaks against the corruption. Materials and marks spent; the lamp at ${where} stays dark; <b>${_esc(factionActor.name)}</b> incurs ritual debt.</p>`;
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker?.({ actor: contributor }) ?? {},
+      content: `<div class="fourththing-roll">
+        <div class="ft-roll-header"><span class="ft-roll-name" style="color:${headerColor}">${headerIcon} ${headerText}: ${_esc(info.sparkName)}</span></div>
+        <p style="margin:0.2rem 0;font-size:0.82rem">${_esc(contributor.name)} performs the repair rite at <b>${where}</b>${info.sephLabel ? ` on the <i>${_esc(info.sephLabel)}</i> spark` : ""}.</p>
+        <div class="ft-roll-formula">
+          <span class="ft-fp" title="check die">${(roll.terms[0]?.results ?? []).map(r => r.result).join(" + ")}</span>
+          ${breakdown.map(([t, v]) => `<span class="ft-fp" title="${t}">+${v}</span>`).join("\n          ")}
+          ${extraOp ? `<span class="ft-fp" title="extra ${_esc(opPool)} spend (${extraOp * mpo} marks)">+${extraOp}</span>` : ""}
+          ${opNeed ? `<span class="ft-fp" title="${_esc(opPool)} cost (${opNeed * mpo} marks)">+${opNeed}</span>` : ""}
+        </div>
+        <div class="ft-roll-result"><span class="ft-total">${total}</span> <span style="opacity:0.7;font-size:0.78rem">vs DC ${dc}</span></div>
+        ${outcomeLine}
+      </div>`
+    }).catch(() => {});
+    return { ok: true, outcome, total, dc, nextDC: outcome === "success" ? null : Math.max(8, dc - 2), hexUuid: doc.uuid, key: info.key };
   }
 
   // ── Pending Deposits Ledger (Phase E.3b) ────────────────────────────────
@@ -651,6 +947,9 @@ console.log("[bbttcc-tikkun/repair] LOADED");
       game.bbttcc.api.tikkun.openRepairLedger = openRepairLedger;
       game.bbttcc.api.tikkun.openRepairRitual = openRepairRitual;
       game.bbttcc.api.tikkun.openDepositLedger = openDepositLedger;
+      game.bbttcc.api.tikkun.openHexRepairRite = openHexRepairRite;
+      game.bbttcc.api.tikkun.listCorruptedHexSparks = listCorruptedHexSparks;
+      try { game.bbttcc.api.gmExec?.register?.(HEX_RITE_RELAY, (p, meta) => _performHexRite(p, meta)); } catch (eR) { console.warn(TAG, "hex rite relay register failed:", eR); }
     } catch (e) { console.warn(TAG, "install failed:", e); }
   }
   Hooks.once("ready", _install);

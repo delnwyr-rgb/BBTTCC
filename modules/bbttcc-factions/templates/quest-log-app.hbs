@@ -27,6 +27,25 @@
       {{/each}}
     </nav>
 
+    {{#if corruptedSparks.length}}
+      <section class="bbttcc-quest-log__sparks">
+        <div class="bbttcc-quest-log__sparks-head">✦ Corrupted sparks</div>
+        {{#each corruptedSparks}}
+          <div class="bbttcc-quest-log__spark-row">
+            <div class="bbttcc-quest-log__spark-text">
+              <b>{{sparkName}}</b>{{#if sephLabel}} <span class="bbttcc-muted">({{sephLabel}})</span>{{/if}} · <span class="bbttcc-quest-log__spark-hex">{{hexName}}</span>
+              <div class="bbttcc-muted">The dark took this lamp — repair it on site.</div>
+            </div>
+            {{#if here}}
+              <button type="button" class="bbttcc-quest-log__spark-btn" data-ql-act="hex-spark-repair" data-hex-uuid="{{hexUuid}}">⚒ Repair</button>
+            {{else}}
+              <button type="button" class="bbttcc-quest-log__spark-btn" disabled title="{{#if partyAt}}The party is at {{partyAt}}{{else}}The party is not there{{/if}}">Ride to {{hexName}}</button>
+            {{/if}}
+          </div>
+        {{/each}}
+      </section>
+    {{/if}}
+
     <div class="bbttcc-quest-log__body">
       <aside class="bbttcc-quest-log__list">
         {{#if rows.length}}

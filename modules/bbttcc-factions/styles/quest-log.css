@@ -262,3 +262,12 @@
 .bbttcc-pill.bbttcc-pill-invite { background: rgba(77,184,176,.18); border-color: #4db8b0; }
 .bbttcc-quest-row.is-invite { border-left: 3px solid #4db8b0; }
 .bbttcc-quest-detail__actions .bbttcc-invite-accept { border-color: #4db8b0; }
+
+/* ✦ Corrupted sparks strip (Dave 2026-11-02) — the dark took a seated lamp; repair on site */
+.bbttcc-quest-log__sparks { flex: 0 0 auto; margin: 0 0 8px; padding: 6px 10px; border-radius: 12px; border: 1px solid rgba(192,48,48,.55); background: rgba(60,10,20,.55); }
+.bbttcc-quest-log__sparks-head { font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: #fca5a5; margin-bottom: 4px; }
+.bbttcc-quest-log__spark-row { display: flex; align-items: center; justify-content: space-between; gap: .6rem; padding: 3px 0; }
+.bbttcc-quest-log__spark-row + .bbttcc-quest-log__spark-row { border-top: 1px solid rgba(192,48,48,.25); }
+.bbttcc-quest-log__spark-hex { color: #bfdbfe; }
+.bbttcc-quest-log__spark-btn { flex: 0 0 auto; width: auto; white-space: nowrap; border-color: #c03030; }
+.bbttcc-quest-log__spark-btn[disabled] { opacity: .55; cursor: not-allowed; }
