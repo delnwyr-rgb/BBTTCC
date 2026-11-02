@@ -337,6 +337,7 @@ export const QUEST_MAP = {
    "name": "The Ninth Guest",
    "act": 4,
    "keystone": false,
+   "evergreen": true,
    "hex": "Founder's Garden",
    "registryId": "quest_ninth_guest",
    "chapters": {}
