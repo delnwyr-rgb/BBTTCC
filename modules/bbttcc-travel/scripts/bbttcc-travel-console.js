@@ -1862,12 +1862,23 @@
                 const covers = (a) => { const b = a.getFlag?.("bbttcc-factions", "opBank") || {}; return Object.entries(short).every(([k, n]) => (Number(b[k]) || 0) >= n); };
                 const shortTxt = Object.entries(short).map(([k, n]) => `${n} ${opLabel(k)}`).join(" + ");
                 let shown = 0, others = [];
+                // CHIPPING IN (2026-11-02 click-through, Dave picked "wait for the week's slice and borrow less"): the coalition was
+                // 37 short, Sweet Release held 24 of it and Fixit the rest — but only an ally covering the WHOLE shortfall got a
+                // button, so the split a table would make was impossible here. An ally holding part of it offers what it can spare.
+                const part = (a) => { const b = a.getFlag?.("bbttcc-factions", "opBank") || {}; const o = {}; for (const [k, n] of Object.entries(short)) { const h = Math.min(n, Math.max(0, Math.floor(Number(b[k]) || 0))); if (h > 0) o[k] = h; } return o; };
+                const partials = [];
                 for (const a of allies) {
-                  if (!covers(a)) continue;
+                  if (!covers(a)) { const pv = part(a); if (Object.keys(pv).length && (game.user?.isGM || a.isOwner)) partials.push([a, pv]); continue; }
                   if (!(game.user?.isGM || a.isOwner)) { others.push(a.name); continue; }
                   const btn = document.createElement("button"); btn.type = "button"; btn.className = "bbttcc-travel-button";
                   btn.textContent = `🤝 ${a.name} can send ${shortTxt}`;
                   btn.onclick = () => { if (!App) return ui.notifications?.error?.("Allied Send app not loaded."); new App(a, { targetId: factionId, preset: short }).render({ force: true, focus: true }); };
+                  $help.appendChild(btn); shown++;
+                }
+                for (const [a, pv] of partials) {
+                  const btn = document.createElement("button"); btn.type = "button"; btn.className = "bbttcc-travel-button";
+                  btn.textContent = `🤝 ${a.name} can chip in ${Object.entries(pv).map(([k, n]) => `${n} ${opLabel(k)}`).join(" + ")}`;
+                  btn.onclick = () => { if (!App) return ui.notifications?.error?.("Allied Send app not loaded."); new App(a, { targetId: factionId, preset: pv }).render({ force: true, focus: true }); };
                   $help.appendChild(btn); shown++;
                 }
                 if (others.length) { const n = document.createElement("div"); n.style.cssText = "font-size:.8rem;opacity:.8;"; n.textContent = `${others.join(", ")} could cover it — ask their player or the GM to send it.`; $help.appendChild(n); }
