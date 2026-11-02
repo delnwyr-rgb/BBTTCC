@@ -656,6 +656,12 @@ export function deriveSituation(ctx) {
   // routes in (for orphan detection and hub finding)
   const routesIn = new Map();
   for (const b of beats) for (const c of (b?.choices || [])) for (const t of [c?.next, c?.failNext]) { const id = String(t || "").trim(); if (id) routesIn.set(id, (routesIn.get(id) || 0) + 1); }
+  // A FAILED CHECK IS NOT A DESTINATION (2026-11-02 click-through): a beat reached only as some choice's failNext is what a miss
+  // costs, never where the story goes next — the Seal Flares (every seal choice's failNext) headlined the Valhaulan Seal's Next
+  // after the seal had been looked at, ahead of the seal itself. stepsOf(c) = the routes a table can CHOOSE to walk.
+  const nextIn = new Set();
+  for (const b of beats) for (const c of (b?.choices || [])) { const id = String(c?.next || "").trim(); if (id) nextIn.add(id); }
+  const stepsOf = (c) => [c?.next, nextIn.has(String(c?.failNext || "").trim()) ? c?.failNext : null];
   const openingId = String(ctx.openingBeatId || "").trim();
   const isHub = (b) => !!b && b.inject?.repeatable !== false && Array.isArray(b.choices) && b.choices.filter(c => c && c.next).length >= 3 && (routesIn.get(String(b.id)) || 0) >= 3;
   // a beat "leads somewhere" if it is unplayed, or it is a hub with an unplayed door behind it (one hop —
@@ -734,7 +740,7 @@ export function deriveSituation(ctx) {
   }
   const anchorBeat = anchorId ? byId.get(anchorId) : null;
   const anchorLoc = (() => { if (!anchorBeat) return null; const d = declOf(anchorBeat); return d ? { quest: d.quest, chapter: d.chapter || null } : null; })();
-  const routedFrom = (b, within) => !b ? [] : uniq((b.choices || []).flatMap(c => [c?.next, c?.failNext]).map(x => byId.get(String(x || ""))).filter(t => t && within.has(String(t.id)) && String(t.id) !== String(b.id) && (!fired.has(String(t.id)) || isHub(t))));
+  const routedFrom = (b, within) => !b ? [] : uniq((b.choices || []).flatMap(c => stepsOf(c)).map(x => byId.get(String(x || ""))).filter(t => t && within.has(String(t.id)) && String(t.id) !== String(b.id) && (!fired.has(String(t.id)) || isHub(t))));
 
   const quests = [];
   for (const [key, def] of Object.entries(QUEST_MAP.quests)) {
@@ -754,7 +760,7 @@ export function deriveSituation(ctx) {
       const state = (rec?.ending || bucket === "completed" || bucket === "archived" || firedEnd) ? "done" : (rec?.started || bucket === "active" || anyFired) ? "open" : "dormant";
       const routed = anchorLoc && anchorLoc.quest === key && anchorLoc.chapter === chKey ? routedFrom(anchorBeat, cIds) : [];
       const cPlayed = cb.filter(b => fired.has(String(b.id))).sort((a, b) => firedTs(String(b.id)) - firedTs(String(a.id)));
-      const cFront = uniq(cPlayed.flatMap(pb => (pb.choices || []).flatMap(c => [c?.next, c?.failNext]).map(x => byId.get(String(x || ""))).filter(t => t && cIds.has(String(t.id)) && !fired.has(String(t.id)))));
+      const cFront = uniq(cPlayed.flatMap(pb => (pb.choices || []).flatMap(c => stepsOf(c)).map(x => byId.get(String(x || ""))).filter(t => t && cIds.has(String(t.id)) && !fired.has(String(t.id)))));
       const cLadder = cb.filter(b => (routesIn.get(String(b.id)) || 0) === 0 && !fired.has(String(b.id)));
       const next = state === "done" ? null : (state === "dormant" && sts.length ? pickNext(sts, [], true) : (pickNext([...cFront, ...cLadder], routed) || (sts.length ? pickNext(sts, [], true) : null)));
       chapters.push({ key: chKey, name: ch.name, registryId: ch.registryId, state, ending: firedEnd ? { beatId: String(firedEnd.id), label: firedEnd.label || firedEnd.id, name: rec?.ending?.name || null } : (rec?.ending ? { beatId: rec.ending.beatId || null, label: rec.ending.name, name: rec.ending.name } : null), next, beats: cb, starts: sts, endings: ends });
@@ -785,7 +791,7 @@ export function deriveSituation(ctx) {
     const bodyAll = qb.main.filter(b => !closerIds.has(String(b.id)));
     const bodyIds = new Set(bodyAll.map(b => String(b.id)));
     const playedHere = all.filter(b => fired.has(String(b.id))).sort((a, b) => firedTs(String(b.id)) - firedTs(String(a.id)));
-    const frontier = uniq(playedHere.flatMap(pb => (pb.choices || []).flatMap(c => [c?.next, c?.failNext]).map(x => byId.get(String(x || ""))).filter(t => t && bodyIds.has(String(t.id)) && !fired.has(String(t.id)))));
+    const frontier = uniq(playedHere.flatMap(pb => (pb.choices || []).flatMap(c => stepsOf(c)).map(x => byId.get(String(x || ""))).filter(t => t && bodyIds.has(String(t.id)) && !fired.has(String(t.id)))));
     const ladder = bodyAll.filter(b => (routesIn.get(String(b.id)) || 0) === 0 && !fired.has(String(b.id)));
     const body = [...frontier, ...ladder];
     if (state === "completed") { why = "complete"; }
@@ -1032,11 +1038,18 @@ export function scriptView(sc, ctx) {
   const questKey = ctx.questKey ? String(ctx.questKey) : null;
   const inQuest = (b) => { if (!questKey) return true; const d = declOf(b); return !!d && d.quest === questKey; };
   const doneIds = (st) => new Set([...(st.done?.anyOf || []), ...(st.done?.allOf || []), ...(st.done?.mark ? [st.done.mark] : [])].map(String));
+  const nextInto = new Set(); const failInto = new Set();
+  for (const b of byId.values()) for (const c of (b?.choices || [])) { if (c?.next) nextInto.add(String(c.next)); if (c?.failNext) failInto.add(String(c.failNext)); }
+  const failOnly = (id) => failInto.has(String(id)) && !nextInto.has(String(id));
   const cand = (st) => {
     const listed = (Array.isArray(st.beats) ? st.beats : []).map(id => byId.get(String(id))).filter(Boolean);
-    const fresh = listed.filter(b => !played(b.id)); if (fresh.length) return fresh;
+    // a failed check is not a destination (2026-11-02 click-through): the Seal Flares sits in the seal step's list as every tool's
+    // failNext, so once the seal had been looked at the Log's Next was the flare. A beat reached only as a failNext is never a
+    // candidate; a REPEATABLE listed beat already played (the seal itself) is where the table goes back to choose.
+    const fresh = listed.filter(b => !played(b.id) && !failOnly(b.id)); if (fresh.length) return fresh;
     const dl = doneIds(st); const out = []; const seen = new Set();
-    for (const pb of listed.filter(b => played(b.id))) for (const c of (pb.choices || [])) for (const t of [c?.next, c?.failNext]) {
+    for (const b of listed) if (played(b.id) && b.inject?.repeatable === true && !seen.has(b.id)) { seen.add(b.id); out.push(b); }
+    for (const pb of listed.filter(b => played(b.id))) for (const c of (pb.choices || [])) for (const t of [c?.next, nextInto.has(String(c?.failNext || "")) ? c?.failNext : null]) {
       const b = byId.get(String(t || "")); if (!b || played(b.id) || seen.has(b.id)) continue;
       if (dl.has(String(b.id)) || inQuest(b)) { seen.add(b.id); out.push(b); }
     }
