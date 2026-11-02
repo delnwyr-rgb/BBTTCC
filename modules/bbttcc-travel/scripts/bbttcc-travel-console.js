@@ -2703,7 +2703,20 @@ if (game.bbttcc?.runVisuals) {
 
       // one hex apart = the shortest path is exactly [from, to]
       const _legAdjacent = (a, b) => { try { const p = computeShortestPath(a, b); return Array.isArray(p) && p.length === 2; } catch (_e) { return false; } };
-      const computeShortestPath = (startHex, endHex) => {
+      const computeShortestPath = (startHex, endHex, opts = {}) => {
+        // AUTO-PLAN RESPECTS THE DOMAIN GATE (2026-11-02 click-through): it planned a route through a river the Domain had no rig to
+        // cross, and Execute then refused at leg 1. With opts.gate, a hex the riding Domain cannot enter is never stepped into
+        // (the destination too — if it is unreachable the planner says so). The one-hex adjacency test calls this without the gate.
+        const _gateFid = opts.gate ? String($fac?.value || "") : "";
+        const _domApi = game.bbttcc?.api?.travel?.domains;
+        const _gateOn = (() => { try { return game.settings.get("bbttcc-core", "travelDomainGate") !== false; } catch { return true; } })();
+        const _passCache = new Map();
+        const passable = (h) => {
+          if (!_gateFid || !_gateOn || !_domApi?.canEnterTerrainKey) return true;
+          if (_passCache.has(h.id)) return _passCache.get(h.id);
+          let ok = true; try { const doc = canvas.drawings?.get?.(h.id)?.document ?? (h.uuid ? fromUuidSync(h.uuid) : null); const g = _domApi.canEnterTerrainKey(_gateFid, h.terrainKey || "", doc); ok = !(g && g.ok === false); } catch (_eG) { ok = true; }
+          _passCache.set(h.id, ok); return ok;
+        };
         // Map id → center; skip hexes without a resolvable center.
         const centers = new Map();
         for (const h of hexes) {
@@ -2762,6 +2775,7 @@ if (game.bbttcc?.runVisuals) {
             if (visited.has(nid)) continue;
             const neighbor = hexes.find(h => h.id === nid);
             if (!neighbor) continue;
+            if (!passable(neighbor)) continue;
 
             const terrKey  = normTerrKey(neighbor.terrainKey || "");
             const terrInfo = dict[terrKey] || {};
@@ -2791,9 +2805,10 @@ if (game.bbttcc?.runVisuals) {
       };
 
       const autoPlanRoute = (startHex, endHex) => {
-        const path = computeShortestPath(startHex, endHex);
+        const path = computeShortestPath(startHex, endHex, { gate: true });
         if (!path) {
-          setPickStatus(`No path found between ${startHex.label} and ${endHex.label}.`);
+          const any = computeShortestPath(startHex, endHex);
+          setPickStatus(any ? `No path ${game.actors.get($fac?.value)?.name || "the Domain"} can travel between ${startHex.label} and ${endHex.label} — every route crosses terrain it has no rig for (water, air…). Bring or borrow a rig that can.` : `No path found between ${startHex.label} and ${endHex.label}.`);
           return;
         }
         legs.length = 0;
