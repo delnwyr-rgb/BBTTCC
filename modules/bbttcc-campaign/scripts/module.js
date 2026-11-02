@@ -1354,6 +1354,24 @@ function _pickOpenBeatChoice({ beatId, label } = {}) {
   return { ok: true, label: norm(buttons[key].label) };
 }
 
+// A WON CHECK THAT LEADS NOWHERE STILL PAYS OUT (2026-11-02 click-through): 47 checks end their beat on success with the reward
+// written only as the button's subtitle ("Unfold it without tearing it" at the drip tray earns the maintenance schedule and the
+// table never reads it). When a passed check has no next beat, its description is posted as the result. A secret check whispers
+// it to the GMs.
+async function _postCheckWonText(campaign, beat, ch) {
+  try {
+    const raw = String(ch?.description || "").trim(); if (!raw) return;
+    let text = raw; try { text = _expandStoryTokens(raw, campaign); } catch (_e) {}
+    const esc = (x) => foundry.utils.escapeHTML(String(x ?? ""));
+    const content = `<div style="border-left:3px solid #4f8f5f;padding:.35em .6em;background:rgba(79,143,95,.08);">`
+      + `<div style="font-variant:small-caps;letter-spacing:.04em;opacity:.75;font-size:.85em;">✓ ${esc(ch?.label || "Success")}</div>`
+      + `<div style="margin-top:.25em;">${esc(text)}</div></div>`;
+    const data = { speaker: { alias: String(beat?.label || "Bad Eden").replace(/\s*[—-].*$/, "") || "Bad Eden" }, content };
+    if (ch?.secret === true) data.whisper = game.users.filter(u => u.isGM).map(u => u.id);
+    await ChatMessage.create(data);
+  } catch (e) { warn("[checks] won-text card failed", e); }
+}
+
 async function _closeOpenBeatDialogs({ beatId = null } = {}) {
   let n = 0;
   for (const e of [...__bbttccOpenBeatDialogs]) {
@@ -3086,6 +3104,7 @@ ${
                   const ok = await _gmAdjudicate(label, '<div style="font-weight:700;">' + _escapeHtml(label) + '</div>' + promptLine + metaLine);
 
                   const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
+                  if (ok && !nextId) await _postCheckWonText(campaign, beat, ch);
                   try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
                   const chainTs = Date.now();
                   if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
@@ -3130,6 +3149,7 @@ ${
                   const ok = await _gmAdjudicate(label, '<div style="font-weight:700;">' + _escapeHtml(label) + '</div>' + promptLine + metaLine);
 
                   const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
+                  if (ok && !nextId) await _postCheckWonText(campaign, beat, ch);
                   try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
                   const chainTs = Date.now();
                   if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
@@ -3229,6 +3249,7 @@ ${
                 const nextId = res.ok
                   ? (ch.next || "")
                   : (ch.failNext || beat.outcomes?.failure || "");
+                if (res.ok && !nextId) await _postCheckWonText(campaign, beat, ch);
 
                 try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
                 if (res.ok) { try { await _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx); } catch (_eQI) {} try { await _choiceWorldEffects(campaign, beat, ch, ctx); } catch (_eCW) { warn("choice worldEffects failed:", _eCW); } try { await _choiceOpenTravel(campaign, beat, ch, ctx); } catch (_eOT) {} }

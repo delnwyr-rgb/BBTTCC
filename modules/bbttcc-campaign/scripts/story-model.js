@@ -893,8 +893,13 @@ export function deriveSituation(ctx) {
   // A DOOR standing at the party's hex counts as reachable too (2026-09-18, live-caught: the party rode to Khezek-Tor on
   // day one and NOW kept offering Allesh-Gilliam's Day's End, a ride away, while the cookline waited right here)
   const doorHere = (q) => (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready && q.next.here === true && leadsSomewhere(q.next.beat);
-  const elsewhere = anchorQuest && !reachable(anchorQuest) ? (inPlay.find(q => fg(q) && reachable(q)) || quests.find(doorHere) || (!fresh(anchorQuest) ? (inPlay.find(q => fg(q) && fresh(q)) || inPlay.find(q => bgOK(q) && fresh(q)) || null) : null)) : null;
-  const elsewhereWhy = elsewhere ? (fresh(anchorQuest) ? "here" : "elsewhere") : null;
+  // A BACKGROUND ANCHOR NEVER HEADLINES (2026-11-02 click-through): the Arms Down surrender made the Bandit Accord the anchor, and
+  // the anchor path skipped the background rule — NOW led with the Accord while Father Tamsin's first step waited. When the anchor
+  // is background and a foreground quest is fresh or a door is ready, that is what happens next.
+  const bgAnchorYields = !!anchorQuest && !fg(anchorQuest) && (anyDoorReady || inPlay.some(q => fg(q) && fresh(q)));
+  const fgDoor = () => quests.filter(q => fg(q) && (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready && q.next.beat).sort((a, b) => Number(b.next?.here === true) - Number(a.next?.here === true))[0] || null;
+  const elsewhere = bgAnchorYields ? (inPlay.find(q => fg(q) && reachable(q)) || quests.find(q => fg(q) && doorHere(q)) || inPlay.find(q => fg(q) && fresh(q)) || fgDoor()) : anchorQuest && !reachable(anchorQuest) ? (inPlay.find(q => fg(q) && reachable(q)) || quests.find(doorHere) || (!fresh(anchorQuest) ? (inPlay.find(q => fg(q) && fresh(q)) || inPlay.find(q => bgOK(q) && fresh(q)) || null) : null)) : null;
+  const elsewhereWhy = elsewhere ? (bgAnchorYields ? (elsewhere.next?.here === true ? "here" : "elsewhere") : (fresh(anchorQuest) ? "here" : "elsewhere")) : null;
   inPlay.sort((a, b) => Number(b.next?.here === true) - Number(a.next?.here === true));
   const now = anchorQuest ? ((!anyFresh && !quests.some(q => (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready))
     ? { quest: anchorQuest, chapter: anchorQuest.currentChapter, next: null, why: "turn", roads: [] }

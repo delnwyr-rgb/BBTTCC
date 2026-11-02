@@ -195,6 +195,9 @@ const FATHER_TAMSIN_PATCH = (() => {
     { const b = byId.get("ft_camp_fight"); const OLD = "The camp stands up. Tools become something else in practised hands."; if (b && b.description === OLD) { b.description = OLD.replace(/\.$/, "") + " — and out of the biggest tent comes the one they keep for this: a Battle-Bassinet Berserker, Valhaulan through and through, who has never once been asked to be gentle."; did("ft_camp_fight: the Berserker walks out"); } }
     { const b = byId.get("ft_camp_recruited"); const OLD2 = "The rest go down to Calder's lockup."; if (b && String(b.description || "").endsWith(OLD2)) { b.description = b.description + " The ones Brakk picked will be waiting at the Muster, packs on, whenever a Steward wants to sign them on."; did("ft_camp_recruited: names the Muster"); } }
 
+    // every camp beat sits at Khezek-Tor (live-caught: the location guard placed the camp in Allesh-Gilliam — the quest's town)
+    for (const b of beats) if (b && /^ft_(camp|tail)_/.test(String(b.id)) && b.where !== "Khezek-Tor") { b.where = "Khezek-Tor"; did(`${b.id}: where Khezek-Tor`); }
+
     // the chain's own gates (live-caught: the Act 3 card's gate door offered the reckoning — its outcomes gated only on the act)
     const chainGate = (id, r, tag) => addReq(byId.get(id), r, tag);
     for (const id of DONE) chainGate(id, mark("ft_camp_reckoning"), "after the reckoning");
@@ -217,6 +220,14 @@ const FATHER_TAMSIN_PATCH = (() => {
     addReq(byId.get("a3_title_card"), anyMark(DONE), "the camp dealt with");
     addReq(byId.get("ag_tamsin_pactkeeper"), anyMark(DONE), "after the camp");
     addReq(byId.get("ag_pipeline_route_only"), anyMark(DONE), "after the camp");
+    // live-caught: the caravan route's term choices led into beats that now wait on the camp — they wait too; until then the route
+    // points up the mountain, and St Gilliam's door carries the terms home afterwards
+    { const cr = byId.get("ag_caravan_route");
+      for (const c of cr.choices || []) if (c && ["ag_tamsin_pactkeeper", "ag_pipeline_route_only"].includes(String(c.next)) && !(Array.isArray(c.requires) ? c.requires : (c.requires ? [c.requires] : [])).some(r => JSON.stringify(r) === JSON.stringify(anyMark(DONE)))) { c.requires = [...(Array.isArray(c.requires) ? c.requires : (c.requires ? [c.requires] : [])), anyMark(DONE)]; did(`ag_caravan_route "${c.label}": after the camp`); }
+      addChoice(cr, ch("Take the route up the mountain first.", "", "Two days up from the Long Market, where the courier's route ends.", { requires: notDone }), /^keep the route\.$/i); }
+    const sg = byId.get("allesh_gilliam_st_gilliams_cinematics");
+    addChoice(sg, ch("Bring him the route. He wants to read the terms.", "ag_tamsin_pactkeeper", "The camp is down. Father Tamsin has the kettle on.", { requires: [P2, mark("ag_caravan_route"), anyMark(["ag_confessor_redeemed", "ag_confessor_pike"]), anyMark(DONE), not("ag_tamsin_pactkeeper")] }));
+    addChoice(sg, ch("Leave him the kettle.", "ag_pipeline_route_only", "The camp is down. The lie can stop now — or not.", { requires: [P2, mark("ag_caravan_route"), mark("ag_confessor_counterfeit"), anyMark(DONE), not("ag_pipeline_route_only")] }));
 
     // 6 — exposed still finds the route, at a price
     const pb = byId.get("ag_pipeline_backward"); const any = (pb.inject?.requires || []).find(r => r && Array.isArray(r.anyOf) && r.anyOf.some(x => x?.beatMark === "ag_confessor_redeemed"));
