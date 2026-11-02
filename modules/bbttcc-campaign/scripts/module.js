@@ -2677,6 +2677,33 @@ function _storyTokenFacts(campaign) {
   } catch (_e) {}
   return out;
 }
+// ── STORY SPANS (2026-11-01) — {{#played ids}}yes{{else}}no{{/played}} and {{#mark …}}…{{/mark}}, nested to any depth.
+// `ids` = a|b|c (ANY). Pure: text in, text out; `isOn(ids)` decides a span. Openers and closers of EITHER kind count toward
+// depth, so a {{/played}} inside a {{#mark}} never closes the mark early. A span with no closer is left as written.
+// BEGIN _expandStorySpans (sliced out verbatim by tools/test-story-spans.mjs — keep self-contained)
+function _expandStorySpans(text, isOn) {
+  const OPEN = /\{\{#(played|mark)\s+([A-Za-z0-9_.|-]+)\s*\}\}/g;
+  const TOK = /\{\{#(played|mark)\s+[A-Za-z0-9_.|-]+\s*\}\}|\{\{else\}\}|\{\{\/(played|mark)\}\}/g;
+  let s = String(text || ""), guard = 0;
+  while (guard++ < 200) {
+    OPEN.lastIndex = 0; const m = OPEN.exec(s); if (!m) return s;
+    const start = m.index, bodyAt = start + m[0].length;
+    // walk to the matching closer, noting the top-level {{else}}
+    TOK.lastIndex = bodyAt; let depth = 1, elseAt = -1, closeAt = -1, closeEnd = -1, t;
+    while ((t = TOK.exec(s))) {
+      if (t[0].startsWith("{{#")) depth++;
+      else if (t[0] === "{{else}}") { if (depth === 1 && elseAt < 0) elseAt = t.index; }
+      else { depth--; if (depth === 0) { closeAt = t.index; closeEnd = t.index + t[0].length; break; } }
+    }
+    if (closeAt < 0) { return s; }   // unterminated — leave as written
+    const yes = s.slice(bodyAt, elseAt >= 0 ? elseAt : closeAt);
+    const no = elseAt >= 0 ? s.slice(elseAt + "{{else}}".length, closeAt) : "";
+    const pick = isOn(m[2]) ? yes : no;
+    s = s.slice(0, start) + pick + s.slice(closeEnd);   // the chosen branch is re-scanned on the next loop (inner spans resolve)
+  }
+  return s;
+}
+// END _expandStorySpans
 function _expandStoryTokens(text, campaign, { raw = false } = {}) {   // raw: plain-text values for payloads the renderer escapes once (review P3, 2026-10-27)
   const s = String(text || "");
   if (s.indexOf("{{") < 0) return s;
@@ -2697,8 +2724,10 @@ function _expandStoryTokens(text, campaign, { raw = false } = {}) {   // raw: pl
   if (out.indexOf("{{#") >= 0) {
     let played = {};
     try { const cid = campaign?.id || (typeof getActiveCampaignId === "function" ? getActiveCampaignId() : null); played = _storyStateFor(cid)?.played || {}; } catch (_eP) { played = {}; }
-    const re = /\{\{#(played|mark)\s+([A-Za-z0-9_.|-]+)\s*\}\}([\s\S]*?)(?:\{\{else\}\}([\s\S]*?))?\{\{\/\1\}\}/g;
-    for (let pass = 0; pass < 2 && re.test(out); pass++) { re.lastIndex = 0; out = out.replace(re, (m, kind, id, yes, no) => (String(id).split("|").some(x => x && played[x]) ? yes : (no || ""))); }
+    // NESTING-AWARE (2026-11-01): the two-pass lazy regex paired an outer opener with the innermost closer, so a return-aware
+    // opening nested three deep ({{#played a}}…{{else}}{{#played b}}…{{/played}}{{/played}}) left stray {{/played}} on
+    // screen whenever an outer branch was true. _expandStorySpans walks the spans with a depth count instead.
+    out = _expandStorySpans(out, (id) => String(id).split("|").some(x => x && played[x]));
     // {{#at Allesh-Gilliam}}…{{else}}…{{/at}} — WHERE the table is (Dave, 2026-10-20: "There is no guarantee that the
     // players will be away from Allesh Gilliam. The text should know where the stewards are"). True when the ACTIVE
     // scene belongs to that town: its name, its folder, or a hex whose travel hub it is, matches the name (case,
