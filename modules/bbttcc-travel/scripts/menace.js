@@ -141,13 +141,22 @@
     } catch (e) { warn("partyScale failed", e); }
     return out;
   }
+  // SCALE IS A GATE, NOT A FILTER (Dave 2026-11-01: "we've got monsters over here, but they are in an area where your big rig
+  // can't go, so you have to get out of it and go on foot. So not exclude them, but deliberately regulate a balance between
+  // vehicle-scale combat and steward scale"). A FOOT-scale entry is drawn by a rig party too — the Menace warning card then
+  // does the regulating ("The ground there is too tight for the rig … whoever goes in goes on foot": Help = dismount and
+  // fight at Steward scale, Not now = the locals remember, loyalty and the clock). The live 10-21 build dropped every foot
+  // entry before the card could show, so a rig party rode Act 2 on bandits and convoys alone. The other direction holds:
+  // a foot party never draws a RIG-scale fight (nothing to dismount from).
   function entryScaleOk(entry, scale) {
     try {
       if (!enabled()) return true;
       const want = String(entry?.conditions?.scale || entry?.scale || "any").trim().toLowerCase();
       if (!want || want === "any") return true;
       const have = (typeof scale === "string") ? scale : (scale && scale.scale) || "foot";
-      return want === have;
+      if (want === have) return true;
+      if (want === "foot") return true;          // a rig party gets the warning card, then goes in on foot
+      return false;                               // want === "rig" and the party is on foot
     } catch (_e) { return true; }
   }
 
