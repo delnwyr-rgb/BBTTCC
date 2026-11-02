@@ -1829,7 +1829,7 @@ async function _choiceHidden(beat, ch, campaign, ctx = {}) {
 //   "soft" — the success beat has played, is repeatable, and is a QUESTION of this menu (an ans_* beat, or a beat that
 //            routes back to this one): greyed, ✓, still clickable (re-read the answer).
 // Exits never grey: no next, or a Leave / Back / Return / Call it a day / Ride / Onward label.
-const _EXIT_LABEL = /^\W*(leave|back\b|return|call it a day|ride\b|onward|go back|actually\b|not this one)/i;
+const _EXIT_LABEL = /^\W*(leave|back\b|return|call it a day|ride\b|onward|go back|actually\b|not this one|not yet|not today|climb back|another time|stay a while)/i;   // 2026-11-02 click-through: "Climb back up. Another time." greyed as done
 function _choiceSpent(ch, campaign, fromBeatId = null) {
   try {
     const next = String(ch?.next || "").trim(); if (!next) return false;
@@ -4023,6 +4023,11 @@ async function executeBeat(campaign, beat, ctx = {}) {
   // played[id].n and re-paid its creature bounty under a fresh key. "Run next" sends source "resume-next" and records.
   const _resumed = ctx?.source === "resume";
   try { if (game.user?.isGM && beat?.id && !_resumed) await _storyRecord(campaign, beat, ctx); } catch (e) { warn("story record failed:", e); }
+  // METERS AT ENTRY (2026-11-02 click-through, live-caught: three good Circuit Rider verifications left crVerify at 0 on the Terms of
+  // Contact screen — the meter rode "bbttcc:beat:resolved", which fires only when a beat's whole awaited chain unwinds, and the
+  // verification answers route straight on into the Terms inside that chain, so "Pursue alliance" (crVerify ≥ 2) was hidden until
+  // the table had already left). The verification tally and worldEffects.meters now land when the beat STARTS, like the play mark.
+  if (game.user?.isGM && beat?.id && !_resumed) { try { await _onBeatResolvedCrVerify({ beat }); } catch (_eCV) {} try { await _onBeatResolvedMeters({ beat }); } catch (_eMt) {} }
 
   // Phase Charter closers apply AT ENTRY (2026-08-30) — same lesson as the
   // fire-mark above: a closer whose choice routes into a long awaited chain
@@ -4055,6 +4060,7 @@ async function executeBeat(campaign, beat, ctx = {}) {
       return d?.uuid || null;
     } catch (_e) { return null; }
   };
+  const _awaitCanvasIdle = async (maxMs = 8000) => { try { const t0 = Date.now(); while ((canvas?.loading || (canvas && !canvas.ready)) && Date.now() - t0 < maxMs) await new Promise(r => setTimeout(r, 150)); } catch (_e) {} };
   const _diveScene = async (scene) => {
     if (!scene) return;
     if (_dive && _tx?.dive) {
@@ -4065,7 +4071,11 @@ async function executeBeat(campaign, beat, ctx = {}) {
         originUuid: _dive.originUuid
       });
     } else if (scene.activate) {
-      await scene.activate();
+      // Foundry refuses a view while the canvas is still loading ("You cannot switch Scenes until resources finish loading") —
+      // chained beats activate scene after scene faster than textures land (Dave 2026-11-02: the warning on every town door).
+      // Wait for the canvas to go idle first (bounded), and skip the activation when the table is already there.
+      await _awaitCanvasIdle();
+      if (!scene.active || canvas?.scene?.id !== scene.id) await scene.activate();
       // Activation's implicit pull skips clients explicitly view()'d onto
       // another scene (Weather Front stranded the player on the hex map,
       // 2026-08-26) — pull the whole table to the beat's stage outright.
@@ -4137,7 +4147,7 @@ async function executeBeat(campaign, beat, ctx = {}) {
               if (!sc2 && raw2 && !raw2.includes(".")) {
                 try { sc2 = await fromUuid(`Scene.${raw2}`); } catch (_eS2b) {}
               }
-              if (sc2?.activate) await sc2.activate();
+              if (sc2?.activate) { await _awaitCanvasIdle(); if (!sc2.active || canvas?.scene?.id !== sc2.id) await sc2.activate(); }
             } catch (_eN) {
               warn("Local cinematic next-scene activation failed:", _eN);
             }
@@ -4549,7 +4559,9 @@ async function executeBeat(campaign, beat, ctx = {}) {
     }
 
     default: {
-      ui.notifications?.info?.(`(Stub) Campaign '${campaign.label}': ran beat '${label}' of type '${type}'.`);
+      // dialog / skill_scene / narration / custom beats are handled by the dialog path above — this branch is reached for
+      // every one of them, and the old "(Stub) … ran beat" toast was a developer leftover the GM saw on every beat (Dave 2026-11-02)
+      log(`ran beat '${label}' of type '${type}'`);
       break;
     }
   }
@@ -9943,8 +9955,8 @@ Hooks.once("ready", () => {
   // Forgotten-Cause arc (step 1): bump the per-world Wendigo rung when a Wendigo
   // travel beat resolves. Pure reactive subscriber — no behavior change to beats.
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedWendigoRung);
-  Hooks.on("bbttcc:beat:resolved", _onBeatResolvedCrVerify);
-  Hooks.on("bbttcc:beat:resolved", _onBeatResolvedMeters);   // worldEffects.meters (2026-09-22)
+  // Hooks.on("bbttcc:beat:resolved", _onBeatResolvedCrVerify);  — moved to executeBeat entry (2026-11-02)
+  // Hooks.on("bbttcc:beat:resolved", _onBeatResolvedMeters);   // worldEffects.meters (2026-09-22)  — moved to executeBeat entry (2026-11-02)
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedGeburah);
   // Forgotten-Cause arc (step 3): move feud state (causeRecovered / heat /
   // peace-by-deletion) when the Confluence + Cultural Summit beats resolve.
