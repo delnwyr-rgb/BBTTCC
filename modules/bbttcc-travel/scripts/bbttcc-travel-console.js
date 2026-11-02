@@ -1908,6 +1908,14 @@
           }
         }
 
+        // A LEG IS ONE HEX (Dave 2026-11-02: "Travel shouldn't have accepted a single leg travel as that's not computable in the
+        // travel engine window"): "+ Add" took any From/To as one leg — six hexes rode as one day, one toll, one encounter roll.
+        // Unless a ley gate links them, a pair that isn't adjacent is refused; Pick on Map and Auto-Plan A→B add every hex.
+        if (!usedGate && !_legAdjacent(fromHex, toHex)) {
+          $rout.textContent = `${fromHex.label} and ${toHex.label} aren't neighbours — a leg is one hex. Use 📍 Pick on Map or 🪄 Auto-Plan A→B to add the route hex by hex.`;
+          return;
+        }
+
         legs.push({
           fromUuid: fUuid,
           toUuid: tUuid,
@@ -2062,6 +2070,10 @@
           try { await _handRouteToGM(factionId); } catch (e) { console.warn(TAG, "handoff failed", e); $rout.textContent = `Could not hand the route over: ${e?.message || e}`; }
           return;
         }
+        // A LEG IS ONE HEX at execution too (Dave 2026-11-02): a route carrying a non-adjacent, non-gate leg (a resumed session, an
+        // old plan) is refused whole — the engine computes one hex per leg.
+        { const byId = (id) => hexes.find(h => h.id === id); const bad = legs.find(L => !L.gate && byId(L.fromId) && byId(L.toId) && !_legAdjacent(byId(L.fromId), byId(L.toId)));
+          if (bad) { $rout.textContent = `${byId(bad.fromId)?.label || "?"} → ${byId(bad.toId)?.label || "?"} isn't one hex. Clear the route and re-plan it with 🪄 Auto-Plan A→B or 📍 Pick on Map.`; return; } }
         // In-flight guard (on the app, so a re-render mid-ride cannot arm a second loop over the same legs).
         if (this._execBusy) { ui.notifications?.info?.("The route is already executing."); return; }
         this._execBusy = true;
@@ -2650,6 +2662,8 @@ if (game.bbttcc?.runVisuals) {
         return null;
       };
 
+      // one hex apart = the shortest path is exactly [from, to]
+      const _legAdjacent = (a, b) => { try { const p = computeShortestPath(a, b); return Array.isArray(p) && p.length === 2; } catch (_e) { return false; } };
       const computeShortestPath = (startHex, endHex) => {
         // Map id → center; skip hexes without a resolvable center.
         const centers = new Map();

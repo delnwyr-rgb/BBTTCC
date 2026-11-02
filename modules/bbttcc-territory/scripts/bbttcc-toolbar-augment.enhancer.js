@@ -98,7 +98,18 @@
           id: "bbttcc-btn-travel-console",
           label: "Travel Console",
           icon: "route",
-          onClick: () => bbttccUi.travelConsole.render(true)
+          // Dave 2026-11-02: "Opening the travel console is supposed to automatically open the Main Map, like the planner button
+          // does" — the console reads hexes off the viewed canvas, so from a town or a battlemap it had nothing to plan on.
+          onClick: async () => {
+            try {
+              const hasHexes = (sc) => (sc?.drawings?.contents || []).some(d => { const f = d.flags?.["bbttcc-territory"]; return !!(f && (f.isHex || f.kind === "territory-hex" || f.name)); });
+              if (!hasHexes(canvas?.scene)) {
+                const map = game.scenes?.find?.(s => /the whole map/i.test(String(s.name || ""))) || game.scenes?.find?.(s => s.getFlag?.("bbttcc-travel", "isWorldHub"));
+                if (map) { const back = game.bbttcc?.api?.transition?.back; if (back) await back(map.uuid, { label: "World Map" }); else await map.view(); }
+              }
+            } catch (e) { console.warn("[bbttcc-ui/toolbar-augment] travel console → main map failed", e); }
+            bbttccUi.travelConsole.render(true);
+          }
         });
       }
 
