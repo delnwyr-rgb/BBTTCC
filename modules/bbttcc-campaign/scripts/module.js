@@ -2608,6 +2608,11 @@ async function _offerRetryInChain(campaign, beat, ctx, opts = {}) {
     if (opts.sinceTs != null) {
       let replayed = 0; try { replayed = Number(_storyStateFor(campaign?.id)?.played?.[String(beat?.id)]?.ts) || 0; } catch (_eSt) {}
       if (replayed >= Number(opts.sinceTs)) return;
+      // The failure route MOVED THE STORY ON (2026-11-02 click-through: the Hexknight's road-price missed → "Insufficient" →
+      // "So be it" → the fight → Win, and the original "Pay the road-price / Meet the lance" menu reopened over the dead knight).
+      // Two or more beats played since the miss = the table already made further choices; the retry belongs to a one-beat miss.
+      let since = 0; try { const pl = _storyStateFor(campaign?.id)?.played || {}; for (const k in pl) if (Number(pl[k]?.ts) >= Number(opts.sinceTs)) since++; } catch (_eSn) {}
+      if (since >= 2) return;
     }
     // Share the beat-effects once-memo with the original ctx: a pick in the retry marks the
     // beat applied for the outer executeBeat tail, and an earlier pick stops a second application.

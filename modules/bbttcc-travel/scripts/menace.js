@@ -272,12 +272,13 @@
     if (fromDoc && hexIsSettled(fromDoc)) return `The folk of ${hexName(fromDoc)}`;
     return "The road";
   }
+  const aOrAn = (w) => /^[aeiou]/i.test(String(w || "").trim()) ? "an" : "a";   // "an Apex Predator" (2026-11-02)
   function warningText(m, speaker, toDoc) {
     if (m && m.warning) return String(m.warning);
     const where = toDoc ? hexName(toDoc) : "the next hex";
     return speaker === "The road"
-      ? `Tracks, a carcass, a silence where there should be birds: a ${m.label} works ${where}.`
-      : `${speaker} stop you before the trail: a ${m.label} has been taking people and stock around ${where}. Nobody here can face it. They ask if you will.`;
+      ? `Tracks, a carcass, a silence where there should be birds: ${aOrAn(m.label)} ${m.label} works ${where}.`
+      : `${speaker} stop you before the trail: ${aOrAn(m.label)} ${m.label} has been taking people and stock around ${where}. Nobody here can face it. They ask if you will.`;
   }
   async function renderCard({ id, m, speaker, text, scale, hexDoc, factionName }) {
     const rigLine = (scale && scale.scale === "rig")
