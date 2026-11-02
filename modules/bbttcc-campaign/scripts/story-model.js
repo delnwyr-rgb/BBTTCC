@@ -926,6 +926,17 @@ export function deriveSituation(ctx) {
       }
     }
   }
+  // A QUEST WAITING TO BEGIN (2026-11-02 click-through, Father Tamsin): with nothing fresh in play and no gate door, a foreground
+  // quest not yet started whose first step is ready is what happens next — before, NOW went blank (or a gate door pointed into
+  // the middle of a chain) while the third candle waited in Allesh-Gilliam.
+  if (!nowOut || !nowOut.next || ["turn", "complete", "empty", "done-no-closer"].includes(String(nowOut.why || ""))) {
+    // the quest a waiting gate names comes first (the Act 3 card waits on Father Tamsin's camp), then what is here
+    const named = new Set();
+    for (const q of inPlay) for (const r of (q.next?.reasons || [])) { const t = String(r?.text || ""); for (const m of t.matchAll(/(?:beatMark |beat [“"'])([A-Za-z0-9_]+)/g)) { const x = byId.get(String(m[1])); const d = x ? declOf(x) : null; if (d?.quest) named.add(String(d.quest)); } }
+    const qd = quests.filter(q => fg(q) && (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready && q.next.beat)
+      .sort((a, b) => (Number(named.has(String(b.key))) - Number(named.has(String(a.key)))) || (Number(b.next?.here === true) - Number(a.next?.here === true)))[0];
+    if (qd) nowOut = { quest: qd, chapter: qd.currentChapter, next: qd.next, why: qd.next.here === true ? "here" : "elsewhere", roads: [] };
+  }
   // THE DAY MUST END FIRST (owner ruling 2026-09-20: "make it deliberate — prompt for it if someone doesn't fire Day's End").
   // When NOW waits on the TURN (a title card gated `turn ≥ N`), the act's Day's End terminal is offered as the way there.
   try {
