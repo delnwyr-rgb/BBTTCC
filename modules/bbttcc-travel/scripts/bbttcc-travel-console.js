@@ -1833,6 +1833,12 @@
             const preview = await game.bbttcc.api.op.preview(factionId, deltas, "travel-route");
             if (!preview) return;
 
+            // AN ALLY CAN SEND IT (Dave 2026-11-02: "have the travel console provide the ability to directly open the sharing
+            // interface"): when the route is short, every mutually-Allied Domain whose bank covers the shortfall gets a button that
+            // opens its Allied Send, prefilled to this Domain and the missing marks. Players see the allies they own.
+            let $help = content.querySelector(".bbttcc-ally-help");
+            if (!$help) { $help = document.createElement("div"); $help.className = "bbttcc-ally-help"; $help.style.cssText = "display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.3rem;"; $est.insertAdjacentElement("afterend", $help); }
+            $help.innerHTML = "";
             if (preview.ok) {
               const afterStr = opToStr(preview.after);
               $est.textContent = `${baseLabel} • After: ${afterStr || "(all zero)"}`;
@@ -1841,6 +1847,24 @@
                 .map(([k, info]) => `${opLabel(k)} ${_marksToOp(Math.abs(info.after))}`)
                 .join(", ");
               $est.textContent = `${baseLabel} • Not enough OP${missing ? ` (short: ${missing})` : ""}`;
+              try {
+                const short = {}; for (const [k, info] of Object.entries(preview.underflow || {})) short[k] = Math.ceil(Math.abs(Number(info.after) || 0));
+                const me = game.actors.get(factionId); const relApi = game.bbttcc?.api?.factions?.relations; const App = game.bbttcc?.apps?.AlliedSendApp;
+                const allies = (relApi?.list && me) ? relApi.list(me).filter(r => r.tier === "allied" && relApi.get(game.actors.get(r.id), me) === "allied").map(r => game.actors.get(r.id)).filter(Boolean) : [];
+                const covers = (a) => { const b = a.getFlag?.("bbttcc-factions", "opBank") || {}; return Object.entries(short).every(([k, n]) => (Number(b[k]) || 0) >= n); };
+                const shortTxt = Object.entries(short).map(([k, n]) => `${n} ${opLabel(k)}`).join(" + ");
+                let shown = 0, others = [];
+                for (const a of allies) {
+                  if (!covers(a)) continue;
+                  if (!(game.user?.isGM || a.isOwner)) { others.push(a.name); continue; }
+                  const btn = document.createElement("button"); btn.type = "button"; btn.className = "bbttcc-travel-button";
+                  btn.textContent = `🤝 ${a.name} can send ${shortTxt}`;
+                  btn.onclick = () => { if (!App) return ui.notifications?.error?.("Allied Send app not loaded."); new App(a, { targetId: factionId, preset: short }).render({ force: true, focus: true }); };
+                  $help.appendChild(btn); shown++;
+                }
+                if (others.length) { const n = document.createElement("div"); n.style.cssText = "font-size:.8rem;opacity:.8;"; n.textContent = `${others.join(", ")} could cover it — ask their player or the GM to send it.`; $help.appendChild(n); }
+                if (!shown && !others.length && allies.length) { const n = document.createElement("div"); n.style.cssText = "font-size:.8rem;opacity:.8;"; n.textContent = "No ally holds enough to cover it on their own."; $help.appendChild(n); }
+              } catch (eAH) { console.warn(TAG, "ally help failed", eAH); }
             }
           } catch (e) {
             console.warn(TAG, "OP preview failed in Travel Console", e);

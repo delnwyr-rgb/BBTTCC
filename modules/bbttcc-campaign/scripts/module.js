@@ -1858,6 +1858,7 @@ function _choiceSpent(ch, campaign, fromBeatId = null) {
   try {
     const next = String(ch?.next || "").trim();
     if (_EXIT_LABEL.test(String(ch?.label || ""))) return false;
+    if (ch?.openTravel) return false;                               // a ride is an exit — never greyed (2026-11-02)
     if (!next) { const k = `${String(fromBeatId || "")}::${String(ch?.label || "").trim()}`; return (fromBeatId && _storyStateFor(campaign?.id)?.asked?.[k]) ? "soft" : false; }
     const tgt = (campaign?.beats || []).find(b => String(b?.id) === next); if (!tgt) return false;
     let played = !!_storyStateFor(campaign?.id)?.played?.[next];

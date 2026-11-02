@@ -115,6 +115,9 @@ class BBTTCC_AlliedSendApp extends foundry.applications.api.ApplicationV2 {
   constructor(actor, options={}) {
     super(options);
     this.actor = actor;
+    // PRESET (2026-11-02, the Travel Console's "an ally can send it"): { targetId, preset: { economy: 28, … } } fills the form
+    this._presetTarget = options?.targetId ? String(options.targetId).replace(/^Actor\./, "") : null;
+    this._preset = (options?.preset && typeof options.preset === "object") ? options.preset : null;
   }
 
   _alliedTargets() {
@@ -159,7 +162,13 @@ class BBTTCC_AlliedSendApp extends foundry.applications.api.ApplicationV2 {
     `;
   }
 
-  _replaceHTML(html, content) { content.innerHTML = html; this._wire(content); }
+  _replaceHTML(html, content) {
+    content.innerHTML = html; this._wire(content);
+    try {
+      if (this._presetTarget) { const sel = content.querySelector('[name="targetId"]'); if (sel && [...sel.options].some(o => o.value === this._presetTarget)) sel.value = this._presetTarget; }
+      for (const [k, v] of Object.entries(this._preset || {})) { const inp = content.querySelector(`[name="offer.marks.${k}"]`); if (inp) inp.value = String(Math.max(0, Math.ceil(Number(v) || 0))); }
+    } catch (_e) {}
+  }
 
   _wire(root) {
     root.querySelector('[data-action="cancel"]')?.addEventListener("click", () => this.close());
