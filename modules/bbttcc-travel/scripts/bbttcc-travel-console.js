@@ -2944,6 +2944,13 @@ if (game.bbttcc?.runVisuals) {
           const toHex = hexes.find(h => _pfNorm(h.label) === _pfNorm(pf.toName)) || null;
           let fromHex = null;
           let facId = $fac?.value || "";
+          // A story ride is the CAMPAIGN's lead Domain's ride (2026-11-02 click-through: after a reload the dropdown defaulted to the
+          // first owned Domain, Allesh Gilliam, so the no-token fallback asked where IT stood — nowhere — and nothing was planned).
+          try {
+            const capi = game.bbttcc?.api?.campaign; const camp = capi?.getCampaign?.(capi?.getActiveCampaignId?.());
+            const lead = String(pf.factionId || camp?.factionId || (camp?.factionIds || [])[0] || "").replace(/^Actor\./, "");
+            if (lead && factions.some(f => f.id === lead) && facId !== lead) { facId = lead; if ($fac) { $fac.value = lead; $fac.dispatchEvent(new Event("change", { bubbles: true })); } }
+          } catch (_eLead) {}
           // The party is the faction's own token OR one of its stewards' tokens (2026-09-09 — the
           // table rides on Marginalia's token, not on an Errata Society token).
           const _isPartyOf = (t, id) => { const a = t?.actor; const f = a?.flags?.["bbttcc-factions"]; return !!a && (a.id === id || String(f?.factionId || "").replace(/^Actor\./, "") === id); };
