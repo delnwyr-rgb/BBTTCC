@@ -611,7 +611,10 @@ export function placeOf(beat, questDef) {
   const id = String(beat.id || ""), label = String(beat.label || "");
   const qk = String(beat.story?.quest || "");
   if (isAmbient(beat) || (qk && qk === String(QUEST_MAP.pool))) return "anywhere";
-  if (/(^|_)words?(_|$)/i.test(id) || /^word from\b/i.test(label)) return "anywhere";
+  // a LETTER reaches you anywhere: an invitation ticket (word_*) or a "Word from …" card. Not any id with "word" in it —
+  // 2026-11-01, live-caught: Khezek-Tor's kt_official_word matched the old `_word$` test, read as "anywhere", and the quest
+  // log ran it from Allesh-Gilliam — the table was dropped on the Khezek-Tor scene without the ride.
+  if (/^word_/i.test(id) || /^word from\b/i.test(label)) return "anywhere";
   if (/(^|_)ride(_|$)/i.test(id) || /^the road\b/i.test(label)) return "anywhere";
   if (Number.isFinite(Number(beat.worldEffects?.phaseAdvance?.set))) return "anywhere";
   const q = questDef || (qk ? QUEST_MAP.quests[qk] : null);
