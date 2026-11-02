@@ -2115,7 +2115,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
             flags: { "bbttcc-raid": { secret: { effectKey: wantKeys.join("+"), effectKeys: wantKeys, acquisition, ...(row.ingredientKey ? { ingredientKey: String(row.ingredientKey) } : {}), source: { npcActorId: String((row.source && row.source.npcActorId) || ""), npcName: srcName, beatId: String(beatCtx.beatId || ""), acquisition, ts: Date.now() } } } }
           });
           let created = null;
-          try { created = await api.addSecret(faction.id, source, { acquisition, effectKey: wantKeys.join("+") }); } catch (eAdd) { console.warn(TAG, "receipts: addSecret failed", eAdd); }
+          try { created = await api.addSecret(faction.id, source, { acquisition, effectKey: wantKeys.join("+"), story: true }); } catch (eAdd) { console.warn(TAG, "receipts: addSecret failed", eAdd); }
           if (created) { changed = true; notes.push("receipt:" + label); lineFor(fid, `🧾 ${label} → ${faction.name}${acquisition === "stolen" ? " (stolen — costs Suspicion when played)" : ""}`); }
           else lineFor(fid, `⚠ ${label} — refused (the faction may be at its Receipt cap)`);
         }

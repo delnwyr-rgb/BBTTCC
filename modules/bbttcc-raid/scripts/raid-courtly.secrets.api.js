@@ -121,7 +121,10 @@
 
   async function enforceCap(actor, n = CAP_PER_FACTION) {
     if (!actor) return 0;
-    const held = (actor.items?.contents || []).filter(i => i.flags?.[MOD_R]?.secret);
+    // STORY RECEIPTS ARE NEVER TRIMMED (2026-11-02 click-through): the cap dropped the oldest Receipt silently, and the story's own —
+    // the Rental Slip, the Gate Sequence, the Caravan Ledger — went first. The cap governs what a Parley deals; story receipts
+    // (secret.story, stamped by the world mutation engine and NPC dialogue) are kept and don't count against it.
+    const held = (actor.items?.contents || []).filter(i => i.flags?.[MOD_R]?.secret && i.flags[MOD_R].secret.story !== true);
     if (held.length <= n) return 0;
     held.sort((a, b) => Number(a.flags?.[MOD_R]?.secret?.acquiredAt || 0) - Number(b.flags?.[MOD_R]?.secret?.acquiredAt || 0));
     const drop = held.slice(0, held.length - n);
@@ -167,7 +170,7 @@
     foundry.utils.mergeObject(baseData, {
       flags: {
         [MOD_R]: {
-          secret: { acquisition, effectKey, effectKeys, raidId, parleyId, parleyLabel, acquiredAt: Date.now() }
+          secret: { acquisition, effectKey, effectKeys, raidId, parleyId, parleyLabel, acquiredAt: Date.now(), ...(opts.story === true ? { story: true } : {}) }
         }
       }
     });

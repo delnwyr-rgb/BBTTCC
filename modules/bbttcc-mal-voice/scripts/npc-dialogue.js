@@ -280,7 +280,7 @@ async function _grantSecret({ npcActor, def, factionId, acquisition, speakerName
       source: { npcActorId: npcActor.id, npcName: npcActor.name, speakerName: String(speakerName || ""), acquisition, ts: Date.now() }
     } } }
   });
-  const created = await api.addSecret(faction.id, source, { acquisition, effectKey: wantKeys.join("+") });
+  const created = await api.addSecret(faction.id, source, { acquisition, effectKey: wantKeys.join("+"), story: true });
   if (!created) return { ok: false, error: "addSecret refused (see notifications)" };
 
   const persona = npcActor.getFlag(MODULE_ID, "persona") || {};
