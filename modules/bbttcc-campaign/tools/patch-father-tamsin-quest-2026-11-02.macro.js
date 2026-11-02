@@ -26,7 +26,10 @@
  * 6. EXPOSED still finds the route — from Etta, at a price (15 economy marks, ag_market_caravan_paid).
  * 7. WHO KNOWS WHAT — the Upper Galleries no longer say "the camp of Tamsin's employer" (nothing has told the table Tamsin has one).
  *    The Act 3 camp (wt_cult_camp) knows the bust happened: Wick has put it back up on the old pegs.
- * Draft-1 prose; encounter actor "Raider Marauder 1" is a PLACEHOLDER (no Valhaulan cell actor exists).
+ * 8. THE BERSERKER + THE SWITCHBACK CREW (Dave 11-02): the camp fights field a Battle-Bassinet Berserker (the Valhaulan hardcore) with
+ *    the camp's hands (Raider Marauder 1 stands in for them, encounter.also); the Recruit ending unlocks a free, story-gated crew
+ *    contract at the Muster (Ironbound Ascendants, 6 turns).
+ * Draft-1 prose.
  * No quest-level closer on purpose: closing would skip the terms step (Pactkeeper comes AFTER the camp); every beat is evergreen.
  * Pure apply(camp) + Foundry runner. Idempotent (rerun = 0). DRY_RUN first. Backup → Data/bbttcc-exports/. GM only.
  */
@@ -72,7 +75,7 @@ const FATHER_TAMSIN_PATCH = (() => {
   const FIGHT_LOST = "Too many, too well-drilled, on ground they've measured to the inch. You get down the switchbacks with everyone you came up with, which tonight counts as winning. The camp is still there. So is the path.";
   const RECKONING = "The camp is yours. What's left of it sits in rows on the scree — technicians, mostly, and a cook, and two people who were only here for the singing. In the courier's tent: a ledger in a hand nobody up here writes, every caravan day for a year and where it went after the camp — and, folded into the back, a sequence of numbers that is not a schedule. It's the kind of thing you'd use to tell a gate where you want it to open.";
   const JAILED = "Calder takes them with a face like a man accepting a delivery he did not order and will absolutely be invoicing. The lockup at Khezek-Tor has room. It has been waiting for a reason to have room.";
-  const RECRUITED = "Brakk walks the line twice, picks the ones who can carry a pack and keep a secret, and doesn't ask what they believed last week. \"Belief's cheap,\" he says. \"Punctual is rare.\" The rest go down to Calder's lockup.";
+  const RECRUITED = "Brakk walks the line twice, picks the ones who can carry a pack and keep a secret, and doesn't ask what they believed last week. \"Belief's cheap,\" he says. \"Punctual is rare.\" The rest go down to Calder's lockup. The ones Brakk picked will be waiting at the Muster, packs on, whenever a Steward wants to sign them on.";
   const BROKEN = "You break the camp: plating off the shaft, wards in the scree, tents in the fire. Then you send them down the mountain with nothing, which is what they had before they met the people who paid for all of this. Some of them will go home. Some of them will go looking for the courier.";
   const PAID = "Etta has heard what happened at St Gilliam's, because everyone has. \"I liked him,\" she says, and sells you the preserves first anyway, and then names a price for the rest — not an unkind one, and not a small one.";
   const GALLERIES_OLD = "the camp of Tamsin's employer", GALLERIES_NEW = "the camp at the end of the courier's route";
@@ -165,9 +168,10 @@ const FATHER_TAMSIN_PATCH = (() => {
     addBeat(beat("ft_camp_surprise", "Khezek Tor — The Camp, Expecting Thursday", SURPRISE, [ch("They expect you Thursday. It is Tuesday.", "ft_camp_taken_quiet", "Walk in. The confessor told them you were busy."), ...approaches(10, 11), ch("Not yet. Back down.", "")], { story: campStory, repeatable: true, sceneId: BARRACKS, requires: [P2, OPEN] }));
     addBeat(beat("ft_camp_warned", "Khezek Tor — The Camp, Waiting for You", WARNED, [...approaches(15, 15, "ft_camp_fight_warned"), ch("Not yet. Back down.", "")], { story: campStory, repeatable: true, sceneId: BARRACKS, requires: [P2, OPEN] }));
     addBeat(beat("ft_camp_scattered", "Khezek Tor — Half a Camp", SCATTERED, [...approaches(11, 12), ch("Not yet. Back down.", "")], { story: campStory, repeatable: true, sceneId: BARRACKS, requires: [P2, OPEN] }));
-    const enc = (count) => ({ key: null, tier: 2, actorName: "Raider Marauder 1", count, party: true });
-    addBeat(beat("ft_camp_fight", "Khezek Tor — The Camp Stands Up", "The camp stands up. Tools become something else in practised hands.", [ch("They're down.", "ft_camp_taken_force"), ch("Too many — back down the switchbacks.", "ft_camp_fight_lost")], { type: "encounter", story: campStory, repeatable: true, sceneId: BARRACKS, encounter: enc(4), requires: [P2, OPEN] }));
-    addBeat(beat("ft_camp_fight_warned", "Khezek Tor — The Camp Was Ready", "They were ready for you. Bells, lanterns, and twice the hands.", [ch("They're down.", "ft_camp_taken_force"), ch("Too many — back down the switchbacks.", "ft_camp_fight_lost")], { type: "encounter", story: campStory, repeatable: true, sceneId: BARRACKS, encounter: enc(6), requires: [P2, OPEN] }));
+    // Dave 11-02: "a Battle Bassinet Berserker as the Valhaulan hardcore bad guy in the camp" — the boss, with the camp's own hands
+    const enc = (hands) => ({ key: null, tier: 2, actorName: "Battle-Bassinet Berserker", count: 1, also: [{ actorName: "Raider Marauder 1", count: hands }], party: true });
+    addBeat(beat("ft_camp_fight", "Khezek Tor — The Camp Stands Up", "The camp stands up. Tools become something else in practised hands — and out of the biggest tent comes the one they keep for this: a Battle-Bassinet Berserker, Valhaulan through and through, who has never once been asked to be gentle.", [ch("They're down.", "ft_camp_taken_force"), ch("Too many — back down the switchbacks.", "ft_camp_fight_lost")], { type: "encounter", story: campStory, repeatable: true, sceneId: BARRACKS, encounter: enc(2), requires: [P2, OPEN] }));
+    addBeat(beat("ft_camp_fight_warned", "Khezek Tor — The Camp Was Ready", "They were ready for you. Bells, lanterns, and twice the hands.", [ch("They're down.", "ft_camp_taken_force"), ch("Too many — back down the switchbacks.", "ft_camp_fight_lost")], { type: "encounter", story: campStory, repeatable: true, sceneId: BARRACKS, encounter: enc(4), requires: [P2, OPEN] }));
     addBeat(beat("ft_camp_fight_lost", "Khezek Tor — Down the Switchbacks", FIGHT_LOST, [ch("Back down.", "")], { story: campStory, repeatable: true, requires: [P2, OPEN] }));
     addBeat(beat("ft_camp_caught", "Khezek Tor — A Ward Wakes", CAUGHT, [ch("Then it's a fight.", "ft_camp_fight"), ch("Back off, fast.", "")], { story: campStory, repeatable: true, sceneId: BARRACKS, requires: [P2, OPEN] }));
     addBeat(beat("ft_camp_parley_fail", "Khezek Tor — One Bell", PARLEY_FAIL, [ch("Then it's a fight.", "ft_camp_fight"), ch("Back off, slowly.", "")], { story: campStory, repeatable: true, sceneId: BARRACKS, requires: [P2, OPEN] }));
@@ -185,6 +189,11 @@ const FATHER_TAMSIN_PATCH = (() => {
     out("ft_camp_jailed", "Khezek Tor — Calder's Lockup", JAILED, { loyaltyDelta: 1 }, "jailed");
     out("ft_camp_recruited", "Khezek Tor — Brakk Walks the Line", RECRUITED, { darknessDelta: -1 }, "recruited");
     out("ft_camp_broken", "Khezek Tor — Down the Mountain With Nothing", BROKEN, { darknessDelta: 1 }, "broken");
+
+    // the fights field the Berserker (upsert — the beats may already exist from an earlier apply)
+    for (const [id, want] of [["ft_camp_fight", enc(2)], ["ft_camp_fight_warned", enc(4)]]) { const b = byId.get(id); if (b && JSON.stringify(b.encounter) !== JSON.stringify(want)) { b.encounter = want; did(`${id}: Battle-Bassinet Berserker + ${want.also[0].count} hands`); } }
+    { const b = byId.get("ft_camp_fight"); const OLD = "The camp stands up. Tools become something else in practised hands."; if (b && b.description === OLD) { b.description = OLD.replace(/\.$/, "") + " — and out of the biggest tent comes the one they keep for this: a Battle-Bassinet Berserker, Valhaulan through and through, who has never once been asked to be gentle."; did("ft_camp_fight: the Berserker walks out"); } }
+    { const b = byId.get("ft_camp_recruited"); const OLD2 = "The rest go down to Calder's lockup."; if (b && String(b.description || "").endsWith(OLD2)) { b.description = b.description + " The ones Brakk picked will be waiting at the Muster, packs on, whenever a Steward wants to sign them on."; did("ft_camp_recruited: names the Muster"); } }
 
     // the chain's own gates (live-caught: the Act 3 card's gate door offered the reckoning — its outcomes gated only on the act)
     const chainGate = (id, r, tag) => addReq(byId.get(id), r, tag);
@@ -248,7 +257,23 @@ if (typeof game === "undefined" && typeof module !== "undefined") {
   const camps = JSON.parse(campsWasStr ? campsRaw : JSON.stringify(campsRaw));   // true copy
   const camp = camps?.[game.bbttcc?.api?.campaign?.getActiveCampaignId?.()];
   if (!camp) return ui.notifications.error("Active campaign not found.");
-  const { changes, report, conflicts } = FATHER_TAMSIN_PATCH.apply(camp);
+  // THE SWITCHBACK CREW at the Muster (Dave 11-02: "Recruited cultists should definitely be recruitable") — a free crew contract,
+  // story-gated (bbttcc-market storyRequires) on the camp's Recruit ending. Ironbound Ascendants: mountain-stronghold people.
+  const ENTRY_ID = "entry-ft-switchback-crew";
+  const musterEntry = { id: ENTRY_ID, vendorId: "the-muster", kind: "contract", name: "The Switchback Crew — crew contract",
+    blurb: "Crew · 6 turns · free. The ones Brakk picked from the camp on the switchbacks: technicians who held a mountain on a schedule and now hold it for you. One crew at a time. (ironbound-ascendants)",
+    cost: { economy: 0 }, tier: 1, rarity: "common", storyRequires: [{ beatMark: "ft_camp_recruited" }],
+    contract: { family: "crew", docId: "brAELAWiggUsnsox", pack: "bbttcc-character-options.crew-types", turns: 6 } };
+  const catNeeds = () => { const cat = game.settings.get("bbttcc-market", "catalog") || []; const cur = (Array.isArray(cat) ? cat : []).find(e => e?.id === ENTRY_ID); return !cur || JSON.stringify(cur) !== JSON.stringify(musterEntry); };
+  async function ensureMusterEntry() {
+    if (!catNeeds()) return false;
+    const cat = JSON.parse(JSON.stringify(game.settings.get("bbttcc-market", "catalog") || []));
+    const i = cat.findIndex(e => e?.id === ENTRY_ID); if (i >= 0) cat[i] = musterEntry; else cat.push(musterEntry);
+    await game.settings.set("bbttcc-market", "catalog", cat); return true;
+  }
+  const { changes: campChanges, report, conflicts } = FATHER_TAMSIN_PATCH.apply(camp);
+  const muster = catNeeds(); if (muster) report.push("✚ the Muster: The Switchback Crew (free, story-gated on ft_camp_recruited)"); else report.push("· ok the Muster entry");
+  const changes = campChanges + (muster ? 1 : 0);
   console.log(`[father tamsin quest 2026-11-02] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.join("\n") + (conflicts.length ? "\n⚠ " + conflicts.join("\n⚠ ") : ""));
   globalThis.__fatherTamsin = { dry: DRY_RUN, changes, report, conflicts };
   if (DRY_RUN) return ui.notifications.info(`DRY RUN — ${changes} change(s), ${conflicts.length} conflict(s); see console.`);
@@ -260,5 +285,6 @@ if (typeof game === "undefined" && typeof module !== "undefined") {
     await FP.upload("data", "bbttcc-exports", new File([campsWasStr ? campsRaw : JSON.stringify(campsRaw)], `backup-campaigns-pre-father-tamsin-${Date.now()}.json`, { type: "application/json" }), {}, { notify: false });
   } catch (e) { return ui.notifications.error("Backup failed — nothing written. " + e.message); }
   await game.settings.set(NS, "campaigns", campsWasStr ? JSON.stringify(camps) : camps);
+  await ensureMusterEntry();
   ui.notifications.info(`Applied ${changes} change(s) — Father Tamsin has his own quest; the camp is the Act 2 climax.`);
 })();

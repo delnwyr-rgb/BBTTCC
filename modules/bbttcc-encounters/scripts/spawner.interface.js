@@ -620,6 +620,14 @@
           Number(t?.disposition) === HOSTILE() && (String(t?.actor?.name || "") === want || String(t?.name || "") === want)).length;
         if (beat.encounter?.party === true) await spawnFactionPCs(scene, {}, { spawnedBy: `pc_party:${beat.id}` });
         if (present < want_n) await spawnByName(scene, want, { count: want_n - present, spawnedBy: `enc:${beat.id}` });
+        // encounter.also (2026-11-02, the camp on the switchbacks): a story fight with a boss and its hands —
+        // [{ actorName, count }] tops up each extra foe the same way (Battle-Bassinet Berserker + the camp's own)
+        for (const x of (Array.isArray(beat.encounter?.also) ? beat.encounter.also : [])) {
+          const nm = String(x?.actorName || "").trim(); if (!nm) continue;
+          const n = Math.max(1, Math.min(8, Math.floor(Number(x?.count) || 1)));
+          const have = iterTokenDocs(scene).filter(t => Number(t?.disposition) === HOSTILE() && (String(t?.actor?.name || "") === nm || String(t?.name || "") === nm)).length;
+          if (have < n) await spawnByName(scene, nm, { count: n - have, spawnedBy: `enc:${beat.id}:${nm}` });
+        }
       }
     })().catch(e => warn("stageReady handler failed", beat?.id, e));
   }

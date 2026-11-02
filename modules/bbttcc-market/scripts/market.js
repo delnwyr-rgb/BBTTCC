@@ -1533,6 +1533,7 @@ async function _purchaseLocal({ entryId, factionId, characterId, hexUuid, note, 
   const catalog = game.settings.get(MODULE_ID, "catalog") || [];
   const entry = (Array.isArray(catalog) ? catalog : []).find(e => e?.id === entryId);
   if (!entry) throw new Error("Catalog entry not found.");
+  if (!(await _storyOk(entry))) throw new Error(`${entry.name} isn't on offer yet.`);
 
   // Economic Horizon: compute spend based on rarity vs faction horizon.
   // RFI item-flag price (flags.fourththing.rfi.item.price) overrides the legacy
@@ -2178,6 +2179,10 @@ const vendors = visibleVendors.map(v => ({
     const deliveryFee = selectedFreight?.fee || 0;
 
     let entries = (Array.isArray(catalogRaw) ? catalogRaw : []).filter(e => e?.vendorId === ctx.vendorId);
+    // STORY-GATED ENTRIES (2026-11-02): an entry with `storyRequires` stays off the shelf until the story has earned it
+    // (the camp's recruits turn up at the Muster). Players never see it early; the GM sees it marked.
+    entries = (await Promise.all(entries.map(async e => [e, await _storyOk(e)])))
+      .filter(([, ok]) => ok || isGM).map(([e, ok]) => ok ? e : { ...e, name: `${e.name} (story-locked)` });
 
     // Legacy `kind` filter retained for callers that set it directly; the
     // user-facing dropdown now writes `category`, which subdivides "gear"
@@ -3235,3 +3240,13 @@ Hooks.once("ready", async () => {
     if (rows) ui.notifications?.info?.(`Bad Eden Market: ${rows} catalog price(s) converted to marks (×${M}).`);
   } catch (e) { console.error(`[${MODULE_ID}] catalog marks migration failed`, e); }
 });
+
+/** A catalog entry's story gate (2026-11-02): `storyRequires` = the campaign gate grammar (beatMark / anyOf / questBucket …). */
+async function _storyOk(e) {
+  const r = e?.storyRequires; if (!Array.isArray(r) || !r.length) return true;
+  try {
+    const capi = game.bbttcc?.api?.campaign; const cid = capi?.getActiveCampaignId?.(); const camp = cid ? capi?.getCampaign?.(cid) : null;
+    if (!capi?.gates?.requiresMet) return true;
+    return !!(await capi.gates.requiresMet({ inject: { requires: r } }, camp, {}));
+  } catch (_e) { return true; }
+}
