@@ -708,6 +708,23 @@
     return out;
   }
 
+  // THE TOWN MAP IS THE HUB (Dave 2026-11-02): when an arrival plays no beat (none configured, every one gated for this act, or a
+  // town's intro already played once — oncePerHex), the table still arrives IN TOWN: dive to the hex's town hub scene
+  // (flags.bbttcc-travel.townHubSceneUuid / hexSceneLink / diveScene — the same target a click on the party's hex uses).
+  async function _arriveOnTownMap(to, hexUuid) {
+    try {
+      if (!game.user?.isGM) return false;
+      const doc = to?.document ?? to; const t = doc?.flags?.["bbttcc-travel"] || {};
+      const target = t.townHubSceneUuid || t.hexSceneLink?.targetSceneUuid || (typeof t.diveScene === "string" ? t.diveScene : null);
+      if (!target) return false;
+      const sc = await fromUuid(target).catch(() => null); if (!sc) return false;
+      const tx = game.bbttcc?.api?.transition;
+      if (tx?.dive) await tx.dive(sc.uuid, { hexUuid, audience: "activate", label: sc.name });
+      else await sc.activate();
+      log("Hex enter: no arrival beat — the table arrives on the town map", { scene: sc.name });
+      return true;
+    } catch (e) { warn("town-map arrival failed", e); return false; }
+  }
   const RADIATION_POCKET_BEAT = "enc_minor_radiation_pocket";   // arrival beat for hot hexes with none of their own (2026-10-22)
 
   const _recent = new Map();
@@ -790,7 +807,7 @@
     }
     const beatId = beatIds[0] || null;
 
-    if (!beatId) { log("Hex enter: no beat configured", { hexUuid, campaignId }); return; }
+    if (!beatId) { log("Hex enter: no beat configured", { hexUuid, campaignId }); await _arriveOnTownMap(to, hexUuid); return; }
 
     const factionId = (ctx && ctx.factionId) || (opts && opts.factionId) || null;
     const key = dkey(campaignId, beatId, hexUuid, factionId);
@@ -850,10 +867,14 @@
           defaults: { oncePerHex: true }
         });
         log("Hex enter: maybeRunBeatById →", id, res);
-        const gated = res && res.ok && res.fired === false && /requires|seal/i.test(String(res.why || ""));
-        if (!gated) return;
+        // gated / sealed for this act → try the next one; already played here (oncePerHex, cooldown, dedupe) → the town map,
+        // never the next beat (2026-11-02: falling through replayed Lyrenn's Act 1 opening on an Act 2 arrival)
+        const notFired = res && res.ok && res.fired === false;
+        if (!notFired) return;
+        if (!/requires|seal/i.test(String(res.why || ""))) { log("Hex enter: arrival already played here →", id, res.why); await _arriveOnTownMap(to, hexUuid); return; }
       }
-      log("Hex enter: every configured beat is gated for this act", { beatIds });
+      log("Hex enter: no configured beat fired on this arrival", { beatIds });
+      await _arriveOnTownMap(to, hexUuid);
       return;
     }
 

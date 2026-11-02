@@ -4027,7 +4027,7 @@ async function executeBeat(campaign, beat, ctx = {}) {
   // Contact screen — the meter rode "bbttcc:beat:resolved", which fires only when a beat's whole awaited chain unwinds, and the
   // verification answers route straight on into the Terms inside that chain, so "Pursue alliance" (crVerify ≥ 2) was hidden until
   // the table had already left). The verification tally and worldEffects.meters now land when the beat STARTS, like the play mark.
-  if (game.user?.isGM && beat?.id && !_resumed) { try { await _onBeatResolvedCrVerify({ beat }); } catch (_eCV) {} try { await _onBeatResolvedMeters({ beat }); } catch (_eMt) {} }
+  if (game.user?.isGM && beat?.id && !_resumed) { try { await _onBeatResolvedCrVerify({ beat }); } catch (_eCV) {} try { await _onBeatResolvedMeters({ beat }); } catch (_eMt) {} if (BANDIT_ENC_RE.test(String(beat.id)) && !BANDIT_MERCY_RE.test(String(beat.id)) && !BANDIT_FEAR_RE.test(String(beat.id)) && ctx?.source !== "arms-down") { let _div = false; try { _div = await _onBeatResolvedBanditLedger({ beat, campaign, atEntry: true }); } catch (_eBL) {} if (_div === true) return { ok: true, diverted: BANDIT_ARMS_DOWN_BEAT_ID }; } }
 
   // Phase Charter closers apply AT ENTRY (2026-08-30) — same lesson as the
   // fire-mark above: a closer whose choice routes into a long awaited chain
@@ -9406,7 +9406,7 @@ async function _postBanditRungCard(rung) {
     warn("[bandit-ledger] card failed:", e);
   }
 }
-async function _onBeatResolvedBanditLedger({ beat, campaign } = {}) {
+async function _onBeatResolvedBanditLedger({ beat, campaign, atEntry = false } = {}) {
   try {
     if (!game.user?.isGM) return;                 // only the GM can write world settings
     const id = beat?.id;
@@ -9436,18 +9436,23 @@ async function _onBeatResolvedBanditLedger({ beat, campaign } = {}) {
     // Rung ≥ 3: an ambush that fires surrenders BEFORE the roll — offer the
     // arms-down variant (Dougan-pointer pattern; repeatable, GM veto is the
     // beat dialog itself).
+    // ARMS DOWN AT ENTRY (2026-11-02 click-through, live-caught): this offer rode beat:resolved, which fires only after the ambush's
+    // whole chain — so the free/jail outcome had already raised the rung and "Arms Down in the Reeds" opened after a fight already won.
+    // The offer is made when the ambush STARTS (executeBeat entry); the resolve-time pass only counts outcomes.
     if (BANDIT_ENC_RE.test(id) && !BANDIT_MERCY_RE.test(id) && !BANDIT_FEAR_RE.test(id)) {
+      if (!atEntry) return;
       // review P2 (2026-10-27): only the ambush's ENTRY offers it — aftermath beats (_win/_run/_lose/_bandits_run/
       // _parley_fail) re-offered a surrender for a fight already won by force.
       const isOutcome = /_(win|lose|run|bandits_run|parley|parley_fail|fail|flee|escape)(_|$)/i.test(id);
       if (!isOutcome && _banditRungFor(mercy) >= 3) {
         const campaignId = campaign?.id || getActiveCampaignId();
         if (campaignId) {
-          log("[bandit-ledger] ambush at rung ≥ 3 → arms-down variant.");
-          await game.bbttcc.api.campaign.runBeat(campaignId, BANDIT_ARMS_DOWN_BEAT_ID);
+          log("[bandit-ledger] ambush at rung ≥ 3 → arms-down variant (it REPLACES the ambush).");
+          game.bbttcc.api.campaign.runBeat(campaignId, BANDIT_ARMS_DOWN_BEAT_ID).catch(e => warn("[bandit-ledger] arms-down failed", e));
+          return true;
         }
       }
-      return;
+      return false;
     }
 
     // Classify the resolution.
