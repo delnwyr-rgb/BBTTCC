@@ -5835,6 +5835,21 @@ async function _awardCreature(campaign, ctx, beat, playedN = null) {
   if (!actor && a.creature) {
     try { const pack = game.packs?.get?.("bbttcc-master-content.npcs"); const idx = pack ? await pack.getIndex() : null; const hit = idx ? [...idx].find(e => _slug(e.name) === _slug(a.creature)) : null; if (hit) actor = await pack.getDocument(hit._id); } catch (_eP) {}
   }
+  // KILLING A PERSON IS DARK (Dave 2026-11-02: "So we killed a human, now need to get a darkness penalty"): a kill bounty on a mortal
+  // creature (rfi lineage "mortal" — the Hexknight, raiders) adds 1 Darkness to the coalition, once per kill (keyed in the story store,
+  // so awards.settle never charges it twice). Story beats that already price their own killing (the bandit ambush) are unaffected.
+  try {
+    const lineage = String(actor?.flags?.fourththing?.rfi?.actor?.lineage || "").toLowerCase();
+    if (String(a.method) === "kill" && lineage === "mortal" && game.user?.isGM) {
+      const n0 = playedN ?? Number(_storyStateFor(campaign?.id)?.played?.[beat.id]?.n || 1);
+      const key = `darkness:${beat.id}:${n0}`;
+      if (!_storyStateFor(campaign?.id)?.darknessPaid?.[key]) {
+        await _storyMutate(campaign.id, (st) => { st.darknessPaid = st.darknessPaid || {}; st.darknessPaid[key] = Date.now(); return []; });
+        await game.bbttcc?.api?.worldMutation?.applyWorldEffects?.({ id: `mortal_kill_${beat.id}`, worldEffects: { factionEffects: [{ factionId: "@coalition", moraleDelta: 0, loyaltyDelta: 0, unityDelta: 0, darknessDelta: 1, opDeltas: {}, allowOvercap: false }], warLog: `Killed ${actor?.name || a.creature} — a person. The dark keeps count.` } }, { campaignId: campaign.id, factionId: campaign.factionId });
+        log(`[awards] ${actor?.name || a.creature} killed (mortal) → Darkness +1`);
+      }
+    }
+  } catch (eDk) { warn("[awards] mortal-kill darkness failed", eDk); }
   let marks = Number(a.marks) || 0; if (!marks && actor && typeof api.bountyFor === "function") marks = Number(api.bountyFor(actor)?.marks) || 0;
   if (!marks) { warn("[awards] no bounty for", a.creature || a.creatureId || beat?.id); return null; }
   const n = playedN ?? Number(_storyStateFor(campaign?.id)?.played?.[beat.id]?.n || 1);
