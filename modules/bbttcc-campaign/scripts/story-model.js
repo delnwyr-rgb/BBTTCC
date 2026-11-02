@@ -697,6 +697,13 @@ export function deriveSituation(ctx) {
       if (!c || typeof c !== "object") return;
       if (c.beatMark != null) { const id = String(c.beatMark); if (c.not === true) return; if (!c.quest && fired.has(id)) return; out.push({ text: `beat “${id}” (played)`, met: false, kind: "beatMark", declared: true }); return; }
       if (String(c.flag || "") === "turn" && !turnMet(c)) out.push({ text: `turn ${c.gte != null ? `≥ ${c.gte}` : c.lte != null ? `≤ ${c.lte}` : `= ${c.eq}`}`, met: false, kind: "flag", current: turn, declared: true });
+      // a QUEST gate names the quest it waits on (2026-11-02 click-through: the Muster waits on the Maneuver Vault, and the quest
+      // log said nothing — so NOW sent the table elsewhere and nobody knew the Vault was the way forward)
+      if (c.questBucket != null && String(c.is || "") === "completed") {
+        const rid = String(c.questBucket); const b = bucketOf(rid);
+        if (b !== "completed" && b !== "archived") { const r = QUEST_MAP.registry?.[rid]; const qk = r?.quest || null; const nm = qk ? (QUEST_MAP.quests?.[qk]?.name || qk) : rid;
+          out.push({ text: `quest “${nm}” completed`, met: false, kind: "questBucket", quest: qk, declared: true }); }
+      }
     };
     // an anyOf group already met by one member is no reason at all (2026-11-02 click-through: the camp's Recruit ending met the Act 3
     // card's anyOf, but Jail and Break were still listed unmet — the gate-door then sent the table to "Jail them")
@@ -940,7 +947,7 @@ export function deriveSituation(ctx) {
   if (!nowOut || !nowOut.next || ["turn", "complete", "empty", "done-no-closer"].includes(String(nowOut.why || ""))) {
     // the quest a waiting gate names comes first (the Act 3 card waits on Father Tamsin's camp), then what is here
     const named = new Set();
-    for (const q of inPlay) for (const r of (q.next?.reasons || [])) { const t = String(r?.text || ""); for (const m of t.matchAll(/(?:beatMark |beat [“"'])([A-Za-z0-9_]+)/g)) { const x = byId.get(String(m[1])); const d = x ? declOf(x) : null; if (d?.quest) named.add(String(d.quest)); } }
+    for (const q of inPlay) for (const r of (q.next?.reasons || [])) { if (r?.quest) named.add(String(r.quest)); const t = String(r?.text || ""); for (const m of t.matchAll(/(?:beatMark |beat [“"'])([A-Za-z0-9_]+)/g)) { const x = byId.get(String(m[1])); const d = x ? declOf(x) : null; if (d?.quest) named.add(String(d.quest)); } }
     const qd = quests.filter(q => fg(q) && (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready && q.next.beat)
       .sort((a, b) => (Number(named.has(String(b.key))) - Number(named.has(String(a.key)))) || (Number(b.next?.here === true) - Number(a.next?.here === true)))[0];
     if (qd) nowOut = { quest: qd, chapter: qd.currentChapter, next: qd.next, why: qd.next.here === true ? "here" : "elsewhere", roads: [] };
