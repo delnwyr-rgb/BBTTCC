@@ -334,8 +334,17 @@ function headroom(faction, channel) {
   const ff = F.flags?.[MOD_ID] || {}; const k = String(channel || "").toLowerCase();
   const bank = Number(ff.opBank?.[k] || 0);
   // The cap the OP engine actually enforces (one authority — no local tier-band copy).
-  const cap = Number(factionCaps(F)?.[k] ?? 0) || 0;
-  return Math.max(0, Math.floor(cap - bank));
+  const caps = factionCaps(F) || {};
+  const cap = Number(caps?.[k] ?? 0) || 0;
+  let room = Math.max(0, Math.floor(cap - bank));
+  // …and the TOTAL cap the engine also enforces (2026-11-02 click-through: Sell Surplus "Bog-Iron would not sell — commit refused"
+  // two months running — Errata's Violence sat over its own cap from story rewards, so the bank was at its TOTAL cap and every
+  // Economy credit was refused although the Economy channel had room). Room = the smaller of the two.
+  try {
+    let tCap = 0, tBank = 0; for (const [kk, v] of Object.entries(caps)) { const c = Number(v) || 0; if (c > 0) { tCap += c; tBank += Number(ff.opBank?.[kk] || 0); } }
+    if (tCap > 0) room = Math.min(room, Math.max(0, Math.floor(tCap - tBank)));
+  } catch (_eT) {}
+  return room;
 }
 
 async function sell(faction, matKey, qtyWanted, opts = {}) {
