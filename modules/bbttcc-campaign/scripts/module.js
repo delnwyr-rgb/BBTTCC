@@ -4988,26 +4988,66 @@ function _timePointsForBeat(beat, ctx = {}) {
 }
 
 async function _applyBeatTimePoints(campaign, beat, ctx = {}) {
-  // Owner ruling R2 (2026-09-13): beats no longer spend days. Time just passes; travel legs still
-  // move the "Day X of 30" chip, which is a prompt to turn the chapter, not a budget.
-  return false;
-  // eslint-disable-next-line no-unreachable
+  // ONE CLOCK (Dave 2026-11-02, replaces ruling R2): story spends days too, so the month is the same days on the ground and at
+  // home. A quest STEP's first play costs a day; a town door's first visit costs half a day; everything else (answers, rooms,
+  // moments, replays) is free. Travel keeps its own per-hex charge. GM only (the ledger is a world write).
   try {
-    const w = game.bbttcc?.api?.world;
-    if (!w?.addTime) return false;
-
-    const tp = _timePointsForBeat(beat, ctx);
-    if (!tp) return false;
-
-    const label = beat?.label || beat?.id || "(beat)";
-    const note = `Beat time +${tp}: ${campaign?.label || campaign?.id || "campaign"}  -  ${label}`;
-
-    await w.addTime(tp, { source: "beat", note, autoAdvance: true, campaignId: campaign?.id || null });
+    if (!game.user?.isGM || !beat?.id || ctx?._resumed || ctx?.resume) return false;
+    const id = String(beat.id);
+    const rec = _storyStateFor(campaign?.id)?.played?.[id];
+    if (rec && Number(rec.n ?? 1) > 1) return false;               // first play only (the play is recorded at entry)
+    let days = 0, why = "";
+    if (_oneClockStepBeats().has(id)) { days = 1; why = "a quest step"; }
+    else if ((await _oneClockDoorBeats()).has(id)) { days = 0.5; why = "a stop in town"; }
+    if (!days) return false;
+    const label = String(beat.label || id).replace(/^.+?\s[—-]\s+/, "");   // "Allesh-Gilliam — The Route…" → "The Route…" (a spaced dash only)
+    await _ledgerSpend(days, { source: "story", note: `${label} — ${why}` });
     return true;
-  } catch (e) {
-    warn("applyBeatTimePoints failed:", e);
-    return false;
-  }
+  } catch (e) { warn("applyBeatTimePoints failed:", e); return false; }
+}
+function _oneClockStepBeats() {
+  const out = new Set();
+  try {
+    for (const sc of Object.values(QUEST_SCRIPTS || {})) {
+      const steps = [...(Array.isArray(sc?.steps) ? sc.steps : []), ...(Array.isArray(sc?.arrival?.steps) ? sc.arrival.steps : [])];
+      for (const st of steps) for (const b of (Array.isArray(st?.beats) ? st.beats : [])) out.add(String(b));
+    }
+  } catch (_e) {}
+  return out;
+}
+let __oneClockDoors = { at: 0, ids: new Set() };
+async function _oneClockDoorBeats() {
+  if (Date.now() - __oneClockDoors.at < 60000) return __oneClockDoors.ids;
+  try { const l = await game.bbttcc?.api?.travel?.doors?.list?.(); __oneClockDoors = { at: Date.now(), ids: new Set((Array.isArray(l) ? l : Object.values(l || {})).map(d => String(d?.beatId || "")).filter(Boolean)) }; } catch (_e) {}
+  return __oneClockDoors.ids;
+}
+
+// ONE CLOCK — the week turns (Dave 2026-11-02): the Domains' income comes in four weekly slices at the START of each week (day 1,
+// 8, 15, 22 = spent 0 / 7 / 14 / 21); the month's close pays the rest (bbttcc-territory turn-driver api.turn.payIncomeSlice —
+// idempotent per slice per world turn). When the month's days are spent, the GM is told once: run the turn.
+const __oneClockMonthSpentTold = new Set();
+async function _onTimeAccruedClock(payload) {
+  try {
+    if (!game.user?.isGM) return;
+    const spent = Number(payload?.spent) || 0, pts = Number(payload?.points) || 0, prev = spent - pts;
+    const pay = game.bbttcc?.api?.turn?.payIncomeSlice;
+    if (typeof pay === "function") for (const k of [2, 3, 4]) { const at = (k - 1) * 7; if (prev < at && spent >= at) await pay({ slice: k }); }
+    const budget = Number(payload?.budget) || _ledgerBudgetSetting();
+    const turn = _getTurnNumberSafe();
+    if (prev < budget && spent >= budget && !__oneClockMonthSpentTold.has(turn)) {
+      __oneClockMonthSpentTold.add(turn);
+      await ChatMessage.create({ speaker: { alias: "The Month" }, whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
+        content: `<div style="border-left:3px solid #b08d3c;padding:.35em .6em;"><b>Month ${turn} is spent.</b> Every day of it went somewhere. Run the turn when the table reaches a good place to stop — the Domains have been working all month; this closes the books.</div>` });
+    }
+  } catch (e) { warn("[one-clock] week/month handler failed:", e); }
+}
+async function _oneClockCatchUp() {
+  try {
+    if (!game.user?.isGM) return;
+    const pay = game.bbttcc?.api?.turn?.payIncomeSlice; if (typeof pay !== "function") return;
+    const spent = Number(game.bbttcc?.api?.world?.getTimeBudget?.()?.spent) || 0;
+    for (const k of [1, 2, 3, 4]) if (spent >= (k - 1) * 7) await pay({ slice: k });   // idempotent — only unpaid slices land
+  } catch (e) { warn("[one-clock] catch-up failed:", e); }
 }
 
 // ── Turn Ledger (2026-07-08) ─────────────────────────────────────────────────
@@ -5205,6 +5245,8 @@ async function _onAdvanceTurnEndLedger(tctx) {
     await w.setState(s);
     await game.settings.set(MOD_ID, SETTING_LEDGER_ENTRIES, { turn: _getTurnNumberSafe(), entries: [] });
   } catch (e) { warn("[ledger] turn-end reset failed:", e); }
+  // ONE CLOCK: the new month's first week starts now — its income slice lands (the reset fires no time:accrued)
+  try { const pay = game.bbttcc?.api?.turn?.payIncomeSlice; if (typeof pay === "function") await pay({ slice: 1 }); } catch (e) { warn("[one-clock] week-1 slice failed:", e); }
 }
 
 // GM-facing time price on director offers: the party chooses knowing what the
@@ -10037,6 +10079,8 @@ Hooks.once("ready", () => {
   // (_applyBeatTimePoints → world.addTime) lights up on its own now that the
   // sink exists — no beat-side wiring needed here.
   Hooks.on("bbttcc:time:accrued", _onTimeAccruedLedger);
+  Hooks.on("bbttcc:time:accrued", _onTimeAccruedClock);          // ONE CLOCK (2026-11-02): weekly income slices + month-spent prompt
+  setTimeout(_oneClockCatchUp, 4000);                              // (inside ready) a month already under way gets the slices it is owed
   Hooks.on("bbttcc:afterTravel", _onAfterTravelLedger);
   Hooks.on("bbttcc:advanceTurn:end", (tctx) => {
     _onAdvanceTurnEndLedger(tctx).catch(e => warn("[ledger] turn-end listener failed:", e));

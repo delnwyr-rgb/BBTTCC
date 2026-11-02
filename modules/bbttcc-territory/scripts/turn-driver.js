@@ -435,27 +435,38 @@ function ensureConsumePlannedShim(){
       // up front; an activity the faction cannot afford is refused outright
       // (consumed from the queue, logged unaffordable, effect NOT run).
       // Truce / Border Patrol (2026-09-09): a refused raid costs nothing.
+      // Bill at plan (Dave 2026-11-02): raid.planActivity charges the price when the order is planned and stamps
+      // entry.paid — that IS the spend result (no second bill; refusals / failures refund it). Entries planned
+      // before the change carry no `paid` and keep the bill-at-Advance path below.
+      const prepaid = (entry?.paid && typeof entry.paid === "object" && Object.keys(entry.paid).length) ? normalizeActivityCost(entry.paid) : null;
+      const refundPrepaid = async () => {
+        if (!prepaid) return {};
+        try { return await refundActivityCost({ factionActor, spendResult: { paid: prepaid } }); }
+        catch (eR) { warn("prepaid refund failed", entry?.activityKey, eR); return {}; }
+      };
       if (apply) {
         const refusal = await raidRefusalFor({ factionActor, effect, entry });
         if (refusal) {
+          const refunded = await refundPrepaid();
           await record(entry, Object.assign(
-            finalizeEntry({ entry, factionActor, effect, effectResult: { ok:false, skipped:"refused" }, spendResult: { ok:true, paid:{} } }),
-            { summary: refusal }
+            finalizeEntry({ entry, factionActor, effect, effectResult: { ok:false, skipped:"refused" }, spendResult: { ok:true, paid:{}, refunded } }),
+            { summary: Object.keys(refunded).length ? `${String(refusal).replace(/[.\s]+$/, "")}. Refunded ${fmtMarks(refunded)} marks.` : refusal }
           ));
           continue;
         }
         const stale = await resolutionRefusal({ factionActor, effect, entry });
         if (stale) {
+          const refunded = await refundPrepaid();
           await record(entry, Object.assign(
-            finalizeEntry({ entry, factionActor, effect, effectResult: { ok:false, skipped:"refused-at-resolution", reason: stale }, spendResult: { ok:true, paid:{} } }),
-            { summary: `${factionActor.name} could not ${activityLabel(effect, entry)}${entry.targetName ? ` on ${entry.targetName}` : ""}: ${stale.replace(/[.\s]+$/, "")}. Nothing was charged.` }
+            finalizeEntry({ entry, factionActor, effect, effectResult: { ok:false, skipped:"refused-at-resolution", reason: stale }, spendResult: { ok:true, paid:{}, refunded } }),
+            { summary: `${factionActor.name} could not ${activityLabel(effect, entry)}${entry.targetName ? ` on ${entry.targetName}` : ""}: ${stale.replace(/[.\s]+$/, "")}. ${Object.keys(refunded).length ? `Refunded ${fmtMarks(refunded)} marks.` : "Nothing was charged."}` }
           ));
           continue;
         }
       }
 
       const spendResult = apply
-        ? await payActivityCost({ factionActor, effect, entry })
+        ? (prepaid ? { ok:true, paid: prepaid, prepaid:true } : await payActivityCost({ factionActor, effect, entry }))
         : { ok:true, preview:true, paid:{} };
 
       if (apply && spendResult.ok === false) {
@@ -536,7 +547,7 @@ function ensureConsumePlannedShim(){
     if (apply && unresolved.length) {
       const names = unresolved.map(e => String(e.activityKey || "?")).join(", ");
       warn(`consumePlanned: ${factionActor.name} has planned orders with no catalog row — left planned:`, names);
-      try { await ChatMessage.create({ content: `<p>⚠ <b>${foundry.utils.escapeHTML(factionActor.name)}</b>: ${unresolved.length} planned order(s) have no activity behind them (<code>${foundry.utils.escapeHTML(names)}</code>) — nothing ran, nothing was charged. They stay on the plan; cancel them from the Domain tab or restore the activity.</p>`, whisper: (game.users ?? []).filter(u => u.isGM).map(u => u.id), speaker: { alias: "Bad Eden Turn Driver" } }); } catch (_e) {}
+      try { await ChatMessage.create({ content: `<p>⚠ <b>${foundry.utils.escapeHTML(factionActor.name)}</b>: ${unresolved.length} planned order(s) have no activity behind them (<code>${foundry.utils.escapeHTML(names)}</code>) — nothing ran, nothing more was charged (a price paid when planned stays paid; cancelling refunds it). They stay on the plan; cancel them from the Domain tab or restore the activity.</p>`, whisper: (game.users ?? []).filter(u => u.isGM).map(u => u.id), speaker: { alias: "Bad Eden Turn Driver" } }); } catch (_e) {}
     }
 
     return { changed: finalizedEntries.length > 0, count: finalizedEntries.length, rows: finalizedEntries, unresolved: unresolved.length };
@@ -1130,127 +1141,283 @@ function computeTerritoryMatrixIncome(factionActor){
   }
 }
 
+// One-clock economy (Dave 2026-11-02): the month's base income, computed WITHOUT writing the bank or posting a
+// card — the same numbers advanceOPRegen(apply:true) credits, BEFORE the Unity / Enlightened wrappers. persist:true
+// (advanceOPRegen only) keeps the old side effect of saving a stockpile derived from owned hexes.
+async function computeRegenIncomeFor(A, { persist=false } = {}){
+  // 1) Read bank + existing stock
+  const opBank  = clone(getFlag(A, `${MOD_FACTIONS}.opBank`,    zeroOps()));
+  let   stock   = clone(getFlag(A, `${MOD_FACTIONS}.stockpile`, zeroRes()));
+
+  // 2) Fallback: derive stockpile from owned hexes if empty
+  if (isEmptyStockpile(stock)) {
+    const derived = deriveStockpileFromOwnedHexes(A.id);
+    // Write the derived stockpile so future turns don't have to rebuild it
+    stock = derived;
+    if (persist) try { await A.update({ [`flags.${MOD_FACTIONS}.stockpile`]: stock }); } catch {}
+  }
+
+  // 3) Regen parameters (allow per-faction overrides)
+  const map     = { ...DEFAULT_REGEN_MAP, ...(getFlag(A, `${MOD_FACTIONS}.opRegenMap`, {})||{}) };
+  const factors = { ...DEFAULT_FACTORS,  ...(getFlag(A, `${MOD_FACTIONS}.opRegenFactors`, {})||{}) };
+
+  // 4) Compute OP delta — territory matrix first (intended engine), legacy
+  // stockpile map as fallback. Matrix income flows live from hexes each
+  // turn; the stockpile burn-down only applies on the legacy path.
+  const matrix = computeTerritoryMatrixIncome(A);
+  const usedMatrix = !!matrix;
+  const opsDelta = usedMatrix ? matrix.delta : computeOpsFromStockpile(stock, map, factors);
+
+  // 4.1) Overextension → Logistics regen multiplier (Alpha v1)
+  // We compute logistics pressure on-demand here so the penalty applies immediately this turn.
+  let over = null;
+  try {
+    over = await computeLogisticsPressureForFaction(A);
+  } catch (e) {
+    warn("Overextension: logistics metric compute failed (non-fatal).", A?.name, e);
+    over = null;
+  }
+
+  let logiMult = 1;
+  if (over?.band === "overextended") logiMult = 0.90;
+  else if (over?.band === "strained") logiMult = 0.80;
+  else if (over?.band === "critical") logiMult = 0.65;
+
+  let logiBefore = safeNum(opsDelta.logistics);
+  if (logiMult !== 1 && logiBefore > 0) {
+    opsDelta.logistics = Math.floor(logiBefore * logiMult);
+  }
+  // Per-faction income plan (2026-09-09): bonuses.regenPlan[{inTurns, mult, channels?}] — entries due now (inTurns ≤ 1) multiply this Advance's income.
+  const regenNotes = [];
+  try {
+    const plan = A.getFlag("bbttcc-factions", "bonuses")?.regenPlan;
+    if (Array.isArray(plan)) for (const e of plan) {
+      if (safeNum(e?.inTurns, 1) > 1) continue;
+      const mult = Number(e?.mult); if (!Number.isFinite(mult) || mult === 1) continue;
+      const chans = Array.isArray(e?.channels) && e.channels.length ? e.channels : Object.keys(opsDelta);
+      for (const k of chans) { const b0 = safeNum(opsDelta[k]); if (b0 > 0) opsDelta[k] = Math.floor(b0 * mult); }
+      regenNotes.push(`${e?.label || "income plan"}: ${chans.length === Object.keys(opsDelta).length ? "all channels" : chans.join("/")} ×${mult}`);
+    }
+  } catch (e) { warn("regenPlan apply failed", e); }
+  // Loyalty stability (wired 2026-09-10, owner ruling): advance-turn.tracks
+  // doLoyaltyPhase1 writes bonuses.nextTurn.opGainPct (−20/−10/+5/+10 by
+  // loyalty band) for THE NEXT Advance — this one. It had no reader and no
+  // expiry, so it only ever accumulated (Errata −40% by turn 2). Applied here
+  // to every channel's income; tickFactionBonuses (after regen) expires it
+  // and defenseDC together, so each turn's loyalty phase starts clean.
+  try {
+    const pctRaw = Number(A.getFlag("bbttcc-factions", "bonuses")?.nextTurn?.opGainPct);
+    const pct = Number.isFinite(pctRaw) ? Math.max(-100, Math.min(100, pctRaw)) : 0;
+    if (pct !== 0) {
+      const mult = 1 + pct / 100;
+      for (const k of Object.keys(opsDelta)) { const b0 = safeNum(opsDelta[k]); if (b0 > 0) opsDelta[k] = Math.max(0, Math.floor(b0 * mult)); }
+      regenNotes.push(`loyalty stability: all channels ${pct > 0 ? "+" : ""}${pct}%`);
+    }
+  } catch (e) { warn("loyalty opGainPct apply failed", e); }
+  // The Town Militia, DRILLED (STORY FLOW D-3, 2026-09-17): +5 marks Violence per Advance while drilled or standing
+  try {
+    const ms = game.bbttcc?.api?.raid?.militia?.state ? game.bbttcc.api.raid.militia.state(A) : null;
+    if (ms && ms.rung >= 2) { opsDelta.violence = safeNum(opsDelta.violence) + 5; regenNotes.push("the militia drills: Violence +5 marks"); }
+  } catch (e) { warn("militia regen apply failed", e); }
+  // Steward identity income (rulings CO3 as amended + CO21, 2026-10-26). Flat part = the OP engine's member reader
+  // (flags.bbttcc-character-options.bonuses, OP × MARKS_PER_OP, facts.faction.memberIncome). The rest reads
+  // flags.fourththing.domainIncome on an assigned steward's items: pct (all channels or `channels`),
+  // perHexType [{types, channel, op}] counted over the Domain's hexes (type or terrain key), perHexes {channel, per, op, min}.
+  try {
+    const flat = game.bbttcc?.facts?.faction?.memberIncome?.(A) || {};
+    const flatNotes = [];
+    for (const [k, v] of Object.entries(flat)) { const n = safeNum(v); if (n > 0 && (k in opsDelta)) { opsDelta[k] = safeNum(opsDelta[k]) + n; flatNotes.push(`${k} +${n}`); } }
+    if (flatNotes.length) regenNotes.push(`steward identity: ${flatNotes.join(", ")}`);
+    const mpo = Number(game.bbttcc?.api?.op?.marksPerOp?.()) || 0;   // the live ratio authority; 0 = unavailable → skip the hex parts
+    const ownedHexes = getAllOwnedHexDocs(A.id);
+    const hexTypes = ownedHexes.map(h => {
+      const tf = h.tf || {}; const terr = (tf.terrain && typeof tf.terrain === "object") ? tf.terrain.key : (tf.terrainKey || tf.terrainType || tf.terrain);
+      return [String(tf.type || "").toLowerCase(), String(terr || "").toLowerCase()];
+    });
+    const stewards = (game.actors?.contents || []).filter(a => a.type === "character" && a.getFlag?.(MOD_FACTIONS, "factionId") === A.id);
+    for (const st of stewards) for (const it of (st.items?.contents || [])) {
+      const di = it.flags?.fourththing?.domainIncome;
+      if (!di || typeof di !== "object") continue;
+      const pct = safeNum(di.pct);
+      if (pct) {
+        const chs = (Array.isArray(di.channels) && di.channels.length ? di.channels : Object.keys(opsDelta)).filter(k => k in opsDelta);
+        for (const k of chs) { const b0 = safeNum(opsDelta[k]); if (b0 > 0) opsDelta[k] = Math.floor(b0 * (1 + pct / 100)); }
+        regenNotes.push(`${it.name}: ${chs.length === Object.keys(opsDelta).length ? "all channels" : chs.join("/")} ${pct > 0 ? "+" : ""}${pct}%`);
+      }
+      if (!(mpo > 0)) continue;
+      for (const row of (Array.isArray(di.perHexType) ? di.perHexType : [])) {
+        const types = (Array.isArray(row?.types) ? row.types : []).map(s => String(s).toLowerCase()); const k = row?.channel;
+        if (!(k in opsDelta) || !types.length) continue;
+        const n = hexTypes.filter(([ty, te]) => types.includes(ty) || types.includes(te)).length;
+        const gain = n * safeNum(row.op) * mpo;
+        if (gain > 0) { opsDelta[k] = safeNum(opsDelta[k]) + gain; regenNotes.push(`${it.name}: ${n} hex${n === 1 ? "" : "es"} → ${k} +${gain}`); }
+      }
+      const ph = di.perHexes;
+      if (ph && (ph.channel in opsDelta)) {
+        const gain = Math.max(safeNum(ph.min), Math.floor(ownedHexes.length / Math.max(1, safeNum(ph.per, 1)))) * safeNum(ph.op) * mpo;
+        if (gain > 0) { opsDelta[ph.channel] = safeNum(opsDelta[ph.channel]) + gain; regenNotes.push(`${it.name}: ${ownedHexes.length} hexes → ${ph.channel} +${gain}`); }
+      }
+    }
+  } catch (e) { warn("steward identity income failed (non-fatal)", e); }
+  const totalGained = Object.values(opsDelta).reduce((a,b)=>a+b,0);
+  return { opBank, stock, map, factors, matrix, usedMatrix, opsDelta, over, logiMult, logiBefore, regenNotes, totalGained };
+}
+// Public: computeRegenIncome(factionActor | id) → { pool: marks } (side-effect free).
+async function computeRegenIncome(factionActor){
+  const A = (typeof factionActor === "string") ? game.actors.get(factionActor) : factionActor;
+  if (!A) return {};
+  const { opsDelta } = await computeRegenIncomeFor(A, { persist:false });
+  const out = {}; for (const [k, v] of Object.entries(opsDelta || {})) out[k] = safeNum(v);
+  return out;
+}
+
+/* ---------------- weekly income slices (one clock, Dave 2026-11-02) ----------------
+ * A World Turn is a month of 30 Turn Ledger days. The month's income is paid in four weekly
+ * slices at the START of each week (slice 1 from day 0, 2 at ≥7 days spent, 3 at ≥14, 4 at ≥21):
+ * floor(base income / 4) per pool, clamped to caps when it lands (a full bank wastes it —
+ * spend it or lose it). Each faction records what it was paid NOMINALLY this turn on
+ * flags.bbttcc-factions.incomeSlices = { turn, slices:[1,..], nominal:{pool:marks} }.
+ * The Advance still runs the full regen (so Unity / Enlightened wrappers see the whole month)
+ * and then debits this turn's nominal slices back out — net = the month's total, paid early.
+ * ------------------------------------------------------------------------------------ */
+const INCOME_SLICE_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
+function worldTurnNow(){
+  try { return Math.max(0, Math.floor(Number(game.bbttcc?.api?.world?.getState?.()?.turn || 0) || 0)); } catch { return 0; }
+}
+// dueIncomeSlices(spentDays) → the slice numbers due so far this month, e.g. 9 → [1, 2].
+function dueIncomeSlices(spentDays = 0){
+  const d = Math.max(0, safeNum(spentDays));
+  const out = [1];
+  if (d >= 7) out.push(2);
+  if (d >= 14) out.push(3);
+  if (d >= 21) out.push(4);
+  return out;
+}
+// This turn's slice record for a faction (a record from another turn reads as empty).
+function incomeSliceRecord(A, turn = worldTurnNow()){
+  const r = getFlag(A, `${MOD_FACTIONS}.incomeSlices`, null);
+  if (!r || typeof r !== "object" || safeNum(r.turn, -1) !== turn) return { turn, slices: [], nominal: {} };
+  return { turn, slices: Array.isArray(r.slices) ? r.slices.map(Number) : [], nominal: (r.nominal && typeof r.nominal === "object") ? clone(r.nominal) : {} };
+}
+function incomeSliceCaps(A){
+  const caps = clone(effectiveCapsFor(A) || {});
+  for (const k of INCOME_SLICE_KEYS) { const c = safeNum(caps[k]); if (c > 0) caps[k] = c + capBumpFor(A, k); }
+  return caps;
+}
+let __incomeSliceChain = Promise.resolve();
+async function _payIncomeSliceNow({ slice } = {}){
+  const n = Math.floor(Number(slice));
+  if (!game.user?.isGM) return { ok:false, reason:"gm-only" };
+  if (!(n >= 1 && n <= 4)) return { ok:false, reason:"slice must be 1..4" };
+  // A slice landing in the middle of an Advance would be recorded against the turn that is ending.
+  if (window._bbttccTurnLock) return { ok:false, reason:"turn-running" };
+  const turn = worldTurnNow();
+  const op = game.bbttcc?.api?.op;
+  const rows = [];
+  for (const A of allFactions()) {
+    try {
+      const rec = incomeSliceRecord(A, turn);
+      if (rec.slices.includes(n)) { rows.push({ factionId: A.id, factionName: A.name, skipped: "already-paid" }); continue; }
+      const income = await computeRegenIncome(A);
+      const pay = {};
+      for (const k of INCOME_SLICE_KEYS) { const v = Math.floor(Math.max(0, safeNum(income[k])) / 4); if (v > 0) pay[k] = v; }
+      let landed = {}, lost = {};
+      if (Object.keys(pay).length) {
+        if (op && typeof op.commit === "function") {
+          const r = await op.commit(A.id, pay, { source: "income", label: `Week ${n} income`, noDiscount: true, clampToCap: true, opCaps: incomeSliceCaps(A) });
+          if (r?.ok === false) { warn("income slice commit refused", A.name, r); rows.push({ factionId: A.id, factionName: A.name, error: r?.error || "commit refused" }); continue; }
+          lost = r?.clamped || {};
+          for (const [k, v] of Object.entries(pay)) { const got = v - safeNum(lost[k]); if (got > 0) landed[k] = got; }
+        } else {
+          const bank = clone(getFlag(A, `${MOD_FACTIONS}.opBank`, zeroOps()));
+          const caps = incomeSliceCaps(A);
+          for (const [k, v] of Object.entries(pay)) {
+            const cap = safeNum(caps[k]); const before = safeNum(bank[k]);
+            const room = cap > 0 ? Math.max(0, cap - before) : v;
+            const got = Math.min(v, room);
+            bank[k] = before + got; if (got > 0) landed[k] = got; if (v > got) lost[k] = v - got;
+          }
+          await A.update({ [`flags.${MOD_FACTIONS}.opBank`]: bank });
+        }
+      }
+      // Record the NOMINAL slice (what the month owed), whatever the cap wasted — the Advance debits exactly this.
+      const nominal = {};
+      for (const k of INCOME_SLICE_KEYS) nominal[k] = safeNum(rec.nominal[k]) + safeNum(pay[k]);
+      await A.update({ [`flags.${MOD_FACTIONS}.incomeSlices`]: { turn, slices: [...rec.slices, n].sort(), nominal } });
+      rows.push({ factionId: A.id, factionName: A.name, paid: pay, landed, lost });
+    } catch (e) { warn("payIncomeSlice failed for", A?.name, e); rows.push({ factionId: A?.id, factionName: A?.name, error: String(e?.message || e) }); }
+  }
+  const paidRows = rows.filter(r => r.paid);
+  if (paidRows.length) {
+    const esc = foundry.utils.escapeHTML;
+    const fmt = (o) => fmtActivityCost(o) || "nothing";
+    const lines = paidRows.map(r => `<li><b>${esc(r.factionName)}</b>: ${esc(fmt(r.landed))}${Object.keys(r.lost || {}).length ? ` <em>(full — ${esc(fmt(r.lost))} lost to the cap)</em>` : ""}</li>`).join("");
+    try {
+      await ChatMessage.create({
+        content: `<p><b>Week ${n}:</b> the Domains' income comes in —</p><ul>${lines}</ul>`,
+        whisper: (game.users ?? []).filter(u => u.isGM).map(u => u.id),
+        speaker: { alias: "Bad Eden Turn Driver" }
+      });
+    } catch (_e) {}
+  }
+  return { ok:true, slice: n, turn, rows };
+}
+// payIncomeSlice({ slice }) — GM only, idempotent per (world turn, slice). Calls are serialized.
+function payIncomeSlice(args = {}){
+  const run = __incomeSliceChain.then(() => _payIncomeSliceNow(args), () => _payIncomeSliceNow(args));
+  __incomeSliceChain = run.catch(() => {});
+  return run;
+}
+// Advance (apply only): after the full regen, take this turn's nominal slices back out of each bank and clear the record.
+async function debitPaidIncomeSlices(){
+  const turn = worldTurnNow();
+  const op = game.bbttcc?.api?.op;
+  const rows = [];
+  for (const A of allFactions()) {
+    try {
+      const raw = getFlag(A, `${MOD_FACTIONS}.incomeSlices`, null);
+      if (!raw) continue;
+      const rec = incomeSliceRecord(A, turn);   // a record from another turn is stale: cleared, never debited
+      const bank = clone(getFlag(A, `${MOD_FACTIONS}.opBank`, zeroOps()));
+      const debit = {}, short = {};
+      for (const k of INCOME_SLICE_KEYS) {
+        const want = Math.max(0, safeNum(rec.nominal[k])); if (!want) continue;
+        const take = Math.min(want, Math.max(0, safeNum(bank[k])));   // income shrank since the slice: never below 0
+        if (take > 0) debit[k] = take; if (want > take) short[k] = want - take;
+      }
+      if (Object.keys(debit).length) {
+        const neg = {}; for (const [k, v] of Object.entries(debit)) neg[k] = -v;
+        let done = false;
+        if (op && typeof op.commit === "function") {
+          const r = await op.commit(A.id, neg, { source: "income", label: "Weekly income slices already paid", noDiscount: true, allowOvercap: true });
+          done = r?.ok !== false;
+        }
+        if (!done) {
+          const b2 = clone(getFlag(A, `${MOD_FACTIONS}.opBank`, zeroOps()));
+          for (const [k, v] of Object.entries(debit)) b2[k] = Math.max(0, safeNum(b2[k]) - v);
+          await A.update({ [`flags.${MOD_FACTIONS}.opBank`]: b2 });
+        }
+      }
+      await A.unsetFlag(MOD_FACTIONS, "incomeSlices");
+      if (rec.slices.length) {
+        const wl = clone(getFlag(A, `${MOD_FACTIONS}.warLogs`, [])) || [];
+        wl.push({ ts: Date.now(), date: (new Date()).toLocaleString(), type: "turn", activity: "income_slices",
+          summary: `${rec.slices.length} weekly slice(s) already paid this month (${fmtActivityCost(debit) || "nothing"}) — the Advance credited only the rest.${Object.keys(short).length ? ` Income shrank since: ${fmtActivityCost(short)} could not be taken back.` : ""}` });
+        await A.update({ [`flags.${MOD_FACTIONS}.warLogs`]: wl });
+        rows.push({ factionId: A.id, factionName: A.name, slices: rec.slices.length, debit, short });
+      }
+    } catch (e) { warn("debitPaidIncomeSlices failed for", A?.name, e); }
+  }
+  return { changed: rows.length > 0, rows };
+}
+
 async function advanceOPRegen({ apply=false, factionId=null, deferCapClamp=false } = {}){
   const targets = factionId ? [game.actors.get(factionId)].filter(Boolean) : allFactions();
   const results = [];
 
   for (const A of targets) {
     try {
-      // 1) Read bank + existing stock
-      const opBank  = clone(getFlag(A, `${MOD_FACTIONS}.opBank`,    zeroOps()));
-      let   stock   = clone(getFlag(A, `${MOD_FACTIONS}.stockpile`, zeroRes()));
-
-      // 2) Fallback: derive stockpile from owned hexes if empty
-      if (isEmptyStockpile(stock)) {
-        const derived = deriveStockpileFromOwnedHexes(A.id);
-        // Write the derived stockpile so future turns don't have to rebuild it
-        stock = derived;
-        try { await A.update({ [`flags.${MOD_FACTIONS}.stockpile`]: stock }); } catch {}
-      }
-
-      // 3) Regen parameters (allow per-faction overrides)
-      const map     = { ...DEFAULT_REGEN_MAP, ...(getFlag(A, `${MOD_FACTIONS}.opRegenMap`, {})||{}) };
-      const factors = { ...DEFAULT_FACTORS,  ...(getFlag(A, `${MOD_FACTIONS}.opRegenFactors`, {})||{}) };
-
-      // 4) Compute OP delta — territory matrix first (intended engine), legacy
-      // stockpile map as fallback. Matrix income flows live from hexes each
-      // turn; the stockpile burn-down only applies on the legacy path.
-      const matrix = computeTerritoryMatrixIncome(A);
-      const usedMatrix = !!matrix;
-      const opsDelta = usedMatrix ? matrix.delta : computeOpsFromStockpile(stock, map, factors);
-
-      // 4.1) Overextension → Logistics regen multiplier (Alpha v1)
-      // We compute logistics pressure on-demand here so the penalty applies immediately this turn.
-      let over = null;
-      try {
-        over = await computeLogisticsPressureForFaction(A);
-      } catch (e) {
-        warn("Overextension: logistics metric compute failed (non-fatal).", A?.name, e);
-        over = null;
-      }
-
-      let logiMult = 1;
-      if (over?.band === "overextended") logiMult = 0.90;
-      else if (over?.band === "strained") logiMult = 0.80;
-      else if (over?.band === "critical") logiMult = 0.65;
-
-      let logiBefore = safeNum(opsDelta.logistics);
-      if (logiMult !== 1 && logiBefore > 0) {
-        opsDelta.logistics = Math.floor(logiBefore * logiMult);
-      }
-      // Per-faction income plan (2026-09-09): bonuses.regenPlan[{inTurns, mult, channels?}] — entries due now (inTurns ≤ 1) multiply this Advance's income.
-      const regenNotes = [];
-      try {
-        const plan = A.getFlag("bbttcc-factions", "bonuses")?.regenPlan;
-        if (Array.isArray(plan)) for (const e of plan) {
-          if (safeNum(e?.inTurns, 1) > 1) continue;
-          const mult = Number(e?.mult); if (!Number.isFinite(mult) || mult === 1) continue;
-          const chans = Array.isArray(e?.channels) && e.channels.length ? e.channels : Object.keys(opsDelta);
-          for (const k of chans) { const b0 = safeNum(opsDelta[k]); if (b0 > 0) opsDelta[k] = Math.floor(b0 * mult); }
-          regenNotes.push(`${e?.label || "income plan"}: ${chans.length === Object.keys(opsDelta).length ? "all channels" : chans.join("/")} ×${mult}`);
-        }
-      } catch (e) { warn("regenPlan apply failed", e); }
-      // Loyalty stability (wired 2026-09-10, owner ruling): advance-turn.tracks
-      // doLoyaltyPhase1 writes bonuses.nextTurn.opGainPct (−20/−10/+5/+10 by
-      // loyalty band) for THE NEXT Advance — this one. It had no reader and no
-      // expiry, so it only ever accumulated (Errata −40% by turn 2). Applied here
-      // to every channel's income; tickFactionBonuses (after regen) expires it
-      // and defenseDC together, so each turn's loyalty phase starts clean.
-      try {
-        const pctRaw = Number(A.getFlag("bbttcc-factions", "bonuses")?.nextTurn?.opGainPct);
-        const pct = Number.isFinite(pctRaw) ? Math.max(-100, Math.min(100, pctRaw)) : 0;
-        if (pct !== 0) {
-          const mult = 1 + pct / 100;
-          for (const k of Object.keys(opsDelta)) { const b0 = safeNum(opsDelta[k]); if (b0 > 0) opsDelta[k] = Math.max(0, Math.floor(b0 * mult)); }
-          regenNotes.push(`loyalty stability: all channels ${pct > 0 ? "+" : ""}${pct}%`);
-        }
-      } catch (e) { warn("loyalty opGainPct apply failed", e); }
-      // The Town Militia, DRILLED (STORY FLOW D-3, 2026-09-17): +5 marks Violence per Advance while drilled or standing
-      try {
-        const ms = game.bbttcc?.api?.raid?.militia?.state ? game.bbttcc.api.raid.militia.state(A) : null;
-        if (ms && ms.rung >= 2) { opsDelta.violence = safeNum(opsDelta.violence) + 5; regenNotes.push("the militia drills: Violence +5 marks"); }
-      } catch (e) { warn("militia regen apply failed", e); }
-      // Steward identity income (rulings CO3 as amended + CO21, 2026-10-26). Flat part = the OP engine's member reader
-      // (flags.bbttcc-character-options.bonuses, OP × MARKS_PER_OP, facts.faction.memberIncome). The rest reads
-      // flags.fourththing.domainIncome on an assigned steward's items: pct (all channels or `channels`),
-      // perHexType [{types, channel, op}] counted over the Domain's hexes (type or terrain key), perHexes {channel, per, op, min}.
-      try {
-        const flat = game.bbttcc?.facts?.faction?.memberIncome?.(A) || {};
-        const flatNotes = [];
-        for (const [k, v] of Object.entries(flat)) { const n = safeNum(v); if (n > 0 && (k in opsDelta)) { opsDelta[k] = safeNum(opsDelta[k]) + n; flatNotes.push(`${k} +${n}`); } }
-        if (flatNotes.length) regenNotes.push(`steward identity: ${flatNotes.join(", ")}`);
-        const mpo = Number(game.bbttcc?.api?.op?.marksPerOp?.()) || 0;   // the live ratio authority; 0 = unavailable → skip the hex parts
-        const ownedHexes = getAllOwnedHexDocs(A.id);
-        const hexTypes = ownedHexes.map(h => {
-          const tf = h.tf || {}; const terr = (tf.terrain && typeof tf.terrain === "object") ? tf.terrain.key : (tf.terrainKey || tf.terrainType || tf.terrain);
-          return [String(tf.type || "").toLowerCase(), String(terr || "").toLowerCase()];
-        });
-        const stewards = (game.actors?.contents || []).filter(a => a.type === "character" && a.getFlag?.(MOD_FACTIONS, "factionId") === A.id);
-        for (const st of stewards) for (const it of (st.items?.contents || [])) {
-          const di = it.flags?.fourththing?.domainIncome;
-          if (!di || typeof di !== "object") continue;
-          const pct = safeNum(di.pct);
-          if (pct) {
-            const chs = (Array.isArray(di.channels) && di.channels.length ? di.channels : Object.keys(opsDelta)).filter(k => k in opsDelta);
-            for (const k of chs) { const b0 = safeNum(opsDelta[k]); if (b0 > 0) opsDelta[k] = Math.floor(b0 * (1 + pct / 100)); }
-            regenNotes.push(`${it.name}: ${chs.length === Object.keys(opsDelta).length ? "all channels" : chs.join("/")} ${pct > 0 ? "+" : ""}${pct}%`);
-          }
-          if (!(mpo > 0)) continue;
-          for (const row of (Array.isArray(di.perHexType) ? di.perHexType : [])) {
-            const types = (Array.isArray(row?.types) ? row.types : []).map(s => String(s).toLowerCase()); const k = row?.channel;
-            if (!(k in opsDelta) || !types.length) continue;
-            const n = hexTypes.filter(([ty, te]) => types.includes(ty) || types.includes(te)).length;
-            const gain = n * safeNum(row.op) * mpo;
-            if (gain > 0) { opsDelta[k] = safeNum(opsDelta[k]) + gain; regenNotes.push(`${it.name}: ${n} hex${n === 1 ? "" : "es"} → ${k} +${gain}`); }
-          }
-          const ph = di.perHexes;
-          if (ph && (ph.channel in opsDelta)) {
-            const gain = Math.max(safeNum(ph.min), Math.floor(ownedHexes.length / Math.max(1, safeNum(ph.per, 1)))) * safeNum(ph.op) * mpo;
-            if (gain > 0) { opsDelta[ph.channel] = safeNum(opsDelta[ph.channel]) + gain; regenNotes.push(`${it.name}: ${ownedHexes.length} hexes → ${ph.channel} +${gain}`); }
-          }
-        }
-      } catch (e) { warn("steward identity income failed (non-fatal)", e); }
-      const totalGained = Object.values(opsDelta).reduce((a,b)=>a+b,0);
+      const { opBank, stock, map, factors, matrix, usedMatrix, opsDelta, over, logiMult, logiBefore, regenNotes, totalGained } = await computeRegenIncomeFor(A, { persist:true });
 
       const row = { factionId: A.id, factionName: A.name, gained: totalGained, opsDelta, applied:false };
       results.push(row);
@@ -1519,7 +1686,12 @@ async function plannedRaidsStep({ apply=false } = {}){
     const bank0 = flags.opBank || {};
     // Regen lands before plans are paid (2026-09-12): preview affordability against bank + this turn's income.
     const bank = foundry.utils.duplicate(bank0);
-    try { const inc = computeTerritoryMatrixIncome(F)?.delta; if (inc) for (const k of OP_KEYS) bank[k] = safeNum(bank[k]) + safeNum(inc[k]); } catch (_eInc) {}
+    // One clock (2026-11-02): add only the income NOT yet paid as weekly slices this turn.
+    try {
+      const inc = await computeRegenIncome(F);
+      const paidNominal = incomeSliceRecord(F).nominal;
+      for (const k of OP_KEYS) bank[k] = safeNum(bank[k]) + Math.max(0, safeNum(inc[k]) - safeNum(paidNominal[k]));
+    } catch (_eInc) {}
     const logs  = Array.isArray(flags.warLogs) ? flags.warLogs : [];
     const planned = logs.filter(e => String(e?.type).toLowerCase() === "planned");
     if (!planned.length) continue;
@@ -1529,10 +1701,12 @@ async function plannedRaidsStep({ apply=false } = {}){
       const key = String(e.activity || e.activityKey || "").toLowerCase();
       const spec = EFFECTS[key];
       const label = spec?.label || (key ? key.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase()) : "(unknown)");
-      const cost = activityCost({ entry: e, effect: spec, key, faction: F });   // steward discounts as billed
-      const afford = canAfford(bank, cost);
-      if (afford) for (const k of OP_KEYS) bank[k] = safeNum(bank[k]) - safeNum(cost[k]);
-      rows.push({ faction: F.name, factionId: F.id, activity: key, label, cost, canAfford: afford });
+      // Bill at plan (2026-11-02): an entry stamped `paid` already left the bank — it is not charged again.
+      const prepaid = (e?.paid && typeof e.paid === "object" && Object.keys(e.paid).length) ? normalizeActivityCost(e.paid) : null;
+      const cost = prepaid || activityCost({ entry: e, effect: spec, key, faction: F });   // steward discounts as billed
+      const afford = prepaid ? true : canAfford(bank, cost);
+      if (afford && !prepaid) for (const k of OP_KEYS) bank[k] = safeNum(bank[k]) - safeNum(cost[k]);
+      rows.push({ faction: F.name, factionId: F.id, activity: key, label, cost, canAfford: afford, prepaid: !!prepaid });
       any = true;
     }
   }
@@ -1540,7 +1714,7 @@ async function plannedRaidsStep({ apply=false } = {}){
   const fmt = (c)=>OP_KEYS.filter(k=>safeNum(c[k])>0).map(k=>`${c[k]} ${k}`).join(", ")||"—";
   await ChatMessage.create({
     content: any
-      ? `<p><i>Planned Activities (Dry Preview)</i> — paid in plan order after this turn\u2019s income</p><ul>${rows.map(r => `<li><b>${foundry.utils.escapeHTML(r.faction)}</b>: ${foundry.utils.escapeHTML(r.label)} — ${fmt(r.cost)} ${r.canAfford?"":"<em>(cannot afford after the orders before it, even with this turn\u2019s income)</em>"}</li>`).join("")}</ul>`
+      ? `<p><i>Planned Activities (Dry Preview)</i> — paid in plan order after this turn\u2019s income</p><ul>${rows.map(r => `<li><b>${foundry.utils.escapeHTML(r.faction)}</b>: ${foundry.utils.escapeHTML(r.label)} — ${fmt(r.cost)}${r.prepaid ? " <em>(paid when planned)</em>" : ""} ${r.canAfford?"":"<em>(cannot afford after the orders before it, even with this turn\u2019s income)</em>"}</li>`).join("")}</ul>`
       : `<p><i>Planned Activities (Dry Preview)</i>: none queued.</p>`,
     whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
     speaker: { alias: "Bad Eden Turn Driver" }
@@ -1965,6 +2139,11 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     // Through the API (2026-10-01) so the wrappers installed on it (Unity Bonus, Enlightened
     // +10% regen) run; both forward opts, so deferCapClamp still reaches the base.
     if (apply) regen = await (game.bbttcc?.api?.territory?.advanceOPRegen || advanceOPRegen)({ apply:true, deferCapClamp:true });
+    // One clock (Dave 2026-11-02): the month's income already paid as weekly slices comes back out of the bank — the
+    // full regen above still ran (Unity / Enlightened see the whole month); net = the month's total, paid early.
+    // Before the planned spend + cap clamp. Dry runs never touch the slice record.
+    let slicesPaid = { changed:false, rows:[] };
+    if (apply) { try { slicesPaid = await debitPaidIncomeSlices(); } catch (e) { warn("weekly slice debit failed (non-fatal)", e); } }
 
     // REGEN BEFORE SPEND (owner ruling 2026-09-12, sim OP_ECONOMY_SIM_2026_09_11.md set C):
     // planned activities are paid from the bank AFTER this turn's income lands, so a
@@ -2013,6 +2192,7 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
         if (promoted.changed) events.push({ label: "Post Effects Promoted", tone: "info" });
         if ((planned.rows||[]).length) events.push({ label: `Planned Actions: ${(planned.rows||[]).length}`, tone: "info" });
         if ((regen.rows||[]).length) events.push({ label: `OP Regenerated: ${(regen.rows||[]).length} factions`, tone: "good" });
+        if ((slicesPaid.rows||[]).length) { const nS = Math.max(...slicesPaid.rows.map(r => r.slices || 0)); events.push({ label: `${nS} weekly slice(s) already paid`, tone: "info" }); }
         if ((logistics.rows||[]).length) events.push({ label: `Logistics Pressure: ${(logistics.rows||[]).length} factions`, tone: "warn" });
         if (normalized.changed) events.push({ label: "Queued Effects Normalized", tone: "info" });
         if (queued.changed) events.push({ label: "Queued Effects Applied", tone: "good" });
@@ -2236,6 +2416,11 @@ function __bbttccPublishTurnApi() {
   // The one planned-activity price (review #3/#4/#5, 2026-10-28): activityCost({entry?, effect?, key?}) → {channel: marks}.
   game.bbttcc.api.turn.activityCost = activityCost;
   game.bbttcc.api.turn.formatActivityCost = fmtActivityCost;
+  // One clock (Dave 2026-11-02): the month's income in four weekly slices.
+  game.bbttcc.api.turn.computeRegenIncome = computeRegenIncome;   // (factionActor|id) → {pool: marks}, side-effect free, before wrappers
+  game.bbttcc.api.turn.payIncomeSlice = payIncomeSlice;           // ({slice:1..4}) GM only, idempotent per world turn
+  game.bbttcc.api.turn.dueIncomeSlices = dueIncomeSlices;         // (spentDays) → [1..4] due so far
+  game.bbttcc.api.turn.incomeSliceRecord = incomeSliceRecord;     // (factionActor, turn?) → {turn, slices, nominal}
 }
 Hooks.once("init", __bbttccPublishTurnApi);
 Hooks.once("ready", __bbttccPublishTurnApi);

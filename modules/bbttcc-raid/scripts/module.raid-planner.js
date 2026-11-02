@@ -2423,9 +2423,51 @@ Hooks.once("init",()=>{
     }
 
     if (practice) entry.practice = true;   // onboarding's practice order — turn-driver consumePlanned never runs it (#15)
-    const prev = deepClone(attacker.getFlag(FCT_ID,"warLogs") || []);
-    prev.push(entry);
-    await attacker.setFlag(FCT_ID,"warLogs", prev);
+
+    // BILL AT PLAN (one clock, Dave 2026-11-02): the price leaves the bank NOW (steward discounts applied by op.commit,
+    // which relays a player seat to the GM). The entry carries `paid` — the Advance does not bill it again, a refusal or
+    // failure at resolution refunds it, and un-planning refunds it. Practice orders and self-billing rows (begin_siege
+    // commits its own buffer) are never charged here.
+    let paid = null;
+    if (!practice && String(activityKey) !== "begin_siege") {
+      const turnApi = game.bbttcc?.api?.turn;
+      const eff = (raidAPI.EFFECTS || {})[String(activityKey)] || null;
+      const base = turnApi?.activityCost ? (turnApi.activityCost({ entry, effect: eff, key: String(activityKey) }) || {}) : {};
+      if (Object.keys(base).length) {
+        const price = turnApi.activityCost({ entry, effect: eff, key: String(activityKey), faction: attacker }) || base;
+        const label = eff?.label || String(activityKey);
+        const fmt = (c) => (turnApi?.formatActivityCost ? turnApi.formatActivityCost(c) : Object.entries(c).map(([k, v]) => `${v} ${k}`).join(" · "));
+        const bank = attacker.getFlag(FCT_ID, "opBank") || {};
+        const short = {};
+        for (const [k, need] of Object.entries(price)) { const have = Number(bank[k]) || 0; if (have < need) short[k] = need - have; }
+        if (Object.keys(short).length) {
+          const err = new Error(`${attacker.name} can't afford ${label} (${fmt(price)} marks) — short ${fmt(short)}. The price is paid when you plan it.`);
+          err.bbttccRefused = true; throw err;
+        }
+        const op = game.bbttcc?.api?.op;
+        if (!op || typeof op.commit !== "function") throw new Error("planActivity: the OP engine is not available to bill the plan.");
+        const neg = {}; for (const [k, v] of Object.entries(base)) neg[k] = -(Number(v) || 0);
+        const r = await op.commit(attacker.id, neg, { source: "strategic", label: `Planned: ${label}`, allowOvercap: true });
+        if (!r || r.ok === false) {
+          const err = new Error(`${attacker.name} can't afford ${label} (${fmt(price)} marks) — the bank refused the charge.`);
+          err.bbttccRefused = true; throw err;
+        }
+        paid = {}; for (const [k, v] of Object.entries(r?.finalCost || {})) if (Number(v) < 0) paid[k] = -Number(v);
+        if (!Object.keys(paid).length) paid = foundry.utils.duplicate(price);
+        entry.paid = paid;
+        entry.summary += ` — paid ${fmt(paid)} marks`;
+      }
+    }
+
+    try {
+      const prev = deepClone(attacker.getFlag(FCT_ID,"warLogs") || []);
+      prev.push(entry);
+      await attacker.setFlag(FCT_ID,"warLogs", prev);
+    } catch (eW) {
+      // The order never reached the plan → give the price back.
+      if (paid) { try { await game.bbttcc.api.op.commit(attacker.id, paid, { source: "strategic", label: `Refund — ${String(activityKey)} was not planned`, noDiscount: true, allowOvercap: true }); } catch (eRf) { console.warn("[bbttcc-raid-planner] plan refund failed", eRf); } }
+      throw eW;
+    }
     log("Planned entry written", entry);
     return entry;
   };

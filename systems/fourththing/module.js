@@ -26456,11 +26456,23 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const logs = faction.getFlag("bbttcc-factions", "warLogs") || [];
       const hit = logs.find(e => String(e?.type || "").toLowerCase() === "planned" && (String(e.id || "") === ref || String(e.ts || "") === ref));
       if (!hit) return sheet.render(false);   // already consumed by a Turn — nothing to cancel
-      const ok = await Dialog.confirm({ title: "Cancel this order?", content: `<p>Take <b>${foundry.utils.escapeHTML(String(game.bbttcc?.api?.raid?.EFFECTS?.[hit.activityKey]?.label || hit.activityKey || "this order"))}</b> off next turn's plan? Nothing has been paid for it yet.</p>` });
+      // Bill at plan (one clock, 2026-11-02): the order's price (hit.paid) left the bank when it was planned — cancelling refunds it.
+      const paidStr = Object.entries(hit.paid || {}).filter(([, v]) => Number(v) > 0).map(([k, v]) => `${v} ${k}`).join(", ");
+      const ok = await Dialog.confirm({ title: "Cancel this order?", content: `<p>Take <b>${foundry.utils.escapeHTML(String(game.bbttcc?.api?.raid?.EFFECTS?.[hit.activityKey]?.label || hit.activityKey || "this order"))}</b> off next turn's plan? ${paidStr ? `Its price (${foundry.utils.escapeHTML(paidStr)} marks) goes back to the bank.` : "Nothing has been paid for it yet."}</p>` });
       if (!ok) return;
       const fresh = faction.getFlag("bbttcc-factions", "warLogs") || [];   // re-read: a Turn may have run while the dialog was up
+      const gone = fresh.find(e => String(e?.type || "").toLowerCase() === "planned" && (String(e.id || "") === ref || String(e.ts || "") === ref));
       const keep = fresh.filter(e => e !== undefined && !(String(e?.type || "").toLowerCase() === "planned" && (String(e.id || "") === ref || String(e.ts || "") === ref)));
-      if (keep.length !== fresh.length) await faction.setFlag("bbttcc-factions", "warLogs", keep);
+      if (keep.length !== fresh.length) {
+        await faction.setFlag("bbttcc-factions", "warLogs", keep);
+        const p = gone?.paid;
+        if (p && Object.values(p).some(v => Number(v) > 0)) {
+          try {
+            const r = await game.bbttcc?.api?.op?.commit?.(faction.id, p, { source: "strategic", label: `Refund — ${gone.activityKey || "planned order"} un-planned`, noDiscount: true, allowOvercap: true });
+            if (r && r.ok !== false) ui.notifications?.info?.(`Order cancelled — refunded ${paidStr} marks.`);
+          } catch (eR) { console.warn("fourththing | planned refund failed", eR); }
+        }
+      }
       return sheet.render(false);
     }
     if (String(act).startsWith("hex:")) {        // a hex of the Domain: jump there when it is on this map, and open its sheet

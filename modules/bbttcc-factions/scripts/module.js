@@ -3153,6 +3153,16 @@ try {
         : [];
 
       const isPlanned = (e) => String(e?.type || "").toLowerCase() === "planned";
+      // Bill at plan (one clock, 2026-11-02): an order carries `paid` — taking it off the plan gives that back (op.commit relays a player seat).
+      const refundPaid = async (e) => {
+        const p = (e?.paid && typeof e.paid === "object") ? e.paid : null;
+        if (!p || !Object.values(p).some(v => Number(v) > 0)) return null;
+        try {
+          const r = await game.bbttcc?.api?.op?.commit?.(this.actor.id, p, { source: "strategic", label: `Refund — ${e?.activityKey || "planned order"} un-planned`, noDiscount: true, allowOvercap: true });
+          return (r && r.ok !== false) ? p : null;
+        } catch (eR) { console.warn("[bbttcc-factions] planned refund failed", eR); return null; }
+      };
+      const fmtPaid = (p) => Object.entries(p || {}).filter(([, v]) => Number(v) > 0).map(([k, v]) => `${v} ${k}`).join(", ");
 
       if (act === "remove") {
         if (!ts) return;
@@ -3173,7 +3183,10 @@ try {
         });
 
         await this.actor.update({ [`flags.${MODULE_ID}.warLogs`]: next });
-        ui.notifications?.info?.("Removed planned action.");
+        const refunded = victim ? await refundPaid(victim) : null;
+        if (refunded) next[next.length - 1].summary += ` Refunded ${fmtPaid(refunded)} marks.`;
+        if (refunded) { try { await this.actor.update({ [`flags.${MODULE_ID}.warLogs`]: next }); } catch (_eL) {} }
+        ui.notifications?.info?.(refunded ? `Removed planned action — refunded ${fmtPaid(refunded)} marks.` : "Removed planned action.");
         this.render(false);
         return;
       }
@@ -3199,7 +3212,16 @@ try {
         });
 
         await this.actor.update({ [`flags.${MODULE_ID}.warLogs`]: kept });
-        ui.notifications?.info?.("Cleared planned actions.");
+        const back = {};
+        for (const e of logsCur.filter(isPlanned)) {
+          const r = await refundPaid(e);
+          if (r) for (const [k, v] of Object.entries(r)) back[k] = (back[k] || 0) + (Number(v) || 0);
+        }
+        if (Object.keys(back).length) {
+          kept[kept.length - 1].summary += ` Refunded ${fmtPaid(back)} marks.`;
+          try { await this.actor.update({ [`flags.${MODULE_ID}.warLogs`]: kept }); } catch (_eL) {}
+        }
+        ui.notifications?.info?.(Object.keys(back).length ? `Cleared planned actions — refunded ${fmtPaid(back)} marks.` : "Cleared planned actions.");
         this.render(false);
         return;
       }

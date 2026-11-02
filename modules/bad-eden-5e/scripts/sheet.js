@@ -163,11 +163,23 @@ async function domainAct(sheet, act) {
     const fresh = faction.getFlag("bbttcc-factions", "warLogs") || [];
     const hit = fresh.find(e => String(e?.type || "").toLowerCase() === "planned" && (String(e.id || "") === ref || String(e.ts || "") === ref));
     if (!hit) return sheet.render(false);
-    const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: "Cancel this order?" }, content: `<p>Take <b>${foundry.utils.escapeHTML(String(A.raid?.EFFECTS?.[hit.activityKey]?.label || hit.activityKey || "this order"))}</b> off next turn's plan? Nothing has been paid for it yet.</p>` });
+    // Bill at plan (one clock, 2026-11-02): the order's price (hit.paid) left the bank when it was planned — cancelling refunds it.
+    const paidStr = Object.entries(hit.paid || {}).filter(([, v]) => Number(v) > 0).map(([k, v]) => `${v} ${k}`).join(", ");
+    const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: "Cancel this order?" }, content: `<p>Take <b>${foundry.utils.escapeHTML(String(A.raid?.EFFECTS?.[hit.activityKey]?.label || hit.activityKey || "this order"))}</b> off next turn's plan? ${paidStr ? `Its price (${foundry.utils.escapeHTML(paidStr)} marks) goes back to the bank.` : "Nothing has been paid for it yet."}</p>` });
     if (!ok) return;
     const now = faction.getFlag("bbttcc-factions", "warLogs") || [];
+    const gone = now.find(e => String(e?.type || "").toLowerCase() === "planned" && (String(e.id || "") === ref || String(e.ts || "") === ref));
     const keep = now.filter(e => !(String(e?.type || "").toLowerCase() === "planned" && (String(e.id || "") === ref || String(e.ts || "") === ref)));
-    if (keep.length !== now.length) await faction.setFlag("bbttcc-factions", "warLogs", keep);
+    if (keep.length !== now.length) {
+      await faction.setFlag("bbttcc-factions", "warLogs", keep);
+      const p = gone?.paid;
+      if (p && Object.values(p).some(v => Number(v) > 0)) {
+        try {
+          const r = await A.op?.commit?.(faction.id, p, { source: "strategic", label: `Refund — ${gone.activityKey || "planned order"} un-planned`, noDiscount: true, allowOvercap: true });
+          if (r && r.ok !== false) ui.notifications?.info?.(`Order cancelled — refunded ${paidStr} marks.`);
+        } catch (eR) { console.warn(`${MOD} | planned refund failed`, eR); }
+      }
+    }
     return sheet.render(false);
   }
   if (act.startsWith("hex:")) {
