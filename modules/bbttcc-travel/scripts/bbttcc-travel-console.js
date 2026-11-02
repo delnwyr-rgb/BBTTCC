@@ -1138,6 +1138,14 @@
       const $rout = content.querySelector(".rp-out");
 
       $fac.innerHTML = factions.map(f => `<option value="${f.id}">${enc(f.name)}</option>`).join("");
+      // THE STORY'S DOMAIN BY DEFAULT (2026-11-02 click-through): the picker opened on the first owned Domain (Allesh Gilliam), so
+      // "↻ Resume ride" looked up a ride nobody was on and a Ride-to prefill had no party to start from. The campaign's lead Domain
+      // is the default; token auto-detect below still overrides it.
+      try {
+        const capi = game.bbttcc?.api?.campaign; const camp = capi?.getCampaign?.(capi?.getActiveCampaignId?.());
+        const lead = String(camp?.factionId || (camp?.factionIds || [])[0] || "").replace(/^Actor\./, "");
+        if (lead && factions.some(f => f.id === lead)) $fac.value = lead;
+      } catch (_eDef) {}
 
       // Auto-detect faction from the canvas selection. Two cases:
       //   1) Selected token's actor IS a faction (isFaction=true)        → use actor.id directly.
