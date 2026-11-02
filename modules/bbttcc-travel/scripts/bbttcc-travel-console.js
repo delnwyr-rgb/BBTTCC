@@ -2499,6 +2499,10 @@
               }
             }
 
+            // the party is IN the hex the moment the leg lands — record it before any encounter can pause the ride (2026-11-02:
+            // a final-leg encounter paused before arrival, a reload lost the waiting card, and the party read as being at the
+            // route's origin)
+            if (r && r.ok !== false && L?.toUuid) { try { await game.bbttcc?.api?.travel?.setPosition?.(factionId, L.toUuid); } catch (_eSP) {} }
             let enc = r?.encounter;
             if (enc?.triggered) {
               const executedUuids = legs.slice(0, i + 1).map(x => x.toUuid).filter(Boolean);

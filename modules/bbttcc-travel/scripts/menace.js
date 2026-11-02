@@ -293,7 +293,7 @@
         <button type="button" data-bbttcc-menace="decline" data-menace-id="${esc(id)}" style="width:auto;padding:.25em .8em;">Not now — ride on</button>
       </div>
       <div style="margin-top:.35em;opacity:.65;font-size:.85em;">${esc(factionName || "The party")} decides. Walking away is remembered here; in ${clock} turn${clock === 1 ? "" : "s"} the bill comes due.</div>`;
-    const msg = await ChatMessage.create({ content: box("#c9a227", inner), speaker: { alias: "Bad Eden" }, flags: { [MOD]: { menaceCard: { id, label: m.label, answered: false } } } });
+    const msg = await ChatMessage.create({ content: box("#c9a227", inner), speaker: { alias: "Bad Eden" }, flags: { [MOD]: { menaceCard: { id, label: m.label, answered: false, hexUuid: hexDoc?.uuid || null } } } });
     return msg;
   }
   async function settleCard(msg, choice, byName) {
@@ -339,6 +339,17 @@
           const ge = game.bbttcc?.api?.gmExec;
           let res = null;
           if (isGM() && PENDING.has(id)) { PENDING.get(id).resolve(choice, game.user?.name); res = { ok: true }; }
+          // A CARD LEFT OVER FROM BEFORE A RELOAD (2026-11-02 click-through): the ride that was waiting on it is gone, so the
+          // party sat in the hex with no arrival. The GM's click finishes the arrival instead (the menace stays on the hex for
+          // the next ride; its beat is not run blind).
+          else if (isGM() && !PENDING.has(id)) {
+            const hx = message?.flags?.[MOD]?.menaceCard?.hexUuid || null;
+            try { await message.update({ [`flags.${MOD}.menaceCard.answered`]: true, [`flags.${MOD}.menaceCard.choice`]: "stale" }); } catch (_eU) {}
+            let lead = null; try { const capi = game.bbttcc?.api?.campaign; const c = capi?.getCampaign?.(capi?.getActiveCampaignId?.()); lead = String(c?.factionId || (c?.factionIds || [])[0] || "").replace(/^Actor\./, "") || null; } catch (_eL) {}
+            if (hx && game.bbttcc?.api?.travel?.arriveAt) { await game.bbttcc.api.travel.arriveAt(hx, { factionId: lead }); ui.notifications?.info?.("That road card was from before a reload — the ride is finished: arriving now."); }
+            else ui.notifications?.info?.("That road card was from before a reload — nothing is waiting on it.");
+            res = { ok: true };
+          }
           else if (ge?.call) res = await ge.call(EXEC_TYPE, { id, choice }, { timeoutMs: 15000 });
           else res = { ok: false, why: "no GM relay" };
           if (!res?.ok) { ui.notifications?.warn?.(`Menace card: ${res?.why || "could not answer"}`); btn.disabled = false; }
