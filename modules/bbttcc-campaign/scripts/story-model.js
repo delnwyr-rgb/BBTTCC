@@ -698,7 +698,10 @@ export function deriveSituation(ctx) {
       if (c.beatMark != null) { const id = String(c.beatMark); if (c.not === true) return; if (!c.quest && fired.has(id)) return; out.push({ text: `beat “${id}” (played)`, met: false, kind: "beatMark", declared: true }); return; }
       if (String(c.flag || "") === "turn" && !turnMet(c)) out.push({ text: `turn ${c.gte != null ? `≥ ${c.gte}` : c.lte != null ? `≤ ${c.lte}` : `= ${c.eq}`}`, met: false, kind: "flag", current: turn, declared: true });
     };
-    for (const c of reqsOf(b)) { if (Array.isArray(c?.anyOf)) c.anyOf.forEach(one); else one(c); }
+    // an anyOf group already met by one member is no reason at all (2026-11-02 click-through: the camp's Recruit ending met the Act 3
+    // card's anyOf, but Jail and Break were still listed unmet — the gate-door then sent the table to "Jail them")
+    const memberMet = (c) => !!c && typeof c === "object" && ((c.beatMark != null && c.not !== true && fired.has(String(c.beatMark))) || (c.beatMark != null && c.not === true && !fired.has(String(c.beatMark))) || (String(c.flag || "") === "turn" && turnMet(c)));
+    for (const c of reqsOf(b)) { if (Array.isArray(c?.anyOf)) { if (!c.anyOf.some(memberMet)) c.anyOf.forEach(one); } else one(c); }
     return out;
   };
   const readiness = (b) => {
