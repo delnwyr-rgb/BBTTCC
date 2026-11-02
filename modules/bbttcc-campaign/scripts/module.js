@@ -5028,7 +5028,10 @@ function _oneClockStepBeats() {
   try {
     for (const sc of Object.values(QUEST_SCRIPTS || {})) {
       const steps = [...(Array.isArray(sc?.steps) ? sc.steps : []), ...(Array.isArray(sc?.arrival?.steps) ? sc.arrival.steps : [])];
-      for (const st of steps) for (const b of (Array.isArray(st?.beats) ? st.beats : [])) out.add(String(b));
+      // MILESTONES (Dave 2026-11-02: "Agreed on milestones, rather than days"): a dense location (Crown Mall, the grief towns) marks
+      // the steps that move the clock — when a script marks any `milestone: true`, only those cost a day; otherwise every step does
+      const marked = steps.some(st => st?.milestone === true);
+      for (const st of steps) { if (marked && st?.milestone !== true) continue; for (const b of (Array.isArray(st?.beats) ? st.beats : [])) out.add(String(b)); }
     }
   } catch (_e) {}
   return out;
