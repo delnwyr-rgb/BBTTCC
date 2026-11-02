@@ -346,7 +346,7 @@ export const QUEST_MAP = {
    "name": "Thatwards Ho! Finale",
    "act": 5,
    "keystone": true,
-   "hex": "Inconvenient Mountains.h",
+   "hex": "Hexen Myre.o",
    "registryId": "quest_thatwards_ho_finale",
    "chapters": {}
   },
