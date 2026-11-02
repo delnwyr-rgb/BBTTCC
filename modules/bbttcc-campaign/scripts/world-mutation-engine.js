@@ -1618,6 +1618,19 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       for (const hs of hsList) {
         if (!hexApi || !hs || typeof hs !== "object") continue;
         const action = String(hs.action || "").trim().toLowerCase();
+        // repairAll (Dave 2026-11-02: "Kill the main bad guy and the rest of them fall"): every corrupted hex spark in the world is
+        // repaired — the finale's win lifts the Gaze's work everywhere. No hex target.
+        if (action === "repairall") {
+          let rows = []; try { const T = get(game, "bbttcc.api.tikkun", null); rows = (await T?.listCorruptedHexSparks?.()) || []; } catch (_eL) { rows = []; }
+          for (const row of rows) {
+            let rr = null; try { rr = await hexApi.repair(row.hexUuid); } catch (eR) { console.warn(TAG, "hexSpark repairAll: repair failed", row.hexName, eR); }
+            const okR = !!(rr && rr.ok);
+            sparkLines.push(okR ? `⚒ repaired — ${escS(row.sparkName || row.key)} at ${escS(row.hexName)} (the rest of them fall)` : `⚠ repair refused at ${escS(row.hexName)}: ${escS((rr && rr.error) || "unknown")}`);
+            if (okR && !(rr && rr.already)) { changed = true; notes.push("hexSpark:repairAll"); }
+          }
+          if (!rows.length) sparkLines.push("· no corrupted sparks to lift");
+          continue;
+        }
         if (!["seat", "integrate", "corrupt", "repair", "unseat"].includes(action)) { console.warn(TAG, "hexSpark: unknown action", hs); continue; }
         const ctxHex = String((ctx && ctx.hexUuid) ? ctx.hexUuid : "").trim();
         const beatHex = String((beat && beat.targetHexUuid) ? beat.targetHexUuid : "").trim();
@@ -1633,6 +1646,12 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
             if (r && r.ok && wantState === "corrupted") r = await hexApi.corrupt(doc.uuid);
           } else if (action === "integrate") {
             r = await hexApi.integrate(doc.uuid, { actorId: (ctx && ctx.actorId) || null, story: true });   // a beat's integration never fails on Reach (2026-09-20)
+            // cleanse:true (Dave 2026-11-02, the finale): the spark this beat brings IS the repair — a corrupted target is repaired, then
+            // seated. (Live-caught: the Gaze corrupted Allesh-Gilliam's Foundation in Month 8 and the finale's Yesod integration was refused.)
+            if (hs.cleanse === true && !(r && r.ok) && /corrupt/i.test(String((r && r.error) || ""))) {
+              const rp = await hexApi.repair(doc.uuid);
+              if (rp && rp.ok) { sparkLines.push(`⚒ cleansed — the corruption at ${escS(hexLabel)} lifts`); r = await hexApi.integrate(doc.uuid, { actorId: (ctx && ctx.actorId) || null, story: true }); }
+            }
           } else {
             r = await hexApi[action](doc.uuid);
           }
