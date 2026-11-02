@@ -396,9 +396,12 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
       const camp = game.bbttcc?.api?.campaign; const cid = camp?.getActiveCampaignId?.();
       const fired = new Set();
       for (const ev of story) {
-        if (String(ev.charter?.source || "") !== "starter" || fired.has(ev.kind) || !camp?.runBeat || !cid) continue;
+        // a LEASE the story tells (2026-11-02 click-through: the Persuade Parley's renewal was a plain charter, so when its three turns
+        // ran out the Absolutely Reliable went home without a word): the starter lease and any charter with source "lease"
+        if (!["starter", "lease"].includes(String(ev.charter?.source || "")) || fired.has(ev.kind) || !camp?.runBeat || !cid) continue;
         const rig = String(ev.charter.rigName || "").toLowerCase();
-        const heldPast = (turn) => (game.actors?.contents ?? []).some(F => isFactionActor(F) && charterList(F.id, { activeOnly: false }).some(c => String(c.rigName || "").toLowerCase() === rig && String(c.source || "") !== "starter" && (c.until == null || Number(c.until) >= turn)));
+        // held past = ANY charter on that rig that outlasts the one ending (a renewal of any source, or the coalition's standing one)
+        const heldPast = (turn) => (game.actors?.contents ?? []).some(F => isFactionActor(F) && charterList(F.id, { activeOnly: false }).some(c => String(c.rigName || "").toLowerCase() === rig && (c.until == null || Number(c.until) >= turn)));
         if (ev.kind === "lastTurn" && heldPast(t + 1)) continue;   // renewed past this turn already
         if (ev.kind === "ended" && heldPast(t)) continue;          // renewed, or the coalition owns it (standing charter)
         fired.add(ev.kind);

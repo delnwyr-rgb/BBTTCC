@@ -2808,7 +2808,9 @@ if (game.bbttcc?.runVisuals) {
         const path = computeShortestPath(startHex, endHex, { gate: true });
         if (!path) {
           const any = computeShortestPath(startHex, endHex);
-          setPickStatus(any ? `No path ${game.actors.get($fac?.value)?.name || "the Domain"} can travel between ${startHex.label} and ${endHex.label} — every route crosses terrain it has no rig for (water, air…). Bring or borrow a rig that can.` : `No path found between ${startHex.label} and ${endHex.label}.`);
+          setPickStatus(any ? `No path ${game.actors.get($fac?.value)?.name || "the Domain"} can travel between ${startHex.label} and ${endHex.label} — every route crosses terrain it has no rig for (water, air…). Charter, borrow, or build a boat.` : `No path found between ${startHex.label} and ${endHex.label}.`);
+          // A BOAT IS ONE BUTTON AWAY (Dave 2026-11-02: "anyone who didn't get the AR officially would eventually buy a submersible or boat")
+          if (any) { try { if ($pickStatus && game.bbttcc?.api?.rigBuilder?.open) { const b = document.createElement("button"); b.type = "button"; b.className = "bbttcc-travel-button"; b.textContent = "🛠 Build a boat (Rig Builder)"; b.style.cssText = "display:block;margin-top:.3rem;"; b.onclick = () => game.bbttcc.api.rigBuilder.open(); $pickStatus.appendChild(b); } } catch (_eBB) {} }
           return;
         }
         legs.length = 0;

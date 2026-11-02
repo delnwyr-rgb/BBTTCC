@@ -1825,7 +1825,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           if (chr.revoke === true) { const r = await tapi.revoke(fid, { fromFactionId: carrier.id }); if (r && r.removed) { changed = true; notes.push("charter:revoked:" + carrier.name); } }
           else {
             const turns = (chr.turns != null) ? Number(chr.turns) : (chr.until === null ? null : 3);
-            const r = await tapi.grant(fid, { fromFactionId: carrier.id, domains: Array.isArray(chr.domains) && chr.domains.length ? chr.domains : null, rigName: chr.rigName || "", turns, until: chr.until != null ? Number(chr.until) : null, source: "beat", note: chr.note || "" });
+            const r = await tapi.grant(fid, { fromFactionId: carrier.id, domains: Array.isArray(chr.domains) && chr.domains.length ? chr.domains : null, rigName: chr.rigName || "", turns, until: chr.until != null ? Number(chr.until) : null, source: String(chr.source || "beat"), note: chr.note || "" });   // source "lease" = a lease the story tells (last turn / gone home), 2026-11-02
             if (r && r.ok) { changed = true; notes.push("charter:" + carrier.name); } else console.warn(TAG, "charter grant refused", r);
           }
         } else if (chr) console.warn(TAG, "charter: faction or carrier not resolved", { fid, from: chr.fromFactionId || chr.fromFactionName });
