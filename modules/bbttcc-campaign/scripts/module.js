@@ -5802,7 +5802,7 @@ async function _awardsPay(campaign, ctx, deltas, { key = null, label = "" } = {}
     const paid = [], refused = [];
     for (const F of facs) {
       if (already.has(String(F.id))) continue;
-      try { const r = await op.commit(F.id, deltas, { source: "story-award", label: `Story — ${label}` }); if (r && r.ok !== false && r.committed !== false) paid.push({ id: F.id, name: F.name }); else refused.push({ id: F.id, name: F.name, why: r?.error || (r?.underflow ? "underflow" : "refused") }); }
+      try { const r = await op.commit(F.id, deltas, { source: "story-award", label: `Story — ${label}`, clampToCap: true /* a full bank keeps what fits — the bestiary rule; never "owed forever" (2026-11-02) */ }); if (r && r.ok !== false && r.committed !== false) paid.push({ id: F.id, name: F.name }); else refused.push({ id: F.id, name: F.name, why: r?.error || (r?.underflow ? "underflow" : "refused") }); }
       catch (eP) { warn("[awards] commit failed", F?.name, eP); refused.push({ id: F.id, name: F.name, why: "error" }); }
     }
     if (key && (paid.length || prev)) {
