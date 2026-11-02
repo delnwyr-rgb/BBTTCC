@@ -1859,7 +1859,14 @@ function _choiceSpent(ch, campaign, fromBeatId = null) {
     const next = String(ch?.next || "").trim();
     if (_EXIT_LABEL.test(String(ch?.label || ""))) return false;
     if (ch?.openTravel) return false;                               // a ride is an exit — never greyed (2026-11-02)
-    if (!next) { const k = `${String(fromBeatId || "")}::${String(ch?.label || "").trim()}`; return (fromBeatId && _storyStateFor(campaign?.id)?.asked?.[k]) ? "soft" : false; }
+    if (!next) {
+      // the way forward never greys: a beat's only choice, or a Continue / OK / Noted / Onward (Arms Down's "Continue" greyed on the
+      // second surrender, 2026-11-02)
+      if (/^\W*(continue|ok|okay|noted|onward|done|got it)\b/i.test(String(ch?.label || "").trim())) return false;
+      const from = fromBeatId ? (campaign?.beats || []).find(b => String(b?.id) === String(fromBeatId)) : null;
+      if (from && (from.choices || []).filter(c => String(c?.label || "").trim()).length <= 1) return false;
+      const k = `${String(fromBeatId || "")}::${String(ch?.label || "").trim()}`; return (fromBeatId && _storyStateFor(campaign?.id)?.asked?.[k]) ? "soft" : false;
+    }
     const tgt = (campaign?.beats || []).find(b => String(b?.id) === next); if (!tgt) return false;
     let played = !!_storyStateFor(campaign?.id)?.played?.[next];
     if (!played) { const ds = _readDirectorState() || {}; played = !!(ds.firedStoryBeats?.[next] || ds.dialogueFired?.[next]); }
@@ -5820,7 +5827,14 @@ async function _awardForChanges(campaign, ctx, changes) {
 async function _awardCreature(campaign, ctx, beat, playedN = null) {
   const a = beat?.award; if (!a || typeof a !== "object" || !a.method) return null;
   const api = game.bbttcc?.api?.bestiary; const M = api?.METHODS?.[String(a.method)]; if (!M) { warn("[awards] unknown bounty method", a.method, beat?.id); return null; }
-  const actor = (a.creatureId && game.actors?.get?.(a.creatureId)) || (a.creature && game.actors?.find?.(x => x.name === a.creature)) || null;
+  // the award names its creature by SLUG ("apex_predator") — the old exact-name lookup never matched, so no road bounty ever paid
+  // (2026-11-02, Dave: "You should technically be collecting bounties from all those monsters you've scared away"). Resolve by id,
+  // exact name, name-slug in the world, then name-slug in the bestiary pack.
+  const _slug = (x) => String(x || "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+  let actor = (a.creatureId && game.actors?.get?.(a.creatureId)) || (a.creature && game.actors?.find?.(x => x.name === a.creature)) || (a.creature && game.actors?.find?.(x => _slug(x.name) === _slug(a.creature))) || null;
+  if (!actor && a.creature) {
+    try { const pack = game.packs?.get?.("bbttcc-master-content.npcs"); const idx = pack ? await pack.getIndex() : null; const hit = idx ? [...idx].find(e => _slug(e.name) === _slug(a.creature)) : null; if (hit) actor = await pack.getDocument(hit._id); } catch (_eP) {}
+  }
   let marks = Number(a.marks) || 0; if (!marks && actor && typeof api.bountyFor === "function") marks = Number(api.bountyFor(actor)?.marks) || 0;
   if (!marks) { warn("[awards] no bounty for", a.creature || a.creatureId || beat?.id); return null; }
   const n = playedN ?? Number(_storyStateFor(campaign?.id)?.played?.[beat.id]?.n || 1);
