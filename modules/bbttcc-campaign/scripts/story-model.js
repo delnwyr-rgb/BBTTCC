@@ -1068,9 +1068,17 @@ export function scriptView(sc, ctx) {
     const fresh = listed.filter(b => !played(b.id) && !failOnly(b.id)); if (fresh.length) return fresh;
     const dl = doneIds(st); const out = []; const seen = new Set();
     for (const b of listed) if (played(b.id) && b.inject?.repeatable === true && !seen.has(b.id)) { seen.add(b.id); out.push(b); }
-    for (const pb of listed.filter(b => played(b.id))) for (const c of (pb.choices || [])) for (const t of [c?.next, nextInto.has(String(c?.failNext || "")) ? c?.failNext : null]) {
-      const b = byId.get(String(t || "")); if (!b || played(b.id) || seen.has(b.id)) continue;
-      if (dl.has(String(b.id)) || inQuest(b)) { seen.add(b.id); out.push(b); }
+    // A FORK IS THE DESTINATION, NOT ITS OUTCOMES (2026-11-02 click-through, Soft Landing): the last step's choice beat had been
+    // seen, so Next named the first of its three endings and "Run next" chose "Somebody Goes First" for the table. When a played
+    // listed beat routes to two or more unplayed outcomes, the beat itself is where the table goes back to choose.
+    for (const pb of listed.filter(b => played(b.id))) {
+      const mine = [];
+      for (const c of (pb.choices || [])) for (const t of [c?.next, nextInto.has(String(c?.failNext || "")) ? c?.failNext : null]) {
+        const b = byId.get(String(t || "")); if (!b || played(b.id) || seen.has(b.id) || mine.includes(b)) continue;
+        if (dl.has(String(b.id)) || inQuest(b)) mine.push(b);
+      }
+      if (mine.length >= 2) { if (!seen.has(pb.id)) { seen.add(pb.id); out.unshift(pb); } continue; }
+      for (const b of mine) { seen.add(b.id); out.push(b); }
     }
     return out;
   };
