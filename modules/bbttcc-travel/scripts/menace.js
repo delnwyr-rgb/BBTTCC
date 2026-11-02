@@ -24,7 +24,7 @@
 //     (hex loyalty back up, darkness relief if authored, a public card). Every later leg that touches a
 //     menaced hex re-posts a short reminder.
 //
-// API: game.bbttcc.api.travel.menace = { partyScale, entryScaleOk, list, find, add, clear, gateEncounter,
+// API: game.bbttcc.api.travel.menace = { partyScale, entryScaleOk, list, find, add, clear, gateEncounter, pendingCount,
 //      tick, DEFAULTS, STATE_NAME }. Setting bbttcc-travel.menaceGate (world, default ON) turns the whole
 //      layer off (no scale filter, no cards, no ticks). GM-side writes; player clicks relay via gmExec
 //      `travel.menace.answer`.
@@ -440,7 +440,10 @@
   // ── publish ────────────────────────────────────────────────────────────────
   // Publish at init AND ready (2026-10-21 live fix): a classic script parses before Foundry builds the real `game`
   // object, so anything hung on `game` at parse time is lost. Hooks registered above survive (global Hooks registry).
-  const API = { partyScale, entryScaleOk, list, find, add, clear, gateEncounter, tick, enabled, DEFAULTS, STATE_NAME, resolveHex };
+  // How many warning cards still wait on the table (2026-11-02 click-through: the ride's arrival read "nothing open" after 120 s
+  // and dove into the Fixit town map with the Slippage Wraith card still unanswered in chat). The arrival counts these as open.
+  const pendingCount = () => PENDING.size;
+  const API = { partyScale, entryScaleOk, list, find, add, clear, gateEncounter, tick, enabled, pendingCount, DEFAULTS, STATE_NAME, resolveHex };
   const publish = () => { try { game.bbttcc = game.bbttcc || {}; game.bbttcc.api = game.bbttcc.api || {}; game.bbttcc.api.travel = game.bbttcc.api.travel || {}; game.bbttcc.api.travel.menace = API; } catch (e) { warn("publish failed", e); } };
   Hooks.once("init", publish);
   Hooks.once("setup", publish);

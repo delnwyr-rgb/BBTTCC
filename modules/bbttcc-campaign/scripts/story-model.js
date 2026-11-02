@@ -1280,7 +1280,11 @@ export function sealOfDecl(beat, state, phase, { sealQuests = true, sealActs = t
     const sc = scriptOf(d.quest);
     const inSteps = !!sc && [...(sc.steps || []), ...((sc.arrival && sc.arrival.steps) || [])].some(stp => (Array.isArray(stp.beats) ? stp.beats : []).map(String).includes(String(beat.id)));
     const spine = !sc || inSteps || d.role === "start" || d.role === "closer" || (!d.chapter && d.role === "ending");
-    if (spine) return { sealed: true, kind: "quest", why: `its quest "${def.name}" is complete (${st.closed[d.quest].name})`, quest: d.quest };
+    // A BUILDING STAYS OPEN (Dave 2026-11-02: "why are we preventing people from going in to buildings, just because there aren't
+    // any more quests there"): a REPEATABLE step beat is a place (a bar, a store, the Arc Bay, a hub) — the closer seals the
+    // once-only story moments only. The start, the closers and the endings still seal, repeatable or not.
+    const place = beat?.inject?.repeatable === true && d.role !== "start" && d.role !== "closer" && d.role !== "ending";
+    if (spine && !place) return { sealed: true, kind: "quest", why: `its quest "${def.name}" is complete (${st.closed[d.quest].name})`, quest: d.quest };
   }
   // A chapter that has ENDED seals its own start and endings (2026-09-18, live-caught: the Weeping Prisoner re-offered from the
   // Arc Bay after Justice). Other beats declared in the chapter (hubs, asides) stay open.

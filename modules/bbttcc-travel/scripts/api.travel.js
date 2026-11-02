@@ -627,6 +627,8 @@
         ".bbttcc-campaign-dialog"   // a campaign beat's own dialog (the Tree's Session on the road, 2026-09-18)
       ].join(",");
       if (document.querySelector(sel)) return true;
+      // an unanswered menace warning card in chat is the table still deciding (2026-11-02: arrival fired over the Slippage Wraith card)
+      try { if (Number(game.bbttcc?.api?.travel?.menace?.pendingCount?.() || 0) > 0) return true; } catch (_eM) {}
 
       const wins = Object.values(ui.windows || {});
       for (const w of wins) {
