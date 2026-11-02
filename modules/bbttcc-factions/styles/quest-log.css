@@ -218,6 +218,15 @@
   border: 1px solid rgba(148,163,184,0.30);
   background: rgba(15,23,42,0.80);
 }
+/* a step pill never spills across the card — one line, clipped, the full text in its tooltip (2026-11-01) */
+.bbttcc-pill.mini.bbttcc-pill-step {
+  display: inline-block;
+  max-width: 16em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
 
 .bbttcc-quest-detail__art {
   width: 100%;

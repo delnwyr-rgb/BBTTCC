@@ -154,7 +154,11 @@
         const waitingOnly = notYet(q.next, q.why);
         // the engine's next line wins for its own step — it carries the hereLine swap ("you're already here, go and look")
         const lines = waitingOnly ? [] : cur.map(st => (q.next && q.next.step === st.id && q.next.line) ? q.next.line : st.line).filter(Boolean); if (!lines.length && q.next?.line && !waitingOnly) lines.push(q.next.line);
-        const stepLabel = cur.map(st => st.label).filter(Boolean).join(" · ") || (q.state === "completed" ? "complete" : "");
+        // the pill shows ONE step; an any-order group with several current steps reads "first +N" and carries the full list
+        // as a tooltip (Dave 2026-11-01: Khezek-Tor's "word" group spilled three labels across the card)
+        const curLabels = cur.map(st => st.label).filter(Boolean);
+        const stepLabel = (curLabels.length > 1 ? `${curLabels[0]} +${curLabels.length - 1}` : curLabels[0] || "") || (q.state === "completed" ? "complete" : "");
+        const stepTitle = curLabels.length > 1 ? curLabels.join(" · ") : "";
         // "Also open" = doors that ARE open: none during the Arrival, and a door with beats only once its next beat's gates
         // are met (Tamsin / Etta / the Muster are Act-2 doors; the Muster also waits for the militia) — 2026-10-26
         const doors = sc.inArrival ? [] : (sc.doors || []).filter(d => d.line && (d.ready || !d.beat)).map(d => ({ label: d.label, line: d.line, ready: d.ready }));
@@ -163,7 +167,7 @@
             soFarHtml(sc.inArrival ? [] : sc.soFar?.main) +
             (ls.length ? `<p><b>Next:</b></p><ul>${ls.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` + (q.state === "completed" || waitingOnly ? "" : whereHtml(q.next)) : "") +
             (doors.length ? `<p><b>Also open:</b></p><ul>${doors.map(d => `<li>${esc(d.line)}</li>`).join("")}</ul>` : "");
-        return { giver: sc.giver || "", description: sc.description || "", stepLabel, lines, doors, renderHtml, html: renderHtml(lines), waitingOnly };
+        return { giver: sc.giver || "", description: sc.description || "", stepLabel, stepTitle, lines, doors, renderHtml, html: renderHtml(lines), waitingOnly };
       };
     } catch (_e) { return () => null; }
   }
@@ -208,6 +212,7 @@
         __authoredKey: authoredKey,
         questStep: Number(tr.questStep ?? tr.step ?? 1) || 1,
         stepLabel: si?.stepLabel || "",
+        stepTitle: si?.stepTitle || "",
         acceptedTs,
         completedTs,
         archivedTs,
