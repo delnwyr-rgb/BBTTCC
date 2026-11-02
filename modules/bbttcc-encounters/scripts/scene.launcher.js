@@ -1737,9 +1737,13 @@ if (
 }
 
       const autoMs = Number(step.autoAdvanceMs || 0);
+      // The gate paces the GM to the NEXT scene. On the last step there is no next scene — the scene is already up, and an
+      // outcome prompt (itself a dialog) or nothing follows — so "Activate scene X … Continue" was a redundant click
+      // (Dave 2026-11-02, Gloomgill Perch: "Another continue, which is redundant").
+      const isLast = i === scenario.steps.length - 1;
       if (autoMs > 0) {
         await new Promise(r => setTimeout(r, autoMs));
-      } else {
+      } else if (!isLast) {
         await waitForGM(desc);
       }
     }
