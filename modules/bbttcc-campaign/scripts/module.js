@@ -9379,7 +9379,15 @@ async function _onBeatResolvedBanditLedger({ beat, campaign } = {}) {
       }
       return;
     }
-    if (!_banditArmed()) return;
+    // THE FIRST ACT ARMS IT (Dave 2026-11-01, live-caught: a freed crew left banditMercy at 0 and the Accord waiting forever —
+    // the opening beat that armed the ledger is itself gated on banditMercy ≥ 1, so nothing could ever count). An ambush
+    // outcome that shows mercy or fear arms the ledger on its own and is counted; everything else still waits for the opening.
+    if (!_banditArmed()) {
+      const firstAct = BANDIT_ENC_RE.test(id) && (BANDIT_MERCY_RE.test(id) || BANDIT_FEAR_RE.test(id));
+      if (!firstAct) return;
+      await game.settings.set(MOD_ID, SETTING_BANDIT_ARMED, true);
+      log(`[bandit-ledger] '${id}' is the first act of mercy or fear — the ledger is ARMED by it.`);
+    }
 
     const mercy = _banditMeterGet(SETTING_BANDIT_MERCY);
     const fear  = _banditMeterGet(SETTING_BANDIT_FEAR);
