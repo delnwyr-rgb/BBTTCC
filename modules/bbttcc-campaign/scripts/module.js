@@ -1856,8 +1856,9 @@ function _inboundRoutes(campaign, id) {
 }
 function _choiceSpent(ch, campaign, fromBeatId = null) {
   try {
-    const next = String(ch?.next || "").trim(); if (!next) return false;
+    const next = String(ch?.next || "").trim();
     if (_EXIT_LABEL.test(String(ch?.label || ""))) return false;
+    if (!next) { const k = `${String(fromBeatId || "")}::${String(ch?.label || "").trim()}`; return (fromBeatId && _storyStateFor(campaign?.id)?.asked?.[k]) ? "soft" : false; }
     const tgt = (campaign?.beats || []).find(b => String(b?.id) === next); if (!tgt) return false;
     let played = !!_storyStateFor(campaign?.id)?.played?.[next];
     if (!played) { const ds = _readDirectorState() || {}; played = !!(ds.firedStoryBeats?.[next] || ds.dialogueFired?.[next]); }
@@ -7299,7 +7300,21 @@ async function dialogueStoryStateFor(_actorId = null) {
 // X" sat active for as long as the party kept walking the town. Called at
 // every choice-pick site (menu + dialogue enact) and, as a fallback for
 // choice-less speaker beats, from the resolve listener. Idempotent, GM-only.
+// ASKED, EVEN WHEN IT LEADS NOWHERE (2026-11-02 click-through, Dave: "Why do you keep asking when does the parade start?"): a choice
+// greys by the beat it leads to — a check whose success ends the scene leads nowhere, so it looked unasked on every visit. Every
+// pick is noted in the story store (st.asked["beatId::label"]); _choiceSpent soft-greys a taken route-less choice (still clickable).
+async function _noteChoiceTaken(beat, choice) {
+  try {
+    if (!game.user?.isGM || !beat?.id || !choice) return;
+    if (String(choice.next || "").trim()) return;                 // routed choices grey by their target already
+    const cid = getActiveCampaignId(); if (!cid) return;
+    const key = `${beat.id}::${String(choice.label || "").trim()}`;
+    if (_storyStateFor(cid)?.asked?.[key]) return;
+    await _storyMutate(cid, (st) => { st.asked = st.asked || {}; st.asked[key] = Date.now(); return []; });
+  } catch (e) { warn("[asked] note failed", e); }
+}
 async function _answerSpeakerWord(beat, choice = null) {
+  try { await _noteChoiceTaken(beat, choice); } catch (_eNT) {}
   try {
     if (!game.user?.isGM) return false;
     const sid = String(beat?.speakerActorId || "").trim();
