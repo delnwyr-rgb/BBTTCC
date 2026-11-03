@@ -7,10 +7,14 @@ const SOFT_LANDING_EXIT = (() => {
   function apply(camp) {
     const beats = Array.isArray(camp.beats) ? camp.beats : Object.values(camp.beats || {});
     const report = [], conflicts = []; let changes = 0;
-    const hub = beats.find(b => b?.label === "Soft Landing — Challenged by Pool Noodles");
-    if (!hub) { conflicts.push("Soft Landing hub not found"); return { changes, report, conflicts }; }
-    const hasExit = (hub.choices || []).some(c => /^\W*(leave|back|ready to move on|not now)/i.test(String(c?.label || "")) && !c.next);
-    if (!hasExit) { (hub.choices = hub.choices || []).push({ label: "Leave.", next: "", description: "", checkStat: "", checkDC: 0, failNext: "" }); changes++; report.push(`✚ ${hub.id}: Leave.`); }
+    // 2026-11-03: the East Wall's Tor-Wrath win card ("What Leaned on It") offered only "Tell Pike — tally the swings", which is
+    // once-locked when the Tally was already played (the NOW skip fixed in a0f09803) → no button at all. It gets a way out too.
+    const targets = [beats.find(b => b?.label === "Soft Landing — Challenged by Pool Noodles"), beats.find(b => b?.id === "ag_east_wall_tor_wrath_won")];
+    for (const hub of targets) {
+      if (!hub) { conflicts.push("target beat not found"); continue; }
+      const hasExit = (hub.choices || []).some(c => /^\W*(leave|back|ready to move on|not now)/i.test(String(c?.label || "")) && !c.next);
+      if (!hasExit) { (hub.choices = hub.choices || []).push({ label: "Leave.", next: "", description: "", checkStat: "", checkDC: 0, failNext: "" }); changes++; report.push(`✚ ${hub.id}: Leave.`); }
+    }
     return { changes, report, conflicts };
   }
   return { apply };
