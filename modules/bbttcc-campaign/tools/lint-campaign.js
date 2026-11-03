@@ -1178,13 +1178,22 @@ for (const b of beats) {
   for (const b of beats) if (s(b?.speakerActorId) && labeledChoices(b).length && b.dialogueOffer !== false) reached.add(s(b.id));
   for (const ov of Object.values(campaign.hexOverrides || {})) for (const id of [...(Array.isArray(ov?.onEnterBeatIds) ? ov.onEnterBeatIds : []), ov?.onEnterBeatId, ov?.beatId]) if (s(id)) reached.add(s(id));
   for (const b of beats) { if (s(b?.handoff?.beatId)) reached.add(s(b.handoff.beatId)); for (const c of (b?.choices || [])) { if (s(c?.next)) reached.add(s(c.next)); if (s(c?.failNext)) reached.add(s(c.failNext)); } }
+  // a Battle / Heist / Parley / performance offer routes its outcomes to beats (worldEffects.raid.routes, .performance.routes)
+  for (const b of beats) for (const blk of [b?.worldEffects?.raid, b?.worldEffects?.performance]) { const rt = blk && typeof blk === "object" ? blk.routes : null; if (rt && typeof rt === "object") for (const v of Object.values(rt)) for (const x of (Array.isArray(v) ? v : [v])) if (s(typeof x === "object" ? x?.beatId : x)) reached.add(s(typeof x === "object" ? x.beatId : x)); }
   const tableTxt = tables ? JSON.stringify(tables) : "";
   if (SMp && typeof SMp.placeOf === "function") {
     for (const b of beats) {
       if (!b || !s(b.id) || deferredP(b)) continue;
       let p = null; try { p = SMp.placeOf(b, null); } catch (_e) { p = null; }
-      if (p !== "anywhere") continue;
       const id = s(b.id);
+      if (p !== "anywhere") {
+        // P11 (2026-11-02, the Hidden Vault's breadcrumb): a beat PLACED at a hex (where / its quest's hex) still needs something that
+        // plays it there — a hex arrival, a route, a table, autoFire. `where` alone only refuses it elsewhere; nothing fires it.
+        if (b.inject?.autoFire === true || (b.pinLeg && typeof b.pinLeg === "object") || tagsOf(b).includes("reality-tear") || /^\(GM\)/.test(s(b.label))) continue;
+        if (reached.has(id) || CODE_FIRED.has(id) || /_exterior$/.test(id) || (tableTxt && tableTxt.includes(`"${id}"`))) continue;
+        F("P11", "WARN", id, `placed at "${p}" but nothing plays it — no hex arrival, route, road table or autoFire reaches it (\`where\` only refuses it elsewhere)`);
+        continue;
+      }
       if (b.inject?.autoFire === true) continue;   // hard-coded: plays itself when its requires hold (module.js _autoFireSweep)
       if (b.pinLeg && typeof b.pinLeg === "object") continue;   // a pinned travel leg wins its leg (hex-travel maybeInject)
       if (tagsOf(b).includes("reality-tear")) continue;          // drawn by tag on a Reality-Tear overshoot (module.js _drawAdversaryBeat)

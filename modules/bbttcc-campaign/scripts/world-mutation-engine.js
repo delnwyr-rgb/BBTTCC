@@ -1935,6 +1935,21 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
     } catch (ePf) { console.warn(TAG, "performance apply failed", ePf); }
 
+    // 2m') RENAME A FACTION (Dave 2026-11-02: "After the alliance they should change their name to the Evil Good Faction"):
+    // worldEffects.renameFaction = {factionId|factionName, name} | list — a story turn renames a Domain actor. Ids keep everything
+    // wired (relations, rigs, hexes carry ids, never names). Idempotent: an actor already so named is a no-op.
+    try {
+      const rnList = Array.isArray(we.renameFaction) ? we.renameFaction : (we.renameFaction && typeof we.renameFaction === "object" ? [we.renameFaction] : []);
+      for (const rn of rnList) {
+        const to = String(rn?.name || "").trim(); if (!to) continue;
+        const A = rn.factionId ? game.actors.get(String(rn.factionId).replace(/^Actor\./, "")) : (rn.factionName ? game.actors.getName(String(rn.factionName)) : null);
+        if (!A) { console.warn(TAG, "renameFaction: faction not found", rn, { beatId: beatCtx.beatId }); continue; }
+        if (A.name === to) continue;
+        const from = A.name; await A.update({ name: to }); changed = true; notes.push(`renameFaction:${from}→${to}`);
+        try { if (A.prototypeToken) await A.update({ "prototypeToken.name": to }); } catch (_eT) {}
+      }
+    } catch (eRN) { console.warn(TAG, "renameFaction apply failed", eRN); }
+
     // 2m) RIG TRANSFER (2026-10-04, Dave: the leased hovercraft can be bought or signed over): worldEffects.rigTransfer =
     // { rigName|rigId, to?: "@coalition" } — the rig becomes the coalition's: its owner flag moves to the campaign's lead faction,
     // every other coalition faction gets a STANDING charter on it from the lead (so all of them travel with it), and the coalition's

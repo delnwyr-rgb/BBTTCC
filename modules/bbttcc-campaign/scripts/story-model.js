@@ -263,6 +263,7 @@ export const QUEST_MAP = {
    "name": "The Hidden Vault",
    "act": 3,
    "keystone": false,
+   "evergreen": true,
    "hex": "PolygonWood.a",
    "registryId": "quest_hidden_vault",
    "chapters": {}
