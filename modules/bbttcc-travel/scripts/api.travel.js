@@ -285,8 +285,17 @@
     if (exclude && exclude.size) eligible = eligible.filter(ent => !exclude.has(String(ent.beatId || "")));
     if (!eligible.length) return { ok: false, reason: "drawn_this_ride", tableId };
 
-    const pick = weightedPick(eligible);
+    // THE PITY TIMER (2026-11-03): the campaign may lift a row's weight (the Wendigo, until the Forgotten Cause can start).
+    // A copy is weighed — the stored table is never touched.
+    let weighed = eligible;
+    try {
+      const tw = game.bbttcc?.api?.campaign?.travelWeight;
+      if (typeof tw === "function") weighed = eligible.map(ent => { const w0 = Number(ent && ent.weight); const w = tw(String(ent.beatId || ""), w0); return (Number.isFinite(w) && w !== w0) ? Object.assign({}, ent, { weight: w, __src: ent }) : ent; });
+    } catch (_eW) { weighed = eligible; }
+    const picked = weightedPick(weighed);
+    const pick = picked && picked.__src ? picked.__src : picked;
     if (!pick) return { ok: false, reason: "roll_failed", tableId };
+    const eligibleIds = eligible.map(ent => String(ent.beatId || ""));
 
     const cid = String(pick.campaignId || campaignId || "").trim() || null;
     const bid = String(pick.beatId || "").trim() || null;
@@ -306,7 +315,8 @@
       campaignId: cid,
       beatId: bid,
       encounterKey: encounterKey || bid,
-      label
+      label,
+      eligibleIds
     };
   }
 
@@ -597,6 +607,7 @@
       });
       if (pick && pick.ok) {
         if (factionId) _rideNoteDraw(factionId, pick.beatId);
+        try { const td = game.bbttcc?.api?.campaign?.travelDrawn; if (typeof td === "function") td(pick.beatId, pick.eligibleIds || []); } catch (_eTD) {}   // the pity timer counts the draw
         return {
           ok: true,
           pick,

@@ -55,6 +55,12 @@ const DIRECTOR_PRESSURE = { turn: 30, leg: 8, raidRound: 10, beat: 3 };
 const SETTING_WENDIGO_RUNG = "wendigoRung";
 const SETTING_DOUGAN_POINTED = "wendigoDouganPointed"; // step 4: Dougan has pointed to the Confluence (fire-once)
 const WENDIGO_RUNG_MAX = 4;
+// THE PITY TIMER (Dave 2026-11-03, failure pass: "The rungs are all random encounters"): until the rung reaches the quest's start
+// (2 — "meet them twice"), every road draw from a table that could have rolled the Wendigo and didn't raises its weight there:
+// w × (n+1)(n+2)/2 → 2, 6, 12, 20 … A Wendigo meeting resets the drought. From rung 2 on the tables are left alone.
+const SETTING_WENDIGO_DROUGHT = "wendigoDrought";
+const WENDIGO_ROAD_BEAT = "fc_road_wendigo";
+const WENDIGO_PITY_UNTIL_RUNG = 2;
 const WENDIGO_TRAVEL_BEAT_IDS = new Set([
   "fc_road_wendigo",   // the Wendigo's own road meeting climbs the rung (2026-11-02: the opener needed rung ≥ 1 and nothing on the roads raised it)
   "acid_bog_logistics_success",
@@ -913,7 +919,9 @@ function getTable(id) {
 }
 
 async function saveTable(id, data) {
-  if (!id) throw new Error("saveTable: id required");
+  // 2026-11-03: a saveTable(tableObject) call once keyed a stale river table as "[object Object]" — accept the one-arg form, refuse non-string ids
+  if (id && typeof id === "object" && data === undefined) { data = id; id = id.id; }
+  if (!id || typeof id !== "string") throw new Error("saveTable: id (string) required");
   const all = getAllTables();
   all[id] = _normalizeTable(id, data);
   await setAllTables(all);
@@ -922,7 +930,9 @@ async function saveTable(id, data) {
 }
 
 async function createTable(id, data = {}) {
-  if (!id) throw new Error("createTable: id required");
+  // 2026-11-03: a createTable(tableObject) call once keyed a stale river table as "[object Object]" — accept the one-arg form, refuse non-string ids
+  if (id && typeof id === "object" && data === undefined || (id && typeof id === "object" && data && !Object.keys(data).length)) { data = id; id = id.id; }
+  if (!id || typeof id !== "string") throw new Error("createTable: id (string) required");
   const all = getAllTables();
   if (all[id]) return _normalizeTable(id, all[id]);
   all[id] = _normalizeTable(id, data);
@@ -1898,6 +1908,12 @@ function _choiceHasCheck(ch) {
 
 function _choiceCheckLabel(key) {
   const k = String(key || "").trim().toLowerCase();
+  // 2026-11-02 (failure pass): on RFI the GM's check dialog named the dnd5e skill the content was authored with ("Persuasion",
+  // "Arcana", "Nature") — skills an RFI sheet doesn't have, so the table rolled nothing real. Name the RFI skill the code
+  // aliases to (the same table the auto-roll uses). The D&D port keeps its D&D labels.
+  try {
+    if (game.system?.id === "fourththing" && _FT_SKILL_ALIASES[k]) { const s = _FT_SKILL_ALIASES[k]; return s.charAt(0).toUpperCase() + s.slice(1); }
+  } catch (_eAl) {}
   const map = {
     gm: "GM Adjudication",
     // fourththing faculties (2026-09-25) — checkStat may name a faculty directly; the roll path already handles it
@@ -1922,12 +1938,6 @@ function _choiceCheckLabel(key) {
     arc: "Arcana",
     ath: "Athletics",
     dec: "Deception",
-  // 2026-11-02 (failure pass): on RFI the GM's check dialog named the dnd5e skill the content was authored with ("Persuasion",
-  // "Arcana", "Nature") — skills an RFI sheet doesn't have, so the table rolled nothing real. Name the RFI skill the code
-  // aliases to (the same table the auto-roll uses). The D&D port keeps its D&D labels.
-  try {
-    if (game.system?.id === "fourththing" && _FT_SKILL_ALIASES[k]) { const s = _FT_SKILL_ALIASES[k]; return s.charAt(0).toUpperCase() + s.slice(1); }
-  } catch (_eAl) {}
     his: "History",
     ins: "Insight",
     itm: "Intimidation",
@@ -2441,6 +2451,7 @@ const _FT_SKILL_ALIASES = {
   prf: "performance", ath: "athletics", acr: "athletics", ste: "stealth",
   slt: "streetwise", dec: "streetwise", itm: "intimidation", med: "meditation",
   dip: "diplomacy", emp: "empathy", pil: "piloting", hac: "hacking", tin: "tinkering",
+  con: "body",   // 2026-11-02 (failure pass): Weather Front "Keep Moving · Constitution" — dnd5e CON = RFI Body (a faculty; the roll path takes it directly)
   // 2026-08-22 armor-skill rename: weave→fitting (light), warding→bracing (medium).
   weave: "fitting", warding: "bracing"
 };
@@ -2465,7 +2476,6 @@ async function _withSecretRollMode(choice, fn) {
 }
 async function _rollChoiceCheck(choice, ctx={}) {
   const stat = String(choice.checkStat || "").trim().toLowerCase();
-  con: "body",   // 2026-11-02 (failure pass): Weather Front "Keep Moving · Constitution" — dnd5e CON = RFI Body (a faculty; the roll path takes it directly)
   const dc = _num(choice.checkDC, 0);
   const supportKey = String((ctx.supportOpKey || (ctx.support || {}).opKey) || "").trim().toLowerCase();
   const supportSpend = _num((ctx.supportSpend != null ? ctx.supportSpend : (ctx.support || {}).spend), 0);
@@ -6159,7 +6169,15 @@ async function _beatRequiresMet(beat, campaign, ctx) {
           // STORY FLOW (2026-09-17): a beatMark with no quest reads the ONE store — met iff the beat has been played
           // (the Confessor's candle waits on the Upper Galleries + Etta's exit; the negotiation waits on Garren's spanner)
           // `not: true` (2026-09-18, the Day's End terminal): met iff the beat has NOT been played
-          let playedMark = false; try { playedMark = !!_storyStateFor(campaign?.id)?.played?.[String(c.beatMark)]; } catch (_eSt) {}
+          let playedMark = false, playedRec = null; try { playedRec = _storyStateFor(campaign?.id)?.played?.[String(c.beatMark)] || null; playedMark = !!playedRec; } catch (_eSt) {}
+          // `turnsSince: N` (2026-11-03, Dave: a failed Summit "can't try again for a round"): met iff the beat was played AND at
+          // least N turns have passed since it last played. With `not: true`: met iff it never played OR fewer than N turns passed.
+          if (c.turnsSince != null && playedMark) {
+            const gap = _getTurnNumberSafe() - (Number(playedRec?.turn) || 0);
+            const aged = gap >= (Number(c.turnsSince) || 0);
+            if (aged !== (c.not === true)) continue;
+            return false;
+          }
           if (playedMark !== (c.not === true)) continue;
           return false;
         }
@@ -8365,6 +8383,32 @@ function _applyCampaignStory(campaign) {
   if (story) log(`[story-data] applied ${r.quests} quest(s) + ${r.scripts} script(s) from campaign '${campaign?.id}'`);
   return true;
 }
+// beatId → [requires…] for beats entered ONLY through gated buttons (see ENTRY GATES in _storySituation). null entry = no gate.
+let _entryGateCache = { key: "", ts: 0, val: null };
+function _storyEntryGates(campaign) {
+  const key = `${campaign?.id}|${(campaign?.beats || []).length}`;
+  if (_entryGateCache.val && _entryGateCache.key === key && Date.now() - _entryGateCache.ts < 30000) return _entryGateCache.val;
+  const out = new Map();
+  try {
+    const beats = Array.isArray(campaign?.beats) ? campaign.beats : [];
+    const gated = new Map(), open = new Set();
+    for (const p of beats) for (const c of (p?.choices || [])) {
+      const req = Array.isArray(c?.requires) ? c.requires : (c?.requires ? [c.requires] : []);
+      const t = String(c?.next || "");
+      if (t) { if (req.length) { if (!gated.has(t)) gated.set(t, []); gated.get(t).push(req); } else open.add(t); }
+      if (c?.failNext) open.add(String(c.failNext));   // a missed check lands there — never gate it on the button
+    }
+    // anything else that can start a beat
+    for (const b of beats) { for (const k of ["success", "failure"]) if (b?.outcomes?.[k]) open.add(String(b.outcomes[k])); if (b?.inject?.autoFire) open.add(String(b.id)); if (b?.worldEffects?.runBeat) open.add(String(b.worldEffects.runBeat?.beatId || b.worldEffects.runBeat)); }
+    for (const v of Object.values(campaign?.hexOverrides || {})) for (const k of ["onEnterBeatId", "onClaimBeatId", "beatId"]) if (v?.[k]) open.add(String(v[k]));
+    try { for (const sc of (game.scenes?.contents || [])) for (const d of (sc.drawings?.contents || [])) { const cf = d.flags?.["bbttcc-territory"]?.campaign; if (cf?.onEnterBeatId) open.add(String(cf.onEnterBeatId)); } } catch (_eD) {}
+    try { let tables = game.settings.get("bbttcc-campaign", "encounterTables"); if (typeof tables === "string") tables = JSON.parse(tables); for (const t of Object.values(tables || {})) for (const e of (t?.entries || [])) if (e?.beatId) open.add(String(e.beatId)); } catch (_eT) {}
+    if (campaign?.openingBeatId) open.add(String(campaign.openingBeatId));
+    for (const [id, reqs] of gated) { const b = beats.find(x => String(x?.id) === id); if (!b || b.questStep == null || open.has(id)) continue; out.set(id, reqs); }
+  } catch (e) { warn("[story] entry gates failed", e); }
+  _entryGateCache = { key, ts: Date.now(), val: out };
+  return out;
+}
 async function _storySituation(campaign, { full = false } = {}) {
   try { _applyCampaignStory(campaign); } catch (eSD) { warn("story data apply failed:", eSD); }
   if (!campaign) return null;
@@ -8395,32 +8439,6 @@ async function _storySituation(campaign, { full = false } = {}) {
     // Review 2026-09-14: unknown readiness is OPTIMISTIC (the model picks the first candidate in story order),
     // the picks get real gate evaluation, and we re-derive until no new beat needs evaluating — so a gated-
     // but-met beat is never skipped for an ungated one further down.
-// beatId → [requires…] for beats entered ONLY through gated buttons (see ENTRY GATES in _storySituation). null entry = no gate.
-let _entryGateCache = { key: "", ts: 0, val: null };
-function _storyEntryGates(campaign) {
-  const key = `${campaign?.id}|${(campaign?.beats || []).length}`;
-  if (_entryGateCache.val && _entryGateCache.key === key && Date.now() - _entryGateCache.ts < 30000) return _entryGateCache.val;
-  const out = new Map();
-  try {
-    const beats = Array.isArray(campaign?.beats) ? campaign.beats : [];
-    const gated = new Map(), open = new Set();
-    for (const p of beats) for (const c of (p?.choices || [])) {
-      const req = Array.isArray(c?.requires) ? c.requires : (c?.requires ? [c.requires] : []);
-      const t = String(c?.next || "");
-      if (t) { if (req.length) { if (!gated.has(t)) gated.set(t, []); gated.get(t).push(req); } else open.add(t); }
-      if (c?.failNext) open.add(String(c.failNext));   // a missed check lands there — never gate it on the button
-    }
-    // anything else that can start a beat
-    for (const b of beats) { for (const k of ["success", "failure"]) if (b?.outcomes?.[k]) open.add(String(b.outcomes[k])); if (b?.inject?.autoFire) open.add(String(b.id)); if (b?.worldEffects?.runBeat) open.add(String(b.worldEffects.runBeat?.beatId || b.worldEffects.runBeat)); }
-    for (const v of Object.values(campaign?.hexOverrides || {})) for (const k of ["onEnterBeatId", "onClaimBeatId", "beatId"]) if (v?.[k]) open.add(String(v[k]));
-    try { for (const sc of (game.scenes?.contents || [])) for (const d of (sc.drawings?.contents || [])) { const cf = d.flags?.["bbttcc-territory"]?.campaign; if (cf?.onEnterBeatId) open.add(String(cf.onEnterBeatId)); } } catch (_eD) {}
-    try { let tables = game.settings.get("bbttcc-campaign", "encounterTables"); if (typeof tables === "string") tables = JSON.parse(tables); for (const t of Object.values(tables || {})) for (const e of (t?.entries || [])) if (e?.beatId) open.add(String(e.beatId)); } catch (_eT) {}
-    if (campaign?.openingBeatId) open.add(String(campaign.openingBeatId));
-    for (const [id, reqs] of gated) { const b = beats.find(x => String(x?.id) === id); if (!b || b.questStep == null || open.has(id)) continue; out.set(id, reqs); }
-  } catch (e) { warn("[story] entry gates failed", e); }
-  _entryGateCache = { key, ts: Date.now(), val: out };
-  return out;
-}
     for (let round = 0; round < 8; round++) {
       const pass = deriveSituation({ ...base, optimistic: true, readyOf: id => memo.get(String(id)) || null });
       let fresh = 0;
@@ -9477,6 +9495,9 @@ function buildCampaignAPI() {
       return wm.applyWorldEffects({ id: "ride-handoff", worldEffects: { openTravel: { hexName: dest, ...(note ? { note } : {}) } } },
         { source: "bbttcc-campaign", campaignId: c?.id || null, campaignTitle: c?.label || "", factionId: c?.factionId || (c?.factionIds || [])[0] || null });
     },
+    // pity timer hooks, read by bbttcc-travel's table pick (2026-11-03)
+    travelWeight: (beatId, weight) => _wendigoTravelWeight(beatId, weight),
+    travelDrawn: (beatId, eligibleIds) => _wendigoTravelDrawn(beatId, eligibleIds),
     getActiveCampaignId,
     setActiveCampaignId,
     builderClass: null
@@ -9494,6 +9515,32 @@ function buildCampaignAPI() {
 function _wendigoRungGet() {
   try { return Number(game.settings.get(MOD_ID, SETTING_WENDIGO_RUNG)) || 0; }
   catch (_e) { return 0; }
+}
+function _wendigoDroughtGet() {
+  try { return Math.max(0, Number(game.settings.get(MOD_ID, SETTING_WENDIGO_DROUGHT)) || 0); }
+  catch (_e) { return 0; }
+}
+// Called per eligible row while the travel module weighs a table. Pure read — never writes.
+function _wendigoTravelWeight(beatId, weight) {
+  const w = (Number.isFinite(Number(weight)) && Number(weight) > 0) ? Number(weight) : 1;
+  if (String(beatId || "") !== WENDIGO_ROAD_BEAT) return w;
+  if (_wendigoRungGet() >= WENDIGO_PITY_UNTIL_RUNG) return w;
+  const n = Math.min(10, _wendigoDroughtGet());
+  return w * (n + 1) * (n + 2) / 2;
+}
+// Called once per successful road pick with the ids that were eligible on that table. GM-only write.
+async function _wendigoTravelDrawn(beatId, eligibleIds) {
+  try {
+    if (!game.user?.isGM) return;
+    const ids = Array.isArray(eligibleIds) ? eligibleIds.map(String) : [];
+    if (!ids.includes(WENDIGO_ROAD_BEAT)) return;                  // this table could not have rolled the Wendigo
+    const cur = _wendigoDroughtGet();
+    if (String(beatId) === WENDIGO_ROAD_BEAT) { if (cur) { await game.settings.set(MOD_ID, SETTING_WENDIGO_DROUGHT, 0); log(`[wendigo-pity] met — drought ${cur} → 0.`); } return; }
+    if (_wendigoRungGet() >= WENDIGO_PITY_UNTIL_RUNG) return;
+    const next = Math.min(10, cur + 1);
+    await game.settings.set(MOD_ID, SETTING_WENDIGO_DROUGHT, next);
+    log(`[wendigo-pity] '${beatId}' drawn instead — drought ${cur} → ${next} (Wendigo weight ×${(next + 1) * (next + 2) / 2}).`);
+  } catch (e) { warn("[wendigo-pity] drought update failed:", e); }
 }
 // Post Mal's per-rung "something OFF" card for the given (post-increment) rung.
 async function _postWendigoRungCard(rung) {
@@ -9648,13 +9695,24 @@ async function _onBeatResolvedDouganPointer({ beat, campaign } = {}) {
   try {
     if (!game.user?.isGM) return;
     if (beat?.id !== "fixit_gullywasher_welcome") return;   // 2026-10-20: the Q&A merged into the welcome (fixit_gullywasher_interior_convo retired)
-    if (_wendigoRungGet() < 3) return;
+    // 2026-11-03 (failure pass, Dave): "met twice" — the script, the giver line and "The Shape of the Wrongness" all say rung 2.
+    if (_wendigoRungGet() < 2) return;
     if (game.settings.get(MOD_ID, SETTING_DOUGAN_POINTED)) return;     // already pointed
     const campaignId = campaign?.id || getActiveCampaignId();
     if (!campaignId) return;
-    await game.settings.set(MOD_ID, SETTING_DOUGAN_POINTED, true);     // latch BEFORE firing
-    log("[dougan] rung>=3 at the Gullywasher → pointing to the Confluence.");
-    await game.bbttcc.api.campaign.runBeat(campaignId, "gullywasher_dougan_points_to_confluence");
+    // Gully or Dougan: the bartender only gives his name to a party that bought the Third Round. The pointer used to always run
+    // the Dougan variant (gated on the Third Round) — a party without it was latched and never pointed at all.
+    let third = false; try { third = !!_storyStateFor(campaignId)?.played?.rc_gully_third_round; } catch (_e) {}
+    const id = third ? "gullywasher_dougan_points_to_confluence" : "gullywasher_gully_points_to_confluence";
+    await game.settings.set(MOD_ID, SETTING_DOUGAN_POINTED, true);     // latch BEFORE firing (its "Back to the bar" re-resolves the welcome)
+    log(`[dougan] rung>=2 at the Gullywasher → ${id}.`);
+    let res = null; try { res = await game.bbttcc.api.campaign.runBeat(campaignId, id); } catch (e) { warn(`[dougan] ${id} failed:`, e); }
+    await new Promise(r => setTimeout(r, 1500));
+    let played = false; try { played = !!_storyStateFor(campaignId)?.played?.[id]; } catch (_e) {}
+    if (!played && res?.ok !== true) {   // refused (a gate) — un-latch so the next round at the bar tries again
+      await game.settings.set(MOD_ID, SETTING_DOUGAN_POINTED, false);
+      warn(`[dougan] ${id} did not play — the pointer stays armed.`, res);
+    }
   } catch (e) {
     warn("[dougan] pointer failed:", e);
   }
@@ -10004,6 +10062,14 @@ Hooks.once("init", () => {
   game.settings.register(MOD_ID, SETTING_WENDIGO_RUNG, {
     name: "Bad Eden Wendigo Rung",
     hint: "Internal: per-world Wendigo 'something OFF' escalation meter (0–4). Do not edit manually.",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 0
+  });
+  game.settings.register(MOD_ID, SETTING_WENDIGO_DROUGHT, {
+    name: "Bad Eden Wendigo Drought",
+    hint: "Internal: road draws on Wendigo tables since the last Wendigo meeting (the pity timer). Do not edit manually.",
     scope: "world",
     config: false,
     type: Number,
