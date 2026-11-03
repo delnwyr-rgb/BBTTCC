@@ -1922,6 +1922,12 @@ function _choiceCheckLabel(key) {
     arc: "Arcana",
     ath: "Athletics",
     dec: "Deception",
+  // 2026-11-02 (failure pass): on RFI the GM's check dialog named the dnd5e skill the content was authored with ("Persuasion",
+  // "Arcana", "Nature") — skills an RFI sheet doesn't have, so the table rolled nothing real. Name the RFI skill the code
+  // aliases to (the same table the auto-roll uses). The D&D port keeps its D&D labels.
+  try {
+    if (game.system?.id === "fourththing" && _FT_SKILL_ALIASES[k]) { const s = _FT_SKILL_ALIASES[k]; return s.charAt(0).toUpperCase() + s.slice(1); }
+  } catch (_eAl) {}
     his: "History",
     ins: "Insight",
     itm: "Intimidation",
@@ -2430,7 +2436,7 @@ async function _sacrificeHpToFactionOp(actor, faction, opKey, hpCost, reason) {
 // (2d10x10 + faculty + rank, Surge-aware). Freeform stats like
 // "Investigation (Mind)" resolve by their first word.
 const _FT_SKILL_ALIASES = {
-  per: "perception", prc: "perception", inv: "investigation", ins: "insight",
+  per: "diplomacy", prc: "perception", inv: "investigation", ins: "insight",   // 2026-11-02: dnd5e per = PERSUASION (prc is Perception) → Diplomacy (core dice seam maps diplomacy ↔ per)
   arc: "occult", rel: "faith", nat: "lore", his: "lore", sur: "lore",
   prf: "performance", ath: "athletics", acr: "athletics", ste: "stealth",
   slt: "streetwise", dec: "streetwise", itm: "intimidation", med: "meditation",
