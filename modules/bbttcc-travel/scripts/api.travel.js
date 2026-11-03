@@ -1546,5 +1546,29 @@
   }
 
   Hooks.once("ready", () => { publishAPI(); installDriftGuard(); });
+
+  // A TOWN MAP IS WHERE THE PARTY IS — when nobody knows (2026-11-02, failure-pass golden reset): the golden reset clears
+  // every recorded position (owner ruling 10-26), then the opening walks the party into Allesh-Gilliam's town map — but
+  // nothing recorded it, so the first story ride ("Ride for Khezek-Tor") opened a console with no start hex ("No faction
+  // token found on the map"). A town hub scene carries its hex (flags.bbttcc-travel.hexUuid); when that scene is drawn
+  // and a coalition faction's position is UNKNOWN, adopt the town's hex. A known position is never overwritten (a GM
+  // browsing a town map doesn't teleport anyone).
+  Hooks.on("canvasReady", async () => {
+    try {
+      if (!game.user?.isGM) return;
+      const gx = game.bbttcc?.api?.gmExec; const p = (typeof gx?.primaryGmId === "function") ? gx.primaryGmId() : game.users?.activeGM?.id;
+      if (p && p !== game.user.id) return;
+      const f = canvas?.scene?.flags?.["bbttcc-travel"] || {};
+      if (!f.isTownHub || !f.hexUuid) return;
+      const capi = game.bbttcc?.api?.campaign; const camp = capi?.getCampaign?.(capi?.getActiveCampaignId?.());
+      const ids = [...new Set([camp?.factionId, ...(camp?.factionIds || [])].map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean))];
+      for (const fid of ids) {
+        if (!game.actors.get(fid)) continue;
+        if (whereIs(fid)) continue;
+        const r = await setPosition(fid, f.hexUuid);
+        if (r?.ok) log(`Town map ${canvas.scene.name}: ${game.actors.get(fid)?.name} had no recorded position — now at ${r.name || r.hexUuid}.`);
+      }
+    } catch (e) { console.warn(TAG, "town-map position adopt failed", e); }
+  });
   try { if (game && game.ready) { publishAPI(); installDriftGuard(); } } catch (_e) {}
 })();
