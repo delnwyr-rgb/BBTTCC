@@ -11881,6 +11881,23 @@ function _ftPressureRated(actor) {
   return !!foundry.utils.getProperty(actor, "flags.fourththing.pressureRated")
       || !!foundry.utils.getProperty(actor, "flags.fourththing.aquaticAdapted");
 }
+// IN THE HULL (Dave 2026-11-02: the bite comes "if the players leave the sub in suits that aren't pressure rated"): a character whose
+// Domain owns or charters a water-sub rig rated for the band is inside its pressure hull — no breath spent, no crush — unless they have
+// stepped OUT (flags.fourththing.outsideHull, set and cleared by the story's worldEffects.depthExposure). Getting to the band at all
+// already took the sub (travel.dive gates on it).
+function _ftInHull(actor, band) {
+  try {
+    if (foundry.utils.getProperty(actor, "flags.fourththing.outsideHull") === true) return false;
+    const fid = String(foundry.utils.getProperty(actor, "flags.bbttcc-factions.factionId") || "").replace(/^Actor\./, "");
+    if (!fid) return false;
+    // the party rides together: the actor's own Domain, or any Domain of the active campaign's coalition, may own the sub
+    const ids = new Set([fid]);
+    try { const capi = game.bbttcc?.api?.campaign; const c = capi?.getCampaign?.(capi?.getActiveCampaignId?.()); for (const x of [].concat(c?.factionId ? [c.factionId] : [], c?.factionIds || [])) ids.add(String(x || "").replace(/^Actor\./, "")); } catch (_eC) {}
+    const need = FT.DEPTH_BANDS?.[band] || 0;
+    for (const id of ids) { const depth = Number(game.bbttcc?.api?.travel?.domains?.factionSubDepth?.(id)); if (Number.isFinite(depth) && depth > 0 && depth >= need) return true; }
+    return false;
+  } catch (_e) { return false; }
+}
 
 // ── Aerial — environmental bite for sky / orbit scenes ──────────────────────
 // Mirrors submersion. A scene flagged flags.fourththing.aloft = { band } makes
@@ -20342,6 +20359,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
   }
 
+  // The story's out-of-combat clock (2026-11-02): one bite per beat spent outside the hull — worldEffects.depthExposure calls these.
+  try { game.fourththing = game.fourththing || {}; game.fourththing.submersion = { tick: _ftSubmersionTurn, clear: _ftClearSubmersion, inHull: _ftInHull, immune: _ftSubmersionImmune, pressureRated: _ftPressureRated, bands: FT.DEPTH_BANDS }; } catch (_eSub) {}
+
   // ── Aerial — per-turn bite (airborne / falling / vacuum) ────────────────────
   async function _ftClearAloft(actor) {
     for (const k of ["airborne", "falling", "vacuum"]) await _ftEnsureCondition(actor, k, false);
@@ -20443,7 +20463,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const sysSnap = actor.system?.system ?? actor.system;
     const walkFt  = Number(sysSnap?.derived?.movement?.walk) || 30;
     const _subBand   = _ftActorSubmersionBand(actor);
-    const _submerged = !!_subBand && !_ftSubmersionImmune(actor);
+    const _submerged = !!_subBand && !_ftSubmersionImmune(actor) && !_ftInHull(actor, _subBand);
     const _swimFt    = Number(sysSnap?.derived?.movement?.swim) || 0;
     const _aloftBand = _ftActorAloftBand(actor);
     const _aloft     = !!_aloftBand;

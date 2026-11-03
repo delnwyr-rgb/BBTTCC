@@ -1935,6 +1935,76 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
     } catch (ePf) { console.warn(TAG, "performance apply failed", ePf); }
 
+    // 2m-dive) DIVE (Dave 2026-11-02, the Binah dive expedition): worldEffects.dive = {band?: reef|deep|abyss, hexName?, audience?} — the
+    // story takes the table DOWN through the same gate as the Travel Console's Dive Here (api.travel.dive: the lead Domain needs a
+    // water-sub rated for the band; no sub → refused). Default audience "activate" (the whole table). A refusal posts a GM card with
+    // the reason and the Rig Builder's Submersible as the way to get one.
+    try {
+      const dv = we.dive && typeof we.dive === "object" ? we.dive : null;
+      if (dv) {
+        const T = get(game, "bbttcc.api.travel", null);
+        const capi = get(game, "bbttcc.api.campaign", null); const cid = capi?.getActiveCampaignId?.(); const camp = cid ? capi.getCampaign(cid) : null;
+        const lead = String((ctx && ctx.factionId) || camp?.factionId || (camp?.factionIds || [])[0] || "").replace(/^Actor\./, "");
+        const hexDoc = dv.hexName ? _findHexByName(dv.hexName) : (ctx?.hexUuid ? await resolveHexDoc(ctx.hexUuid) : null);
+        let res = null;
+        if (dv.surface === true) {   // back up one band (travel.surface climbs a band at a time, then the surface map)
+          try { res = await T?.surface?.({ audience: dv.audience || "activate" }); } catch (eS) { res = { ok: false, reason: String(eS?.message || eS) }; }
+          if (res?.ok !== false) { changed = true; notes.push("dive:surface"); }
+        }
+        // any coalition Domain's sub will do — the lead first, then the rest (Sweet Release may be the one that built it)
+        const coalD = [...new Set([lead, ...[].concat(camp?.factionIds || []).map(x => String(x || "").replace(/^Actor\./, ""))].filter(Boolean))];
+        const subOf = (fid) => { try { return Number(T?.domains?.factionSubDepth?.(fid)); } catch (_e) { return -1; } };
+        const diver = coalD.find(fid => subOf(fid) > 0) || lead;
+        if (dv.surface !== true && T?.dive && diver && hexDoc?.uuid) res = await T.dive(diver, hexDoc.uuid, { band: dv.band || undefined, audience: dv.audience || "activate" });
+        if (dv.surface === true) { /* handled above */ }
+        else if (res?.ok) {
+          changed = true; notes.push(`dive:${res.band}`);
+          // then: the beat that plays ONCE THE DIVE HAS LANDED (a refused dive plays nothing — the story waits for the hull)
+          if (dv.then) { const capi2 = get(game, "bbttcc.api.campaign", null); const thenId = String(dv.then); setTimeout(() => { try { capi2?.runBeat?.(cid, thenId, { source: "dive" }); } catch (_eT) {} }, Number(dv.thenDelayMs || 2500)); }
+        }
+        else {
+          const why = String(res?.reason || (!hexDoc ? "no-hex" : !lead ? "no-faction" : "unavailable"));
+          const msg = why === "no-sub" ? "nobody in the coalition has a submersible — build one in the Rig Builder (Submersible chassis)"
+            : why === "too-shallow" ? "the coalition's submersible isn't rated that deep" : why === "no-dive-link" ? "this hex has no depth scenes linked (Hex Config → Underwater)" : why;
+          try { await ChatMessage.create({ whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id), speaker: { alias: "Bad Eden" }, content: `<div style="border-left:3px solid #1f8fdd;padding:.35em .6em;">🌊 <b>The dive doesn't go</b> — ${foundry.utils.escapeHTML(msg)}.</div>` }); } catch (_eM) {}
+          console.warn(TAG, "dive refused", { why, beatId: beatCtx.beatId });
+        }
+      }
+    } catch (eDV) { console.warn(TAG, "dive apply failed", eDV); }
+
+    // 2m'') DEPTH EXPOSURE (Dave 2026-11-02: pressure bites "if the players leave the sub in suits that aren't pressure rated", in or
+    // out of combat): worldEffects.depthExposure = {outside?: true|false, tick?: true, band?} — outside:true = the coalition's Stewards
+    // suit up and step out of the hull (flags.fourththing.outsideHull) and take one bite; tick:true = one more bite per beat spent
+    // outside; outside:false = back aboard (flag cleared, breath refilled). The bite is the system's own (game.fourththing.submersion.tick:
+    // breath, drowning, crush by band); pressure-rated characters (flags.fourththing.pressureRated / aquaticAdapted) are exempt.
+    try {
+      const dx = we.depthExposure && typeof we.depthExposure === "object" ? we.depthExposure : null;
+      const SUB = get(game, "fourththing.submersion", null);
+      if (dx && SUB) {
+        const capi = get(game, "bbttcc.api.campaign", null); const cid = capi?.getActiveCampaignId?.(); const camp = cid ? capi.getCampaign(cid) : null;
+        const coal = new Set([].concat(camp?.factionId ? [camp.factionId] : [], camp?.factionIds || []).map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean));
+        // the party = each coalition Domain's ROSTER (flags.bbttcc-factions.roster — the same list the beat dialog's roster picker shows),
+        // not every Steward the Domain has ever had
+        const crew = []; const seenC = new Set();
+        for (const fid of coal) {
+          const F = game.actors.get(fid); const ros = F?.getFlag?.("bbttcc-factions", "roster") || [];
+          // an EMPTY roster = the Domain's own Stewards (characters linked by factionId) — the same fallback the beat dialog's roster uses
+          const members = ros.length ? ros.map(e => game.actors.get(String((typeof e === "string" ? e : (e?.uuid || e?.id)) || "").replace(/^Actor\./, ""))).filter(Boolean)
+            : game.actors.filter(a => a.type === "character" && String(a.flags?.["bbttcc-factions"]?.factionId || "").replace(/^Actor\./, "") === fid);
+          for (const A of members) if (!seenC.has(A.id)) { seenC.add(A.id); crew.push(A); }
+        }
+        const band = String(dx.band || canvas?.scene?.flags?.fourththing?.underwater?.band || "").trim();
+        for (const a of crew) {
+          if (dx.outside === false) { try { await a.unsetFlag("fourththing", "outsideHull"); } catch (_e) {} try { await SUB.clear(a); } catch (_e) {} continue; }
+          if (dx.outside === true) { try { await a.setFlag("fourththing", "outsideHull", true); } catch (_e) {} }
+          const out = a.flags?.fourththing?.outsideHull === true || dx.outside === true;
+          if (!out || !band || SUB.pressureRated(a) || SUB.immune(a)) continue;
+          if (dx.outside === true || dx.tick === true) { try { await SUB.tick(a, band); } catch (eT) { console.warn(TAG, "depthExposure tick failed", a.name, eT); } }
+        }
+        changed = true; notes.push(`depthExposure:${dx.outside === false ? "aboard" : dx.outside === true ? "outside" : "tick"}`);
+      } else if (dx && !SUB) console.warn(TAG, "depthExposure: system submersion API not available");
+    } catch (eDX) { console.warn(TAG, "depthExposure apply failed", eDX); }
+
     // 2m') RENAME A FACTION (Dave 2026-11-02: "After the alliance they should change their name to the Evil Good Faction"):
     // worldEffects.renameFaction = {factionId|factionName, name} | list — a story turn renames a Domain actor. Ids keep everything
     // wired (relations, rigs, hexes carry ids, never names). Idempotent: an actor already so named is a no-op.

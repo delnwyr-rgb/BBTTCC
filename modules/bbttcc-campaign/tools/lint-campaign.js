@@ -163,11 +163,13 @@ const routeTargets = (b) => {                          // [target, via] pairs th
   for (const [i, ch] of (b.choices || []).entries()) {
     if (!ch) continue;
     if (s(ch.next)) out.push([s(ch.next), `choice[${i}].next`]);
+    if (s(ch.worldEffects?.dive?.then)) out.push([s(ch.worldEffects.dive.then), `choice[${i}].worldEffects.dive.then`]);   // plays once the dive lands (WME 2m-dive)
     if (s(ch.checkStat)) {                                     // fail edges exist only when a check exists
       if (s(ch.failNext)) out.push([s(ch.failNext), `choice[${i}].failNext`]);
       else if (s(b.outcomes?.failure)) out.push([s(b.outcomes.failure), `choice[${i}] fail→outcomes.failure`]);
     }
   }
+  if (s(b.worldEffects?.dive?.then)) out.push([s(b.worldEffects.dive.then), "worldEffects.dive.then"]);
   if (s(b.phaseEntry?.to)) out.push([s(b.phaseEntry.to), "phaseEntry.to"]);
   if (s(b.handoff?.beatId)) {                                  // handoff posts the HUB's choices as GM-clicked doors; the hub itself never runs
     const hub = byId.get(s(b.handoff.beatId));
@@ -207,9 +209,13 @@ for (const b of beats) {
 if (s(campaign.openingBeatId) && !exists(campaign.openingBeatId)) F("G02", "ERROR", null, `campaign.openingBeatId '${campaign.openingBeatId}' does not exist`);
 const hexOnEnter = new Map();   // beatId → drawing uuid (campaign.hexOverrides; the live scene flags may hold MORE)
 for (const [uuid, ov] of Object.entries(campaign.hexOverrides || {})) {
-  const bid = s(ov?.onEnterBeatId); if (!bid) continue;
-  if (!exists(bid)) F("G02", "ERROR", null, `hexOverrides ${uuid}.onEnterBeatId '${bid}' does not exist`);
-  else { hexOnEnter.set(bid, uuid); addIn(bid, `hex:${uuid}`, "onEnter"); }
+  // onEnterBeatId (single) and onEnterBeatIds (the per-act list, first eligible plays — 2026-11-02: the list was not read here, so
+  // every beat a hex arrives into through a list looked stranded)
+  for (const bid of [s(ov?.onEnterBeatId), ...(Array.isArray(ov?.onEnterBeatIds) ? ov.onEnterBeatIds.map(s) : [])]) {
+    if (!bid) continue;
+    if (!exists(bid)) F("G02", "ERROR", null, `hexOverrides ${uuid} on-enter '${bid}' does not exist`);
+    else { hexOnEnter.set(bid, uuid); addIn(bid, `hex:${uuid}`, "onEnter"); }
+  }
 }
 // npcPlacements rules[].when share the gate grammar (module.js evaluates them via _beatRequiresMet)
 for (const pl of (Array.isArray(campaign.npcPlacements) ? campaign.npcPlacements : Object.values(campaign.npcPlacements || {}))) {
@@ -310,6 +316,7 @@ for (const b of beats) {
   if (s(b.speakerActorId) && labeledChoices(b).length && b.dialogueOffer !== false) root(b.id, "dialogue");
   if (s(b.targetHexUuid) || tagsOf(b).some(t => /^discovery$|onenter|on-enter|arrival/i.test(t))) root(b.id, "hex-arrival");
   if (b.questRole === "start") root(b.id, "quest-start");        // acceptance prompt / visualizer fresh route
+  if (b.inject?.autoFire === true) root(b.id, "autoFire");         // plays itself once its requires hold (module.js _autoFireSweep, 2026-11-02)
 }
 // hex.<slug> tags → on-enter entry (wire-hex-onenter-from-tags rule: sole claimant, else the questRole:start claimant)
 {
