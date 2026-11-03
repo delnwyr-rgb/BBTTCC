@@ -6579,8 +6579,10 @@ function installInjectorHooks() {
 // bypass of the reach/stability/identity gates, owner-locked 2026-07-01) with
 // OP caps lifted to the tier band. Reconcile re-runs on every turn tick so
 // late joiners and reincarnated stewards snap back onto the curve.
-// Owner-locked cadence ladder: one TIER per campaign arc — Valhaulan arc ends
-// at L6/T2, then L11/T3, L16/T4, L18+ epic gate.
+// Cadence ladder (owner ruling 2026-11-02, "lvl 9 is actually perfect"): PHASE_FLOORS is the ONE source of truth — Act 2 L2/T1,
+// Act 3 L4/T2, Act 4 L6/T3, Act 5 L8/T4, Act 6 L9/T4, so Part One ends at L9 with Daath's door open; Part Two climbs from L9 toward
+// the L18+ epic gate (Daath's knock). Beat levelEffects floors (the spine bridges 2–5, the finale 6) sit under the act ladder and
+// only ever matter if they are higher. (Superseded note: "Valhaulan arc ends at L6/T2, then L11/T3, L16/T4".)
 
 function _readDirectorState() {
   try {
