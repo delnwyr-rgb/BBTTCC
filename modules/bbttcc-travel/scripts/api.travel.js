@@ -1009,7 +1009,11 @@
             await new Promise(r => setTimeout(r, 500)); continue;
           }
           const settled = Number((game.bbttcc && game.bbttcc._encounterChainSettledTs) || 0) > deferT0;
-          if (settled) return { ok: true, via: "settled" };
+          // 2026-11-03 (failure pass, live-caught): the chain marks itself settled when the choice is PRESSED, while the GM's
+          // SUCCESS/FAIL adjudication for that choice is still open — the Crown Mall arrival opened over an Apex Predator's
+          // unrolled Intimidation check. Settled now also means nothing of ours is still on screen (the hard stop below still
+          // guarantees the arrival fires eventually).
+          if (settled && !hasBBTTCCModalOpen() && !isCombatActive()) return { ok: true, via: "settled" };
           const launched = Number((game.bbttcc && game.bbttcc._encounterChainLaunchedTs) || 0) > deferT0;
           if (launched) {
             // A LAUNCHED chain settles or times out — no inference lane at
