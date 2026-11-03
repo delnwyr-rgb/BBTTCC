@@ -859,7 +859,7 @@ const stewardshipTurn = {
         label: "Got the rhythm"
       });
       await _pause(600);
-      await ctx.speak("That's a Turn. In the living world you plan at the table, the GM runs it at Day's End, and the land answers in the morning.");
+      await ctx.speak("That's a Turn. In the living world you plan at the table, the GM locks the turn and runs it, and the land answers in the morning.");
       done();
     })().catch(e => { console.warn(TAG, "stewardship_turn detect failed", e); done(); });
     return null;
@@ -1036,7 +1036,7 @@ const crewOccult = {
           },
           {
             title: "When they walk",
-            body: `<p>On the last turn of a contract you get a card. At Day's End they go, and their maneuvers, bonuses and people go with them.</p>
+            body: `<p>On the last turn of a contract you get a card. When the turn locks they go, and their maneuvers, bonuses and people go with them.</p>
               <p>Once they've gone, hire them again at the Muster, or sign someone else. The <b>Retinue</b> card on your <b>Domain</b> tab shows who rides with you and for how long; the ✂ lets them go early — no refund.</p>
               <span class="bbttcc-deck-key">Loyalty you rent runs out on schedule. Plan the fight before the contract does.</span>`
           }

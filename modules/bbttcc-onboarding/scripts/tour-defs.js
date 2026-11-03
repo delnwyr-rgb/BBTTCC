@@ -298,7 +298,7 @@ const DOMAIN_TAB_STEPS = [
   {
     id: "next-turn", title: "Next turn — the plan",
     selector: ".ft-domain-turn",
-    text: "What your Domain will do when the Turn ticks. Nothing planned means nothing happens — plan the turn, then the GM runs it at Day's End."
+    text: "What your Domain will do when the Turn ticks. Nothing planned means nothing happens — plan the turn, then the GM locks the turn and runs it."
   },
   {
     id: "planner", title: "Plan the turn",

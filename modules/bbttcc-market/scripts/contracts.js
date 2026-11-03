@@ -159,7 +159,7 @@ async function sweep({ apply = true } = {}) {
       else if (Number(c.until) === t && c.noted !== t) {
         lastTurn++;
         try { await a.setFlag(CO, `contracts.${c.family}.noted`, t); } catch (_e) {}
-        _card(a, `⌛ Last turn: ${_esc(c.displayName)}`, `This is the last turn of ${_esc(a.name)}'s ${_esc(c.familyLabel.toLowerCase())} contract. They walk at Day's End — hire them again at the Muster after that to keep them.`);   // 10-29 (#23): an active contract can't be renewed, so "Renew at the Muster" sent players into a refusal
+        _card(a, `⌛ Last turn: ${_esc(c.displayName)}`, `This is the last turn of ${_esc(a.name)}'s ${_esc(c.familyLabel.toLowerCase())} contract. They walk when the turn locks — hire them again at the Muster after that to keep them.`);   // 10-29 (#23): an active contract can't be renewed, so "Renew at the Muster" sent players into a refusal
         try { Hooks.callAll("bbttcc:contract:lastTurn", { actorId: a.id, family: c.family, contract: c }); } catch (_e) {}
       }
     }

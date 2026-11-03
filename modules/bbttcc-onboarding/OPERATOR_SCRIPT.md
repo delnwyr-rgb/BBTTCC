@@ -98,7 +98,7 @@ Every line has an id (e.g. `meatsuit.03`, `tour.raid-console.05`) so a recording
 
 **`stewardship_turn.04`** The planner balked at that one— *bzzt* —no matter. The shape's the lesson: pick an order, it waits for the Turn.
 
-**`stewardship_turn.05`** That's a Turn. In the living world you plan at the table, the GM runs it at Day's End, and the land answers in the morning.
+**`stewardship_turn.05`** That's a Turn. In the living world you plan at the table, the GM locks the turn and runs it, and the land answers in the morning.
 
 **`stewardship_turn.06`** Stewardship: learned. You can hold ground and run it. One thing left before the real test— *bzzt* —you'll have to GO somewhere dangerous.
 
@@ -452,7 +452,7 @@ Nothing has tested you yet. It will.
 Crews and Associations under contract, hired at the Muster by the turn. Their maneuvers and strength ride with your Domain into every fight while the contract holds.
 
 **`tour.faction-sheet · Alpha (the Domain tab).07` · Next turn — the plan**  
-What your Domain will do when the Turn ticks. Nothing planned means nothing happens — plan the turn, then the GM runs it at Day's End.
+What your Domain will do when the Turn ticks. Nothing planned means nothing happens — plan the turn, then the GM locks the turn and runs it.
 
 **`tour.faction-sheet · Alpha (the Domain tab).08` · Plan the turn**  
 The Activity Planner: secure, supply, build, expand. Slower than a fight, cheaper than a war, and it compounds. It has its own tour.

@@ -54,14 +54,14 @@ export const STORY_SCRIPTS = {
       steps: [
         { id: "welcome", label: "Welcome!", line: "The Jackalope has stopped. Get off.", beats: ["allesh_gilliam_opening_scene"] },
         { id: "joan", label: "Joan's Sendoff", line: "Joan is waiting just inside the gate. Hear her out.", beats: ["avuncular_joans_speech"] },
-        { id: "round", label: "The Welcome Round", line: "Walk the town. Six doors, any order. Call it a day once you've been met.",
+        { id: "round", label: "The Welcome Round", line: "Walk the town. Six doors, any order. Ready to move on once you've been met.",
           beats: ["allesh_gilliam_town_walk"],
           done: { anyOf: ["allesh_gilliam_yarrow_welcome", "allesh_gilliam_tamsin_welcome", "allesh_gilliam_etta_welcome", "allesh_gilliam_waiting_room_intro", "allesh_gilliam_vacancy_intro", "allesh_gilliam_plumb_office_intro", "ag_first_night_soma_break"] } },
         { id: "night", label: "First Night", line: "Take your Soma Break. Sleep behind the wall.", beats: ["ag_first_night_soma_break"] },
         { id: "tent", label: "The Tent at the Edge of Town", line: "There's a tent at the edge of town that wasn't there yesterday. Look in on your way out.", beats: ["hum_quiet_tent"], borrow: true },   // the Hum's rung 1, pinned here by ruling
         { id: "crossroads", label: "The Crossroads", line: "Ride out and see that over which you now have Stewardship, which sounds awesome and definitely something to brag about in postcards home.",
           beats: ["ag_crossroads_first_rides"], done: { mark: "ag_days_end" } },   // the hub stays current until the day ends (playtest 2026-09-18)
-        { id: "daysend", label: "Day's End", line: "Divvy the hexes, set each faction's plans, then the GM runs the turn. The River Heart lies open to the south — collapsed, and so all of it on the map already. Ride it when you're ready; some of what the grief left there is still waiting to be met.", beats: ["ag_days_end"] },
+        { id: "daysend", label: "Lock the Turn", line: "Divvy the hexes, set each faction's plans, then the GM runs the turn. The River Heart lies open to the south — collapsed, and so all of it on the map already. Ride it when you're ready; some of what the grief left there is still waiting to be met.", beats: ["ag_days_end"] },
         { id: "title", label: "Title Card", line: "The first turn is in the books. Roll problems.", beats: ["ag_title_card"] }
       ] },
     steps: [
@@ -98,7 +98,7 @@ export const STORY_SCRIPTS = {
       description: "Lyrenn doesn't greet you. It notices you, which around here is the same thing, done more honestly.",
       steps: [
         { id: "road", label: "The Road to Lyrenn", line: "The road to Lyrenn doesn't so much go as it is permitted. Head into town.", beats: ["lyrenn_opening_scene"] },
-        { id: "rows", label: "Walking the Rows", line: "Meet Elsin, meet Rowan, see the Green Ring. Call it a day when the rows have noticed you.",
+        { id: "rows", label: "Walking the Rows", line: "Meet Elsin, meet Rowan, see the Green Ring. Ready to move on when the rows have noticed you.",
           beats: ["lyrenn_town_walk"], done: { anyOf: ["lyrenn_elsin_welcome", "lyrenn_rowan_welcome", "lyrenn_green_ring_cinematic"] } }
       ] },
     steps: [
