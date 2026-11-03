@@ -8383,12 +8383,44 @@ async function _storySituation(campaign, { full = false } = {}) {
   const seqOf = (b) => { const n = Number(b?.questStep); return (b?.questStep != null && Number.isFinite(n)) ? n : 1e6 + (idx.get(String(b?.id)) ?? 0); };
   const base = { beats, firedSet, firedTs: id => ts[id] || 0, bucketOf, invitedIds, phase: _storyPhaseGet(), turn: _getTurnNumberSafe(), anchorId, seqOf, questNames: {}, state: store, where: _partyWhere(campaign)?.hex || null, knownHexes: _knownHexKeys() };
   const memo = new Map();
-  const evalReady = async (b) => { if (!b) return false; const id = String(b.id); if (memo.has(id)) return false; const ok = await _beatRequiresMet(b, campaign, {}); memo.set(id, { ready: !!ok, reasons: [] }); return true; };
+  // ENTRY GATES (2026-11-02, failure pass): NOW / Run next started the East Wall's Tally (quest step) directly — its button on the Wall
+  // menu needs the Tor-Wrath fight, the beat itself only "Act 2" — so the story skipped its own fight and the seal (Act 3) locked. 72
+  // quest-step beats had a button stricter than the beat. A beat whose EVERY way in is a gated button (no ungated button, no fail route,
+  // and nothing else enters it: hex arrival, road table, outcome route, auto-fire) is ready only when one of those buttons' gates is met.
+  const entryIdx = _storyEntryGates(campaign);
+  const entryOk = async (b) => { const g = entryIdx.get(String(b.id)); if (!g) return true; for (const req of g) { if (await _beatRequiresMet({ id: `${b.id}#entry`, inject: { requires: req } }, campaign, {})) return true; } return false; };
+  const evalReady = async (b) => { if (!b) return false; const id = String(b.id); if (memo.has(id)) return false; const ok = (await _beatRequiresMet(b, campaign, {})) && (await entryOk(b)); memo.set(id, { ready: !!ok, reasons: [] }); return true; };
   if (full) { for (const b of beats) if (!firedSet.has(String(b.id)) && !_isAmbientBeat(b)) await evalReady(b); }
   else {
     // Review 2026-09-14: unknown readiness is OPTIMISTIC (the model picks the first candidate in story order),
     // the picks get real gate evaluation, and we re-derive until no new beat needs evaluating — so a gated-
     // but-met beat is never skipped for an ungated one further down.
+// beatId → [requires…] for beats entered ONLY through gated buttons (see ENTRY GATES in _storySituation). null entry = no gate.
+let _entryGateCache = { key: "", ts: 0, val: null };
+function _storyEntryGates(campaign) {
+  const key = `${campaign?.id}|${(campaign?.beats || []).length}`;
+  if (_entryGateCache.val && _entryGateCache.key === key && Date.now() - _entryGateCache.ts < 30000) return _entryGateCache.val;
+  const out = new Map();
+  try {
+    const beats = Array.isArray(campaign?.beats) ? campaign.beats : [];
+    const gated = new Map(), open = new Set();
+    for (const p of beats) for (const c of (p?.choices || [])) {
+      const req = Array.isArray(c?.requires) ? c.requires : (c?.requires ? [c.requires] : []);
+      const t = String(c?.next || "");
+      if (t) { if (req.length) { if (!gated.has(t)) gated.set(t, []); gated.get(t).push(req); } else open.add(t); }
+      if (c?.failNext) open.add(String(c.failNext));   // a missed check lands there — never gate it on the button
+    }
+    // anything else that can start a beat
+    for (const b of beats) { for (const k of ["success", "failure"]) if (b?.outcomes?.[k]) open.add(String(b.outcomes[k])); if (b?.inject?.autoFire) open.add(String(b.id)); if (b?.worldEffects?.runBeat) open.add(String(b.worldEffects.runBeat?.beatId || b.worldEffects.runBeat)); }
+    for (const v of Object.values(campaign?.hexOverrides || {})) for (const k of ["onEnterBeatId", "onClaimBeatId", "beatId"]) if (v?.[k]) open.add(String(v[k]));
+    try { for (const sc of (game.scenes?.contents || [])) for (const d of (sc.drawings?.contents || [])) { const cf = d.flags?.["bbttcc-territory"]?.campaign; if (cf?.onEnterBeatId) open.add(String(cf.onEnterBeatId)); } } catch (_eD) {}
+    try { let tables = game.settings.get("bbttcc-campaign", "encounterTables"); if (typeof tables === "string") tables = JSON.parse(tables); for (const t of Object.values(tables || {})) for (const e of (t?.entries || [])) if (e?.beatId) open.add(String(e.beatId)); } catch (_eT) {}
+    if (campaign?.openingBeatId) open.add(String(campaign.openingBeatId));
+    for (const [id, reqs] of gated) { const b = beats.find(x => String(x?.id) === id); if (!b || b.questStep == null || open.has(id)) continue; out.set(id, reqs); }
+  } catch (e) { warn("[story] entry gates failed", e); }
+  _entryGateCache = { key, ts: Date.now(), val: out };
+  return out;
+}
     for (let round = 0; round < 8; round++) {
       const pass = deriveSituation({ ...base, optimistic: true, readyOf: id => memo.get(String(id)) || null });
       let fresh = 0;
