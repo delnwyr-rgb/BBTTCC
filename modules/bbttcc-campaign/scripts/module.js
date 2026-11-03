@@ -4862,6 +4862,7 @@ async function executeBeat(campaign, beat, ctx = {}) {
 // schedules a debounced sweep; the sweep waits while a beat dialog is open or a ride is mid-route, then runs the first eligible
 // beat (never played, not sealed, inject.requires met) and re-sweeps. Active GM only. Lint P10 counts autoFire as reached.
 let _autoFireTimer = null, _autoFireBusy = false;
+const _autoFireTried = new Set();   // tried this session and still unplayed (runBeat refused it) — never let one beat block the queue
 function _scheduleAutoFire(ms = 2500) {
   try { if (!game.user?.isGM) return; clearTimeout(_autoFireTimer); _autoFireTimer = setTimeout(() => { _autoFireSweep().catch(e => warn("[autoFire] sweep failed:", e)); }, ms); } catch (_e) {}
 }
@@ -4875,14 +4876,14 @@ async function _autoFireSweep() {
   if (busy) return _scheduleAutoFire(4000);
   const st = _storyStateFor(cid);
   for (const b of cands) {
-    if (st.played?.[b.id]) continue;
+    if (st.played?.[b.id] || _autoFireTried.has(b.id)) continue;
     // never move the act ladder BACKWARDS: an act card whose phaseAdvance.set is at or below the current act is stale (a table that
     // reached the act another way) — it stays unplayed and silent
     try { const setTo = Number(b.worldEffects?.phaseAdvance?.set); if (Number.isFinite(setTo) && setTo <= Number(_storyPhaseGet() || 0)) continue; } catch (_eP) {}
     let ok = false; try { ok = await _beatRequiresMet(b, camp, {}); } catch (_e) { ok = false; }
     if (!ok) continue;
-    _autoFireBusy = true;
-    try { log(`[autoFire] '${b.id}' — its conditions hold; it plays.`); await runBeat(cid, b.id, { source: "autoFire" }); }
+    _autoFireBusy = true; _autoFireTried.add(b.id);
+    try { console.log(`[bbttcc-campaign] [autoFire] '${b.id}' — its conditions hold; it plays.`); await runBeat(cid, b.id, { source: "autoFire" }); }
     catch (e) { warn(`[autoFire] '${b.id}' failed:`, e); }
     finally { _autoFireBusy = false; }
     _scheduleAutoFire(3000);
@@ -4890,6 +4891,12 @@ async function _autoFireSweep() {
   }
 }
 Hooks.on("updateSetting", (setting) => { try { if (String(setting?.key || "").startsWith(MOD_ID + ".")) _scheduleAutoFire(); } catch (_e) {} });
+// GM diagnostics: every autoFire beat with the ENGINE's own verdict (api.campaign.gates.requiresMet is not the same check)
+Hooks.once("ready", () => { try { const api = game.bbttcc?.api?.campaign; if (!api) return; api.autoFire = {
+  candidates: async () => { const cid = getActiveCampaignId(); const camp = cid ? getCampaign(cid) : null; const st = _storyStateFor(cid); const out = [];
+    for (const b of (camp?.beats || [])) { if (b?.inject?.autoFire !== true || b._deferred) continue; let ok = null; try { ok = await _beatRequiresMet(b, camp, {}); } catch (_e) { ok = "error"; }
+      out.push({ id: b.id, played: !!st.played?.[b.id], tried: _autoFireTried.has(b.id), eligible: ok }); } return out; },
+  sweep: () => _autoFireSweep(), forget: (id) => _autoFireTried.delete(String(id)) }; } catch (_e) {} });
 Hooks.on("bbttcc:advanceTurn:end", () => _scheduleAutoFire(5000));
 Hooks.once("ready", () => _scheduleAutoFire(15000));
 
@@ -6079,6 +6086,15 @@ async function _beatRequiresMet(beat, campaign, ctx) {
         let any = false;
         for (const sub of c.anyOf) { if (await _beatRequiresMet({ id: beat?.id, worldEffects: beat?.worldEffects, inject: { requires: [sub] } }, campaign, ctx)) { any = true; break; } }
         if (!any) return false;
+        continue;
+      }
+
+      // { sparkLit: "<sephirah>", not?: true } — some hex holds an INTEGRATED spark of that sephirah (2026-11-02, the Netzach fallback:
+      // Port Kudzu's testimony played but its spark was corrupted at the time, so the lamp stayed dark — gate on the lamp, not the beat)
+      if (c.sparkLit != null) {
+        const seph = String(c.sparkLit || "").trim().toLowerCase();
+        let lit = false; try { lit = (game.bbttcc?.api?.tikkun?.hex?.all?.() || []).some(r => r && r.state === "integrated" && String(r.key || "").startsWith(`spark_${seph}_`)); } catch (_eSL) { lit = false; }
+        if (c.not === true ? lit : !lit) return false;
         continue;
       }
 
