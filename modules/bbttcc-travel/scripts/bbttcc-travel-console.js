@@ -2054,7 +2054,20 @@
           if (!hexUuid) { $rout.textContent = needHint; return; }
           const res = await fn(factionId, hexUuid);
           if (res?.ok) { const m = `${verb} → ${res.band}…`; $rout.textContent = m; ui.notifications?.info?.(m); }
-          else { const m = res?.message || `${verb} failed.`; $rout.textContent = m; ui.notifications?.warn?.(m); }
+          else {
+            const m = res?.message || `${verb} failed.`; $rout.textContent = m; ui.notifications?.warn?.(m);
+            // NO HULL FOR IT (Dave 2026-11-02: "Players need to buy a sub at some point!"): a dive refused for want of a
+            // submersible (or one rated too shallow) offers the Rig Builder — its Submersible chassis (water-sub, depth 2) — the
+            // same way an all-water route offers to build a boat.
+            try {
+              const wantRig = apiName === "dive" ? /no-sub|too-shallow/.test(String(res?.reason || "")) : /no-air|too-low|no-reach/.test(String(res?.reason || ""));
+              if (wantRig && game.bbttcc?.api?.rigBuilder?.open) {
+                const b = document.createElement("button"); b.type = "button"; b.className = "bbttcc-travel-button"; b.style.cssText = "display:block;margin-top:.3rem;";
+                b.textContent = apiName === "dive" ? "🛠 Build a submersible (Rig Builder → Submersible)" : "🛠 Build an aircraft (Rig Builder)";
+                b.onclick = () => game.bbttcc.api.rigBuilder.open(); $rout.appendChild(b);
+              }
+            } catch (_eRB) {}
+          }
         };
       };
       _bindVertical("rp-dive",   "dive",   "Diving",   "Dive: stand the faction's token on a hex with depth links (or select that hex), then Dive Here.");
