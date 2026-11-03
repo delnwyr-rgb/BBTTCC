@@ -259,6 +259,18 @@
     if (!entries.length) return { ok: false, reason: "no_entries", tableId };
 
     let eligible = entries.filter(ent => ent && passesTravelConditions(ent, terrainKey, scale));
+    // 2026-11-03 (failure pass, live-caught): a row's own phaseGte can sit below its BEAT's act gate — the plains table drew
+    // hum_quiet_ledger (Act 9) in Act 4; the campaign refused it at launch, the leg's encounter was wasted and the ride sat on
+    // an encounter that never launched. A row whose beat is gated above the current act is invisible to the roll.
+    try {
+      let phase = 0; try { phase = Number(game.settings.get("bbttcc-campaign", "storyPhase")) || 0; } catch (_eP0) {}
+      eligible = eligible.filter(ent => {
+        const b = getBeatFromCampaignStore(String(ent.campaignId || campaignId || ""), String(ent.beatId || ""));
+        const req = Array.isArray(b?.inject?.requires) ? b.inject.requires : [];
+        const gte = req.filter(r => r && r.flag === "storyPhase" && r.gte != null && !r.not).map(r => Number(r.gte)).filter(Number.isFinite);
+        return !gte.length || phase >= Math.max(...gte);
+      });
+    } catch (_eAct) {}
     if (!eligible.length) return { ok: false, reason: "no_eligible", tableId };
 
     // Single-fire entries (2026-09-03, owner ruling): an entry with once:true
