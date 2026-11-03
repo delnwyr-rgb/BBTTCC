@@ -14,7 +14,8 @@ const DEAD_ENDS_2 = (() => {
   const PARENTS = ["adversary_reality_tear_watcher_notices", "ag_tamsin_pactkeeper", "fixit_mystery_bin", "fixit_route_board_after",
     "wt_chapel_keeper", "wt_kudzu_saloon", "hv_service_manifest", "maneuver_vault_honor_roll", "enc_circuit_riders_colossus",
     "fc_road_wendigo", "siege_pie_tally", "siege_year_zero", "bandit_stilt_hall", "trojan_betting_pool", "cadence_the_drum",
-    "ninth_guest_the_made_room", "fixit_late_run_success", "founders_garden_the_dates", "reliable_lease_last_turn", "reliable_lease_parley"];
+    "ninth_guest_the_made_room", "fixit_late_run_success", "founders_garden_the_dates", "reliable_lease_last_turn", "reliable_lease_parley",
+    "gloomgill_final_fact"];   // 2026-11-03: "Ask why he stopped teaching." closed the chain — the only way into the End of Part One was lost
   const ONE_PICK = {
     adversary_reality_tear_watcher_notices: /./,
     trojan_betting_pool: /^Bet /,
