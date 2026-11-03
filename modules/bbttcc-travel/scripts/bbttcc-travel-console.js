@@ -3021,7 +3021,11 @@ if (game.bbttcc?.runVisuals) {
           setPickStatus("Waiting for the map to finish loading…");
         } else if (pf?.toName) {
           const _pfNorm = (s) => String(s || "").replace(/[\s ]+/g, " ").trim().toLowerCase();
-          const toHex = hexes.find(h => _pfNorm(h.label) === _pfNorm(pf.toName)) || null;
+          // 2026-11-02 (failure pass): "Furrier's Fixit Farm" never found the hex "Furrier's Fixit-Farm" — the GM got an empty
+          // console. Exact first; then a punctuation-blind retry (hyphens, dots, underscores, apostrophes) as the safety net.
+          const _pfLoose = (s) => _pfNorm(s).replace(/[‘’'`]/g, "").replace(/[-–—_.]/g, " ").replace(/\s+/g, " ").trim();
+          const toHex = hexes.find(h => _pfNorm(h.label) === _pfNorm(pf.toName))
+                     || hexes.find(h => _pfLoose(h.label) === _pfLoose(pf.toName)) || null;
           let fromHex = null;
           let facId = $fac?.value || "";
           // A story ride is the CAMPAIGN's lead Domain's ride (2026-11-02 click-through: after a reload the dropdown defaulted to the
