@@ -138,7 +138,10 @@
                   // Phase 4 (2026-09-13): the turn is a chapter break; days are a prompt, not a budget.
                   // Month framing (Dave 2026-10-28): the Advance IS the rest of the month — the Domain's orders.
                   const month = Math.max(1, Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 1);
-                  ledgerLine = `<p><i class="fas fa-hourglass-half"></i> <b>Month ${month}, Day ${lg.spent}</b> — the rest of Month ${month} passes: the weeks the Stewards weren't watching, when the Domain's orders, builds, contracts and rigs do their work. Month ${month + 1} begins.</p>`;
+                  const _over = Math.round(((Number(lg.spent) || 0) - (Number(lg.budget) || 30)) * 10) / 10;
+                  // 2026-11-02 (failure pass): past day 30 there are no "weeks the Stewards weren't watching" left — say so.
+                  if (_over > 0) ledgerLine = `<p><i class="fas fa-hourglass-half"></i> <b>Month ${month}, Day ${lg.spent}</b> — the Stewards ran ${_over} day${_over === 1 ? "" : "s"} past the month's end. The Domain's orders, builds, contracts and rigs still land as it closes. Month ${month + 1} begins.</p>`;
+                  else ledgerLine = `<p><i class="fas fa-hourglass-half"></i> <b>Month ${month}, Day ${lg.spent}</b> — the rest of Month ${month} passes: the weeks the Stewards weren't watching, when the Domain's orders, builds, contracts and rigs do their work. Month ${month + 1} begins.</p>`;
                 }
               } catch (_eLg) {}
 
@@ -182,6 +185,30 @@
   function refresh() {
     setTimeout(augmentToolbar, 0);
   }
+
+  // THE MONTH IS SPENT — PROMPT (Dave 2026-11-02, failure pass: "I think we should TOTALLY prompt when 30 days is hit"). Still no
+  // auto-advance (the GM's Turn Driver alone ends a month); the primary GM is simply asked, once per month, the moment a debit carries
+  // the day count to the month's length or past it. "Lock the Turn" opens the same Turn Driver confirm the toolbar button does.
+  Hooks.on("bbttcc:time:accrued", (p) => {
+    try {
+      if (!game.user?.isGM) return;
+      const gx = game.bbttcc?.api?.gmExec; const prim = (typeof gx?.primaryGmId === "function") ? gx.primaryGmId() : game.users?.activeGM?.id;
+      if (prim && prim !== game.user.id) return;
+      const budget = Number(p?.budget) || 0, spent = Number(p?.spent) || 0, pts = Number(p?.points) || 0;
+      if (!(budget > 0) || spent < budget || (spent - pts) >= budget) return;   // only the debit that crosses the line
+      const month = Math.max(1, Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 1);
+      if (globalThis.__bbttccMonthPrompted === month) return; globalThis.__bbttccMonthPrompted = month;
+      new Dialog({
+        title: `Month ${month} is spent`,
+        content: `<p><i class="fas fa-hourglass-end"></i> The Stewards have used all <b>${budget}</b> days of <b>Month ${month}</b> (Day ${spent}).</p><p>Lock the turn now and let the Domain's month land? Keep playing and the days run past the month's end — nothing carries over, but the month doesn't end until the Turn Driver runs.</p>`,
+        buttons: {
+          lock: { icon: '<i class="fas fa-forward"></i>', label: "Lock the Turn", callback: () => { try { document.getElementById("bbttcc-btn-turn-driver")?.click(); } catch (_e) {} } },
+          keep: { icon: '<i class="fas fa-person-walking"></i>', label: "Keep playing" }
+        },
+        default: "lock"
+      }, { classes: ["dialog", "bbttcc-hexchrome-dialog"] }).render(true);
+    } catch (e) { console.warn("[bbttcc-ui/toolbar-augment] month-spent prompt failed", e); }
+  });
 
   Hooks.on("ready", refresh);
   Hooks.on("canvasReady", refresh);

@@ -5349,7 +5349,10 @@ async function _onAdvanceTurnEndLedger(tctx) {
   const newMonth = Math.max(1, Number(w.getState?.()?.turn) || 1);
   const endedMonth = Math.max(1, newMonth - 1);
   const restDays = Math.max(0, Math.round((Number(before.budget) || 30) - (Number(before.spent) || 0)));
-  const verdict = `<p>The other ${restDays} days of Month ${endedMonth} went to the Domain: its orders, builds, contracts and rigs. Month ${newMonth} begins; the day count resets.</p>`;
+  const _overDays = Math.max(0, Math.round(((Number(before.spent) || 0) - (Number(before.budget) || 30)) * 10) / 10);
+  const verdict = _overDays > 0   // 2026-11-02: past the month's end there were no "other days" — say what happened instead
+    ? `<p>The Stewards ran ${_overDays} day${_overDays === 1 ? "" : "s"} past Month ${endedMonth}'s end; the Domain's orders, builds, contracts and rigs still landed. Month ${newMonth} begins; the day count resets.</p>`
+    : `<p>The other ${restDays} days of Month ${endedMonth} went to the Domain: its orders, builds, contracts and rigs. Month ${newMonth} begins; the day count resets.</p>`;
   try {
     await ChatMessage.create({
       content: `<div class="bbttcc-turn-month"><p><i class="fas fa-hourglass-half"></i> <b>Month ${endedMonth} ends.</b> The Stewards spent ${Number(before.spent) || 0} day${Number(before.spent) === 1 ? "" : "s"} on the road; the rest of the month went to the Domain's work. <b>Month ${newMonth} begins.</b></p></div>`,
