@@ -229,7 +229,23 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
   // Keep best 2 chain totals for rank 4+ pools; otherwise keep everything.
   const sortedForKeep = [...dieResults].sort((a, b) => b.chainTotal - a.chainTotal);
   const kept          = poolSize === 3 ? sortedForKeep.slice(0, 2) : dieResults;
-  const keptSum       = kept.reduce((s, d) => s + d.chainTotal, 0);
+  let keptSum         = kept.reduce((s, d) => s + d.chainTotal, 0);
+  // 2026-11-02: Surge "Bonus Die" (+1d10 exploding, the next d10 roll) lands on aptitude checks too — it was only
+  // read by strike/cast/save, so a Surge spent before a story check bought nothing. Always kept; its 10s chain.
+  let surgeBonusDie = null;
+  if (actor?.flags?.fourththing?.surge?.oneShot?.["narrative-bonus-die"]) {
+    const bd = await new Roll("1d10x10").evaluate();
+    const res = (bd.terms[0]?.results ?? []).map(r => r.result);
+    surgeBonusDie = { base: res[0] ?? bd.total, explosions: res.slice(1), chainTotal: bd.total, surgeBonus: true };
+    dieResults.push(surgeBonusDie);
+    if (kept !== dieResults) kept.push(surgeBonusDie);
+    keptSum += bd.total;
+    try {
+      await actor.update({ "flags.fourththing.surge.oneShot.-=narrative-bonus-die": null });
+      const ids = Array.from(actor.effects ?? []).filter(e => e.flags?.fourththing?.surge?.oneShotMarker === "narrative-bonus-die").map(e => e.id);
+      if (ids.length) await actor.deleteEmbeddedDocuments("ActiveEffect", ids);
+    } catch (e) { console.warn("[fourththing] Bonus Die consume failed", e); }
+  }
   const total         = keptSum + totalBonus;
 
   // Bank Surge on the actor (explosions from ALL dice, including dropped) —
@@ -264,6 +280,10 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
   if (checkBonuses.length) {
     const cbNote = checkBonuses.map(b => `${b.bonus > 0 ? "+" : ""}${b.bonus} ${b.source}`).join(", ");
     mechNote = mechNote ? `${mechNote} · ${cbNote}` : cbNote;
+  }
+  if (surgeBonusDie) {
+    const bdNote = `✦ Surge Bonus Die +${surgeBonusDie.chainTotal}`;
+    mechNote = mechNote ? `${mechNote} · ${bdNote}` : bdNote;
   }
 
   return { total, roll, rank, rankData, attrVal, aeBonus, totalBonus, radPenalty,

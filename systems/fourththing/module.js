@@ -4540,6 +4540,10 @@ function _ftApplySurgeRollMods(formula, shots) {
   }
   if (shots.wrathCascade) {
     // Match whatever threshold ended up in the base term and mirror it onto
+  }
+  // 2026-11-02 (failure pass, Dave: "use surge to help with rolls"): the Bonus Die promises the "next d10 roll" —
+  // aptitude/attribute CHECKS included (every story check). It was never read on a check, so the Surge was spent for nothing.
+  if (context === "strike" || context === "cast" || context === "save" || context === "check") {
     // the bonus dice (so the two pools have consistent explode behavior).
     const m = f.match(/(\d+)d10x(10|>=\d+)/);
     const thresh = m ? m[2] : "10";
@@ -15964,7 +15968,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // RFI canon: d10s explode on 10 — each extra die banks +1 Surge. Foundry's
     // x10 modifier chains the explosions natively so the dice tray and total
     // stay correct.
-    const formula = `${_ftXd10(actor)} + ${totalBonus}${_dwExtra}`;
+    const _sShots = _ftReadSurgeOneShots(actor, { context: "check" });
+    const formula = `${_ftXd10(actor)} + ${totalBonus}${_dwExtra}${_sShots.bonusDie ? " + 1d10x10" : ""}`;
     const roll    = new Roll(formula);
     await roll.evaluate();
 
@@ -16016,6 +16021,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const parts = aeContribs.map(c => `${c.value >= 0 ? "+" : ""}${c.value} ${c.label} (${c.src})`);
       noteBits.push(`Passives: ${parts.join(", ")}`);
     }
+    if (_sShots.consumed.length) await _ftConsumeSurgeOneShots(actor, _sShots, { context: "check" });
     if (_framePushBonus > 0) noteBits.push(`⛰ Frame Push +${_framePushBonus} (Body)`);
     if (_radPen > 0)         noteBits.push(`☢ Radiation −${_radPen}`);
     if (_cb.length)          noteBits.push(`Bonuses: ${_cb.map(b => `${b.bonus >= 0 ? "+" : ""}${b.bonus} (${b.source})`).join(", ")}`);

@@ -318,7 +318,17 @@
     const ids = coll.map(d => d.id);
     // bbttccRestore on the DELETE too: deleteToken listeners (raid muster refunds, crew
     // release) must stand down, or they credit the just-restored faction pools.
-    if (ids.length) await parent.deleteEmbeddedDocuments(type, ids, { bbttccRestore: true });
+    // 2026-11-02 (failure-pass golden reset): a hook fired by the actor update just before (effect sync, stance
+    // cleanup) can delete one of these rows while we wait — the batch then throws "X does not exist!" and the
+    // actor kept its LIVE gear/effects (Toblerone, Furrier, Mara Quickhands, The General). Retry with what's left.
+    if (ids.length) {
+      try { await parent.deleteEmbeddedDocuments(type, ids, { bbttccRestore: true }); }
+      catch (e) {
+        if (!/does not exist/i.test(String(e?.message || e))) throw e;
+        const left = parent.getEmbeddedCollection(type).map(d => d.id);
+        if (left.length) await parent.deleteEmbeddedDocuments(type, left, { bbttccRestore: true });
+      }
+    }
     if (savedArr?.length) await parent.createEmbeddedDocuments(type, savedArr, { keepId: true, bbttccRestore: true });   // restore mode: creation hooks stand down (2026-09-12)
     return 1;
   }
