@@ -2465,6 +2465,7 @@ async function _withSecretRollMode(choice, fn) {
 }
 async function _rollChoiceCheck(choice, ctx={}) {
   const stat = String(choice.checkStat || "").trim().toLowerCase();
+  con: "body",   // 2026-11-02 (failure pass): Weather Front "Keep Moving · Constitution" — dnd5e CON = RFI Body (a faculty; the roll path takes it directly)
   const dc = _num(choice.checkDC, 0);
   const supportKey = String((ctx.supportOpKey || (ctx.support || {}).opKey) || "").trim().toLowerCase();
   const supportSpend = _num((ctx.supportSpend != null ? ctx.supportSpend : (ctx.support || {}).spend), 0);
