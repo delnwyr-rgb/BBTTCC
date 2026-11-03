@@ -109,7 +109,13 @@ async function checkLamps(reason = "manual") {
 
     let next = { ...state, lampsLit: [...new Set([...state.lampsLit, ...lit])] };
 
-    if (lit.length >= SEPHIROT.length && !state.opened) {
+    // THE CLIFFHANGER (Dave 2026-11-02: "The Daath Opening should be the cliffhanger" · "After Gloomgill"): ten lamps are not enough on
+    // their own — Daath waits for the story mark in `bbttcc-epic.daathGateMark` (default "gloomgill_passed", the exam's verdict; empty =
+    // no gate). Gloomgill's final fact calls daath.check() and the door opens on his words.
+    const gateMark = (() => { try { return String(game.settings.get(MOD, "daathGateMark") ?? "gloomgill_passed").trim(); } catch (_e) { return "gloomgill_passed"; } })();
+    const gateOk = !gateMark || (() => { try { return !!game.bbttcc?.api?.campaign?.story?.hasMark?.(gateMark); } catch (_e) { return false; } })();
+    if (lit.length >= SEPHIROT.length && !state.opened && !gateOk) log(`ten lamps burn — Daath waits for '${gateMark}'`);
+    if (lit.length >= SEPHIROT.length && !state.opened && gateOk) {
       next = { ...next, opened: true, openedAt: Date.now() };
       // The prophecy string has waited in lang/en.json since v1. It fires true.
       const prophecy = game.i18n?.localize?.("bbttcc-tikkun.notifications.egoDragonWarning");
@@ -228,6 +234,7 @@ Hooks.on("init", () => {
   if (game?.system?.id !== "fourththing") return;
   game.settings.register(MOD, "daath",        { scope: "world", config: false, type: Object, default: { opened: false, openedAt: null, lampsLit: [], risen: false, darkDoor: false, outcome: null } });
   game.settings.register(MOD, "daathSceneId", { scope: "world", config: false, type: String, default: "" });
+  game.settings.register(MOD, "daathGateMark", { scope: "world", config: false, type: String, default: "gloomgill_passed" });   // 2026-11-02 the cliffhanger
 });
 
 Hooks.on("bbttcc:spark:hexIntegrated", () => queueLampCheck("integration"));

@@ -1935,6 +1935,12 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
     } catch (ePf) { console.warn(TAG, "performance apply failed", ePf); }
 
+    // 2m-daath) DAATH CHECK (2026-11-02, the cliffhanger): worldEffects.daathCheck = true — ask the epic layer to re-check the lamps; with
+    // ten lit and the gate mark played (bbttcc-epic.daathGateMark, default gloomgill_passed) Daath opens here, on the story's words.
+    try {
+      if (we.daathCheck === true) { const D = get(game, "fourththing.epic.daath", null); if (D?.check) { await D.check(); changed = true; notes.push("daathCheck"); } else console.warn(TAG, "daathCheck: epic daath API not available"); }
+    } catch (eDC) { console.warn(TAG, "daathCheck failed", eDC); }
+
     // 2m-dive) DIVE (Dave 2026-11-02, the Binah dive expedition): worldEffects.dive = {band?: reef|deep|abyss, hexName?, audience?} — the
     // story takes the table DOWN through the same gate as the Travel Console's Dive Here (api.travel.dive: the lead Domain needs a
     // water-sub rated for the band; no sub → refused). Default audience "activate" (the whole table). A refusal posts a GM card with
