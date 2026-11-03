@@ -1175,7 +1175,7 @@ for (const b of beats) {
 {
   let SMp = null; try { SMp = require(path.join(__dirname, "..", "scripts", "story-model.js")); } catch (_e) { SMp = null; }
   const CODE_FIRED = new Set([   // beats the engine fires by id (module.js / hex-travel.js / strategic-throughput.js / bandit ledger)
-    "ag_title_card", "bandit_ambush_arms_down", "reliable_lease_last_turn", "reliable_lease_lapsed", "tikkun_atonement_rite"
+    "ag_title_card", "bandit_ambush_arms_down", "bandit_patrol_waves", "reliable_lease_last_turn", "reliable_lease_lapsed", "tikkun_atonement_rite"
   ]);
   const deferredP = (b) => !!b?._deferred || (Array.isArray(b?.inject?.requires) && b.inject.requires.some(r => r && r.flag === "storyPhase" && Number(r.gte) >= 9));
   // counted: authored routes, hex arrivals (overrides + hex.<slug> tags), road tables — NOT the Visualizer's quest-order offer or a

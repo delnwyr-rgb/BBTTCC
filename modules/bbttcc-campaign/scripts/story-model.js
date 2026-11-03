@@ -154,6 +154,7 @@ export const QUEST_MAP = {
    "name": "The Forgotten Cause",
    "act": 2,
    "keystone": false,
+   "evergreen": true,
    "hex": "Furrier's Fixit-Farm",
    "registryId": "fc_wendigo_confluence",
    "chapters": {

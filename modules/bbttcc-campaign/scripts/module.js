@@ -111,6 +111,11 @@ const BANDIT_MERCY_RUNG_AT = [2, 3, 4, 6];   // index+1 = rung
 // win_kill = fear) so outcome-id spelling variants in the live corpus still
 // count; the authored arms-down beats are matched by exact id above.
 const BANDIT_ENC_RE     = /^enc_bandit/i;
+// After the Accord (any of its endings) there are no more bandits on the water-roads to ambush anybody (2026-11-02 click-through: an
+// Arms Down surrender rolled in water the Evil Good Faction now patrols) — a bandit ambush becomes their friendly patrol instead.
+const BANDIT_PATROL_BEAT_ID = "bandit_patrol_waves";
+const BANDIT_ACCORD_ENDINGS = ["bandit_summit_accord", "bandit_summit_absorption", "bandit_summit_humiliation"];
+function _banditSufferingEnded(campaign) { try { const st = _storyStateFor(campaign?.id); return BANDIT_ACCORD_ENDINGS.some(id => st.played?.[id]); } catch (_e) { return false; } }
 const BANDIT_MERCY_RE   = /(free|jail)/i;
 const BANDIT_FEAR_RE    = /kill|execute/i;
 // Reed-telegraph cards (posted when a rung is NEWLY reached), funny → moving.
@@ -4073,7 +4078,7 @@ async function executeBeat(campaign, beat, ctx = {}) {
   // verification answers route straight on into the Terms inside that chain, so "Pursue alliance" (crVerify ≥ 2) was hidden until
   // the table had already left). The verification tally and worldEffects.meters now land when the beat STARTS, like the play mark.
   if (game.user?.isGM && beat?.id && !_resumed) { try { await _applyBeatTimePoints(campaign, beat, ctx); } catch (_eTP) {} }   // ONE CLOCK: the day is spent when the step starts
-  if (game.user?.isGM && beat?.id && !_resumed) { try { await _onBeatResolvedCrVerify({ beat }); } catch (_eCV) {} try { await _onBeatResolvedMeters({ beat }); } catch (_eMt) {} if (BANDIT_ENC_RE.test(String(beat.id)) && !BANDIT_MERCY_RE.test(String(beat.id)) && !BANDIT_FEAR_RE.test(String(beat.id)) && ctx?.source !== "arms-down") { let _div = false; try { _div = await _onBeatResolvedBanditLedger({ beat, campaign, atEntry: true }); } catch (_eBL) {} if (_div === true) return { ok: true, diverted: BANDIT_ARMS_DOWN_BEAT_ID }; } }
+  if (game.user?.isGM && beat?.id && !_resumed) { try { await _onBeatResolvedCrVerify({ beat }); } catch (_eCV) {} try { await _onBeatResolvedMeters({ beat }); } catch (_eMt) {} if (BANDIT_ENC_RE.test(String(beat.id)) && !BANDIT_MERCY_RE.test(String(beat.id)) && !BANDIT_FEAR_RE.test(String(beat.id)) && ctx?.source !== "arms-down" && ctx?.source !== "patrol" && _banditSufferingEnded(campaign) && (campaign?.beats || []).some(b => b?.id === BANDIT_PATROL_BEAT_ID)) { try { runBeat(campaign.id, BANDIT_PATROL_BEAT_ID, { ...(_chainCtxFrom(ctx) || {}), source: "patrol" }).catch(e => warn("[bandit] patrol failed", e)); } catch (_eP) {} return { ok: true, diverted: BANDIT_PATROL_BEAT_ID }; } if (BANDIT_ENC_RE.test(String(beat.id)) && !BANDIT_MERCY_RE.test(String(beat.id)) && !BANDIT_FEAR_RE.test(String(beat.id)) && ctx?.source !== "arms-down") { let _div = false; try { _div = await _onBeatResolvedBanditLedger({ beat, campaign, atEntry: true }); } catch (_eBL) {} if (_div === true) return { ok: true, diverted: BANDIT_ARMS_DOWN_BEAT_ID }; } }
 
   // Phase Charter closers apply AT ENTRY (2026-08-30) — same lesson as the
   // fire-mark above: a closer whose choice routes into a long awaited chain
@@ -6086,6 +6091,13 @@ async function _beatRequiresMet(beat, campaign, ctx) {
         let any = false;
         for (const sub of c.anyOf) { if (await _beatRequiresMet({ id: beat?.id, worldEffects: beat?.worldEffects, inject: { requires: [sub] } }, campaign, ctx)) { any = true; break; } }
         if (!any) return false;
+        continue;
+      }
+
+      // { allOf: [cond, cond, …] } — an AND group, so an anyOf can hold one (2026-11-02, Gloomgill's "unfinished business": any lamp
+      // dark OR [no Accord ending at all] OR [no Long Table decision at all])
+      if (Array.isArray(c.allOf)) {
+        if (!(await _beatRequiresMet({ id: beat?.id, worldEffects: beat?.worldEffects, inject: { requires: c.allOf } }, campaign, ctx))) return false;
         continue;
       }
 
