@@ -9,7 +9,8 @@ const SOFT_LANDING_EXIT = (() => {
     const report = [], conflicts = []; let changes = 0;
     // 2026-11-03: the East Wall's Tor-Wrath win card ("What Leaned on It") offered only "Tell Pike — tally the swings", which is
     // once-locked when the Tally was already played (the NOW skip fixed in a0f09803) → no button at all. It gets a way out too.
-    const targets = [beats.find(b => b?.label === "Soft Landing — Challenged by Pool Noodles"), beats.find(b => b?.id === "ag_east_wall_tor_wrath_won")];
+    // 2026-11-03: the Crown Mall food court ("That 90s Coalition") — six doors, no exit; once all were asked the table was stuck.
+    const targets = [beats.find(b => b?.label === "Soft Landing — Challenged by Pool Noodles"), beats.find(b => b?.id === "ag_east_wall_tor_wrath_won"), beats.find(b => b?.id === "enc_forgotten_yesterdays_tanneritos")];
     for (const hub of targets) {
       if (!hub) { conflicts.push("target beat not found"); continue; }
       const hasExit = (hub.choices || []).some(c => /^\W*(leave|back|ready to move on|not now)/i.test(String(c?.label || "")) && !c.next);
