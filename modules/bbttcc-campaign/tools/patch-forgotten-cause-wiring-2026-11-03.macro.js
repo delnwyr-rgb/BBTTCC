@@ -8,9 +8,11 @@
  *   • fc_bridge_confluence "The Long Table Is Set" — the Anchor Reach's arrival card (first in its onEnterBeatIds, the Act-3
  *     harbor intro stays behind it), repeatable while the Long Table is open, return text once the table has been seen,
  *     buttons: "Go to the table." / "The harbor floor, at low tide." (the intro's own gate) / "Not yet."
- *   • the Confluence beats declare where = "The Anchor Reach" (the quest log's Ride)
+ *   • the Confluence beats + its three endings declare where = "The Anchor Reach" (the quest log's Ride; the location guard
+ *     refused RESTORE live — the endings defaulted to the Fixit-Farm)
  *   • fc_bridge_summit "An Empty Reason-Column" + grief_quartet_capstone — autoFire
- *   • fixit_gullywasher_welcome — "The Summit room is set." (Summit open, never failed) and "Get people back to the table."
+ *   • fixit_gullywasher_welcome — "Tell him about the Wendigo." (rung ≥ 2, Dougan/Gully by the Third Round, until pointed),
+ *     "The Summit room is set." (Summit open, never failed) and "Get people back to the table."
  *     (Summit open, failed ≥ 1 turn ago — beatMark.turnsSince, module.js) → gullywasher_cultural_summit
  * Idempotent (rerun = 0). DRY_RUN first. Backups (campaigns + encounterTables) → Data/bbttcc-exports/. GM only.
  */
@@ -26,7 +28,8 @@ const FC_WIRING = (() => {
     const need = (id) => { const b = by.get(id); if (!b) conflicts.push(`${id} not found`); return b; };
     const set = (b, path, val, note) => { const keys = path.split("."); let o = b; for (const k of keys.slice(0, -1)) o = (o[k] = o[k] || {}); const k = keys.at(-1); if (J(o[k]) !== J(val)) { o[k] = val; changes++; report.push(`✚ ${b.id}: ${note || path}`); } };
 
-    for (const id of ["fc_bridge_off", "fc_bridge_summit", "grief_quartet_capstone"]) { const b = need(id); if (b) set(b, "inject.autoFire", true, "autoFire"); }
+    // realisation cards play where the party stands (like vs_bridge_seal) — live-caught: the location guard refused the Quartet at the Anchor Reach
+    for (const id of ["fc_bridge_off", "fc_bridge_summit", "grief_quartet_capstone"]) { const b = need(id); if (b) { set(b, "inject.autoFire", true, "autoFire"); set(b, "where", "anywhere", "where = anywhere"); } }
 
     const conf = need("fc_bridge_confluence"), intro = need("map_anchor_reach_intro"), table = need("wendigo_confluence_the_long_table");
     if (conf && intro && table) {
@@ -37,7 +40,7 @@ const FC_WIRING = (() => {
       const introReq = JSON.parse(J(intro.inject?.requires || []));
       set(conf, "choices", [ch("Go to the table.", "wendigo_confluence_the_long_table"), ch("The harbor floor, at low tide.", "map_anchor_reach_intro", introReq), ch("Not yet.", "")], "choices: table / harbor / not yet");
     }
-    for (const id of ["fc_bridge_confluence", "wendigo_confluence_the_long_table", "fc_seated", "wendigo_confluence_name_cards", "fc_night_one"]) { const b = by.get(id); if (b) set(b, "where", ANCHOR, `where = ${ANCHOR}`); }
+    for (const id of ["fc_bridge_confluence", "wendigo_confluence_the_long_table", "fc_seated", "wendigo_confluence_name_cards", "fc_night_one", "wendigo_confluence_repair", "wendigo_confluence_redirect", "wendigo_confluence_break"]) { const b = by.get(id); if (b) set(b, "where", ANCHOR, `where = ${ANCHOR}`); }
 
     if (anchorUuid) {
       camp.hexOverrides = camp.hexOverrides || {};
@@ -49,12 +52,18 @@ const FC_WIRING = (() => {
     const bar = need("fixit_gullywasher_welcome");
     if (bar) {
       const OPEN = { questBucket: "fc_cultural_summit", is: "active" };
-      const want = [ch("The Summit room is set.", "gullywasher_cultural_summit", [OPEN, { beatMark: "gullywasher_cultural_summit_failure", not: true }]),
+      // "Tell him about the Wendigo." (the quest log's own line) — Dougan's or Gully's pointer by the Third Round; hidden once either played.
+      // The code fallback (_onBeatResolvedDouganPointer) only fires when the whole welcome chain settles — out of the bar.
+      const NOT_POINTED = [{ beatMark: "gullywasher_dougan_points_to_confluence", not: true }, { beatMark: "gullywasher_gully_points_to_confluence", not: true }];
+      const RUNG = { flag: "wendigoRung", gte: 2 };
+      const want = [ch("Tell him about the Wendigo.", "gullywasher_dougan_points_to_confluence", [RUNG, { beatMark: "rc_gully_third_round" }, ...NOT_POINTED]),
+                    ch("Tell him about the Wendigo.", "gullywasher_gully_points_to_confluence", [RUNG, { beatMark: "rc_gully_third_round", not: true }, ...NOT_POINTED]),
+                    ch("The Summit room is set.", "gullywasher_cultural_summit", [OPEN, { beatMark: "gullywasher_cultural_summit_failure", not: true }]),
                     ch("Get people back to the table.", "gullywasher_cultural_summit", [OPEN, { beatMark: "gullywasher_cultural_summit_failure", turnsSince: 1 }])];
       for (const w of want) {
-        const cur = (bar.choices || []).find(c => c.label === w.label);
+        const cur = (bar.choices || []).find(c => c.label === w.label && c.next === w.next);
         if (!cur) { const at = bar.choices.findIndex(c => /^Back to the yard/.test(c.label)); bar.choices.splice(at >= 0 ? at : bar.choices.length, 0, w); changes++; report.push(`✚ ${bar.id}: "${w.label}"`); }
-        else if (J(cur.requires) !== J(w.requires) || cur.next !== w.next) { Object.assign(cur, { next: w.next, requires: w.requires }); changes++; report.push(`✚ ${bar.id}: "${w.label}" synced`); }
+        else if (J(cur.requires) !== J(w.requires)) { cur.requires = w.requires; changes++; report.push(`✚ ${bar.id}: "${w.label}" → ${w.next} gate synced`); }
       }
     }
     return { changes, report, conflicts };

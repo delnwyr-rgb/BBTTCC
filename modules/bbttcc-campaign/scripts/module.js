@@ -9700,6 +9700,9 @@ async function _onBeatResolvedDouganPointer({ beat, campaign } = {}) {
     if (game.settings.get(MOD_ID, SETTING_DOUGAN_POINTED)) return;     // already pointed
     const campaignId = campaign?.id || getActiveCampaignId();
     if (!campaignId) return;
+    // 2026-11-03: the bar now offers "Tell him about the Wendigo." (the GM button). This hook is only the fallback for a
+    // table that never presses it — it resolves when the whole welcome chain settles, so it stands down once either pointer played.
+    try { const pl = _storyStateFor(campaignId)?.played || {}; if (pl.gullywasher_dougan_points_to_confluence || pl.gullywasher_gully_points_to_confluence) return; } catch (_e) {}
     // Gully or Dougan: the bartender only gives his name to a party that bought the Third Round. The pointer used to always run
     // the Dougan variant (gated on the Third Round) — a party without it was latched and never pointed at all.
     let third = false; try { third = !!_storyStateFor(campaignId)?.played?.rc_gully_third_round; } catch (_e) {}
