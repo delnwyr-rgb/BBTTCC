@@ -628,6 +628,7 @@ function kindLabel(k) {
   if (key === "facility_upgrade") return "Facility Upgrade";
   if (key === "actor") return "Actor (Rig/Boss/NPC)";
   if (key === "contract") return "Contract (crew / association)";
+  if (key === "receipt") return "Receipt (paper / secret)";
   return "Thing";
 }
 
@@ -746,6 +747,10 @@ function _normalizeEntry(e) {
   if (kind === "facility") out.facilityPatch = e?.facilityPatch || {};
   if (kind === "hex_asset") out.asset = e?.asset || { key:"", label:"" };
   if (kind === "rig_upgrade" || kind === "facility_upgrade") out.patch = e?.patch || {};
+  // RECEIPT (Dave 2026-11-02, failure pass: "move the ability to purchase our magical memory messing receipts into the market
+  // proper … each player can access and spend their own marks on a receipt, and then have it available to play whether they are
+  // leading the party or supporting"): { label, effectKey, truth?, acquisition?, source? } — the worldEffects.receipts row shape.
+  if (kind === "receipt") out.receipt = (e?.receipt && typeof e.receipt === "object") ? e.receipt : { label: "", effectKey: "favorShift" };
   if (kind === "contract") out.contract = { family: String(e?.contract?.family || "crew"), docId: String(e?.contract?.docId || ""), pack: String(e?.contract?.pack || ""), turns: Math.max(1, Number(e?.contract?.turns) || 3) };
   return out;
 }
@@ -759,6 +764,7 @@ function _entryPayloadString(e) {
   if (kind === "hex_asset") return JSON.stringify(e?.asset || {}, null, 2);
   if (kind === "rig_upgrade" || kind === "facility_upgrade") return JSON.stringify(e?.patch || {}, null, 2);
   if (kind === "contract") return JSON.stringify(e?.contract || {}, null, 2);
+  if (kind === "receipt") return JSON.stringify(e?.receipt || {}, null, 2);
   return "";
 }
 
@@ -1616,6 +1622,13 @@ async function _purchaseLocal({ entryId, factionId, characterId, hexUuid, note, 
     const src = String(entry.uuid || "").trim() ? await fromUuid(entry.uuid).catch(() => null) : null;
     if (!src) _abortPurchase(`Actor UUID on "${entry.name}" is missing or could not be resolved.`);
     if (src.documentName !== "Actor") _abortPurchase(`Catalog entry "${entry.name}" UUID does not point to an Actor (got ${src.documentName}).`);
+  } else if (kind === "receipt") {
+    // the buyer's OWN Domain receives it (lead or supporting) — validated before any marks move
+    if (!String(entry.receipt?.label || "").trim()) _abortPurchase(`"${entry.name}" has no receipt set up in its catalog entry — ask the GM to fix it.`);
+    if (typeof game.bbttcc?.api?.worldMutation?.applyWorldEffects !== "function" || typeof game.bbttcc?.api?.raid?.courtlySecrets?.addSecret !== "function") _abortPurchase("Receipts can't be granted right now (courtly secrets API not loaded).");
+    const _buyer = game.actors.get(String(factionId || ""));
+    if (!_buyer) _abortPurchase("Buying Domain not found.");
+    if ((_buyer.items || []).some(it => String(it?.name || "").trim() === String(entry.receipt.label).trim() && it.flags?.["bbttcc-raid"]?.secret)) _abortPurchase(`${_buyer.name} already holds "${entry.receipt.label}" — play it first.`);
   } else if (kind === "contract") {
     // ruling 15: a steward signs; one contract per family at a time
     if (!characterId) _abortPurchase("Select a Buyer Character — a contract is signed by a steward.");
@@ -1757,6 +1770,14 @@ async function _purchaseLocal({ entryId, factionId, characterId, hexUuid, note, 
       // intact for re-purchase.
       const res = await deliverActorByUuid(factionId, entry.uuid);
       delivered = { to: "faction", actorTemplate: true, ...res };
+    } else if (kind === "receipt") {
+      // through the story's own Receipt path (worldEffects.receipts → courtlySecrets.addSecret), granted to the BUYER's Domain
+      const _label = String(entry.receipt.label).trim();
+      const _row = { effectKey: "favorShift", acquisition: "earned", source: { name: entry.vendorId ? (_vendorsArray().find(v => String(v?.id) === String(entry.vendorId))?.name || entry.vendorId) : "the market" }, ...entry.receipt, label: _label, factionId: String(factionId) };
+      await game.bbttcc.api.worldMutation.applyWorldEffects({ id: `market_receipt_${entry.id}`, label: entry.name, worldEffects: { receipts: [_row] } }, { factionId: String(factionId) });
+      const _got = (game.actors.get(String(factionId))?.items || []).some(it => String(it?.name || "").trim() === _label && it.flags?.["bbttcc-raid"]?.secret);
+      if (!_got) throw new Error(`the Receipt "${_label}" was refused (the Domain may be at its Receipt cap)`);
+      delivered = { to: "faction", receipt: _label };
     } else if (kind === "contract") {
       const c = await game.bbttcc.api.contracts.hire(characterId, entry.contract.family, entry.contract.docId, { turns: entry.contract.turns, source: "market", entryId: entry.id, vendorId: entry.vendorId, portrait: entry.img || null });
       delivered = { to: "character", characterId, contract: { family: entry.contract.family, until: c?.until ?? null } };
