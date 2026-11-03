@@ -5898,7 +5898,11 @@ async function _awardCreature(campaign, ctx, beat, playedN = null) {
   // so awards.settle never charges it twice). Story beats that already price their own killing (the bandit ambush) are unaffected.
   try {
     const lineage = String(actor?.flags?.fourththing?.rfi?.actor?.lineage || "").toLowerCase();
-    if (String(a.method) === "kill" && lineage === "mortal" && game.user?.isGM) {
+    // 2026-11-02 (failure pass): "story beats that already price their own killing" was only true while the bandit award
+    // resolved to no actor — once it named Road Bandit (mortal) the ambush's own Darkness +4 got a +1 on top. Made explicit:
+    // a beat whose worldEffects already carry a darknessDelta has priced the kill; the rule stands down.
+    const _pricedOwn = (beat?.worldEffects?.factionEffects || []).some(fe => Number(fe?.darknessDelta) > 0);
+    if (String(a.method) === "kill" && lineage === "mortal" && game.user?.isGM && !_pricedOwn) {
       const n0 = playedN ?? Number(_storyStateFor(campaign?.id)?.played?.[beat.id]?.n || 1);
       const key = `darkness:${beat.id}:${n0}`;
       if (!_storyStateFor(campaign?.id)?.darknessPaid?.[key]) {
