@@ -16,6 +16,7 @@
  *              channel); every other checkStat → GM adjudication
  *   effects    WME reads factionEffects/relationshipEffects/worldModifiers/
  *              turnRequests as ARRAYS (anything else is silently dropped)
+ *   placeless  P10 (2026-11-02): an "anywhere" beat nothing routes, pins, tables, doors or fires — it never plays
  *   outlived   X01–X04 (BEAT AUDIT 2026-11-01): choices that outlive what they ask about — a stale ask about a done chapter
  *              (X01, INFO), an open meal-or-refusal fork (X02), a town beat whose only exit rides out (X03), a chapter beat
  *              re-offered after its chapter ends (X04). Engine: repeatable !== true = once-only; unmet choice.requires = hidden.
@@ -1157,6 +1158,41 @@ for (const b of beats) {
       if (routers.length) F("X04", "WARN", b.id, `belongs to ${c.qname} · ${c.name} but its Quest link is ${s(b.questId) || "(none)"} and nothing gates it on the chapter — ${routers.map(r => r.id).join(", ")} still route to it after the chapter is done`);
     }
   }
+}
+
+// ── P10 PLACELESS (Dave 2026-11-02: "I don't like the idea of anywhere beats anymore. I want things to either happen at a specific hex,
+// and if the conditions aren't met yet it doesn't trigger, or have it be a random encounter. For things we want to make sure happen,
+// they should be hardcoded."): a live beat whose place is "anywhere" must be REACHED by something — a route (choice next/failNext,
+// handoff), a hex arrival (hexOverrides onEnterBeatId / onEnterBeatIds), a road table entry, a town-map door (the *_exterior
+// convention — door tiles live on scenes the export doesn't carry) or the engine (CODE_FIRED). Nothing reaches it = it never plays.
+{
+  let SMp = null; try { SMp = require(path.join(__dirname, "..", "scripts", "story-model.js")); } catch (_e) { SMp = null; }
+  const CODE_FIRED = new Set([   // beats the engine fires by id (module.js / hex-travel.js / strategic-throughput.js / bandit ledger)
+    "ag_title_card", "bandit_ambush_arms_down", "reliable_lease_last_turn", "reliable_lease_lapsed", "tikkun_atonement_rite"
+  ]);
+  const deferredP = (b) => !!b?._deferred || (Array.isArray(b?.inject?.requires) && b.inject.requires.some(r => r && r.flag === "storyPhase" && Number(r.gte) >= 9));
+  // counted: authored routes, hex arrivals (overrides + hex.<slug> tags), road tables — NOT the Visualizer's quest-order offer or a
+  // Director storyChain invite (GM-mediated "anywhere" offers are exactly what the ruling retires). An NPC dialogue offer counts:
+  // it needs the speaker present on a scene.
+  const reached = new Set([...incoming.entries()].filter(([, ins]) => (ins || []).some(r => r && r.via !== "quest-order")).map(([k]) => k));
+  for (const b of beats) if (s(b?.speakerActorId) && labeledChoices(b).length && b.dialogueOffer !== false) reached.add(s(b.id));
+  for (const ov of Object.values(campaign.hexOverrides || {})) for (const id of [...(Array.isArray(ov?.onEnterBeatIds) ? ov.onEnterBeatIds : []), ov?.onEnterBeatId, ov?.beatId]) if (s(id)) reached.add(s(id));
+  for (const b of beats) { if (s(b?.handoff?.beatId)) reached.add(s(b.handoff.beatId)); for (const c of (b?.choices || [])) { if (s(c?.next)) reached.add(s(c.next)); if (s(c?.failNext)) reached.add(s(c.failNext)); } }
+  const tableTxt = tables ? JSON.stringify(tables) : "";
+  if (SMp && typeof SMp.placeOf === "function") {
+    for (const b of beats) {
+      if (!b || !s(b.id) || deferredP(b)) continue;
+      let p = null; try { p = SMp.placeOf(b, null); } catch (_e) { p = null; }
+      if (p !== "anywhere") continue;
+      const id = s(b.id);
+      if (b.inject?.autoFire === true) continue;   // hard-coded: plays itself when its requires hold (module.js _autoFireSweep)
+      if (b.pinLeg && typeof b.pinLeg === "object") continue;   // a pinned travel leg wins its leg (hex-travel maybeInject)
+      if (tagsOf(b).includes("reality-tear")) continue;          // drawn by tag on a Reality-Tear overshoot (module.js _drawAdversaryBeat)
+      if (/^\(GM\)/.test(s(b.label))) continue;                  // a GM reaction card ("(GM) If Someone Swings") — played when the table does the thing
+      if (reached.has(id) || CODE_FIRED.has(id) || /_exterior$/.test(id) || (tableTxt && tableTxt.includes(`"${id}"`))) continue;
+      F("P10", "ERROR", id, `placeless and unreached — "anywhere", and no route, hex arrival, road table, town door or engine path plays it. Pin it to a hex (beat.where / hexOverrides), put it on a road table, or route it from the beat that earns it`);
+    }
+  } else console.error("note: story-model.js not loadable — P10 skipped");
 }
 
 // ─── report ─────────────────────────────────────────────────────────────────

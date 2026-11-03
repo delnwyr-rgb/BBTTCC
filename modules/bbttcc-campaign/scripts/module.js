@@ -56,6 +56,7 @@ const SETTING_WENDIGO_RUNG = "wendigoRung";
 const SETTING_DOUGAN_POINTED = "wendigoDouganPointed"; // step 4: Dougan has pointed to the Confluence (fire-once)
 const WENDIGO_RUNG_MAX = 4;
 const WENDIGO_TRAVEL_BEAT_IDS = new Set([
+  "fc_road_wendigo",   // the Wendigo's own road meeting climbs the rung (2026-11-02: the opener needed rung ≥ 1 and nothing on the roads raised it)
   "acid_bog_logistics_success",
   "acid_bog_logistics_failure",
   "enc_broken_bridge_go_around_success",
@@ -4854,6 +4855,43 @@ async function executeBeat(campaign, beat, ctx = {}) {
     }
   } catch (e) { warn("quest-offer card failed:", e); }
 }
+
+// AUTO-FIRE (Dave 2026-11-02: "I want things to either happen at a specific hex … or have it be a random encounter. For things we want
+// to make sure happen, they should be hardcoded."): a beat with `inject.autoFire: true` plays ITSELF, once, the moment its conditions
+// hold — no hex, no table, no GM fetching it from a list. Any write to a campaign-namespace setting (story state, a meter, the act)
+// schedules a debounced sweep; the sweep waits while a beat dialog is open or a ride is mid-route, then runs the first eligible
+// beat (never played, not sealed, inject.requires met) and re-sweeps. Active GM only. Lint P10 counts autoFire as reached.
+let _autoFireTimer = null, _autoFireBusy = false;
+function _scheduleAutoFire(ms = 2500) {
+  try { if (!game.user?.isGM) return; clearTimeout(_autoFireTimer); _autoFireTimer = setTimeout(() => { _autoFireSweep().catch(e => warn("[autoFire] sweep failed:", e)); }, ms); } catch (_e) {}
+}
+async function _autoFireSweep() {
+  if (_autoFireBusy || !game.user?.isGM) return;
+  const activeGM = game.users?.activeGM; if (activeGM && !activeGM.isSelf) return;
+  const cid = getActiveCampaignId(); const camp = cid ? getCampaign(cid) : null; if (!camp) return;
+  const cands = (camp.beats || []).filter(b => b?.inject?.autoFire === true && !b._deferred);
+  if (!cands.length) return;
+  const busy = !!document.querySelector(".bbttcc-campaign-dialog, .bbttcc-player-facing-dialog") || !!game.bbttcc?._pendingHexEnter;
+  if (busy) return _scheduleAutoFire(4000);
+  const st = _storyStateFor(cid);
+  for (const b of cands) {
+    if (st.played?.[b.id]) continue;
+    // never move the act ladder BACKWARDS: an act card whose phaseAdvance.set is at or below the current act is stale (a table that
+    // reached the act another way) — it stays unplayed and silent
+    try { const setTo = Number(b.worldEffects?.phaseAdvance?.set); if (Number.isFinite(setTo) && setTo <= Number(_storyPhaseGet() || 0)) continue; } catch (_eP) {}
+    let ok = false; try { ok = await _beatRequiresMet(b, camp, {}); } catch (_e) { ok = false; }
+    if (!ok) continue;
+    _autoFireBusy = true;
+    try { log(`[autoFire] '${b.id}' — its conditions hold; it plays.`); await runBeat(cid, b.id, { source: "autoFire" }); }
+    catch (e) { warn(`[autoFire] '${b.id}' failed:`, e); }
+    finally { _autoFireBusy = false; }
+    _scheduleAutoFire(3000);
+    return;
+  }
+}
+Hooks.on("updateSetting", (setting) => { try { if (String(setting?.key || "").startsWith(MOD_ID + ".")) _scheduleAutoFire(); } catch (_e) {} });
+Hooks.on("bbttcc:advanceTurn:end", () => _scheduleAutoFire(5000));
+Hooks.once("ready", () => _scheduleAutoFire(15000));
 
 // Title-card trigger (2026-08-24, owner's movie model): the first applied
 // turn advance while the story sits in Act 1 (the prologue) offers the GM
