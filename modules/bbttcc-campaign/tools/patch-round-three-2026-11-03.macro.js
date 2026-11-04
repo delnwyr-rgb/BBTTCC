@@ -11,6 +11,9 @@
  *   • Chuckle Creek is a place (2026-11-04): its hub fired once, so a party that left mid-quest rode back to silence. It repeats now, with a way back to the road.
  *   • Leaving Gloomgill before his exam isn't a verdict (2026-11-04): "Leave" went to gloomgill_fled, which closes the quest for good, even while he was
  *     refusing to begin and telling the party to come back. It's the walk-out verdict only once the exam is open; before that, the lake just lets you go.
+ *   • No fighting Gloomgill (Dave 2026-11-04: "Let's remove the fight option"): the Fight choice and its two beats are gone. The text survives in fix-gloomgill-exam.macro.js.
+ *   • Lines (Dave 2026-11-04): Chuckle Creek's street knows you've been here; the finale's exit stops calling itself clean and knows if you let Tarvaan finish; Sklar turns
+ *     at the bunker mouth on the Siege path, not mid-swing.
  * Idempotent (rerun = 0). DRY_RUN first. Backup (campaigns) → Data/bbttcc-exports/. GM only.
  */
 const ROUND_THREE_PATCH = (() => {
@@ -71,6 +74,38 @@ const ROUND_THREE_PATCH = (() => {
       const prev = `gloomgill_question_${n - 1}`;
       if (!req.some(r => r?.beatMark === prev)) { q.inject.requires = [...req, { beatMark: prev }]; changes++; report.push(`✚ ${q.id}: requires ${prev}`); }
     }
+    // ── No fighting Gloomgill ──
+    const ggIntro = beats.find(b => b?.id === "gloomgill_intro_scene");
+    if (!ggIntro) conflicts.push("beat not found: gloomgill_intro_scene");
+    else if ((ggIntro.choices || []).some(c => c?.next === "gloomgill_fight")) {
+      ggIntro.choices = ggIntro.choices.filter(c => c?.next !== "gloomgill_fight");
+      changes++; report.push("✚ gloomgill_intro_scene: Fight removed");
+    }
+    for (const id of ["gloomgill_fight", "gloomgill_fought"]) {
+      const i = beats.findIndex(b => b?.id === id);
+      if (i < 0) continue;
+      const stillRouted = beats.some(b => b?.id !== "gloomgill_fight" && (b?.choices || []).some(c => c?.next === id || c?.failNext === id));
+      if (stillRouted) { conflicts.push(`${id}: another beat still routes to it, left in place`); continue; }
+      beats.splice(i, 1); changes++; report.push(`✚ ${id}: deleted`);
+    }
+    // ── Lines ──
+    const rewrite = (id, marker, fn) => {
+      const b = beats.find(x => x?.id === id);
+      if (!b) { conflicts.push(`beat not found: ${id}`); return; }
+      const d = String(b.description || "");
+      if (d.includes(marker)) return;
+      const out = fn(d);
+      if (out === d) { conflicts.push(`${id}: expected text not found, left alone`); return; }
+      b.description = out; changes++; report.push(`✚ ${id}: text`);
+    };
+    const CREEK_SEEN = "cc_diner|chuckle_hollis|chuckle_piano_kid|chuckle_projector|chuckle_creek_itself";
+    rewrite("chuckle_arrival", `{{#played ${CREEK_SEEN}}}`, d => `{{#played ${CREEK_SEEN}}}The street again. The sun with the face is still pleased to see you: exactly as pleased, to the same degree, which you are starting to notice. The man on the corner takes the anvil, flattens, springs back, tips his hat. The carhop loves your costume, with no memory of having said so. The creek is still enjoying the joke two rooms away. The kid is still under the piano that has not fallen yet. Nothing here has changed, and nobody finds that remarkable. {{#played chuckle_rung_4}}You know where the seam is now. The plaque goes by between the carhop's sentence and the elf's. Nobody looks up. {{/played}}Pick a door.\n\n⚙ GM: same street, same joy, same delight at seeing you, word for word if you can manage it. Let the sameness start to itch. If somebody swings at Hollis unprovoked, play "(GM) If Someone Swings".{{else}}${d}{{/played}}`);
+    const TF = "You got what you came for, and you let a man be a god for one breath to do it.";
+    rewrite("raid_thatwards_outcome_neutral_spark", TF, d => `{{#played odie_tarvaan_fires}}${TF} The Spark is yours. Nobody is going to round this one in your favor: the platform is cracked, the mountain felt it, and whatever looked down through that hole in the ceiling has seen who was standing under it. The truth is incomplete, but it points in the right direction: someone with money and patience redirected energies through the seal and wounded something ancient in the process. You were in the room for the second wound.{{else}}${d}{{/played}}`);
+    const exit = beats.find(b => b?.id === "raid_thatwards_outcome_neutral_spark");
+    if (exit && exit.label === "Clean Exit, Dirty Truth") { exit.label = "Out With the Spark, and a Dirty Truth"; changes++; report.push("✚ raid_thatwards_outcome_neutral_spark: label"); }
+    const SK_OLD = "It happens in the middle of the fight, which is the only place it could. Sklar, mid-swing, with a Rider's relay crackling the figures at her from across the field";
+    rewrite("odie_sklar_switches", "{{#played raid_thatwards_siege_open}}", d => d.replace(SK_OLD, `{{#played raid_thatwards_siege_open}}It happens at the bunker mouth, in whatever shift of the siege this is, which is the only place it could. Sklar, between volleys, with a Rider's relay crackling the figures at her from across the perimeter{{else}}${SK_OLD}{{/played}}`));
     return { changes, report, conflicts };
   }
   return { apply };

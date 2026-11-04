@@ -185,5 +185,20 @@ if (save) {
   test("every registered script resolves a next for a fresh quest at its act (no script is empty)", () => { const sit = m.deriveSituation({ beats: cb, firedSet: new Set(), readyOf: () => ({ ready: true, reasons: [] }), bucketOf: () => null, phase: 2, turn: 2, seqOf: b => Number(b.questStep) || 1e6, state: m.emptyState() }); for (const k of Object.keys(m.QUEST_SCRIPTS)) { const q = sit.byKey[k]; assert.ok(q, k); assert.ok(q.script, k + " script"); assert.ok(q.next?.beat || q.next?.handoff, k + " next"); assert.ok(q.next.line, k + " line"); } });
 }
 
+// ── back to a half-done quest (Dave 2026-11-04): with nothing else left, NOW offers the hub with a step still behind an open door ─────────
+{
+  // a real quest key: the model only lists quests in QUEST_MAP. The script override stays local to this last block.
+  m.registerScripts({ chuckle_creek: { giver: "x", description: "x", steps: [{ id: "a", label: "A", line: "a", beats: ["ht_hub"] }, { id: "d", label: "D", line: "d", beats: ["ht_diner"], done: { mark: "ht_table" } }, { id: "k", label: "K", line: "k", beats: ["ht_kid"] }, { id: "s", label: "S", line: "s", beats: ["ht_seam"] }], doors: [], after: [], chapters: {} } });
+  const S = (id, extra = {}) => ({ id, label: id, story: { quest: "chuckle_creek" }, inject: {}, choices: [{ label: "back", next: "ht_hub" }], ...extra });
+  const hub = S("ht_hub", { inject: { repeatable: true }, choices: [{ label: "diner", next: "ht_diner" }, { label: "kid", next: "ht_kid" }, { label: "aside", next: "ht_aside" }, { label: "seam", next: "ht_seam", requires: [{ beatMark: "ht_kid" }] }, { label: "road", next: "" }] });
+  const hb = [hub, S("ht_diner"), S("ht_table"), S("ht_kid"), S("ht_seam"), S("ht_aside")];
+  const hById = new Map(hb.map(b => [b.id, b]));
+  const run = (fired, over = {}) => { const st = m.emptyState(); for (const id of fired) m.applyRecord(st, hById.get(id), { ts: 1, turn: 1 }); return m.deriveSituation({ beats: hb, firedSet: new Set(fired), firedTs: () => 1, readyOf: () => ({ ready: true, reasons: [] }), bucketOf: () => null, phase: 2, turn: 2, anchorId: null, seqOf: b => hb.indexOf(b), state: st, where: null, knownHexes: null, ...over }); };
+  test("back-to-hub: stuck on a played step (the Creek's diner) → NOW offers the hub, not the turn", () => { const s = run(["ht_hub", "ht_diner"]); assert.equal(s.now?.why, "back-to-hub"); assert.equal(s.now.next.beat.id, "ht_hub"); assert.equal(s.now.next.backToHub, true); assert.equal(s.now.next.named, "ht_kid"); });
+  test("back-to-hub: every step played → the offer stops, even with an aside unread", () => { const s = run(["ht_hub", "ht_diner", "ht_table", "ht_kid", "ht_seam"]); assert.notEqual(s.now?.why, "back-to-hub"); });
+  test("back-to-hub: a fresh next wins; going back is only a last resort", () => { const s = run(["ht_hub", "ht_diner", "ht_table"]); assert.notEqual(s.now?.why, "back-to-hub"); assert.equal(s.now?.next?.beat?.id, "ht_kid"); });
+  test("back-to-hub: a door gated on an unplayed mark doesn't count", () => { hb[0].choices = hb[0].choices.filter(c => c.next === "ht_seam" || !c.next); hb[0].choices.push({ label: "x", next: "ht_aside" }, { label: "y", next: "ht_table" }); const s = run(["ht_hub", "ht_diner"]); assert.notEqual(s.now?.next?.named, "ht_seam"); });
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

@@ -66,7 +66,7 @@ async function data() {
     const n = sit?.now?.next;
     // here/place (Dave 2026-10-29: "Run next" fired Pike's HQ summons while the Stewards stood at Khezek-Tor) — a next beat
     // in another town is a RIDE, not a button; the card names the ride instead
-    if (n?.beat) next = { id: n.beat.id, label: n.beat.label || n.beat.id, ready: !!n.ready, line: n.line || "", here: n.here ?? null, place: n.place || null, where: sit?.where || null };
+    if (n?.beat) next = { id: n.beat.id, label: n.beat.label || n.beat.id, ready: !!n.ready, line: n.line || "", here: n.here ?? null, place: n.place || null, where: sit?.where || null, backToHub: !!n.backToHub };
     // 2026-11-03 (failure pass): when the story's next step is the TURN itself (NOW says "turn"), the card offers Lock the Turn —
     // it used to say "no ready next beat" and leave the GM to find the toolbar
     else if (String(sit?.now?.why || "") === "turn") waitsTurn = true;
@@ -120,6 +120,8 @@ async function open() {
   else if (d.next?.ready && d.next.here === false && d.next.place) buttons.ride = { icon: '<i class="fas fa-horse"></i>', label: `Ride to ${d.next.place}`, callback: () => { api()?.rideTo?.(d.next.place); } };
   else if (d.next?.ready && d.next.here !== false) buttons.next = { icon: '<i class="fas fa-play"></i>', label: `Run next: ${d.next.label}`, callback: () => { run(d.next.id, "resume-next"); } };
   else if (d.waitsTurn) buttons.lock = { icon: '<i class="fas fa-forward"></i>', label: "Lock the Turn", callback: () => { try { document.getElementById("bbttcc-btn-turn-driver")?.click(); } catch (_e) {} } };
+  // Going back is an offer: the table may be done with that town for now, so the month can still end from here (2026-11-04)
+  if (d.next?.backToHub && !buttons.pick) buttons.lock = { icon: '<i class="fas fa-forward"></i>', label: "Lock the Turn", callback: () => { try { document.getElementById("bbttcc-btn-turn-driver")?.click(); } catch (_e) {} } };
   buttons.close = { icon: '<i class="fas fa-times"></i>', label: "Not now" };
 
   _dlg = new Dialog({ title: "⏯ The last time we saw Lucky…", content, buttons, default: Object.keys(buttons)[0] }, { left: 80, top: 10, width: 460 });

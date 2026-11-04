@@ -981,6 +981,28 @@ export function deriveSituation(ctx) {
       }
     }
   }
+  // BACK TO A HALF-DONE QUEST (Dave 2026-11-04, round three): the party left Chuckle Creek mid-quest, its next step was reachable only through the town's hub, and with nothing else
+  // left Resume said Lock the Turn while the Creek (and every lamp behind it) waited. Last resort, so it never outranks anything: a started foreground quest with a repeatable
+  // hub whose open door leads to an unplayed STEP of that quest's script, or to the step it's still on. Script steps only: an unread answer in an old town never drags a table back, and when the steps are
+  // played the offer stops by itself. A door is open only if every row of its gate is a beatMark the store can answer; anything else stays closed here, the safe way to be wrong.
+  if (!nowOut || !nowOut.next || ["turn", "complete", "empty", "done-no-closer"].includes(String(nowOut.why || ""))) {
+    const markMet = (r) => !!r && typeof r === "object" && r.beatMark != null && (r.not === true ? !fired.has(String(r.beatMark)) : fired.has(String(r.beatMark)));
+    const doorOpen = (c) => [].concat(c?.requires || []).filter(Boolean).every(markMet);
+    const started = [...inPlay, ...(anchorQuest && anchorQuest.state === "active" ? [anchorQuest] : [])].filter(fg);
+    outerHub: for (const q of started) {
+      const sc = scriptOf(q.key); if (!sc) continue;
+      const stepIds = new Set((sc.steps || []).flatMap(st => (st?.beats || []).map(String)));
+      for (const b of beats) {
+        if (String(b?.story?.quest || "") !== String(q.key) || b.inject?.repeatable !== true || !fired.has(String(b.id)) || !isHub(b)) continue;
+        if (!readiness(b).ready || sealOfDecl(b, store || undefined, phase)?.sealed) continue;
+        const door = (b.choices || []).find(c => { const t = byId.get(String(c?.next || "")); return t && stepIds.has(String(t.id)) && (!fired.has(String(t.id)) || String(t.id) === String(q.next?.beat?.id || "")) && doorOpen(c) && readiness(t).ready; });   // a played step can still be the current one: the Creek's diner, done only by a mark inside it
+        if (!door) continue;
+        const def = QUEST_MAP.quests[String(q.key)] || null, pl = placeOf(b, def);
+        nowOut = { quest: q, chapter: q.currentChapter, next: { beat: b, ready: true, reasons: [], line: `Unfinished: ${def?.name || q.key}. There's still a door open there.`, here: hereOf(b, def), place: (pl && pl !== "anywhere") ? pl : (def?.hex || null), named: String(door.next), backToHub: true }, why: "back-to-hub", roads: [] };
+        break outerHub;
+      }
+    }
+  }
   // THE DAY MUST END FIRST (owner ruling 2026-09-20: "make it deliberate — prompt for it if someone doesn't fire Day's End").
   // When NOW waits on the TURN (a title card gated `turn ≥ N`), the act's Day's End terminal is offered as the way there.
   try {

@@ -371,7 +371,7 @@ export const STORY_SCRIPTS = {
       { id: "act6", label: "Act Six", line: "The finale is counted. The epilogue is waiting in the river.", beats: ["a6_title_card"], done: { mark: "a6_title_card" } },
       { id: "intro", label: "The River Goes Silent", line: "The river goes silent a mile out. That's the invitation.", beats: ["gloomgill_intro", "gloomgill_intro_scene"], done: { mark: "gloomgill_intro_scene" } },
       { id: "questions", label: "Ten Questions", line: "Ten questions. He's grading energy, not answers.", beats: ["gloomgill_question_1", "gloomgill_question_2", "gloomgill_question_3", "gloomgill_question_4", "gloomgill_question_5", "gloomgill_question_6", "gloomgill_question_7", "gloomgill_question_8", "gloomgill_question_9", "gloomgill_question_10"], done: { anyOf: ["gloomgill_question_10", "gloomgill_fight", "gloomgill_fled"] } },
-      { id: "verdict", label: "The Verdict", line: "The verdict.", beats: ["gloomgill_passed", "gloomgill_failed", "gloomgill_fought", "gloomgill_fled"], done: { quest: "gloomgill" } }
+      { id: "verdict", label: "The Verdict", line: "The verdict.", beats: ["gloomgill_passed", "gloomgill_failed", "gloomgill_fled"], done: { quest: "gloomgill" } }
     ],
     doors: [], after: [], chapters: {}
   },
