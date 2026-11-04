@@ -95,7 +95,22 @@ console.log("[bbttcc-tikkun/beat-listener] LOADED");
         if (fromUuidActor instanceof Actor && fromUuidActor.type === "character") return fromUuidActor;
       } catch (_e) { /* ignore */ }
     }
+    // 2026-11-03 (failure pass, the finale's "Unexpectedly Friendly Terms"): the beat window's roster pick, then a party of one.
+    actor = tryId(ctx?.rosterActorId) || tryId(ctx?.roster?.actorId);
+    if (actor) return actor;
+    const party = _partyStewards();
+    if (party.length === 1) return party[0];
     return null;
+  }
+
+  // The Stewards riding with the active campaign's lead Domain (the same roster the radiation/ride code uses).
+  function _partyStewards() {
+    try {
+      const capi = game.bbttcc?.api?.campaign; const camp = capi?.getCampaign?.(capi?.getActiveCampaignId?.());
+      const lead = String(camp?.factionId || (camp?.factionIds || [])[0] || "").replace(/^Actor\./, "");
+      const list = lead ? (game.bbttcc?.api?.radiation?.partyStewardsOf?.(lead) || []) : [];
+      return list.filter(a => a && a.type === "character");
+    } catch (_e) { return []; }
   }
 
   // GM-prompt fallback: pick a character actor from the world. Only fires
@@ -103,7 +118,9 @@ console.log("[bbttcc-tikkun/beat-listener] LOADED");
   // actor or null (cancelled).
   async function _promptForActor(link, beatLabel) {
     const _isSteward = (a) => { const k = game.bbttcc?.api?.actorKind?.(a); return k ? k === "steward" : a?.type === "character"; };
-    const candidates = game.actors?.filter(a => _isSteward(a) && a.hasPlayerOwner) ?? [];
+    // the riding party first (2026-11-03: the finale listed every player-owned Steward in the world); the world only as a fallback
+    const party = _partyStewards();
+    const candidates = party.length ? party : (game.actors?.filter(a => _isSteward(a) && a.hasPlayerOwner) ?? []);
     if (!candidates.length) return null;
     return new Promise((resolve) => {
       const opts = candidates.map(a => `<option value="${a.id}">${a.name}</option>`).join("");

@@ -443,6 +443,23 @@ faultline_tuning: {
   text: "Tune resonant faultlines and leylines; stabilize a region or reveal hidden pathways (GM adjudicates)."
 },
 
+cultural_exchange_network: {
+  kind: "strategic",
+  label: "Cultural Exchange Network",
+  primaryKey: "culture",
+  cost: { culture: 10, diplomacy: 5 },
+  opCosts: { culture: 10, diplomacy: 5 },
+  tier: 1,
+  rarity: "uncommon",
+  source: "narrative-unlock",
+  unlockKey: "cultural_exchange_network",
+  groupKey: "forgotten_cause",
+  groupLabel: "The Forgotten Cause",
+  groupOrder: 20,
+  storyOnly: true,
+  text: "Keep the Summit's table set: an exchange of cooks, stories and apprentices with a neighbouring people. This turn, one strained relationship with a faction you share a border with improves by a step, or one Unity loss from a cultural clash is averted (GM adjudicates)."
+},
+
 auto_recon_sweep: {
   kind: "strategic",
   label: "Auto-Recon Sweep",
@@ -537,6 +554,23 @@ divine_favor: {
     raidTypes: ["infiltration","espionage"],
     defenderAccess: "No",
     text: "Phase through the seams: ignore one defensive circumstance this round (GM adjudicates) and gain +2 to the attacker roll if the raid type is Infiltration/Espionage."
+  },
+
+  // THE FORGOTTEN CAUSE (2026-11-03, failure pass): the Confluence's Restore/Redirect and the Summit granted keys that were never
+  // defined — the doctrine item was created empty ("EFFECTS missing key"). Narrative unlocks, GM-adjudicated like their neighbours.
+  leyline_remembrance: {
+    kind: "maneuver",
+    tier: 1,
+    rarity: "uncommon",
+    minFactionTier: 1,
+    unlockKey: "leyline_remembrance",
+    label: "Leyline Remembrance",
+    primaryKey: "culture",
+    cost: { culture: 10 },
+    opCosts: { culture: 10 },
+    raidTypes: ["ritual","courtly","liberation","assault_defense"],
+    defenderAccess: "Yes",
+    text: "Call the names the Wendigo held back into the field. Once this round, a side that has forgotten what it fights for wavers: the opponent loses 2 from its next roll, or one of your units shaken this round steadies (GM adjudicates)."
   },
 
   // RETIRED 2026-05-24 (MANEUVER_BALANCE_PASS.md §3.C) — Battlefield Harmony

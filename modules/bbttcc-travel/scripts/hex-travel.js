@@ -858,8 +858,8 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
       if (!game.settings?.settings?.has(`${ENC_DIAL_NS}.${ENC_BASE_DC_KEY}`)) {
         game.settings.register(ENC_DIAL_NS, ENC_BASE_DC_KEY, {
           name: "Travel: Encounter Base DC",
-          hint: "Base difficulty of every travel check (2d10 + Intrigue + scout). The party must roll >= this to pass; failure triggers an encounter. HIGHER = more encounters. Default 12 (retuned 2026-08-22 for the 2d10 regime — a world that stored the old d20-era 15 should be set back to 12).",
-          scope: "world", config: true, type: Number, default: 12
+          hint: "Base difficulty of every travel check (2d10 + Intrigue + scout); the leg's DC adds 'Encounter DC per Tier' × the danger tier. The party must roll >= the DC to pass; failure triggers an encounter. HIGHER = more encounters. Default 9 (Dave 2026-11-03: 'a 75% chance … is a little aggressive' — 9 puts a Tier-1 leg at DC 11 ≈ 45% before Intrigue/scout, Tier 2 ≈ 66%, Tier 3 ≈ 84%). A world still on the d20-era 15 (≈ 90% at Tier 1) should be set to 9.",
+          scope: "world", config: true, type: Number, default: 9
         });
       }
       if (!game.settings?.settings?.has(`${ENC_DIAL_NS}.${ENC_TIER_STEP_KEY}`)) {
@@ -899,10 +899,10 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
 
   function _encounterDc(tier, dcMod, darknessBump) {
     _ensureEncounterDialSettings();
-    let base = 15, step = 2;
+    let base = 9, step = 2;
     try { base = Number(game.settings.get(ENC_DIAL_NS, ENC_BASE_DC_KEY)); } catch (_e) {}
     try { step = Number(game.settings.get(ENC_DIAL_NS, ENC_TIER_STEP_KEY)); } catch (_e) {}
-    if (!Number.isFinite(base)) base = 15;
+    if (!Number.isFinite(base)) base = 9;
     if (!Number.isFinite(step)) step = 2;
     return base + ((Number(tier) || 0) * step) + (Number(dcMod) || 0) + (Number(darknessBump) || 0);
   }

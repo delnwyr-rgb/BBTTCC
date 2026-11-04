@@ -1892,7 +1892,11 @@ function _choiceSpent(ch, campaign, fromBeatId = null) {
     // more beats route into is somewhere you go back to, not a moment that's spent.
     if (tgt.inject?.repeatable !== true) return _inboundRoutes(campaign, next) >= 4 ? false : "lock";
     const from = String(fromBeatId || "");
-    const isQuestion = /^ans_/.test(next) || /\banswer\b/.test(String(tgt.tags || "")) || (!!from && (tgt.choices || []).some(c => String(c?.next || "") === from));
+    // 2026-11-03 (failure pass, the Crown Mall hub): a side trip that comes home in TWO steps (VHS Ghosts → Emotional Rewind →
+    // "The mall keeps happening." → the hub) is asked too — the one-step test never greyed the mall's three explorations.
+    const byId = (id) => (campaign?.beats || []).find(b => String(b?.id) === String(id));
+    const comesBack = (b) => (b?.choices || []).some(c => String(c?.next || "") === from);
+    const isQuestion = /^ans_/.test(next) || /\banswer\b/.test(String(tgt.tags || "")) || (!!from && (comesBack(tgt) || (tgt.choices || []).some(c => c?.next && String(c.next) !== from && comesBack(byId(c.next)))));
     return isQuestion ? "soft" : false;
   } catch (_e) { return false; }
 }
@@ -3107,6 +3111,9 @@ ${
             try {
               const sel = html && html[0] ? html[0].querySelector('select[name="bbttccRosterActor"]') : null;
               const rosterActorId = sel ? (sel.value || null) : null;
+              // 2026-11-03: the pick rides on the beat's ctx — bbttcc:beat:resolved listeners (the Tikkun spark advance on the
+              // finale's "Unexpectedly Friendly Terms") prompted for an operative because nothing told them who acted.
+              try { if (rosterActorId && ctx && typeof ctx === "object") ctx.rosterActorId = rosterActorId; } catch (_eRA) {}
 
               // Support/backing (Faction spend in MARKS -> +2 per 10 marks)  -  optional
               // NOTE: Support UI may be absent; fall back to ctx/choice fields.
