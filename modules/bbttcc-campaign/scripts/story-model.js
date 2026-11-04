@@ -944,6 +944,9 @@ export function deriveSituation(ctx) {
         if (!x || fired.has(String(x.id)) || !readyNow(x)) continue;
         const b = entryFor(x) || x; const def = QUEST_MAP.quests[String(b.story?.quest || "")] || null;
         nowOut = { quest: q, chapter: q.currentChapter, next: { beat: b, ready: true, reasons: [], line: q.next?.line || "", here: hereOf(b, def), gateDoor: true, named: String(x.id), opens: q.next?.beat?.id || null, stepLabel: q.next?.stepLabel || "" }, why: "gate-door", roads: [] };
+        // Round three (2026-11-03): a gate door never named its place, so a door a ride away gave the Resume card no Ride-to button, only "Not now"
+        // (the Red Thread, Leaning). A beat that declares nothing falls back on its quest's hex.
+        { const pl = placeOf(b, def); nowOut.next.place = (pl && pl !== "anywhere") ? pl : (def?.hex || q.hex || null); }
         break outer;
       }
     }
