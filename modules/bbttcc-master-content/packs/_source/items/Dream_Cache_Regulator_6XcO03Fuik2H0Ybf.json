@@ -50,7 +50,7 @@
             "origin": "septcraft"
           },
           "price": {
-            "marks": 1080,
+            "marks": 170,
             "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
@@ -58,7 +58,9 @@
             "rarityMult": 1,
             "notes": "TIII sigil × 1.20 × tech 2.0",
             "bound": "attuned",
-            "saleBack": 432
+            "saleBack": 68,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 1080
           }
         }
       }

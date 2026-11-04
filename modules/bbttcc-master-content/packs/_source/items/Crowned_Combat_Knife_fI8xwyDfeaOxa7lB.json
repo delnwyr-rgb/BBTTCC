@@ -103,7 +103,7 @@
             }
           ],
           "price": {
-            "marks": 2025,
+            "marks": 125,
             "currency": "violence",
             "gmOverride": false,
             "altCurrencies": {},
@@ -111,7 +111,9 @@
             "rarityMult": 1,
             "notes": "TIV weapon (Crowned +3 on TI Combat Knife) × bound soulbound",
             "bound": "soulbound",
-            "saleBack": 0
+            "saleBack": 0,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 2025
           }
         }
       },

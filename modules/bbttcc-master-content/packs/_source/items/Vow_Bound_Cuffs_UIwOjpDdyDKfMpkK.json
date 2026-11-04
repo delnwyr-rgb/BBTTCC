@@ -50,7 +50,7 @@
             "origin": "septcraft"
           },
           "price": {
-            "marks": 180,
+            "marks": 70,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
@@ -58,7 +58,9 @@
             "rarityMult": 1,
             "notes": "TII tool × 0.60 × tech 2.0",
             "bound": "free",
-            "saleBack": 72
+            "saleBack": 28,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 180
           }
         }
       }

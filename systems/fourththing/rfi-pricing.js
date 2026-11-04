@@ -40,6 +40,15 @@ export const MARKS_PER_OP = 10;
 // Tier base — geometric ×3 progression. T1: 50 / T2: 150 / T3: 450 / T4: 1350.
 export const TIER_BASE_MARKS = { 1: 50, 2: 150, 3: 450, 4: 1350 };
 
+// GEAR TIER BASE (owner ruling 2026-11-03, round three: "cut T2 prices … apply the same rubric to the higher tiers"). One rule: a tier's ARMOR (×1.5)
+// costs one full pool at the Standing that opens it — caps 90 / 110 / 130 at Standing 2 / 3 / 4 (TIER_CAP_BAND_MARKS). The live test that drove it: a
+// 225-list Tier II armor took 300 of a Domain's 501 marks, about seven months of its income. Tier I stays 50 (free as Standard Issue within the horizon).
+// TIER_BASE_MARKS still prices what is not gear: hulls, materials and trade goods here, plus rigs and facilities in their own functions.
+export const GEAR_TIER_BASE_MARKS = { 1: 50, 2: 60, 3: 70, 4: 85 };
+const NON_GEAR_FRAMES = new Set(["vehicle", "material", "trade-good"]);
+export function gearTierBaseMarks(tier) { return GEAR_TIER_BASE_MARKS[tierToInt(tier)] ?? GEAR_TIER_BASE_MARKS[1]; }
+export function isGearFrame(frame) { return !NON_GEAR_FRAMES.has(String(frame || "")); }
+
 // Frame → category multiplier (rubric §2).
 export const CATEGORY_MULT_BY_FRAME = {
   weapon:     1.0,
@@ -123,7 +132,8 @@ export const SALE_BACK_FRACTION = 0.40;
 // Per-tier forge fee in marks (rubric §4). Covers tools, time, lost wax,
 // sept tithe, GM-discretion fees. Charged in marks regardless of materials
 // consumed; forge keeps it on failed crafts.
-export const TIER_FEE_MARKS = { I: 10, II: 30, III: 90, IV: 270 };
+// 2026-11-03: 20% of the gear base, as it always was of the old one — 30 / 90 / 270 would now exceed the item's own list price.
+export const TIER_FEE_MARKS = { I: 10, II: 12, III: 14, IV: 17 };
 
 // Rig bracket multipliers (rubric §7). Applied to tierBase to get a frame-only
 // chassis price; weapon/system/output modules priced separately as items.
@@ -165,7 +175,7 @@ function roundToFive(n) {
  * Returns marks (integer, rounded to 5).
  */
 export function computeListPrice({ tier, frame, hasTech = false, bound = "free", halfTier = false, rarityMult = 1.0 } = {}) {
-  const base    = tierBaseMarks(tier);
+  const base    = isGearFrame(frame) ? gearTierBaseMarks(tier) : tierBaseMarks(tier);
   const cat     = categoryMult(frame);
   const tech    = hasTech ? TECH_MULT : 1.0;
   const boundM  = BOUND_MULT[bound] ?? 1.0;
@@ -380,7 +390,7 @@ async function _writeTech(item, partialOrNull) {
 
 export const RfiPricing = {
   // schema
-  MARKS_PER_OP, TIER_BASE_MARKS, CATEGORY_MULT_BY_FRAME, OP_POOLS, OP_POOL_LABELS,
+  MARKS_PER_OP, TIER_BASE_MARKS, GEAR_TIER_BASE_MARKS, gearTierBaseMarks, CATEGORY_MULT_BY_FRAME, OP_POOLS, OP_POOL_LABELS,
   NATIVE_POOL_BY_FRAME, TECH_MULT, BOUND_MULT, SALE_BACK_FRACTION, CROSS_POOL_FRICTION,
   TIER_FEE_MARKS, RIG_BRACKET_MULT,
   CREATURE_TIER_BASE, CREATURE_BRACKET_MULT, CREATURE_HIRE_MULT, LINEAGE_DEFAULT_CURRENCY,

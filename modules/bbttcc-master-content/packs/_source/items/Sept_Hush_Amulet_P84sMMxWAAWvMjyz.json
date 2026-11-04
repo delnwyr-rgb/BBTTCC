@@ -56,7 +56,7 @@
             "origin": "septcraft"
           },
           "price": {
-            "marks": 450,
+            "marks": 180,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -64,7 +64,9 @@
             "rarityMult": 1,
             "notes": "TII armor × 1.50 × tech 2.0",
             "bound": "attuned",
-            "saleBack": 180
+            "saleBack": 72,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 450
           }
         }
       }

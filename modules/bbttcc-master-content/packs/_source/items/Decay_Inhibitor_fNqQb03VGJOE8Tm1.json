@@ -52,7 +52,7 @@
             "target": "self"
           },
           "price": {
-            "marks": 30,
+            "marks": 10,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
@@ -60,7 +60,9 @@
             "rarityMult": 1,
             "notes": "TII consumable stamp",
             "bound": "free",
-            "saleBack": 12
+            "saleBack": 4,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 30
           }
         }
       }

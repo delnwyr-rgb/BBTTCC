@@ -100,7 +100,7 @@
             }
           ],
           "price": {
-            "marks": 150,
+            "marks": 60,
             "currency": "violence",
             "gmOverride": false,
             "altCurrencies": {},
@@ -108,7 +108,9 @@
             "rarityMult": 1,
             "notes": "TII weapon (Inlaid +1 on TI Hand Axe) × bound free",
             "bound": "free",
-            "saleBack": 60
+            "saleBack": 24,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 150
           }
         }
       },

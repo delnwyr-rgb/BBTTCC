@@ -54,7 +54,7 @@
           "signals": {},
           "lore": "<p>Light hazmat liner. Flexible, shielded weave keeps the slow death out without slowing the wearer down.</p>",
           "price": {
-            "marks": 340,
+            "marks": 135,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -62,7 +62,9 @@
             "rarityMult": 1.5,
             "notes": "TII armor × rarity 1.5",
             "bound": "free",
-            "saleBack": 136
+            "saleBack": 54,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 340
           }
         }
       },

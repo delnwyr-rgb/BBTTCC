@@ -91,7 +91,7 @@
             "origin": "hex-script"
           },
           "price": {
-            "marks": 300,
+            "marks": 120,
             "currency": "violence",
             "gmOverride": false,
             "altCurrencies": {},
@@ -99,7 +99,9 @@
             "rarityMult": 1,
             "notes": "TII weapon × 1 × tech 2.0",
             "bound": "free",
-            "saleBack": 120
+            "saleBack": 48,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 300
           }
         }
       }

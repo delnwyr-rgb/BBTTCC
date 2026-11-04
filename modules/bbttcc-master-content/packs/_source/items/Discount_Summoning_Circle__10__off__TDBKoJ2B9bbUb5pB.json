@@ -43,7 +43,7 @@
           "charges": 1,
           "lore": "<p>A cheap vinyl mat printed with runes and an aggressively cheerful coupon code. The fine print is in Infernal, and it is <i>mostly</i> about arbitration.</p><p><b>Action — Place Circle.</b> Set the mat in an unoccupied space within reach. The circle lasts 10 minutes or until used. While within 1 square, you can cast one conjuration manifestation with these benefits:</p><ul><li><b>10% Off Materials.</b> Reduce a costly material component cost by 10% (min 1 mark). Reduced cost is still consumed.</li><li><b>Coupon Stabilizer.</b> +1 to your Resolve DC for that manifestation.</li></ul><p>After the manifestation lands, the mat smokes, curls, and crumbles into glittery ash.</p>",
           "price": {
-            "marks": 45,
+            "marks": 20,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
@@ -51,7 +51,9 @@
             "rarityMult": 1.5,
             "notes": "TII consumable × rarity 1.5",
             "bound": "free",
-            "saleBack": 18
+            "saleBack": 8,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 45
           },
           "consume": {
             "effects": [],

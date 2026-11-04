@@ -147,7 +147,7 @@
             "focusing-lens"
           ],
           "price": {
-            "marks": 630,
+            "marks": 100,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -155,7 +155,9 @@
             "rarityMult": 2,
             "notes": "TIII shield × attuned × rarity 2",
             "bound": "attuned",
-            "saleBack": 252
+            "saleBack": 40,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 630
           },
           "grants": {
             "resistances": [

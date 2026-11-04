@@ -66,7 +66,7 @@
             }
           ],
           "price": {
-            "marks": 675,
+            "marks": 105,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -74,7 +74,9 @@
             "rarityMult": 1,
             "notes": "TIII armor (Circuited +2 on TI Initiate's Robe) × bound attuned",
             "bound": "attuned",
-            "saleBack": 270
+            "saleBack": 42,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 675
           }
         }
       },

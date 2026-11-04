@@ -46,7 +46,7 @@
           ],
           "charges": 3,
           "price": {
-            "marks": 90,
+            "marks": 35,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
@@ -54,7 +54,9 @@
             "rarityMult": 1,
             "notes": "TII tool stamp",
             "bound": "attuned",
-            "saleBack": 36
+            "saleBack": 14,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 90
           }
         }
       }

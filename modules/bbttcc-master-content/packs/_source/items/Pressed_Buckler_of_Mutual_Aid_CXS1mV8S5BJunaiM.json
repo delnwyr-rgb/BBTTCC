@@ -71,7 +71,7 @@
             }
           ],
           "price": {
-            "marks": 210,
+            "marks": 85,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -79,7 +79,9 @@
             "rarityMult": 1,
             "notes": "TII shield × tech 2.0 (bound Working: Mutual Aid Clause TI) × attuned",
             "bound": "attuned",
-            "saleBack": 84
+            "saleBack": 34,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 210
           },
           "tech": {
             "kind": "charged",

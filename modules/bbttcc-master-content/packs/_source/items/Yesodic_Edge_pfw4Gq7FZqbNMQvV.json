@@ -104,7 +104,7 @@
             }
           ],
           "price": {
-            "marks": 1350,
+            "marks": 85,
             "currency": "violence",
             "gmOverride": false,
             "altCurrencies": {},
@@ -112,7 +112,9 @@
             "rarityMult": 1,
             "notes": "TIV weapon stamp",
             "bound": "attuned",
-            "saleBack": 540
+            "saleBack": 34,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 1350
           }
         }
       }

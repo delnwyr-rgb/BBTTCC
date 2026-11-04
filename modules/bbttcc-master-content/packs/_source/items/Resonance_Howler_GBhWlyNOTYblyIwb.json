@@ -71,7 +71,7 @@
           "tier": "III",
           "frame": "weapon",
           "price": {
-            "marks": 450,
+            "marks": 70,
             "currency": "violence",
             "gmOverride": false,
             "altCurrencies": {},
@@ -79,7 +79,9 @@
             "rarityMult": 1,
             "notes": "TIII weapon stamp",
             "bound": "free",
-            "saleBack": 180
+            "saleBack": 28,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 450
           }
         }
       }

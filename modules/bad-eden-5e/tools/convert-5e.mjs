@@ -306,7 +306,8 @@ function weaponDamageType(s, tags) {
 const LEGACY_SLUG = s => s.replace(/^gear-wardstone-of-geburah$/, "gear-wardstone-of-gevurah").replace(/^spark-geburah-/, "spark-gevurah-");
 const DIE_UP = { 4: 6, 6: 8, 8: 10, 10: 12, 12: 12 };
 const rarityFor = (tags, marks, attune) => tags.includes("t1-baseline") ? "" : tags.includes("capstone") || marks >= 2000 ? "legendary" : attune || marks >= 1000 ? "veryRare" : marks >= 300 ? "rare" : marks >= 150 ? "uncommon" : "common";
-const rfiPrice = d => Number(d.flags?.fourththing?.rfi?.item?.price?.marks ?? 0) || 0;
+// RFI's gear prices were cut 2026-11-03 (rfi-pricing.js GEAR_TIER_BASE_MARKS). 5E rarity and cost keep the old scale (price.legacyMarks), so the D&D port's prices stay put.
+const rfiPrice = d => { const p = d.flags?.fourththing?.rfi?.item?.price; return Number(p?.legacyMarks ?? p?.marks ?? 0) || 0; };
 const baseItem = (d, type, extra = {}) => ({
   slug: LEGACY_SLUG("gear-" + d.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")),   // by name: RFI identifiers collide (two "laser" weapons)
   name: d.name, type, img: d.img && !/fourththing|bbttcc/.test(d.img) ? d.img : extra.img ?? "icons/svg/item-bag.svg",

@@ -44,7 +44,7 @@
             "regret"
           ],
           "price": {
-            "marks": 340,
+            "marks": 135,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
@@ -52,7 +52,9 @@
             "rarityMult": 1,
             "notes": "TII implant × soulbound",
             "bound": "soulbound",
-            "saleBack": 0
+            "saleBack": 0,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 340
           }
         }
       }

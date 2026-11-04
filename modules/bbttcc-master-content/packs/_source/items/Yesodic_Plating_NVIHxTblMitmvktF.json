@@ -74,7 +74,7 @@
             ]
           },
           "price": {
-            "marks": 2025,
+            "marks": 125,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -82,7 +82,9 @@
             "rarityMult": 1,
             "notes": "TIV armor stamp",
             "bound": "attuned",
-            "saleBack": 810
+            "saleBack": 50,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 2025
           }
         }
       },

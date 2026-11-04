@@ -311,7 +311,7 @@
             "mastery": ""
           },
           "price": {
-            "marks": 900,
+            "marks": 140,
             "currency": "violence",
             "gmOverride": false,
             "altCurrencies": {},
@@ -319,7 +319,9 @@
             "rarityMult": 1,
             "notes": "TIII weapon × tech 2.0 (3 charges, Soma Break) × attuned (2026-10-26: tech multiplier replaces the wondrous ×2 — price unchanged)",
             "bound": "attuned",
-            "saleBack": 360
+            "saleBack": 56,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 900
           },
           "tech": {
             "kind": "charged",

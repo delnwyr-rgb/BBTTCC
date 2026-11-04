@@ -61,7 +61,7 @@
             }
           ],
           "price": {
-            "marks": 810,
+            "marks": 50,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
@@ -69,7 +69,9 @@
             "rarityMult": 1,
             "notes": "TIV tool stamp",
             "bound": "attuned",
-            "saleBack": 324
+            "saleBack": 20,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 810
           }
         }
       }

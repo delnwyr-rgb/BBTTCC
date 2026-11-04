@@ -42,7 +42,7 @@
             "origin": "witness-forge"
           },
           "price": {
-            "marks": 360,
+            "marks": 145,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
@@ -50,7 +50,9 @@
             "rarityMult": 2,
             "notes": "TII tool × tech 2.0 × attuned × rarity 2",
             "bound": "attuned",
-            "saleBack": 144
+            "saleBack": 58,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 360
           }
         }
       }

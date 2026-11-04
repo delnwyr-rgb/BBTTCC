@@ -70,7 +70,7 @@
             }
           ],
           "price": {
-            "marks": 945,
+            "marks": 60,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -78,7 +78,9 @@
             "rarityMult": 1,
             "notes": "TIV shield (Circuited +2 on TII Wardiron Targe) × bound attuned",
             "bound": "attuned",
-            "saleBack": 378
+            "saleBack": 24,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 945
           }
         }
       },

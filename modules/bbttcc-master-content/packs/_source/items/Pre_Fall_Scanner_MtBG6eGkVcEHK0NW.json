@@ -51,7 +51,7 @@
             "origin": "pre-fall"
           },
           "price": {
-            "marks": 540,
+            "marks": 85,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
@@ -59,7 +59,9 @@
             "rarityMult": 1,
             "notes": "TIII tool × 0.60 × tech 2.0",
             "bound": "attuned",
-            "saleBack": 216
+            "saleBack": 34,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 540
           }
         }
       }

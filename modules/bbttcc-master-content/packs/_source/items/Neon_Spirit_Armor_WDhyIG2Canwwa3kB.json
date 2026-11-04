@@ -47,7 +47,7 @@
           "signals": {},
           "lore": "<p>It hums with the after-image of fluorescent signage. Smells like ozone and pretzel salt.</p><p><b>Neon Afterimage.</b> While in dim light or within 6 squares of an obvious artificial light source (signage, streetlights, neon, holo-ads), reroll the lowest die on Intrigue (tumble/balance/slip-past) checks to avoid provoking reaction strikes.</p><p><b>Ghostwalk (1/Soma Break).</b> As a bonus action, become briefly half-ethereal until the end of your current turn. You can move through creatures and objects as if difficult terrain. If you end your turn inside an object, you're shunted to the nearest open space and take <b>1d10 kinetic damage</b>.</p><p><b>Neon Signature.</b> The armor sheds faint, shifting light: a 1 square radius of dim light. Suppress or restore as a bonus action.</p>",
           "price": {
-            "marks": 1350,
+            "marks": 210,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -55,7 +55,9 @@
             "rarityMult": 2,
             "notes": "TIII armor × attuned × rarity 2",
             "bound": "attuned",
-            "saleBack": 540
+            "saleBack": 84,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 1350
           }
         }
       },

@@ -64,7 +64,7 @@
             }
           ],
           "price": {
-            "marks": 1415,
+            "marks": 90,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -72,7 +72,9 @@
             "rarityMult": 1,
             "notes": "TIV shield (Crowned +3 on TI Pressed Buckler) × bound soulbound",
             "bound": "soulbound",
-            "saleBack": 0
+            "saleBack": 0,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 1415
           }
         }
       },

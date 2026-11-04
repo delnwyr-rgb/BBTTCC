@@ -53,7 +53,7 @@
             "brace-iron"
           ],
           "price": {
-            "marks": 315,
+            "marks": 50,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -61,7 +61,9 @@
             "rarityMult": 1,
             "notes": "TIII shield × attuned (hygiene 2026-10-07; was 450 economy)",
             "bound": "attuned",
-            "saleBack": 126
+            "saleBack": 20,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 315
           }
         }
       },

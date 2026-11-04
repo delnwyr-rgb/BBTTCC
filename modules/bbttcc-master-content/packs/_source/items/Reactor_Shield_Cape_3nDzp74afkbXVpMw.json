@@ -19,7 +19,7 @@
       "rfi": {
         "item": {
           "price": {
-            "marks": 450,
+            "marks": 180,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -27,7 +27,9 @@
             "rarityMult": 2,
             "notes": "TII vestment stamp × rarity 2.0",
             "bound": "free",
-            "saleBack": 180
+            "saleBack": 72,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 450
           },
           "tier": "II",
           "frame": "vestment",

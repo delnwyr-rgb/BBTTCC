@@ -289,7 +289,7 @@
             "mastery": ""
           },
           "price": {
-            "marks": 675,
+            "marks": 105,
             "currency": "violence",
             "gmOverride": false,
             "altCurrencies": {},
@@ -297,7 +297,9 @@
             "rarityMult": 1.5,
             "notes": "TIII weapon × rarity 1.5 (hygiene 2026-10-07; was 450 violence)",
             "bound": "free",
-            "saleBack": 270
+            "saleBack": 42,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 675
           }
         }
       }

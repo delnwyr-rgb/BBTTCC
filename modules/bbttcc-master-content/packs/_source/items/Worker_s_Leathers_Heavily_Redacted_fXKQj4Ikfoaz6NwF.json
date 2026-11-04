@@ -76,7 +76,7 @@
             }
           ],
           "price": {
-            "marks": 450,
+            "marks": 180,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -84,7 +84,9 @@
             "rarityMult": 1,
             "notes": "TII armor × tech 2.0 (bound Working: Heavily Redacted TI) × attuned",
             "bound": "attuned",
-            "saleBack": 180
+            "saleBack": 72,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 450
           },
           "tech": {
             "kind": "charged",

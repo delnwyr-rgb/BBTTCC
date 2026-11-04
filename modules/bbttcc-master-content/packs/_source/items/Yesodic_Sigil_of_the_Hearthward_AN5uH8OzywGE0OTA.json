@@ -59,7 +59,7 @@
             }
           ],
           "price": {
-            "marks": 540,
+            "marks": 85,
             "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
@@ -67,7 +67,9 @@
             "rarityMult": 1,
             "notes": "TIII sigil stamp",
             "bound": "attuned",
-            "saleBack": 216
+            "saleBack": 34,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 540
           }
         }
       }

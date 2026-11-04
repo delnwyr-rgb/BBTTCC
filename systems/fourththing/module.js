@@ -12520,6 +12520,7 @@ function ftComputeDefenses(actor, sys) {
 
       // Bucket-A migration toward native Active Effects: an item may declare its
       // passive defense grants as GM-visible/editable AE *change rows* keyed
+        if (!_ftArmorCountedIds(actor, sys)?.has(item.id)) continue;   // one per slot (2026-11-03): an uncounted piece grants no resistances either
       //   flags.fourththing.grant.{resists|immunes|vulns|condImmunes}
       // (one damage-type/condition per row, or comma-separated). Read here, inside
       // the gated item loop, so AE grants inherit the SAME equipped + skill gates as
@@ -13101,6 +13102,31 @@ function ftComputeArmorBonus(actor, sys) {
   for (const item of actor.items) {
     if (item.type !== "armor") continue;
     const a = item.system ?? {};
+// ONE BODY PIECE PLUS A SHIELD (owner ruling 2026-11-03, round three: worn armor stacked without limit, and Tier I armor is free). Each armor item fills
+// one slot; boots, a helm and a scarf or shirt are their own slots, not body pieces. Only the best worn piece per slot counts. Monsters wear hides natively.
+function _ftArmorSlot(item) {
+  const frame = String(item?.flags?.fourththing?.rfi?.item?.frame || "");
+  const tags = (item?.system?.tags || []).map(t => String(t).toLowerCase());
+  if (frame === "shield" || tags.includes("shield")) return "shield";
+  if (frame === "footwear" || tags.includes("footwear")) return "feet";
+  if (tags.includes("helm")) return "head";
+  if (frame === "vestment") return "vestment";
+  return "body";
+}
+function _ftArmorCountedIds(actor, sys) {
+  try { if (actorKind(actor) === "monster") return null; } catch (_e) {}
+  const best = new Map();
+  for (const item of actor.items) {
+    if (item.type !== "armor" || item.system?.equipped === false) continue;
+    const rank = sys?.skills?.[_ftArmorGateSkill(item)]?.value ?? 0;
+    const scale = FT.ARMOR_RANK_SCALE[rank] ?? FT.ARMOR_RANK_SCALE[0];
+    const score = ["guard", "evasion", "resolve"].reduce((n, k) => { const raw = _ftArmorStatRaw(item, k); return n + Math.round(raw * scale.mult) + (raw > 0 ? scale.flat : 0); }, 0);
+    const slot = _ftArmorSlot(item), cur = best.get(slot);
+    if (!cur || score > cur.score) best.set(slot, { id: item.id, score });
+  }
+  return new Set([...best.values()].map(b => b.id));
+}
+
     if (a.equipped === false) continue;
 
     // Weight tag is canonical (light→fitting, medium→bracing, heavy→plating);
@@ -13120,10 +13146,15 @@ function ftComputeArmorBonus(actor, sys) {
     // instead of silently zeroing. Half-bonuses canon preserved: +1→+1, +2→+1,
     // +3→+2, +4→+2 at Trained; full bonuses at Proficient and above.
     const g = Math.round(rawG * scale.mult) + (rawG > 0 ? scale.flat : 0);
+  const countedArmor = _ftArmorCountedIds(actor, sys);
     const e = Math.round(rawE * scale.mult) + (rawE > 0 ? scale.flat : 0);
     const r = Math.round(rawR * scale.mult) + (rawR > 0 ? scale.flat : 0);
 
     result.guard   += g;
+    if (countedArmor && !countedArmor.has(item.id)) {
+      result.breakdown.push({ item: `${item.name} (not counted: one per slot)`, skill: null, rank: 0, guard: 0, evasion: 0, resolve: 0 });
+      continue;
+    }
     result.evasion += e;
     result.resolve += r;
     result.breakdown.push({
@@ -29590,6 +29621,17 @@ function _ftRigOnScene(rig, scene = canvas?.scene) {
   if (!rig || !scene) return false;
   return !!scene.tokens?.some?.(t => t.actorId === rig.id);
 }
+// Putting on a second piece in a slot takes the first one off (2026-11-03): the sheet shows what actually counts.
+Hooks.on("updateItem", (item, changed, _opts, userId) => {
+  try {
+    if (userId !== game.user?.id || item?.type !== "armor" || changed?.system?.equipped !== true) return;
+    const actor = item.parent; if (!actor?.items) return;
+    try { if (actorKind(actor) === "monster") return; } catch (_e) {}
+    const slot = _ftArmorSlot(item);
+    const off = actor.items.filter(i => i.type === "armor" && i.id !== item.id && i.system?.equipped !== false && _ftArmorSlot(i) === slot).map(i => ({ _id: i.id, "system.equipped": false }));
+    if (off.length) actor.updateEmbeddedDocuments("Item", off);
+  } catch (e) { console.warn("[fourththing] armor slot swap failed", e); }
+});
 function _ftRigOnAnyScene(rig) {
   if (!rig) return false;
   return !!game.scenes?.some?.(sc => sc.tokens?.some?.(t => t.actorId === rig.id));

@@ -132,7 +132,7 @@
             "sun-glass"
           ],
           "price": {
-            "marks": 210,
+            "marks": 85,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -140,7 +140,9 @@
             "rarityMult": 2,
             "notes": "TII shield × rarity 2",
             "bound": "free",
-            "saleBack": 84
+            "saleBack": 34,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 210
           },
           "grants": {
             "resistances": [

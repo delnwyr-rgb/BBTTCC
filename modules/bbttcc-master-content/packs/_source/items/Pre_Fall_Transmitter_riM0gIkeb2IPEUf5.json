@@ -47,7 +47,7 @@
             "origin": "pre-fall"
           },
           "price": {
-            "marks": 1620,
+            "marks": 100,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
@@ -55,7 +55,9 @@
             "rarityMult": 1,
             "notes": "TIV tool × 0.60 × tech 2.0",
             "bound": "attuned",
-            "saleBack": 648
+            "saleBack": 40,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 1620
           }
         }
       }

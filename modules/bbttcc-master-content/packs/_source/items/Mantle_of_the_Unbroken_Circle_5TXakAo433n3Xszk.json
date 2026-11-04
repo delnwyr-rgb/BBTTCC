@@ -56,7 +56,7 @@
             "witness-resin"
           ],
           "price": {
-            "marks": 3040,
+            "marks": 190,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -64,7 +64,9 @@
             "rarityMult": 1,
             "notes": "TIV armor × 1.50 × soulbound 1.5",
             "bound": "soulbound",
-            "saleBack": 0
+            "saleBack": 0,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 3040
           }
         }
       },

@@ -72,7 +72,7 @@
             }
           ],
           "price": {
-            "marks": 300,
+            "marks": 120,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -80,7 +80,9 @@
             "rarityMult": 1,
             "notes": "TII footwear × tech 2.0 (bound Working: Doorframe Discount TI) × attuned",
             "bound": "attuned",
-            "saleBack": 120
+            "saleBack": 48,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 300
           },
           "tech": {
             "kind": "charged",

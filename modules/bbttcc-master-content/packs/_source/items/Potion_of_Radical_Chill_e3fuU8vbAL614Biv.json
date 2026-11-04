@@ -66,7 +66,7 @@
             "decrement": true
           },
           "price": {
-            "marks": 45,
+            "marks": 20,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
@@ -74,7 +74,9 @@
             "rarityMult": 1.5,
             "notes": "TII consumable × rarity 1.5",
             "bound": "free",
-            "saleBack": 18
+            "saleBack": 8,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 45
           }
         }
       }

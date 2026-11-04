@@ -64,7 +64,7 @@
             }
           ],
           "price": {
-            "marks": 315,
+            "marks": 50,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -72,7 +72,9 @@
             "rarityMult": 1,
             "notes": "TIII shield (Circuited +2 on TI Pressed Buckler) × bound attuned",
             "bound": "attuned",
-            "saleBack": 126
+            "saleBack": 20,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 315
           }
         }
       },

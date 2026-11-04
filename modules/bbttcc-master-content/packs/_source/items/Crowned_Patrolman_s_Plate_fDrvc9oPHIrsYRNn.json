@@ -68,7 +68,7 @@
             }
           ],
           "price": {
-            "marks": 3040,
+            "marks": 190,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -76,7 +76,9 @@
             "rarityMult": 1,
             "notes": "TIV armor (Crowned +3 on TI Patrolman's Plate) × bound soulbound",
             "bound": "soulbound",
-            "saleBack": 0
+            "saleBack": 0,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 3040
           }
         }
       },

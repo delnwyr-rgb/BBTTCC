@@ -19,7 +19,7 @@
       "rfi": {
         "item": {
           "price": {
-            "marks": 540,
+            "marks": 215,
             "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
@@ -27,7 +27,9 @@
             "rarityMult": 3,
             "notes": "TII talisman × rarity 3",
             "bound": "free",
-            "saleBack": 216
+            "saleBack": 86,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 540
           },
           "tier": "II",
           "frame": "talisman",

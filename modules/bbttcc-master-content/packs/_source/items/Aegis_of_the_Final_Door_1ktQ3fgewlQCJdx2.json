@@ -53,7 +53,7 @@
             "vow-bone"
           ],
           "price": {
-            "marks": 1415,
+            "marks": 90,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -61,7 +61,9 @@
             "rarityMult": 1,
             "notes": "TIV shield × soulbound (hygiene 2026-10-07; was 2025 economy)",
             "bound": "soulbound",
-            "saleBack": 0
+            "saleBack": 0,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 1415
           }
         }
       },

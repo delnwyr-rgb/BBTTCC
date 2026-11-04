@@ -26,7 +26,7 @@
       "rfi": {
         "item": {
           "price": {
-            "marks": 270,
+            "marks": 40,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
@@ -34,7 +34,9 @@
             "rarityMult": 1,
             "notes": "TIII tool stamp (untiered pass 2026-10-12)",
             "bound": "free",
-            "saleBack": 108
+            "saleBack": 16,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 270
           },
           "tier": "III",
           "frame": "tool"

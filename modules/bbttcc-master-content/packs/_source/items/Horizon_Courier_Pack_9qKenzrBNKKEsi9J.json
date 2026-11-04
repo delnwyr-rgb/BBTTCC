@@ -19,7 +19,7 @@
       "rfi": {
         "item": {
           "price": {
-            "marks": 180,
+            "marks": 70,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
@@ -27,7 +27,9 @@
             "rarityMult": 2,
             "notes": "TII tool stamp × rarity 2.0",
             "bound": "free",
-            "saleBack": 72
+            "saleBack": 28,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 180
           },
           "tier": "II",
           "frame": "tool",

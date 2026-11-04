@@ -51,7 +51,7 @@
             "oak-core"
           ],
           "price": {
-            "marks": 105,
+            "marks": 40,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -59,7 +59,9 @@
             "rarityMult": 1,
             "notes": "TII shield (hygiene 2026-10-07; was 150 economy)",
             "bound": "free",
-            "saleBack": 42
+            "saleBack": 16,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 105
           }
         }
       },

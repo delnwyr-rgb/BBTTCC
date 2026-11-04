@@ -44,7 +44,7 @@
             "brass"
           ],
           "price": {
-            "marks": 180,
+            "marks": 70,
             "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
@@ -52,7 +52,9 @@
             "rarityMult": 1,
             "notes": "TII talisman × attuned",
             "bound": "attuned",
-            "saleBack": 72
+            "saleBack": 28,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 180
           }
         }
       }

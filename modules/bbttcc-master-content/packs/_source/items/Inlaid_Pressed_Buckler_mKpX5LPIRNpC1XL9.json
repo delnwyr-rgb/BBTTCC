@@ -60,7 +60,7 @@
             }
           ],
           "price": {
-            "marks": 105,
+            "marks": 40,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -68,7 +68,9 @@
             "rarityMult": 1,
             "notes": "TII shield (Inlaid +1 on TI Pressed Buckler) × bound free",
             "bound": "free",
-            "saleBack": 42
+            "saleBack": 16,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 105
           }
         }
       },

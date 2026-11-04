@@ -49,7 +49,7 @@
           "signals": {},
           "lore": "<p>Standard hazmat suit. Layered warding shrugs off creeping toxins; a vow not to flinch when the geiger sings.</p>",
           "price": {
-            "marks": 675,
+            "marks": 105,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -57,7 +57,9 @@
             "rarityMult": 1,
             "notes": "TIII armor stamp",
             "bound": "free",
-            "saleBack": 270
+            "saleBack": 42,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 675
           }
         }
       },

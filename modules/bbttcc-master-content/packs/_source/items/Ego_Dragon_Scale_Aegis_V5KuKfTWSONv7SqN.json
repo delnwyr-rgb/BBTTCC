@@ -19,7 +19,7 @@
       "rfi": {
         "item": {
           "price": {
-            "marks": 8100,
+            "marks": 510,
             "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
@@ -27,7 +27,9 @@
             "rarityMult": 5,
             "notes": "TIV talisman × rarity 5",
             "bound": "free",
-            "saleBack": 3240
+            "saleBack": 204,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 8100
           },
           "tier": "IV",
           "frame": "talisman",

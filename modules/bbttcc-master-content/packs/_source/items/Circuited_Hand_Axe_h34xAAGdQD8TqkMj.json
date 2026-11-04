@@ -104,7 +104,7 @@
             }
           ],
           "price": {
-            "marks": 450,
+            "marks": 70,
             "currency": "violence",
             "gmOverride": false,
             "altCurrencies": {},
@@ -112,7 +112,9 @@
             "rarityMult": 1,
             "notes": "TIII weapon (Circuited +2 on TI Hand Axe) × bound attuned",
             "bound": "attuned",
-            "saleBack": 180
+            "saleBack": 28,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 450
           }
         }
       },

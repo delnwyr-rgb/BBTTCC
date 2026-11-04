@@ -50,7 +50,7 @@
           "charges": 1,
           "rechargesOn": "soma-break",
           "price": {
-            "marks": 270,
+            "marks": 40,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
@@ -58,7 +58,9 @@
             "rarityMult": 1,
             "notes": "TIII tool stamp",
             "bound": "attuned",
-            "saleBack": 108
+            "saleBack": 16,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 270
           },
           "chargesMax": 1
         }

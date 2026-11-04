@@ -55,7 +55,7 @@
             "signature": "apex-core"
           },
           "price": {
-            "marks": 3240,
+            "marks": 205,
             "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
@@ -63,7 +63,9 @@
             "rarityMult": 1,
             "notes": "TIV sigil × 1.20 × tech 2.0",
             "bound": "attuned",
-            "saleBack": 1296
+            "saleBack": 82,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 3240
           }
         }
       }

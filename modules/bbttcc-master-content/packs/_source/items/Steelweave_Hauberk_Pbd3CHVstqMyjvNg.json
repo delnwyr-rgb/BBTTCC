@@ -58,7 +58,7 @@
             ]
           },
           "price": {
-            "marks": 225,
+            "marks": 90,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -66,7 +66,9 @@
             "rarityMult": 1,
             "notes": "TII armor stamp",
             "bound": "free",
-            "saleBack": 90
+            "saleBack": 36,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 225
           }
         }
       }

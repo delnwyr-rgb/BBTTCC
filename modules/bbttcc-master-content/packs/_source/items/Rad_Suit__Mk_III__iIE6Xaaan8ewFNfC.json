@@ -50,7 +50,7 @@
           "signals": {},
           "lore": "<p>Heavy hardsuit. Plate-grade shielding turns the wearer into a slow-moving sanctuary; movement suffers, the world bounces off.</p>",
           "price": {
-            "marks": 2025,
+            "marks": 125,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -58,7 +58,9 @@
             "rarityMult": 1,
             "notes": "TIV armor stamp",
             "bound": "free",
-            "saleBack": 810
+            "saleBack": 50,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 2025
           }
         }
       },

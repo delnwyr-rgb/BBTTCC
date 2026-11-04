@@ -44,7 +44,7 @@
             "cosmic-petty"
           ],
           "price": {
-            "marks": 270,
+            "marks": 110,
             "currency": "softpower",
             "gmOverride": false,
             "altCurrencies": {},
@@ -52,7 +52,9 @@
             "rarityMult": 1,
             "notes": "TII talisman × soulbound",
             "bound": "soulbound",
-            "saleBack": 0
+            "saleBack": 0,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 270
           }
         }
       }

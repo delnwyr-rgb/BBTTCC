@@ -139,7 +139,7 @@
             "threshold-wax"
           ],
           "price": {
-            "marks": 450,
+            "marks": 180,
             "currency": "nonlethal",
             "gmOverride": false,
             "altCurrencies": {},
@@ -147,7 +147,9 @@
             "rarityMult": 2,
             "notes": "TII armor × attuned × rarity 2",
             "bound": "attuned",
-            "saleBack": 180
+            "saleBack": 72,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 450
           },
           "grants": {
             "resistances": [

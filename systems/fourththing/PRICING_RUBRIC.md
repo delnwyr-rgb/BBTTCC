@@ -34,6 +34,8 @@ tierBase(t) = 50 × 3^(t-1)
 | **T3** | 450 | 45 | masterwork / signature |
 | **T4** | 1350 | 135 | mythic / world-shaping |
 
+> **Gear base (owner ruling 2026-11-03, `GEAR_TIER_BASE_MARKS`): T1 50 · T2 60 · T3 70 · T4 85.** A tier's armor costs one full pool at the Standing that opens it (caps 90 / 110 / 130 at Standing 2 / 3 / 4). The table above still prices hulls, materials and trade goods, and rigs and facilities in §7. The T2–T4 columns in §2's table show the old gear scale; compute gear as gear base × category.
+
 Half-tier flexing (e.g. an unusually fine T2 item) is a × 1.5 modifier on `tierBase` — call it "T2★" in flavor text.
 
 ---

@@ -274,7 +274,7 @@
             "mastery": ""
           },
           "price": {
-            "marks": 900,
+            "marks": 140,
             "currency": "violence",
             "gmOverride": false,
             "altCurrencies": {},
@@ -282,7 +282,9 @@
             "rarityMult": 2,
             "notes": "TIII weapon × attuned × rarity 2 (hygiene 2026-10-07; was 450 violence)",
             "bound": "attuned",
-            "saleBack": 360
+            "saleBack": 56,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 900
           }
         }
       }

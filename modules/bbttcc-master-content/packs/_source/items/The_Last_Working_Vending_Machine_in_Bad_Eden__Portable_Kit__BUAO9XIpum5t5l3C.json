@@ -45,7 +45,7 @@
           ],
           "charges": 1,
           "price": {
-            "marks": 405,
+            "marks": 65,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
@@ -53,7 +53,9 @@
             "rarityMult": 1,
             "notes": "TIII tool stamp × soulbound 1.5",
             "bound": "soulbound",
-            "saleBack": 0
+            "saleBack": 0,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 405
           }
         }
       }

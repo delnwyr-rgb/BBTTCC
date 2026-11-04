@@ -71,7 +71,7 @@
             "target": "self"
           },
           "price": {
-            "marks": 90,
+            "marks": 15,
             "currency": "economy",
             "gmOverride": false,
             "altCurrencies": {},
@@ -79,7 +79,9 @@
             "rarityMult": 1,
             "notes": "TIII consumable stamp",
             "bound": "free",
-            "saleBack": 36
+            "saleBack": 6,
+            "rubric": "gear-2026-11-03",
+            "legacyMarks": 90
           }
         }
       }
