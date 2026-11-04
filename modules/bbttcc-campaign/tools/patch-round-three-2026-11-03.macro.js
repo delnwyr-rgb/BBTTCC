@@ -8,6 +8,7 @@
  *     Khezek-Tor late would get "Act Three" in the middle of a later act.
  *   • Gloomgill's questions run in order (2026-11-04): only Question 1 carried the lamp gate, so Resume skipped to Question 2, sent the table back
  *     to a lake that refused them, and its Run next would have stepped past the gate. Each question now requires the one before it.
+ *   • Chuckle Creek is a place (2026-11-04): its hub fired once, so a party that left mid-quest rode back to silence. It repeats now, with a way back to the road.
  * Idempotent (rerun = 0). DRY_RUN first. Backup (campaigns) → Data/bbttcc-exports/. GM only.
  */
 const ROUND_THREE_PATCH = (() => {
@@ -37,6 +38,16 @@ const ROUND_THREE_PATCH = (() => {
       a3.inject = a3.inject || {};
       const req = Array.isArray(a3.inject.requires) ? a3.inject.requires : [];
       if (!req.some(r => r?.flag === "storyPhase" && r?.lte === 3)) { a3.inject.requires = [...req, { flag: "storyPhase", lte: 3 }]; changes++; report.push("✚ a3_title_card: closes after Act Three"); }
+    }
+    const creek = beats.find(b => b?.id === "chuckle_arrival");
+    if (!creek) conflicts.push("beat not found: chuckle_arrival");
+    else {
+      creek.inject = creek.inject || {};
+      if (creek.inject.repeatable !== true) { creek.inject.repeatable = true; changes++; report.push("✚ chuckle_arrival: repeats on return"); }
+      if (!(creek.choices || []).some(c => c?.label === "Back on the road.")) {
+        creek.choices = [...(creek.choices || []), { label: "Back on the road.", next: "", description: "", checkStat: "", checkDC: 0, failNext: "" }];
+        changes++; report.push("✚ chuckle_arrival: road exit");
+      }
     }
     for (let n = 2; n <= 10; n++) {
       const q = beats.find(b => b?.id === `gloomgill_question_${n}`);
