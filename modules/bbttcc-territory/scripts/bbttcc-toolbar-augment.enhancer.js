@@ -126,6 +126,10 @@
                 return;
               }
 
+              // Lock the Turn and this button both land here. A second confirm left
+              // open would still say Yes after the first one had advanced the month.
+              if (window.__bbttccAdvanceConfirmOpen) return;
+
               const sceneId = canvas?.scene?.id || null;
 
               // Turn Ledger (2026-07-08): show where the month stands before
@@ -145,6 +149,7 @@
                 }
               } catch (_eLg) {}
 
+              window.__bbttccAdvanceConfirmOpen = true;
               const ok = await Dialog.confirm({
                 title: "Advance Turn",
                 content: `<p>Advance the strategic turn now? This will apply all pending effects.</p>${ledgerLine}`,
@@ -154,7 +159,7 @@
                 // Self-theme with HexChrome so it doesn't depend on the global
                 // renderDialog hook (which doesn't catch this confirm on v14).
                 options: { classes: ["dialog", "bbttcc-hexchrome-dialog"] }
-              }).catch(() => false);
+              }).catch(() => false).finally(() => { window.__bbttccAdvanceConfirmOpen = false; });
 
               if (!ok) return;
 

@@ -2291,6 +2291,12 @@ const vendors = visibleVendors.map(v => ({
         charge.freight = deliveryFee;
       }
       if (buyerFaction && charge) afford = _affordFor(charge, buyerBalances);
+      // Spread payment can settle a single-pool bill the native pool can't: that's still affordable, at ×1.5.
+      let canSpread = false;
+      if (afford && !afford.ok && !charge.artifact && !charge.priceless) {
+        const billed = Object.entries(charge.pools).filter(([, v]) => v > 0);
+        if (billed.length === 1) { try { canSpread = !!_spreadPayPlan(buyerFaction, billed[0][0], billed[0][1]).ok; } catch (_e) {} }
+      }
       const tabKey = _tabKeyFor({ kind: e.kind, docType, isConsumable });
 
       // 2026-10-12 — untiered items used to sink below Tier IV on a tier sort
@@ -2331,9 +2337,10 @@ const vendors = visibleVendors.map(v => ({
         paysLabel: _paysLabel(charge),
         affordKnown: !!afford,
         canAfford: !!afford?.ok,
+        canSpread,
         shortLabel: afford && !afford.ok
           ? (charge?.artifact ? "Artifact" : charge?.priceless ? "Priceless"
-             : afford.short.map(x => `${poolShortLabel(x.pool)} −${x.by}`).join(" · "))
+             : afford.short.map(x => `${poolShortLabel(x.pool)} −${x.by}`).join(" · ") + (canSpread ? " · spread can cover (×1.5)" : ""))
           : ""
       };
     }));
@@ -2346,7 +2353,7 @@ const vendors = visibleVendors.map(v => ({
     // Cost band (horizon-scaled when a faction is selected, list price otherwise).
     if (ctx.costBand) entries = entries.filter(r => r.costBand === ctx.costBand);
     // Only what we can afford — needs a Buyer Faction to mean anything.
-    if (ctx.affordOnly && buyerFaction) entries = entries.filter(r => r.canAfford);
+    if (ctx.affordOnly && buyerFaction) entries = entries.filter(r => r.canAfford || r.canSpread);
 
     const filteredCounts = {};
     for (const r of entries) filteredCounts[r.tabKey] = (filteredCounts[r.tabKey] || 0) + 1;
