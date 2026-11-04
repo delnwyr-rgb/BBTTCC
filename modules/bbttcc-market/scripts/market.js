@@ -3127,6 +3127,7 @@ Hooks.once("ready", () => {
   game.bbttcc.api.market.purchase = purchase;
   game.bbttcc.api.market.sell = sell;
   game.bbttcc.api.market.sellQuote = sellQuote;
+  game.bbttcc.api.market.spreadPayPlan = _spreadPayPlan;   // round three: travel passengers pay short pools the same way
   game.bbttcc.api.market.vendorStanceFor = vendorStanceFor;
   game.bbttcc.api.market.domainOf = domainOf;   // ruling 16: a steward's Domain (faction actor), for the Domain tab and friends
 

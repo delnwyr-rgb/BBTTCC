@@ -1495,7 +1495,7 @@
           `);
         }
         const foot = anyUnaffordable
-          ? `<div class="rp-stack-cost-foot bad">⚠ One or more passengers can't afford. Execute will roll back those legs.</div>`
+          ? `<div class="rp-stack-cost-foot bad">⚠ A passenger is short in one pool: it pays from its other pools at ×1.5. If it can't cover that either, the leg rolls back.</div>`
           : `<div class="rp-stack-cost-foot ok">✓ All passengers affordable.</div>`;
         $stackCost.innerHTML = lines.join("") + foot;
       }
@@ -2457,6 +2457,21 @@
                     if (n > 0) { deltas[String(k).toLowerCase()] = -n; anyDelta = true; }
                   }
                   if (!anyDelta) continue;
+                  // Round three (2026-11-03, four Domains riding): a passenger short in one pool pays from its others at the market's ×1.5, instead of voiding the whole party's
+                  // fare (Sweet Release held 641 marks and 6 Economy). Only a passenger who truly cannot cover it falls through to the rollback below.
+                  try {
+                    const plan = game.bbttcc?.api?.market?.spreadPayPlan;
+                    const bank = passenger.getFlag?.("bbttcc-factions", "opBank") || {};
+                    for (const [k, v] of Object.entries({ ...deltas })) {
+                      const need = -Number(v) || 0;
+                      if (need <= (Number(bank[k]) || 0) || typeof plan !== "function") continue;
+                      const p = plan(passenger, k, need);
+                      if (!p?.ok) continue;
+                      delete deltas[k];
+                      for (const [pool, d] of Object.entries(p.deltas)) deltas[pool] = (deltas[pool] || 0) + d;
+                      out.push(`    🔀 ${passenger.name} spreads ${need} ${k} across its pools (×1.5).`);
+                    }
+                  } catch (eS) { console.warn(TAG, "passenger spread failed", eS); }
                   try {
                     const res = await opApi.commit(passenger.id, deltas, { source: "travel-stack", label: `Leg ${i + 1}: rode with ${game.actors?.get(factionId)?.name || "lead"}` });
                     if (res?.ok) {
