@@ -113,14 +113,18 @@
     return _appendWarLogDirect(factionId, entry);
   }
 
+  // Domain Darkness tops out at 10, same as the turn track and the sheet's bar.
+  const FACTION_DARKNESS_CAP = 10;
+
   async function _fallbackWriteDarkness(factionId, delta) {
     const F = asFactionActor(factionId);
     if (!F) return false;
     try {
       const flags = clone(F.flags && F.flags[MOD_FACTIONS] ? F.flags[MOD_FACTIONS] : {});
-      const darkness = clone(flags.darkness || {});
-      const cur = Number(darkness.global || 0);
-      const next = Math.max(0, cur + Number(delta || 0));
+      const raw = flags.darkness;
+      const darkness = (raw && typeof raw === "object") ? clone(raw) : {};
+      const cur = Number((raw && typeof raw === "object") ? raw.global : raw) || 0;
+      const next = Math.min(FACTION_DARKNESS_CAP, Math.max(0, cur + Number(delta || 0)));
       darkness.global = next;
       flags.darkness = darkness;
       await F.update({ ["flags."+MOD_FACTIONS]: flags });
@@ -165,19 +169,17 @@
       if (!Number.isFinite(darkCur)) darkCur = 0;
     }
 
-    const darkNext = Math.max(0, darkCur + Number(opts.darknessDelta || 0));
+    const darkNext = Math.min(FACTION_DARKNESS_CAP, Math.max(0, darkCur + Number(opts.darknessDelta || 0)));
 
     flags.loyalty = loyalty;
 
     void victory;   // flags.victory is left untouched (sparks / unityMap / tempCapBonus live there)
 
-    // Preserve the existing darkness shape to avoid breaking sheet renderers.
-    if (rawDark != null && typeof rawDark === "object") {
-      darknessObj.global = darkNext;
-      flags.darkness = darknessObj;
-    } else {
-      flags.darkness = darkNext;
-    }
+    // Always write the object shape: cleansing and travel read only .global, so a
+    // legacy flat number left a Domain's Darkness out of their reach.
+    const darknessOut = (rawDark != null && typeof rawDark === "object") ? darknessObj : {};
+    darknessOut.global = darkNext;
+    flags.darkness = darknessOut;
 
     await F.update({ ["flags."+MOD_FACTIONS]: flags });
   }
