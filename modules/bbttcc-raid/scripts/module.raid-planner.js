@@ -10,6 +10,17 @@
  */
 
 const RAID_ID = "bbttcc-raid";
+
+// 2026-11-03 (failure pass): the planner opened on the alphabetically-first Domain; it now opens on the active campaign's lead
+// Domain when that is in the list (a picked/locked faction still wins).
+function _plannerDefaultFactionId(facs) {
+  try {
+    const capi = game.bbttcc?.api?.campaign; const camp = capi?.getCampaign?.(capi?.getActiveCampaignId?.());
+    const lead = String(camp?.factionId || (camp?.factionIds || [])[0] || "").replace(/^Actor\./, "");
+    if (lead && facs.some(f => f?.id === lead)) return lead;
+  } catch (_e) {}
+  return facs[0]?.id || "";
+}
 const FCT_ID  = "bbttcc-factions";
 const TERR_ID = "bbttcc-territory";
 const log  = (...a)=>console.log(`[${RAID_ID}]`,...a);
@@ -1358,7 +1369,7 @@ if (_fid) {
 
       // Ensure we always have a factionId in state for deterministic target filtering.
       if (this._lockedFactionId) this._plannerState.factionId = this._lockedFactionId;
-      else if (!this._plannerState.factionId && facs[0]?.id) this._plannerState.factionId = facs[0].id;
+      else if (!this._plannerState.factionId && facs[0]?.id) this._plannerState.factionId = _plannerDefaultFactionId(facs);
 
       // Issue 2: filter targets by faction control + adjacency (GM can bypass via Show Locked).
       const bypassTargets = (game?.user?.isGM && this._plannerState.showLocked);
@@ -1442,7 +1453,7 @@ if (_fid) {
 
       // Sync selection to state so gating uses the same faction the user sees.
       // Default: if no state value, pick the first faction.
-      if (!this._plannerState.factionId && facs[0]?.id) this._plannerState.factionId = facs[0].id;
+      if (!this._plannerState.factionId && facs[0]?.id) this._plannerState.factionId = _plannerDefaultFactionId(facs);
       facSel.value = this._plannerState.factionId || facSel.value;
       facSel.addEventListener("change", () => {
         // Hard safety: ignore faction changes if locked — GM seats too (#45: the selector snapped back after a

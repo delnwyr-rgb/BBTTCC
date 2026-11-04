@@ -2081,8 +2081,13 @@
           if (!sess?.legs?.length) { ui.notifications?.info?.("No persisted ride for this faction."); render(); return; }
           legs.length = 0;
           legs.push(...sess.legs.map(L => ({ ...L })));
+          // 2026-11-03 (failure pass): a ride paused at an encounter and then reloaded kept stage "encounter" with a beat that
+          // either already resolved or will never relaunch (the chain lived in memory). Restoring the ride clears the pause.
+          if (String(sess.stage || "") === "encounter" && game.user?.isGM) {
+            try { game.bbttcc?.api?.travel?.rideSession?.save?.($fac.value, { ...sess, stage: "riding", encounter: null, updatedTs: Date.now() }); } catch (_eSt) {}
+          }
           render();
-          $rout.textContent = `Ride restored — ${legs.length} leg(s)${sess.encounter?.label ? ` (paused at ${sess.encounter.label})` : ""}. Execute Route to ride on.`;
+          $rout.textContent = `Ride restored — ${legs.length} leg(s)${sess.encounter?.label ? ` (it was paused at ${sess.encounter.label}; that encounter is behind you now)` : ""}. Execute Route to ride on.`;
         } catch (e) { console.warn(TAG, "resume failed", e); }
       };
 

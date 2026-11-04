@@ -1291,6 +1291,18 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         fx = out;
       }
     } catch (eX) { console.warn(TAG, "factionEffects @coalition expand failed", eX); }
+    // "@payer" (2026-11-03, failure pass): a PURCHASE is paid by one Domain — the Domain of the Steward picked in the beat window
+    // (ctx.rosterActorId), else ctx.factionId, else the campaign's lead. "@coalition" charged every Domain on the roster for one
+    // jar of preserves (Dave's receipts ruling: "each player can spend their own marks").
+    try {
+      if (fx.some(r => r && /^@payer$/i.test(String(r.factionId || "").trim()))) {
+        let payer = null;
+        try { const a = ctx.rosterActorId ? game.actors?.get?.(String(ctx.rosterActorId)) : null; const fid = a?.getFlag?.("bbttcc-factions", "factionId"); if (fid && game.actors?.get?.(String(fid).replace(/^Actor\./, ""))) payer = String(fid).replace(/^Actor\./, ""); } catch (_eP) {}
+        if (!payer && ctx.factionId) payer = String(ctx.factionId).replace(/^Actor\./, "");
+        if (!payer) { try { const capi = get(game, "bbttcc.api.campaign", null); const camp = capi?.getCampaign?.(capi?.getActiveCampaignId?.()); payer = String(camp?.factionId || (camp?.factionIds || [])[0] || "").replace(/^Actor\./, "") || null; } catch (_eL) {} }
+        fx = fx.map(r => (r && /^@payer$/i.test(String(r.factionId || "").trim())) ? Object.assign({}, r, { factionId: payer || "" }) : r);
+      }
+    } catch (eP) { console.warn(TAG, "factionEffects @payer resolve failed", eP); }
 
     for (let i=0;i<fx.length;i++) {
       const row = fx[i];

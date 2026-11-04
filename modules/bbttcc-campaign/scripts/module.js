@@ -1533,7 +1533,7 @@ async function _broadcastPlayerFacingDialogViaChat(action, payload) {
       ts: Date.now()
     };
 
-    await ChatMessage.create({
+    const msg = await ChatMessage.create({
       content: '<span style="display:none">Bad Eden Courier</span>',
       whisper: recipients,
       speaker: { alias: "Bad Eden Campaign" },
@@ -1543,6 +1543,9 @@ async function _broadcastPlayerFacingDialogViaChat(action, payload) {
         }
       }
     });
+    // 2026-11-03 (failure pass): a courier is a delivery, not a record — players act on createChatMessage, so the message has
+    // done its job the moment it lands. 6,478 of them had piled up in ember's chat (24k messages). Delete after delivery.
+    try { if (msg?.id) setTimeout(() => { try { game.messages?.get?.(msg.id)?.delete?.(); } catch (_eD) {} }, 15000); } catch (_eT) {}
 
     return true;
   } catch (e) {
@@ -1593,6 +1596,19 @@ function _installPlayerFacingChatBridge() {
         } catch (_e2) {}
       } catch (_e) {}
     });
+
+    // One sweep on load (primary GM): couriers left from before the auto-delete, or from a session that closed inside the 15 s.
+    // (installed from the ready hook — run on a timer, not Hooks.once("ready"), which has already fired)
+    setTimeout(async () => {
+      try {
+        if (!game.user?.isGM) return;
+        try { const p = game.bbttcc?.api?.gmExec?.primaryGmId?.(); if (p && p !== game.user.id) return; } catch (_eP) {}
+        const cutoff = Date.now() - 60000;
+        const ids = (game.messages?.contents || []).filter(m => _extractPlayerFacingChatPayload(m) && Number(m.timestamp || 0) < cutoff).map(m => m.id);
+        for (let i = 0; i < ids.length; i += 200) { await ChatMessage.deleteDocuments(ids.slice(i, i + 200)); }
+        if (ids.length) log(`[courier] swept ${ids.length} delivered courier message(s) from chat.`);
+      } catch (eS) { warn("[courier] sweep failed:", eS); }
+    }, 8000);
 
     log("Player-facing chat bridge installed.");
   } catch (_e) {}

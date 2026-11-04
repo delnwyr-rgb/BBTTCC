@@ -1609,9 +1609,15 @@ async function showTextStep(step, ctx) {
     const encKey = enc.result?.key || enc.key || null;
 
     let hexDoc = ctx?.to?.obj ?? ctx?.to?.document ?? ctx?.to ?? null;
+    // 2026-11-03 (failure pass): Scout Signs outcomes carry no ctx.to — the war log read "Unknown Hex". Fall back to the
+    // context's hex uuid, then to where the Domain's party stands.
+    if (!hexDoc && (ctx?.hexUuid || ctx?.toUuid)) { try { hexDoc = fromUuidSync(String(ctx.hexUuid || ctx.toUuid)); } catch (_eH) {} }
+    let whereName = null;
+    if (!hexDoc) { try { const w = game.bbttcc?.api?.travel?.whereIs?.(actor.id); whereName = w?.name || null; if (w?.uuid) { try { hexDoc = fromUuidSync(w.uuid); } catch (_eW) {} } } catch (_eWh) {} }
     const hexFlags = hexDoc?.flags?.["bbttcc-territory"] || {};
     const hexName =
       hexFlags.name ||
+      whereName ||
       hexDoc?.text ||
       hexDoc?.name ||
       hexDoc?.id ||
