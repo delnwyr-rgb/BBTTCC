@@ -2144,9 +2144,16 @@ async function _ftLevelUpDialog(actor) {
           icon: "<i class='fas fa-arrow-up'></i>",
           label: `Advance to ${newLevel}`,
           callback: (html) => { _submitted = true; return (async () => {
-            const attrKey = html.find("[name='attrChoice']").val();
             // Re-read source NOW — the dialog may have sat open while the sheet changed.
             const srcNow  = readSrc();
+            // An empty pick must never reach the update path: it wrote attributes.null and lost the point.
+            const picked  = html.find("[name='attrChoice']").val();
+            const anyOpen = attrKeys.some(k => Number(srcNow?.attributes?.[k]?.value ?? 2) < 10);
+            if (!attrKeys.includes(picked) && anyOpen) {
+              ui.notifications.warn(`${actor.name}: no faculty picked — Advance cancelled.`);
+              return resolve(null);
+            }
+            const attrKey = attrKeys.includes(picked) ? picked : attrKeys[0];   // every faculty capped: no change below
             // 10-29: the level moved while this dialog sat open — never apply a stale Advance.
             const levelNow = Number(srcNow?.details?.level) || 1;
             if (levelNow !== current) {

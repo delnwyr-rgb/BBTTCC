@@ -4,6 +4,8 @@
  *     appears there once all three have been asked.
  *   • The Fifteen-Year Siege is PARKED (Dave 2026-11-03: "Let's skip it"): its hex lives only on an unlinked scene, so NOW's Ride-to button stranded the GM. Its one entry,
  *     siege_market_day, now also requires beatMark "siege_unparked", which nothing sets. Unpark: remove that row once the Siege has a door on the main map.
+ *   • The Act Three card closes once Act Three has passed (2026-11-04), as Acts Four and Five do: with no upper limit, a table that settled
+ *     Khezek-Tor late would get "Act Three" in the middle of a later act.
  * Idempotent (rerun = 0). DRY_RUN first. Backup (campaigns) → Data/bbttcc-exports/. GM only.
  */
 const ROUND_THREE_PATCH = (() => {
@@ -26,6 +28,13 @@ const ROUND_THREE_PATCH = (() => {
       siege.inject = siege.inject || {};
       const req = Array.isArray(siege.inject.requires) ? siege.inject.requires : [];
       if (!req.some(r => r?.beatMark === "siege_unparked")) { siege.inject.requires = [...req, { beatMark: "siege_unparked" }]; changes++; report.push("✚ siege_market_day: parked (requires siege_unparked)"); }
+    }
+    const a3 = beats.find(b => b?.id === "a3_title_card");
+    if (!a3) conflicts.push("beat not found: a3_title_card");
+    else {
+      a3.inject = a3.inject || {};
+      const req = Array.isArray(a3.inject.requires) ? a3.inject.requires : [];
+      if (!req.some(r => r?.flag === "storyPhase" && r?.lte === 3)) { a3.inject.requires = [...req, { flag: "storyPhase", lte: 3 }]; changes++; report.push("✚ a3_title_card: closes after Act Three"); }
     }
     return { changes, report, conflicts };
   }
