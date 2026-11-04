@@ -2,6 +2,8 @@
  * patch-round-three-2026-11-03.macro.js — story fixes from round three of the GM click-through (a real four-Steward party).
  *   • Verification Begins (Circuit Riders): after all three questions the hub had no way out, only greyed repeats. "Terms of contact" now
  *     appears there once all three have been asked.
+ *   • The Fifteen-Year Siege is PARKED (Dave 2026-11-03: "Let's skip it"): its hex lives only on an unlinked scene, so NOW's Ride-to button stranded the GM. Its one entry,
+ *     siege_market_day, now also requires beatMark "siege_unparked", which nothing sets. Unpark: remove that row once the Siege has a door on the main map.
  * Idempotent (rerun = 0). DRY_RUN first. Backup (campaigns) → Data/bbttcc-exports/. GM only.
  */
 const ROUND_THREE_PATCH = (() => {
@@ -17,6 +19,13 @@ const ROUND_THREE_PATCH = (() => {
     else if (!(hub.choices || []).some(c => c?.next === TERMS)) {
       hub.choices = [...(hub.choices || []), { label: "Terms of contact", next: TERMS, description: "", checkStat: "", checkDC: 0, failNext: "", requires: ASKED.map(beatMark => ({ beatMark })) }];
       changes++; report.push(`✚ ${HUB}: "Terms of contact" once all three questions are asked`);
+    }
+    const siege = beats.find(b => b?.id === "siege_market_day");
+    if (!siege) conflicts.push("beat not found: siege_market_day");
+    else {
+      siege.inject = siege.inject || {};
+      const req = Array.isArray(siege.inject.requires) ? siege.inject.requires : [];
+      if (!req.some(r => r?.beatMark === "siege_unparked")) { siege.inject.requires = [...req, { beatMark: "siege_unparked" }]; changes++; report.push("✚ siege_market_day: parked (requires siege_unparked)"); }
     }
     return { changes, report, conflicts };
   }
