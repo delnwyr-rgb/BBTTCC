@@ -6,6 +6,8 @@
  *     siege_market_day, now also requires beatMark "siege_unparked", which nothing sets. Unpark: remove that row once the Siege has a door on the main map.
  *   • The Act Three card closes once Act Three has passed (2026-11-04), as Acts Four and Five do: with no upper limit, a table that settled
  *     Khezek-Tor late would get "Act Three" in the middle of a later act.
+ *   • Gloomgill's questions run in order (2026-11-04): only Question 1 carried the lamp gate, so Resume skipped to Question 2, sent the table back
+ *     to a lake that refused them, and its Run next would have stepped past the gate. Each question now requires the one before it.
  * Idempotent (rerun = 0). DRY_RUN first. Backup (campaigns) → Data/bbttcc-exports/. GM only.
  */
 const ROUND_THREE_PATCH = (() => {
@@ -35,6 +37,14 @@ const ROUND_THREE_PATCH = (() => {
       a3.inject = a3.inject || {};
       const req = Array.isArray(a3.inject.requires) ? a3.inject.requires : [];
       if (!req.some(r => r?.flag === "storyPhase" && r?.lte === 3)) { a3.inject.requires = [...req, { flag: "storyPhase", lte: 3 }]; changes++; report.push("✚ a3_title_card: closes after Act Three"); }
+    }
+    for (let n = 2; n <= 10; n++) {
+      const q = beats.find(b => b?.id === `gloomgill_question_${n}`);
+      if (!q) { conflicts.push(`beat not found: gloomgill_question_${n}`); continue; }
+      q.inject = q.inject || {};
+      const req = Array.isArray(q.inject.requires) ? q.inject.requires : [];
+      const prev = `gloomgill_question_${n - 1}`;
+      if (!req.some(r => r?.beatMark === prev)) { q.inject.requires = [...req, { beatMark: prev }]; changes++; report.push(`✚ ${q.id}: requires ${prev}`); }
     }
     return { changes, report, conflicts };
   }
