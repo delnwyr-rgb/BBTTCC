@@ -128,6 +128,9 @@ function horizonEconCost(baseCost, distance, kind, rarity, docFrame = "") {
   const n = Number(baseCost ?? 0) || 0;
   if (isStandardIssue(kind, rarity, distance, docFrame)) return 0;
   if (distance <= 0) return n;            // within horizon, above the T1 kit: list price
+  // GEAR OVER THE HORIZON (Dave 2026-11-03, round three): ×2 per step. With gear priced to the pools, ×1 sold a Tier III weapon at Standing 2 for 70 marks against 60 for Tier II.
+  // Hulls and everything that is not gear keep the old ×1 / ×2 / ×4.
+  if (String(kind || "").toLowerCase() === "gear" && !NEVER_FREE_FRAMES.has(String(docFrame || "").toLowerCase())) return n * Math.pow(2, Math.min(distance, 3));
   return scaledEconomyCost(n, distance);  // over the horizon: ×1 / ×2 / ×4
 }
 
@@ -542,13 +545,11 @@ function chipSpecFor(rarity, horizon, distance, baseCost, econCost, poolLabel = 
     };
   }
 
-  let mult = 1;
-  if (d === 2) mult = 2;
-  else if (d >= 3) mult = 4;
+  const mult = b0 > 0 ? Math.max(1, Math.round(e0 / b0)) : 1;   // read from the price itself: gear ×2 / ×4 / ×8, the rest ×1 / ×2 / ×4
 
   const b = b0;
   const e = e0;
-  const multLabel = (mult === 1) ? "x1" : (mult === 2) ? "x2" : "x4";
+  const multLabel = `x${mult}`;
 
   const style =
     (mult >= 4) ? "border-color:rgba(239,68,68,.40);background:rgba(239,68,68,.10);" :

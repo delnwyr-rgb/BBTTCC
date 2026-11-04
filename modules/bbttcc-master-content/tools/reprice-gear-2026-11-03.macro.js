@@ -20,6 +20,9 @@
     if (p.split && typeof p.split === "object") next.split = Object.fromEntries(Object.entries(p.split).map(([k, v]) => [k, five((Number(v) || 0) * r)]));
     ups.push({ _id: d.id, "flags.fourththing.rfi.item.price": next }); backup.push({ id: d.id, name: d.name, price: p });
   }
+  // Dave 2026-11-03: Rad Suit Mk I (Tier II) drops its ×1.5 rarity; at 135 it cost more than Mk II (Tier III, 105).
+  const mk1 = docs.find(d => d.name === "Rad Suit (Mk I)"), mk1p = mk1?.flags?.fourththing?.rfi?.item?.price;
+  if (mk1p?.rubric === RUBRIC && mk1p.marks !== 90) { ups.push({ _id: mk1.id, "flags.fourththing.rfi.item.price": { ...mk1p, marks: 90, rarityMult: 1, saleBack: 36 } }); backup.push({ id: mk1.id, name: mk1.name, price: mk1p }); }
   globalThis.__reprice = { dry: DRY, changes: ups.length };
   if (DRY || !ups.length) return ui.notifications.info(`${DRY ? "DRY RUN — " : ""}${ups.length} gear price(s).`);
   const FP = foundry.applications?.apps?.FilePicker?.implementation ?? FilePicker;

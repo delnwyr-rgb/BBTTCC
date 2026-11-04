@@ -1036,7 +1036,7 @@
                   <button type="button" data-action="rp-stack-add" class="bbttcc-travel-button">+ Add</button>
                 </div>
                 <div class="rp-stack-list" data-role="rp-stack-list"></div>
-                <div class="rp-stack-hint" style="font-size:.72rem; opacity:.6; margin-top:.25rem;">Each passenger pays their own faction's OP cost × multiplier. Default 1.0× (full pay).</div>
+                <div class="rp-stack-hint" style="font-size:.72rem; opacity:.6; margin-top:.25rem;">The riding Domains split one fare per leg. A multiplier scales a passenger's share (0 rides free).</div>
               </div>
 
               <div class="bbttcc-travel-field" style="margin-top:0.6rem;">
@@ -1293,6 +1293,13 @@
         return p;
       }
 
+      // How many Domains pay on this leg: the passengers who neither ride free nor sit at a 0 multiplier, plus the lead unless it rides free.
+      function _legPayers(leadId, hexEntry, leadPays = null) {
+        const riders = joiningFactionIds.filter(fid => Number(costMultipliers[fid] ?? 1) > 0 && !_passage(fid, hexEntry).free).length;
+        const lead = leadPays ?? !_passage(leadId, hexEntry).free;
+        return Math.max(1, riders + (lead ? 1 : 0));
+      }
+
       function _computePerLegMarksCost(forFactionId = null) {
         // Mirror the leg-cost arithmetic from render() so passenger debits
         // match what the lead pays. Returns one marks delta per leg per
@@ -1471,7 +1478,10 @@
           const f = game.actors?.get(fid);
           if (!f) continue;
           const mult = Number(costMultipliers[fid] ?? 1);
-          const perLeg = _computePerLegMarksCost(fid);   // passenger's own free-passage rights
+          const perLeg = _computePerLegMarksCost(fid).map((cost, li) => {   // passenger's own free-passage rights, and its share of the leg's one fare
+            const payers = _legPayers($fac.value || "", hexes.find(h => h.id === legs[li]?.toId));
+            return Object.fromEntries(Object.entries(cost).map(([k, v]) => [k, Number(v || 0) / payers]));
+          });
           const totals = _sumLegCosts(perLeg, mult);
           const bank = f?.getFlag?.(MOD_FCT, "opBank") || {};
           const shortfalls = [];
@@ -2441,6 +2451,10 @@
                 // rollback if any failure occurred.
                 const successfulDebits = []; // { fid, name, deltas }
                 const failures = [];          // { fid, name, reason }
+                // ONE FARE PER LEG (Dave 2026-11-03, round three): the riding Domains split the fare. Four Domains were paying four fares (one mountain month cost a small Domain 250 marks
+                // against ~75 of income). Whoever rides free (dev-6) or at a 0 multiplier is not in the split. travelHex charged the lead in full; it gets the others' shares back below.
+                const leadPaidLeg = !(r?.devSixFreePassage || r?.context?.devSixFreePassage);
+                const legPayers = _legPayers(factionId, destHex, leadPaidLeg);
                 for (const fid of joiningFactionIds) {
                   const passenger = game.actors?.get(fid);
                   if (!passenger) continue;
@@ -2453,7 +2467,7 @@
                   if (pass.free) { console.log(TAG, `passenger ${passenger.name} rides free on leg ${i + 1} (dev-6 owner/ally)`); continue; }
                   const passMult = (pass.why && Number.isFinite(pass.mult)) ? pass.mult : 1;
                   for (const [k, v] of Object.entries(legCost)) {
-                    const n = Math.max(0, Math.round(Number(v || 0) * passMult * mult));
+                    const n = Math.max(0, Math.round(Number(v || 0) * passMult * mult / legPayers));
                     if (n > 0) { deltas[String(k).toLowerCase()] = -n; anyDelta = true; }
                   }
                   if (!anyDelta) continue;
@@ -2539,6 +2553,22 @@
                   }
                   const who = failures.map(f => f.name).join(", ");
                   out.push(`    ↩ Leg ${i + 1} rolled back — ${who} could not afford the cut. Lead${successfulDebits.length ? ` + ${successfulDebits.length} paid passenger${successfulDebits.length === 1 ? "" : "s"}` : ""} refunded (token + war log unchanged).${tollNote}`);
+                } else if (leadPaidLeg && legPayers > 1) {
+                  const charged = r?.context?.spentFinal || r?.cost || r?.context?.cost || {};
+                  const toll = (r?.context?.crossing?.tollTo ? Number(r?.context?.crossing?.toll || 0) : 0);   // a bridge toll is the lead's own
+                  const back = {};
+                  for (const [k, v] of Object.entries(charged)) {
+                    let n = Math.max(0, Math.round(Number(v || 0)));
+                    if (toll && String(k).toLowerCase() === "economy") n = Math.max(0, n - toll);
+                    const refund = n - Math.round(n / legPayers);
+                    if (refund > 0) back[String(k).toLowerCase()] = refund;
+                  }
+                  if (Object.keys(back).length) {
+                    try {
+                      await opApi.commit(factionId, back, { source: "travel-stack-share", label: `Leg ${i + 1}: fare split ${legPayers} ways`, clampToCap: true });
+                      out.push(`    🤝 Leg ${i + 1}: fare split ${legPayers} ways.`);
+                    } catch (e) { console.warn(TAG, "lead share refund failed", e); }
+                  }
                 }
               }
             }
