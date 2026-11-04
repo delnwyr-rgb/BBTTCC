@@ -5955,6 +5955,8 @@ async function _awardCreature(campaign, ctx, beat, playedN = null) {
   try {
     const lineage = String(actor?.flags?.fourththing?.rfi?.actor?.lineage || "").toLowerCase();
     // 2026-11-02 (failure pass): "story beats that already price their own killing" was only true while the bandit award
+    if (c?.kind === "quest-closed") await _questGearDrop(campaign, ctx, c.quest, c.ending);
+    else if (c?.kind === "chapter-ended") await _questGearDrop(campaign, ctx, `${c.quest}.${c.chapter}`, c.ending);
     // resolved to no actor — once it named Road Bandit (mortal) the ambush's own Darkness +4 got a +1 on top. Made explicit:
     // a beat whose worldEffects already carry a darknessDelta has priced the kill; the rule stands down.
     const _pricedOwn = (beat?.worldEffects?.factionEffects || []).some(fe => Number(fe?.darknessDelta) > 0);
@@ -5974,7 +5976,9 @@ async function _awardCreature(campaign, ctx, beat, playedN = null) {
   return _awardsPay(campaign, ctx, { [M.pool]: marks }, { key: `creature:${beat.id}:${n}`, label: `${actor?.name || a.creature || beat.label || beat.id} — ${String(M.label || a.method).toLowerCase()}` });
 }
 async function _awardsSettle(campaign, ctx = {}) {
-  const st = _storyStateFor(campaign?.id) || {}; const out = { quests: 0, chapters: 0, creatures: 0 };
+  const st = _storyStateFor(campaign?.id) || {}; const out = { quests: 0, chapters: 0, creatures: 0, gear: 0 };
+  for (const [q, r] of Object.entries(st.closed || {})) if (await _questGearDrop(campaign, ctx, q, r?.name)) out.gear++;
+  for (const [q, cs] of Object.entries(st.chapters || {})) for (const [c, r] of Object.entries(cs || {})) { if (r?.ending && await _questGearDrop(campaign, ctx, `${q}.${c}`, r.ending)) out.gear++; }
   for (const [q, r] of Object.entries(st.closed || {})) { const paid = await _awardsPay(campaign, ctx, rewardFor(q), { key: `quest:${q}`, label: `${QUEST_MAP.quests?.[q]?.name || q} — ${r?.name || "closed"} (settled)` }); if (paid) out.quests++; }
   for (const [q, cs] of Object.entries(st.chapters || {})) for (const [c, r] of Object.entries(cs || {})) { if (!r?.ending) continue; const paid = await _awardsPay(campaign, ctx, rewardFor(q, c), { key: `chapter:${q}.${c}`, label: `${QUEST_MAP.quests?.[q]?.name || q} · ${QUEST_MAP.quests?.[q]?.chapters?.[c]?.name || c} — ${r.ending.name} (settled)` }); if (paid) out.chapters++; }
   for (const b of (campaign?.beats || [])) { if (!b?.award?.method || !st.played?.[b.id]) continue; const n = Number(st.played[b.id].n || 1); for (let i = 1; i <= n; i++) { const paid = await _awardCreature(campaign, ctx, b, i); if (paid) out.creatures++; } }
@@ -5997,6 +6001,30 @@ async function _storyRecord(campaign, beat, ctx = {}) {
     } catch (_e) {}
     try {
       const nm = (q) => QUEST_MAP.quests[q]?.name || q, cn = (q, c) => QUEST_MAP.quests[q]?.chapters?.[c]?.name || c;
+// GEAR AS QUEST REWARDS (Dave 2026-11-03, round three: Tier II became affordable, "and this provides impetus to add things like GEAR as quest reward items").
+// campaign.story.questGear = { "<quest>" | "<quest>.<chapter>": { uuid } } drops one real item when that quest or chapter closes, once ever (awards ledger), to a
+// party Steward fully trained for it (else the best trained); a tie goes to whoever holds the fewest rewards. A failed ending earns nothing. tools/patch-quest-gear-2026-11-03.macro.js holds the table.
+async function _questGearDrop(campaign, ctx, key, ending = "") {
+  try {
+    const row = campaign?.story?.questGear?.[key];
+    if (!row?.uuid || !game.user?.isGM) return false;
+    if (/\b(fail|failed|ruin|ruined|lost|burned|broken)\b/i.test(String(ending))) return false;
+    const ledger = _awardsLedger(), lk = `gear:${key}`;
+    if (ledger[lk]) return false;
+    const src = await fromUuid(String(row.uuid)); if (!src) { warn("[quest-gear] no such item", key, row.uuid); return false; }
+    const coalition = new Set((await _resolveCampaignFactions(campaign, ctx)).map(f => String(f.id)));
+    const party = [...new Set(game.users.filter(u => !u.isGM && u.character?.type === "character").map(u => u.character))].filter(a => coalition.has(String(a.getFlag("bbttcc-factions", "factionId") || "")));
+    const raw = String(src.system?.skill || src.system?.armorSkill || ""), skill = { weave: "fitting", warding: "bracing", weaver: "fitting" }[raw] || raw;
+    const rewardsHeld = (a) => a.items.filter(i => String(i.flags?.["bbttcc-campaign"]?.questItem?.key || "").startsWith("questGear:")).length;
+    // Capped at Proficient (2 = full bonuses): the armor cascade lifts a heavy-armor Steward's lighter skills, and uncapped he took all seven rewards.
+    const rank = (a) => Math.min(2, Number((a.system?.system ?? a.system)?.skills?.[skill]?.value) || 0);
+    const holder = party.sort((x, y) => (rank(y) - rank(x)) || (rewardsHeld(x) - rewardsHeld(y)))[0] || null;
+    await _choiceQuestItems(campaign, { id: `quest_gear_${key}` }, { questItems: [{ key: `questGear:${key}`, uuid: String(row.uuid) }] }, holder?.id, ctx);
+    ledger[lk] = { ts: Date.now(), label: src.name, holder: holder?.name || null };
+    await game.settings.set(MOD_ID, SETTING_AWARDS_LEDGER, ledger);
+    return true;
+  } catch (e) { warn("[quest-gear] drop failed", key, e); return false; }
+}
       const lines = changes.map(c => c.kind === "quest-started" ? `▷ ${nm(c.quest)} begins` : c.kind === "chapter-started" ? `▷ ${nm(c.quest)} · ${cn(c.quest, c.chapter)} opens` : c.kind === "chapter-ended" ? `✓ ${nm(c.quest)} · ${cn(c.quest, c.chapter)} — ${c.ending}` : c.kind === "quest-closed" ? `🏁 ${nm(c.quest)} — ${c.ending}` : JSON.stringify(c));
       await ChatMessage.create({ content: `<div class="bbttcc-story-ledger"><b>Story</b><ul style="margin:.3em 0 0 1em">${lines.map(l => `<li>${l.replace(/</g, "&lt;")}</li>`).join("")}</ul></div>`, whisper: game.users.filter(u => u.isGM).map(u => u.id), speaker: { alias: "Bad Eden" } });
     } catch (_eMsg) {}
