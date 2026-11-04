@@ -669,7 +669,11 @@ export function deriveSituation(ctx) {
   const isHub = (b) => !!b && b.inject?.repeatable !== false && Array.isArray(b.choices) && b.choices.filter(c => c && c.next).length >= 3 && (routesIn.get(String(b.id)) || 0) >= 3;
   // a beat "leads somewhere" if it is unplayed, or it is a hub with an unplayed door behind it (one hop —
   // two hubs pointing at each other with nothing behind either do NOT lead anywhere, 2026-09-14)
-  const leadsSomewhere = (b) => !!b && (!fired.has(String(b.id)) || (isHub(b) && (b.choices || []).some(c => { const t = byId.get(String(c?.next || "")); return t && !fired.has(String(t.id)); })));
+  // Round three (2026-11-03): a beat under a live phaseEntry lands on its target, so that target is what we judge. KT's Act 2 intro never played in
+  // Act 1 (it enters the cookline), which left NOW and "Run next" on it for good after the cookline was done.
+  const enteredAs = (b) => { const pe = b?.phaseEntry; const t = (pe?.to && phase < Number(pe.belowPhase)) ? byId.get(String(pe.to)) : null; return t || b; };
+  const leadsSomewhere = (b0) => { const b = enteredAs(b0); return !!b && (!fired.has(String(b.id)) || (isHub(b) && (b.choices || []).some(c => { if ([].concat(c?.requires || []).some(r => r?.beatMark && r.not && fired.has(String(r.beatMark)))) return false;   // the other fork was taken: this one is closed, not fresh
+    const t = byId.get(String(c?.next || "")); return t && !fired.has(String(t.id)); }))); };
   // (2026-09-14, evening) The "orphan" heuristic is GONE. Dead beats are a DATA fact, removed by
   // tools/scrub-orphan-beats; authored order (questStep) is the fallback the authors wrote, and linear
   // ladders with no routes between rungs (the Offices' Sayings) depend on it. The model guesses nothing.
@@ -911,7 +915,7 @@ export function deriveSituation(ctx) {
   // is background and a foreground quest is fresh or a door is ready, that is what happens next.
   const bgAnchorYields = !!anchorQuest && !fg(anchorQuest) && (anyDoorReady || inPlay.some(q => fg(q) && fresh(q)));
   const fgDoor = () => quests.filter(q => fg(q) && (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready && q.next.beat).sort((a, b) => Number(b.next?.here === true) - Number(a.next?.here === true))[0] || null;
-  const elsewhere = bgAnchorYields ? (inPlay.find(q => fg(q) && reachable(q)) || quests.find(q => fg(q) && doorHere(q)) || inPlay.find(q => fg(q) && fresh(q)) || fgDoor()) : anchorQuest && !reachable(anchorQuest) ? (inPlay.find(q => fg(q) && reachable(q)) || quests.find(doorHere) || (!fresh(anchorQuest) ? (inPlay.find(q => fg(q) && fresh(q)) || inPlay.find(q => bgOK(q) && fresh(q)) || null) : null)) : null;
+  const elsewhere = bgAnchorYields ? (inPlay.find(q => fg(q) && reachable(q)) || quests.find(q => fg(q) && doorHere(q)) || inPlay.find(q => fg(q) && fresh(q)) || fgDoor()) : anchorQuest && !reachable(anchorQuest) ? (inPlay.find(q => fg(q) && reachable(q)) || quests.find(doorHere) || (!fresh(anchorQuest) ? (inPlay.find(q => fg(q) && fresh(q)) || inPlay.find(q => bgOK(q) && fresh(q)) || fgDoor() || null) : null)) : null;   // round three: a stale anchor yields to a door a ride away (KT done → Lyrenn)
   const elsewhereWhy = elsewhere ? (bgAnchorYields ? (elsewhere.next?.here === true ? "here" : "elsewhere") : (fresh(anchorQuest) ? "here" : "elsewhere")) : null;
   inPlay.sort((a, b) => Number(b.next?.here === true) - Number(a.next?.here === true));
   const now = anchorQuest ? ((!anyFresh && !quests.some(q => (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready))

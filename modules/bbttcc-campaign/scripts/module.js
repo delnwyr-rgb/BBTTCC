@@ -1254,6 +1254,10 @@ let __bbttccCurrentBeatDialogPick = null;   // Autopilot: { beat, token, pick(i,
 // beat about to open closes its own stale copy, and a map door click closes them all (the table chose the map).
 // A closed dialog resolves as a dismissal, ending the chain it was waiting in.
 const __bbttccOpenBeatDialogs = new Set();   // { beatId, dlg }
+// RESTORE EPOCH (round three, 2026-11-03): a save load replaces the timeline. A dialog still open from the old one must not run its
+// tail on close — "Three Points Make a Heading", left open across a golden reset, raised the fresh party's level floor to 3 in Act 1.
+let __bbttccRestoreEpoch = 0;
+Hooks.on("bbttcc:restore:begin", () => { __bbttccRestoreEpoch++; try { _closeOpenBeatDialogs(); } catch (_e) {} });
 // THE BOOKMARK (Dave 2026-10-27: "a bookmark for the campaign that's easy to pick right back up"): the GM seat notes the
 // beat window that is OPEN right now in world setting `bookmark` ({campaignId, open:{beatId,label,since,token,sceneId},
 // lastResolved, ts}); resolving it clears `open`. Closing the browser resolves nothing, so the note survives the logout —
@@ -1906,7 +1910,10 @@ function _choiceSpent(ch, campaign, fromBeatId = null) {
     // A PLACE IS NEVER LOCKED (2026-11-02 click-through, Chuckle Creek): "Go find him under the piano" routes back to the street
     // hub — once-only, but 29 beats route into it — and greyed "done" as the dialog's only choice: a dead end. A beat that four or
     // more beats route into is somewhere you go back to, not a moment that's spent.
-    if (tgt.inject?.repeatable !== true) return _inboundRoutes(campaign, next) >= 4 ? false : "lock";
+    // Round three (2026-11-03, KT "The Tar"): that holds for a repeatable hub too — both first-time replies to Drax route home to the town
+    // walk, so they wore ✓ before anyone had picked them. Going back to a place is never "done".
+    if (_inboundRoutes(campaign, next) >= 4) return false;
+    if (tgt.inject?.repeatable !== true) return "lock";
     const from = String(fromBeatId || "");
     // 2026-11-03 (failure pass, the Crown Mall hub): a side trip that comes home in TWO steps (VHS Ghosts → Emotional Rewind →
     // "The mall keeps happening." → the hub) is asked too — the one-step test never greyed the mall's three explorations.
@@ -4025,6 +4032,7 @@ async function executeBeat(campaign, beat, ctx = {}) {
     }
   } catch (eSeal) { warn("[seal] entry check failed (fail-open):", eSeal); }
 
+  const restoreEpochAtEntry = __bbttccRestoreEpoch;
   // Future-act guard (2026-09-14, live-caught: an orphaned Act-1 church intro routed the table into the
   // Father's Act-2 Echo on day one). Gates carry order (Charter Law 2): a beat whose act is AHEAD of the
   // story is refused on every path except a forced run or the phase door that opens it — "not yet".
@@ -4441,6 +4449,8 @@ async function executeBeat(campaign, beat, ctx = {}) {
           checkOk: (dialogRes.check && typeof dialogRes.check.ok === "boolean") ? dialogRes.check.ok : null
         };
         await _mutateDirectorState(async (st) => {
+  // The timeline this beat opened in was replaced while it waited: no effects, no mark, no resolved hook.
+  if (restoreEpochAtEntry !== __bbttccRestoreEpoch) return { ok: false, abandoned: true, why: "save loaded while open" };
           st.choices = Array.isArray(st.choices) ? st.choices : [];
           st.choices.push(rec);
           if (st.choices.length > 200) st.choices.splice(0, st.choices.length - 200);
