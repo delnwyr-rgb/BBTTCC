@@ -9,6 +9,8 @@
  *   • Gloomgill's questions run in order (2026-11-04): only Question 1 carried the lamp gate, so Resume skipped to Question 2, sent the table back
  *     to a lake that refused them, and its Run next would have stepped past the gate. Each question now requires the one before it.
  *   • Chuckle Creek is a place (2026-11-04): its hub fired once, so a party that left mid-quest rode back to silence. It repeats now, with a way back to the road.
+ *   • Leaving Gloomgill before his exam isn't a verdict (2026-11-04): "Leave" went to gloomgill_fled, which closes the quest for good, even while he was
+ *     refusing to begin and telling the party to come back. It's the walk-out verdict only once the exam is open; before that, the lake just lets you go.
  * Idempotent (rerun = 0). DRY_RUN first. Backup (campaigns) → Data/bbttcc-exports/. GM only.
  */
 const ROUND_THREE_PATCH = (() => {
@@ -47,6 +49,18 @@ const ROUND_THREE_PATCH = (() => {
       if (!(creek.choices || []).some(c => c?.label === "Back on the road.")) {
         creek.choices = [...(creek.choices || []), { label: "Back on the road.", next: "", description: "", checkStat: "", checkDC: 0, failNext: "" }];
         changes++; report.push("✚ chuckle_arrival: road exit");
+      }
+    }
+    const gg = beats.find(b => b?.id === "gloomgill_intro_scene");
+    const ggTalk = gg && (gg.choices || []).find(c => c?.next === "gloomgill_question_1");
+    const ggWait = gg && (gg.choices || []).find(c => c?.next === "gloomgill_unfinished");
+    const ggLeave = gg && (gg.choices || []).find(c => c?.next === "gloomgill_fled");
+    if (!ggTalk?.requires || !ggWait?.requires || !ggLeave) conflicts.push("gloomgill_intro_scene: gate choices not found");
+    else {
+      if (!ggLeave.requires) { ggLeave.requires = JSON.parse(JSON.stringify(ggTalk.requires)); changes++; report.push("✚ gloomgill_intro_scene: the walk-out verdict waits for the open exam"); }
+      if (!gg.choices.some(c => c?.label === "Leave the lake for now.")) {
+        gg.choices = [...gg.choices, { label: "Leave the lake for now.", next: "", description: "", checkStat: "", checkDC: 0, failNext: "", requires: JSON.parse(JSON.stringify(ggWait.requires)) }];
+        changes++; report.push("✚ gloomgill_intro_scene: leave without a verdict while he won't begin");
       }
     }
     for (let n = 2; n <= 10; n++) {
