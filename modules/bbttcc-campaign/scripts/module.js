@@ -5650,7 +5650,7 @@ async function _openCalendarDoors({ turn = null, via = "calendar" } = {}) {
   for (const [turnGte, phaseMin] of PHASE_CALENDAR_DOORS) {
     if (tNow < turnGte) continue;
     const opened = await _storyPhaseAdvance(phaseMin, { via: `calendar hard door (turn ${tNow}, ${via})` });
-    if (opened) out.opened.push(phaseMin);
+    if (opened) { out.opened.push(phaseMin); __calendarDoorTurn = tNow; break; }
   }
   return out;
 }
@@ -5661,16 +5661,20 @@ function _storyPhaseGet() {
 
 async function _storyPhaseAdvance(target, { via = "beat" } = {}) {
   const cur = _storyPhaseGet();
-  const next = Math.max(cur, Math.floor(Number(target) || 0));
+  let next = Math.max(cur, Math.floor(Number(target) || 0));
+  if (cur <= 2 && next >= 3 && _act2ClimaxPending()) { log(`[phase] Act ${next} held: the camp has no outcome yet (${via}).`); next = cur; }
   if (next === cur) return false;
   await game.settings.set(MOD_ID, SETTING_STORY_PHASE, next);
   const floors = PHASE_FLOORS[next];
   if (floors) {
     await _mutateDirectorState(async (st) => {
+let __calendarDoorTurn = null;
       st.stewardLevelFloor = Math.max(Number(st.stewardLevelFloor) || 0, floors.steward);
       st.factionTierFloor = Math.max(Number(st.factionTierFloor) || 0, floors.faction);
     });
     try { await directorReconcileLevels({ reason: `phase ${next}` }); } catch (eR) { warn("[phase] reconcileLevels failed:", eR); }
+  // One act per Advance (2026-11-03): a camp finished late must not open Acts 3 and 4 together and jump the party two floors. The driver calls this twice per Advance.
+  if (__calendarDoorTurn === tNow) return out;
   }
   const nm = PHASE_NAMES[next] || `PHASE ${next}`;
   try {
@@ -5683,6 +5687,19 @@ async function _storyPhaseAdvance(target, { via = "beat" } = {}) {
     });
   } catch (_e) {}
   // The act's door beat (2026-09-13): the opening card, before the invitations.
+// THE CAMP CLOSES ACT 2 (Dave 2026-11-03, round three: "the big climax of act 2, before The Widening Trail opens. Act 3 isn't supposed to be able to open without that happening").
+// The Month 6 door opened Act 3 regardless and Month 10 opened Act 4, so a table that lagged met its climax at L6. No path past Act 2 until the camp has an outcome: the calendar and
+// every beat phaseAdvance come through _storyPhaseAdvance. A campaign without the camp is not held.
+const ACT2_CLIMAX_MARKS = ["ft_camp_jailed", "ft_camp_recruited", "ft_camp_broken"];
+function _act2ClimaxPending() {
+  try {
+    const cid = getActiveCampaignId(), c = cid ? getCampaign(cid) : null;
+    if (!(c?.beats || []).some(b => b?.id === "ft_camp_approach")) return false;
+    const played = _storyStateFor(cid)?.played || {};
+    return !ACT2_CLIMAX_MARKS.some(id => played[id]);
+  } catch (_e) { return false; }
+}
+
   try {
     const doorBeat = PHASE_DOOR_BEATS[next];
     const cidD = getActiveCampaignId(); const cD = cidD ? getCampaign(cidD) : null;
@@ -8561,7 +8578,7 @@ async function directorSlate({ via = "manual" } = {}) {
   const doors = story.doors;
   const nextDoor = PHASE_CALENDAR_DOORS.find(([t, p]) => p > phase) || null;
   const keystone = story.quests.find(q => q.keystone && q.act === phase && q.state !== "completed") || null;
-  const cal = nextDoor ? `Act ${nextDoor[1]} opens by itself at turn ${nextDoor[0]}${nextDoor[0] > turn ? ` (${nextDoor[0] - turn} turn${nextDoor[0] - turn === 1 ? "" : "s"} from now)` : " (overdue)"}${keystone ? `; or sooner, when <b>${nm(keystone)}</b> closes` : ""}.` : "No calendar door ahead.";
+  const cal = (nextDoor && nextDoor[1] >= 3 && phase <= 2 && _act2ClimaxPending()) ? `Act 3 waits on the camp at Khezek-Tor` : nextDoor ? `Act ${nextDoor[1]} opens by itself at turn ${nextDoor[0]}${nextDoor[0] > turn ? ` (${nextDoor[0] - turn} turn${nextDoor[0] - turn === 1 ? "" : "s"} from now)` : " (overdue)"}${keystone ? `; or sooner, when <b>${nm(keystone)}</b> closes` : ""}.` : "No calendar door ahead.";
   const html = `<div class="bbttcc-slate" style="border-left:3px solid #d9a441;padding:.45em .6em;background:rgba(217,164,65,.08);font-size:12px">
     <div style="font-weight:700;letter-spacing:.04em">🎙 THE SLATE — Act ${phase} · Turn ${turn}${story.where ? ` · 📍 ${esc(String(story.where))}` : ""}</div>
     ${nowQ ? `<div style="margin-top:.3em"><b>NOW</b> — ${nm(nowQ)}${story.now.chapter ? ` · ${esc(story.now.chapter.name)}` : ""}: ${story.now.next ? `${esc(story.now.next.beat.label || story.now.next.beat.id)}${story.now.next.ready ? runBtn(story.now.next.beat, true) : waitsTxt(story.now.next, nowQ)}` : esc(story.now.why)}${lineTxt(story.now.next)}</div>` : ""}
