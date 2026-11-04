@@ -962,6 +962,25 @@ export function deriveSituation(ctx) {
       .sort((a, b) => (Number(named.has(String(b.key))) - Number(named.has(String(a.key)))) || (Number(b.next?.here === true) - Number(a.next?.here === true)))[0];
     if (qd) nowOut = { quest: qd, chapter: qd.currentChapter, next: qd.next, why: qd.next.here === true ? "here" : "elsewhere", roads: [] };
   }
+  // A PARKED STEP'S LAST RESORT (round three, 2026-11-03): a parked step is never Next, and that is right while the table has other work. But the party finished the Wall and the Field,
+  // never went back to the Long Market, and NOW said only Lock the Turn for two empty months while the whole spine waited on the seal. With nothing else left, a step carrying
+  // `park.nudge` offers the first ready beat of its first unmet group, in the nudge's own words.
+  if (!nowOut || !nowOut.next || ["turn", "complete", "empty", "done-no-closer"].includes(String(nowOut.why || ""))) {
+    outerPark: for (const q of inPlay) {
+      for (const st of (scriptOf(q.key)?.steps || [])) {
+        const p = st?.park; if (!p?.nudge || !Array.isArray(p.until)) continue;
+        if (Array.isArray(p.after) && p.after.length && !p.after.some(id => fired.has(String(id)))) continue;
+        for (const group of p.until) {
+          if ((group || []).some(id => fired.has(String(id)))) continue;
+          const x = (group || []).map(id => byId.get(String(id))).find(b => b && readiness(b).ready && !sealOfDecl(b, store || undefined, phase)?.sealed);
+          if (!x) continue;
+          const def = QUEST_MAP.quests[String(x.story?.quest || "")] || null, pl = placeOf(x, def);
+          nowOut = { quest: q, chapter: q.currentChapter, next: { beat: x, ready: true, reasons: [], line: String(p.nudge), here: hereOf(x, def), place: (pl && pl !== "anywhere") ? pl : (def?.hex || null) }, why: "park-nudge", roads: [] };
+          break outerPark;
+        }
+      }
+    }
+  }
   // THE DAY MUST END FIRST (owner ruling 2026-09-20: "make it deliberate — prompt for it if someone doesn't fire Day's End").
   // When NOW waits on the TURN (a title card gated `turn ≥ N`), the act's Day's End terminal is offered as the way there.
   try {

@@ -183,7 +183,7 @@ export const STORY_SCRIPTS = {
         // Dave 2026-10-29: once the table has stood in front of it, the seal is a dead end until Etta + the East Wall + the
         // Field (the same gates as the three tools). Parked = no Next anywhere, so the Log and the Visualizer move on; the
         // tools come back as Next by themselves when the last gate lands. Etta is never named here — she's found by talking.
-        park: { after: SEAL_SEEN, until: SEAL_GATES,
+        park: { after: SEAL_SEEN, until: SEAL_GATES, nudge: "The seal's hand is older than the mine. Somebody at the Long Market in Allesh-Gilliam has seen it before.",
           logged: "You saw the seal up close. Nobody at Khezek Tor can read the carving, and it won't take anything you try on it yet." } }
     ],
     doors: [], after: [], chapters: {}
