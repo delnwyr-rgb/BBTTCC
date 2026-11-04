@@ -799,6 +799,22 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
       return { ok: true, via: "none", deltas };
     }
 
+    // Round three (2026-11-03): a lead short in one pool pays from its others at the market's ×1.5, like a passenger. Errata held 690 marks and 5 Non-Lethal, and a wild-terrain leg
+    // refused with only "see console". A Domain that truly cannot cover the leg is still refused below.
+    try {
+      const plan = game.bbttcc?.api?.market?.spreadPayPlan;
+      const actor = game.actors?.get?.(factionId);
+      const bank = actor?.getFlag?.(MOD_FCT, "opBank") || {};
+      if (typeof plan === "function" && actor) for (const [k, v] of Object.entries({ ...deltas })) {
+        const need = -Number(v) || 0;
+        if (need <= (Number(bank[k]) || 0)) continue;
+        const p = plan(actor, k, need);
+        if (!p?.ok) continue;
+        delete deltas[k];
+        for (const [pool, d] of Object.entries(p.deltas)) deltas[pool] = (deltas[pool] || 0) + d;
+      }
+    } catch (eS) { console.warn(TAG, "lead spread failed", eS); }
+
     const res = await op.commit(factionId, deltas, reason);
     // 2026-08-28: op.commit REFUSES on underflow (committed:false) — honoring
     // that here is the travel gate. The old unconditional ok:true let a leg
