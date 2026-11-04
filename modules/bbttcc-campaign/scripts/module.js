@@ -5934,7 +5934,10 @@ async function _awardCreature(campaign, ctx, beat, playedN = null) {
   const _slug = (x) => String(x || "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
   let actor = (a.creatureId && game.actors?.get?.(a.creatureId)) || (a.creature && game.actors?.find?.(x => x.name === a.creature)) || (a.creature && game.actors?.find?.(x => _slug(x.name) === _slug(a.creature))) || null;
   if (!actor && a.creature) {
-    try { const pack = game.packs?.get?.("bbttcc-master-content.npcs"); const idx = pack ? await pack.getIndex() : null; const hit = idx ? [...idx].find(e => _slug(e.name) === _slug(a.creature)) : null; if (hit) actor = await pack.getDocument(hit._id); } catch (_eP) {}
+    // 2026-11-03: the D&D table keeps its bestiary in bad-eden-5e.monsters (stamped bounties + lineage) — no road bounty paid there.
+    const _bestiaryPacks = game.system?.id === "dnd5e" ? ["bad-eden-5e.monsters", "bbttcc-master-content.npcs"] : ["bbttcc-master-content.npcs", "bad-eden-5e.monsters"];
+    for (const _pid of _bestiaryPacks) { if (actor) break;
+    try { const pack = game.packs?.get?.(_pid); const idx = pack ? await pack.getIndex() : null; const hit = idx ? [...idx].find(e => _slug(e.name) === _slug(a.creature)) : null; if (hit) actor = await pack.getDocument(hit._id); } catch (_eP) {} }
   }
   // KILLING A PERSON IS DARK (Dave 2026-11-02: "So we killed a human, now need to get a darkness penalty"): a kill bounty on a mortal
   // creature (rfi lineage "mortal" — the Hexknight, raiders) adds 1 Darkness to the coalition, once per kill (keyed in the story store,

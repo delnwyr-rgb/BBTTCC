@@ -22,7 +22,7 @@ const TUNING_ROUND = (() => {
     { id: "a5_title_card", label: "THATWARDS HO! — Act Five", act: 5,
       description: "The bunker isn't hidden. It never was. The ships over it land sideways on purpose, and the court inside has been keeping somebody else's books.\n\nThe projector hums again over the Frontier Formerly Known As Texas:\n\nA C T   F I V E   —   T H E   S K Y   B R E A K S   S I D E W A Y S\n\nCount who comes with you. Every road you own points at the same cracked mouth in the hill now.\n\n⚙ GM: this card marks Act 5 (The Sky Is Waiting raised the act)." }
   ];
-  function apply(camp, refFix) {
+  function apply(camp, refFix, opts = {}) {
     if (!Array.isArray(camp.beats)) camp.beats = Object.values(camp.beats || {});
     const by = new Map(camp.beats.map(b => [b.id, b]));
     const report = [], conflicts = []; let changes = 0;
@@ -38,7 +38,8 @@ const TUNING_ROUND = (() => {
     if (forest?.unlocks?.maneuvers?.includes("battlefield_harmony")) { forest.unlocks.maneuvers = forest.unlocks.maneuvers.map(k => k === "battlefield_harmony" ? "rally_the_line" : k); changes++; report.push("✚ forest harmonious ending: battlefield_harmony (retired) → rally_the_line"); }
     // 3
     const kv = get("enc_forgotten_yesterdays_tanneritos_hostile");
-    if (kv) { kv.worldEffects = kv.worldEffects || {}; const rel = kv.worldEffects.relationshipEffects = kv.worldEffects.relationshipEffects || [];
+    if (kv && opts.tanneritos === false) report.push("· Killed the Vibe: no Tanneritos faction in this world — skipped");
+    else if (kv) { kv.worldEffects = kv.worldEffects || {}; const rel = kv.worldEffects.relationshipEffects = kv.worldEffects.relationshipEffects || [];
       if (!rel.some(r => r && r.targetFactionId === TANNERITOS)) { rel.push({ sourceFactionId: "@coalition", targetFactionId: TANNERITOS, step: -1 }); changes++; report.push("✚ Killed the Vibe: coalition → Tanneritos −1 step"); } }
     else conflicts.push("enc_forgotten_yesterdays_tanneritos_hostile not found");
     // 4
@@ -79,7 +80,7 @@ if (typeof game === "undefined" && typeof module !== "undefined") {
     const [, sid, , did] = u.split("."); if (game.scenes.get(sid)?.drawings?.get(did)) continue;
     const d = one?.drawings?.get(did); if (d) refFix[u] = d.uuid;
   }
-  const { changes, report, conflicts } = TUNING_ROUND.apply(camp, refFix);
+  const { changes, report, conflicts } = TUNING_ROUND.apply(camp, refFix, { tanneritos: !!game.actors?.get?.("ibpWpT3LPv0sZHio") });
   console.log(`[tuning round 2026-11-03] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.join("\n") + (conflicts.length ? "\n⚠ " + conflicts.join("\n⚠ ") : ""));
   globalThis.__tune = { dry: DRY_RUN, changes, report, conflicts };
   if (DRY_RUN) return ui.notifications.info(`DRY RUN — ${changes} change(s); see console.`);

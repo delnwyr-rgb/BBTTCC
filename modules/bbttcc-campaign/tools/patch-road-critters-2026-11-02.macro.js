@@ -38,7 +38,7 @@ if (typeof game === "undefined" && typeof module !== "undefined") {
   const NS = "bbttcc-campaign";
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
   // every critter must exist (world, or the npcs pack) before we point at it
-  const pack = game.packs?.get("bbttcc-master-content.npcs"); const idx = pack ? [...await pack.getIndex()] : [];
+  const idx = []; for (const pid of ["bbttcc-master-content.npcs", "bad-eden-5e.monsters"]) { const pack = game.packs?.get(pid); if (pack) idx.push(...await pack.getIndex()); }   // + the D&D bestiary (2026-11-03)
   const missing = Object.values(ROAD_CRITTERS_PATCH.MAP).map(m => m.name).filter(n => !game.actors.find(a => a.name === n) && !idx.find(e => e.name === n));
   if (missing.length) { globalThis.__roadCritters = { dry: DRY_RUN, changes: 0, conflicts: missing.map(n => `critter not found: ${n}`) }; return ui.notifications.error("Missing critters: " + missing.join(", ")); }
   const campsRaw = game.settings.get(NS, "campaigns"); const campsWasStr = typeof campsRaw === "string";
