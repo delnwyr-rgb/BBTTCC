@@ -198,7 +198,7 @@ export const QUEST_MAP = {
    "act": 2,
    "keystone": false,
    "evergreen": true,
-   "hex": "Ynnermire.b",
+   "hex": "Odaroloc River.a",
    "registryId": "quest_soft_landing",
    "chapters": {}
   },
@@ -207,7 +207,7 @@ export const QUEST_MAP = {
    "act": 2,
    "keystone": false,
    "evergreen": true,
-   "hex": "Odaroloc River.d",
+   "hex": "PolygonForest.c",
    "registryId": "quest_stillwater",
    "chapters": {}
   },

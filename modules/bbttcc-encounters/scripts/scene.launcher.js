@@ -1351,13 +1351,13 @@ async function showTextStep(step, ctx) {
       actorUpdates["flags.bbttcc-factions.tracks"] = tracks;
       // 2026-10-28 (Dave: "Darkness should be real"): the outcome tables above wrote Darkness into the legacy
       // tracks box, which nothing reads — every encounter's Darkness was lost. The delta now lands on the
-      // Domain's real meter (flags.bbttcc-factions.darkness.global, 0–10). tracks.morale stays retired (ruling 19).
+      // Domain's real meter (flags.bbttcc-factions.darkness.global, no ceiling since 2026-11-04). tracks.morale stays retired (ruling 19).
       const dDark = n(tracks.darkness) - n(fFlagsOrig.tracks?.darkness);
       if (dDark) {
         const raw = fFlagsOrig.darkness;
         const box = (raw && typeof raw === "object") ? clone(raw) : { global: n(raw) };
         const before = n(box.global);
-        box.global = Math.max(0, Math.min(10, before + dDark));
+        box.global = Math.max(0, before + dDark);
         if (box.global !== before) {
           actorUpdates["flags.bbttcc-factions.darkness"] = box;
           const wl = Array.isArray(fFlagsOrig.warLogs) ? fFlagsOrig.warLogs.slice() : [];

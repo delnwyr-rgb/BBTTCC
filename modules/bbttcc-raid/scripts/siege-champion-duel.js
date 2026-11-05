@@ -63,8 +63,9 @@
       let a, d, guard = 0;
       do {
         const _die = (game.fourththing?.rolls?.checkFormula?.() || "2d10x10");
-        a = (await new Roll(_die).evaluate()).total;
-        d = (await new Roll(_die).evaluate()).total;
+        const _champ = (id) => (game.bbttcc?.dice?.rollArmed?.(_die, {}, { actor: game.actors?.get?.(id) ?? null }) ?? new Roll(_die).evaluate());   // armed Momentum / Surge (2026-11-04)
+        a = (await _champ(atkId)).total;
+        d = (await _champ(defId)).total;
       } while (a === d && guard++ < 5);
       winnerSide = a >= d ? "attacker" : "defender";
       margin = Math.abs(a - d);

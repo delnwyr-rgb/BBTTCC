@@ -57,19 +57,27 @@
     const c = Number(intel.confidence ?? 0);
     return isNaN(c) ? 0 : Math.max(0, Math.min(1, c));
   }
-  // The engine rolls 2d10 + mod vs DC (hex-travel.js) — exact 2d10 odds, not d20 math.
+  // The engine rolls 2d10x10 + mod vs DC (hex-travel.js) — exact exploding odds, not d20 math (tens chain; 8 links is plenty).
+  const _dieOdds = (() => {
+    const m = new Map(); let p = 1;
+    for (let link = 0; link < 8; link++, p /= 10) for (let v = 1; v <= 9; v++) m.set(link * 10 + v, p / 10);
+    return m;
+  })();
   function successChance(dc, mod, advantage = false) {
     const need = Number(dc) - Number(mod || 0);
-    let hits = 0;
+    let odds = 0;
     if (!advantage) {
-      for (let a = 1; a <= 10; a++) for (let b = 1; b <= 10; b++) if (a + b >= need) hits++;
-      return hits / 100;
+      for (const [a, pa] of _dieOdds) for (const [b, pb] of _dieOdds) if (a + b >= need) odds += pa * pb;
+      return Math.min(1, odds);
     }
-    // 3d10kh2 (travelHex with ctx.travelAdvantage): best two of three.
+    // 3d10kh2x10 (travelHex with ctx.travelAdvantage; owner ruling 2026-11-04): the best two of three are kept, then the kept tens explode.
     for (let a = 1; a <= 10; a++) for (let b = 1; b <= 10; b++) for (let c = 1; c <= 10; c++) {
-      if (a + b + c - Math.min(a, b, c) >= need) hits++;
+      const sorted = [a, b, c].sort((x, y) => y - x); const x = sorted[0], y = sorted[1];
+      if (x < 10) { if (x + y >= need) odds += 1 / 1000; continue; }
+      if (y < 10) { for (const [e, pe] of _dieOdds) if (10 + y + e >= need) odds += pe / 1000; continue; }
+      for (const [e, pe] of _dieOdds) for (const [f, pf] of _dieOdds) if (20 + e + f >= need) odds += pe * pf / 1000;
     }
-    return hits / 1000;
+    return Math.min(1, odds);
   }
   function labelOP(k) {
     const L = { economy:"Economy", logistics:"Logistics", intrigue:"Intrigue",

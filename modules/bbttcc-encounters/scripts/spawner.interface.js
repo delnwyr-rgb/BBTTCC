@@ -256,6 +256,65 @@
   // position.
   // ---------------------------------------------------------------------------
 
+  // ---------------------------------------------------------------------------
+  // TOKEN SPOTS (owner ruling 2026-11-04: "the location for token will actually be unique per map").
+  // Each battlemap remembers where its Stewards and foes stand. Place the tokens, then press Save Token Spots
+  // (Token controls) or call api.encounters.saveTokenSpots(). Setting `bbttcc-encounters.tokenSpots` =
+  // { [sceneId]: { pcs: [{x,y}…], foes: { [actorName]: [{x,y}…] } } } — GAME layer, so a story reset keeps it.
+  // A map with no spots falls back to the old rows.
+  // ---------------------------------------------------------------------------
+  const SPOTS_MOD = "bbttcc-encounters", SPOTS_KEY = "tokenSpots";
+  Hooks.once("init", () => {
+    game.settings.register(SPOTS_MOD, SPOTS_KEY, { scope: "world", config: false, type: Object, default: {}, bbttcc: { layer: "game" } });
+  });
+  function spotsFor(scene) {
+    try { return (game.settings.get(SPOTS_MOD, SPOTS_KEY) || {})[scene?.id] || null; } catch (_e) { return null; }
+  }
+  const _nameOf = (t) => String(t?.actor?.name || t?.name || "").trim();
+  async function saveTokenSpots(scene = canvas?.scene) {
+    if (!scene || !game.user?.isGM) return null;
+    const FRIENDLY = CONST.TOKEN_DISPOSITIONS.FRIENDLY;
+    const pos = (t) => ({ x: Number(t.x) || 0, y: Number(t.y) || 0 });
+    const byXY = (a, b) => (a.x - b.x) || (a.y - b.y);
+    const toks = iterTokenDocs(scene);
+    const pcs = toks.filter(t => Number(t.disposition) === FRIENDLY && t.actor?.type === "character").map(pos).sort(byXY);
+    const foes = {};
+    for (const t of toks) { if (Number(t.disposition) !== HOSTILE()) continue; const n = _nameOf(t); if (n) (foes[n] ??= []).push(pos(t)); }
+    for (const list of Object.values(foes)) list.sort(byXY);
+    const all = foundry.utils.duplicate(game.settings.get(SPOTS_MOD, SPOTS_KEY) || {});
+    all[scene.id] = { name: scene.name, pcs, foes, at: Date.now() };
+    await game.settings.set(SPOTS_MOD, SPOTS_KEY, all);
+    const foeN = Object.values(foes).reduce((s, l) => s + l.length, 0);
+    ui.notifications?.info?.(`${scene.name}: saved ${pcs.length} Steward and ${foeN} foe spot(s).`);
+    return all[scene.id];
+  }
+  async function clearTokenSpots(scene = canvas?.scene) {
+    if (!scene || !game.user?.isGM) return;
+    const all = foundry.utils.duplicate(game.settings.get(SPOTS_MOD, SPOTS_KEY) || {});
+    delete all[scene.id];
+    await game.settings.set(SPOTS_MOD, SPOTS_KEY, all);
+    ui.notifications?.info?.(`${scene.name}: token spots cleared.`);
+  }
+  // Foes already on the map go to their saved spots when the stage is set; never during a running fight.
+  async function applyFoeSpots(scene) {
+    const spots = spotsFor(scene); if (!spots?.foes || !game.user?.isGM) return;
+    if ((game.combats?.contents ?? []).some(c => c.started && c.scene?.id === scene.id)) return;
+    const seen = {}; const ups = [];
+    for (const t of iterTokenDocs(scene)) {
+      if (Number(t.disposition) !== HOSTILE()) continue;
+      const n = _nameOf(t); const i = (seen[n] = (seen[n] ?? -1) + 1); const s = spots.foes[n]?.[i];
+      if (s && (t.x !== s.x || t.y !== s.y)) ups.push({ _id: t.id, x: s.x, y: s.y });
+    }
+    if (ups.length) await scene.updateEmbeddedDocuments("Token", ups, { animate: false });
+  }
+  Hooks.on("getSceneControlButtons", (controls) => {
+    try {
+      const tokens = controls?.tokens;
+      if (!tokens?.tools || !game.user?.isGM) return;
+      tokens.tools.bbttccSaveTokenSpots = { name: "bbttccSaveTokenSpots", title: "Save Token Spots (this map)", icon: "fa-solid fa-map-pin", order: 60, button: true, visible: true, onChange: () => saveTokenSpots(canvas?.scene) };
+    } catch (_e) {}
+  });
+
   function _pcBelongsToFaction(char, faction) {
     // Mirrors bbttcc-factions _characterBelongsToFaction (flag id → system id →
     // flag name → system name), kept local so the encounters module has no
@@ -368,6 +427,7 @@
     for (const doc of iterTokenDocs(scene)) {
       if (doc?.actorId) present.add(doc.actorId);
     }
+    await applyFoeSpots(scene);
     const toPlace = pcs.filter(a => !present.has(a.id));
     if (!toPlace.length) {
       log("spawnFactionPCs: all participating PCs already on scene; nothing to drop.");
@@ -385,14 +445,18 @@
     const rowY = Math.floor((sy + sh - 3 * grid) / grid) * grid;
 
     const spawnedBy = opts.spawnedBy || "pc_party";
-    const specs = toPlace.map((a, idx) => ({
-      actor: a.id,
-      role: "pc",
-      spawnedBy,
-      disposition: CONST.TOKEN_DISPOSITIONS.FRIENDLY,
-      x: Math.floor((cx + (idx - (toPlace.length - 1) / 2) * (1.5 * grid)) / grid) * grid,
-      y: rowY
-    }));
+    const pcSpots = spotsFor(scene)?.pcs || [];
+    const specs = toPlace.map((a, idx) => {
+      const spot = pcSpots[pcs.indexOf(a)];
+      return {
+        actor: a.id,
+        role: "pc",
+        spawnedBy,
+        disposition: CONST.TOKEN_DISPOSITIONS.FRIENDLY,
+        x: spot ? spot.x : Math.floor((cx + (idx - (toPlace.length - 1) / 2) * (1.5 * grid)) / grid) * grid,
+        y: spot ? spot.y : rowY
+      };
+    });
 
     log("spawnFactionPCs: dropping stewards", { factionRefs, stewards: toPlace.map(a => a.name) });
     return spawnTokens(scene, specs);
@@ -533,7 +597,7 @@
     return out;
   }
 
-  async function spawnByName(scene, name, { count = 1, spawnedBy = "by_name", role = "npc" } = {}) {
+  async function spawnByName(scene, name, { count = 1, spawnedBy = "by_name", role = "npc", offset = 0 } = {}) {
     if (!scene) return [];
     const base = await actorByName(name);
     if (!base) { warn("spawnByName: no actor named", name); return []; }
@@ -544,10 +608,11 @@
     const cx = sx + sw / 2;
     const topY = Math.floor((sy + 3 * grid) / grid) * grid;
     const specs = [];
-    for (let i = 0; i < count; i++) specs.push({
+    const foeSpots = spotsFor(scene)?.foes?.[String(name).trim()] || [];
+    for (let i = 0; i < count; i++) { const spot = foeSpots[i + offset]; specs.push({
       actor: base.id, role, spawnedBy, disposition: HOSTILE(),
-      x: Math.floor((cx + (i - (count - 1) / 2) * (1.5 * grid)) / grid) * grid, y: topY
-    });
+      x: spot ? spot.x : Math.floor((cx + (i - (count - 1) / 2) * (1.5 * grid)) / grid) * grid, y: spot ? spot.y : topY
+    }); }
     return spawnTokens(scene, specs);
   }
 
@@ -609,6 +674,7 @@
   function onStageReady({ beat, scene } = {}) {
     if (!game.user?.isGM || !scene || !beat) return;
     (async () => {
+      await applyFoeSpots(scene);
       if (String(beat.id) === "enc_bandit_ambush" && banditAccordUnderway()) await setBanditAmbushCrew(scene, "accord");
       const want = String(beat.encounter?.actorName || "").trim();
       if (want) {
@@ -619,14 +685,14 @@
         const present = iterTokenDocs(scene).filter(t =>
           Number(t?.disposition) === HOSTILE() && (String(t?.actor?.name || "") === want || String(t?.name || "") === want)).length;
         if (beat.encounter?.party === true) await spawnFactionPCs(scene, {}, { spawnedBy: `pc_party:${beat.id}` });
-        if (present < want_n) await spawnByName(scene, want, { count: want_n - present, spawnedBy: `enc:${beat.id}` });
+        if (present < want_n) await spawnByName(scene, want, { count: want_n - present, spawnedBy: `enc:${beat.id}`, offset: present });
         // encounter.also (2026-11-02, the camp on the switchbacks): a story fight with a boss and its hands —
         // [{ actorName, count }] tops up each extra foe the same way (Battle-Bassinet Berserker + the camp's own)
         for (const x of (Array.isArray(beat.encounter?.also) ? beat.encounter.also : [])) {
           const nm = String(x?.actorName || "").trim(); if (!nm) continue;
           const n = Math.max(1, Math.min(8, Math.floor(Number(x?.count) || 1)));
           const have = iterTokenDocs(scene).filter(t => Number(t?.disposition) === HOSTILE() && (String(t?.actor?.name || "") === nm || String(t?.name || "") === nm)).length;
-          if (have < n) await spawnByName(scene, nm, { count: n - have, spawnedBy: `enc:${beat.id}:${nm}` });
+          if (have < n) await spawnByName(scene, nm, { count: n - have, spawnedBy: `enc:${beat.id}:${nm}`, offset: have });
         }
       }
     })().catch(e => warn("stageReady handler failed", beat?.id, e));
@@ -674,6 +740,7 @@
 
     // 2026-10-13: name-driven spawns + storyline crew variants
     Object.assign(game.bbttcc.api.encounters._spawner, { actorByName, spawnByName, setBanditAmbushCrew, banditAccordUnderway });
+    Object.assign(game.bbttcc.api.encounters, { saveTokenSpots, clearTokenSpots, tokenSpots: spotsFor });
     Hooks.on("bbttcc:beat:stageReady", onStageReady);
 
     log("Spawner interface installed");

@@ -1021,6 +1021,14 @@ function _rcBossDoctrineMap(def){
   return out;
 }
 
+// Every Steward / Domain 2d10 is eligible for armed Momentum and Surge (owner ruling 2026-11-04). The Add Round preview
+// uses the same dice with armed=false, so a preview never spends what the committed roll should.
+async function _rcRollSide(formula, data, faction, armed) {
+  const ra = game.bbttcc?.dice?.rollArmed;
+  if (armed && faction && typeof ra === "function") return ra(formula, data, { faction });
+  return new Roll(formula, data).evaluate();
+}
+
 async function computeContestedVsBoss(attacker, bossDef, {
   activityKey="assault",
   difficulty="normal",
@@ -1034,7 +1042,8 @@ async function computeContestedVsBoss(attacker, bossDef, {
   rollModeDef="normal",
   extraBonusAtt=0,
   extraBonusDef=0,
-  attackerBaseOverride=null
+  attackerBaseOverride=null,
+  armed=false   // commit only: spends the Domain's armed Momentum / Surge
 } = {}) {
   const key = String(contestedKey || primaryKeyFor(activityKey) || "violence").toLowerCase();
   const stats = _rcBossStats(bossDef);
@@ -1056,13 +1065,11 @@ async function computeContestedVsBoss(attacker, bossDef, {
 
   const mAtt = String(rollModeAtt||"normal").toLowerCase();
   const mDef = String(rollModeDef||"normal").toLowerCase();
-  const d20A = (mAtt === "adv") ? "3d10kh2" : (mAtt === "dis") ? "3d10kl2" : "2d10";
-  const d20D = (mDef === "adv") ? "3d10kh2" : (mDef === "dis") ? "3d10kl2" : "2d10";
+  const d20A = (mAtt === "adv") ? "3d10kh2x10" : (mAtt === "dis") ? "3d10kl2" : "2d10x10";
+  const d20D = (mDef === "adv") ? "3d10kh2x10" : (mDef === "dis") ? "3d10kl2" : "2d10x10";
 
-  const attRoll = new Roll(`${d20A} + @b`, { b: attTotalBonus });
-  const defRoll = new Roll(`${d20D} + @b`, { b: defTotalBonus });
-  await attRoll.evaluate();
-  await defRoll.evaluate();
+  const attRoll = await _rcRollSide(`${d20A} + @b`, { b: attTotalBonus }, attacker, armed);
+  const defRoll = await _rcRollSide(`${d20D} + @b`, { b: defTotalBonus }, null, false);
 
   const attTotal = attRoll.total;
   const defTotal = defRoll.total;
@@ -2573,7 +2580,7 @@ async function computeDryRun(attacker, { activityKey="assault", difficulty="norm
   const DC       = Math.max(0, Number(baseDC||0) + diffAdj);
 
   const mode = String(rollMode || "normal").toLowerCase();
-  const d20 = (mode === "adv") ? "3d10kh2" : (mode === "dis") ? "3d10kl2" : "2d10";
+  const d20 = (mode === "adv") ? "3d10kh2x10" : (mode === "dis") ? "3d10kl2" : "2d10x10";
 
   const roll = new Roll(`${d20} + @b + @x`, { b: attBonus, x: Number(extraBonus||0) });
   await roll.evaluate();
@@ -2614,7 +2621,8 @@ async function computeContested(attacker, defender, {
   rollModeDef="normal",
   extraBonusAtt=0,
   extraBonusDef=0,
-  attackerBaseOverride=null
+  attackerBaseOverride=null,
+  armed=false   // commit only: spends the Domains' armed Momentum / Surge
 } = {}) {
   const key = String(contestedKey || primaryKeyFor(activityKey) || "violence").toLowerCase();
 
@@ -2641,13 +2649,11 @@ async function computeContested(attacker, defender, {
 
   const mAtt = String(rollModeAtt||"normal").toLowerCase();
   const mDef = String(rollModeDef||"normal").toLowerCase();
-  const d20A = (mAtt === "adv") ? "3d10kh2" : (mAtt === "dis") ? "3d10kl2" : "2d10";
-  const d20D = (mDef === "adv") ? "3d10kh2" : (mDef === "dis") ? "3d10kl2" : "2d10";
+  const d20A = (mAtt === "adv") ? "3d10kh2x10" : (mAtt === "dis") ? "3d10kl2" : "2d10x10";
+  const d20D = (mDef === "adv") ? "3d10kh2x10" : (mDef === "dis") ? "3d10kl2" : "2d10x10";
 
-  const attRoll = new Roll(`${d20A} + @b`, { b: attTotalBonus });
-  const defRoll = new Roll(`${d20D} + @b`, { b: defTotalBonus });
-  await attRoll.evaluate();
-  await defRoll.evaluate();
+  const attRoll = await _rcRollSide(`${d20A} + @b`, { b: attTotalBonus }, attacker, armed);
+  const defRoll = await _rcRollSide(`${d20D} + @b`, { b: defTotalBonus }, defender, armed);
 
   const attTotal = attRoll.total;
   const defTotal = defRoll.total;
@@ -6410,7 +6416,8 @@ if (res && res.totalFinal!=null && res.dcFinal!=null) {
         rollModeDef: __b3DefModeFinal,
         extraBonusAtt: __b3AttExtraFinal,
         extraBonusDef: (Number(__b3DefExtraFinal||0) + Number(__b3DefExtra2||0)),
-        attackerBaseOverride: Number(__coalition.total || 0)
+        attackerBaseOverride: Number(__coalition.total || 0),
+        armed: true
       });
 
       r.contested = true;
@@ -6431,8 +6438,8 @@ if (res && res.totalFinal!=null && res.dcFinal!=null) {
     } else {
       const sBonus = stagedOpBonus(Number(stagedA || 0) + Number(stagedSupport || 0));
 	const dBonus = stagedOpBonus(stagedD);
-      const __d20 = (String(__b3AttModeFinal||"normal").toLowerCase()==="adv") ? "3d10kh2" : (String(__b3AttModeFinal||"normal").toLowerCase()==="dis") ? "3d10kl2" : "2d10";
-      const r1 = new Roll(`${__d20} + @b + @s + @x`, { b: Number(__coalition.total || 0), s: sBonus, x: __b3AttExtraFinal }); await r1.evaluate();
+      const __d20 = (String(__b3AttModeFinal||"normal").toLowerCase()==="adv") ? "3d10kh2x10" : (String(__b3AttModeFinal||"normal").toLowerCase()==="dis") ? "3d10kl2" : "2d10x10";
+      const r1 = await _rcRollSide(`${__d20} + @b + @s + @x`, { b: Number(__coalition.total || 0), s: sBonus, x: __b3AttExtraFinal }, attacker, true);
       rollUsed = r1;
       totalFinal = r1.total;
       dcFinal = Number(r.DC||10) + dBonus + Number(r.diffOffset||0) + __b3DefExtra2;
@@ -6542,7 +6549,8 @@ try {
       rollModeAtt: __b3AttModeFinal,
       rollModeDef: __b3DefModeFinal,
       extraBonusAtt: __b3AttExtraFinal,
-      extraBonusDef: (Number(__b3DefExtraFinal||0) + Number(__b3DefExtra2||0))
+      extraBonusDef: (Number(__b3DefExtraFinal||0) + Number(__b3DefExtra2||0)),
+      armed: true
     });
 
     r.contested = true;
@@ -9920,8 +9928,8 @@ function _b3RollModeFromKey(k){
 
 async function _b3RerollSide({ side, bonus, mode }){
   mode = _b3RollModeFromKey(mode);
-  let formula = "2d10 + @b";
-  if (mode === "advantage") formula = "3d10kh2 + @b";
+  let formula = "2d10x10 + @b";
+  if (mode === "advantage") formula = "3d10kh2x10 + @b";
   if (mode === "disadvantage") formula = "3d10kl2 + @b";
   const rr = new Roll(formula, { b: Number(bonus||0) });
   await rr.evaluate();

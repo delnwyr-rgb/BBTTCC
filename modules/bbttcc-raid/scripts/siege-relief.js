@@ -182,8 +182,9 @@
               outcome = "attacker_lost";
             } else {
               const _die = (game.fourththing?.rolls?.checkFormula?.() || "2d10x10");
-              const a = (await new Roll(_die).evaluate()).total;
-              const d = (await new Roll(_die).evaluate()).total;
+              const _side = (faction) => (game.bbttcc?.dice?.rollArmed?.(_die, {}, { faction }) ?? new Roll(_die).evaluate());   // armed Momentum / Surge (2026-11-04)
+              const a = (await _side(entry.siege?.attackerFactionId)).total;
+              const d = (await _side(wave.callingFactionId)).total;
               rolls = { attacker: a, relief: d };
               outcome = a >= d ? "attacker_won" : "attacker_lost"; // besiegers hold ties
             }

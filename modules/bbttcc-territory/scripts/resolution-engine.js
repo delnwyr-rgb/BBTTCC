@@ -211,7 +211,7 @@
 
       if (T.darknessDelta !== undefined) {
         const curD = (F.darkness && typeof F.darkness.global === "number") ? F.darkness.global : 0;
-        F.darkness = { global: clamp(curD + T.darknessDelta, 0, 10) };
+        F.darkness = { global: Math.max(0, curD + T.darknessDelta) };
       }
 
       // Stash raw track deltas for debugging / later use (violence attrition, empathy, etc.)

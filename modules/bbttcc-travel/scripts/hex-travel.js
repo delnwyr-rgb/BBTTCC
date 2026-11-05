@@ -1511,8 +1511,9 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     // 3d10 keep-high-2, matching strikes/saves everywhere else. Pair with the
     // retuned Encounter Base DC (12) — the old base 15 was authored against
     // a d20's flat distribution.
-    const rollFormula = ctx.travelAdvantage ? "3d10kh2 + @int + @scout" : "2d10 + @int + @scout";
-    const roll = await (new Roll(rollFormula, { int: intrigueMod, scout: scoutRollMod })).evaluate();
+    // Owner ruling 2026-11-04: tens explode here too, and armed Momentum / Surge ride the travel check.
+    const rollFormula = ctx.travelAdvantage ? "3d10kh2x10 + @int + @scout" : "2d10x10 + @int + @scout";
+    const roll = await (game.bbttcc?.dice?.rollArmed?.(rollFormula, { int: intrigueMod, scout: scoutRollMod }, { faction: factionId, actor }) ?? new Roll(rollFormula, { int: intrigueMod, scout: scoutRollMod }).evaluate());
     let total = roll.total;
     let success = total >= dc;
     // A scripted (pinned) leg is the leg's event — no random encounter on top of it (2026-10-27).

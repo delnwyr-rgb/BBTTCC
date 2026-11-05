@@ -431,8 +431,8 @@ async function _onRenewal(actor) {
             const rawSys = actor.system?.system ?? actor.system;
             const sk = rawSys?.skills?.[skillKey] ?? {};
             const attrVal = (Number(rawSys?.attributes?.[sk.attribute || "soul"]?.value) || 0) + (Number(sk.value) || 0);
-            const roll = new Roll(`${(game.fourththing?.rolls?.checkFormula?.() || "2d10x10")} + ${attrVal}`);   // canon die: 2d10, tens explode
-            await roll.evaluate();
+            const _die = `${(game.fourththing?.rolls?.checkFormula?.() || "2d10x10")} + ${attrVal}`;   // canon die: 2d10, tens explode
+            const roll = await (game.bbttcc?.dice?.rollArmed?.(_die, {}, { actor }) ?? new Roll(_die).evaluate());   // armed Momentum / Surge (2026-11-04)
             total = Number(roll.total) || 0;
             await roll.toMessage({
               flavor: `${actor.name} — Ruin to Renewal (${skillKey} ${attrVal >= 0 ? "+" : ""}${attrVal}) vs DC 15`,

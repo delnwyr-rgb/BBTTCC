@@ -322,8 +322,10 @@
         const atkBonus = Math.ceil(atkSpend / 2) + stewBonus + atkCoalition;
         const defBonus = Math.ceil(defSpend / 2) + Math.max(0, Math.floor(state.difficulty)) + defCoalition;
 
-        const atkRoll = await (new Roll("2d10 + @b", { b: atkBonus })).evaluate();
-        const defRoll = await (new Roll("2d10 + @b", { b: defBonus })).evaluate();
+        // Exploding dice + armed Momentum / Surge (owner ruling 2026-11-04).
+        const _infilRoll = (bonus, faction) => (game.bbttcc?.dice?.rollArmed?.("2d10x10 + @b", { b: bonus }, { faction }) ?? new Roll("2d10x10 + @b", { b: bonus }).evaluate());
+        const atkRoll = await _infilRoll(atkBonus, A);
+        const defRoll = await _infilRoll(defBonus, D);
 
         const atkTotal = atkRoll.total ?? 0;
         const defTotal = defRoll.total ?? 0;
@@ -388,8 +390,8 @@
         // OP/steward/difficulty bonuses are the same numbers fed to the roll.
         const atkSpendBonus = Math.ceil(atkSpend / 2);
         const defSpendBonus = Math.ceil(defSpend / 2);
-        const atkDiceSum = atkRoll?.dice?.[0]?.results?.reduce((s, r) => s + Number(r.result || 0), 0) ?? (atkTotal - atkBonus);
-        const defDiceSum = defRoll?.dice?.[0]?.results?.reduce((s, r) => s + Number(r.result || 0), 0) ?? (defTotal - defBonus);
+        const atkDiceSum = atkTotal - atkBonus;   // every die: explosions and an armed bonus die included
+        const defDiceSum = defTotal - defBonus;
         const atkParts = [`${atkDiceSum} <small style="opacity:.7;">(2d10)</small>`];
         if (atkSpendBonus > 0) atkParts.push(`+ ${atkSpendBonus} <small style="opacity:.7;">(Intrigue ×${atkSpend} per 10 marks)</small>`);
         if (stewBonus     > 0) atkParts.push(`+ ${stewBonus} <small style="opacity:.7;">(stewards × ${stewBonus})</small>`);

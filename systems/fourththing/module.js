@@ -2219,7 +2219,7 @@ function _ftWarnIfOutOfRange(actor, item) {
 // 2026-05-29 (playtest #5) — Advantage/Disadvantage roll modes for every d10 roll.
 // Core dice expression for a mode:
 //   normal       → 2d10x10      (the canon exploding base)
-//   advantage    → 3d10x10kh2   (roll 3 exploding, keep the best 2)
+//   advantage    → 3d10kh2x10   (roll 3, keep the best 2, the kept dice explode; owner ruling 2026-11-04)
 //   disadvantage → 3d10kl2      (roll 3, keep lowest 2 — matches the existing
 //                                effect-imposed disadvantage, which drops explosions)
 // `actor` (optional) gates the explosion: foes (hostile NPCs/Monsters) only
@@ -2229,7 +2229,7 @@ function _ftWarnIfOutOfRange(actor, item) {
 // still roll surge dice into their totals when hostile"). PCs/bosses/rigs
 // (and any callsite passing no actor) keep the canon exploding base.
 function _ftCoreDice(mode, actor = null) {
-  if (mode === "advantage")    return "3d10kh2";
+  if (mode === "advantage")    return (actor && !_ftSurgeAllowed(actor)) ? "3d10kh2" : "3d10kh2x10";
   if (mode === "disadvantage") return "3d10kl2";
   return (actor && !_ftSurgeAllowed(actor)) ? "2d10" : "2d10x10";
 }
@@ -4521,7 +4521,20 @@ function _ftReadSurgeOneShots(actor, { context = "strike" } = {}) {
   if (context === "strike" || context === "cast" || context === "save") {
     if (has("wrath-cascade"))      { out.wrathCascade = true; out.consumed.push("wrath-cascade"); }
     if (has("cinderwake"))         { out.cinderwake   = true; out.consumed.push("cinderwake"); }
+  }
+  // 2026-11-02 (failure pass, Dave: "use surge to help with rolls"): the Bonus Die promises the "next d10 roll" —
+  // aptitude/attribute CHECKS included (every story check). It was never read on a check, so the Surge was spent for nothing.
+  if (context === "strike" || context === "cast" || context === "save" || context === "check") {
     if (has("narrative-bonus-die")){ out.bonusDie     = true; out.consumed.push("narrative-bonus-die"); }
+    // Momentum rides any Steward roll too (owner ruling 2026-11-04: "ANY 2d10 roll by the Steward or Domain"). A Surge die already
+    // armed goes first, and the Domain's stays banked for the next roll.
+    else {
+      try {
+        const fid = actor?.getFlag?.("bbttcc-factions", "factionId");
+        const fac = fid ? game.actors?.get(fid) : null;
+        if (fac?.getFlag?.("bbttcc-factions", "nextRollBonusDie")) { out.bonusDie = true; out.momentumFaction = fac; }
+      } catch (_e) {}
+    }
   }
   return out;
 }
@@ -4562,6 +4575,10 @@ function _ftApplySurgeRollMods(formula, shots) {
 // shots.consumed. Posts a styled chat note crediting which boosts fired
 // (matches the DW pattern where consumption is visible in chat).
 async function _ftConsumeSurgeOneShots(actor, shots, { context = "strike" } = {}) {
+  if (shots?.momentumFaction) {
+    try { await shots.momentumFaction.unsetFlag("bbttcc-factions", "nextRollBonusDie"); ui.notifications?.info?.(`${shots.momentumFaction.name}: Momentum +1d10 rode this roll.`); }
+    catch (e) { console.warn("[fourththing] Momentum die consume failed", e); }
+  }
   if (!actor || !shots?.consumed?.length) return;
   const updates = {};
   for (const key of shots.consumed) {
@@ -15917,7 +15934,7 @@ Hooks.once("init", function () {
 // still speak canon (double-ten, explosions).
 game.fourththing.rolls.checkFormula = function ({ mode = "normal", explode = true } = {}) {
   const m = _ftResolveRollMode({ user: mode });
-  if (m === "advantage")    return explode ? "3d10x10kh2" : "3d10kh2";
+  if (m === "advantage")    return explode ? "3d10kh2x10" : "3d10kh2";
   if (m === "disadvantage") return "3d10kl2";
   return explode ? "2d10x10" : "2d10";
 };
@@ -26389,7 +26406,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (v < 4)  return { key: "warn",  band: "Shaded",    hint: "Darkness 1–3: income −5% every turn. It will not fade on its own — cleanse a hex, hold Blessed Ground, or convene the other Domains." };
     if (v < 7)  return { key: "bad",   band: "Shadowed",  hint: "Darkness 4–6: income −10%, Loyalty −1 every turn and no recovery, and unrest can break out. Work it down before it reaches 7." };
     if (v < 10) return { key: "worst", band: "Intrusion", hint: "Darkness 7–9: income −15%, Loyalty −1, and each turn the dark leaks into a neighbouring hex — usually another Domain's. Their Darkness rises with yours. Travel is harder." };
-    return             { key: "worst", band: "Calamity",  hint: "Darkness 10: income −20%, Loyalty −2, the leak, and each turn your least loyal hex loses 2 integration and turns Hostile." };
+    if (v < 15) return { key: "worst", band: "Calamity",  hint: "Darkness 10–14: income −20%, Loyalty −2, the leak, and each turn your least loyal hex that can still break loses 2 integration and turns Hostile. There is no ceiling: every point has to be worked back down." };
+    if (v < 20) return { key: "worst", band: "Ruin",      hint: "Darkness 15–19: income −30%, Loyalty −3, two leaks a turn, and two hexes break each turn. At 20 your broken hexes start leaving the Domain." };
+    return             { key: "worst", band: "Abyss",     hint: "Darkness 20+: income −40%, Loyalty −4, three leaks a turn, three hexes break each turn, and one fully broken hex leaves the Domain each turn and has to be re-claimed." };
   }
   /** The hexes that make up the Domain (Dave 2026-10-18: "room for more stuff … like hexes that make up the domain").
    *  → { count, list:[{uuid, name, kind, hint, here}] } — `here` = on the scene currently on the canvas. */

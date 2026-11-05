@@ -18,6 +18,7 @@
  *   await game.bbttcc.dice.skillCheck(actor, { skill, attribute, label })   → { total, roll, isFumble }
  *   await game.bbttcc.dice.check(actor, { attribute, bonus, dc, label })     → { total, ok, roll }
  *   await game.bbttcc.dice.flatCheck({ bonus, dc, label })                   → { total, ok, dc, bonus, roll }
+ *   await game.bbttcc.dice.rollArmed(formula, data, { faction, actor })      → Roll, spending armed Momentum / Surge
  *
  * The RFI→5E maps mirror modules/bad-eden-5e/conversion/rubric.json (abilities,
  * skills). Keep them in step when the rubric changes.
@@ -197,10 +198,71 @@ const packs = {
   TWINS: PACK_TWINS
 };
 
+/* ── Armed rolls (owner ruling 2026-11-04: "ANY 2d10 roll by the Steward or Domain is eligible for Surge or Momentum") ──
+ * Evaluates a check and spends whatever the roller has armed: Momentum on the Domain (+1d10 exploding and/or a reroll
+ * keeping the better) and a Steward's Surge Bonus Die (+1d10 exploding). Pass the roller as { actor } and/or { faction };
+ * a Steward finds its Domain by flag, and a Domain roll takes the Bonus Die from whichever of its Stewards armed one. */
+const _FAC = "bbttcc-factions";
+function _armedFaction(faction, actor) {
+  const ref = faction ?? actor?.getFlag?.(_FAC, "factionId");
+  if (!ref) return null;
+  if (typeof ref !== "string") return ref;
+  return game.actors?.get(ref.replace(/^Actor\./, "")) ?? null;
+}
+function _armedSteward(actor, fac) {
+  const armed = (a) => !!a?.flags?.fourththing?.surge?.oneShot?.["narrative-bonus-die"];
+  if (armed(actor)) return actor;
+  if (!fac) return null;
+  return (game.actors?.contents ?? []).find(a => a.type === "character" && a.getFlag?.(_FAC, "factionId") === fac.id && armed(a)) ?? null;
+}
+/** Spend an armed Surge Bonus Die for this roller; true if one was spent (for rolls that build their own formula). */
+async function spendSurgeDie({ faction = null, actor = null } = {}) {
+  if (!isRFI()) return false;
+  const st = _armedSteward(actor, _armedFaction(faction, actor));
+  if (!st) return false;
+  try {
+    await st.update({ "flags.fourththing.surge.oneShot.-=narrative-bonus-die": null });
+    ui.notifications?.info?.(`${st.name}: Surge Bonus Die rides this roll.`);
+    return true;
+  } catch (e) { console.warn(TAG, "armed die could not be spent", e); return false; }
+}
+async function rollArmed(formula, data = {}, { faction = null, actor = null } = {}) {
+  const plain = () => new Roll(formula, data).evaluate();
+  if (!isRFI()) return plain();
+  const fac = _armedFaction(faction, actor);
+  const notes = [];
+  let extra = "";
+  try {
+    if (fac?.getFlag?.(_FAC, "nextRollBonusDie")) {
+      await fac.unsetFlag(_FAC, "nextRollBonusDie");
+      extra += " + 1d10x10";
+      notes.push(`${fac.name}: Momentum +1d10 rides this roll.`);
+    }
+    const st = _armedSteward(actor, fac);
+    if (st) {
+      await st.update({ "flags.fourththing.surge.oneShot.-=narrative-bonus-die": null });
+      extra += " + 1d10x10";
+      notes.push(`${st.name}: Surge Bonus Die rides this roll.`);
+    }
+  } catch (e) { console.warn(TAG, "armed die could not be spent", e); }
+  const f = formula + extra;
+  let roll = await new Roll(f, data).evaluate();
+  try {
+    if (fac?.getFlag?.(_FAC, "nextRollReroll")) {
+      await fac.unsetFlag(_FAC, "nextRollReroll");
+      const again = await new Roll(f, data).evaluate();
+      notes.push(`${fac.name}: Momentum reroll: ${roll.total} / ${again.total}, kept ${Math.max(roll.total, again.total)}.`);
+      if (again.total > roll.total) roll = again;
+    }
+  } catch (e) { console.warn(TAG, "armed reroll failed", e); }
+  for (const n of notes) { try { ui.notifications?.info?.(n); } catch (_e) {} }
+  return roll;
+}
+
 Hooks.once("init", () => {
   game.bbttcc = game.bbttcc || {};
   game.bbttcc.packs = packs;
-  game.bbttcc.dice = { isRFI, checkFormula, abilityKey, abilityMod, skillRef, skillBonus, skillCheck, check, flatCheck, aeKey, aeChanges, ABILITY, SKILLS, AE_KEYS };
+  game.bbttcc.dice = { isRFI, rollArmed, spendSurgeDie, checkFormula, abilityKey, abilityMod, skillRef, skillBonus, skillCheck, check, flatCheck, aeKey, aeChanges, ABILITY, SKILLS, AE_KEYS };
   game.bbttcc.types = types;
   console.log(TAG, `installed game.bbttcc.dice (${isRFI() ? "RFI canon die" : "d20"})`);
 });

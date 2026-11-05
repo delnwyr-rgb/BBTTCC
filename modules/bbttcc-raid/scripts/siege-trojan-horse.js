@@ -41,7 +41,10 @@
   const _nm = (id) => game.actors?.get?.(id)?.name || id || "—";
   const _currentTurn = () => { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch { return 0; } };
   const _esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
-  const _roll = async () => (await new Roll((game.fourththing?.rolls?.checkFormula?.() || "2d10x10")).evaluate()).total;   // canon die: 2d10, tens explode
+  const _roll = async (faction = null) => {   // armed Momentum / Surge ride the Domain's next roll (2026-11-04)
+    const die = game.fourththing?.rolls?.checkFormula?.() || "2d10x10";
+    return (await (game.bbttcc?.dice?.rollArmed?.(die, {}, { faction }) ?? new Roll(die).evaluate())).total;
+  };   // canon die: 2d10, tens explode
 
   function _relayHook(hook, payload){
     Hooks.callAll(hook, payload);
@@ -91,7 +94,7 @@
     for (const d of defs) {
       const auto = sinon && sinonMode === "auto" && sinonAutoKey === d.key;
       if (auto) { results.push({ ...d, auto: true, total: d.dc, pass: true }); continue; }
-      const base = await _roll();
+      const base = await _roll(entry.siege?.attackerFactionId);
       const bonus = (sinon && sinonMode === "all") ? 5 : 0;
       const total = base + bonus;
       results.push({ ...d, auto: false, base, bonus, total, pass: total >= d.dc });

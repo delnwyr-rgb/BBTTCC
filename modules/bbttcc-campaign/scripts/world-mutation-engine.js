@@ -113,8 +113,7 @@
     return _appendWarLogDirect(factionId, entry);
   }
 
-  // Domain Darkness tops out at 10, same as the turn track and the sheet's bar.
-  const FACTION_DARKNESS_CAP = 10;
+  // Domain Darkness has no ceiling (owner ruling 2026-11-04): it only floors at 0.
 
   async function _fallbackWriteDarkness(factionId, delta) {
     const F = asFactionActor(factionId);
@@ -124,7 +123,7 @@
       const raw = flags.darkness;
       const darkness = (raw && typeof raw === "object") ? clone(raw) : {};
       const cur = Number((raw && typeof raw === "object") ? raw.global : raw) || 0;
-      const next = Math.min(FACTION_DARKNESS_CAP, Math.max(0, cur + Number(delta || 0)));
+      const next = Math.max(0, cur + Number(delta || 0));
       darkness.global = next;
       flags.darkness = darkness;
       await F.update({ ["flags."+MOD_FACTIONS]: flags });
@@ -169,7 +168,7 @@
       if (!Number.isFinite(darkCur)) darkCur = 0;
     }
 
-    const darkNext = Math.min(FACTION_DARKNESS_CAP, Math.max(0, darkCur + Number(opts.darknessDelta || 0)));
+    const darkNext = Math.max(0, darkCur + Number(opts.darknessDelta || 0));
 
     flags.loyalty = loyalty;
 

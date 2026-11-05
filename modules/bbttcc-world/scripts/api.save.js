@@ -106,7 +106,8 @@
     "bbttcc-factions.nudgeCooldownHours", "bbttcc-factions.expireSweepIntervalMinutes",
     "bbttcc-onboarding.wakeThemeSrc", "bbttcc-onboarding.campaignWakeBeatId", "bbttcc-onboarding.campaignResumeBeatId",
     "bbttcc-onboarding.offerOnReady", "bbttcc-onboarding.operatorAudience",
-    "bbttcc-epic.protagonistFactions", "bbttcc-epic.daathSceneId"
+    "bbttcc-epic.protagonistFactions", "bbttcc-epic.daathSceneId",
+    "bbttcc-encounters.tokenSpots"
   ];
   // GAME settings that carry a little play state inside: a story load keeps the live value and merges only these keys.
   // Values are sometimes JSON strings (🪤 2026-09-09) — decode, merge, re-encode in the live value's shape.
@@ -500,7 +501,10 @@
               if (!isHexFlags(d.flags)) continue;
               const live = scene.drawings.get(d._id); if (!live) continue;
               const flags = storyFlagsForDrawing(live.toObject().flags, d.flags);
-              if (!sameJson(live.toObject().flags, flags)) updates.push({ _id: d._id, flags });
+              // A hex's revealed state is the Drawing's `hidden` field (HEX VISIBILITY, 2026-11-02): play state, so it
+              // resets with the story (owner ruling 2026-11-04). It used to survive every reset; 124 of 141 were left showing.
+              const hidden = !!d.hidden;
+              if (!sameJson(live.toObject().flags, flags) || !!live.hidden !== hidden) updates.push({ _id: d._id, flags, hidden });
             }
             if (updates.length) { await scene.updateEmbeddedDocuments("Drawing", updates, { diff: false, recursive: false, bbttccRestore: true }); report.hexesMerged += updates.length; }
           } else {

@@ -53,7 +53,7 @@
           const bonusAtt= Number(res?.meta?.bonusAtt || 0);
           const baseAtt = Number(round?.attBonus || 0);
           const r1 = res?.roll;
-          const r2 = await (new Roll("2d10 + @b", { b: baseAtt + sBonus + bonusAtt })).evaluate();
+          const r2 = await (new Roll("2d10x10 + @b", { b: baseAtt + sBonus + bonusAtt })).evaluate();
           const keep = (r1?.total||0) >= (r2?.total||0) ? r1 : r2;
           res.roll = keep; res.totalFinal = keep.total; res.meta.adv = true;
         } catch(e) { console.warn("[bbttcc-raid/roundflags] adv fail", e); }

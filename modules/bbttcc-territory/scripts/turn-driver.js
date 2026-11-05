@@ -57,8 +57,18 @@ function activityCost({ entry = null, effect = null, key = null, faction = null 
   const eff = effect || game.bbttcc?.api?.raid?.EFFECTS?.[k] || game.bbttcc?.api?.raid?.EFFECTS?.[k.toLowerCase()] || null;
   const recipe = entry?.recipe?.cost;
   const pick = (c) => (c && typeof c === "object" && Object.keys(normalizeActivityCost(c)).length) ? c : null;
-  const base = normalizeActivityCost(pick(recipe) || pick(eff?.cost) || pick(eff?.opCosts) || {});
+  let base = normalizeActivityCost(pick(recipe) || pick(eff?.cost) || pick(eff?.opCosts) || {});
   if (!faction) return base;
+  // Oblivion Protocol (owner ruling 2026-11-04): the purge costs what it purges: 20 marks per point of Domain Darkness,
+  // split Intrigue / Faith, never less than the listed 60 + 60. A channel can't be asked for more than its bank can
+  // hold, so past that the price stops and strategic-throughput's handler purges only the points that were paid for.
+  if (k === "oblivion_protocol") {
+    const raw = faction.getFlag?.(MOD_FACTIONS, "darkness");
+    const dark = Math.max(0, Number((raw && typeof raw === "object") ? raw.global : raw) || 0);
+    const caps = game.bbttcc?.facts?.faction?.caps?.(faction) || {};
+    const per = (ch) => { const listed = Number(base[ch]) || 0; const cap = Number(caps[ch]); return Math.max(listed, Number.isFinite(cap) ? Math.min(dark * 10, cap) : dark * 10); };
+    base = normalizeActivityCost({ ...base, intrigue: per("intrigue"), faith: per("faith") });
+  }
   try { const d = game.bbttcc?.api?.op?.discounted; return d ? normalizeActivityCost(d(faction, base)) : base; } catch (_e) { return base; }
 }
 const fmtActivityCost = (c) => PLAN_COST_KEYS.filter(k => (Number(c?.[k]) || 0) > 0).map(k => `${c[k]} ${k === "softpower" ? "soft power" : k === "nonlethal" ? "non-lethal" : k}`).join(" · ");
@@ -253,7 +263,7 @@ function ensureConsumePlannedShim(){
     }
     if (safeNum(fac.darknessDelta)) {
       const box = (f.darkness && typeof f.darkness === "object" && !Array.isArray(f.darkness)) ? clone(f.darkness) : { global: safeNum(f.darkness) };
-      const before = safeNum(box.global); box.global = Math.max(0, Math.min(10, before + safeNum(fac.darknessDelta)));   // #35: DARK_CAP 10, as adjustFactionDarkness
+      const before = safeNum(box.global); box.global = Math.max(0, before + safeNum(fac.darknessDelta));   // #35: DARK_CAP 10, as adjustFactionDarkness
       upd[`flags.${MOD_FACTIONS}.darkness`] = box; notes.push(`darkness ${before}→${box.global}`);
     }
     if (Object.keys(upd).length) await factionActor.update(upd);

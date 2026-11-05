@@ -720,14 +720,18 @@
         let nextScandalOnA = false;
         let nextScandalOnD = false;
 
-        let atkRoll = await (new Roll("2d10 + @b", { b: atkBonus })).evaluate();
-        let defRoll = await (new Roll("2d10 + @b", { b: defBonus })).evaluate();
-        if (forceAReroll) atkRoll = await (new Roll("2d10 + @b", { b: atkBonus })).evaluate();
-        if (forceDReroll) defRoll = await (new Roll("2d10 + @b", { b: defBonus })).evaluate();
+        // Exploding dice + armed Momentum / Surge (owner ruling 2026-11-04). A forced reroll throws the first roll away,
+        // so the first is plain and the armed die rides the roll that counts.
+        const _courtRoll = (bonus, faction) => (game.bbttcc?.dice?.rollArmed?.("2d10x10 + @b", { b: bonus }, { faction }) ?? new Roll("2d10x10 + @b", { b: bonus }).evaluate());
+        const _plainRoll = (bonus) => new Roll("2d10x10 + @b", { b: bonus }).evaluate();
+        let atkRoll = forceAReroll ? await _plainRoll(atkBonus) : await _courtRoll(atkBonus, A);
+        let defRoll = forceDReroll ? await _plainRoll(defBonus) : await _courtRoll(defBonus, D);
+        if (forceAReroll) atkRoll = await _courtRoll(atkBonus, A);
+        if (forceDReroll) defRoll = await _courtRoll(defBonus, D);
 
         const atkTotal = atkRoll.total ?? 0;
         const defTotal = defRoll.total ?? 0;
-        const margin   = atkTotal - defTotal;
+        let margin     = atkTotal - defTotal;
 
         let result;
         if (atkTotal === defTotal) {

@@ -169,8 +169,7 @@
     const attr = baseAttr + aeAttr;
 
     const formula = `${dice?.checkFormula?.() ?? (game.fourththing?.rolls?.checkFormula?.() || "2d10x10")} + ${attr}`;   // the system's check die (canon 2d10 on RFI, d20 on dnd5e)
-    const roll = new Roll(formula);
-    await roll.evaluate();
+    const roll = await (dice?.rollArmed?.(formula, {}, { actor }) ?? new Roll(formula).evaluate());   // armed Momentum / Surge (2026-11-04)
     const total = roll.total;
     const success = total >= dc;
 

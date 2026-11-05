@@ -408,25 +408,30 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
   // DARKNESS TRACK (FROM RADIATED HEXES)
   // ===========================================================================
 
-  const DARK_CAP = 10;
+  // Domain Darkness has no ceiling (owner ruling 2026-11-04): it only floors at 0. Every point counts.
 
   // DARKNESS BANDS (owner ruling 2026-10-28) — every band bites, and each includes the ones below it:
   //   1–3 Shaded     income −5% next turn
   //   4–6 Shadowed   income −10%, Loyalty −1 a turn (and no upward drift), the unrest roll opens
   //   7–9 Intrusion  income −15%, Loyalty −1, unrest, and the dark leaks: one neighbouring hex's
   //                  Radiation +1 each turn (Radiated → Contaminated), a neighbour's before your own
-  //   10  Calamity   income −20%, Loyalty −2, unrest, the leak, and your least loyal hex loses 2
-  //                  integration and turns Hostile
+  //   10–14 Calamity income −20%, Loyalty −2, unrest, the leak, and your least loyal hex that can still
+  //                  break loses 2 integration and turns Hostile (a broken hex passes it to the next)
+  //   15–19 Ruin     income −30%, Loyalty −3, two leaks, two hexes break (owner ruling 2026-11-04)
+  //   20+   Abyss    income −40%, Loyalty −4, three leaks, three hexes break, and one fully broken hex leaves
+  //                  the Domain each turn: it goes unclaimed, still Hostile, and has to be re-claimed
   // (Travel DC +2, Qliphothic spikes and leyline rot at 7+ are unchanged.)
   const DARK_BANDS = [
-    { min: 10, key: "calamity",  label: "Calamity",  incomePct: -20, loyalty: -2 },
+    { min: 20, key: "abyss",     label: "Abyss",     incomePct: -40, loyalty: -4, leaks: 3, breaks: 3, losesHex: true },
+    { min: 15, key: "ruin",      label: "Ruin",      incomePct: -30, loyalty: -3, leaks: 2, breaks: 2 },
+    { min: 10, key: "calamity",  label: "Calamity",  incomePct: -20, loyalty: -2, leaks: 1, breaks: 1 },
     { min: 7,  key: "intrusion", label: "Intrusion", incomePct: -15, loyalty: -1 },
     { min: 4,  key: "shadowed",  label: "Shadowed",  incomePct: -10, loyalty: -1 },
     { min: 1,  key: "shaded",    label: "Shaded",    incomePct: -5,  loyalty: 0 }
   ];
   function factionDarkness(A) {
     const box = A?.getFlag?.(MODF, "darkness");
-    return Math.max(0, Math.min(DARK_CAP, Number((box && typeof box === "object") ? box.global : box) || 0));
+    return Math.max(0, Number((box && typeof box === "object") ? box.global : box) || 0);
   }
   function darknessBand(g) {
     const n = Number(g) || 0;
@@ -466,8 +471,8 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
       // Owner ruling 2026-10-28: Darkness does NOT fade on its own — "Darkness is the reason to cooperate; it
       // should be real." It falls only through deliberate work: Blessed Ground (below), cleansing a hex, the
       // rites and councils in the planner, story beats. (A clean Domain used to shed 1 a turn for free.)
-      if (ownedRadiated > 0) g = Math.min(DARK_CAP, g + 1);
-      if (ownedDark > 0)     g = Math.min(DARK_CAP, g + 1);
+      if (ownedRadiated > 0) g = g + 1;
+      if (ownedDark > 0)     g = g + 1;
       if (blessed > 0)       g = Math.max(0, g - blessed);
 
       if (g !== before) {
@@ -526,7 +531,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
 
       // INTRUSION (7+) — the dark leaks: one hex next to the Domain's ground gains a Radiation level
       // (Radiated → Contaminated, never past 2 from this), a neighbour's hex before the Domain's own.
-      if (g >= 7) {
+      if (g >= 7) for (let leakN = 0; leakN < (band.leaks || 1); leakN++) {
         let pick = null;
         if (radApi) {
           const outside = [], inside = [];
@@ -553,19 +558,41 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
           const ownerId = pick.flags?.[MODT]?.factionId || pick.flags?.[MODT]?.ownerId;
           const B = ownerId ? game.actors.get(String(ownerId)) : null;
           const rung = after >= 2 ? "Contaminated" : "Radiated";
-          lines7.push(`• <b>${name}</b> (Darkness ${g}, Intrusion): the dark leaks into <b>${foundry.utils.escapeHTML(hexName)}</b> — Radiation ${before} → ${after} (${rung})${B && B.id !== A.id ? `, held by ${foundry.utils.escapeHTML(B.name)}` : ""}`);
-          await _darkWarLog(A, `Darkness ${g} (Intrusion): the dark leaked into ${hexName} — Radiation ${before} → ${after} (${rung}).`, { hexUuid: pick.uuid });
+          lines7.push(`• <b>${name}</b> (Darkness ${g}, ${band.label}): the dark leaks into <b>${foundry.utils.escapeHTML(hexName)}</b> — Radiation ${before} → ${after} (${rung})${B && B.id !== A.id ? `, held by ${foundry.utils.escapeHTML(B.name)}` : ""}`);
+          await _darkWarLog(A, `Darkness ${g} (${band.label}): the dark leaked into ${hexName} — Radiation ${before} → ${after} (${rung}).`, { hexUuid: pick.uuid });
           if (B && B.id !== A.id) await _darkWarLog(B, `${A.name}'s Darkness leaked into ${hexName} — Radiation ${before} → ${after} (${rung}). A radiated hex raises your Darkness every turn until it is cleansed.`, { hexUuid: pick.uuid, sourceFactionId: A.id });
         } else {
-          lines7.push(`• <b>${name}</b> (Darkness ${g}, Intrusion): income ${band.incomePct}%, Loyalty ${band.loyalty} a turn — no clean hex left nearby to leak into`);
+          lines7.push(`• <b>${name}</b> (Darkness ${g}, ${band.label}): income ${band.incomePct}%, Loyalty ${band.loyalty} a turn — no clean hex left nearby to leak into`);
+          break;
         }
       }
 
-      // CALAMITY (10) — the Domain's least loyal hex breaks: integration −2 and Hostile Population.
+      // CALAMITY (10+) — the Domain's least loyal hex breaks: integration −2 and Hostile Population.
+      // Owner ruling 2026-11-04: it only lands on a hex that can still break. A hex at integration 0 that is
+      // already Hostile passes it to the next one (round three: 21 of 36 Calamities re-hit a broken hex, 0 → 0).
       if (g >= 10) {
         const owned = ownedHexDocs(A);
-        const hex = owned.slice().sort((a, b) => hexLoyaltyScore(a.flags?.[MODT] || {}) - hexLoyaltyScore(b.flags?.[MODT] || {}))[0];
-        if (hex) {
+        const canBreak = (d) => {
+          const t = d.flags?.[MODT] || {};
+          const prog = Number(t.integration?.progress ?? t.integrationProgress ?? 0) || 0;
+          return prog > 0 || !(Array.isArray(t.modifiers) && t.modifiers.includes("Hostile Population"));
+        };
+        // ABYSS (20+, owner ruling 2026-11-04): one fully broken hex leaves the Domain each turn. It stays Hostile and must be re-claimed.
+        if (band.losesHex) {
+          const gone = owned.filter(d => !canBreak(d)).sort((a, b) => hexLoyaltyScore(a.flags?.[MODT] || {}) - hexLoyaltyScore(b.flags?.[MODT] || {}))[0];
+          if (gone) {
+            const goneName = gone.flags?.[MODT]?.name || gone.text || gone.name || gone.id;
+            await gone.update({ [`flags.${MODT}.factionId`]: "", [`flags.${MODT}.ownerId`]: "", [`flags.${MODT}.faction`]: "", [`flags.${MODT}.ownerName`]: "", [`flags.${MODT}.status`]: "unclaimed", [`flags.${MODT}.capital`]: false }, { parent: gone.parent });
+            owned.splice(owned.indexOf(gone), 1);
+            lines10.push(`• <b>${name}</b> (Darkness ${g}): <span style="color:#b22222"><b>Abyss</b></span> — ${foundry.utils.escapeHTML(goneName)} is lost. It no longer answers to the Domain and has to be re-claimed.`);
+            await _darkWarLog(A, `Darkness ${g} (Abyss): ${goneName} is lost and has to be re-claimed.`, { hexUuid: gone.uuid });
+          }
+        }
+        const targets = owned.filter(canBreak).sort((a, b) => hexLoyaltyScore(a.flags?.[MODT] || {}) - hexLoyaltyScore(b.flags?.[MODT] || {})).slice(0, band.breaks || 1);
+        if (!targets.length && owned.length) {
+          lines10.push(`• <b>${name}</b> (Darkness ${g}): <span style="color:#b22222"><b>${band.label}</b></span> — every hex it holds is already broken`);
+        }
+        for (const hex of targets) {
           const tf = hex.flags?.[MODT] || {};
           const integ = foundry.utils.duplicate(tf.integration || {});
           const pBefore = Number(integ.progress ?? tf.integrationProgress ?? 0) || 0;
@@ -581,8 +608,8 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
             try { const rec = game?.bbttcc?.api?.territory?.recordHexModifierTransition; if (typeof rec === "function") await rec(hex, "Hostile Population", "added", { activity: "darkness_calamity", factionId: A.id }, `calamity:${hex.id}:${Date.now()}`); } catch (_e) {}
           }
           const hexName = tf.name || hex.text || hex.name || hex.id;
-          lines10.push(`• <b>${name}</b> (Darkness ${g}): <span style="color:#b22222"><b>Calamity</b></span> — ${foundry.utils.escapeHTML(hexName)} integration ${pBefore} → ${integ.progress}${addHostile ? ", now Hostile" : ""}`);
-          await _darkWarLog(A, `Darkness ${g} (Calamity): ${hexName} breaks — integration ${pBefore} → ${integ.progress}${addHostile ? ", Hostile Population" : ""}.`, { hexUuid: hex.uuid });
+          lines10.push(`• <b>${name}</b> (Darkness ${g}): <span style="color:#b22222"><b>${band.label}</b></span> — ${foundry.utils.escapeHTML(hexName)} integration ${pBefore} → ${integ.progress}${addHostile ? ", now Hostile" : ""}`);
+          await _darkWarLog(A, `Darkness ${g} (${band.label}): ${hexName} breaks — integration ${pBefore} → ${integ.progress}${addHostile ? ", Hostile Population" : ""}.`, { hexUuid: hex.uuid });
         }
       }
     }
@@ -595,7 +622,7 @@ const tableAudience = () => { try { if (game.settings.get("bbttcc-territory", "t
 
     await mk("Darkness — Shadowed (4–6)", lines4);
     await mk("Darkness — Intrusion (7–9)", lines7);
-    await mk("Darkness — Calamity (10)", lines10);
+    await mk("Darkness — Calamity (10+)", lines10);
   }
 
   // ===========================================================================

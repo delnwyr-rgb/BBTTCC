@@ -379,7 +379,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     }
 
     const formula  = `${dice?.checkFormula?.() ?? (game.fourththing?.rolls?.checkFormula?.() || "2d10x10")} + ${totalBonus}`;   // the check die
-    const roll = await new Roll(formula).roll();
+    const roll = await (dice?.rollArmed?.(formula, {}, { faction: factionActor, actor: contributor }) ?? new Roll(formula).evaluate());
     const total = roll.total;
     const margin = total - dc;
     const outcome = margin >= 0 ? "success" : (margin >= -3 ? "partial" : "failure");
@@ -793,7 +793,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
       : [["ritual", Number(sys.skills?.ritual?.value ?? 0)], ["soul", Number(sys.attributes?.soul?.value ?? 2)]];
     const totalBonus = ritSkill + extraOp + opNeed;
     const formula = `${dice?.checkFormula?.() ?? (game.fourththing?.rolls?.checkFormula?.() || "2d10x10")} + ${totalBonus}`;
-    const roll = await new Roll(formula).roll();
+    const roll = await (dice?.rollArmed?.(formula, {}, { faction: factionActor, actor: contributor }) ?? new Roll(formula).evaluate());
     const total = roll.total;
     const margin = total - dc;
     const outcome = margin >= 0 ? "success" : (margin >= -3 ? "partial" : "failure");

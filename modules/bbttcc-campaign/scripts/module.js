@@ -2531,13 +2531,15 @@ async function _rollChoiceCheck(choice, ctx={}) {
     // from the Momentum spend) rides THIS check too — it was only ever read by the faction sheet's own roll. Consumed here.
     let momentumDie = false;
     try { if (faction?.getFlag?.("bbttcc-factions", "nextRollBonusDie")) { momentumDie = true; await faction.unsetFlag("bbttcc-factions", "nextRollBonusDie"); } } catch (_eMD) {}
-    let roll = await _evalRoll(new Roll(`${_ftCanonDie()}${momentumDie ? " + 1d10x" : ""} + @b`, { b: bonus }));
+    const surgeDie = await game.bbttcc?.dice?.spendSurgeDie?.({ faction });   // ruling 2026-11-04: any Domain 2d10 takes Surge
+    const _opDie = `${_ftCanonDie()}${momentumDie ? " + 1d10x" : ""}${surgeDie ? " + 1d10x10" : ""}`;
+    let roll = await _evalRoll(new Roll(`${_opDie} + @b`, { b: bonus }));
     if (momentumDie) { try { ui.notifications?.info?.(`${faction.name}: Momentum +1d10 rides this check.`); } catch (_eN) {} }
     // Momentum reroll (2026-10-30, automated): armed → roll the check again, keep the better
     try {
       if (faction?.getFlag?.("bbttcc-factions", "nextRollReroll")) {
         await faction.unsetFlag("bbttcc-factions", "nextRollReroll");
-        const again = await _evalRoll(new Roll(`${_ftCanonDie()}${momentumDie ? " + 1d10x" : ""} + @b`, { b: bonus }));
+        const again = await _evalRoll(new Roll(`${_opDie} + @b`, { b: bonus }));
         const keep = Number(again.total ?? 0) > Number(roll.total ?? 0) ? again : roll;
         ui.notifications?.info?.(`${faction.name}: Momentum reroll — ${roll.total} / ${again.total}, kept ${keep.total}.`);
         roll = keep;
@@ -2579,7 +2581,7 @@ async function _rollChoiceCheck(choice, ctx={}) {
         }
         if (ftSys?.attributes && ftKey && ftSys.attributes[ftKey]) {
           const av = _num(ftSys.attributes[ftKey]?.value, 0);
-          const r = await _evalRoll(new Roll("2d10x10 + @a", { a: av }));
+          const r = await (game.bbttcc?.dice?.rollArmed?.("2d10x10 + @a", { a: av }, { actor }) ?? _evalRoll(new Roll("2d10x10 + @a", { a: av })));   // armed Momentum / Surge (2026-11-04)
           const total = (r.total ?? 0) + supportBonus;
           return { kind:"actor", subkind:"ft-faculty", stat, faculty:ftKey, dc, actorName:actor.name, total, ok: total>=dc, roll:r, support:{ opKey:supportKey, spend:supportSpend, bonus:supportBonus } };
         }

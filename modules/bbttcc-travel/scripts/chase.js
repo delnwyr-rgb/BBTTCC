@@ -264,7 +264,10 @@
       }
     }
     if (!parts.length) {
-      const r = await quietRoll(`2d10 + ${side.tier}`);
+      // A Domain's side explodes and spends armed Momentum / Surge (owner ruling 2026-11-04); a named foe with no Domain stays plain.
+      const r = (side.factionId && game.bbttcc?.dice?.rollArmed)
+        ? await game.bbttcc.dice.rollArmed(`2d10x10 + ${side.tier}`, {}, { faction: side.factionId })
+        : await quietRoll(`2d10 + ${side.tier}`);
       rollTotal = r.total;
       parts.push(`2d10+tier ${rollTotal}`);
     }

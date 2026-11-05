@@ -60,8 +60,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
   // ENGINE ADAPTERS (2026-09-09 — every legendary/T2 row below is wired to a
   // real engine through these; nothing writes a flag that has no reader).
   // ─────────────────────────────────────────────────────────────────────────
-  const DARK_CAP = 10;
-  // flags.bbttcc-factions.darkness = { global: 0..10, [hexDrawingId]: 0..10 } — a BOX.
+  const DARK_CAP = 10;   // per-hex keys only; `global` has no ceiling (owner ruling 2026-11-04)
+  // flags.bbttcc-factions.darkness = { global: 0+, [hexDrawingId]: 0..10 } — a BOX.
   // adjustFactionTrack used to overwrite it with a bare number, wiping every
   // per-hex key (audit 2026-09-09). Always preserve the box.
   async function adjustFactionDarkness(A, delta){
@@ -69,7 +69,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     const raw = A.getFlag(MODF, "darkness");
     const box = (raw && typeof raw === "object") ? foundry.utils.duplicate(raw) : {};
     const before = (typeof box.global === "number") ? box.global : (typeof raw === "number" ? raw : 0);
-    const after = Math.max(0, Math.min(DARK_CAP, before + Number(delta || 0)));
+    const after = Math.max(0, before + Number(delta || 0));
     box.global = after;
     await A.update({ [`flags.${MODF}.darkness`]: box });
     return { before, after };
@@ -266,7 +266,16 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     await actor.createEmbeddedDocuments("Item", [item.toObject()]);
     return { ok: true, from: cur, to: next };
   }
-  async function rollCheck({ dc, bonus = 0, label = "" }){
+  async function rollCheck({ dc, bonus = 0, label = "", faction = null }){
+    // A Domain's check spends its armed Momentum / Surge (owner ruling 2026-11-04).
+    const armed = game.bbttcc?.dice?.rollArmed;
+    if (faction && typeof armed === "function") {
+      try {
+        const die = game.fourththing?.rolls?.checkFormula?.() || "2d10x10";
+        const roll = await armed(`${die} + @b`, { b: bonus }, { faction });
+        return { total: roll.total, ok: roll.total >= dc, dc, bonus, roll };
+      } catch (_e) {}
+    }
     const fc = game.fourththing?.rolls?.flatCheck;
     if (typeof fc === "function") { try { return await fc({ dc, bonus, label }); } catch (_e) {} }
     const roll = await new Roll("2d10x10 + @b", { b: bonus }).evaluate();
@@ -805,16 +814,24 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       for (const s of stewards) { try { const r = await grantNextEnlightenment(s); out.push(r.ok ? `${s.name}: ${r.from} → ${r.to}` : `${s.name}: ${r.why}`); } catch (e) { out.push(`${s.name}: ${e.message}`); } }
       await pushWarLog(A, `Enlightenment Congress: ${out.join("; ") || "no stewards on the roster"}.`);
     },
-    // Oblivion Protocol — the faction's whole Darkness map (institutional + every hex key) resets to 0; stewards wash clean; a corrupted spark on the target is repaired.
+    // Oblivion Protocol — purges the Darkness that was paid for (20 marks a point, owner ruling 2026-11-04; turn-driver's activityCost
+    // holds the price). What it can afford in full resets the whole Darkness map (institutional + every hex key); past the bank caps it
+    // removes only the paid points. Stewards wash clean; a corrupted spark on the target is repaired.
     async oblivion_protocol(ctx){
       const A = game.actors.get(ctx.factionId);
-      const r = await zeroFactionDarkness(A);
+      const raw0 = A?.getFlag(MODF, "darkness");
+      const dark0 = Math.max(0, Number((raw0 && typeof raw0 === "object") ? raw0.global : raw0) || 0);
+      const caps0 = game.bbttcc?.facts?.faction?.caps?.(A) || {};
+      const perCh = (ch) => { const cap = Number(caps0[ch]); return Number.isFinite(cap) ? Math.min(dark0 * 10, cap) : dark0 * 10; };
+      const paidPoints = Math.floor(Math.max(60, perCh("intrigue")) / 10) + Math.floor(Math.max(60, perCh("faith")) / 10);
+      const purge = Math.floor(paidPoints / 2);
+      const r = (purge >= dark0) ? await zeroFactionDarkness(A) : Object.assign(await adjustFactionDarkness(A, -purge), { hexKeys: 0 });
       const wash = game.fourththing?.darkness?.wash;
       let washed = 0;
       for (const s of stewardsOf(ctx.factionId)) { try { if (typeof wash === "function" && s.isOwner) { await wash(s, 10, "oblivion_protocol"); washed++; } } catch (_e) {} }
       let spark = "";
       if (ctx.targetUuid && game.user?.isGM) { try { const rr = await game.bbttcc?.api?.tikkun?.hex?.repair?.(ctx.targetUuid); if (rr?.ok && !rr.already) spark = `; the ${rr.key} spark at the target is repaired`; } catch (_e) {} }
-      await pushWarLog(A, `Oblivion Protocol: Darkness ${r.before} → 0 (${r.hexKeys} hex key(s) cleared); ${washed} steward(s) washed to their taint${spark}.`);
+      await pushWarLog(A, `Oblivion Protocol: Darkness ${r.before} → ${r.after} (${r.hexKeys} hex key(s) cleared); ${washed} steward(s) washed to their taint${spark}.`);
     },
     // Inquisition Mandate — exposes the target hex (revealed, dossier of its spark/darkness state); Darkness −1.
     async inquisition_mandate(ctx){
@@ -940,7 +957,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     async dragons_parley(ctx){
       const A = game.actors.get(ctx.factionId); if (!A) return;
       const lamps = Number(game.fourththing?.epic?.daath?.status?.()?.lampsCount || 0);
-      const r = await rollCheck({ dc: 14, bonus: lamps, label: "Dragon's Parley" });
+      const r = await rollCheck({ dc: 14, bonus: lamps, label: "Dragon's Parley", faction: A });
       if (r.ok) {
         const d = await adjustFactionDarkness(A, -3);
         const wash = game.fourththing?.darkness?.wash; let washed = 0;
