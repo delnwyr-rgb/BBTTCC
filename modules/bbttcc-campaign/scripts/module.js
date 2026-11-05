@@ -2760,7 +2760,11 @@ function _storyTokenFacts(campaign) {
     const held = hexes.filter(t => roster.has(String(t.factionId || "").replace(/^Actor\./, "")));
     const name = t => String(t.name || "").replace(/[ \s]+/g, " ").trim();
     held.sort((a, b) => (b.capital ? 1 : 0) - (a.capital ? 1 : 0) || name(a).localeCompare(name(b)));
-    out.coalitionCount = held.length; out.coalitionNames = held.map(name).filter(Boolean);
+    // Round 4 (2026-11-05): "the hexes you command" means every hex the roster holds, wherever it sits. Counting River Heart only read 11 for a 12-hex start (BarrenPlains.d is region r2). The band warning below still measures the River Heart.
+    const allHeld = (game.scenes?.contents || []).flatMap(sc => (sc.drawings?.contents || []).map(d => d?.flags?.["bbttcc-territory"]))
+      .filter(t => t && t.isHex && roster.has(String(t.factionId || "").replace(/^Actor\./, "")));
+    allHeld.sort((a, b) => (b.capital ? 1 : 0) - (a.capital ? 1 : 0) || name(a).localeCompare(name(b)));
+    out.coalitionCount = allHeld.length; out.coalitionNames = allHeld.map(name).filter(Boolean);
     out.rhCount = hexes.length; out.rhClaimed = hexes.filter(t => String(t.factionId || "").trim()).length;
     // the owner's band: 3..half the River Heart — tell the GM (once a session) when the table started outside it
     try {

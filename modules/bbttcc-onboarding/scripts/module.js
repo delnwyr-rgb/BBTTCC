@@ -55,14 +55,12 @@ Hooks.once("init", () => {
     scope: "world", config: false, type: Object, default: {}
   });
 
-  // Campaign handoff wiring (owner's Act-0 order-of-operations, 2026-08-23):
-  // Offices of Fates and Destinies runs its dream-sayings up to "Wake up" →
-  // the table drops into onboarding → graduation hands BACK to the Offices
-  // at Teaching Slide 1 (the "employee orientation film") → Thatwards Ho.
+  // Campaign handoff wiring. Dave 2026-11-05: the opening titles and Teaching Slides are no longer campaign beats (players see
+  // them before the game, on the landing page), so both handoffs default to blank = off. A world can still name a beat here.
   game.settings.register(MODULE_ID, "campaignWakeBeatId", {
     name: "Onboarding — campaign beat that begins training",
     hint: "When this campaign beat resolves, a public 'Report for training' card offers every player a Begin Onboarding button. Blank disables the handoff.",
-    scope: "world", config: true, type: String, default: "fates_and_destinies_adam_kadmon"
+    scope: "world", config: true, type: String, default: ""
   });
   game.settings.register(MODULE_ID, "operatorAudience", {
     name: "Onboarding — who sees the Operator's instruction lines",
@@ -78,7 +76,7 @@ Hooks.once("init", () => {
   game.settings.register(MODULE_ID, "campaignResumeBeatId", {
     name: "Onboarding — campaign beat to run after graduation",
     hint: "When a player graduates, the GM gets a card with a button that runs this campaign beat (the orientation film). Blank disables the handoff.",
-    scope: "world", config: true, type: String, default: "fates_and_destinies_1"
+    scope: "world", config: true, type: String, default: ""
   });
 
   log("Settings registered.");

@@ -27,13 +27,6 @@ export const STORY_SCRIPTS = {
     giver: "Mal (narrator); Adam Kadmon, played by your GM, runs the slides",
     description: "Before you had a body, somebody explained the universe to you. Mal said the words. Adam Kadmon ran the projector. The Lens shattered, the World shattered itself back on purpose, and a handful of hexes Thatwards now belong to whoever shows up willing. That's you. Listen, then go.",
     steps: [
-      { id: "sayings", label: "The Sayings", line: "Listen. Mal is speaking.",
-        beats: ["fates_and_destinies_saying_as_above", "fates_and_destinies_saying_form_consciousness", "fates_and_destinies_map_territory", "fates_and_destinies_attention_energy", "fates_and_destinies_bus_explodes", "fates_and_destinies_attention_remember", "fates_and_destinies_incarnate"],
-        done: { mark: "fates_and_destinies_incarnate" } },
-      { id: "guess", label: "Guess What", line: "Adam Kadmon has something prepared. Let him get through it.", beats: ["fates_and_destinies_adam_kadmon"] },
-      { id: "slides", label: "The Ten Slides", line: "Ten slides. Progress the deck.",
-        beats: ["fates_and_destinies_1", "fates_and_destinies_2", "fates_and_destinies_3", "fates_and_destinies_4", "fates_and_destinies_5", "fates_and_destinies_6", "fates_and_destinies_7", "fates_and_destinies_8", "fates_and_destinies_9", "fates_and_destinies_10"],
-        done: { mark: "fates_and_destinies_10" } },
       // 2026-10-20 Dave: the cold open RETIRED from the opening — `ag_tamsin_the_dream` plays the same footage when the Father sets the kettle down.
       { id: "ho", label: "Thatwards Ho!", line: "Read the briefing. Then the Jackalope leaves for Allesh-Gilliam.", beats: ["thatwards_ho_opening_scene"], chapter: "opening" }
     ],
