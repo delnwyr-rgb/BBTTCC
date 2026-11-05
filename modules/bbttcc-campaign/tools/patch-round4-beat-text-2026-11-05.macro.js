@@ -33,7 +33,7 @@ Etta Bloom, or Mayor Bloom as I like to call her but I should really stop becaus
 
 If you are hungry and destitute, or just want a sandwich and a nap, my dear friend Father Tamsin holds forth at St Gilliams, a building that is far more church like now that it has stopped trying to be a church and is now a bed and breakfast. Cauldron is on at 10 AM!
 
-If you want a drink and a war story, head to The Waiting Room and don’t tell Doc I sent you. She does not like me because of the Window Incident of which we shall never again speak. She never closes and is always there. This is creepy. Again do NOT tell her I sent you.
+If you want a drink and a war story, head to The Waiting Room and don’t tell Doc I sent you. She does not like me because I point out things that are true repeatedly. She never closes and is always there. This is creepy. Again do NOT tell her I sent you.
 
 If you need a place to stay, which you do not, or local gossip, which you do, head to The Vacancy. They have rooms available. And also gossip. And also Me! I have a room there.
 
@@ -45,7 +45,7 @@ You do.
 
 Again, welcome my friends! I hope we speak again!”
 
-And without waiting for anyone to so anything except blink, he hurries away down the street and vanishes into the dust.`
+And without waiting for anyone to do anything except blink, he hurries away down the street and vanishes into the dust.`
   };
 
   const REPLIES = [{
@@ -57,7 +57,7 @@ And without waiting for anyone to so anything except blink, he hurries away down
     tags: "arrival greeley wick",
     requires: [{ beatMark: "ag_walk_wick" }],
     at: 1,
-    text: `Doc Greeley’s nose wrinkles in distaste, and then they sigh. “Well. I can’t help it that he talks to people. He thinks we’re “don’t need a lot of sleep buddies.” That’s … and he wouldn’t cut it out.”
+    text: `Doc Greeley’s nose wrinkles in distaste, and then she sighs. “Well. I can’t help it that he talks to people. He thinks we’re ‘don’t need a lot of sleep buddies.’ That’s … and he wouldn’t cut it out.”
 
 This is the town in which you now reside!`
   }];
