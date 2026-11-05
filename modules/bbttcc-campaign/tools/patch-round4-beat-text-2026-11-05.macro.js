@@ -31,7 +31,7 @@ Marshal Pike is at your Headquarters. He arrives promptly at 7 AM every morning,
 
 Etta Bloom, or Mayor Bloom as I like to call her but I should really stop because she has told me to many times, is in at the Long Market by 9 AM. She’s a Bad Eden native with a bit of Sky Pirate in her past.
 
-If you are hungry and destitute, or just want a sandwich and a nap, my dear friend Father Tamsin holds forth at St Gilliams, a building that is far more church like now that it has stopped trying to be a church and is now a bed and breakfast. Cauldron is on at 10 AM!
+If you are hungry and destitute, or just want a sandwich and a nap, my dear friend Father Tamsin holds forth at St Gilliam’s, a building that is far more church like now that it has stopped trying to be a church and is now a bed and breakfast. Cauldron is on at 10 AM!
 
 If you want a drink and a war story, head to The Waiting Room and don’t tell Doc I sent you. She does not like me because I point out things that are true repeatedly. She never closes and is always there. This is creepy. Again do NOT tell her I sent you.
 
