@@ -831,17 +831,13 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
   }
 
   // INTRIGUE ON THE ROAD (Dave 2026-11-04: "wire in Intrigue capped at +3"): the check always added a Domain Intrigue flag nothing ever wrote, so it was 0 for every party.
-  // It's the best Intrigue among the Stewards on this ride, capped. Who's riding: the seated players' Stewards in the lead's Domain and its passengers (the quest-gear rule,
-  // so a Domain's unplayed roster doesn't scout for the party); with nobody seated, the whole roster. No Intrigue attribute (the D&D port) reads 0.
+  // It's the best Intrigue among the Stewards on this ride, capped. Who's riding = api.radiation.ridingStewardsOf: seated players' Stewards, so a Domain's unplayed roster doesn't
+  // scout for the party. No Intrigue attribute (the D&D port) reads 0.
   const TRAVEL_INTRIGUE_CAP = 3;
   function travelIntrigue(actor) {
     const out = { mod: 0, raw: 0, by: null };
     try {
-      const R = game.bbttcc?.api?.radiation;
-      const ids = new Set((R?.partyFactionIds?.(actor?.id) || [actor?.id]).filter(Boolean).map(String));
-      const inParty = (a) => ids.has(String(a?.flags?.[MOD_FCT]?.factionId || ""));
-      const seated = [...new Set(game.users.filter(u => !u.isGM && u.character?.type === "character").map(u => u.character))].filter(inParty);
-      for (const a of (seated.length ? seated : (R?.partyStewardsOf?.(actor?.id) || []))) {
+      for (const a of (game.bbttcc?.api?.radiation?.ridingStewardsOf?.(actor?.id) || [])) {
         const v = Number((a.system?.system ?? a.system)?.attributes?.intrigue?.value) || 0;
         if (v > out.raw) { out.raw = v; out.by = a.name; }
       }

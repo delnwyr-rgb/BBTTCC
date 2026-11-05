@@ -207,6 +207,15 @@
     return out;
   }
 
+  // WHO'S ACTUALLY ON THE ROAD (Dave 2026-11-04: "seated Stewards only"): the Stewards seated players are running on this ride. A Domain's unplayed roster stays home: twelve
+  // L1s with no gear rode 200 legs on paper and reached 203 RP, Terminal. With nobody seated (a GM running alone), the whole roster, as before.
+  function ridingStewardsOf(factionOrId) {
+    const ids = new Set(partyFactionIds(factionOrId).map(String));
+    const seated = [...new Set((game.users?.contents ?? []).filter(u => !u.isGM && u.character?.type === "character").map(u => u.character))]
+      .filter(a => ids.has(String(a.flags?.["bbttcc-factions"]?.factionId || "")));
+    return seated.length ? seated : partyStewardsOf(factionOrId);
+  }
+
   function install() {
     try {
       // Attach namespace
@@ -224,6 +233,7 @@
       api.stewardsOf    = stewardsOf;
       api.partyFactionIds = partyFactionIds;
       api.partyStewardsOf = partyStewardsOf;
+      api.ridingStewardsOf = ridingStewardsOf;
       api.hexBase       = hexBase;
       _registerRelay();
 

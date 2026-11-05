@@ -37,8 +37,8 @@
     if (base <= 0) return;
 
     const faction = ctx.actor;
-    // the whole ride, not just the lead (Dave 2026-10-29) — passengers stacked on this faction take the leg too
-    const stewards = radApi.partyStewardsOf ? radApi.partyStewardsOf(faction ?? ctx.factionId) : radApi.stewardsOf(faction ?? ctx.factionId);
+    // the whole ride, not just the lead (Dave 2026-10-29) — passengers stacked on this faction take the leg too; seated Stewards only (Dave 2026-11-04)
+    const stewards = radApi.ridingStewardsOf(faction ?? ctx.factionId);
     if (!stewards.length) { console.log(TAG, "hot hex but no stewards on", faction?.name); return; }
 
     const rows = [];
