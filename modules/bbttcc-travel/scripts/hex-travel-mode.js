@@ -44,13 +44,7 @@
   }
 
   // ---------- Math / helpers ----------
-  function intrigueMod(actor) {
-    const fx = actor?.flags?.[MOD_FCT] || {};   // getFlag(scope) w/o key returns undefined — read flags directly
-    return Number(
-      foundry.utils.getProperty(fx, "skills.intrigue.mod") ??
-      foundry.utils.getProperty(fx, "mods.intrigue") ?? 0
-    );
-  }
+  function intrigueMod(actor) { return Number(game.bbttcc?.api?.travel?.travelIntrigue?.(actor)?.mod) || 0; }   // the forecast reads what travelHex rolls (2026-11-04)
   function darknessBump(actor, hexDrawing) {
     const fx = actor?.flags?.[MOD_FCT] || {};   // getFlag(scope) w/o key returns undefined — read flags directly
     const regionId = hexDrawing?.id || "global";

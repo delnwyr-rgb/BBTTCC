@@ -830,16 +830,26 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
     return { ok: true, via: "op.commit", deltas, res };
   }
 
-  function getFactionIntrigueMod(actor) {
+  // INTRIGUE ON THE ROAD (Dave 2026-11-04: "wire in Intrigue capped at +3"): the check always added a Domain Intrigue flag nothing ever wrote, so it was 0 for every party.
+  // It's the best Intrigue among the Stewards on this ride, capped. Who's riding: the seated players' Stewards in the lead's Domain and its passengers (the quest-gear rule,
+  // so a Domain's unplayed roster doesn't scout for the party); with nobody seated, the whole roster. No Intrigue attribute (the D&D port) reads 0.
+  const TRAVEL_INTRIGUE_CAP = 3;
+  function travelIntrigue(actor) {
+    const out = { mod: 0, raw: 0, by: null };
     try {
-      const fx = actor?.flags?.[MOD_FCT] || {};   // getFlag(scope) w/o key returns undefined — read flags directly
-      return Number(
-        foundry.utils.getProperty(fx, "skills.intrigue.mod") ??
-        foundry.utils.getProperty(fx, "mods.intrigue") ??
-        0
-      );
-    } catch (_e) { return 0; }
+      const R = game.bbttcc?.api?.radiation;
+      const ids = new Set((R?.partyFactionIds?.(actor?.id) || [actor?.id]).filter(Boolean).map(String));
+      const inParty = (a) => ids.has(String(a?.flags?.[MOD_FCT]?.factionId || ""));
+      const seated = [...new Set(game.users.filter(u => !u.isGM && u.character?.type === "character").map(u => u.character))].filter(inParty);
+      for (const a of (seated.length ? seated : (R?.partyStewardsOf?.(actor?.id) || []))) {
+        const v = Number((a.system?.system ?? a.system)?.attributes?.intrigue?.value) || 0;
+        if (v > out.raw) { out.raw = v; out.by = a.name; }
+      }
+      out.mod = Math.max(0, Math.min(TRAVEL_INTRIGUE_CAP, out.raw));
+    } catch (_e) {}
+    return out;
   }
+  function getFactionIntrigueMod(actor) { return travelIntrigue(actor).mod; }
 
   // Darkness can increase travel DCs / encounter pressure.
   // Safe fallback: uses faction flags.bbttcc-factions.darkness.{global|<hexId>} if present.
@@ -874,7 +884,7 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
       if (!game.settings?.settings?.has(`${ENC_DIAL_NS}.${ENC_BASE_DC_KEY}`)) {
         game.settings.register(ENC_DIAL_NS, ENC_BASE_DC_KEY, {
           name: "Travel: Encounter Base DC",
-          hint: "Base difficulty of every travel check (2d10 + Intrigue + scout); the leg's DC adds 'Encounter DC per Tier' × the danger tier. The party must roll >= the DC to pass; failure triggers an encounter. HIGHER = more encounters. Default 9 (Dave 2026-11-03: 'a 75% chance … is a little aggressive' — 9 puts a Tier-1 leg at DC 11 ≈ 45% before Intrigue/scout, Tier 2 ≈ 66%, Tier 3 ≈ 84%). A world still on the d20-era 15 (≈ 90% at Tier 1) should be set to 9.",
+          hint: "Base difficulty of every travel check (2d10 + Intrigue + scout); the leg's DC adds 'Encounter DC per Tier' × the danger tier. The party must roll >= the DC to pass; failure triggers an encounter. HIGHER = more encounters. Default 9 (Dave 2026-11-03: 'a 75% chance … is a little aggressive' — 9 puts a Tier-1 leg at DC 11 ≈ 45% before Intrigue/scout, Tier 2 ≈ 66%, Tier 3 ≈ 84%; a hex's terrain and modifiers can raise the DC further). Intrigue = the best riding Steward's, capped at +3. A world still on the d20-era 15 (≈ 90% at Tier 1) should be set to 9.",
           scope: "world", config: true, type: Number, default: 9
         });
       }
@@ -1480,7 +1490,9 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     const costTxt = Object.entries(ctx.cost).map(([k,v]) => (v>0?`-${v} ${labelOP(k)}`:null)).filter(Boolean).join(", ");
     if (costTxt) popupText(mid, costTxt);
 
-    const intrigueMod = getFactionIntrigueMod(actor);
+    const _intrigue = travelIntrigue(actor);
+    const intrigueMod = _intrigue.mod;
+    if (intrigueMod) console.log(TAG, `Intrigue: +${intrigueMod} on the travel check (${_intrigue.by}, ${_intrigue.raw})`);
     const darknessBump = darknessEncounterBoost(actor, to);
     const dc = _encounterDc(ctx.terrainTier, ctx.dcMod, darknessBump);
     // Harmonized Grove (STORY FLOW D-5, 2026-09-17): a destination hex the Forest of Early Tifaret accepted is safer to
@@ -1530,7 +1542,7 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
       if (r2.total > total) { total = r2.total; success = total >= dc; }
     }
     pulseToken(ctx.token ?? canvas.tokens.controlled[0] ?? canvas.tokens.placeables[0], success ? "#00FF66" : "#FF3366");
-    popupText(b, `Travel Check ${total} vs DC ${dc} ${success ? "✅" : "❌"}${ctx.encounterReroll ? " ↻" : ""}${ctx.roadSpeed ? ` · 🏍 +${ctx.roadSpeed.bonus}` : ""}`);
+    popupText(b, `Travel Check ${total} vs DC ${dc} ${success ? "✅" : "❌"}${ctx.encounterReroll ? " ↻" : ""}${ctx.roadSpeed ? ` · 🏍 +${ctx.roadSpeed.bonus}` : ""}${intrigueMod ? ` · 🕵 +${intrigueMod}` : ""}`);
 
     const travelStub = {
       active: true,
@@ -2426,6 +2438,7 @@ function registerTravelAPI() {
 
   // Movement-domain gating surface — reused by combat (underwater zone detection),
   // the dive transition, and any UI that wants to preview reachability.
+  api.travel.travelIntrigue = travelIntrigue;   // Dave 2026-11-04: best riding Steward's Intrigue, cap +3
   api.travel.roadSpeedBonus = roadSpeedBonus;   // RIG BALANCE 2026-10-21
   api.travel.domains = {
     terrainMedium,
