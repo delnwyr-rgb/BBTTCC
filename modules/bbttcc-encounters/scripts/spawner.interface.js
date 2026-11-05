@@ -277,15 +277,21 @@
     const pos = (t) => ({ x: Number(t.x) || 0, y: Number(t.y) || 0 });
     const byXY = (a, b) => (a.x - b.x) || (a.y - b.y);
     const toks = iterTokenDocs(scene);
-    const pcs = toks.filter(t => Number(t.disposition) === FRIENDLY && t.actor?.type === "character").map(pos).sort(byXY);
+    // Round 4 (2026-11-05): a friendly NPC is not a Steward. Doc Greeley is a friendly character, and filing her under pcs would drop a Steward on top of her.
+    const isPc = (t) => Number(t.disposition) === FRIENDLY && t.actor?.type === "character" && _isSteward(t.actor);
+    const pcs = toks.filter(isPc).map(pos).sort(byXY);
+    const npcs = {};
+    for (const t of toks) { if (isPc(t) || Number(t.disposition) === HOSTILE()) continue; const n = _nameOf(t); if (n) (npcs[n] ??= []).push(pos(t)); }
+    for (const list of Object.values(npcs)) list.sort(byXY);
     const foes = {};
     for (const t of toks) { if (Number(t.disposition) !== HOSTILE()) continue; const n = _nameOf(t); if (n) (foes[n] ??= []).push(pos(t)); }
     for (const list of Object.values(foes)) list.sort(byXY);
     const all = foundry.utils.duplicate(game.settings.get(SPOTS_MOD, SPOTS_KEY) || {});
-    all[scene.id] = { name: scene.name, pcs, foes, at: Date.now() };
+    all[scene.id] = { name: scene.name, pcs, foes, npcs, at: Date.now() };
     await game.settings.set(SPOTS_MOD, SPOTS_KEY, all);
     const foeN = Object.values(foes).reduce((s, l) => s + l.length, 0);
-    ui.notifications?.info?.(`${scene.name}: saved ${pcs.length} Steward and ${foeN} foe spot(s).`);
+    const npcN = Object.values(npcs).reduce((s, l) => s + l.length, 0);
+    ui.notifications?.info?.(`${scene.name}: saved ${pcs.length} Steward, ${foeN} foe and ${npcN} NPC spot(s).`);
     return all[scene.id];
   }
   async function clearTokenSpots(scene = canvas?.scene) {
@@ -307,6 +313,21 @@
     }
     if (ups.length) await scene.updateEmbeddedDocuments("Token", ups, { animate: false });
   }
+  // NPCs stand on their saved spots whenever the map loads or the placement system creates them. A story load restores scene
+  // tokens from the save, so this is what keeps a placed NPC where it was put. Never during a running fight.
+  async function applyNpcSpots(scene) {
+    const spots = spotsFor(scene); if (!spots?.npcs || game.user !== game.users?.activeGM) return;
+    if ((game.combats?.contents ?? []).some(c => c.started && c.scene?.id === scene.id)) return;
+    const seen = {}; const ups = [];
+    for (const t of iterTokenDocs(scene)) {
+      const n = _nameOf(t); if (!spots.npcs[n]) continue;
+      const i = (seen[n] = (seen[n] ?? -1) + 1); const s = spots.npcs[n][i];
+      if (s && (t.x !== s.x || t.y !== s.y)) ups.push({ _id: t.id, x: s.x, y: s.y });
+    }
+    if (ups.length) await scene.updateEmbeddedDocuments("Token", ups, { animate: false });
+  }
+  Hooks.on("canvasReady", () => { try { if (canvas?.scene) applyNpcSpots(canvas.scene).catch(() => {}); } catch (_e) {} });
+  Hooks.on("createToken", (doc) => { try { if (doc?.parent && spotsFor(doc.parent)?.npcs?.[_nameOf(doc)]) applyNpcSpots(doc.parent).catch(() => {}); } catch (_e) {} });
   Hooks.on("getSceneControlButtons", (controls) => {
     try {
       const tokens = controls?.tokens;
