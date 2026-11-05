@@ -1294,11 +1294,14 @@ function _questItemHeld(key) {
   return null;
 }
 function _questItemHolderFor(campaign, rosterActorId, ctx = {}) {
-  const pick = rosterActorId ? game.actors?.get?.(String(rosterActorId)) : null; if (pick) return pick;
-  const viaCtx = ctx?.rosterActorId ? game.actors?.get?.(String(ctx.rosterActorId)) : null; if (viaCtx) return viaCtx;
+  // Seated players' Stewards only (Dave 2026-11-04): a named pick stands if it's one of them, then the ride, then anyone seated. With nobody seated, the roster, as before.
+  const seated = [...new Set(game.users.filter(u => !u.isGM && u.character?.type === "character").map(u => u.character))];
+  const ok = (a) => !!a && (!seated.length || seated.includes(a));
+  const pick = rosterActorId ? game.actors?.get?.(String(rosterActorId)) : null; if (ok(pick)) return pick;
+  const viaCtx = ctx?.rosterActorId ? game.actors?.get?.(String(ctx.rosterActorId)) : null; if (ok(viaCtx)) return viaCtx;
   const lead = String(campaign?.factionId || (campaign?.factionIds || [])[0] || "").replace(/^Actor\./, "");
-  try { const st = game.bbttcc?.api?.radiation?.partyStewardsOf?.(lead) || []; const played = st.find(a => a.hasPlayerOwner); if (played || st[0]) return played || st[0]; } catch (_e) {}
-  return null;
+  try { const st = game.bbttcc?.api?.radiation?.ridingStewardsOf?.(lead) || []; const played = st.find(ok); if (played || seated[0] || st[0]) return played || seated[0] || st[0]; } catch (_e) {}
+  return seated[0] || null;
 }
 async function _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx = {}) {
   const rows = Array.isArray(ch?.questItems) ? ch.questItems.filter(r => r && String(r.key || "").trim()) : [];
