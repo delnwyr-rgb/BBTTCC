@@ -2,6 +2,7 @@
  * patch-temp-scenes-2026-11-04.macro.js — Dave 2026-11-04: "wire up Good Temp Scenes" from the Bad Eden: Scenes compendium.
  * ⚠ THE COMPENDIUM ART IS AI. Fine for playtesting, NEVER for any media. Every import is named "TEMP AI — …", sits in the folder "TEMP AI (playtest only)"
  * and carries flags.bbttcc-campaign.tempAI, so it can be found and swapped out. Placed tokens are dropped on import when their actor doesn't exist here.
+ * Dave 2026-11-04: Maarg "can totally wait" (encounter not built) and the Lost Statues don't need battlemaps, so neither is wired here; the statue cinematics' dead next-scene is cleared.
  * Idempotent (rerun = 0). DRY_RUN first. Backup (campaigns) → Data/bbttcc-exports/. GM only.
  */
 (async () => {
@@ -16,7 +17,6 @@
     ["fixit_backstairs_exterior", T("fixit_backstairs_exterior")],
     ...["fixit_route_board", "fixit_route_board_pegs", "fixit_route_board_fail", "fixit_route_board_after", "ans_fixit_route_board_pegs_ask_what_pip_and_patter", "ans_fixit_route_board_pegs_ask_who_pays_for_the", "ans_fixit_route_board_pegs_ask_about_the_wagon", "ans_fixit_route_board_after_ask_pip_what_the_loop", "ans_fixit_route_board_after_ask_what_ish_means"].map(b => [b, T("fixit_arc_bay_shed")]),
     ["thatwards_ho_opening_scene", T("thatwards_ho_opening_scene")],
-    ["enc_desenitarius_maarg", T("desenetarius_marg_main")],
     ...["adversary_reality_tear_watcher_notices", "ans_adversary_reality_tear_watcher_notices_meet_its_gaze_let_the", "ans_adversary_reality_tear_watcher_notices_cover_the_tear_spend_a", "ans_adversary_reality_tear_watcher_notices_hold_still_let_the_pressure"].map(b => [b, T("Adversary Beat")]),
     // the camp, and the same camp when it comes back in the Widening Trail (Mini Raid, Dave's pointer). Not Rig Fight: its rows are tokens, the map under them is an empty road
     ...["ft_camp_approach", "ft_camp_quiet", "ft_camp_surprise", "ft_camp_warned", "ft_camp_fight", "ft_camp_fight_warned", "ft_camp_taken_force", "ft_camp_taken_quiet", "ft_camp_turned", "wt_cult_camp"].map(b => [b, T("Warehouse Courtyard")]),
@@ -39,12 +39,9 @@
     ["enc_scout_signs", T(roads.open)], ["enc_scout_signs_valuable", T(roads.open)], ["enc_supply_shortage", T(roads.wreck)]
   ];
   const CINE = [
-    ["enc_rockslide_cinematic", { startSceneId: T("Rockslide Cinematic") }],
-    ["enc_desenitarius_maarg_cinematic_intro", { startSceneId: T("Desenatarius Marg Cinematic"), nextSceneId: T("desenetarius_marg_main"), enabled: true, durationMs: 16000 }],
-    ["spark_geburah_northreach_b", { nextSceneId: T("lost_statue_1_battlemap") }],
-    ["spark_geburah_mountains_q", { nextSceneId: T("lost_statue_2_battlemap") }],
-    ["spark_geburah_mountains_o", { nextSceneId: T("lost_statue_3_battlemap") }]
+    ["enc_rockslide_cinematic", { startSceneId: T("Rockslide Cinematic") }]
   ];
+  const CLEAR_NEXT = ["spark_geburah_northreach_b", "spark_geburah_mountains_q", "spark_geburah_mountains_o"];
   const wanted = new Set();
   for (const [, n] of WIRE) if (n.startsWith(PFX)) wanted.add(n);
   for (const [, c] of CINE) for (const v of Object.values(c)) if (typeof v === "string" && v.startsWith(PFX)) wanted.add(v);
@@ -81,6 +78,7 @@
     await Scene.create(data);
   }
   let changes = toImport.length;
+  for (const id of CLEAR_NEXT) { const b = beats.find(x => x?.id === id); if (b?.cinematic?.nextSceneId && !game.scenes.get(String(b.cinematic.nextSceneId).replace(/^Scene\./, ""))) { b.cinematic.nextSceneId = null; changes++; report.push(`✚ ${id}: dead next scene cleared`); } }
   for (const [id, n] of WIRE) { const s = game.scenes.getName(n), b = beats.find(x => x?.id === id);
     if (String(b.sceneId || "").replace(/^Scene\./, "") !== s.id) { b.sceneId = s.id; changes++; report.push(`✚ ${id} → ${n}`); } }
   for (const [id, c] of CINE) { const b = beats.find(x => x?.id === id); b.cinematic = b.cinematic || {};
