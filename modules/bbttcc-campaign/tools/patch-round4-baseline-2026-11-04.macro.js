@@ -120,6 +120,7 @@
       up(d, "factionId", errataOwner.id); up(d, "ownerId", errataOwner.id); up(d, "faction", errataOwner.name); up(d, "ownerName", errataOwner.name);
     }
   }
+  if (!hexNamed("Bedlam Fancies").flags[T].capital) up(hexNamed("Bedlam Fancies"), "capital", true);   // Errata's capital (Dave 2026-11-04)
   // CanYAWN Amirite.b belonged to Torvaal, who is gone (Dave 2026-11-04: unclaim it).
   const canyawn = hexNamed("CanYAWN Amirite.b");
   if (canyawn.flags[T].factionId || canyawn.flags[T].ownerId || canyawn.flags[T].status !== "unclaimed") {
