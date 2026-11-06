@@ -9,6 +9,11 @@
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
 
   const TEXT = {
+    ag_wick_the_order: `“The Old Routes,” he says which, to be fair, would need to be followed by a word like “Delaware” or “France” to be an actual answer, but frustratingly it does not.
+
+Instead, “We go where the flame is thin.”
+
+Any attempts to get a more specific response from him seem to confuse and agitate him.`,
     ag_wick_the_flame: `“The flame,” he says proudly. “Civilization is a fire someone has to keep. Most people think it keeps itself. WRONG.”
 
 He is enthusiastic!
@@ -304,6 +309,12 @@ And with that she writes “gentleman and scholar” next to Wick’s name in th
   // Dave: Wick isn't suspicious in this act, so the old routes carry no suspicion check.
   const oldRoutes = find("ag_vacancy_pilgrim_wick_routes");
   if ((oldRoutes?.choices || []).some(x => x.next === "ag_tallow_wick_routes_hit")) { oldRoutes.choices = oldRoutes.choices.filter(x => x.next !== "ag_tallow_wick_routes_hit"); report.text.push("Old Routes: no suspicion check"); }
+
+  // Dave: no "discover Wick" choices in Act 1. These two seed the shrines and the slate, so they wait for Act 2.
+  for (const [beatId, next] of [["ag_wick_the_shrines", "ag_wick_shrines_later"], ["ag_wick_the_bed", "ag_wick_the_slate"]]) {
+    const ch = (find(beatId)?.choices || []).find(x => x.next === next);
+    if (ch && !ch.requires) { ch.requires = [{ flag: "storyPhase", gte: 2 }]; report.text.push(`Act 2 only: ${next}`); }
+  }
 
   // Dave: Offices of Fates and Destinies is no longer a quest. Thatward's Ho stays, on its own, with the new line.
   const tw = find("thatwards_ho_opening_scene");
