@@ -397,6 +397,12 @@ And with that she writes “gentleman and scholar” next to Wick’s name in th
     }
   }
 
+  // Dave: Etta's Act 1 beats live in the Long Market, so its door is on the map in Act 1. The Leygate stays hidden until Act 2.
+  const marketDoor = find("allesh_gilliam_long_market_exterior");
+  for (const r of (marketDoor?.inject?.requires || [])) {
+    if (r?.flag === "storyPhase" && Number(r.gte) === 2) { r.gte = 1; report.text.push("Long Market door: open from Act 1"); }
+  }
+
   // Dave: the opening plays through, then players can click doors.
   const WAIT = { beat: "allesh_gilliam_opening_scene", message: "Hear out the briefing and get off the Jackalope first." };
   const doorsChanged = JSON.stringify(c.doorsWaitFor) !== JSON.stringify(WAIT);
