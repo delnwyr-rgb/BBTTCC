@@ -114,6 +114,10 @@ And without waiting for anyone to do anything except blink, he hurries away down
 
   // Part of a beat's text swapped, leaving its return-visit spans alone.
   const SWAPS = [{
+    beat: "allesh_gilliam_vacancy_exterior",
+    from: ` Verna keeps the ledger; the ledger keeps everyone else.`,
+    to: ``
+  }, {
     beat: "allesh_gilliam_yarrow_welcome",
     from: `in a precisely, measured, calculated way`,
     to: `in a precisely measured, calculated way`
