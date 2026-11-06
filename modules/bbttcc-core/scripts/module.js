@@ -169,3 +169,16 @@ Hooks.once("ready", function () {
   _installGMApi();
   _log(`[${CORE_ID}] ready`);
 });
+
+// Round 4 (2026-11-05): a page load can get HTTP errors on a few of its ~250 files (measured: 503s on tableau.canvas.js, raid scripts,
+// fourththing.css), and Foundry carries on without them, so features vanish with no message. Say so on the seat it happened to. A reload fixes it.
+Hooks.once("ready", () => {
+  try {
+    const failed = performance.getEntriesByType("resource")
+      .filter(e => e.responseStatus >= 400 && /\/(modules|systems)\/[^?]+\.(m?js|css|hbs)(\?|$)/.test(e.name))
+      .map(e => `${decodeURIComponent(new URL(e.name).pathname)} (${e.responseStatus})`);
+    if (!failed.length) return;
+    console.error("[bbttcc-core] this page load is missing files:", failed);
+    ui.notifications?.error?.(`This page load is missing ${failed.length} file(s), so some features may not work. Press F5 to reload.`, { permanent: true });
+  } catch (_e) {}
+});
