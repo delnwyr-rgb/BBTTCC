@@ -2161,6 +2161,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
               who.push(a.name); changed = true;
             } catch (eA) { console.warn(TAG, "partyEffects: grant failed", a?.name, eA); }
           }
+          if (who.length) _bannerPartyEffect(name, checkBonus, ranks, relief, permanent);
           if (who.length) { notes.push("partyEffect:" + name); lines.push(`🍲 ${name} → ${who.join(", ")}${permanent ? " (permanent)" : ` (until the end of turn ${expiresTurn})`}`); }
           else lines.push(`· ${name} — everyone already has it`);
         }
@@ -2819,6 +2820,24 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     return 0;
   }
   /** Every Steward on the active campaign's coalition roster (dedup, canonical actorKind "steward"; type check fallback). */
+  // Dave 2026-11-05: a party effect lands with a banner on every seat, so nobody finds out from their sheet.
+  const PARTY_BANNER_SOCKET = "module.bbttcc-campaign";
+  function _bannerPartyEffect(name, checkBonus, ranks, relief, permanent) {
+    const signed = (n) => `${Number(n) > 0 ? "+" : ""}${Number(n)}`;
+    const title = (s) => String(s || "").replace(/^./, c => c.toUpperCase());
+    const parts = [];
+    for (const g of (checkBonus || [])) {
+      const what = g.skill ? title(g.skill) : g.attribute ? title(g.attribute) : "";
+      const kind = String(g.context || "check").toLowerCase() === "check" ? "checks" : `${g.context} rolls`;
+      parts.push(`${signed(g.bonus)} on ${what ? what + " " : ""}${kind}`);
+    }
+    for (const [sk, n] of Object.entries(ranks || {})) if (Number(n)) parts.push(`${signed(n)} ${title(sk)}`);
+    if (relief) parts.push(`${relief} Strain eased`);
+    const text = `${name}${parts.length ? ": " + parts.join(", ") : ""}${permanent ? "." : " until the turn ends."}`;
+    try { ui.notifications?.info?.(text); game.socket?.emit?.(PARTY_BANNER_SOCKET, { type: "bbttccPartyEffectBanner", text }); } catch (e) { console.warn(TAG, "party effect banner failed", e); }
+  }
+  Hooks.once("ready", () => { try { game.socket?.on?.(PARTY_BANNER_SOCKET, (m) => { if (m?.type === "bbttccPartyEffectBanner" && m.text) ui.notifications?.info?.(m.text); }); } catch (_e) {} });
+
   async function _coalitionStewards() {
     const out = []; const seen = new Set();
     try {
