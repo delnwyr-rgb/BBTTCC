@@ -9,6 +9,13 @@
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
 
   const TEXT = {
+    ag_wick_the_shrines: `“Up the switchbacks around Khezek Tor. I try to place one every hour of my climb, in someplace that the wind can’t reach but travelers can see. A crevasse, a stone, a candle. It’s beautiful. It’s reassuring.
+
+“And it helps people see at night on those switchbacks which is SUPER important.”
+
+He is really into walking and fire.
+
+Fair enough.`,
     ag_vacancy_pilgrim_wick: `He’s in the lounge with his boots off, but his relaxation is immediately replaced with enthusiasm as he sees you approaching!
 
 “Hello Stewards! So glad to see you.”
