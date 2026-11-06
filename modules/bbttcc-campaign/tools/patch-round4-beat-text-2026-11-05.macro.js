@@ -125,6 +125,22 @@ This is the town in which you now reside!`
   if ((walk.choices || []).some(x => x.next === "ag_walk_wick")) { walk.choices = walk.choices.filter(x => x.next !== "ag_walk_wick"); report.text.push("walk: Wick choice off"); }
   if (walk.entryFirst?.beat !== "ag_walk_wick") { walk.entryFirst = { beat: "ag_walk_wick" }; report.text.push("walk: Wick plays on the way in"); }
 
+  // Dave: going to a person reads "speak with", not "find".
+  const SPEAK = { "Find the Marshal": "Speak with the Marshal", "The kettle is warm — find Father Tamsin": "The kettle is warm — speak with Father Tamsin", "Find Brennig at his desk": "Speak with Brennig at his desk" };
+  for (const b of beats) for (const ch of (b.choices || [])) if (SPEAK[ch.label]) { report.text.push(`${b.id}: ${ch.label}`); ch.label = SPEAK[ch.label]; }
+
+  // Dave: Pike is not on the HQ exterior. A story load restores scene tokens, so the map's token spots remember it.
+  const EXTERIOR = game.scenes.get("bhPP40A9TJBPmXuO");
+  if (EXTERIOR) {
+    const allSpots = foundry.utils.duplicate(game.settings.get("bbttcc-encounters", "tokenSpots") || {});
+    const ext = allSpots[EXTERIOR.id];
+    if (!ext?.absent?.includes("Marshal Yarrow Pike")) {
+      allSpots[EXTERIOR.id] = { name: EXTERIOR.name, pcs: [], foes: {}, npcs: {}, ...ext, absent: [...(ext?.absent || []), "Marshal Yarrow Pike"], at: Date.now() };
+      report.text.push("HQ exterior: Pike stays off");
+      if (!DRY_RUN) await game.settings.set("bbttcc-encounters", "tokenSpots", allSpots);
+    }
+  }
+
   // Dave: the opening plays through, then players can click doors.
   const WAIT = { beat: "allesh_gilliam_opening_scene", message: "Hear out the briefing and get off the Jackalope first." };
   const doorsChanged = JSON.stringify(c.doorsWaitFor) !== JSON.stringify(WAIT);

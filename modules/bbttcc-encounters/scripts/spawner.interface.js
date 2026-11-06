@@ -289,7 +289,9 @@
     for (const list of Object.values(foes)) list.sort(byXY);
     const all = foundry.utils.duplicate(game.settings.get(SPOTS_MOD, SPOTS_KEY) || {});
     const tableau = foundry.utils.getProperty(scene, "flags.bbttcc-raid.tableau") ?? null;
-    all[scene.id] = { name: scene.name, pcs, foes, npcs, tableau: tableau ? foundry.utils.duplicate(tableau) : null, at: Date.now() };
+    // absent = NPCs removed from this map by hand. Placing one back and saving clears it.
+    const absent = (all[scene.id]?.absent || []).filter(n => !npcs[n]);
+    all[scene.id] = { name: scene.name, pcs, foes, npcs, absent, tableau: tableau ? foundry.utils.duplicate(tableau) : null, at: Date.now() };
     await game.settings.set(SPOTS_MOD, SPOTS_KEY, all);
     const foeN = Object.values(foes).reduce((s, l) => s + l.length, 0);
     const npcN = Object.values(npcs).reduce((s, l) => s + l.length, 0);
@@ -322,6 +324,10 @@
     if ((game.combats?.contents ?? []).some(c => c.started && c.scene?.id === scene.id)) return;
     if (spots.tableau && JSON.stringify(foundry.utils.getProperty(scene, "flags.bbttcc-raid.tableau") ?? null) !== JSON.stringify(spots.tableau)) {
       await scene.update({ "flags.bbttcc-raid.tableau": foundry.utils.duplicate(spots.tableau) });
+    }
+    if (spots.absent?.length) {
+      const gone = iterTokenDocs(scene).filter(t => spots.absent.includes(_nameOf(t))).map(t => t.id);
+      if (gone.length) await scene.deleteEmbeddedDocuments("Token", gone);
     }
     if (!spots.npcs) return;
     const seen = {}; const ups = [];
