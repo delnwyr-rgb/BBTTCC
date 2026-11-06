@@ -416,8 +416,24 @@
   function playerActivateAllowed() {
     try { return !!game.settings.get(SCOPE, "doorsPlayerActivate"); } catch (_e) { return true; }
   }
+  // Dave 2026-11-05: campaign.doorsWaitFor = { beat, message? } keeps every town door shut until that beat has played, so the opening
+  // plays through before anyone walks off. A door click used to close Thatwards Ho! and skip the Jackalope's arrival.
+  function _doorsWaitingOn() {
+    try {
+      const camp = game.bbttcc?.api?.campaign; const cid = camp?.getActiveCampaignId?.();
+      const wait = cid ? camp.getCampaign?.(cid)?.doorsWaitFor : null;
+      if (!wait?.beat || camp.story?.state?.(cid)?.played?.[String(wait.beat)]) return null;
+      return wait;
+    } catch (_e) { return null; }
+  }
+  function _doorsShut() {
+    const wait = _doorsWaitingOn(); if (!wait) return false;
+    ui.notifications?.info?.(wait.message || "Not yet.");
+    return true;
+  }
   /** Dive through a door (by drawing uuid) from any seat. */
   async function dive(drawingUuid, opts = {}) {
+    if (_doorsShut()) return false;
     const d = doorDrawings().find(x => x.document.uuid === drawingUuid);
     const link = d ? linkOf(d) : null;
     if (!link) return ui.notifications?.warn?.("That door leads nowhere (no locationLink)."), false;
@@ -488,6 +504,7 @@
   }
   /** A token walked into a door Region (call from the Region's executeScript on the mover's client). */
   async function enter(regionUuid, { tokenUuid = null } = {}) {
+    if (_doorsShut()) return false;
     const doc = await fromUuid(String(regionUuid || "")).catch(() => null);
     const link = doc ? regionLinkOf(doc) : null;
     if (!link || !isTownHub(doc.parent)) return false;
@@ -774,6 +791,7 @@
       game.bbttcc.api.gmExec?.register?.("travel.doors.dive", async (payload, meta) => {
         if (!game.user.isGM) return { ok: false, why: "not-gm" };
         if (!playerActivateAllowed()) return { ok: false, why: "setting-off" };
+        if (_doorsWaitingOn()) return { ok: true, waiting: true };
         const doc = await fromUuid(String(payload?.drawingUuid || "")).catch(() => null);
         const link = doc ? linkOf(doc) : null;
         if (!link || !isTownHub(doc.parent)) return { ok: false, why: "not-a-door" };

@@ -295,7 +295,17 @@
   const sameJson = (a, b) => { try { return JSON.stringify(a) === JSON.stringify(b); } catch (_e) { return false; } };
   const folderOk = (folderId) => !folderId || !!game.folders.get(folderId);
 
+  // Dave 2026-11-05: every load saves the world first. A reset wiped hand-set Tableau Settings with nothing to restore them from.
+  // Refuses the load if the backup fails; opts.noBackup skips it. Keeps the newest AUTO_BACKUPS_KEPT of these (about 22 MB each).
+  const AUTO_BACKUP_PREFIX = "Before reset (auto)", AUTO_BACKUPS_KEPT = 3;
+  async function _backupBeforeLoad(id) {
+    const target = readIndex().slots.find(s => s.id === id);
+    await save({ label: `${AUTO_BACKUP_PREFIX}: to ${target?.label || id}` });
+    const autos = readIndex().slots.filter(s => String(s.label || "").startsWith(AUTO_BACKUP_PREFIX) && !s.golden).sort((x, y) => y.at - x.at);
+    for (const old of autos.slice(AUTO_BACKUPS_KEPT)) await remove(old.id);
+  }
   async function load(id, opts = {}) {
+    if (opts.noBackup !== true) await _backupBeforeLoad(id);
     let res;
     try { res = await _loadInner(id, opts); }
     finally { try { game.bbttcc.restoring = false; Hooks.callAll("bbttcc:restore:end", { id }); } catch (_e) {} }

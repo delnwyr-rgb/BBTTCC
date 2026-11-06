@@ -125,8 +125,13 @@ This is the town in which you now reside!`
   if ((walk.choices || []).some(x => x.next === "ag_walk_wick")) { walk.choices = walk.choices.filter(x => x.next !== "ag_walk_wick"); report.text.push("walk: Wick choice off"); }
   if (walk.entryFirst?.beat !== "ag_walk_wick") { walk.entryFirst = { beat: "ag_walk_wick" }; report.text.push("walk: Wick plays on the way in"); }
 
+  // Dave: the opening plays through, then players can click doors.
+  const WAIT = { beat: "allesh_gilliam_opening_scene", message: "Hear out the briefing and get off the Jackalope first." };
+  const doorsChanged = JSON.stringify(c.doorsWaitFor) !== JSON.stringify(WAIT);
+  if (doorsChanged) report.text.push("doors wait for Welcome");
+
   const changed = report.text.length + report.replies.length;
-  if (!DRY_RUN && changed) await C.saveCampaign(id, { ...c, beats });
+  if (!DRY_RUN && changed) await C.saveCampaign(id, { ...c, beats, doorsWaitFor: WAIT });
   console.log("R4TEXT " + JSON.stringify(report));
   ui.notifications.info(`Round 4 beat text: ${DRY_RUN ? "dry run" : "applied"}, ${changed} change(s).`);
 })();
