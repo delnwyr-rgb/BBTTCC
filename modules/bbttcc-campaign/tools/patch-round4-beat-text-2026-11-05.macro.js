@@ -9,6 +9,15 @@
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
 
   const TEXT = {
+    rc_tamsin_cauldron: `Father Tamsin ladles out a rustic bowl of Bad Eden, and it is comfort in a bowl.
+
+This guy needs to open a chain of church themed B&Bs for the unfortunate that serve Michelin level food.
+
+It also helps that the server is so freaking nice. See, he’s so nice I didn’t use a swear here.
+
+Gary, at the far table, says something about the plumbing.
+
+“GARY,” says Tamsin, without turning around.`,
     allesh_gilliam_tamsin_welcome: `St Gilliam’s still looks like a church on the inside, and somehow it makes it seem more cosy. That’s a remarkable feat given the history of organized religion.
 
 A man - obviously Father Tamsin, he moves like he owns the scene - approaches you, wiping his hands on a towel. They appear to be caked with pie dough.
