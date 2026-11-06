@@ -43,12 +43,14 @@
   async function _loadDecks(){
     if (DECKS) return DECKS;
     try {
-      const mod = game.modules?.get?.(MOD_R);
-      const base = (mod?.url || mod?.path || `/modules/${MOD_R}`).replace(/\/+$/, "");
-      DECKS = await (await fetch(`${base}/data/siege-events.json`, { cache: "no-store" })).json();
+      // Not mod.url: that's the manifest's project page (GitHub), so the deck never loaded.
+      const r = await fetch(foundry.utils.getRoute(`modules/${MOD_R}/data/siege-events.json`), { cache: "no-store" });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      DECKS = await r.json();
     } catch (e) {
-      console.warn(TAG, "deck JSON load failed; using empty deck", e);
-      DECKS = { events: {}, decks: {} };
+      // A lost request (ngrok 503s) mustn't empty the deck for the whole session, so the next draw tries again.
+      console.warn(TAG, "deck JSON load failed; using empty deck for now", e);
+      return { events: {}, decks: {} };
     }
     return DECKS;
   }
