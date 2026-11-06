@@ -405,6 +405,20 @@
     document.body.appendChild(b);
   }
 
+  // Round 4 (Dave 2026-11-06): when the lead can't afford the next round, the coalition covers it. Allies get a button to send the marks; the lead is told who can.
+  const ROUND_MARKS = 10;
+  function sharingRow(app) {
+    const vm = app?.vm || {}; const lead = game.actors?.get?.(String(vm.attackerId || "")); if (!lead) return "";
+    const key = String(vm.activityKey || "violence"); const have = Number(lead.getFlag?.("bbttcc-factions", "opBank")?.[key]) || 0;
+    const need = ROUND_MARKS - have; if (need <= 0) return "";
+    const word = key.charAt(0).toUpperCase() + key.slice(1);
+    const allies = (vm.supportFactionIds || []).map(id => game.actors.get(String(id))).filter(Boolean);
+    const mine = allies.find(a => a.isOwner);
+    if (lead.isOwner && !mine) return `<div class="cb-row"><span class="cb-title">🤝 ${esc(lead.name)} needs ${need} more ${esc(word)} for the next round.</span> <span class="cb-dim">Allies can send it from their own pools: ${esc(allies.map(a => a.name).join(", ") || "no one riding with you")}.</span></div>`;
+    if (!mine) return "";
+    return `<div class="cb-row"><span class="cb-title">🤝 ${esc(lead.name)} needs ${need} more ${esc(word)} for the next round.</span> <button type="button" data-cb="share" data-from="${esc(mine.id)}" data-to="${esc(lead.id)}" data-key="${esc(key)}" data-need="${need}">Send ${need} from ${esc(mine.name)}</button></div>`;
+  }
+
   function render() {
     _timer = null;
     if (game.user?.isGM && !globalThis.__bbttccConflictBarOnGM) return teardown();   // debug: set the global to preview the bar on a GM seat
@@ -445,7 +459,7 @@
 
     let body = "";
     if (!round) {
-      body = `<div class="cb-row cb-dim">The GM opens each round — your stakes and maneuvers appear here when it does.</div>`;
+      body = `<div class="cb-row cb-dim">The GM opens each round — your stakes and maneuvers appear here when it does.</div>${sharingRow(app)}`;
     } else if (!row) {
       body = `<div class="cb-row cb-dim">Opening Round ${idx + 1}…</div>`;
     } else {
@@ -496,6 +510,11 @@
     const bar = document.getElementById(BAR_ID); const act = t.dataset.cb; const i = Number(t.dataset.i);
     ev.preventDefault(); ev.stopPropagation();
     try {
+      if (act === "share") {
+        const App = game.bbttcc?.apps?.AlliedSendApp; const from = game.actors.get(ev.target.closest("[data-cb]").dataset.from); const d = ev.target.closest("[data-cb]").dataset;
+        if (App && from) new App(from, { targetId: d.to, preset: { [d.key]: Number(d.need) || 0 } }).render(true);
+        return;
+      }
       if (act === "window") { _showWindow = !_showWindow; const app = liveConsole(); if (app) { app.element.classList.toggle("cb-docked", !_showWindow); if (_showWindow) app.bringToFront?.(); } return schedule(0); }
       if (act === "collapse") { _collapsed = !_collapsed; try { localStorage.setItem("bbttcc-conflict-bar-collapsed", _collapsed ? "1" : "0"); } catch (_e) {} return schedule(0); }
       if (act === "ping") return game.bbttcc?.api?.raid?.courtlyHud?.ping?.(t.dataset.tokenId);
@@ -523,6 +542,16 @@
       if (mine) await openStoryConsole(mine);
     } catch (e) { console.warn(TAG, "reopen on load failed", e); }
   }, 1500));
+  // When an ally's marks arrive and no round is open, the GM's console opens the next one.
+  Hooks.on("bbttcc:economy:share", () => setTimeout(async () => {
+    try {
+      if (!game.user?.isGM) return;
+      const app = liveConsole(); if (!app?.vm?.offeredBy || activeIdx(app) >= 0 || !(app.vm.rounds || []).length) return;
+      if (!(game.combats?.contents ?? []).some(c => c.started && c.scene?.id === canvas?.scene?.id)) return;
+      await app.render?.(); await new Promise(r => setTimeout(r, 400));
+      const add = app.element?.querySelector?.("[data-id='add-round']"); if (add && !add.disabled) add.click();
+    } catch (e) { console.warn(TAG, "next round after a share failed", e); }
+  }, 600));
   // Round 4 (Dave 2026-11-06): ending the combat ends a Battle that was running beside it, so the bar goes and a refresh won't bring it back.
   Hooks.on("deleteCombat", async () => {
     try {
