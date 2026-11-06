@@ -281,13 +281,15 @@
     const isPc = (t) => Number(t.disposition) === FRIENDLY && t.actor?.type === "character" && _isSteward(t.actor);
     const pcs = toks.filter(isPc).map(pos).sort(byXY);
     const npcs = {};
-    for (const t of toks) { if (isPc(t) || Number(t.disposition) === HOSTILE()) continue; const n = _nameOf(t); if (n) (npcs[n] ??= []).push(pos(t)); }
+    // A story load puts scene flags and tokens back as saved, so the spot keeps what Dave set by hand: art, size and the map's Tableau Settings.
+    for (const t of toks) { if (isPc(t) || Number(t.disposition) === HOSTILE()) continue; const n = _nameOf(t); if (n) (npcs[n] ??= []).push({ ...pos(t), width: t.width, height: t.height, src: t.texture?.src || null }); }
     for (const list of Object.values(npcs)) list.sort(byXY);
     const foes = {};
     for (const t of toks) { if (Number(t.disposition) !== HOSTILE()) continue; const n = _nameOf(t); if (n) (foes[n] ??= []).push(pos(t)); }
     for (const list of Object.values(foes)) list.sort(byXY);
     const all = foundry.utils.duplicate(game.settings.get(SPOTS_MOD, SPOTS_KEY) || {});
-    all[scene.id] = { name: scene.name, pcs, foes, npcs, at: Date.now() };
+    const tableau = foundry.utils.getProperty(scene, "flags.bbttcc-raid.tableau") ?? null;
+    all[scene.id] = { name: scene.name, pcs, foes, npcs, tableau: tableau ? foundry.utils.duplicate(tableau) : null, at: Date.now() };
     await game.settings.set(SPOTS_MOD, SPOTS_KEY, all);
     const foeN = Object.values(foes).reduce((s, l) => s + l.length, 0);
     const npcN = Object.values(npcs).reduce((s, l) => s + l.length, 0);
@@ -316,13 +318,22 @@
   // NPCs stand on their saved spots whenever the map loads or the placement system creates them. A story load restores scene
   // tokens from the save, so this is what keeps a placed NPC where it was put. Never during a running fight.
   async function applyNpcSpots(scene) {
-    const spots = spotsFor(scene); if (!spots?.npcs || game.user !== game.users?.activeGM) return;
+    const spots = spotsFor(scene); if (!spots || game.user !== game.users?.activeGM) return;
     if ((game.combats?.contents ?? []).some(c => c.started && c.scene?.id === scene.id)) return;
+    if (spots.tableau && JSON.stringify(foundry.utils.getProperty(scene, "flags.bbttcc-raid.tableau") ?? null) !== JSON.stringify(spots.tableau)) {
+      await scene.update({ "flags.bbttcc-raid.tableau": foundry.utils.duplicate(spots.tableau) });
+    }
+    if (!spots.npcs) return;
     const seen = {}; const ups = [];
     for (const t of iterTokenDocs(scene)) {
       const n = _nameOf(t); if (!spots.npcs[n]) continue;
-      const i = (seen[n] = (seen[n] ?? -1) + 1); const s = spots.npcs[n][i];
-      if (s && (t.x !== s.x || t.y !== s.y)) ups.push({ _id: t.id, x: s.x, y: s.y });
+      const i = (seen[n] = (seen[n] ?? -1) + 1); const s = spots.npcs[n][i]; if (!s) continue;
+      const up = {};
+      if (t.x !== s.x || t.y !== s.y) { up.x = s.x; up.y = s.y; }
+      if (s.width && t.width !== s.width) up.width = s.width;
+      if (s.height && t.height !== s.height) up.height = s.height;
+      if (s.src && t.texture?.src !== s.src) up["texture.src"] = s.src;
+      if (Object.keys(up).length) ups.push({ _id: t.id, ...up });
     }
     if (ups.length) await scene.updateEmbeddedDocuments("Token", ups, { animate: false });
   }
