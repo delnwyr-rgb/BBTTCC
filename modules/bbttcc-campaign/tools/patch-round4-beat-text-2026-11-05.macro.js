@@ -9,6 +9,13 @@
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
 
   const TEXT = {
+    ag_wick_the_flame: `“The flame,” he says proudly. “Civilization is a fire someone has to keep. Most people think it keeps itself. WRONG.”
+
+He is enthusiastic!
+
+“So St Gilliam’s has the most fire in town in one easily accessible place. And Father Tamsin has enough to do as it is, feeding and … sleeping? … the needy.
+
+“I sometimes have help from someone called Gary. I like working with Gary. He’s pretty certain everyone at St Gilliam’s is going to be murdered by ghosts, and not plumbing. He was very emphatic about that last part, even though I never brought plumbing up.”{{#played ag_title_card}} He turns a hand over: something pale under the nails.{{/played}}`,
     rc_etta_skewer: `You eat the skewer of whatever.
 
 Etta watches you intently, her mouth opening and closing slightly in time with yours.
