@@ -382,7 +382,8 @@
   function liveStoryFaction() {
     for (const a of game.actors?.contents ?? []) {
       const s = a.getFlag?.("bbttcc-raid", "raidSession");
-      if (!s || s.by !== "story" || s.routeFired || s.practice === true || s.tourStaged) continue;
+      // offeredBy marks a story raid for good: the console's own saves overwrite s.by with the saving user's id.
+      if (!s?.offeredBy || s.routeFired || s.practice === true || s.tourStaged) continue;
       const mine = [String(s.attackerId || a.id), ...(s.supportFactionIds || []).map(String)].find(id => game.actors.get(id)?.isOwner);
       if (mine) return mine;
     }
@@ -531,7 +532,7 @@
       if (!game.user?.isGM) return;
       for (const a of game.actors?.contents ?? []) {
         const s = a.getFlag?.("bbttcc-raid", "raidSession");
-        if (s?.by === "story" && s.activityKey === "violence" && !s.routeFired) await a.setFlag("bbttcc-raid", "raidSession", { ...s, routeFired: "combat-ended", rev: Number(s.rev || 0) + 1, ts: Date.now() });
+        if (s?.offeredBy && s.activityKey === "violence" && !s.routeFired) await a.setFlag("bbttcc-raid", "raidSession", { ...s, routeFired: "combat-ended", rev: Number(s.rev || 0) + 1, ts: Date.now() });
       }
     } catch (e) { console.warn(TAG, "battle end on combat end failed", e); }
   });
