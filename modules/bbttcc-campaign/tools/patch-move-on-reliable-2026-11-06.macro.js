@@ -88,6 +88,13 @@
   const KT_LINE = "The Mountain Town, where riches compete with explosions and other problems for attention.";
   if (ktRide && ktRide.description !== KT_LINE) { ktRide.description = KT_LINE; report.text.push("Crossroads: Khezek-Tor line"); }
 
+  // Dave: the road north. The Travel Console line at the bottom stays.
+  const rideKT = find("ag_ride_khezek_tor");
+  const RIDE_KT = "Boots in stirrups, and away you go to the prize of the Avuncular Order\u2019s Bad Eden holdings.\n\nKhezek-Tor. The only known Yesodium mine in existence. It has already exploded once, as you have now heard multiple times.\n\nIf you haven\u2019t, shame on you for skipping conversations.\n\nYou had stirrups installed in your personal rigs because it felt appropriate, considering the rocky terrain.";
+  const consoleAt = rideKT.description.indexOf("\u2699 Plot the ride");
+  if (consoleAt < 0) report.missed.push("Khezek-Tor ride: console line");
+  else if (!rideKT.description.startsWith(RIDE_KT)) { rideKT.description = `${RIDE_KT}\n\n${rideKT.description.slice(consoleAt)}`; report.text.push("Khezek-Tor ride: Dave's text"); }
+
   // Lock the Turn is for when the rides are done.
   const days = find("ag_days_end");
   if (days.choices.some(x => NIGHTLY.test(x.label))) { days.choices = days.choices.filter(x => !NIGHTLY.test(x.label)); report.text.push("Lock the Turn: first night choice gone"); }
