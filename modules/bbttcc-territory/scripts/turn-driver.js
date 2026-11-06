@@ -1349,6 +1349,8 @@ async function _payIncomeSliceNow({ slice } = {}){
   if (!(n >= 1 && n <= 4)) return { ok:false, reason:"slice must be 1..4" };
   // A slice landing in the middle of an Advance would be recorded against the turn that is ending.
   if (window._bbttccTurnLock) return { ok:false, reason:"turn-running" };
+  // Round 4 (2026-11-05): worldTurnNow reads 0 while the world API is still attaching. That read as a new month and paid an already paid slice on page load.
+  if (!game.bbttcc?.api?.world?.getState?.()) return { ok:false, reason:"world-not-ready" };
   const turn = worldTurnNow();
   const op = game.bbttcc?.api?.op;
   const rows = [];
