@@ -1,6 +1,6 @@
 /*
  * patch-evil-bad-squadron-2026-11-06.macro.js — Dave 2026-11-06: the first road ambush is a Battle against a small enemy Domain, not the party's own hex and not the
- * grown Evil Bad Faction. Evil Bad Squadron is a tier 0 faction with no learned maneuvers, the training bank the Induction's hostile faction uses, led by the Commander Road Bandit.
+ * grown Evil Bad Faction. Evil Bad Squadron is a tier 0 faction with no learned maneuvers, a bank at the average of the four Domains, led by the Commander Road Bandit.
  * Ember Bad Eden. globalThis.__squadDry = false applies; anything else is a dry run. Idempotent. Fixed actor id so a rerun after a reset finds or rebuilds the same faction.
  */
 (async () => {
@@ -20,7 +20,7 @@
       prototypeToken: { actorLink: false, disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE, name: "Evil Bad Squadron" },
       flags: { "bbttcc-factions": {
         isFaction: true, disposition: "hostile", tier: 0, factionLevel: 0, opBankMarksMigrated: true,
-        opBank: { violence: 50, nonlethal: 50, intrigue: 50, softpower: 50, diplomacy: 50, economy: 20, logistics: 20, culture: 0, faith: 0 },
+        opBank: Object.fromEntries(["violence", "nonlethal", "intrigue", "economy", "softpower", "diplomacy", "logistics", "culture", "faith"].map(k => [k, Math.round(DOMAINS.reduce((n, d) => n + (Number(game.actors.get(d)?.flags?.["bbttcc-factions"]?.opBank?.[k]) || 0), 0) / DOMAINS.length)])),   // Dave: a similarly powered single Domain, so the average of the four
         roster: [`Actor.${CMDR}`], leaderId: CMDR, unlocks: { maneuvers: {} },
         relations: Object.fromEntries(DOMAINS.map(d => [d, "hostile"]))
       } }
