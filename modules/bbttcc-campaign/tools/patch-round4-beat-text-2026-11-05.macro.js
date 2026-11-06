@@ -368,6 +368,13 @@ And with that she writes “gentleman and scholar” next to Wick’s name in th
   for (const x of beats) for (const ch of (x.choices || [])) if (/^Leave him to his vigil\.?$/.test(String(ch.label || "").trim())) { ch.label = "Let him rest."; restN++; }
   if (restN) report.text.push(`Let him rest: ${restN}`);
 
+  // Dave: the Plumb door has to hit its exterior first. Its cinematic started on the interior, with the External POV scene unused.
+  const plumbExt = find("allesh_gilliam_plumb_tower_exterior");
+  if (plumbExt?.cinematic && plumbExt.cinematic.startSceneId !== "Scene.0FZJfU1ZNR2FhuP0" && game.scenes.get("0FZJfU1ZNR2FhuP0")) {
+    Object.assign(plumbExt.cinematic, { startSceneId: "Scene.0FZJfU1ZNR2FhuP0", nextSceneId: "Scene.gYuClWDbCpP4RR79" });
+    report.text.push("Plumb exterior: starts on External POV");
+  }
+
   // Dave: Offices of Fates and Destinies is no longer a quest. Thatward's Ho stays, on its own, with the new line.
   const tw = find("thatwards_ho_opening_scene");
   if (tw?.story?.chapter) { delete tw.story.chapter; report.text.push("Thatwards Ho: no chapter"); }
