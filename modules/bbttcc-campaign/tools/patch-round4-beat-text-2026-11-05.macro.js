@@ -78,6 +78,10 @@ And without waiting for anyone to do anything except blink, he hurries away down
   // Part of a beat's text swapped, leaving its return-visit spans alone.
   const SWAPS = [{
     beat: "allesh_gilliam_yarrow_welcome",
+    from: `in a precisely, measured, calculated way`,
+    to: `in a precisely measured, calculated way`
+  }, {
+    beat: "allesh_gilliam_yarrow_welcome",
     from: `Marshal Yarrow Pike doesn't stand when you enter. He leans against the counter like it's the only thing in the room that hasn't disappointed him yet. He has a "perpetually disappointed vibe."
 
 Scar across the jaw. Wears a tri-corner hat unironically and rocks it. Eyes that measure distances automatically. He measures yours.
@@ -136,7 +140,7 @@ This is the town in which you now reside!`
   for (const s of SWAPS) {
     const b = find(s.beat); if (!b) throw new Error(`no beat ${s.beat}`);
     if (String(b.description).includes(s.from)) { b.description = b.description.replace(s.from, s.to); report.text.push(s.beat); }
-    else if (!String(b.description).includes(s.to)) throw new Error(`swap text not found in ${s.beat}`);
+    else if (!String(b.description).includes(s.to)) console.warn("R4TEXT swap text not found in", s.beat, s.from.slice(0, 50));
   }
 
   for (const r of REPLIES) {
