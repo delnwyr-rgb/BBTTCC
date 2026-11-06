@@ -170,43 +170,108 @@ Hooks.once("ready", function () {
   _log(`[${CORE_ID}] ready`);
 });
 
-// Round 4 (2026-11-05): a page load can get HTTP 503 on a few of its ~250 files (about 1 load in 4, seemingly from the tunnel, not the server), and
-// Foundry carries on without them, so features vanish. Modules have all been evaluated by init, so check there, before any hook has done work, and
-// reload by itself, up to 3 times. If it still fails, say so on that seat.
+// Round 4 (2026-11-05): a page load can lose files to ngrok 503s, and Foundry carries on without them, so features vanish. Check at init and reload by
+// itself, up to 3 times. If it still fails, say so on that seat.
+// Resource Timing can't do this alone: 132 of 327 tags had no entry (measured 2026-11-06).
+// So ask the browser instead. Importing a module script that loaded does nothing. Importing a lost one downloads it again, and that download is the
+// signal: when it works the import reports success and the script runs late (measured in Chrome), which is harmless because this page is about to reload.
 const _LOAD_RETRY_KEY = "bbttcc-load-retries";
-// Diagnosis (2026-11-05): one line per load in this browser's localStorage. Read it with: localStorage.getItem("bbttcc-load-log")
+const _LOAD_CHECK_TIMEOUT_MS = 5000;
 try { performance.setResourceTimingBufferSize(2000); } catch (_e) {}
-function _logLoad(failed) {
+const _shortFile = (u) => { try { return decodeURIComponent(new URL(u).pathname); } catch (_e) { return String(u); } };
+// Diagnosis: one line per load in this browser's localStorage. Read it with: localStorage.getItem("bbttcc-load-log")
+function _logLoad(r) {
   try {
     const log = JSON.parse(localStorage.getItem("bbttcc-load-log") || "[]");
-    log.push({ at: new Date().toISOString(), seen: performance.getEntriesByType("resource").length, failed: failed.map(f => f.split("/").pop()) });
+    log.push({ at: new Date().toISOString(), checked: r.checked, heard: r.heard, ms: r.ms, timedOut: r.timedOut, failed: r.lost.map(f => f.split("/").pop()), gone: r.gone.length, threw: r.threw.length });
     localStorage.setItem("bbttcc-load-log", JSON.stringify(log.slice(-60)));
   } catch (_e) {}
 }
-function _failedLoadFiles() {
-  return performance.getEntriesByType("resource")
-    .filter(e => e.responseStatus >= 400 && /\/(modules|systems)\/[^?]+\.(m?js|css)(\?|$)/.test(e.name))
-    .map(e => `${decodeURIComponent(new URL(e.name).pathname)} (${e.responseStatus})`);
+// Scripts report failure in document order, so a listener from an early file hears the later ones, classic scripts too, which import() can't test.
+// systems/fourththing/ft-translation.js starts it. On a world using another system, this file starts it, which hears fewer of them.
+if (!globalThis.__bbttccLostTags) {
+  const lostTags = globalThis.__bbttccLostTags = [];
+  window.addEventListener("error", (e) => { if (e.target?.tagName === "SCRIPT" && e.target.src) lostTags.push(e.target.src); }, true);
 }
-Hooks.once("init", () => {
-  try {
-    const failed = _failedLoadFiles();
-    _logLoad(failed);
-    const tries = Number(sessionStorage.getItem(_LOAD_RETRY_KEY)) || 0;
-    if (failed.length && tries < 3) {
-      sessionStorage.setItem(_LOAD_RETRY_KEY, String(tries + 1));
-      console.warn(`[bbttcc-core] page load missing ${failed.length} file(s), reloading (try ${tries + 1} of 3):`, failed);
-      location.reload();
-      return;
+async function _checkLoadedFiles() {
+  const t0 = performance.now();
+  const sameOrigin = (u) => { try { return new URL(u, location.href).origin === location.origin; } catch (_e) { return false; } };
+  const lost = new Set(), gone = new Set(), threw = [];
+  // Is a file we think failed really absent from the server, or was it just lost on this load?
+  const verify = async (u, bodyMatters) => {
+    const f = _shortFile(u);
+    try {
+      const res = await fetch(u, { cache: "no-store" });
+      if (res.status === 404) gone.add(f);
+      else if (!res.ok || !bodyMatters || (await res.text()).replace(/\/\*[\s\S]*?\*\//g, "").trim()) lost.add(f);
+    } catch (_e) { lost.add(f); }
+  };
+  // Module CSS arrives by @import inside <style> tags. A stylesheet that failed can't be read (SecurityError, measured), so fetch any unreadable or empty one, as the file may really be empty.
+  const suspectSheets = [];
+  let sheetCount = 0;
+  const walk = (sheet) => {
+    let rules;
+    try { rules = sheet.cssRules; } catch (_e) { return; }
+    for (const r of rules) {
+      if (r.type !== CSSRule.IMPORT_RULE) continue;
+      sheetCount++;
+      let n = -1;
+      try { n = r.styleSheet?.cssRules?.length ?? -1; } catch (_e) {}
+      const href = new URL(r.href, sheet.href || location.href).href;
+      if (n <= 0 && sameOrigin(href)) suspectSheets.push(href);
+      else if (n > 0) walk(r.styleSheet);
     }
-    if (!failed.length) sessionStorage.removeItem(_LOAD_RETRY_KEY);
-  } catch (_e) {}
+  };
+  for (const sheet of document.styleSheets) walk(sheet);
+  for (const l of document.querySelectorAll('link[rel="stylesheet"][href]')) {
+    if (l.disabled || !sameOrigin(l.href)) continue;
+    sheetCount++;
+    let n = -1;
+    try { n = l.sheet?.cssRules?.length ?? -1; } catch (_e) {}
+    if (n <= 0) suspectSheets.push(l.href);
+  }
+  const tags = [...document.querySelectorAll('script[type="module"][src]')].map(s => s.src).filter(sameOrigin);
+  const classic = document.querySelectorAll('script[src]:not([type="module"])').length;
+  let timedOut = false;
+  const probes = tags.map(u => import(u).then(() => {}, (e) => {
+    if (e?.name === "SyntaxError" || (e?.name === "TypeError" && /dynamically imported module|module script/i.test(e.message || ""))) lost.add(_shortFile(u));
+    else threw.push(_shortFile(u));   // It loaded and its own code threw: a bug, not a lost file, and a reload wouldn't help.
+  }));
+  await Promise.race([
+    Promise.allSettled(probes),
+    new Promise(res => setTimeout(() => { timedOut = true; res(); }, _LOAD_CHECK_TIMEOUT_MS))
+  ]);
+  await new Promise(res => setTimeout(res, 50));   // Finished downloads reach the timeline a moment after the import settles.
+  for (const e of performance.getEntriesByType("resource")) {
+    if (e.startTime < t0 || !sameOrigin(e.name) || !/\.m?js(\?|$)/.test(e.name)) continue;
+    const f = _shortFile(e.name);
+    if (e.responseStatus === 404) gone.add(f);   // Really not on the server, so a reload wouldn't help.
+    else lost.add(f);
+  }
+  const heard = [...new Set(globalThis.__bbttccLostTags || [])].filter(sameOrigin);
+  await Promise.all([...heard.map(u => verify(u, false)), ...[...new Set(suspectSheets)].map(u => verify(u, true))]);
+  for (const f of gone) lost.delete(f);
+  return { checked: tags.length + classic + sheetCount, heard: heard.length, ms: Math.round(performance.now() - t0), timedOut, lost: [...lost], gone: [...gone], threw };
+}
+let _loadCheck = Promise.resolve(null);
+Hooks.once("init", () => {
+  _loadCheck = _checkLoadedFiles().then((r) => {
+    _logLoad(r);
+    const tries = Number(sessionStorage.getItem(_LOAD_RETRY_KEY)) || 0;
+    if (r.gone.length || r.threw.length) console.warn("[bbttcc-core] page load check, not lost files:", { gone: r.gone, threw: r.threw });
+    if (r.lost.length && tries < 3) {
+      sessionStorage.setItem(_LOAD_RETRY_KEY, String(tries + 1));
+      console.warn(`[bbttcc-core] page load missing ${r.lost.length} file(s), reloading (try ${tries + 1} of 3):`, r.lost);
+      location.reload();
+    } else if (!r.lost.length) sessionStorage.removeItem(_LOAD_RETRY_KEY);
+    return r;
+  }).catch((e) => { console.warn("[bbttcc-core] page load check failed", e); return null; });
 });
-Hooks.once("ready", () => {
+Hooks.once("ready", async () => {
   try {
-    const failed = _failedLoadFiles();
-    if (!failed.length) return;
-    console.error("[bbttcc-core] this page load is missing files:", failed);
-    ui.notifications?.error?.(`This page load is missing ${failed.length} file(s), so some features may not work. Press F5 to reload.`, { permanent: true });
+    const r = await _loadCheck;
+    if (!r?.lost?.length) return;
+    console.error("[bbttcc-core] this page load is missing files:", r.lost);
+    ui.notifications?.error?.(`This page load is missing ${r.lost.length} file(s), so some features may not work. Press F5 to reload.`, { permanent: true });
   } catch (_e) {}
 });

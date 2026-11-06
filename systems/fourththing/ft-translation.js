@@ -1,3 +1,9 @@
+// Round 4 (2026-11-06): the page load check in bbttcc-core needs to hear failed scripts, and this is the first file of ours to run, so it starts listening here.
+if (!globalThis.__bbttccLostTags) {
+  const lostTags = globalThis.__bbttccLostTags = [];
+  window.addEventListener("error", (e) => { if (e.target?.tagName === "SCRIPT" && e.target.src) lostTags.push(e.target.src); }, true);
+}
+
 // Roll for Initiation — ft-translation.js  v0.3.0
 // Foundation pass: imported-text translation — legacy D&D terms → Roll for Initiation vocabulary
 //
