@@ -9,6 +9,11 @@
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
 
   const TEXT = {
+    allesh_gilliam_plumb_tower_exterior: `The cistern of the old water tower is an office now. The curtains are drawn. Wick mentioned he doesn’t leave the tower much.
+
+Best know what’s happening. Can’t be any weirder than what you’ve already seen.
+
+I shouldn’t have said that.`,
     ag_wick_the_bed: `“I keep all of my things there, that I need sometimes but don’t need as I walk.
 
 “I sleep on the road. So I don’t need a bed.
