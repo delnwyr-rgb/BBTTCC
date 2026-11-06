@@ -53,6 +53,17 @@ Again, welcome my friends! I hope we speak again!”
 And without waiting for anyone to do anything except blink, he hurries away down the street and vanishes into the dust.`
   };
 
+  // Part of a beat's text swapped, leaving its return-visit spans alone.
+  const SWAPS = [{
+    beat: "allesh_gilliam_waiting_room_intro",
+    from: `Doc Greeley, one of the rare Eidolons to call Bad Eden home, pours like she's writing prescriptions, and the room is loud in the specific way of people who survived something together and have agreed to discuss anything else. In the cellar there's one room kept spotless, with the cellar door shut. Nobody jokes in there.`,
+    to: `Doc Greeley, one of the rare Eidolons to call Bad Eden home, has the haunted look in her eyes of an early game NPC with a complicated backstory but no real character arc.
+
+She is definitely a doctor who has seen some shit.
+
+In the cellar there's one room kept spotless, with the cellar door shut. Nobody jokes in there.`
+  }];
+
   const REPLIES = [{
     id: "ans_allesh_gilliam_waiting_room_intro_wick_sent_us",
     parent: "allesh_gilliam_waiting_room_intro",
@@ -78,6 +89,12 @@ This is the town in which you now reside!`
     const b = find(beatId); if (!b) throw new Error(`no beat ${beatId}`);
     const next = fit(text, b.description);
     if (b.description !== next) { b.description = next; report.text.push(beatId); }
+  }
+
+  for (const s of SWAPS) {
+    const b = find(s.beat); if (!b) throw new Error(`no beat ${s.beat}`);
+    if (String(b.description).includes(s.from)) { b.description = b.description.replace(s.from, s.to); report.text.push(s.beat); }
+    else if (!String(b.description).includes(s.to)) throw new Error(`swap text not found in ${s.beat}`);
   }
 
   for (const r of REPLIES) {

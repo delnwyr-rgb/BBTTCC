@@ -8336,6 +8336,14 @@ function _placementSceneId(rule) {
   return null;
 }
 
+// Round 4 (2026-11-05): rule.sceneIds = one rule, several maps (Mara in the Arc Bay interior and its back room during the Weeping Prisoner).
+function _placementSceneIds(rule) {
+  const many = Array.isArray(rule?.sceneIds) ? rule.sceneIds.map(s => String(s || "").replace(/^Scene\./, "").trim()).filter(s => s && game.scenes?.get?.(s)) : [];
+  if (many.length) return many;
+  const one = _placementSceneId(rule);
+  return one ? [one] : [];
+}
+
 async function _placementRuleMatches(rule, campaign) {
   const conds = rule?.when;
   if (!conds || (Array.isArray(conds) && !conds.length)) return true;   // default spot
@@ -8370,9 +8378,9 @@ async function _reconcileNpcPlacementsOnce({ sceneId = null, reason = "manual" }
         if (await _placementRuleMatches(rule, campaign)) { desired = rule; break; }
       }
       if (!desired) continue;                                   // no opinion — leave the world alone
-      const desiredSceneId = _placementSceneId(desired);
+      const desiredSceneIds = _placementSceneIds(desired);
       const here = scene.tokens.filter(t => t.actorId === actor.id);
-      if (desiredSceneId === scene.id) {
+      if (desiredSceneIds.includes(scene.id)) {
         if (!here.length) {
           const td = await actor.getTokenDocument({
             x: Number.isFinite(desired.x) ? desired.x : Math.round(scene.width / 2),
@@ -8383,7 +8391,7 @@ async function _reconcileNpcPlacementsOnce({ sceneId = null, reason = "manual" }
           changed++;
           log(`[placement] ${actor.name} appears in '${scene.name}' (${reason}).`);
         }
-      } else if (desiredSceneId && here.length && !desired.alsoElsewhere) {   // Round 4 (2026-11-05): alsoElsewhere = home spot only; staged tokens on other maps stay (Pike's on the Siege)
+      } else if (desiredSceneIds.length && here.length && !desired.alsoElsewhere) {   // Round 4 (2026-11-05): alsoElsewhere = home spot only; staged tokens on other maps stay (Pike's on the Siege)
         await scene.deleteEmbeddedDocuments("Token", here.map(t => t.id));
         changed++;
         log(`[placement] ${actor.name} is elsewhere now — removed from '${scene.name}' (${reason}).`);
