@@ -2499,12 +2499,25 @@ function _ftSkillKeyFor(stat) {
 // miss beats to read alike — same label, same exits — and let only the hit set the mark downstream gates read.
 async function _withSecretRollMode(choice, fn) {
   if (!choice || choice.secret !== true) return fn();
-  let prev = null; try { prev = game.settings.get("core", "rollMode"); } catch (_e) {}
-  try { await game.settings.set("core", "rollMode", "blindroll"); } catch (_e) {}
+  // Round 4 (2026-11-05): Foundry v14 moved this to core.messageMode; core.rollMode reads null and does nothing, so every "secret" check rolled in public.
+  const key = game.settings.settings.has("core.messageMode") ? "messageMode" : "rollMode";
+  const hidden = key === "messageMode" ? "blind" : "blindroll";
+  let prev = null; try { prev = game.settings.get("core", key); } catch (_e) {}
+  try { await game.settings.set("core", key, hidden); } catch (_e) {}
   try { return await fn(); }
-  finally { try { if (prev != null) await game.settings.set("core", "rollMode", prev); } catch (_e) {} }
+  finally { try { if (prev != null) await game.settings.set("core", key, prev); } catch (_e) {} }
 }
 async function _rollChoiceCheck(choice, ctx={}) {
+  // Dave 2026-11-05: a secret check is the GM rolling for the table. Every seated Steward rolls, and anyone making it gets the result.
+  if (choice?.secret === true && !ctx.__secretSeat && !String(choice.checkStat || "").trim().toLowerCase().startsWith("op.")) {
+    const seated = [...new Set((game.users?.contents ?? []).filter(u => !u.isGM && u.character).map(u => u.character))];
+    if (seated.length) {
+      const rows = [];
+      for (const a of seated) rows.push({ actor: a, res: await _rollChoiceCheck(choice, { ...ctx, rosterActorId: a.id, __secretSeat: true }) });
+      const best = rows.reduce((x, y) => (_num(y.res?.total, 0) > _num(x.res?.total, 0) ? y : x));
+      return { ...best.res, secretRolls: rows.map(r => ({ name: r.actor.name, total: r.res?.total ?? null, ok: !!r.res?.ok })) };
+    }
+  }
   const stat = String(choice.checkStat || "").trim().toLowerCase();
   const dc = _num(choice.checkDC, 0);
   const supportKey = String((ctx.supportOpKey || (ctx.support || {}).opKey) || "").trim().toLowerCase();
@@ -2922,7 +2935,8 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
         choicesHidden: facChoicesHidden,
         canPick: facCanPick,
         pickToken: facPickToken,
-        choices: facChoicesHidden ? [] : choices.map(function (ch, i) {
+        // secret choices are the GM's to call; players never see their label (with player-pick the indices must stay aligned)
+        choices: facChoicesHidden ? [] : choices.filter(function (ch) { return facCanPick || !(ch && ch.secret === true); }).map(function (ch, i) {
           return {
             label: ch && ch.label ? ch.label : ('Choice ' + (i + 1)),
             description: _stripGmNotes(_expandStoryTokens(String(ch && ch.description ? ch.description : '').trim(), undefined, { raw: true })),   // round 2 E2 + story tokens (plain text: the mirror escapes it)
