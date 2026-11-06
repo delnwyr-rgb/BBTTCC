@@ -1886,7 +1886,7 @@ async function _choiceHidden(beat, ch, campaign, ctx = {}) {
 //   "soft" — the success beat has played, is repeatable, and is a QUESTION of this menu (an ans_* beat, or a beat that
 //            routes back to this one): greyed, ✓, still clickable (re-read the answer).
 // Exits never grey: no next, or a Leave / Back / Return / Call it a day / Ride / Onward label.
-const _EXIT_LABEL = /^\W*(leave|back\b|return|call it a day|ready to move on|ride\b|onward|go back|actually\b|not this one|not yet|not today|climb back|another time|stay a while)/i;   // 2026-11-02 click-through: "Climb back up. Another time." greyed as done
+const _EXIT_LABEL = /^\W*(go in\b|leave|back\b|return|call it a day|ready to move on|ride\b|onward|go back|actually\b|not this one|not yet|not today|climb back|another time|stay a while)/i;   // 2026-11-02 click-through: "Climb back up. Another time." greyed as done
 const __inboundCache = new WeakMap();
 function _inboundRoutes(campaign, id) {
   const beats = Array.isArray(campaign?.beats) ? campaign.beats : []; let m = __inboundCache.get(beats);
