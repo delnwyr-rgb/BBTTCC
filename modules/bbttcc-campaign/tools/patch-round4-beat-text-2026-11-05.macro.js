@@ -9,6 +9,13 @@
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
 
   const TEXT = {
+    ag_vacancy_pilgrim_wick: `He’s in the lounge with his boots off, but his relaxation is immediately replaced with enthusiasm as he sees you approaching!
+
+“Hello Stewards! So glad to see you.”
+
+He stands, almost to attention, and grins broadly in what appears to be genuine gladness.
+
+“How may I be of assistance?”`,
     ag_wick_the_order: `“The Old Routes,” he says which, to be fair, would need to be followed by a word like “Delaware” or “France” to be an actual answer, but frustratingly it does not.
 
 Instead, “We go where the flame is thin.”
@@ -314,6 +321,26 @@ And with that she writes “gentleman and scholar” next to Wick’s name in th
   for (const [beatId, next] of [["ag_wick_the_shrines", "ag_wick_shrines_later"], ["ag_wick_the_bed", "ag_wick_the_slate"]]) {
     const ch = (find(beatId)?.choices || []).find(x => x.next === next);
     if (ch && !ch.requires) { ch.requires = [{ flag: "storyPhase", gte: 2 }]; report.text.push(`Act 2 only: ${next}`); }
+  }
+
+  // Dave: Wick's hub is a greeting; his itinerary and the questions come when the Stewards ask about him. "Ask something else" returns to the questions, not the hello.
+  const WICK_HUB = "ag_vacancy_pilgrim_wick", WICK_ABOUT = "ag_vacancy_pilgrim_wick_about";
+  const wickHub = find(WICK_HUB);
+  if (!find(WICK_ABOUT)) {
+    const about = foundry.utils.deepClone(wickHub);
+    for (const k of ["questId", "questStep", "questRole", "story", "digest", "nextLine"]) delete about[k];
+    Object.assign(about, { id: WICK_ABOUT, label: "Allesh-Gilliam — The Guest Who Keeps Vigil — About Himself", timeScale: "moment", timePoints: 0, dialogueOffer: false,
+      description: `He tells you where he's been: St Gilliam's for the candles, the high shrines above Khezek Tor, and here, for the bed he doesn't use.` });
+    about.inject = { ...about.inject, repeatable: true, evergreen: true };
+    wickHub.choices = [
+      { label: "Actually, we’re curious about you! Tell us about yourself, Pilgrim Wick!", next: WICK_ABOUT, description: "", checkStat: "", checkDC: 0, failNext: "" },
+      ...(wickHub.choices || []).filter(x => /^Leave him/.test(x.label))
+    ];
+    beats.splice(beats.indexOf(wickHub) + 1, 0, about);
+    report.text.push("Wick: greeting hub + about beat");
+  }
+  for (const x of beats) if (x.id !== WICK_HUB && x.id !== WICK_ABOUT) for (const ch of (x.choices || [])) {
+    if (ch.next === WICK_HUB && /^Ask something else/.test(ch.label)) { ch.next = WICK_ABOUT; report.text.push(`${x.id}: back to the questions`); }
   }
 
   // Dave: Offices of Fates and Destinies is no longer a quest. Thatward's Ho stays, on its own, with the new line.
