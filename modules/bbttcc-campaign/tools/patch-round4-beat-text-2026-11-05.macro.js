@@ -294,6 +294,10 @@ And with that she writes “gentleman and scholar” next to Wick’s name in th
     report.text.push("Vacancy: Verna's reply");
   }
 
+  // Dave: Wick isn't suspicious in this act, so the old routes carry no suspicion check.
+  const oldRoutes = find("ag_vacancy_pilgrim_wick_routes");
+  if ((oldRoutes?.choices || []).some(x => x.next === "ag_tallow_wick_routes_hit")) { oldRoutes.choices = oldRoutes.choices.filter(x => x.next !== "ag_tallow_wick_routes_hit"); report.text.push("Old Routes: no suspicion check"); }
+
   // Dave: Offices of Fates and Destinies is no longer a quest. Thatward's Ho stays, on its own, with the new line.
   const tw = find("thatwards_ho_opening_scene");
   if (tw?.story?.chapter) { delete tw.story.chapter; report.text.push("Thatwards Ho: no chapter"); }
