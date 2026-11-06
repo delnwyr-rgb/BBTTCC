@@ -114,6 +114,10 @@ And without waiting for anyone to do anything except blink, he hurries away down
 
   // Part of a beat's text swapped, leaving its return-visit spans alone.
   const SWAPS = [{
+    beat: "ag_vacancy_pilgrim_wick",
+    from: `Verna doesn't lower her voice, because she wants him to hear it. "I didn't trust him. A man who pays for a bed and never sleeps in it, what's he doing all night? Then I worked it out. Nothing. He's out on the road being a saint, and I've got a room I never turn down, sheets I never wash, and rent to the mark every week since the night of the Cough. He fixed the ice machine. He carried the Hendersons' piano. Favorite guest." She points her pen at you. "Don't tell the others."`,
+    to: `@@STRUCK@@`
+  }, {
     beat: "allesh_gilliam_vacancy_exterior",
     from: ` Verna keeps the ledger; the ledger keeps everyone else.`,
     to: ``
@@ -180,7 +184,8 @@ This is the town in which you now reside!`
 
   for (const s of SWAPS) {
     const b = find(s.beat); if (!b) throw new Error(`no beat ${s.beat}`);
-    if (String(b.description).includes(s.from)) { b.description = b.description.replace(s.from, s.to); report.text.push(s.beat); }
+    if (String(b.description).includes(s.from)) { b.description = s.to === "@@STRUCK@@" ? b.description.replace(s.from, "").replace(/\n{3,}/g, "\n\n") : b.description.replace(s.from, s.to); report.text.push(s.beat); }
+    else if (s.to === "@@STRUCK@@") continue;
     else if (!String(b.description).includes(s.to)) console.warn("R4TEXT swap text not found in", s.beat, s.from.slice(0, 50));
   }
 
