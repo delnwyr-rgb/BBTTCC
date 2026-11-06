@@ -36,6 +36,9 @@
       ch("Head out — the Crossroads", CROSS, "Marshal Pike gets his parking back, at least temporarily."));
     report.text.push("Reliable: hub choices");
   }
+  // Dave's text for the card.
+  const LEASE_TEXT = "Young Gearbox left the paperwork on the galley table, weighted with a hyperspanner. He must have liked you after all.\n\nHe also left a card, with shaky handwriting in block letters. \u201CTHE ABSOLUTELY RELIABLE. 3 TURN LEASE. CERTIFIED BY ME. SHE LIKES BEING TALKED TO.\u201D\n\nUnder that, in a smaller, much neater hand - \u201CLease her or buy her. - Mara Quickhands\u201D";
+  if (hub.description !== LEASE_TEXT) { hub.description = LEASE_TEXT; report.text.push("Reliable: lease card text"); }
   // Dave: the old "Sit with..." label was confusing.
   const craft = hub.choices.find(x => x.next === SIG);
   if (craft && craft.label !== "Craft your Signature Manifestation, if you haven't yet done so.") { craft.label = "Craft your Signature Manifestation, if you haven't yet done so."; report.text.push("Reliable: Signature label"); }
