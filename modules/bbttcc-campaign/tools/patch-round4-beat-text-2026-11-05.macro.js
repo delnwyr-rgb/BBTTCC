@@ -9,6 +9,19 @@
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
 
   const TEXT = {
+    ag_wick_the_bed: `“I keep all of my things there, that I need sometimes but don’t need as I walk.
+
+“I sleep on the road. So I don’t need a bed.
+
+“Sometimes I find really super cool rocks and sticks and bring them back and —”
+
+From around the corner Verna says in a raised voice, “One of them was cursed.”
+
+“And yes Verna, I was about to say super cool rocks and sticks and cursed sticks, and everything is fine, and the horse changed back.”
+
+“I wasn’t complaining.”
+
+Wick looks relieved.`,
     ag_wick_the_shrines: `“Up the switchbacks around Khezek Tor. I try to place one every hour of my climb, in someplace that the wind can’t reach but travelers can see. A crevasse, a stone, a candle. It’s beautiful. It’s reassuring.
 
 “And it helps people see at night on those switchbacks which is SUPER important.”
