@@ -9,7 +9,7 @@
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
 
   const TEXT = {
-    ag_tamsin_answer_building: `I’m pretty sure you know the answer to this, as it’s been mentioned in previous boxed text, but here’s the TL;DR
+    ag_tamsin_answer_building: `“I’m pretty sure you know the answer to this, as it’s been mentioned in previous boxed text, but here’s the TL;DR
 
 “This used to be a church. Since god is more of an occupation now - not much use for such things. They’re as out of place as that one thing that you see in a group of other things that doesn’t belong.” He makes a grimace, takes out a small notebook, and crosses something out.
 
