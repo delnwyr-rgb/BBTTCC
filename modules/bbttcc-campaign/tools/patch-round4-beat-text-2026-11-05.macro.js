@@ -255,6 +255,12 @@ This is the town in which you now reside!`
   }
   if (held) report.text.push(`exteriors at 5s: ${held}`);
 
+  // Round 4: these town beats had no player-facing flag, so their text never reached a player's seat and the last card stayed up.
+  for (const id of ["allesh_gilliam_vacancy_intro", "allesh_gilliam_waiting_room_intro", "allesh_gilliam_plumb_office_intro", "allesh_gilliam_muster_intro", "allesh_gilliam_st_gilliams_cinematics"]) {
+    const x = find(id);
+    if (x && !x.playerFacing) { Object.assign(x, { playerFacing: true, playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true }); report.text.push(`player-facing: ${id}`); }
+  }
+
   // Dave: Offices of Fates and Destinies is no longer a quest. Thatward's Ho stays, on its own, with the new line.
   const tw = find("thatwards_ho_opening_scene");
   if (tw?.story?.chapter) { delete tw.story.chapter; report.text.push("Thatwards Ho: no chapter"); }
