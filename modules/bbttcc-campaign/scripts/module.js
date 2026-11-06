@@ -1920,7 +1920,10 @@ function _choiceSpent(ch, campaign, fromBeatId = null) {
     if (fromBeatId) {
       const byId = (id) => (campaign?.beats || []).find(b => String(b?.id) === String(id));
       const leadsTo = (b, id) => (b?.choices || []).some(c => String(c?.next || "") === String(id));
-      if (leadsTo(tgt, fromBeatId) || (tgt.choices || []).some(c => leadsTo(byId(c?.next), fromBeatId))) return false;
+      // Only going BACK counts: the target was first seen before this beat. The Round's doors also loop home, but they lie ahead of it, so they keep their ✓.
+      const seen = _storyStateFor(campaign?.id)?.played || {};
+      const earlier = Number(seen[next]?.firstTs) < Number(seen[String(fromBeatId)]?.firstTs);
+      if (earlier && (leadsTo(tgt, fromBeatId) || (tgt.choices || []).some(c => leadsTo(byId(c?.next), fromBeatId)))) return false;
     }
     if (tgt.inject?.repeatable !== true) return "lock";
     const from = String(fromBeatId || "");
