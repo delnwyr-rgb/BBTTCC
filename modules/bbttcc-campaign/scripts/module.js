@@ -8383,7 +8383,7 @@ async function _reconcileNpcPlacementsOnce({ sceneId = null, reason = "manual" }
           changed++;
           log(`[placement] ${actor.name} appears in '${scene.name}' (${reason}).`);
         }
-      } else if (desiredSceneId && here.length) {
+      } else if (desiredSceneId && here.length && !desired.alsoElsewhere) {   // Round 4 (2026-11-05): alsoElsewhere = home spot only; staged tokens on other maps stay (Pike's on the Siege)
         await scene.deleteEmbeddedDocuments("Token", here.map(t => t.id));
         changed++;
         log(`[placement] ${actor.name} is elsewhere now — removed from '${scene.name}' (${reason}).`);
