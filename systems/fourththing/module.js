@@ -16946,7 +16946,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
     // Surge one-shots (consumer side). Read BEFORE formula build so wrath-cascade
     // and cinderwake can mutate dice; tier-surge / final-argument adjust the
-    // scalar bonus; snap-strike adds a reroll-lowest grant post-roll.
+    // scalar bonus; snap-strike adds a die to the pool.
     const _surge = _ftReadSurgeOneShots(actor, { context: "strike" });
     const tierVal = _ftCasterTier(actor);
     const tierBonus = (_surge.tierSurge || _surge.finalArgument) ? tierVal : 0;
@@ -17002,7 +17002,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // attack and is consumed by it.
     const _imposedAttack = !!game.fourththing.impose?.isImposed?.(actor);
     if (_imposedAttack) { try { await game.fourththing.impose.consume(actor, "attack"); } catch (_e) {} }
-    const _attkMode    = _ftResolveRollMode({ user: rollMode, forcedDis: _abDisAttack || _rangedKineticUnderwater || _imposedAttack });
+    let   _attkMode    = _ftResolveRollMode({ user: rollMode, forcedDis: _abDisAttack || _rangedKineticUnderwater || _imposedAttack });
+    // Round 4 (2026-11-06): Snap Strike promises advantage, so it adds a real die and keeps the best 2. It was a reroll-lowest that
+    // showed nothing when the new die was no better, and did nothing at all beside a Proficient reroll. It keeps the roll's explosions,
+    // and it cancels disadvantage instead of adding a die.
+    const _snapDie     = (_surge.snapStrike && _attkMode !== "disadvantage") ? 1 : 0;
+    if (_surge.snapStrike && _attkMode === "disadvantage") _attkMode = "normal";
     const _rankClamped = Math.max(0, Math.min(5, Number(skillVal) || 0));
     const _rankData    = SKILL_RANK_DATA[_rankClamped] ?? SKILL_RANK_DATA[0];
     const _masterPool  = _rankClamped >= 4;                       // Master / Legendary
@@ -17010,7 +17015,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
     const surgeAllowed = _ftSurgeAllowed(actor);
     const explodes     = (_attkMode === "normal") && surgeAllowed;
-    const baseN        = 2 + (_attkMode !== "normal" ? 1 : 0) + (_masterPool ? 1 : 0);
+    const baseN        = 2 + (_attkMode !== "normal" ? 1 : 0) + (_masterPool ? 1 : 0) + _snapDie;
     const dropCount    = baseN - 2;
     // Disadvantage keeps the WORST 2 — unless Master/Legendary, whose pool always
     // keeps the BEST 2 (the rank layers on top, mitigating disadvantage).
@@ -17040,7 +17045,6 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const rerollGrants = collectRerolls(actor, { context: "attack", skill, attribute: intent, target: target?.actor ?? target ?? null });
     consumeBankedBonus(actor, _atkCb).catch(() => {});
     if (_rankData.mechanic === "reroll_low") rerollGrants.push({ sourceItemName: `${ftCap(skill)} · Proficient`, mode: "reroll-lowest" });
-    if (_surge.snapStrike) rerollGrants.push({ sourceItemName: "Surge: Snap Strike", mode: "reroll-lowest" });
     // NPC automation (2026-10-06): "rerolls the lowest die on attacks against a creature that hasn't acted" & kin
     let _npcAtkMods = { rerolls: [], damage: null };
     try { _npcAtkMods = game.fourththing.npcAuto?.attackMods?.(actor, itemUuid ? fromUuidSync(itemUuid) : null, target?.actor ?? target) ?? _npcAtkMods; } catch (_e) {}
