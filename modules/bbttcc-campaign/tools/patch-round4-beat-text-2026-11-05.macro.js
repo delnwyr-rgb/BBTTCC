@@ -261,6 +261,34 @@ This is the town in which you now reside!`
     if (x && !x.playerFacing) { Object.assign(x, { playerFacing: true, playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true }); report.text.push(`player-facing: ${id}`); }
   }
 
+  // Dave: story text reaches players. Every beat with no player-facing setting at all gets one; beats explicitly set off stay off.
+  const PF = ["playerFacing", "playerFacingDialog", "dialogPlayerFacing", "playerFacingContent", "showToPlayers"];
+  let pfOn = 0;
+  for (const x of beats) if (PF.every(k => x[k] === undefined)) { for (const k of PF) x[k] = true; pfOn++; }
+  if (pfOn) report.text.push(`player-facing on: ${pfOn}`);
+
+  // Dave: the Stewards know Wick, so Verna gets asked about him by name.
+  const vacancy = find("allesh_gilliam_vacancy_intro");
+  const VERNA_REPLY = "ans_allesh_gilliam_vacancy_intro_is_that_wick";
+  const guest = (vacancy.choices || []).find(x => x.next === "ag_vacancy_pilgrim_wick");
+  if (guest) { Object.assign(guest, { label: "Hey, is that Pilgrim Wick?", next: VERNA_REPLY, description: "" }); report.text.push("Vacancy: Wick choice renamed"); }
+  if (!find(VERNA_REPLY)) {
+    const reply = foundry.utils.deepClone(find("ag_greeley_answer_cough"));
+    for (const k of ["questId", "questStep", "questRole", "story", "digest", "nextLine"]) delete reply[k];
+    Object.assign(reply, { id: VERNA_REPLY, label: "Allesh-Gilliam — The Vacancy — Hey, is that Pilgrim Wick?", tags: "arrival verna wick", timeScale: "moment", timePoints: 0, dialogueOffer: false,
+      speakerActorId: game.actors.getName("Verna Tulliver")?.id || null,
+      description: `“Yep. He pays on time every time, never sleeps in his bed so I don’t have to clean it up. A gentleman and a scholar in my book.”
+
+And with that she writes “gentleman and scholar” next to Wick’s name in the book.`,
+      choices: [
+        { label: "Go talk to Pilgrim Wick", next: "ag_vacancy_pilgrim_wick", description: "", checkStat: "", checkDC: 0, failNext: "" },
+        { label: "Leave", next: "allesh_gilliam_town_walk", description: "", checkStat: "", checkDC: 0, failNext: "" }
+      ] });
+    reply.inject = { ...reply.inject, repeatable: true, evergreen: true, requires: [{ flag: "storyPhase", gte: 1 }] };
+    beats.splice(beats.indexOf(vacancy) + 1, 0, reply);
+    report.text.push("Vacancy: Verna's reply");
+  }
+
   // Dave: Offices of Fates and Destinies is no longer a quest. Thatward's Ho stays, on its own, with the new line.
   const tw = find("thatwards_ho_opening_scene");
   if (tw?.story?.chapter) { delete tw.story.chapter; report.text.push("Thatwards Ho: no chapter"); }
