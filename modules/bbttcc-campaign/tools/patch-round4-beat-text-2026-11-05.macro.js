@@ -15,7 +15,7 @@ A man - obviously Father Tamsin, he moves like he owns the scene - approaches yo
 
 “Ah, Stewards. I had hoped you’d stop by for a nosh and a sit. Both are present here in LOADS. Whereas St Gilliam’s was once a church, now it helps people, providing for their material needs.
 
-You seem to be being followed by children who are walking in a strangely majestic fashion. Shoo Tormasiin! Begone Avilaara! Cann’t you see the Stewards want rest, not tiny gyrating shadows!”
+You seem to be being followed by children who are walking in a strangely majestic fashion. Shoo Tormasiin! Begone Avilaara! Can’t you see the Stewards want rest, not tiny gyrating shadows!”
 
 The children laugh and scram. Tamsin looks after them fondly.
 
@@ -83,7 +83,7 @@ And without waiting for anyone to do anything except blink, he hurries away down
 Scar across the jaw. Wears a tri-corner hat unironically and rocks it. Eyes that measure distances automatically. He measures yours.
 
 Uncomfortable.`,
-    to: `Marshal Yarrow Pike, (you find out later that Marshal is his first name), doesn’t straighten up as you enter, but rather remains leaning, in a precisely, measured, calculated way designed to evince the UTMOST sense of unimpressed-ness.
+    to: `Marshal Yarrow Pike, (you find out later that Marshal is his first name), doesn’t straighten up as you enter, but rather remains leaning, in a precisely measured, calculated way designed to evince the UTMOST sense of unimpressed-ness.
 
 He has a perpetually disappointed vibe - like nothing has ever really measured up in his eyes - and he is not expecting his life to change anytime soon.
 
