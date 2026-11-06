@@ -1316,6 +1316,7 @@ function ftSetUserTargets(tokens) {
 }
 
 async function ftOpenEngageDialog(actor, item, options = {}) {
+  if (ftWarnIfIncapacitated(actor)) return;
   if (!actor || !item) return;
 
   // AoE weapon abilities (Frag Grenade & friends, playtest 2026-06-06): when a
@@ -2111,6 +2112,23 @@ const FT_EFFECT_MOD_LABELS = Object.freeze({
 // Distance between two tokens in scene feet. Uses center-to-center Euclidean
 // distance and the scene's grid distance unit. Sufficient for ranged chain
 // fall-off; diagonal-five-ten edge cases aren't material at this granularity.
+// Round 4 (2026-11-06): the table counts whole squares, never single feet. On a square grid a distance is the
+// grid's own path cost under the scene's diagonal rule, rounded up to a whole square. Null on hex or gridless scenes.
+function _ftGridFt(grid, a, b) {
+  try {
+    if (!grid || grid.type !== CONST.GRID_TYPES.SQUARE || typeof grid.measurePath !== "function") return null;
+    const d = Number(grid.measurePath([a, b])?.distance);
+    const step = Number(grid.distance) || 5;
+    return Number.isFinite(d) ? Math.ceil((d - 1e-6) / step) * step : null;
+  } catch (_e) { return null; }
+}
+const _ftIsIncapacitated = (actor) => !!actor?.flags?.fourththing?.gettingItTogether;
+function ftWarnIfIncapacitated(actor) {
+  if (!_ftIsIncapacitated(actor)) return false;
+  ui.notifications?.warn(`${actor.name} is Incapacitated and can't act.`);
+  return true;
+}
+
 function _ftDistanceBetweenTokens(tokenA, tokenB) {
   if (!tokenA || !tokenB) return Infinity;
   const grid = canvas?.grid;
@@ -2119,6 +2137,8 @@ function _ftDistanceBetweenTokens(tokenA, tokenB) {
   const ay = tokenA.y + (tokenA.h ?? tokenA.height ?? 0) / 2;
   const bx = tokenB.x + (tokenB.w ?? tokenB.width ?? 0) / 2;
   const by = tokenB.y + (tokenB.h ?? tokenB.height ?? 0) / 2;
+  const whole = _ftGridFt(grid, { x: ax, y: ay }, { x: bx, y: by });
+  if (whole !== null) return whole;
   const px = Math.hypot(ax - bx, ay - by);
   // grid.distance is the ft-per-square value (typically 5). grid.size is the
   // pixel-width of one square. ft = pixels × (distance / size).
@@ -8423,6 +8443,7 @@ async function _ftCascadeRigDestruction(rigActor) {
 // HUD can open the exact same cast flow without a sheet instance. Behavior is
 // identical — _onFtCast now just calls this with (actor, item).
 function ftOpenCastDialog(actor, item) {
+  if (ftWarnIfIncapacitated(actor)) return;
   if (!actor) return;
   const rawSys  = actor.system?.system ?? actor.system;
   const intent  = item?.system?.intent   ?? "presence";
@@ -11702,6 +11723,7 @@ FT.CONDITIONS = {
   restrained: { label: "Restrained", color: "#3dd6c0", desc: "Cannot move; Evasion reduced to base 10."           },
   charmed:    { label: "Charmed",    color: "#e07ec6", desc: "Cannot take hostile action against the source; source has reroll-lowest on social checks against you." },
   compelled:  { label: "Compelled",  color: "#7d3cff", desc: "On your turn you must spend at least one action toward a directive named by the source; otherwise you may act freely." },
+  incapacitated: { label: "Incapacitated", color: "#6a3a8a", desc: "Stress reduced to 0. You cannot act. Roll Getting It Together at the start of each of your turns: 3 successes → back up at 1 Stress. 3 failures → out for the fight." },
   dying:      { label: "Dying",      color: "#8b0000", desc: "Integrity reduced to 0. Make a Last Stand roll at the start of each of your turns. 3 successes → stabilize at 1 Integrity. 3 failures → Cross the Threshold." },
   surprise:   { label: "Surprised",  color: "#cc7a00", desc: "Cannot take any action on the first round of combat. Ends at the start of your next turn." },
   // Imposed (techniques ruling R5, 2026-09-21): the target's next attack roll or
@@ -19571,6 +19593,64 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (failures >= 3) await game.fourththing.deathMech.crossThreshold(actor);
   };
 
+  // ── Stress 0: Incapacitated + Getting It Together (Dave 2026-11-06) ───────
+  // The same roll as Last Stand, for the Stress track. Stewards roll at the start of each turn: both natural 10s or 3 successes
+  // bring them back at 1 Stress, any 1 is a failure, and 3 failures leave them out for the fight. Foes just drop. Stress above 0 clears it.
+  game.fourththing.deathMech.enterIncapacitated = async function (actor) {
+    if (!actor || _ftIsIncapacitated(actor)) return;
+    await actor.update({ "flags.fourththing.gettingItTogether": { successes: 0, failures: 0, ledger: [] } });
+    await _ftSyncConditionAE(actor, "incapacitated", true);
+    const isSteward = actor.type === "character";
+    if (!isSteward) {
+      for (const c of game.combats?.contents ?? []) {
+        const cb = c.combatants.find(x => x.actor?.uuid === actor.uuid || x.actorId === actor.id && x.actor === actor);
+        if (cb && !cb.defeated) await cb.update({ defeated: true });
+      }
+    }
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#c8a0ff">✖ ${ftEscapeHtml(actor.name)} is Incapacitated</span></div>
+        <p style="margin:0.2rem 0;font-size:0.82rem;opacity:0.85">${isSteward ? "Stress has hit 0. Roll Getting It Together at the start of each turn." : "Stress has hit 0. Out of the fight."}</p></div>`
+    });
+  };
+  game.fourththing.deathMech.clearIncapacitated = async function (actor) {
+    if (!actor || !_ftIsIncapacitated(actor)) return;
+    await actor.update({ "flags.fourththing.-=gettingItTogether": null });
+    await _ftSyncConditionAE(actor, "incapacitated", false);
+    if (actor.type !== "character") {
+      for (const c of game.combats?.contents ?? []) {
+        const cb = c.combatants.find(x => x.actor?.uuid === actor.uuid);
+        if (cb?.defeated) await cb.update({ defeated: false });
+      }
+    }
+  };
+  game.fourththing.deathMech.rollGettingItTogether = async function (actor) {
+    const st = actor?.flags?.fourththing?.gettingItTogether;
+    if (!st || (Number(st.failures) || 0) >= 3) return null;
+    const roll = new Roll(_ftXd10(actor));
+    await roll.evaluate();
+    const base = (roll.terms[0]?.results ?? []).slice(0, 2).map(r => r.result);
+    const vision = base.filter(v => v === 10).length >= 2;
+    const fail = !vision && base.includes(1);
+    const successes = (Number(st.successes) || 0) + (!vision && !fail ? 1 : 0);
+    const failures = (Number(st.failures) || 0) + (fail ? 1 : 0);
+    const label = vision ? "Clarity" : fail ? "Failure" : "Success";
+    await roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      flavor: `<div class="fourththing-roll"><h3 style="color:${fail ? "#ff8a8a" : "#27ae60"};margin:0">Getting It Together — ${label}</h3>
+        <p style="margin:0.2rem 0;font-size:0.82rem">Dice: <b>${base.join(", ")}</b> · Successes <b>${successes}/3</b> · Failures <b>${failures}/3</b></p></div>`
+    });
+    if (vision || successes >= 3) {
+      await game.fourththing.deathMech.clearIncapacitated(actor);
+      await actor.update({ "system.derived.stress.value": 1 });
+      await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#27ae60">✦ ${ftEscapeHtml(actor.name)} gets it together</span></div><p style="margin:0.2rem 0;font-size:0.82rem;opacity:0.85">Back up at 1 Stress.</p></div>` });
+      return { outcome: "stabilized", successes, failures };
+    }
+    await actor.update({ "flags.fourththing.gettingItTogether": { ...st, successes, failures, ledger: [...(st.ledger ?? []), { turn: game.combat?.round ?? 0, dice: base, ts: Date.now() }] } });
+    if (failures >= 3) await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#ff8a8a">✖ ${ftEscapeHtml(actor.name)} is out for the fight</span></div></div>` });
+    return { outcome: fail ? "failure" : "success", successes, failures };
+  };
+
   // ── Redemption ritual ─────────────────────────────────────────────────────
   // Commits (tier × 5) OP from the linked faction's bank (violence by default),
   // clears the Blood Debt ledger, revives the actor at 1 Integrity, and applies
@@ -20660,6 +20740,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         try { await game.fourththing.deathMech.rollLastStand(actor); }
         catch (err) { console.error("Roll for Initiation | Last Stand roll failed", err); }
       }
+      if (_ftIsIncapacitated(actor)) {
+        try { await game.fourththing.deathMech.rollGettingItTogether(actor); }
+        catch (err) { console.error("Roll for Initiation | Getting It Together failed", err); }
+      }
     }
 
     // Cosmic Linguist — Resonance auto-gain (1/round at start of CL's turn).
@@ -20878,7 +20962,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const newY = change.y ?? tokenDoc.y;
     const dx   = newX - tokenDoc.x;
     const dy   = newY - tokenDoc.y;
-    const distanceFt = Math.round((Math.hypot(dx, dy) / gridSize) * gridDist);
+    const distanceFt = _ftGridFt(canvas?.grid, { x: tokenDoc.x, y: tokenDoc.y }, { x: newX, y: newY }) ?? Math.round((Math.hypot(dx, dy) / gridSize) * gridDist);
     if (distanceFt <= 0) return;
     // 2026-05-20 — Pass cumulative-per-turn movement alongside the delta so
     // on-move triggers can predicate against "moved 30+ ft this turn"
@@ -21043,6 +21127,17 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (!ftBurnClassFor(actor) || ftBurnClassFor(actor).slug !== "aurablade") return;
     try { await syncAurabladeEffects(actor, null, ftBurnBandFor(actor).key); }
     catch (e) { console.warn("Roll for Initiation | aurablade auto-sync failed", e); }
+  });
+
+  // Stress → 0 detector: Incapacitated on the way down, cleared once Stress is back above 0. Stewards and foes alike.
+  Hooks.on("updateActor", async (actor, changes, _options, userId) => {
+    if (userId !== game.user.id) return;
+    const newStress = foundry.utils.getProperty(changes, "system.derived.stress.value");
+    if (newStress === undefined) return;
+    try {
+      if (newStress <= 0) await game.fourththing.deathMech.enterIncapacitated(actor);
+      else await game.fourththing.deathMech.clearIncapacitated(actor);
+    } catch (err) { console.error("Roll for Initiation | Incapacitated update failed", err); }
   });
 
   // Integrity → 0 detector: enters Last Stand on collapse; exits if healed above 0.

@@ -500,5 +500,18 @@
       }
     } catch (e) { console.warn(TAG, "reopen on load failed", e); }
   }, 1500));
+  // Round 4 (Dave 2026-11-06): ending the combat ends a Battle that was running beside it, so the bar goes and a refresh won't bring it back.
+  Hooks.on("deleteCombat", async () => {
+    try {
+      if ((game.combats?.contents ?? []).some(c => c.started && c.scene?.id === canvas?.scene?.id)) return;
+      const app = liveConsole();
+      if (app?.vm?.routes && !app.vm.routeFired) { app.vm.routeFired = "combat-ended"; await app.close?.(); }
+      if (!game.user?.isGM) return;
+      for (const a of game.actors?.contents ?? []) {
+        const s = a.getFlag?.("bbttcc-raid", "raidSession");
+        if (s?.by === "story" && s.activityKey === "violence" && !s.routeFired) await a.setFlag("bbttcc-raid", "raidSession", { ...s, routeFired: "combat-ended", rev: Number(s.rev || 0) + 1, ts: Date.now() });
+      }
+    } catch (e) { console.warn(TAG, "battle end on combat end failed", e); }
+  });
   console.log(TAG, "Conflict bar loaded (player seats)");
 })();

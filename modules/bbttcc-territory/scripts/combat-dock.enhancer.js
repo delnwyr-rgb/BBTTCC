@@ -607,7 +607,7 @@
         ${slotsHTML(s)}
         <span class="cd-spacer"></span>
         <span class="cd-target">${targetLineHTML(s)}</span>
-        <span class="cd-queued">${queuedHTML}</span>
+        <span class="cd-queued">${offerChips()}${queuedHTML}</span>
         ${canEnd ? `<button type="button" class="cd-end" data-dock="end"><i class="fas fa-forward"></i> End Turn</button>` : ""}
         <button type="button" class="cd-icon ${folded ? "" : "is-on"}" data-dock="bars" data-tooltip="${folded ? "Show Foundry's macro bar + sidebar" : "Fold Foundry's macro bar + sidebar away"}"><i class="fas fa-bars"></i></button>
         <button type="button" class="cd-icon" data-dock="collapse" data-tooltip="Shrink the dock"><i class="fas fa-chevron-down"></i></button>
@@ -644,6 +644,13 @@
       const s = subject(); if (!s) return;
       switch (b.dataset.dock) {
         case "fire": { const e = findEntry(s, b.dataset.g, b.dataset.k); if (e) activate(e, s); return; }
+        case "offer": {
+          const o = _offers.get(b.dataset.offer); _offers.delete(b.dataset.offer); render();
+          const msg = o ? game.messages?.get?.(o.msgId) : null; if (!msg) return;
+          const r = await game.fourththing?.triggers?.accept?.(msg);
+          if (r && !r.ok && r.reason) ui.notifications?.warn?.(r.reason);
+          return;
+        }
         case "surge": return IS_5E() ? game.surgePowers?.openMenu?.(s.actor) : hud()?.fire?.pool?.(s.actor, "surge");
         case "end": {
           if (_aim) endAim();
@@ -710,7 +717,13 @@
     if (s && (s.actor.id === actor.id || s.actor.uuid === actor.uuid)) return true;
     return !game.user.isGM && actor.isOwner && actor.type === "character";
   }
-  function reactionCard({ title, body, onTake }) {
+  // Round 4 (Dave 2026-11-06): an offer outlives its 8-second card. It waits on the dock as a chip until it's taken, passed or spent.
+  const _offers = new Map();
+  function offerChips() {
+    for (const [k, o] of _offers) { const m = game.messages?.get?.(o.msgId); if (!m || m.flags?.fourththing?.triggerOffer?.used) _offers.delete(k); }
+    return [..._offers.entries()].map(([k, o]) => `<button type="button" class="cd-q is-act" data-dock="offer" data-offer="${esc(k)}" data-tooltip="${esc(o.tip)}"><i class="fas fa-bolt"></i> ${esc(o.title.length > 30 ? `${o.title.slice(0, 29)}…` : o.title)}</button>`).join("");
+  }
+  function reactionCard({ title, body, onTake, onPass }) {
     let box = document.getElementById(REACT_ID);
     if (!box) { box = document.createElement("div"); box.id = REACT_ID; document.body.appendChild(box); }
     const secs = Number(setting("combatDockReactionSeconds", 8)) || 8;
@@ -727,6 +740,7 @@
       const b = ev.target.closest("button[data-r]"); if (!b) return;
       done();
       if (b.dataset.r === "take") { try { await onTake(); } catch (e) { warn("reaction take failed", e); } }
+      else { try { onPass?.(); } catch (_e) {} }
     });
   }
   function onChatForReactions(msg) {
@@ -738,10 +752,15 @@
       if (mineToAnswer(a)) {
         let title = "Reaction offer";
         try { const d = document.createElement("div"); d.innerHTML = msg.content ?? ""; title = d.querySelector(".ft-roll-name")?.textContent?.trim() || title; } catch (_e) {}
+        const key = `${off.actorUuid}::${off.itemId}::${off.triggerIndex}`;
+        let tip = title; try { const d = document.createElement("div"); d.innerHTML = msg.content ?? ""; tip = d.textContent.replace(/\s+/g, " ").trim(); } catch (_e) {}
+        _offers.set(key, { msgId: msg.id, title: title.replace(/^[^\p{L}]+/u, ""), tip });
+        renderSoon();
         reactionCard({ title, body: `${a.name} can react — take it?`, onTake: async () => {
+          _offers.delete(key); renderSoon();
           const r = await game.fourththing?.triggers?.accept?.(msg);
           if (r && !r.ok && r.reason) ui.notifications?.warn?.(r.reason);
-        } });
+        }, onPass: () => { _offers.delete(key); renderSoon(); } });
       }
       return;
     }

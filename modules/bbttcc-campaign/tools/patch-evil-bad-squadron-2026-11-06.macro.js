@@ -12,6 +12,13 @@
   const beats = foundry.utils.deepClone(c.beats);
   const ambush = beats.find(b => b.id === "first_road_ambush");
   if (ambush?.worldEffects?.raid?.defenderId !== ID) { ambush.worldEffects.raid.defenderId = ID; report.text.push("Ambush: defender is the Squadron"); }
+  // Dave: the only way into this fight, and the Aftermath is now called on its own card.
+  const STEWARD_LINE = "Show Bad Eden what it means to be a Steward of the Land.";
+  const steel = (ambush.choices || []).find(x => x.next === "first_road_ambush_results");
+  if (steel && steel.label !== STEWARD_LINE) { steel.label = STEWARD_LINE; report.text.push("Ambush: choice text"); }
+  const after = beats.find(b => b.id === "first_road_ambush_results");
+  const OLD_CALL = /<i>Call the Battle in the Domain Conflict console[\s\S]*?<\/i>/;
+  if (OLD_CALL.test(after?.description || "")) { after.description = after.description.replace(OLD_CALL, "<i>Call the fight here when it's over. If the party broke and ran, pick Run.</i>"); report.text.push("Aftermath: call it here"); }
   const evil = game.actors.getName("Evil Bad Faction");
   if (!game.actors.get(ID)) {
     report.text.push("Squadron: created");

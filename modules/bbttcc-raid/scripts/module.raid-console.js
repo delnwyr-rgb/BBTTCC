@@ -6308,7 +6308,12 @@ const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3MergeMode(__b3DefMode, 
 
     // ALPHA CUT ruling 21 — a Battle is fought on the battlemap; the GM calls it here. Dice = off-map fallback.
     let __battleCall = null;
-    if (_rcAlphaOn() && _rcIsBattleKey(r.activityKey) && r.targetType !== "creature") {
+    // Round 4 (Dave 2026-11-06): with a combat running on this scene, Battle rounds and combat rounds run side by side. Committing a
+    // round settles its marks and maneuvers, then opens the next Battle round and the next combat round. The fight's result is
+    // called on the Aftermath card when it's over, so this commit asks for no call, flips no ground and fires no story route.
+    const __concurrent = _rcIsBattleKey(r.activityKey) && r.targetType !== "creature"
+      && (game.combats?.contents ?? []).some(c => c.started && c.scene?.id === canvas?.scene?.id);
+    if (_rcAlphaOn() && _rcIsBattleKey(r.activityKey) && r.targetType !== "creature" && !__concurrent) {
       let __stake = null;
       try { if (r.targetType === "hex" && targetHex) __stake = await _rcBattleStake(r, attacker, targetHex, { objectiveOnly: this.vm.objectiveOnly === true }); } catch (_e) {}
       r.meta ||= {}; if (__stake) r.meta.stake = __stake;
@@ -6828,9 +6833,13 @@ try {
       }
     } catch (e) { warn("post-round effects failed", e); }
     // ALPHA CUT ruling 21 — open ground changes hands on a won Battle (ruling 20 decides whether it can be kept).
-    try { await _rcBattleGroundFlip(r, attacker, defender, targetHex, { objectiveOnly: this.vm.objectiveOnly === true }); } catch (eGF) { warn("battle ground flip failed (non-fatal)", eGF); }
+    if (!__concurrent) try { await _rcBattleGroundFlip(r, attacker, defender, targetHex, { objectiveOnly: this.vm.objectiveOnly === true }); } catch (eGF) { warn("battle ground flip failed (non-fatal)", eGF); }
     // Ruling 22 — a Battle concludes in one call (or one roll): go where the story said.
-    try { if (_rcIsBattleKey(r.activityKey)) await _rcStoryRoute(this, _rcRoundWord(r), r.outcome || ""); } catch (_e) {}
+    try { if (_rcIsBattleKey(r.activityKey) && !__concurrent) await _rcStoryRoute(this, _rcRoundWord(r), r.outcome || ""); } catch (_e) {}
+    if (__concurrent && _rcIsGMUser()) setTimeout(async () => {
+      try { this.element?.querySelector?.("[data-id='add-round']")?.click(); await game.combat?.nextRound?.(); }
+      catch (eNext) { warn("next Battle + combat round failed", eNext); }
+    }, 1500);
 
 // Legacy fields: keep a Roll object for non-contested raids; contested raids store a friendly string in r.roll.result.
     if (!r.contested) {
