@@ -36,6 +36,9 @@
       ch("Head out — the Crossroads", CROSS, "Marshal Pike gets his parking back, at least temporarily."));
     report.text.push("Reliable: hub choices");
   }
+  // Dave: the old "Sit with..." label was confusing.
+  const craft = hub.choices.find(x => x.next === SIG);
+  if (craft && craft.label !== "Craft your Signature Manifestation, if you haven't yet done so.") { craft.label = "Craft your Signature Manifestation, if you haven't yet done so."; report.text.push("Reliable: Signature label"); }
   for (const x of ["reliable_lease_terms", "reliable_lease_home", SIG]) {
     const b = find(x);
     if (!b.choices.some(y => y.next === "ag_first_morning" || (x === SIG && y.next === HUB && y.requires))) continue;
