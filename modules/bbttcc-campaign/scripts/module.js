@@ -1916,6 +1916,12 @@ function _choiceSpent(ch, campaign, fromBeatId = null) {
     // Round three (2026-11-03, KT "The Tar"): that holds for a repeatable hub too — both first-time replies to Drax route home to the town
     // walk, so they wore ✓ before anyone had picked them. Going back to a place is never "done".
     if (_inboundRoutes(campaign, next) >= 4) return false;
+    // Round 4 (2026-11-05): a side question that comes home to where it was asked from (Plumb's "Good to know.", one or two steps) is the way back, never "done".
+    if (fromBeatId) {
+      const byId = (id) => (campaign?.beats || []).find(b => String(b?.id) === String(id));
+      const leadsTo = (b, id) => (b?.choices || []).some(c => String(c?.next || "") === String(id));
+      if (leadsTo(tgt, fromBeatId) || (tgt.choices || []).some(c => leadsTo(byId(c?.next), fromBeatId))) return false;
+    }
     if (tgt.inject?.repeatable !== true) return "lock";
     const from = String(fromBeatId || "");
     // 2026-11-03 (failure pass, the Crown Mall hub): a side trip that comes home in TWO steps (VHS Ghosts → Emotional Rewind →
