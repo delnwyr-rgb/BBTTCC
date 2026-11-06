@@ -9,6 +9,25 @@
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
 
   const TEXT = {
+    rc_etta_skewer: `You eat the skewer of whatever.
+
+Etta watches you intently, her mouth opening and closing slightly in time with yours.
+
+It’s marvelous.
+
+You look around.
+
+Everyone, all the shoppers and merchants and intelligent furniture and etc, are staring at you intently.
+
+They all immediately break eye contact and hurriedly go back to whatever they had been doing, while whistling tunelessly.
+
+You’re PRETTY sure you caught a few smiles, though, right before they vanished behind racks of jeans and fake runestones.
+
+You look back. Etta is smiling slightly too.
+
+A second skewer has appeared in your hand through an unknown mechanism.
+
+“You’ll do fine,” she says.`,
     ag_tamsin_answer_building: `“I’m pretty sure you know the answer to this, as it’s been mentioned in previous boxed text, but here’s the TL;DR
 
 “This used to be a church. Since god is more of an occupation now - not much use for such things. They’re as out of place as that one thing that you see in a group of other things that doesn’t belong.” He makes a grimace, takes out a small notebook, and crosses something out.
