@@ -80,6 +80,14 @@
   const SIG_TEXT = "Before venturing out into the Less New Newbie Zone, take this moment to craft your Signature Manifestation if you have not yet done so. It will grow in power with you and your power and, (inevitably) fame - so it\u2019s always in your press clippings.\n\n<i>On your sheet, Core tab, under Manifestations: the \u2726 slot. Take your time with it. The land will still be there when you're done.</i>";
   if (sig.description !== SIG_TEXT) { sig.description = SIG_TEXT; report.text.push("Signature: Dave's text"); }
 
+  // Dave: Crossroads text. The seal is Act 2 knowledge.
+  const crossBeat = find(CROSS);
+  const OLD_BUMP = "Lots of handshakes quickly turned fist NOPE elbow bumps.";
+  if (crossBeat.description.includes(OLD_BUMP)) { crossBeat.description = crossBeat.description.replace(OLD_BUMP, "Lots of handshakes have quickly turned into fi - NOPE elbow bumps.\n\nHygiene people!"); report.text.push("Crossroads: elbow bumps"); }
+  const ktRide = crossBeat.choices.find(x => x.next === "ag_ride_khezek_tor");
+  const KT_LINE = "The Mountain Town, where riches compete with explosions and other problems for attention.";
+  if (ktRide && ktRide.description !== KT_LINE) { ktRide.description = KT_LINE; report.text.push("Crossroads: Khezek-Tor line"); }
+
   // Lock the Turn is for when the rides are done.
   const days = find("ag_days_end");
   if (days.choices.some(x => NIGHTLY.test(x.label))) { days.choices = days.choices.filter(x => !NIGHTLY.test(x.label)); report.text.push("Lock the Turn: first night choice gone"); }
