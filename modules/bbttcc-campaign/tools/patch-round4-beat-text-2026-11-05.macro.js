@@ -9,6 +9,15 @@
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
 
   const TEXT = {
+    ag_tamsin_answer_building: `I’m pretty sure you know the answer to this, as it’s been mentioned in previous boxed text, but here’s the TL;DR
+
+“This used to be a church. Since god is more of an occupation now - not much use for such things. They’re as out of place as that one thing that you see in a group of other things that doesn’t belong.” He makes a grimace, takes out a small notebook, and crosses something out.
+
+“I’m trying to work on my analogies.
+
+“I thought that it might make a good place for folks to rest and recover from Bad Eden as much as they can before sending themselves back out into the mess.
+
+“It also helped that we got a deal because the previous owners thought it was haunted. Which it is not. No MATTER,” and here he turns to look at a group of townsfolk sitting around a table a few yards away, “WHAT GARY SAYS, THE NOISES ARE THE PLUMBING. And so was this enterprise of giving back born.”`,
     rc_tamsin_cauldron: `Father Tamsin ladles out a rustic bowl of Bad Eden, and it is comfort in a bowl.
 
 This guy needs to open a chain of church themed B&Bs for the unfortunate that serve Michelin level food.
