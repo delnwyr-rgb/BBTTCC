@@ -10577,7 +10577,7 @@ Hooks.once("ready", () => {
           choicesHidden: pol.choices === "hidden",
           canPick: pol.choices === "playerPick" && !!(pick && pick.beat === beat),
           pickToken: (pick && pick.beat === beat) ? pick.token : null,
-          choices: (pol.choices === "hidden" ? [] : shown).map((ch, i) => ({
+          choices: (pol.choices === "hidden" ? [] : shown.filter(ch => pol.choices === "playerPick" || !(ch && ch.secret === true))).map((ch, i) => ({
             label: (ch && ch.label) || ("Choice " + (i + 1)),
             description: _stripGmNotes(_expandStoryTokens(String((ch && ch.description) || "").trim(), undefined, { raw: true })),   // round 2 E2 + story tokens (raw: the mirror escapes once)
             checkLabel: _choiceHasCheck(ch) ? _choiceCheckLabel(ch.checkStat) : "",
