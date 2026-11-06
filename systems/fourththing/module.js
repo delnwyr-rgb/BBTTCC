@@ -3231,7 +3231,7 @@ async function _ftHandleAoeSavePromptClick(btn, message) {
     const _sts = ctx.appliedStates?.states;
     const _hasStates = Array.isArray(_sts) ? _sts.length > 0
       : !!(_sts && typeof _sts === "object" && Object.values(_sts).some(Boolean));
-    if (mult > 0 && (_hasStates || _hasWards)) {
+    if (mult > 0 && !sav?.saved && (_hasStates || _hasWards)) {
       try {
         await game.fourththing.applyManifestationStates(caster, target, item, { appliedStates: ctx.appliedStates }, { castDc: ctx.castDc, channel: ctx.channel || null });
       } catch (e) {
@@ -3389,7 +3389,7 @@ async function _ftHandleSavePromptClick(btn, message) {
     // resolution.statesOnFail (2026-10-06, NPC riders): "half on success, NO Shaken" — conditions/wards land only on a
     // failed save. Default false keeps the PC manifestation behaviour (half-success still applies states) unchanged.
     const _statesGate = ctx.resolution?.statesOnFail ? !sav?.saved : mult > 0;
-    if (_statesGate && (_hasStates || _hasWards)) {
+    if (_statesGate && !sav?.saved && (_hasStates || _hasWards)) {
       // applyManifestationStates reads mf.appliedStates — pass a synthetic mf
       // shape with the snapshotted appliedStates so it doesn't re-read the
       // (potentially edited) item.
@@ -9006,6 +9006,7 @@ async function castManifestation(actor, item, {
     //   0.5 = half damage   (saved with onSave="half")
     //   0   = no damage     (attack missed, OR saved with onSave="negate")
     let damageMultiplier = 1;
+    let _savedVsStates = false;   // Dave 2026-11-06: a successful save stops the conditions; onSave only sets what happens to the damage
     if (effShape === "attack" && target) {
       const atk = await game.fourththing.rolls.resolveManifestationAttack(actor, target, item, resolution, {
         intent, channel
@@ -9019,6 +9020,7 @@ async function castManifestation(actor, item, {
         rollOverride: rs.defenseImpose > 0 ? "3d10kl2" : null
       });
       if (sav?.saved) {
+        _savedVsStates = true;
         if (sav.onSave === "negate")    damageMultiplier = 0;
         else if (sav.onSave === "half") damageMultiplier = 0.5;
       }
@@ -9081,14 +9083,14 @@ async function castManifestation(actor, item, {
         const pendingDmg = [];
 
         for (const aoeActor of aoeActors) {
-          let aoeMult = 1;
+          let aoeMult = 1, aoeSaved = false;
           if (effShape === "save") {
             const sav = await game.fourththing.rolls.resolveManifestationSave(actor, aoeActor, item, resolution, {
               castDc: targetSaveCastDc,
               channel,
               rollOverride: rs.defenseImpose > 0 ? "3d10kl2" : null
             });
-            if (sav?.saved) aoeMult = (sav.onSave === "negate") ? 0 : 0.5;
+            if (sav?.saved) { aoeSaved = true; aoeMult = (sav.onSave === "negate") ? 0 : 0.5; }
           } else if (effShape === "contested") {
             const con = await game.fourththing.rolls.resolveManifestationContest(actor, aoeActor, item, resolution, { intent, channel });
             if (con && !con.casterWins) aoeMult = (con.onContestLoss === "negate") ? 0 : 0.5;
@@ -9117,7 +9119,7 @@ async function castManifestation(actor, item, {
           // too now, same contract as weapon strikes. The confirm step is only
           // for damage application, not state-AE creation.)
           if (_ftHasManifestationApplicables(mf, item) && (game.settings?.get?.("fourththing", "autoApplyEffects") ?? true)) {
-            if (aoeMult > 0) {
+            if (aoeMult > 0 && !aoeSaved) {
               try {
                 await game.fourththing.applyManifestationStates(actor, aoeActor, item, mf, { castDc: targetSaveCastDc, channel });
                 stateLines.push(`${aoeActor.name}: states applied`);
@@ -9181,7 +9183,7 @@ async function castManifestation(actor, item, {
       if (dr.op !== "none" && dr.number > 0 && damageMultiplier > 0) {
         await ftRollManifestationDamage(actor, item, dr, { multiplier: damageMultiplier });
       }
-      if (target && damageMultiplier > 0 && _ftHasManifestationApplicables(mf, item)
+      if (target && damageMultiplier > 0 && !_savedVsStates && _ftHasManifestationApplicables(mf, item)
           && (game.settings?.get?.("fourththing", "autoApplyEffects") ?? true)) {
         try {
           await game.fourththing.applyManifestationStates(actor, target, item, mf, { castDc: targetSaveCastDc, channel });
