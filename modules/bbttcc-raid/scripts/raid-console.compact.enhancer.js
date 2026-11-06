@@ -487,5 +487,18 @@
   Hooks.on("createItem", (it) => { if (it?.flags?.["bbttcc-raid"]?.secret) schedule(150); });
   Hooks.on("deleteItem", (it) => { if (it?.flags?.["bbttcc-raid"]?.secret) schedule(150); });
   window.addEventListener("resize", () => { const b = document.getElementById(BAR_ID); if (b) place(b); });
+  // Round 4 (Dave 2026-11-06): a refresh mid-fight lost the bar, because only the beat's socket call opens the console. A player whose Domain is in an unfinished story raid gets it back on load.
+  Hooks.once("ready", () => setTimeout(async () => {
+    try {
+      if (game.user?.isGM) return;
+      const open = game.bbttcc?.api?.raid?.openConsole; if (typeof open !== "function") return;
+      for (const a of game.actors?.contents ?? []) {
+        const s = a.getFlag?.("bbttcc-raid", "raidSession");
+        if (!s || s.by !== "story" || s.routeFired || s.practice === true || s.tourStaged) continue;
+        const mine = [String(s.attackerId || a.id), ...(s.supportFactionIds || []).map(String)].find(id => game.actors.get(id)?.isOwner);
+        if (mine) { await open({ factionId: mine, fromBeat: true }); return; }
+      }
+    } catch (e) { console.warn(TAG, "reopen on load failed", e); }
+  }, 1500));
   console.log(TAG, "Conflict bar loaded (player seats)");
 })();
