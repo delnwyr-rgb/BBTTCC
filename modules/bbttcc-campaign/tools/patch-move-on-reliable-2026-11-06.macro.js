@@ -39,6 +39,12 @@
   // Dave's text for the card.
   const LEASE_TEXT = "Young Gearbox left the paperwork on the galley table, weighted with a hyperspanner. He must have liked you after all.\n\nHe also left a card, with shaky handwriting in block letters. \u201CTHE ABSOLUTELY RELIABLE. 3 TURN LEASE. CERTIFIED BY ME. SHE LIKES BEING TALKED TO.\u201D\n\nUnder that, in a smaller, much neater hand - \u201CLease her or buy her. - Mara Quickhands\u201D";
   if (hub.description !== LEASE_TEXT) { hub.description = LEASE_TEXT; report.text.push("Reliable: lease card text"); }
+  // Dave: the Terms drop Earn.
+  const terms = find("reliable_lease_terms");
+  for (const [from, to] of [["<b>Three ways to keep her:</b>", "<b>Two ways to keep her:</b>"], ["\n<b>Earn</b> \u2014 bring Young Gearbox a thing that is what it says it is. He signs over what he can certify.", ""]]) {
+    if (terms.description.includes(from)) { terms.description = terms.description.replace(from, to); report.text.push("Terms: no Earn"); }
+    else if (to ? !terms.description.includes(to) : false) report.missed.push(from);
+  }
   // Dave: the old "Sit with..." label was confusing.
   const craft = hub.choices.find(x => x.next === SIG);
   if (craft && craft.label !== "Craft your Signature Manifestation, if you haven't yet done so.") { craft.label = "Craft your Signature Manifestation, if you haven't yet done so."; report.text.push("Reliable: Signature label"); }
