@@ -9,6 +9,11 @@
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
 
   const TEXT = {
+    allesh_gilliam_waiting_room_exterior: `This used to be a medical clinic. Now it is a bar.
+
+The owner is a medic named Doc Greeley.
+
+Drunk people get hurt. The synergy is there is you look hard enough.`,
     ag_walk_wick: `You stride into town in a way that you hope is reassuringly heroic.
 
 Cam footage later reveals that it was not, but people got the point.
