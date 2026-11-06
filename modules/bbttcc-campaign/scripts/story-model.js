@@ -22,17 +22,12 @@
 export const QUEST_MAP = {
  "quests": {
   "offices": {
-   "name": "Offices of Fates and Destinies",
+   "name": "Thatward's Ho — Opening",
    "act": 0,
    "keystone": false,
    "hex": "Allesh-Gilliam",
-   "registryId": "quest_ycEa0uXzTzsbK4qP",
-   "chapters": {
-    "opening": {
-     "name": "Opening",
-     "registryId": "quest_thatwards_opening"
-    }
-   }
+   "registryId": "quest_thatwards_opening",
+   "chapters": {}
   },
   "allesh_gilliam": {
    "name": "Allesh-Gilliam",
@@ -363,10 +358,6 @@ export const QUEST_MAP = {
  },
  "registry": {
   "quest_thatwards_opening": {
-   "quest": "offices",
-   "chapter": "opening"
-  },
-  "quest_ycEa0uXzTzsbK4qP": {
    "quest": "offices",
    "chapter": null
   },

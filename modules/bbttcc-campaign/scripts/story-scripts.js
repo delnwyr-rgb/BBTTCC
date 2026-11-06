@@ -24,14 +24,13 @@ export const STORY_SCRIPTS = {
 
   // ═══ ACT 0 ══════════════════════════════════════════════════════════════════
   offices: {
-    giver: "Mal (narrator); Adam Kadmon, played by your GM, runs the slides",
-    description: "Before you had a body, somebody explained the universe to you. Mal said the words. Adam Kadmon ran the projector. The Lens shattered, the World shattered itself back on purpose, and a handful of hexes Thatwards now belong to whoever shows up willing. That's you. Listen, then go.",
+    giver: "Mal",
+    description: "You're in Bad Eden now. Welcome home?",
     steps: [
       // 2026-10-20 Dave: the cold open RETIRED from the opening — `ag_tamsin_the_dream` plays the same footage when the Father sets the kettle down.
-      { id: "ho", label: "Thatwards Ho!", line: "Read the briefing. Then the Jackalope leaves for Allesh-Gilliam.", beats: ["thatwards_ho_opening_scene"], chapter: "opening" }
+      { id: "ho", label: "Thatwards Ho!", line: "Read the briefing. Then the Jackalope leaves for Allesh-Gilliam.", beats: ["thatwards_ho_opening_scene"] }
     ],
-    doors: [], after: [],
-    chapters: { opening: { giver: "Mal", line: "Read the briefing. Then the Jackalope leaves for Allesh-Gilliam." } }
+    doors: [], after: []
   },
 
   // sarmoung_hum: UNSCRIPTED in code. Tier 1 (acts 0–5) = six ambient rungs; the tent is pinned into Allesh-Gilliam · Arrival.

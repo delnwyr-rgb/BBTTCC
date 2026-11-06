@@ -130,7 +130,7 @@
   // ── 1. Opening container ──────────────────────────────────────────────────
   if (!quests[OPENING.qid]) {
     quests[OPENING.qid] = { id: OPENING.qid, v: 1, name: OPENING.name,
-      description: "The bus, the sendoff, the town below: the campaign's cold open and opening scene, fired by the Offices' incarnation closer.",
+      description: "You're in Bad Eden now. Welcome home?",
       tags: [], status: "active", createdTs: 0, updatedTs: 0 };
     changes++; report.push(`✚ quest registered: ${OPENING.name}`);
   } else report.push(`· ok quest (already) ${OPENING.name}`);

@@ -55,6 +55,26 @@ And without waiting for anyone to do anything except blink, he hurries away down
 
   // Part of a beat's text swapped, leaving its return-visit spans alone.
   const SWAPS = [{
+    beat: "allesh_gilliam_yarrow_welcome",
+    from: `Marshal Yarrow Pike doesn't stand when you enter. He leans against the counter like it's the only thing in the room that hasn't disappointed him yet. He has a "perpetually disappointed vibe."
+
+Scar across the jaw. Wears a tri-corner hat unironically and rocks it. Eyes that measure distances automatically. He measures yours.
+
+Uncomfortable.`,
+    to: `Marshal Yarrow Pike, (you find out later that Marshal is his first name), doesn’t straighten up as you enter, but rather remains leaning, in a precisely, measured, calculated way designed to evince the UTMOST sense of unimpressed-ness.
+
+He has a perpetually disappointed vibe - like nothing has ever really measured up in his eyes - and he is not expecting his life to change anytime soon.
+
+He also wears a tri-corner hat unironically, and rocks it.`
+  }, {
+    beat: "allesh_gilliam_yarrow_welcome",
+    from: `A pause that almost qualifies as friendly.
+
+"Eat something. Sleep behind the wall. Tomorrow's allowed to wait for you — that's an order I only give once.
+
+"And tomorrow, it's your turn to start giving orders."`,
+    to: `“Eat something. Sleep. Then take a look around. THEN give orders.”`
+  }, {
     beat: "allesh_gilliam_waiting_room_intro",
     from: `Doc Greeley, one of the rare Eidolons to call Bad Eden home, pours like she's writing prescriptions, and the room is loud in the specific way of people who survived something together and have agreed to discuss anything else. In the cellar there's one room kept spotless, with the cellar door shut. Nobody jokes in there.`,
     to: `Doc Greeley, one of the rare Eidolons to call Bad Eden home, has the haunted look in her eyes of an early game NPC with a complicated backstory but no real character arc.
@@ -138,6 +158,23 @@ This is the town in which you now reside!`
       allSpots[EXTERIOR.id] = { name: EXTERIOR.name, pcs: [], foes: {}, npcs: {}, ...ext, absent: [...(ext?.absent || []), "Marshal Yarrow Pike"], at: Date.now() };
       report.text.push("HQ exterior: Pike stays off");
       if (!DRY_RUN) await game.settings.set("bbttcc-encounters", "tokenSpots", allSpots);
+    }
+  }
+
+  // Dave: Offices of Fates and Destinies is no longer a quest. Thatward's Ho stays, on its own, with the new line.
+  const tw = find("thatwards_ho_opening_scene");
+  if (tw?.story?.chapter) { delete tw.story.chapter; report.text.push("Thatwards Ho: no chapter"); }
+  const allQuests = foundry.utils.deepClone(C.quests.getAllQuests());
+  const WELCOME_LINE = "You're in Bad Eden now. Welcome home?";
+  let questsChanged = false;
+  if (allQuests.quest_ycEa0uXzTzsbK4qP) { delete allQuests.quest_ycEa0uXzTzsbK4qP; questsChanged = true; report.text.push("Offices quest removed"); }
+  if (allQuests.quest_thatwards_opening && allQuests.quest_thatwards_opening.description !== WELCOME_LINE) { allQuests.quest_thatwards_opening.description = WELCOME_LINE; questsChanged = true; report.text.push("Thatwards Ho: Mal's line"); }
+  if (!DRY_RUN && questsChanged) await C.quests.setAllQuests(allQuests);
+  for (const a of game.actors) {
+    const q = a.flags?.["bbttcc-factions"]?.quests; if (!q) continue;
+    for (const bucket of ["active", "completed", "archived"]) if (q[bucket]?.quest_ycEa0uXzTzsbK4qP) {
+      report.text.push(`${a.name}: Offices off the log`);
+      if (!DRY_RUN) await a.update({ [`flags.bbttcc-factions.quests.${bucket}.-=quest_ycEa0uXzTzsbK4qP`]: null });
     }
   }
 
