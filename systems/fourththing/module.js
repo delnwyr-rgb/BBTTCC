@@ -17118,7 +17118,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (dropCount > 0) {
       const poolLabel = _masterPool
         ? (_rankData.mechanic === "legendary" ? "Legendary" : "Master")
-        : (_attkMode === "advantage" ? "Advantage" : "Disadvantage");
+        : (_snapDie && _attkMode === "normal" ? "Snap Strike" : _attkMode === "advantage" ? "Advantage" : "Disadvantage");
       _rankPoolNote = `${poolLabel}: ${baseN}d10 keep ${keepBest ? "best 2" : "worst 2"}${droppedVals.length ? ` (dropped ${droppedVals.join(", ")})` : ""}`;
     }
 
