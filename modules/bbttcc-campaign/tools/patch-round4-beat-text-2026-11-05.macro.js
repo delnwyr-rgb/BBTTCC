@@ -120,6 +120,11 @@ This is the town in which you now reside!`
     }
   }
 
+  // Dave: Wick is not a town walk choice. He plays when you go in, then you walk the town.
+  const walk = find("allesh_gilliam_town_walk");
+  if ((walk.choices || []).some(x => x.next === "ag_walk_wick")) { walk.choices = walk.choices.filter(x => x.next !== "ag_walk_wick"); report.text.push("walk: Wick choice off"); }
+  if (walk.entryFirst?.beat !== "ag_walk_wick") { walk.entryFirst = { beat: "ag_walk_wick" }; report.text.push("walk: Wick plays on the way in"); }
+
   const changed = report.text.length + report.replies.length;
   if (!DRY_RUN && changed) await C.saveCampaign(id, { ...c, beats });
   console.log("R4TEXT " + JSON.stringify(report));

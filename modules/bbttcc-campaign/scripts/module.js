@@ -5047,6 +5047,12 @@ function _beatEntryRedirect(beatId, campaign) {
         return FEUD_SUMMIT_FAILURE_ID;
       }
     }
+    // Round 4 (2026-11-05): entryFirst = { beat, unlessMark } plays that beat on the way in until it has been seen. Wick on the ladder plays once, on any route into the Welcome Round.
+    const ef = (campaign?.beats || []).find(x => String(x?.id) === String(beatId))?.entryFirst;
+    if (ef?.beat && String(ef.beat) !== String(beatId) && (campaign?.beats || []).some(x => String(x?.id) === String(ef.beat))) {
+      const seen = !!_storyStateFor(campaign?.id)?.played?.[String(ef.unlessMark || ef.beat)];
+      if (!seen) { log(`[entryFirst] '${beatId}' → '${ef.beat}'`); return String(ef.beat); }
+    }
     // Phase-entry redirect (hospitality pass): a beat may carry
     // phaseEntry = { belowPhase: N, to: "beat_id" } — while storyPhase < N,
     // entering it lands on `to` instead (its Phase-1 hospitality variant).
