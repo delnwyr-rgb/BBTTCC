@@ -9,6 +9,19 @@
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
 
   const TEXT = {
+    allesh_gilliam_tamsin_welcome: `St Gilliam’s still looks like a church on the inside, and somehow it makes it seem more cosy. That’s a remarkable feat given the history of organized religion.
+
+A man - obviously Father Tamsin, he moves like he owns the scene - approaches you, wiping his hands on a towel. They appear to be caked with pie dough.
+
+“Ah, Stewards. I had hoped you’d stop by for a nosh and a sit. Both are present here in LOADS. Whereas St Gilliam’s was once a church, now it helps people, providing for their material needs.
+
+You seem to be being followed by children who are walking in a strangely majestic fashion. Shoo Tormasiin! Begone Avilaara! Cann’t you see the Stewards want rest, not tiny gyrating shadows!”
+
+The children laugh and scram. Tamsin looks after them fondly.
+
+“Sit and eat. Bread’s hot and fresh. Stew’s got some of Elsie’s finest from yesterday’s harvest. Chef’s kiss.”
+
+He had apparently already set you a table, before you arrived.`,
     rc_pike_coffee: `You drink it without question.
 
 It is terrible. It is also the best thing you’ve had since you left Coraliindra.
@@ -168,6 +181,17 @@ This is the town in which you now reside!`
       report.text.push("HQ exterior: Pike stays off");
       if (!DRY_RUN) await game.settings.set("bbttcc-encounters", "tokenSpots", allSpots);
     }
+  }
+
+  // Dave: nobody rolls to take a bowl, and a table can turn the Father down.
+  const tamsin = find("allesh_gilliam_tamsin_welcome");
+  const bowl = (tamsin.choices || []).find(x => x.next === "rc_tamsin_cauldron");
+  if (bowl?.checkStat) { Object.assign(bowl, { checkStat: "", checkDC: 0, failNext: "", description: String(bowl.description || "").replace(/\s*\(Presence, DC 11\)/, "") }); report.text.push("cauldron: no check"); }
+  const REFUSE = "Refuse the Father’s hospitality.";
+  if (!(tamsin.choices || []).some(x => x.label === REFUSE)) {
+    const at = tamsin.choices.findIndex(x => /^Thank him/.test(x.label));
+    tamsin.choices.splice(at < 0 ? tamsin.choices.length : at, 0, { label: REFUSE, next: "allesh_gilliam_town_walk", description: "", checkStat: "", checkDC: 0, failNext: "" });
+    report.text.push("Tamsin: refuse choice");
   }
 
   // Dave: Offices of Fates and Destinies is no longer a quest. Thatward's Ho stays, on its own, with the new line.
