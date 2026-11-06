@@ -4225,12 +4225,6 @@ async function executeBeat(campaign, beat, ctx = {}) {
           (String(beat.description || "").trim().length > 0) ||
           (Array.isArray(beat.choices) && beat.choices.length > 0);
 
-        // Kick the dialog without blocking the cinematic scene activation.
-        let dlgPromise = null;
-        if (hasDialogContentLocal) {
-          try { dlgPromise = _runBeatDialog(campaign, beat, ctx); } catch (_eDlg) {}
-        }
-
         // Narration (auto-play) is already handled once at beat start.
 
         // Activate Start Scene
@@ -4242,7 +4236,18 @@ async function executeBeat(campaign, beat, ctx = {}) {
             try { sc1 = await fromUuid(`Scene.${raw1}`); } catch (_eS1b) {}
           }
         }
-        await _diveScene(sc1);  // cinematic start scene — dives if a request is pending
+        // Dave 2026-11-05: the dialog waits for the scene, so "Go in" never floats over the wrong map. Capped so a stuck dive can't lose the dialog.
+        const _t0 = performance.now();
+        await Promise.race([_diveScene(sc1), new Promise(r => setTimeout(r, 15000))]);  // cinematic start scene — dives if a request is pending
+        const _landedMs = Math.round(performance.now() - _t0);
+        log(`[beat-timing] ${beat.id}: scene landed in ${_landedMs} ms`);
+        try { (globalThis.__bbttccBeatTimes ??= []).push({ beat: beat.id, landedMs: _landedMs, scene: sc1?.name || null, at: Date.now() }); } catch (_eT) {}
+
+        // Kick the dialog without blocking the timer below.
+        let dlgPromise = null;
+        if (hasDialogContentLocal) {
+          try { dlgPromise = _runBeatDialog(campaign, beat, ctx); } catch (_eDlg) {}
+        }
 
         // Schedule Next Scene (if configured)
         const raw2 = String(cin.nextSceneId || "").trim();

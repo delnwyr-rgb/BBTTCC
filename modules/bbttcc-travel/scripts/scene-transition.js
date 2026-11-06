@@ -173,6 +173,8 @@
       return false;
     }
     _busy = true;
+    const _times = { label: label || scene.name, start: performance.now() };   // Dave 2026-11-05: where a door's seconds go
+    const _mark = (k) => { _times[k] = Math.round(performance.now() - _times.start); };
     try {
       // The hex's own centre beats a missing / {0,0} focus (10-30: encounter dives panned to the top-left corner).
       if (!_usableFocus(focus) && hexUuid) focus = (await hexFocus(hexUuid)) || null;
@@ -190,6 +192,7 @@
       portalSwirl(hexUuid);     // fire-and-forget; plays on the CURRENT scene
       shake();                  // little ignition jolt as it ignites
       if (hexUuid) await wait(portalLeadMs);  // let the circle establish (only if a portal)
+      _mark("portal");
 
       // 2) zoom-dive toward the focus — now we fall through the open portal
       if (focus && canvas?.animatePan) {
@@ -197,12 +200,15 @@
         const target = Math.min(maxZoom, (canvas.stage.scale.x || 1) * 2.4);
         await canvas.animatePan({ x: focus.x, y: focus.y, scale: target, duration: 680 });
       }
+      _mark("zoom");
       // 3) flash at the moment of passage
       flash(flashColor);
       await wait(180);
       // 4) make sure the preload has settled (bounded) before swapping, so the new
       //    bg is ready under the flash. Cap so a slow/huge asset can't hang the dive.
       await Promise.race([preloading, wait(1200)]);
+      _mark("preload");
+      try { (globalThis.__bbttccDiveTimes ??= []).push(_times); console.info("[bbttcc transition] timing", _times); } catch (_eT) {}
       // 5) land. activate() pulls the whole table; view() is per-user/non-destructive.
       if (audience === "activate") {
         // GM activates (Foundry's own pull); a non-GM diver can't activate but
