@@ -343,6 +343,11 @@ And with that she writes “gentleman and scholar” next to Wick’s name in th
     if (ch.next === WICK_HUB && /^Ask something else/.test(ch.label)) { ch.next = WICK_ABOUT; report.text.push(`${x.id}: back to the questions`); }
   }
 
+  // Dave: leaving Wick reads "Let him rest."
+  let restN = 0;
+  for (const x of beats) for (const ch of (x.choices || [])) if (/^Leave him to his vigil\.?$/.test(String(ch.label || "").trim())) { ch.label = "Let him rest."; restN++; }
+  if (restN) report.text.push(`Let him rest: ${restN}`);
+
   // Dave: Offices of Fates and Destinies is no longer a quest. Thatward's Ho stays, on its own, with the new line.
   const tw = find("thatwards_ho_opening_scene");
   if (tw?.story?.chapter) { delete tw.story.chapter; report.text.push("Thatwards Ho: no chapter"); }
