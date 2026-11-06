@@ -1931,7 +1931,9 @@ function _choiceSpent(ch, campaign, fromBeatId = null) {
     // "The mall keeps happening." → the hub) is asked too — the one-step test never greyed the mall's three explorations.
     const byId = (id) => (campaign?.beats || []).find(b => String(b?.id) === String(id));
     const comesBack = (b) => (b?.choices || []).some(c => String(c?.next || "") === from);
-    const isQuestion = /^ans_/.test(next) || /\banswer\b/.test(String(tgt.tags || "")) || (!!from && (comesBack(tgt) || (tgt.choices || []).some(c => c?.next && String(c.next) !== from && comesBack(byId(c.next)))));
+    // Round 4 (2026-11-06): read the beat a route really lands on. The Long Market's "Go in" lands on Etta's Act 1 welcome through phaseEntry, so its way home never showed and the Round's door kept no ✓.
+    const entered = (id) => { const b = byId(id), pe = b?.phaseEntry; return (pe?.to && _storyPhaseGet() < Number(pe.belowPhase) && byId(pe.to)) || b; };
+    const isQuestion = /^ans_/.test(next) || /\banswer\b/.test(String(tgt.tags || "")) || (!!from && (comesBack(tgt) || (tgt.choices || []).some(c => c?.next && String(c.next) !== from && comesBack(entered(c.next)))));
     return isQuestion ? "soft" : false;
   } catch (_e) { return false; }
 }
