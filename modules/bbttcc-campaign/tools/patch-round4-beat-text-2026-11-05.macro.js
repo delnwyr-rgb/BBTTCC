@@ -9,6 +9,15 @@
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
 
   const TEXT = {
+    rc_pike_coffee: `You drink it without question.
+
+It is terrible. It is also the best thing you’ve had since you left Coraliindra.
+
+Pike refills his mug, but not yours. He has decided that you are competent enough to find and use the pot yourself.
+
+“Get a bit of focus going. Things always look better after coffee.”
+
+He’s right. The Patrol Boards make slightly more sense now, somehow ...`,
     allesh_gilliam_waiting_room_exterior: `This used to be a medical clinic. Now it is a bar.
 
 The owner is a medic named Doc Greeley.
