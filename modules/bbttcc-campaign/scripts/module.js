@@ -2581,7 +2581,9 @@ async function _rollChoiceCheck(choice, ctx={}) {
         }
         if (ftSys?.attributes && ftKey && ftSys.attributes[ftKey]) {
           const av = _num(ftSys.attributes[ftKey]?.value, 0);
-          const r = await (game.bbttcc?.dice?.rollArmed?.("2d10x10 + @a", { a: av }, { actor }) ?? _evalRoll(new Roll("2d10x10 + @a", { a: av })));   // armed Momentum / Surge (2026-11-04)
+          // Round 4 (2026-11-05): a bare faculty check skips the system's roll path, so Pike's Coffee (+1 Mind) never reached it. Banked aid stays out: this path can't spend it.
+          const cb = (game.fourththing?.triggers?.debug?.(actor, { context: "check", attribute: ftKey })?.bonuses ?? []).filter(x => !Number.isInteger(x?._bankedIndex)).reduce((n, x) => n + (Number(x?.bonus) || 0), 0);
+          const r = await (game.bbttcc?.dice?.rollArmed?.("2d10x10 + @a + @cb", { a: av, cb }, { actor }) ?? _evalRoll(new Roll("2d10x10 + @a + @cb", { a: av, cb })));   // armed Momentum / Surge (2026-11-04)
           const total = (r.total ?? 0) + supportBonus;
           return { kind:"actor", subkind:"ft-faculty", stat, faculty:ftKey, dc, actorName:actor.name, total, ok: total>=dc, roll:r, support:{ opKey:supportKey, spend:supportSpend, bonus:supportBonus } };
         }
