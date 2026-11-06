@@ -378,10 +378,37 @@
       </div>`;
   }
 
+  // Round 4 (Dave 2026-11-06): closing the console must never strand a player. While their Domain is in an unfinished story raid and no console is open, a button brings it back.
+  function liveStoryFaction() {
+    for (const a of game.actors?.contents ?? []) {
+      const s = a.getFlag?.("bbttcc-raid", "raidSession");
+      if (!s || s.by !== "story" || s.routeFired || s.practice === true || s.tourStaged) continue;
+      const mine = [String(s.attackerId || a.id), ...(s.supportFactionIds || []).map(String)].find(id => game.actors.get(id)?.isOwner);
+      if (mine) return mine;
+    }
+    return null;
+  }
+  async function openStoryConsole(factionId) {
+    const open = game.bbttcc?.api?.raid?.openConsole;
+    if (typeof open === "function") await open({ factionId, fromBeat: true });
+  }
+  function syncReopen(app) {
+    const id = "bbttcc-conflict-reopen";
+    const fid = app ? null : liveStoryFaction();
+    let b = document.getElementById(id);
+    if (!fid) return b?.remove();
+    if (b) return;
+    b = document.createElement("button"); b.id = id; b.type = "button"; b.innerHTML = "⚔ Reopen the Conflict";
+    b.style.cssText = "position:fixed;left:50%;transform:translateX(-50%);bottom:96px;z-index:65;width:auto;padding:.25rem .8rem;border-radius:8px;border:1px solid rgba(214,178,106,.7);background:rgba(16,13,11,.95);color:#f1e7d0;font-size:.8rem;cursor:pointer";
+    b.addEventListener("click", () => { const f = liveStoryFaction(); b.remove(); if (f) openStoryConsole(f).catch(e => console.warn(TAG, "reopen failed", e)); });
+    document.body.appendChild(b);
+  }
+
   function render() {
     _timer = null;
     if (game.user?.isGM && !globalThis.__bbttccConflictBarOnGM) return teardown();   // debug: set the global to preview the bar on a GM seat
     const app = liveConsole();
+    syncReopen(app);
     if (!app) return teardown();
     injectStyle();
     app.element.classList.toggle("cb-docked", !_showWindow);
@@ -491,13 +518,8 @@
   Hooks.once("ready", () => setTimeout(async () => {
     try {
       if (game.user?.isGM) return;
-      const open = game.bbttcc?.api?.raid?.openConsole; if (typeof open !== "function") return;
-      for (const a of game.actors?.contents ?? []) {
-        const s = a.getFlag?.("bbttcc-raid", "raidSession");
-        if (!s || s.by !== "story" || s.routeFired || s.practice === true || s.tourStaged) continue;
-        const mine = [String(s.attackerId || a.id), ...(s.supportFactionIds || []).map(String)].find(id => game.actors.get(id)?.isOwner);
-        if (mine) { await open({ factionId: mine, fromBeat: true }); return; }
-      }
+      const mine = liveStoryFaction();
+      if (mine) await openStoryConsole(mine);
     } catch (e) { console.warn(TAG, "reopen on load failed", e); }
   }, 1500));
   // Round 4 (Dave 2026-11-06): ending the combat ends a Battle that was running beside it, so the bar goes and a refresh won't bring it back.
