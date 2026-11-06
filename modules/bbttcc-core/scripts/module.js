@@ -170,13 +170,31 @@ Hooks.once("ready", function () {
   _log(`[${CORE_ID}] ready`);
 });
 
-// Round 4 (2026-11-05): a page load can get HTTP errors on a few of its ~250 files (measured: 503s on tableau.canvas.js, raid scripts,
-// fourththing.css), and Foundry carries on without them, so features vanish with no message. Say so on the seat it happened to. A reload fixes it.
+// Round 4 (2026-11-05): a page load can get HTTP 503 on a few of its ~250 files (about 1 load in 4, seemingly from the tunnel, not the server), and
+// Foundry carries on without them, so features vanish. Modules have all been evaluated by init, so check there, before any hook has done work, and
+// reload by itself, up to 3 times. If it still fails, say so on that seat.
+const _LOAD_RETRY_KEY = "bbttcc-load-retries";
+function _failedLoadFiles() {
+  return performance.getEntriesByType("resource")
+    .filter(e => e.responseStatus >= 400 && /\/(modules|systems)\/[^?]+\.(m?js|css)(\?|$)/.test(e.name))
+    .map(e => `${decodeURIComponent(new URL(e.name).pathname)} (${e.responseStatus})`);
+}
+Hooks.once("init", () => {
+  try {
+    const failed = _failedLoadFiles();
+    const tries = Number(sessionStorage.getItem(_LOAD_RETRY_KEY)) || 0;
+    if (failed.length && tries < 3) {
+      sessionStorage.setItem(_LOAD_RETRY_KEY, String(tries + 1));
+      console.warn(`[bbttcc-core] page load missing ${failed.length} file(s), reloading (try ${tries + 1} of 3):`, failed);
+      location.reload();
+      return;
+    }
+    if (!failed.length) sessionStorage.removeItem(_LOAD_RETRY_KEY);
+  } catch (_e) {}
+});
 Hooks.once("ready", () => {
   try {
-    const failed = performance.getEntriesByType("resource")
-      .filter(e => e.responseStatus >= 400 && /\/(modules|systems)\/[^?]+\.(m?js|css|hbs)(\?|$)/.test(e.name))
-      .map(e => `${decodeURIComponent(new URL(e.name).pathname)} (${e.responseStatus})`);
+    const failed = _failedLoadFiles();
     if (!failed.length) return;
     console.error("[bbttcc-core] this page load is missing files:", failed);
     ui.notifications?.error?.(`This page load is missing ${failed.length} file(s), so some features may not work. Press F5 to reload.`, { permanent: true });
