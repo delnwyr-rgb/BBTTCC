@@ -2113,7 +2113,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     try {
       const rows = Array.isArray(we.partyEffects) ? we.partyEffects.filter(r => r && typeof r === "object" && String(r.name || "").trim()) : [];
       if (rows.length) {
-        const stewards = await _coalitionStewards();
+        const stewards = _seatedOnly(await _coalitionStewards());
         if (!stewards.length) console.warn(TAG, "partyEffects: no coalition Stewards found", { beatId: beatCtx.beatId });
         const turnNow = _worldTurn();
         const esc = (t) => String(t || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -2820,6 +2820,12 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     return 0;
   }
   /** Every Steward on the active campaign's coalition roster (dedup, canonical actorKind "steward"; type check fallback). */
+  // Dave 2026-11-05: party effects go to seated Stewards, the same rule as radiation and quest items. Nobody seated = everyone (a GM alone at the table).
+  function _seatedOnly(stewards) {
+    const seated = new Set((game.users?.contents ?? []).filter(u => !u.isGM && u.character).map(u => u.character.id));
+    const here = stewards.filter(a => seated.has(a.id));
+    return here.length ? here : stewards;
+  }
   // Dave 2026-11-05: a party effect lands with a banner on every seat, so nobody finds out from their sheet.
   const PARTY_BANNER_SOCKET = "module.bbttcc-campaign";
   function _bannerPartyEffect(name, checkBonus, ranks, relief, permanent) {
