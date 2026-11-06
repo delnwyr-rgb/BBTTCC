@@ -76,10 +76,9 @@
     report.text.push(`${x}: back to the galley`);
   }
   const sig = find(SIG);
-  for (const [from, to] of [["The galley is quiet. Everyone else has found a bunk. You have", "The galley is quiet. You have"], ["The land will still be there in the morning.", "The land will still be there when you're done."]]) {
-    if (sig.description.includes(from)) { sig.description = sig.description.replace(from, to); report.text.push("Signature: no night"); }
-    else if (!sig.description.includes(to)) report.missed.push(from);
-  }
+  // Dave's text; the sheet instructions at the bottom stay as they are.
+  const SIG_TEXT = "Before venturing out into the Less New Newbie Zone, take this moment to craft your Signature Manifestation if you have not yet done so. It will grow in power with you and your power and, (inevitably) fame - so it\u2019s always in your press clippings.\n\n<i>On your sheet, Core tab, under Manifestations: the \u2726 slot. Take your time with it. The land will still be there when you're done.</i>";
+  if (sig.description !== SIG_TEXT) { sig.description = SIG_TEXT; report.text.push("Signature: Dave's text"); }
 
   // Lock the Turn is for when the rides are done.
   const days = find("ag_days_end");
