@@ -39,12 +39,32 @@
   // Dave's text for the card.
   const LEASE_TEXT = "Young Gearbox left the paperwork on the galley table, weighted with a hyperspanner. He must have liked you after all.\n\nHe also left a card, with shaky handwriting in block letters. \u201CTHE ABSOLUTELY RELIABLE. 3 TURN LEASE. CERTIFIED BY ME. SHE LIKES BEING TALKED TO.\u201D\n\nUnder that, in a smaller, much neater hand - \u201CLease her or buy her. - Mara Quickhands\u201D";
   if (hub.description !== LEASE_TEXT) { hub.description = LEASE_TEXT; report.text.push("Reliable: lease card text"); }
-  // Dave: the Terms drop Earn.
+  // Dave: Earn stays in the Terms, as friendship with the Farm rather than a certified part. Allies can simply ask Mara or Gearbox for her.
   const terms = find("reliable_lease_terms");
-  for (const [from, to] of [["<b>Three ways to keep her:</b>", "<b>Two ways to keep her:</b>"], ["\n<b>Earn</b> \u2014 bring Young Gearbox a thing that is what it says it is. He signs over what he can certify.", ""]]) {
-    if (terms.description.includes(from)) { terms.description = terms.description.replace(from, to); report.text.push("Terms: no Earn"); }
-    else if (to ? !terms.description.includes(to) : false) report.missed.push(from);
+  const EARN = "\n<b>Earn</b> \u2014 FFF is generous with those they call friends. Earn their trust.";
+  terms.description = terms.description.replace("<b>Two ways to keep her:</b>", "<b>Three ways to keep her:</b>");
+  if (!terms.description.includes(EARN)) {
+    const buyLine = /(\n<b>Buy<\/b>[^\n]*)/;
+    if (!buyLine.test(terms.description)) report.missed.push("Terms: Buy line");
+    else { terms.description = terms.description.replace(/\n<b>Earn<\/b>[^\n]*/, "").replace(buyLine, "$1" + EARN); report.text.push("Terms: Earn by friendship"); }
   }
+  const earnHint = find("ans_reliable_lease_last_turn_plan_to_earn_it");
+  const EARN_HINT = "FFF is generous with those they call friends. Earn their trust.";
+  if (earnHint && earnHint.description !== EARN_HINT) { earnHint.description = EARN_HINT; report.text.push("Last turn: earn hint"); }
+  const FFF = "U5YaO2p189LBMvVq";
+  const askArc = find("fixit_arc_bay_conversation")?.choices?.find(x => x.next === "reliable_gearbox_signs");
+  const ASK = "Ask Mara or Gearbox if you can just have her.";
+  if (askArc && (askArc.label !== ASK || JSON.stringify(askArc.requires).includes("fixit_load_the_crate"))) {
+    askArc.label = ASK;
+    askArc.requires = [{ beatMark: "reliable_bought", not: true }, { beatMark: "reliable_gearbox_signs", not: true }, { relation: FFF, atLeast: "allied" }];
+    report.text.push("Arc Bay: ask for her at Allied");
+  }
+  const signed = find("reliable_gearbox_signs");
+  if (signed?.inject?.requires) {
+    const reqs = signed.inject.requires.filter(r => r.beatMark !== "fixit_load_the_crate" && r.flag !== "storyPhase");
+    if (!reqs.some(r => r.relation === FFF)) { reqs.push({ relation: FFF, atLeast: "allied" }); signed.inject.requires = reqs; report.text.push("Signed Over: gate is Allied"); }
+  }
+
   // Dave: the old "Sit with..." label was confusing.
   const craft = hub.choices.find(x => x.next === SIG);
   if (craft && craft.label !== "Craft your Signature Manifestation, if you haven't yet done so.") { craft.label = "Craft your Signature Manifestation, if you haven't yet done so."; report.text.push("Reliable: Signature label"); }
