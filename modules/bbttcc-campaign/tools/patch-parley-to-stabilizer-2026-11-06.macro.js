@@ -54,6 +54,12 @@
     clean(b.inject); b.choices.forEach(clean);
   }
 
+  // The last-turn answers had the Parley as their only way out.
+  for (const x of ["ans_reliable_lease_last_turn_plan_to_earn_it", "ans_reliable_lease_last_turn_plan_to_buy_it", "ans_reliable_lease_last_turn_plan_to_renew_it"]) {
+    const y = find(x);
+    if (y && !(y.choices || []).length) { y.choices = [{ label: "Noted.", next: "", description: "", checkStat: "", checkDC: 0, failNext: "" }]; report.text.push(`${x}: Noted`); }
+  }
+
   // Dave's text.
   const signed = find("reliable_gearbox_signs");
   const SIGNED = "You earned the trust of The Farm. This is a Big Deal. Not even AJ ❤️ had managed that. And the trust of the people in charge of all the best gear in the River Heart has its rewards. Hovercrafts, for example.";
