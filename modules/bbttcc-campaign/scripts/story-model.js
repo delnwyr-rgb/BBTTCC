@@ -1002,7 +1002,7 @@ export function deriveSituation(ctx) {
       const term = beats.find(b => /\bterminal\b/.test(String(b.tags || "")) && String(b.id) !== "ag_days_end" && readiness(b).ready) || (phase <= 1 ? byId.get("ag_days_end") : null);
       if (term && !(nowOut.roads || []).some(r => r?.beat?.id === term.id)) {
         const def = QUEST_MAP.quests[String(term.story?.quest || "")] || null;
-        nowOut = { ...nowOut, roads: [{ quest: nowOut.quest, chapter: null, beat: term, ready: true, here: hereOf(term, def), viaTurn: true, line: "The day is spent. Lock the turn, then the story moves." }, ...(nowOut.roads || [])] };
+        nowOut = { ...nowOut, roads: [{ quest: nowOut.quest, chapter: null, beat: term, ready: true, here: hereOf(term, def), viaTurn: true, line: "Lock the turn, then the story moves." }, ...(nowOut.roads || [])] };
       }
     }
   } catch (_eT) {}

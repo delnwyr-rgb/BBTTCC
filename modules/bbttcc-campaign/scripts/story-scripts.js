@@ -42,15 +42,15 @@ export const STORY_SCRIPTS = {
     giver: "Marshal Yarrow Pike",
     description: "Pike gave you two errands and in a vaguely threatening, grandfatherly way. The Leygate is remembering wrong, and the only replacement stabilizer he knows of sits in the Arc Bay at Furrier's Fixit. The East Wall is bowing, and the Architect, Plumb, calls it cosmetic. Keep one promise and the town might stop measuring you for a box.",
     arrival: { act: 1, giver: "Avuncular Joan",
-      description: "Joan handed you a fortress, a farm, and a hole in the ground, told you to keep one promise, and left. Allesh-Gilliam wants to be met before it wants to be fixed. Eat here, sleep here, learn names. In the morning, ride out and see what you own.",
+      description: "Joan handed you a fortress, a farm, and a hole in the ground, told you to keep one promise, and left. Allesh-Gilliam wants to be met before it wants to be fixed. Eat here, learn names. Then ride out and see what you own.",
       steps: [
         { id: "welcome", label: "Welcome!", line: "The Jackalope has stopped. Get off.", beats: ["allesh_gilliam_opening_scene"] },
         { id: "joan", label: "Joan's Sendoff", line: "Joan is waiting just inside the gate. Hear her out.", beats: ["avuncular_joans_speech"] },
         { id: "round", label: "The Welcome Round", line: "Walk the town. Six doors, any order. Ready to move on once you've been met.",
           beats: ["allesh_gilliam_town_walk"],
-          done: { anyOf: ["allesh_gilliam_yarrow_welcome", "allesh_gilliam_tamsin_welcome", "allesh_gilliam_etta_welcome", "allesh_gilliam_waiting_room_intro", "allesh_gilliam_vacancy_intro", "allesh_gilliam_plumb_office_intro", "ag_first_night_soma_break"] } },
-        { id: "night", label: "First Night", line: "Take your Soma Break. Sleep behind the wall.", beats: ["ag_first_night_soma_break"] },
-        { id: "tent", label: "The Tent at the Edge of Town", line: "There's a tent at the edge of town that wasn't there yesterday. Look in on your way out.", beats: ["hum_quiet_tent"], borrow: true },   // the Hum's rung 1, pinned here by ruling
+          done: { anyOf: ["allesh_gilliam_yarrow_welcome", "allesh_gilliam_tamsin_welcome", "allesh_gilliam_etta_welcome", "allesh_gilliam_waiting_room_intro", "allesh_gilliam_vacancy_intro", "allesh_gilliam_plumb_office_intro"] } },
+        { id: "reliable", label: "The Absolutely Reliable", line: "Look over the hovercraft. She's how you'll reach Khezek-Tor and Lyrenn.", beats: ["reliable_the_lease"] },
+        { id: "tent", label: "The White Tent", line: "Head out to the Crossroads. There's a white tent where the road forks.", beats: ["hum_quiet_tent"], borrow: true },   // the Hum's rung 1, pinned here by ruling
         { id: "crossroads", label: "The Crossroads", line: "Ride out and see that over which you now have Stewardship, which sounds awesome and definitely something to brag about in postcards home.",
           beats: ["ag_crossroads_first_rides"], done: { mark: "ag_days_end" } },   // the hub stays current until the day ends (playtest 2026-09-18)
         { id: "daysend", label: "Lock the Turn", line: "Divvy the hexes, set each faction's plans, then the GM runs the turn. The River Heart lies open to the south — collapsed, and so all of it on the map already. Ride it when you're ready; some of what the grief left there is still waiting to be met.", beats: ["ag_days_end"] },
