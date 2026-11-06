@@ -235,6 +235,22 @@ This is the town in which you now reside!`
     report.text.push("Tamsin: refuse choice");
   }
 
+  // Dave: the Round's town doors go through the exterior, like the HQ and St Gilliam's, and an exterior holds for 5 seconds.
+  const ROUND = { allesh_gilliam_long_market_exterior: "The Long Market", allesh_gilliam_waiting_room_exterior: "The Waiting Room", allesh_gilliam_vacancy_exterior: "The Vacancy", allesh_gilliam_plumb_tower_exterior: "The Plumb Office" };
+  const round = find("allesh_gilliam_town_walk");
+  for (const [next, label] of Object.entries(ROUND)) {
+    const ch = (round.choices || []).find(x => x.label === label);
+    if (ch && find(next) && ch.next !== next) { ch.next = next; report.text.push(`Round: ${label} via exterior`); }
+  }
+  const sceneName = (s) => game.scenes.get(String(s || "").replace(/^Scene\./, ""))?.name || "";
+  let held = 0;
+  for (const b of beats) {
+    if (!b.cinematic?.enabled || !(Number(b.cinematic.durationMs) > 5000)) continue;
+    if (!/exterior/i.test(b.id) && !/exterior/i.test(sceneName(b.cinematic.startSceneId))) continue;
+    b.cinematic.durationMs = 5000; held++;
+  }
+  if (held) report.text.push(`exteriors at 5s: ${held}`);
+
   // Dave: Offices of Fates and Destinies is no longer a quest. Thatward's Ho stays, on its own, with the new line.
   const tw = find("thatwards_ho_opening_scene");
   if (tw?.story?.chapter) { delete tw.story.chapter; report.text.push("Thatwards Ho: no chapter"); }
