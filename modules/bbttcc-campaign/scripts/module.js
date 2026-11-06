@@ -4200,6 +4200,8 @@ async function executeBeat(campaign, beat, ctx = {}) {
       // Wait for the canvas to go idle first (bounded), and skip the activation when the table is already there.
       await _awaitCanvasIdle();
       if (!scene.active || canvas?.scene?.id !== scene.id) await scene.activate();
+      // Round 4 (2026-11-05, measured): activate() resolved in 71 ms with the old map still up. Wait for the canvas to land here, so a dialog held for the scene really is.
+      try { const t0 = Date.now(); while ((canvas?.scene?.id !== scene.id || canvas?.loading || !canvas?.ready) && Date.now() - t0 < 12000) await new Promise(r => setTimeout(r, 100)); } catch (_eLand) {}
       // Activation's implicit pull skips clients explicitly view()'d onto
       // another scene (Weather Front stranded the player on the hex map,
       // 2026-08-26) — pull the whole table to the beat's stage outright.
