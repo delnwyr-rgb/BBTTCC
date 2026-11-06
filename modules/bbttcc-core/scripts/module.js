@@ -174,6 +174,15 @@ Hooks.once("ready", function () {
 // Foundry carries on without them, so features vanish. Modules have all been evaluated by init, so check there, before any hook has done work, and
 // reload by itself, up to 3 times. If it still fails, say so on that seat.
 const _LOAD_RETRY_KEY = "bbttcc-load-retries";
+// Diagnosis (2026-11-05): one line per load in this browser's localStorage. Read it with: localStorage.getItem("bbttcc-load-log")
+try { performance.setResourceTimingBufferSize(2000); } catch (_e) {}
+function _logLoad(failed) {
+  try {
+    const log = JSON.parse(localStorage.getItem("bbttcc-load-log") || "[]");
+    log.push({ at: new Date().toISOString(), seen: performance.getEntriesByType("resource").length, failed: failed.map(f => f.split("/").pop()) });
+    localStorage.setItem("bbttcc-load-log", JSON.stringify(log.slice(-60)));
+  } catch (_e) {}
+}
 function _failedLoadFiles() {
   return performance.getEntriesByType("resource")
     .filter(e => e.responseStatus >= 400 && /\/(modules|systems)\/[^?]+\.(m?js|css)(\?|$)/.test(e.name))
@@ -182,6 +191,7 @@ function _failedLoadFiles() {
 Hooks.once("init", () => {
   try {
     const failed = _failedLoadFiles();
+    _logLoad(failed);
     const tries = Number(sessionStorage.getItem(_LOAD_RETRY_KEY)) || 0;
     if (failed.length && tries < 3) {
       sessionStorage.setItem(_LOAD_RETRY_KEY, String(tries + 1));
