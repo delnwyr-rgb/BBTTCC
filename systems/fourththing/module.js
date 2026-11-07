@@ -1317,6 +1317,7 @@ function ftSetUserTargets(tokens) {
 
 async function ftOpenEngageDialog(actor, item, options = {}) {
   if (ftWarnIfIncapacitated(actor)) return;
+  _ftWarnIfTargetDown();
   if (!actor || !item) return;
 
   // AoE weapon abilities (Frag Grenade & friends, playtest 2026-06-06): when a
@@ -2130,6 +2131,55 @@ function ftWarnIfIncapacitated(actor) {
   if (!state) return false;
   ui.notifications?.warn(`${actor.name} is ${state} and can't act.`);
   return true;
+}
+
+// Round 4 (Dave 2026-11-06): the table couldn't see who was down and swung at a downed bandit. Foes go down at 0 Stress or 0 Integrity, Stewards at Incapacitated or Dying.
+// Each client paints this from the actor's state, so nothing is written to the token and recovery clears it by itself.
+function _ftDownLabel(actor) {
+  if (!actor) return null;
+  const sys = actor.system?.system ?? actor.system;
+  if (sys?.conditions?.dying === true) return "DYING";
+  if (_ftIsIncapacitated(actor)) return "DOWN";
+  const integ = sys?.derived?.integrity;
+  return (actor.type !== "character" && Number(integ?.max) > 0 && Number(integ?.value) <= 0) ? "DOWN" : null;
+}
+function _ftPaintDownToken(token) {
+  if (!token?.mesh || token.destroyed) return;
+  const label = _ftDownLabel(token.actor);
+  if (label) {
+    token.mesh.tint = 0x777777;
+    token.mesh.alpha = Math.min(token.mesh.alpha ?? 1, 0.6);
+    let mark = token._ftDownMark;
+    if (!mark || mark.destroyed) {
+      mark = token._ftDownMark = new PIXI.Text("", { fontFamily: "Signika, sans-serif", fontSize: 22, fontWeight: "900", fill: 0xff5a4a, stroke: 0x000000, strokeThickness: 5 });
+      mark.anchor.set(0.5);
+      token.addChild(mark);
+    }
+    const text = `✖ ${label}`;
+    if (mark.text !== text) mark.text = text;
+    mark.position.set(token.w / 2, token.h / 2);
+    mark.visible = token.isVisible !== false;
+    token._ftDownPainted = true;
+  } else if (token._ftDownPainted) {
+    token._ftDownPainted = false;
+    if (token._ftDownMark && !token._ftDownMark.destroyed) token._ftDownMark.visible = false;
+    token.renderFlags?.set?.({ refreshMesh: true, refreshState: true });
+  }
+}
+function _ftRepaintDownFor(actor) {
+  if (!canvas?.ready || !actor) return;
+  for (const t of actor.getActiveTokens?.() ?? []) { _ftPaintDownToken(t); t.renderFlags?.set?.({ refreshState: true }); }
+}
+Hooks.on("refreshToken", _ftPaintDownToken);
+Hooks.on("drawToken", _ftPaintDownToken);
+Hooks.on("updateActor", (actor) => _ftRepaintDownFor(actor));
+Hooks.on("createActiveEffect", (effect) => _ftRepaintDownFor(effect?.parent));
+Hooks.on("deleteActiveEffect", (effect) => _ftRepaintDownFor(effect?.parent));
+// A foe already down gets a warning, not a block: you may still want to finish it off.
+function _ftWarnIfTargetDown() {
+  for (const t of game.user?.targets ?? []) {
+    if (t.actor?.type !== "character" && _ftDownLabel(t.actor)) ui.notifications?.warn(`${t.name} is already down.`);
+  }
 }
 
 function _ftDistanceBetweenTokens(tokenA, tokenB) {
@@ -8447,6 +8497,7 @@ async function _ftCascadeRigDestruction(rigActor) {
 // identical — _onFtCast now just calls this with (actor, item).
 function ftOpenCastDialog(actor, item) {
   if (ftWarnIfIncapacitated(actor)) return;
+  _ftWarnIfTargetDown();
   if (!actor) return;
   const rawSys  = actor.system?.system ?? actor.system;
   const intent  = item?.system?.intent   ?? "presence";
@@ -19662,7 +19713,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (actor.type !== "character") {
       for (const c of game.combats?.contents ?? []) {
         const cb = c.combatants.find(x => x.actor?.uuid === actor.uuid);
-        if (cb?.defeated) await cb.update({ defeated: false });
+        if (cb?.defeated && !_ftDownLabel(actor)) await cb.update({ defeated: false });
       }
     }
   };
@@ -21187,9 +21238,18 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   Hooks.on("updateActor", async (actor, changes, _options, userId) => {
     // Author's client only — same reasoning as the Aurablade sync above.
     if (userId !== game.user.id) return;
-    if (actor.type !== "character") return;
     const newIntegrity = foundry.utils.getProperty(changes, "system.derived.integrity.value");
     if (newIntegrity === undefined) return;
+    // Foes drop at 0 Integrity with no dying cycle: out of the fight in the tracker, with a line in chat (Dave 2026-11-06).
+    if (actor.type !== "character") {
+      const cb = game.combat?.combatants?.find?.(c => c.actor?.uuid === actor.uuid);
+      if (!cb) return;
+      if (newIntegrity <= 0 && !cb.defeated) {
+        await cb.update({ defeated: true });
+        ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#ff5a4a">✖ ${ftEscapeHtml(actor.name)} is down</span></div><p style="margin:0.2rem 0;font-size:0.82rem">Integrity has hit 0. Out of the fight.</p></div>` });
+      } else if (newIntegrity > 0 && cb.defeated && !_ftIsIncapacitated(actor)) await cb.update({ defeated: false });
+      return;
+    }
     const sys = actor.system?.system ?? actor.system;
     const dying = sys?.conditions?.dying === true;
 
