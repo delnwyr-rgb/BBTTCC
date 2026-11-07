@@ -8156,6 +8156,7 @@ function _reliableVaultAccess({ asPlayer = false } = {}) {
   if (game.user?.isGM && !asPlayer) return { ok: true };
   const state = _reliableState(), viewed = game.scenes?.viewed;
   if (state === "unmet") return { ok: true };   // no ship yet: outfitting and training still need the vault
+  if (game.combat?.started) return { ok: false, reason: "The vault's locked until the fight is over." };   // Dave 2026-11-07: she can be fought in, and the vault stays shut
   if (state === "gone") return /^vacancy_/i.test(String(viewed?.name || "")) ? { ok: true } : { ok: false, reason: "Your vault is at the Vacancy now." };
   return viewed?.getFlag?.(MOD_ID, "reliableScene") ? { ok: true } : { ok: false, reason: "Your vault's aboard the Reliable." };
 }
