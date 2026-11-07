@@ -317,6 +317,7 @@ API surface = only `game.bbttcc.apps.FacilityConsole` (class; no `api.facilities
 ## 9. bbttcc-campaign
 
 - **Reward banners (2026-11-06):** a beat's Loyalty, Darkness and immediate mark changes, and story awards, reach every seat as a notification (socket `module.bbttcc-campaign`, type `bbttccPartyEffectBanner`). Beat rewards also post a chat line.
+- **The Reliable as a place (2026-11-06):** `api.campaign.reliable.{sceneId, state, canBoard, vaultAccess, board}`; gmExec `campaign.reliable.board`; scene flags `bbttcc-campaign.reliableScene` and `noReliable`. `api.banks.openTreasury` refuses non-GMs unless aboard (at a `vacancy_*` scene if the lease lapsed). Player HUD button "The Reliable". Tool `patch-reliable-place-2026-11-06.macro.js`.
 
 *The story engine* v1.0.1 — the **beat** as atomic authored content; three drivers (Story Director, dialogue surface via mal-voice, injector); world mutation, casualties, **Turn Ledger** (play→calendar days), **The Turn Press** digest, Campaign Builder (Flow Visualizer/Beat Editor/Table Editor/Quests).
 

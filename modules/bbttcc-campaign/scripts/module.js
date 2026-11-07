@@ -8090,10 +8090,50 @@ function _installChoicePickRelaySocket() {
     });
   } catch (_e) {}
 }
+// THE ABSOLUTELY RELIABLE AS A PLACE (Dave 2026-11-06). She is a scene the table can board from anywhere she can be reached, and the vault lives aboard.
+// If the lease lapses the vault moves to The Vacancy. Scene flags: bbttcc-campaign.reliableScene marks her scene, noReliable marks a scene she can't be reached from.
+const RELIABLE_HUB = "reliable_aboard";
+const GMEXEC_RELIABLE_BOARD = "campaign.reliable.board";
+function _reliableSceneId() { return game.scenes?.find?.(s => s.getFlag?.(MOD_ID, "reliableScene"))?.id || null; }
+function _reliableState() {
+  const played = _storyStateFor(getActiveCampaignId())?.played || {};
+  if (!played.reliable_the_lease) return "unmet";
+  if (played.reliable_lease_lapsed && !played.reliable_bought && !played.reliable_gearbox_signs) return "gone";
+  return "aboard";
+}
+function _reliableCanBoard() {
+  const state = _reliableState();
+  if (state === "unmet") return { ok: false, reason: "You haven't found the Reliable yet." };
+  if (state === "gone") return { ok: false, reason: "The Reliable went home to the Farm. Your vault is at the Vacancy." };
+  if (game.combat?.started) return { ok: false, reason: "Not in the middle of a fight." };
+  if (game.scenes?.viewed?.getFlag?.(MOD_ID, "noReliable")) return { ok: false, reason: "You can't reach the Reliable from here." };
+  return { ok: true };
+}
+function _reliableVaultAccess({ asPlayer = false } = {}) {
+  if (game.user?.isGM && !asPlayer) return { ok: true };
+  const state = _reliableState(), viewed = game.scenes?.viewed;
+  if (state === "unmet") return { ok: true };   // no ship yet: outfitting and training still need the vault
+  if (state === "gone") return /^vacancy_/i.test(String(viewed?.name || "")) ? { ok: true } : { ok: false, reason: "Your vault is at the Vacancy now." };
+  return viewed?.getFlag?.(MOD_ID, "reliableScene") ? { ok: true } : { ok: false, reason: "Your vault's aboard the Reliable." };
+}
+async function _reliableBoard() {
+  const can = _reliableCanBoard();
+  if (!can.ok) { ui.notifications?.warn?.(can.reason); return can; }
+  if (!game.user?.isGM) return game.bbttcc?.api?.gmExec?.call?.(GMEXEC_RELIABLE_BOARD, {});
+  runBeat(getActiveCampaignId(), RELIABLE_HUB, { source: "reliable-door" });   // fire and forget: the chain waits on the table's choices
+  return { ok: true };
+}
 function _registerInviteGmExec() {
   try {
     const gx = game.bbttcc?.api?.gmExec;
     if (!gx?.register) return;
+    gx.register(GMEXEC_RELIABLE_BOARD, async () => {
+      if (!game.user?.isGM) throw new Error("not a GM seat");
+      const can = _reliableCanBoard();
+      if (!can.ok) return can;
+      runBeat(getActiveCampaignId(), RELIABLE_HUB, { source: "reliable-door" });
+      return { ok: true };
+    });
     gx.register(GMEXEC_INVITE_ACCEPT, async (payload = {}, meta = {}) => {
       if (!game.user?.isGM) throw new Error("not a GM seat");
       if (!meta?.local && !_invitesPlayerAcceptAllowed()) throw new Error("player acceptance is off (setting invites.playerAccept)");
@@ -9578,6 +9618,7 @@ function buildCampaignAPI() {
         return { started, names, firstLine };
       }
     },
+    reliable: { sceneId: _reliableSceneId, state: _reliableState, canBoard: _reliableCanBoard, vaultAccess: _reliableVaultAccess, board: _reliableBoard },
     invites: {
       list: (opts = {}) => _listOpenInvites(opts || {}),
       accept: (opts = {}) => _acceptInviteAnySeat(opts || {}),

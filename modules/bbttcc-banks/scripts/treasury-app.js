@@ -295,6 +295,9 @@ const _open = new Map();
  * or either one's id. One window per Domain, whichever door it was opened from.
  */
 function openTreasury(actorOrId, { steward: stewardHint = null } = {}) {
+  // Dave 2026-11-06: the vault lives aboard the Absolutely Reliable (at the Vacancy if her lease lapses). GMs keep access.
+  const _access = game.bbttcc?.api?.campaign?.reliable?.vaultAccess?.();
+  if (_access && !_access.ok) { ui.notifications?.warn?.(_access.reason); return null; }
   const a = _resolve(actorOrId);
   if (!a) { ui.notifications?.warn?.("No actor for the Treasury."); return null; }
   const banks = _banks();
