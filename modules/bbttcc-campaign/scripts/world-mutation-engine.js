@@ -2164,7 +2164,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
               who.push(a.name); changed = true;
             } catch (eA) { console.warn(TAG, "partyEffects: grant failed", a?.name, eA); }
           }
-          if (who.length) _bannerPartyEffect(name, checkBonus, ranks, relief, permanent);
+          if (who.length) _bannerPartyEffect(name, checkBonus, ranks, relief, permanent, turns);
           if (who.length) { notes.push("partyEffect:" + name); lines.push(`🍲 ${name} → ${who.join(", ")}${permanent ? " (permanent)" : ` (until the end of turn ${expiresTurn})`}`); }
           else lines.push(`· ${name} — everyone already has it`);
         }
@@ -2856,7 +2856,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       ChatMessage.create({ content: `<div class="bbttcc-beat-reward">${foundry.utils.escapeHTML(text)}</div>` }).catch?.(() => {});
     } catch (e) { console.warn(TAG, "beat reward banner failed", e); }
   }
-  function _bannerPartyEffect(name, checkBonus, ranks, relief, permanent) {
+  function _bannerPartyEffect(name, checkBonus, ranks, relief, permanent, turns = 1) {
     const signed = (n) => `${Number(n) > 0 ? "+" : ""}${Number(n)}`;
     const title = (s) => String(s || "").replace(/^./, c => c.toUpperCase());
     const parts = [];
@@ -2867,7 +2867,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     }
     for (const [sk, n] of Object.entries(ranks || {})) if (Number(n)) parts.push(`${signed(n)} ${title(sk)}`);
     if (relief) parts.push(`${relief} Strain eased`);
-    const text = `${name}${parts.length ? ": " + parts.join(", ") : ""}${permanent ? "." : " until the turn ends."}`;
+    const text = `${name}${parts.length ? ": " + parts.join(", ") : ""}${permanent ? "." : turns > 1 ? ` for ${turns} turns.` : " until the turn ends."}`;
     try { ui.notifications?.info?.(text); game.socket?.emit?.(PARTY_BANNER_SOCKET, { type: "bbttccPartyEffectBanner", text }); } catch (e) { console.warn(TAG, "party effect banner failed", e); }
   }
   Hooks.once("ready", () => { try { game.socket?.on?.(PARTY_BANNER_SOCKET, (m) => { if (m?.type === "bbttccPartyEffectBanner" && m.text) ui.notifications?.info?.(m.text); }); } catch (_e) {} });
