@@ -1305,6 +1305,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
     } catch (eP) { console.warn(TAG, "factionEffects @payer resolve failed", eP); }
 
+    const _rewardRows = [];   // Round 4 (Dave 2026-11-06): what this beat changed, announced to the table after the loop
     for (let i=0;i<fx.length;i++) {
       const row = fx[i];
       if (!row) continue;
@@ -1347,6 +1348,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           });
           changed = true;
           notes.push("faction:" + factionId);
+          _rewardRows.push({ factionId, loyalty: l, darkness: dk, marks: hasImmediateOp && !hasScheduledOp ? opD : null });
 
           // OP Bank deltas (optional)
           try {
@@ -1431,6 +1433,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         console.warn(TAG, "faction delta failed", factionId, e);
       }
     }
+    if (beatCtx.beatId && _rewardRows.length) _announceBeatRewards(beatCtx.beatLabel || beatCtx.beatId, _rewardRows);
 
     // war log target faction
     let warFactionId = null;
@@ -2828,6 +2831,31 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
   }
   // Dave 2026-11-05: a party effect lands with a banner on every seat, so nobody finds out from their sheet.
   const PARTY_BANNER_SOCKET = "module.bbttcc-campaign";
+  // Round 4 (Dave 2026-11-06): chat lines get missed, and Loyalty had none at all. A beat's Loyalty, Darkness and mark changes reach every seat as a banner, with a line in chat.
+  function _announceBeatRewards(label, rows) {
+    try {
+      const signed = (n) => `${Number(n) > 0 ? "+" : ""}${Number(n)}`;
+      const nameOf = (id) => game.actors?.get?.(String(id).replace(/^Actor\./, ""))?.name || String(id);
+      const everyId = new Set(rows.map(r => String(r.factionId)));
+      const byEffect = new Map();
+      const add = (what, id) => { if (!byEffect.has(what)) byEffect.set(what, []); byEffect.get(what).push(String(id)); };
+      for (const r of rows) {
+        if (r.loyalty) add(`${signed(r.loyalty)} Loyalty`, r.factionId);
+        if (r.darkness) add(`${signed(r.darkness)} Darkness`, r.factionId);
+        for (const [k, v] of Object.entries(r.marks || {})) if (Number(v)) add(`${signed(v)} ${String(k).replace(/^./, c => c.toUpperCase())} marks`, r.factionId);
+      }
+      if (!byEffect.size) return;
+      const parts = [...byEffect.entries()].map(([what, ids]) => {
+        if (ids.length > 1 && ids.length === everyId.size) return `${what} for every Domain`;
+        return `${what} for ${ids.map(nameOf).join(", ")}`;
+      });
+      const title = String(label).split(" — ").pop();
+      const text = `${title}: ${parts.join(", ")}.`;
+      ui.notifications?.info?.(text);
+      game.socket?.emit?.(PARTY_BANNER_SOCKET, { type: "bbttccPartyEffectBanner", text });
+      ChatMessage.create({ content: `<div class="bbttcc-beat-reward">${foundry.utils.escapeHTML(text)}</div>` }).catch?.(() => {});
+    } catch (e) { console.warn(TAG, "beat reward banner failed", e); }
+  }
   function _bannerPartyEffect(name, checkBonus, ranks, relief, permanent) {
     const signed = (n) => `${Number(n) > 0 ? "+" : ""}${Number(n)}`;
     const title = (s) => String(s || "").replace(/^./, c => c.toUpperCase());

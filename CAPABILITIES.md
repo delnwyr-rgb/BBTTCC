@@ -316,6 +316,8 @@ API surface = only `game.bbttcc.apps.FacilityConsole` (class; no `api.facilities
 
 ## 9. bbttcc-campaign
 
+- **Reward banners (2026-11-06):** a beat's Loyalty, Darkness and immediate mark changes, and story awards, reach every seat as a notification (socket `module.bbttcc-campaign`, type `bbttccPartyEffectBanner`). Beat rewards also post a chat line.
+
 *The story engine* v1.0.1 — the **beat** as atomic authored content; three drivers (Story Director, dialogue surface via mal-voice, injector); world mutation, casualties, **Turn Ledger** (play→calendar days), **The Turn Press** digest, Campaign Builder (Flow Visualizer/Beat Editor/Table Editor/Quests).
 
 **REVEAL KIT (2026-10-26, NP1):** `flags.bbttcc-campaign.revealKit = { untilMark:[beatIds], items:[docs], patch?:{system}, note? }` — on `bbttcc:beat:resolved` for one of those beats the primary GM seat grants the items once (keepId), applies the patch and stamps `revealKitGranted` (`_grantRevealKits`). Pairs with the alias flag: Pilgrim Wick's actor is named Jeargan, wears `alias {name:"Pilgrim Wick", untilMark:["ninth_guest_the_name"]}` and carries the Bulwark kit under revealKit.

@@ -5990,6 +5990,8 @@ async function _awardsPay(campaign, ctx, deltas, { key = null, label = "" } = {}
     }
     const esc = foundry.utils.escapeHTML;
     if (paid.length) { try { await ChatMessage.create({ speaker: { alias: "Bad Eden" }, content: `<div class="bbttcc-story-award" style="border-left:3px solid #d4a72c;padding:.35em .6em;background:rgba(212,167,44,.08);">🏆 <b>Earned</b> — ${esc(label)}: ${Object.entries(deltas).map(([k, v]) => `<b>+${esc(v)}</b> ${esc(k)}`).join(", ")} <span style="opacity:.7;">(each: ${paid.map(p => esc(p.name)).join(", ")})</span></div>` }); } catch (_eC) {} }
+    // Round 4 (Dave 2026-11-06): chat lines get missed, so an award reaches every seat as a banner too.
+    if (paid.length) { try { const text = `🏆 ${label}: ${Object.entries(deltas).map(([k, v]) => `+${v} ${String(k).replace(/^./, c => c.toUpperCase())} marks`).join(", ")} ${paid.length > 1 ? "for every Domain" : `for ${paid[0].name}`}.`; ui.notifications?.info?.(text); game.socket?.emit?.("module.bbttcc-campaign", { type: "bbttccPartyEffectBanner", text }); } catch (_eB) {} }
     if (refused.length) { try { await ChatMessage.create({ speaker: { alias: "Bad Eden" }, whisper: game.users.filter(u => u.isGM).map(u => u.id), content: `<div class="bbttcc-story-award">⚠ <b>Award refused</b> — ${esc(label)}: ${refused.map(p => `${esc(p.name)} (${esc(p.why)})`).join(", ")}. Still owed; <code>api.campaign.awards.settle()</code> retries.</div>` }); } catch (_eC2) {} }
     log(`[awards] ${label}: ${JSON.stringify(deltas)} → paid ${paid.map(p => p.name).join(", ") || "none"}${refused.length ? `; refused ${refused.map(p => p.name).join(", ")}` : ""}`);
     return paid.length ? paid : null;
