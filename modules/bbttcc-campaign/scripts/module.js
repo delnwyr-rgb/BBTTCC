@@ -8117,6 +8117,52 @@ function _installChoicePickRelaySocket() {
 }
 // THE ABSOLUTELY RELIABLE AS A PLACE (Dave 2026-11-06). She is a scene the table can board from anywhere she can be reached, and the vault lives aboard.
 // If the lease lapses the vault moves to The Vacancy. Scene flags: bbttcc-campaign.reliableScene marks her scene, noReliable marks a scene she can't be reached from.
+// THE STAIRS (Dave 2026-11-07): boarding and the deck buttons land the Stewards around the scene's Change Level region, never on it, since standing on it is what asks to change level.
+// Cells are tried nearest first, skipping the region, other tokens and anywhere a wall on that level cuts off from the stairs. A map with no stairs keeps each token's x and y.
+function _stairsCells(scene, level) {
+  const stairs = scene.regions?.contents?.find?.(r => r.behaviors?.contents?.some?.(b => b.type === "changeLevel" && !b.disabled) && (!r.levels?.size || r.levels.has(level.id)));
+  const shape = stairs?.shapes?.[0]; if (!shape) return null;
+  const rect = shape.type === "rectangle" ? shape : null;
+  let cx = Number(shape.x), cy = Number(shape.y);
+  if (rect) { cx += rect.width / 2; cy += rect.height / 2; }
+  else if (Array.isArray(shape.points) && shape.points.length) { const n = shape.points.length / 2; cx = cy = 0; shape.points.forEach((v, i) => { if (i % 2) cy += v / n; else cx += v / n; }); }
+  if (!Number.isFinite(cx) || !Number.isFinite(cy)) return null;
+  const g = scene.grid?.size || 100, c = { x: cx, y: cy }, cells = [];
+  const walls = scene.walls.contents.filter(w => w.move > 0 && w.ds !== 1 && (!w.levels?.size || w.levels.has(level.id)));
+  const baseX = Math.floor(cx / g), baseY = Math.floor(cy / g);
+  for (let dx = -5; dx <= 5; dx++) for (let dy = -5; dy <= 5; dy++) {
+    const x = (baseX + dx) * g, y = (baseY + dy) * g, m = { x: x + g / 2, y: y + g / 2 };
+    if (x < 0 || y < 0 || x + g > scene.width || y + g > scene.height) continue;
+    if (dx === 0 && dy === 0) continue;
+    if (rect && m.x > rect.x && m.x < rect.x + rect.width && m.y > rect.y && m.y < rect.y + rect.height) continue;
+    if (walls.some(w => foundry.utils.lineSegmentIntersects(c, m, { x: w.c[0], y: w.c[1] }, { x: w.c[2], y: w.c[3] }))) continue;
+    cells.push({ x, y, d: Math.hypot(m.x - cx, m.y - cy) });
+  }
+  return cells.sort((p, q) => p.d - q.d);
+}
+async function _tokensToStairs(scene, tokens, level) {
+  if (!tokens?.length) return;
+  const cells = _stairsCells(scene, level) || [], moving = new Set(tokens.map(t => t.id));
+  const taken = new Set(scene.tokens.contents.filter(t => !moving.has(t.id) && t._source.level === level.id).map(t => `${t.x},${t.y}`));
+  const free = cells.filter(c => !taken.has(`${c.x},${c.y}`));
+  const updates = tokens.map((t, i) => ({ _id: t.id, elevation: level.elevation.base, level: level.id, ...(free[i] ? { x: free[i].x, y: free[i].y } : {}) }));
+  await scene.updateEmbeddedDocuments("Token", updates, { animate: false });
+}
+// Boarding from elsewhere gathers every Steward at the stairs. Pressing The Reliable while already aboard only adds whoever is missing.
+async function _reliableBoardNow() {
+  try {
+    const scene = game.scenes?.get?.(_reliableSceneId());
+    const spawner = game.bbttcc?.api?.encounters?._spawner;
+    if (scene && typeof spawner?.spawnFactionPCs === "function") {
+      const before = new Set(scene.tokens.contents.map(t => t.id));
+      await spawner.spawnFactionPCs(scene, {}, { spawnedBy: "pc_party:reliable" });
+      const fromElsewhere = game.scenes.active?.id !== scene.id;
+      const movers = scene.tokens.contents.filter(t => t.actor?.hasPlayerOwner && (fromElsewhere || !before.has(t.id)));
+      await _tokensToStairs(scene, movers, scene.initialLevel);
+    }
+  } catch (e) { warn("Reliable boarding placement failed (non-blocking):", e); }
+  runBeat(getActiveCampaignId(), RELIABLE_HUB, { source: "reliable-door" });   // fire and forget: the chain waits on the table's choices
+}
 // BEAT LEVELS (Dave 2026-11-07, the Reliable's two decks). beat.sceneLevel = the id of a Level on the beat's scene. The party's tokens move to it and the table's view follows, since a player's vision comes from their token.
 // A level nobody names leaves tokens alone, and foes never move. On foot, the scene's own Change Level region does the same job.
 async function _beatSceneLevel(beat, scene) {
@@ -8126,10 +8172,7 @@ async function _beatSceneLevel(beat, scene) {
     const level = scene.levels?.get?.(levelId);
     if (!level) { warn(`beat ${beat.id}: sceneLevel ${levelId} isn't a level on ${scene.name}`); return; }
     const movers = scene.tokens.contents.filter(t => t.actor?.hasPlayerOwner && t._source.level !== levelId);
-    await Promise.race([
-      Promise.all(movers.map(t => t.move({ elevation: level.elevation.base, level: levelId }, { animate: false, constrainOptions: { ignoreWalls: true } }))),
-      new Promise(r => setTimeout(r, 3000))
-    ]);
+    await _tokensToStairs(scene, movers, level);
     const others = game.users.filter(u => u.active && !u.isSelf && u.viewedLevel !== levelId);
     if (others.length) scene.pullUsers(others, { level: levelId });
     if (canvas?.scene?.id === scene.id && canvas.level?.id !== levelId) { const t0 = Date.now(); while (canvas.loading && Date.now() - t0 < 8000) await new Promise(r => setTimeout(r, 100)); await scene.view({ level: levelId }); }
@@ -8164,7 +8207,7 @@ async function _reliableBoard() {
   const can = _reliableCanBoard();
   if (!can.ok) { ui.notifications?.warn?.(can.reason); return can; }
   if (!game.user?.isGM) return game.bbttcc?.api?.gmExec?.call?.(GMEXEC_RELIABLE_BOARD, {});
-  runBeat(getActiveCampaignId(), RELIABLE_HUB, { source: "reliable-door" });   // fire and forget: the chain waits on the table's choices
+  _reliableBoardNow();
   return { ok: true };
 }
 function _registerInviteGmExec() {
@@ -8175,7 +8218,7 @@ function _registerInviteGmExec() {
       if (!game.user?.isGM) throw new Error("not a GM seat");
       const can = _reliableCanBoard();
       if (!can.ok) return can;
-      runBeat(getActiveCampaignId(), RELIABLE_HUB, { source: "reliable-door" });
+      _reliableBoardNow();
       return { ok: true };
     });
     gx.register(GMEXEC_INVITE_ACCEPT, async (payload = {}, meta = {}) => {
