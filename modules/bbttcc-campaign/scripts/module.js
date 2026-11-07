@@ -8148,8 +8148,11 @@ async function _tokensToStairs(scene, tokens, level) {
   const taken = new Set(scene.tokens.contents.filter(t => !moving.has(t.id) && t._source.level === level.id).map(t => `${t.x},${t.y}`));
   for (const p of Object.values(spots)) taken.add(`${p.x},${p.y}`);
   const free = cells.filter(c => !taken.has(`${c.x},${c.y}`));
-  const updates = tokens.map(t => { const c = spots[t.actorId] || free.shift(); return { _id: t.id, elevation: level.elevation.base, level: level.id, ...(c ? { x: c.x, y: c.y } : {}) }; });
-  await scene.updateEmbeddedDocuments("Token", updates, { animate: false });
+  // A displace lifts the token straight to its square. Any other move walks the line, and a line across the stairs stops on them and asks to change level (Marmalade stuck halfway, 2026-11-07).
+  await Promise.race([
+    Promise.all(tokens.map(t => { const c = spots[t.actorId] || free.shift(); return t.move({ elevation: level.elevation.base, level: level.id, action: "displace", ...(c ? { x: c.x, y: c.y } : {}) }, { animate: false, constrainOptions: { ignoreWalls: true } }); })),
+    new Promise(r => setTimeout(r, 3000))
+  ]);
 }
 // Boarding from elsewhere gathers every Steward at the stairs. Pressing The Reliable while already aboard only adds whoever is missing.
 async function _reliableBoardNow() {
