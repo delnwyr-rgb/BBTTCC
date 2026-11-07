@@ -1285,7 +1285,8 @@ function _bookmarkClose(token, payload) {
 // QUEST ITEMS (Dave 2026-10-30: "a quest item section in inventory … a notice 'Item Received - X' … the choice button
 // say 'with the Tetrarch Spanner'"). A quest item is a gear Item on the STEWARD who took it (the beat window's roster pick),
 // flagged flags.bbttcc-campaign.questItem = { key, beatId, at }; the system sheet lists it under "Quest Items".
-//   choice.questItems = [{ key, name, img?, description?, remove? }] — granted (or removed, any holder) when THAT choice is picked
+//   choice.questItems = [{ key, name, img?, description?, remove?, uuid? }] — granted (or removed, any holder) when THAT choice is picked;
+//                       `uuid` (2026-10-31) clones a compendium Item whole (armor / weapon / worn gear + its effects) instead of minting plain gear
 //   choice.withItem   = key   — the button reads "<label> — with the <name>" while someone holds it
 //   requires { questItem: key, not? } — the gate grammar (a choice/beat that needs the item in hand)
 function _questItemHeld(key) {
@@ -1319,17 +1320,40 @@ async function _choiceQuestItems(campaign, beat, ch, rosterActorId, ctx = {}) {
     if (held) { log(`[quest-items] '${key}' already held by ${held.actor.name}`); continue; }
     const holder = _questItemHolderFor(campaign, rosterActorId, ctx);
     if (!holder) { warn("[quest-items] no Steward to hold", key, beat?.id); continue; }
-    const name = String(r.name || key);
+    let name = String(r.name || key);
     try {
-      // Item type through the bbttcc-core seam: RFI "gear", dnd5e "loot" (review C30 — "gear" failed document validation
-      // on the D&D table, so the Tetrarch Spanner never landed and every questItem door stayed shut). The quest flag is
-      // what the gates read; the system block is shaped per system (dnd5e loot has no `category`).
-      const descHtml = r.description ? `<p>${foundry.utils.escapeHTML(String(r.description))}</p>` : "";
-      const onRFI = game.system?.id === "fourththing";
-      await holder.createEmbeddedDocuments("Item", [{ name, type: game.bbttcc?.types?.item?.("gear") ?? "gear", img: r.img || "icons/tools/hand/wrench-steel-grey.webp",
-        system: onRFI ? { description: { value: descHtml, chat: "" }, category: "gear", quantity: 1 }
-                      : { description: { value: descHtml, chat: "" }, quantity: 1 },
-        flags: { "bbttcc-campaign": { questItem: { key, beatId: String(beat?.id || ""), at: Date.now() } } } }]);
+      const questFlag = { "bbttcc-campaign": { questItem: { key, beatId: String(beat?.id || ""), at: Date.now() } } };
+      // REAL ITEMS AS QUEST REWARDS (2026-10-31, the Halloween hoard): `uuid` names a compendium Item (armor, a weapon, worn gear with
+      // its Active Effects) — it is cloned whole onto the Steward and stamped with the quest flag, so the costume pieces are both
+      // story objects (gates, the Quest Items group) and equipment (the sheet keeps their equip toggle). A uuid whose type the running
+      // system cannot hold (a fourththing armor on the D&D table) falls through to the plain generated gear below.
+      let granted = false;
+      if (r.uuid) {
+        try {
+          const src = await fromUuid(String(r.uuid));
+          const okType = !!src && src.documentName === "Item" && !!(CONFIG.Item?.dataModels?.[src.type] || game.system?.id === "fourththing");
+          if (okType) {
+            const data = src.toObject(); delete data._id; delete data.folder; delete data.sort; delete data.ownership;
+            foundry.utils.mergeObject(data, { flags: questFlag });
+            if (r.name) data.name = String(r.name);
+            if (r.img) data.img = String(r.img);
+            name = data.name;
+            await holder.createEmbeddedDocuments("Item", [data]);
+            granted = true;
+          } else warn("[quest-items] uuid not usable on this system — granting plain gear instead", key, r.uuid);
+        } catch (eU) { warn("[quest-items] uuid grant failed — granting plain gear instead", key, r.uuid, eU); }
+      }
+      if (!granted) {
+        // Item type through the bbttcc-core seam: RFI "gear", dnd5e "loot" (review C30 — "gear" failed document validation
+        // on the D&D table, so the Tetrarch Spanner never landed and every questItem door stayed shut). The quest flag is
+        // what the gates read; the system block is shaped per system (dnd5e loot has no `category`).
+        const descHtml = r.description ? `<p>${foundry.utils.escapeHTML(String(r.description))}</p>` : "";
+        const onRFI = game.system?.id === "fourththing";
+        await holder.createEmbeddedDocuments("Item", [{ name, type: game.bbttcc?.types?.item?.("gear") ?? "gear", img: r.img || "icons/tools/hand/wrench-steel-grey.webp",
+          system: onRFI ? { description: { value: descHtml, chat: "" }, category: "gear", quantity: 1 }
+                        : { description: { value: descHtml, chat: "" }, quantity: 1 },
+          flags: questFlag }]);
+      }
     } catch (e) { warn("[quest-items] grant failed", key, e); continue; }
     await ChatMessage.create({ speaker: { alias: "Bad Eden" }, content: `<div style="border-left:3px solid #d4a72c;padding:.35em .6em;background:rgba(212,167,44,.08);">🎒 <b>Item received</b> — ${esc(name)} <span style="opacity:.75">(${esc(holder.name)} carries it · Inventory → Quest Items)</span></div>` }).catch(() => {});
     ui.notifications?.info?.(`Item received — ${name} (${holder.name})`);
@@ -4044,6 +4068,7 @@ async function _applyBeatEffectsOnce(campaign, beat, ctx = {}, { skipOpenTravel 
 
 async function executeBeat(campaign, beat, ctx = {}) {
   if (!beat) return;
+  const restoreEpochAtEntry = __bbttccRestoreEpoch;
 
   // Seals (2026-09-07): completed quest / finished act ⇒ the beat stays closed on
   // EVERY path (runBeat ignores inject.requires by design, so this is the one door).
@@ -4068,7 +4093,6 @@ async function executeBeat(campaign, beat, ctx = {}) {
     }
   } catch (eSeal) { warn("[seal] entry check failed (fail-open):", eSeal); }
 
-  const restoreEpochAtEntry = __bbttccRestoreEpoch;
   // Future-act guard (2026-09-14, live-caught: an orphaned Act-1 church intro routed the table into the
   // Father's Act-2 Echo on day one). Gates carry order (Charter Law 2): a beat whose act is AHEAD of the
   // story is refused on every path except a forced run or the phase door that opens it — "not yet".
@@ -4377,6 +4401,7 @@ async function executeBeat(campaign, beat, ctx = {}) {
         }
 
         await _diveScene(scene);  // non-cinematic beat scene — dives if a request is pending
+        await _beatSceneLevel(beat, scene);  // a beat on a multi-level map names its level
 
         // Participating-faction PC drop (2026-08-27): a travel-encounter beat
         // that lands the table on its own battlemap places the party too
@@ -4468,6 +4493,8 @@ async function executeBeat(campaign, beat, ctx = {}) {
   if (hasDialogContent && (type !== "encounter" || !hasEncounterKey || _hasChoices) && !isCinematic) {
     dialogRes = await _runBeatDialog(campaign, beat, ctx);
   }
+  // The timeline this beat opened in was replaced while it waited: no effects, no mark, no resolved hook.
+  if (restoreEpochAtEntry !== __bbttccRestoreEpoch) return { ok: false, abandoned: true, why: "save loaded while open" };
   {
     // After dialog resolves, we still apply world effects below (keeps pipeline).
     // (Runs for the local cinematic chain's pick too — dialogRes carries it.)
@@ -4492,8 +4519,6 @@ async function executeBeat(campaign, beat, ctx = {}) {
           checkOk: (dialogRes.check && typeof dialogRes.check.ok === "boolean") ? dialogRes.check.ok : null
         };
         await _mutateDirectorState(async (st) => {
-  // The timeline this beat opened in was replaced while it waited: no effects, no mark, no resolved hook.
-  if (restoreEpochAtEntry !== __bbttccRestoreEpoch) return { ok: false, abandoned: true, why: "save loaded while open" };
           st.choices = Array.isArray(st.choices) ? st.choices : [];
           st.choices.push(rec);
           if (st.choices.length > 200) st.choices.splice(0, st.choices.length - 200);
@@ -5693,10 +5718,13 @@ const PHASE_DOOR_BEATS = { 2: "a2_that_one_night" };
 // raises opCaps before income lands — the old end-of-turn door let turn-1
 // income of a new act clamp against the old tier's caps (Mark 5 cap_clamp).
 // Idempotent: _storyPhaseAdvance is monotonic, so re-running is a no-op.
+let __calendarDoorTurn = null;
 async function _openCalendarDoors({ turn = null, via = "calendar" } = {}) {
   const out = { opened: [] };
   if (!game.user?.isGM) return out;
   const tNow = Number.isFinite(Number(turn)) ? Number(turn) : _getTurnNumberSafe();
+  // One act per Advance (2026-11-03): a camp finished late must not open Acts 3 and 4 together and jump the party two floors. The driver calls this twice per Advance.
+  if (__calendarDoorTurn === tNow) return out;
   for (const [turnGte, phaseMin] of PHASE_CALENDAR_DOORS) {
     if (tNow < turnGte) continue;
     const opened = await _storyPhaseAdvance(phaseMin, { via: `calendar hard door (turn ${tNow}, ${via})` });
@@ -5709,34 +5737,6 @@ function _storyPhaseGet() {
   try { return Number(game.settings.get(MOD_ID, SETTING_STORY_PHASE)) || 0; } catch (_e) { return 0; }
 }
 
-async function _storyPhaseAdvance(target, { via = "beat" } = {}) {
-  const cur = _storyPhaseGet();
-  let next = Math.max(cur, Math.floor(Number(target) || 0));
-  if (cur <= 2 && next >= 3 && _act2ClimaxPending()) { log(`[phase] Act ${next} held: the camp has no outcome yet (${via}).`); next = cur; }
-  if (next === cur) return false;
-  await game.settings.set(MOD_ID, SETTING_STORY_PHASE, next);
-  const floors = PHASE_FLOORS[next];
-  if (floors) {
-    await _mutateDirectorState(async (st) => {
-let __calendarDoorTurn = null;
-      st.stewardLevelFloor = Math.max(Number(st.stewardLevelFloor) || 0, floors.steward);
-      st.factionTierFloor = Math.max(Number(st.factionTierFloor) || 0, floors.faction);
-    });
-    try { await directorReconcileLevels({ reason: `phase ${next}` }); } catch (eR) { warn("[phase] reconcileLevels failed:", eR); }
-  // One act per Advance (2026-11-03): a camp finished late must not open Acts 3 and 4 together and jump the party two floors. The driver calls this twice per Advance.
-  if (__calendarDoorTurn === tNow) return out;
-  }
-  const nm = PHASE_NAMES[next] || `PHASE ${next}`;
-  try {
-    await ChatMessage.create({
-      whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
-      content: `<div class="bbttcc-phase-advance"><h3>🚦 ACT ${next} — ${nm}</h3>` +
-        `<p>Story phase advanced (${via}).` +
-        (floors ? ` Level floors raised: steward <b>${floors.steward}</b>, faction <b>T${floors.faction}</b>.` : "") +
-        `</p></div>`
-    });
-  } catch (_e) {}
-  // The act's door beat (2026-09-13): the opening card, before the invitations.
 // THE CAMP CLOSES ACT 2 (Dave 2026-11-03, round three: "the big climax of act 2, before The Widening Trail opens. Act 3 isn't supposed to be able to open without that happening").
 // The Month 6 door opened Act 3 regardless and Month 10 opened Act 4, so a table that lagged met its climax at L6. No path past Act 2 until the camp has an outcome: the calendar and
 // every beat phaseAdvance come through _storyPhaseAdvance. A campaign without the camp is not held.
@@ -5750,6 +5750,31 @@ function _act2ClimaxPending() {
   } catch (_e) { return false; }
 }
 
+async function _storyPhaseAdvance(target, { via = "beat" } = {}) {
+  const cur = _storyPhaseGet();
+  let next = Math.max(cur, Math.floor(Number(target) || 0));
+  if (cur <= 2 && next >= 3 && _act2ClimaxPending()) { log(`[phase] Act ${next} held: the camp has no outcome yet (${via}).`); next = cur; }
+  if (next === cur) return false;
+  await game.settings.set(MOD_ID, SETTING_STORY_PHASE, next);
+  const floors = PHASE_FLOORS[next];
+  if (floors) {
+    await _mutateDirectorState(async (st) => {
+      st.stewardLevelFloor = Math.max(Number(st.stewardLevelFloor) || 0, floors.steward);
+      st.factionTierFloor = Math.max(Number(st.factionTierFloor) || 0, floors.faction);
+    });
+    try { await directorReconcileLevels({ reason: `phase ${next}` }); } catch (eR) { warn("[phase] reconcileLevels failed:", eR); }
+  }
+  const nm = PHASE_NAMES[next] || `PHASE ${next}`;
+  try {
+    await ChatMessage.create({
+      whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
+      content: `<div class="bbttcc-phase-advance"><h3>🚦 ACT ${next} — ${nm}</h3>` +
+        `<p>Story phase advanced (${via}).` +
+        (floors ? ` Level floors raised: steward <b>${floors.steward}</b>, faction <b>T${floors.faction}</b>.` : "") +
+        `</p></div>`
+    });
+  } catch (_e) {}
+  // The act's door beat (2026-09-13): the opening card, before the invitations.
   try {
     const doorBeat = PHASE_DOOR_BEATS[next];
     const cidD = getActiveCampaignId(); const cD = cidD ? getCampaign(cidD) : null;
@@ -6000,6 +6025,8 @@ async function _awardsPay(campaign, ctx, deltas, { key = null, label = "" } = {}
 async function _awardForChanges(campaign, ctx, changes) {
   const qn = (q) => QUEST_MAP.quests?.[q]?.name || q, cn = (q, c) => QUEST_MAP.quests?.[q]?.chapters?.[c]?.name || c;
   for (const c of (changes || [])) {
+    if (c?.kind === "quest-closed") await _questGearDrop(campaign, ctx, c.quest, c.ending);
+    else if (c?.kind === "chapter-ended") await _questGearDrop(campaign, ctx, `${c.quest}.${c.chapter}`, c.ending);
     if (c?.kind === "quest-closed") await _awardsPay(campaign, ctx, rewardFor(c.quest), { key: `quest:${c.quest}`, label: `${qn(c.quest)} — ${c.ending || "closed"}` });
     else if (c?.kind === "chapter-ended") await _awardsPay(campaign, ctx, rewardFor(c.quest, c.chapter), { key: `chapter:${c.quest}.${c.chapter}`, label: `${qn(c.quest)} · ${cn(c.quest, c.chapter)} — ${c.ending || "ended"}` });
   }
@@ -6024,8 +6051,6 @@ async function _awardCreature(campaign, ctx, beat, playedN = null) {
   try {
     const lineage = String(actor?.flags?.fourththing?.rfi?.actor?.lineage || "").toLowerCase();
     // 2026-11-02 (failure pass): "story beats that already price their own killing" was only true while the bandit award
-    if (c?.kind === "quest-closed") await _questGearDrop(campaign, ctx, c.quest, c.ending);
-    else if (c?.kind === "chapter-ended") await _questGearDrop(campaign, ctx, `${c.quest}.${c.chapter}`, c.ending);
     // resolved to no actor — once it named Road Bandit (mortal) the ambush's own Darkness +4 got a +1 on top. Made explicit:
     // a beat whose worldEffects already carry a darknessDelta has priced the kill; the rule stands down.
     const _pricedOwn = (beat?.worldEffects?.factionEffects || []).some(fe => Number(fe?.darknessDelta) > 0);
@@ -6043,6 +6068,30 @@ async function _awardCreature(campaign, ctx, beat, playedN = null) {
   if (!marks) { warn("[awards] no bounty for", a.creature || a.creatureId || beat?.id); return null; }
   const n = playedN ?? Number(_storyStateFor(campaign?.id)?.played?.[beat.id]?.n || 1);
   return _awardsPay(campaign, ctx, { [M.pool]: marks }, { key: `creature:${beat.id}:${n}`, label: `${actor?.name || a.creature || beat.label || beat.id} — ${String(M.label || a.method).toLowerCase()}` });
+}
+// GEAR AS QUEST REWARDS (Dave 2026-11-03, round three: Tier II became affordable, "and this provides impetus to add things like GEAR as quest reward items").
+// campaign.story.questGear = { "<quest>" | "<quest>.<chapter>": { uuid } } drops one real item when that quest or chapter closes, once ever (awards ledger), to a
+// party Steward fully trained for it (else the best trained); a tie goes to whoever holds the fewest rewards. A failed ending earns nothing. tools/patch-quest-gear-2026-11-03.macro.js holds the table.
+async function _questGearDrop(campaign, ctx, key, ending = "") {
+  try {
+    const row = campaign?.story?.questGear?.[key];
+    if (!row?.uuid || !game.user?.isGM) return false;
+    if (/\b(fail|failed|ruin|ruined|lost|burned|broken)\b/i.test(String(ending))) return false;
+    const ledger = _awardsLedger(), lk = `gear:${key}`;
+    if (ledger[lk]) return false;
+    const src = await fromUuid(String(row.uuid)); if (!src) { warn("[quest-gear] no such item", key, row.uuid); return false; }
+    const coalition = new Set((await _resolveCampaignFactions(campaign, ctx)).map(f => String(f.id)));
+    const party = [...new Set(game.users.filter(u => !u.isGM && u.character?.type === "character").map(u => u.character))].filter(a => coalition.has(String(a.getFlag("bbttcc-factions", "factionId") || "")));
+    const raw = String(src.system?.skill || src.system?.armorSkill || ""), skill = { weave: "fitting", warding: "bracing", weaver: "fitting" }[raw] || raw;
+    const rewardsHeld = (a) => a.items.filter(i => String(i.flags?.["bbttcc-campaign"]?.questItem?.key || "").startsWith("questGear:")).length;
+    // Capped at Proficient (2 = full bonuses): the armor cascade lifts a heavy-armor Steward's lighter skills, and uncapped he took all seven rewards.
+    const rank = (a) => Math.min(2, Number((a.system?.system ?? a.system)?.skills?.[skill]?.value) || 0);
+    const holder = party.sort((x, y) => (rank(y) - rank(x)) || (rewardsHeld(x) - rewardsHeld(y)))[0] || null;
+    await _choiceQuestItems(campaign, { id: `quest_gear_${key}` }, { questItems: [{ key: `questGear:${key}`, uuid: String(row.uuid) }] }, holder?.id, ctx);
+    ledger[lk] = { ts: Date.now(), label: src.name, holder: holder?.name || null };
+    await game.settings.set(MOD_ID, SETTING_AWARDS_LEDGER, ledger);
+    return true;
+  } catch (e) { warn("[quest-gear] drop failed", key, e); return false; }
 }
 async function _awardsSettle(campaign, ctx = {}) {
   const st = _storyStateFor(campaign?.id) || {}; const out = { quests: 0, chapters: 0, creatures: 0, gear: 0 };
@@ -6070,30 +6119,6 @@ async function _storyRecord(campaign, beat, ctx = {}) {
     } catch (_e) {}
     try {
       const nm = (q) => QUEST_MAP.quests[q]?.name || q, cn = (q, c) => QUEST_MAP.quests[q]?.chapters?.[c]?.name || c;
-// GEAR AS QUEST REWARDS (Dave 2026-11-03, round three: Tier II became affordable, "and this provides impetus to add things like GEAR as quest reward items").
-// campaign.story.questGear = { "<quest>" | "<quest>.<chapter>": { uuid } } drops one real item when that quest or chapter closes, once ever (awards ledger), to a
-// party Steward fully trained for it (else the best trained); a tie goes to whoever holds the fewest rewards. A failed ending earns nothing. tools/patch-quest-gear-2026-11-03.macro.js holds the table.
-async function _questGearDrop(campaign, ctx, key, ending = "") {
-  try {
-    const row = campaign?.story?.questGear?.[key];
-    if (!row?.uuid || !game.user?.isGM) return false;
-    if (/\b(fail|failed|ruin|ruined|lost|burned|broken)\b/i.test(String(ending))) return false;
-    const ledger = _awardsLedger(), lk = `gear:${key}`;
-    if (ledger[lk]) return false;
-    const src = await fromUuid(String(row.uuid)); if (!src) { warn("[quest-gear] no such item", key, row.uuid); return false; }
-    const coalition = new Set((await _resolveCampaignFactions(campaign, ctx)).map(f => String(f.id)));
-    const party = [...new Set(game.users.filter(u => !u.isGM && u.character?.type === "character").map(u => u.character))].filter(a => coalition.has(String(a.getFlag("bbttcc-factions", "factionId") || "")));
-    const raw = String(src.system?.skill || src.system?.armorSkill || ""), skill = { weave: "fitting", warding: "bracing", weaver: "fitting" }[raw] || raw;
-    const rewardsHeld = (a) => a.items.filter(i => String(i.flags?.["bbttcc-campaign"]?.questItem?.key || "").startsWith("questGear:")).length;
-    // Capped at Proficient (2 = full bonuses): the armor cascade lifts a heavy-armor Steward's lighter skills, and uncapped he took all seven rewards.
-    const rank = (a) => Math.min(2, Number((a.system?.system ?? a.system)?.skills?.[skill]?.value) || 0);
-    const holder = party.sort((x, y) => (rank(y) - rank(x)) || (rewardsHeld(x) - rewardsHeld(y)))[0] || null;
-    await _choiceQuestItems(campaign, { id: `quest_gear_${key}` }, { questItems: [{ key: `questGear:${key}`, uuid: String(row.uuid) }] }, holder?.id, ctx);
-    ledger[lk] = { ts: Date.now(), label: src.name, holder: holder?.name || null };
-    await game.settings.set(MOD_ID, SETTING_AWARDS_LEDGER, ledger);
-    return true;
-  } catch (e) { warn("[quest-gear] drop failed", key, e); return false; }
-}
       const lines = changes.map(c => c.kind === "quest-started" ? `▷ ${nm(c.quest)} begins` : c.kind === "chapter-started" ? `▷ ${nm(c.quest)} · ${cn(c.quest, c.chapter)} opens` : c.kind === "chapter-ended" ? `✓ ${nm(c.quest)} · ${cn(c.quest, c.chapter)} — ${c.ending}` : c.kind === "quest-closed" ? `🏁 ${nm(c.quest)} — ${c.ending}` : JSON.stringify(c));
       await ChatMessage.create({ content: `<div class="bbttcc-story-ledger"><b>Story</b><ul style="margin:.3em 0 0 1em">${lines.map(l => `<li>${l.replace(/</g, "&lt;")}</li>`).join("")}</ul></div>`, whisper: game.users.filter(u => u.isGM).map(u => u.id), speaker: { alias: "Bad Eden" } });
     } catch (_eMsg) {}
@@ -8092,6 +8117,24 @@ function _installChoicePickRelaySocket() {
 }
 // THE ABSOLUTELY RELIABLE AS A PLACE (Dave 2026-11-06). She is a scene the table can board from anywhere she can be reached, and the vault lives aboard.
 // If the lease lapses the vault moves to The Vacancy. Scene flags: bbttcc-campaign.reliableScene marks her scene, noReliable marks a scene she can't be reached from.
+// BEAT LEVELS (Dave 2026-11-07, the Reliable's two decks). beat.sceneLevel = the id of a Level on the beat's scene. The party's tokens move to it and the table's view follows, since a player's vision comes from their token.
+// A level nobody names leaves tokens alone, and foes never move. On foot, the scene's own Change Level region does the same job.
+async function _beatSceneLevel(beat, scene) {
+  try {
+    const levelId = String(beat?.sceneLevel || "").trim();
+    if (!levelId || !scene || !game.user?.isGM) return;
+    const level = scene.levels?.get?.(levelId);
+    if (!level) { warn(`beat ${beat.id}: sceneLevel ${levelId} isn't a level on ${scene.name}`); return; }
+    const movers = scene.tokens.contents.filter(t => t.actor?.hasPlayerOwner && t._source.level !== levelId);
+    await Promise.race([
+      Promise.all(movers.map(t => t.move({ elevation: level.elevation.base, level: levelId }, { animate: false, constrainOptions: { ignoreWalls: true } }))),
+      new Promise(r => setTimeout(r, 3000))
+    ]);
+    const others = game.users.filter(u => u.active && !u.isSelf && u.viewedLevel !== levelId);
+    if (others.length) scene.pullUsers(others, { level: levelId });
+    if (canvas?.scene?.id === scene.id && canvas.level?.id !== levelId) { const t0 = Date.now(); while (canvas.loading && Date.now() - t0 < 8000) await new Promise(r => setTimeout(r, 100)); await scene.view({ level: levelId }); }
+  } catch (e) { warn("beat sceneLevel failed (non-blocking):", e); }
+}
 const RELIABLE_HUB = "reliable_aboard";
 const GMEXEC_RELIABLE_BOARD = "campaign.reliable.board";
 function _reliableSceneId() { return game.scenes?.find?.(s => s.getFlag?.(MOD_ID, "reliableScene"))?.id || null; }
@@ -9781,6 +9824,7 @@ async function _onBeatResolvedMeters({ beat } = {}) {
       if (r.min !== undefined) next = Math.max(Number(r.min), next);
       if (r.max !== undefined) next = Math.min(Number(r.max), next);
       if (!Number.isFinite(next) || next === cur) continue;
+      if (key === SETTING_WENDIGO_RUNG && next > cur) { const ward = _wendigoCostumeWard(); if (ward) { await _postWendigoWardCard(ward, beat?.id); continue; } }   // costume ward (2026-10-31)
       await game.settings.set(MOD_ID, key, next);
       log(`[meters] '${beat.id}' → ${key} ${cur} → ${next}.`);
     }
@@ -9797,11 +9841,38 @@ async function _onBeatResolvedCrVerify({ beat } = {}) {
   } catch (e) { warn("[cr-verify] failed:", e); }
 }
 
+// THE WENDIGO DON'T TAKE CHILDREN IN COSTUME (2026-10-31, the Crown Mall costume): a Steward on the ride wearing the full Sparky set
+// (mask + reactor-suit top + pants, tag set:sparky, game.fourththing.sets) wards the rung — it does not climb while they ride.
+// Decrements (the grief towns' good endings) still land. Returns the warding Steward or null.
+const WENDIGO_WARD_SET = "sparky";
+function _wendigoCostumeWard() {
+  try {
+    const sets = game.fourththing?.sets; if (!sets?.holders) return null;
+    const holders = sets.holders(WENDIGO_WARD_SET, 3); if (!holders.length) return null;
+    const camp = getCampaign(getActiveCampaignId());
+    const lead = String(camp?.factionId || (camp?.factionIds || [])[0] || "").replace(/^Actor\./, "");
+    const party = lead ? (game.bbttcc?.api?.radiation?.partyStewardsOf?.(lead) || []) : [];
+    const ids = new Set(party.map(a => a.id));
+    return (ids.size ? holders.find(a => ids.has(a.id)) : holders[0]) || null;
+  } catch (_e) { return null; }
+}
+async function _postWendigoWardCard(steward, beatId) {
+  try {
+    const content = `<div style="border-left:3px solid #6b8f9e;padding:.35em .6em;">`
+      + `<div style="font-variant:small-caps;letter-spacing:.04em;opacity:.7;font-size:.85em;">&hellip; something a little OFF about those Wendigo</div>`
+      + `<div style="margin-top:.25em;">They look at ${foundry.utils.escapeHTML(steward?.name || "the one in the costume")} for a long moment &mdash; the dog mask, the yellow suit, the pants with the knees gone &mdash; and then they look away, carefully, the way you look away from a kid who has fallen and has not decided yet whether to cry. Nothing is handed over. Nothing is taken.</div>`
+      + `<div style="margin-top:.4em;font-style:italic;opacity:.85;">&mdash; The Wendigo don&rsquo;t take children in costume. Everybody knows that. Nobody knows how they know it.</div></div>`;
+    await ChatMessage.create({ content, speaker: { alias: "Mal" } });
+    log(`[wendigo-rung] '${beatId}' warded by ${steward?.name} (full ${WENDIGO_WARD_SET} set) — rung holds.`);
+  } catch (e) { warn("[wendigo-rung] ward card failed:", e); }
+}
 async function _onBeatResolvedWendigoRung({ beat } = {}) {
   try {
     if (!game.user?.isGM) return;                 // only the GM can write world settings
     const id = beat?.id;
     if (!id || !WENDIGO_TRAVEL_BEAT_IDS.has(id)) return;
+    const ward = _wendigoCostumeWard();
+    if (ward) { await _postWendigoWardCard(ward, id); return; }
     const cur = _wendigoRungGet();
     const next = Math.min(WENDIGO_RUNG_MAX, cur + 1);
     if (next !== cur) {
