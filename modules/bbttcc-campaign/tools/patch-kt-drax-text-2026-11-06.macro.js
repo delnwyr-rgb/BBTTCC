@@ -1,5 +1,5 @@
 /*
- * patch-kt-drax-text-2026-11-06.macro.js — Dave's beat polish, 2026-11-06: Drax Calder's welcome is rewritten; the Gruff Men With Coffee close stays at the end.
+ * patch-kt-drax-text-2026-11-06.macro.js — Dave's beat polish, 2026-11-06: Drax Calder's welcome is rewritten; the Gruff Men With Coffee close stays at the end. The Tar's second paragraph ends on Dave's line.
  * Ember Bad Eden. globalThis.__ktDraxDry = false applies; anything else is a dry run. Idempotent.
  */
 (async () => {
@@ -22,8 +22,11 @@
   const at = b.description.indexOf(KEEP);
   if (at < 0) throw new Error("close not found");
   const next = `${NEW}\n\n${b.description.slice(at)}`;
-  const changed = next !== b.description;
+  let changed = next !== b.description;
   if (changed) b.description = next;
+  const tar = beats.find(x => x.id === "rc_drax_tar");
+  const TAR_OLD = "That's the tar. Or it's the mine deciding to know you a little early.", TAR_NEW = "That's the tar. It has to be. Yeah.";
+  if (tar?.description?.includes(TAR_OLD)) { tar.description = tar.description.replace(TAR_OLD, TAR_NEW); changed = true; }
   if (!DRY_RUN && changed) await C.saveCampaign(id, { ...c, beats });
   console.log("KTDRAX " + JSON.stringify({ DRY_RUN, changed }));
 })();
