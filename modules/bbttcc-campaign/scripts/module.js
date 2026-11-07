@@ -2979,7 +2979,13 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
   const desc0 = _expandStoryTokens((unmetHtml + String(beat.description || "")).trim(), campaign);
   // CHOICE RESULT (Dave 2026-11-07): the pick that led here opens this card with what it did (see _choiceResultText).
   let desc = desc0;
-  const _lead = ctx?.__choiceResult;
+  let _lead = ctx?.__choiceResult;
+  // The next card already tells that moment (answer beats often open with the same line): skip the lead, never say it twice.
+  try {
+    const _nz = (x) => String(x || "").toLowerCase().replace(/<[^>]*>/g, " ").replace(/[^a-z0-9]+/g, " ").trim();
+    const _head = _nz(_lead?.text).slice(0, 30);
+    if (_head.length >= 12 && _nz(desc0).includes(_head)) _lead = null;
+  } catch (_eLd) {}
   if (_lead?.text) {
     let lt = _lead.text; try { lt = _expandStoryTokens(lt, campaign); } catch (_eL) {}
     const leadHtml = '<div class="bbttcc-choice-result" style="font-style:italic; opacity:.92; border-left:3px solid #c9a24a; padding-left:8px; margin-bottom:10px;">' + _escapeHtml(_stripGmNotes(lt)).replace(/\n/g, "<br/>") + '</div>';
