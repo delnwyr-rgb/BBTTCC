@@ -34,6 +34,10 @@
   const answer = beats.find(x => x.id === "kt_drax_answer_chalk");
   const SEAM_OLD = "Calder finishes the seam he's on before answering — you get the sense EVERYTHING waits for the seam he's on.", SEAM_NEW = "Calder finishes the sum he's on before answering — you get the sense EVERYTHING waits for the sum he's on.";
   if (answer?.description?.includes(SEAM_OLD)) { answer.description = answer.description.replace(SEAM_OLD, SEAM_NEW); changed = true; }
+  // The Fiddle always paid Loyalty; now the card says so, like the Bench and the Tar.
+  const fiddle = beats.find(x => x.id === "kt_the_fiddle");
+  const FIDDLE_LINE = "<i>The fiddle: +1 Loyalty for every Domain. The camp will remember who stayed for the third song.</i>";
+  if (fiddle && !fiddle.description.includes(FIDDLE_LINE)) { fiddle.description = `${fiddle.description}\n\n${FIDDLE_LINE}`; changed = true; }
   if (!DRY_RUN && changed) await C.saveCampaign(id, { ...c, beats });
   console.log("KTDRAX " + JSON.stringify({ DRY_RUN, changed }));
 })();
