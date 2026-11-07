@@ -562,6 +562,16 @@
               <textarea name="choice-desc" rows="3" placeholder="Optional: what this choice means / asks / risks.">{{ch.description}}</textarea>
             </div>
 
+            <div class="form-group">
+              <label data-tooltip="{{bbttccTip 'beats' 'choiceResult'}}">Result (shown to everyone after the pick)</label>
+              <textarea name="choice-result" rows="2" placeholder="Optional: what happens once they pick it. Never shown on the player card beforehand.">{{ch.result}}</textarea>
+            </div>
+
+            <div class="form-group">
+              <label data-tooltip="{{bbttccTip 'beats' 'choiceFailResult'}}">Result on a failed check</label>
+              <textarea name="choice-fail-result" rows="2" placeholder="Optional: what happens when the check misses.">{{ch.failResult}}</textarea>
+            </div>
+
             <div class="bbttcc-form-grid bbttcc-form-grid-4">
               <div class="form-group">
                 <label data-tooltip="{{bbttccTip 'beats' 'choiceCheckStat'}}">Check Stat (optional)</label>

@@ -137,7 +137,9 @@ const BEATS_HELP = {
   choices: "Choices — the buttons offered in the run dialog. Each can gate on a check and route to another beat. Routing runs the target beat IN FULL (scene, audio, effects) before this beat finishes resolving — so a routed child's effects land before this beat's own World Effects.",
   choiceLabel: "Choice Label — the button text in the beat dialog (GM view and the player mirror).",
   choiceNext: "Next Beat — runs this beat on pick (or on a passed check). It executes immediately and completely before the current beat's own effects apply.",
-  choiceDesc: "Choice Description — optional text listed under the buttons; good for stakes, costs, and what the table is really deciding.",
+  choiceDesc: "Choice Description — shown under the button BEFORE the pick: colour commentary, a short explanation, or what the Steward would say. Never what happens — that's the Result.",
+  choiceResult: "Result — what happens once this choice is picked (or its check passes). Hidden from players until then; it opens the next beat's card, or posts to chat if the choice leads nowhere.",
+  choiceFailResult: "Result on a failed check — what happens when this choice's check misses. Opens the failure beat's card, or posts to chat.",
   choiceCheckStat: "Check Stat — gate for this choice. GM Adjudication = pass/fail modal, no dice. op.* = faction roll: 2d10x10 + (bank÷10 + roster) vs DC — costs 10 marks to attempt and supports faction-backing spends. Abilities / saves / skills roll on the selected roster actor; if no roster actor is selected the GM adjudicates instead.",
   choiceCheckDC: "DC — the check total must meet or beat this number. Ignored when no Check Stat is set.",
   choiceFailNext: "Failure Beat — where a failed check routes. Blank = fall back to this beat's Failure Outcome (the Outcomes section below); if that is also blank, a failure routes nowhere and the dialog simply closes.",
@@ -3487,9 +3489,11 @@ _syncCoreFromForm() {
       const chCheckStats = fd.getAll("choice-check-stat").map(v => String(v || "").trim());
       const chCheckDCs = fd.getAll("choice-check-dc").map(v => _safeNum(v, 0));
       const chFailNexts = fd.getAll("choice-fail-next").map(v => String(v || "").trim());
+    const chResults = fd.getAll("choice-result").map(v => String(v || "").trim());
+    const chFailResults = fd.getAll("choice-fail-result").map(v => String(v || "").trim());
 
       const choices = [];
-      const n = Math.max(chLabels.length, chNexts.length, chDescs.length, chCheckStats.length, chCheckDCs.length, chFailNexts.length);
+      const n = Math.max(chLabels.length, chNexts.length, chDescs.length, chCheckStats.length, chCheckDCs.length, chFailNexts.length, chResults.length);
       for (let i = 0; i < n; i++) {
         const label = chLabels[i] || "";
         const next = chNexts[i] || "";
@@ -3499,10 +3503,11 @@ _syncCoreFromForm() {
         const failNext = chFailNexts[i] || "";
         // review P3 (2026-10-27): keep blank rows here so this.beat.choices stays index-aligned with the
         // form rows Remove / ▲▼ address; _saveFromForm still compacts them.
-        if (!label && !next && !description && !checkStat && !failNext) { choices.push({ ...this._renderedChoiceAt(i), label: "", next: "", description: "", checkStat: "", checkDC, failNext: "" }); continue; }
+        const result = chResults[i] || "", failResult = chFailResults[i] || "";
+        if (!label && !next && !description && !checkStat && !failNext && !result && !failResult) { choices.push({ ...this._renderedChoiceAt(i), label: "", next: "", description: "", checkStat: "", checkDC, failNext: "", result: "", failResult: "" }); continue; }
         // Start from the choice as rendered so fields the form does not show
         // (requires, cooldownTurns, checkMode, politicalTags…) round-trip.
-        choices.push({ ...this._renderedChoiceAt(i), label: label || `Choice ${i + 1}`, next, description, checkStat, checkDC, failNext });
+        choices.push({ ...this._renderedChoiceAt(i), label: label || `Choice ${i + 1}`, next, description, checkStat, checkDC, failNext, result, failResult });
       }
 
       this.beat.choices = choices;
@@ -4053,9 +4058,11 @@ _syncCoreFromForm() {
     const chCheckStats = fd.getAll("choice-check-stat").map(v => String(v || "").trim());
     const chCheckDCs = fd.getAll("choice-check-dc").map(v => _safeNum(v, 0));
     const chFailNexts = fd.getAll("choice-fail-next").map(v => String(v || "").trim());
+    const chResults = fd.getAll("choice-result").map(v => String(v || "").trim());
+    const chFailResults = fd.getAll("choice-fail-result").map(v => String(v || "").trim());
 
     const choices = [];
-    const n = Math.max(chLabels.length, chNexts.length, chDescs.length, chCheckStats.length, chCheckDCs.length, chFailNexts.length);
+    const n = Math.max(chLabels.length, chNexts.length, chDescs.length, chCheckStats.length, chCheckDCs.length, chFailNexts.length, chResults.length);
     for (let i = 0; i < n; i++) {
       const label = chLabels[i] || "";
       const next = chNexts[i] || "";
@@ -4063,8 +4070,9 @@ _syncCoreFromForm() {
       const checkStat = chCheckStats[i] || "";
       const checkDC = chCheckDCs[i] ?? 0;
       const failNext = chFailNexts[i] || "";
-      if (!label && !next && !description && !checkStat && !failNext) continue;
-      choices.push({ ...this._renderedChoiceAt(i), label: label || `Choice ${i + 1}`, next, description, checkStat, checkDC, failNext });
+      const result = chResults[i] || "", failResult = chFailResults[i] || "";
+      if (!label && !next && !description && !checkStat && !failNext && !result && !failResult) continue;
+      choices.push({ ...this._renderedChoiceAt(i), label: label || `Choice ${i + 1}`, next, description, checkStat, checkDC, failNext, result, failResult });
     }
     this.beat.choices = choices;
 
