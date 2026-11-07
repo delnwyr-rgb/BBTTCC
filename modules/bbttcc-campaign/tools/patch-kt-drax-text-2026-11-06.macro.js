@@ -30,6 +30,10 @@
   // The Tar's "Ask about the chalk marks" dropped the table back at the cookline without the answer.
   const chalk = (tar?.choices || []).find(x => /^Ask about the chalk marks/.test(String(x?.label || "")));
   if (chalk && chalk.next !== "kt_drax_answer_chalk") { chalk.next = "kt_drax_answer_chalk"; changed = true; }
+  // Calder works the books now, so he finishes a sum, not a seam.
+  const answer = beats.find(x => x.id === "kt_drax_answer_chalk");
+  const SEAM_OLD = "Calder finishes the seam he's on before answering — you get the sense EVERYTHING waits for the seam he's on.", SEAM_NEW = "Calder finishes the sum he's on before answering — you get the sense EVERYTHING waits for the sum he's on.";
+  if (answer?.description?.includes(SEAM_OLD)) { answer.description = answer.description.replace(SEAM_OLD, SEAM_NEW); changed = true; }
   if (!DRY_RUN && changed) await C.saveCampaign(id, { ...c, beats });
   console.log("KTDRAX " + JSON.stringify({ DRY_RUN, changed }));
 })();
