@@ -55,13 +55,8 @@
           "offer": true,
           "offerText": "The Wheel Never Stops — bonus action: one weapon attack (reroll its lowest die) or the Dash.",
           "effect": {
-            "kind": "bank-reroll",
-            "args": {
-              "target": "self",
-              "count": 1,
-              "context": "attack",
-              "note": "The Wheel Never Stops"
-            }
+            "kind": "bonus-strike-or-dash",
+            "args": {"reroll": true, "minMoveFt": 10, "note": "The Wheel Never Stops" }
           }
         }
       ]

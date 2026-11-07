@@ -1047,6 +1047,7 @@ export async function fireResourceGrants(actor, cadence) {
 //                "displace-token"     {who:"target"|"self", squares, mode:"push"|"pull"|"shift"}
 //                "apply-ae"           {name?, rounds?|minutes?, changes?:[{key,value,mode?}], surge?:{kind,resistType?,drFlat?}, target?}
 //                "bank-counter"       {counter, delta?, max?}   "spend-counter" {counter, per:{dieFormula?|flat?}, type?, max?}
+//                "bonus-strike-or-dash" {reroll?, minMoveFt?, note?}   // asks Attack or Dash, spends the Bonus action; refused = charge kept
 //                "reroll-failed-check" {}   (offer-only; on-skill-fail)   "reaction-attack" {reachSquares?} (offer-only; on-missed-by etc.)
 //                "queued-reroll"      args:{context, mode}      // still a GM whisper
 //                "hex-darkness"       {delta}   // Darkness pips on the party's current hex (flags.bbttcc-territory.mods.darkness); GM whisper when no hex / not GM
@@ -1178,7 +1179,7 @@ const _TRIGGER_SELF_PATH = {
 const OFFER_ONLY_KINDS = new Set(["reroll-failed-check", "reaction-attack"]);
 export const TRIGGER_EFFECT_KINDS = ["grant-resource", "add-temp-integrity", "apply-state", "heal", "extra-damage", "queued-reroll", "spend-and-survive", "chat-prompt",
   "modify-incoming-damage", "survive-at-1", "resist-forced-movement", "bank-reroll", "bank-bonus", "impose", "displace-token", "apply-ae", "remove-condition",
-  "bank-counter", "spend-counter", "reroll-failed-check", "reaction-attack", "negate-condition", "hex-darkness"];
+  "bank-counter", "spend-counter", "reroll-failed-check", "reaction-attack", "bonus-strike-or-dash", "negate-condition", "hex-darkness"];
 export const TRIGGER_EVENTS = ["on-ally-turn-end-adjacent", "on-attack-hit", "on-attack-miss", "on-missed-by", "on-damage-taken", "on-incoming-damage", "on-ally-incoming-damage", "on-ally-hit", "on-self-or-ally-hit",
   "on-skill-fail", "on-skill-success", "on-agreement", "on-search", "on-save-fail", "on-save-success", "on-would-drop-to-zero", "on-drop-to-zero", "on-adjacent-drop",
   "on-soma-break", "on-move", "on-forced-movement", "on-delivery", "on-cast", "on-turn-start", "on-turn-end", "on-enemy-turn-end-adjacent", "on-help-action", "on-would-gain-condition", "on-ally-forced-movement"];
@@ -1451,6 +1452,10 @@ async function _dispatchEffect(actor, effect, source, payload, sourceItemId = nu
       await game.fourththing.rolls.attributeTest(actor, { attribute: ra.attribute, skill: ra.skill || null, label: `${ra.label || "Check"} — ${source} reroll`, dc: ra.dc ?? null, target: tgt?.actor ?? tgt ?? null, kind: ra.kind || "tactical", _noFailTriggers: true });
       return { ok:true, summary:`${ra.label || "check"} rerolled` };
     }
+    case "bonus-strike-or-dash": {
+      const r = await game.fourththing.triggers.bonusStrikeOrDash(actor, args, source);
+      return r?.ok ? { ok:true, summary: r.summary } : { ok:false, reason: r?.reason || "not used" };
+    }
     case "reaction-attack": {
       const tgt = payload?.target?.actor ?? payload?.target ?? null;
       if (!tgt) return { ok:false, reason:"no one to strike" };
@@ -1480,7 +1485,7 @@ async function _postOfferCard(actor, m, payload, event, fireId = null) {
   const eff = m.trigger.effect ?? {};
   const what = m.trigger.offerText || eff.args?.body || ({
     "reroll-failed-check": "Reroll the check you just failed",
-    "reaction-attack": "Make a reaction Strike",
+    "reaction-attack": "Make a reaction Strike", "bonus-strike-or-dash": "Bonus action: one weapon attack or the Dash",
     "modify-incoming-damage": "Reduce the damage you just took",
     "displace-token": "Shift position",
     "bank-reroll": "Bank a reroll", "bank-bonus": "Bank a bonus", "impose": "Impose on the target",

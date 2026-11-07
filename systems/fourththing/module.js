@@ -18232,6 +18232,40 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const tt = target.getActiveTokens?.()[0]; if (tt) ftSetUserTargets([tt]);
       ftOpenEngageDialog(actor, item, { skipActionGate: true });
       return { ok: true, summary: `${actor.name} — reaction Strike vs ${target.name} (${item.name})` };
+    },
+    /** bonus-strike-or-dash (Round 4, 2026-11-06): spend the Bonus action on one weapon attack (with a banked reroll) or the Dash. A refusal keeps the feature's charge. */
+    async bonusStrikeOrDash(actor, args = {}, source = "") {
+      if (ftWarnIfIncapacitated(actor)) return { ok: false, reason: `${actor.name} can't act` };
+      const acts = (actor.system?.system ?? actor.system)?.actions ?? {};
+      if (_ftIsActionEconomyActive(actor)) {
+        if (game.combat?.combatant?.actor?.id !== actor.id) return { ok: false, reason: "it can only be used on your turn. Your charge is kept" };
+        if (acts.bonusUsed) return { ok: false, reason: "your Bonus action is already spent. Your charge is kept" };
+        const need = Number(args.minMoveFt) || 0;
+        if ((Number(acts.movementUsedFt) || 0) < need) return { ok: false, reason: `move at least ${need} ft this turn first. Your charge is kept` };
+      }
+      const weapons = actor.items.filter(i => i.type === "weapon").sort((a, b) => a.name.localeCompare(b.name));
+      const options = weapons.map(w => `<option value="${w.id}">${ftEscapeHtml(w.name)}</option>`).join("");
+      const content = weapons.length ? `<label style="display:block;margin:0.4rem 0">Weapon <select name="weaponId" style="width:100%">${options}</select></label>` : `<p style="margin:0.4rem 0">You have no weapon to attack with.</p>`;
+      const picked = await foundry.applications.api.DialogV2.wait({
+        window: { title: source || "Bonus action" }, content, rejectClose: false,
+        buttons: [
+          ...(weapons.length ? [{ action: "attack", label: "Weapon attack", default: true, callback: (_e, btn) => ({ act: "attack", weaponId: btn.form?.elements?.weaponId?.value }) }] : []),
+          { action: "dash", label: "Dash", callback: () => ({ act: "dash" }) }
+        ]
+      }).catch(() => null);
+      if (!picked?.act) return { ok: false, reason: "not used. Your charge is kept" };
+      if (picked.act === "dash") {
+        const summary = await FT.COMBAT_ACTIONS.dash.apply(actor);
+        await actor.update({ "system.actions.bonusUsed": true });
+        return { ok: true, summary };
+      }
+      const item = actor.items.get(picked.weaponId);
+      if (!item) return { ok: false, reason: "that weapon is gone. Your charge is kept" };
+      if (!game.user.targets?.size) return { ok: false, reason: "target someone first. Your charge is kept" };
+      if (args.reroll !== false) await game.fourththing.aid.bank(actor, { from: actor.name, source, context: "attack", note: args.note || source });
+      await actor.update({ "system.actions.bonusUsed": true });
+      ftOpenEngageDialog(actor, item, { skipActionGate: true });
+      return { ok: true, summary: `${actor.name} — bonus attack with ${item.name}${args.reroll !== false ? ", rerolling its lowest die" : ""}` };
     }
   };
   game.fourththing.ftOpenCastDialog   = ftOpenCastDialog;
