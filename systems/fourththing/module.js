@@ -17398,7 +17398,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           // manifestation carries resolution.saveAttribute (+ fixed DC); instead of landing the states outright, the
           // target gets the standard save-prompt card (states on a failed save; optional rider damage in
           // manifestation.riderDamage, halved/negated by resolution.onSave). Save-FIRST weapons never reach here.
-          if (_strikeItem?.type === "weapon" && _strikeMf?.resolution?.saveAttribute && _strikeMf.resolution.mode !== "save" && _strikeTgt) {
+          // Round 4 (2026-11-06): the builder leaves saveAttribute on every weapon, so a plain Strike with nothing riding on it posted an empty save
+          // that claimed "halved" over a card whose damage it never touched. No rider damage and no states = no save.
+          const _riderStakes = !!_strikeMf?.riderDamage?.number || (!!_strikeMf && _ftHasManifestationApplicables(_strikeMf, _strikeItem));
+          if (_strikeItem?.type === "weapon" && _strikeMf?.resolution?.saveAttribute && _strikeMf.resolution.mode !== "save" && _strikeTgt && _riderStakes) {
             const _riderDr = _strikeMf.riderDamage?.number ? _strikeMf.riderDamage : { op: "none" };
             await _ftPostSavePromptCard(actor, _strikeTgt, _strikeItem, _strikeMf, _riderDr, { castDc: Number(defenseValue) || 15, intent });
           } else if (_strikeItem?.type === "weapon" && _strikeMf && _strikeTgt &&
