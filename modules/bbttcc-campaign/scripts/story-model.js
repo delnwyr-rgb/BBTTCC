@@ -662,7 +662,7 @@ export function deriveSituation(ctx) {
   // two hubs pointing at each other with nothing behind either do NOT lead anywhere, 2026-09-14)
   // Round three (2026-11-03): a beat under a live phaseEntry lands on its target, so that target is what we judge. KT's Act 2 intro never played in
   // Act 1 (it enters the cookline), which left NOW and "Run next" on it for good after the cookline was done.
-  const enteredAs = (b) => { const pe = b?.phaseEntry; const t = (pe?.to && phase < Number(pe.belowPhase)) ? byId.get(String(pe.to)) : null; return t || b; };
+  const enteredAs = (b) => { const pe = b?.phaseEntry; const t = (pe?.to && phase < Number(pe.belowPhase) && !(pe.afterFirst && !fired.has(String(b.id)))) ? byId.get(String(pe.to)) : null; return t || b; };
   const leadsSomewhere = (b0) => { const b = enteredAs(b0); return !!b && (!fired.has(String(b.id)) || (isHub(b) && (b.choices || []).some(c => { if ([].concat(c?.requires || []).some(r => r?.beatMark && r.not && fired.has(String(r.beatMark)))) return false;   // the other fork was taken: this one is closed, not fresh
     const t = byId.get(String(c?.next || "")); return t && !fired.has(String(t.id)); }))); };
   // (2026-09-14, evening) The "orphan" heuristic is GONE. Dead beats are a DATA fact, removed by

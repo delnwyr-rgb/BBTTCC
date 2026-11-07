@@ -1932,7 +1932,7 @@ function _choiceSpent(ch, campaign, fromBeatId = null) {
     const byId = (id) => (campaign?.beats || []).find(b => String(b?.id) === String(id));
     const comesBack = (b) => (b?.choices || []).some(c => String(c?.next || "") === from);
     // Round 4 (2026-11-06): read the beat a route really lands on. The Long Market's "Go in" lands on Etta's Act 1 welcome through phaseEntry, so its way home never showed and the Round's door kept no ✓.
-    const entered = (id) => { const b = byId(id), pe = b?.phaseEntry; return (pe?.to && _storyPhaseGet() < Number(pe.belowPhase) && byId(pe.to)) || b; };
+    const entered = (id) => { const b = byId(id), pe = b?.phaseEntry; return (pe?.to && _storyPhaseGet() < Number(pe.belowPhase) && !(pe.afterFirst && !_storyStateFor(campaign?.id).played?.[String(b.id)]) && byId(pe.to)) || b; };
     const isQuestion = /^ans_/.test(next) || /\banswer\b/.test(String(tgt.tags || "")) || (!!from && (comesBack(tgt) || (tgt.choices || []).some(c => c?.next && String(c.next) !== from && comesBack(entered(c.next)))));
     return isQuestion ? "soft" : false;
   } catch (_e) { return false; }
@@ -5095,7 +5095,8 @@ function _beatEntryRedirect(beatId, campaign) {
     // so "Leave → quest hub" wiring needs the reroute to happen here.
     const b = (campaign?.beats || []).find(x => String(x?.id) === String(beatId));
     const pe = b?.phaseEntry;
-    if (pe && pe.to && Number.isFinite(Number(pe.belowPhase)) && _storyPhaseGet() < Number(pe.belowPhase)) {
+    // afterFirst (Dave 2026-11-06): the beat plays once as itself, so a town's entrance isn't lost to its hospitality variant.
+    if (pe && pe.to && Number.isFinite(Number(pe.belowPhase)) && _storyPhaseGet() < Number(pe.belowPhase) && !(pe.afterFirst && !_storyStateFor(campaign?.id).played?.[String(b.id)])) {
       const to = String(pe.to);
       if ((campaign?.beats || []).some(x => String(x?.id) === to)) {
         log(`[phaseEntry] '${beatId}' → '${to}' (storyPhase ${_storyPhaseGet()} < ${Number(pe.belowPhase)})`);
