@@ -8142,10 +8142,13 @@ function _stairsCells(scene, level) {
 }
 async function _tokensToStairs(scene, tokens, level) {
   if (!tokens?.length) return;
+  // Dave places them by hand: flags.bbttcc-campaign.stewardSpots = { [levelId]: { [actorId]: {x,y} } }. Anyone without a spot takes the nearest free square.
+  const spots = scene.getFlag(MOD_ID, "stewardSpots")?.[level.id] || {};
   const cells = _stairsCells(scene, level) || [], moving = new Set(tokens.map(t => t.id));
   const taken = new Set(scene.tokens.contents.filter(t => !moving.has(t.id) && t._source.level === level.id).map(t => `${t.x},${t.y}`));
+  for (const p of Object.values(spots)) taken.add(`${p.x},${p.y}`);
   const free = cells.filter(c => !taken.has(`${c.x},${c.y}`));
-  const updates = tokens.map((t, i) => ({ _id: t.id, elevation: level.elevation.base, level: level.id, ...(free[i] ? { x: free[i].x, y: free[i].y } : {}) }));
+  const updates = tokens.map(t => { const c = spots[t.actorId] || free.shift(); return { _id: t.id, elevation: level.elevation.base, level: level.id, ...(c ? { x: c.x, y: c.y } : {}) }; });
   await scene.updateEmbeddedDocuments("Token", updates, { animate: false });
 }
 // Boarding from elsewhere gathers every Steward at the stairs. Pressing The Reliable while already aboard only adds whoever is missing.
