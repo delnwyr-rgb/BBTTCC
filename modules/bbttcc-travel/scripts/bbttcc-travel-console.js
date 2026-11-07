@@ -2577,6 +2577,9 @@
             // a final-leg encounter paused before arrival, a reload lost the waiting card, and the party read as being at the
             // route's origin)
             if (r && r.ok !== false && L?.toUuid) { try { await game.bbttcc?.api?.travel?.setPosition?.(factionId, L.toUuid); } catch (_eSP) {} }
+            // THE RIDE = EVERYONE (Dave 10-29): the passengers land with the lead (2026-11-07: their positions stayed at the origin,
+            // so the map showed an "Enter" plate for Khezek-Tor while the party stood in Lyrenn).
+            if (r && r.ok !== false && L?.toUuid) { for (const pfid of joiningFactionIds) { try { await game.bbttcc?.api?.travel?.setPosition?.(pfid, L.toUuid); } catch (_eSPp) {} } }
             let enc = r?.encounter;
             if (enc?.triggered) {
               const executedUuids = legs.slice(0, i + 1).map(x => x.toUuid).filter(Boolean);
