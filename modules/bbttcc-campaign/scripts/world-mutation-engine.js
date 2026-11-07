@@ -2832,6 +2832,14 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
   // Dave 2026-11-05: a party effect lands with a banner on every seat, so nobody finds out from their sheet.
   const PARTY_BANNER_SOCKET = "module.bbttcc-campaign";
   // Round 4 (Dave 2026-11-06): chat lines get missed, and Loyalty had none at all. A beat's Loyalty, Darkness and mark changes reach every seat as a banner, with a line in chat.
+  // Dave 2026-11-07: a bonus gets the level-up treatment, a centre-screen card with a sting on every seat (moment story_bonus). A table with the FX off still gets the old banner.
+  function _announceBonus({ kicker, title, detail, fallback }) {
+    try {
+      const fired = game.bbttcc?.api?.fx?.moment?.("story_bonus", { kicker, title, detail });
+      if (fired?.ok) return;
+    } catch (e) { console.warn(TAG, "bonus moment failed", e); }
+    try { ui.notifications?.info?.(fallback); game.socket?.emit?.(PARTY_BANNER_SOCKET, { type: "bbttccPartyEffectBanner", text: fallback }); } catch (e) { console.warn(TAG, "bonus banner failed", e); }
+  }
   function _announceBeatRewards(label, rows) {
     try {
       const signed = (n) => `${Number(n) > 0 ? "+" : ""}${Number(n)}`;
@@ -2851,8 +2859,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       });
       const title = String(label).split(" — ").pop();
       const text = `${title}: ${parts.join(", ")}.`;
-      ui.notifications?.info?.(text);
-      game.socket?.emit?.(PARTY_BANNER_SOCKET, { type: "bbttccPartyEffectBanner", text });
+      _announceBonus({ kicker: "EARNED", title, detail: `${parts.join(", ")}.`, fallback: text });
       ChatMessage.create({ content: `<div class="bbttcc-beat-reward">${foundry.utils.escapeHTML(text)}</div>` }).catch?.(() => {});
     } catch (e) { console.warn(TAG, "beat reward banner failed", e); }
   }
@@ -2868,7 +2875,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     for (const [sk, n] of Object.entries(ranks || {})) if (Number(n)) parts.push(`${signed(n)} ${title(sk)}`);
     if (relief) parts.push(`${relief} Strain eased`);
     const text = `${name}${parts.length ? ": " + parts.join(", ") : ""}${permanent ? "." : turns > 1 ? ` for ${turns} turns.` : " until the turn ends."}`;
-    try { ui.notifications?.info?.(text); game.socket?.emit?.(PARTY_BANNER_SOCKET, { type: "bbttccPartyEffectBanner", text }); } catch (e) { console.warn(TAG, "party effect banner failed", e); }
+    _announceBonus({ kicker: "BONUS", title: name, detail: text.slice(String(name).length).replace(/^:?\s*/, ""), fallback: text });
   }
   Hooks.once("ready", () => { try { game.socket?.on?.(PARTY_BANNER_SOCKET, (m) => { if (m?.type === "bbttccPartyEffectBanner" && m.text) ui.notifications?.info?.(m.text); }); } catch (_e) {} });
 
