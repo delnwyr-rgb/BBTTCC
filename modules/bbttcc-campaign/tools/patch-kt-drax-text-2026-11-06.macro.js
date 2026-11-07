@@ -27,6 +27,9 @@
   const tar = beats.find(x => x.id === "rc_drax_tar");
   const TAR_OLD = "That's the tar. Or it's the mine deciding to know you a little early.", TAR_NEW = "That's the tar. It has to be. Yeah.";
   if (tar?.description?.includes(TAR_OLD)) { tar.description = tar.description.replace(TAR_OLD, TAR_NEW); changed = true; }
+  // The Tar's "Ask about the chalk marks" dropped the table back at the cookline without the answer.
+  const chalk = (tar?.choices || []).find(x => /^Ask about the chalk marks/.test(String(x?.label || "")));
+  if (chalk && chalk.next !== "kt_drax_answer_chalk") { chalk.next = "kt_drax_answer_chalk"; changed = true; }
   if (!DRY_RUN && changed) await C.saveCampaign(id, { ...c, beats });
   console.log("KTDRAX " + JSON.stringify({ DRY_RUN, changed }));
 })();
