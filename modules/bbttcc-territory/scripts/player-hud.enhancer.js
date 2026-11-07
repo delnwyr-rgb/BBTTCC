@@ -1067,7 +1067,7 @@
         <button type="button" class="bbttcc-btn" data-action="travel">
           <i class="fas fa-route"></i><span>Travel</span>
         </button>
-        <button type="button" class="bbttcc-btn" data-action="reliable" data-tooltip="Board the Absolutely Reliable: galley, control station, bunks and your vault.">
+        <button type="button" class="bbttcc-btn" data-action="reliable" data-tooltip="Board the Absolutely Reliable: galley, bunks, engine room and your vault.">
           <i class="fas fa-ship"></i><span>The Reliable</span>
         </button>
         <button type="button" class="bbttcc-btn bbttcc-travel-stack-pill" data-action="travel" data-role="travel-stack-pill" style="display:none;"></button>
