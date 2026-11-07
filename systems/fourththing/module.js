@@ -2123,9 +2123,12 @@ function _ftGridFt(grid, a, b) {
   } catch (_e) { return null; }
 }
 const _ftIsIncapacitated = (actor) => !!actor?.flags?.fourththing?.gettingItTogether;
+// Dying can't act either (Dave 2026-11-06): 0 Integrity means Last Stand rolls and waiting for help.
+const _ftIsDying = (actor) => (actor?.system?.system ?? actor?.system)?.conditions?.dying === true;
 function ftWarnIfIncapacitated(actor) {
-  if (!_ftIsIncapacitated(actor)) return false;
-  ui.notifications?.warn(`${actor.name} is Incapacitated and can't act.`);
+  const state = _ftIsDying(actor) ? "Dying" : (_ftIsIncapacitated(actor) ? "Incapacitated" : null);
+  if (!state) return false;
+  ui.notifications?.warn(`${actor.name} is ${state} and can't act.`);
   return true;
 }
 
@@ -11726,7 +11729,7 @@ FT.CONDITIONS = {
   charmed:    { label: "Charmed",    color: "#e07ec6", desc: "Cannot take hostile action against the source; source has reroll-lowest on social checks against you." },
   compelled:  { label: "Compelled",  color: "#7d3cff", desc: "On your turn you must spend at least one action toward a directive named by the source; otherwise you may act freely." },
   incapacitated: { label: "Incapacitated", color: "#6a3a8a", desc: "Stress reduced to 0. You cannot act. Roll Getting It Together at the start of each of your turns: 3 successes → back up at 1 Stress. 3 failures → out for the fight." },
-  dying:      { label: "Dying",      color: "#8b0000", desc: "Integrity reduced to 0. Make a Last Stand roll at the start of each of your turns. 3 successes → stabilize at 1 Integrity. 3 failures → Cross the Threshold." },
+  dying:      { label: "Dying",      color: "#8b0000", desc: "Integrity reduced to 0. You can't act. Make a Last Stand roll at the start of each of your turns. 3 successes → stabilize at 1 Integrity. 3 failures → Cross the Threshold." },
   surprise:   { label: "Surprised",  color: "#cc7a00", desc: "Cannot take any action on the first round of combat. Ends at the start of your next turn." },
   // Imposed (techniques ruling R5, 2026-09-21): the target's next attack roll or
   // defense check is made with 3d10 keep-lowest-2 (no explosions). Consumed by
