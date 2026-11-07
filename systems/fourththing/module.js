@@ -18105,6 +18105,15 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     for (const token of applyTargets) {
       const actor = token.actor;
       if (!actor) continue;
+      // Round 4 (2026-11-06): an Apply button stayed live after use, and two seats pressing it healed Toran twice. Each target takes a card once, on any seat.
+      const _applyMsg = game.messages?.get(btn.closest("[data-message-id]")?.dataset?.messageId);
+      const _applyKey = String(actor.uuid).replace(/\./g, "_");
+      if (_applyMsg?.flags?.fourththing?.appliedTo?.[_applyKey]) {
+        ui.notifications.warn(`This card has already been applied to ${actor.name}.`);
+        continue;
+      }
+      if (_applyMsg?.isOwner) { try { await _applyMsg.setFlag("fourththing", `appliedTo.${_applyKey}`, Date.now()); } catch (e) { console.warn("[fourththing] apply stamp failed", e); } }
+      else if (_applyMsg) _ftRelayEmit({ t: "ft-cardApplied", messageId: _applyMsg.id, key: _applyKey });
       if (!firstTarget) firstTarget = actor;
       // 2026-05-19 — Players don't own enemy rigs/bosses. 2026-10-01 — the
       // per-call GM relay now lives in _applyDamageToActor itself (by uuid),
@@ -31402,7 +31411,11 @@ async function _ftRelayActor(uuid) {
 // 2026-10-01 relay types (runs on the active GM only — see _ftRelayHandler).
 // Each validates its payload: only known flag/condition keys are written.
 function _ftRelayHandlerExtra(msg) {
-  if (msg?.t === "ft-cardResolved") {
+  if (msg?.t === "ft-cardApplied") {
+    // A clicker who can't write the message: the GM records that this target has taken the card.
+    const m = game.messages?.get(msg.messageId);
+    if (m && /^[A-Za-z0-9_]+$/.test(String(msg.key ?? ""))) m.setFlag("fourththing", `appliedTo.${msg.key}`, Date.now()).catch(e => console.warn("[fourththing] GM-relay apply stamp failed", e));
+  } else if (msg?.t === "ft-cardResolved") {
     // Persist a chat card's one-time resolution for a clicker who can't write
     // the message (see _ftMarkCardResolved).
     if (!_FT_RESOLVABLE_CARD_KEYS.has(msg.ctxKey)) return;

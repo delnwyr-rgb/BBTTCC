@@ -1481,7 +1481,14 @@ function _serialisePayload(payload = {}) {
   }
   return out;
 }
-async function _postOfferCard(actor, m, payload, event, fireId = null) {
+// limit.overflowSurge (Round 4, 2026-11-06): past the limit, the offer returns at a Surge cost, once per turn, only when it can actually be paid for.
+function _overflowCost(actor, trigger) {
+  const n = Number(trigger?.limit?.overflowSurge) || 0;
+  if (n <= 0) return 0;
+  const sys = actor.system?.system ?? actor.system;
+  return (Number(sys?.resources?.surge?.value) || 0) >= n && !sys?.actions?.bonusUsed ? n : 0;
+}
+async function _postOfferCard(actor, m, payload, event, fireId = null, overflow = 0) {
   const eff = m.trigger.effect ?? {};
   const what = m.trigger.offerText || eff.args?.body || ({
     "reroll-failed-check": "Reroll the check you just failed",
@@ -1500,10 +1507,10 @@ async function _postOfferCard(actor, m, payload, event, fireId = null) {
     whisper: [...new Set([...owners, ..._gmAndMe()])],
     content: `<div class="fourththing-roll ft-trigger-offer" style="border-left:4px solid #6b3fa0;padding:0.45rem 0.6rem;background:#ede0f5;border-radius:3px;color:#1a1a1a">
       <div style="font-size:0.82rem;color:#6b3fa0;font-weight:700">⚡ ${m.sourceItemName}${limitNote}</div>
-      <div style="font-size:0.78rem;margin:0.2rem 0">${what}</div>
+      <div style="font-size:0.78rem;margin:0.2rem 0">${what}${overflow ? ` <b>Extra use: costs ${overflow} Surge.</b>` : ""}</div>
       <button type="button" class="ft-trigger-accept" style="font-size:0.78rem;line-height:1.6;margin-top:0.15rem">Use ${m.sourceItemName}</button>
     </div>`,
-    flags: { fourththing: { triggerOffer: { actorUuid: actor.uuid, itemId: m.sourceItemId, triggerIndex: m.triggerIndex, event, fireId, payload: _serialisePayload(payload), used: false } } }
+    flags: { fourththing: { triggerOffer: { actorUuid: actor.uuid, itemId: m.sourceItemId, triggerIndex: m.triggerIndex, event, fireId, payload: _serialisePayload(payload), used: false, overflowSurge: overflow || 0 } } }
   });
   return msg;
 }
@@ -1518,12 +1525,20 @@ export async function acceptTriggerOffer(message) {
   const item = a.items.get(off.itemId); const t = item?.flags?.fourththing?.triggers?.[off.triggerIndex];
   if (!t) return { ok:false, reason:"trigger gone" };
   const limitCheck = await _checkAndConsumeLimit(a, off.itemId, off.triggerIndex, t.limit, false);
-  if (!limitCheck.allowed) return { ok:false, reason: limitCheck.reason };
+  let surgeDue = 0;
+  if (!limitCheck.allowed) {
+    surgeDue = _overflowCost(a, t);
+    if (!surgeDue) { const reason = Number(t.limit?.overflowSurge) > 0 ? `the extra use costs ${t.limit.overflowSurge} Surge and a free Bonus action` : limitCheck.reason; ui.notifications?.warn?.(`${item.name}: ${reason}`); return { ok:false, reason }; }
+  }
   const payload = { ...off.payload, _accepted: true };
   if (off.payload?.targetUuid) { const tg = await fromUuid(off.payload.targetUuid).catch(() => null); payload.target = tg?.actor ?? tg ?? null; }
   let result; try { result = await _dispatchEffect(a, t.effect, item.name, payload, off.itemId); } catch (e) { result = { ok:false, reason: e?.message || "threw" }; }
   if (result.ok) {
     try { await limitCheck.consume?.(); } catch (_e) {}
+    if (surgeDue) {
+      const sys = a.system?.system ?? a.system; const cur = Number(sys?.resources?.surge?.value) || 0;
+      try { await a.update({ "system.resources.surge.value": Math.max(0, cur - surgeDue) }); result.summary = `${result.summary} (${surgeDue} Surge)`; } catch (e) { console.warn("trigger overflow Surge failed", e); }
+    }
     try { await message.update({ "flags.fourththing.triggerOffer.used": true, content: message.content.replace(/<button[\s\S]*?<\/button>/, `<div style="font-size:0.78rem;color:#2f6b2f">✔ ${result.summary}</div>`) }); } catch (_e) {}
     // 2026-10-07: sibling Offers from the same event (e.g. Wind-Read + Ward of the Gale + Reactor Shield Cape on one hit) are retired — one reaction per event.
     if (off.fireId) for (const sib of game.messages.contents) {
@@ -1548,9 +1563,13 @@ export async function fireTriggers(actor, event, payload = {}) {
     }
     // 2026-10-06: the limited use is consumed AFTER a successful dispatch — a failed/errored effect no longer burns it
     const limitCheck = await _checkAndConsumeLimit(actor, m.sourceItemId, m.triggerIndex, m.trigger.limit, false);
+    let overflow = 0;
     if (!limitCheck.allowed) {
-      skipped.push({ source: m.sourceItemName, reason: limitCheck.reason });
-      continue;
+      overflow = m.trigger.offer === true ? _overflowCost(actor, m.trigger) : 0;
+      const turnKey = `${game.combat?.id}:${game.combat?.round}:${game.combat?.turn}:${m.sourceItemId}:${m.triggerIndex}`;
+      if (overflow && actor.flags?.fourththing?.overflowOffered === turnKey) overflow = 0;
+      if (!overflow) { skipped.push({ source: m.sourceItemName, reason: limitCheck.reason }); continue; }
+      try { await actor.setFlag("fourththing", "overflowOffered", turnKey); } catch (_e) {}
     }
     // 10-29: don't offer to spend a counter that's empty (Menhirkin Heat Memory offered on every hit,
     // then "heat is empty" on accept) — the offer appears only once something is banked.
@@ -1561,7 +1580,7 @@ export async function fireTriggers(actor, event, payload = {}) {
     }
     // Offers: post the card and move on — nothing fires until the player accepts.
     if (m.trigger.offer === true || OFFER_ONLY_KINDS.has(m.trigger.effect?.kind)) {
-      try { await _postOfferCard(actor, m, payload, event, fireId); offered.push({ source: m.sourceItemName }); }
+      try { await _postOfferCard(actor, m, payload, event, fireId, overflow); offered.push({ source: m.sourceItemName }); }
       catch (e) { skipped.push({ source: m.sourceItemName, reason: e?.message || "offer failed" }); }
       continue;
     }

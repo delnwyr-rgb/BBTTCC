@@ -132,6 +132,7 @@ Legend: 🔴 broken wire · 🟡 dormant/unwired (built, nothing calls it) · �
 - **Integrity 0 (2026-11-06):** Dying can't act: `ftWarnIfIncapacitated` gates `ftOpenEngageDialog` and `ftOpenCastDialog` on `system.conditions.dying` as well as `flags.fourththing.gettingItTogether`. Healing above 0 lifts it (updateActor Integrity detector).
 - **Trigger kind `bonus-strike-or-dash` (2026-11-06):** `game.fourththing.triggers.bonusStrikeOrDash(actor, {reroll, minMoveFt, note}, source)` asks Attack or Dash and spends the Bonus action; a refusal keeps the charge. Used by The Wheel Never Stops.
 - **Down markers (2026-11-06):** each client greys and labels a token from actor state (`_ftDownLabel`: foes at 0 Stress or 0 Integrity = DOWN, Stewards Incapacitated = DOWN, Dying = DYING), nothing written to the token. A foe at 0 Integrity is marked defeated with a chat line. Engage and Cast warn when a targeted foe is already down.
+- **Trigger `limit.overflowSurge` (2026-11-06):** past its limit, an offer returns once per turn at that Surge cost when Surge and the Bonus action are available. **Apply cards:** each target takes a card once across seats, recorded in `flags.fourththing.appliedTo` (GM relay `ft-cardApplied`).
 - Outbound to modules: `game.bbttcc.combat.applyDamage/resistsForcedMove` (`:15535`), `game.bbttcc.api.raid.battleScenes.{list,current,bind,unbind,activate}` (`:26920`), `actorKind` (actor-kind.js).
 
 ### Hooks emitted

@@ -50,7 +50,7 @@
           },
           "limit": {
             "window": "soma-break",
-            "uses": 1
+            "uses": 1, "overflowSurge": 1
           },
           "offer": true,
           "offerText": "The Wheel Never Stops — bonus action: one weapon attack (reroll its lowest die) or the Dash.",
