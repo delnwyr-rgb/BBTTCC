@@ -1216,12 +1216,20 @@ function ftResolveWeaponSkill(actor, weaponSkillKey, weaponCategory = "") {
   return "melee";
 }
 
-// Which target defense a weapon naturally swings at. Ranged → evasion (dodge);
-// melee → guard (parry/block). Falls back to guard for unknown categories.
-function ftWeaponTargetDefense(item) {
-  const cat = String(item?.system?.category ?? "").toLowerCase();
-  if (cat === "ranged") return "evasion";
+// Which defense an attack rolls against — Dave's ruling 2026-11-07 at the East Wall ("it becomes binary"): anything that
+// does Integrity damage attacks GUARD, anything that does Stress damage attacks RESOLVE. Evasion is no longer a target
+// (ranged weapons used to swing at it, which made Guard-only armor useless against a bullet). Track first; the damage type
+// (psychic / qliphothic → Stress) is the fallback for items with no track.
+function ftDefenseForDamage(track, type) {
+  const t = String(track ?? "").toLowerCase(), ty = String(type ?? "").toLowerCase();
+  if (t === "stress") return "resolve";
+  if (t === "integrity") return "guard";
+  if (ty === "psychic" || ty === "qliphothic") return "resolve";
   return "guard";
+}
+function ftWeaponTargetDefense(item) {
+  const dmg = item?.system?.damage ?? {};
+  return ftDefenseForDamage(dmg.track, dmg.type);
 }
 
 // Find an item suitable for an Attack of Opportunity. AoO can fire on any
@@ -16504,7 +16512,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const sys  = actor.system?.system  ?? actor.system  ?? {};
     const tSys = target.system?.system ?? target.system ?? {};
 
-    const attackVs = ["guard", "evasion", "resolve"].includes(resolution.attackVs) ? resolution.attackVs : "evasion";
+    // Binary defenses (2026-11-07): an authored Guard / Resolve stands; "evasion" (the old default) and anything else resolve
+    // from the manifestation's damage track — Integrity → Guard, Stress → Resolve.
+    const _mfDmg = item?.system?.damageRoll ?? item?.system?.damage ?? {};
+    const attackVs = ["guard", "resolve"].includes(resolution.attackVs) ? resolution.attackVs : ftDefenseForDamage(_mfDmg.track, _mfDmg.type);
     const defenseValue = (Number(tSys?.derived?.[attackVs]?.value) || 10) + auraDefenseBonus(target, attackVs);   // + allies' auras (2026-10-07)
 
     // Base from SOURCE (2026-10-01) — the AE sweep below is the single
