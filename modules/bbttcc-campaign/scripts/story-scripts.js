@@ -137,7 +137,7 @@ export const STORY_SCRIPTS = {
           beats: ["khezek_tor_town_walk"], done: { anyOf: ["khezek_tor_drax_welcome", "khezek_tor_sable_welcome"] } }
       ] },
     steps: [
-      { id: "word", label: "Word from the Mountain", line: "Word from Khezek Tor came up with the ore tallies. The old shaft has new handwriting. Ride Thatwards-by-North.", hereLine: "Word from Khezek Tor came up with the ore tallies. You're already on the mountain. Go and see.",
+      { id: "word", label: "Word from the Mountain", line: "Sable Nine and Drax Calder have both written asking for you. Ride to Khezek-Tor.", hereLine: "Sable Nine and Drax Calder have both written asking for you. You're in Khezek-Tor already, so go and find them.",
         beats: ["vs_overture", "khezek_word_ride"], borrow: true, done: { anyOf: ["khezek_word_ride", "khezek_tor_quest_acceptance", "khezek_tor_quest_scene"] } },   // the spine's overture IS Khezek-Tor's word (ruling); khezek_word_ride = Phase C
       { id: "switchback", label: "The Switchback", line: "Calder doesn't spook, and his crews won't work the gallery. Take the mountain's measure from the switchback.", beats: ["khezek_tor_quest_acceptance", "khezek_tor_quest_scene"], done: { mark: "khezek_tor_quest_scene" } },
       { id: "mine", label: "The Mine That Answered Back", group: "shafts", chapter: "the_mine_that_answered_back", line: "Calder wants you below. The new shaft broke into something he won't call a cavern.",
