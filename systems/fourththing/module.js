@@ -2329,7 +2329,7 @@ async function _ftRollDefenseCheck(actor, which = "guard") {
   if (!actor) return null;
   const sys   = actor.system?.system ?? actor.system ?? {};
   const v     = Number(sys.derived?.[which]?.value ?? 10) + auraDefenseBonus(actor, which);   // + allies' auras (2026-10-07)
-  const pen   = _ftStrainBite(actor).rollPenalty;
+  const pen   = _ftStrainBite(actor).rollPenalty + ((which === "resolve" && sys.conditions?.shaken === true) ? 2 : 0);   // 2026-11-08: Shaken −2 to Resolve checks
   const imposed = !!game.fourththing.impose?.isImposed?.(actor);
   const die   = imposed ? "3d10kl2" : _ftXd10(actor);
   const bonus = v - pen;
@@ -17051,8 +17051,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // Aurablade Fury — Imposed Disadvantage: this attacker's next attack is
     // forced to 3d10kl2 (one-shot stamped on them by fury_dis_attack). Same
     // 3d10kl2 mechanic the CL defenseImpose gate uses on the save side.
-    const _abDisAttack = !!actor.flags?.fourththing?.aurablade?.disAttackOnce;
-    if (_abDisAttack) {
+    // 2026-11-08 (East Wall fights): Blinded says "attack rolls at disadvantage" — same 3d10 keep-lowest-2 as Imposed.
+    const _blindDis = (actor.system?.system ?? actor.system)?.conditions?.blinded === true;
+    const _abDisAttack = !!actor.flags?.fourththing?.aurablade?.disAttackOnce || _blindDis;
+    if (actor.flags?.fourththing?.aurablade?.disAttackOnce) {
       try { await actor.update({ "flags.fourththing.aurablade.-=disAttackOnce": null }); }
       catch (_e) { /* non-owner — clears on next round commit */ }
     }
@@ -17079,7 +17081,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const _atkCbSum = _atkCb.reduce((n, b) => n + (Number(b.bonus) || 0), 0);
     // 2026-11-07 (the East Wall fight): Staggered says "−2 to attack rolls" and nothing applied it — a Staggered Tor-Wrath hit at full bonus.
     const _staggerPen = ((actor.system?.system ?? actor.system)?.conditions?.staggered === true) ? 2 : 0;
-    const total_mod = _atkCbSum + attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus + foeTierBonus + threatAttack - echoPenalty - _radPen - _staggerPen;
+    // 2026-11-08: Prone target — "melee attacks against you +2; ranged −2"; Shaken target — "−2 to Resolve checks" (its Resolve as a target).
+    const _tgtSysP = target ? ((target.system?.system ?? target.system) ?? {}) : {};
+    let _tgtCat = ""; try { _tgtCat = String((itemUuid ? fromUuidSync(itemUuid) : null)?.system?.category ?? "").toLowerCase(); } catch (_eCat) {}
+    const _proneMod = (_tgtSysP?.conditions?.prone === true) ? (_tgtCat === "ranged" ? -2 : 2) : 0;
+    const _shakenDef = (_tgtSysP?.conditions?.shaken === true && String(defense).toLowerCase() === "resolve") ? 2 : 0;
+    if (_shakenDef) defenseValue = Math.max(0, (Number(defenseValue) || 0) - _shakenDef);
+    const total_mod = _atkCbSum + attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus + foeTierBonus + threatAttack - echoPenalty - _radPen - _staggerPen + _proneMod;
     // ── Aptitude rank + roll mode → dice pool ────────────────────────────────
     // Strikes roll the SAME rank-aware pool as an Aptitude check so a weapon hit
     // benefits identically. The rank's flat +N is already in total_mod; here the
@@ -17394,6 +17402,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         radPenalty: _radPen
       }) + restraintNote + (_staggerPen
         ? `<p class="ft-roll-note" style="font-size:0.78rem;color:#f2994a;margin:0.2rem 0 0">◈ Staggered: −${_staggerPen} to the attack</p>`
+        : "") + (_blindDis
+        ? `<p class="ft-roll-note" style="font-size:0.78rem;color:#f2994a;margin:0.2rem 0 0">◈ Blinded: 3d10 keep worst 2</p>`
+        : "") + (_proneMod
+        ? `<p class="ft-roll-note" style="font-size:0.78rem;color:#9ad0ff;margin:0.2rem 0 0">◈ Target Prone: ${_proneMod > 0 ? "+" : ""}${_proneMod} to the attack</p>`
+        : "") + (_shakenDef
+        ? `<p class="ft-roll-note" style="font-size:0.78rem;color:#9ad0ff;margin:0.2rem 0 0">◈ Target Shaken: Resolve −${_shakenDef}</p>`
         : "") + (flankMod > 0
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">⚔ Flanking: +${flankMod} (${flankMod + 1} melee threats)</p>`
         : "") + (_atkCb.length
@@ -18964,7 +18978,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   game.fourththing.impose = {
     isImposed(actor) { const s = actor?.system?.system ?? actor?.system; return !!s?.conditions?.imposed; },
     /** Saves only (2026-11-07): the target's defense checks keep the lowest 2 of 3d10 for a round — attacks untouched (the Tor-Wrath's aura as written). */
-    saves(source, target, name = "Saves at disadvantage") { return _ftPactDisSavesAE(source ?? target, target, name); },
+    saves(source, target, name = "Saves at disadvantage") {
+      // one copy per target (Dave 2026-11-08, "what are all the swirlies"): eight auras were stacking a daze icon each per turn
+      if (target?.effects?.some?.(e => !e.disabled && e.flags?.fourththing?.aurablade?.disSavesAll)) return null;
+      return _ftPactDisSavesAE(source ?? target, target, name);
+    },
     async apply(target, { source = "", note = "" } = {}) {
       if (!target || (target.type !== "character" && target.type !== "npc")) return false;
       const round = Number(game.combat?.round ?? 0);
@@ -19300,9 +19318,24 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     return null;
   };
 
-  game.fourththing.applyManifestationStates = async function (caster, target, item, mf, { castDc = 15, channel = null } = {}) {
+  game.fourththing.applyManifestationStates = async function (caster, target, item, mf, { castDc = 15, channel = null, saveResolved = false } = {}) {
     if (!caster || !target) return null;
     const cfg = mf?.appliedStates ?? null;
+    // 2026-11-08 (the East Wall fights, Dave: "are the manifestations working right?"): a power whose text reads "Mind defense vs
+    // Cast DC — on a fail: Staggered" but carries NO resolution shape used to land its states outright; only save-shaped powers
+    // ever rolled the target. When the states name a save attribute and nothing upstream resolved one, the target rolls it here
+    // (the system's own save roll — disadvantage AEs, auto-succeed one-shots and the chat card all apply). A pass negates.
+    try {
+      const _resShape = String(mf?.resolution?.shape ?? item?.system?.manifestation?.resolution?.shape ?? "none").toLowerCase();
+      const _states = Array.isArray(cfg?.states) ? cfg.states : (cfg?.states && typeof cfg.states === "object" ? Object.keys(cfg.states).filter(k => cfg.states[k]) : []);
+      if (cfg?.saveAttribute && _states.length && !saveResolved && target.id !== caster.id && (_resShape === "none" || _resShape === "")) {
+        const _mfTierSv = Number(mf?.tier ?? (item?.system?.system ?? item?.system)?.manifestation?.tier) || 1;
+        const _dcSv = cfg.saveDcMode === "fixed" ? (Number(cfg.saveDcFixed) || 15) : ftFormulaSaveDC(caster, _mfTierSv, channel);
+        const sv = await game.fourththing.rolls.resolveManifestationSave(caster, target, item,
+          { saveAttribute: cfg.saveAttribute, saveDcMode: "fixed", saveDcFixed: _dcSv, onSave: "negate" }, { castDc: _dcSv });
+        if (sv?.saved) return { applied: [], skipped: _states.map(k => ({ key: k, reason: "saved" })), saved: true, total: sv.total, dc: sv.dc };
+      }
+    } catch (eSv) { console.warn("[fourththing] applied-states save roll failed", eSv); }
     // Phase C — Buffs & Wards. Pull from mf first (full call sites), then
     // fall back to the live item's manifestation block (save-prompt synthesizes
     // mf with only appliedStates, so the item-side lookup is the bridge).
@@ -19329,7 +19362,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // tick rounds — they're ended by the save-each-round handler or scene
     // boundary. Round-based durations get `rounds` so Foundry decrements.
     const combat = game.combat;
-    const dur = cfg?.duration ?? "1-round";
+    const _mfDurRaw = String(mf?.duration ?? item?.system?.manifestation?.duration ?? "").toLowerCase(), _mfStabRaw = String(mf?.stability ?? item?.system?.manifestation?.stability ?? "").toLowerCase();
+    const dur = cfg?.duration ?? ((["scene", "persistent", "sustained"].includes(_mfDurRaw) || ["sustained", "enduring"].includes(_mfStabRaw)) ? "scene" : "1-round");   // 2026-11-08: a scene-long ward no longer expires after one round
     const roundsByKey = { "1-round": 1, "2-rounds": 2, "3-rounds": 3 };
     // Owner ruling 2026-08-22 ("bite first"): a timed effect applied outside
     // the target's own turn is padded one round, so "1 round" always lasts
