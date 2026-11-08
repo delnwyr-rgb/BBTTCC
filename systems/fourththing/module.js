@@ -4523,13 +4523,13 @@ function _ftOverheatShielded(actor) {
 async function _ftOverheatBite(actor) {
   try {
     if (_ftOverheatShielded(actor)) return;
-    const s = actor.system?.system ?? actor.system ?? {};
-    const cur = Number(s?.derived?.stress?.value);
-    if (!Number.isFinite(cur) || cur <= 0) return;
-    await actor.update({ "system.derived.stress.value": cur - 1 });
+    // Dave 2026-11-07 (the East Wall fight): the overheat bite is 1 STRAIN, not 1 Stress — Stress is a hit-point pool;
+    // Strain is the exhaustion ladder (a Soma Break recovers one level). game.fourththing.strain.gain posts its own card.
+    if (!game.fourththing?.strain?.gain) return;
+    await game.fourththing.strain.gain(actor, 1, "overheat");
     ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor }),
-      content: `<div class="fourththing-roll"><p style="margin:0.15rem 0;font-size:0.78rem;color:#ff5ac8">🔥 <b>Overheated</b> — ${ftEscapeHtml(actor.name)} can't hold more Surge. Reality pushes back: <b>1 Stress</b>. Spend or vent.</p></div>`
+      content: `<div class="fourththing-roll"><p style="margin:0.15rem 0;font-size:0.78rem;color:#ff5ac8">🔥 <b>Overheated</b> — ${ftEscapeHtml(actor.name)} can't hold more Surge. Reality pushes back: <b>1 Strain</b>. Spend or vent.</p></div>`
     });
   } catch (e) { console.warn("[ft] overheat bite failed", e); }
 }
@@ -17077,7 +17077,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // 2026-10-07 (item ladder): a graded weapon's +N to hit — only the weapon being swung (item-ladder.js).
     try { const _gi = itemUuid ? fromUuidSync(itemUuid) : null; const _g = _gi?.flags?.fourththing?.grade; if (_g && Number(_g.attack)) _atkCb.push({ bonus: Number(_g.attack), source: _gi.name, note: `${_g.name} +${_g.attack}` }); } catch (_e) {}
     const _atkCbSum = _atkCb.reduce((n, b) => n + (Number(b.bonus) || 0), 0);
-    const total_mod = _atkCbSum + attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus + foeTierBonus + threatAttack - echoPenalty - _radPen;
+    // 2026-11-07 (the East Wall fight): Staggered says "−2 to attack rolls" and nothing applied it — a Staggered Tor-Wrath hit at full bonus.
+    const _staggerPen = ((actor.system?.system ?? actor.system)?.conditions?.staggered === true) ? 2 : 0;
+    const total_mod = _atkCbSum + attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus + foeTierBonus + threatAttack - echoPenalty - _radPen - _staggerPen;
     // ── Aptitude rank + roll mode → dice pool ────────────────────────────────
     // Strikes roll the SAME rank-aware pool as an Aptitude check so a weapon hit
     // benefits identically. The rank's flat +N is already in total_mod; here the
@@ -17390,7 +17392,9 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         costNote, signature, thirdThing,
         itemUuid, ignoreResists: !!_surge.sunderingBlow || !!_npcAtkMods?.ignoreResists, nonlethal: _nonlethalHit,
         radPenalty: _radPen
-      }) + restraintNote + (flankMod > 0
+      }) + restraintNote + (_staggerPen
+        ? `<p class="ft-roll-note" style="font-size:0.78rem;color:#f2994a;margin:0.2rem 0 0">◈ Staggered: −${_staggerPen} to the attack</p>`
+        : "") + (flankMod > 0
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">⚔ Flanking: +${flankMod} (${flankMod + 1} melee threats)</p>`
         : "") + (_atkCb.length
         // 2026-10-07: itemise the flat attack bonuses in the total (graded weapon, passives.checkBonus, auras, banked) — the
@@ -18959,6 +18963,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // save paths call consume) or expired at the target's second turn-start.
   game.fourththing.impose = {
     isImposed(actor) { const s = actor?.system?.system ?? actor?.system; return !!s?.conditions?.imposed; },
+    /** Saves only (2026-11-07): the target's defense checks keep the lowest 2 of 3d10 for a round — attacks untouched (the Tor-Wrath's aura as written). */
+    saves(source, target, name = "Saves at disadvantage") { return _ftPactDisSavesAE(source ?? target, target, name); },
     async apply(target, { source = "", note = "" } = {}) {
       if (!target || (target.type !== "character" && target.type !== "npc")) return false;
       const round = Number(game.combat?.round ?? 0);
@@ -20714,6 +20720,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // REGIMEN step 3 (2026-10-06): a real `on-turn-start` trigger event (ancestry/class triggers used to sit on a dead event)
     try { await fireTriggers(actor, "on-turn-start", { scope: "self", round: combat.round, tags: ["turn-start"] }); }
     catch (e) { console.warn("[fourththing] on-turn-start triggers failed", actor?.name, e); }
+    // 2026-11-07 (the East Wall fight): Burning says "1d4 Integrity damage at start of each turn" and nothing ticked it.
+    try {
+      if ((actor.system?.system ?? actor.system)?.conditions?.burning === true) {
+        const _bRoll = await new Roll("1d4").evaluate();
+        await game.fourththing.rolls._applyDamageToActor(actor, _bRoll.total, { op: "damage", track: "integrity", damageType: "energy", damageFlavor: "burning" });
+        ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><p style="margin:0.15rem 0;font-size:0.78rem;color:#ff8a5a">🔥 <b>Burning</b> — ${ftEscapeHtml(actor.name)} takes ${_bRoll.total} fire at the start of the turn.</p></div>` });
+      }
+    } catch (e) { console.warn("[fourththing] burning tick failed", actor?.name, e); }
     // 2026-10-07 (regimen pass 7): the PREVIOUS combatant just ended its turn — its own on-turn-end, and
     // "a creature ends its turn adjacent to me" for everyone within 1 square of it.
     try {

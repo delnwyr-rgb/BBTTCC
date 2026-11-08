@@ -4034,6 +4034,16 @@
 .chat-message .fourththing-roll li {
   color: inherit;
 }
+/* 2026-11-07 (Dave: "fix all texts that are light on light"): the amber / sky notes on roll cards (Flanking, Disadvantage,
+   Bonuses, Reroll…) are inline-coloured for the dark card; on a parchment chat theme they vanished. A dark halo keeps them
+   legible on either background without touching the sixty inline colours. */
+.fourththing-roll p[style*="#e8c84a"], .fourththing-roll span[style*="#e8c84a"], .fourththing-roll div[style*="#e8c84a"],
+.fourththing-roll p[style*="#9ad0ff"], .fourththing-roll span[style*="#9ad0ff"],
+.fourththing-roll p[style*="#f2994a"], .fourththing-roll span[style*="#f2994a"],
+.fourththing-roll p[style*="#ff5ac8"], .fourththing-roll p[style*="#ff8a5a"],
+.fourththing-roll .ft-roll-note {
+  text-shadow: 0 0 2px #000, 0 0 4px #000, 0 1px 2px #000;
+}
 
 /* ── RFI Inventory Tab ──────────────────────────────────────────────────── */
 .ft-inventory {

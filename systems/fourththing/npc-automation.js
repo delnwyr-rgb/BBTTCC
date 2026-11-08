@@ -36,6 +36,7 @@
  *               heal:N|"formula", morale:{attr, dc, outcome, condition?}, ward:0.5, prompt:"…",
  *               bankReroll:true|{context?,skill?,attribute?,note?}, bankBonus:{bonus,context?,skill?,attribute?,note?},
  *               removeCondition:[keys], impose:true,   (2026-10-07: the last four run on ▶ Use / hit / struck / saveFail targets)
+ *               disSaves:true              the subject's saves keep the lowest 2 of 3d10 until its next turn (attacks untouched; 2026-11-07)
  *               ── 2026-10-26 (BS7, "make the automations real") ──
  *               push:N | pull:N            the target is shoved N squares along the line from the owner (forced-move resist honoured)
  *               shift:N | slow:N           the subject's movement budget this turn grows / shrinks by N squares
@@ -262,6 +263,10 @@ export function registerNpcAutomation({ actorKind, postSavePrompt, playAnimation
     }
     if (d.impose && target) {
       try { await game.fourththing.impose.apply(target, { source: item.name }); lines.push(`${tName}: <b>Imposed</b>`); } catch (e) { console.warn("[npc-automation] impose", e); }
+    }
+    // disSaves (2026-11-07): the target's SAVES keep the lowest 2 of 3d10 until its next turn — Soul/Resolve checks roll worse, attacks don't.
+    if (d.disSaves && target) {
+      try { await game.fourththing.impose.saves(actor, target, `${item.name} (saves keep lowest 2 of 3d10)`); lines.push(`${tName}: saves at disadvantage`); } catch (e) { console.warn("[npc-automation] disSaves", e); }
     }
     // ── 2026-10-26 (BS7): the verbs the prompt-only rules were standing in for ─────────────────────
     for (const [key, mode] of [["push", "push"], ["pull", "pull"]]) if (Number(d[key]) > 0 && target && target.id !== actor.id) {
