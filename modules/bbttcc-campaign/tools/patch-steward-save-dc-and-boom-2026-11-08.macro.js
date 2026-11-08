@@ -5,15 +5,16 @@
  *   resolution.saveDcMode and appliedStates.saveDcMode set to "cast-dc" (the ladder 11 + tier×2 + channel).
  *   The system already ignores a fixed DC for Stewards at resolution (ftSaveDCFor) and hides the option on the
  *   Engine and the sheets; this clears the stored value so the Magnitude score stops counting it (Sic had DC 18 → T3).
- *   "And let's set Boom to personal!" — This Is My BOOM Sword: manifestation.scale "scene" → "personal" wherever it
- *   lives (character actors, world items, the RFI Starter Manifestations pack). A single thrown strike is a Personal
- *   footprint; with the relaxed range band (T1 ≤30 ft) it scores T1 again. The preUpdateItem re-score runs on the
- *   scale change and writes the tier.
+ *   "And let's set Boom to personal!" / "set Drift to personal" — This Is My BOOM Sword and Marginalia Drift:
+ *   manifestation.scale "scene" → "personal" wherever they live (character actors, world items, the RFI Starter
+ *   Manifestations pack). A single-target strike or hold is a Personal footprint; with the relaxed range band
+ *   (T1 ≤30 ft) both score T1 again. The preUpdateItem re-score runs on the scale change and writes the tier.
  * Ember Bad Eden. globalThis.__stewardDcDry = false applies; anything else is a dry run. Idempotent.
  */
 (async () => {
   const DRY_RUN = globalThis.__stewardDcDry !== false;
   const report = { DRY_RUN, dcCleared: [], boom: [], skipped: [] };
+  const PERSONAL = ["This Is My BOOM Sword", "Marginalia Drift"];   // single-target workings authored at scale "scene"
   const isFoe = (a) => { try { return game.fourththing?.constants && typeof _ftIsFoeActor === "function" ? _ftIsFoeActor(a) : a.type === "npc"; } catch (_e) { return a.type === "npc"; } };
 
   async function fixItem(it, where, { steward }) {
@@ -24,9 +25,9 @@
       if (mf.appliedStates?.saveDcMode === "fixed") u["system.manifestation.appliedStates.saveDcMode"] = "cast-dc";
       if (Object.keys(u).length) report.dcCleared.push(`${where}: ${it.name}`);
     }
-    if (it.name === "This Is My BOOM Sword" && mf && mf.scale !== "personal") {
+    if (PERSONAL.includes(it.name) && mf && mf.scale !== "personal") {
       u["system.manifestation.scale"] = "personal";
-      report.boom.push(`${where}: scale ${mf.scale} → personal`);
+      report.boom.push(`${where}: ${it.name} scale ${mf.scale} → personal`);
     }
     if (!DRY_RUN && Object.keys(u).length) await it.update(u);
   }

@@ -10830,14 +10830,15 @@ function _ftWizV2DamageBudgetTier(state) {
   return { tier, note: `${opLabel} ${bits.join(" + ")} (avg ${total.toFixed(1)})${overshoot} → T${tier}` };
 }
 
-// Area anchors (Magnitude v1.1): T1 no AoE; T2 10-ft burst / 15-ft cone; T3 20-ft burst /
-// 30-ft cone; T4 beyond. Bursts (sphere/cylinder/cube/burst) and lines/cones band apart.
+// Area anchors — relaxed 2026-11-08 with the range band (Dave: "Relax the area band too"; v1.1 made every
+// AoE at least T2, so a 15-ft flash read T3 and a 30-ft lantern T4). Bursts (sphere/cylinder/cube/burst):
+// T1 ≤10 ft · T2 ≤20 · T3 ≤30 · T4 beyond. Lines/cones: T1 ≤15 ft · T2 ≤30 · T3 ≤60 · T4 beyond.
 function _ftWizV2AreaBudgetTier(area) {
   if (!area || area.shape === "none" || !(Number(area.size) > 0)) return { tier: 0, note: null };
   const sz = Number(area.size);
   const longShape = ["cone", "line"].includes(String(area.shape));
-  const [t2, t3] = longShape ? [15, 30] : [10, 20];
-  const tier = sz <= t2 ? 2 : sz <= t3 ? 3 : 4;
+  const [t1, t2, t3] = longShape ? [15, 30, 60] : [10, 20, 30];
+  const tier = sz <= t1 ? 1 : sz <= t2 ? 2 : sz <= t3 ? 3 : 4;
   return { tier, note: `${area.shape} ${sz}ft → T${tier}` };
 }
 
