@@ -136,7 +136,7 @@
       path: "aurablade", kind: "weapon", name: "Wrath-Brand",
       stability: "sustained", interaction: "weapon", form: "weapon", function: "harm",
       intent: "violence", channel: "body", sephirah: "geburah", mode: "chaos",
-      damageFormula: "2d6", damageType: "fire", damageFlavor: "righteous heat",
+      damageFormula: "1d6", damageType: "fire", damageFlavor: "righteous heat",
       concept: "A blade made of your conviction, hot to the touch and visibly upset.",
       signature: "The edge sings the name of the wrong it answers.",
       thirdThing: "When you kill with it, the body's clothes scorch the precise sin into the cloth.",

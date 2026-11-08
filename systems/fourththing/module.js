@@ -1328,6 +1328,19 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
   _ftWarnIfTargetDown();
   if (!actor || !item) return;
 
+  // A Form above your tier is inert in your hands (Dave 2026-11-08: "Inert above tier").
+  // Invoke already gates tier (reach one above with Surge / Blood Debt); Strikes never
+  // looked. No reach for Strikes — a bound blade can't be Surged every swing. Foes are
+  // GM-driven and exempt; Minor Miracle callers pass skipTierGate.
+  if (ftIsManifestedForm(item) && !options.skipTierGate && !_ftIsFoeActor(actor)) {
+    const mfTier = Math.max(1, Math.min(4, Number(item.system?.manifestation?.tier) || 1));
+    const mine = _ftCasterTier(actor);
+    if (mfTier > mine) {
+      ui.notifications?.warn(`${item.name} is ${FT.MANIFESTATION_TIERS?.[mfTier]?.label ?? `T${mfTier}`} — inert in ${actor.name}'s hands until T${mfTier} (level ${ftStewardTierLevel(mfTier)}).`);
+      return;
+    }
+  }
+
   // AoE weapon abilities (Frag Grenade & friends, playtest 2026-06-06): when a
   // strikable item declares system.manifestation.area, drop the template FIRST
   // and auto-target everyone caught — the engage flow + Apply Damage then land
@@ -1552,6 +1565,10 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
           if (applyCost && costAssessment) {
             const applied = await ftApplyManifestationCost(actor, costAssessment);
             if (applied.applied) ui.notifications?.info(`${actor.name}: ${applied.summary}.`);
+            // A persistent Form's activation is paid for this scene — the next Engage opens with the box clear (2026-11-08).
+            if (applied.applied && ftIsManifestedForm(item) && !ftManifestationCostIsPerUse(item)) {
+              try { await item.setFlag("fourththing", "formPaid", _ftSceneKey()); } catch (_e) {}
+            }
           }
 
           // Action Economy canon §2 + §4 (Phase A 2026-05-19). Action debit
@@ -4082,6 +4099,15 @@ function ftManifestationCostIsPerUse(item) {
   return !(isWeaponForm && persists);
 }
 
+// Once-a-scene activation for persistent Forms (2026-11-08). The scene key is the running combat, else the viewed
+// scene; a Form stamped with this key has paid its activation and the Engage dialog opens with the cost box clear.
+function _ftSceneKey() {
+  return game.combat?.id ? `combat:${game.combat.id}` : `scene:${canvas?.scene?.id ?? "none"}`;
+}
+function _ftFormPaidThisScene(item) {
+  return foundry.utils.getProperty(item, "flags.fourththing.formPaid") === _ftSceneKey();
+}
+
 function ftAssessManifestationCost(actor, item, kind = "power") {
   const system = item?.system ?? {};
   const mf = system.manifestation ?? {};
@@ -4102,11 +4128,22 @@ function ftAssessManifestationCost(actor, item, kind = "power") {
     }
   }
 
+  // Cost floor (Dave 2026-11-08: "it can't pay zero"). A manifested Form's activation costs at
+  // least its tier's base Clarity (T1 1 · T2 2 · T3 3 · T4 5). Authored costs above the floor
+  // stand; a non-Clarity cost type stands. Guns aren't Forms (ftIsManifestedForm) — untouched.
+  // The once-a-scene cadence for persistent Forms is the Engage dialog's "apply cost" default.
+  let _floored = false;
+  if (kind === "weapon" && ftIsManifestedForm(item) && (type === "none" || type === "clarity")) {
+    const tier = Math.max(1, Math.min(4, Number(mf.tier) || 1));
+    const floor = Number(FT.MANIFESTATION_TIERS?.[tier]?.clarityCost) || 1;
+    if (type === "none" || value < floor) { type = "clarity"; value = Math.max(value, floor); _floored = true; }
+  }
+
   const normalizedValue = type === "none" || type === "custom" ? value : Math.max(1, value || 1);
   const assessment = {
     type,
     value: normalizedValue,
-    label: ftManifestationCostLabel(kind, system),
+    label: _floored ? `${normalizedValue} Clarity` : ftManifestationCostLabel(kind, system),
     autoSupported: false,
     manualOnly: false,
     canPay: true,
@@ -10032,12 +10069,16 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       name: values.name || "New Manifestation",
       type: "weapon",
       img: values.img || "icons/svg/sword.svg",
+      // The Engine's stamp: a manifested Form, not a gun. Ordinary weapons carry the same
+      // normalized manifestation block (form weapon · bound · T1), so tier and cost rules
+      // read this flag, never the block (2026-11-08).
+      flags: { fourththing: { manifested: true } },
       system: {
         category: values.category || "melee",
         intent: values.intent || "violence",
         skill: values.skill || "melee",
         damage: {
-          formula: values.damageFormula || "2d6",
+          formula: values.damageFormula || "1d6",
           attribute: values.damageAttribute || values.intent || "violence",
           type: values.damageType || "kinetic",
           track: values.damageTrack || "integrity"
@@ -10442,8 +10483,10 @@ function _ftWizV2RenderTargeting(state) {
     </div>${conflictNote}`;
 }
 
-function _ftWizV2RenderEffectPower(state) {
-  const dr = state.damageRoll ?? {};
+// Conditions Applied — the states grid + duration / save fields. Shared by the power AND
+// weapon Effect steps (2026-11-08, Dave: the Form path had no grid, so a Strike's states
+// could only be ticked on the item sheet, outside the Magnitude score).
+function _ftWizV2RenderStatesBlock(state, { coach } = {}) {
   const ap = state.appliedStates ?? {};
   const stateMap = ap.states ?? {};
   // Render checkbox grid for FT.CONDITIONS. Use `appliedStates.states.<key>`
@@ -10479,14 +10522,7 @@ function _ftWizV2RenderEffectPower(state) {
       <div class="ft-cast-field"><label>Track</label>${_ftWizV2Sel("damageRoll.track", { integrity: "Integrity", stress: "Stress", clarity: "Clarity", noise: "Noise" }, dr.track ?? "integrity")}</div>
       <div class="ft-cast-field ft-cast-span-2"><label>Damage flavor</label>${_ftWizV2FlavorField("damageRoll.flavor", dr.type ?? "kinetic", dr.flavor)}</div>
     </div>
-    <div class="ft-wiz-v2-subhead" style="margin-top:0.6rem">Conditions Applied</div>
-    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Pick states the working inflicts. Applied only when resolution lands (full or half). Tooltips show effects.</p>
-    <div class="ft-wiz-v2-cond-grid">${condChecks}</div>
-    <div class="ft-cast-grid" style="margin-top:0.4rem">
-      <div class="ft-cast-field"><label>Duration</label>${_ftWizV2Sel("appliedStates.duration", { "1-round": "1 round", "2-rounds": "2 rounds", "3-rounds": "3 rounds", scene: "Scene", "until-saved": "Until saved" }, ap.duration ?? "1-round")}</div>
-      <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("appliedStates.saveEachRound", ap.saveEachRound === true)}<span>Save each round to shake off</span></label></div>
-      ${saveSubFields}
-    </div>
+    ${_ftWizV2RenderStatesBlock(state)}
     ${_ftWizV2RenderEffectsBlock(state)}
     ${_ftWizV2RenderConditionalDamageBlock(state)}
     ${_ftWizV2RenderDamagePartsBlock(state)}`;
@@ -10559,12 +10595,13 @@ function _ftWizV2RenderEffectWeapon(state) {
       <div class="ft-cast-field"><label>Form Type</label>${_ftWizV2Sel("category", { melee: "Melee", ranged: "Ranged", thrown: "Thrown", unarmed: "Unarmed" }, state.category ?? "melee")}</div>
       <div class="ft-cast-field"><label>Intent</label>${_ftWizV2Sel("intent", FT.INTENTS, state.intent ?? "violence")}</div>
       <div class="ft-cast-field"><label>Skill</label>${_ftWizV2Sel("skill", { brawl: "Brawl", melee: "Melee", firearms: "Firearms", athletics: "Athletics", stealth: "Stealth" }, state.skill ?? "melee")}</div>
-      <div class="ft-cast-field"><label>Damage formula</label>${_ftWizV2Txt("damageFormula", state.damageFormula ?? "2d6", "2d6")}</div>
+      <div class="ft-cast-field"><label>Damage formula</label>${_ftWizV2Txt("damageFormula", state.damageFormula ?? "1d6", "1d6")}</div>
       <div class="ft-cast-field"><label>Damage type</label>${_ftWizV2Sel("damageType", FT.DAMAGE_TYPES, state.damageType ?? "kinetic")}</div>
       <div class="ft-cast-field"><label>Track</label>${_ftWizV2Sel("damageTrack", { integrity: "Integrity", stress: "Stress", radiation: "Radiation" }, state.damageTrack ?? "integrity")}</div>
       <div class="ft-cast-field"><label>Short Range</label>${_ftWizV2Num("rangeShort", state.rangeShort ?? 1, { min: 0, max: 999 })}</div>
       <div class="ft-cast-field"><label>Long Range</label>${_ftWizV2Num("rangeLong", state.rangeLong ?? 1, { min: 0, max: 999 })}</div>
     </div>
+    ${_ftWizV2RenderStatesBlock(state, { coach: "States the Form inflicts on a hit. The target rolls the save at resolution; a pass shrugs it off." })}
     ${_ftWizV2RenderEffectsBlock(state)}
     ${_ftWizV2RenderConditionalDamageBlock(state)}
     ${_ftWizV2RenderDamagePartsBlock(state)}`;
@@ -10924,6 +10961,49 @@ function _ftWizV2SuggestTier(state) {
 
 function _ftWizV2TierLabel(n) {
   return FT.MANIFESTATION_TIERS?.[n]?.label ?? `T${n}`;
+}
+
+// ── Tier is DERIVED (Dave, 2026-11-08) ─────────────────────────────────────
+// "There's nothing preventing me from checking all of the states … and the system will
+// still call it a Tier 1 manifestation." The Magnitude score used to be a banner with an
+// opt-in button; the item sheet never re-scored. Now every save — Engine finish or sheet
+// edit — writes manifestation.tier from the magnitude of what was actually built.
+//   ftManifestationMagnitudeTier(itemLike, kind) → 1..4 from { system } data (a Document,
+//     toObject() output, or a merged update preview).
+//   ftIsManifestedForm(item) → a weapon the Engine made (flags.fourththing.manifested).
+//     Guns carry the same normalized manifestation block, so the flag is the only tell.
+//   ftStewardTierLevel(tier) → the level that unlocks a tier (the "inert until" message).
+function ftManifestationMagnitudeTier(itemLike, kind) {
+  const k = kind ?? (itemLike?.type === "weapon" ? "weapon" : "power");
+  const state = {
+    _kind: k,
+    appliedStates: { states: {} },
+    appliedEffects: { modifiers: {}, resists: {}, immunes: {} },
+    conditionalDamage: {},
+    damageParts: {}
+  };
+  try { _ftWizV2OverlayFromItem(state, itemLike, k); }
+  catch (e) { console.warn("Roll for Initiation | magnitude tier overlay failed", e); return 1; }
+  const sug = _ftWizV2SuggestTier(state);
+  return Math.max(1, Math.min(4, Number(sug?.tier) || 1));
+}
+function ftIsManifestedForm(item) {
+  return item?.type === "weapon" && foundry.utils.getProperty(item, "flags.fourththing.manifested") === true;
+}
+function ftStewardTierLevel(tier) {
+  return ({ 1: 1, 2: 6, 3: 11, 4: 16 })[Math.max(1, Math.min(4, Number(tier) || 1))];
+}
+// The fields whose edit changes magnitude. A description or icon edit never re-tiers.
+const FT_MAGNITUDE_PATHS = [
+  "system.damage", "system.damageParts", "system.damageRoll",
+  "system.manifestation.appliedStates", "system.manifestation.appliedEffects",
+  "system.manifestation.area", "system.manifestation.rangeFt", "system.manifestation.scale",
+  "system.manifestation.chain", "system.manifestation.conditionalDamage", "system.manifestation.resolution"
+];
+function _ftUpdateTouchesMagnitude(changes) {
+  const flat = foundry.utils.flattenObject(changes ?? {});
+  const keys = Object.keys(flat);
+  return FT_MAGNITUDE_PATHS.some(p => keys.some(k => k === p || k.startsWith(p + ".")));
 }
 
 function _ftWizV2RenderSoulAndReview(state, { actor }) {
@@ -11669,11 +11749,21 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
               unlock();
               return;
             }
+            // Tier is derived from magnitude, never picked (Dave 2026-11-08). The Review banner is a readout.
+            {
+              const sug = _ftWizV2SuggestTier(state);
+              state.tier = Math.max(1, Math.min(4, Number(sug?.tier) || 1));
+            }
             if (sigLock && actor) {
               // A Signature is always a Signature, and never outruns its steward's tier (ruling 14).
+              // It used to be clamped silently; with a derived tier that would hide the overshoot, so refuse.
               state.isSignature = true;
               const cap = ftStewardTier(actor);
-              if ((Number(state.tier) || 1) > cap) state.tier = cap;
+              if ((Number(state.tier) || 1) > cap) {
+                ui.notifications?.warn(`${state.name || "This Signature"} scores ${_ftWizV2TierLabel(state.tier)} — a Signature can't sit above your ${_ftWizV2TierLabel(cap)}. Ease the magnitude (dice, states, area, range) and save again.`);
+                unlock();
+                return;
+              }
             }
             const itemData = createManifestationItemData(actor, wizardKind, state);
             // Edit mode (2026-05-29) — write back to the existing item in place.
@@ -13775,7 +13865,8 @@ function buildAttackDialogHTML(actor, item) {
     `<option value="${k}" ${k === intent ? "selected" : ""}>${v.label}</option>`
   ).join("");
   const costAssessment = item ? ftAssessManifestationCost(actor, item, "weapon") : null;
-  const costBox = item ? buildManifestationCostBoxHTML(costAssessment, { inputName: "applyCost", defaultChecked: ftManifestationCostIsPerUse(item) }) : "";
+  // A persistent Form pays once a scene: the box is pre-ticked until this scene's activation is paid (2026-11-08).
+  const costBox = item ? buildManifestationCostBoxHTML(costAssessment, { inputName: "applyCost", defaultChecked: ftManifestationCostIsPerUse(item) || (ftIsManifestedForm(item) && !_ftFormPaidThisScene(item)) }) : "";
   const signature = item?.system?.manifestation?.signature ?? "";
   const thirdThing = item?.system?.manifestation?.thirdThing ?? "";
   const stewardTier = Math.max(1, Math.min(4, Number(sysData?.details?.tier) || 1));
@@ -15452,6 +15543,9 @@ Hooks.once("init", function () {
     bankSurge: _ftBankSurge,
     rolls: {},
     constants: FT,
+    // Derived tier (2026-11-08): magnitudeTier(itemLike, kind) scores an item the way the Engine's
+    // Review step does; isForm(item) = an Engine-made weapon; tierLevel(t) = the level that unlocks t.
+    manifestation: { magnitudeTier: ftManifestationMagnitudeTier, isForm: ftIsManifestedForm, tierLevel: ftStewardTierLevel },
     items:   RfiItems,
     craft:   RfiCrafting,
     harvest: RfiHarvest,
@@ -29870,6 +29964,29 @@ Hooks.on("updateActor", (actor) => {
   // picker is debounced + cheap, so re-render unconditionally.
   if (actor.type === "rig") return _ftRenderCrewHud();
   if (!__ftCrewHudActiveActorId) _ftRenderCrewHud();
+});
+// Tier follows magnitude on sheet edits too (Dave 2026-11-08). A manifested Form (Engine stamp)
+// or any power with a manifestation block re-scores when a magnitude field changes — dice,
+// extra dice, states, buffs, area, range, scale, chain, conditional damage, resolution DC.
+// Text and icon edits never re-tier. An update that sets the tier itself (the Engine's own
+// finish) is trusted. Foe items keep their authored tiers (threat chassis does their scaling).
+Hooks.on("preUpdateItem", (item, changes) => {
+  try {
+    if (!changes?.system) return;
+    if (foundry.utils.hasProperty(changes, "system.manifestation.tier")) return;
+    const isForm = ftIsManifestedForm(item);
+    const isPower = item?.type === "power" && !!item.system?.manifestation;
+    if (!isForm && !isPower) return;
+    if (item.parent && _ftIsFoeActor(item.parent)) return;
+    if (!_ftUpdateTouchesMagnitude(changes)) return;
+    const merged = foundry.utils.mergeObject(item.toObject(), changes, { inplace: false });
+    const tier = ftManifestationMagnitudeTier(merged, isForm ? "weapon" : "power");
+    const cur = Math.max(1, Math.min(4, Number(item.system?.manifestation?.tier) || 1));
+    if (tier !== cur) {
+      foundry.utils.setProperty(changes, "system.manifestation.tier", tier);
+      ui.notifications?.info(`${item.name}: magnitude now scores ${FT.MANIFESTATION_TIERS?.[tier]?.label ?? `T${tier}`}.`);
+    }
+  } catch (e) { console.warn("Roll for Initiation | derived tier on item update failed", e); }
 });
 Hooks.on("createItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("deleteItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
